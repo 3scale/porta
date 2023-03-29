@@ -1,43 +1,35 @@
 production:
-  superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
-  apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
-  secure_cookie: true
-  force_ssl: true
-  apicast_custom_url: true
   active_docs_proxy_disabled: true
+  active_merchant_logging: false
+  apicast_custom_url: true
+  apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
-  events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
-  onpremises_api_docs_version: true
-  onpremises: true
-  recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
-  recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
-  user_session_ttl: <%= ENV.fetch('USER_SESSION_TTL', 2.weeks) %>
-
-  # System Emails
-  noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
-  support_email: <%= ENV.fetch('SUPPORT_EMAIL', "#{superdomain} Support <support@#{superdomain}>") %>
-  sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
-  notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
-  sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
-  impersonation_admin:
-    username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
-    domain: <%= ENV.fetch('IMPERSONATION_ADMIN_DOMAIN', '3scale.net') %>
-
-  readonly_custom_domains_settings: false
-  report_traffic: false
-  hide_basic_switches: true
-  tenant_mode: <%= ENV['TENANT_MODE'] %>
-  db_secret:
-
   assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
-
+  billing_canaries:
+  db_secret:
   email_sanitizer:
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', false) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
-
+  events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
+  force_ssl: true
+  hide_basic_switches: true
+  impersonation_admin:
+    domain: <%= ENV.fetch('IMPERSONATION_ADMIN_DOMAIN', '3scale.net') %>
+    username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
   janitor_worker_enabled: true
-
-  # deprecated: use payments.yaml to configure payments instead
-  active_merchant_logging: false
-  billing_canaries:
+  onpremises: true
+  onpremises_api_docs_version: true
+  readonly_custom_domains_settings: false
+  recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
+  recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
+  report_traffic: false
+  secure_cookie: true
+  superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
+  tenant_mode: <%= ENV['TENANT_MODE'] %>
+  user_session_ttl: <%= ENV.fetch('USER_SESSION_TTL', 2.weeks) %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
+  noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
+  notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
+  sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
+  support_email: <%= ENV.fetch('SUPPORT_EMAIL', "#{superdomain} Support <support@#{superdomain}>") %>
+  sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
