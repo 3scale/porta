@@ -4,7 +4,7 @@ module CMS::PageRepresenter
   include ThreeScale::JSONRepresenter
 
   property :id
-  property :type, getter: ->(*) { self.class.data_tag }
+  property :type, getter: ->(*) { CMS::TypeMap.cms_type(self.class) }
   property :created_at
   property :updated_at
   property :title

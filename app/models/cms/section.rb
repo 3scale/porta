@@ -1,6 +1,5 @@
 class CMS::Section < ApplicationRecord
   include CMS::Filtering
-  include CMS::DataTag
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
 

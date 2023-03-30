@@ -108,14 +108,10 @@ class CMS::Builtin < CMS::BasePage
     validates_each :draft, :published do |record, attr, value|
       record.errors.add attr, :is_present if value.present?
     end
-
-    has_data_tag :builtin_page
   end
 
   # CMS::Builtin::Page
   class Page < CMS::Builtin
-
-    has_data_tag :builtin_page
 
     def content_type
       'text/html'
@@ -151,8 +147,6 @@ class CMS::Builtin < CMS::BasePage
 
     private :destroy
     attr_readonly :system_name
-
-    has_data_tag :builtin_partial
 
     # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
     def liquid_enabled?
