@@ -145,7 +145,7 @@ class AccessToken < ApplicationRecord
   end
 
   def show_value?(*)
-    saved_changes.include?(:value)
+    saved_change_to_value?
   end
 
   def available_scopes
