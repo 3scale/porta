@@ -15,8 +15,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
 
-import 'Dashboard/styles/dashboard.scss'
-
 interface Props {
   newBackendPath: string;
   backendsPath: string;
