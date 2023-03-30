@@ -70,7 +70,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :delete_all, inverse_of: :user
   has_one  :notification_preferences, dependent: :delete, inverse_of: :user
 
-  has_many :access_tokens, autosave: false, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_many :access_tokens, foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
 
   symbolize :signup_type
 
