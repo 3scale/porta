@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 resource 'AccessToken' do
-  let(:resource) { FactoryBot.build(:access_token) }
+  let(:owner) { FactoryBot.create(:user) }
+  let(:resource) { FactoryBot.build(:access_token, owner: owner) }
   let(:expected_properties) { %w[id name scopes permission value] }
 
   json(:resource) do
