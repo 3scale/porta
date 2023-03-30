@@ -13,18 +13,7 @@ class CMS::Template < ApplicationRecord
 
   self.allowed_search_scopes = %i[type section_id]
 
-  scope :by_type, ->(type) {
-    type_class = {
-      page: CMS::Page,
-      builtin_page: CMS::Builtin::Page,
-      partial: CMS::Partial,
-      builtin_partial: CMS::Builtin::Partial,
-      layout: CMS::Layout,
-    }[type.to_sym]
-
-    where(type: type_class)
-  }
-
+  scope :by_type, ->(type) { where(type: CMS::TypeMap.cms_class(type)) }
   scope :by_section_id, ->(section_id) { where(section_id: section_id) }
 
   self.table_name = :cms_templates
