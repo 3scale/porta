@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory(:pending_user, :class => :user) do
+  factory(:pending_user, class: User) do
     sequence(:email) { |n| "foo#{n}@example.net" }
     sequence(:username) { |n| "dude#{n}" }
     password { 'supersecret' }
