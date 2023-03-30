@@ -47,8 +47,9 @@ module Signup
 
     def errors
       errors = @errors.dup
-      user.errors.full_messages.each    { |user_error|    errors.add(:user, user_error) }
-      account.errors.full_messages.each { |account_error| errors.add(:account, account_error) }
+      user.errors.each { |user_error| errors.add(:user, user_error.full_message) }
+      account.errors.each { |account_error| errors.add(:account, account_error.full_message) }
+
       errors
     end
 
