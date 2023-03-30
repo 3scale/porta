@@ -94,14 +94,14 @@ class Account::StatesTest < ActiveSupport::TestCase
 
   test 'enqueues notification email when account is made pending' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "confirmed", "deliver_now", account]) do
+    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "confirmed", "deliver_now", account]) do
       account.make_pending!
     end
   end
 
   test 'enqueues notification email when account is rejected' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "rejected", "deliver_now", account]) do
+    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "rejected", "deliver_now", account]) do
       account.reject!
     end
   end
@@ -113,7 +113,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     account.reload
 
-    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "approved", "deliver_now", account]) do
+    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "approved", "deliver_now", account]) do
       account.approve!
     end
 
@@ -123,7 +123,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     AccountMailer.any_instance.expects(:approved).never
 
     account = FactoryBot.create(:pending_account)
-    assert_no_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    assert_no_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       account.approve!
     end
   end

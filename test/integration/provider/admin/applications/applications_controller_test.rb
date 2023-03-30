@@ -270,7 +270,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
         ActionMailer::Base.deliveries = []
-        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
           put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
         end
 

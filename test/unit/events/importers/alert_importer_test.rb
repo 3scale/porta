@@ -88,7 +88,7 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
     })
 
     ActionMailer::Base.deliveries = []
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       import_events
     end
 

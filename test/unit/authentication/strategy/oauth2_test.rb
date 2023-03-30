@@ -219,7 +219,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       user_data = valid_user_data
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         assert_difference(User.method(:count), +1) do
           result = authentication_strategy.authenticate({
                                                           system_name: authentication_provider.system_name,
@@ -251,7 +251,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         assert_difference(User.method(:count), +1) do
           result = authentication_strategy.authenticate({
                                                           system_name: authentication_provider.system_name,
