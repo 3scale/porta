@@ -2,6 +2,7 @@
 import { useState } from 'react'
 
 import { Label } from 'NewService/components/FormElements/Label'
+import { HelperText, HelperTextItem } from 'Common/components/HelperText'
 
 import type { FunctionComponent, ChangeEvent, SetStateAction } from 'react'
 import type { ServiceFormTemplate } from 'NewService/types'
@@ -35,9 +36,12 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
           label="System name"
         />
         <input id="service_system_name" maxLength={255} name="service[system_name]" type="text" value={systemName} onChange={onChange(setSystemName)} />
-        <p className={`${errors.system_name ? 'inline-errors' : 'inline-hints'}`}>
-          { errors.system_name ? errors.system_name : 'Only ASCII letters, numbers, dashes and underscores are allowed.' }
-        </p>
+        <HelperText>
+          <HelperTextItem>
+            <p className={`${errors.system_name ? 'inline-errors' : 'inline-hints'}`}> { errors.system_name ? errors.system_name : '' } </p>
+            <p className="inline-hints">Only ASCII letters, numbers, dashes and underscores are allowed.</p>
+          </HelperTextItem>
+        </HelperText>
       </li>
       <li className={`text optional ${errors?.description ? 'error' : ''}`} id="service_description_input">
         <Label
