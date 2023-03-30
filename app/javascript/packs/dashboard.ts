@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion -- FIXME: we need to give some default values or something */
 import * as dashboardWidget from 'Dashboard/ajax-widget'
 import { render as renderChartWidget } from 'Dashboard/chart'
 import { ProductsWidgetWrapper } from 'Dashboard/components/ProductsWidget'
@@ -19,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const backendsContainer = document.getElementById(backendsContainerId)
 
   if (productsContainer) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: handle undefined or use JSON.parse
     const { newProductPath, productsPath, products } = safeFromJsonString<ProductsWidgetProps>(productsContainer.dataset.productsWidget)!
 
     ProductsWidgetWrapper({
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (backendsContainer) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: handle undefined or use JSON.parse
     const { newBackendPath, backendsPath, backends } = safeFromJsonString<BackendsWidgetProps>(backendsContainer.dataset.backendsWidget)!
 
     BackendsWidgetWrapper({
