@@ -13,11 +13,11 @@ class CMS::TypeMap
     }.freeze
 
     def cms_type(cms_class)
-      CLASS_TYPES.rassoc(cms_class)[0]
+      CLASS_TYPES.rassoc(cms_class)&.fetch(0)
     end
 
     def cms_class(cms_type)
-      CLASS_TYPES[cms_type.to_sym]
+      CLASS_TYPES[cms_type.try(:to_sym)]
     end
   end
 end
