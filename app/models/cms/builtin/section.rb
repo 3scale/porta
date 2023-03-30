@@ -3,8 +3,6 @@ class CMS::Builtin::Section < CMS::Section
   self.search_type = 'section'
   self.search_origin = 'builtin'
 
-  has_data_tag :builtin_section
-
   private
 
   def destroy

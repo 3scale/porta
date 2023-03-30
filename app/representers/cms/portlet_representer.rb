@@ -4,7 +4,7 @@ module CMS::PortletRepresenter
   include ThreeScale::JSONRepresenter
 
   property :id
-  property :type, getter: ->(*) { self.class.data_tag }
+  property :type, getter: ->(*) { CMS::TypeMap.cms_type(self.class) }
   property :title
   property :portlet_type
   property :name

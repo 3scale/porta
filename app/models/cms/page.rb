@@ -29,8 +29,6 @@ class CMS::Page < CMS::BasePage
   before_save :mark_for_searchability
   after_initialize :set_default_values
 
-  has_data_tag :page
-
   def self.path(chunks, format = nil)
     path = Array(chunks).compact.join('/')
     path.prepend(root_path) unless path.start_with?(root_path)

@@ -1,6 +1,5 @@
 class CMS::File < ApplicationRecord
   include CMS::Filtering
-  include CMS::DataTag
   include NormalizePathAttribute
   acts_as_taggable
   include Tagging
