@@ -209,7 +209,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       deliveries = ActionMailer::Base.deliveries
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
 
         assert_difference(User.method(:count), +1) do
 
