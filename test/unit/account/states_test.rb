@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Account::StatesTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
+  include ActionMailer::TestHelper
 
   test '.without_suspended' do
     accounts = FactoryBot.create_list(:simple_provider, 2)
@@ -94,14 +94,14 @@ class Account::StatesTest < ActiveSupport::TestCase
 
   test 'enqueues notification email when account is made pending' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "confirmed", "deliver_now", account]) do
+    assert_enqueued_email_with(AccountMailer, :confirmed, args: [account]) do
       account.make_pending!
     end
   end
 
   test 'enqueues notification email when account is rejected' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "rejected", "deliver_now", account]) do
+    assert_enqueued_email_with(AccountMailer, :rejected, args: [account]) do
       account.reject!
     end
   end
@@ -113,10 +113,9 @@ class Account::StatesTest < ActiveSupport::TestCase
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     account.reload
 
-    assert_enqueued_with(job: ActionMailer::MailDeliveryJob, args: ["AccountMailer", "approved", "deliver_now", account]) do
+    assert_enqueued_email_with(AccountMailer, :approved, args: [account]) do
       account.approve!
     end
-
   end
 
   test 'does not enqueue notification email when non buyer account is approved' do

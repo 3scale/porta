@@ -236,6 +236,7 @@ module System
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = smtp_config = (try_config_for(:smtp) || {})
     config.action_mailer.raise_delivery_errors = smtp_config[:address].present?
+    config.action_mailer.deliver_later_queue_name = :mailers
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
