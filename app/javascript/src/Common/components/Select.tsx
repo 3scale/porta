@@ -99,4 +99,5 @@ const Select = <T extends IRecord>({
   )
 }
 
-export { Select, Props }
+export type { Props }
+export { Select }

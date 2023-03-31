@@ -12,4 +12,5 @@ const ForgotCredentials: FunctionComponent<Props> = ({ requestPasswordResetPath 
   </LoginMainFooterBandItem>
 )
 
-export { ForgotCredentials, Props }
+export type { Props }
+export { ForgotCredentials }

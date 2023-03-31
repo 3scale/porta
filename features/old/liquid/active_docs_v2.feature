@@ -8,7 +8,7 @@ Feature: ActiveDocs
     And the current provider is foo.3scale.localhost
 
   Scenario: Loading Swagger UI v2
-    Given provider "foo.3scale.localhost" has the swagger example of signup
+    Given a service with a Swagger 2 spec
     And the provider has cms page "/version-20" with:
     """
     {% active_docs version: "2.0" %}
@@ -26,7 +26,7 @@ Feature: ActiveDocs
     Then I should see "A sample echo API"
 
   Scenario: Loading new Swagger v2 template with new cdn_asset tag
-    Given provider "foo.3scale.localhost" has the swagger example of signup
+    Given a service with a Swagger 2 spec
     And the provider has cms page "/version-22" with:
     """
     {% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}

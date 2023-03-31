@@ -798,6 +798,7 @@ en:
           invalid_json_body_and_query_paramtypes: "JSON Spec can not have paramType='body' and paramType='query' on the same method."
           invalid_swagger: "JSON Spec is invalid"
           invalid_json: "Invalid JSON"
+          invalid_version: "Invalid Swagger version"
 
   activerecord:
     errors:

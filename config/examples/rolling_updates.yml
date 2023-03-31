@@ -1,35 +1,30 @@
 base: &default
-  new_provider_documentation: false
-  proxy_pro: false
-  instant_bill_plan_change: false
-  service_permissions: true
-  async_apicast_deploy: false
+  apicast_oidc: true
+  apicast_per_service: true
+  apicast_v2: true
+  billable_contracts:
   duplicate_application_id: true
   duplicate_user_key: true
-  plan_changes_wizard: false
-  require_cc_on_signup: false
-  apicast_per_service: true
-  new_notification_system: true
   forum: false
+  instant_bill_plan_change: false
+  new_notification_system: true
+  new_provider_documentation: false
+  plan_changes_wizard: false
   policy_registry: true
+  provider_sso:
   proxy_private_base_path: true
+  proxy_pro: false
+  published_service_plan_signup: true
+  require_cc_on_signup: false
   service_mesh_integration: false
-  api_as_product: false
+  service_permissions: true
 
 development:
   <<: *default
 
 test:
-  new_provider_documentation: false
-  proxy_pro: false
-  instant_bill_plan_change: false
-  async_apicast_deploy: false
-  duplicate_application_id: true
-  plan_changes_wizard: false
-  require_cc_on_signup: false
-  apicast_per_service: true
-  new_notification_system: true
-
-preview:
+  <<: *default
+  published_service_plan_signup:
 
 production:
+  <<: *default

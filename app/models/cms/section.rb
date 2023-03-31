@@ -1,6 +1,5 @@
 class CMS::Section < ApplicationRecord
   include CMS::Filtering
-  include CMS::DataTag
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
 
@@ -19,14 +18,14 @@ class CMS::Section < ApplicationRecord
   alias sections children
   alias section= parent=
 
-  validates :system_name, :provider, presence: true
+  validates :title, :system_name, :provider, presence: true
   validates :parent_id, presence: { :unless => :root? }
 
   validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
   validates :system_name, uniqueness: { :scope => [:provider_id] }, length: { maximum: 255 }
   validates :partial_path, :title, :type, length: { maximum: 255 }
 
-  before_validation :set_system_name , :on => :create
+  before_validation :set_system_name , on: %i[create update]
   before_validation :set_partial_path, :on => :create
   verify_path_format :partial_path
   before_validation :set_provider, :on => :create
@@ -40,27 +39,6 @@ class CMS::Section < ApplicationRecord
   has_many :groups, :class_name => 'CMS::Group', :through => :group_sections
 
   before_save :strip_trailing_slashes
-
-  has_data_tag :section
-
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.title title
-      x.system_name system_name
-      x.public public
-      x.parent_id parent_id
-      x.partial_path partial_path
-    end
-
-    xml.to_xml
-  end
 
   module ProviderAssociationExtension
     def root
@@ -76,7 +54,7 @@ class CMS::Section < ApplicationRecord
     end
 
     def find_or_create!(name, path, options = {})
-      system_name = name.downcase
+      system_name = name.parameterize
 
       if section = find_by_system_name(system_name)
         section
@@ -175,7 +153,7 @@ class CMS::Section < ApplicationRecord
   protected
 
   def set_system_name
-    self.system_name = self.title if self.title && self.system_name.blank?
+    self.system_name = title.parameterize if title.present? && system_name.blank?
   end
 
   def set_partial_path

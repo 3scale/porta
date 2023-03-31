@@ -28,4 +28,5 @@ const IncrementByInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { IncrementByInput, Props }
+export type { Props }
+export { IncrementByInput }

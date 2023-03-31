@@ -50,4 +50,5 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
     </>
   )
 }
-export { ServiceManualListItems, Props }
+export type { Props }
+export { ServiceManualListItems }

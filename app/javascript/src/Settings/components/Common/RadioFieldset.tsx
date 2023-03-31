@@ -48,4 +48,5 @@ const RadioFieldset: FunctionComponent<Props> = ({
   )
 }
 
-export { RadioFieldset, Props }
+export type { Props }
+export { RadioFieldset }

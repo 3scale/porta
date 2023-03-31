@@ -33,4 +33,5 @@ const PolicyRegistry: React.FunctionComponent<Props> = ({
   </section>
 )
 
-export { PolicyRegistry, Props }
+export type { Props }
+export { PolicyRegistry }

@@ -46,4 +46,5 @@ const NewPage: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const NewPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewPage {...props} />, containerId) }
 
-export { NewPage, NewPageWrapper, Props }
+export type { Props }
+export { NewPage, NewPageWrapper }

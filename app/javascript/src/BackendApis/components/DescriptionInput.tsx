@@ -25,4 +25,5 @@ const DescriptionInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { DescriptionInput, Props }
+export type { Props }
+export { DescriptionInput }

@@ -34,4 +34,5 @@ const AuthenticationProviders: FunctionComponent<Props> = (props) => {
   )
 }
 
-export { AuthenticationProviders, Props }
+export type { Props }
+export { AuthenticationProviders }

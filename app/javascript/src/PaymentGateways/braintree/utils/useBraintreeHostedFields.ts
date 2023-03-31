@@ -194,4 +194,5 @@ const useBraintreeHostedFields = (
   return [hostedFields, error, loading, valid]
 }
 
-export { useBraintreeHostedFields, CustomHostedFields }
+export type { CustomHostedFields }
+export { useBraintreeHostedFields }

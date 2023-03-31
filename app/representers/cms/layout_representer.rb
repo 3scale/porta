@@ -3,9 +3,8 @@
 module CMS::LayoutRepresenter
   include ThreeScale::JSONRepresenter
 
-  wraps_resource ->(*) { self.class.data_tag }
-
   property :id
+  property :type, getter: ->(*) { CMS::TypeMap.cms_type(self.class) }
   property :created_at
   property :updated_at
   property :title

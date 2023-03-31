@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('Stripe data was not provided')
   }
 
-  const { stripePublishableKey, setupIntentSecret, billingAddress, successUrl, creditCardStored } = data
+  const { stripePublishableKey, setupIntentSecret, billingAddress, billingName, successUrl, creditCardStored } = data
 
   StripeFormWrapper({
     publishableKey: stripePublishableKey,
     setupIntentSecret,
     billingAddressDetails: billingAddress,
+    billingName,
     successUrl,
     isCreditCardStored: creditCardStored
   }, containerId)

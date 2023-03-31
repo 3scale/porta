@@ -70,9 +70,9 @@ shared_context "json", json: true do |args|
   let(:format) { :json }
   let(:json) { JSON.parse(serialized) }
 
-  subject { json[root] }
+  subject { respond_to?(:root) ? json[root] : json }
 
-  it("should have root") { expect(json).to have_key(root) }
+  it("should have root") { expect(json).to have_key(root) } unless args[:skip_root_check]
 end
 
 shared_context "xml", xml: true do

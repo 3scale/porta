@@ -376,6 +376,18 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'spec_version',
+  regexp: /Swagger 1.2|Swagger 2|OAS 3.0/,
+  transformer: ->(version) do
+    {
+      'Swagger 1.2' => '1.2',
+      'Swagger 2' => '2.0',
+      'OAS 3.0' => '3.0'
+    }[version]
+  end
+)
+
+ParameterType(
   name: 'valid',
   regexp: /valid|invalid/,
   transformer: ->(value) { value == 'valid' }

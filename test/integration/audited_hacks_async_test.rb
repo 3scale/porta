@@ -87,7 +87,13 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
     # just a model without noise producing callbacks
     line_item = FactoryBot.build(:line_item)
 
-    assert_number_of_queries(2, matching: /./) do
+    # warmup to avoid oracle driver service queries
+    LineItem.with_auditing do
+      FactoryBot.create(:line_item).update!(quantity: 7)
+    end
+
+    # this dual is some oracle specific garbage so we ignore it
+    assert_number_of_queries(2, matching: /^(.(?!FROM dual))*$/) do
       LineItem.with_auditing do
         line_item.save!
         line_item.update!(quantity: 5)

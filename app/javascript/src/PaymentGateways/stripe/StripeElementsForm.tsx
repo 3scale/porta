@@ -18,6 +18,7 @@ const CARD_OPTIONS: StripeCardElementOptions = {
       fontWeight: 300,
       fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
       fontSize: '19px',
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '::placeholder': {
         color: '#3f454c'
       }
@@ -36,6 +37,7 @@ const CARD_OPTIONS: StripeCardElementOptions = {
 interface Props {
   setupIntentSecret: string;
   billingAddressDetails: BillingAddress;
+  billingName?: string;
   successUrl: string;
   isCreditCardStored: boolean;
 }
@@ -43,6 +45,7 @@ interface Props {
 const StripeElementsForm: FunctionComponent<Props> = ({
   setupIntentSecret,
   billingAddressDetails,
+  billingName = '',
   successUrl,
   isCreditCardStored
 }) => {
@@ -54,6 +57,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   const stripe = useStripe()
   const elements = useElements()
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises -- FIXME
   const handleSubmit: FormEventHandler = async (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -76,7 +80,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
         billing_details: {
           address: billingAddressDetails,
           email: '',
-          name: '',
+          name: billingName,
           phone: ''
         }
       }
@@ -146,4 +150,5 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   )
 }
 
-export { StripeElementsForm, Props }
+export type { Props }
+export { StripeElementsForm }

@@ -11,7 +11,7 @@ ActiveSupport.on_load(:active_record) do
 end
 
 # If you precompile assets before deploying to production, use this line
-Bundler.require(*Rails.groups(:oracle, assets: %w[development production preview test]))
+Bundler.require(*Rails.groups(:oracle, assets: %w[development production test]))
 # If you want your assets lazily compiled in production, use this line
 # Bundler.require(:default, :assets, Rails.env)
 
@@ -39,6 +39,16 @@ module System
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
+
+    # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
+    # NOTE: Symbol was later added to enabled classes by default, see https://github.com/rails/rails/pull/45584,
+    # it was added to Rails 6.0.6, 6.1.7, 7.0.4
+    config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
+                                                          ActionController::Parameters,
+                                                          ActiveSupport::TimeWithZone,
+                                                          ActiveSupport::TimeZone,
+                                                          ActiveSupport::HashWithIndifferentAccess]
+
     config.action_view.form_with_generates_remote_forms = false
 
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
@@ -175,12 +185,8 @@ module System
     config.three_scale.sandbox_proxy = ActiveSupport::OrderedOptions.new
     config.three_scale.sandbox_proxy.merge!(config_for(:sandbox_proxy).symbolize_keys)
 
-    config.three_scale.web_analytics = ActiveSupport::OrderedOptions.new
     config.three_scale.tracking = ActiveSupport::OrderedOptions.new
-    config.three_scale.mixpanel = ActiveSupport::OrderedOptions.new
-    config.three_scale.mixpanel.merge!(config_for(:mixpanel).symbolize_keys)
     config.three_scale.core.merge!(config_for(:core).symbolize_keys)
-    config.three_scale.web_analytics.merge!(config_for(:web_analytics).deep_symbolize_keys)
 
     config.three_scale.segment = ActiveSupport::OrderedOptions.new
     config.three_scale.segment.merge!(config_for(:segment).symbolize_keys)

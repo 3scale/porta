@@ -1,4 +1,4 @@
-default: &base
+base: &default
   enabled: false
   server_scheme: 'https'
   server_host:
@@ -14,21 +14,10 @@ default: &base
   verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %> # 0
 
 development:
-  <<: *base
-  server_host:
-  bearer_token:
+  <<: *default
 
 test:
-  <<: *base
-  server_host:
-  bearer_token:
+  <<: *default
 
 production:
-  <<: *base
-  server_host:
-  bearer_token:
-
-preview:
-  <<: *base
-  server_host:
-  bearer_token:
+  <<: *default

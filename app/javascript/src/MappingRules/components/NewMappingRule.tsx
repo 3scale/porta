@@ -109,4 +109,5 @@ const NewMappingRule: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const NewMappingRuleWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewMappingRule {...props} />, containerId) }
 
-export { NewMappingRule, NewMappingRuleWrapper, Props }
+export type { Props }
+export { NewMappingRule, NewMappingRuleWrapper }

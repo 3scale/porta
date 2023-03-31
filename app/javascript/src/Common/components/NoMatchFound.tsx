@@ -35,4 +35,5 @@ const NoMatchFound: FunctionComponent<Props> = ({
   </EmptyState>
 )
 
-export { NoMatchFound, Props }
+export type { Props }
+export { NoMatchFound }

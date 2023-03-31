@@ -133,4 +133,5 @@ class SignupForm extends Component<Props, State> {
   }
 }
 
-export { SignupForm, Props }
+export type { Props }
+export { SignupForm }

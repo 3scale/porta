@@ -70,4 +70,5 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
   )
 }
 
-export { ServiceDiscoveryListItems, Props }
+export type { Props }
+export { ServiceDiscoveryListItems }

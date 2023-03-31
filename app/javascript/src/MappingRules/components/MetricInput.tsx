@@ -101,4 +101,5 @@ const MetricInput: FunctionComponent<Props> = ({
   )
 }
 
-export { MetricInput, Props }
+export type { Props }
+export { MetricInput }

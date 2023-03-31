@@ -10,7 +10,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   representer :entity => ::CMS::SectionRepresenter, :collection => ::CMS::SectionsRepresenter
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/sections.xml"
+  ##~ e.path = "/admin/api/cms/sections.json"
   ##~ e.responseClass = "List[short-section]"
   #
   ##~ op            = e.operations.add
@@ -35,6 +35,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query", :required => true
+  ##~ op.parameters.add :name => "system_name", :description => "Human readable and unique identifier", :paramType => "query"
   ##~ op.parameters.add :name => "public", :description => "Public or not", :default => "true", :type => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "parent_id", :description => "ID of a parent section", :paramType => "query", :default => "root section id", :type => "int"
   ##~ op.parameters.add :name => "partial_path", :description => "Path of the section", :paramType => "query"
@@ -47,7 +48,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/sections/{id}.xml"
+  ##~ e.path = "/admin/api/cms/sections/{id}.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -71,6 +72,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_section_id
   ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query"
+  ##~ op.parameters.add :name => "system_name", :description => "Human readable and unique identifier", :paramType => "query"
   ##~ op.parameters.add :name => "public", :description => "Public or not", :default => "true", :type => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "parent_id", :description => "ID of a parent section", :paramType => "query", :default => "root section id", :type => "int"
   ##~ op.parameters.add :name => "partial_path", :description => "Path of the section", :paramType => "query"

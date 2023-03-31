@@ -67,7 +67,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
         provider.services.create!(name: '2nd-service')
         assert provider.reload.multiservice?
         get admin_service_applications_path(service)
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         refute page.xpath("//tr").text.match /Service/
       end
     end

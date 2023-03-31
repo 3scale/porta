@@ -21,9 +21,16 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
     assert_equal @drop.id, @buyer.id
   end
 
-  test 'returns vat_rate' do
-    assert_equal(@drop.vat_rate, @buyer.vat_rate)
+  test 'returns nil vat_rate for drop if buyer vate rate is nil' do
+    assert_nil @drop.vat_rate
   end
+
+  test 'returns vat_rate' do
+    @buyer.update(vat_rate: '123.4')
+    @drop_account = Drops::Account.new(@buyer)
+    assert_equal @buyer.vat_rate, @drop_account.vat_rate
+  end
+
 
   test "returns buyer's applications" do
     assert @drop.applications.is_a?(Array)

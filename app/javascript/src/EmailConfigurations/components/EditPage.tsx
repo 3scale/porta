@@ -47,4 +47,5 @@ const EditPage: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const EditPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<EditPage {...props} />, containerId) }
 
-export { EditPage, EditPageWrapper, Props }
+export type { Props }
+export { EditPage, EditPageWrapper }

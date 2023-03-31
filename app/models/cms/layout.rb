@@ -7,35 +7,12 @@ class CMS::Layout < CMS::Template
 
   before_destroy :avoid_destruction
 
-  has_data_tag :layout
-
   def human_name
     title or I18n.t(system_name, :scope => [:cms, :layout], :default => system_name)
   end
 
   def content_type
     self[:content_type] || 'text/html'
-  end
-
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.title title
-      x.system_name system_name
-      x.liquid_enabled liquid_enabled?
-      unless options[:short]
-        x.draft { |node| node.cdata(draft) if draft }
-        x.published { |node| node.cdata(published) if published }
-      end
-    end
-
-    xml.to_xml
   end
 
   def can_be_destroyed?

@@ -5,6 +5,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   before_action :authorize_api_docs
   before_action :find_api_docs, only: %i[show preview toggle_visible edit update destroy]
   before_action :new_service_id_permitted, only: %i[create update]
+  helper_method :current_scope
 
   def index
     @api_docs_services = accessible_api_docs_services.page(params[:page]).includes(:service)

@@ -14,4 +14,5 @@ const HiddenInputs: FunctionComponent<Props> = ({ isPasswordReset = false }) => 
   </>
 )
 
-export { HiddenInputs, Props }
+export type { Props }
+export { HiddenInputs }

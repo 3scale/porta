@@ -24,4 +24,5 @@ const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
   </FormGroup>
 )
 
-export { NameInput, Props }
+export type { Props }
+export { NameInput }

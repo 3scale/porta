@@ -71,7 +71,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       get api_docs_service_path(format: :json, id: 'service_management_api')
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal "https://#{backend_config[:host]}", json["servers"][0]["url"]
+      assert_equal backend_config[:public_url], json["servers"][0]["url"]
     end
 
     test 'show the relative "/" path for system APIs' do

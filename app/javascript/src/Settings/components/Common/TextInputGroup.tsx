@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FormGroup, TextInput } from '@patternfly/react-core'
 
-import { FieldGroupProps } from 'Settings/types'
+import type { FieldGroupProps } from 'Settings/types'
 
 const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
   defaultValue,
@@ -30,4 +30,5 @@ const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
   )
 }
 
-export { TextInputGroup, FieldGroupProps as Props }
+export type { FieldGroupProps as Props }
+export { TextInputGroup }

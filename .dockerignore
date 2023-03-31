@@ -30,7 +30,6 @@ config/amazon_s3.yml
 config/database.yml
 config/redis.yml
 config/backend_redis.yml
-config/cubert.yml
 config/tinny_tim.yml
 config/*.sphinx.conf
 public/assets

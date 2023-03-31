@@ -213,4 +213,5 @@ const TableModal = <T extends IRecord>({
   )
 }
 
-export { TableModal, Props }
+export type { Props }
+export { TableModal }

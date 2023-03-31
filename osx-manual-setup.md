@@ -74,6 +74,8 @@ brew link imagemagick@6
   brew install pixman cairo pango
   ```
 
+* Additionally you need to install the **[LiberationSans](https://www.dafont.com/liberation-sans.font)** font. You can install in `~/Library/Fonts` or globally in `/Library/Fonts`.
+
 ### Databases
 
 The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). MySQL will be used by default.

@@ -49,7 +49,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
     get :show
 
     assert_response :success
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
 
     values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
@@ -66,7 +66,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
     get :show
 
     assert_response :success
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
 
     values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 

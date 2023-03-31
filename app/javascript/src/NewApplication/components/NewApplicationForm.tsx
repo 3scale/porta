@@ -203,4 +203,5 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const NewApplicationFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewApplicationForm {...props} />, containerId) }
 
-export { NewApplicationForm, NewApplicationFormWrapper, Props }
+export type { Props }
+export { NewApplicationForm, NewApplicationFormWrapper }

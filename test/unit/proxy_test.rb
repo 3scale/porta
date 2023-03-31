@@ -274,7 +274,7 @@ class ProxyTest < ActiveSupport::TestCase
 
   test 'backend' do
     proxy_config = System::Application.config.three_scale.sandbox_proxy
-    proxy_config.stubs(backend_scheme: 'https', backend_host: 'example.net:4400')
+    proxy_config.stubs(backend_endpoint: 'https://example.net:4400')
     assert_equal({ endpoint: 'https://example.net:4400', host: 'example.net' }, @proxy.backend)
   end
 

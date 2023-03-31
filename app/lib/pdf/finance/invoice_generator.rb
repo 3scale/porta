@@ -38,8 +38,6 @@ module Pdf
         print_line_items
         move_down(5)
 
-        print_line
-        move_down
         print_total
 
         move_down(2)
@@ -84,7 +82,7 @@ module Pdf
         table_with_column_header(person, width: TABLE_HALF_WIDTH) do
           # prevent long addresses from wrapping header words
           # see https://github.com/prawnpdf/prawn-table/issues/67
-          style(column(0), width: 50)
+          style(column(0), width: 58)
         end
       end
 
@@ -109,11 +107,16 @@ module Pdf
       end
 
       def print_total
-        @pdf.bounding_box([@pdf.bounds.right - 310, @pdf.cursor], width: 310) do
-          @pdf.text "AMOUNT DUE: #{@coder.decode(rounded_price_tag(@data.cost))}", size: 13, align: :right, style: :bold
-        end
-      end
+        text = "AMOUNT DUE: #{@coder.decode(rounded_price_tag(@data.cost))}"
+        format = {size: 13, align: :right, style: :bold}
+        total_height = @pdf.height_of_formatted([{ text: text, **format }]) + move_amount(1)
 
+        @pdf.start_new_page if @pdf.cursor < total_height
+
+        print_line
+        move_down(1)
+        @pdf.text text, **format
+      end
     end
   end
 end

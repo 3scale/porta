@@ -53,5 +53,3 @@ test:
   <<: *default
 
 production:
-
-preview:

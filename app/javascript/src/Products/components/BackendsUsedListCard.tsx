@@ -42,4 +42,5 @@ const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsUsedListCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendsUsedListCard {...props} />, containerId) }
 
-export { BackendsUsedListCard, BackendsUsedListCardWrapper, Props }
+export type { Props }
+export { BackendsUsedListCard, BackendsUsedListCardWrapper }
