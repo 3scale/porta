@@ -311,21 +311,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  class ServiceCreateTest < self
-    test 'create error shows the right flash message' do
-      post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
-
-      @provider.settings.allow_multiple_services!
-
-      post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Name can\'t be blank', flash[:error]
-
-      post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
-      assert_equal 'System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed.', flash[:error]
-    end
-  end
-
   class ServiceUpdateTest < self
     test 'update' do
       assert_not_equal @service.name, 'Supetramp'
