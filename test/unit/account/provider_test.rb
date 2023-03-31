@@ -18,7 +18,7 @@ class Account::ProviderTest < ActiveSupport::TestCase
       assert_equal authentication_provider_class, authentication_provider.class
       assert_equal kind_name.downcase, authentication_provider.kind
       assert_equal account, authentication_provider.account
-      authentication_provider.valid? && puts(authentication_provider.errors.full_messages)
+      authentication_provider.valid? && puts(authentication_provider.errors.map(&:full_messages))
       assert authentication_provider.valid?
     end
   end
@@ -31,7 +31,7 @@ class Account::ProviderTest < ActiveSupport::TestCase
       assert_equal authentication_provider_class, authentication_provider.class
       assert_equal kind_name.downcase, authentication_provider.kind
       assert_equal account, authentication_provider.account
-      authentication_provider.valid? && puts(authentication_provider.errors.full_messages)
+      authentication_provider.valid? && puts(authentication_provider.errors.map(&:full_messages))
       assert authentication_provider.valid?
     end
   end
