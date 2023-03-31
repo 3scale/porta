@@ -1,3 +1,7 @@
+/* As we disabled automatic PF4/React css inline injection */
+/* Now we need to add pf4 styles manually */
+
+// import 'patternflyStyles/pf4Base'
 @import '~@patternfly/patternfly/patternfly-variables.css';
 @import '~@patternfly/patternfly/patternfly-shield-noninheritable.css';
 @import '~@patternfly/patternfly/patternfly-shield-inheritable.css';
@@ -36,3 +40,11 @@ This code must be removed once PF4 is implemented in the whole application */
   }
 }
 /****** END OF HACK ******/
+
+// import 'patternflyStyles/loginPage'
+@import '~@patternfly/patternfly/components/Login/login.css';
+@import '~@patternfly/patternfly/components/BackgroundImage/background-image.css';
+@import '~@patternfly/patternfly/components/Form/form.css';
+@import '~@patternfly/patternfly/components/FormControl/form-control.css';
+@import '~@patternfly/patternfly/components/Title/title.css';
+@import '~@patternfly/patternfly/components/Button/button.css';
