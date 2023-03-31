@@ -992,7 +992,7 @@ DEPENDENCIES
   mail_view (~> 2.0.4)
   mechanize
   mimemagic (~> 0.3.10)
-  minitest (= 5.10.3)
+  minitest (= 5.18)
   minitest-ci
   minitest-reporters
   minitest-stub-const
