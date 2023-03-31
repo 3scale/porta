@@ -31,7 +31,7 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
   end
 
   def partial_from_filesystem(path, context)
-    renderer = LiquidPartialRenderer.new(@lookup_context)
+    renderer = LiquidPartialRenderer.new(@lookup_context, {})
     template = renderer.find_template(path)
     template.source
   rescue ActionView::MissingTemplate
