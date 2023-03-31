@@ -3,7 +3,7 @@ module TestHelpers
     private
 
     def assert_valid(record, message = nil)
-      assert record.valid?, message || record.errors.full_messages.to_sentence
+      assert record.valid?, message || record.errors.map(&:full_messages).to_sentence
     end
 
     # TODO: rename to assert_not_valid and replace assert_not *.valid? everywhere
