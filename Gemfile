@@ -219,7 +219,7 @@ group :test do
   gem 'shoulda', '~> 4.0'
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
-  gem 'minitest', '5.10.3'
+  gem 'minitest', '5.18'
   gem 'minitest-ci', require: false
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
