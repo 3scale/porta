@@ -1,8 +1,8 @@
 module Liquid
   class Template
     class Handler
-      def self.call(template)
-        "Liquid::Template::Handler.new(self).render(#{template.source.inspect}, local_assigns)"
+      def self.call(template, message)
+        "Liquid::Template::Handler.new(self).render(#{message.inspect}, local_assigns)"
       end
 
       def initialize(view)
