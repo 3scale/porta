@@ -32,7 +32,7 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
 
     service.stubs(updated_at: Time.now)
     service_attributes =  @source.attributes_for_proxy['services'][0]
-    assert_equal service.updated_at, service_attributes['updated_at']
+    assert_equal service.updated_at.to_i, service_attributes['updated_at'].to_time.to_i
 
     assert proxy_attributes = services.first.proxy
 
@@ -60,4 +60,3 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
     assert_nil @source.attributes_for_proxy['services'][0]['proxy']['policies_config']
   end
 end
-
