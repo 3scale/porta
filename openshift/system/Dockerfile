@@ -12,7 +12,7 @@ ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
-    NODEJS_SCL=rh-nodejs12 \
+    NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
 
