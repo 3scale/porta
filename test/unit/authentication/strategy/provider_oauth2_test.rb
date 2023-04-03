@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
+class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
 
   setup do
     @provider = FactoryBot.create(:simple_provider)
@@ -249,7 +249,7 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
           code:        '1234',
           request:     mock_request,
           invitation:  invitation
-        }, procedure:  Authentication::Strategy::Oauth2::CreateInvitedUser)
+        }, procedure:  Authentication::Strategy::OAuth2::CreateInvitedUser)
 
         assert_instance_of User, result
         assert_equal result.email, user_data[:email]

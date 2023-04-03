@@ -1,6 +1,6 @@
 module Authentication
   module Strategy
-    class ProviderOauth2 < Authentication::Strategy::OAuth2Base
+    class ProviderOAuth2 < Authentication::Strategy::OAuth2Base
 
       class FindOrCreateUser < Procedure
 
@@ -13,7 +13,7 @@ module Authentication
         private
 
         def find_user
-          result = Users::FindOauth2UserService.run(user_data, authentication_provider, users)
+          result = Users::FindOAuth2UserService.run(user_data, authentication_provider, users)
           strategy.error_message = result.error_message
           result.user
         end
