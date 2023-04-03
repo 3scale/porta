@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Admin::Api::BaseController < ApplicationController
+  include ApiSupport::ForbidParams
+
+  forbid_extra_params :raise, whitelist: %i[id page per_page]
+
   around_action :notification_center
 
   before_action :force_provider_or_master_domain
