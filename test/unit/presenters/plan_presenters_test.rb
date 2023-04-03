@@ -7,11 +7,11 @@ class PlanPresentersTest < ActiveSupport::TestCase
     assert_equal plans.reorder(name: :desc), presenter({ sort: 'name', direction: 'desc' }).paginated_table_plans
     assert_equal plans.reorder(name: :asc), presenter({ sort: 'name', direction: 'asc' }).paginated_table_plans
 
-    assert_equal plans.reorder(contracts_count: :desc), presenter({ sort: 'contracts_count', direction: 'desc' }).paginated_table_plans
-    assert_equal plans.reorder(contracts_count: :asc), presenter({ sort: 'contracts_count', direction: 'asc' }).paginated_table_plans
+    assert_equal plans.reorder(contracts_count: :desc, name: :asc), presenter({ sort: 'contracts_count', direction: 'desc' }).paginated_table_plans
+    assert_equal plans.reorder(contracts_count: :asc, name: :asc), presenter({ sort: 'contracts_count', direction: 'asc' }).paginated_table_plans
 
-    assert_equal plans.reorder(state: :desc), presenter({ sort: 'state', direction: 'desc' }).paginated_table_plans
-    assert_equal plans.reorder(state: :asc), presenter({ sort: 'state', direction: 'asc' }).paginated_table_plans
+    assert_equal plans.reorder(state: :desc, name: :asc), presenter({ sort: 'state', direction: 'desc' }).paginated_table_plans
+    assert_equal plans.reorder(state: :asc, name: :asc), presenter({ sort: 'state', direction: 'asc' }).paginated_table_plans
   end
 
   test 'default plan select plans have a fixed order by name' do

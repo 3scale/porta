@@ -83,7 +83,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
     test 'index pagination does not count custom plans' do
       get admin_service_application_plans_path(service)
-      table = Nokogiri::HTML.parse(response.body).xpath "//*[@id='plans_table']"
+      table = Nokogiri::HTML4.parse(response.body).xpath "//*[@id='plans_table']"
 
       pagination_count = JSON.parse table.attribute('data-count')
       table_count = JSON.parse(table.attribute('data-plans').value).length
@@ -327,7 +327,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       get admin_service_application_plans_path(service)
       assert_response :success
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       data_plans_ids = JSON.parse(page.css('#default_plan').first.attributes["data-plans"].value).map{|p| p["id"]}
       assert_same_elements service.application_plans.pluck(:id), data_plans_ids
       assert_not_includes data_plans_ids, forbidden_plan.id

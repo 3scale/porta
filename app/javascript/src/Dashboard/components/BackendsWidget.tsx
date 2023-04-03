@@ -15,8 +15,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
 
-import 'Dashboard/styles/dashboard.scss'
-
 interface Props {
   newBackendPath: string;
   backendsPath: string;
@@ -39,7 +37,7 @@ const BackendsWidget: FunctionComponent<Props> = ({
   backendsPath,
   backends
 }) => (
-  <Card className="pf-c-card">
+  <Card>
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
         <CubeIcon />
@@ -77,4 +75,5 @@ const BackendsWidget: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsWidgetWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendsWidget {...props} />, containerId) }
 
-export { BackendsWidget, BackendsWidgetWrapper, Props }
+export type { Props }
+export { BackendsWidget, BackendsWidgetWrapper }

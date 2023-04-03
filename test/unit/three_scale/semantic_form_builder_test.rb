@@ -62,7 +62,7 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     )
 
     # test errors as sentence
-    html_doc = Nokogiri::HTML(buffer.output)
+    html_doc = Nokogiri::HTML4(buffer.output)
     assert_equal 'error 1 and error 2', html_doc.css('li#dummy_title_input p.inline-errors').text
 
 
@@ -77,7 +77,7 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
       end
     )
 
-    html_doc = Nokogiri::HTML(buffer.output)
+    html_doc = Nokogiri::HTML4(buffer.output)
 
     # errors of title
     assert html_doc.css('li#dummy_title_input p.inline-errors').present?

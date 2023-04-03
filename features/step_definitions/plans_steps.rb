@@ -134,16 +134,16 @@ And "they can sort plans by name, no. of contracts and state" do
     assert_plans_table @plans.reorder(name: :desc), sort: true
 
     click_on 'Contracts'
-    assert_plans_table @plans.reorder(contracts_count: :asc), sort: true
+    assert_plans_table @plans.reorder(contracts_count: :asc, name: :asc), sort: true
 
     click_on 'Contracts'
-    assert_plans_table @plans.reorder(contracts_count: :desc), sort: true
+    assert_plans_table @plans.reorder(contracts_count: :desc, name: :asc), sort: true
 
     click_on 'State'
-    assert_plans_table @plans.reorder(state: :asc), sort: true
+    assert_plans_table @plans.reorder(state: :asc, name: :asc), sort: true
 
     click_on 'State'
-    assert_plans_table @plans.reorder(state: :desc), sort: true
+    assert_plans_table @plans.reorder(state: :desc, name: :asc), sort: true
   end
 end
 

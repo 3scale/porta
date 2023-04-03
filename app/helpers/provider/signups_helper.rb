@@ -32,10 +32,6 @@ module Provider::SignupsHelper
     link_to(text, 'https://mail.google.com/mail/u/?authuser=' + email, target: '_blank', id: 'gmail-inbox')
   end
 
-  def analytics_credentials
-    ThreeScale::Analytics.credentials
-  end
-
   def document_origin
     request.headers['3scale-Origin'] || request.headers['Origin']
   end

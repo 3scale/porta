@@ -1,7 +1,3 @@
-base: &default
+production:
   - :mem_cache_store
   - <%= ENV['MEMCACHE_SERVERS'].presence || 'system-memcache:11211' %>
-
-preview: *default
-
-production: *default

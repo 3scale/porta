@@ -115,4 +115,5 @@ class Login3scaleForm extends Component<Props, State> {
   }
 }
 
-export { Login3scaleForm, Props }
+export type { Props }
+export { Login3scaleForm }

@@ -6,14 +6,19 @@ source 'https://rubygems.org'
 # to not use insecure git protocol
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rack', '~> 2.1.4'
+gem 'rack', '~> 2.2.6'
 
 gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.2.7'
+gem 'rails', '~> 5.2.8'
 gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
+
+# Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
+# https://github.com/mikel/mail/blob/2-8-stable/CHANGELOG.rdoc#version-281-unreleased-
+# Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
+gem 'mail', '~> 2.7.1'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -86,7 +91,7 @@ gem 'dalli', '~> 2.7' # remove version once we stop supporting ruby 2.4
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.10.10'
+gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
 
 gem 'acts-as-taggable-on', '~> 8.0'
@@ -253,7 +258,7 @@ end
 gem 'webpacker', '5.4.4'
 
 gem 'developer_portal', path: 'lib/developer_portal'
-gem 'unicorn', require: false, group: %i[production preview]
+gem 'unicorn', require: false, group: %i[production]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do

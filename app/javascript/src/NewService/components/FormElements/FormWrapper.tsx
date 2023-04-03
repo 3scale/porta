@@ -40,4 +40,5 @@ const FormWrapper: FunctionComponent<Props> = ({
   </form>
 )
 
-export { FormWrapper, Props }
+export type { Props }
+export { FormWrapper }

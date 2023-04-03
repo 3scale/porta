@@ -8,7 +8,7 @@ Feature: ActiveDocs
     And the current provider is foo.3scale.localhost
 
   Scenario: Loading ActiveDocs 1.0
-    Given provider "foo.3scale.localhost" has a swagger 1.0
+    Given a service with a Swagger 1.2 spec
     Given the provider has cms page "/version-10" with:
     """
     {% active_docs version: "1.0" %}

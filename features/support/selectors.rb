@@ -42,9 +42,6 @@ module HtmlSelectorsHelper
       end
       [:xpath, "//tr[td[text() = '#{text}']]"]
 
-    when /the row for ([^:"]+) active docs/
-      [:xpath, "//tr[td[text() = '#{$1}']]"]
-
     #
     # General helpers
     #

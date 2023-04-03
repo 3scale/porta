@@ -1,0 +1,51 @@
+{
+  "basePath": "https://echo-api.3scale.net",
+  "apiVersion": "v1",
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "/",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Say Hello!",
+          "description": "This operation says hello.",
+          "nickname": "hello",
+          "group": "words",
+          "type": "string",
+          "parameters": [
+            {
+              "name": "user_key",
+              "description": "Your API access key",
+              "type": "string",
+              "paramType": "header",
+              "threescale_name": "user_keys"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/hello",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Say Hello!",
+          "description": "This operation says hello.",
+          "nickname": "hello",
+          "group": "words",
+          "type": "string",
+          "parameters": [
+            {
+              "name": "user_key",
+              "description": "Your API access key",
+              "type": "string",
+              "paramType": "header",
+              "threescale_name": "user_keys"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

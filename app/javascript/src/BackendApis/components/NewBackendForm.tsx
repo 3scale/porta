@@ -81,4 +81,5 @@ const NewBackendForm: FunctionComponent<Props> = ({
   )
 }
 
-export { NewBackendForm, Props }
+export type { Props }
+export { NewBackendForm }

@@ -21,4 +21,5 @@ const FlashMessages: FunctionComponent<Props> = ({ flashMessages }) => (
   </div>
 )
 
-export { FlashMessages, Props }
+export type { Props }
+export { FlashMessages }

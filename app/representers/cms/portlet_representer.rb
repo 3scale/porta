@@ -3,10 +3,8 @@
 module CMS::PortletRepresenter
   include ThreeScale::JSONRepresenter
 
-  wraps_resource
-
   property :id
-
+  property :type, getter: ->(*) { CMS::TypeMap.cms_type(self.class) }
   property :title
   property :portlet_type
   property :name

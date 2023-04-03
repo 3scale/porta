@@ -33,4 +33,5 @@ const PrivateEndpointInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { PrivateEndpointInput, Props }
+export type { Props }
+export { PrivateEndpointInput }

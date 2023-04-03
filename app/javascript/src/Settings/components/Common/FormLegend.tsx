@@ -9,4 +9,5 @@ const FormLegend: React.FunctionComponent<React.HTMLAttributes<HTMLLegendElement
   </legend>
 )
 
-export { FormLegend, Props }
+export type { Props }
+export { FormLegend }

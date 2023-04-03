@@ -8,7 +8,7 @@ Feature: ActiveDocs
     And the current provider is foo.3scale.localhost
 
   Scenario: Loading new Swagger template with javascript packs
-    Given provider "foo.3scale.localhost" has the swagger example of signup
+    Given a service with a OAS 3.0 spec
     And the provider has cms page "/swagger-ui-3" with:
     """
     {% content_for javascripts %}

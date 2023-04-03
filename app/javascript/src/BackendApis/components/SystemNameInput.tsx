@@ -24,4 +24,5 @@ const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }
   </FormGroup>
 )
 
-export { SystemNameInput, Props }
+export type { Props }
+export { SystemNameInput }

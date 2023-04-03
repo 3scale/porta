@@ -84,4 +84,5 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
   )
 }
 
-export { PolicyConfig, Props }
+export type { Props }
+export { PolicyConfig }

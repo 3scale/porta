@@ -2,7 +2,6 @@ class CMS::Template < ApplicationRecord
   include Symbolize
 
   include CMS::Filtering
-  include CMS::DataTag
 
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
   scope :for_rails_view, ->(path) { where(rails_view_path: path.to_s) }

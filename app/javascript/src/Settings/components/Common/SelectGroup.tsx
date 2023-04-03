@@ -38,4 +38,5 @@ const SelectGroup: React.FunctionComponent<Props> = ({
   )
 }
 
-export { SelectGroup, Props }
+export type { Props }
+export { SelectGroup }

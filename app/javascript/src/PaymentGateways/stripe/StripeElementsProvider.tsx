@@ -21,4 +21,5 @@ const StripeElementsProvider: FunctionComponent<PropsWithChildren<Props>> = ({ p
   )
 }
 
-export { StripeElementsProvider, Props }
+export type { Props }
+export { StripeElementsProvider }

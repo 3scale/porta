@@ -33,4 +33,5 @@ const MicroPagination: FunctionComponent<Props> = ({
   )
 }
 
-export { MicroPagination, Props }
+export type { Props }
+export { MicroPagination }

@@ -98,4 +98,5 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
   )
 }
 
-export { EmailConfigurationsTable, Props }
+export type { Props }
+export { EmailConfigurationsTable }

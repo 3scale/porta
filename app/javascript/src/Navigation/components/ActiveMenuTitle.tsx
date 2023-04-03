@@ -58,4 +58,5 @@ const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
   )
 }
 
-export { ActiveMenuTitle, Props }
+export type { Props }
+export { ActiveMenuTitle }

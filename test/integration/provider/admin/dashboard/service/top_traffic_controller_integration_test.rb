@@ -23,7 +23,7 @@ class Provider::Admin::Dashboard::Service::TopTrafficControllerIntegrationTest <
     Dashboard::TopTrafficPresenter.any_instance.stubs(current_items: current_items)
 
     get provider_admin_dashboard_service_top_traffic_path(@service)
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     application_show_paths_displayed = page.xpath("//a[@class='DashboardWidgetList-link']").map { |node| node['href'] }
     assert_same_elements cinstances.map { |cinstance| provider_admin_application_path(cinstance) }, application_show_paths_displayed
   end

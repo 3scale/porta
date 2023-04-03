@@ -34,7 +34,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansControllerTest < ActionDispatch
 
     get new_admin_buyers_service_contracts_bulk_change_plan_path, params: { selected: contracts.map(&:id) }
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
 
     expected_display_names = contracts.map { |contract| contract.decorate.account_admin_user_display_name }
     li_title_display_names = page.xpath("//ul[@class='bulk_operation_items']/li").map { |li| li.attribute('title').value.split(' - ')[1] }

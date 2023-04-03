@@ -77,4 +77,5 @@ const NewBackendModal: FunctionComponent<Props> = ({
   )
 }
 
-export { NewBackendModal, Props }
+export type { Props }
+export { NewBackendModal }
