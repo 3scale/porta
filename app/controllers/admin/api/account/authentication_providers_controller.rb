@@ -87,7 +87,7 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    presenters = ProviderOauthFlowPresenter.wrap(self_authentication_providers, request, request.host)
+    presenters = ProviderOAuthFlowPresenter.wrap(self_authentication_providers, request, request.host)
     respond_with(presenters)
   end
 
@@ -123,7 +123,7 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   end
 
   def authentication_provider_presenter
-    ProviderOauthFlowPresenter.new(authentication_provider, request, request.host)
+    ProviderOAuthFlowPresenter.new(authentication_provider, request, request.host)
   end
 
   def authorize_rolling_update

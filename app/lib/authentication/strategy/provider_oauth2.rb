@@ -1,6 +1,6 @@
 module Authentication
   module Strategy
-    class ProviderOauth2 < Authentication::Strategy::Oauth2Base
+    class ProviderOauth2 < Authentication::Strategy::OAuth2Base
 
       class FindOrCreateUser < Procedure
 

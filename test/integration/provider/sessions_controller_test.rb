@@ -14,7 +14,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'bounce redirects to the authorize_url' do
     get authorization_provider_bounce_path(authentication_provider.system_name)
     request = ActionDispatch::TestRequest.create
-    assert_redirected_to ProviderOauthFlowPresenter.new(authentication_provider, request, @provider.external_admin_domain).authorize_url
+    assert_redirected_to ProviderOAuthFlowPresenter.new(authentication_provider, request, @provider.external_admin_domain).authorize_url
   end
 
   test 'bounce returns not found if the authentication provider belongs to another provider' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OauthFlowPresenter
+class OAuthFlowPresenter
   DELEGATED_METHODS = AuthenticationProvider.attribute_names.map(&:to_sym) | %i[account errors callback_account]
 
   delegate(*DELEGATED_METHODS, to: :authentication_provider)

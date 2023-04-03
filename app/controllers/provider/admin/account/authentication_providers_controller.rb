@@ -26,7 +26,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
 
   def show
     @presenter = Provider::Admin::Account::AuthenticationProvidersShowPresenter.new(authentication_provider)
-    @oauth_presenter = ProviderOauthFlowPresenter.new(authentication_provider, request, request.host)
+    @oauth_presenter = ProviderOAuthFlowPresenter.new(authentication_provider, request, request.host)
   end
 
   def edit

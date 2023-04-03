@@ -10,3 +10,6 @@ ThinkingSphinx::Index.define('cms/page'.to_sym, with: :real_time) do
   indexes :published
   scope { CMS::Page.where(searchable: true) }
 end
+
+module CMSPageIndex
+end

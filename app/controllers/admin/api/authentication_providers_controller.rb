@@ -103,7 +103,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    presenters = OauthFlowPresenter.wrap(authentication_providers, request)
+    presenters = OAuthFlowPresenter.wrap(authentication_providers, request)
     respond_with(presenters)
   end
 
@@ -137,7 +137,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   end
 
   def authentication_provider_presenter
-    OauthFlowPresenter.new(authentication_provider, request)
+    OAuthFlowPresenter.new(authentication_provider, request)
   end
 
   def build_authentication_provider

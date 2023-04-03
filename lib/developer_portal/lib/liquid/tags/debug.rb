@@ -1,7 +1,7 @@
 module Liquid
   module Tags
     class Debug < Base
-      include ActionView::Helpers::ApplicationHelper
+      include System::UrlHelpers
       # vars excluded from the help message
       PROTECTED_ASSIGNS = %w{ content_for_layout }
 

@@ -1,6 +1,6 @@
 module ThreeScale
   module OAuth2
-    class GithubClient < ClientBase
+    class GitHubClient < ClientBase
       def uid
         raw_info['id']
       end

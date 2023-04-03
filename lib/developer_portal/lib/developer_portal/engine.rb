@@ -3,6 +3,7 @@ module DeveloperPortal
     isolate_namespace DeveloperPortal
 
     config.autoload_paths += %W(#{config.root.join('lib')})
+    config.eager_load_paths += %W(#{config.root.join('lib')})
     config.paths.add 'lib', eager_load: true
 
     initializer :assets do |config|

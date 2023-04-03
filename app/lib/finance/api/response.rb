@@ -1,6 +1,6 @@
 module Finance
-  module API
-    module Collection
+  module Api
+    module Response
     end
   end
 end
