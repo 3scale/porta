@@ -3,7 +3,7 @@
 class Admin::Api::CMS::BaseController < Admin::Api::BaseController
   include ApiSupport::ForbidParams
 
-  forbid_extra_params :raise, whitelist: %i[id page per_page]
+  forbid_extra_params :reject, whitelist: %i[id page per_page]
 
   before_action :ensure_json_request
   before_action :deny_on_premises_for_master

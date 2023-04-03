@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::BaseController < ApplicationController
-    around_action :notification_center
+  around_action :notification_center
 
   before_action :force_provider_or_master_domain
   after_action :report_traffic
