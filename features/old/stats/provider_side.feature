@@ -7,7 +7,7 @@ Feature: Provider stats
   # TODO: Find a way to test the charts
 
   Background:
-    Given a provider "foo.3scale.localhost" is logged in
+    Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And all the rolling updates features are off
