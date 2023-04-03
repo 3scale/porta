@@ -64,12 +64,13 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         forbid_extra_params :log
       end
 
-      test 'writes on the log when controller_action_on_unpermitted_parameters = log' do
+      test 'writes on the log when forbid_extra_params = log' do
         with_test_routes do
           log_output = capture_log do
             post '/test/log', params: { unpermitted: true }
           end
 
+          assert_response :success
           assert log_output.include?('Unpermitted parameters: ["unpermitted"]')
         end
       end
@@ -80,9 +81,11 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         forbid_extra_params :raise
       end
 
-      test 'raises an ActionController::UnpermittedParameters when controller_action_on_unpermitted_parameters = :raise' do
+      test 'returns 406 when forbid_extra_params = :raise' do
         with_test_routes do
-          assert_raises(ActionController::UnpermittedParameters) { post '/test/raise', params: { unpermitted: true } }
+          post '/test/raise', params: { unpermitted: true }
+
+          assert_response :unprocessable_entity
         end
       end
     end
@@ -98,7 +101,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         with_test_routes do
           post '/test/symbol', params: { extra_permitted: true }
 
-          assert true # No error was raised
+          assert_response :success
         end
       end
     end
@@ -112,7 +115,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         with_test_routes do
           post '/test/string', params: { extra_permitted: true }
 
-          assert true # No error was raised
+          assert_response :success
         end
       end
     end
@@ -126,7 +129,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         with_test_routes do
           post '/test/list', params: { also_permitted: true }
 
-          assert true # No error was raised
+          assert_response :success
         end
       end
     end
