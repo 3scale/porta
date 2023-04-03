@@ -12,7 +12,7 @@ module Authentication
         private
 
         def find_user
-          Users::FindOauth2UserService.run(user_data, authentication_provider, users).user.tap do |user|
+          Users::FindOAuth2UserService.run(user_data, authentication_provider, users).user.tap do |user|
             strategy.user_used_sso_authorization(user, user_data) if user
           end
         end

@@ -246,8 +246,8 @@ When(/^the provider upgrades to plan "(.+?)"$/) do |name|
   @provider.force_upgrade_to_provider_plan!(plan)
 end
 
-When(/I authenticate by Oauth2$/) do
-  # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
+When(/I authenticate by OAuth2$/) do
+  # it works for OAuth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
   visit "/auth/#{@authentication_provider.system_name}/callback"
 end
 

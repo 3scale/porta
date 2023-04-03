@@ -3,7 +3,7 @@ require 'test_helper'
 class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
 
-  Oauth2 = Authentication::Strategy::Oauth2
+  OAuth2 = Authentication::Strategy::OAuth2
 
   def setup
     @provider   = FactoryBot.create(:simple_provider)
@@ -23,8 +23,8 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
 
     # sso attributes do exist, sso authorization object should be built
     # and therefore, user password should not be required
-    Oauth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
-    Oauth2.any_instance.expects(:user_data).returns({ uid: '12345' })
+    OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
+    OAuth2.any_instance.expects(:user_data).returns({ uid: '12345' })
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     get invitee_signup_path(invitation_token: @invitation.token)
@@ -63,38 +63,38 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
 
   def test_auth0_sso_create
     user = FactoryBot.create(:simple_user, account: @buyer)
-    Oauth2.any_instance.expects(:authenticate).returns(user).at_least_once
+    OAuth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/auth0/auth0_ab1234/callback?state=#{@invitation.token}"
     assert_response :redirect
     assert_equal 'Signed up successfully', flash[:notice]
   end
 
   def test_sso_create
-    Oauth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
-    Oauth2.any_instance.expects(:authenticate).returns(false).at_least_once
+    OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
+    OAuth2.any_instance.expects(:authenticate).returns(false).at_least_once
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     assert session[:invitation_sso_uid].blank?
     refute assigns(:user).valid?
 
-    Oauth2.any_instance.expects(:user_data).returns({ uid: '12345' })
+    OAuth2.any_instance.expects(:user_data).returns({ uid: '12345' })
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     assert_equal '12345', session[:invitation_sso_uid]
     refute assigns(:user).valid?
 
     user = FactoryBot.create(:simple_user, account: @buyer)
-    Oauth2.any_instance.expects(:authenticate).returns(user).at_least_once
+    OAuth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :redirect
     assert_equal 'Signed up successfully', flash[:notice]
   end
 
   def test_error_sso_create
-    Oauth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
-    Oauth2.any_instance.expects(:authenticate).returns(false).at_least_once
+    OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
+    OAuth2.any_instance.expects(:authenticate).returns(false).at_least_once
     error_data = ThreeScale::OAuth2::ErrorData.new(error: 'The code is incorrect or expired.')
-    Oauth2.any_instance.expects(:user_data).returns(error_data)
+    OAuth2.any_instance.expects(:user_data).returns(error_data)
 
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
@@ -103,7 +103,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   end
 
   def test_create
-    Oauth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
+    OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
 
     assert_difference '@buyer.users.count' do
       post invitee_signup_path(invitation_token: @invitation.token, user: user_valid_params)

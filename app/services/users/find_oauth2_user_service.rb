@@ -1,4 +1,4 @@
-class Users::FindOauth2UserService
+class Users::FindOAuth2UserService
 
   Result = Struct.new(:user, :error_message)
 

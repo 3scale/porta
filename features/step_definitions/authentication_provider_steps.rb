@@ -37,11 +37,11 @@ Given(/^the provider has the authentication provider "([^"]+)" published$/) do |
   @authentication_provider.update_attributes!(published: true)
 end
 
-Given(/^the Oauth2 user has all the required fields$/) do
+Given(/^the OAuth2 user has all the required fields$/) do
   stub_user_data('OrganizationName')
 end
 
-Given(/^the Oauth2 user does not have all the required fields$/) do
+Given(/^the OAuth2 user does not have all the required fields$/) do
   stub_user_data(nil)
 end
 
