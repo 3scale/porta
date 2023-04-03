@@ -10,7 +10,7 @@ class NestedAssociationValidator < ActiveModel::EachValidator
     return if !value || value.valid? || value.marked_for_destruction?
     options[:report].each do |alternate, attr|
       errors = value.errors.messages[alternate]
-      record.errors[attr || alternate].concat(errors) if errors.present?
+      errors.each { |error| record.errors.add((attr || alternate), error) } if errors.any?
     end
   end
 end
