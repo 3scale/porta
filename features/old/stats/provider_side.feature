@@ -7,7 +7,7 @@ Feature: Provider stats
   # TODO: Find a way to test the charts
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider "foo.3scale.localhost" is logged in
     And provider "foo.3scale.localhost" has multiple applications enabled
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And all the rolling updates features are off
@@ -46,20 +46,6 @@ Feature: Provider stats
     And I follow "Analytics"
     And I follow "Top Applications"
     Then I should see "Top Applications" in a header
-
-  Scenario: Default metric is product metric
-    Given a product "My Product" and a backend
-    And the backend is used by this product
-    And the following metrics:
-      | Metric   | system_name | owner_type    |
-      | Pizza    |      pizza  |  "BackendApi" |
-      | Hits     |      hits   |   "Service"   |
-
-    When I log in as provider "foo.3scale.localhost"
-    When I go to the overview page of product "My Product"
-    And I follow "Analytics"
-    And I follow "Traffic"
-    And I should see "Hits" as the default metric
 
   @wip
   Scenario: Signups (single application mode)

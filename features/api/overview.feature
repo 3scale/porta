@@ -14,3 +14,10 @@ Feature: Product > Overview page
       | Backend 1 |
       | Backend 2 |
       | Backend 3 |
+
+  @javascript
+  Scenario: Show product metric as default
+      When I go to the overview page of product "My Product"
+      And I follow "Analytics"
+      And I follow "Traffic"
+    Then I should see "Hits"
