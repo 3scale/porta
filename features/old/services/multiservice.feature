@@ -64,9 +64,10 @@ Feature: Multiservice feature
       Then I should see "Only ASCII letters, numbers, dashes and underscores are allowed."
 
     @javascript
-    Scenario: Create new product: with already existed product name
+    Scenario: Create new product: with already existed System name
       Given I am logged in as provider "foo.3scale.localhost"
-        And a service for provider "foo.3scale.localhost" with system_name "Fancy API"
+        And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+        And service discovery is not enabled
       When I am on the provider dashboard
         And I follow "Create Product"
         And I fill in "Name" with "Product Name"
