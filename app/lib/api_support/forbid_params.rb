@@ -54,7 +54,7 @@ module ApiSupport
       case self.class._forbid_params_action
       when :log
         Rails.logger.warn("Unpermitted parameters: #{unpermitted_keys}")
-      when :raise
+      when :reject
         raise UnpermittedParameters, unpermitted_keys
       end
     end

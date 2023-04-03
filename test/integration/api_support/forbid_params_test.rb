@@ -15,7 +15,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
     Rails.application.routes.draw do
       post '/test/default' => 'api_support/forbid_params_test/action/default/default#create'
       post '/test/log' => 'api_support/forbid_params_test/action/log/log#create'
-      post '/test/raise' => 'api_support/forbid_params_test/action/raise/raise#create'
+      post '/test/reject' => 'api_support/forbid_params_test/action/reject/reject#create'
       post '/test/symbol' => 'api_support/forbid_params_test/whitelist/symbol/symbol#create'
       post '/test/string' => 'api_support/forbid_params_test/whitelist/string/string#create'
       post '/test/list' => 'api_support/forbid_params_test/whitelist/list/list#create'
@@ -76,14 +76,14 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    class Raise <Action
-      class RaiseController < TestController
-        forbid_extra_params :raise
+    class Reject <Action
+      class RejectController < TestController
+        forbid_extra_params :reject
       end
 
-      test 'returns 406 when forbid_extra_params = :raise' do
+      test 'returns 406 when forbid_extra_params = :reject' do
         with_test_routes do
-          post '/test/raise', params: { unpermitted: true }
+          post '/test/reject', params: { unpermitted: true }
 
           assert_response :unprocessable_entity
         end
@@ -94,10 +94,10 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
   class Whitelist < ApiSupport::ForbidParamsTest
     class Symbol < Whitelist
       class SymbolController < TestController
-        forbid_extra_params :raise, whitelist: :extra_permitted
+        forbid_extra_params :reject, whitelist: :extra_permitted
       end
 
-      test "doesn't raise an error for a whitelisted parameter as symbol" do
+      test "returns 200 OK for a whitelisted parameter as symbol" do
         with_test_routes do
           post '/test/symbol', params: { extra_permitted: true }
 
@@ -108,10 +108,10 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
 
     class String < Whitelist
       class StringController < TestController
-        forbid_extra_params :raise, whitelist: 'extra_permitted'
+        forbid_extra_params :reject, whitelist: 'extra_permitted'
       end
 
-      test "doesn't raise an error for a whitelisted parameter as string" do
+      test "returns 200 OK for a whitelisted parameter as string" do
         with_test_routes do
           post '/test/string', params: { extra_permitted: true }
 
@@ -122,10 +122,10 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
 
     class List < Whitelist
       class ListController < TestController
-        forbid_extra_params :raise, whitelist: %i[extra_permitted also_permitted]
+        forbid_extra_params :reject, whitelist: %i[extra_permitted also_permitted]
       end
 
-      test "doesn't raise an error for a white list of parameters" do
+      test "returns 200 OK for a white list of parameters" do
         with_test_routes do
           post '/test/list', params: { also_permitted: true }
 
