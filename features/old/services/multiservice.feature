@@ -66,12 +66,13 @@ Feature: Multiservice feature
     @javascript
     Scenario: Create new product: with already existed System name
       Given I am logged in as provider "foo.3scale.localhost"
+        And a service "Fancy Name"
         And provider "foo.3scale.localhost" has "multiple_services" switch allowed
         And service discovery is not enabled
       When I am on the provider dashboard
         And I follow "Create Product"
-        And I fill in "Name" with "Product Name"
-        And I fill in "System name" with "Fancy API"
+        And I fill in "Name" with "Fancy API"
+        And I fill in "System name" with "fancy_name"
         And I press "Create Product"
       Then I should see "Has already been taken"
 
