@@ -21,15 +21,15 @@ class ProxyTest < ActiveSupport::TestCase
 
       proxy.policies_config = [{ name: '1' }]
       refute proxy.valid?
-      assert_match 'version can\'t be blank', proxy.errors.full_messages.to_sentence
-      assert_match 'configuration can\'t be blank', proxy.errors.full_messages.to_sentence
+      assert_match 'version can\'t be blank', proxy.errors.map(&:full_message).to_sentence
+      assert_match 'configuration can\'t be blank', proxy.errors.map(&:full_message).to_sentence
     end
 
     def test_not_valid_json_policies_config
       service = FactoryBot.create(:simple_service)
       proxy = Proxy.new(policies_config: 'not-valid-json', service: service)
       refute proxy.valid?
-      assert_match 'Policies config has invalid format. The Correct format is:', proxy.errors.full_messages.to_sentence
+      assert_match 'Policies config has invalid format. The Correct format is:', proxy.errors.map(&:full_message).to_sentence
     end
 
     def test_policies_config
@@ -291,7 +291,7 @@ class ProxyTest < ActiveSupport::TestCase
   test 'proxy api backend formats ok' do
     %w[http://example.org:9 https://example.org:3].each do |endpoint|
       @proxy.api_backend = endpoint
-      assert @proxy.valid?, @proxy.errors.full_messages.to_sentence
+      assert @proxy.valid?, @proxy.errors.map(&:full_messages).to_sentence
     end
   end
 
@@ -327,7 +327,7 @@ class ProxyTest < ActiveSupport::TestCase
     @proxy.secret_token = "lskdjfkljdsf"
     %w[https://example.net?baz https://www.example.org localhost].each do |login_url|
       @proxy.oauth_login_url = login_url
-      assert @proxy.valid?, "#{@proxy.errors.full_messages.to_sentence} - #{login_url}"
+      assert @proxy.valid?, "#{@proxy.errors.map(&:full_messages).to_sentence} - #{login_url}"
     end
   end
 
@@ -780,7 +780,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     test 'does not track changes on all attributes' do
       with_proxy_config_affecting_changes_tracker do |tracker|
-        proxy = FactoryBot.create(:simple_proxy)
+        proxy = FactoryBot.create(:simple_proxy, service: service)
         tracker.flush
         tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy)
         refute tracker.tracking?(tracked_object)
@@ -835,7 +835,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     test 'tracks changes on destroy' do
       with_proxy_config_affecting_changes_tracker do |tracker|
-        proxy = FactoryBot.create(:simple_proxy)
+        proxy = FactoryBot.create(:simple_proxy, service: service)
         tracker.flush
 
         proxy.expects(:track_proxy_affecting_changes).once

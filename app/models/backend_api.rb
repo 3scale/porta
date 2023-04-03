@@ -24,7 +24,7 @@ class BackendApi < ApplicationRecord
   has_many :services, through: :backend_api_configs
   has_many :proxies, through: :services
 
-  belongs_to :account
+  belongs_to :account, inverse_of: :backend_apis
 
   delegate :provider_can_use?, to: :account, allow_nil: true
   delegate :default_api_backend, to: :class
