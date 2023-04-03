@@ -2,7 +2,7 @@
 
 module Authentication
   module Strategy
-    class Oauth2 < Authentication::Strategy::Oauth2Base
+    class OAuth2 < Authentication::Strategy::OAuth2Base
       class FindOrCreateAccount < Procedure
 
         def call

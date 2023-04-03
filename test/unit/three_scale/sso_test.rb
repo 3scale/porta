@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ThreeScale::SsoTest < ActiveSupport::TestCase
+class ThreeScale::SSOTest < ActiveSupport::TestCase
 
   test "encrypting and decrypting data" do
     key = ThreeScale::SSO.generate_sso_key

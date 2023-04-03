@@ -1,12 +1,12 @@
 require 'test_helper'
 
-class ThreeScale::OAuth2::GithubClientTest < ActiveSupport::TestCase
+class ThreeScale::OAuth2::GitHubClientTest < ActiveSupport::TestCase
 
   setup do
     authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @authentication = ThreeScale::OAuth2::Client.build_authentication(authentication_provider)
 
-    @oauth2 = ThreeScale::OAuth2::GithubClient.new(@authentication)
+    @oauth2 = ThreeScale::OAuth2::GitHubClient.new(@authentication)
     @oauth2.stubs(:raw_info).returns({'id' => '1234', 'login' => 'quentin', 'company' => 'org'})
   end
 
@@ -29,7 +29,7 @@ class ThreeScale::OAuth2::GithubClientTest < ActiveSupport::TestCase
   test '#org_name' do
     assert_equal 'org', @oauth2.org_name
   end
-  
+
   test '#access_token in Authorization HTTP header' do
     access_token = ::OAuth2::AccessToken.from_hash(@oauth2.client, access_token: 'some-access-token')
     @oauth2.expects(:access_token).returns(access_token).at_least_once

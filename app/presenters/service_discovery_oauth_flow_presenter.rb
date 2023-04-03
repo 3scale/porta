@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # TODO: Refactor! This class is really similar to RedhatCustomerOAuthFlowPresenter
-class ServiceDiscoveryOAuthFlowPresenter < OauthFlowPresenter
+class ServiceDiscoveryOAuthFlowPresenter < OAuthFlowPresenter
 
   def initialize(account, request)
     super(account.service_discovery_authentication_provider, request)

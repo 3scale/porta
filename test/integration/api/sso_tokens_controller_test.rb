@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
+class Admin::Api::SSOTokensControllerTest < ActionDispatch::IntegrationTest
   def setup
     provider = FactoryBot.create(:provider_account)
     @admin = FactoryBot.create(:simple_admin, account: provider, username: 'alaska123')
@@ -24,7 +24,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  class Admin::Api::SsoTokensControllerForProviderTest < ActionDispatch::IntegrationTest
+  class Admin::Api::SSOTokensControllerForProviderTest < ActionDispatch::IntegrationTest
 
     disable_transactional_fixtures!
 
@@ -59,4 +59,3 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     end
   end
 end
-

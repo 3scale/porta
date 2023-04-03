@@ -2,7 +2,7 @@
 
 module Authentication
   module Strategy
-    class Oauth2Base < Authentication::Strategy::Internal
+    class OAuth2Base < Authentication::Strategy::Internal
 
       def initialize(*)
         super

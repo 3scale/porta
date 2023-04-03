@@ -15,7 +15,7 @@ resource 'AuthenticationProvider' do
       'HTTP_HOST' => authentication_provider.account.external_domain
     }
     request = ActionDispatch::TestRequest.create(env)
-    OauthFlowPresenter.new(authentication_provider, request)
+    OAuthFlowPresenter.new(authentication_provider, request)
   end
   let(:domain) { resource.account.domain }
   let(:system_name) { resource.system_name }

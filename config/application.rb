@@ -31,8 +31,6 @@ module System
 
   class Application < Rails::Application
     config.load_defaults 6.1
-    # To prevent configuration issues with Zeitwerk
-    config.autoloader = :classic
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0

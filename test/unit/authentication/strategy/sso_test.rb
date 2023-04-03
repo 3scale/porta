@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
+class Authentication::Strategy::SSOTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:provider_account)

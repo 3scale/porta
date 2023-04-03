@@ -20,7 +20,7 @@ module ApiAuthentication
     private
 
     def sso_strategy
-      Authentication::Strategy::Sso.new(domain_account, true)
+      Authentication::Strategy::SSO.new(domain_account, true)
     end
 
     def authenticated_user_by_sso_token

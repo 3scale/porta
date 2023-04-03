@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
+class Admin::Api::SSOTokensTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
