@@ -101,6 +101,7 @@ Feature: Multiservice feature
   Scenario: Delete Service
     Given I am logged in as provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+    And a service "Second service" of provider "foo.3scale.localhost"
     And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
     When I follow "I understand the consequences, proceed to delete 'Second service' product" and I confirm dialog box
     Then I should see "Product 'Second service' will be deleted shortly."
