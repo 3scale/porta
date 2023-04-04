@@ -122,12 +122,20 @@ module ProxyConfigAffectingChanges
         super
       end
 
-      protected
-
       def write_attribute(attr_name, value)
+        name = attr_name.to_s
+        name = self.class.attribute_aliases[name] || name
+        name = @primary_key if name == "id" && @primary_key
+
+        _write_attribute(name, value)
+      end
+
+      def _write_attribute(attr_name, value)
         track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
         super
       end
+
+      protected
 
       def write_attribute_without_type_cast(attr_name, value)
         track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
