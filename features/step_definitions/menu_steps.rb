@@ -46,5 +46,5 @@ def help_menu_selector
 end
 
 def open_help_menu
-  find(help_menu_selector, wait: false).click_link
+  find("#{help_menu_selector} a", wait: false).click
 end
