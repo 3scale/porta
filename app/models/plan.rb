@@ -66,7 +66,7 @@ class Plan < ApplicationRecord
   validates :description, length: { maximum: 65535 }
 
   # This association is redefined in child classes to take advantage of :inverse_of
-  belongs_to :issuer, :polymorphic => true
+  belongs_to :issuer, polymorphic: true, inverse_of: :issued_plans
 
   # Use `:prepend => true` so it is called before any other callback.
   # Especially there is a bug with *acts_as_list* that will call `#lock!` on the record before destroy
