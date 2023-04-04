@@ -37,8 +37,7 @@ class ActiveJobUniquenessTest < ActiveSupport::TestCase
       JobUniquenessTestWorker.perform_later
     end
     assert_enqueued_jobs 1, only: JobUniquenessTestWorker
-    # In Rails 6.0 we can just call #perform_enqueued_jobs
-    enqueued_jobs.each { |job_data| instantiate_job(job_data).perform_now }
+    perform_enqueued_jobs
 
     assert_equal 1, JobUniquenessTestWorker.run_counter
     assert_equal 1, locks
