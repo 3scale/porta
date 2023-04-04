@@ -35,7 +35,7 @@ class Contract < ApplicationRecord
   validates :user_key, length: { maximum: 256 }
 
   # TODO: rename to buyer_account and remove alias
-  belongs_to :user_account, class_name: 'Account', autosave: false
+  belongs_to :user_account, class_name: 'Account', autosave: false, inverse_of: :contracts
 
   alias buyer_account user_account
   alias buyer         user_account

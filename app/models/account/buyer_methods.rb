@@ -21,11 +21,12 @@ module Account::BuyerMethods
     # Cinstances of services this account has contracted.
     has_many :bought_cinstances, :class_name  => 'Cinstance',
                                  :foreign_key => :user_account_id,
-                                 :dependent   => :destroy
+                                 :dependent   => :destroy,
+                                 inverse_of: :user_account
 
     alias_method :application_contracts, :bought_cinstances
 
-    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy
+    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy, inverse_of: :user_account
 
     module UniqueAssociation
       # Oracle can't do DISTINCT when there are TEXT columns

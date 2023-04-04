@@ -93,7 +93,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     alias_method :application, :cinstance
   end
 
-  belongs_to :account
+  belongs_to :account, inverse_of: :services
   alias provider account
 
   has_many :usage_limits, through: :application_plans

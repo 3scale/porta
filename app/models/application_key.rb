@@ -5,7 +5,7 @@ class ApplicationKey < ApplicationRecord
 
   audited only: %i[application_id created_at]
 
-  belongs_to :application, :class_name => 'Cinstance', :inverse_of => :application_keys
+  belongs_to :application, :class_name => 'Cinstance'
 
   attr_accessible :application, :value
 
@@ -22,7 +22,7 @@ class ApplicationKey < ApplicationRecord
   after_commit :push_webhook_key_created, :on => :create
   after_commit :push_webhook_key_destroyed, :on => :destroy
 
-  after_commit :notify_after_create, :on => :create, :if => :should_notify?
+  after_create_commit :notify_after_create, if: :should_notify?
   after_commit :notify_after_destroy, on: :destroy, if: -> { should_notify? && !destroyed_by_association }
 
   delegate :account, to: :application, allow_nil: true
