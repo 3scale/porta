@@ -6,7 +6,6 @@ Feature: Multiservice feature
   Background:
     Given a provider "foo.3scale.localhost"
     And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-    And a service "Second service" of provider "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
 
   @javascript
@@ -66,13 +65,12 @@ Feature: Multiservice feature
     @javascript
     Scenario: Create new product: with already existed System name
       Given I am logged in as provider "foo.3scale.localhost"
-        And a service "Fancy Name"
         And provider "foo.3scale.localhost" has "multiple_services" switch allowed
         And service discovery is not enabled
-      When I am on the provider dashboard
-        And I follow "Create Product"
-        And I fill in "Name" with "Fancy API"
-        And I fill in "System name" with "fancy_name"
+        And a service "Fancy Name" of provider "foo.3scale.localhost"
+      When I am on the new product page
+        And I fill in "Name" with "Fancy Api"
+        And I fill in "System name" with "api"
         And I press "Create Product"
       Then I should see "Has already been taken"
 
