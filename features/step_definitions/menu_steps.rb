@@ -15,7 +15,7 @@ Then /^I should not see menu items$/ do |items|
 end
 
 Then "the help menu should have the following items:" do |table|
-  assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul.PopNavigation-list li').map(&:text)
+  assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul li').map(&:text)
 end
 
 # TODO: replace this with with more generic step?!

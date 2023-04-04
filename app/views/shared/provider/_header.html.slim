@@ -15,9 +15,9 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
       = current_user.username
 
     .PopNavigation.PopNavigation--docs
-      a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#documentation-menu" title="Documentation"
+      a.PopNavigation-trigger title="Documentation"
         => icon('question-circle-o')
-      ul#documentation-menu.PopNavigation-list.u-toggleable
+      ul#documentation-menu.PopNavigation-list
         li.PopNavigation-listItem
           = fixed_width_icon_link_to 'Customer Portal', 'external-link', '//access.redhat.com/products/red-hat-3scale', class: 'PopNavigation-link', target: '_blank'
         li.PopNavigation-listItem
@@ -32,10 +32,10 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
             = fixed_width_icon_link_to 'Quick starts', 'book', provider_admin_quickstarts_path, class: 'PopNavigation-link'
 
     .PopNavigation.PopNavigation--session
-      a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#session-menu" title="Session"
+      a.PopNavigation-trigger title="Session"
         => icon('user')
         => icon('bolt') if impersonating?
-      ul#session-menu.PopNavigation-list.u-toggleable
+      ul#session-menu.PopNavigation-list
         li.PopNavigation-listItem
           p.PopNavigation-info
             - if impersonating?
