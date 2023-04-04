@@ -43,6 +43,10 @@ class WebHook
       true
     end
 
+    def trigger_transactional_callbacks?
+      true
+    end
+
     def enqueue
       if connection.try!(:transaction_open?) && !connection.current_transaction.state.finalized?
         logger.info "Will enqueue WebHook::Event(#{id}) #{event} after commit for #{model}##{resource.id}"
