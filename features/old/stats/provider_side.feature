@@ -48,17 +48,12 @@ Feature: Provider stats
     Then I should see "Top Applications" in a header
 
   Scenario: Default metric is product metric
+    Given provider "foo.3scale.localhost" has multiple applications disabled
     When I log in as provider "foo.3scale.localhost"
     Given a product
-    Given a backend
+    And a backend
     And the backend is used by this product
-    And the following metrics:
-      | Metric   | system_name | owner_type    |
-      | Pizza    |      pizza  |  "BackendApi" |
-      | Pasta    |      pasta  |  "BackendApi" |
-      | Hits     |      hits   |   "Service"   |
-
-    When I go to the overview page of product "My Product"
+    When I go to the overview page of product "API"
       And I follow "Analytics"
       And I follow "Traffic"
     Then I should see "hits"
