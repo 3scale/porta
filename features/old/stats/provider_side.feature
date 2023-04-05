@@ -56,7 +56,8 @@ Feature: Provider stats
     When I go to the overview page of product "API"
       And I follow "Analytics"
       And I follow "Traffic"
-    Then I should see "hits"
+    Then I should see "Hits (hits)"
+    Then I should not see "Hits (hits.55)"
 
   @wip
   Scenario: Signups (single application mode)
