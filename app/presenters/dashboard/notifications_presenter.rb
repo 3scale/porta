@@ -2,7 +2,7 @@ class Dashboard::NotificationsPresenter < Dashboard::MessagesPresenter
   IGNORED_NOTIFICATIONS = %w(csv_data_export daily_report weekly_report).freeze
 
   def initialize(notifications)
-    super notifications.where.not(system_name: IGNORED_NOTIFICATIONS, title: nil).order(created_at: :desc)
+    super notifications.where.not(system_name: IGNORED_NOTIFICATIONS).where.not(title: nil).order(created_at: :desc)
   end
 
   def link_tag(notification)
