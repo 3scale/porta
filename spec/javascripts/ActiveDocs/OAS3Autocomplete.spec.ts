@@ -70,14 +70,14 @@ describe('when the request is fetching OpenAPI spec', () => {
   describe('when spec url is absolute', () => {
     it('should inject servers to the spec', async () => {
       const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
-      expect(res.body.servers).toEqual([{'url': serviceEndpoint}])
+      expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
     })
   })
 
   describe('when spec url is relative', () => {
     it('should inject servers to the spec', async () => {
       const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specRelativeUrl)
-      expect(res.body.servers).toEqual([{'url': serviceEndpoint}])
+      expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
     })
   })
 
