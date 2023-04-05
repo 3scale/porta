@@ -93,6 +93,7 @@ describe('when the request is fetching OpenAPI spec', () => {
     expect(examplesSecondParam).toBe(undefined)
   })
 })
+
 describe('when the request is fetching API call response', () => {
   const response = apiResponse
   it('should not inject servers to the response', () => {
