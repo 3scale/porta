@@ -46,10 +46,6 @@ const specResponse = {
   },
   obj: {}
 }
-const specRelativeResponse = {
-  ...specResponse,
-  url: specRelativeUrl
-}
 const apiResponse = {
   ...specResponse,
   url: apiUrl,
@@ -70,9 +66,19 @@ fetchDataSpy.mockResolvedValue(accountData)
 
 describe('when the request is fetching OpenAPI spec', () => {
   const response = specResponse
-  it('should inject servers to the spec', async () => {
-    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
-    expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
+
+  describe('when spec url is absolute', () => {
+    it('should inject servers to the spec', async () => {
+      const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
+      expect(res.body.servers).toEqual([{'url': serviceEndpoint}])
+    })
+  })
+
+  describe('when spec url is relative', () => {
+    it('should inject servers to the spec', async () => {
+      const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specRelativeUrl)
+      expect(res.body.servers).toEqual([{'url': serviceEndpoint}])
+    })
   })
 
   it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', async () => {
@@ -87,15 +93,6 @@ describe('when the request is fetching OpenAPI spec', () => {
     expect(examplesSecondParam).toBe(undefined)
   })
 })
-
-describe('when the request is fetching OpenAPI spec by relative path', () => {
-  const response = specRelativeResponse
-  it('should inject servers to the spec', async () => {
-    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specRelativeUrl)
-    expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
-  })
-})
-
 describe('when the request is fetching API call response', () => {
   const response = apiResponse
   it('should not inject servers to the response', () => {
