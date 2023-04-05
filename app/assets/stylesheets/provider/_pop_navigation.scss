@@ -3,38 +3,7 @@ $pf4-sidebar-width: 18.125rem;
 
 .PopNavigation {
   color: $content-background;
-
-  &--context {
-    float: left;
-
-    .PopNavigation-list {
-      background-color: $white;
-    }
-  }
-
-  &--session {
-    float: right;
-
-    .PopNavigation-list {
-      right: line-height-times(1 / 2);
-    }
-  }
-
-  &--docs {
-    float: right;
-
-    .PopNavigation-list {
-      right: line-height-times(1 / 2);
-    }
-  }
-
-  &--account {
-    float: right;
-
-    .PopNavigation-list {
-      right: line-height-times(5 / 2);
-    }
-  }
+  float: right;
 
   &-list {
     @include box-shadow(0 0 line-height-times(1 / 2) $box-shadow-color);
@@ -47,12 +16,12 @@ $pf4-sidebar-width: 18.125rem;
     min-width: line-height-times(4);
     overflow: hidden;
     position: absolute;
+    right: line-height-times(1 / 2);
     text-align: left;
     width: 20%;
     z-index: 1000;
 
-    &.is-toggled,
-    &:target {
+    &.is-expanded {
       display: block;
     }
   }
@@ -97,8 +66,7 @@ $pf4-sidebar-width: 18.125rem;
     display: block;
 
     &:hover,
-    &.is-toggled,
-    &.is-current {
+    &.is-expanded {
       color: $link-color;
     }
 

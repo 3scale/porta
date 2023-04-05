@@ -1,42 +1,38 @@
-import { hideAllToggleable, toggleNavigation } from 'Navigation/utils/toggle_navigation'
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- Safe to assume everything is there */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const togglers = document.getElementsByClassName('u-toggler') as HTMLCollectionOf<HTMLElement>
-  const vertNavTogglers = document.getElementsByClassName('vert-nav-toggle') as HTMLCollectionOf<HTMLElement>
-  const eventOptions = {
-    capture: true,
-    passive: false,
-    useCapture: true
-  }
+  const docs = document.querySelector<HTMLAnchorElement>('.PopNavigation--docs a')!
+  const docsMenu = document.querySelector<HTMLUListElement>('.PopNavigation--docs ul')!
+  const session = document.querySelector<HTMLAnchorElement>('.PopNavigation--session a')!
+  const sessionMenu = document.querySelector<HTMLUListElement>('.PopNavigation--session ul')!
 
-  function addClickEventToCollection (collection: HTMLCollectionOf<HTMLElement>, handler: (e: Event) => void) {
-    for (const item of Array.from(collection)) {
-      item.addEventListener('click', handler, eventOptions)
-    }
-  }
+  const expandedClass = 'is-expanded'
 
-  document.body.addEventListener('click', (e: Event) => {
-    if ((e.target as HTMLInputElement).type !== 'search') {
-      hideAllToggleable()
-    }
-  }, eventOptions)
-
-  addClickEventToCollection(togglers, function (e: Event) {
+  docs.addEventListener('click', (e: Event) => {
     e.stopPropagation()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: can we safely assume the target is there? Also, why currentTarget here but target above?
-    toggleNavigation(e.currentTarget!)
     e.preventDefault()
+
+    docs.classList.add(expandedClass)
+    docsMenu.classList.add(expandedClass)
+
+    session.classList.remove(expandedClass)
+    sessionMenu.classList.remove(expandedClass)
   })
 
-  addClickEventToCollection(vertNavTogglers, function () {
-    const store = window.localStorage
-    // @ts-expect-error FIXME: should or should not? Figure it out
-    const shouldVertNavCollapse = !JSON.parse((store.isVerticalNavCollapsed as string) || false)
+  session.addEventListener('click', (e: Event) => {
+    e.stopPropagation()
+    e.preventDefault()
 
-    document.querySelector('.vertical-nav')
-      ?.classList
-      .toggle('collapsed')
+    session.classList.add(expandedClass)
+    sessionMenu.classList.add(expandedClass)
 
-    store.isVerticalNavCollapsed = shouldVertNavCollapse
+    docs.classList.remove(expandedClass)
+    docsMenu.classList.remove(expandedClass)
+  })
+
+  document.body.addEventListener('click', () => {
+    [docs, docsMenu, session, sessionMenu].forEach(({ classList }) => {
+      classList.remove(expandedClass)
+    })
   })
 })
