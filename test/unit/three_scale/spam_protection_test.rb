@@ -158,7 +158,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         Recaptcha::Verify.stubs(skip?: false)
         @object = ModelJS.new
         @object.stubs(:errors).returns({})
-        @template = ActionView::Base.new
+        @template = ActionView::Base.new('app/views', {}, nil)
         @template.stubs(:logged_in?).returns(false)
         @output = @template.output_buffer = ActiveSupport::SafeBuffer.new
         @block = proc do |form|
