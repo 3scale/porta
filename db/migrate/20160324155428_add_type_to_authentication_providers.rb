@@ -15,7 +15,7 @@ class AddTypeToAuthenticationProviders < ActiveRecord::Migration
 
         AuthenticationProvider.where(kind: 'github').update_all(type: 'AuthenticationProvider::GitHub')
 
-        AuthenticationProvider.where(kind: 'github').where.not(client_id: nil, client_secret: nil)
+        AuthenticationProvider.where(kind: 'github').where.not(client_id: nil).where.not(client_secret: nil)
             .update_all(branding_state: 'custom_branded')
       end
     end
