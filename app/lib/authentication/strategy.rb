@@ -15,7 +15,7 @@ module Authentication
       protected
 
       def build_strategy(type)
-        inflected_type = Rails.autoloaders.main.inflector.camelize(type, {})
+        inflected_type = Rails.autoloaders.main.inflector.camelize(type.to_s, {})
         strategy_class_name = "Authentication::Strategy::#{inflected_type}"
         strategy_class_name.constantize
       end
