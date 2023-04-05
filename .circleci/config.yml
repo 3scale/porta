@@ -214,7 +214,8 @@ commands: # reusable commands with parameters
           command: |
             echo "Running gems install for database: $DB"
             echo "$(bundle version)"
-            bundle check || bundle install --deployment
+            bundle config set --local deployment 'true'
+            bundle check || bundle install
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
             rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
