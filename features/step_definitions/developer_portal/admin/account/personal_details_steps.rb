@@ -8,7 +8,7 @@ When "they edit their personal details" do
   fill_in('user[username]', with: 'Alfred')
   fill_in('user[email]', with: 'alfred@batcave.com')
   # password defined in test/factories/user.rb
-  fill_in('user[current_password]', with: 'supersecret') if has_css?('user[current_password]')
+  fill_in('user[current_password]', with: 'supersecret') if has_css?('input[name="user[current_password]"]')
 end
 
 And "they change their password" do
@@ -51,7 +51,7 @@ When "the buyer edits their custom personal details" do
   fill_in('user[first_name]', with: 'Alfred')
   fill_in('user[user_extra_required]', with: 'Butler')
   # password defined in test/factories/user.rb
-  fill_in('user[current_password]', with: 'supersecret') if has_css?('user[current_password]')
+  fill_in('user[current_password]', with: 'supersecret') if has_css?('input[name="user[current_password]"]')
 end
 
 Then "they should be able to edit their custom personal details" do
