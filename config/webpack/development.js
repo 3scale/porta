@@ -1,23 +1,32 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const environment = require('./environment')
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
+const path = require('path')
 
-// Add Webpack custom configs here
-environment.loaders.append('eslint', {
-  test: /\.tsx?$/,
-  exclude: /(node_modules)/,
-  enforce: 'pre',
-  loader: 'eslint-loader',
-  options: {
-    eslintPath: 'eslint',
-    configFile: '.eslintrc'
-  }
-})
-
-// HACK: this removes transpilation errors in tests during development. tsconfig includes them so
-// that VS Code can work with imports. Ideally we should have a specific config for VS Code but
-// the plugin automatically picks `tsconfig.json` and doesn't support a custom filename.
-const tsLoader = environment.loaders.get('ts')
-tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
+// The default installation (by webpacker) only transpiles TS code using Babel. This enables type
+// checking as part of the Webpack compilation process (i.e. fail the build if there are TS errors).
+environment.plugins.append(
+  "ForkTsCheckerWebpackPlugin",
+  new ForkTsCheckerWebpackPlugin({
+    eslint: {
+      files: [
+        './app/javascript/**/*.{ts,tsx}',
+        './spec/javascripts/**/*.{ts,tsx}'
+      ]
+    },
+    typescript: {
+      configFile: path.resolve(__dirname, "../../tsconfig.json"),
+      // TODO: this options is introduces in v8.0.0, it doesn't work yet.
+      // Ignore transpilation errors in specs during development. tsconfig includes them so
+      // that VS Code can work with imports. Ideally we should have a specific config for VS Code
+      // but the extension doesn't support custom config files.
+      reportFiles: ['app/javascript/**/*.{ts,tsx}'],
+    },
+    async: false,
+  })
+)
 
 environment.plugins.append('BundleAnalyzerPlugin',
   new BundleAnalyzerPlugin()

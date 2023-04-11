@@ -1,44 +1,32 @@
 const { environment } = require('@rails/webpacker')
 const path = require('path')
 
-// Add global webpack configs here
-
-environment.loaders.delete('css')
+// We don't use css modules, we can remove these loaders.
 environment.loaders.delete('moduleCss')
-environment.loaders.delete('sass')
 environment.loaders.delete('moduleSass')
 
-environment.loaders.append('ts', {
-  test: /.(ts|tsx)$/,
-  options: {},
-  loader: 'ts-loader'
+// postCss is included by default by webpacker but it breaks our styles. Removing all plugins from
+// its config file generates a lot of warning messages so better we remove the loader until we make
+// it work. TODO: make it work.
+;['css', 'sass'].forEach(key => {
+  const loader = environment.loaders.get(key)
+  loader.use = loader.use.filter(u => u.loader !== 'postcss-loader')
 })
 
+// Remove styles added automatically by @patternfly/react because it messes up our own styles.
+// We import the necessary styles manually in our .scss files and that way it works.
 environment.loaders.append('null', {
   test: /\.css$/,
   include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
   use: ['null-loader']
 })
 
-environment.loaders.append('style', {
-  test: /(\.css|\.scss|\.sass)$/,
-  use: [
-    { loader: 'style-loader' },
-    { loader: 'css-loader' },
-    {
-      loader: 'sass-loader',
-      options: {
-        modules: true,
-        localIdentName: '[name]---[local]---[hash:base64:5]'
-      }
-    }
-  ]
-})
-
+// Quickstarts' guides are written in YAML for convenience (QuickStarts/templates), then this loader
+// allow us to import them as JSON and pass them to the React component (QuickStartContainer).
 environment.loaders.append('yaml', {
   test: /\.ya?ml$/,
   use: 'yaml-loader',
-  include: path.resolve(__dirname, '../../app/javascript'),
+  include: path.resolve(__dirname, '../../app/javascript/src/QuickStarts/templates'),
   type: 'json'
 })
 

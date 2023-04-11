@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import $ from 'jquery'
 import numeral from 'numeral'

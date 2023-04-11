@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import moment from 'moment-timezone'
 

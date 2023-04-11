@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 
 import pluralize from 'pluralize'

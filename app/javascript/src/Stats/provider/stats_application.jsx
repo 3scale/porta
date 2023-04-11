@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import { StatsUsageChart } from 'Stats/lib/usage_chart'
 import { StatsUsageChartManager } from 'Stats/lib/usage_chart_manager'

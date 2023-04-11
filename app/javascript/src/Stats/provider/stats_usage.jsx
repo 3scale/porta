@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import { StatsUsageChart } from 'Stats/lib/usage_chart'
 import { PeriodRangeDate } from 'Stats/lib/state'

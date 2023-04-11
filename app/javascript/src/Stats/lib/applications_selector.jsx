@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import { StatsUI } from 'Stats/lib/ui'
 import $ from 'jquery'

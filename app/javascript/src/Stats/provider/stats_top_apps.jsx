@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 /** @jsx StatsUI.dom */
 import 'core-js/fn/array/find'
 import moment from 'moment'
