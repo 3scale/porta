@@ -62,8 +62,8 @@ module CMS
 
       test 'index filters by parent_id' do
         parent = FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root)
-        5.times { FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root) }
-        2.times { FactoryBot.create(:cms_section, provider: @provider, parent: parent) }
+        FactoryBot.create_list(:cms_section, 5, provider: @provider, parent: @provider.sections.root)
+        FactoryBot.create_list(:cms_section, 2, provider: @provider, parent: parent)
 
         get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, parent_id: parent.id }
 
