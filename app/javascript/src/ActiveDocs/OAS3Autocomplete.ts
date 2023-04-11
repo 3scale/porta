@@ -132,7 +132,7 @@ const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: str
  * @param serviceEndpoint Public Base URL of the gateway, that will replace the  URL in the "servers" object
  */
 export const autocompleteInterceptor = (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string, specUrl?: string): Promise<Response> | SwaggerUIResponse => {
-  if (specUrl !== response.url) {
+  if (!response.url.includes(specUrl)) {
     return response
   }
   return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
