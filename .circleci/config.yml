@@ -485,11 +485,9 @@ jobs:
       - *use-example-config-files
       - run:
           name: Precompile assets
-          command: bundle exec rake assets:precompile
+          command: bundle exec rake assets:precompile:test
           environment:
             RAILS_GROUPS: assets
-            RAILS_ENV: test
-            NODE_ENV: test
       - *save-assets-cache
       - persist_to_workspace:
           root: .
