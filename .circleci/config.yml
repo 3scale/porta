@@ -31,6 +31,7 @@ store-log-artifacts: &store-log-artifacts
 npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
 bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 assets-cache-key: &assets-cache-key v1-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+packs-cache-key: &packs-cache-key packs-cache-{{ checksum "tmp/packs_related_checksums" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -47,18 +48,31 @@ save-assets-cache: &save-assets-cache
     key: *assets-cache-key
     paths:
       - public/assets
-      - public/packs-test
       - tmp/cache/assets
-      - tmp/cache/webpacker
+
+save-packs-cache: &save-packs-cache
+  save_cache:
+    key: *packs-cache-key
+    paths:
+      - public/packs-test
 
 restore-assets-cache: &restore-assets-cache
   restore_cache:
     key: *assets-cache-key
 
+restore-packs-cache: &restore-packs-cache
+  restore_cache:
+    key: *packs-cache-key
+
 generate-assets-checksums: &generate-assets-checksums
   run:
     name: Generate assets precompilation checksum data
     command: git ls-tree -r HEAD $(<.circleci/asset_paths) > tmp/assets_related_checksums
+
+generate-packs-checksums: &generate-packs-checksums
+  run:
+    name: Generate packs compilation checksum data
+    command: git ls-tree -r HEAD $(<.circleci/packs_paths) > tmp/packs_related_checksums
 
 use-example-config-files: &use-example-config-files
   run:
@@ -482,6 +496,7 @@ jobs:
       - *attach-to-workspace
       - *generate-assets-checksums
       - *restore-assets-cache
+      - *restore-packs-cache
       - *use-example-config-files
       - run:
           name: Precompile assets
@@ -491,6 +506,7 @@ jobs:
             RAILS_ENV: test
             NODE_ENV: test
       - *save-assets-cache
+      - *save-packs-cache
       - persist_to_workspace:
           root: .
           paths:
