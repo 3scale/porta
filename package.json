@@ -88,6 +88,7 @@
     "braintree-web": "3.90.0",
     "c3": "^0.4.11",
     "classnames": "^2.2.6",
+    "codemirror": "5.65.9",
     "jquery": "^3.5.0",
     "jquery-ui": "1.12.1",
     "lodash.escaperegexp": "^4.1.2",
