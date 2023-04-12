@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ApiSupport
-
   class UnpermittedParameters < StandardError
     def initialize(unpermitted_keys)
       msg = "Unpermitted parameters: #{unpermitted_keys}"

@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
-
   class TestController < ApplicationController
     include ApiSupport::ForbidParams
     def create
