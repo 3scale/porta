@@ -4,7 +4,6 @@ import * as utils from 'utilities/fetchData'
 import type { Request as SwaggerUIRequest, Response as SwaggerUIResponse } from 'swagger-ui'
 
 const specUrl = 'https://provider.3scale.test/foo/bar.json'
-const specRelativeUrl = 'foo/bar.json'
 const apiUrl = 'https://some.api.domain/foo/bar/api-url'
 const accountDataUrl = 'foo/bar'
 const serviceEndpoint = 'foo/bar/serviceEndpoint'
@@ -110,7 +109,7 @@ describe('autocompleteRequestInterceptor', () => {
     })
 
     it('should prevent injecting servers to the response', async () => {
-      const res: SwaggerUIResponse = await request.responseInterceptor(apiResponse, accountDataUrl, serviceEndpoint, specUrl)
+      const res: SwaggerUIResponse = await request.responseInterceptor(apiResponse, accountDataUrl, serviceEndpoint)
       expect(res.body.servers).toBe(undefined)
     })
   })
