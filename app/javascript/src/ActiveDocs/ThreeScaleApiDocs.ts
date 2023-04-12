@@ -3,9 +3,10 @@ import SwaggerUI from 'swagger-ui'
 import { execute } from 'swagger-client/es/execute'
 
 import { fetchData } from 'utilities/fetchData'
+import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
-import type { ApiDocsServices, BackendApiReportBody, BackendApiTransaction, ExecuteData } from 'Types/SwaggerTypes'
+import type { ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData, ExecuteData } from 'Types/SwaggerTypes'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
@@ -21,14 +22,9 @@ const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
 }
 
 /**
- * when using Record notation, the following error is thrown:
- * 'TS2456: Type alias 'BodyValue' circularly references itself.'
- */
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-type BodyValue = boolean | number | string | { [key: string]: BodyValue }
-
-/**
- * Transforms an object into form data representation, also URL-encoding the values,
+ * Transforms an object into form data representation. Does not URL-encode, because it will be done by
+ * swagger-client itself
+ * Returns an empty object if the argument is not an object
  * Example:
  * {
  *   a_string: 'hello',
@@ -42,15 +38,19 @@ type BodyValue = boolean | number | string | { [key: string]: BodyValue }
  *   a_string: 'hello',
  *   'an_array[0][first]': '1',
  *   'an_array[1][second]': '1',
- *   'an_array[1][extra_param]': 'with%20whitespace'
+ *   'an_array[1][extra_param]': 'with whitespace'
  * }
  * @param object
  */
-export const objectToFormData = (object: BodyValue): Record<string, boolean | number | string> => {
-  const buildFormData = (formData: Record<string, boolean | number | string>, data: BodyValue, parentKey?: string) => {
+export const objectToFormData = (object: BodyValue): FormData => {
+  if (typeof object !== 'object' || Array.isArray(object)) {
+    return {}
+  }
+  const buildFormData = (formData: FormData, data: BodyValue, parentKey?: string) => {
     if (data && typeof data === 'object') {
-      Object.keys(data).forEach((key: string) => {
-        buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key)
+      const dataObject = data as BodyValueObject
+      Object.keys(dataObject).forEach((key: string) => {
+        buildFormData(formData, dataObject[key], parentKey ? `${parentKey}[${key}]` : key)
       })
     } else {
       if (parentKey) {
@@ -58,7 +58,7 @@ export const objectToFormData = (object: BodyValue): Record<string, boolean | nu
       }
     }
   }
-  const formData = {}
+  const formData: FormData = {}
   buildFormData(formData, object)
   return formData
 }
@@ -74,22 +74,20 @@ export const objectToFormData = (object: BodyValue): Record<string, boolean | nu
  *    'transactions[0][usage][hits]': 1
  * @param body BackendApiReportBody
  */
-export const transformReportRequestBody = (body: BackendApiReportBody): Record<string, boolean | number | string> => {
+export const transformReportRequestBody = (body: BackendApiReportBody): FormData => {
   if (Array.isArray(body.transactions)) {
-    body.transactions = body.transactions.map(transaction => {
-      switch (typeof transaction) {
-        case 'object':
-          return transaction
-        case 'string':
-          try {
-            return JSON.parse(transaction) as BackendApiTransaction
-          } catch (error: unknown) {
-            return null
-          }
-        default:
-          return null
+    body.transactions = body.transactions.reduce((acc: BackendApiTransaction[], transaction) => {
+      let value = undefined
+      if (typeof transaction === 'object') {
+        value = transaction
+      } else {
+        value = safeFromJsonString<BackendApiTransaction>(transaction)
       }
-    }).filter(element => element != null) as BackendApiTransaction[]
+      if (value) {
+        acc.push(value)
+      }
+      return acc
+    }, [])
   }
   return objectToFormData(body as BodyValue)
 }

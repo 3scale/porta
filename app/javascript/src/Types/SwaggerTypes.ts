@@ -19,16 +19,6 @@ export interface ApiDocsServices {
   apis: ApiDocsService[];
 }
 
-export interface RequestData extends Request {
-  url: string;
-  method: SupportedHTTPMethods;
-  body: string;
-  credentials: string;
-  headers: Record<string, string>;
-  requestInterceptor?: ((request: Request) => Promise<Request> | Request) | undefined;
-  responseInterceptor?: ((response: Response) => Promise<Response> | Response) | undefined;
-}
-
 export interface ExecuteData {
   contextUrl: string;
   fetch: (arg: unknown) => unknown;
@@ -37,7 +27,7 @@ export interface ExecuteData {
   operationId: string;
   parameters: unknown;
   pathName: string;
-  requestBody: unknown;
+  requestBody?: unknown;
   requestContentType: string;
   requestInterceptor?: ((request: Request) => Promise<Request> | Request) | undefined;
   responseContentType: string;
@@ -66,3 +56,12 @@ export interface BackendApiReportBody {
   service_id?: string;
   transactions?: (BackendApiTransaction | string)[];
 }
+
+/**
+ * when using Record notation, the following error is thrown:
+ * 'TS2456: Type alias 'BodyValue' circularly references itself.'
+ */
+export type BodyValue = BodyValue[] | boolean | number | string | { [key: string]: BodyValue } | null | undefined
+export type BodyValueObject = Record<string, BodyValue>
+
+export type FormData = Record<string, boolean | number | string>
