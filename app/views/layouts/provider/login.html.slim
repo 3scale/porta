@@ -8,11 +8,5 @@ html[lang="en" class="pf-m-redhat-font"]
     = javascript_pack_tag 'login'
     = javascript_include_tag 'vendor/jquery-1.8.2.min.js', 'vendor/rails.js'
 
-  //
-    # this rescue nil is a temporary hack that should be removed once
-    #   invitee_signup GET /signup/:invitation_token(.:format) accounts/invitee_signups#show
-    #   invitee_signup POST /signup/:invitation_token(.:format) accounts/invitee_signups#create
-    # are split Provider/Buyer side
-
   body class="login-layout"
     = yield

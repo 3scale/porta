@@ -64,7 +64,7 @@ const ChangePassword: FunctionComponent<Props> = ({
       brandImgSrc={brandImg}
       loginTitle="Change Password"
     >
-      {errors.length && <FlashMessages flashMessages={errors} />}
+      {errors.length > 0 && <FlashMessages flashMessages={errors} />}
       <Form
         noValidate
         acceptCharset="UTF-8"

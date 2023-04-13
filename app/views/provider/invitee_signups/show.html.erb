@@ -1,5 +1,3 @@
-<%= javascript_pack_tag 'sign_up_page' %>
-
 <%= tag("div", :id => "pf-login-page-container", :"data-signup-props" => {:path => provider_invitee_signup_path(@invitation.token),
   :name => @invitation.account.name,
   :user => {
@@ -10,25 +8,3 @@
       :errors => (@user.errors  || []).map { |key, value| {type: 'error', message: "#{key} #{value}"}}
     }
 }.to_json) %>
-
-<div id="old-login-page-wrapper">
-  <h2>Sign Up to <%= @invitation.account.name %></h2>
-
-
-<%= semantic_form_for @user, :url => provider_invitee_signup_path(@invitation.token),
-                            :builder => Fields::FormBuilder,
-                            :html => {:id => 'signup_form'} do |form| %>
-  <%= form.inputs do -%>
-    <%= form.user_defined_form %>
-    <%= form.input :password, :required => true %>
-    <%= form.input :password_confirmation, :required => true %>
-  <% end %>
-
-  <%= form.actions do %>
-    <%= form.commit_button 'Sign up', button_html: { class: 'user-signup'} %>
-  <% end %>
-
- <% end %>
-</div>
-
-
