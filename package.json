@@ -59,7 +59,6 @@
     "mockdate": "^3.0.5",
     "null-loader": "^3.0.0",
     "postcss-loader": "^3.0.0",
-    "postcss-smart-import": "^0.7.6",
     "raf": "^3.4.1",
     "redux-immutable-state-invariant": "^2.1.0",
     "regenerator-runtime": "^0.13.1",
