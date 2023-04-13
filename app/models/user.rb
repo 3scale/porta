@@ -43,7 +43,7 @@ class User < ApplicationRecord
     errors.empty?
   end
 
-  belongs_to :account, :autosave => false, :inverse_of => :users
+  belongs_to :account, :autosave => false
 
   # TODO: enable this in rails 3.1 or greater :)
   # has_one :provider_account, :through => :account, :source => :provider_account
