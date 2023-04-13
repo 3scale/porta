@@ -47,7 +47,7 @@ class PolicyTest < ActiveSupport::TestCase
     refute policy.valid?
     assert_equal ['must be a tenant'], policy.errors[:account]
 
-    policy = policy.account = FactoryBot.build(:simple_provider)
+    policy.account = FactoryBot.build_stubbed(:simple_provider)
     assert policy.valid?
     assert_empty policy.errors[:account]
   end
