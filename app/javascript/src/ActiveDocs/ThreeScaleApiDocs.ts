@@ -6,7 +6,8 @@ import { fetchData } from 'utilities/fetchData'
 import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
-import type { ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData, ExecuteData } from 'Types/SwaggerTypes'
+import type { ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData } from 'Types/SwaggerTypes'
+import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
@@ -110,7 +111,7 @@ const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {
             && req.requestBody) {
           req.requestBody = transformReportRequestBody(req.requestBody as BackendApiReportBody)
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
         return execute(req)
       }
     }
