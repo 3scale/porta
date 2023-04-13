@@ -1,6 +1,6 @@
 import { objectToFormData, transformReportRequestBody } from 'ActiveDocs/ThreeScaleApiDocs'
 
-import type { BackendApiReportBody, BackendApiTransaction, BodyValue } from 'Types/SwaggerTypes'
+import type { BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject } from 'Types/SwaggerTypes'
 
 const transaction1: BackendApiTransaction = {
   app_id: 'app-id1',
@@ -75,12 +75,15 @@ describe('objectToFormData', () => {
   })
 
   it('returns an empty object if argument is not a valid object', () => {
-    expect(objectToFormData('hello')).toEqual({})
-    expect(objectToFormData(true)).toEqual({})
-    expect(objectToFormData(123)).toEqual({})
-    expect(objectToFormData(['q', 'w', 'r'])).toEqual({})
-  })
+    const invalidObjects = [
+      'hello',
+      true,
+      123,
+      ['q', 'w', 'r']
+    ] as unknown as BodyValueObject[]
 
+    invalidObjects.forEach(i => { expect(objectToFormData(i)).toEqual({}) })
+  })
 })
 
 describe('transformReportRequestBody', () => {
