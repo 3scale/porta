@@ -44,7 +44,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     assert authentication_provider.errors[:authorize_url].present?
     assert authentication_provider.errors[:user_info_url].present?
 
-    assert_equal ["Invalid URL format"], authentication_provider.errors.values.flat_map{|x| x[0]}.uniq
+    assert_equal ["Invalid URL format"], authentication_provider.errors.values.uniq
 
     authentication_provider.site = 'https://example.org'
     authentication_provider.token_url = 'http://example.org'
