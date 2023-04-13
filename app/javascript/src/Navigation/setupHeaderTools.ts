@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Safe to assume everything is there */
 
-document.addEventListener('DOMContentLoaded', () => {
+const setupHeaderTools = (): void => {
   const docs = document.querySelector<HTMLAnchorElement>('.PopNavigation--docs a')!
   const docsMenu = document.querySelector<HTMLUListElement>('.PopNavigation--docs ul')!
   const session = document.querySelector<HTMLAnchorElement>('.PopNavigation--session a')!
@@ -35,4 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
       classList.remove(expandedClass)
     })
   })
-})
+}
+
+export { setupHeaderTools }
