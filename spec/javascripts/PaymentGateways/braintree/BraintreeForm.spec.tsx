@@ -93,8 +93,8 @@ describe('before instantiating hosted fields', () => {
     const wrapper = mountWrapper()
     expect(wrapper.find('[name="customer[credit_card][billing_address][country_name]"] option').map((n) => n.html()))
       .toMatchInlineSnapshot(`
-        Array [
-          "<option disabled=\\"\\" value=\\"\\"></option>",
+        [
+          "<option disabled="" value=""></option>",
           "<option>Afghanistan</option>",
           "<option>Albania</option>",
           "<option>Algeria</option>",

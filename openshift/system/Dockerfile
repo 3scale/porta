@@ -12,7 +12,7 @@ ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
-    NODEJS_SCL=rh-nodejs12 \
+    NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
 
@@ -82,7 +82,7 @@ RUN source /opt/app-root/etc/scl_enable \
     && cd /opt/system \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    && SECRET_KEY_BASE=rails/32947 NODE_OPTIONS=--max-old-space-size=2560 bundle exec rake assets:precompile tmp:clear \
+    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 

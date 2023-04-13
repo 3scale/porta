@@ -9,7 +9,7 @@ exports[`should render correctly 1`] = `
   </FormLegend>
   <SelectGroup
     catalog={
-      Object {
+      {
         "run_the_jewels_1": "Run The Jewels I",
         "run_the_jewels_2": "Run The Jewels II",
         "run_the_jewels_3": "Run The Jewels III",

@@ -3,8 +3,9 @@ import * as utils from 'utilities/fetchData'
 
 import type { Response as SwaggerUIResponse } from 'swagger-ui'
 
-const specUrl = 'foo/bar.json'
-const apiUrl = 'foo/bar/api-url'
+const specUrl = 'https://provider.3scale.test/foo/bar.json'
+const specRelativeUrl = 'foo/bar.json'
+const apiUrl = 'https://some.api.domain/foo/bar/api-url'
 const accountDataUrl = 'foo/bar'
 const serviceEndpoint = 'foo/bar/serviceEndpoint'
 const specResponse = {
@@ -68,9 +69,19 @@ fetchDataSpy.mockResolvedValue(accountData)
 
 describe('when the request is fetching OpenAPI spec', () => {
   const response = specResponse
-  it('should inject servers to the spec', async () => {
-    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
-    expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
+
+  describe('when spec url is absolute', () => {
+    it('should inject servers to the spec', async () => {
+      const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
+      expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
+    })
+  })
+
+  describe('when spec url is relative', () => {
+    it('should inject servers to the spec', async () => {
+      const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specRelativeUrl)
+      expect(res.body.servers).toEqual([{ 'url': serviceEndpoint }])
+    })
   })
 
   it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', async () => {
