@@ -22,6 +22,27 @@ const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
 }
 
 /**
+ * A recursive function that traverses the tree of the multi-level object `data`
+ * and for every leaf (i.e. value of primitive type) adds the value to `formData` single-level object,
+ * with the key that is the `path` to that leaf, e.g. 'paramName[nestedArray][0][arrayProp]'
+ * @param formData single-level object used as accumulator
+ * @param data current node of the object
+ * @param parentKey part of the formData key inherited from the upper level
+ */
+const buildFormData = (formData: FormData, data: BodyValue, parentKey?: string) => {
+  if (data && typeof data === 'object') {
+    const dataObject = data as BodyValueObject
+    Object.keys(dataObject).forEach((key: string) => {
+      buildFormData(formData, dataObject[key], parentKey ? `${parentKey}[${key}]` : key)
+    })
+  } else {
+    if (parentKey) {
+      formData[parentKey] = data ? data : ''
+    }
+  }
+}
+
+/**
  * Transforms an object into form data representation. Does not URL-encode, because it will be done by
  * swagger-client itself
  * Returns an empty object if the argument is not an object
@@ -45,18 +66,6 @@ const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
 export const objectToFormData = (object: BodyValueObject): FormData => {
   if (typeof object !== 'object' || Array.isArray(object)) {
     return {}
-  }
-  const buildFormData = (formData: FormData, data: BodyValue, parentKey?: string) => {
-    if (data && typeof data === 'object') {
-      const dataObject = data as BodyValueObject
-      Object.keys(dataObject).forEach((key: string) => {
-        buildFormData(formData, dataObject[key], parentKey ? `${parentKey}[${key}]` : key)
-      })
-    } else {
-      if (parentKey) {
-        formData[parentKey] = data ? data : ''
-      }
-    }
   }
   const formData: FormData = {}
   buildFormData(formData, object)
