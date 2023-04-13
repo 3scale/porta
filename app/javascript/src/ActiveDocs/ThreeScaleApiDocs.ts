@@ -42,7 +42,7 @@ const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
  * }
  * @param object
  */
-export const objectToFormData = (object: BodyValue): FormData => {
+export const objectToFormData = (object: BodyValueObject): FormData => {
   if (typeof object !== 'object' || Array.isArray(object)) {
     return {}
   }
@@ -89,7 +89,7 @@ export const transformReportRequestBody = (body: BackendApiReportBody): FormData
       return acc
     }, [])
   }
-  return objectToFormData(body as BodyValue)
+  return objectToFormData(body)
 }
 
 const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {

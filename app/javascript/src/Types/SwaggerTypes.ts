@@ -39,7 +39,7 @@ export interface ExecuteData {
   spec: unknown;
 }
 
-export interface BackendApiTransaction {
+export interface BackendApiTransaction extends BodyValueObject {
   app_id?: string;
   user_key?: string;
   timestamp?: string;
@@ -51,7 +51,7 @@ export interface BackendApiTransaction {
   };
 }
 
-export interface BackendApiReportBody {
+export interface BackendApiReportBody extends BodyValueObject {
   service_token?: string;
   service_id?: string;
   transactions?: (BackendApiTransaction | string)[];
