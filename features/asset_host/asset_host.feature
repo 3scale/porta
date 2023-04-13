@@ -9,11 +9,12 @@ Feature: Asset host
       Given master is the provider
 
     Scenario: Asset host not configured
+      Given the asset host is unset
       When master admin is logged in
       Then assets shouldn't be loaded from the asset host
 
     Scenario: Master dashboard with asset host configured
-      When the asset host is set to "cdn.3scale.localhost"
+      Given the asset host is set to "cdn.3scale.localhost"
       When master admin is logged in
       Then assets should be loaded from the asset host
 
@@ -21,11 +22,23 @@ Feature: Asset host
     Background:
       Given the asset host is set to "cdn.3scale.localhost"
       And a provider is logged in
-      And the provider has one buyer
 
     Scenario: Provider dashboard with asset host configured
       Then assets should be loaded from the asset host
 
+  Rule: Developer
+    Background:
+      Given a provider exists
+      And the provider has one buyer
+
+    Scenario: Developer portal with asset host not configured
+      Given the asset host is unset
+      And the buyer logs in to the provider
+      Then javascript assets shouldn't be loaded from the asset host
+      And provided assets shouldn't be loaded from the asset host
+
     Scenario: Developer portal with asset host configured
-      When the buyer logs in to the provider
+      Given the asset host is set to "cdn.3scale.localhost"
+      And the buyer logs in to the provider
       Then javascript assets should be loaded from the asset host
+      Then provided assets should be loaded from the asset host
