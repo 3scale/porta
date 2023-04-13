@@ -1,17 +1,6 @@
 require 'routing_constraints'
 require 'prometheus_exporter_port'
 
-class CdnAssets
-  def initialize
-    @environment = Sprockets::Environment.new
-    @environment.append_path 'cdn'
-  end
-
-  def call(env)
-    @environment.call(env)
-  end
-end
-
 # rubocop:disable Metrics/BlockLength
 
 Rails.application.routes.draw do
@@ -24,8 +13,6 @@ Rails.application.routes.draw do
     mount Yabeda::Prometheus::Exporter, at: '/yabeda-metrics'
     mount ::System::Deploy, at: 'deploy'
   end
-
-  mount CdnAssets.new => '/_cdn_assets_' unless Rails.configuration.three_scale.assets_cdn_host
 
   resource :openid
 
