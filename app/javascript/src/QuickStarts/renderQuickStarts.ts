@@ -2,12 +2,13 @@ import { QuickStartContainerWrapper as QuickStartContainer } from 'QuickStarts/c
 import { getActiveQuickstart } from 'QuickStarts/utils/progressTracker'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-document.addEventListener('DOMContentLoaded', () => {
+const renderQuickStarts = (): void => {
   const containerId = 'quick-start-container'
   const container = document.getElementById(containerId)
 
+  // QuickStarts are hidden behind config QuickstartsConfig
   if (!container) {
-    throw new Error(`Container not found: #${containerId}`)
+    return
   }
 
   const { links, renderCatalog } = container.dataset
@@ -30,4 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (quickStartsContainer && wrapperContainer) {
     quickStartsContainer.after(wrapperContainer)
   }
-})
+}
+
+export { renderQuickStarts }
