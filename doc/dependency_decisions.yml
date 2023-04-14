@@ -237,3 +237,9 @@
     :why: Package is exclusive for OSX, we don't ship it in production.
     :versions: []
     :when: 2023-03-01 14:38:40.169316108 Z
+- - :permit
+  - Python-2.0
+  - :who: Daria Mayorova
+    :why: License approved by Red Hat
+    :versions: []
+    :when: 2023-04-14 08:25:18.115879534 Z
