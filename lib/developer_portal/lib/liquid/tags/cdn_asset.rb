@@ -13,7 +13,7 @@ module Liquid
 
       def initialize(tag_name, file, tokens)
         super
-        @file = File.join('/dev-portal', file).strip # strip because we are allowing the path not enclosed between quotes
+        @file = File.join('/dev-portal-assets', file).strip # strip because we are allowing the path not enclosed between quotes
       end
 
       desc %(

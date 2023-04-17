@@ -29,14 +29,14 @@ end
 
 Then /^provided assets should be loaded from the asset host$/ do
   cdn_url = Rails.configuration.three_scale.asset_host
-  js_regexp = Regexp.new("https?://#{cdn_url}/dev-portal/.*?\\.js")
+  js_regexp = Regexp.new("https?://#{cdn_url}/dev-portal-assets/.*?\\.js")
 
   assert_not_nil Capybara.page.source.match js_regexp
 end
 
 Then /^provided assets shouldn't be loaded from the asset host$/ do
   # When no CDN is set, we expect to find relative paths to reusable assets
-  js_regexp = Regexp.new('src="/dev-portal/.*?\.js"')
+  js_regexp = Regexp.new('src="/dev-portal-assets/.*?\.js"')
 
   assert_not_nil Capybara.page.source.match js_regexp
 end
