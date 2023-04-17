@@ -23,7 +23,7 @@ module ApiSupport
 
     class_methods do
       def forbid_extra_params(action, options = {})
-        before_action :unpermitted_parameters_check
+        before_action :_unpermitted_parameters_check
         self._forbid_params_action = action
 
         return unless options[:whitelist]
@@ -34,27 +34,27 @@ module ApiSupport
 
     private
 
-    def forbid_params_whitelist
+    def _forbid_params_whitelist_keys
       self.class._forbid_params_whitelist.map(&:to_s)
     end
 
-    def wrapped_keys
+    def _wrapped_keys
       [_wrapper_key, *_wrapper_options[:include]].map(&:to_s)
     end
 
-    def unpermitted_keys
-      flat_params.keys - wrapped_keys - forbid_params_whitelist
+    def _unpermitted_keys
+      flat_params.keys - _wrapped_keys - _forbid_params_whitelist_keys
     end
 
-    def unpermitted_parameters_check
+    def _unpermitted_parameters_check
       return unless _forbid_params_action
-      return if unpermitted_keys.blank?
+      return if _unpermitted_keys.blank?
 
       case self.class._forbid_params_action
       when :log
-        Rails.logger.warn("Unpermitted parameters: #{unpermitted_keys}")
+        Rails.logger.warn("Unpermitted parameters: #{_unpermitted_keys}")
       when :reject
-        raise UnpermittedParameters, unpermitted_keys
+        raise UnpermittedParameters, _unpermitted_keys
       end
     end
   end
