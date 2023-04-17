@@ -97,7 +97,7 @@ CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 FROM porta-base AS porta-sphinx-config
 ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
-    THINKING_SPHINX_INDICES_LOCATION=/var/lib/sphinx \
+    THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
     THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
     RAILS_ENV=production \
     SECRET_KEY_BASE=dummy \
