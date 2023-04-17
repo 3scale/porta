@@ -27,7 +27,6 @@
     "spec/javascripts"
   ],
   "exclude": [
-    "app/javascript/packs/PF4Styles"
   ],
   "compileOnSave": false
 }
