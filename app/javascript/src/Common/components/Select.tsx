@@ -30,6 +30,7 @@ interface Props<T extends IRecord> {
   isDisabled?: boolean;
   isLoading?: boolean;
   isRequired?: boolean;
+  ouiaId?: number | string;
 }
 
 const Select = <T extends IRecord>({
@@ -48,7 +49,8 @@ const Select = <T extends IRecord>({
   helperTextInvalid,
   isDisabled = false,
   isLoading = false,
-  isRequired = false
+  isRequired = false,
+  ouiaId
 }: Props<T>): React.ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
@@ -84,6 +86,7 @@ const Select = <T extends IRecord>({
         id={fieldId}
         isDisabled={isDisabled}
         isExpanded={expanded}
+        ouiaId={ouiaId}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
