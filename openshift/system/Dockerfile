@@ -10,7 +10,6 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
 
 ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
-    BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
     NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
@@ -65,6 +64,7 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
 RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
+    && bundle config set --local without development:test:licenses \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
@@ -112,8 +112,9 @@ RUN yum install -y mariadb-server \
 
 FROM porta-base AS licenses-report
 RUN source /opt/app-root/etc/scl_enable \
-    && gem install license_finder \
-    && license_finder report --format=xml --save=doc/licenses/licenses.xml --decisions-file=doc/dependency_decisions.yml \
+    && sed -i -e 's/:licenses//' .bundle/config \
+    && bundle install \
+    && bundle exec rake licenses:report \
     && [ -s doc/licenses/licenses.xml ]
 
 FROM porta-base AS porta-prod

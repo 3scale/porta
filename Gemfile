@@ -242,7 +242,6 @@ group :development, :test do
   gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'license_finder', '~> 7.1.0'
 
   gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false
@@ -253,6 +252,10 @@ group :development, :test do
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
+end
+
+group :licenses do
+  gem 'license_finder', '~> 7.1.0'
 end
 
 gem 'webpacker', '5.4.4'
