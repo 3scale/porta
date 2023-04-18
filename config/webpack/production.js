@@ -16,4 +16,5 @@ environment.plugins.append(
   })
 )
 
+return console.dir(environment.toWebpackConfig(), { depth: null })
 module.exports = environment.toWebpackConfig()

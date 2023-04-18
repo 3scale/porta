@@ -489,6 +489,7 @@ jobs:
           command: bundle exec rake assets:precompile:test
           environment:
             RAILS_GROUPS: assets
+            NODE_OPTIONS: --max-old-space-size=4096
       - *save-assets-cache
       - persist_to_workspace:
           root: .
