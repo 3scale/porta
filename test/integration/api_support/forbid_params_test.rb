@@ -40,7 +40,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
   end
 
   class Action < ApiSupport::ForbidParamsTest
-    class Default <Action
+    class Default < Action
       class DefaultController < TestController; end
 
       def setup
@@ -58,7 +58,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    class Log <Action
+    class Log < Action
       class LogController < TestController
         forbid_extra_params :log
       end
@@ -75,7 +75,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    class Reject <Action
+    class Reject < Action
       class RejectController < TestController
         forbid_extra_params :reject
       end
