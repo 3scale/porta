@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { LoginPage } from '@patternfly/react-core'
 
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
 import { ForgotCredentials } from 'LoginPage/loginForms/ForgotCredentials'
@@ -12,8 +11,6 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import type { ReactNode } from 'react'
 import type { ProvidersProps } from 'LoginPage/loginForms/AuthenticationProviders'
 import type { FlashMessage } from 'Types'
-
-import 'LoginPage/assets/styles/loginPage.scss'
 
 interface Props {
   authenticationProviders?: ProvidersProps[];
@@ -86,8 +83,5 @@ class SimpleLoginPage extends Component<Props, State> {
   }
 }
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const LoginPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<SimpleLoginPage {...props} />, containerId) }
-
 export type { Props }
-export { SimpleLoginPage, LoginPageWrapper }
+export { SimpleLoginPage as default }

@@ -1,7 +1,6 @@
-= javascript_pack_tag 'request_password_page'
 - authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
 - flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
 
-div#pf-request-page-container data-request-props={flashMessages: flash_messages,
+div#pf-login-page-container data-request-props={flashMessages: flash_messages,
   providerLoginPath: provider_login_path,
   providerPasswordPath: provider_password_path }.to_json

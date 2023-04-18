@@ -1,45 +1,45 @@
 /* As we disabled automatic PF4/React css inline injection */
 /* Now we need to add pf4 styles manually */
 
-// import 'patternflyStyles/pf4Base'
-@import '~@patternfly/patternfly/patternfly-variables.css';
-@import '~@patternfly/patternfly/patternfly-shield-noninheritable.css';
-@import '~@patternfly/patternfly/patternfly-shield-inheritable.css';
-@import '~@patternfly/patternfly/patternfly-common.css';
-@import '~@patternfly/patternfly/patternfly-globals.css';
-@import '~@patternfly/patternfly/patternfly-addons.css';
+// // import 'patternflyStyles/pf4Base'
+// @import '~@patternfly/patternfly/patternfly-variables.css';
+// @import '~@patternfly/patternfly/patternfly-shield-noninheritable.css';
+// @import '~@patternfly/patternfly/patternfly-shield-inheritable.css';
+// @import '~@patternfly/patternfly/patternfly-common.css';
+// @import '~@patternfly/patternfly/patternfly-globals.css';
+// @import '~@patternfly/patternfly/patternfly-addons.css';
 
-@import '~@patternfly/patternfly/components/Page/page.css';
-@import '~@patternfly/patternfly/components/Nav/nav.css';
-@import '~@patternfly/patternfly/components/ContextSelector/context-selector.css';
-@import '~@patternfly/patternfly/layouts/Level/level.css';
-@import '~@patternfly/patternfly/patternfly-fonts.css';
+// @import '~@patternfly/patternfly/components/Page/page.css';
+// @import '~@patternfly/patternfly/components/Nav/nav.css';
+// @import '~@patternfly/patternfly/components/ContextSelector/context-selector.css';
+// @import '~@patternfly/patternfly/layouts/Level/level.css';
+// @import '~@patternfly/patternfly/patternfly-fonts.css';
 
-/****** HACK ******/
+// /****** HACK ******/
 
-/* PF4 font-size is not dynamic, but ours is.
-As we are still in a transition where PF4 is not totally implemented,
-we are keeping the dinamycally calculated size.
-This code must be removed once PF4 is implemented in the whole application */
+// /* PF4 font-size is not dynamic, but ours is.
+// As we are still in a transition where PF4 is not totally implemented,
+// we are keeping the dinamycally calculated size.
+// This code must be removed once PF4 is implemented in the whole application */
 
-@media screen and (max-width: 979px) {
-  html {
-    font-size: 0.65rem!important;
-  }
-}
+// @media screen and (max-width: 979px) {
+//   html {
+//     font-size: 0.65rem!important;
+//   }
+// }
 
-@media screen and (min-width: 980px) {
-  html {
-      font-size:calc(0.65rem + 0.35 * ((100vw - 50rem) / 50))!important;
-  }
-}
+// @media screen and (min-width: 980px) {
+//   html {
+//       font-size:calc(0.65rem + 0.35 * ((100vw - 50rem) / 50))!important;
+//   }
+// }
 
-@media screen and (min-width: 1600px) {
-  html {
-      font-size:1rem!important;
-  }
-}
-/****** END OF HACK ******/
+// @media screen and (min-width: 1600px) {
+//   html {
+//       font-size:1rem!important;
+//   }
+// }
+// /****** END OF HACK ******/
 
 // import 'patternflyStyles/loginPage'
 @import '~@patternfly/patternfly/components/Login/login.css';
@@ -48,3 +48,48 @@ This code must be removed once PF4 is implemented in the whole application */
 @import '~@patternfly/patternfly/components/FormControl/form-control.css';
 @import '~@patternfly/patternfly/components/Title/title.css';
 @import '~@patternfly/patternfly/components/Button/button.css';
+
+$pf-black-500:  #8b8d8f; // $osloGray
+$--pf-global--danger-color--100: #c9190b;
+$--pf-global--info-color--200:	#004368;
+
+#pf-login-page-container {
+
+  .pf-c-background-image::before {
+    filter: none;
+  }
+
+  .login-provider {
+    padding: .3rem 0;
+
+    .login-provider-link:hover {
+      text-decoration: none;
+    }
+  }
+
+  .providers-separator {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .pf-c-form__helper-text {
+    margin: 1rem 0;
+    svg {
+      margin-right: .3rem;
+    }
+  }
+  .pf-m-error {
+    color: $--pf-global--danger-color--100;
+  }
+
+  .pf-m-notice {
+    color: $--pf-global--info-color--200;
+  }
+}
+// // import 'patternflyStyles/loginPage'
+// @import '~@patternfly/patternfly/components/Login/login.css';
+// @import '~@patternfly/patternfly/components/BackgroundImage/background-image.css';
+// @import '~@patternfly/patternfly/components/Form/form.css';
+// @import '~@patternfly/patternfly/components/FormControl/form-control.css';
+// @import '~@patternfly/patternfly/components/Title/title.css';
+// @import '~@patternfly/patternfly/components/Button/button.css';

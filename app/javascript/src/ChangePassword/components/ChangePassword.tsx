@@ -11,8 +11,6 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'
 
-import 'LoginPage/assets/styles/loginPage.scss'
-
 interface Props {
   lostPasswordToken?: string | null;
   url?: string;
@@ -64,7 +62,7 @@ const ChangePassword: FunctionComponent<Props> = ({
       brandImgSrc={brandImg}
       loginTitle="Change Password"
     >
-      {errors.length && <FlashMessages flashMessages={errors} />}
+      {errors.length > 0 && <FlashMessages flashMessages={errors} />}
       <Form
         noValidate
         acceptCharset="UTF-8"
