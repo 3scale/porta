@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ApiSupport
-  class UnpermittedParameters < StandardError
+  class UnpermittedParametersError < StandardError
     def initialize(unpermitted_keys)
       msg = "Unpermitted parameters: #{unpermitted_keys}"
       super msg
@@ -16,7 +16,7 @@ module ApiSupport
       class_attribute :_forbid_params_action
       class_attribute :_forbid_params_whitelist, default: []
 
-      rescue_from UnpermittedParameters do |error|
+      rescue_from UnpermittedParametersError do |error|
         render_error error.message, status: :unprocessable_entity
       end
     end
@@ -54,7 +54,7 @@ module ApiSupport
       when :log
         Rails.logger.warn("Unpermitted parameters: #{_unpermitted_keys}")
       when :reject
-        raise UnpermittedParameters, _unpermitted_keys
+        raise UnpermittedParametersError, _unpermitted_keys
       end
     end
   end
