@@ -19,11 +19,11 @@ non_transactional = %w[
 transactional = non_transactional.map {|t| "not #{t}" }
 
 Before(*transactional) do
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.clean_with(:transaction, except: %w(ar_internal_metadata))
 end
 
 Before non_transactional.join(' or ') do
-  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.clean_with(:truncation, except: %w(ar_internal_metadata))
 end
 
 # Capybara defaults to CSS3 selectors rather than XPath.

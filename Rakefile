@@ -58,8 +58,22 @@ end
 # connection failure and thus failure to create the database.
 # Since we don't use credentials, we can remove that dependency.
 # And then a whole mess to fix other use cases especally db:reset
-warn "Removing :environment prerequisite from db:create"
-Rake::Task['db:load_config'].prerequisites.delete("environment")
+warn "Removing :environment prerequisite from db:load_config"
+Rake::Task["db:load_config"].clear
+# Extracted from https://github.com/rails/rails/blob/6-1-stable/activerecord/lib/active_record/railties/databases.rake#L21-L27
+# As we remove :environment from db:load_config, the database_configuration might be nil.
+# Since Rails 6.1, the database configuration must be present at this step so, as a workaround, we can load the
+# configurations directly from Rails.application.
+namespace :db do
+  task :load_config do
+    if ActiveRecord::Base.configurations.empty?
+      ActiveRecord::Base.configurations = ActiveRecord::Tasks::DatabaseTasks.database_configuration || Rails.application.config.database_configuration
+    end
+
+    ActiveRecord::Migrator.migrations_paths = ActiveRecord::Tasks::DatabaseTasks.migrations_paths
+  end
+end
+
 Rake::Task.tasks.select { |task|
   next if task.name == "db:create"
   task.name.start_with?("db:") && task.prerequisites.include?("load_config")
