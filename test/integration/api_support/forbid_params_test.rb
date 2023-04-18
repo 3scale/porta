@@ -145,7 +145,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
 
     test 'the callback is only called once' do
       with_test_routes do
-        ChildController.any_instance.expects(:_unpermitted_parameters_check).times(1)
+        ChildController.any_instance.expects(:_unpermitted_parameters_check).once
         post '/test/child', params: { unpermitted: true }
       end
     end
