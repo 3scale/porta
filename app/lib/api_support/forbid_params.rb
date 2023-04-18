@@ -48,13 +48,15 @@ module ApiSupport
 
     def _unpermitted_parameters_check
       return unless _forbid_params_action
-      return if _unpermitted_keys.blank?
+
+      unpermitted_keys = _unpermitted_keys
+      return if unpermitted_keys.blank?
 
       case self.class._forbid_params_action
       when :log
-        Rails.logger.warn("Unpermitted parameters: #{_unpermitted_keys}")
+        Rails.logger.warn("Unpermitted parameters: #{unpermitted_keys}")
       when :reject
-        raise UnpermittedParametersError, _unpermitted_keys
+        raise UnpermittedParametersError, unpermitted_keys
       end
     end
   end
