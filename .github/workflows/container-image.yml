@@ -22,3 +22,6 @@ jobs:
     with:
       platforms: ${{ inputs.platforms }}
       custom_tag: ${{ inputs.custom_tag }}
+    secrets: # inherit doesn't work for some reason
+      QUAY_USER_NAME: ${{ secrets.QUAY_USER_NAME }}
+      QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}

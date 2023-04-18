@@ -12,6 +12,11 @@ on:
         required: false
         default: ''
         type: string
+    secrets:
+      QUAY_USER_NAME:
+        required: false
+      QUAY_PASSWORD:
+        required: false
 
 env:
   # Use docker.io for Docker Hub if empty
