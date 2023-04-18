@@ -80,7 +80,7 @@ class ApiSupport::ForbidParamsTest < ActionDispatch::IntegrationTest
         forbid_extra_params :reject
       end
 
-      test 'returns 406 when forbid_extra_params = :reject' do
+      test 'returns 422 when forbid_extra_params = :reject' do
         with_test_routes do
           post '/test/reject', params: { unpermitted: true }
 
