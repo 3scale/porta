@@ -30,7 +30,6 @@ interface Props<T extends IRecord> {
   isDisabled?: boolean;
   isLoading?: boolean;
   isRequired?: boolean;
-  ouiaId?: number | string;
 }
 
 const Select = <T extends IRecord>({
@@ -49,8 +48,7 @@ const Select = <T extends IRecord>({
   helperTextInvalid,
   isDisabled = false,
   isLoading = false,
-  isRequired = false,
-  ouiaId
+  isRequired = false
 }: Props<T>): React.ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
@@ -82,11 +80,11 @@ const Select = <T extends IRecord>({
       {item && <input name={name} type="hidden" value={item.id >= 0 ? item.id : ''} />}
       <PF4Select
         aria-label={ariaLabel}
+        ariaLabelTypeAhead="input-select-label"
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
         isExpanded={expanded}
-        ouiaId={ouiaId}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}

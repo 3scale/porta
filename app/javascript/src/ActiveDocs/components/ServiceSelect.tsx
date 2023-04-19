@@ -17,7 +17,6 @@ const ServiceSelect: FunctionComponent<Props> = ({ service = null, services, set
     items={services}
     label="Service"
     name="api_docs_service[service_id]"
-    ouiaId="ouiaId"
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- There is no empty option at select and will never be null
     onSelect={(selectedService) => { setService(selectedService!) }}
   />
