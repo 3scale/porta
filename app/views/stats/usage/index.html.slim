@@ -27,7 +27,7 @@ javascript:
         methodsTableContainer: '.StatsMethodsTable-container',
         csvLinkContainer: '.StatsCSVLink-container',
         usageMetricsUrl: '#{admin_service_stats_usage_path(@service, format: :json)}',
-        hitsMetricName: '#{@metrics.find { |metric| metric.hits? && metric.service? }.system_name}',
+        hitsMetricName: '#{@metrics.find { |metric| metric.hits? && metric.service_metric? }.system_name}',
         sourceCollection: 'service'
       }
     )
