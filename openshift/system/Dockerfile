@@ -110,13 +110,5 @@ RUN yum install -y mariadb-server \
     && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
     && kill $(</var/run/mariadb/mariadb.pid)
 
-FROM porta-base AS licenses-report
-RUN source /opt/app-root/etc/scl_enable \
-    && sed -i -e 's/:licenses//' .bundle/config \
-    && bundle install \
-    && bundle exec rake licenses:report \
-    && [ -s doc/licenses/licenses.xml ]
-
 FROM porta-base AS porta-prod
 COPY --from=porta-sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
-COPY --from=licenses-report /opt/system/doc/licenses/licenses.xml /opt/system/doc/licenses/
