@@ -59,21 +59,7 @@ end
 # Since we don't use credentials, we can remove that dependency.
 # And then a whole mess to fix other use cases especally db:reset
 warn "Removing :environment prerequisite from db:load_config"
-Rake::Task["db:load_config"].clear
-# Extracted from https://github.com/rails/rails/blob/6-1-stable/activerecord/lib/active_record/railties/databases.rake#L21-L27
-# As we remove :environment from db:load_config, the database_configuration might be nil.
-# Since Rails 6.1, the database configuration must be present at this step so, as a workaround, we can load the
-# configurations directly from Rails.application.
-namespace :db do
-  task :load_config do
-    if ActiveRecord::Base.configurations.empty?
-      ActiveRecord::Base.configurations = ActiveRecord::Tasks::DatabaseTasks.database_configuration || Rails.application.config.database_configuration
-    end
-
-    ActiveRecord::Migrator.migrations_paths = ActiveRecord::Tasks::DatabaseTasks.migrations_paths
-  end
-end
-
+Rake::Task['db:load_config'].prerequisites.delete("environment")
 Rake::Task.tasks.select { |task|
   next if task.name == "db:create"
   task.name.start_with?("db:") && task.prerequisites.include?("load_config")
@@ -96,6 +82,15 @@ namespace :hack do
       Rake::Task["db:drop"].clear
     end
   end
+
+  # As we remove :environment from db:load_config, the database_configuration might be nil.
+  # Since Rails 6.1, the database configuration must be present at db:load_config.
+  # As a workaround, we can load the configurations directly from Rails.application.
+  desc "Sets ActiveRecord's database configuration in case it's still not present"
+  task :set_db_config do
+    ActiveRecord::Tasks::DatabaseTasks.database_configuration ||= Rails.application.config.database_configuration || {}
+  end
 end
 
 Rake::Task["db:reset"].prerequisites.prepend "hack:reset_needs_drop"
+Rake::Task["db:load_config"].prerequisites.prepend "hack:set_db_config"
