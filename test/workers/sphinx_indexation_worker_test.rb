@@ -23,7 +23,7 @@ class SphinxIndexationWorkerTest < ActiveSupport::TestCase
   test "only one index found per indexed model" do
     worker = SphinxIndexationWorker.new
     indices = ThinkingSphinx::Test.indexed_models.select do |model|
-      assert_match SizeMatcher.new(1), worker.send(:indices_for_model, model).to_a
+      assert_equal 1, worker.send(:indices_for_model, model).to_a.size
     end
 
     assert_not_empty indices.map(&:name)
