@@ -7,9 +7,6 @@ class ModelsTest < ActiveSupport::TestCase
 
   test 'validate length of strings for all models to do not raise an error reaching DB' do
     exceptions = {
-      'Audited::Audit' => :all, 'RailsEventStoreActiveRecord::Event' => :all,
-      'ActiveStorage::Attachment' => :all, 'ActiveRecord::SchemaMigration' => :all, 'ActiveStorage::Blob' => :all,
-      'System::Database::ConnectionProbe' => :all, 'ActsAsTaggableOn::Tag' => :all, 'ActsAsTaggableOn::Tagging' => :all, 'ApplicationRecord' => :all,
       'FieldsDefinition' => %w[target], 'AuthenticationProvider' => %w[account_type], 'Feature' => %w[featurable_type scope], 'Message' => %w[state],
       'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name], 'ProxyConfig' => %w[hosts],
       'Proxy' => %w[endpoint sandbox_endpoint], 'OIDCConfiguration' => %w[oidc_configurable_type], 'Invitation' => %w[token],
@@ -28,7 +25,7 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy, Topic, Forum]
+    models = ApplicationRecord.descendants - [BackendApi, Service, Proxy, Topic, Forum]
 
     validate_columns_for = ->(model, options = {}) do
       model_name = model.name
