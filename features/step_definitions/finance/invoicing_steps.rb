@@ -122,14 +122,13 @@ When(/^I see my invoice from "([^"]*)" is "([^"]*)"$/) do |month, state|
 end
 
 Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
-  row = page.find(%(tr:has(td:contains("#{invoice_number}"))))
-  link = row.find(%(td a:contains("PDF")))
+  link = find('tr.invoice', text: invoice_number).find('td a', text: 'PDF')
 
   # This only checks that the link points to the s3 server and that it contains the
   # AWS secret id.
   #
   # REVIEW: Maybe check the full url is corret?
-  assert_secure_invoice_pdf_url(link[:href], Invoice.find_by_friendly_id!(invoice_number))
+  assert_secure_invoice_pdf_url(link[:href], Invoice.find_by!(friendly_id: invoice_number))
 end
 
 Then(/^I should see secure PDF link for the shown (buyer )?invoice$/) do |buyer_side|

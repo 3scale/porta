@@ -52,16 +52,15 @@ Background:
     | Total VAT Amount             |          |    0 |
     | Total cost (VAT 5% included) |          |  100 |
 
+  @javascript
   Scenario: Sums on dashboard are VAT sensitive
    Given a buyer "europe" signed up to application plan "best"
      And VAT rate of buyer "europe" is 5%
      And an invoice of buyer "europe" for May, 1945 with items
      | name       | description         | cost |
      | Liberation | started in Normandy |  100 |
-
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
-
-     And I go to the invoices by months page
-     Then I should have an invoice of "105.0 EUR"
+    And I go to the invoices by months page
+    Then I should have an invoice of "105.0 EUR"
     # TODO: Then should see the following table:

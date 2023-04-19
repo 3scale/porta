@@ -1,41 +1,35 @@
+@javascript
 Feature: Notifications
   In order to get notified by email only about the event I'm interested in
   As admin of an account
   I want to configure notifications
 
   Background:
-    Given a provider
-      And all the rolling updates features are off
+    Given a provider is logged in
+    And all the rolling updates features are off
 
   Scenario: Navigate to notifications page
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
     And I go to the provider account page
     And I follow "Notifications"
     Then I should see "Email Notifications" in a header
 
 
   Scenario: Notifications default values
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-
-      And I go to the notifications page
+    And I go to the notifications page
     Then the "New user signup" checkbox should be checked
-      And the "Receiving a new message" checkbox should be checked
-      And the "Plan change by a user" checkbox should be checked
-      And the "User cancels account" checkbox should be checked
+    And the "Receiving a new message" checkbox should be checked
+    And the "Plan change by a user" checkbox should be checked
+    And the "User cancels account" checkbox should be checked
 
     But the "New forum post" checkbox should not be checked
-      And the "Weekly aggregate report" checkbox should not be checked
-      And the "Daily aggregate report" checkbox should not be checked
+    And the "Weekly aggregate report" checkbox should not be checked
+    And the "Daily aggregate report" checkbox should not be checked
 
   # This scenario was unDRYed from an Outline due to performance reasons, it went from ~2 minutes to 20 seconds
   # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-  @wip @javascript
+  @wip
   Scenario: Enable notification
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-      And I go to the notifications page
+    And I go to the notifications page
 
     When I check "New user signup"
     Then I should have the notification "New user signup" enabled

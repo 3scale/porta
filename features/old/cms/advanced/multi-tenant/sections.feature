@@ -1,3 +1,4 @@
+@javascript
 Feature: Section
   In order to have multi tenant working
   as a Provider
@@ -5,8 +6,7 @@ Feature: Section
 
   Background:
     Given a provider "withsections.3scale.localhost"
-      And provider "withsections.3scale.localhost" has section "lolsection"
-
+    And provider "withsections.3scale.localhost" has section "lolsection"
     Given a provider "foo.3scale.localhost"
 
   Scenario: Cannot index other providers sections

@@ -6,6 +6,7 @@ Feature: Account management
   Background:
     Given a provider "foo.3scale.localhost"
 
+  @javascript
   Scenario: Edit and show account details
     Given the admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
     Given master provider has the following fields defined for "Account":
@@ -34,7 +35,7 @@ Feature: Account management
         | Time Zone               | Santiago                  |
       And provider "Fantastically awesome API" time zone should be "Santiago"
 
-  @security @wip
+  @security @wip @javascript
   Scenario: Non-admins cannot edit account details
     Given an user "bob" of account "foo.3scale.localhost"
     And user "bob" activates himself
@@ -44,6 +45,7 @@ Feature: Account management
     # FIXME: as the Edit button now resides elsewhere, this does not assert anything
     Then I should not see link "Edit" within "#account_details"
 
+  @javascript
   Scenario: Providers see their provider key on the account details page
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
@@ -59,7 +61,7 @@ Feature: Account management
     And I follow "Settings"
     Then I should not see "API Key"
 
-  @wip
+  @wip @javascript
   Scenario: For admins the account overview is a page to change account details
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
@@ -81,7 +83,7 @@ Feature: Account management
     Then I should see the page to change account details
       And I should see the value of the customers type field is "Consumers"
 
-  @wip
+  @wip @javascript
   Scenario: Provider Admins cannot edit Profiles fields on account
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
@@ -100,7 +102,7 @@ Feature: Account management
     And I press "Update Details"
     Then I should see "should look like an email address"
 
-  @regression-test
+  @regression-test @javascript
   Scenario: Edit account information even with advanced CMS enabled
     When provider "foo.3scale.localhost" has Browser CMS activated
     And current domain is the admin domain of provider "foo.3scale.localhost"
@@ -108,6 +110,7 @@ Feature: Account management
      And I go to the provider edit account page
     Then I should see "Edit Account Details"
 
+  @javascript
   Scenario: Provider should see all fields defined for account
     And provider "foo.3scale.localhost" has multiple applications enabled
       And provider "foo.3scale.localhost" has the following fields defined for "Account":

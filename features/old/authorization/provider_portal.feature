@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider portal section authorization
   In order to manage my portal
   As a provider
@@ -12,7 +13,7 @@ Feature: Provider portal section authorization
     When I log in as provider "foo.3scale.localhost"
 
     When I go to the provider dashboard
-    Then I should see the link "Portal" in the audience dashboard widget
+    Then I should see the link "PORTAL" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be on the <page> page

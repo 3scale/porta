@@ -1,3 +1,4 @@
+@javascript
 Feature: Paid plan
   In order to charge my users and get rich
   As a provider
@@ -10,10 +11,8 @@ Feature: Paid plan
 
   Scenario: Billing allowed, all postpaid details valid
     Given provider "foo.3scale.localhost" is charging its buyers
-
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
-
     And I go to the edit page for plan "Foo"
     Then I should see "Setup fee"
     And I should see "Cost per month"

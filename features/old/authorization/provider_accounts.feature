@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider accounts authorization
   In order to manage my accounts
   As a provider
@@ -17,7 +18,7 @@ Feature: Provider accounts authorization
 
     When I go to the provider dashboard
     #Then show me the page
-    Then I should see the link "1 Account" in the audience dashboard widget
+    Then I should see the link "1 ACCOUNT" in the audience dashboard widget
     When I follow "1 Account"
     Then I should see the link "Accounts" in the main menu
 
@@ -51,7 +52,7 @@ Feature: Provider accounts authorization
     When I log in as provider "member"
 
      And I go to the provider dashboard
-    Then I should not see the link "Accounts" in the audience dashboard widget
+    Then I should not see the link "ACCOUNTS" in the audience dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
 
@@ -79,7 +80,7 @@ Feature: Provider accounts authorization
       And provider "foo.3scale.localhost" has "multiple_users" switch allowed
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should see the link "1 Account" in the audience dashboard widget
+    Then I should see the link "1 ACCOUNT" in the audience dashboard widget
 
     When I go to the <page> page
     Then I should be at url for the <page> page

@@ -1,3 +1,4 @@
+@javascript
 Feature: ActiveDocs
   As a provider
   I want to manage my ActiveDocs
@@ -10,7 +11,6 @@ Feature: ActiveDocs
     When an admin is reviewing the developer portal's active docs
     Then the table should contain a column for the service
 
-  @javascript
   Scenario Outline: Create a spec for the first time
     Given an admin wants to add a spec to a new service "FooAPI"
     When they are reviewing the developer portal's active docs
