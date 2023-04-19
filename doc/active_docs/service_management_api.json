@@ -80,7 +80,7 @@
           {
             "name": "usage",
             "in": "query",
-            "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+            "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.\n\nThe usage object (see <a href=\"#model-Usage\">Usage</a> schema for definition) may contain multiple fields, where the keys are metrics' system names, and the values are the reported usage.",
             "schema": {
               "$ref": "#/components/schemas/Usage"
             },
@@ -165,7 +165,7 @@
           {
             "name": "usage",
             "in": "query",
-            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
+            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.\n\nThe usage object (see <a href=\"#model-Usage\">Usage</a> schema for definition) may contain multiple fields, where the keys are metrics' system names, and the values are the reported usage.",
             "schema": {
               "$ref": "#/components/schemas/Usage"
             },
@@ -177,7 +177,13 @@
             "in": "query",
             "description": "Request Log allows to log status codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
             "schema": {
-              "$ref": "#/components/schemas/Log"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "example": 200
+                }
+              }
             },
             "style": "deepObject",
             "explode": true
@@ -249,7 +255,7 @@
           {
             "name": "usage",
             "in": "query",
-            "description": "Predicted usage. Actual usage will need to be reported with a report or an authrep call.",
+            "description": "Predicted usage. Actual usage will need to be reported with a report or an authrep call.\n\nThe usage object (see <a href=\"#model-Usage\">Usage</a> schema for definition) may contain multiple fields, where the keys are metrics' system names, and the values are the reported usage.",
             "schema": {
               "$ref": "#/components/schemas/Usage"
             },
@@ -339,7 +345,7 @@
           {
             "name": "usage",
             "in": "query",
-            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
+            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.\n\nThe usage object (see <a href=\"#model-Usage\">Usage</a> schema for definition) may contain multiple fields, where the keys are metrics' system names, and the values are the reported usage.",
             "schema": {
               "$ref": "#/components/schemas/Usage"
             },
@@ -449,6 +455,7 @@
       },
       "Transactions": {
         "type": "array",
+        "description": "Array of transaction details (see <a href=\"#model-Transaction\">Transaction</a> definition). All transactions must include either `user_key` or `app_id` (the same for all transactions), depending on the API's authentication pattern. Transactions may optionally include the `timestamp` field.",
         "items": {
           "$ref": "#/components/schemas/Transaction"
         }
@@ -480,15 +487,6 @@
           "user_key": "example",
           "usage": {
             "hits": 1
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": 200
           }
         }
       }

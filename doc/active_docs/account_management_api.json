@@ -19,8 +19,8 @@
           "Accounts"
         ],
         "requestBody": {
-          "description": "Create Account",
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-SignupExpressRequest\">SignupExpressRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -148,6 +148,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-AccountUpdateRequest\">AccountUpdateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -320,6 +321,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-ApplicationCreateRequest\">ApplicationCreateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -411,6 +413,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-ApplicationUpdateRequest\">ApplicationUpdateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -1711,6 +1714,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-UserCreateRequest\">UserCreateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -1802,6 +1806,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-UserUpdateRequest\">UserUpdateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -2197,6 +2202,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-UserCreateRequest\">UserCreateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -2268,6 +2274,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-UserUpdateRequest\">UserUpdateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -7270,6 +7277,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-ServiceCreateRequest\">ServiceCreateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -7341,6 +7349,7 @@
         ],
         "requestBody": {
           "required": true,
+          "description": "Custom fields can be specified in the request by adding `&custom-field=value` to the body parameters. See <a href=\"#model-ServiceUpdateRequest\">ServiceUpdateRequest</a> schema for the request body definition.",
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
