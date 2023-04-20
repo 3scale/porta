@@ -1,8 +1,12 @@
 import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/neat.css'
+import 'codemirror/mode/javascript/javascript'
 import CodeMirror from 'codemirror'
 import { useEffect } from 'react'
 
 import type { Editor } from 'codemirror'
+
+import '../../packs/codemirror-cms.scss'
 
 const useCodeMirror = (textAreaId: string, initialValue: string, onChange: (value: string) => void): void => {
   useEffect(() => {
