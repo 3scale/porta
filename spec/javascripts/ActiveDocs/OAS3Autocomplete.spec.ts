@@ -1,7 +1,7 @@
 import { autocompleteOAS3, autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
-import * as utils from 'utilities/fetchData'
 
 import type { Request as SwaggerUIRequest, Response as SwaggerUIResponse } from 'swagger-ui'
+import type { AccountDataResponse} from 'Types/SwaggerTypes'
 
 const specUrl = 'https://provider.3scale.test/foo/bar.json'
 const apiUrl = 'https://some.api.domain/foo/bar/api-url'
@@ -53,27 +53,24 @@ const apiResponse = {
   }
 }
 
-const accountData = {
-  status: 200,
+const accountData: AccountDataResponse = {
+  status: '200',
   results: {
     user_keys: [
       { name: 'Some App', value: '12345678' },
       { name: 'Another App', value: '' }
     ]
   }
-} as const
-
-const fetchDataSpy = jest.spyOn(utils, 'fetchData')
-fetchDataSpy.mockResolvedValue(accountData)
+}
 
 describe('autocompleteOAS3', () => {
   it('should inject servers to the spec', async () => {
-    const res: SwaggerUIResponse = await autocompleteOAS3(specResponse, accountDataUrl, serviceEndpoint)
+    const res: SwaggerUIResponse = await autocompleteOAS3(specResponse, accountData, serviceEndpoint)
     expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
   })
 
   it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', async () => {
-    const res: SwaggerUIResponse = await autocompleteOAS3(specResponse, accountDataUrl, serviceEndpoint)
+    const res: SwaggerUIResponse = await autocompleteOAS3(specResponse, accountData, serviceEndpoint)
     const examplesFirstParam = res.body.paths['/'].get.parameters[0].examples
     const examplesSecondParam = res.body.paths['/'].get.parameters[1].examples
 
@@ -90,7 +87,7 @@ describe('autocompleteRequestInterceptor', () => {
   describe('when the request is fetching OpenAPI spec', () => {
     it('should update the response interceptor', async () => {
       let request: SwaggerUIRequest = { loadSpec: true }
-      request = autocompleteRequestInterceptor(request, accountDataUrl, serviceEndpoint)
+      request = autocompleteRequestInterceptor(request, accountData, serviceEndpoint)
 
       expect(request.responseInterceptor).toBeDefined()
 
@@ -100,9 +97,9 @@ describe('autocompleteRequestInterceptor', () => {
   })
 
   describe('when the request is fetching API call response', () => {
-    const originalInterceptor = jest.fn((res: SwaggerUIRequest)=> { return res })
+    const originalInterceptor = jest.fn((res: SwaggerUIRequest) => { return res })
     let request: SwaggerUIRequest = { responseInterceptor: originalInterceptor }
-    request = autocompleteRequestInterceptor(request, accountDataUrl, serviceEndpoint)
+    request = autocompleteRequestInterceptor(request, accountData, serviceEndpoint)
 
     it('should not update the response interceptor', () => {
       expect(request.responseInterceptor).toEqual(originalInterceptor)
