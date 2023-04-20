@@ -41,7 +41,7 @@ exports[`should render required form fields 1`] = `
     <HelperText>
       <HelperTextItem>
         <p
-          className="inline-hints"
+          className="inline-errors"
         >
            
            
