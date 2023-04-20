@@ -5,6 +5,11 @@ export type AccountData = Record<string, {
   value: string;
 }[]>
 
+export interface AccountDataResponse {
+  status: string;
+  results: AccountData;
+}
+
 export interface ApiDocsService {
   name: string;
   system_name: string;

@@ -11,10 +11,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* TODO: this module needs to be properly typed !!! */
 
-import { fetchData } from 'utilities/fetchData'
-
 import type { Request as SwaggerUIRequest, Response as SwaggerUIResponse } from 'swagger-ui'
-import type { AccountData } from 'Types/SwaggerTypes'
+import type { AccountData, AccountDataResponse } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
 
@@ -114,14 +112,13 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+export const autocompleteOAS3 = (response: SwaggerUIResponse, accountData: AccountDataResponse, serviceEndpoint: string): Response => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
-  const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
   let body = undefined
   try {
-    body = data.results
-      ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
+    body = accountData.results
+      ? injectAutocompleteToResponseBody(bodyWithServer, accountData.results)
       : bodyWithServer
   } catch (error: unknown) {
     console.error(error)
@@ -141,12 +138,12 @@ export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataU
  * transformations (inject servers list and autocomplete data) to the response
  * keep the responses to the actual API calls (made through 'Try it out') untouched
  * @param request request made through Swagger UI
- * @param accountDataUrl URL of the data for autocompletion
+ * @param accountData data for autocompletion
  * @param serviceEndpoint Public Base URL of the gateway, that will replace the  URL in the "servers" object
  */
-export const autocompleteRequestInterceptor = (request: SwaggerUIRequest, accountDataUrl: string, serviceEndpoint: string): Promise<SwaggerUIRequest> | SwaggerUIRequest => {
+export const autocompleteRequestInterceptor = (request: SwaggerUIRequest, accountData: AccountDataResponse, serviceEndpoint: string): Promise<SwaggerUIRequest> | SwaggerUIRequest => {
   if (request.loadSpec) {
-    request.responseInterceptor = (response: SwaggerUIResponse) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+    request.responseInterceptor = (response: SwaggerUIResponse) => autocompleteOAS3(response, accountData, serviceEndpoint)
   }
   return request
 }

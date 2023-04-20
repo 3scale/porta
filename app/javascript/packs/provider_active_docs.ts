@@ -1,19 +1,24 @@
 // We can define the 3scale plugins here and export the modified bundle
 import 'swagger-ui/dist/swagger-ui.css'
 
-import { renderApiDocs } from 'ActiveDocs/ThreeScaleApiDocs'
+import { renderSwaggerUI } from 'ActiveDocs/ThreeScaleApiDocs'
 
 import 'ActiveDocs/swagger-ui-3-provider-patch.scss'
 
-document.addEventListener('DOMContentLoaded', () => {
+const renderActiveDocs = async () => {
   const containerId = 'api-containers'
   const container = document.getElementById(containerId)
 
   if (!container) {
-    throw new Error('The target ID was not found: ' + containerId)
+    console.error(`The target element with ID ${containerId} was not found`)
+    return
   }
 
   const { baseUrl = '', apiDocsPath = '', apiDocsAccountDataPath = '' } = container.dataset
 
-  void renderApiDocs(container, apiDocsPath, baseUrl, apiDocsAccountDataPath)
+  await renderSwaggerUI(container, apiDocsPath, baseUrl, apiDocsAccountDataPath)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderActiveDocs().catch(error => { console.error(error) })
 })

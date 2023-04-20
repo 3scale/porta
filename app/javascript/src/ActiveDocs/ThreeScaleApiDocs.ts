@@ -6,7 +6,7 @@ import { fetchData } from 'utilities/fetchData'
 import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
-import type { ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData } from 'Types/SwaggerTypes'
+import type { AccountDataResponse, ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData } from 'Types/SwaggerTypes'
 import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 
@@ -118,8 +118,11 @@ const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {
   }
 }
 
-export const renderApiDocs = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, apiDocsAccountDataPath: string): Promise<void> => {
+export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, accountDataUrl: string): Promise<void> => {
   const apiSpecs: ApiDocsServices = await fetchData<ApiDocsServices>(apiDocsPath)
+
+  const accountData: AccountDataResponse = await fetchData<AccountDataResponse>(accountDataUrl)
+
   apiSpecs.apis.forEach( api => {
     const domId = api.system_name.replace(/_/g, '-')
     const url = getApiSpecUrl(baseUrl, api.path)
@@ -128,7 +131,7 @@ export const renderApiDocs = async (container: HTMLElement, apiDocsPath: string,
       url,
       // eslint-disable-next-line @typescript-eslint/naming-convention -- Swagger UI
       dom_id: `#${domId}`,
-      requestInterceptor: (request) => autocompleteRequestInterceptor(request, apiDocsAccountDataPath, ''),
+      requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
         RequestBodyTransformerPlugin
