@@ -112,7 +112,7 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-export const autocompleteOAS3 = (response: SwaggerUIResponse, accountData: AccountDataResponse, serviceEndpoint: string): Response => {
+const autocompleteOAS3 = (response: SwaggerUIResponse, accountData: AccountDataResponse, serviceEndpoint: string): Response => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
 
   let body = undefined
