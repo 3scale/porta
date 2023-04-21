@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 # to not use insecure git protocol
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rack', '~> 2.1.4'
+gem 'rack', '~> 2.2.6'
 
 gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
@@ -151,7 +151,7 @@ gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 
 # for liquid docs on-fly generation
-gem 'commonmarker', '~> 0.23.7'
+gem 'commonmarker', '~> 0.23.9'
 gem 'escape_utils'
 gem 'github-markdown'
 gem 'html-pipeline'

@@ -2,7 +2,39 @@
 
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 .PolicyConfiguration {
-  @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss";
+
+  // Utilities
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_opacity.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_tab-focus.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_text-emphasis.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_text-overflow.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_vendor-prefixes.scss";
+
+  // Components
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_buttons.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_forms.scss";
+
+  // Skins
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_background-variant.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_border-radius.scss";
+
+  // Layout
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_clearfix.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_grid-framework.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_grid.scss";
+
+  // Reset and dependencies
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_glyphicons.scss";
+
+  // Core CSS
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_type.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_grid.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_forms.scss";
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_buttons.scss";
+
+  // Components
+  @import "~bootstrap-sass/assets/stylesheets/bootstrap/_button-groups.scss";
 }
 
 $body-background: #fff;

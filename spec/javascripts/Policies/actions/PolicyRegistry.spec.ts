@@ -9,19 +9,19 @@ it('#loadRegistrySuccess should create an action', () => {
 
 it('#fetchRegistry should create an action to use the redux api middleware', () => {
   expect(PolicyRegistry.fetchRegistry()).toMatchInlineSnapshot(`
-    Object {
-      "@@redux-api-middleware/RSAA": Object {
+    {
+      "@@redux-api-middleware/RSAA": {
         "credentials": "same-origin",
         "endpoint": "/admin/api/policies.json",
         "method": "GET",
-        "types": Array [
-          Object {
+        "types": [
+          {
             "type": "FETCH_REGISTRY_REQUEST",
           },
-          Object {
+          {
             "type": "FETCH_REGISTRY_SUCCESS",
           },
-          Object {
+          {
             "type": "FETCH_REGISTRY_ERROR",
           },
         ],

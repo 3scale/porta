@@ -1,0 +1,29 @@
+// import 'patternflyStyles/modal'
+@import "~@patternfly/patternfly/components/ModalBox/modal-box.css";
+
+.pf-c-modal-box h1.pf-c-title {
+  text-align: initial;
+  font-size: var(--pf-global--FontSize--2xl);
+}
+
+// import 'patternflyStyles/backdrop'
+@import "~@patternfly/patternfly/components/Backdrop/backdrop.css";
+
+// import 'patternflyStyles/bullseye'
+@import "~@patternfly/patternfly/layouts/Bullseye/bullseye.css";
+
+// import 'patternflyStyles/table'
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Button/button.css';
+
+// import 'patternflyStyles/pagination'
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+
+// import 'patternflyStyles/optionsMenu'
+@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+
+// import 'patternflyStyles/inputGroup'
+@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
+
+// import 'patternflyStyles/toolbar'
+@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';

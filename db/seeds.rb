@@ -2,11 +2,10 @@
 
 require 'dotenv/rails-now'
 
-
 ActiveRecord::Base.transaction do
-  if Rails.env.test? || System::Application.config.three_scale.core.fake_server
+  backend_url = URI::parse ThreeScale::Core.url
+  if Rails.env.test? || System::Application.config.three_scale.core.fake_server || !ThreeScale::Socket.accepts_connections?(backend_url.host, backend_url.port)
     require Rails.root.join('test/test_helpers/backend')
-    TestHelpers::Backend::MockCore.mock_core!
   end
 
   master_name = ENV.fetch('MASTER_NAME', 'Master Account')

@@ -9,8 +9,8 @@ exports[`should render correctly 1`] = `
   </FormLegend>
   <Basics
     item={
-      Object {
-        "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be \\"https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME\\".",
+      {
+        "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME".",
         "label": "OpenID Connect Issuer",
         "name": "oidc_issuer_endpoint",
         "placeholder": "https://sso.example.com/auth/realms/gateway",
@@ -18,8 +18,8 @@ exports[`should render correctly 1`] = `
       }
     }
     type={
-      Object {
-        "catalog": Object {
+      {
+        "catalog": {
           "keycloak": "Red Hat Single Sign-On",
           "rest": "REST API",
         },
@@ -31,23 +31,23 @@ exports[`should render correctly 1`] = `
   />
   <AuthorizationFlow
     collection={
-      Array [
-        Object {
+      [
+        {
           "checked": false,
           "label": "Service Accounts Flow",
           "name": "service_accounts_enabled",
         },
-        Object {
+        {
           "checked": false,
           "label": "Authorization Code Flow",
           "name": "standard_flow_enabled",
         },
-        Object {
+        {
           "checked": false,
           "label": "Implicit Flow",
           "name": "implicit_flow_enabled",
         },
-        Object {
+        {
           "checked": false,
           "label": "Direct Access Grant Flow",
           "name": "direct_access_grants_enabled",
@@ -57,8 +57,8 @@ exports[`should render correctly 1`] = `
   />
   <JsonWebToken
     item={
-      Object {
-        "hint": "The Token Claim that contains the clientID. Defaults to \\"azp\\".",
+      {
+        "hint": "The Token Claim that contains the clientID. Defaults to "azp".",
         "label": "ClientID Token Claim",
         "name": "jwt_claim_with_client_id",
         "placeholder": "azp",
@@ -66,12 +66,12 @@ exports[`should render correctly 1`] = `
       }
     }
     type={
-      Object {
-        "catalog": Object {
+      {
+        "catalog": {
           "liquid": "liquid",
           "plain": "plain",
         },
-        "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to \\"Liquid\\" you can define more complex rules. e.g. If \\"some_claim\\" is an array you can select the first value this like {{ some_claim | first }}.",
+        "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to "Liquid" you can define more complex rules. e.g. If "some_claim" is an array you can select the first value this like {{ some_claim | first }}.",
         "label": "ClientID Token Claim Type",
         "name": "jwt_claim_with_client_id_type",
         "value": "plain",
@@ -90,8 +90,8 @@ exports[`should render only Basics when Service Mesh is active 1`] = `
   </FormLegend>
   <Basics
     item={
-      Object {
-        "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be \\"https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME\\".",
+      {
+        "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME".",
         "label": "OpenID Connect Issuer",
         "name": "oidc_issuer_endpoint",
         "placeholder": "https://sso.example.com/auth/realms/gateway",
@@ -99,8 +99,8 @@ exports[`should render only Basics when Service Mesh is active 1`] = `
       }
     }
     type={
-      Object {
-        "catalog": Object {
+      {
+        "catalog": {
           "keycloak": "Red Hat Single Sign-On",
           "rest": "REST API",
         },
