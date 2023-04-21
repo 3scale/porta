@@ -68,7 +68,7 @@ Feature: Multiservice feature
         And provider "foo.3scale.localhost" has "multiple_services" switch allowed
         And service discovery is not enabled
         And a service "Fancy Name" of provider "foo.3scale.localhost"
-      When I am on the new product page
+      When I am on the new service page
         And I fill in "Name" with "Fancy Api"
         And I fill in "System name" with "api"
         And I press "Create Product"
