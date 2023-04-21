@@ -34,7 +34,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_page
   ##~ op.parameters.add @parameter_per_page
   def index
-    templates = cms_templates.paginate(pagination_params)
+    templates = cms_templates.scope_search(search).paginate(pagination_params)
     respond_with(templates, short: true, representer: CMS::TemplatesRepresenter)
   end
 
