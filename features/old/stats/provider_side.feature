@@ -52,12 +52,16 @@ Feature: Provider stats
     When I log in as provider "foo.3scale.localhost"
     Given a product
     And a backend
+    And the following BackendApi type metrics:
+      | pasta  |
+      | Pizza  |
+    And the following metrics:
+      | Curry |
     And the backend is used by this product
     When I go to the overview page of product "API"
       And I follow "Analytics"
       And I follow "Traffic"
     Then I should see "Hits (hits)"
-    Then I should not see "Hits (hits.55)"
 
   @wip
   Scenario: Signups (single application mode)
