@@ -4,9 +4,9 @@ on:
     branches:
       - master
       - managed-services
-      - 3scale-[0-9]+-stable
+      - 3scale-[0-9]+.[0-9]+-stable
     tags:
-      - 3scale-[0-9]+-GA
+      - 3scale-[0-9]+.[0-9]+.[0-9]+-GA
   workflow_dispatch:
     inputs:
       platforms:
