@@ -23,7 +23,7 @@ Feature: API menu
 
   Scenario: Analytics sub menu structure
     When I follow "Analytics" within the main menu
-    Then I should see menu items
+    Then I should see menu items under "Analytics"
       | Traffic            |
       | Daily Averages     |
       | Hourly Averages    |
@@ -34,14 +34,15 @@ Feature: API menu
 
   Scenario: Applications sub menu structure
     When I follow "Applications" within the main menu
-    Then I should see menu items
+    Then I should see menu items under "Applications"
       | Listing           |
       | Application Plans |
+      | Usage Rules       |
 
   Scenario: Integration sub menu structure
     When I follow "Overview"
     And I follow "Integration" within the main menu
-    Then I should see menu items
+    Then I should see menu items under "Integration"
       | Configuration       |
       | Methods and Metrics |
       | Mapping Rules       |
@@ -64,6 +65,6 @@ Feature: API menu
     When provider "foo.3scale.localhost" has "service_plans" switch allowed
     When I go to the API dashboard page
     When I follow "Subscriptions" within the main menu
-    Then I should see menu items
+    Then I should see menu items under "Subscriptions"
       | Service Subscriptions |
       | Service Plans         |

@@ -21,30 +21,31 @@ Feature: Audience menu
 
   Scenario: Accounts sub menu structure
     Given menu "Accounts" is open
-    Then I should see menu items
+    Then I should see menu items under "Accounts"
       | Listing            |
       | Usage Rules        |
       | Fields Definitions |
 
   Scenario: Portal sub menu structure
     Given menu "Developer Portal" is open
-    Then I should see menu items
+    Then I should see menu items under "Developer Portal"
       | Content              |
       | Drafts               |
       | Redirects            |
       | Feature Visibility   |
+      | ActiveDocs           |
       | Visit Portal         |
-      | Liquid Reference     |
       | Signup               |
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
       | Spam Protection      |
       | SSO Integrations     |
+      | Liquid Reference     |
 
   Scenario: Messages sub menu structure
     Given menu "Messages" is open
-    Then I should see menu items
+    Then I should see menu items under "Messages"
       | Inbox           |
       | Sent messages   |
       | Trash           |
@@ -55,21 +56,26 @@ Feature: Audience menu
     When the provider has "account_plans" visible
     And I go to the accounts admin page
     When menu "Accounts" is open
-    Then I should see menu items
-      | Account Plans |
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Account Plans      |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Accounts sub menu structure with account plans disabled
     When the provider has "account_plans" denied
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
-    Then I should not see menu items
-      | Account Plans |
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Accounts sub menu structure with service plans enabled
     When the provider has "service_plans" visible
     And I go to the accounts admin page
     When menu "Accounts" is open
-    Then I should see menu items
+    Then I should see menu items under "Accounts"
       | Listing            |
       | Subscriptions      |
       | Usage Rules        |
@@ -80,5 +86,18 @@ Feature: Audience menu
     And I go to the provider dashboard
     And I follow "0 Accounts"
     When menu "Developer Portal" is open
-    Then I should see menu items
-      | Groups |
+    Then I should see menu items under "Developer Portal"
+      | Content              |
+      | Drafts               |
+      | Redirects            |
+      | Groups               |
+      | Feature Visibility   |
+      | ActiveDocs           |
+      | Visit Portal         |
+      | Signup               |
+      | Service Subscription |
+      | New Application      |
+      | Domains & Access     |
+      | Spam Protection      |
+      | SSO Integrations     |
+      | Liquid Reference     |

@@ -13,5 +13,5 @@ end
 
 Given(/^the default proxy does not use apicast configuration driven$/) do
   proxy = @provider.default_service.proxy
-  proxy.update!(apicast_configuration_driven: false, sandbox_endpoint: 'https://api-2.staging.apicast.io:4443')
+  proxy.update!(apicast_configuration_driven: false, sandbox_endpoint: 'https://api-2.staging.apicast.io:4443', endpoint: 'https://api-2.staging.io:4443')
 end

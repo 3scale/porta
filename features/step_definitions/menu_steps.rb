@@ -2,7 +2,7 @@
 
 Then /^I should see menu items$/ do |items|
   within '#mainmenu' do
-    assert_equal items.raw.flatten, find_all('.pf-c-nav__item').map(&:text)
+    assert_equal items.raw.flatten, find_all('#mainmenu .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link').map(&:text)
   end
 end
 
@@ -15,16 +15,9 @@ Then "I should see menu items under {string}" do |section, items|
   assert_equal items.raw.flatten, nav_items
 end
 
-Then /^I should not see menu items$/ do |items|
-  items.raw.each do |item|
-    within '#mainmenu' do
-      assert has_no_css? 'li', :text => item[0]
-    end
-  end
-end
-
 Then "the help menu should have the following items:" do |table|
-  assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul li').map(&:text)
+  open_help_menu
+  assert_same_elements table.raw.flatten, find(help_menu_selector).find_all('ul li').map(&:text)
 end
 
 # TODO: replace this with with more generic step?!

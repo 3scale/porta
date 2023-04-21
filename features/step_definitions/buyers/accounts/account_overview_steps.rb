@@ -76,8 +76,10 @@ end
 
 Then "{string} can be enabled" do |switch|
   within_plan_settings_card do
-    find('td', text: switch).sibling('td', text: 'Denied')
-                            .click_button('enable')
+    accept_confirm do
+      find('td', text: switch).sibling('td', text: 'Denied')
+                              .click_button('enable')
+    end
   end
 
   within_plan_settings_card do
