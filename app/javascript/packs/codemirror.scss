@@ -1,4 +1,7 @@
-// Comes from _colors.scss
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/theme/neat.css';
+
+// Copied from _colors.scss
 $outerSpaceGray: #393f44; // pf-black-800
 $osloGray:       #8b8d8f; // pf-black-500
 $gallery:        #ededed; // pf-black-200
@@ -19,8 +22,6 @@ $success-color: $appleGreen;
 $link-color: $highlight-color;
 $warning-color: $tahitiGold;
 $error-color: $guardsmanRed;
-
-// Comes from _theme.scss
 $login-content-color: $font-color;
 $codemirror-color: $label-color;
 $codemirror-border: $content-background;
@@ -47,13 +48,13 @@ $codemirror-liquid-string-color: $success-color;
 $codemirror-gutter-color: $border-color;
 $codemirror-gutter-background-color: $codemirror-bg;
 
-// Comes from _selector.scss 
+// Copied from _selector.scss 
 $border-width: 1px !default;
 
-//Comes from _typography.scss 
-$border-radius:                  line-height-times(1/8);
-$border-width-lg:              2.0 * $border-width;
-$font-weight-bold:            700;
+//Copied from _typography.scss 
+$border-radius: line-height-times(1/8);
+$border-width-lg: 2.0 * $border-width;
+$font-weight-bold: 700;
 
 /* adjusted copy of the 'neat' theme which we are using */
 .CodeMirror-scroll {
