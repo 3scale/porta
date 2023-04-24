@@ -896,7 +896,7 @@ en:
         service:
           attributes:
             system_name:
-              invalid: invalid. Only ASCII letters, numbers, dashes and underscores are allowed.
+              invalid: System name is invalid
 
         cinstance:
           attributes:
