@@ -33,7 +33,7 @@ Feature: ActiveDocs
       | swagger version |
       | Swagger 1.2     |
       | Swagger 2       |
-  # | OAS 3.0         | Feature not implemented |
+      # | OAS 3.0         | Feature not implemented |
 
   @javascript
   Scenario Outline: Slashes generated curl command for header values
@@ -45,7 +45,7 @@ Feature: ActiveDocs
       | swagger version |
       | Swagger 1.2     |
       | Swagger 2       |
-  # | OAS 3.0         | Feature not implemented |
+      # | OAS 3.0         | Feature not implemented |
 
   @javascript
   Scenario Outline: Create a second spec
