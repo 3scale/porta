@@ -38,13 +38,11 @@ exports[`should render required form fields 1`] = `
       type="text"
       value="new_api"
     />
-    <HelperTextItem>
-      <p
-        className="inline-hints"
-      >
-        Only ASCII letters, numbers, dashes and underscores are allowed.
-      </p>
-    </HelperTextItem>
+    <p
+      className="inline-hints"
+    >
+      Only ASCII letters, numbers, dashes and underscores are allowed.
+    </p>
   </li>
   <li
     className="text optional "
@@ -109,18 +107,16 @@ exports[`should render required form fields with errors 1`] = `
       type="text"
       value="new api"
     />
-    <HelperTextItem>
-      <p
-        className="inline-errors"
-      >
-        Only ASCII letters, numbers, dashes and underscores are allowed.
-      </p>
-      <p
-        className="inline-hints"
-      >
-        Only ASCII letters, numbers, dashes and underscores are allowed.
-      </p>
-    </HelperTextItem>
+    <p
+      className="inline-errors"
+    >
+      Invalid
+    </p>
+    <p
+      className="inline-hints"
+    >
+      Only ASCII letters, numbers, dashes and underscores are allowed.
+    </p>
   </li>
   <li
     className="text optional "

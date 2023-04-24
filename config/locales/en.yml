@@ -896,7 +896,7 @@ en:
         service:
           attributes:
             system_name:
-              invalid: invalid.
+              invalid: Invalid.
 
         cinstance:
           attributes:
