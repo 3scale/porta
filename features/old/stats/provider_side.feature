@@ -53,9 +53,9 @@ Feature: Provider stats
     Given a backend
     And a service "My API" of provider "foo.3scale.localhost"
     And the backend is used by this service
-    When I go to the overview page of product "API"
-      And I follow "Analytics"
-      And I follow "Traffic"
+    When I go to the overview page of product "My API"
+    And I follow "Analytics"
+    And I follow "Traffic"
     Then I should see "Hits (hits)"
 
   @wip
