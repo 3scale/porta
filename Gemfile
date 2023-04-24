@@ -52,7 +52,7 @@ gem '3scale_time_range', '0.0.6'
 gem 'statsd-ruby', require: false
 
 # Sidekiq
-gem 'sidekiq', '< 6', require: %w[sidekiq sidekiq/web]
+gem 'sidekiq', '< 8', require: %w[sidekiq sidekiq/web]
 gem 'sidekiq-batch', '~> 0.1.6'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-lock'
