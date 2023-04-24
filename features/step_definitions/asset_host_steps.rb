@@ -14,6 +14,7 @@ Then /^((javascript|font)\s)?assets should be loaded from the asset host$/ do |a
   js_regexp = Regexp.new("https?://#{cdn_url}/packs.*?\\.js")
   font_regexp = Regexp.new("https?://#{cdn_url}/packs.*?\\.eot")
 
+  assert cdn_url.present?
   assert_not_nil Capybara.page.source.match js_regexp if ['javascript', nil].include? asset_type
   assert_not_nil Capybara.page.source.match font_regexp if ['font', nil].include? asset_type
 end
@@ -31,6 +32,7 @@ Then /^provided assets should be loaded from the asset host$/ do
   cdn_url = Rails.configuration.three_scale.asset_host
   js_regexp = Regexp.new("https?://#{cdn_url}/dev-portal-assets/.*?\\.js")
 
+  assert cdn_url.present?
   assert_not_nil Capybara.page.source.match js_regexp
 end
 
