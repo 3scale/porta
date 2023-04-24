@@ -9,8 +9,6 @@ import { SignupForm } from 'LoginPage/loginForms/SignupForm'
 import type { FunctionComponent } from 'react'
 import type { SignupProps as Props } from 'Types'
 
-import 'LoginPage/assets/styles/loginPage.scss'
-
 const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
