@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 import { Label } from 'NewService/components/FormElements/Label'
-import { HelperText, HelperTextItem } from 'Common/components/HelperText'
+import { HelperTextItem } from 'Common/components/HelperText'
 
 import type { FunctionComponent, ChangeEvent, SetStateAction } from 'react'
 import type { ServiceFormTemplate } from 'NewService/types'
