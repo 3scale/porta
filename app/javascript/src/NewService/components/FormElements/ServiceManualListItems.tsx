@@ -27,7 +27,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
           label="Name"
         />
         <input autoFocus id="service_name" maxLength={255} name="service[name]" type="text" value={name} onChange={onChange(setName)} />
-        { !!errors.name && <p className="inline-errors">{errors.name}</p> }
+        { !!errors.name && <p className="inline-errors">Name {errors.name}</p> }
       </li>
       <li className={`string required ${errors?.system_name ? 'error' : ''}`} id="service_system_name_input">
         <Label

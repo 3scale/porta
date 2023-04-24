@@ -48,7 +48,7 @@ Feature: Multiservice feature
         And I follow "Create Product"
         And I fill in "System name" with "Less fancy API"
         And I press "Create Product"
-      Then I should see "Can't be blank"
+      Then I should see "Name Can't be blank"
 
     @javascript
     Scenario: Create new product: Fail scenario error message
