@@ -38,7 +38,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
         <input id="service_system_name" maxLength={255} name="service[system_name]" type="text" value={systemName} onChange={onChange(setSystemName)} />
         <HelperText>
           <HelperTextItem>
-            <p className="inline-errors"> { errors.system_name ? errors.system_name : '' } </p>
+            {errors.system_name && <p className="inline-errors">{errors.system_name}</p>}
             <p className="inline-hints">Only ASCII letters, numbers, dashes and underscores are allowed.</p>
           </HelperTextItem>
         </HelperText>
