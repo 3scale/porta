@@ -147,7 +147,6 @@ def setup_provider(login)
   step 'I log in as provider "foo.3scale.localhost"' if login
 
   @provider = Account.find_by_domain!('foo.3scale.localhost')
-  @service ||= @provider.default_service
 end
 
 Given(/^master admin( is logged in)?/) do |login|
