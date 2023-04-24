@@ -315,6 +315,14 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'create error shows the right flash message' do
       post admin_services_path, params: { service: { name: '' } }
       assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+
+      @provider.settings.allow_multiple_services!
+
+      post admin_services_path, params: { service: { name: '' } }
+      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+
+      post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
+      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
     end
   end
 
