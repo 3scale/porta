@@ -63,7 +63,7 @@ Feature: Multiservice feature
       Then I should see "Only ASCII letters, numbers, dashes and underscores are allowed."
 
     @javascript
-    Scenario: Create new product: with already existed System name
+    Scenario: Create new product: with already existing System name
       Given I am logged in as provider "foo.3scale.localhost"
         And provider "foo.3scale.localhost" has "multiple_services" switch allowed
         And service discovery is not enabled
