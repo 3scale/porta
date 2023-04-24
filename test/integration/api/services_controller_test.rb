@@ -311,6 +311,13 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  class ServiceCreateTest < self
+    test 'create error shows the right flash message' do
+      post admin_services_path, params: { service: { name: '' } }
+      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+    end
+  end
+
   class ServiceUpdateTest < self
     test 'update' do
       assert_not_equal @service.name, 'Supetramp'
