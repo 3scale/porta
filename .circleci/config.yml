@@ -214,7 +214,8 @@ commands: # reusable commands with parameters
           command: |
             echo "Running gems install for database: $DB"
             echo "$(bundle version)"
-            bundle check || bundle install --deployment
+            bundle config set --local deployment 'true'
+            bundle check || bundle install
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
             rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
@@ -485,11 +486,9 @@ jobs:
       - *use-example-config-files
       - run:
           name: Precompile assets
-          command: bundle exec rake assets:precompile
+          command: bundle exec rake assets:precompile:test
           environment:
             RAILS_GROUPS: assets
-            RAILS_ENV: test
-            NODE_ENV: test
       - *save-assets-cache
       - persist_to_workspace:
           root: .

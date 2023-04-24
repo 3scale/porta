@@ -1,3 +1,4 @@
+@javascript
 Feature: User management
   In order to manage users in my organization
   As an account admin
@@ -7,7 +8,7 @@ Feature: User management
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
     Given an user "alice" of account "foo.3scale.localhost"
-      And an user "bob" of account "foo.3scale.localhost"
+    And an user "bob" of account "foo.3scale.localhost"
 
   Scenario: Navigating to users overview for providers
     And current domain is the admin domain of provider "foo.3scale.localhost"
@@ -20,26 +21,25 @@ Feature: User management
     Given I am logged in as provider "foo.3scale.localhost"
     When I go to the provider users page
     Then I should see user "alice"
-      And I should see link to the provider user edit page for "alice"
-      And I should see button to delete user "alice"
+    And I should see link to the provider user edit page for "alice"
+    And I should see button to delete user "alice"
     And I should see user "bob"
-      And I should see link to the provider user edit page for "bob"
-      And I should see button to delete user "bob"
+    And I should see link to the provider user edit page for "bob"
+    And I should see button to delete user "bob"
 
   Scenario: Last admin does not have delete button
     And current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
     When I go to the provider users page
     Then I should see user "foo.3scale.localhost"
-      But I should not see button to delete user "foo.3scale.localhost"
+    But I should not see button to delete user "foo.3scale.localhost"
 
   Scenario: Users overview only shows own users
     Given a provider "bar.3scale.localhost"
-      And an user "cecilia" of account "bar.3scale.localhost"
-
+    And an user "cecilia" of account "bar.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
-      And I go to the provider users page
+    And I go to the provider users page
     Then I should see "alice"
     But I should not see "cecilia"
 
@@ -82,18 +82,17 @@ Feature: User management
     And I press "Update User"
     Then user "bob" should have role "admin"
 
-  @security @allow-rescue
+  @security @allow-rescue @javascript
   Scenario: Only admins can manage users
     Given an active user "josephine" of account "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "josephine"
     And I go to the provider account page
     Then I should not see link to the provider users page
-
     When I go to the provider users page
     Then I should be denied the access
 
-  @allow-rescue
+  @allow-rescue @javascript
   Scenario: Admin cannot delete him/herself
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"

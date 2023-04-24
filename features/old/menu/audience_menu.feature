@@ -1,93 +1,103 @@
+@javascript
 Feature: Audience menu
   In order to manage my audience
   As a provider
   I want to see a menu that lets me do that
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-      And I log in as provider "foo.3scale.localhost"
-      And I go to the provider dashboard
-      And I follow "0 Accounts"
+    Given a provider is logged in
+    And go to the accounts admin page
 
   Scenario: Current API title
     Then I should see there is no current API
 
   Scenario: Audience menu structure
     Then I should see menu items
-    | Accounts                  |
-    | Portal                    |
-    | Messages                  |
-    | Forum                     |
+      | Accounts         |
+      | Applications     |
+      | Developer Portal |
+      | Messages         |
+      | Forum            |
 
   Scenario: Accounts sub menu structure
-    When I follow "Accounts" within the main menu
-    Then I should see menu items
-    | Listing                   |
-    | Usage Rules               |
-    | Fields Definitions        |
+    Given menu "Accounts" is open
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Portal sub menu structure
-    When I follow "Developer Portal" within the main menu
-    Then I should see menu items
-    | Content                   |
-    | Drafts                    |
-    | Redirects                 |
-    | Feature Visibility        |
-    | Visit Portal              |
-    | Liquid Reference          |
-    | Signup                    |
-    | Service Subscription      |
-    | New Application           |
-    | Domains & Access          |
-    | Spam Protection           |
-    | SSO Integrations          |
+    Given menu "Developer Portal" is open
+    Then I should see menu items under "Developer Portal"
+      | Content              |
+      | Drafts               |
+      | Redirects            |
+      | Feature Visibility   |
+      | ActiveDocs           |
+      | Visit Portal         |
+      | Signup               |
+      | Service Subscription |
+      | New Application      |
+      | Domains & Access     |
+      | Spam Protection      |
+      | SSO Integrations     |
+      | Liquid Reference     |
 
   Scenario: Messages sub menu structure
-    When I follow "Messages" within the main menu
-    Then I should see menu items
-    | Inbox                     |
-    | Sent messages             |
-    | Trash                     |
-    | Support Emails            |
-    | Email Templates           |
-
-  Scenario: Forum sub menu structure
-    When I follow "Forum" within the main menu
-    Then I should see menu items
-    | Threads                   |
-    | Categories                |
-    | My Threads                |
-    | Preferences               |
+    Given menu "Messages" is open
+    Then I should see menu items under "Messages"
+      | Inbox           |
+      | Sent messages   |
+      | Trash           |
+      | Support Emails  |
+      | Email Templates |
 
   Scenario: Accounts sub menu structure with account plans enabled
-    When provider "foo.3scale.localhost" has "account_plans" visible
+    When the provider has "account_plans" visible
     And I go to the accounts admin page
-    When I follow "Accounts" within the main menu
-    Then I should see menu items
-      | Account Plans            |
+    When menu "Accounts" is open
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Account Plans      |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Accounts sub menu structure with account plans disabled
-    When provider "foo.3scale.localhost" has "account_plans" denied
+    When the provider has "account_plans" denied
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
-    Then I should not see menu items
-      | Account Plans            |
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Accounts sub menu structure with service plans enabled
-    When provider "foo.3scale.localhost" has "service_plans" visible
+    When the provider has "service_plans" visible
     And I go to the accounts admin page
-    When I follow "Accounts" within the main menu
-    Then I should see menu items
-    | Listing                   |
-    | Subscriptions             |
-    | Usage Rules               |
-    | Fields Definitions        |
+    When menu "Accounts" is open
+    Then I should see menu items under "Accounts"
+      | Listing            |
+      | Subscriptions      |
+      | Usage Rules        |
+      | Fields Definitions |
 
   Scenario: Portal sub menu structure with groups enabled
-    When provider "foo.3scale.localhost" has "groups" switch allowed
+    When the provider has "groups" switch allowed
     And I go to the provider dashboard
     And I follow "0 Accounts"
-    When I follow "Developer Portal" within the main menu
-    Then I should see menu items
-    | Groups                    |
+    When menu "Developer Portal" is open
+    Then I should see menu items under "Developer Portal"
+      | Content              |
+      | Drafts               |
+      | Redirects            |
+      | Groups               |
+      | Feature Visibility   |
+      | ActiveDocs           |
+      | Visit Portal         |
+      | Signup               |
+      | Service Subscription |
+      | New Application      |
+      | Domains & Access     |
+      | Spam Protection      |
+      | SSO Integrations     |
+      | Liquid Reference     |

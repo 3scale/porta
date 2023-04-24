@@ -6,24 +6,27 @@ Feature: Activation
     Given a provider "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
 
-  @emails
+  @emails @javascript
   Scenario: Activation with valid activation token
     Given a pending user "alice" of account "foo.3scale.localhost"
     When I follow the activation link in an email sent to user "alice"
     And I try to log in as provider "alice"
     Then I should be logged in as "alice"
 
+  @javascript
   Scenario: Not activated user can't log in
     Given a pending user "alice" of account "foo.3scale.localhost"
     When I try to log in as provider "alice"
     Then I should not be logged in
 
+  @javascript
   Scenario: Activated user logs in
     Given a pending user "alice" of account "foo.3scale.localhost"
     And user "alice" activates herself
     When I try to log in as provider "alice"
     Then I should be logged in as "alice"
 
+  @javascript
   Scenario: Activated user tries to activate again
     Given a pending user "alice" of account "foo.3scale.localhost"
     And user "alice" activates herself

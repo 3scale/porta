@@ -10,21 +10,21 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     host! @provider.external_admin_domain
   end
 
-  def test_sso_enforce
+  def test_sso_enforce # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     # password signup form is visible
     get new_provider_sessions_path
     assert_response :success
-    assert_match 'Email or Username', response.body
+    assert_match 'id="pf-login-page-container', response.body
 
     # username & password login
     post provider_sessions_path(username: @user.username, password: 'alaska1233')
     assert_match 'Signed in successfully', flash[:notice]
-    refute_nil User.current
+    assert_not_nil User.current
 
     # there's no auth providers, no enforce sso info error message yet
     get provider_admin_account_authentication_providers_path
     assert_response :success
-    refute_match enforce_error_message, response.body
+    assert_no_match enforce_error_message, response.body
 
     # new auth provider has been created, not published yet
     get new_provider_admin_account_authentication_provider_path
@@ -68,10 +68,10 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     # auth provider has been tested, no error message visible
     get provider_admin_account_authentication_provider_path(auth_provider)
     assert_response :success
-    refute_match needs_to_be_testet_error, response.body
+    assert_no_match needs_to_be_testet_error, response.body
 
     # auth provider successfully published
-    refute auth_provider.published?
+    assert_not auth_provider.published?
     post provider_admin_account_authentication_provider_publishing_path(auth_provider)
     assert_match 'SSO Integration successfully published', flash[:notice]
     assert auth_provider.reload.published?
@@ -93,10 +93,10 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     # there's no enforce sso info error message
     get provider_admin_account_authentication_providers_path
     assert_response :success
-    refute_match enforce_error_message, response.body
+    assert_no_match enforce_error_message, response.body
 
     # enforce sso feature has been successfully enabled
-    refute @provider.settings.enforce_sso?
+    assert_not @provider.settings.enforce_sso?
     post provider_admin_account_enforce_sso_path
     assert_match 'SSO successfully enforced', flash[:notice]
     assert @provider.reload.settings.enforce_sso?
@@ -108,7 +108,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
 
     # password login is disabled
     post provider_sessions_path(username: @user.username, password: 'alaska1233')
-    refute_match 'Signed in successfully', flash[:notice]
+    assert_no_match 'Signed in successfully', flash[:notice]
     assert_response :success
     assert_nil User.current
 

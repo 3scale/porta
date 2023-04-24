@@ -1,25 +1,21 @@
-@search
+@search @javascript
 Feature: Providers's subscription searching, sorting and filtering
   In order to quickly find specific set of subscriptions
   As a provider
   I want to search, filter and sort subscriptions
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has "service_plans" visible
-      And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-      And a service "New Service" of provider "foo.3scale.localhost"
-      And a default service plan "Basic" of service "Fancy API"
-      And a service plan "Unpublished" of service "New Service"
-
+    Given a provider is logged in
+    And the provider has "service_plans" visible
+    And a default service of provider "foo.3scale.localhost" has name "Fancy API"
+    And a service "New Service" of provider "foo.3scale.localhost"
+    And a default service plan "Basic" of service "Fancy API"
+    And a service plan "Unpublished" of service "New Service"
     Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |
       | jane | Basic              |
       | mike | Unpublished        |
-
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Search
     When I am on the subscriptions admin page
@@ -28,9 +24,9 @@ Feature: Providers's subscription searching, sorting and filtering
       | Basic | free  | live  |
     And I follow "Account" within table header
     Then I should see following table:
-     | Account ▲ |
-     | bob       |
-     | jane      |
+      | Account ▲ |
+      | bob       |
+      | jane      |
 
   Scenario: Listing
     When I am on the subscriptions admin page with 1 record per page

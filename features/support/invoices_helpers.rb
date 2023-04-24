@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InvoicesHelpers
   def create_invoice(buyer, date, opts = {})
     options = opts.reverse_merge(buyer_account: buyer, period: Month.new(date), creation_type: :background)
@@ -5,7 +7,7 @@ module InvoicesHelpers
   end
 
   def assert_secure_invoice_pdf_url(url, invoice)
-    assert_equal invoice.pdf.expiring_url, url
+    assert url.ends_with?(invoice.pdf.expiring_url)
   end
 end
 

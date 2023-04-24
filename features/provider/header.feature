@@ -1,5 +1,5 @@
+@javascript
 Feature: Header buttons and menus
-
   Background:
     Given a provider is logged in
 

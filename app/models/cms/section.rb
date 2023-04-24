@@ -1,9 +1,16 @@
+# frozen_string_literal: true
+
 class CMS::Section < ApplicationRecord
+  include ThreeScale::Search::Scopes
   include CMS::Filtering
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
 
   self.table_name = :cms_sections
+
+  self.allowed_search_scopes = %i[parent_id]
+
+  scope :by_parent_id, ->(parent_id) { where(parent_id: parent_id) }
 
   belongs_to :provider, :class_name => 'Account'
 
@@ -66,7 +73,7 @@ class CMS::Section < ApplicationRecord
   end
 
   def full_path
-    path_from_root = parent ? parent.full_path : "/"
+    path_from_root = parent ? parent.full_path : +"/"
     path_from_root.gsub!(/([^\/])$/,"\\1/")
     self.root? ? path_from_root : (path_from_root + partial_path).gsub(/\/+/,"/")
   end

@@ -4,7 +4,7 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
   report_path = Rails.root.join('doc/licenses/licenses.xml').freeze
 
   desc 'Generates a report with the dependencies and their licenses'
-  task :report do
+  task report: :license_finder_gem do
     warn 'Generating report...'
     license_finder_report(report_path)
 
@@ -12,7 +12,7 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
   end
 
   desc 'Check license compliance of dependencies'
-  task :compliance do
+  task compliance: :license_finder_gem do
     warn 'Checking action items...'
     LicenseFinder::CLI::Main.new.action_items # Aborts if there are pending action items
 
@@ -31,6 +31,10 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
     end
 
     warn 'License report up to date.'
+  end
+
+  task :license_finder_gem do
+    Bundler.require(:licenses)
   end
 
   private
