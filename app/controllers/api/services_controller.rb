@@ -57,7 +57,7 @@ class Api::ServicesController < Api::BaseController
       flash[:notice] = t('flash.services.create.notice')
       redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = 'Product could not be created'
+      flash.now[:error] = I18n.t!('flash.services.create.errors.default')
       activate_menu :dashboard
       render :new
     end
