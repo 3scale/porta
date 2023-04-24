@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider accounts management
   As a master I to want to manage my provider accounts
 

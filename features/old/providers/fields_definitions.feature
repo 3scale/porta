@@ -1,22 +1,21 @@
+@javascript
 Feature: Fields Definitions
   In order to store more data about my users
   As a provider
   I need to define and use extra fields
 
   Background:
-  Given a provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I log in as provider "foo.3scale.localhost"
+    Given a provider is logged in
 
   Scenario: Required fields can't be deleted
     When I go to the fields definitions index page
     Then I should see "Edit"
-      But I should not see "Delete"
+    But I should not see "Delete"
 
   # TODO: Test CRUD for real, this is just making sure the page displays ok
   Scenario: Create a new field definition
     When I go to the fields definitions index page
-     And I follow "Create"
+    And I follow "Create"
     Then I should see "New Field"
 
   Scenario: Edit a field definition
@@ -33,16 +32,13 @@ Feature: Fields Definitions
       | car_type         | true     |           |        |
       | head_size        |          | true      |        |
       | hidden           |          |           | true   |
-
-      And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
-      And buyer "randomdude" has extra fields:
+    And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
+    And buyer "randomdude" has extra fields:
       | car_type       | head_size      | hidden |
       | extra_required | user_read_only | hidden |
-
-      And account "randomdude" has telephone number "666"
-      And VAT rate of buyer "randomdude" is 9%
-      And VAT code of buyer "randomdude" is 9
-
+    And account "randomdude" has telephone number "666"
+    And VAT rate of buyer "randomdude" is 9%
+    And VAT code of buyer "randomdude" is 9
     When I go to the buyer account page for "randomdude"
     Then I should see the fields in order:
       | present          |

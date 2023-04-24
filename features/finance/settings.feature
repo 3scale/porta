@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider Charging & Gateway settings
   In order to accept payments from my users
   As a provider
@@ -15,14 +16,12 @@ Feature: Provider Charging & Gateway settings
     When they are reviewing the charging and gateway billing settings
     Then payment gateway cannot be set
 
-  @javascript
   Scenario: Using Stripe as payment gateway
     Given the provider is charging its buyers
     But the provider doesn't have a payment gateway set up
     When they are reviewing the charging and gateway billing settings
     Then Stripe can be set as a payment gateway
 
-  @javascript
   Scenario: Using Braintree as payment gateway
     Given the provider is charging its buyers
     But the provider doesn't have a payment gateway set up

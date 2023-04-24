@@ -1,3 +1,4 @@
+@javascript
 Feature: Manage Authentication Providers
   In order to allow my buyers login with oauth2 providers
   As a provider

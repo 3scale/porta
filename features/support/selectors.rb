@@ -55,7 +55,7 @@ module HtmlSelectorsHelper
       'table'
 
     when 'search form'
-      'form.search'
+      'tr.search'
 
     when 'the results'
       'table.data > tbody'

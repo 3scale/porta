@@ -1,3 +1,4 @@
+@javascript
 Feature: Admin Portal Provider's Plan Settings
   In order to manage provider accounts
   As a master

@@ -35,7 +35,7 @@ Feature: Change plan
       Then I should see "EUR 1.00"
       Then I should see "EUR 10.00"
 
-
+  @javascript
   Scenario: Change plan with variable costs in both plans in the same month. Provider sees it the day after. Buyer end of month (PREPAID)
     Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:

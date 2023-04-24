@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When /^I navigate to (?:(\d)(?:nd|st|rd|th) )?invoice issued (?:for|FOR) me (?:for month|in) "([^\"]+)"$/ do |order,date|
   order ||= '1'
 
@@ -35,6 +37,5 @@ end
 When /^I navigate to invoice (.*) issued by me for "([^"]*)"$/ do |invoice_number, buyer_name|
   step %(I navigate to invoices issued by me for "#{buyer_name}")
 
-  row = page.find(%(tr:has(td:contains("#{invoice_number}"))))
-  row.click_link("Show")
+  find('tr.invoice', text: invoice_number).click_link('Show')
 end
