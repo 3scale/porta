@@ -29,7 +29,7 @@ it('#toSelectOption should work', () => {
       onClick={[Function]}
       sendRef={[Function]}
       value={
-        Object {
+        {
           "id": "10",
           "name": "The item",
           "toString": [Function],
@@ -50,8 +50,8 @@ it('#handleOnFilter should work', () => {
     .map((el) => el.props.value)
 
   expect(filter('one')).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "id": "1",
         "name": "One item",
         "toString": [Function],
@@ -59,13 +59,13 @@ it('#handleOnFilter should work', () => {
     ]
   `)
   expect(filter('item')).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "id": "1",
         "name": "One item",
         "toString": [Function],
       },
-      Object {
+      {
         "id": "2",
         "name": "Another item",
         "toString": [Function],
@@ -73,13 +73,13 @@ it('#handleOnFilter should work', () => {
     ]
   `)
   expect(filter('')).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "id": "1",
         "name": "One item",
         "toString": [Function],
       },
-      Object {
+      {
         "id": "2",
         "name": "Another item",
         "toString": [Function],

@@ -1,14 +1,12 @@
+@javascript
 Feature: Menu of the Account screen
   In order to edit my account details
   As a provider
   I want to see the menu
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-      And I log in as provider "foo.3scale.localhost"
+    Given a provider is logged in
 
-  @javascript
   Scenario: Current API title
     When I go to the provider account page
     Then I should see there is no current API
@@ -17,35 +15,42 @@ Feature: Menu of the Account screen
     When I go to the provider account page
     Then I should see "foo.3scale.localhost"
     And I should see menu items
-    | Overview                  |
-    | Export                    |
-    | 3scale Invoices           |
-    | Payment Details           |
-    | Users                     |
+      | Overview  |
+      | Personal  |
+      | Users     |
+      | Billing   |
+      | Integrate |
+      | Export    |
+    Then I should see menu items under "Users"
+      | Listing          |
+      | SSO Integrations |
+    And I should see menu items under "Billing"
+      | 3scale Invoices |
+      | Payment Details |
 
   Scenario: Account menu structure with multiple users enabled
     Given the provider has "branding" switch allowed
     Given the provider has "multiple_users" switch allowed
     When I go to the provider account page
-    Then I should see menu items
-    | Overview                  |
-    | Export                    |
-    | 3scale Invoices           |
-    | Payment Details           |
-    | Users                     |
-    | SSO Integrations          |
+    Then I should see menu items under "Users"
+      | Listing          |
+      | Invitations      |
+      | SSO Integrations |
+    And I should see menu items under "Billing"
+      | 3scale Invoices |
+      | Payment Details |
 
   Scenario: finance disabled should not disable 3scale invoices
     Given provider "foo.3scale.localhost" has "finance" switch denied
     When I go to the provider account page
-     And I follow "Billing"
-     And I follow "3scale Invoices"
+    And I follow "Billing"
+    And I follow "3scale Invoices"
     Then I should be on my invoices from 3scale page
 
   Scenario: Account menu when master is billing
     Given master is billing tenants
     When I go to the provider account page
-     And I follow "Billing"
+    And I follow "Billing"
     Then I should see "3scale Invoices"
 
   Scenario: Account menu when master is not billing
@@ -57,15 +62,16 @@ Feature: Menu of the Account screen
     Given the provider has "multiple_users" switch allowed
     Given provider "foo.3scale.localhost" has "enforce_sso" set to "true"
     When I go to the provider account page
-    Then I should not see "Invitations"
+    And I should see menu items under "Users"
+      | Listing          |
+      | SSO Integrations |
 
   Scenario: Personal menu structure
     When I go to the provider personal page
-    Then I should see "foo.3scale.localhost"
-    And I should see menu items
-    | Personal Details          |
-    | Tokens                    |
-    | Notification Preferences  |
+    And I should see menu items under "Personal"
+      | Personal Details         |
+      | Tokens                   |
+      | Notification Preferences |
 
   Scenario: Navigate to export to csv
     When I go to the provider account page

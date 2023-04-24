@@ -23,7 +23,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_page
   ##~ op.parameters.add @parameter_per_page
   def index
-    @sections = current_account.sections.page(params[:page] || 1).per_page(per_page)
+    @sections = current_account.sections.scope_search(search).paginate(pagination_params)
     respond_with @sections
   end
 

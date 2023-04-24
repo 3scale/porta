@@ -13,8 +13,6 @@ import type { ReactNode } from 'react'
 import type { ProvidersProps } from 'LoginPage/loginForms/AuthenticationProviders'
 import type { FlashMessage } from 'Types'
 
-import 'LoginPage/assets/styles/loginPage.scss'
-
 interface Props {
   authenticationProviders?: ProvidersProps[];
   flashMessages?: FlashMessage[];

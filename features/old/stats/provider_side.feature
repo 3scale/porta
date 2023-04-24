@@ -7,29 +7,24 @@ Feature: Provider stats
   # TODO: Find a way to test the charts
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
-    And current domain is the admin domain of provider "foo.3scale.localhost"
+    Given a provider is logged in
+    And the provider has multiple applications enabled
     And all the rolling updates features are off
     And All Dashboard widgets are loaded
 
-  @javascript
   Scenario: Stats access
-    When I log in as provider "foo.3scale.localhost"
     And I follow "API"
     And I follow "Analytics"
     And I follow "Traffic"
     Then I should be on the provider stats usage page
 
   Scenario: Usage stats
-    When I log in as provider "foo.3scale.localhost"
     And I follow "API"
     And I follow "Analytics"
     Then I should see "Traffic"
 
   Scenario: Top applications (multiple applications mode)
     Given a buyer "bob" signed up to provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
     And I follow "API"
     And I follow "Analytics"
     And I go to the provider stats apps page
@@ -37,11 +32,9 @@ Feature: Provider stats
     And I should see a chart called "chart"
 
   Scenario: Top users (single application mode)
-    Given provider "foo.3scale.localhost" has multiple applications disabled
+    Given the provider has multiple applications disabled
     And an application plan "Default" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Default"
-
-    When I log in as provider "foo.3scale.localhost"
     And I follow "API"
     And I follow "Analytics"
     And I follow "Top Applications"
@@ -113,7 +106,7 @@ Feature: Provider stats
     When I log in as "lol.3scale.localhost"
     And I go to the provider days stats page
     Then I should see "Stats: Days of week"
-    # # This should really be "I click on ...", but the link is inside flash and
-    # # webrat can't handle that as far as i know...
-    # When I am on the provider day stats page for day "monday" and metric "hits"
-    # Then I should see "Stats: Monday"
+# # This should really be "I click on ...", but the link is inside flash and
+# # webrat can't handle that as far as i know...
+# When I am on the provider day stats page for day "monday" and metric "hits"
+# Then I should see "Stats: Monday"

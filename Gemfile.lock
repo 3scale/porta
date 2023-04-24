@@ -243,7 +243,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     colorize (0.8.1)
-    commonmarker (0.23.7)
+    commonmarker (0.23.9)
     compass (1.0.3)
       chunky_png (~> 1.2)
       compass-core (~> 1.0.2)
@@ -928,7 +928,7 @@ DEPENDENCIES
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.2)
   colorize
-  commonmarker (~> 0.23.7)
+  commonmarker (~> 0.23.9)
   compass-rails (~> 3.0.2)
   cucumber (~> 7.0)
   cucumber-rails (~> 2.4.0)

@@ -5,9 +5,7 @@ Feature: Legal terms settings
   I want manage them on a separate settings page
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I log in as provider "foo.3scale.localhost"
+    Given a provider is logged in
 
   Scenario: Signup Licence
     When I go to the legal terms settings page

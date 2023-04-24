@@ -113,8 +113,7 @@ Then /^I should be logged in the Development Portal$/ do
 end
 
 When /^I log ?out$/ do
-  visit '#session-menu'
-  click_link 'Sign Out' || 'Log Out'
+  log_out
 end
 
 # TODO: merge those 3 assertion steps
@@ -140,7 +139,11 @@ Then /^I should not be logged in$/ do
 end
 
 When "the user logs in" do
-  visit '#session-menu'
-  click_link 'Sign Out' || 'Log Out'
+  log_out
   try_provider_login(@user.username, 'supersecret')
+end
+
+def log_out
+  find(:css, '.pf-c-page__header-tools a[title="Session"]').click
+  click_link 'Sign Out'
 end

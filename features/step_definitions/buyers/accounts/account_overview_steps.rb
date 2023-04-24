@@ -35,8 +35,10 @@ Then "they should see the credit card is not stored" do
 end
 
 And "monthly billing can be disabled" do
-  within_billing_status_card do
-    click_button 'Disable billing'
+  accept_confirm do
+    within_billing_status_card do
+      click_button 'Disable billing'
+    end
   end
 
   within_billing_status_card do
@@ -45,8 +47,10 @@ And "monthly billing can be disabled" do
 end
 
 And "monthly charging can be disabled" do
-  within_billing_status_card do
-    click_button 'Disable charging'
+  accept_confirm do
+    within_billing_status_card do
+      click_button 'Disable charging'
+    end
   end
 
   within_billing_status_card do
@@ -72,8 +76,10 @@ end
 
 Then "{string} can be enabled" do |switch|
   within_plan_settings_card do
-    find('td', text: switch).sibling('td', text: 'Denied')
-                            .click_button('enable')
+    accept_confirm do
+      find('td', text: switch).sibling('td', text: 'Denied')
+                              .click_button('enable')
+    end
   end
 
   within_plan_settings_card do

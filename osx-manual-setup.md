@@ -26,7 +26,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. To install them with `asdf` run:
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 14](https://nodejs.org/download/release/v14.21.3/)**. To install them with `asdf` run:
 
 ```
 asdf plugin add ruby
@@ -34,12 +34,6 @@ asdf plugin add nodejs
 
 asdf install
 ```
-
-* **Macs with M1** require installing and running node through Rosetta 2:
-
-  ```
-  arch -x86_64 asdf install nodejs 12.22.2
-  ```
 
 ### Python (only macs with M1)
 
