@@ -50,14 +50,9 @@ Feature: Provider stats
   Scenario: Default metric is product metric
     Given provider "foo.3scale.localhost" has multiple applications disabled
     When I log in as provider "foo.3scale.localhost"
-    Given a product
-    And a backend
-    And the following BackendApi type metrics:
-      | pasta  |
-      | Pizza  |
-    And the following metrics:
-      | Curry |
-    And the backend is used by this product
+    Given a backend
+    And a service "My API" of provider "foo.3scale.localhost"
+    And the backend is used by this service
     When I go to the overview page of product "API"
       And I follow "Analytics"
       And I follow "Traffic"
