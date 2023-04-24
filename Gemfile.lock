@@ -364,8 +364,9 @@ GEM
     github-markdown (0.6.9)
     globalid (1.0.1)
       activesupport (>= 5.0)
-    gruff (0.7.0)
-      rmagick (~> 2.13, >= 2.13.4)
+    gruff (0.19.0)
+      histogram
+      rmagick (>= 4.2)
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
@@ -373,6 +374,7 @@ GEM
     hashery (2.1.2)
     hashie (3.6.0)
     hiredis (0.6.3)
+    histogram (0.2.4.1)
     html-pipeline (2.12.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -654,7 +656,7 @@ GEM
       netrc (~> 0.8)
     rexml (3.2.5)
     riddle (2.4.3)
-    rmagick (2.15.4)
+    rmagick (4.3.0)
     roar (1.0.4)
       representable (>= 2.0.1, < 2.4.0)
     roar-rails (1.0.2)
@@ -1015,7 +1017,7 @@ DEPENDENCIES
   reek (= 6.01)
   reform (~> 2.0.3)
   rest-client (~> 2.0.2)
-  rmagick (~> 2.15.3)
+  rmagick (~> 4.1)
   roar-rails
   rspec-html-matchers!
   rspec-rails (~> 4.1)
@@ -1067,4 +1069,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   2.2.25
+   2.2.26
