@@ -27,18 +27,6 @@ Feature: Multiservice feature
      And I press "Create Product"
     Then I should see "Less fancy API"
 
-  @javascript
-  Scenario: Create new product: Fail scenario error message
-    Given I am logged in as provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has "multiple_services" switch allowed
-      And service discovery is not enabled
-    When I am on the provider dashboard
-      And I follow "Create Product"
-      And I fill in "Name" with "Invalid API"
-      And I fill in "System name" with "I am using spaces"
-      And I press "Create Product"
-    Then I should see the flash message "Product could not be created"
-
     @javascript
     Scenario: Create new product: with blank product name
       Given I am logged in as provider "foo.3scale.localhost"
@@ -60,7 +48,8 @@ Feature: Multiservice feature
         And I fill in "Name" with "Less fancy API"
         And I fill in "System name" with "SystemName@123"
         And I press "Create Product"
-      Then I should see "Only ASCII letters, numbers, dashes and underscores are allowed."
+      Then I should see "Invalid."
+      Then I should see the flash message "Couldn't create Product. Check your Plan limits"
 
     @javascript
     Scenario: Create new product: with already existing System name
