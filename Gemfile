@@ -250,8 +250,6 @@ group :development, :test do
   gem 'pry-shell'
   gem 'pry-stack_explorer'
 
-  # for `rake doc:liquid:generate` and similar
-  gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
 end
 
