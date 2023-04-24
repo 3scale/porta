@@ -5,8 +5,6 @@ require 'test_helper'
 class Provider::Admin::Account::LogosControllerTest < ActionDispatch::IntegrationTest
   include ActiveSupport::Testing::FileFixtures
 
-  self.file_fixture_path = Rails.root.join('test/fixtures')
-
   def setup
     @provider = FactoryBot.create(:provider_account)
     provider.settings.allow_branding!
@@ -23,11 +21,35 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     assert_redirected_to edit_provider_admin_account_logo_path
     assert_equal 'The logo was successfully uploaded.', flash[:notice]
     assert_nil flash[:error]
+
+    sizes = %i(large medium thumb invoice).map do |style|
+      file = Tempfile.new(["logo-", ".jpg"])
+      provider.profile.logo.copy_to_local_file style, file.path
+      file.rewind
+      FastImage.size(file)
+    end
+    assert_equal [[300, 239], [150, 120], [100, 80], [63, 50]], sizes
+  end
+
+  test 'upload a small logo' do
+    put provider_admin_account_logo_path, params: { profile: {logo: small_logo_file} }
+
+    assert_redirected_to edit_provider_admin_account_logo_path
+    assert_equal 'The logo was successfully uploaded.', flash[:notice]
+    assert_nil flash[:error]
+
+    sizes = %i(large medium thumb invoice).map do |style|
+      file = Tempfile.new(["logo-", ".png"])
+      provider.profile.logo.copy_to_local_file style, file.path
+      file.rewind
+      FastImage.size(file)
+    end
+    assert_equal [[10, 10], [10, 10], [10, 10], [10, 10]], sizes
   end
 
   test 'update when it should fail' do
     assert_no_change(of: -> { provider.profile.reload.logo_file_name }) do
-      put provider_admin_account_logo_path, params: { profile: { logo: countries_yaml_file } }
+      put provider_admin_account_logo_path, params: { profile: { logo: fixture_file_upload(file_fixture("small.gif")) } }
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
@@ -85,7 +107,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     @logo_file ||= fixture_file_upload(file_fixture('hypnotoad.jpg'))
   end
 
-  def countries_yaml_file
-    @countries_yaml_file ||= fixture_file_upload(file_fixture('countries.yml'))
+  def small_logo_file
+    @small_logo_file ||= fixture_file_upload(file_fixture('small.png'))
   end
 end

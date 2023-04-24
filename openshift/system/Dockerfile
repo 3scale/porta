@@ -25,6 +25,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && yum -y install centos-release-scl-rh \
               ImageMagick \
               ImageMagick-devel \
+              gd-devel \
               unixODBC-devel \
               mysql \
               llvm5.0-devel \

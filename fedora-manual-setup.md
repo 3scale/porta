@@ -30,7 +30,7 @@ asdf install
 ### Dependencies
 
 ```
-sudo dnf install sphinx chromedriver postgresql-devel mysql-devel ImageMagick  ImageMagick-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
+sudo dnf install sphinx chromedriver postgresql-devel gd-devel mysql-devel ImageMagick  ImageMagick-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
 ```
 
 ### Database
