@@ -7,7 +7,6 @@ Feature: Multiservice feature
   Background:
     Given a provider is logged in
     And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Can create new service setting
     And provider "foo.3scale.localhost" has "can create service" set to "true"
