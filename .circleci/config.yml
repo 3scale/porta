@@ -533,27 +533,6 @@ jobs:
           destination: licenses
       - notify_failure
 
-  swagger:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby26
-    executor:
-      name: << parameters.executor >>
-    steps:
-      - checkout
-      - *attach-to-workspace
-      - *use-example-config-files
-      - run:
-          name: Swagger validation
-          command: |
-            bundle exec rake doc:swagger:validate:all
-            bundle exec rake doc:swagger:generate:all
-      - store_artifacts:
-          path: doc/active_docs
-          destination: active_docs
-      - notify_failure
-
   jest:
     resource_class: medium+
     parameters:
