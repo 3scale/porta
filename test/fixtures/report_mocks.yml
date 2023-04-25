@@ -66,8 +66,8 @@ usage:
     unit: hit
   period:
     name: week
-    since: '2022-03-13T00:00:00+01:00'
-    until: '2022-03-19T23:59:59+01:00'
+    since: '2022-03-13T00:00:00+02:00'
+    until: '2022-03-19T23:59:59+02:00'
     timezone: Europe/Sofia
     granularity: 21600
   total: 327406
@@ -103,9 +103,9 @@ usage:
 usage_progress_for_all_metrics:
   period:
     name: week
-    since: '2022-03-13T00:00:00+01:00'
-    until: '2022-03-19T23:59:59+01:00'
-    timezone: Europe/Vienna
+    since: '2022-03-13T00:00:00+02:00'
+    until: '2022-03-19T23:59:59+02:00'
+    timezone: Europe/Sofia
     granularity: 21600
   metrics:
   - data:

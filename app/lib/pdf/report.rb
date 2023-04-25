@@ -136,7 +136,7 @@ module Pdf
       if @period == :day
         ->(point) { (point % 4).zero? ? sprintf("%02d:00", point) : "" }
       else
-        since = Time.parse(usage.dig(:period, :since))
+        since = usage.dig(:period, :since)
         granularity = usage.dig(:period, :granularity)
         ->(point) { (point % 4).zero? ? (since + point * granularity).strftime("%d %b") : "" }
       end
