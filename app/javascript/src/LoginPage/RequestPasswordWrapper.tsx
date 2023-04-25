@@ -1,6 +1,5 @@
 import { LoginPage } from '@patternfly/react-core'
 
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
@@ -35,8 +34,6 @@ const RequestPassword: FunctionComponent<Props> = ({
   </LoginPage>
 )
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const RequestPasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<RequestPassword {...props} />, containerId) }
-
 export type { Props }
-export { RequestPassword, RequestPasswordWrapper }
+export default RequestPassword
+export { RequestPassword }

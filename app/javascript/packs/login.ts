@@ -1,1 +1,12 @@
-// TODO: move here login_page and sign_up_page packs
+import render from 'LoginPage/render'
+
+document.addEventListener('DOMContentLoaded', () => {
+  const containerId = 'pf-login-page-container'
+  const container = document.getElementById(containerId)
+
+  if (!container) {
+    return
+  }
+
+  render(container)
+})

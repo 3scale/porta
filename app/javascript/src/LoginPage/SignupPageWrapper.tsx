@@ -1,6 +1,5 @@
 import { LoginPage } from '@patternfly/react-core'
 
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
@@ -22,8 +21,6 @@ const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
   </LoginPage>
 )
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const SignupPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<SignupPage {...props} />, containerId) }
-
 export type { Props }
-export { SignupPage, SignupPageWrapper }
+export default SignupPage
+export { SignupPage }
