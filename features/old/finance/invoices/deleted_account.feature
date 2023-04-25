@@ -9,7 +9,7 @@ Feature: Invoices of deleted account
     Given a provider is logged in
     Given the provider is charging its buyers in prepaid mode
     And an application plan "Plan" of provider "foo.3scale.localhost"
-    And a buyer "bob" signed up to application plan "Plan"
+    And a buyer "bob" signed up to application plan "Plan" on 1st January 2011
 
   @commit-transactions
   Scenario: I cannot but view the invoices of a deleted buyer
