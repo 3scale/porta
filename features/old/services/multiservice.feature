@@ -27,37 +27,37 @@ Feature: Multiservice feature
     @javascript
     Scenario: Create new product: with blank product name
       Given I am logged in as provider "foo.3scale.localhost"
-        And provider "foo.3scale.localhost" has "multiple_services" switch allowed
-        And service discovery is not enabled
+      And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+      And service discovery is not enabled
       When I am on the provider dashboard
-        And I follow "Create Product"
-        And I fill in "System name" with "Less fancy API"
-        And I press "Create Product"
+      And I follow "Create Product"
+      And I fill in "System name" with "Less fancy API"
+      And I press "Create Product"
       Then I should see "Name Can't be blank"
 
     @javascript
     Scenario: Create new product: Fail scenario error message
       Given I am logged in as provider "foo.3scale.localhost"
-        And provider "foo.3scale.localhost" has "multiple_services" switch allowed
-        And service discovery is not enabled
+      And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+      And service discovery is not enabled
       When I am on the provider dashboard
-        And I follow "Create Product"
-        And I fill in "Name" with "Less fancy API"
-        And I fill in "System name" with "SystemName@123"
-        And I press "Create Product"
+      And I follow "Create Product"
+      And I fill in "Name" with "Less fancy API"
+      And I fill in "System name" with "SystemName@123"
+      And I press "Create Product"
       Then I should see "Invalid."
       Then I should see the flash message "Couldn't create Product. Check your Plan limits"
 
     @javascript
     Scenario: Create new product: with already existing System name
       Given I am logged in as provider "foo.3scale.localhost"
-        And provider "foo.3scale.localhost" has "multiple_services" switch allowed
-        And service discovery is not enabled
-        And a service "Fancy Name" of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+      And service discovery is not enabled
+      And a service "Fancy Name" of provider "foo.3scale.localhost"
       When I am on the new service page
-        And I fill in "Name" with "Fancy Api"
-        And I fill in "System name" with "api"
-        And I press "Create Product"
+      And I fill in "Name" with "Fancy Api"
+      And I fill in "System name" with "api"
+      And I press "Create Product"
       Then I should see "Has already been taken"
 
   @wip
