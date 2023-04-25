@@ -86,7 +86,6 @@ exports[`should render required form fields with errors 1`] = `
     <p
       className="inline-errors"
     >
-      Name 
       Can't be blank
     </p>
   </li>
