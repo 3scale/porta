@@ -58,8 +58,7 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver imagemagick@6 gs pkg-config openssl geckodriver sphinx gd mysql@5.7 postgresql@14
-brew link imagemagick@6
+brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@5.7 postgresql@14
 ```
 
 * **Macs with M1** also require the following:

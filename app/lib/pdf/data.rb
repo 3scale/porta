@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'gruff'
-
 module Pdf
   class Data
 
@@ -74,74 +72,11 @@ module Pdf
       end
     end
 
-    def traffic_graph
-      return if @hit_metric.nil?
-
-      data = @source.usage(@options)
-
-      g = Gruff::Line.new('1200x300')
-
-      g.theme = {
-        :colors => ['#9172EC', '#306EFF', '#000066', '#B4B4B4'],
-        :font_color => '#555',
-        :marker_color => '#eeeeee',
-        :background_colors => ['#ffffff', '#ffffff']
-      }
-
-      g.legend_box_size = 10
-      g.hide_title = true
-      g.legend_font_size = 13
-      g.hide_line_markers = false
-      g.marker_font_size = 13
-      g.hide_dots = false
-      g.dot_radius = 3
-      g.line_width = 2
-      g.marker_count = 5
-      g.margins = 2
-
-      g.sort = false
-      g.x_axis_label = @period == :day ? "Hour" : "Week Days"
-      g.y_axis_label = @hit_metric.friendly_name
-
-      data = data[:values]
-      g.data(@hit_metric.friendly_name, data)
-
-      max = data.max
-      g.maximum_value = max + (max / 5)
-
-      g.labels = send("#{@period}_labels")
-      StringIO.new(g.to_blob("JPG"))
+    def usage
+      @source.usage(@options) unless @hit_metric.nil?
     end
 
-    def week_labels
-      # Week report, there are 28 data points, at 6 hour intervals
-      # What was the date 1 week ago
-      date = 1.week.ago.beginning_of_day
-
-      #Gruff expects labels to be presented as a hash
-      labels= {}
-      (0..27).each do |point|
-        # Insert blanks except for every 4th data point (covering a 24hr period)
-        if (point % 4).zero?
-          labels[point] = date.strftime("%d %b")
-          date += 1.day
-        end
-      end
-
-      labels
-    end
-
-    def day_labels
-      # See week_labels
-      date = 1.day.ago.beginning_of_day
-
-      labels = {}
-      (0..23).each do |point|
-        labels[point] = date.strftime("%k:00") if (point % 4).zero?
-        date += 1.hour
-      end
-      labels
-    end
+    private
 
     def sanitize_text(text)
       EscapeUtils.escape_javascript(text.to_s)

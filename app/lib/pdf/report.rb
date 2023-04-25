@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'SVG/Graph/DataPoint'
+require 'SVG/Graph/Line'
+
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf
   class Report
@@ -35,6 +38,7 @@ module Pdf
 
       header
 
+      move_down 3
       traffic_graph
       move_down 3
 
@@ -128,11 +132,158 @@ module Pdf
       end
     end
 
+    def graph_key_formatter(usage)
+      if @period == :day
+        ->(point) { (point % 4).zero? ? sprintf("%02d:00", point) : "" }
+      else
+        since = usage.dig(:period, :since)
+        granularity = usage.dig(:period, :granularity)
+        ->(point) { (point % 4).zero? ? (since + point * granularity).strftime("%d %b") : "" }
+      end
+    end
+
     def traffic_graph
-      graph = @data.traffic_graph
-      return unless graph
-      subtitle "Traffic"
-      @pdf.image graph, position: :left, width: 520
+      usage = @data.usage
+
+      return unless usage
+
+      options = {
+        graph_title: "Traffic - #{usage.dig(:metric, :name)}",
+        show_graph_title: true,
+        key: false,
+        area_fill: false,
+        show_data_values: false,
+        add_popups: false,
+        width: TABLE_FULL_WIDTH,
+        height: TABLE_FULL_WIDTH / 4,
+        step_x_labels: 4,
+        step_include_first_x_label: true,
+        fields: usage[:values].each_index.map(&graph_key_formatter(usage)),
+        show_x_title: false,
+        x_title: @period == :day ? "Hour" : "Week Days",
+        show_y_guidelines: true,
+        scale_integers: true,
+        scale_divisions: [2, (usage[:values].max - usage[:values].min) / 5].max,
+        number_format: IntegerWithDelimiterFormatter.new,
+        show_y_title: false,
+        y_title: usage.dig(:metric, :name),
+        y_title_location: :middle,
+        no_css: false,
+      }
+
+      graph = SVG::Graph::Line.new(options)
+
+      graph.add_data(data: usage[:values], title: options[:y_title])
+
+      @pdf.svg traffic_graph_style(graph.burn_svg_only)
+    end
+
+    def traffic_graph_style(svg)
+      xml = Nokogiri::XML(svg)
+      style = xml.at_css("style")
+      css = CssParser::Parser.new
+      css.load_string!(style.text.gsub(/ff0000/i, "9273ED"))
+      traffic_graph_first_data_point(xml)
+      traffic_graph_y_align(xml)
+      traffic_graph_style_clean_up(css)
+      traffic_graph_style_guide_lines(css)
+      traffic_graph_style_axes(css)
+      traffic_graph_style_line_width(css)
+      traffic_graph_style_background(css)
+      traffic_graph_style_text(css)
+
+      style.content = css.to_s
+      xml.to_s
+    end
+
+    # TODO: remove this hack ofter fix is acepted upstream
+    #       https://github.com/lumean/svg-graph2/pull/43
+    def traffic_graph_first_data_point(xml)
+      line = xml.at_css(".line1")
+      line[:d] = line[:d].sub(/^M.+L\s*(\S+\s+\S+)(.*)$/, 'M\1 L\2')
+    end
+
+    # TODO: remove this hack after fix is accepted upstream
+    #       https://github.com/lumean/svg-graph2/pull/44
+    def traffic_graph_y_align(xml)
+      xml.css(".yAxisLabels").each do |label|
+        label[:x] = "-8"
+        label.delete("style")
+        label.delete("transform")
+      end
+    end
+
+    def traffic_graph_style_background(css)
+      desired = <<-EOT
+      .graphBackground { 
+        fill:#ffffff;
+      }
+      EOT
+
+      css.remove_rule_set!(css.find_rule_sets([".graphBackground"]).first)
+      css.add_block!(desired)
+    end
+
+    def traffic_graph_style_text(css)
+      desired = <<-EOT
+        .xAxisLabels,.yAxisLabels {
+          fill:#909090;
+          font-size: 10px;
+          font-family: "#{@style[:font]}", sans-serif; font-weight: normal;
+        }
+        .mainTitle {
+          fill:#505050;
+          font-family: "#{@style[:font]}", sans-serif; font-weight: normal;
+        }
+      EOT
+
+      css.add_block!(desired)
+    end
+
+    def traffic_graph_style_axes(css)
+      desired = <<-EOT
+      .axis{
+        stroke: #ffffff;
+        stroke-width: 0px;
+      }
+      EOT
+
+      css.remove_rule_set!(css.find_rule_sets([".axis"]).first)
+      css.add_block!(desired)
+    end
+
+    def traffic_graph_style_line_width(css)
+      desired = <<-EOT
+      .line1 {
+        stroke-width: 2px;
+      }
+      EOT
+
+      css.add_block!(desired)
+    end
+
+    def traffic_graph_style_guide_lines(css)
+      desired = <<-EOT
+      .guideLines,#yAxis {
+        stroke: #eeeeee;
+        stroke-width: 0.3px;
+        stroke-dasharray: 0.01 1;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      EOT
+
+      css.remove_rule_set!(css.find_rule_sets([".guideLines"]).first)
+      css.add_block!(desired)
+    end
+
+    def traffic_graph_style_clean_up(css)
+      (2..12).each do |num|
+        %w[line fill key dataPoint].each do |type|
+          rule = css.find_rule_sets([".#{type}#{num}"]).first
+          css.remove_rule_set!(rule) if rule.present?
+        end
+      end
     end
 
     def metrics
@@ -187,6 +338,14 @@ module Pdf
         { content: numstr, **@style[:red] }
       else
         { content: numstr, **@style[:green] }
+      end
+    end
+
+    class IntegerWithDelimiterFormatter
+      include ActionView::Helpers::NumberHelper
+
+      def %(num)
+        number_with_delimiter(num.to_i)
       end
     end
   end
