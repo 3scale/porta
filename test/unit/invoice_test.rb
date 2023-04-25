@@ -128,16 +128,16 @@ class InvoiceTest < ActiveSupport::TestCase
     @invoice.update(period: period)
 
     assert_not @invoice.valid?
-    assert_includes @invoice.errors[:period], 'must be between the account creation date and one month from now'
+    assert_includes @invoice.errors[:period], 'must be between the account creation date and 12 months from now'
   end
 
-  test 'validates invoice year - invalid if later than 1 month from now' do
+  test 'validates invoice year - invalid if later than 12 months from now' do
     travel_to(Date.new(2022,10,27)) do
-      period = Month.new(Time.zone.local(2022, 12, 1))
+      period = Month.new(Time.zone.local(2023, 11, 1))
       @invoice.update(period: period)
 
       assert_not @invoice.valid?
-      assert_includes @invoice.errors[:period], 'must be between the account creation date and one month from now'
+      assert_includes @invoice.errors[:period], 'must be between the account creation date and 12 months from now'
     end
   end
 

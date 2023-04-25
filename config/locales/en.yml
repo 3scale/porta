@@ -1000,7 +1000,7 @@ en:
             base:
               charging_failed: 'Failed to charge the credit card.'
             period:
-              invalid_range: 'must be between the account creation date and one month from now'
+              invalid_range: 'must be between the account creation date and 12 months from now'
 
     models:
       topic_category: category
