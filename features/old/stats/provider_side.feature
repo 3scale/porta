@@ -40,12 +40,21 @@ Feature: Provider stats
     And I follow "Top Applications"
     Then I should see "Top Applications" in a header
 
-  Scenario: Default metric is product metric
-    Given provider "foo.3scale.localhost" has multiple applications disabled
-    When I log in as provider "foo.3scale.localhost"
+  # Regression: https://issues.redhat.com/browse/THREESCALE-8719
+  Scenario: Default metric when creating a backend after product
+    Given a service "My API" of the provider
+    And a backend
+    And the backend is used by this product
+    When I go to the overview page of product "My API"
+    And I follow "Analytics"
+    And I follow "Traffic"
+    Then I should see "Hits (hits)"
+
+  # Regression: https://issues.redhat.com/browse/THREESCALE-8719
+  Scenario: Default metric when creating a backend before product
     Given a backend
-    And a service "My API" of provider "foo.3scale.localhost"
-    And the backend is used by this service
+    And a service "My API" of the provider
+    And the backend is used by this product
     When I go to the overview page of product "My API"
     And I follow "Analytics"
     And I follow "Traffic"
