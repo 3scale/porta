@@ -6,12 +6,6 @@ Given('the following metric(s):') do |table|
   end
 end
 
-Given('the following BackendApi type metric(s):') do |table|
-  table.raw.flatten.each do |name|
-    FactoryBot.create(:metric, owner: @provider.default_service, system_name: name, friendly_name: name, owner_type: "BackendApi")
-  end
-end
-
 Given('the following method(s):') do |table|
   table.raw.flatten.each do |name|
     FactoryBot.create(:method, owner: @provider.default_service, friendly_name: name)

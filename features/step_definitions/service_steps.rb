@@ -5,7 +5,7 @@ Given 'a product' do
 end
 
 Given "a service {string} of {provider}" do |name, provider|
-  @service = provider.services.create! :name => name, :mandatory_app_key => false
+  @service = provider.services.create! name: name, mandatory_app_key: false
 end
 
 Given /^a service "([^"]*)"$/ do |name|
