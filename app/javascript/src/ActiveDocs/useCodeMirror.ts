@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import 'codemirror/mode/javascript/javascript'
 
 import type { Editor } from 'codemirror'
 
