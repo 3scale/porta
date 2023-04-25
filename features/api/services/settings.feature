@@ -1,16 +1,13 @@
+@javascript
 Feature: Integration Settings
   In order to configure my Product API
   As a provider
   I want to set my API deployment and authentication options
 
-
   Background:
-    Given a provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-
+    Given a provider is logged in
 
   Scenario: Integration Settings options (Rolling updates Service Mesh OFF)
-    Given I log in as provider "foo.3scale.localhost"
     And I have rolling updates "service_mesh_integration,apicast_oidc" disabled
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
     Then I should see within "#service_deployment_option_input" the following:
@@ -23,9 +20,7 @@ Feature: Integration Settings
       | API Key (user_key)       |
       | App_ID and App_Key Pair  |
 
-
   Scenario: Integration Settings options (Rolling updates ON)
-    Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
     Then I should see within "#service_deployment_option_input" the following:
       | name                           |
@@ -39,9 +34,7 @@ Feature: Integration Settings
       | App_ID and App_Key Pair  |
       | OpenID Connect           |
 
-  @javascript
   Scenario: Integration Settings and authentication method interaction
-    Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
     When I click on the label "APIcast self-managed"
@@ -84,18 +77,14 @@ Feature: Integration Settings
     And I should not see "SECURITY"
     And I should not see "GATEWAY RESPONSE"
 
-  @javascript
   Scenario: Production and Staging URL are not grayed out when self-managed APIcast
-    Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
     When I click on the label "APIcast self-managed"
     Then I should see field "Staging Public Base URL" enabled
     And I should see field "Production Public Base URL" enabled
 
-  @javascript
   Scenario: Production and Staging URL are grayed out when 3scale-managed APIcast
-    Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
     When I click on the label "APIcast"

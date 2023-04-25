@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class ProfileTest < ActiveSupport::TestCase
+  # we need to specify subject with a logo to enforce validation of content types for #validate_attachment_content_type
+  subject { FactoryBot.build :profile, logo: file_fixture("small.png").open }
   should have_db_column :logo_file_name
   should have_db_column :logo_content_type
   should have_db_column :logo_file_size
@@ -10,8 +12,8 @@ class ProfileTest < ActiveSupport::TestCase
   should validate_presence_of :company_size
 
   should validate_attachment_content_type(:logo)
-             .allowing('image/png', 'image/gif', 'image/jpeg')
-             .rejecting('image/svg', 'text/plain', 'text/xml', 'image/abc', 'some_image/png')
+             .allowing('image/png', 'image/jpeg')
+             .rejecting('image/svg', 'text/plain', 'text/xml', 'image/abc', 'some_image/png', 'image/gif')
 
   test '#account attribute validation: not be saved without account' do
     invalid_profile = FactoryBot.build(:profile, :account_id => nil)
@@ -117,6 +119,7 @@ class ProfileTest < ActiveSupport::TestCase
       profile.save!
 
       assert profile.logo
+      assert_equal ".jpg", profile.logo.url(:invoice)[-4..-1]
     end
 
     test 'does not accept a fake image' do
@@ -126,6 +129,41 @@ class ProfileTest < ActiveSupport::TestCase
 
       assert_not profile.valid?
       assert_includes profile.errors[:logo], 'has contents that are not what they are reported to be'
+    end
+
+    test 'invoice style for PNG logos is .png' do
+      profile = FactoryBot.build(:profile)
+      profile.logo = file_fixture("wide.png").open
+      profile.save!
+
+      assert profile.logo
+      assert_equal ".png", profile.logo.url(:invoice)[-4..-1]
+    end
+
+    test 'invoice style for historic GIF logos is .png' do
+      profile = FactoryBot.build(:profile)
+      profile.logo = file_fixture("hypnotoad.jpg").open
+      profile.save!
+
+      # setting GIF logos is not allowed anymore, so lets cheat here
+      profile.update_column(:logo_content_type, "image/gif")
+      assert profile.logo
+      assert_equal ".png", profile.logo.url(:invoice)[-4..-1]
+    end
+
+    test 'historic GIF logos are not validated' do
+      profile = FactoryBot.build(:profile, logo: file_fixture("small.png").open)
+      assert_valid profile
+
+      # when logo attachment is dirty, validation should take place
+      profile.logo_content_type = "image/gif"
+      refute_valid profile
+
+      # when logo is in db since earlier, no validation should take place
+      profile.logo_content_type = "image/png"
+      profile.save!
+      profile.update_column(:logo_content_type, "image/gif")
+      assert_valid profile
     end
   end
 end

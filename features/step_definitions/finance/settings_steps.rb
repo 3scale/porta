@@ -19,7 +19,6 @@ end
 
 Then "they should not be able to review the charging and gateway billing settings" do
   visit admin_finance_settings_path
-  assert_equal 403, status_code
   assert_text 'Access Denied'
 end
 

@@ -64,6 +64,17 @@ module CMS
         )
       end
 
+      test 'index filters by section_id' do
+        section = FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root)
+        FactoryBot.create_list(:cms_file, 5, provider: @provider)
+        FactoryBot.create_list(:cms_file, 2, provider: @provider, section_id: section.id)
+
+        get admin_api_cms_files_path, params: { provider_key: @provider.provider_key, section_id: section.id }
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+      end
+
       test 'show file' do
         file = create_file
         get admin_api_cms_file_path(file), params: { provider_key: @provider.provider_key, format: :json }

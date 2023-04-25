@@ -100,7 +100,7 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
         end
       end
 
-      def sphinx_search(params)
+      def scope_search(params)
         return default_search_scope unless allowed_scopes || default_search_scopes.present? || params
 
         params = params.dup
@@ -113,8 +113,6 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
 
         join_scopes(selected_scopes)
       end
-
-      alias scope_search sphinx_search
 
       private
 

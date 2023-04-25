@@ -1,27 +1,23 @@
+@javascript
 Feature: Providers's applications searching, sorting and filtering
   In order to quickly find specific set of appplications
   As a provider
   I want to search, filter and sort applications
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
-    And provider "foo.3scale.localhost" has "finance" switch visible
+    Given a provider is logged in
+    And the provider has multiple applications enabled
+    And the provider has "finance" switch visible
     And a default application plan of provider "foo.3scale.localhost"
-
-    And the provider "foo.3scale.localhost" has following application plans:
+    And the provider has following application plans:
       | Name      | Cost per month | Setup fee |
       | Cheap     | 0              | 0         |
       | Expensive | 100            | 10        |
-
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has application "BobApp" with plan "Cheap"
     And 1 minute passes
     And a buyer "jane" signed up to provider "foo.3scale.localhost"
     And buyer "jane" has application "JaneApp" with plan "Expensive"
-
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Search
     When I am on the applications admin page
@@ -34,10 +30,11 @@ Feature: Providers's applications searching, sorting and filtering
       | bob  | Cheap | free  | live  |
     And I follow "Name" within table header
     Then I should see following table:
-      | Name ▲  | Account |
-      | BobApp  | bob     |
+      | Name ▲ | Account |
+      | BobApp | bob     |
 
   Scenario: Search scoped by service
+    Given I am on the dashboard
     When I follow "2 Applications"
     Then I should see following table:
       | Name    | Account |
@@ -48,15 +45,13 @@ Feature: Providers's applications searching, sorting and filtering
       | bob  | Cheap | free  | live  |
     And I follow "Name" within table header
     Then I should see following table:
-      | Name ▲  | Account |
-      | BobApp  | bob     |
-
+      | Name ▲ | Account |
+      | BobApp | bob     |
 
   Scenario: Listing
     Given the provider "foo.3scale.localhost" has the following applications:
-    | Buyer | Name     | Plan  |
-    | jane  | CheapApp | Cheap |
-
+      | Buyer | Name     | Plan  |
+      | jane  | CheapApp | Cheap |
     When I am on the applications admin page with 1 record per page
     Then I should see 3 pages
     When I search for:
@@ -67,7 +62,6 @@ Feature: Providers's applications searching, sorting and filtering
       | Account ▲ |
       | bob       |
       | jane      |
-
 
   Scenario Outline: Ordering
     Given I am on the applications admin page

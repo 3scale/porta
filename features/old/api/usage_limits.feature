@@ -5,10 +5,8 @@ Feature: Usage limits
   I want to define usage limits
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And an application plan "Basic" of provider "foo.3scale.localhost"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-    Given I log in as provider "foo.3scale.localhost"
+    Given a provider is logged in
+    And an application plan "Basic" of provider "foo.3scale.localhost"
 
   Scenario: Create a limit
     When I go to the edit page for plan "Basic"

@@ -5,12 +5,10 @@ Feature: Create application from product context
   I want to create their applications
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider is logged in
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has no applications
     And a default application plan "Basic" of provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    Then I log in as provider "foo.3scale.localhost"
 
   Scenario: Create a an application
     When I create an application "My App" from the product "API" context

@@ -1,30 +1,27 @@
+@javascript
 Feature: Invoices of deleted account
   In order to check old invoices
   As a provider
   I want to be able to see invoices of deleted accounts
 
- Background:
-  Given the date is 25th January 2012
-  Given a provider "xyz.3scale.localhost"
-  Given provider "xyz.3scale.localhost" is charging its buyers in prepaid mode
-    And an application plan "Plan" of provider "xyz.3scale.localhost"
+  Background:
+    Given the date is 25th January 2012
+    Given a provider is logged in
+    Given the provider is charging its buyers in prepaid mode
+    And an application plan "Plan" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Plan"
-  Given current domain is the admin domain of provider "xyz.3scale.localhost"
 
- @commit-transactions
- Scenario: I cannot but view the invoices of a deleted buyer
+  @commit-transactions
+  Scenario: I cannot but view the invoices of a deleted buyer
     Given an invoice of buyer "bob" for January, 2011 with items:
       | name   | cost |
-      | Custom |   42 |
-     And I issue the invoice number "2011-01-00000001"
-     And account "bob" is deleted
-
-    When I log in as provider "xyz.3scale.localhost"
-     And I go to the invoices issued by me
+      | Custom | 42   |
+    And I issue the invoice number "2011-01-00000001"
+    And account "bob" is deleted
+    And I go to the invoices issued by me
     Then I should see 1 invoice
-
     When I follow "2011-01-00000001"
     Then I should see "2011-01-00000001"
-     But I should not see "Cancel invoice"
-     And I should not see "Mark as paid"
-     And I should not see /Charge$/
+    But I should not see "Cancel invoice"
+    And I should not see "Mark as paid"
+    And I should not see /Charge$/

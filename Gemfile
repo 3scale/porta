@@ -102,6 +102,7 @@ gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'paperclip', '~> 6.0'
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
@@ -151,7 +152,7 @@ gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 
 # for liquid docs on-fly generation
-gem 'commonmarker', '~> 0.23.7'
+gem 'commonmarker', '~> 0.23.9'
 gem 'escape_utils'
 gem 'github-markdown'
 gem 'html-pipeline'
@@ -242,7 +243,6 @@ group :development, :test do
   gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'license_finder', '~> 7.1.0'
 
   gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false
@@ -253,6 +253,10 @@ group :development, :test do
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
+end
+
+group :licenses do
+  gem 'license_finder', '~> 7.1.0'
 end
 
 gem 'webpacker', '5.4.4'

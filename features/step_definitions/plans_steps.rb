@@ -17,7 +17,7 @@ Given "a default published service plan {string} of {service_of_provider}" do |p
 end
 
 Given(/^the provider has a (default )?free application plan(?: "([^"]*)")?$/) do |default, plan_name|
-  @free_application_plan ||= create_plan :application, name: plan_name || 'Copper', issuer: @service, published: true, default: default.present?
+  @free_application_plan ||= create_plan :application, name: plan_name || 'Copper', issuer: @provider.default_service, published: true, default: default.present?
 end
 
 Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (application|service|account) plan(?: "([^"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|

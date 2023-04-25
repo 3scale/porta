@@ -10,7 +10,7 @@ module ApiSupport::Params
     private
 
     def flat_params
-      params.except(:format, :controller, :action, :provider_key, :api_key)
+      params.except(:format, :controller, :action, :provider_key, :api_key, :access_token)
     end
 
     # This basically checks if the wrapped parameter is passed as a Hash, if not it will go 422

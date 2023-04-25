@@ -3,7 +3,7 @@
 exports[`should render correctly 1`] = `
 <SelectGroup
   catalog={
-    Object {
+    {
       "massive_attack": "Massive Attack",
       "nick_cave": "Nick Cave",
       "tame_impala": "Tame Impala",
@@ -48,8 +48,8 @@ exports[`should render correctly 1`] = `
         <ComponentWithOuia
           component={[Function]}
           componentProps={
-            Object {
-              "children": Array [
+            {
+              "children": [
                 <SelectOption
                   className=""
                   component="button"
@@ -64,7 +64,7 @@ exports[`should render correctly 1`] = `
                   onClick={[Function]}
                   sendRef={[Function]}
                   value={
-                    Object {
+                    {
                       "toString": [Function],
                     }
                   }
@@ -83,7 +83,7 @@ exports[`should render correctly 1`] = `
                   onClick={[Function]}
                   sendRef={[Function]}
                   value={
-                    Object {
+                    {
                       "toString": [Function],
                     }
                   }
@@ -102,7 +102,7 @@ exports[`should render correctly 1`] = `
                   onClick={[Function]}
                   sendRef={[Function]}
                   value={
-                    Object {
+                    {
                       "toString": [Function],
                     }
                   }
@@ -121,7 +121,7 @@ exports[`should render correctly 1`] = `
                   onClick={[Function]}
                   sendRef={[Function]}
                   value={
-                    Object {
+                    {
                       "toString": [Function],
                     }
                   }
@@ -163,7 +163,7 @@ exports[`should render correctly 1`] = `
             onSelect={[Function]}
             onToggle={[Function]}
             ouiaContext={
-              Object {
+              {
                 "isOuia": false,
                 "ouiaId": null,
               }
@@ -178,7 +178,7 @@ exports[`should render correctly 1`] = `
             <div
               className="pf-c-select"
               style={
-                Object {
+                {
                   "width": "",
                 }
               }
@@ -200,7 +200,7 @@ exports[`should render correctly 1`] = `
                 onEnter={[Function]}
                 onToggle={[Function]}
                 parentRef={
-                  Object {
+                  {
                     "current": <div
                       class="pf-c-select"
                     >
@@ -278,7 +278,7 @@ exports[`should render correctly 1`] = `
                       height="1em"
                       role="img"
                       style={
-                        Object {
+                        {
                           "verticalAlign": "-0.125em",
                         }
                       }

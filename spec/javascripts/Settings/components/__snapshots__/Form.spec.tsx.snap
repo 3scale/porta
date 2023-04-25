@@ -4,7 +4,7 @@ exports[`should not render Auth Settings, Security, Credential Locations and API
 <Fragment>
   <RadioFieldset
     catalog={
-      Object {
+      {
         "hosted": "APIcast 3scale managed",
         "self_managed": "APIcast self-managed",
         "service_mesh_istio": "Istio",
@@ -18,7 +18,7 @@ exports[`should not render Auth Settings, Security, Credential Locations and API
   />
   <RadioFieldset
     catalog={
-      Object {
+      {
         "1": "API Key (user_key)",
         "2": "App_ID and App_Key Pair",
         "oidc": "OpenID Connect",
@@ -32,21 +32,21 @@ exports[`should not render Auth Settings, Security, Credential Locations and API
   />
   <AuthenticationSettingsFieldset
     apiKeySettings={
-      Object {
+      {
         "label": "Auth user key",
         "name": "auth_user_key",
         "value": "user_key",
       }
     }
     appIdKeyPairSettings={
-      Array [
-        Object {
+      [
+        {
           "hint": "Public address of your API gateway in the staging environment.",
           "label": "App ID parameter",
           "name": "auth_app_id",
           "value": "app_id",
         },
-        Object {
+        {
           "label": "App Key parameter",
           "name": "auth_app_key",
           "value": "app_key",
@@ -56,17 +56,17 @@ exports[`should not render Auth Settings, Security, Credential Locations and API
     authenticationMethod="1"
     isServiceMesh={true}
     oidcSettings={
-      Object {
-        "basicSettings": Object {
-          "item": Object {
-            "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be \\"https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME\\".",
+      {
+        "basicSettings": {
+          "item": {
+            "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME".",
             "label": "OpenID Connect Issuer",
             "name": "oidc_issuer_endpoint",
             "placeholder": "https://sso.example.com/auth/realms/gateway",
             "value": "",
           },
-          "type": Object {
-            "catalog": Object {
+          "type": {
+            "catalog": {
               "keycloak": "Red Hat Single Sign-On",
               "rest": "REST API",
             },
@@ -75,42 +75,42 @@ exports[`should not render Auth Settings, Security, Credential Locations and API
             "value": "keycloak",
           },
         },
-        "flowSettings": Array [
-          Object {
+        "flowSettings": [
+          {
             "checked": false,
             "label": "Service Accounts Flow",
             "name": "service_accounts_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Authorization Code Flow",
             "name": "standard_flow_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Implicit Flow",
             "name": "implicit_flow_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Direct Access Grant Flow",
             "name": "direct_access_grants_enabled",
           },
         ],
-        "jwtSettings": Object {
-          "item": Object {
-            "hint": "The Token Claim that contains the clientID. Defaults to \\"azp\\".",
+        "jwtSettings": {
+          "item": {
+            "hint": "The Token Claim that contains the clientID. Defaults to "azp".",
             "label": "ClientID Token Claim",
             "name": "jwt_claim_with_client_id",
             "placeholder": "azp",
             "value": "azp",
           },
-          "type": Object {
-            "catalog": Object {
+          "type": {
+            "catalog": {
               "liquid": "liquid",
               "plain": "plain",
             },
-            "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to \\"Liquid\\" you can define more complex rules. e.g. If \\"some_claim\\" is an array you can select the first value this like {{ some_claim | first }}.",
+            "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to "Liquid" you can define more complex rules. e.g. If "some_claim" is an array you can select the first value this like {{ some_claim | first }}.",
             "label": "ClientID Token Claim Type",
             "name": "jwt_claim_with_client_id_type",
             "value": "plain",
@@ -126,7 +126,7 @@ exports[`should render correctly 1`] = `
 <Fragment>
   <RadioFieldset
     catalog={
-      Object {
+      {
         "hosted": "APIcast 3scale managed",
         "self_managed": "APIcast self-managed",
         "service_mesh_istio": "Istio",
@@ -141,8 +141,8 @@ exports[`should render correctly 1`] = `
   <FormCollection
     ItemComponent={[Function]}
     collection={
-      Array [
-        Object {
+      [
+        {
           "defaultValue": "https://api-2.staging.apicast.com",
           "hint": "Public address of your API gateway in the staging environment.",
           "inputType": "url",
@@ -153,7 +153,7 @@ exports[`should render correctly 1`] = `
           "readOnly": true,
           "value": "https://custom.api.staging.provider-name.com",
         },
-        Object {
+        {
           "defaultValue": "https://api-2.apicast.com",
           "hint": "Public address of your API gateway in the production environment.",
           "inputType": "url",
@@ -170,7 +170,7 @@ exports[`should render correctly 1`] = `
   />
   <RadioFieldset
     catalog={
-      Object {
+      {
         "1": "API Key (user_key)",
         "2": "App_ID and App_Key Pair",
         "oidc": "OpenID Connect",
@@ -184,21 +184,21 @@ exports[`should render correctly 1`] = `
   />
   <AuthenticationSettingsFieldset
     apiKeySettings={
-      Object {
+      {
         "label": "Auth user key",
         "name": "auth_user_key",
         "value": "user_key",
       }
     }
     appIdKeyPairSettings={
-      Array [
-        Object {
+      [
+        {
           "hint": "Public address of your API gateway in the staging environment.",
           "label": "App ID parameter",
           "name": "auth_app_id",
           "value": "app_id",
         },
-        Object {
+        {
           "label": "App Key parameter",
           "name": "auth_app_key",
           "value": "app_key",
@@ -208,17 +208,17 @@ exports[`should render correctly 1`] = `
     authenticationMethod="1"
     isServiceMesh={false}
     oidcSettings={
-      Object {
-        "basicSettings": Object {
-          "item": Object {
-            "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be \\"https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME\\".",
+      {
+        "basicSettings": {
+          "item": {
+            "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME".",
             "label": "OpenID Connect Issuer",
             "name": "oidc_issuer_endpoint",
             "placeholder": "https://sso.example.com/auth/realms/gateway",
             "value": "",
           },
-          "type": Object {
-            "catalog": Object {
+          "type": {
+            "catalog": {
               "keycloak": "Red Hat Single Sign-On",
               "rest": "REST API",
             },
@@ -227,42 +227,42 @@ exports[`should render correctly 1`] = `
             "value": "keycloak",
           },
         },
-        "flowSettings": Array [
-          Object {
+        "flowSettings": [
+          {
             "checked": false,
             "label": "Service Accounts Flow",
             "name": "service_accounts_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Authorization Code Flow",
             "name": "standard_flow_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Implicit Flow",
             "name": "implicit_flow_enabled",
           },
-          Object {
+          {
             "checked": false,
             "label": "Direct Access Grant Flow",
             "name": "direct_access_grants_enabled",
           },
         ],
-        "jwtSettings": Object {
-          "item": Object {
-            "hint": "The Token Claim that contains the clientID. Defaults to \\"azp\\".",
+        "jwtSettings": {
+          "item": {
+            "hint": "The Token Claim that contains the clientID. Defaults to "azp".",
             "label": "ClientID Token Claim",
             "name": "jwt_claim_with_client_id",
             "placeholder": "azp",
             "value": "azp",
           },
-          "type": Object {
-            "catalog": Object {
+          "type": {
+            "catalog": {
               "liquid": "liquid",
               "plain": "plain",
             },
-            "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to \\"Liquid\\" you can define more complex rules. e.g. If \\"some_claim\\" is an array you can select the first value this like {{ some_claim | first }}.",
+            "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to "Liquid" you can define more complex rules. e.g. If "some_claim" is an array you can select the first value this like {{ some_claim | first }}.",
             "label": "ClientID Token Claim Type",
             "name": "jwt_claim_with_client_id_type",
             "value": "plain",
@@ -273,7 +273,7 @@ exports[`should render correctly 1`] = `
   />
   <RadioFieldset
     catalog={
-      Object {
+      {
         "authorization": "As HTTP Basic Authentication",
         "headers": "As HTTP Headers",
         "query": "As query parameters (GET) or body parameters (POST/PUT/DELETE)",
@@ -287,8 +287,8 @@ exports[`should render correctly 1`] = `
   <FormCollection
     ItemComponent={[Function]}
     collection={
-      Array [
-        Object {
+      [
+        {
           "defaultValue": "",
           "hint": "Lets you define a custom Host request header. This is needed if your API backend only accepts traffic from a specific host.",
           "label": "Host Header",
@@ -297,7 +297,7 @@ exports[`should render correctly 1`] = `
           "readOnly": false,
           "value": "",
         },
-        Object {
+        {
           "defaultValue": "",
           "hint": "Enables you to block any direct developer requests to your API backend; each 3scale API gateway call to your API backend contains a request header called X-3scale-proxy-secret-token. The value of this header can be set by you here. It's up to you ensure your backend only allows calls with this secret header.",
           "label": "Secret Token",
@@ -319,20 +319,20 @@ exports[`should render correctly 1`] = `
     <FormCollection
       ItemComponent={[Function]}
       collection={
-        Array [
-          Object {
+        [
+          {
             "inputType": "number",
             "label": "Response Code",
             "name": "error_status_auth_failed",
             "value": "403",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Content-type",
             "name": "error_headers_auth_failed",
             "value": "text/plain; charset=us-ascii",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Response Body",
             "name": "error_auth_failed",
@@ -346,20 +346,20 @@ exports[`should render correctly 1`] = `
     <FormCollection
       ItemComponent={[Function]}
       collection={
-        Array [
-          Object {
+        [
+          {
             "inputType": "number",
             "label": "Response Code",
             "name": "error_status_auth_missing",
             "value": "403",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Content-type",
             "name": "error_headers_auth_missing",
             "value": "text/plain; charset=us-ascii",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Response Body",
             "name": "error_auth_missing",
@@ -373,20 +373,20 @@ exports[`should render correctly 1`] = `
     <FormCollection
       ItemComponent={[Function]}
       collection={
-        Array [
-          Object {
+        [
+          {
             "inputType": "number",
             "label": "Response Code",
             "name": "error_status_no_match",
             "value": "404",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Content-type",
             "name": "error_headers_no_match",
             "value": "text/plain; charset=us-ascii",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Response Body",
             "name": "error_no_match",
@@ -400,20 +400,20 @@ exports[`should render correctly 1`] = `
     <FormCollection
       ItemComponent={[Function]}
       collection={
-        Array [
-          Object {
+        [
+          {
             "inputType": "number",
             "label": "Response Code",
             "name": "error_status_limits_exceeded",
             "value": "429",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Content-type",
             "name": "error_headers_limits_exceeded",
             "value": "text/plain; charset=us-ascii",
           },
-          Object {
+          {
             "inputType": "text",
             "label": "Response Body",
             "name": "error_limits_exceeded",

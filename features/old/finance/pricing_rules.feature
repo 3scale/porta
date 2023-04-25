@@ -1,14 +1,13 @@
+@javascript
 Feature: On paid plans
   In order to charge my customers
   As a provider
   I want to charge my customers the right amounts
 
   Background:
-    Given a provider "planet.express.com"
-    And provider "planet.express.com" is charging its buyers
-    And an application plan "Rocket" of provider "planet.express.com"
-    And current domain is the admin domain of provider "planet.express.com"
-    And I am logged in as provider "planet.express.com"
+    Given a provider is logged in
+    And the provider is charging its buyers
+    And an application plan "Rocket" of provider "foo.3scale.localhost"
 
   Scenario: Pricing rules have 4 decimals of precision
     Given pricing rules on plan "Rocket":

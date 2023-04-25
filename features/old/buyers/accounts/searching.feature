@@ -1,11 +1,11 @@
-@search
+@search @javascript
 Feature: Searching buyer accounts
   In order to find a buyer account I'm looking for
   As a provider
   I want to have a full-text search at my disposal
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider is logged in
     Given a default account plan "Default" of provider "foo.3scale.localhost"
     And a account plan "Awesome" of provider "foo.3scale.localhost"
     And a account plan "Tricky" of provider "foo.3scale.localhost"
@@ -13,17 +13,13 @@ Feature: Searching buyer accounts
       | Code | Name           |
       | IT   | Italy          |
       | UK   | United Kingdom |
-    And provider "foo.3scale.localhost" has multiple applications enabled
-    And provider "foo.3scale.localhost" has the following buyers:
-      | Name          | State    | Plan    | Country |
-      | alice         | approved | Default |         |
+    And the provider has multiple applications enabled
+    And the provider has the following buyers:
+      | Name          | State    | Plan    | Country        |
+      | alice         | approved | Default |                |
       | bob           | approved | Awesome | United Kingdom |
-      | bad buyer     | rejected | Default |         |
-      | pending buyer | pending  | Tricky  | Italy   |
-
-     And current domain is the admin domain of provider "foo.3scale.localhost"
-     When I log in as provider "foo.3scale.localhost"
-
+      | bad buyer     | rejected | Default |                |
+      | pending buyer | pending  | Tricky  | Italy          |
 
   Scenario: Search
     When I go to the buyer accounts page
@@ -121,7 +117,6 @@ Feature: Searching buyer accounts
 
   Scenario: Search by user's name
     Given an user of account "bob" with first name "Eric" and last name "Cartman"
-
     When I go to the buyer accounts page
     And I search for:
       | Group/Org. |
@@ -139,7 +134,6 @@ Feature: Searching buyer accounts
 
   Scenario: Search by user's username
     Given an user "awesomo" of account "bob"
-
     When I go to the buyer accounts page
     When I search for:
       | Group/Org. |
@@ -152,7 +146,6 @@ Feature: Searching buyer accounts
 
   Scenario: Recently created account is searchable
     When I create new buyer account "Bob's Web Widgets"
-
     And I go to the buyer accounts page
     And I search for:
       | Group/Org. |
@@ -166,13 +159,11 @@ Feature: Searching buyer accounts
     Given a provider "bar.3scale.localhost"
     And provider "bar.3scale.localhost" has multiple applications enabled
     And a buyer "claire" signed up to provider "bar.3scale.localhost"
-
     When I go to the buyer accounts page
     Then I should not see "claire" in the buyer accounts table
 
   Scenario: Does not list deleted accounts
     Given account "bob" is deleted
-
     When I go to the buyer accounts page
     Then I should not see "bob" in the buyer accounts table
 
@@ -181,11 +172,10 @@ Feature: Searching buyer accounts
     And I search for:
       | Group/Org. |
       | $bob       |
-   Then I should see 1 buyers in the buyer accounts table
+    Then I should see 1 buyers in the buyer accounts table
 
   Scenario: Lists 10 accounts per page
     Given provider "foo.3scale.localhost" has 12 buyers
-
     When I go to the buyer accounts page with 10 records per page
     Then I should see only 10 buyers in the buyer accounts table
     When I follow "Next →"

@@ -24,6 +24,11 @@ module ThreeScale
         def swagger?
           raise "#{self.class} should implement #{__method__}"
         end
+
+        def as_json
+          doc = Autocomplete.fix!(@doc)
+          Schemes.fix!(doc)
+        end
       end
 
       class VInvalid < VBase
@@ -56,13 +61,17 @@ module ThreeScale
         def servers
           @servers ||= ThreeScale::OpenApi::UrlResolver.new(@doc).servers
         end
+
+        def as_json
+          Autocomplete.fix!(@doc)
+        end
       end
 
       class V20 < VBase
         # NOTE:
         #   * "If the schemes is not included, the default scheme to be used is the one used to access the specification."
         #   * "If the host is not included, the host serving the documentation is to be used (including the port)."
-        # To acomplish this we return an empty string.
+        # To accomplish this we return an empty string.
         # ApiDocsProxy supports only http/s
         def base_path
           schema = @doc.fetch("schemes", [])[0]
@@ -152,7 +161,7 @@ module ThreeScale
         @version = init_version
       end
 
-      delegate :base_path, :servers, :validate!, :swagger?, to: :@version
+      delegate :base_path, :servers, :validate!, :swagger?, :as_json, to: :@version
 
       # Check if this specification is swagger thus it can be displayed in swagger-ui
       def swagger_1_2?
@@ -172,12 +181,6 @@ module ThreeScale
       # Falls back to "1.0" if version can"t be determined
       def swagger_version
         swagger_1_2_or_newer? ? doc_version.scan(/\A(\d+\.\d+)(\..+)?\Z/).flatten.first : '1.0'
-      end
-
-      def as_json
-        doc = Autocomplete.fix!(@doc)
-        doc = Schemes.fix!(doc)
-        doc
       end
 
       def valid?

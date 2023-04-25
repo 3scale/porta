@@ -11,8 +11,6 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'
 
-import 'LoginPage/assets/styles/loginPage.scss'
-
 interface Props {
   lostPasswordToken?: string | null;
   url?: string;

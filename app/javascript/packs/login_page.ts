@@ -5,13 +5,6 @@ import type { Props } from 'LoginPage/LoginPageWrapper'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'pf-login-page-container'
-
-  const oldLoginWrapper = document.getElementById('old-login-page-wrapper')
-  const oldLoginPage = document.getElementById('old-login-page')
-  if (oldLoginWrapper && oldLoginPage ) {
-    oldLoginWrapper.removeChild(oldLoginPage)
-  }
-
   const container = document.getElementById(containerId)
 
   if (!container) {

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CMS::Template < ApplicationRecord
   include Symbolize
-
+  include ThreeScale::Search::Scopes
   include CMS::Filtering
 
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
@@ -8,6 +10,11 @@ class CMS::Template < ApplicationRecord
 
   scope :but, ->(*klasses) { where{ type.not_in klasses.map(&:to_s) } }
   scope :recents, -> { order(updated_at: :desc).where.has { updated_at != created_at } }
+
+  self.allowed_search_scopes = %i[type section_id]
+
+  scope :by_type, ->(type) { where(type: CMS::TypeMap.cms_class(type)) }
+  scope :by_section_id, ->(section_id) { where(section_id: section_id) }
 
   self.table_name = :cms_templates
 

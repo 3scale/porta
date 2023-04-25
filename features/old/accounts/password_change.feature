@@ -5,10 +5,7 @@ Feature: Password change
 
   @javascript
   Scenario: Provider password change
-    Given a provider "foo.3scale.localhost"
-
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost" with password "supersecret"
+    Given a provider is logged in
     When I navigate to the Account Settings
     And I follow "Personal"
     And I follow "Personal Details"
@@ -16,7 +13,6 @@ Feature: Password change
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     And I log out
-    And current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Email or Username" with "foo.3scale.localhost"
     And I fill in "Password" with "monkey"

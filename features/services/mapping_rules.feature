@@ -7,11 +7,9 @@ Feature: Product mapping rules
   Background:
     Given all the rolling updates features are off
     And I have oauth_api feature enabled
-    Given a provider "foo.3scale.localhost"
+    Given a provider is logged in
     And a default service of provider "foo.3scale.localhost" has name "one"
     And the service "one" of provider "foo.3scale.localhost" has deployment option "self_managed"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I log in as provider "foo.3scale.localhost"
     And apicast registry is stubbed
     And the default proxy does not use apicast configuration driven
 
