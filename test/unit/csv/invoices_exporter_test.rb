@@ -4,7 +4,10 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com')
-    @buyer = FactoryBot.create(:old_simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
+    @buyer = FactoryBot.create(:simple_buyer,
+                               provider_account: @provider,
+                               org_legaladdress: 'Null street',
+                               created_at: Time.zone.local(2009, 1, 1))
 
     @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
@@ -12,7 +15,7 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
                                       period: Month.new(Time.utc(2009, 6, 1)),
                                       created_at: Time.utc(2009, 6, 2))
 
-    @buyer2 =  FactoryBot.create(:old_simple_buyer, provider_account: @provider)
+    @buyer2 =  FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: Time.zone.local(1964, 10, 1))
     @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
                                       buyer_account: @buyer2,
