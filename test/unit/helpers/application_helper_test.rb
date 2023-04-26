@@ -26,13 +26,13 @@ class ApplicationHelperTest < ActionView::TestCase
     setup do
       @request = ActionDispatch::TestRequest.create
       @asset_host = 'cdn.3scale.test.localhost'
+      @full_asset_host = 'https://cdn.3scale.test.localhost'
     end
 
     attr_reader :request
 
     test 'asset host is not configured' do
-      Rails.configuration.expects(:asset_host).returns(nil)
-      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+      Rails.configuration.stubs(:asset_host).returns(nil)
 
       result = rails_asset_host_url
 
@@ -40,8 +40,8 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test "asset host is configured but it's value is empty" do
-      Rails.configuration.expects(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.expects(:asset_host).returns('')
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns('')
 
       result = rails_asset_host_url
 
@@ -49,12 +49,21 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test 'asset host is configured and has a proper value' do
-      Rails.configuration.expects(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns(@asset_host)
 
       result = rails_asset_host_url
 
       assert_equal "#{request.protocol}#{@asset_host}", result
+    end
+
+    test 'asset host is configured and set to a full URL with protocol' do
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns(@full_asset_host)
+
+      result = rails_asset_host_url
+
+      assert_equal @full_asset_host, result
     end
   end
 
