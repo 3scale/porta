@@ -2,7 +2,7 @@ base: &default
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
   active_docs_proxy_disabled: false
   apicast_custom_url: <%= ENV.fetch('ENABLE_APICAST_CUSTOM_URL', '0') == '1' %>
-  asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
+  asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) || ENV.fetch('ASSETS_CDN_HOST', nil) %>
   bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
   bugsnag_release_stage: <%= ENV.fetch('BUGSNAG_RELEASE_STAGE', Rails.env) %>
   daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>

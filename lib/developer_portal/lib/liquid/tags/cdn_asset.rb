@@ -62,7 +62,8 @@ module Liquid
       private
 
       def cdn_host(request)
-        asset_host_url = Rails.configuration.three_scale.asset_host.presence
+        rails_config = Rails.configuration.three_scale
+        asset_host_url = rails_config.asset_host.presence || rails_config.assets_cdn_host.presence
         return '' unless asset_host_url
         return asset_host_url if asset_host_url.match? %r{^https?://}
 
