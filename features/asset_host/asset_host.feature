@@ -18,6 +18,11 @@ Feature: Asset host
       When master admin is logged in
       Then assets should be loaded from the asset host
 
+    Scenario: Master dashboard with asset host configured as full URL
+      Given the asset host is set to "http://cdn.3scale.localhost"
+      When master admin is logged in
+      Then assets should be loaded from the asset host
+
   Rule: Provider
     Background:
       Given the asset host is set to "cdn.3scale.localhost"
@@ -39,6 +44,12 @@ Feature: Asset host
 
     Scenario: Developer portal with asset host configured
       Given the asset host is set to "cdn.3scale.localhost"
+      And the buyer logs in to the provider
+      Then javascript assets should be loaded from the asset host
+      Then provided assets should be loaded from the asset host
+
+    Scenario: Developer portal with asset host configured as full URL
+      Given the asset host is set to "http://cdn.3scale.localhost"
       And the buyer logs in to the provider
       Then javascript assets should be loaded from the asset host
       Then provided assets should be loaded from the asset host

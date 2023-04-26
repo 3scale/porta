@@ -370,10 +370,16 @@ module ApplicationHelper
   end
 
   def rails_asset_host_url
-    asset_host_enabled = Rails.configuration.asset_host.present?
-    asset_host_url = Rails.configuration.three_scale.asset_host.presence
+    return '' unless Rails.configuration.asset_host.present? && Rails.configuration.three_scale.asset_host.presence
 
-    return '' unless asset_host_enabled && asset_host_url
+    rails_asset_host_full_url
+  end
+
+  private
+
+  def rails_asset_host_full_url
+    asset_host_url = Rails.configuration.three_scale.asset_host
+    return asset_host_url if asset_host_url.match? %r{^https?://}
 
     "#{request.protocol}#{asset_host_url}"
   end
