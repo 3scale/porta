@@ -7,6 +7,7 @@ class Admin::Api::CMS::TemplateService
   class UnknownTemplateTypeError < TemplateServiceError; end
   class UnknownSectionError < TemplateServiceError; end
   class UnknownLayoutError < TemplateServiceError; end
+  class DeleteBuiltinError < TemplateServiceError; end
 
   def initialize(current_account, params, permitted_params)
     @permitted_params = permitted_params
@@ -111,6 +112,22 @@ class Admin::Api::CMS::TemplateService
       elsif layout_received?
         raise UnknownLayoutError, "Unknown layout: '#{layout_id || layout_name}'"
       end
+    end
+  end
+
+  class Destroy
+    include Callable
+
+    def initialize(template)
+      @template = template
+    end
+
+    attr_reader :template
+
+    def call
+      raise DeleteBuiltinError, "Builtin resources can't be deleted" unless template.respond_to?(:destroy)
+
+      template.destroy
     end
   end
 

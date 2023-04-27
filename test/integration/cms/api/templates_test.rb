@@ -315,6 +315,23 @@ module CMS
         assert_equal 'foo', partial['system_name']
         assert_equal 'bar', partial['draft']
       end
+
+      test 'destroy' do
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        delete admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key }
+
+        assert_raise(ActiveRecord::RecordNotFound) { page.reload }
+      end
+
+      test 'destroy a builtin resource' do
+        page = FactoryBot.create(:cms_builtin_page, provider: @provider)
+
+        delete admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key }
+
+        assert_response :unprocessable_entity
+        assert page.reload.persisted?
+      end
     end
   end
 end

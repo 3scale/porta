@@ -120,6 +120,23 @@ module CMS
 
         assert_equal 'Foo Bar Lol', section.title
       end
+
+      test 'destroy' do
+        section = create_section
+
+        delete admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key }
+
+        assert_raise(ActiveRecord::RecordNotFound) { section.reload }
+      end
+
+      test 'destroy a builtin resource' do
+        section = @provider.sections.root
+
+        delete admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key }
+
+        assert_response :unprocessable_entity
+        assert section.reload.persisted?
+      end
     end
 
     class SystemNameTest < ActionDispatch::IntegrationTest
