@@ -10,6 +10,8 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   self.access_token_scopes = :account_management
   before_action :ensure_master_with_plans, only: :create
 
+  before_action :find_plan_for_upgrade, only: :plan_upgrade
+
   ##~ @parameter_account_id_by_id = {:name => "id", :description => "ID of the account.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "account_ids"}
 
   # Change the partner of a provider account
@@ -98,13 +100,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     provider_account.assign_unflattened_attributes(params.require(:account))
     provider_account.save
 
-    signup_result = Signup::ResultWithAccessToken.new(account: provider_account, user: provider_account.admin_users.first)
-
-    # Signup::ResultWithAccessToken because it is the representer, but after it initializes, it builds an access token,
-    # which is a known design problem). So this access token needs to be set to nil before responding because it is an unsaved one
-    signup_result.access_token = nil
-
-    respond_with signup_result
+    respond_with signup_result_with_nil_token
   end
 
   ##~ e = sapi.apis.add
@@ -139,13 +135,21 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   ##~ op.parameters.add @parameter_account_id_by_id
   #
   def show
-    signup_result = Signup::ResultWithAccessToken.new(account: provider_account, user: provider_account.admin_users.first)
+    respond_with signup_result_with_nil_token
+  end
 
-    # Signup::ResultWithAccessToken because it is the representer, but after it initializes, it builds an access token,
-    # which is a known design problem). So this access token needs to be set to nil before responding because it is an unsaved one
-    signup_result.access_token = nil
+  def plan_upgrade
+    authorize! :update, :provider_plans
+    authorize! :update, @plan_for_upgrade.issuer
 
-    respond_with signup_result
+    new_switches = provider_account.available_plans[@plan_for_upgrade.system_name]
+    if new_switches
+      provider_account.force_upgrade_to_provider_plan!(@plan_for_upgrade)
+      respond_with signup_result_with_nil_token
+    else
+      render_error "Plan #{@plan_for_upgrade.name} is not one of the 3scale stock plans. Cannot automatically change to it.",
+                   status: :bad_request
+    end
   end
 
   UPDATE_PARAMS = %i[from_email support_email finance_support_email site_access_code state_event].freeze
@@ -157,6 +161,15 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params[:id])
   end
 
+  def signup_result_with_nil_token
+    signup_result = Signup::ResultWithAccessToken.new(account: provider_account, user: provider_account.admin_users.first)
+
+    # Signup::ResultWithAccessToken because it is the representer, but after it initializes, it builds an access token,
+    # which is a known design problem). So this access token needs to be set to nil before responding because it is an unsaved one
+    signup_result.access_token = nil
+    signup_result
+  end
+
   def action_includes_deleted_providers?
     %w[show update].include?(action_name)
   end
@@ -165,6 +178,13 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     return if current_account.signup_provider_possible?
     System::ErrorReporting.report_error('Provider signup not enabled. Check all master\'s plans are in place.')
     render_error 'Provider signup not enabled.', :status => :unprocessable_entity
+  end
+
+  def find_plan_for_upgrade
+    plan_id = params[:plan_id]
+    @plan_for_upgrade ||= Account.master.application_plans.stock.find(plan_id)
+  rescue ActiveRecord::RecordNotFound
+    render_error "Plan with ID #{plan_id.presence} not found", status: :not_found
   end
 
   def update_params
