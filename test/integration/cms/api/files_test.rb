@@ -97,6 +97,31 @@ module CMS
         assert_response :success
       end
 
+      test 'update ignores immutable fields' do
+        file = create_file
+        created_at = file.created_at
+        updated_at = file.updated_at
+        url = file.url
+        title = file.title
+        content_type = file.attachment.content_type
+        params = { provider_key: @provider.provider_key,
+                   created_at: Time.current + 1000, updated_at: Time.current + 1000,
+                   url: '/file', title: 'title',
+                   content_type: 'image/test',
+                   section_id: file.section.id
+        }
+
+        put admin_api_cms_file_path(file, format: :json), params: params
+        file.reload
+
+        assert_response :success
+        assert_equal created_at, file.created_at
+        assert_equal updated_at, file.updated_at
+        assert_equal url, file.url
+        assert_equal title, file.title
+        assert_equal content_type, file.attachment.content_type
+      end
+
       test 'create' do
         post admin_api_cms_files_path, params: { provider_key: @provider.provider_key, format: :json, path: "/foo.bar", attachment: attachment_for_upload, section_id: @provider.sections.root.id }
         assert_response :success

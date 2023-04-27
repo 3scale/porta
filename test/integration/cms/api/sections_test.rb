@@ -106,6 +106,27 @@ module CMS
         assert_equal 'foo', section.title
       end
 
+      test 'update ignores immutable fields' do
+        section = create_section
+        created_at = section.created_at
+        updated_at = section.updated_at
+        params = {
+          provider_key: @provider.provider_key,
+          format: :json,
+          created_at: Time.current + 1000,
+          updated_at: Time.current + 1000,
+          title: 'foo'
+        }
+
+        put admin_api_cms_section_path(section), params: params
+        section.reload
+
+        assert_equal created_at, section.created_at
+        assert_equal updated_at, section.updated_at
+        assert_equal 'foo', section.title
+      end
+
+
       test 'create' do
         post admin_api_cms_sections_path, params: {
           provider_key: @provider.provider_key,

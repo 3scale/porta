@@ -227,6 +227,31 @@ module CMS
         assert_equal new_layout, page.reload.layout
       end
 
+      test 'update ignores immutable fields' do
+        page   = FactoryBot.create(:cms_page, provider: @provider)
+        created_at = page.created_at
+        updated_at = page.updated_at
+        hidden = page.hidden?
+        published = page.published.present?
+        params = {
+          provider_key: @provider.provider_key,
+          title:        'Alaska',
+          created_at:   Time.current + 1000,
+          updated_at:   Time.current + 1000,
+          hidden:       true,
+          published:     true
+        }
+
+        put admin_api_cms_template_path(page), params: params
+        page.reload
+
+        assert_response :success
+        assert_equal created_at, page.created_at
+        assert_equal updated_at, page.updated_at
+        assert_equal hidden, page.hidden?
+        assert_equal published, page.published.present?
+      end
+
       test 'create with missing or invalid type fails' do
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json,
                                                      type: 'INVALID', title: 'test template' }

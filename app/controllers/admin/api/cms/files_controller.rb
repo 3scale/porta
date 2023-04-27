@@ -17,6 +17,8 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
 
   wrap_parameters :file, include: ALLOWED_PARAMS
 
+  forbid_extra_params :reject, whitelist: %i[id page per_page created_at updated_at url title content_type]
+
   representer :entity => ::CMS::FileRepresenter, :collection => ::CMS::FilesRepresenter
 
   ##~ e = sapi.apis.add
