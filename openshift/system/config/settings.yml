@@ -3,7 +3,7 @@ production:
   active_merchant_logging: false
   apicast_custom_url: true
   apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
-  asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) || ENV.fetch('ASSETS_CDN_HOST', nil) %>
+  asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
   billing_canaries:
   db_secret:
   email_sanitizer:

@@ -3,7 +3,7 @@ require 'test_helper'
 
 class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
   test 'gets the correct file name' do
-    Rails.configuration.three_scale.asset_host = nil
+    Rails.configuration.three_scale.assets_cdn_host = nil
     {
       '/swagger-ui/2.2.10/swagger-ui.js' => '/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.js',
       '/swagger-ui/2.2.10/swagger-ui.min.js' => '/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.min.js',
