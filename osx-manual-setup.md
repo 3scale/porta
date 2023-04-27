@@ -58,8 +58,7 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver imagemagick@6 gs pkg-config openssl geckodriver sphinx mysql@5.7 postgresql@14
-brew link imagemagick@6
+brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@5.7 postgresql@14
 ```
 
 * **Macs with M1** also require the following:
@@ -159,6 +158,7 @@ Then add the necessary configs:
 bundle config --local build.thin --with-cflags=-Wno-error="implicit-function-declaration"
 bundle config --local build.github-markdown --with-cflags=-Wno-error="implicit-function-declaration"
 bundle config --local build.mysql2 --with-opt-dir="$(brew --prefix openssl)"
+bundle config --local build.local-fastimage_resize --with-opt-dir="$(brew --prefix gd)"
 ```
 
 And finally install all gems:

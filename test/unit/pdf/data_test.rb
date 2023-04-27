@@ -19,14 +19,14 @@ class Pdf::DataTest < ActiveSupport::TestCase
     assert_raises(ArgumentError) { Pdf::Data.new(@provider_account) }
   end
 
-  test "generates traffic graph for week" do
+  test "generates usage data for week" do
     @data = Pdf::Data.new(@provider_account, @service, :period => :week)
-    assert_not_nil @data.traffic_graph
+    assert_not_nil @data.usage
   end
 
-  test "generates traffic graph for day" do
+  test "generates usage date for day" do
     @data = Pdf::Data.new(@provider_account, @service, :period => :day)
-    assert_not_nil @data.traffic_graph
+    assert_not_nil @data.usage
   end
 
   test 'scope data by service' do

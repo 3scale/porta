@@ -74,9 +74,7 @@ gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.11'
 gem 'cancancan', '~> 2.3.0'
 gem 'formtastic', '~> 2.3.1'
-gem 'gruff', '~>0.3', require: false
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
-gem 'rmagick', '~> 2.15.3', require: false
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.12.0'
 gem 'has_scope', '~> 0.7.2' # remove line after we stop supporting Ruby 2.4
@@ -102,9 +100,11 @@ gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'paperclip', '~> 6.0'
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
+gem 'prawn-svg'
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
@@ -114,6 +114,7 @@ gem 'redis', '~> 4.1.3', require: ['redis', 'redis/connection/hiredis']
 gem 'redis-namespace', '~> 1.7.0'
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
+gem 'svg-graph', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
 gem 'thinking-sphinx', '~> 5.4.0'

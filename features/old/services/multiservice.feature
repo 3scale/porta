@@ -7,7 +7,6 @@ Feature: Multiservice feature
   Background:
     Given a provider is logged in
     And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-    And a service "Second service" of provider "foo.3scale.localhost"
 
   Scenario: Can create new service setting
     And provider "foo.3scale.localhost" has "can create service" set to "true"
@@ -24,15 +23,38 @@ Feature: Multiservice feature
     And I press "Create Product"
     Then I should see "Less fancy API"
 
+  @javascript
+  Scenario: Create new product: with blank product name
+    And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+    And service discovery is not enabled
+    When I am on the provider dashboard
+    And I follow "Create Product"
+    And I fill in "System name" with "Less fancy API"
+    And I press "Create Product"
+    Then I should see "Can't be blank"
+
+  @javascript
   Scenario: Create new product: Fail scenario error message
     And provider "foo.3scale.localhost" has "multiple_services" switch allowed
     And service discovery is not enabled
     When I am on the provider dashboard
     And I follow "Create Product"
-    And I fill in "Name" with "Invalid API"
-    And I fill in "System name" with "I am using spaces"
+    And I fill in "Name" with "Less fancy API"
+    And I fill in "System name" with "SystemName@123"
     And I press "Create Product"
-    Then I should see the flash message "System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed."
+    Then I should see "Invalid."
+    Then I should see the flash message "Couldn't create Product. Check your Plan limits"
+
+  @javascript
+  Scenario: Create new product: with already existing System name
+    And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+    And service discovery is not enabled
+    And a service "Fancy Name" of provider "foo.3scale.localhost"
+    When I am on the new service page
+    And I fill in "Name" with "Fancy Api"
+    And I fill in "System name" with "api"
+    And I press "Create Product"
+    Then I should see "Has already been taken"
 
   @wip
   Scenario: Create new backend
@@ -58,6 +80,7 @@ Feature: Multiservice feature
 
   Scenario: Delete Service
     And provider "foo.3scale.localhost" has "multiple_services" switch allowed
+    And a service "Second service" of provider "foo.3scale.localhost"
     And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
     When I follow "I understand the consequences, proceed to delete 'Second service' product" and I confirm dialog box
     Then I should see "Product 'Second service' will be deleted shortly."

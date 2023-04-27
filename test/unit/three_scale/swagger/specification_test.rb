@@ -53,15 +53,26 @@ class ThreeScale::Swagger::SpecificationTest < ActiveSupport::TestCase
     assert_equal "bar", specification["parameters"]["x-data-threescale-name"]
   end
 
-  test 'add schemes if is not present' do
-    specification = ThreeScale::Swagger::Specification.new({}.to_json).as_json
-    assert_equal ["http"], specification["schemes"]
+  test 'add schemes if is not present for Swagger v1 and v2' do
+    [{ swaggerVersion: '1.2'}, { swagger: '2.0'}].each do |spec|
+      specification = ThreeScale::Swagger::Specification.new(spec.to_json).as_json
+      assert_equal ["http"], specification["schemes"]
 
-    specification = ThreeScale::Swagger::Specification.new({"basePath" => "https://example.net"}.to_json).as_json
-    assert_equal ["https"], specification["schemes"]
+      specification = ThreeScale::Swagger::Specification.new(spec.merge({ basePath: 'https://example.net'}).to_json).as_json
+      assert_equal ["https"], specification["schemes"]
 
-    specification = ThreeScale::Swagger::Specification.new({schemes: ["foo"]}.to_json).as_json
-    assert_equal ["foo"], specification["schemes"]
+      specification = ThreeScale::Swagger::Specification.new(spec.merge({ schemes: ['foo'] }).to_json).as_json
+      assert_equal ["foo"], specification["schemes"]
+    end
+  end
+
+  test 'do not add schemes for OpenAPI v3' do
+    spec = { openapi: '3.0.0' }
+    specification = ThreeScale::Swagger::Specification.new(spec.to_json).as_json
+    assert_nil specification["schemes"]
+
+    specification = ThreeScale::Swagger::Specification.new(spec.merge({ servers: ['https://example.net'] }).to_json).as_json
+    assert_nil specification["schemes"]
   end
 
   private

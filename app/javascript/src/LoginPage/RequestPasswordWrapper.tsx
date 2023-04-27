@@ -9,8 +9,6 @@ import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
 
-import 'LoginPage/assets/styles/loginPage.scss'
-
 interface Props {
   flashMessages?: FlashMessage[];
   providerLoginPath: string;

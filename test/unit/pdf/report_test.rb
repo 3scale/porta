@@ -53,9 +53,12 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     test 'generates a multi-page report' do
       mock_values = YAML.load_file(file_fixture("report_mocks.yml").to_s).deep_symbolize_keys
       mock_values[:usage_progress_for_all_metrics][:metrics].each(&:deep_symbolize_keys!)
+      mock_values.dig(:usage, :period).tap do |period|
+        period[:since] = Time.parse(period[:since]).in_time_zone(period[:timezone])
+        period[:until] = Time.parse(period[:until]).in_time_zone(period[:timezone])
+      end
       Stats::Service.any_instance.stubs(mock_values.slice(*%i[usage_progress_for_all_metrics usage]))
       Pdf::Data.any_instance.stubs(mock_values.slice(*%i[latest_users top_users users]))
-
 
       @report.generate
 
@@ -82,6 +85,15 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     service = FactoryBot.build_stubbed(:simple_service, account: account)
 
     report = Pdf::Report.new(account, service, period: :day)
+
+    assert report.generate
+  end
+
+  test 'simple week report' do
+    account = FactoryBot.create(:simple_provider)
+    service = FactoryBot.create(:simple_service, account: account)
+
+    report = Pdf::Report.new(account, service, period: :week)
 
     assert report.generate
   end

@@ -98,10 +98,11 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
 
       namespace :api, defaults: {format: 'json'} do
-        # /master/api/provider
+        # /master/api/providers
         resources :providers, except: :index do
           member do
             post :change_partner
+            put :plan_upgrade
           end
           resources :services, only: [:destroy]
         end

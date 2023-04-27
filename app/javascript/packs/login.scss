@@ -48,3 +48,41 @@ This code must be removed once PF4 is implemented in the whole application */
 @import '~@patternfly/patternfly/components/FormControl/form-control.css';
 @import '~@patternfly/patternfly/components/Title/title.css';
 @import '~@patternfly/patternfly/components/Button/button.css';
+
+$pf-black-500:  #8b8d8f; // $osloGray
+$--pf-global--danger-color--100: #c9190b;
+$--pf-global--info-color--200:	#004368;
+
+#pf-login-page-container {
+
+  .pf-c-background-image::before {
+    filter: none;
+  }
+
+  .login-provider {
+    padding: .3rem 0;
+
+    .login-provider-link:hover {
+      text-decoration: none;
+    }
+  }
+
+  .providers-separator {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .pf-c-form__helper-text {
+    margin: 1rem 0;
+    svg {
+      margin-right: .3rem;
+    }
+  }
+  .pf-m-error {
+    color: $--pf-global--danger-color--100;
+  }
+
+  .pf-m-notice {
+    color: $--pf-global--info-color--200;
+  }
+}

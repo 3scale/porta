@@ -1,8 +1,4 @@
-<%= stylesheet_link_tag 'active-docs/application.css' %>
-<%= javascript_tag do %>
-  window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
-<% end %>
-<%= javascript_include_tag 'active-docs/application.js' %>
+<%= javascript_pack_tag 'provider_active_docs' %>
 
 <% content_for :title do %>
   3scale API Documentation
@@ -12,11 +8,10 @@
   <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
 <% end %>
 
-<div class='api-docs-wrap'></div>
-<script>
-$(function(){
-   ThreeScale.APIDocs.account_type = 'provider';
-   ThreeScale.APIDocs.host = "<%=j base_url.gsub(%r{/$}, '') %>";
-   ThreeScale.APIDocs.init([]);
-});
-</script>
+<div
+  id="api-containers"
+  data-api-docs-path="<%= api_docs_services_path %>"
+  data-api-docs-account-data-path="<%= provider_admin_api_docs_account_data_path %>"
+  data-base-url="<%= base_url %>"
+>
+</div>

@@ -258,4 +258,51 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     }.merge(different_params)
   end
 
+  class ProviderUpgradeTest < ActionDispatch::IntegrationTest
+    def setup
+      # master_account.stubs(:provider_can_use?).with(:service_permissions).returns(true)
+      #
+      host! master_account.internal_admin_domain
+
+      @provider = FactoryBot.create(:provider_account, provider_account: master_account)
+      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first, scopes: 'account_management')
+    end
+
+    test '#plan_upgrade successful upgrade' do
+      new_plan = FactoryBot.create(:application_plan, service: master_account.default_service)
+
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
+
+      assert_response :ok
+      assert_equal new_plan.id, provider.reload.bought_application_plans.first.id
+    end
+
+    test '#plan_upgrade missing plan' do
+      current_plan_id = provider.reload.bought_application_plans.first.id
+      new_plan_id = 999
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan_id, format: :xml)
+
+      assert_response :not_found
+      assert_equal current_plan_id, provider.reload.bought_application_plans.first.id
+      assert_xml Nokogiri::XML::Document.parse(response.body), '//error', "Plan with ID #{new_plan_id} not found"
+    end
+
+    test '#plan_upgrade no stock plan' do
+      new_plan_name = 'invalid-plan'
+      new_plan = FactoryBot.create(:application_plan_without_rules, service: master_account.default_service, name: new_plan_name)
+      current_plan_id = provider.reload.bought_application_plans.first.id
+
+      put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
+
+      assert_response :bad_request
+      assert_equal current_plan_id, provider.reload.bought_application_plans.first.id
+      assert_xml Nokogiri::XML::Document.parse(response.body), '//error',
+                 "Plan #{new_plan_name} is not one of the 3scale stock plans. Cannot automatically change to it."
+    end
+
+    private
+
+    attr_reader :provider, :token
+  end
+
 end
