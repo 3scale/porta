@@ -1,5 +1,6 @@
 <%= javascript_include_tag 'provider/cms' %>
 <%= javascript_pack_tag 'codemirror' %>
+<%= javascript_include_tag 'codemirror/modes/liquid' %>
 
 <%= javascript_tag do %>
   <% timeout = (Rails.env.development? or Rails.env.test?) ? 10000 : 3000 -%>
