@@ -22,6 +22,12 @@ module ApiSupport
     end
 
     class_methods do
+      # What to do when the client sends additional parameters not permitted by Strong Parameters
+      # === action:
+      #   * <tt>:log</tt> -   Writes a warning on the logs, containing the list of unpermitted parameters.
+      #   * <tt>:raise</tt> - Raises an +UnpermittedParametersError+ error.
+      # === options:
+      #   * <tt>:whitelist</tt> - List of parameters to be ignored. These parameters won't trigger the action but they are still unpermitted and  won't reach the database.
       def forbid_extra_params(action, options = {})
         before_action :_unpermitted_parameters_check
         self._forbid_params_action = action
