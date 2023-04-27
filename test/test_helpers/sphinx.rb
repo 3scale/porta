@@ -9,8 +9,6 @@ module ThinkingSphinx
         init
         start index: false
         yield
-      rescue Riddle::CommandFailedError => error
-        binding.pry
       ensure
         stop
       end
