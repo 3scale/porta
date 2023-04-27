@@ -603,6 +603,30 @@ class UserTest < ActiveSupport::TestCase
     assert user.can_login?
   end
 
+  def test_login_logging
+
+    account = FactoryBot.create(:account_without_users)
+    user = FactoryBot.create(:user, account: account)
+    user.activate!
+    account.reject!
+    assert_not user.can_login?
+
+    Rails.logger.expects(:info).with { |val| val =~ /^'[AUDIT]: Signed in:'.*/ }
+
+  end
+
+  def test_logout_logging
+
+    account = FactoryBot.create(:account_without_users)
+    user = FactoryBot.create(:user, account: account)
+    user.activate!
+    account.reject!
+    assert_not user.can_login?
+
+    Rails.logger.expects(:info).with { |val| val =~ /^'[AUDIT]: destroy_user_session:'.*/ }
+
+  end
+
   class DeletionOfUsersTest < ActiveSupport::TestCase
     setup do
       @account = FactoryBot.create(:account, org_name: "Alice's web empire")
