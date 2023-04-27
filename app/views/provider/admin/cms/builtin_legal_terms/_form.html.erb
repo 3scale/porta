@@ -1,4 +1,6 @@
-<%= javascript_include_tag 'provider/codemirror' %>
+<%= javascript_pack_tag 'codemirror' %>
+<%= javascript_include_tag 'codemirror/modes/liquid' %>
+
 <%= f.input :system_name, :as => :hidden %>
 
 <%= f.error_messages %>
