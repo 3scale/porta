@@ -7,7 +7,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     def invoice
       @invoice ||= FactoryBot.create(:invoice, provider_account: @provider,
                                      buyer_account: @buyer,
-                                     period: Month.parse_month('2018-08-01')).reload
+                                     period: Month.new(@now)).reload
     end
 
     def invoice_params
@@ -15,7 +15,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def invoice_new_values
-      month = Month.new('2017', '07')
+      month = Month.new(@later.year, @later.month)
       { month: month, friendly_id: "#{month.to_param}-00000005" }
     end
   end
@@ -29,10 +29,12 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
       ThreeScale.config.stubs(onpremises: true)
       @access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[finance]).value
       @provider = master_account
-      @buyer = FactoryBot.create(:simple_provider)
+      @now = Time.zone.now
+      @later = @now + 2.months
+      @buyer = FactoryBot.create(:simple_provider, created_at: @now)
       master_account.settings.allow_finance!
       host! master_account.internal_admin_domain
-      %w[2017-07 2018-08].each { |month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
+      [@now, @later].each { |datetime| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: datetime.strftime('%Y-%m')) }
     end
 
     test '#index' do
@@ -60,12 +62,14 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
-    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @now = Time.zone.now
+    @later = @now + 2.months
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, created_at: @now)
     @provider.settings.allow_finance!
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[finance]).value
     host! @provider.external_admin_domain
 
-    %w[2017-07 2018-08].each { |month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
+    [@now, @later].each { |datetime| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: datetime.strftime('%Y-%m')) }
   end
 
   test '#index' do
@@ -122,7 +126,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_response 422
   end
 
-  test '#state inalize state' do
+  test '#state finalize state' do
     put state_api_invoice_path(invoice, state: 'finalized'), params: { access_token: @access_token }, headers: { accept: Mime[:json] }
     invoice.reload
     assert_equal 'finalized', invoice.state
