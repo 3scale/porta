@@ -8,78 +8,22 @@ class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseContro
 
   wrap_parameters ::Proxy, include: Proxy.user_attribute_names
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy.xml"
-  ##~ e.responseClass = "proxy"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Proxy Read"
-  ##~ op.description = "Returns the Proxy of a Service."
-  ##~ op.group = "proxy"
-  #
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  #
+  # Proxy Read
+  # GET /admin/api/services/{service_id}/proxy.xml
   def show
     respond_with(proxy)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy.xml"
-  ##~ e.responseClass = "proxy"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PATCH"
-  ##~ op.summary    = "Proxy Update"
-  ##~ op.description = "Changes the Proxy settings. This will create a new APIcast configuration version for the Staging environment with the updated settings."
-  ##~ op.group = "proxy"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add name: "endpoint", description: "Public Base URL for production environment.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "api_backend", description: "Private Base URL. Caution! Do not use it if the account has API as a Product enabled. It may cause API backend usages to be removed from the Product.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "credentials_location", description: "Credentials Location. Either headers, query or authorization for the Basic Authorization.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "auth_app_key", description: "Parameter/Header where App Key is expected.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "auth_app_id", description: "Parameter/Header where App ID is expected.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "auth_user_key", description: "Parameter/Header where User Key is expected.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_auth_failed", description: "Error message on failed authentication.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_status_auth_failed", description: "Status code on failed authentication.", dataType: "int", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_headers_auth_failed", description: "Content-Type header on failed authentication.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_auth_missing", description: "Error message on missing authentication.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_status_auth_missing", description: "Status code on missing authentication.", dataType: "int", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_headers_auth_missing", description: "Content-Type header on missing authentication.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_no_match", description: "Error message when no mapping rule is matched.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_status_no_match", description: "Status code when no mapping rule is matched.", dataType: "int", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_headers_no_match", description: "Content-Type header when no mapping rule is matched.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_status_limits_exceeded", description: "Status code when usage limit exceeded.", dataType: "int", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_headers_limits_exceeded", description: "Content-Type header when usage limit exceeded.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "error_limits_exceeded", description: "Error message on usage limit exceeded.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "oidc_issuer_endpoint", description: "Location of your OpenID Provider.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "oidc_issuer_type", description: "Type of your OpenID Provider.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "sandbox_endpoint", description: "Sandbox endpoint.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "jwt_claim_with_client_id", description: "JWT Claim With ClientId Location.", dataType: "string", paramType: "query", required: false
-  ##~ op.parameters.add name: "jwt_claim_with_client_id_type", description: "JWT Claim With ClientId Type. Either `plain` or `liquid`", dataType: "string", paramType: "query", required: false
-  #
+  # Proxy Update
+  # PATCH /admin/api/services/{service_id}/proxy.xml
   def update
     ProxyDeploymentService.call(proxy) if proxy.update_attributes(proxy_params)
 
     respond_with(proxy)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy/deploy.xml"
-  ##~ e.responseClass = "proxy"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Proxy Deploy"
-  ##~ op.description = "Promotes the APIcast configuration to the Staging Environment (Production Environment in case of Service Mesh)."
-  ##~ op.group = "proxy"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
+  # Proxy Deploy
+  # POST /admin/api/services/{service_id}/proxy/deploy.xml
   def deploy
     ProxyDeploymentService.call(proxy)
 

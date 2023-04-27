@@ -19,36 +19,16 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
 
   representer :entity => ::CMS::FileRepresenter, :collection => ::CMS::FilesRepresenter
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files.json"
-  ##~ e.responseClass = "List[short-file]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "File List"
-  ##~ op.description = "List all files"
-  ##~ op.group = "cms_files"
-  #
-  ##~ op.parameters.add @parameter_page
-  ##~ op.parameters.add @parameter_per_page
-  ##~ op.parameters.add @parameter_access_token
+  # File List
+  # GET /admin/api/cms/files.json
   def index
     files = current_account.files.scope_search(search).paginate(pagination_params)
 
     respond_with files
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "File Create"
-  ##~ op.description = "Create file"
-  ##~ op.group = "cms_files"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query", :required => true
-  ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "attachment", :paramType => "query", :required => true
-  ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
+  # File Create
+  # POST /admin/api/cms/files.json
   def create
     @file = current_account.files.build(file_params)
     @file.section = current_account.sections.find_by(id: params[:section_id]) || current_account.sections.root
@@ -57,47 +37,21 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
     respond_with @file
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files/{id}.json"
-  ##~ e.responseClass = "file"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "File Read"
-  ##~ op.description = "View file"
-  ##~ op.group       = "cms_files"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_file_id
+  # File Read
+  # GET admin/api/cms/files/{id}.json
   def show
     respond_with @file
   end
 
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "PUT"
-  ##~ op.summary     = "File Update"
-  ##~ op.description = "Update file"
-  ##~ op.group       = "cms_files"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_file_id
-  ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query"
-  ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "attachment", :paramType => "query"
-  ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
+  # File Update
+  # PUT admin/api/cms/files/{id}.json
   def update
     @file.update_attributes(file_params)
     respond_with @file
   end
 
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "DELETE"
-  ##~ op.summary     = "File Delete"
-  ##~ op.description = "Delete file"
-  ##~ op.group       = "cms_files"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_file_id
+  # File Delete
+  # DELETE admin/api/cms/files/{id}.json
   def destroy
     @file.destroy
     respond_with @file, location: admin_api_cms_files_path(@file)

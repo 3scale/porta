@@ -15,20 +15,8 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
     render_error 'invalid environment', status: :bad_request
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy/configs/{environment}.json"
-  ##~ e.responseClass = "proxy_config"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "Proxy Configs List (Service)"
-  ##~ op.description = "Returns the Proxy Configs of a Service"
-  ##~ op.group       = "proxy_config"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_environment
-  #
+  # Proxy Configs List (Service)
+  # GET /admin/api/services/{service_id}/proxy/configs/{environment}.json
   def index
     respond_with(service_proxy_configs)
   end
@@ -37,61 +25,22 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
     respond_with(host_proxy_configs)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy/configs/{environment}/latest.json"
-  ##~ e.responseClass = "proxy_config"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "Proxy Config Show Latest"
-  ##~ op.description = "Returns the latest Proxy Config."
-  ##~ op.group       = "proxy_config"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_environment
-  #
+  # Proxy Config Show Latest
+  # GET /admin/api/services/{service_id}/proxy/configs/{environment}/latest.json
   def latest
     proxy_config = service_proxy_configs.newest_first.first!
 
     respond_with(proxy_config)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}.json"
-  ##~ e.responseClass = "proxy_config"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "Proxy Config Show"
-  ##~ op.description = "Returns a Proxy Config."
-  ##~ op.group       = "proxy_config"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_environment
-  ##~ op.parameters.add @parameter_proxy_config_version_by_version
-  #
+  # Proxy Config Show
+  # GET /admin/api/services/{service_id}/proxy/configs/{environment}/{version}.json
   def show
     respond_with(proxy_config)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}/promote.json"
-  ##~ e.responseClass = "proxy_config"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "POST"
-  ##~ op.summary     = "Proxy Config Promote"
-  ##~ op.description = "Promotes a Proxy Config from one environment to another environment."
-  ##~ op.group       = "proxy_config"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_environment
-  ##~ op.parameters.add @parameter_proxy_config_version_by_version
-  ##~ op.parameters.add :name => "to", :description => "the name of the destination environment", :dataType => "string", :paramType => "query", :required => true
-  #
+  # Proxy Config Promote
+  # POST /admin/api/services/{service_id}/proxy/configs/{environment}/{version}/promote.json
   def promote
     destination_environment = params.require(:to)
     promoted_proxy_config   = proxy_config.clone_to(environment: destination_environment)

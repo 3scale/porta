@@ -3,65 +3,22 @@ class Admin::Api::ApplicationPlanMetricPricingRulesController < Admin::Api::Base
 
   wrap_parameters ::PricingRule, name: :pricing_rule
 
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules.xml"
-  ##~ e.responseClass = "List[pricing_rule]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.nickname   = "metric_pricing_rules"
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Pricing Rules List per Metric"
-  ##~ op.description    = "Returns the list of all pricing rules associated to a metric of an application plan."
-  ##~ op.group = "application_plan_pricing_rules"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  #
-
+  # Pricing Rules List per Metric
+  # GET /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules.xml
   def index
     respond_with(pricing_rules)
   end
 
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary   = "Pricing Rule Create"
-  ##~ op.description = "Creates a pricing rule for an associated application plan."
-  ##~ op.group = "application_plan_pricing_rules"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-
-  ##~ op.parameters.add :name => "min", :dataType => "int", :paramType => "query", :description => "From (min) hit"
-  ##~ op.parameters.add :name => "max", :dataType => "int", :paramType => "query", :description => "To (max) hit"
-  ##~ op.parameters.add :name => "cost_per_unit", :dataType => "decimal", :paramType => "query", :description => "Cost per unit"
-  #
+  # Pricing Rule Create
+  # POST /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules.xml
   def create
     pricing_rule = application_plan.pricing_rules.create(pricing_rule_params)
 
     respond_with(pricing_rule)
   end
 
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json"
-  ##~ e.responseClass = "pricing_rule"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary   = "Pricing Rule Delete"
-  ##~ op.description = "Deletes a pricing rule for a given application plan and metric."
-  ##~ op.group = "application_plan_pricing_rules"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add name: "id", description: "ID of the pricing rule.", dataType: "int", required: true, paramType: "path", threescale_name: "pricing_rule_ids"
-  #
+  # Pricing Rule Delete
+  # DELETE /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json
   def destroy
     pricing_rule = pricing_rules.find(params[:id])
     pricing_rule.destroy

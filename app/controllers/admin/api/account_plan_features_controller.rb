@@ -2,8 +2,11 @@ class Admin::Api::AccountPlanFeaturesController < Admin::Api::FeaturingsBaseCont
 
   before_action :authorize_account_plans!
 
-  # Account Plan Features List List | Create | Update
-  # GET | POST | DELETE /admin/api/account_plans/{account_plan_id}/features.xml
+  # Account Plan Feature List | Create
+  # GET | POST /admin/api/account_plans/{account_plan_id}/features.xml
+
+  # Account Plan Feature Delete
+  # DELETE /admin/api/account_plans/{account_plan_id}/features/{id}.xml
 
   protected
 
