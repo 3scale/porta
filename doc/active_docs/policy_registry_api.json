@@ -1,0 +1,193 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Policy Registry API",
+    "description": "API for managing the APIcast Policy Registry.",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/admin/api/registry/policies.json": {
+      "get": {
+        "summary": "APIcast Policy Registry List",
+        "description": "List the APIcast Policies",
+        "tags": [
+          "Policies"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "summary": "APIcast Policy Registry Create",
+        "description": "Creates an APIcast Policy",
+        "tags": [
+          "Policies"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the policy"
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Version of the policy"
+                  },
+                  "schema": {
+                    "type": "string",
+                    "description": "JSON Schema of the policy"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name",
+                  "version",
+                  "schema"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/registry/policies/{id}.json": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "ID of the policy. It can be an integer value or a combination 'name-version' of the policy (e.g. 'mypolicy-1.0')",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "summary": "APIcast Policy Registry Read",
+        "description": "Returns the APIcast policy by ID",
+        "tags": [
+          "Policies"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "summary": "APIcast Policy Registry Update",
+        "description": "Updates an APIcast Policy",
+        "tags": [
+          "Policies"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "New name of the policy"
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "New Version of the policy"
+                  },
+                  "schema": {
+                    "type": "string",
+                    "description": "New JSON Schema of the policy"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "summary": "APIcast Policy Registry Delete",
+        "description": "Deletes an APIcast policy by ID",
+        "tags": [
+          "Policies"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    }
+  }
+}

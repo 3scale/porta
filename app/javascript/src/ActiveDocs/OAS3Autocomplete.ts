@@ -11,17 +11,29 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* TODO: this module needs to be properly typed !!! */
 
-import { fetchData } from 'utilities/fetchData'
-
-import type { Response as SwaggerUIResponse } from 'swagger-ui'
-import type { AccountData } from 'Types/SwaggerTypes'
+import type { Request as SwaggerUIRequest, Response as SwaggerUIResponse } from 'swagger-ui'
+import type { AccountData, AccountDataResponse } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
 
 const X_DATA_PARAMS_DESCRIPTIONS = {
-  user_keys: 'First user key from latest 5 applications',
+  metric_names: 'Latest 5 metrics',
+  metric_ids: 'Latest 5 metrics',
+  app_keys: 'First application key from the latest five applications',
   app_ids: 'Latest 5 applications (across all accounts and services)',
-  app_keys: 'First application key from the latest five applications'
+  application_ids: 'Latest 5 applications',
+  user_keys: 'First user key from latest 5 applications',
+  account_ids: 'Latest 5 accounts',
+  access_token: 'Access Token',
+  user_ids: 'First user (admin) of the latest 5 account',
+  service_ids: 'Service IDs',
+  service_tokens: 'Service tokens',
+  admin_ids: 'Latest 5 users (admin) from your account',
+  service_plan_ids: 'Latest 5 service plans',
+  application_plan_ids: 'Latest 5 application plans',
+  account_plan_ids: 'Latest 5 account plans',
+  client_ids: 'Client IDs from the latest five applications',
+  client_secrets: 'Client secrets from the latest five applications'
 } as const
 
 const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
@@ -34,7 +46,7 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
     ? {
       ...param,
       examples: autocompleteData.reduce<{ summary: string; value: string }[]>((examples, item) => (
-        [...examples, { summary: item.name, value: item.value }]
+        [...examples, { summary: item.value ? `${item.name} - ${item.value}` : item.name, value: item.value }]
       ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param
@@ -100,14 +112,13 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+const autocompleteOAS3 = (response: SwaggerUIResponse, accountData: AccountDataResponse, serviceEndpoint: string): Response => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
-  const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
   let body = undefined
   try {
-    body = data.results
-      ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
+    body = accountData.results
+      ? injectAutocompleteToResponseBody(bodyWithServer, accountData.results)
       : bodyWithServer
   } catch (error: unknown) {
     console.error(error)
@@ -123,17 +134,16 @@ const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: str
 }
 
 /**
- * Intercept and process the response made by Swagger UI
- * Apply transformations (inject servers list and autocomplete data) to the response for OpenAPI spec requests, and
+ * Intercept the request, and if it fetches the OpenAPI specification, apply a custom responseInterceptor that applies
+ * transformations (inject servers list and autocomplete data) to the response
  * keep the responses to the actual API calls (made through 'Try it out') untouched
- * @param response response to the request made through Swagger UI
- * @param specUrl URL of the OpenAPI specification
- * @param accountDataUrl URL of the data for autocompletion
+ * @param request request made through Swagger UI
+ * @param accountData data for autocompletion
  * @param serviceEndpoint Public Base URL of the gateway, that will replace the  URL in the "servers" object
  */
-export const autocompleteInterceptor = (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string, specUrl?: string): Promise<Response> | SwaggerUIResponse => {
-  if (!response.url.includes(specUrl)) {
-    return response
+export const autocompleteRequestInterceptor = (request: SwaggerUIRequest, accountData: AccountDataResponse, serviceEndpoint: string): Promise<SwaggerUIRequest> | SwaggerUIRequest => {
+  if (request.loadSpec) {
+    request.responseInterceptor = (response: SwaggerUIResponse) => autocompleteOAS3(response, accountData, serviceEndpoint)
   }
-  return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+  return request
 }

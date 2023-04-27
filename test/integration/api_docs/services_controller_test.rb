@@ -61,8 +61,8 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         show_result = JSON.parse(response.body)
 
         assert_response :success
-        assert show_result.has_key?('basePath')
-        assert show_result.has_key?('apis')
+        assert show_result.has_key?('paths')
+        assert_match /^3\.[0-9]+\.[0-9]+$/, show_result["openapi"]
       end
     end
 
@@ -71,7 +71,17 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       get api_docs_service_path(format: :json, id: 'service_management_api')
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal backend_config[:public_url], json['basePath']
+      assert_equal backend_config[:public_url], json["servers"][0]["url"]
+    end
+
+    test 'show the relative "/" path for system APIs' do
+      system_apis = ApiDocs::ServicesController::API_SYSTEM_NAMES - [:service_management_api]
+      system_apis.each do |system_name|
+        get api_docs_service_path(format: :json, id: system_name)
+        assert_response :success
+        servers = JSON.parse(response.body)["servers"]
+        assert_equal [{ 'url' => '/' }], servers
+      end
     end
 
     test 'show backend_api endpoints only under rolling update enabled' do
@@ -79,7 +89,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       Logic::RollingUpdates.stubs(enabled?: true)
       select_endpoints = Proc.new do |api, collection_paths|
-        path = api['path']
+        path = api[0]
         collection_paths << path if path.match(name_or_path_regex)
       end
 
@@ -88,7 +98,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         # ignore stats endpoint
         name.to_s.match(name_or_path_regex) && name.to_s !~ /stats/
       }
-      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints).length
+      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['paths'].each_with_object(Set.new, &select_endpoints).length
     end
   end
 
@@ -102,14 +112,14 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       ThreeScale.config.stubs(onpremises: true)
       get '/api_docs/services/account_management_api.json'
 
-      select_endpoint = Proc.new { |api| api['path'] == '/admin/api/account_plans/{id}.xml' }
+      select_endpoint = Proc.new { |api| api == '/admin/api/account_plans/{id}.xml' }
       ThreeScale.config.stubs(onpremises: false)
       get '/api_docs/services/account_management_api.json'
-      assert_not_empty JSON.parse(response.body)['apis'].select(&select_endpoint)
+      assert_not_empty JSON.parse(response.body)['paths'].select(&select_endpoint)
 
       ThreeScale.config.stubs(onpremises: true)
       get '/api_docs/services/account_management_api.json'
-      assert_empty JSON.parse(response.body)['apis'].select(&select_endpoint)
+      assert_empty JSON.parse(response.body)['paths'].select(&select_endpoint)
     end
 
     def test_index_and_show
@@ -134,8 +144,8 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
           show_result = JSON.parse(response.body)
 
           assert_response :success
-          assert show_result.has_key?('basePath')
-          assert show_result.has_key?('apis')
+          assert show_result.has_key?('paths')
+          assert_match /^3\.[0-9]+\.[0-9]+$/, show_result["openapi"]
         end
       end
     end
@@ -147,22 +157,32 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def test_backend_base_host
       System::Application.config.stubs(backend_client: { url: 'example-localhost:3001', host: 'example.com' })
-      api_json = ApiFile.new('API', 'service_management_api').json
-      assert_equal 'example-localhost:3001', api_json['basePath']
+
+      api_json = ApiFile.new('Service Management API', 'service_management_api').json
+      assert_equal 'example-localhost:3001', api_json["servers"][0]["url"]
 
       System::Application.config.stubs(backend_client: { host: 'example.com' })
-      api_json = ApiFile.new('API', 'service_management_api').json
-      assert_equal 'https://example.com', api_json['basePath']
+      api_json = ApiFile.new('Service Management API', 'service_management_api').json
+      assert_equal 'https://example.com', api_json["servers"][0]["url"]
+    end
+
+    test 'servers url defaults to / for system apis' do
+      system_apis = ApiDocs::ServicesController::APIS.reject { |x| x[:system_name] == :service_management_api }
+
+      system_apis.each do |api|
+        api_json = ApiFile.new(api[:name], api[:system_name]).json
+        assert_equal '/', api_json["servers"][0]["url"]
+      end
     end
 
     def test_file_path
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: false)
-      api_file = ApiFile.new('API', 'service_management_api')
-      assert_not_match '(on-premises)', api_file.file_path.to_s
+      api_file = ApiFile.new('Service Management API', 'service_management_api')
+      assert_not_match '_on_premises', api_file.file_path.to_s
 
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: true)
-      api_file = ApiFile.new('API', 'service_management_api')
-      assert_match '(on-premises)', api_file.file_path.to_s
+      api_file = ApiFile.new('Service Management API', 'service_management_api')
+      assert_match '_on_premises', api_file.file_path.to_s
     end
   end
 
