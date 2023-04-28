@@ -26,7 +26,7 @@ class ApplicationHelperTest < ActionView::TestCase
     setup do
       @request = ActionDispatch::TestRequest.create
       @asset_host = 'cdn.3scale.test.localhost'
-      @full_asset_host = 'https://cdn.3scale.test.localhost'
+      @full_asset_host = "https://#{@asset_host}"
     end
 
     attr_reader :request
