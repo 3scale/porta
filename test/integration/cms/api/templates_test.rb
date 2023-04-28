@@ -116,10 +116,10 @@ module CMS
         assert_equal 2, response.parsed_body['collection'].size
       end
 
-      test 'index returns full data when receiving the :full parameter as true' do
+      test 'index returns content when receiving the :content parameter as true' do
         FactoryBot.create_list(:cms_page, 2, provider: @provider)
 
-        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, full: true}
+        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, content: true}
 
         assert_response :success
         assert_equal 2, response.parsed_body['collection'].size

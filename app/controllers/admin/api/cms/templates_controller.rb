@@ -14,7 +14,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   wrap_parameters :template, include: AVAILABLE_PARAMS,
                              format: %i[json multipart_form url_encoded_form]
 
-  forbid_extra_params :reject, whitelist: %i[id page per_page type layout_name section_name full]
+  forbid_extra_params :reject, whitelist: %i[id page per_page type layout_name section_name content]
 
   before_action :find_template, except: %i[index create]
 
@@ -35,7 +35,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_per_page
   def index
     templates = cms_templates.scope_search(search).paginate(pagination_params)
-    short = !full_data
+    short = !content?
     respond_with(templates, short: short, representer: CMS::TemplatesRepresenter)
   end
 
@@ -165,7 +165,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     current_account.templates.but(CMS::EmailTemplate, CMS::Builtin::LegalTerm).order(:id)
   end
 
-  def full_data
-    params[:full] == "true"
+  def content?
+    params[:content] == "true"
   end
 end
