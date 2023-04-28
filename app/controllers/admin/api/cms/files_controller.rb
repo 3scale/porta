@@ -2,12 +2,6 @@
 # The idea is that by default the section should be root section but this leaves
 # a bunch of untested branches out of the scope of this PR (e.g. does the account has a root section...)
 class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
-  ##~ sapi = source2swagger.namespace("CMS API")
-  ##~ sapi.resourcePath = "/admin/api/cms/templates"
-  ##~ sapi.swaggerVersion = "1.1"
-  ##~ sapi.apiVersion = "1.0"
-  #
-  ##~ @parameter_file_id = { :name => "id", :description => "ID of the file", :dataType => "int", :required => true, :paramType => "path" }
 
   MAX_PER_PAGE = 100
   DEFAULT_PER_PAGE = 20

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::BaseController
-  ##~ sapi = source2swagger.namespace("Account Management API")
 
   include ApiAuthentication::BySsoToken
 

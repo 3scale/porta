@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseController
-  ##~ sapi = source2swagger.namespace("Account Management API")
 
   represents :json, entity: ::ProxyRepresenter::JSON
   represents :xml, entity: ::ProxyRepresenter::XML

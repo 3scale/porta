@@ -2,51 +2,17 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   representer ::Cinstance
 
   paginate only: :index
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/applications.xml"
-  ##~ e.responseClass = "List[applications]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.nickname   ="applications"
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application List (all services)"
-  ##~ op.description = "Returns the list of applications across all services. Note that applications are scoped by service and can be paginated."
-  ##~ op.group = "application"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_page
-  ##~ op.parameters.add @parameter_per_page
-  ##~ op.parameters.add :name => "active_since", :description => "Filter date", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "active_since"
-  ##~ op.parameters.add :name => "inactive_since", :description => "Filter date", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "inactive_since"
-  ##~ op.parameters.add :name => "service_id", :description => "Filter by service", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "service_id"
-  ##~ op.parameters.add :name => "plan_id", :description => "Filter by plan", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "plan_id"
-  ##~ op.parameters.add :name => "plan_type", :description => "Filter by plan type", :dataType => "string", :allowableValues => {:values => ["free", "paid"], :valueType => "LIST"}, :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "plan_type"
-  #
 
+  # Application List (all services)
+  # GET /admin/api/applications.xml
   def index
     apps = applications.scope_search(search)
            .serialization_preloading.paginate(:page => current_page, :per_page => per_page)
     respond_with(apps)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/applications/find.xml"
-  ##~ e.responseClass = "application"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Find"
-  ##~ op.description = "Finds an application by keys used on the integration of your API and 3scale's Service Management API or by application ID."
-  ##~ op.group = "application"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_id_by_name
-  ##~ op.parameters.add :name => "user_key", :description => "user_key of the application (for user_key authentication mode).", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "user_keys"
-  ##~ op.parameters.add :name => "app_id", :description => "app_id of the application (for app_id/app_key and oauth authentication modes).", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "app_ids"
-  ##~ op.parameters.add :name => "service_id", :description => "Filter by service", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query", :threescale_name => "service_id"
-  #
+  # Application Find
+  # GET /admin/api/applications/find.xml
   def find
     respond_with(application)
   end

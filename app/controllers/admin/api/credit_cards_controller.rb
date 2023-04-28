@@ -4,33 +4,8 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
 
   before_action :find_buyer
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/accounts/{id}/credit_card.xml"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary = "Account Set Credit Card"
-  ##~ op.description = "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions"
-  ##~ op.group = "account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_account_id_by_id
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_token", :description => "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
-  ##~ op.parameters.add :dataType => "string", :required => false, :paramType => "query", :name => "credit_card_authorize_net_payment_profile_token", :description => "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_expiration_year", :description => "Year of expiration of credit card. Two digit number"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_expiration_month", :description => "Month of expiration of credit card. Two digit number"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "billing_address_name", :description => "Name of the person/company to bill"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "billing_address_address", :description => "Address associated to the credit card"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "billing_address_city", :description => "Billing address city"
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "billing_address_country", :description => "Billing address country"
-
-  ##~ op.parameters.add :dataType => "string", :paramType => "query", :name => "billing_address_state", :description => "Billing address state", :required => false
-  ##~ op.parameters.add :dataType => "string", :paramType => "query", :name => "billing_address_phone", :description => "Billing address phone", :required => false
-  ##~ op.parameters.add :dataType => "string", :paramType => "query", :name => "billing_address_zip", :description => "Billing address ZIP Code", :required => false
-  ##~ op.parameters.add :dataType => "string", :paramType => "query", :name => "credit_card_partial_number", :description => "Last four digits on the credit card"
-
-  ##~ @parameter_access_token = { :name => "access_token", :description => "A personal Access Token", :dataType => "string", :required => true, :paramType => "query", :threescale_name => "access_token" }
-
+  # Account Set Credit Card
+  # PUT /admin/api/accounts/{id}/credit_card.xml
   def update
     forced_parameters = :credit_card_token, :account_id, :billing_address_name, :billing_address_address,
                         :billing_address_city, :billing_address_country, :credit_card_expiration_year,
@@ -86,15 +61,8 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
     respond_with(@buyer)
   end
 
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary = "Account Delete Credit Card"
-  ##~ op.description = "Removes all credit card info of an account."
-  ##~ op.group = "account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_account_id_by_id
-
+  # Account Delete Credit Card
+  # DELETE /admin/api/accounts/{id}/credit_card.xml
   def destroy
     failed = nil
     unless failed = required_params(:account_id)

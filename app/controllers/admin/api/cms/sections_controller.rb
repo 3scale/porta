@@ -1,6 +1,4 @@
 class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
-  ##~ sapi = source2swagger.namespace("CMS API")
-  ##~ @parameter_section_id = { :name => "id", :description => "ID of the section", :dataType => "int", :required => true, :paramType => "path" }
 
   ALLOWED_PARAMS = %i[parent_id title system_name public partial_path].freeze
   wrap_parameters :section, include: ALLOWED_PARAMS

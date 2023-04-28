@@ -12,12 +12,10 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
   before_action :find_plan_for_upgrade, only: :plan_upgrade
 
-  ##~ @parameter_account_id_by_id = {:name => "id", :description => "ID of the account.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "account_ids"}
-
   # Change the partner of a provider account
   #
   # Params:
-  # - application_plan: system_name should be valid for the partneter
+  # - application_plan: system_name should be valid for the partner
   # - partner: system_name, could be nil
   # - api_key: API KEY of master account
   #
@@ -34,31 +32,8 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     render json: @provider.as_json(include: [:bought_cinstance, :partner])
   end
 
-  # swagger
-  ##~ @base_path = ""
-  #
-  ##~ sapi = source2swagger.namespace("Master API")
-  ##~ sapi.basePath     = @base_path
-  ##~ sapi.swaggerVersion = "0.1a"
-  ##~ sapi.apiVersion   = "1.0"
-  #
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/master/api/providers.xml"
-  ##~ e.responseClass = "signup"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary = "Tenant Create"
-  ##~ op.description = "This request allows you to reproduce a sign-up from a tenant in a single API call. It will create an Account, an Admin User for the account, and optionally an Application with its keys. If the plan_id is not passed, the default plan will be used instead. You can add additional custom parameters in Fields Definition on your Admin Portal."
-  ##~ op.group = "signup"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "org_name", :description => "Organization Name of the tenant account.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "username", :description => "Username of the admin user (on the new tenant account).", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "email", :description => "Email of the admin user.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "password", :description => "Password of the admin user.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add @parameter_extra
-  #
+  # Tenant Create
+  # POST /master/api/providers.xml
   def create
     signup_result = Signup::ProviderAccountManager.new(current_account).create(create_params, ::Signup::ResultWithAccessToken)
 
@@ -70,31 +45,8 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     respond_with(signup_result)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/master/api/providers/{id}.xml"
-  ##~ e.responseClass = "provider"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary = "Tenant Update"
-  ##~ op.description = "Updates email addresses used to deliver email notifications to customers."
-  ##~ op.group = "account"
-  #
-  ##~ @parameter_from_email = {:name => "from_email", :description => "New outgoing email.", :dataType => "string", :paramType => "query"}
-  ##~ @parameter_support_email = {:name => "support_email", :description => "New support email.", :dataType => "string", :paramType => "query"}
-  ##~ @parameter_finance_support_email = {:name => "finance_support_email", :description => "New finance support email.", :dataType => "string", :paramType => "query"}
-  ##~ @parameter_site_access_code = {:name => "site_access_code", :description => "Developer Portal Access Code.", :dataType => "string", :paramType => "query"}
-  ##~ @parameter_state_event = {:name => "state_event", :description => "Change the state of the tenant. It can be either 'make_pending', 'approve', 'reject', 'suspend', or 'resume' depending on the current state", :dataType => "string", :required => false, :paramType => "query"}
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_account_id_by_id
-  ##~ op.parameters.add @parameter_from_email
-  ##~ op.parameters.add @parameter_support_email
-  ##~ op.parameters.add @parameter_finance_support_email
-  ##~ op.parameters.add @parameter_site_access_code
-  ##~ op.parameters.add @parameter_state_event
-  ##~ op.parameters.add @parameter_extra
-  #
+  # Tenant Update
+  # PUT /master/api/providers/{id}.xml
   def update
     provider_account.assign_attributes(update_params, without_protection: true)
     provider_account.assign_unflattened_attributes(params.require(:account))
@@ -103,37 +55,15 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     respond_with signup_result_with_nil_token
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/master/api/providers/{id}.xml"
-  ##~ e.responseClass = "provider"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Tenant Delete"
-  ##~ op.description = "Schedules a tenant account to be permanently deleted in 15 days. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. When a tenant account is scheduled for deletion it can no longer be edited (except except its state) and its admin portal and developer portal cannot be accessible. Update with 'resume' state event to unschedule a tenant for deletion."
-  ##~ op.group = "account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_account_id_by_id
-  #
+  # Tenant Delete
+  # DELETE /master/api/providers/{id}.xml
   def destroy
     provider_account.schedule_for_deletion!
     respond_with provider_account
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/master/api/providers/{id}.xml"
-  ##~ e.responseClass = "provider"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Tenant Show"
-  ##~ op.description = "Show a tenant account."
-  ##~ op.group = "account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_account_id_by_id
-  #
+  # Tenant Show
+  # GET /master/api/providers/{id}.xml
   def show
     respond_with signup_result_with_nil_token
   end

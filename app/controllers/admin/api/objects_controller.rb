@@ -8,18 +8,8 @@ class Admin::Api::ObjectsController < Admin::Api::BaseController
 
   before_action :authorize!
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/objects/status.json"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Object deletion status for objects that are deleted asynchronously"
-  ##~ op.description = "Returns an object status. (200/404). Useful for those objects that deleted asynchronously in order to know if the deletion has been completed(404) or not(200)"
-  ##~ op.group = "objects"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "object_type", :description => "Object type has to be service, account, proxy or backend_api."
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "object_id", :description => "Object ID."
+  # Object deletion status for objects that are deleted asynchronously
+  # GET /admin/api/objects/status.json
   def status
     status_object = status_object_type.classify.constantize.unscoped.find(status_object_id)
 

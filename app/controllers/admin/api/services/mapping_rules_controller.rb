@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseController
-  ##~ sapi = source2swagger.namespace("Account Management API")
 
   represents :json, entity: ::ProxyRuleRepresenter::JSON, collection: ::ProxyRulesRepresenter::JSON
   represents :xml, entity: ::ProxyRuleRepresenter::XML, collection: ::ProxyRulesRepresenter::XML

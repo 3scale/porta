@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::Proxy::OIDCConfigurationsController < Admin::Api::Services::BaseController
-  ##~ sapi = source2swagger.namespace("Account Management API")
 
   representer ::OIDCConfiguration
   wrap_parameters name: :oidc_configuration, include: OIDCConfiguration::Config::ATTRIBUTES
