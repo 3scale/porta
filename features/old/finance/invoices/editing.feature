@@ -7,7 +7,7 @@ Feature: Edit Invoice
   Background:
     Given a provider is logged in
     And the provider is charging its buyers
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob" signed up to provider "foo.3scale.localhost" on 1st January 2011
     And an invoice of buyer "bob" for January, 2011
     And an invoice of buyer "bob" for February, 2011
 

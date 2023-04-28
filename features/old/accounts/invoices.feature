@@ -8,7 +8,7 @@ Feature: Show invoices from account's page (#16015909)
     Given a provider is logged in
     And the provider is charging its buyers in prepaid mode
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
-    And a buyer "zoidberg" signed up to application plan "Fixed"
+    And a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2011
     And an invoice of buyer "zoidberg" for January, 2011
     When I go to the buyer account page for "zoidberg"
     And I follow "1 Invoice"
@@ -29,7 +29,7 @@ Feature: Show invoices from account's page (#16015909)
     Given a provider is logged in
     And the provider is charging its buyers in prepaid mode
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
-    And a buyer "zoidberg" signed up to application plan "Fixed"
+    And a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2011
     And an invoice of buyer "zoidberg" for January, 2011
     And I go to the buyer account page for "zoidberg"
     And I follow "1 Invoice"
