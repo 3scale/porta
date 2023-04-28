@@ -141,9 +141,11 @@ module Finance::Api
       end
 
       test 'filter by month' do
-        FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer, period: Month.new(1022,5))
+        # Create an invoice 2 months after the first one
+        new_invoice_period = @buyer.invoices.last.period.next.next
+        FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer, period: new_invoice_period)
 
-        get "/api/#{@context}invoices.xml?provider_key=#{@key}&month=1022-05"
+        get "/api/#{@context}invoices.xml?provider_key=#{@key}&month=#{new_invoice_period.to_param}"
 
         assert_response :success
 

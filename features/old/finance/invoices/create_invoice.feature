@@ -7,7 +7,7 @@ Feature: Create invoice
     Given a provider is logged in
     And the provider is charging its buyers in prepaid mode
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
-    And a buyer "zoidberg" signed up to application plan "Fixed"
+    And a buyer "zoidberg" signed up to application plan "Fixed" on 1st Jan 2009
 
   @javascript
   Scenario: Create and view the invoice
