@@ -46,7 +46,7 @@ And "buyers will receive new invoices with that currency" do
   buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   buyer.buy!(@provider.account_plans.default)
 
-  create_invoice(buyer, tested_invoice_date)
+  create_invoice(buyer)
 
   visit admin_finance_root_path
   assert has_css?('td.u-amount', text: 'EUR')
@@ -57,7 +57,7 @@ And "a buyer has been billed monthly" do
   @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   @buyer.buy!(@provider.account_plans.default)
 
-  create_invoice(@buyer, tested_invoice_date)
+  create_invoice(@buyer, @buyer.created_at)
 end
 
 Then "they can set the billing period to yearly" do
@@ -69,8 +69,9 @@ end
 
 And "only new invoices will change their id" do
   assert @provider.reload.billing_strategy.billing_yearly?
-  assert_equal "2022-12-00000001", @buyer.invoices.last.friendly_id # Month period defined by tested_invoice_date
-  assert_equal "2022-00000001", @provider.billing_strategy.next_available_friendly_id(Month.new(tested_invoice_date))
+  last_invoice = @buyer.invoices.last
+  assert_equal "#{last_invoice.period.to_param}-00000001", last_invoice.friendly_id
+  assert_equal "#{last_invoice.period.begin.year}-00000001", @provider.billing_strategy.next_available_friendly_id(last_invoice.period)
 end
 
 Given "{provider} is billing but not charging" do |provider|
