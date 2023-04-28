@@ -975,10 +975,6 @@ workflows:
       - licenses:
           requires:
             - dependencies_bundler
-      - swagger:
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           requires:
             - dependencies_npm
@@ -988,7 +984,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter
@@ -1153,11 +1148,6 @@ workflows:
           executor: builder-ruby26
           requires:
             - dependencies_bundler
-      - swagger:
-          executor: builder-ruby26
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           executor: builder-ruby26
           requires:
@@ -1169,7 +1159,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter
