@@ -8,7 +8,7 @@ import {
   DataList,
   Title
 } from '@patternfly/react-core'
-import { CubeIcon } from '@patternfly/react-icons'
+import CubeIcon from '@patternfly/react-icons/dist/js/icons/cube-icon'
 
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import { createReactWrapper } from 'utilities/createReactWrapper'

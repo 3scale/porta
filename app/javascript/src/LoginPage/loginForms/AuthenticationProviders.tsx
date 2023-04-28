@@ -1,4 +1,6 @@
-import { GreaterThanIcon, KeyIcon, LessThanIcon } from '@patternfly/react-icons'
+import GreaterThanIcon from '@patternfly/react-icons/dist/js/icons/greater-than-icon'
+import KeyIcon from '@patternfly/react-icons/dist/js/icons/key-icon'
+import LessThanIcon from '@patternfly/react-icons/dist/js/icons/less-than-icon'
 
 import type { FunctionComponent } from 'react'
 
