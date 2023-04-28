@@ -45,13 +45,13 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       assert_response :success
     end
 
-    def test_destroy_locked
+    def test_destroy_unprocessable
       # builtin pages cannot be destroyed
       page = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
       delete :destroy, params: { id: page.id, format: :json, access_token: @token }
 
-      assert_response :locked
+      assert_response :unprocessable_entity
     end
 
     private
