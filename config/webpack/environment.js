@@ -42,13 +42,13 @@ environment.loaders.append('yaml', {
  */
 const { output } = environment.config;
 const oldPublicPath = output.publicPath
-output.publicPath = '';
+output.publicPath = ''
 
 const fileLoader = environment.loaders.get('file');
 Object.assign(fileLoader.use[0].options, {
   publicPath: oldPublicPath,
   postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
-});
+})
 
 environment.config.merge({
   optimization: {
