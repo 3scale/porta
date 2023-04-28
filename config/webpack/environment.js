@@ -62,4 +62,12 @@ Object.assign(fileLoader.use[0].options, {
   postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
 });
 
+environment.config.merge({
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    }
+  }
+})
+
 module.exports = environment

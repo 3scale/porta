@@ -5,7 +5,7 @@ html[lang="en" class="pf-m-redhat-font"]
     title 3scale Login
     = csrf_meta_tag
     = rails_asset_url_tag
-    = javascript_pack_tag 'login'
+    = javascript_packs_with_chunks_tag 'login'
 
   body class="login-layout"
     = yield
