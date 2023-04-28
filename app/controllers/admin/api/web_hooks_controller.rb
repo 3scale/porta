@@ -5,36 +5,8 @@ class Admin::Api::WebHooksController < Admin::Api::BaseController
 
   wrap_parameters ::WebHook
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/webhooks.json"
-  ##~ e.responseClass = "webhook"
-  #
-  ##~ op             = e.operations.add
-  ##~ op.httpMethod  = "PUT"
-  ##~ op.summary     = "WebHooks Update"
-  ##~ op.description = "Updates webhooks."
-  ##~ op.group       = "webhook"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "url", :description => "URL that will be notified about all the events", :dataType => "string", :paramType => "query"
-  ##~ op.parameters.add :name => "active", :description => "Activate/Disable WebHooks", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "provider_actions", :description => "Dashboard actions fire webhooks. If false, only user actions in the portal trigger events.", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "account_created_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "account_updated_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "account_deleted_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "user_created_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "user_updated_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "user_deleted_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_created_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_updated_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_deleted_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "account_plan_changed_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_plan_changed_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_user_key_updated_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_key_created_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_key_deleted_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_suspended_on", :dataType => "boolean", :paramType => "query"
-  ##~ op.parameters.add :name => "application_key_updated_on", :dataType => "boolean", :paramType => "query"
+  # WebHooks Update
+  # PUT /admin/api/webhooks.json
   def update
     webhook.update_attributes(webhook_params)
     respond_with(webhook)

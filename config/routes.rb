@@ -299,7 +299,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       namespace :api_docs do
         resource :account_data, :only => [:show]
-        resources :specs, only: :show
       end
 
       scope 'applications/:application_id', :as => :application do

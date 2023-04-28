@@ -533,27 +533,6 @@ jobs:
           destination: licenses
       - notify_failure
 
-  swagger:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby26
-    executor:
-      name: << parameters.executor >>
-    steps:
-      - checkout
-      - *attach-to-workspace
-      - *use-example-config-files
-      - run:
-          name: Swagger validation
-          command: |
-            bundle exec rake doc:swagger:validate:all
-            bundle exec rake doc:swagger:generate:all
-      - store_artifacts:
-          path: doc/active_docs
-          destination: active_docs
-      - notify_failure
-
   jest:
     resource_class: medium+
     parameters:
@@ -996,10 +975,6 @@ workflows:
       - licenses:
           requires:
             - dependencies_bundler
-      - swagger:
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           requires:
             - dependencies_npm
@@ -1009,7 +984,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter
@@ -1174,11 +1148,6 @@ workflows:
           executor: builder-ruby26
           requires:
             - dependencies_bundler
-      - swagger:
-          executor: builder-ruby26
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           executor: builder-ruby26
           requires:
@@ -1190,7 +1159,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter

@@ -2,40 +2,14 @@ class Admin::Api::ApplicationPlanMetricLimitsController < Admin::Api::BaseContro
   wrap_parameters UsageLimit
   representer UsageLimit
 
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits.xml"
-  ##~ e.responseClass = "List[limit]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.nickname   = "limits"
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary = "Limit List per Metric"
-  ##~ op.description    = "Returns the list of all limits associated to a metric of an application plan."
-  ##~ op.group = "application_plan_limit"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  #
+  # Limit List per Metric
+  # GET /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits.xml
   def index
     respond_with(usage_limits)
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Limit Create"
-  ##~ op.description = "Adds a limit to a metric of an application plan. All applications with the application plan (application_plan_id) will be constrained by this new limit on the metric (metric_id)."
-  ##~ op.group = "application_plan_limit"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  #
-  ##~ op.parameters.add @parameter_limit_period
-  ##~ op.parameters.add :name => "value", :description => "Value of the limit.", :dataType => "int", :required => true, :paramType => "query", :allowMultiple => false
-  #
+  # Limit Create
+  # POST /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits.xml
   def create
     usage_limit = usage_limits.new(usage_limit_params)
     usage_limit.plan = application_plan
@@ -45,55 +19,22 @@ class Admin::Api::ApplicationPlanMetricLimitsController < Admin::Api::BaseContro
     respond_with(usage_limit)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml"
-  ##~ e.responseClass = "application_plan_limit"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Limit Read"
-  ##~ op.description = "Returns a limit on a metric of an application plan."
-  ##~ op.group = "application_plan_limit"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_limit_id_by_id
-  #
+  # Limit Read
+  # GET /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml
   def show
     respond_with(usage_limit)
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Limit Update"
-  ##~ op.description = "Updates a limit on a metric of an application plan."
-  ##~ op.group = "application_plan_limit"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_limit_id_by_id
-  ##~ op.parameters.add @parameter_limit_period
-  ##~ op.parameters.add :name => "value", :description => "Value of the limit.", :dataType => "int", :required => false, :paramType => "query", :allowMultiple => false
-  #
+  # Limit Update
+  # PUT /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml
   def update
     usage_limit.update_attributes(usage_limit_params)
 
     respond_with(usage_limit)
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Limit Delete"
-  ##~ op.description = "Deletes a limit on a metric of an application plan."
-  ##~ op.group = "application_plan_limit"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_plan_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_limit_id_by_id
-  #
+  # Limit Delete
+  # DELETE /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml
   def destroy
     usage_limit.destroy
 

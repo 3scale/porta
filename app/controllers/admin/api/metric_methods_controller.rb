@@ -3,107 +3,35 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   wrap_parameters Metric, include: [ :name, :system_name, :friendly_name, :unit, :description ]
   representer Method
 
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/metrics/{metric_id}/methods.xml"
-  ##~ e.responseClass = "List[methods]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Service Method List"
-  ##~ op.description = "List the methods of a metric that belongs to a service. Methods are metrics that are children of a parent metric."
-  ##~ op.group = "metric_method"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  #
+  # Service Method List
+  # GET /admin/api/services/{service_id}/metrics/{metric_id}/methods.xml
   def index
     respond_with(metric_methods)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/metrics/{metric_id}/methods.xml"
-  ##~ e.responseClass = "method"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Service Method Create"
-  ##~ op.description = "Creates a method under a metric that belongs to a service."
-  ##~ op.group = "metric_method"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add :name => "friendly_name", :description => "Name of the method.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "system_name", :description => "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "unit", :description => "Measure unit of the method.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "description", :description => "Description of the method.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
-  #
+  # Service Method Create
+  # POST /admin/api/services/{service_id}/metrics/{metric_id}/methods.xml
   def create
     metric_method = metric_methods.create(create_params)
     respond_with(metric_method)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml"
-  ##~ e.responseClass = "method"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Service Method Read"
-  ##~ op.description = "Returns the method of a metric that belongs to a service."
-  ##~ op.group = "metric_method"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_method_id_by_id
-  #
+  # Service Method Read
+  # GET /admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml
   def show
     respond_with(metric_method)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml"
-  ##~ e.responseClass = "method"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Service Method Update"
-  ##~ op.description = "Updates a method of a metric that belongs to a service."
-  ##~ op.group = "metric_method"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_method_id_by_id
-  ##~ op.parameters.add :name => "friendly_name", :description => "Name of the method.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "unit", :description => "Measure unit of the method.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "description", :description => "Description of the method.", :dataType => "text", :allowMultiple => false, :required => false, :paramType => "query"
-  #
+  # Service Method Update
+  # PUT /admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml
   def update
     metric_method.update_attributes(update_params)
 
     respond_with(metric_method)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Service Method Delete"
-  ##~ op.description = "Deletes the method of a metric that belongs to a service."
-  ##~ op.group = "metric_method"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_metric_id_by_id_name
-  ##~ op.parameters.add @parameter_method_id_by_id
-  #
+  # Service Method Delete
+  # DELETE /admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml
   def destroy
     metric_method.destroy
 

@@ -7,130 +7,45 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   before_action :deny_on_premises_for_master
   before_action :authorize_manage_plans, only: %i[create destroy]
 
-  ##~ @parameter_application_plan_state_event = {:name => "state_event", :description => "State event of the application plan. It can be 'publish' or 'hide'", :dataType => "string", :required => false, :paramType => "query"}
+  # Application Plan List (all services)
+  # GET /admin/api/application_plans.xml
 
-  # swagger (this is the unnested "fast track" route to get all app_plans)
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/application_plans.xml"
-  ##~ e.responseClass = "List[application_plan]"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Plan List (all services)"
-  ##~ op.description = "Returns the list of all application plans across services. Note that application plans are scoped by service."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  #
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/application_plans.xml"
-  ##~ e.responseClass = "List[application_plan]"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Plan List"
-  ##~ op.description = "Returns the list of all application plans of a service."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  #
+  # Application Plan List
+  # GET /admin/api/services/{service_id}/application_plans.xml
   def index
     respond_with(application_plans)
   end
 
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "Application Plan Create"
-  ##~ op.description = "Creates an application plan."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add :name => "name", :description => "Name of the application plan.", :dataType => "string", :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Applications require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "cost_per_month", :description => "Cost per month", :dataType => "decimal", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "setup_fee", :description => "Setup fee", :dataType => "decimal", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "trial_period_days", :description => "Trial period days", :dataType => "integer", :required => false, :paramType => "query"
-  ##~ op.parameters.add @parameter_system_name_by_name
-  ##~ op.parameters.add @parameter_application_plan_state_event
-  #
+  # Application Plan Create
+  # POST /admin/api/services/{service_id}/application_plans.xml
   def create
     application_plan = application_plans.create(application_plan_create_params)
     respond_with(application_plan)
   end
 
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/services/{service_id}/application_plans/{id}.xml"
-  ##~ e.responseClass = "application_plan"
-  #
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Plan Read"
-  ##~ op.description = "Returns and application plan."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_application_plan_id_by_id
-  #
+  # Application Plan Read
+  # GET /admin/api/services/{service_id}/application_plans/{id}.xml
   def show
     respond_with(application_plan)
   end
 
-  ##~ op = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Application Plan Update"
-  ##~ op.description = "Updates an application plan."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_application_plan_id_by_id
-  ##~ op.parameters.add :name => "name", :description => "Name of the application plan.", :dataType => "string", :paramType => "query"
-  ##~ op.parameters.add :name => "approval_required", :description => "Set the 'Applications require approval?' to 'true' or 'false'", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "cost_per_month", :description => "Cost per month", :dataType => "decimal", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "setup_fee", :description => "Setup fee", :dataType => "decimal", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "trial_period_days", :description => "Trial period days", :dataType => "integer", :required => false, :paramType => "query"
-  ##~ op.parameters.add @parameter_application_plan_state_event
-  #
+  # Application Plan Update
+  # PUT /admin/api/services/{service_id}/application_plans/{id}.xml
   def update
     application_plan.update_attributes(application_plan_update_params)
     respond_with(application_plan)
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "Application Plan Delete"
-  ##~ op.description = "Deletes an application plan."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_application_plan_id_by_id
-  #
+  # Application Plan Delete
+  # DELETE /admin/api/services/{service_id}/application_plans/{id}.xml
   def destroy
     application_plan.destroy
 
     respond_with(application_plan)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path   = "/admin/api/services/{service_id}/application_plans/{id}/default.xml"
-  ##~ e.responseClass = "application_plan"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "Application Plan Set to Default"
-  ##~ op.description = "Makes the application plan the default one. New applications will be assigned to the default plan unless an application_plan_id is explicity passed (e.g. on the signup express operation)."
-  ##~ op.group = "application_plan"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id_by_id_name
-  ##~ op.parameters.add @parameter_application_plan_id_by_id
-  #
+  # Application Plan Set to Default
+  # PUT /admin/api/services/{service_id}/application_plans/{id}/default.xml
   def default
     service.update_attribute(:default_application_plan, application_plan)
     respond_with(application_plan)

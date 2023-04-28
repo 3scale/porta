@@ -7,7 +7,6 @@ production:
   forum: false
   instant_bill_plan_change: false
   new_notification_system: true
-  new_provider_documentation: false
   plan_changes_wizard: false
   policy_registry: true
   proxy_private_base_path: true
