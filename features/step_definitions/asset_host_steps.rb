@@ -29,7 +29,7 @@ Then /^((javascript|font)\s)?assets shouldn't be loaded from the asset host$/ do
   assert_not_nil Capybara.page.source.match font_regexp if ['font', nil].include? asset_type
 end
 
-Then /^provided assets should be loaded from the asset host$/ do
+Then /^cdn assets should be loaded from the asset host$/ do
   cdn_url = Rails.configuration.three_scale.asset_host.presence
   is_full_url = cdn_url.match? %r{^https?://}
   js_regexp =  %r{#{is_full_url ? '' : 'https?://'}#{cdn_url}/dev-portal-assets/.*?\.js}

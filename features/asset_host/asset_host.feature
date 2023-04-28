@@ -46,10 +46,10 @@ Feature: Asset host
       Given the asset host is set to "cdn.3scale.localhost"
       When the buyer logs in to the provider
       Then javascript assets should be loaded from the asset host
-      And provided assets should be loaded from the asset host
+      And cdn assets should be loaded from the asset host
 
     Scenario: Developer portal with asset host configured as full URL
       Given the asset host is set to "http://cdn.3scale.localhost"
       When the buyer logs in to the provider
       Then javascript assets should be loaded from the asset host
-      Then provided assets should be loaded from the asset host
+      Then cdn assets should be loaded from the asset host
