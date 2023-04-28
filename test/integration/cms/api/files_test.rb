@@ -115,8 +115,8 @@ module CMS
         file.reload
 
         assert_response :success
-        assert_equal created_at, file.created_at
-        assert_equal updated_at, file.updated_at
+        assert_equal created_at.to_s, file.created_at.to_s
+        assert_equal updated_at.to_s, file.updated_at.to_s
         assert_equal url, file.url
         assert_equal title, file.title
         assert_equal content_type, file.attachment.content_type

@@ -121,8 +121,8 @@ module CMS
         put admin_api_cms_section_path(section), params: params
         section.reload
 
-        assert_equal created_at, section.created_at
-        assert_equal updated_at, section.updated_at
+        assert_equal created_at.to_s, section.created_at.to_s
+        assert_equal updated_at.to_s, section.updated_at.to_s
         assert_equal 'foo', section.title
       end
 

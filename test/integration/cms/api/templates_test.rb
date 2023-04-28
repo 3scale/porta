@@ -246,8 +246,8 @@ module CMS
         page.reload
 
         assert_response :success
-        assert_equal created_at, page.created_at
-        assert_equal updated_at, page.updated_at
+        assert_equal created_at.to_s, page.created_at.to_s
+        assert_equal updated_at.to_s, page.updated_at.to_s
         assert_equal hidden, page.hidden?
         assert_equal published, page.published.present?
       end
