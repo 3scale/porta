@@ -151,8 +151,9 @@ GEM
     ansi (1.5.0)
     arel (9.0.0)
     ast (2.4.2)
-    audited (5.0.2)
+    audited (5.3.3)
       activerecord (>= 5.0, < 7.1)
+      request_store (~> 1.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.607.0)
     aws-record (2.7.0)
@@ -907,7 +908,7 @@ DEPENDENCIES
   addressable
   after_commit_queue (~> 1.1.0)
   analytics-ruby
-  audited (~> 5.0.2)
+  audited (~> 5.3.3)
   aws-sdk-rails (~> 3)
   aws-sdk-s3 (~> 1)
   baby_squeel (~> 1.4.3)
