@@ -1,1 +1,1 @@
-require_dependency 'tracking_notifications'
+require 'tracking_notifications'

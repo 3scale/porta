@@ -8,15 +8,14 @@ module Liquid
         super
       end
 
-      def find_templates(name, prefix, partial, details, outside_app_allowed = false)
+      def _find_all(name, prefix, partial, details, key = nil, locals = [])
         path = build_path(name, prefix = nil, partial)
 
         # force just liquid format
         details = details.merge(handlers: [:liquid])
 
-        query(path, details, details[:formats], outside_app_allowed)
+        query(path, details, details[:formats], locals, cache: !!key)
       end
-
     end
   end
 end
