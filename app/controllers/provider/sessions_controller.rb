@@ -25,6 +25,9 @@ class Provider::SessionsController < FrontendController
       self.current_user = @user
       create_user_session!(strategy.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
+
+      AuditLogService.call("Signed in: #{self.current_user.username} #{self.current_user.id} #{self.current_user.first_name} #{self.current_user.last_name}")
+
       redirect_back_or_default provider_admin_path
     else
       @session = Session.new
@@ -43,6 +46,9 @@ class Provider::SessionsController < FrontendController
     user = current_user
     logout_killing_session!
     destroy_user_session!
+
+    AuditLogService.call("destroy_user_session: #{user.username} #{user.id} #{user.first_name} #{user.last_name}")
+
     if @provider.partner? && (logout_url = @provider.partner.logout_url)
       redirect_to logout_url + {user_id: user.id, provider_id: @provider.id}.to_query
     else
