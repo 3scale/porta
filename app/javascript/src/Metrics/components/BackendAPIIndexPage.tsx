@@ -40,7 +40,7 @@ const BackendAPIIndexPage: FunctionComponent<Props> = ({
         <List>
           <ListItem>Method calls trigger the <i>Hits</i> metric.</ListItem>
           <ListItem>To have specific calls to your backend tracked by specific methods, you must map a method to one or more URL patterns listed in <a href={mappingRulesPath}>Mapping rules</a>.</ListItem>
-          <ListItem>Define usage limits and pricing rules for individual methods from within a product's Application plan.</ListItem>
+          <ListItem>Define usage limits and pricing rules for individual methods from within a product&apos;s Application plan.</ListItem>
         </List>
       </>
     )}

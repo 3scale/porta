@@ -58,8 +58,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
             name="policy-enabled"
             type="checkbox"
             onChange={togglePolicy}
-          />
-          Enabled
+          />Enabled
         </label>
       )}
       {isPolicyVisible && (
