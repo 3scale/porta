@@ -129,8 +129,7 @@ const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = (
           type="checkbox"
           value=""
           onChange={() => { onChange('services') }}
-        />
-        All current and future existing API products
+        />All current and future existing API products
       </label>
       {blankServiceIdsInput}
     </li>
