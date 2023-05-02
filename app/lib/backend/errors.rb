@@ -13,7 +13,7 @@ module Backend
     'provider.invalid_transaction_id' => 'transaction does not exist'
   }.freeze
 
-  class Error < StandardError
+  class Errors < StandardError
     attr_reader :code
 
     def initialize(code, message = nil)
@@ -29,55 +29,55 @@ module Backend
     end
   end
 
-  class ServiceNotFound < Error
+  class ServiceNotFound < Errors
     def initialize
       super('provider.invalid_service')
     end
   end
 
-  class UserKeyInvalid < Error
+  class UserKeyInvalid < Errors
     def initialize
       super('user.invalid_key')
     end
   end
 
-  class ContractNotActive < Error
+  class ContractNotActive < Errors
     def initialize
       super('user.inactive_contract')
     end
   end
 
-  class LimitsExceeded < Error
+  class LimitsExceeded < Errors
     def initialize(message = nil)
       super('user.exceeded_limits', message)
     end
   end
 
-  class CreditExceeded < Error
+  class CreditExceeded < Errors
     def initialize
       super('user.exceeded_credit')
     end
   end
 
-  class ProviderKeyInvalid < Error
+  class ProviderKeyInvalid < Errors
     def initialize
       super('provider.invalid_key')
     end
   end
 
-  class MetricNotFound < Error
+  class MetricNotFound < Errors
     def initialize
       super('provider.invalid_metric')
     end
   end
 
-  class UsageValueInvalid < Error
+  class UsageValueInvalid < Errors
     def initialize
       super('provider.invalid_usage_value')
     end
   end
 
-  class TransactionNotFound < Error
+  class TransactionNotFound < Errors
     def initialize
       super('provider.invalid_transaction_id')
     end
