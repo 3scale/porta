@@ -32,7 +32,7 @@ module PlanRuleLoader
   end
 
   def sort_by_rank(yaml)
-    yaml.sort_by { |_, attributes| Integer(attributes['rank']) }
+    yaml.sort_by { |_, attributes| Integer(attributes[:rank]) }
   end
 
   def convert_to_hash_with_plan_rule_objects(config)
