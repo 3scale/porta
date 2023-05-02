@@ -1,8 +1,10 @@
 module Liquid
   class Template
     class Handler
-      def self.call(template)
-        "Liquid::Template::Handler.new(self).render(#{template.source.inspect}, local_assigns)"
+      # DEPRECATION WARNING: Single arity template handlers are deprecated. Template handlers must
+      # now accept two parameters, the view object and the source for the view object.
+      def self.call(template, source = template.source)
+        "Liquid::Template::Handler.new(self).render(#{source.inspect}, local_assigns)"
       end
 
       def initialize(view)
