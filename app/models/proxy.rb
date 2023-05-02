@@ -10,6 +10,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ModelExtension
 
+  audited :allow_mass_assignment => true
+
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
@@ -684,3 +686,5 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
 end
+
+PoliciesConfig = Proxy::PoliciesConfig
