@@ -1,9 +1,4 @@
-require_dependency 'events/event'
-
-require_dependency 'events/importers/base_importer'
-require_dependency 'events/importers/first_traffic_importer'
-require_dependency 'events/importers/first_daily_traffic_importer'
-require_dependency 'events/importers/alert_importer'
+# frozen_string_literal: true
 
 module Events
   module Importer

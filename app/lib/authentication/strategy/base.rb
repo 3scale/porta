@@ -80,7 +80,7 @@ module Authentication
 
       def authentication_provider_id
         authentication_provider.try(:id)
-      rescue Authentication::Strategy::Oauth2Base::MissingAuthenticationProvider
+      rescue Authentication::Strategy::OAuth2Base::MissingAuthenticationProvider
         nil
       end
     end

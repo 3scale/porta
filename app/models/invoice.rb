@@ -1,7 +1,4 @@
-require_dependency 'pdf/finance/invoice_report_data'
-require_dependency 'pdf/finance/invoice_generator'
-
-require_dependency 'month'
+# frozen_string_literal: true
 
 # TODO: add uniqueness check on provider/buyer/period scope
 #

@@ -13,7 +13,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     provider_user = FactoryBot.create(:user, account: @provider)
     provider_user.activate!
 
-    Authentication::Strategy::ProviderOauth2.any_instance.expects(:authenticate).returns(provider_user)
+    Authentication::Strategy::ProviderOAuth2.any_instance.expects(:authenticate).returns(provider_user)
 
     open_session do |session|
       session.host! @provider.external_admin_domain

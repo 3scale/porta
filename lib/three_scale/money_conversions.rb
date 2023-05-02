@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module ThreeScale
-  module Conversions
+  module MoneyConversions
     def to_has_money(currency, date = nil)
       ThreeScale::Money.new(self, currency, date)
     end
   end
 
   # Enhance numeric types with +to_has_money+ method.
-  Numeric.send(:include, Conversions)
+  Numeric.send(:include, MoneyConversions)
 
   # Enhance String with +to_has_money+ method.
   class ::String

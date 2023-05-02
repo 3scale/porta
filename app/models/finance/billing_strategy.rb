@@ -414,6 +414,3 @@ class Finance::BillingStrategy < ApplicationRecord
   extend FindEachFix
   include FindEachFix
 end
-
-require_dependency 'finance/prepaid_billing_strategy'
-require_dependency 'finance/postpaid_billing_strategy'

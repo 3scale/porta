@@ -1,4 +1,4 @@
-require_dependency 'events/importers/base_importer'
+# frozen_string_literal: true
 
 module Events
   module Importers
@@ -103,4 +103,3 @@ module Events
     end
   end
 end
-
