@@ -515,5 +515,3 @@ class Cinstance < Contract
     plan.issuer.prefix_key(SecureRandom.hex(16))
   end
 end
-
-ApplicationContract = Cinstance

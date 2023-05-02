@@ -4,7 +4,7 @@ module ThreeScale
       def call(*)
         yield
       ensure
-        UserTracking.flush
+        ::ThreeScale::Analytics::UserTracking.flush
       end
     end
   end

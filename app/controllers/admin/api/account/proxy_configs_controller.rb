@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
-  include ApiAuthentication::BySsoToken
+  include ApiAuthentication::BySSOToken
 
   represents :json, entity: ::ProxyConfigRepresenter
   represents :json, collection: ::ProxyConfigsRepresenter
