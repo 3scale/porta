@@ -23,8 +23,8 @@ namespace :fixes do
   desc "updates impersonation_admin email address"
   task :update_impersonation_admin_email => :environment do
     impersonation_admin_config   = ThreeScale.config.impersonation_admin
-    impersonation_admin_username = impersonation_admin_config['username']
-    impersonation_admin_domain   = impersonation_admin_config['domain']
+    impersonation_admin_username = impersonation_admin_config[:username]
+    impersonation_admin_domain   = impersonation_admin_config[:domain]
 
     users= User.where(email: "#{impersonation_admin_username}@#{impersonation_admin_domain}")
     users.each do | user |

@@ -65,15 +65,12 @@ module System
     config.action_view.form_with_generates_remote_forms = false
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
-    config.action_dispatch.use_authenticated_cookie_encryption = false
-    config.active_support.use_authenticated_message_encryption = false
 
-    # Use a modern approved hashing function
+    # Use a modern approved hashing function.
+    # This is the default in Rails 7.0, so can be removed when we upgrade.
     config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
-    # NOTE: Symbol was later added to enabled classes by default, see https://github.com/rails/rails/pull/45584,
-    # it was added to Rails 6.0.6, 6.1.7, 7.0.4
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
                                                           ActionController::Parameters,
                                                           ActiveSupport::TimeWithZone,
@@ -184,8 +181,8 @@ module System
     args = config_for(:cache_store)
     store_type = args.shift
     options = args.extract_options!
-    servers = args.flat_map { |arg| arg.split(',') }
-    config.cache_store = [store_type, servers, options]
+    options[:digest_class] ||= Digest::SHA256 if store_type == :mem_cache_store
+    config.cache_store = [store_type, *args, options]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

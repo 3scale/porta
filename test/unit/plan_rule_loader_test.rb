@@ -4,7 +4,7 @@ require 'test_helper'
 
 class PlanRuleLoaderTest < ActiveSupport::TestCase
   def given_plan_rules_config(config)
-    ThreeScale.config.stubs(:plan_rules).returns(config)
+    ThreeScale.config.stubs(:plan_rules).returns(HashWithIndifferentAccess.new(config))
   end
 
   class LoadErrorTest < PlanRuleLoaderTest
