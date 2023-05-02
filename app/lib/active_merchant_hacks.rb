@@ -2,6 +2,9 @@
 
 # ActiveMerchant monkey patches
 
+module ActiveMerchantHacks
+end
+
 class ActiveMerchant::Billing::Gateway
 
   # Add threescale-versioned methods for gateways
