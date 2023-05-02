@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
+class ApiAuthentication::BySSOTokenTest < ActionDispatch::IntegrationTest
   def setup
     @account = FactoryBot.create(:provider_account)
     @master = Account.master
