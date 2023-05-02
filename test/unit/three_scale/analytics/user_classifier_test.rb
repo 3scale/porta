@@ -24,11 +24,11 @@ class ThreeScaleAnalyticsUserClassifierTest < SimpleMiniTest
   def test_is_impersonation_admin?
     refute classifier(username: 'foo').is_impersonation_admin?
 
-    assert classifier(username: ThreeScale.config.impersonation_admin['username']).is_impersonation_admin?
+    assert classifier(username: ThreeScale.config.impersonation_admin[:username]).is_impersonation_admin?
   end
 
   def test_is_3scale?
-    impersonation_admin_username = ThreeScale.config.impersonation_admin['username']
+    impersonation_admin_username = ThreeScale.config.impersonation_admin[:username]
     refute classifier(email: 'foo@example.com', username: 'foo').is_3scale?
     assert classifier(email: 'foo@example.com', username: impersonation_admin_username).is_3scale?
     assert classifier(email: 'foo@3scale.net',  username: impersonation_admin_username).is_3scale?
@@ -44,7 +44,7 @@ class ThreeScaleAnalyticsUserClassifierTest < SimpleMiniTest
   end
 
   def test_user_type
-    impersonation_admin_username = ThreeScale.config.impersonation_admin['username']
+    impersonation_admin_username = ThreeScale.config.impersonation_admin[:username]
     assert_equal 'customer', classifier(email: 'user@example.com', username: 'user').user_type
 
     assert_equal '3scale', classifier(email: 'user@3scale.net', username: 'user').user_type

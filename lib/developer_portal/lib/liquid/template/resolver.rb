@@ -22,14 +22,13 @@ module Liquid
         super()
       end
 
-      def find_templates(name, prefix, partial, _details, _outside_app_allowed = false)
+      def _find_all(name, prefix, partial, details, key = nil, locals = [])
         path = Path.build(name, prefix, partial)
 
         @scope.templates.for_rails_view(path).map do |record|
           Liquid::Template::View.from(record, path, cms)
         end
       end
-
     end
   end
 end
