@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.2.8'
+gem 'rails', '~> 6.0'
 gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 
 # Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
@@ -36,7 +36,7 @@ group :assets do
   gem 'sprockets-rails', '3.2.2' # remove version after we stop supporting Ruby 2.4
 end
 
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 1.4'
@@ -148,7 +148,7 @@ gem 'compass-rails', '~> 3.0.2'
 
 gem 'after_commit_queue', '~> 1.1.0'
 gem 'state_machines', '~> 0.5.0'
-gem 'state_machines-activerecord', '~> 0.5.0'
+gem 'state_machines-activerecord', '~> 0.8'
 
 # for liquid docs on-fly generation
 gem 'commonmarker', '~> 0.23.9'
@@ -160,7 +160,7 @@ gem 'html-pipeline'
 gem 'ruby-openid'
 gem 'slim-rails', '~> 3.2'
 
-gem 'draper', '~> 3.0'
+gem 'draper', '~> 3.1'
 
 group :development do
   gem 'bullet', '~> 6.1.5'
@@ -188,7 +188,7 @@ group :test do
   # To remove once migrated all functional tests
   gem 'codecov', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '~> 1.0.4'
   gem 'simplecov', '~> 0.21.2', require: false
 
   gem 'capybara', '~>3.35.3', source: 'https://rubygems.org'
@@ -264,7 +264,7 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 6.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 
