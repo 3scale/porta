@@ -9,7 +9,7 @@ Rails.autoloaders.main.inflector.inflect(
   'xml' => 'XML',
   'json_representer' => 'JSONRepresenter',
   'json_validator' => 'JSONValidator',
-  'by_sso_token' => 'BySsoToken'
+  'by_sso_token' => 'BySSOToken'
 )
 
 Rails.autoloaders.main.ignore(

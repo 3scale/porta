@@ -2,7 +2,7 @@
 
 class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::BaseController
 
-  include ApiAuthentication::BySsoToken
+  include ApiAuthentication::BySSOToken
 
   represents :json, entity: ::ProxyConfigRepresenter
   represents :json, collection: ::ProxyConfigsRepresenter
