@@ -133,8 +133,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert impersonation_user.admin?
     assert impersonation_user.active?
     assert impersonation_user.activated_at.present?
-    assert_equal impersonation_admin_config['username'], impersonation_user.username
-    assert_equal "#{impersonation_admin_config['username']}+#{tenant_account.internal_admin_domain}@#{impersonation_admin_config['domain']}", impersonation_user.email
+    assert_equal impersonation_admin_config[:username], impersonation_user.username
+    assert_equal "#{impersonation_admin_config[:username]}+#{tenant_account.internal_admin_domain}@#{impersonation_admin_config[:domain]}", impersonation_user.email
     assert_equal '3scale', impersonation_user.first_name
     assert_equal 'Admin', impersonation_user.last_name
 

@@ -46,7 +46,7 @@ Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
   step %(a provider "#{provider_name}")
   provider = Account.find_by_org_name(provider_name)
   if provider.admins.impersonation_admins.empty?
-    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], account: provider
+    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], account: provider
   end
 end
 

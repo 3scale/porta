@@ -197,7 +197,7 @@ class Account < ApplicationRecord
   end
 
   def find_impersonation_admin
-    users.admins.find_by(username: ThreeScale.config.impersonation_admin['username'])
+    users.admins.find_by(username: ThreeScale.config.impersonation_admin[:username])
   end
 
   # Users of this account + users of all buyer accounts of this account (if it is provider).
