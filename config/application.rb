@@ -36,6 +36,7 @@ module System
     # before initializers and causes configuration not to be respected.
     # This is fixed in Rails 5.2
     config.load_defaults 5.1
+    config.autoloader = :zeitwerk
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
