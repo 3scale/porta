@@ -6,3 +6,6 @@ ThinkingSphinx::Index.define(:plan, with: :real_time) do
 
   # Attributes
 end
+
+module PlanIndex
+end
