@@ -21,7 +21,7 @@ class AfterCommitSubscriber
       subscriber.after_rollback(event)
     end
 
-    def has_transactional_callbacks?
+    def trigger_transactional_callbacks?
       true
     end
 
