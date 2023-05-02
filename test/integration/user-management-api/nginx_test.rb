@@ -19,7 +19,7 @@ class Admin::Api::NginxTest < ActionDispatch::IntegrationTest
   test 'spec' do
     get spec_path, params: { provider_key: @provider.provider_key }
     assert_response :success
-    assert_equal("application/json", @response.content_type)
+    assert_equal("application/json", @response.media_type)
     assert_not_nil @response.body
   end
 
