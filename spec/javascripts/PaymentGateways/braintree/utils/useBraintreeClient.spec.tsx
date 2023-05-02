@@ -112,6 +112,7 @@ describe('when hosted fields are created', () => {
 
 describe('when hosted fields are not created', () => {
   beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
     jest.spyOn(createHostedFields, 'createHostedFields').mockRejectedValue('Foh!')
   })
 
