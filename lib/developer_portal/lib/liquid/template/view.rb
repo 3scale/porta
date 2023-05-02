@@ -3,9 +3,17 @@ module Liquid
     class View < ActionView::Template
       attr_reader :record
 
-      def initialize(source, ident, handler, details)
-        source ||= '' # in case template is nil
-        super
+      def initialize(source = '', identifier, handler, details)
+        super(
+          source,
+          identifier,
+          handler,
+          locals: [],
+          format: nil,
+          variant: details[:variant],
+          virtual_path: details[:virtual_path]
+        )
+
         @record = details.fetch(:record)
       end
 
