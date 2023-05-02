@@ -13,10 +13,11 @@ module System
 
     def read_configuration_specification
       configurations = Rails.application.config.database_configuration
-      resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(configurations)
-      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call.to_sym
+      resolver = ActiveRecord::DatabaseConfigurations.new(configurations)
+      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call
 
-      resolver.spec(spec)
+      # TODO: Check spec_name
+      resolver.configs_for(env_name: spec, spec_name: 'primary')
     end
 
     def adapter
@@ -24,7 +25,9 @@ module System
     end
 
     def adapter_method
-      ActiveSupport::StringInquirer.new(configuration_specification.adapter_method)
+      # TODO: This looks bad
+      ActiveSupport::StringInquirer.new("#{configuration_specification.config['adapter']}_connection")
+      # ActiveSupport::StringInquirer.new(configuration_specification.adapter_method)
     end
 
     def oracle?
