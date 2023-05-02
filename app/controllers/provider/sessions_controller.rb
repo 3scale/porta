@@ -36,7 +36,7 @@ class Provider::SessionsController < FrontendController
 
   def bounce
     auth = domain_account.self_authentication_providers.find_by!(system_name: params.require(:system_name))
-    redirect_to ProviderOauthFlowPresenter.new(auth, request, request.host).authorize_url
+    redirect_to ProviderOAuthFlowPresenter.new(auth, request, request.host).authorize_url
   end
 
   def destroy
@@ -56,7 +56,7 @@ class Provider::SessionsController < FrontendController
     return [] unless @provider.provider_can_use?(:provider_sso)
 
     @provider.self_authentication_providers.published.map do |auth|
-      ProviderOauthFlowPresenter.new(auth, request, request.host)
+      ProviderOAuthFlowPresenter.new(auth, request, request.host)
     end
   end
 
