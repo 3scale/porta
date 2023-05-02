@@ -557,6 +557,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       @policies_config = policies_config
     end
 
+    # TODO: avoid overriding name because it later confuses serialization of PoliciesConfig, see at the bottom
     def self.name
       'PoliciesConfig'
     end
@@ -684,7 +685,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def generate_port(proxy_attribute)
     PortGenerator.new(self).call(proxy_attribute)
   end
-
 end
 
+# TODO: this is needed because of overriding ::name above
 PoliciesConfig = Proxy::PoliciesConfig
