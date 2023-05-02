@@ -18,7 +18,7 @@ class User < ApplicationRecord
   include Invitations
   include Permissions
   include ProvidedAccessTokens
-  include AccountIndex::ForDependency
+  include Indices::AccountIndex::ForDependency
 
   self.background_deletion = [
     :user_sessions,
