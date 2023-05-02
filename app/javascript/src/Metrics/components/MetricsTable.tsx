@@ -7,7 +7,7 @@ import {
   ToolbarItem
 } from '@patternfly/react-core'
 import { Table, TableBody, TableHeader } from '@patternfly/react-table'
-import { CheckIcon } from '@patternfly/react-icons'
+import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon'
 
 import { Pagination } from 'Common/components/Pagination'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'

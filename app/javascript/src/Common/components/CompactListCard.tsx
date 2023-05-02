@@ -7,7 +7,7 @@ import {
   TextInput
 } from '@patternfly/react-core'
 import { Table, TableBody } from '@patternfly/react-table'
-import { SearchIcon } from '@patternfly/react-icons'
+import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import { MicroPagination } from 'Common/components/MicroPagination'
 

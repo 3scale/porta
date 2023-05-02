@@ -14,7 +14,7 @@ import {
   TableBody,
   TableHeader
 } from '@patternfly/react-table'
-import { SearchIcon } from '@patternfly/react-icons'
+import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import { NoMatchFound } from 'Common/components/NoMatchFound'
 import type { IRecord } from 'utilities/patternfly-utils'

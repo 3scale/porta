@@ -1,4 +1,4 @@
-import { ExclamationCircleIcon } from '@patternfly/react-icons'
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
