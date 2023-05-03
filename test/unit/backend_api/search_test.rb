@@ -36,4 +36,22 @@ class BackendApi::SearchTest < ActiveSupport::TestCase
     end
   end
 
+  test 'search with query by system_name' do
+    ThinkingSphinx::Test.rt_run do
+      backend_apis = []
+
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        backend_apis = [
+          FactoryBot.create(:backend_api, name: 'one', system_name: 'first'),
+          FactoryBot.create(:backend_api, name: 'two', system_name: 'second_api'),
+          FactoryBot.create(:backend_api, name: 'three', system_name: 'third_api')
+        ]
+      end
+
+      search_results = BackendApi.scope_search(query: 'api').select(:id).map(&:id)
+      expected_backend_apis = backend_apis.select { |s| s.system_name.include?('api') }.map(&:id)
+      assert_equal search_results.sort, expected_backend_apis.sort
+    end
+  end
+
 end
