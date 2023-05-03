@@ -56,13 +56,13 @@ $border-width: 1px !default;
 //Copied from _typography.scss
 $lineHeight: 1.5;
 
-$line-height-sm:              2/3 * $lineHeight;
-$line-height-base:            3/3 * $lineHeight;
-$line-height-lg:              4/3 * $lineHeight;
+$line-height-sm:              calc(2/3 * $lineHeight);
+$line-height-base:            calc(3/3 * $lineHeight);
+$line-height-lg:              calc(4/3 * $lineHeight);
 
 
 @function line-height-times($multiplier: 1, $subtract-border: false) {
-  $spacer: $line-height-base *1rem * $multiplier;
+  $spacer: $line-height-base * 1rem * $multiplier;
 
   @if $subtract-border == true {
     @return calc(#{$spacer} - #{$border-width});
@@ -72,7 +72,7 @@ $line-height-lg:              4/3 * $lineHeight;
   }
 }
 
-$border-radius: line-height-times(1/8);
+$border-radius: line-height-times(calc(1/8));
 $border-width-lg: 2.0 * $border-width;
 $font-weight-bold: 700;
 
@@ -156,7 +156,7 @@ $font-weight-bold: 700;
 /* adjusted copy of the 'neat' theme which we are using */
 .CodeMirror-scroll {
   min-height: line-height-times(13);
-  border: line-height-times(1/4) solid $codemirror-border;
+  border: line-height-times(calc(1/4)) solid $codemirror-border;
 }
 
 .CodeMirror-gutters {
