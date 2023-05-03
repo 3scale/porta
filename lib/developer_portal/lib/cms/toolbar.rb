@@ -39,7 +39,7 @@ module CMS::Toolbar
     return false if @_exception_handled
 
     is_cms_domain = site_account.provider? && !site_account.master? # => buyer domain
-    is_html_content = response.content_type.nil? || response.content_type == 'text/html' #=> only for html content type
+    is_html_content = response.media_type.nil? || response.media_type == 'text/html' #=> only for html content type
 
     return false unless is_cms_domain
     return false unless is_html_content
