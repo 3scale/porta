@@ -1,5 +1,7 @@
 import { createReducer, generateGuid, isNotApicastPolicy, isPolicyChainChanged } from 'Policies/util'
 
+import type { JSONSchema6 } from 'json-schema'
+
 const policy00 = { $schema: '', uuid: '0', humanName: 'Headers', name: 'headers', description: ['Headers'], version: '1.0.0', configuration: {}, enabled: true, removable: true, summary: '', id: '666', data: {} }
 const policy01 = { $schema: '', uuid: '1', humanName: 'CORS', name: 'cors', description: ['CORS'], version: '1.0.0', configuration: {}, removable: true, summary: '', enabled: true, id: '007', data: {} }
 
@@ -27,7 +29,7 @@ describe('isPolicyChainChanged', () => {
   })
 
   it('should detect a change when a policy is updated', () => {
-    const newChain = [{ ...policy00, data: { allow_origin: '123 123 123' } }]
+    const newChain = [{ ...policy00, data: { allow_origin: '123 123 123' } as JSONSchema6 }]
     const changed = isPolicyChainChanged(newChain, chain)
 
     expect(changed).toEqual(true)

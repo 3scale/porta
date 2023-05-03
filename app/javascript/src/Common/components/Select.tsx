@@ -77,7 +77,7 @@ const Select = <T extends IRecord>({
     >
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
       {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
-      {item && <input name={name} type="hidden" value={item.id >= 0 ? item.id : ''} />}
+      {item && <input name={name} type="hidden" value={Number(item.id) >= 0 ? item.id : ''} />}
       <PF4Select
         aria-label={ariaLabel}
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
