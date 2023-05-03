@@ -28,4 +28,5 @@ Feature: Asset host
 
     Scenario: Developer portal with asset host configured
       When the buyer logs in to the provider
+      And follow "Documentation"
       Then javascript assets should be loaded from the asset host
