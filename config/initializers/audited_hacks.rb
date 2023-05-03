@@ -78,6 +78,7 @@ module AuditedHacks
 
   module ClassMethods
     def audited(options = {})
+      options[:on] = %i[create update destroy]
       super
 
       # this disables auditing only for current thread
