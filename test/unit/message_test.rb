@@ -47,7 +47,7 @@ class MessageTest < ActiveSupport::TestCase
 
     message = Message.create!(sender: sender, to: recipients,
                               subject: 'hello', body: "what's up?")
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { message.deliver! }
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { message.deliver! }
 
     assert delivery = ActionMailer::Base.deliveries.first
     assert_equal delivery['from'].value, Rails.configuration.three_scale.noreply_email
@@ -86,7 +86,7 @@ class MessageTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     message = Message.create!(sender: sender, to: recipients, subject: 'hello', body: "what's up?")
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { message.deliver! }
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { message.deliver! }
 
     assert delivery = ActionMailer::Base.deliveries.first
     assert_equal delivery['from'].value, sender.from_email

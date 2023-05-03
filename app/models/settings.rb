@@ -44,6 +44,7 @@ class Settings < ApplicationRecord
 
     super(attributes)
   end
+  alias update_attributes update
 
   def set_forum_enabled
     if account

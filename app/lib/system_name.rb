@@ -59,7 +59,7 @@ module SystemName
   # we can guess a reasonable one.
   #
   def internal_system_name
-    model_name = ActiveModel::Name.new(self.class, self.class.parent)
+    model_name = ActiveModel::Name.new(self.class, self.class.module_parent)
     "#{model_name.param_key}_#{SecureRandom.hex(6)}"
   end
 end
