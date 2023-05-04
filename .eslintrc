@@ -129,7 +129,7 @@
     }
   },
   "ignorePatterns": [
-    "jest.config.js",
+    "*.config.js",
     "spec/javascripts/setupTests.ts",
     "spec/javascripts/__mocks__/",
     "app/javascript/src/Stats" // We better avoid touching this module, eslint may automatically fix some of the errors and break it.
