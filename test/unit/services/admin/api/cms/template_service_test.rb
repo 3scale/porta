@@ -68,7 +68,7 @@ class TemplateServiceTest < ActiveSupport::TestCase
           'title' => 'test API',
           'path' => '/testAPI',
           'system_name' => 'test_api',
-          'section_id' => 100
+          'section_id' => 1000000
         }
         params = permitted_params.merge({
                                           'type' => 'page'
@@ -147,7 +147,7 @@ class TemplateServiceTest < ActiveSupport::TestCase
           'title' => 'test API',
           'path' => '/testAPI',
           'system_name' => 'test_api',
-          'layout_id' => 100
+          'layout_id' => 1000000
         }
         params = permitted_params.merge({
                                           'type' => 'page'
@@ -230,7 +230,7 @@ class TemplateServiceTest < ActiveSupport::TestCase
           'title' => 'test API',
           'path' => '/testAPI',
           'system_name' => 'test_api',
-          'section_id' => 100
+          'section_id' => 1000000
         }
         params = permitted_params
 
@@ -330,7 +330,7 @@ class TemplateServiceTest < ActiveSupport::TestCase
           'title' => 'test API',
           'path' => '/testAPI',
           'system_name' => 'test_api',
-          'layout_id' => 100
+          'layout_id' => 1000000
         }
         params = permitted_params
 
