@@ -78,7 +78,7 @@ module AuditedHacks
 
   module ClassMethods
     def audited(options = {})
-      options[:on] = %i[create update destroy]
+      options[:on] = _filter_touch_callback(options[:on])
       super
 
       # this disables auditing only for current thread
@@ -113,6 +113,13 @@ module AuditedHacks
 
     def with_synchronous_auditing(&block)
       synchronous_audits { with_auditing(&block) }
+    end
+
+    private
+
+    def _filter_touch_callback(callbacks)
+      filtered_callbacks = [*callbacks] - %i[touch]
+      filtered_callbacks.presence || %i[create update destroy]
     end
   end
 

@@ -103,6 +103,28 @@ class AuditedHacksTest < ActiveSupport::TestCase
       assert_equal({ 'welcome_text' => 'hello', 'sso_key' => '[FILTERED]' }, audit_obfuscated.audited_changes)
     end
 
+    test 'touch callback is removed from list' do
+      class UpdateTouchModel < ApplicationRecord
+        audited on: %i[update touch]
+      end
+
+      assert_equal %i[update], UpdateTouchModel.audited_options[:on]
+    end
+
+    test 'touch callback is removed from default list' do
+      class TouchModel < ApplicationRecord
+        audited on: :touch
+      end
+
+      assert_equal %i[create update destroy], TouchModel.audited_options[:on]
+
+      class EmptyModel < ApplicationRecord
+        audited
+      end
+
+      assert_equal %i[create update destroy], EmptyModel.audited_options[:on]
+    end
+
     protected
 
     def expected_hash(audit = @audit)
