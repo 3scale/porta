@@ -44,7 +44,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
       @section.destroy
       respond_with @section, location: admin_api_cms_sections_path(@section)
     else
-      render_error status: :method_not_allowed, text: "This section can't be deleted"
+      render_error "Built-in resources can't be deleted", status: :unprocessable_entity
     end
   end
 

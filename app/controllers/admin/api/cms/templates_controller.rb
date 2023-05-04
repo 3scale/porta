@@ -16,8 +16,6 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
   before_action :find_template, except: %i[index create]
 
-  before_action :can_destroy, only: :destroy
-
   # Template List
   # GET /admin/api/cms/templates.json
   def index
@@ -52,8 +50,10 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   # Template Delete
   # DELETE /admin/api/cms/templates/{id}.json
   def destroy
-    @template.destroy
+    Admin::Api::CMS::TemplateService::Destroy.call(@template)
     respond_with(@template)
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
+    render_error exception.message, status: :unprocessable_entity
   end
 
   # Template Publish
@@ -83,10 +83,6 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     return params[:type].parameterize.to_sym if params[:type].present?
 
     @template.class.name[5..-1].parameterize.to_sym if @template.present?
-  end
-
-  def can_destroy
-    head :locked unless @template.respond_to?(:destroy)
   end
 
   def cms_templates
