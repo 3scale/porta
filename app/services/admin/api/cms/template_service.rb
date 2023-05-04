@@ -125,7 +125,7 @@ class Admin::Api::CMS::TemplateService
     attr_reader :template
 
     def call
-      raise DeleteBuiltinError, "Builtin resources can't be deleted" unless template.respond_to?(:destroy)
+      raise DeleteBuiltinError, "Built-in resources can't be deleted" unless template.respond_to?(:destroy)
 
       template.destroy
     end
