@@ -44,7 +44,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
       @section.destroy
       respond_with @section, location: admin_api_cms_sections_path(@section)
     else
-      render_error "Builtin resources can't be deleted", status: :unprocessable_entity
+      render_error "Built-in resources can't be deleted", status: :unprocessable_entity
     end
   end
 
