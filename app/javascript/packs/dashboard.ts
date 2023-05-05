@@ -10,6 +10,7 @@ import type { Props as BackendsWidgetProps } from 'Dashboard/components/Backends
 const productsContainerId = 'products-widget'
 const backendsContainerId = 'backends-widget'
 
+console.log('Pepse')
 document.addEventListener('DOMContentLoaded', () => {
   window.dashboardWidget = dashboardWidget
   window.renderChartWidget = renderChartWidget

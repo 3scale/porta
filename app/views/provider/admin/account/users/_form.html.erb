@@ -1,3 +1,5 @@
+<% append_javascript_pack_tag 'permissions' if current_account.provider_can_use?(:service_permissions) %>
+
 <%= form.inputs :name => 'User Information' do %>
   <%= form.user_defined_form %>
 <% end %>
@@ -55,11 +57,6 @@
         handleGroups()
       })
     </script>
-    <%- if current_account.provider_can_use?(:service_permissions) %>
-        <% content_for :javascripts do %>
-            <% javascript_packs_with_chunks_tag 'permissions' %>
-        <% end %>
-    <%- end -%>
   <% end %>
 <% end %>
 

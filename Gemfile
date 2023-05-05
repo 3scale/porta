@@ -256,7 +256,7 @@ group :licenses do
   gem 'license_finder', '~> 7.1.0'
 end
 
-gem 'webpacker', '5.4.4'
+gem 'shakapacker', '= 6.6'
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production]

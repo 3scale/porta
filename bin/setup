@@ -18,7 +18,7 @@ chdir APP_ROOT do
   system('bundle check') || system!('bundle install')
 
   # Install JavaScript dependencies if using Yarn
-  # system('bin/yarn')
+  system!('bin/yarn')
 
   puts "\n== Copying sample files =="
   cp_r 'config/examples/.', 'config/', preserve: true, dereference_root: true

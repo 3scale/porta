@@ -1,5 +1,5 @@
 - content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'codemirror', 'api_docs_form'
+  = javascript_pack_tag 'codemirror', 'api_docs_form'
   = javascript_include_tag 'codemirror/modes/liquid'
 
 - content_for :sublayout_title, 'ActiveDocs'
