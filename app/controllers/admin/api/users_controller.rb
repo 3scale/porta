@@ -3,40 +3,16 @@ class Admin::Api::UsersController < Admin::Api::BaseController
 
   before_action :can_create, only: :create
 
-  # swagger
-  ##~ sapi = source2swagger.namespace("Account Management API")
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users.xml"
-  ##~ e.responseClass = "List[users]"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "User List (provider account)"
-  ##~ op.description = "Lists the users of the provider account. You can apply filters by state and/or role."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_user_state
-  ##~ op.parameters.add @parameter_user_role
-  #
+  # User List (provider account)
+  # GET /admin/api/users.xml
   def index
     authorize! :manage, :multiple_users
 
     respond_with(users)
   end
 
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "POST"
-  ##~ op.summary    = "User Create (provider account)"
-  ##~ op.description = "Creates a new user in the provider account. Do not forget to activate it, otherwise he/she will not be able to sign-in. After creation the default state is pending and the default role is member. The user object can be extended using Fields Definitions in the Admin Portal where you can add/remove fields, for instance token (string), age (int), third name (string optional), etc."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "username", :description => "Username of the user.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "email", :description => "Email of the user.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "password", :description => "Password of the user.", :dataType => "string", :allowMultiple => false, :required => true, :paramType => "query"
-  ##~ op.parameters.add @parameter_extra_provider
-  #
+  # User Create (provider account)
+  # POST /admin/api/users.xml
   def create
     user = new_user
 
@@ -50,41 +26,16 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}.xml"
-  ##~ e.responseClass = "user"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "User Read (provider account)"
-  ##~ op.description = "Gets the user of the provider account by ID."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Read (provider account)
+  # GET /admin/api/users/{id}.xml
   def show
     authorize! :show, user
 
     respond_with(user)
   end
 
-  # swagger
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Update (provider account)"
-  ##~ op.description = "Modifies the user of the provider account by ID. You can update any field, not only those in the form of the ActiveDocs but also fields that belong to the User object. Remember that you can define custom fields on your Admin Portal."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  ##~ op.parameters.add :name => "username", :description => "Username of the user.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "email", :description => "Email of the user.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "password", :description => "Password of the user.", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
-  ##~ op.parameters.add @parameter_extra_provider
-  #
+  # User Update (provider account)
+  # PUT /admin/api/users/{id}.xml
   def update
     authorize! :update, user
 
@@ -93,16 +44,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "DELETE"
-  ##~ op.summary    = "User Delete (provider account)"
-  ##~ op.description = "Deletes the user of the provider account by ID."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Delete (provider account)
+  # DELETE /admin/api/users/{id}.xml
   def destroy
     authorize! :destroy, user
 
@@ -111,19 +54,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}/member.xml"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Change Role to Member (provider account)"
-  ##~ op.description = "Changes the role of the user of the provider account to member."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Change Role to Member (provider account)
+  # PUT /admin/api/users/{id}/member.xml
   def member
     authorize! :update_role, user
 
@@ -132,19 +64,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}/admin.xml"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Change Role to Admin (provider account)"
-  ##~ op.description = "Changes the role of the provider account to admin (full rights and privileges)."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Change Role to Admin (provider account)
+  # PUT /admin/api/users/{id}/admin.xml
   def admin
     authorize! :update_role, user
 
@@ -153,20 +74,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}/suspend.xml"
-  ##~ e.responseClass = "user"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Suspend (provider account)"
-  ##~ op.description = "Changes the state of the user of the provider account to suspended, which removes the user's ability to sign-in. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Suspend (provider account)
+  # PUT /admin/api/users/{id}/suspend.xml
   def suspend
     authorize! :suspend, user
 
@@ -175,20 +84,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}/unsuspend.xml"
-  ##~ e.responseClass = "user"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Unsuspend (provider account)"
-  ##~ op.description = "Revokes the suspension of a user of the provider account. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Unsuspend (provider account)
+  # PUT /admin/api/users/{id}/unsuspend.xml
   def unsuspend
     authorize! :unsuspend, user
 
@@ -197,20 +94,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     respond_with(user)
   end
 
-  # swagger
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/users/{id}/activate.xml"
-  ##~ e.responseClass = "user"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "PUT"
-  ##~ op.summary    = "User Activate (provider account)"
-  ##~ op.description = "Changes the state of the user of the provider account to active (after sign-up). You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter."
-  ##~ op.group = "user_provider_account"
-  #
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_admin_id_by_id
-  #
+  # User Activate (provider account)
+  # PUT /admin/api/users/{id}/activate.xml
   def activate
     authorize! :update, user
 

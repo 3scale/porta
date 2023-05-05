@@ -5,33 +5,33 @@ it('should paginate a collection', () => {
   const perPage = 2
 
   expect(paginateCollection(items, perPage)).toMatchInlineSnapshot(`
-    Object {
-      "1": Array [
-        Object {
+    {
+      "1": [
+        {
           "id": 0,
           "value": "item no. 0",
         },
-        Object {
+        {
           "id": 1,
           "value": "item no. 1",
         },
       ],
-      "2": Array [
-        Object {
+      "2": [
+        {
           "id": 2,
           "value": "item no. 2",
         },
-        Object {
+        {
           "id": 3,
           "value": "item no. 3",
         },
       ],
-      "3": Array [
-        Object {
+      "3": [
+        {
           "id": 4,
           "value": "item no. 4",
         },
-        Object {
+        {
           "id": 5,
           "value": "item no. 5",
         },

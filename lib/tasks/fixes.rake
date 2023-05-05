@@ -113,6 +113,17 @@ namespace :fixes do
     end
   end
 
+  desc "Regenerate JPEG logos :invoice style"
+  task :regenerate_jpeg_invoice_logo => :environment do
+    Profile.where(logo_content_type: "image/jpeg").find_each do |profile|
+      begin
+        profile.logo.reprocess!(:invoice)
+      rescue => exception
+        Rails.logger.error("Failed to reprocess invoice logo for #{profile.account_id}: #{exception.message}")
+      end
+    end
+  end
+
   desc "Checks for cinstances with zero plan_id and associats them with the Default plan"
   task :zero_plan_id => :environment do
     Cinstance.find_each do |cinstance|

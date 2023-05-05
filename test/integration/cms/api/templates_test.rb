@@ -95,6 +95,37 @@ module CMS
         assert_equal 2, response.parsed_body['collection'].size
       end
 
+      test 'index filters by type' do
+        FactoryBot.create_list(:cms_page, 5, provider: @provider)
+        FactoryBot.create_list(:cms_partial, 2, provider: @provider)
+
+        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, type: 'partial' }
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+      end
+
+      test 'index filters by section_id' do
+        section = FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root)
+        FactoryBot.create_list(:cms_page, 5, provider: @provider)
+        FactoryBot.create_list(:cms_page, 2, provider: @provider, section_id: section.id)
+
+        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, section_id: section.id }
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+      end
+
+      test 'index returns content when receiving the :content parameter as true' do
+        FactoryBot.create_list(:cms_page, 2, provider: @provider)
+
+        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, content: true}
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+        assert response.parsed_body['collection'].first.key?('draft')
+      end
+
       # TODO: check XML content
       test 'show partial' do
         partial = FactoryBot.create(:cms_partial, provider: @provider)
@@ -293,6 +324,23 @@ module CMS
         partial = response.parsed_body
         assert_equal 'foo', partial['system_name']
         assert_equal 'bar', partial['draft']
+      end
+
+      test 'destroy' do
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        delete admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key }
+
+        assert_raise(ActiveRecord::RecordNotFound) { page.reload }
+      end
+
+      test 'destroy a builtin resource' do
+        page = FactoryBot.create(:cms_builtin_page, provider: @provider)
+
+        delete admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key }
+
+        assert_response :unprocessable_entity
+        assert page.reload.persisted?
       end
     end
   end

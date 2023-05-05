@@ -7,7 +7,7 @@ import {
   Popover,
   TextInput
 } from '@patternfly/react-core'
-import { SearchIcon } from '@patternfly/react-icons'
+import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 

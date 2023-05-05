@@ -3,42 +3,51 @@ const path = require('path')
 
 // Add global webpack configs here
 
+// It seems webpacker handles stylesheets in a less performant way, so we override the loaders
 environment.loaders.delete('css')
-environment.loaders.delete('moduleCss')
 environment.loaders.delete('sass')
+environment.loaders.append('css', {
+  test: /(\.css)$/,
+  use: [
+    { loader: 'style-loader' },
+    { loader: 'css-loader' }
+  ]
+})
+environment.loaders.append('sass', {
+  test: /(\.scss|\.sass)$/,
+  use: [
+    { loader: 'style-loader' },
+    { loader: 'css-loader' },
+    { loader: 'sass-loader' }
+  ]
+})
+
+// We don't use css modules so these can go
+environment.loaders.delete('moduleCss')
 environment.loaders.delete('moduleSass')
 
+// We use tsc for both typescript compilation and type checking and let babel handle React.
 environment.loaders.append('ts', {
-  test: /.(ts|tsx)$/,
+  test: /\.(ts|tsx)$/,
+  include: path.resolve(__dirname, '../../app/javascript'),
   options: {},
   loader: 'ts-loader'
 })
 
+// Remove styles added automatically by @patternfly/react because it messes up our own styles.
+// We import the necessary styles manually in our .scss files and that way it works.
 environment.loaders.append('null', {
   test: /\.css$/,
   include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
   use: ['null-loader']
 })
 
-environment.loaders.append('style', {
-  test: /(\.css|\.scss|\.sass)$/,
-  use: [
-    { loader: 'style-loader' },
-    { loader: 'css-loader' },
-    {
-      loader: 'sass-loader',
-      options: {
-        modules: true,
-        localIdentName: '[name]---[local]---[hash:base64:5]'
-      }
-    }
-  ]
-})
-
+// Quickstarts' guides are written in YAML for convenience (QuickStarts/templates), then this loader
+// allow us to import them as JSON and pass them to the React component (QuickStartContainer).
 environment.loaders.append('yaml', {
   test: /\.ya?ml$/,
   use: 'yaml-loader',
-  include: path.resolve(__dirname, '../../app/javascript'),
+  include: path.resolve(__dirname, '../../app/javascript/src/QuickStarts/templates'),
   type: 'json'
 })
 
@@ -53,13 +62,19 @@ environment.loaders.append('yaml', {
  * https://github.com/3scale/porta/pull/3072
  */
 const { output } = environment.config;
-const oldPublicPath = output.publicPath
-output.publicPath = '';
-
+const oldPublicPath = output.publicPath;
 const fileLoader = environment.loaders.get('file');
 Object.assign(fileLoader.use[0].options, {
   publicPath: oldPublicPath,
   postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
 });
+
+environment.config.merge({
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    }
+  }
+})
 
 module.exports = environment

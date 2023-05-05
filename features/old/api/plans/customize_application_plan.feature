@@ -1,3 +1,4 @@
+@javascript
 Feature: Application Plan customization
   In order to fullfill special requirements of my clients
   As a provider

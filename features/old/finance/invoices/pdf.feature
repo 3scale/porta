@@ -13,24 +13,21 @@ Feature: Invoice PDFs
     And an issued invoice of buyer "bob" for August, 2011
     And current domain is the admin domain of provider "foo.3scale.localhost"
 
-  @commit-transactions
+  @commit-transactions @javascript
   Scenario: Provider side links on the invoice index and details
-  Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
-
     When I navigate to invoices issued by me for "bob"
     Then I should see secure PDF link for invoice 2011-08-00000001
-
     When I navigate to invoice 2011-08 issued by me for "bob"
     Then I should see secure PDF link for the shown invoice
 
   @commit-transactions
   Scenario: Buyer side links on the invoice index and details
-  Given the current domain is "foo.3scale.localhost"
+    Given the current domain is "foo.3scale.localhost"
     And I log in as "bob"
     And provider "foo.3scale.localhost" has "finance" switch visible
-
-   When I go to my invoices
-   Then I should see secure PDF link for invoice 2011-08-00000001
-   When I follow "Show 2011-08-00000001"
-   Then I should see secure PDF link for the shown buyer invoice
+    When I go to my invoices
+    Then I should see secure PDF link for invoice 2011-08-00000001
+    When I follow "Show 2011-08-00000001"
+    Then I should see secure PDF link for the shown buyer invoice

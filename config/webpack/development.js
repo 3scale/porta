@@ -1,3 +1,6 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const environment = require('./environment')
 
 // Add Webpack custom configs here
@@ -17,5 +20,9 @@ environment.loaders.append('eslint', {
 // the plugin automatically picks `tsconfig.json` and doesn't support a custom filename.
 const tsLoader = environment.loaders.get('ts')
 tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
+
+environment.plugins.append('BundleAnalyzerPlugin',
+  new BundleAnalyzerPlugin()
+)
 
 module.exports = environment.toWebpackConfig()

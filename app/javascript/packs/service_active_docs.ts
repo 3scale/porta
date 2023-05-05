@@ -1,27 +1,37 @@
 import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
-import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
+import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
+
+import type { AccountDataResponse } from 'Types/SwaggerTypes'
 
 import 'ActiveDocs/swagger-ui-3-provider-patch.scss'
+import { fetchData } from '../src/utilities/fetchData'
 
-document.addEventListener('DOMContentLoaded', () => {
+const renderActiveDocs = async () => {
   const containerId = 'swagger-ui-container'
   const DATA_URL = 'p/admin/api_docs/account_data.json'
   const container = document.getElementById(containerId)
 
   if (!container) {
-    throw new Error('The target ID was not found: ' + containerId)
+    console.error(`Element with ID ${containerId} not found`)
+    return
   }
   const { url = '', baseUrl = '', serviceEndpoint = '' } = container.dataset
   const accountDataUrl = `${baseUrl}${DATA_URL}`
 
-  const responseInterceptor: SwaggerUI.SwaggerUIOptions['responseInterceptor'] = (response) => autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, url)
+  const accountData: AccountDataResponse = await fetchData<AccountDataResponse>(accountDataUrl)
+
+  const requestInterceptor: SwaggerUI.SwaggerUIOptions['requestInterceptor'] = (request) => autocompleteRequestInterceptor(request, accountData, serviceEndpoint)
 
   SwaggerUI({
     url,
     // eslint-disable-next-line @typescript-eslint/naming-convention -- SwaggerUI API
     dom_id: `#${containerId}`,
-    responseInterceptor
+    requestInterceptor
   })
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderActiveDocs().catch(error => { console.error(error) })
 })

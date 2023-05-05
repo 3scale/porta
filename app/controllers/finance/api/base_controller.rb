@@ -27,7 +27,4 @@ class Finance::Api::BaseController < Admin::Api::BaseController
   def api_version
     '1.0'.freeze
   end
-
-  # This should be defined in Admin::Api::BaseController, but for some reason swagger does not reach it there, so leaving it here
-  ##~ @parameter_account_id_by_id_name = {:name => "account_id", :description => "ID of the account.", :dataType => "int", :required => true, :paramType => "path", :threescale_name => "account_ids"}
 end

@@ -41,7 +41,7 @@ class ApiDocs::ServicesController < FrontendController
 
     def json
       parsed_content = JSON.parse(file_content)
-      parsed_content['basePath'] = backend_base_host if backend_api?
+      parsed_content['servers'] = [{ 'url' => backend_base_host }] if backend_api?
 
       parsed_content
     end
@@ -54,9 +54,9 @@ class ApiDocs::ServicesController < FrontendController
 
     def file_name
       if onpremises_version? && onpremises_version_preferred?
-        "#{name} (on-premises)"
+        "#{system_name}_on_premises"
       else
-        name
+        system_name
       end
     end
 
@@ -115,18 +115,15 @@ class ApiDocs::ServicesController < FrontendController
   def show
     system_name = params[:id].to_sym
     api_file = (api_files.fetch(system_name) { raise ActiveRecord::RecordNotFound }).dup
-    api_file['apis'] = exclude_forbidden_endpoints(api_file['apis'])
+    api_file['paths'] = exclude_forbidden_endpoints(api_file['paths']) if master_on_premises?
 
     render json: api_file
   end
 
   private
 
-  def exclude_forbidden_endpoints(apis)
-    apis.select do |api|
-      path = api['path']
-      !master_on_premises? || path.exclude?('plan')
-    end
+  def exclude_forbidden_endpoints(paths)
+    paths.select { |url| url.exclude?('plan') }
   end
 
   def allowed_api?(api)

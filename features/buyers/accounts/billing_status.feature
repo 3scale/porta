@@ -1,3 +1,4 @@
+@javascript
 Feature: Admin Portal Buyer's Billing Status
   In order to know as much as I can about my clients
   As a provider

@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**.
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 14](https://nodejs.org/download/release/v14.21.3/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -24,13 +24,13 @@ asdf install
 
 > Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
 > ```
-> dnf module install nodejs:12
+> dnf module install nodejs:14
 > ```
 
 ### Dependencies
 
 ```
-sudo dnf install sphinx chromedriver postgresql-devel mysql-devel ImageMagick  ImageMagick-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
+sudo dnf install sphinx chromedriver postgresql-devel gd-devel mysql-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
 ```
 
 ### Database

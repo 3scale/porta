@@ -16,6 +16,10 @@ module BackendApiLogic
       owner_type == 'BackendApi'
     end
 
+    def service_metric?
+      service_id || owner_type == 'Service'
+    end
+
     def parent_id_for_service(service)
       if backend_api_metric? && hits?
         service.metrics.hits&.id

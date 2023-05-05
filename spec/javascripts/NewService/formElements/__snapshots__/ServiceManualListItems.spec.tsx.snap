@@ -109,6 +109,11 @@ exports[`should render required form fields with errors 1`] = `
     <p
       className="inline-errors"
     >
+      Invalid
+    </p>
+    <p
+      className="inline-hints"
+    >
       Only ASCII letters, numbers, dashes and underscores are allowed.
     </p>
   </li>

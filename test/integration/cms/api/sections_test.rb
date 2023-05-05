@@ -60,6 +60,17 @@ module CMS
         )
       end
 
+      test 'index filters by parent_id' do
+        parent = FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root)
+        FactoryBot.create_list(:cms_section, 5, provider: @provider, parent: @provider.sections.root)
+        FactoryBot.create_list(:cms_section, 2, provider: @provider, parent: parent)
+
+        get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, parent_id: parent.id }
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+      end
+
       test 'show section' do
         section = create_section
         get admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key, format: :json }
@@ -108,6 +119,23 @@ module CMS
         section = @provider.sections.find(id.to_i)
 
         assert_equal 'Foo Bar Lol', section.title
+      end
+
+      test 'destroy' do
+        section = create_section
+
+        delete admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key }
+
+        assert_raise(ActiveRecord::RecordNotFound) { section.reload }
+      end
+
+      test 'destroy a builtin resource' do
+        section = @provider.sections.root
+
+        delete admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key }
+
+        assert_response :unprocessable_entity
+        assert section.reload.persisted?
       end
     end
 

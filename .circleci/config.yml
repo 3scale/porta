@@ -214,7 +214,8 @@ commands: # reusable commands with parameters
           command: |
             echo "Running gems install for database: $DB"
             echo "$(bundle version)"
-            bundle check || bundle install --deployment
+            bundle config set --local deployment 'true'
+            bundle check || bundle install
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
             rm -rf "$BUNDLE_PATH/$(ruby -e 'puts Gem.ruby_engine')/$(ruby -e 'puts Gem.ruby_api_version')"/gems/capybara-webkit-*/src
@@ -485,11 +486,9 @@ jobs:
       - *use-example-config-files
       - run:
           name: Precompile assets
-          command: bundle exec rake assets:precompile
+          command: bundle exec rake assets:precompile:test
           environment:
             RAILS_GROUPS: assets
-            RAILS_ENV: test
-            NODE_ENV: test
       - *save-assets-cache
       - persist_to_workspace:
           root: .
@@ -532,27 +531,6 @@ jobs:
       - store_artifacts:
           path: doc/licenses
           destination: licenses
-      - notify_failure
-
-  swagger:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby26
-    executor:
-      name: << parameters.executor >>
-    steps:
-      - checkout
-      - *attach-to-workspace
-      - *use-example-config-files
-      - run:
-          name: Swagger validation
-          command: |
-            bundle exec rake doc:swagger:validate:all
-            bundle exec rake doc:swagger:generate:all
-      - store_artifacts:
-          path: doc/active_docs
-          destination: active_docs
       - notify_failure
 
   jest:
@@ -997,10 +975,6 @@ workflows:
       - licenses:
           requires:
             - dependencies_bundler
-      - swagger:
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           requires:
             - dependencies_npm
@@ -1010,7 +984,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter
@@ -1175,11 +1148,6 @@ workflows:
           executor: builder-ruby26
           requires:
             - dependencies_bundler
-      - swagger:
-          executor: builder-ruby26
-          requires:
-            - dependencies_npm
-            - dependencies_bundler
       - lint:
           executor: builder-ruby26
           requires:
@@ -1191,7 +1159,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - swagger
             - lint
             - jest
           <<: *only-master-filter

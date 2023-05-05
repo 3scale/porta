@@ -10,9 +10,8 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
 
 ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
-    BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
-    NODEJS_SCL=rh-nodejs12 \
+    NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
 
@@ -24,8 +23,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && yum remove -y postgresql \
     && yum install -y epel-release \
     && yum -y install centos-release-scl-rh \
-              ImageMagick \
-              ImageMagick-devel \
+              gd-devel \
               unixODBC-devel \
               mysql \
               llvm5.0-devel \
@@ -65,6 +63,7 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
 RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
+    && bundle config set --local without development:test:licenses \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
@@ -82,7 +81,7 @@ RUN source /opt/app-root/etc/scl_enable \
     && cd /opt/system \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    && SECRET_KEY_BASE=rails/32947 NODE_OPTIONS=--max-old-space-size=2560 bundle exec rake assets:precompile tmp:clear \
+    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 
@@ -97,7 +96,7 @@ CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 FROM porta-base AS porta-sphinx-config
 ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
-    THINKING_SPHINX_INDICES_LOCATION=/var/lib/sphinx \
+    THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
     THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
     RAILS_ENV=production \
     SECRET_KEY_BASE=dummy \
@@ -110,12 +109,5 @@ RUN yum install -y mariadb-server \
     && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
     && kill $(</var/run/mariadb/mariadb.pid)
 
-FROM porta-base AS licenses-report
-RUN source /opt/app-root/etc/scl_enable \
-    && gem install license_finder \
-    && license_finder report --format=xml --save=doc/licenses/licenses.xml --decisions-file=doc/dependency_decisions.yml \
-    && [ -s doc/licenses/licenses.xml ]
-
 FROM porta-base AS porta-prod
 COPY --from=porta-sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
-COPY --from=licenses-report /opt/system/doc/licenses/licenses.xml /opt/system/doc/licenses/

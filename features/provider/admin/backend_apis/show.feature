@@ -9,9 +9,10 @@ Feature: Backend API overview page
     When an admin is in the backend overview page
     Then the name of the backend can be seen on top of the menu
     And I should see menu items
-    | Overview                    |
-    | Methods and Metrics         |
-    | Mapping Rules               |
+      | Overview            |
+      | Analytics           |
+      | Methods and Metrics |
+      | Mapping Rules       |
 
   Scenario: Products used by backend table
     Given a product

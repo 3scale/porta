@@ -1,16 +1,14 @@
+@javascript
 Feature: Rejecting buyer account
   In order to let know my new buyers that I don't like them
   As a provider
   I want to reject them
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
-    And provider "foo.3scale.localhost" requires cinstances to be approved before use
-    And provider "foo.3scale.localhost" requires accounts to be approved
-
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
+    Given a provider is logged in
+    And the provider has multiple applications enabled
+    And the provider requires cinstances to be approved before use
+    And the provider requires accounts to be approved
 
   Scenario: Rejecting a single buyer account
     Given a pending buyer "bob" signed up to provider "foo.3scale.localhost"
@@ -32,19 +30,17 @@ Feature: Rejecting buyer account
   Scenario: Rejecting buyer accounts in bulk
     When I navigate to the pending partners page
     And I check the buyers:
-      | buyer      |
-      | pendi_1    |
-      | pendi_2    |
+      | buyer   |
+      | pendi_1 |
+      | pendi_2 |
     And I press the button to reject the buyers
     Then I should see the confirm page before I reject the buyers:
-      | buyer      |
-      | pendi_1    |
-      | pendi_2    |
-
+      | buyer   |
+      | pendi_1 |
+      | pendi_2 |
     When I confirm to reject of the buyers
     Then the following buyers should be rejected:
-      | buyer      |
-      | pendi_1    |
-      | pendi_2    |
+      | buyer   |
+      | pendi_1 |
+      | pendi_2 |
     And I should see the pending partners page
-

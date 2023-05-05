@@ -24,6 +24,10 @@ production:
   html_index_attrs: "img=alt,title; a=title"
   min_infix_len: 3
 
+  # clean-up orphan records after full reindexing
+  # see https://github.com/pat/thinking-sphinx/pull/1192
+  real_time_tidy: true
+
   # ----------------------------------
   # Data source configuration, see http://sphinxsearch.com/docs/current.html#confgroup-source
   # ----------------------------------

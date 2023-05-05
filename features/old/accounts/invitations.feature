@@ -9,6 +9,7 @@ Feature: Invitations
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "multiple_users" switch allowed
 
+  @javascript
   Scenario: When switch is denied as provider
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "multiple_users" switch denied
@@ -38,6 +39,7 @@ Feature: Invitations
     And I press "Invite User"
     Then invitation from account "apininja" should be sent to "alice@foo.3scale.localhost"
 
+  @javascript
   Scenario: Attempt to send invitation to an email of already existing user
     Given an user "alice" of account "foo.3scale.localhost"
     And user "alice" has email "alice@foo.3scale.localhost"
@@ -49,6 +51,7 @@ Feature: Invitations
     Then I should see error "has been taken by another user" for field "Send invitation to"
     And no invitation should be sent to "alice@foo.3scale.localhost"
 
+  @javascript
   Scenario: Invitation to an email of already existing pending invitation
     Given an invitation from account "foo.3scale.localhost" sent to "alice@foo.3scale.localhost"
     And a clear email queue
@@ -59,6 +62,7 @@ Feature: Invitations
     And I press "Send"
     Then I should see "This invitation has already been sent."
 
+  @javascript
   Scenario: Deleted user from invitation with changed email
     Given an invitation from account "foo.3scale.localhost" sent to "ubuntu@foo.3scale.localhost"
     When I follow the link to signup provider "foo.3scale.localhost" in the invitation sent to "ubuntu@foo.3scale.localhost"
@@ -84,6 +88,7 @@ Feature: Invitations
      And follow "API"
      And I should see "Analytics"
 
+  @javascript
   Scenario: Managing sent invitations
     Given the following invitations from account "foo.3scale.localhost" exist:
       | Email                 | State    |
@@ -97,6 +102,7 @@ Feature: Invitations
     And I should see pending invitation for "alice@foo.3scale.localhost"
     And I should see accepted invitation for "bob@foo.3scale.localhost"
 
+  @javascript
   Scenario: Deleting an invitation
     Given an invitation from account "foo.3scale.localhost" sent to "alice@foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
@@ -105,6 +111,7 @@ Feature: Invitations
     And I press "Delete" for an invitation from account "foo.3scale.localhost" for "alice@foo.3scale.localhost" and I confirm dialog box
     Then I should not see invitation for "alice@foo.3scale.localhost"
 
+  @javascript
   Scenario: Managing sent invitations disabled when multiple_users switch denied
      Given provider "foo.3scale.localhost" has "multiple_users" switch denied
        And current domain is the admin domain of provider "foo.3scale.localhost"
@@ -112,7 +119,7 @@ Feature: Invitations
     And I go to the provider users page
     Then I should not see "Invitations"
 
-  @security @allow-rescue
+  @security @allow-rescue @javascript
   Scenario: Only admins can send invitations
     Given an active user "alice" of account "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"

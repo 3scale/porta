@@ -25,7 +25,7 @@ it('should render required form fields with errors', () => {
     },
     errors: {
       name: ["Can't be blank"],
-      system_name: ['Only ASCII letters, numbers, dashes and underscores are allowed.']
+      system_name: ['Invalid']
     }
   }
   const view = shallow(<ServiceManualListItems {...props} />)

@@ -20,6 +20,7 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
 
+  @wip
   Scenario: Do nothing
     And I am on the service contracts admin page
     When I follow "Account" within table

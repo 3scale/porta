@@ -36,7 +36,7 @@ Then "they will be able to update it with an existing name and url" do
 end
 
 Given "the backend is used by this product" do
-  @product.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
+  (@service || @product).backend_api_configs.create!(backend_api: @backend, path: "/my_product")
 end
 
 When "an admin tries to delete the backend api from its edit page" do

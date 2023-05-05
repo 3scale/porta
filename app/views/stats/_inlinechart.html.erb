@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'inline_chart' %>
+<%= javascript_packs_with_chunks_tag 'inline_chart' %>
 
 <div id="mini-charts">
   <% Array.wrap(metrics).each do |metric| %>

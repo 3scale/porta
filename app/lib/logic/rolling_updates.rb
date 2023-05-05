@@ -118,12 +118,6 @@ module Logic
         end
       end
 
-      class NewProviderDocumentation < Base
-        def missing_config
-          false
-        end
-      end
-
       class ProxyPro < Base
         def missing_config
           false

@@ -26,9 +26,11 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     association(:issuer, :factory => :service)
   end
 
-  factory(:application_plan, :parent => :plan, :class => ApplicationPlan) do
-    association(:issuer, :factory => :service)
+  factory(:application_plan_without_rules, parent: :plan, class: ApplicationPlan) do
+    association(:issuer, factory: :service)
+  end
 
+  factory(:application_plan, parent: :application_plan_without_rules) do
     after(:build) do |plan|
       plan_rule = PlanRulesCollection.find_for_plan(plan) || FactoryBot.build(:plan_rule, system_name: plan.system_name.to_sym)
       plan.stubs(:plan_rule).returns(plan_rule)

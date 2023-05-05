@@ -1,5 +1,6 @@
 import { Button } from '@patternfly/react-core'
-import { AngleLeftIcon, AngleRightIcon } from '@patternfly/react-icons'
+import AngleLeftIcon from '@patternfly/react-icons/dist/js/icons/angle-left-icon'
+import AngleRightIcon from '@patternfly/react-icons/dist/js/icons/angle-right-icon'
 
 import type { FunctionComponent } from 'react'
 

@@ -1,5 +1,6 @@
 import { Button } from '@patternfly/react-core'
-import { PlusIcon, TimesIcon } from '@patternfly/react-icons'
+import PlusIcon from '@patternfly/react-icons/dist/js/icons/plus-icon'
+import TimesIcon from '@patternfly/react-icons/dist/js/icons/times-icon'
 
 import type { FunctionComponent } from 'react'
 import type { ThunkAction } from 'Policies/types/Actions'

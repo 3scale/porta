@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider Payment Details
   In order to pay for the service
   As a provider
@@ -8,7 +9,6 @@ Feature: Provider Payment Details
       Given master admin is logged in
       Then the provider's payment details are not accessible
 
-  @javascript
   Rule: Provider
     Background:
       Given a provider is logged in

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Admin::Api::CMS::BaseController < Admin::Api::BaseController
+  include ApiSupport::ForbidParams
+
+  forbid_extra_params :reject, whitelist: %i[id page per_page]
+
   before_action :ensure_json_request
   before_action :deny_on_premises_for_master
   self.access_token_scopes = %i[cms account_management]
@@ -22,9 +26,3 @@ class Admin::Api::CMS::BaseController < Admin::Api::BaseController
     raise ActionController::UnknownFormat unless request.format.json?
   end
 end
-
-## Defining common parameters
-
-##~ @parameter_access_token = { :name => "access_token", :description => "Your access token", :dataType => "string", :required => true, :paramType => "query", :allowMultiple => false}
-##~ @parameter_page = {:name => "page", :description => "Current page of the list", :dataType => "int", :paramType => "query", :default => 1}
-##~ @parameter_per_page = {:name => "per_page", :description => "Total number of records per one page (maximum 100)", :dataType => "int", :paramType => "query", :default => 20}

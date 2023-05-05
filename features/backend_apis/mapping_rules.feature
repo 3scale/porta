@@ -5,10 +5,8 @@ Feature: Backend API mapping rules
   I want to be able to manage my mapping rules
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider is logged in
     And a backend
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Sorting mapping rules
     When I go to the mapping rules index page for backend "My Backend"
