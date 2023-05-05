@@ -47,7 +47,7 @@ module Liquid
 
       def render(context)
         action_view = context.registers[:controller].view_context
-        file_url = File.join(cdn_host(context.registers[:request]), @file)
+        file_url = File.join(context.registers[:controller].helpers.rails_asset_host_url, @file)
         case Pathname.new(@file).extname
         when '.css'
           action_view.stylesheet_link_tag file_url
@@ -57,16 +57,6 @@ module Liquid
           raise SyntaxError, 'should be a JS or CSS file'
         end
 
-      end
-
-      private
-
-      def cdn_host(request)
-        asset_host_url = Rails.configuration.three_scale.asset_host.presence
-        return '' unless asset_host_url
-        return asset_host_url if asset_host_url.match? %r{^https?://}
-
-        "#{request.protocol}#{asset_host_url}"
       end
     end
   end
