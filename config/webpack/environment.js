@@ -62,9 +62,7 @@ environment.loaders.append('yaml', {
  * https://github.com/3scale/porta/pull/3072
  */
 const { output } = environment.config;
-const oldPublicPath = output.publicPath
-output.publicPath = '';
-
+const oldPublicPath = output.publicPath;
 const fileLoader = environment.loaders.get('file');
 Object.assign(fileLoader.use[0].options, {
   publicPath: oldPublicPath,
