@@ -43,6 +43,14 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "description": "Return the draft and published content",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
