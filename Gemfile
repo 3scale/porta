@@ -13,7 +13,6 @@ gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 6.0'
-gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 
 # Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
 # https://github.com/mikel/mail/blob/2-8-stable/CHANGELOG.rdoc#version-281-unreleased-
