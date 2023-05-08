@@ -3,8 +3,8 @@ require 'test_helper'
 class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider_account = FactoryBot.create(:provider_account)
-    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider_account, created_at: Time.zone.local(2023, 5, 4))
+    @provider_account = FactoryBot.create(:provider_account, created_at: Time.zone.local(2023, 5, 4))
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider_account)
     @cinstance = FactoryBot.create(:cinstance, user_account: @buyer)
     @provider_account.create_billing_strategy
     @provider_account.settings.allow_finance!

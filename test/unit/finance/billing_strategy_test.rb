@@ -7,14 +7,14 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   should validate_presence_of :numbering_period
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing)
+    # Ensure that the invoices created in the test (with period in 1984) pass the validation
+    @provider_created_at = Time.zone.local(1983, 11, 1)
+    @provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
 
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
 
-    # Ensure that the invoices created in the test (with period in 1984) pass the validation
-    @buyer_created_at = Time.zone.local(1983, 11, 1)
-    @buyer = FactoryBot.create(:buyer_account, created_at: @buyer_created_at)
+    @buyer = FactoryBot.create(:buyer_account)
   end
 
   test 'add_cost' do
@@ -175,7 +175,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
     second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.numbering_period = 'monthly'
-    second_buyer = FactoryBot.create(:buyer_account, created_at: @buyer_created_at)
+    second_buyer = FactoryBot.create(:buyer_account, created_at: @provider_created_at)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
                                               :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer,
@@ -208,7 +208,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
     second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    second_buyer = FactoryBot.create(:buyer_account, created_at: @buyer_created_at)
+    second_buyer = FactoryBot.create(:buyer_account, created_at: @provider_created_at)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
 

@@ -3,7 +3,7 @@ Feature: Billing with VAT
   I want to edit them and see them affecting invoice costs
 
 Background:
-  Given a provider exists
+  Given a provider exists on 1st May 1945
     And the provider is charging its buyers
     Given provider "foo.3scale.localhost" has "finance" switch visible
     And an application plan "best" of provider "foo.3scale.localhost" for 100 monthly
