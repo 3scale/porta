@@ -3,11 +3,11 @@ Feature: Variable cost on automatic billing
   As a provider I want to bill for variable cost
 
   Background:
-    Given a provider exists
+    Given a provider exists on 1st January 2019
     And the provider is billing but not charging
     And the provider has "finance" visible
     Given all the rolling updates features are off
-    And the provider has one buyer on 1st January 2019
+    And the provider has one buyer
     And the provider has a paid application plan "VariableOnly" of 0 per month
     And pricing rules on plan "VariableOnly":
       | Metric   | Cost per unit | Min   | Max      |

@@ -4,10 +4,10 @@ Feature: Create invoice
   I want to be able to create an invoice on demand
 
   Background:
-    Given a provider is logged in
+    Given a provider is logged in on 1st Jan 2009
     And the provider is charging its buyers in prepaid mode
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
-    And a buyer "zoidberg" signed up to application plan "Fixed" on 1st Jan 2009
+    And a buyer "zoidberg" signed up to application plan "Fixed"
 
   @javascript
   Scenario: Create and view the invoice

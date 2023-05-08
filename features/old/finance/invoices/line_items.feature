@@ -6,10 +6,10 @@ Feature: Provider manages line items
 
   # TODO: create the invoice artificially and not by billing mechanism
   Background:
-    Given a provider is logged in
+    Given a provider is logged in on 1st February 2009
     Given the provider is charging its buyers
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
-    And a buyer "zoidberg" signed up to application plan "Fixed" on 1st February 2009
+    And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for February, 2009 with items
       | name | cost |
       | Old  | 42   |

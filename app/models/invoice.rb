@@ -622,7 +622,7 @@ class Invoice < ApplicationRecord
   # - from: creation date of the buyer
   # - to: 12 months from now
   def period_range_valid?
-    return if self[:period]&.between?(buyer.created_at.to_date.beginning_of_month, Time.zone.now + 12.months)
+    return if self[:period]&.between?(provider_account.created_at.to_date.beginning_of_month, Time.zone.now + 12.months)
 
     errors.add(:period, :invalid_range)
   end

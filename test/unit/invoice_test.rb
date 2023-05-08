@@ -18,10 +18,10 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   def setup
-    @provider = FactoryBot.create(:simple_provider)
-
     @local_time = Time.zone.local(1984, 1, 1)
-    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: @local_time)
+    @provider = FactoryBot.create(:simple_provider, created_at: @local_time)
+
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
     @invoice = FactoryBot.create(:invoice,
                                   period: Month.new(@local_time),
