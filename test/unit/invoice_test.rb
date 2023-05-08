@@ -152,9 +152,9 @@ class InvoiceTest < ActiveSupport::TestCase
   class AutoFriendlyIdTest < ActiveSupport::TestCase
 
     def setup
-      @provider = FactoryBot.create(:simple_provider)
       @local_time = Time.zone.local(1984, 1, 1)
-      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: @local_time)
+      @provider = FactoryBot.create(:simple_provider, created_at: @local_time)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     end
 
     test 'gets sequential friendly_ids after saved' do
@@ -563,12 +563,10 @@ class InvoiceTest < ActiveSupport::TestCase
   class CounterUpdateTest < ActiveSupport::TestCase
 
     def setup
-      @provider = FactoryBot.create(:simple_provider)
-
       @local_time = Time.zone.local(2018, 1, 1)
+      @provider = FactoryBot.create(:simple_provider, created_at: @local_time)
       @invoice_period = Month.new(@local_time)
-
-      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: @local_time)
+      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
 
       @provider.billing_strategy = FactoryBot.create(:prepaid_billing, numbering_period: 'yearly')

@@ -3,7 +3,7 @@ require 'test_helper'
 class Csv::InvoicesExporterTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com', created_at: Time.zone.local(2009, 1, 1))
+    @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com', created_at: Time.zone.local(1964, 10, 1))
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
 
     @invoice_one = FactoryBot.create(:invoice,

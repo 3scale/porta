@@ -173,9 +173,9 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'increment id by provider' do
     create_two_invoices
 
-    second_provider = FactoryBot.create(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.numbering_period = 'monthly'
-    second_buyer = FactoryBot.create(:buyer_account, created_at: @provider_created_at)
+    second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
                                               :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer,
@@ -206,9 +206,9 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     two = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     other_month = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 2, 2)))
 
-    second_provider = FactoryBot.create(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    second_buyer = FactoryBot.create(:buyer_account, created_at: @provider_created_at)
+    second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
 
