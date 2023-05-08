@@ -32,7 +32,7 @@ gem 'strong_migrations', '~> 0.6.8'
 group :assets do
   gem 'coffee-rails', '~> 4.2'
   gem 'non-stupid-digest-assets', '~> 1.0'
-  gem 'sprockets-rails', '3.2.2' # remove version after we stop supporting Ruby 2.4
+  gem 'sprockets-rails'
 end
 
 gem 'sass-rails', '~> 5.0.8'
