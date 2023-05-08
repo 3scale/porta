@@ -76,7 +76,6 @@ gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.12.0'
-gem 'has_scope', '~> 0.7.2' # remove line after we stop supporting Ruby 2.4
 gem 'json', '~> 2.3.0'
 
 gem 'mysql2', '~> 0.5.3'
