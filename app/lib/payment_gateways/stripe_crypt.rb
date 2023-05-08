@@ -49,8 +49,8 @@ module PaymentGateways
       begin
         customer = Stripe::Customer.retrieve(customer_id, api_key)
         customer.deleted? ? create_customer : customer
-      rescue Stripe::InvalidRequestError => e
-        puts "An invalid request occurred."
+      rescue Stripe::InvalidRequestError
+        Rails.logger.warn("An invalid request occurred.")
       end
     end
 
