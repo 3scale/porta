@@ -46,8 +46,9 @@ module Liquid
       )
 
       def render(context)
-        action_view = context.registers[:controller].view_context
-        file_url = File.join(context.registers[:controller].helpers.rails_asset_host_url, @file)
+        controller = context.registers[:controller]
+        action_view = controller.view_context
+        file_url = File.join(controller.helpers.rails_asset_host_url, @file)
         case Pathname.new(@file).extname
         when '.css'
           action_view.stylesheet_link_tag file_url
