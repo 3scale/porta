@@ -117,6 +117,9 @@ module AuditedHacks
 
     private
 
+    # Disable the +:touch+ callback.
+    #
+    # We don't want a rails touch (e.g. for a +belongs_to+ +:touch+ association) to write an audit.
     def _filter_touch_callback(callbacks)
       filtered_callbacks = [*callbacks] - %i[touch]
       filtered_callbacks.presence || %i[create update destroy]
