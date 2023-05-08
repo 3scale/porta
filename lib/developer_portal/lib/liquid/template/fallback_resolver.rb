@@ -1,28 +1,29 @@
+# frozen_string_literal: true
+
 module Liquid
   class Template
     class FallbackResolver < ActionView::FileSystemResolver
-
       def initialize(path = DeveloperPortal::VIEW_PATH)
         super
       end
 
-      def find_templates(name, prefix, partial, details, outside_app_allowed = false)
+      def _find_all(name, prefix, partial, details, key = nil, locals = [])
         path = build_path(name, prefix, partial)
 
         # force just liquid format
         details = details.merge(handlers: [:liquid])
 
-        query(path, details, details[:formats], outside_app_allowed)
+        query(path, details, details[:formats], locals, cache: !!key)
       end
 
       def build_path(name, prefix, partial)
         prefix = prefix ? [prefix] : []
         prefix = ::File.join(*prefix)
         ::Rails.logger.debug { "FallbackResolver: path: #{[name, prefix, partial].inspect}" }
-        super
+        Path.build(name, prefix, partial)
       end
 
-      public :find_templates
+      public :_find_all
     end
 
     class FallbackResolverNoPrefix < FallbackResolver
@@ -31,16 +32,14 @@ module Liquid
         super
       end
 
-      def find_templates(name, prefix, partial, details, outside_app_allowed = false)
+      def _find_all(name, prefix, partial, details, key = nil, locals = [])
         path = build_path(name, prefix = nil, partial)
 
         # force just liquid format
         details = details.merge(handlers: [:liquid])
 
-        query(path, details, details[:formats], outside_app_allowed)
+        query(path, details, details[:formats], locals, cache: !!key)
       end
-
     end
-
   end
 end
