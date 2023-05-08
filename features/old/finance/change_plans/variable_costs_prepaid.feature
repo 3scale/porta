@@ -5,7 +5,7 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider exists
+    Given a provider exists on 1st May 2009
       And the provider is charging its buyers in prepaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on

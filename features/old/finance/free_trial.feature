@@ -5,7 +5,7 @@ Feature: On paid plans
   I want to charge my customers the right amounts even if there is a free trial
 
   Background:
-    Given a provider "planet.express.com"
+    Given a provider "planet.express.com" on 1st November 1989
       And provider "planet.express.com" is charging its buyers
       And provider "planet.express.com" has "finance" switch visible
       Given an application plan "Rocket" of provider "planet.express.com"
