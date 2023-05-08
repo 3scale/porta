@@ -844,10 +844,13 @@ class ProxyTest < ActiveSupport::TestCase
 
     test 'update policies config with audit check' do
       proxy = FactoryBot.create :proxy
+      long_string = "a" * 62 * 1024
+      # long_string = "foo"
+      # TODO serialization ends up with `ActiveModel::Errors` in there for some reason
+      proxy.update(policies_config: [{name: 'cors2', version: '0.0.2', configuration: {foo: long_string}}])
 
       Proxy.with_synchronous_auditing do
-        proxy.policies_config = [{name: 'cors2', version: '0.0.2', configuration: {foo: 'fofo'}}]
-        proxy.save
+        proxy.update(policies_config: [{name: 'cors2', version: '0.0.3', configuration: {foo: long_string}}])
 
         audit = proxy.audits.last
         assert_equal 'update', audit.action

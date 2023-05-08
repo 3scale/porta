@@ -478,7 +478,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     attr_accessor :name, :version, :configuration, :enabled
 
-    delegate :to_json, :as_json, to: :to_h
+    delegate :to_json, :to_yaml, to: :as_json
 
     validates :name, :version, presence: true
     validate :configuration_is_object
@@ -512,11 +512,12 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       to_h.slice('name', 'version', 'configuration')
     end
 
-    def to_h
+    def to_h(options = nil)
       %i[name version configuration enabled].each_with_object({}) do |key, obj|
         obj[key] = public_send key
-      end.compact.as_json
+      end.compact.as_json(options)
     end
+    alias as_json to_h
 
     def ==(other)
       %i[name version configuration enabled].all? { |key| public_send(key) == other.public_send(key) }
@@ -542,6 +543,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     MAX_LENGTH = 2.megabytes
 
     delegate :each, :to_json, :as_json, to: :policies_config
+    delegate :to_yaml, to: :as_json
     alias to_s to_json
     attr_reader :policies_config
     protected :policies_config
