@@ -54,8 +54,7 @@ Background:
 
   @javascript
   Scenario: Sums on dashboard are VAT sensitive
-   Given the time is 9th May 1945
-     And a buyer "europe" signed up to application plan "best"
+    Given a buyer "europe" signed up to application plan "best"
      And VAT rate of buyer "europe" is 5%
      And an invoice of buyer "europe" for May, 1945 with items
      | name       | description         | cost |
