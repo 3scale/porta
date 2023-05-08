@@ -189,7 +189,7 @@ module System
     store_type = args.shift
     options = args.extract_options!
     servers = args.flat_map { |arg| arg.split(',') }
-    config.cache_store = [store_type, servers, options]
+    config.cache_store = store_type == :null_store ? store_type : [store_type, servers, options]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
