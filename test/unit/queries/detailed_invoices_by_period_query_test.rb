@@ -14,8 +14,7 @@ class DetailedInvoicesByPeriodQueryTest < ActiveSupport::TestCase
 
     @invoice_two = FactoryBot.create(:invoice,
                                       provider_account: @provider,
-                                      buyer_account: FactoryBot.create(:simple_buyer, provider_account: @provider,
-                                                                       created_at: Time.utc(2009, 1, 1)),
+                                      buyer_account: FactoryBot.create(:simple_buyer, provider_account: @provider),
                                       period: Month.new(Time.utc(2009, 10, 1)),
                                       created_at: Time.utc(2009, 6, 1))
   end
