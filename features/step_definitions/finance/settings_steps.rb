@@ -57,7 +57,7 @@ And "a buyer has been billed monthly" do
   @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   @buyer.buy!(@provider.account_plans.default)
 
-  create_invoice(@buyer, @buyer.created_at)
+  create_invoice(@buyer, @provider.created_at)
 end
 
 Then "they can set the billing period to yearly" do
