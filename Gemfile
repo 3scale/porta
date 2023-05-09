@@ -92,7 +92,7 @@ gem 'secure_headers', '~> 6.3.0'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
-gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
+gem 'browser'
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
