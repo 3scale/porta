@@ -60,7 +60,6 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    # This is fixed in Rails 5.2
     config.load_defaults 5.1
     config.autoloader = :zeitwerk
     config.active_record.belongs_to_required_by_default = false
