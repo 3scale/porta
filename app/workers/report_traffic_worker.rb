@@ -73,14 +73,14 @@ class ReportTrafficWorker
     application_id = master_application_id(account_id)
     return unless application_id && master_service_metric?(metric_system_name.to_s)
 
-    transactions = {
+    transactions = [{
       app_id: application_id,
       usage:  { metric_system_name => 1 },
       log:    report_traffic_log(request, response),
       timestamp: time.utc.to_s
-    }
+    }]
 
-    client.report(transactions)
+    client.report(transactions: transactions, service_id: master_service.id, service_token: master_service.service_token)
   rescue ThreeScale::ServerError => exception
     raise ReportTrafficError, exception.response
   end
@@ -88,8 +88,7 @@ class ReportTrafficWorker
   private
 
   def client
-    @client ||= ThreeScale::Client.new(BackendClient.threescale_client_config.merge(
-                                        provider_key: master_service.account.api_key))
+    @client ||= ThreeScale::Client.new(BackendClient.threescale_client_config.merge(service_tokens: true))
   end
 
   def master_service
