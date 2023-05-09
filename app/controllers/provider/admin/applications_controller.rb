@@ -86,8 +86,18 @@ class Provider::Admin::ApplicationsController < FrontendController
     # there is no need to query available_application_plans as we already have a validation
     new_plan = accessible_plans.stock.find(plan_id)
     @cinstance.provider_changes_plan!(new_plan)
+    update_trial_period(new_plan)
     flash[:notice] = "Plan changed to '#{new_plan.name}'."
     redirect_to provider_admin_application_url(@cinstance)
+  end
+
+  def update_trial_period(new_plan)
+    if new_plan.trial_period_days.nil?
+      @cinstance.trial_period_expires_at = Time.zone.now
+    else
+      @cinstance.trial_period_expires_at = Time.zone.now + new_plan.trial_period_days.to_i.days
+    end
+    @cinstance.save!
   end
 
   def change_user_key
