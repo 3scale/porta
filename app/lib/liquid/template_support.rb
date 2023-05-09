@@ -48,7 +48,12 @@ module Liquid
         end
       end
 
-      view_renderer.extend(LayoutSupport)
+      ActionView::Renderer.class_eval do
+        # RAILS: this overrides a Rails method. Beware when upgrading.
+        def render_template_to_object(context, options)
+          LiquidTemplateRenderer.new(@lookup_context).render(context, options)
+        end
+      end
     end
 
     class LiquidTemplateRenderer < ::ActionView::TemplateRenderer
@@ -65,13 +70,6 @@ module Liquid
             Rails.logger.info "Rendering #{template.inspect} with #{overridden} instead of #{original}"
           end
         end
-      end
-    end
-
-    module LayoutSupport
-      # RAILS: this overrides rails method, beware when upgrading
-      def render_template(context, options)
-        LiquidTemplateRenderer.new(@lookup_context).render(context, options)
       end
     end
 
