@@ -64,15 +64,15 @@ module System
     config.autoloader = :zeitwerk
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
-    # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
-    config.active_record.yaml_column_permitted_classes = [Time, Date, BigDecimal, OpenStruct,
+    config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
                                                           ActionController::Parameters,
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
 
+    # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
 
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
