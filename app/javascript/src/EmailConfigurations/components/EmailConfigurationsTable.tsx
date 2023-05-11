@@ -20,8 +20,6 @@ import type { ISortBy, OnSort } from '@patternfly/react-table'
 import type { EmailConfiguration } from 'EmailConfigurations/types'
 import type { FunctionComponent } from 'react'
 
-import './EmailConfigurationsTable.scss'
-
 interface Props {
   emailConfigurations: EmailConfiguration[];
   emailConfigurationsCount: number;

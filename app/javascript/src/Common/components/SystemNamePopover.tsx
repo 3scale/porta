@@ -1,8 +1,6 @@
 import { render } from 'react-dom'
 import { Popover } from '@patternfly/react-core'
 
-import './SystemNamePopover.scss'
-
 // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any -- HACK: Popover return method is incompatible. Need to upgrade @patternfly/react-core
 const Popopover: any = Popover
 

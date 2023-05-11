@@ -11,8 +11,6 @@ import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import { MicroPagination } from 'Common/components/MicroPagination'
 
-import './CompactListCard.scss'
-
 export interface CompactListItem {
   name: string;
   href: string;

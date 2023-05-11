@@ -10,8 +10,6 @@ import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import type { FunctionComponent } from 'react'
 
-import './NoMatchFound.scss'
-
 interface Props {
   onClearFiltersClick?: () => void;
 }
