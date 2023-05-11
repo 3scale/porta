@@ -15,7 +15,7 @@ module Buyers::AccountsHelper
     if buyer
       if can? :manage, :partners
         path = path_method.is_a?(Symbol) ? send( path_method, buyer) : path_method
-        link_to buyer.org_name, path
+        link_to buyer.org_name, path, title: account_title(buyer)
       else
         buyer.org_name
       end

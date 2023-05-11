@@ -38,7 +38,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
     @service_contracts = current_user.accessible_service_contracts
               .scope_search(@search).order_by(*sorting_params)
-              .includes({ plan: %i[issuer pricing_rules]}, :user_account)
+              .includes(plan: %i[issuer pricing_rules], user_account: [:admin_user])
               .paginate(pagination_params)
               .decorate
 
