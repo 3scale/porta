@@ -349,8 +349,8 @@ GEM
       rake
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
-    formtastic (2.3.1)
-      actionpack (>= 3.0)
+    formtastic (4.0.0)
+      actionpack (>= 5.2.0)
     fugit (1.5.0)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -944,7 +944,7 @@ DEPENDENCIES
   faraday (~> 0.15.3)
   faraday_middleware (~> 0.13.1)
   font-awesome-rails (~> 4.7.0.5)
-  formtastic (~> 2.3.1)
+  formtastic (~> 4.0)
   github-markdown
   globalid (~> 1.0.1)
   has_scope (~> 0.7.2)
