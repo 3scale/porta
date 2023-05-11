@@ -31,6 +31,10 @@ class ServiceContract < Contract
     where(:plans => { :issuer_id => service_id.to_i }).joins(:plan).references(:plan)
   end
 
+  # TODO: unit test this scope
+  def self.provided_by(account)
+    where(plan_id: ServicePlan.provided_by(account).select(:id))
+  end
 
   # HACK: to enable it on-fly just when it comes from controller
   #

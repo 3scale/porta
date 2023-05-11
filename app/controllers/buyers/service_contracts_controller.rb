@@ -17,6 +17,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @services = accessible_services.includes(:service_plans)
     @search = ThreeScale::Search.new(params[:search] || params)
     @plans = current_account.service_plans
+    @multiservice = current_account.multiservice?
 
     if (service_id = params[:service_id] || @search.service_id)
       @service = @services.find service_id
@@ -37,6 +38,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
     @service_contracts = current_user.accessible_service_contracts
               .scope_search(@search).order_by(*sorting_params)
+              .includes({ plan: %i[issuer pricing_rules]}, :user_account)
               .paginate(pagination_params)
               .decorate
 
