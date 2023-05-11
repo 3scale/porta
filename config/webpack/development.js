@@ -1,10 +1,6 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const environment = require('./environment')
 
-// Add Webpack custom configs here
-environment.loaders.append('eslint', {
+const eslintRule = {
   test: /\.tsx?$/,
   exclude: /(node_modules)/,
   enforce: 'pre',
@@ -13,16 +9,13 @@ environment.loaders.append('eslint', {
     eslintPath: 'eslint',
     configFile: '.eslintrc'
   }
-})
+}
 
-// HACK: this removes transpilation errors in tests during development. tsconfig includes them so
-// that VS Code can work with imports. Ideally we should have a specific config for VS Code but
-// the plugin automatically picks `tsconfig.json` and doesn't support a custom filename.
-const tsLoader = environment.loaders.get('ts')
-tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
-
-environment.plugins.append('BundleAnalyzerPlugin',
-  new BundleAnalyzerPlugin()
-)
-
-module.exports = environment.toWebpackConfig()
+module.exports = {
+  module: {
+    rules: [eslintRule]
+  },
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ],
+}

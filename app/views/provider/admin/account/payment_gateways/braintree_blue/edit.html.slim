@@ -1,3 +1,6 @@
+- append_javascript_pack_tag 'braintree_provider_form'
+- append_stylesheet_pack_tag 'braintree_provider_form'
+
 h2
   = site_account.org_name
   |  Payment Details
@@ -58,4 +61,3 @@ p
     = form.commit_button 'Save credit card', button_html: { disabled: true }
 
 span#braintree_data data-client-token=braintree_authorization
-  = javascript_packs_with_chunks_tag 'braintree_provider_form'

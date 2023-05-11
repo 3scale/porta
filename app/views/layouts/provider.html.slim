@@ -1,18 +1,5 @@
-doctype html
-html[lang="en" class="pf-m-redhat-font"]
-  head
-    meta[charset="utf-8"]
-    title
-      = content_for?(:title) ? yield(:title) : default_title
-      |  | Red Hat 3scale API Management
-    = csrf_meta_tag
-    = rails_asset_url_tag
-    = javascript_packs_with_chunks_tag 'provider'
-    = render 'provider/theme'
-    = render 'provider/analytics'
-    = javascript_include_tag 'provider/layout/provider'
-    = yield :javascripts
-
+/ The code rendering partials has to come before the call to javascript_pack_tag
+- content_for :body
   body
     = render partial: 'shared/provider/quickstarts_container' if Features::QuickstartsConfig.enabled?
     #wrapper.pf-c-page
@@ -28,3 +15,21 @@ html[lang="en" class="pf-m-redhat-font"]
             = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
+
+doctype html
+html[lang="en" class="pf-m-redhat-font"]
+  head
+    meta[charset="utf-8"]
+    title
+      = content_for?(:title) ? yield(:title) : default_title
+      |  | Red Hat 3scale API Management
+    = csrf_meta_tag
+    = rails_asset_url_tag
+    = javascript_pack_tag 'provider', defer: false
+    = stylesheet_pack_tag 'provider'
+    = render 'provider/theme'
+    = render 'provider/analytics'
+    = javascript_include_tag 'provider/layout/provider'
+    = yield :javascripts
+
+  = yield :body

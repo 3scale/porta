@@ -1,3 +1,5 @@
+<% append_javascript_pack_tag 'plans_metrics' %>
+
 <div>
   <h2 id="header_table">
     <% if @plan.pricing_enabled? %>
@@ -68,5 +70,4 @@
       <% end -%>
     </tbody>
   </table>
-  <%= javascript_packs_with_chunks_tag 'plans_metrics' %>
 </div>

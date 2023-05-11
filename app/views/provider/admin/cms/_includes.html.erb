@@ -1,5 +1,7 @@
+<% append_javascript_pack_tag 'codemirror', defer: false %>
+<% append_stylesheet_pack_tag 'codemirror' %>
+
 <%= javascript_include_tag 'provider/cms' %>
-<%= javascript_packs_with_chunks_tag 'codemirror' %>
 <%= javascript_include_tag 'codemirror/modes/liquid' %>
 
 <%= javascript_tag do %>

@@ -98,6 +98,7 @@
     "react/require-default-props": "off",
     "react/no-set-state": "off",
     "react/no-unescaped-entities": "warn",
+    "react/no-object-type-as-default-prop": "off", // FIXME: remove line and fix errors
 
     // From plugin import
     "import/order": ["error", {

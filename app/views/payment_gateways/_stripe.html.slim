@@ -1,2 +1,4 @@
+- append_javascript_pack_tag 'stripe_form'
+- append_stylesheet_pack_tag 'stripe_form'
+
 div#stripe-form-wrapper data-stripe-form=stripe_form_data(@intent).to_json
-  = javascript_packs_with_chunks_tag 'stripe_form'

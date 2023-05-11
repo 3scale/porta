@@ -1,7 +1,8 @@
 = f.toggled_inputs 'policies', cookie_name: 'policies-rules', legend: "Policies", id: "policies-container" do
   - if @error.nil?
+    - append_javascript_pack_tag 'policies'
+    - append_stylesheet_pack_tag 'policies'
     div#policies data-service-id=@service.id data-registry=@registry_policies.to_json data-chain=@proxy.policies_config.to_json
-    = javascript_packs_with_chunks_tag 'policies'
   - else
     div
       h3 A valid APIcast Policies endpoint must be provided

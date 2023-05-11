@@ -11,7 +11,8 @@ module Liquid
 
       THREESCALE_STYLESHEETS = %w[legacy/stats plans_widget.css active-docs/application.css stats.css].freeze
       THREESCALE_JAVASCRIPTS = %w[plans_widget.js plans_widget_v2.js active-docs/application.js stats.js].freeze
-      THREESCALE_WEBPACK_PACKS = %w[stats.js active_docs.js validate_signup.js].freeze
+      THREESCALE_WEBPACK_JS_PACKS = %w[stats.js active_docs.js validate_signup.js].freeze
+      THREESCALE_WEBPACK_CSS_PACKS = %w[active_docs].freeze
       THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
       ACTIVE_DOCS_JS = %w[active-docs/application.js active_docs.js].freeze
 
@@ -50,8 +51,13 @@ module Liquid
       def javascript_include_tag(name, options = {})
         js = RailsHelpers.replace_googleapis(name)
         case
-        when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
-          active_docs_proxy(name) + view.javascript_packs_with_chunks_tag(name.chomp('.js'), options)
+        when THREESCALE_WEBPACK_JS_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
+          pack_name = name.chomp('.js')
+
+          tag = active_docs_proxy(name) +
+                view.javascript_pack_tag(pack_name, options.merge(defer: false))
+          tag += view.stylesheet_pack_tag(pack_name) if THREESCALE_WEBPACK_CSS_PACKS.include?(pack_name)
+          tag
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           active_docs_proxy(js) + view.javascript_include_tag(js)
         else

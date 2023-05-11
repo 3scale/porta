@@ -1,11 +1,11 @@
+- append_javascript_pack_tag 'provider_stats', defer: false
+- append_stylesheet_pack_tag 'provider_stats'
+
 - content_for :title, 'Traffic analytics'
 - content_for :sublayout_title, "Traffic"
 
 - content_for :stylesheets do
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'
-
-  - content_for :javascripts do
-    = javascript_packs_with_chunks_tag 'provider_stats'
 
 .Stats
   .StatsMenu-container

@@ -1,3 +1,6 @@
+- append_javascript_pack_tag 'system_name_input_popover'
+- append_stylesheet_pack_tag 'system_name_input_popover'
+
 = form.inputs do
   = form.input :friendly_name, input_html: { autofocus: true }
   li id='metric_system_name_input' class='string required'
@@ -7,7 +10,6 @@
       p
         = ".#{backend_api.id}"
       div id='system_name_popover'
-        = javascript_packs_with_chunks_tag('system_name_input_popover')
     p class='inline-hints' Only ASCII letters, numbers, dashes and underscores are allowed.
   = form.input :unit unless @metric.child?
   = form.input :description, input_html: { rows: 3 }
