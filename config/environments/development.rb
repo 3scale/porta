@@ -17,12 +17,7 @@ Rails.application.configure do
   config.assets.digest = false
   config.assets.precompile += %w( spec_helper.js )
 
-  config.asset_host = ->(*args) {
-    _source, request = args
-
-    return unless request
-    request.headers['host']
-  }
+  config.asset_host = config.three_scale.asset_host.presence
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 

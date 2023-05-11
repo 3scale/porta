@@ -31,10 +31,10 @@
 <% elsif @api_docs_service.specification.swagger_2_0? -%>
 
   <% content_for :javascripts do -%>
-    <%= javascript_include_tag "/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.js" -%>
+    <%= javascript_include_tag "/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.js" -%>
     <%= javascript_include_tag "swagger-ui2/api_docs_proxy" %>
 
-    <%= stylesheet_link_tag    "/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.css" %>
+    <%= stylesheet_link_tag    "/dev-portal-assets/swagger-ui/2.2.10/swagger-ui.css" %>
 
     <style type="text/css">
       div.swagger-section {
