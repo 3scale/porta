@@ -195,7 +195,7 @@ group :test do
   gem 'cucumber', '~> 7.0'
   gem 'cucumber-rails', '~> 2.4.0', require: false
   gem 'email_spec', require: false
-  gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
+  gem 'fakefs', require: 'fakefs/safe'
   gem 'launchy'
   gem 'mechanize'
   gem 'selenium-webdriver', '~> 3.142', require: false

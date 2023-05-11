@@ -351,7 +351,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    fakefs (0.18.0)
+    fakefs (1.8.0)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.13.1)
@@ -954,7 +954,7 @@ DEPENDENCIES
   equivalent-xml
   escape_utils
   factory_bot_rails (~> 6.2)
-  fakefs (~> 0.18.0)
+  fakefs
   faraday (~> 0.15.3)
   faraday_middleware (~> 0.13.1)
   font-awesome-rails (~> 4.7.0.5)
