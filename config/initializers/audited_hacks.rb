@@ -78,7 +78,7 @@ module AuditedHacks
 
   module ClassMethods
     def audited(options = {})
-      options[:on] = _filter_touch_callback(options[:on])
+      options[:on] = options[:on].presence || %i[create update destroy]
       super
 
       # this disables auditing only for current thread
@@ -113,16 +113,6 @@ module AuditedHacks
 
     def with_synchronous_auditing(&block)
       synchronous_audits { with_auditing(&block) }
-    end
-
-    private
-
-    # Disable the +:touch+ callback.
-    #
-    # We don't want a rails touch (e.g. for a +belongs_to+ +:touch+ association) to write an audit.
-    def _filter_touch_callback(callbacks)
-      filtered_callbacks = [*callbacks] - %i[touch]
-      filtered_callbacks.presence || %i[create update destroy]
     end
   end
 
