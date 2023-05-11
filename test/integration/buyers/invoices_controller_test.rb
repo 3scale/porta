@@ -60,7 +60,7 @@ class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_equal period, period_input['value']
     error_element = period_input.next_element
     assert_equal 'inline-errors', error_element['class']
-    assert_equal 'must be between the account creation date and 12 months from now', error_element.text
+    assert_equal 'must be between the provider account creation date and 12 months from now', error_element.text
   end
 
   test 'update invoice period with a valid value' do

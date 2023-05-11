@@ -619,7 +619,7 @@ class Invoice < ApplicationRecord
   private
 
   # Allowed range for the invoice period is:
-  # - from: creation date of the buyer
+  # - from: creation date of the provider
   # - to: 12 months from now
   def period_range_valid?
     return if self[:period]&.between?(provider_account.created_at.to_date.beginning_of_month, Time.zone.now + 12.months)

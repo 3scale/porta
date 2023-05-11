@@ -166,14 +166,14 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     period_too_old = (@now - 2.months).strftime('%Y-%m')
     post api_invoices_path, params: invoice_params.merge(period: period_too_old), headers: { accept: Mime[:json] }
     assert_response 422
-    assert_contains JSON.parse(response.body)['errors']['period'], 'must be between the account creation date and 12 months from now'
+    assert_contains JSON.parse(response.body)['errors']['period'], 'must be between the provider account creation date and 12 months from now'
   end
 
   test '#create with invalid date - later than next 12 months' do
     period_after_1year = (@now + 1.year + 1.month).strftime('%Y-%m')
     post api_invoices_path, params: invoice_params.merge(period: period_after_1year), headers: { accept: Mime[:json] }
     assert_response 422
-    assert_contains JSON.parse(response.body)['errors']['period'], 'must be between the account creation date and 12 months from now'
+    assert_contains JSON.parse(response.body)['errors']['period'], 'must be between the provider account creation date and 12 months from now'
   end
 
   test '#update states' do

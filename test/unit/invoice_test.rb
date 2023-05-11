@@ -130,7 +130,7 @@ class InvoiceTest < ActiveSupport::TestCase
     @invoice.update(period: period)
 
     assert_not @invoice.valid?
-    assert_includes @invoice.errors[:period], 'must be between the account creation date and 12 months from now'
+    assert_includes @invoice.errors[:period], 'must be between the provider account creation date and 12 months from now'
   end
 
   test 'validates invoice year - invalid if later than 12 months from now' do
@@ -139,7 +139,7 @@ class InvoiceTest < ActiveSupport::TestCase
       @invoice.update(period: period)
 
       assert_not @invoice.valid?
-      assert_includes @invoice.errors[:period], 'must be between the account creation date and 12 months from now'
+      assert_includes @invoice.errors[:period], 'must be between the provider account creation date and 12 months from now'
     end
   end
 
