@@ -50,8 +50,17 @@ module Liquid
 
       ActionView::Renderer.class_eval do
         # RAILS: this overrides a Rails method. Beware when upgrading.
+        # We overwrite ActionView methods to make Liquid work. Due to changes in ActionView, we cannot depend on
+        # overwriting instances of ActionView::Renderer anymore, as those can be reinitialized during a page render.
+        # Because of that, we need to overwrite this method in class level, which may cause odd behaviours without
+        # the respond_to?(:liquify) check.
+        # Maybe move this to an initializer in case we can't find a better solution?
         def render_template_to_object(context, options)
-          LiquidTemplateRenderer.new(@lookup_context).render(context, options)
+          if context.controller.class.respond_to?(:liquify)
+            LiquidTemplateRenderer.new(@lookup_context).render(context, options)
+          else
+            ActionView::TemplateRenderer.new(@lookup_context).render(context, options)
+          end
         end
       end
     end
