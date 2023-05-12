@@ -1522,7 +1522,7 @@
     "@patternfly/react-styles" "^4.11.4"
     classnames "^2.2.5"
 
-"@patternfly/react-core@^3.120.5":
+"@patternfly/react-core@3.158.4":
   version "3.158.4"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-3.158.4.tgz#adb5a744d36af5121d55fb8893fda2ed41a94330"
   integrity sha512-LwLSD4DvHCkfY55kgLhcNlKzy0x/zrPX4oEWcCcZIu/PKS7lRKJFdLzKf0qGv17GsfmYiIlhYSZ+B5FCAh90dg==
