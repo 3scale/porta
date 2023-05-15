@@ -3,7 +3,7 @@ Feature: Instant biling plan change feature
   As a provider I want to charge the variable cost on plan change
 
   Background:
-    Given a provider is logged in
+    Given a provider is logged in on 1st January 2017
     And the provider is charging its buyers in prepaid mode
     And the provider service allows to change application plan directly
     And the provider has "finance" visible
@@ -72,39 +72,39 @@ Feature: Instant biling plan change feature
     And pricing rules on plan "PureVariable101":
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 101 | infinity |
-    # In March, 2018
-    Given the buyer signed up for plan "PureVariable101" on 20th Mar 2018
+    # In March, 2017
+    Given the buyer signed up for plan "PureVariable101" on 20th Mar 2017
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 50    |
-    When time flies to 3rd Apr 2018
+    When time flies to 3rd Apr 2017
     # Automatic billing ran, threshold wasn't reached in the past month
     Then the buyer should have 0 invoices
-    # In April, 2018
+    # In April, 2017
     Given the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 65    |
-    When time flies to 3rd May 2018
+    When time flies to 3rd May 2017
     # Automatic billing ran, threshold wasn't reached in the past month
     Then the buyer should have 0 invoices
-    # In May, 2018
+    # In May, 2017
     Given the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 500   |
-    When time flies to 4th May 2018
+    When time flies to 4th May 2017
     And the buyer changed to plan "PureVariable"
-    When time flies to 7th May 2018
+    When time flies to 7th May 2017
     # Plan changed occurred, threshold of PureVariable101 was reached
-    Then the buyer should have following line items for "May, 2018" in the 1st invoice:
+    Then the buyer should have following line items for "May, 2017" in the 1st invoice:
       | name       | quantity | cost  |
       | Hits       | 500      | 40.00 |
       | Total cost |          | 40.00 |
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 100   |
-    When time flies to 3rd Jun 2018
+    When time flies to 3rd Jun 2017
     # Automatic billing ran, more accountable traffic while in PureVariable
-    Then the buyer should have following line items for "June, 2018" in the 1st invoice:
+    Then the buyer should have following line items for "June, 2017" in the 1st invoice:
       | name       | quantity | cost  |
       | Hits       | 100      | 10.00 |
       | Total cost |          | 10.00 |

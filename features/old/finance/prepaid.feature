@@ -4,7 +4,7 @@ Feature: Prepaid billing of a buyer
   I want to be charged as soon as possible
 
  Background:
-  Given a provider
+  Given a provider on 1st January 2009
     And the provider is billing but not charging in prepaid mode
     And provider "foo.3scale.localhost" has "finance" switch visible
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly

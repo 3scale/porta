@@ -3,7 +3,7 @@ require 'test_helper'
 class MonthlyRevenueQueryTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryBot.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider, created_at: Time.utc(1964, 10, 1))
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
     @invoice_one = FactoryBot.create(:invoice,

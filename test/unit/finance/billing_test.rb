@@ -4,13 +4,12 @@ class BillingTest < ActiveSupport::TestCase
 
   def setup
     provider = FactoryBot.create(:simple_provider)
-    buyer = FactoryBot.create(:simple_buyer, :provider_account => provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
 
     @invoice = FactoryBot.create(:invoice,
-                              :period => Month.new(Time.zone.local(1984, 1, 1)),
-                              :provider_account => provider,
-                              :buyer_account => buyer,
-                              :friendly_id => '0000-00-00000001')
+                                 period: Month.new(Time.zone.now),
+                                 provider_account: provider,
+                                 buyer_account: buyer)
     @billing_invoice = Finance::AdminBilling.new(@invoice)
 
     @item = { name: 'FakeName', cost: 22, type: LineItem::PlanCost }

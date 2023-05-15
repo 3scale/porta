@@ -41,6 +41,7 @@ class MonthTest < ActiveSupport::TestCase
   test 'return nil when parsing invalid date' do
     assert_nil Month.parse_month 'not-a-date'
     assert_nil Month.parse_month 'giberish'
+    assert_nil Month.parse_month '2020-14'
   end
 
   test 'raise with wrong params' do

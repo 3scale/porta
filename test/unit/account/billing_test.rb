@@ -135,9 +135,7 @@ class Account::BillingTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
     account = FactoryBot.create(:simple_account, provider_account: provider, vat_rate: 1.0)
 
-    invoice = account.invoices.create!(provider_account: provider,
-                                       period: '2016-06',
-                                       friendly_id: '2016-06-00000001')
+    invoice = account.invoices.create!(provider_account: provider, period: Month.new(Time.zone.now))
     invoice.update_columns(vat_rate: 2.0)
     assert_equal 2.0, invoice.reload.vat_rate.to_f
 
@@ -154,7 +152,7 @@ class Account::BillingTest < ActiveSupport::TestCase
     number_buyers = 2
     provider = FactoryBot.create(:simple_provider)
     FactoryBot.create_list(:simple_buyer, number_buyers, provider_account: provider)
-        .each { |buyer| buyer.invoices.create!(provider_account: provider, period: '2016-06', friendly_id: '2016-06-00000001', state: 'pending') }
+        .each { |buyer| buyer.invoices.create!(provider_account: provider, period: Month.new(Time.zone.now), state: 'pending') }
 
     assert_raise(ActiveRecord::RecordNotDestroyed) { provider.destroy! }
     refute provider.destroyed?

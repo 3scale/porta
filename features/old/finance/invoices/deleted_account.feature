@@ -6,7 +6,7 @@ Feature: Invoices of deleted account
 
   Background:
     Given the date is 25th January 2012
-    Given a provider is logged in
+    Given a provider is logged in on 1st January 2011
     Given the provider is charging its buyers in prepaid mode
     And an application plan "Plan" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Plan"
