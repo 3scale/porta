@@ -38,7 +38,7 @@ Then /^cdn assets should be loaded from the asset host$/ do
   assert_not_nil Capybara.page.source.match js_regexp
 end
 
-Then /^provided assets shouldn't be loaded from the asset host$/ do
+Then /^cdn assets shouldn't be loaded from the asset host$/ do
   # When no CDN is set, we expect to find relative paths to reusable assets
   js_regexp =  %r{src="/dev-portal-assets/.*?\.js"}
 
