@@ -11,7 +11,7 @@ class ServicePlan < Plan
   before_destroy :destroy_contracts
 
   def self.provided_by(account)
-    Plan.by_type(self).issued_by(Service, account.service_ids)
+    Plan.by_type(ServicePlan).issued_by(Service, account.service_ids)
   end
 
   def provider_account
