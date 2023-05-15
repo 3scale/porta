@@ -5,10 +5,6 @@ base: &default
   open_timeout: <%= ENV.fetch('BACKEND_OPEN_TIMEOUT', 3) %>
   timeout: <%= ENV.fetch('BACKEND_TIMEOUT', 3) %>
 
-  # superseded by 'url'
-  # host: <%= ENV.fetch('BACKEND_HOST', 'localhost:3001') %>
-  # secure: <%= ENV.fetch('BACKEND_SECURE', '0') == '1' %>
-
 development:
   <<: *default
   persistent: false

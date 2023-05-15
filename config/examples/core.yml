@@ -1,5 +1,5 @@
 base: &default
-  url: <%= ENV.fetch('THREESCALE_CORE_INTERNAL_API', 'http://localhost:3001/internal/') %>
+  url: "<%= URI.join(ENV.fetch('BACKEND_URL', 'http://backend-listener:3000'), '/internal/') %>"
   # fake server is useful when you don't run a real backend apisonator
   # fake_server: 'http://localhost:3000/internal/'
 #  fake_server: false

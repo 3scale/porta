@@ -12,10 +12,9 @@ x-system_environment:
     - DB_HOST=mysql
     - REDIS_URL=redis://redis/1
     - MEMCACHE_SERVERS=memcached:11211
-    - BACKEND_HOST=apisonator:3001
+    - BACKEND_URL=http://apisonator:3001
     - BACKEND_REDIS_URL=redis://redis/3
     - SECRET_KEY_BASE=secret
-    - THREESCALE_CORE_INTERNAL_API=http://apisonator:3001/internal/
     - CONFIG_INTERNAL_API_USER=system_app
     - CONFIG_INTERNAL_API_PASSWORD=password
     - SMTP_ADDRESS=mailhog

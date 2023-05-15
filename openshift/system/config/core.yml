@@ -1,5 +1,5 @@
 production:
-  url: <%= ENV.fetch('THREESCALE_CORE_INTERNAL_API', 'http://backend-listener:3000/internal/') %>
+  url: "<%= URI.join(ENV.fetch('BACKEND_URL', 'http://backend-listener:3000'), '/internal/') %>"
   fake_server: false
   username: <%= ENV.fetch('CONFIG_INTERNAL_API_USER', nil) %>
   password: <%= ENV.fetch('CONFIG_INTERNAL_API_PASSWORD', nil) %>
