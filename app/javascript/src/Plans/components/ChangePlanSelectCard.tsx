@@ -26,9 +26,6 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
 }) => {
   const [plan, setPlan] = useState<Plan | null>(null)
 
-  // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
-  const plans = plan ? applicationPlans.map(p => ({ ...p, disabled: p.id === plan.id })) : applicationPlans
-
   return (
     <Card id="change_plan_card">
       <CardBody>
@@ -44,7 +41,7 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
           <SelectFormGroup
             fieldId="cinstance_plan_id"
             item={plan}
-            items={plans}
+            items={applicationPlans}
             label={<h3>Change plan</h3>}
             name="cinstance[plan_id]"
             placeholderText="Select plan"

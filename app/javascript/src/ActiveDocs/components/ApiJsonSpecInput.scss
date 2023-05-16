@@ -9,7 +9,7 @@ textarea#api_docs_service_body[aria-invalid="true"] + div.CodeMirror {
   background-position: calc(100% - 0.5rem) 0.5rem;
   background-repeat: no-repeat;
   background-size: 1rem 1rem;
-  border-bottom-color: #C9190B; // TODO: When upgrading to PF4 use var(--pf-c-form__helper-text--m-error--Color)
+  border-bottom-color: var(--pf-c-form__helper-text--m-error--Color);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-style: solid;

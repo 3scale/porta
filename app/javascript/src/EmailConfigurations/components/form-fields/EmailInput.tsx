@@ -14,25 +14,27 @@ const EmailInput: FunctionComponent<Props> = ({
   setEmail,
   isRequired,
   errors
-}) => (
-  <FormGroup
-    fieldId="email_configuration_email"
-    helperTextInvalid={errors.toString()}
-    isRequired={isRequired}
-    isValid={!errors.length}
-    label="Email"
-    validated="default"
-  >
-    <TextInput
-      id="email_configuration_email"
-      isValid={!errors.length}
-      name="email_configuration[email]"
-      type="text"
-      value={email}
-      onChange={setEmail}
-    />
-  </FormGroup>
-)
+}) => {
+  const validated = errors.length ? 'error' : 'default'
+  return (
+    <FormGroup
+      fieldId="email_configuration_email"
+      helperTextInvalid={errors.toString()}
+      isRequired={isRequired}
+      label="Email"
+      validated={validated}
+    >
+      <TextInput
+        id="email_configuration_email"
+        name="email_configuration[email]"
+        type="text"
+        validated={validated}
+        value={email}
+        onChange={setEmail}
+      />
+    </FormGroup>
+  )
+}
 
 export type { Props }
 export { EmailInput }

@@ -15,7 +15,6 @@ const RedirectUrlInput: FunctionComponent<Props> = ({
   <FormGroup
     fieldId="proxy_rule_redirect_url"
     label="Redirect URL"
-    validated="default"
   >
     <TextInput
       id="proxy_rule_redirect_url"

@@ -1,9 +1,8 @@
 import {
   Button,
   Divider,
-  PaginationVariant,
   Toolbar,
-  ToolbarGroup,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
@@ -58,12 +57,11 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
     window.location.replace(url.toString())
   }
 
-  // TODO: wrap toolbar items in a ToolbarContent once PF upgraded
   return (
     <>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarGroup> {/* TODO: add variant='filter-group' after upgrading @patternfly/react-core */}
-          <ToolbarItem>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
             <ToolbarSearch name="query" placeholder="Find an email" />
           </ToolbarItem>
           <ToolbarItem>
@@ -76,12 +74,10 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
               Add an Email configuration
             </Button>
           </ToolbarItem>
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-            <Pagination itemCount={emailConfigurationsCount} />
-          </ToolbarItem>
-        </ToolbarGroup>
+        </ToolbarContent>
+        <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+          <Pagination itemCount={emailConfigurationsCount} />
+        </ToolbarItem>
       </Toolbar>
       <Divider />
       {/* TODO: add NoMatchFound when no search results and a NoItemsCreateFirstOne when collection empty */}
@@ -89,8 +85,12 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        <Pagination itemCount={emailConfigurationsCount} variant={PaginationVariant.bottom} />
+      <Toolbar id="bottom-toolbar">
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={emailConfigurationsCount} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </>
   )

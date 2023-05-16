@@ -68,20 +68,20 @@ it('should disable the button when the default plan is selected', () => {
   isButtonDisabled(true)
 })
 
-it('should disable the plan option when plan already selected', () => {
+it('should select the plan option when plan already selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' } as const
   const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
   const option = (plan: IRecord) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
-  const isOptionDisabled = (plan: IRecord, disabled: boolean) => { expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled) }
+  const isOptionSelected = (plan: IRecord, selected: boolean) => { expect(option(plan).prop('className').includes('pf-m-selected')).toBe(selected) }
 
   openSelect(wrapper)
-  isOptionDisabled(initialDefaultPlan, true)
-  isOptionDisabled(plan, false)
+  isOptionSelected(initialDefaultPlan, true)
+  isOptionSelected(plan, false)
 
   option(plan).simulate('click')
   openSelect(wrapper)
-  isOptionDisabled(initialDefaultPlan, false)
-  isOptionDisabled(plan, true)
+  isOptionSelected(initialDefaultPlan, false)
+  isOptionSelected(plan, true)
 })
 
 it.todo('should be able to filter by name')

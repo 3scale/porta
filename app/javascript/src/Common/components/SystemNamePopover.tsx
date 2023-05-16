@@ -1,11 +1,8 @@
 import { render } from 'react-dom'
 import { Popover } from '@patternfly/react-core'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any -- HACK: Popover return method is incompatible. Need to upgrade @patternfly/react-core
-const Popopover: any = Popover
-
 const SystemNamePopover: React.FunctionComponent = () => (
-  <Popopover
+  <Popover
     aria-label="system name info popover"
     bodyContent={(
       <div style={{ textAlign: 'start' }}>
@@ -15,7 +12,7 @@ const SystemNamePopover: React.FunctionComponent = () => (
     maxWidth="420px"
   >
     <i className="fa fa-question-circle-o" />
-  </Popopover>
+  </Popover>
 )
 
 const SystemNamePopoverWrapper = (container: Element): void => { render(<SystemNamePopover />, container) }

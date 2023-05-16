@@ -17,7 +17,6 @@ const PositionInput: FunctionComponent<Props> = ({
     className="pf-c-form__group-narrow"
     fieldId="proxy_rule_position"
     label="Position"
-    validated="default"
   >
     <TextInput
       id="proxy_rule_position"

@@ -2,11 +2,15 @@
 
 exports[`should be able to render a "cancel" button variant 1`] = `
 <button
+  aria-disabled="false"
   class="pf-c-button pf-m-link PolicyChain-addPolicy--cancel"
+  data-ouia-component-id="OUIA-Generated-Button-link-4"
+  data-ouia-component-type="PF4/Button"
+  data-ouia-safe="true"
   type="button"
 >
   <span
-    class="pf-c-button__icon"
+    class="pf-c-button__icon pf-m-start"
   >
     <svg
       aria-hidden="true"
@@ -23,19 +27,20 @@ exports[`should be able to render a "cancel" button variant 1`] = `
       />
     </svg>
   </span>
-  <span
-    class="pf-c-button__text"
-  />
 </button>
 `;
 
 exports[`should be able to render an "add" button variant 1`] = `
 <button
+  aria-disabled="false"
   class="pf-c-button pf-m-link PolicyChain-addPolicy"
+  data-ouia-component-id="OUIA-Generated-Button-link-3"
+  data-ouia-component-type="PF4/Button"
+  data-ouia-safe="true"
   type="button"
 >
   <span
-    class="pf-c-button__icon"
+    class="pf-c-button__icon pf-m-start"
   >
     <svg
       aria-hidden="true"
@@ -52,8 +57,5 @@ exports[`should be able to render an "add" button variant 1`] = `
       />
     </svg>
   </span>
-  <span
-    class="pf-c-button__text"
-  />
 </button>
 `;

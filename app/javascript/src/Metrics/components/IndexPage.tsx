@@ -2,10 +2,17 @@ import {
   Button,
   Card,
   CardBody,
+  Flex,
+  FlexItem,
   PageSection,
   PageSectionVariants,
   Tab,
-  Tabs
+  TabContent,
+  TabContentBody,
+  TabTitleText,
+  Tabs,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { MetricsTable } from 'Metrics/components/MetricsTable'
@@ -49,39 +56,57 @@ const IndexPage: FunctionComponent<Props> = ({
   return (
     <div id="metrics-index-page">
       <PageSection variant={PageSectionVariants.light}>
-        <h1>Methods and Metrics</h1>
+        <TextContent>
+          <Text component="h1">Methods and Metrics</Text>
+        </TextContent>
       </PageSection>
 
-      <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
-        <Tab eventKey="methods" title="Methods" />
-        <Tab eventKey="metrics" title="Metrics" />
-      </Tabs>
+      <PageSection type="tabs">
+        <Tabs
+          usePageInsets
+          activeKey={activeTabKey}
+          onSelect={handleTabClick}
+        >
+          <Tab eventKey="methods" title={<TabTitleText>Methods</TabTitleText>} />
+          <Tab eventKey="metrics" title={<TabTitleText>Metrics</TabTitleText>} />
+        </Tabs>
+      </PageSection>
 
       <PageSection>
-        <Card>
-          <CardBody>
-            {infoCard}
-          </CardBody>
-        </Card>
+        <TabContent id="method-metrics-info-card">
+          <TabContentBody>
+            <Flex className="pf-u-h-100" direction={{ default: 'column' }}>
+              <FlexItem flex={{ default: 'flex_1' }}>
+                <Card>
+                  <CardBody>
+                    {infoCard}
+                  </CardBody>
+                </Card>
+              </FlexItem>
 
-        <Card>
-          <MetricsTable
-            activeTabKey={activeTabKey}
-            addMappingRulePath={addMappingRulePath}
-            createButton={(
-              <Button
-                isInline
-                component="a"
-                href={createMetricPath}
-                variant="primary"
-              >{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
-              </Button>
-            )}
-            mappingRulesPath={mappingRulesPath}
-            metrics={metrics}
-            metricsCount={metricsCount}
-          />
-        </Card>
+              <FlexItem flex={{ default: 'flex_1' }}>
+                <Card>
+                  <MetricsTable
+                    activeTabKey={activeTabKey}
+                    addMappingRulePath={addMappingRulePath}
+                    createButton={(
+                      <Button
+                        isInline
+                        component="a"
+                        href={createMetricPath}
+                        variant="primary"
+                      >{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
+                      </Button>
+                    )}
+                    mappingRulesPath={mappingRulesPath}
+                    metrics={metrics}
+                    metricsCount={metricsCount}
+                  />
+                </Card>
+              </FlexItem>
+            </Flex>
+          </TabContentBody>
+        </TabContent>
       </PageSection>
     </div>
   )

@@ -24,7 +24,7 @@ it('should render itself', () => {
 
 it('should render six Form Groups', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('.pf-c-form__group > label').length).toEqual(6)
+  expect(wrapper.find('.pf-c-form__group label').length).toEqual(6)
 })
 
 describe('Username', () => {

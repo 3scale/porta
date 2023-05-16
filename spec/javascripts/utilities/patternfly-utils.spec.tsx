@@ -1,3 +1,4 @@
+import { SelectOption } from '@patternfly/react-core'
 import * as patternflyUtils from 'utilities/patternfly-utils'
 import type { IRecord } from 'utilities/patternfly-utils'
 
@@ -14,29 +15,35 @@ it('#toSelectOption should work', () => {
   const selectOption = patternflyUtils.toSelectOption({ ...item, disabled: undefined, className: 'banana' })
 
   expect(selectOption).toMatchInlineSnapshot(`
-    <SelectOption
-      className="banana"
-      component="button"
-      data-description="A standard item object"
-      index={0}
-      isChecked={false}
-      isDisabled={false}
-      isFocused={false}
-      isNoResultsOption={false}
-      isPlaceholder={false}
-      isSelected={false}
-      keyHandler={[Function]}
-      onClick={[Function]}
-      sendRef={[Function]}
-      value={
-        {
-          "id": "10",
-          "name": "The item",
-          "toString": [Function],
-        }
-      }
-    />
-  `)
+<SelectOption
+  className="banana"
+  component="button"
+  data-description="A standard item object"
+  index={0}
+  inputId=""
+  isChecked={false}
+  isDisabled={false}
+  isFavorite={null}
+  isLastOptionBeforeFooter={[Function]}
+  isLoad={false}
+  isLoading={false}
+  isNoResultsOption={false}
+  isPlaceholder={false}
+  isSelected={false}
+  keyHandler={[Function]}
+  onClick={[Function]}
+  sendRef={[Function]}
+  setViewMoreNextIndex={[Function]}
+  value={
+    {
+      "compareTo": [Function],
+      "id": "10",
+      "name": "The item",
+      "toString": [Function],
+    }
+  }
+/>
+`)
 })
 
 it('#handleOnFilter should work', () => {
@@ -44,47 +51,51 @@ it('#handleOnFilter should work', () => {
     { id: 1, name: 'One item', description: '' },
     { id: 2, name: 'Another item', description: '' }
   ]
-  const onFilter = patternflyUtils.handleOnFilter<IRecord>(items)
 
-  const filter = (value: string): any[] => onFilter({ currentTarget: { value } } as React.SyntheticEvent<HTMLInputElement>)
-    .map((el) => el.props.value)
+  const filter = (term: string): any[] => patternflyUtils.handleOnFilter(items)(undefined, term)!
+    .map((el) => (el as unknown as SelectOption).props.value)
 
   expect(filter('one')).toMatchInlineSnapshot(`
-    [
-      {
-        "id": "1",
-        "name": "One item",
-        "toString": [Function],
-      },
-    ]
-  `)
+[
+  {
+    "compareTo": [Function],
+    "id": "1",
+    "name": "One item",
+    "toString": [Function],
+  },
+]
+`)
   expect(filter('item')).toMatchInlineSnapshot(`
-    [
-      {
-        "id": "1",
-        "name": "One item",
-        "toString": [Function],
-      },
-      {
-        "id": "2",
-        "name": "Another item",
-        "toString": [Function],
-      },
-    ]
-  `)
+[
+  {
+    "compareTo": [Function],
+    "id": "1",
+    "name": "One item",
+    "toString": [Function],
+  },
+  {
+    "compareTo": [Function],
+    "id": "2",
+    "name": "Another item",
+    "toString": [Function],
+  },
+]
+`)
   expect(filter('')).toMatchInlineSnapshot(`
-    [
-      {
-        "id": "1",
-        "name": "One item",
-        "toString": [Function],
-      },
-      {
-        "id": "2",
-        "name": "Another item",
-        "toString": [Function],
-      },
-    ]
-  `)
+[
+  {
+    "compareTo": [Function],
+    "id": "1",
+    "name": "One item",
+    "toString": [Function],
+  },
+  {
+    "compareTo": [Function],
+    "id": "2",
+    "name": "Another item",
+    "toString": [Function],
+  },
+]
+`)
   expect(filter('asdf')).toEqual([])
 })

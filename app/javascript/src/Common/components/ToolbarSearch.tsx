@@ -11,8 +11,6 @@ import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import './ToolbarSearch.scss'
-
 interface Props {
   placeholder: string;
   name?: string;
@@ -77,9 +75,6 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     onSubmitSearch((e.currentTarget as HTMLInputElement).value)
   }
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any -- HACK: Popover return method is incompatible. Need to upgrade @patternfly/react-core
-  const Popopover: any = Popover
-
   return (
     <Form
       acceptCharset="UTF-8"
@@ -101,7 +96,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           value={searchText}
           onChange={setSearchText}
         />
-        <Popopover
+        <Popover
           aria-label="search minimum length"
           bodyContent={<div>To search, type at least 3 characters.</div>}
           isVisible={showPopover}
@@ -114,7 +109,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           >
             <SearchIcon />
           </Button>
-        </Popopover>
+        </Popover>
       </InputGroup>
     </Form>
   )

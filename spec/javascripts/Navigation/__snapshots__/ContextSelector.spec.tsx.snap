@@ -13,7 +13,7 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
     data-quickstart-id="context-selector"
   >
     <a
-      className="pf-c-context-selector__toggle "
+      className="pf-c-context-selector__toggle pf-m-plain pf-m-text"
       onClick={[Function]}
       title="Context Selector"
     >
@@ -112,7 +112,7 @@ exports[`should not have Audience if not provided 1`] = `
     data-quickstart-id="context-selector"
   >
     <a
-      className="pf-c-context-selector__toggle "
+      className="pf-c-context-selector__toggle pf-m-plain pf-m-text"
       onClick={[Function]}
       title="Context Selector"
     >

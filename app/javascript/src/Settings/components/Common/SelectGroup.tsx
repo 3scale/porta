@@ -25,7 +25,7 @@ const SelectGroup: React.FunctionComponent<Props> = ({
       <input name={`service[proxy_attributes][${name}]`} type="hidden" value={selectedValue} />
       <Select
         id={`service_proxy_attributes_${name}_select`}
-        isExpanded={isExpanded}
+        isOpen={isExpanded}
         selections={catalog[selectedValue]}
         onSelect={onSelect}
         onToggle={setIsExpanded}

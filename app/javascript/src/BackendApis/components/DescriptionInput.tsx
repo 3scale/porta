@@ -14,7 +14,6 @@ const DescriptionInput: FunctionComponent<Props> = ({
   <FormGroup
     fieldId="backend_api_description"
     label="Description"
-    validated="default"
   >
     <TextArea
       id="backend_api_description"

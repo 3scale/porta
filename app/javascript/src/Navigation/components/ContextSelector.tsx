@@ -46,7 +46,7 @@ const ContextSelector: FunctionComponent<Props> = ({
 
   return (
     <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} data-quickstart-id="context-selector" ref={ref}>
-      <a className="pf-c-context-selector__toggle " title="Context Selector" onClick={() => { setIsOpen(!isOpen) }}>
+      <a className="pf-c-context-selector__toggle pf-m-plain pf-m-text" title="Context Selector" onClick={() => { setIsOpen(!isOpen) }}>
         <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (

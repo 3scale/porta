@@ -1,6 +1,0 @@
-// HACK: this should not be necessary. Remove after upgrading Patternfly.
-.pf-c-table .pf-c-table__sort,
-.pf-c-table .pf-c-table__sort:first-child,
-.pf-c-table .pf-c-table__sort:last-child {
-  padding: var(--pf-c-table--cell--first-last-child--PaddingLeft);
-}

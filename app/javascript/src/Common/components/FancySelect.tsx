@@ -90,8 +90,8 @@ const FancySelect = <T extends IRecord>({
       fieldId={id}
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
-      isValid={!helperTextInvalid}
       label={label}
+      validated={helperTextInvalid ? 'error' : 'default'}
     >
       {!!name && item && <input name={name} type="hidden" value={item.id} />}
       <Select
@@ -99,7 +99,7 @@ const FancySelect = <T extends IRecord>({
         aria-labelledby={id}
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
         isDisabled={isDisabled}
-        isExpanded={expanded}
+        isOpen={expanded}
         placeholderText={placeholderText}
         selections={item && toSelectOptionObject(item)}
         variant={SelectVariant.typeahead}

@@ -7,9 +7,4 @@
   .pf-c-form__group-narrow {
     max-width: 110px;
   }
-
-  // HACK: we're using different PF versions and therefore missing the actual class for monospace font. Remove this once we upgrade to PF4.
-  .pf-m-redhatmono-font {
-    font-family: monospace;
-  }
 }

@@ -1,32 +1,4 @@
-/* As we disabled automatic PF4/React css inline injection */
-/* Now we need to add pf4 styles manually */
-@import '~@patternfly/patternfly/patternfly.css';
-
-/****** HACK ******/
-
-/* PF4 font-size is not dynamic, but ours is.
-As we are still in a transition where PF4 is not totally implemented,
-we are keeping the dinamycally calculated size.
-This code must be removed once PF4 is implemented in the whole application */
-
-@media screen and (max-width: 979px) {
-  html {
-    font-size: 0.65rem!important;
-  }
-}
-
-@media screen and (min-width: 980px) {
-  html {
-      font-size:calc(0.65rem + 0.35 * ((100vw - 50rem) / 50))!important;
-  }
-}
-
-@media screen and (min-width: 1600px) {
-  html {
-      font-size:1rem!important;
-  }
-}
-/****** END OF HACK ******/
+@import '~@patternfly/react-core/dist/styles/base.css';
 
 $pf-black-500:  #8b8d8f; // $osloGray
 $--pf-global--danger-color--100: #c9190b;

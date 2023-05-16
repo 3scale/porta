@@ -44,7 +44,7 @@ it('should enable the button when a plan is selected', () => {
   expect(wrapper.find('button[type="submit"]').prop('disabled')).toEqual(false)
 })
 
-it('should disable the plan already selected', () => {
+it('should mark the plan already selected', () => {
   const wrapper = mountWrapper()
   const option = () => wrapper.find('SelectOption button').findWhere(n => n.text() === 'I am a plan').first()
 
@@ -54,7 +54,7 @@ it('should disable the plan already selected', () => {
   expect(selected.name).toBe(plan.name)
 
   openSelect(wrapper)
-  expect(option().prop('className')).toMatch('pf-m-disabled')
+  expect(option().prop('className')).toMatch('pf-m-selected')
 })
 
 // FIXME: input not receiving change event

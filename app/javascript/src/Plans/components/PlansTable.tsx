@@ -1,8 +1,8 @@
 import {
   Button,
   Divider,
-  PaginationVariant,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
@@ -17,8 +17,6 @@ import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { IActionsResolver, ISortBy, OnSort } from '@patternfly/react-table'
 import type { Action, Plan } from 'Types'
-
-import './PlansTable.scss'
 
 interface Props {
   columns: {
@@ -71,21 +69,27 @@ const PlansTable: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarItem>
-          <ToolbarSearch placeholder="Find a plan" />
-        </ToolbarItem>
-        <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-          <Pagination itemCount={count} />
-        </ToolbarItem>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <ToolbarSearch placeholder="Find a plan" />
+          </ToolbarItem>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={count} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
       <Divider />
       <Table actionResolver={actionResolver} aria-label="Plans Table" cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <Pagination itemCount={count} variant={PaginationVariant.bottom} />
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={count} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </>
   )

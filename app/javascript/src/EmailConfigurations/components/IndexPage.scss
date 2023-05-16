@@ -6,15 +6,4 @@
   #bottom-toolbar .pf-l-toolbar__item {
     flex: auto;
   }
-
-  // HACK: variant='filter-group' should already provide the necessary styles once PF is upgraded
-  .pf-l-toolbar {
-    [variant="filter-group"] {
-      display: flex;
-
-      .pf-l-toolbar__item {
-        margin-right: 1rem;
-      }
-    }
-  }
 }

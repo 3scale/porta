@@ -1,7 +1,7 @@
 import { FormGroup, TextArea } from '@patternfly/react-core'
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
 import { useCodeMirror } from 'ActiveDocs/useCodeMirror'
-// import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon' add the icon when we upgrade to PF4
 
 import type { FunctionComponent } from 'react'
 
@@ -35,7 +35,7 @@ const ApiJsonSpecInput: FunctionComponent<Props> = ({
         </>
       )}
       helperTextInvalid={errors}
-      // helperTextInvalidIcon={<ExclamationCircleIcon />} add the icon when we upgrade to PF4
+      helperTextInvalidIcon={<ExclamationCircleIcon />}
       label="API JSON Spec"
       validated={validated}
     >

@@ -34,9 +34,6 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
 
   const availablePlans = [NO_DEFAULT_PLAN, ...plans]
 
-  // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
-  const mappedPlans = defaultPlan ? availablePlans.map(p => ({ ...p, disabled: p.id === defaultPlan.id })) : availablePlans
-
   return (
     <Card id="default_plan_card">
       <CardBody>
@@ -51,7 +48,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
           <SelectFormGroup
             fieldId="id"
             item={defaultPlan}
-            items={mappedPlans}
+            items={availablePlans}
             label="Default plan"
             name="id"
             placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}

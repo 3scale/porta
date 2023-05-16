@@ -90,6 +90,9 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-3"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -116,45 +119,39 @@ exports[`should not render reset password button when disablePasswordReset is tr
                     method="post"
                     noValidate={true}
                   >
-                    <form
+                    <FormBase
                       acceptCharset="UTF-8"
                       action="sessions-path"
                       autoComplete="off"
-                      className="pf-c-form"
                       id="new_session"
+                      innerRef={null}
                       method="post"
                       noValidate={true}
                     >
-                      <HiddenInputs>
-                        <input
-                          name="utf8"
-                          type="hidden"
-                          value="✓"
-                        />
-                        <CSRFToken>
-                          <input
-                            name="mocked-csrf-param"
-                            type="hidden"
-                            value="mocked-csrf-token"
-                          />
-                        </CSRFToken>
-                      </HiddenInputs>
-                      <TextField
-                        inputProps={
-                          {
-                            "autoFocus": true,
-                            "fieldId": "session_username",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Email or Username",
-                            "name": "username",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
+                      <form
+                        acceptCharset="UTF-8"
+                        action="sessions-path"
+                        autoComplete="off"
+                        className="pf-c-form"
+                        id="new_session"
+                        method="post"
+                        noValidate={true}
                       >
-                        <FormGroup
-                          helperTextInvalid="Email or username is mandatory"
+                        <HiddenInputs>
+                          <input
+                            name="utf8"
+                            type="hidden"
+                            value="✓"
+                          />
+                          <CSRFToken>
+                            <input
+                              name="mocked-csrf-param"
+                              type="hidden"
+                              value="mocked-csrf-token"
+                            />
+                          </CSRFToken>
+                        </HiddenInputs>
+                        <TextField
                           inputProps={
                             {
                               "autoFocus": true,
@@ -167,99 +164,128 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               "value": "",
                             }
                           }
-                          type="text"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
-                            isRequired={true}
-                            label="Email or Username"
+                            inputProps={
+                              {
+                                "autoFocus": true,
+                                "fieldId": "session_username",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Email or Username",
+                                "name": "username",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="text"
                           >
-                            <div
+                            <FormGroup
                               autoComplete="off"
-                              className="pf-c-form__group"
+                              fieldId="session_username"
+                              helperTextInvalid="Email or username is mandatory"
+                              isRequired={true}
+                              label="Email or Username"
+                              validated="error"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <GenerateId
+                                prefix="pf-random-id-"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={true}
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
+                                <div
                                   autoComplete="off"
-                                  autoFocus={true}
-                                  className=""
-                                  id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="username"
-                                  onChange={[Function]}
-                                  type="text"
-                                  validated="default"
-                                  value=""
+                                  className="pf-c-form__group"
                                 >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={true}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_username"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Email or Username
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={true}
+                                      id="session_username"
+                                      isRequired={true}
+                                      name="username"
+                                      onChange={[Function]}
+                                      type="text"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={true}
+                                        className=""
+                                        id="session_username"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="username"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="text"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={true}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-5"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_username"
+                                          name="username"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="text"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_username-helper"
+                                    >
+                                      Email or username is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
                           </FormGroup>
-                        </FormGroup>
-                      </TextField>
-                      <PasswordField
-                        inputProps={
-                          {
-                            "autoFocus": false,
-                            "fieldId": "session_password",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Password",
-                            "name": "password",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
-                      >
-                        <FormGroup
-                          helperTextInvalid="Password is mandatory"
+                        </TextField>
+                        <PasswordField
                           inputProps={
                             {
                               "autoFocus": false,
@@ -272,135 +298,170 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               "value": "",
                             }
                           }
-                          type="password"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
-                            isRequired={true}
-                            label="Password"
+                            inputProps={
+                              {
+                                "autoFocus": false,
+                                "fieldId": "session_password",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Password",
+                                "name": "password",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="password"
+                          >
+                            <FormGroup
+                              autoComplete="off"
+                              fieldId="session_password"
+                              helperTextInvalid="Password is mandatory"
+                              isRequired={true}
+                              label="Password"
+                              validated="error"
+                            >
+                              <GenerateId
+                                prefix="pf-random-id-"
+                              >
+                                <div
+                                  autoComplete="off"
+                                  className="pf-c-form__group"
+                                >
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_password"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Password
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={false}
+                                      id="session_password"
+                                      isRequired={true}
+                                      name="password"
+                                      onChange={[Function]}
+                                      type="password"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={false}
+                                        className=""
+                                        id="session_password"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="password"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="password"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={false}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-6"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_password"
+                                          name="password"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="password"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_password-helper"
+                                    >
+                                      Password is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
+                          </FormGroup>
+                        </PasswordField>
+                        <ActionGroup>
+                          <div
+                            className="pf-c-form__group pf-m-action"
                           >
                             <div
-                              autoComplete="off"
-                              className="pf-c-form__group"
+                              className="pf-c-form__group-control"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
-                              >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
-                                  autoComplete="off"
-                                  autoFocus={false}
-                                  className=""
-                                  id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="password"
-                                  onChange={[Function]}
-                                  type="password"
-                                  validated="default"
-                                  value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
-                          </FormGroup>
-                        </FormGroup>
-                      </PasswordField>
-                      <ActionGroup>
-                        <div
-                          className="pf-c-form__group pf-m-action"
-                        >
-                          <div
-                            className="pf-c-form__actions"
-                          >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
-                            >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <div
+                                className="pf-c-form__actions"
                               >
                                 <Button
                                   className="pf-c-button pf-m-primary pf-m-block"
                                   isDisabled={true}
-                                  ouiaContext={
-                                    {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
-                                  <button
-                                    aria-disabled={null}
-                                    aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
-                                    disabled={true}
-                                    tabIndex={null}
+                                  <ButtonBase
+                                    className="pf-c-button pf-m-primary pf-m-block"
+                                    innerRef={null}
+                                    isDisabled={true}
                                     type="submit"
                                   >
-                                     Sign in
-                                  </button>
+                                    <button
+                                      aria-disabled={true}
+                                      aria-label={null}
+                                      className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                      data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                                      data-ouia-component-type="PF4/Button"
+                                      data-ouia-safe={true}
+                                      disabled={true}
+                                      role={null}
+                                      tabIndex={null}
+                                      type="submit"
+                                    >
+                                       Sign in
+                                    </button>
+                                  </ButtonBase>
                                 </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </ActionGroup>
-                    </form>
+                        </ActionGroup>
+                      </form>
+                    </FormBase>
                   </Form>
                 </Login3scaleForm>
                 <div
@@ -541,6 +602,9 @@ exports[`should render Login form and Authentication providers when available 1`
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-4"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -567,45 +631,39 @@ exports[`should render Login form and Authentication providers when available 1`
                     method="post"
                     noValidate={true}
                   >
-                    <form
+                    <FormBase
                       acceptCharset="UTF-8"
                       action="sessions-path"
                       autoComplete="off"
-                      className="pf-c-form"
                       id="new_session"
+                      innerRef={null}
                       method="post"
                       noValidate={true}
                     >
-                      <HiddenInputs>
-                        <input
-                          name="utf8"
-                          type="hidden"
-                          value="✓"
-                        />
-                        <CSRFToken>
-                          <input
-                            name="mocked-csrf-param"
-                            type="hidden"
-                            value="mocked-csrf-token"
-                          />
-                        </CSRFToken>
-                      </HiddenInputs>
-                      <TextField
-                        inputProps={
-                          {
-                            "autoFocus": true,
-                            "fieldId": "session_username",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Email or Username",
-                            "name": "username",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
+                      <form
+                        acceptCharset="UTF-8"
+                        action="sessions-path"
+                        autoComplete="off"
+                        className="pf-c-form"
+                        id="new_session"
+                        method="post"
+                        noValidate={true}
                       >
-                        <FormGroup
-                          helperTextInvalid="Email or username is mandatory"
+                        <HiddenInputs>
+                          <input
+                            name="utf8"
+                            type="hidden"
+                            value="✓"
+                          />
+                          <CSRFToken>
+                            <input
+                              name="mocked-csrf-param"
+                              type="hidden"
+                              value="mocked-csrf-token"
+                            />
+                          </CSRFToken>
+                        </HiddenInputs>
+                        <TextField
                           inputProps={
                             {
                               "autoFocus": true,
@@ -618,99 +676,128 @@ exports[`should render Login form and Authentication providers when available 1`
                               "value": "",
                             }
                           }
-                          type="text"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
-                            isRequired={true}
-                            label="Email or Username"
+                            inputProps={
+                              {
+                                "autoFocus": true,
+                                "fieldId": "session_username",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Email or Username",
+                                "name": "username",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="text"
                           >
-                            <div
+                            <FormGroup
                               autoComplete="off"
-                              className="pf-c-form__group"
+                              fieldId="session_username"
+                              helperTextInvalid="Email or username is mandatory"
+                              isRequired={true}
+                              label="Email or Username"
+                              validated="error"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <GenerateId
+                                prefix="pf-random-id-"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={true}
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
+                                <div
                                   autoComplete="off"
-                                  autoFocus={true}
-                                  className=""
-                                  id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="username"
-                                  onChange={[Function]}
-                                  type="text"
-                                  validated="default"
-                                  value=""
+                                  className="pf-c-form__group"
                                 >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={true}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_username"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Email or Username
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={true}
+                                      id="session_username"
+                                      isRequired={true}
+                                      name="username"
+                                      onChange={[Function]}
+                                      type="text"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={true}
+                                        className=""
+                                        id="session_username"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="username"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="text"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={true}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-7"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_username"
+                                          name="username"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="text"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_username-helper"
+                                    >
+                                      Email or username is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
                           </FormGroup>
-                        </FormGroup>
-                      </TextField>
-                      <PasswordField
-                        inputProps={
-                          {
-                            "autoFocus": false,
-                            "fieldId": "session_password",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Password",
-                            "name": "password",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
-                      >
-                        <FormGroup
-                          helperTextInvalid="Password is mandatory"
+                        </TextField>
+                        <PasswordField
                           inputProps={
                             {
                               "autoFocus": false,
@@ -723,135 +810,170 @@ exports[`should render Login form and Authentication providers when available 1`
                               "value": "",
                             }
                           }
-                          type="password"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
-                            isRequired={true}
-                            label="Password"
+                            inputProps={
+                              {
+                                "autoFocus": false,
+                                "fieldId": "session_password",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Password",
+                                "name": "password",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="password"
+                          >
+                            <FormGroup
+                              autoComplete="off"
+                              fieldId="session_password"
+                              helperTextInvalid="Password is mandatory"
+                              isRequired={true}
+                              label="Password"
+                              validated="error"
+                            >
+                              <GenerateId
+                                prefix="pf-random-id-"
+                              >
+                                <div
+                                  autoComplete="off"
+                                  className="pf-c-form__group"
+                                >
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_password"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Password
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={false}
+                                      id="session_password"
+                                      isRequired={true}
+                                      name="password"
+                                      onChange={[Function]}
+                                      type="password"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={false}
+                                        className=""
+                                        id="session_password"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="password"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="password"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={false}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-8"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_password"
+                                          name="password"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="password"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_password-helper"
+                                    >
+                                      Password is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
+                          </FormGroup>
+                        </PasswordField>
+                        <ActionGroup>
+                          <div
+                            className="pf-c-form__group pf-m-action"
                           >
                             <div
-                              autoComplete="off"
-                              className="pf-c-form__group"
+                              className="pf-c-form__group-control"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
-                              >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
-                                  autoComplete="off"
-                                  autoFocus={false}
-                                  className=""
-                                  id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="password"
-                                  onChange={[Function]}
-                                  type="password"
-                                  validated="default"
-                                  value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
-                          </FormGroup>
-                        </FormGroup>
-                      </PasswordField>
-                      <ActionGroup>
-                        <div
-                          className="pf-c-form__group pf-m-action"
-                        >
-                          <div
-                            className="pf-c-form__actions"
-                          >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
-                            >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <div
+                                className="pf-c-form__actions"
                               >
                                 <Button
                                   className="pf-c-button pf-m-primary pf-m-block"
                                   isDisabled={true}
-                                  ouiaContext={
-                                    {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
-                                  <button
-                                    aria-disabled={null}
-                                    aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
-                                    disabled={true}
-                                    tabIndex={null}
+                                  <ButtonBase
+                                    className="pf-c-button pf-m-primary pf-m-block"
+                                    innerRef={null}
+                                    isDisabled={true}
                                     type="submit"
                                   >
-                                     Sign in
-                                  </button>
+                                    <button
+                                      aria-disabled={true}
+                                      aria-label={null}
+                                      className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                      data-ouia-component-id="OUIA-Generated-Button-primary-4"
+                                      data-ouia-component-type="PF4/Button"
+                                      data-ouia-safe={true}
+                                      disabled={true}
+                                      role={null}
+                                      tabIndex={null}
+                                      type="submit"
+                                    >
+                                       Sign in
+                                    </button>
+                                  </ButtonBase>
                                 </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </ActionGroup>
-                    </form>
+                        </ActionGroup>
+                      </form>
+                    </FormBase>
                   </Form>
                 </Login3scaleForm>
                 <div
@@ -1216,6 +1338,9 @@ exports[`should render itself 1`] = `
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-1"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -1242,45 +1367,39 @@ exports[`should render itself 1`] = `
                     method="post"
                     noValidate={true}
                   >
-                    <form
+                    <FormBase
                       acceptCharset="UTF-8"
                       action="sessions-path"
                       autoComplete="off"
-                      className="pf-c-form"
                       id="new_session"
+                      innerRef={null}
                       method="post"
                       noValidate={true}
                     >
-                      <HiddenInputs>
-                        <input
-                          name="utf8"
-                          type="hidden"
-                          value="✓"
-                        />
-                        <CSRFToken>
-                          <input
-                            name="mocked-csrf-param"
-                            type="hidden"
-                            value="mocked-csrf-token"
-                          />
-                        </CSRFToken>
-                      </HiddenInputs>
-                      <TextField
-                        inputProps={
-                          {
-                            "autoFocus": true,
-                            "fieldId": "session_username",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Email or Username",
-                            "name": "username",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
+                      <form
+                        acceptCharset="UTF-8"
+                        action="sessions-path"
+                        autoComplete="off"
+                        className="pf-c-form"
+                        id="new_session"
+                        method="post"
+                        noValidate={true}
                       >
-                        <FormGroup
-                          helperTextInvalid="Email or username is mandatory"
+                        <HiddenInputs>
+                          <input
+                            name="utf8"
+                            type="hidden"
+                            value="✓"
+                          />
+                          <CSRFToken>
+                            <input
+                              name="mocked-csrf-param"
+                              type="hidden"
+                              value="mocked-csrf-token"
+                            />
+                          </CSRFToken>
+                        </HiddenInputs>
+                        <TextField
                           inputProps={
                             {
                               "autoFocus": true,
@@ -1293,99 +1412,128 @@ exports[`should render itself 1`] = `
                               "value": "",
                             }
                           }
-                          type="text"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
-                            isRequired={true}
-                            label="Email or Username"
+                            inputProps={
+                              {
+                                "autoFocus": true,
+                                "fieldId": "session_username",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Email or Username",
+                                "name": "username",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="text"
                           >
-                            <div
+                            <FormGroup
                               autoComplete="off"
-                              className="pf-c-form__group"
+                              fieldId="session_username"
+                              helperTextInvalid="Email or username is mandatory"
+                              isRequired={true}
+                              label="Email or Username"
+                              validated="error"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <GenerateId
+                                prefix="pf-random-id-"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={true}
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
+                                <div
                                   autoComplete="off"
-                                  autoFocus={true}
-                                  className=""
-                                  id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="username"
-                                  onChange={[Function]}
-                                  type="text"
-                                  validated="default"
-                                  value=""
+                                  className="pf-c-form__group"
                                 >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={true}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_username"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Email or Username
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={true}
+                                      id="session_username"
+                                      isRequired={true}
+                                      name="username"
+                                      onChange={[Function]}
+                                      type="text"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={true}
+                                        className=""
+                                        id="session_username"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="username"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="text"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={true}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-1"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_username"
+                                          name="username"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="text"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_username-helper"
+                                    >
+                                      Email or username is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
                           </FormGroup>
-                        </FormGroup>
-                      </TextField>
-                      <PasswordField
-                        inputProps={
-                          {
-                            "autoFocus": false,
-                            "fieldId": "session_password",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Password",
-                            "name": "password",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
-                      >
-                        <FormGroup
-                          helperTextInvalid="Password is mandatory"
+                        </TextField>
+                        <PasswordField
                           inputProps={
                             {
                               "autoFocus": false,
@@ -1398,135 +1546,170 @@ exports[`should render itself 1`] = `
                               "value": "",
                             }
                           }
-                          type="password"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
-                            isRequired={true}
-                            label="Password"
+                            inputProps={
+                              {
+                                "autoFocus": false,
+                                "fieldId": "session_password",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Password",
+                                "name": "password",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="password"
+                          >
+                            <FormGroup
+                              autoComplete="off"
+                              fieldId="session_password"
+                              helperTextInvalid="Password is mandatory"
+                              isRequired={true}
+                              label="Password"
+                              validated="error"
+                            >
+                              <GenerateId
+                                prefix="pf-random-id-"
+                              >
+                                <div
+                                  autoComplete="off"
+                                  className="pf-c-form__group"
+                                >
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_password"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Password
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={false}
+                                      id="session_password"
+                                      isRequired={true}
+                                      name="password"
+                                      onChange={[Function]}
+                                      type="password"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={false}
+                                        className=""
+                                        id="session_password"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="password"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="password"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={false}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-2"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_password"
+                                          name="password"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="password"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_password-helper"
+                                    >
+                                      Password is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
+                          </FormGroup>
+                        </PasswordField>
+                        <ActionGroup>
+                          <div
+                            className="pf-c-form__group pf-m-action"
                           >
                             <div
-                              autoComplete="off"
-                              className="pf-c-form__group"
+                              className="pf-c-form__group-control"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
-                              >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
-                                  autoComplete="off"
-                                  autoFocus={false}
-                                  className=""
-                                  id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="password"
-                                  onChange={[Function]}
-                                  type="password"
-                                  validated="default"
-                                  value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
-                          </FormGroup>
-                        </FormGroup>
-                      </PasswordField>
-                      <ActionGroup>
-                        <div
-                          className="pf-c-form__group pf-m-action"
-                        >
-                          <div
-                            className="pf-c-form__actions"
-                          >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
-                            >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <div
+                                className="pf-c-form__actions"
                               >
                                 <Button
                                   className="pf-c-button pf-m-primary pf-m-block"
                                   isDisabled={true}
-                                  ouiaContext={
-                                    {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
-                                  <button
-                                    aria-disabled={null}
-                                    aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
-                                    disabled={true}
-                                    tabIndex={null}
+                                  <ButtonBase
+                                    className="pf-c-button pf-m-primary pf-m-block"
+                                    innerRef={null}
+                                    isDisabled={true}
                                     type="submit"
                                   >
-                                     Sign in
-                                  </button>
+                                    <button
+                                      aria-disabled={true}
+                                      aria-label={null}
+                                      className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                      data-ouia-component-id="OUIA-Generated-Button-primary-1"
+                                      data-ouia-component-type="PF4/Button"
+                                      data-ouia-safe={true}
+                                      disabled={true}
+                                      role={null}
+                                      tabIndex={null}
+                                      type="submit"
+                                    >
+                                       Sign in
+                                    </button>
+                                  </ButtonBase>
                                 </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </ActionGroup>
-                    </form>
+                        </ActionGroup>
+                      </form>
+                    </FormBase>
                   </Form>
                 </Login3scaleForm>
                 <div
@@ -1689,6 +1872,9 @@ exports[`should render reset password button when disablePasswordReset is false 
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-2"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -1715,45 +1901,39 @@ exports[`should render reset password button when disablePasswordReset is false 
                     method="post"
                     noValidate={true}
                   >
-                    <form
+                    <FormBase
                       acceptCharset="UTF-8"
                       action="sessions-path"
                       autoComplete="off"
-                      className="pf-c-form"
                       id="new_session"
+                      innerRef={null}
                       method="post"
                       noValidate={true}
                     >
-                      <HiddenInputs>
-                        <input
-                          name="utf8"
-                          type="hidden"
-                          value="✓"
-                        />
-                        <CSRFToken>
-                          <input
-                            name="mocked-csrf-param"
-                            type="hidden"
-                            value="mocked-csrf-token"
-                          />
-                        </CSRFToken>
-                      </HiddenInputs>
-                      <TextField
-                        inputProps={
-                          {
-                            "autoFocus": true,
-                            "fieldId": "session_username",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Email or Username",
-                            "name": "username",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
+                      <form
+                        acceptCharset="UTF-8"
+                        action="sessions-path"
+                        autoComplete="off"
+                        className="pf-c-form"
+                        id="new_session"
+                        method="post"
+                        noValidate={true}
                       >
-                        <FormGroup
-                          helperTextInvalid="Email or username is mandatory"
+                        <HiddenInputs>
+                          <input
+                            name="utf8"
+                            type="hidden"
+                            value="✓"
+                          />
+                          <CSRFToken>
+                            <input
+                              name="mocked-csrf-param"
+                              type="hidden"
+                              value="mocked-csrf-token"
+                            />
+                          </CSRFToken>
+                        </HiddenInputs>
+                        <TextField
                           inputProps={
                             {
                               "autoFocus": true,
@@ -1766,99 +1946,128 @@ exports[`should render reset password button when disablePasswordReset is false 
                               "value": "",
                             }
                           }
-                          type="text"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
-                            isRequired={true}
-                            label="Email or Username"
+                            inputProps={
+                              {
+                                "autoFocus": true,
+                                "fieldId": "session_username",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Email or Username",
+                                "name": "username",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="text"
                           >
-                            <div
+                            <FormGroup
                               autoComplete="off"
-                              className="pf-c-form__group"
+                              fieldId="session_username"
+                              helperTextInvalid="Email or username is mandatory"
+                              isRequired={true}
+                              label="Email or Username"
+                              validated="error"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <GenerateId
+                                prefix="pf-random-id-"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={true}
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
+                                <div
                                   autoComplete="off"
-                                  autoFocus={true}
-                                  className=""
-                                  id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="username"
-                                  onChange={[Function]}
-                                  type="text"
-                                  validated="default"
-                                  value=""
+                                  className="pf-c-form__group"
                                 >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={true}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_username"
-                                    name="username"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="text"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_username"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Email or Username
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={true}
+                                      id="session_username"
+                                      isRequired={true}
+                                      name="username"
+                                      onChange={[Function]}
+                                      type="text"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={true}
+                                        className=""
+                                        id="session_username"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="username"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="text"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={true}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-3"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_username"
+                                          name="username"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="text"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_username-helper"
+                                    >
+                                      Email or username is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
                           </FormGroup>
-                        </FormGroup>
-                      </TextField>
-                      <PasswordField
-                        inputProps={
-                          {
-                            "autoFocus": false,
-                            "fieldId": "session_password",
-                            "isRequired": true,
-                            "isValid": undefined,
-                            "label": "Password",
-                            "name": "password",
-                            "onChange": [Function],
-                            "value": "",
-                          }
-                        }
-                      >
-                        <FormGroup
-                          helperTextInvalid="Password is mandatory"
+                        </TextField>
+                        <PasswordField
                           inputProps={
                             {
                               "autoFocus": false,
@@ -1871,135 +2080,170 @@ exports[`should render reset password button when disablePasswordReset is false 
                               "value": "",
                             }
                           }
-                          type="password"
                         >
                           <FormGroup
-                            autoComplete="off"
-                            fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
-                            isRequired={true}
-                            label="Password"
+                            inputProps={
+                              {
+                                "autoFocus": false,
+                                "fieldId": "session_password",
+                                "isRequired": true,
+                                "isValid": undefined,
+                                "label": "Password",
+                                "name": "password",
+                                "onChange": [Function],
+                                "value": "",
+                              }
+                            }
+                            type="password"
+                          >
+                            <FormGroup
+                              autoComplete="off"
+                              fieldId="session_password"
+                              helperTextInvalid="Password is mandatory"
+                              isRequired={true}
+                              label="Password"
+                              validated="error"
+                            >
+                              <GenerateId
+                                prefix="pf-random-id-"
+                              >
+                                <div
+                                  autoComplete="off"
+                                  className="pf-c-form__group"
+                                >
+                                  <div
+                                    className="pf-c-form__group-label"
+                                  >
+                                    <label
+                                      className="pf-c-form__label"
+                                      htmlFor="session_password"
+                                    >
+                                      <span
+                                        className="pf-c-form__label-text"
+                                      >
+                                        Password
+                                      </span>
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-form__label-required"
+                                      >
+                                         
+                                        *
+                                      </span>
+                                    </label>
+                                     
+                                  </div>
+                                  <div
+                                    className="pf-c-form__group-control"
+                                  >
+                                    <TextInput
+                                      autoComplete="off"
+                                      autoFocus={false}
+                                      id="session_password"
+                                      isRequired={true}
+                                      name="password"
+                                      onChange={[Function]}
+                                      type="password"
+                                      validated="error"
+                                      value=""
+                                    >
+                                      <TextInputBase
+                                        aria-label={null}
+                                        autoComplete="off"
+                                        autoFocus={false}
+                                        className=""
+                                        id="session_password"
+                                        innerRef={null}
+                                        isDisabled={false}
+                                        isIconSprite={false}
+                                        isLeftTruncated={false}
+                                        isReadOnly={false}
+                                        isRequired={true}
+                                        name="password"
+                                        onChange={[Function]}
+                                        ouiaSafe={true}
+                                        type="password"
+                                        validated="error"
+                                        value=""
+                                      >
+                                        <input
+                                          aria-invalid={true}
+                                          aria-label={null}
+                                          autoComplete="off"
+                                          autoFocus={false}
+                                          className="pf-c-form-control"
+                                          data-ouia-component-id="OUIA-Generated-TextInputBase-4"
+                                          data-ouia-component-type="PF4/TextInput"
+                                          data-ouia-safe={true}
+                                          disabled={false}
+                                          id="session_password"
+                                          name="password"
+                                          onBlur={[Function]}
+                                          onChange={[Function]}
+                                          onFocus={[Function]}
+                                          required={true}
+                                          type="password"
+                                          value=""
+                                        />
+                                      </TextInputBase>
+                                    </TextInput>
+                                    <div
+                                      aria-live="polite"
+                                      className="pf-c-form__helper-text pf-m-error"
+                                      id="session_password-helper"
+                                    >
+                                      Password is mandatory
+                                    </div>
+                                  </div>
+                                </div>
+                              </GenerateId>
+                            </FormGroup>
+                          </FormGroup>
+                        </PasswordField>
+                        <ActionGroup>
+                          <div
+                            className="pf-c-form__group pf-m-action"
                           >
                             <div
-                              autoComplete="off"
-                              className="pf-c-form__group"
+                              className="pf-c-form__group-control"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
-                              >
-                                <span
-                                  className="pf-c-form__label-text"
-                                >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoComplete="off"
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
-                              >
-                                <TextInputBase
-                                  aria-label={null}
-                                  autoComplete="off"
-                                  autoFocus={false}
-                                  className=""
-                                  id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
-                                  isRequired={true}
-                                  isValid={true}
-                                  name="password"
-                                  onChange={[Function]}
-                                  type="password"
-                                  validated="default"
-                                  value=""
-                                >
-                                  <input
-                                    aria-invalid={false}
-                                    aria-label={null}
-                                    autoComplete="off"
-                                    autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
-                                    id="session_password"
-                                    name="password"
-                                    onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
-                                    type="password"
-                                    value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
-                            </div>
-                          </FormGroup>
-                        </FormGroup>
-                      </PasswordField>
-                      <ActionGroup>
-                        <div
-                          className="pf-c-form__group pf-m-action"
-                        >
-                          <div
-                            className="pf-c-form__actions"
-                          >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
-                            >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <div
+                                className="pf-c-form__actions"
                               >
                                 <Button
                                   className="pf-c-button pf-m-primary pf-m-block"
                                   isDisabled={true}
-                                  ouiaContext={
-                                    {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
-                                  <button
-                                    aria-disabled={null}
-                                    aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
-                                    disabled={true}
-                                    tabIndex={null}
+                                  <ButtonBase
+                                    className="pf-c-button pf-m-primary pf-m-block"
+                                    innerRef={null}
+                                    isDisabled={true}
                                     type="submit"
                                   >
-                                     Sign in
-                                  </button>
+                                    <button
+                                      aria-disabled={true}
+                                      aria-label={null}
+                                      className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                      data-ouia-component-id="OUIA-Generated-Button-primary-2"
+                                      data-ouia-component-type="PF4/Button"
+                                      data-ouia-safe={true}
+                                      disabled={true}
+                                      role={null}
+                                      tabIndex={null}
+                                      type="submit"
+                                    >
+                                       Sign in
+                                    </button>
+                                  </ButtonBase>
                                 </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </ActionGroup>
-                    </form>
+                        </ActionGroup>
+                      </form>
+                    </FormBase>
                   </Form>
                 </Login3scaleForm>
                 <div

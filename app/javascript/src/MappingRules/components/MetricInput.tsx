@@ -85,7 +85,6 @@ const MetricInput: FunctionComponent<Props> = ({
       isRequired
       fieldId="proxy_rule_metric_id"
       label="Method or metric to increment"
-      validated="default"
     >
       <RadioOption
         items={methods}

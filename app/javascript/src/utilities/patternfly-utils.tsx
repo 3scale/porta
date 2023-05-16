@@ -19,6 +19,7 @@ export interface SelectOptionObject extends PFSelectOptionObject {
 export const toSelectOptionObject = (item: IRecord): SelectOptionObject => ({
   id: String(item.id),
   name: item.name,
+  compareTo: (other: SelectOptionObject) => other.id === String(item.id),
   toString: () => item.name
 })
 
@@ -52,8 +53,7 @@ export const handleOnFilter = <T extends IRecord>(
   items: T[],
   getSelectOptionsForItems?: (items: T[]) => React.ReactElement<SelectOptionProps>[]
 ) => {
-  return (e: React.SyntheticEvent<HTMLInputElement>): React.ReactElement<SelectOptionProps>[] => {
-    const { value } = e.currentTarget
+  return (_e: unknown, value: string): React.ReactElement[] | undefined => {
     const term = new RegExp(escapeRegExp(value), 'i')
 
     const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
