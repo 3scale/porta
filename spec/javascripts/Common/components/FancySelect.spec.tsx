@@ -64,7 +64,7 @@ it('should have a default item selected', () => {
 it('should have a helper text', () => {
   // eslint-disable-next-line react/no-unescaped-entities
   const wrapper = mountWrapper({ helperText: <p>I'm helpful</p> })
-  expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot(`null`)
+  expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot('null')
 })
 
 describe('with a sticky footer link', () => {

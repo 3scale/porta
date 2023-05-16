@@ -187,7 +187,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               helperTextInvalid="Email or username is mandatory"
                               isRequired={true}
                               label="Email or Username"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -229,7 +229,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       name="username"
                                       onChange={[Function]}
                                       type="text"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -248,11 +248,11 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="text"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={true}
@@ -272,13 +272,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_username-helper"
-                                    >
-                                      Email or username is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -321,7 +314,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               helperTextInvalid="Password is mandatory"
                               isRequired={true}
                               label="Password"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -363,7 +356,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       name="password"
                                       onChange={[Function]}
                                       type="password"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -382,11 +375,11 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="password"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={false}
@@ -406,13 +399,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_password-helper"
-                                    >
-                                      Password is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -699,7 +685,7 @@ exports[`should render Login form and Authentication providers when available 1`
                               helperTextInvalid="Email or username is mandatory"
                               isRequired={true}
                               label="Email or Username"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -741,7 +727,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                       name="username"
                                       onChange={[Function]}
                                       type="text"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -760,11 +746,11 @@ exports[`should render Login form and Authentication providers when available 1`
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="text"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={true}
@@ -784,13 +770,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_username-helper"
-                                    >
-                                      Email or username is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -833,7 +812,7 @@ exports[`should render Login form and Authentication providers when available 1`
                               helperTextInvalid="Password is mandatory"
                               isRequired={true}
                               label="Password"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -875,7 +854,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                       name="password"
                                       onChange={[Function]}
                                       type="password"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -894,11 +873,11 @@ exports[`should render Login form and Authentication providers when available 1`
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="password"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={false}
@@ -918,13 +897,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_password-helper"
-                                    >
-                                      Password is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -1435,7 +1407,7 @@ exports[`should render itself 1`] = `
                               helperTextInvalid="Email or username is mandatory"
                               isRequired={true}
                               label="Email or Username"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -1477,7 +1449,7 @@ exports[`should render itself 1`] = `
                                       name="username"
                                       onChange={[Function]}
                                       type="text"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -1496,11 +1468,11 @@ exports[`should render itself 1`] = `
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="text"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={true}
@@ -1520,13 +1492,6 @@ exports[`should render itself 1`] = `
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_username-helper"
-                                    >
-                                      Email or username is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -1569,7 +1534,7 @@ exports[`should render itself 1`] = `
                               helperTextInvalid="Password is mandatory"
                               isRequired={true}
                               label="Password"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -1611,7 +1576,7 @@ exports[`should render itself 1`] = `
                                       name="password"
                                       onChange={[Function]}
                                       type="password"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -1630,11 +1595,11 @@ exports[`should render itself 1`] = `
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="password"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={false}
@@ -1654,13 +1619,6 @@ exports[`should render itself 1`] = `
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_password-helper"
-                                    >
-                                      Password is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -1969,7 +1927,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                               helperTextInvalid="Email or username is mandatory"
                               isRequired={true}
                               label="Email or Username"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -2011,7 +1969,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       name="username"
                                       onChange={[Function]}
                                       type="text"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -2030,11 +1988,11 @@ exports[`should render reset password button when disablePasswordReset is false 
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="text"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={true}
@@ -2054,13 +2012,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_username-helper"
-                                    >
-                                      Email or username is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>
@@ -2103,7 +2054,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                               helperTextInvalid="Password is mandatory"
                               isRequired={true}
                               label="Password"
-                              validated="error"
+                              validated="default"
                             >
                               <GenerateId
                                 prefix="pf-random-id-"
@@ -2145,7 +2096,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       name="password"
                                       onChange={[Function]}
                                       type="password"
-                                      validated="error"
+                                      validated="default"
                                       value=""
                                     >
                                       <TextInputBase
@@ -2164,11 +2115,11 @@ exports[`should render reset password button when disablePasswordReset is false 
                                         onChange={[Function]}
                                         ouiaSafe={true}
                                         type="password"
-                                        validated="error"
+                                        validated="default"
                                         value=""
                                       >
                                         <input
-                                          aria-invalid={true}
+                                          aria-invalid={false}
                                           aria-label={null}
                                           autoComplete="off"
                                           autoFocus={false}
@@ -2188,13 +2139,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                         />
                                       </TextInputBase>
                                     </TextInput>
-                                    <div
-                                      aria-live="polite"
-                                      className="pf-c-form__helper-text pf-m-error"
-                                      id="session_password-helper"
-                                    >
-                                      Password is mandatory
-                                    </div>
                                   </div>
                                 </div>
                               </GenerateId>

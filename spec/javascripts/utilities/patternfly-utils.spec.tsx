@@ -1,6 +1,6 @@
-import { SelectOption } from '@patternfly/react-core'
 import * as patternflyUtils from 'utilities/patternfly-utils'
-import type { IRecord } from 'utilities/patternfly-utils'
+
+import type { SelectOption } from '@patternfly/react-core'
 
 const item = { id: 10, name: 'The item', description: 'A standard item object' }
 
