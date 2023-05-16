@@ -6,11 +6,10 @@
       legend = t(category.title_key, scope: :notification_category_titles)
 
       ol
-
         = f.input :enabled_notifications, as: :check_boxes_with_hints,
-                                          collection: category.notifications,
-                                          member_label: ->(value) { t(value, scope: :notification_preference_titles) },
-                                          member_hint: ->(value) { t(value, scope: :notification_preference_hints) }
+                                  collection: category.notifications.map { |value| [t(value, scope: :notification_preference_titles), value] },
+                                  member_hint: ->(value) { t(value, scope: :notification_preference_hints) }
+
 
   = f.actions do
     = f.commit_button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label')
