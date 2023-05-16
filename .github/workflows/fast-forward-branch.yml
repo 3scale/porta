@@ -13,11 +13,25 @@ jobs:
   fast-forward:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout branch
+        uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
-      - run: |
+      - id: git_log
+        name: Generate diff log
+        run: |
+          log=$(git log origin/${{ inputs.to_branch }}..origin/${{ inputs.ref }} --pretty=format:'%h - %s (%an)')
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$log" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Fast-forward
+        run: |
           git fetch origin ${{ inputs.ref }}:${{ inputs.to_branch }}
           git push origin ${{ inputs.to_branch }}
+      - name: Print diff log
+        run: |
+          cat << EOF
+          ${{ steps.git_log.outputs.log }}
+          EOF
