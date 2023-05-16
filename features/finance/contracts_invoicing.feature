@@ -5,7 +5,7 @@ Feature: All kind of contracts are billed
   I want to be bill account, service and application contracts separately
 
   Background:
-    Given a provider
+    Given a provider on 1st January 2009
     And the provider is charging its buyers
     And the provider has "finance" visible
     And the provider has one buyer

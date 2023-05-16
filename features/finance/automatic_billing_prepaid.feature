@@ -4,7 +4,7 @@ Feature: Automatic billing with plan changes on PREPAID
   billing job and my manually created invoices
 
   Background:
-    Given a provider is logged in
+    Given a provider is logged in on 1st January 2017
     And the provider is charging its buyers in prepaid mode
     And the provider has "finance" visible
     Given the provider service allows to change application plan directly

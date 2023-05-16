@@ -6,7 +6,7 @@ Feature: Postpaid billing
   I want use the postpaid mode
 
 Background:
-  Given a provider "xyz.3scale.localhost"
+  Given a provider "xyz.3scale.localhost" on 1st January 2009
     And the provider is billing but not charging
     And provider "xyz.3scale.localhost" has "finance" switch visible
   Given a default service of provider "xyz.3scale.localhost" has name "api"

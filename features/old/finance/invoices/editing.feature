@@ -5,7 +5,7 @@ Feature: Edit Invoice
   I Want to edit invoice
 
   Background:
-    Given a provider is logged in
+    Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And an invoice of buyer "bob" for January, 2011

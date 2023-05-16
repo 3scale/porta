@@ -48,3 +48,7 @@ Given "{buyer} has only one admin {string}" do |account, username|
 
   to_be_admin.update_attribute(:role, :admin)
 end
+
+Given "{provider} was created on {date}" do |provider, date|
+  provider.update_attribute(:created_at, date.to_datetime)
+end

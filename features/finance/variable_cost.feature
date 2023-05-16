@@ -3,7 +3,7 @@ Feature: Variable cost on automatic billing
   As a provider I want to bill for variable cost
 
   Background:
-    Given a provider exists
+    Given a provider exists on 1st January 2019
     And the provider is billing but not charging
     And the provider has "finance" visible
     Given all the rolling updates features are off

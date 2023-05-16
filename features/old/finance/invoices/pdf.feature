@@ -5,7 +5,7 @@ Feature: Invoice PDFs
   I want to have the PDF versions of the invoices
 
   Background:
-    Given a provider exists
+    Given a provider exists on 1st August 2011
     And the provider is charging its buyers
     And a published plan "Fixed" of provider "foo.3scale.localhost"
     And plan "Fixed" has monthly fee of 200

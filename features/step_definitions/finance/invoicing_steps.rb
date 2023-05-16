@@ -144,7 +144,8 @@ Then(/^I should have an invoice of "(\d+\.?\d*) (.+)"$/) do |amount, currency|
 end
 
 Given(/^an invoice of the buyer with a total cost of (\d+)/) do |cost|
-  step 'an invoice of buyer "bob" for January, 2011 with items:', table(<<-TABLE)
+  date = Time.zone.now.strftime('%B, %Y')
+  step %(an invoice of buyer "bob" for #{date} with items:), table(<<-TABLE)
   | name   | cost |
   | Custom | #{cost} |
   TABLE
@@ -153,7 +154,8 @@ end
 Then(/^I should see in the invoice period for the column "(in process|overdue|paid|total)" a cost of (\d+\.\d+) (\w+)$/) do |column, cost, money|
   columns = ['month', 'total', 'in process', 'overdue', 'paid']
   position = columns.index(column) + 1
-  node = find(:xpath, %(//table//td/a[text()="January, 2011"]/../..//td[#{position}]))
+  date = Time.zone.now.strftime('%B, %Y')
+  node = find(:xpath, %(//table//td/a[text()="#{date}"]/../..//td[#{position}]))
   assert_equal "#{money} #{cost}", node.text
 end
 

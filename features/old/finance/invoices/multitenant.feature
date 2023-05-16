@@ -6,9 +6,9 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider "xyz.3scale.localhost"
+    Given a provider "xyz.3scale.localhost" on 1st October 2010
       And provider "xyz.3scale.localhost" is billing but not charging
-    Given a provider "other.3scale.localhost"
+    Given a provider "other.3scale.localhost" on 1st October 2010
       And provider "other.3scale.localhost" is billing but not charging
 
     Given an application plan "Fixed" of provider "xyz.3scale.localhost" for 200 monthly

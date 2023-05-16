@@ -5,7 +5,7 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider exists
+    Given a provider exists on 1st April 2009
       And the provider is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly

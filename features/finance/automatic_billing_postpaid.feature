@@ -5,7 +5,7 @@ Feature: Automatic billing with plan changes on POSTPAID
   billing job and my manually created invoices
 
   Background:
-    Given a provider
+    Given a provider on 1st January 2017
     And the provider is charging its buyers in postpaid mode
     And the provider has "finance" visible
     Given the provider service allows to change application plan directly

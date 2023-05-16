@@ -999,6 +999,8 @@ en:
               not_in_chargeable_state: "Invoice %{id} is not in chargeable state!"
             base:
               charging_failed: 'Failed to charge the credit card.'
+            period:
+              invalid_range: 'must be between the provider account creation date and 12 months from now'
 
     models:
       topic_category: category
