@@ -15,10 +15,14 @@ interface Props {
   onServiceSelected: (id: number) => void;
 }
 
+const emptyApiArray: Api[] = []
+const emptyAdminSectionArray: AdminSection[] = []
+const emptyNumberArray: number[] = []
+
 const ServicesFieldset: React.FunctionComponent<Props> = ({
-  services = [],
-  selectedSections = [],
-  selectedServicesIds = [],
+  services = emptyApiArray,
+  selectedSections = emptyAdminSectionArray,
+  selectedServicesIds = emptyNumberArray,
   onServiceSelected
 }) => {
   const servicesListClassName = 'ServiceAccessList'

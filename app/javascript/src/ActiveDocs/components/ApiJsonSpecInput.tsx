@@ -13,9 +13,11 @@ interface Props {
   setApiJsonSpec: (description: string) => void;
 }
 
+const emptyStringArray: string[] = []
+
 const ApiJsonSpecInput: FunctionComponent<Props> = ({
   apiJsonSpec,
-  errors = [],
+  errors = emptyStringArray,
   setApiJsonSpec
 }) => {
   const textAreaId = 'api_docs_service_body'

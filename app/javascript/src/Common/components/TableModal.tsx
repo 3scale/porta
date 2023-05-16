@@ -55,6 +55,8 @@ interface Props<T extends IRecord> {
 
 const PER_PAGE_DEFAULT = 5
 
+const emptyArray: <T extends IRecord>() => T[]
+
 const TableModal = <T extends IRecord>({
   title,
   isOpen,

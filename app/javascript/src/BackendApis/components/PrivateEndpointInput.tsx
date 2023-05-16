@@ -8,10 +8,12 @@ interface Props {
   errors?: string[];
 }
 
+const emptyStringArray: string[] = []
+
 const PrivateEndpointInput: FunctionComponent<Props> = ({
   privateEndpoint,
   setPrivateEndpoint,
-  errors = []
+  errors = emptyStringArray
 }) => (
   <FormGroup
     isRequired

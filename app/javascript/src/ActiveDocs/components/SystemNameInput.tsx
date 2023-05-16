@@ -13,7 +13,9 @@ interface Props {
   systemName: string;
 }
 
-const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = false, setSystemName, systemName }) => {
+const emptyStringArray: string[] = []
+
+const SystemNameInput: FunctionComponent<Props> = ({ errors = emptyStringArray, isDisabled = false, setSystemName, systemName }) => {
   const validated = errors.length ? 'error' : 'default'
 
   return (

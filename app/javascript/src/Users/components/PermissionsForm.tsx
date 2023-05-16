@@ -10,26 +10,30 @@ import type { FunctionComponent } from 'react'
 import type { AdminSection, Feature, Role } from 'Users/types'
 import type { Api } from 'Types'
 
+interface State {
+  role?: Role;
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+  admin_sections?: AdminSection[];
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+  member_permission_service_ids?: number[];
+}
+
 interface Props {
-  initialState?: {
-    role?: Role;
-    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
-    admin_sections?: AdminSection[];
-    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
-    member_permission_service_ids?: number[];
-  };
+  initialState?: State;
   features: Feature[];
   services: Api[];
 }
 
+const emptyState: State = {}
+
 /**
  * Represents the user's permissions form, also known as Administrative. It handles the user's Role and their access to different Services.
- * @param {InitialState}  initialState  - The values of the user's current settings.
+ * @param {State}  initialState  - The values of the user's current settings.
  * @param {Feature[]}     features      - The set of features or sections the user can have access to.
  * @param {Api[]}         services      - The list of services or APIs the user can have access to.
  */
 const PermissionsForm: FunctionComponent<Props> = ({
-  initialState = {},
+  initialState = emptyState,
   features,
   services
 }) => {
