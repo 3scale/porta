@@ -17,10 +17,12 @@ interface Props {
   errors?: FlashMessage[];
 }
 
+const emptyArray = [] as never[]
+
 const ChangePassword: FunctionComponent<Props> = ({
   lostPasswordToken = null,
   url = '',
-  errors = []
+  errors = emptyArray
 }) => {
   const {
     isFormDisabled,

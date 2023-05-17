@@ -41,6 +41,8 @@ interface Props {
   error?: string;
 }
 
+const emptyArray = [] as never[]
+
 const NewApplicationForm: React.FunctionComponent<Props> = ({
   buyer: defaultBuyer,
   buyers,
@@ -55,7 +57,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   products,
   productsCount = 0,
   productsPath,
-  definedFields = [],
+  definedFields = emptyArray,
   validationErrors,
   error
 }) => {

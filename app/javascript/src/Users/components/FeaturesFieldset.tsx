@@ -23,9 +23,11 @@ interface Props {
   onAdminSectionSelected: (section: AdminSection) => void;
 }
 
+const emptyArray = [] as never[]
+
 const FeaturesFieldset: React.FunctionComponent<Props> = ({
   features,
-  selectedSections = [],
+  selectedSections = emptyArray,
   areServicesVisible = false,
   onAdminSectionSelected
 }) => {

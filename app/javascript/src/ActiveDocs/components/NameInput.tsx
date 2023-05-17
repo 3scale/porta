@@ -9,7 +9,9 @@ interface Props {
   setName: (name: string) => void;
 }
 
-const NameInput: FunctionComponent<Props> = ({ errors = [], name, setName }) => {
+const emptyArray = [] as never[]
+
+const NameInput: FunctionComponent<Props> = ({ errors = emptyArray, name, setName }) => {
   const validated = errors.length ? 'error' : 'default'
 
   return (
