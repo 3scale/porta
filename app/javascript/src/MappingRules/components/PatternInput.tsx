@@ -20,7 +20,7 @@ const PatternInput: FunctionComponent<Props> = ({
     isRequired
     fieldId="proxy_rule_pattern"
     helperText={(
-      <>Examples: <span className="pf-m-redhatmono-font">{'/my-path/{someid}, /collection/{id}?filter={value}'}</span></>
+      <>Examples: <code>{'/my-path/{someid}, /collection/{id}?filter={value}'}</code></>
     )}
     helperTextInvalid={helperTextInvalid}
     label="Pattern"

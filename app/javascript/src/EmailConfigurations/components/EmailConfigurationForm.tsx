@@ -14,8 +14,6 @@ import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNa
 import type { FunctionComponent, FormEvent } from 'react'
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
-import './EmailConfigurationForm.scss'
-
 interface Props {
   url: string;
   emailConfiguration: FormEmailConfiguration;

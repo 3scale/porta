@@ -1,7 +1,7 @@
 import { FormGroup, TextArea } from '@patternfly/react-core'
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
 import { useCodeMirror } from 'ActiveDocs/useCodeMirror'
-// import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon' add the icon when we upgrade to PF4
 
 import type { FunctionComponent } from 'react'
 
@@ -34,8 +34,8 @@ const ApiJsonSpecInput: FunctionComponent<Props> = ({
         Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a>, <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a>
         </>
       )}
-      helperTextInvalid={errors}
-      // helperTextInvalidIcon={<ExclamationCircleIcon />} add the icon when we upgrade to PF4
+      helperTextInvalid={errors.join(', ')}
+      helperTextInvalidIcon={<ExclamationCircleIcon />}
       label="API JSON Spec"
       validated={validated}
     >

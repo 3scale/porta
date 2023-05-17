@@ -12,7 +12,6 @@ const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }
     fieldId="backend_api_system_name"
     helperText="Only ASCII letters, numbers, dashes, and underscores are allowed."
     label="SystemName"
-    validated="default"
   >
     <TextInput
       id="backend_api_system_name"

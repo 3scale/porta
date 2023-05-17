@@ -3,7 +3,7 @@
 Then "an admin {is} able to see its account plans" do |visible|
   visit admin_buyers_account_plans_path
 
-  assert_equal visible, section_from_vertical_nav?('Accounts') && subsection_from_vertical_nav?('Accounts', 'Account Plans')
+  assert_equal visible, section_from_vertical_nav?('Accounts') && subsection_from_vertical_nav?('Listing', 'Account Plans')
 end
 
 When /^an admin selects a (published|hidden) account plan as default$/ do |state|

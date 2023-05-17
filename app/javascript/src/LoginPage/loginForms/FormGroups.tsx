@@ -7,8 +7,7 @@ import type { TextInputProps } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 import type { InputProps } from 'Types'
 
-interface Props {
-  type?: TextInputProps['type'];
+interface Props extends Pick<TextInputProps, 'type'> {
   helperTextInvalid: string;
   inputProps: InputProps;
 }
@@ -32,14 +31,15 @@ const FormGroup: FunctionComponent<Props> = ({
   inputProps
 }) => {
   const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
+  const validated = isValid === false ? 'error' : 'default'
   return (
     <PF4FormGroup
       autoComplete="off"
       fieldId={fieldId}
       helperTextInvalid={helperTextInvalid}
       isRequired={isRequired}
-      isValid={isValid}
       label={label}
+      validated={validated}
     >
       <TextInput
         aria-invalid={ariaInvalid}
@@ -47,9 +47,9 @@ const FormGroup: FunctionComponent<Props> = ({
         autoFocus={autoFocus}
         id={fieldId}
         isRequired={isRequired}
-        isValid={isValid}
         name={name}
         type={type}
+        validated={validated}
         value={value}
         onBlur={onBlur}
         onChange={onChange}

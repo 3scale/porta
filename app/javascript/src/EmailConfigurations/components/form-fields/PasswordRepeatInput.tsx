@@ -16,26 +16,28 @@ const PasswordRepeatInput: FunctionComponent<Props> = ({
   errors,
   isRequired,
   isDisabled
-}) => (
-  <FormGroup
-    fieldId="email_configuration_password_repeat"
-    helperTextInvalid={errors.toString()}
-    isRequired={isRequired}
-    isValid={!errors.length}
-    label="Confirm password"
-    validated="default"
-  >
-    <TextInput
-      autoComplete="new-password"
-      id="email_configuration_password_repeat"
-      isDisabled={isDisabled}
-      isValid={!errors.length}
-      type="password"
-      value={password}
-      onChange={setPassword}
-    />
-  </FormGroup>
-)
+}) => {
+  const validated = errors.length ? 'error' : 'default'
+  return (
+    <FormGroup
+      fieldId="email_configuration_password_repeat"
+      helperTextInvalid={errors.toString()}
+      isRequired={isRequired}
+      label="Confirm password"
+      validated={validated}
+    >
+      <TextInput
+        autoComplete="new-password"
+        id="email_configuration_password_repeat"
+        isDisabled={isDisabled}
+        type="password"
+        validated={validated}
+        value={password}
+        onChange={setPassword}
+      />
+    </FormGroup>
+  )
+}
 
 export type { Props }
 export { PasswordRepeatInput }

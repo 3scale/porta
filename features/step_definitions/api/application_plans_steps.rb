@@ -34,8 +34,8 @@ Then "any new application will use this plan" do
   visit new_provider_admin_application_path
   pf4_select_first(from: 'Account')
   pf4_select_first(from: 'Product')
-  find('.pf-c-form__label', text: 'Name').sibling('input').set('My App')
-  find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
+  fill_in_pf('Name', with: 'My App')
+  fill_in_pf('Description', with: 'This is some kind of application')
   click_on 'Create application'
 
   assert_equal @plan, Cinstance.last.plan

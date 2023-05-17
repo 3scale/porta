@@ -32,21 +32,7 @@ $maxFont: 1rem;
 }
 
 // For details on RedHatFont visit: https://github.com/RedHatOfficial/RedHatFont
-$font-family-sans-serif:    RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif;
-$font-family-base:          $font-family-sans-serif;
-
-/****** HACK ******/
-/* Porta still is missing PF4 styles in most of the pages content, including h1 - h6
-Once we added PF4 styles to headings we can remove this */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: $font-family-sans-serif;
-}
-/****** END OF HACK ******/
+$font-family-base:          RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif;
 
 // font-sizes
 $fontSize:                   1rem;

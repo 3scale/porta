@@ -6,9 +6,9 @@ import {
   LevelItem,
   PageSection,
   PageSectionVariants,
-  PaginationVariant,
   Title,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 
@@ -75,22 +75,26 @@ const IndexPage: FunctionComponent<Props> = ({
       </Level>
       <p>Explore and manage all your internal APIs.</p>
       <Divider />
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="top-toolbar">
-        <ToolbarItem>
-          <ToolbarSearch placeholder="Find a backend" />
-        </ToolbarItem>
-        <ToolbarItem>
-          <Pagination itemCount={backendsCount} />
-        </ToolbarItem>
+      <Toolbar id="top-toolbar">
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <ToolbarSearch placeholder="Find a backend" />
+          </ToolbarItem>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={backendsCount} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
       <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        <ToolbarItem>
-          <Pagination itemCount={backendsCount} variant={PaginationVariant.bottom}    />
-        </ToolbarItem>
+      <Toolbar id="bottom-toolbar">
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={backendsCount} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </PageSection>
   )

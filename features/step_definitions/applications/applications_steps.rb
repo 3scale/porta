@@ -203,7 +203,7 @@ When 'I fill in the new application form with extra fields:' do |table|
   fill_in_new_application_form
   table.hashes.each do |h|
     # step %(I fill in "#{hash[:field]}" with "#{hash[:value]}")
-    find('.pf-c-form__label', text: h[:field]).sibling('input').set(h[:value])
+    fill_in_pf(h[:field], with: h[:value])
   end
 end
 
@@ -241,10 +241,16 @@ def fill_in_new_application_form(name: 'My App', service_name: 'API')
   pf4_select_first(from: 'Account') if page.has_css?('.pf-c-form__label', text: 'Account')
   pf4_select(service_name, from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')
   pf4_select_first(from: 'Application plan') unless app_plan_select.has_css?('.pf-m-disabled')
-  find('.pf-c-form__label', text: 'Name').sibling('input').set(name)
-  find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
+  fill_in_pf('Name', with: name)
+  fill_in_pf('Description', with: 'This is some kind of application')
 end
 
 def app_plan_select
-  find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select')
+  find_pf_select('Application plan')
+end
+
+def fill_in_pf(label, with:)
+  find('.pf-c-form__group-label', text: label).sibling('.pf-c-form__group-control')
+                                              .find('input')
+                                              .set(with)
 end

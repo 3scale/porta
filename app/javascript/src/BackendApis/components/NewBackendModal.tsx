@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import {
   BaseSizes,
   Modal,
+  ModalVariant,
   Spinner,
-  Title,
-  TitleLevel
+  Title
 } from '@patternfly/react-core'
 
 import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
@@ -52,7 +52,7 @@ const NewBackendModal: FunctionComponent<Props> = ({
 
   const header = (
     <>
-      <Title className="with-spinner" headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
+      <Title className="with-spinner" headingLevel="h1" id="new-backend-modal-title" size={BaseSizes['2xl']}>
         Create backend
       </Title>
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
@@ -61,10 +61,11 @@ const NewBackendModal: FunctionComponent<Props> = ({
 
   return (
     <Modal
-      isSmall
+      aria-labelledby="new-backend-modal-title"
       header={header}
       isOpen={isOpen}
       title="Create backend"
+      variant={ModalVariant.small}
       onClose={onClose}
     >
       <NewBackendForm

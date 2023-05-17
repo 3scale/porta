@@ -5,9 +5,9 @@ import {
   LevelItem,
   PageSection,
   PageSectionVariants,
-  PaginationVariant,
   Title,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 import { Table, TableBody, TableHeader } from '@patternfly/react-table'
@@ -75,22 +75,26 @@ const IndexPage: React.FunctionComponent<Props> = ({
       </Level>
       <p>Explore and manage all customer-facing APIs that contain one or more of your Backends.</p>
       <Divider />
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="top-toolbar">
-        <ToolbarItem>
-          <ToolbarSearch placeholder="Find a product" />
-        </ToolbarItem>
-        <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-          <Pagination itemCount={productsCount} />
-        </ToolbarItem>
+      <Toolbar id="top-toolbar">
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <ToolbarSearch placeholder="Find a product" />
+          </ToolbarItem>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={productsCount} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
       <Table actions={tableActions} aria-label="Products Table" cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        <ToolbarItem>
-          <Pagination itemCount={productsCount} variant={PaginationVariant.bottom} />
-        </ToolbarItem>
+      <Toolbar id="bottom-toolbar">
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={productsCount} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </PageSection>
   )

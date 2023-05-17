@@ -4,13 +4,12 @@ import {
   EmptyStateBody,
   EmptyStateIcon,
   EmptyStatePrimary,
+  EmptyStateVariant,
   Title
 } from '@patternfly/react-core'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import type { FunctionComponent } from 'react'
-
-import './NoMatchFound.scss'
 
 interface Props {
   onClearFiltersClick?: () => void;
@@ -19,7 +18,7 @@ interface Props {
 const NoMatchFound: FunctionComponent<Props> = ({
   onClearFiltersClick
 }) => (
-  <EmptyState>
+  <EmptyState variant={EmptyStateVariant.large}>
     <EmptyStateIcon icon={SearchIcon as FunctionComponent} />
     <Title headingLevel="h4" size="lg">
       No results found

@@ -17,13 +17,13 @@ const defaultProps: Props<IRecord> = {
   items,
   onSelect,
   label: <h1>Toys</h1>,
-  ariaLabel: 'Toys',
+  'aria-label': 'Toys',
   fieldId: 'favorite_toy',
   name: 'toy[favorite]',
   isClearable: undefined,
   placeholderText: 'Select a toy',
   hint: undefined,
-  isValid: undefined,
+  validated: undefined,
   helperText: undefined,
   helperTextInvalid: undefined,
   isDisabled: undefined,
@@ -73,7 +73,7 @@ it('should filter via typeahead', () => {
 
 it('should be aria-labelled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists(`[aria-label="${defaultProps.ariaLabel!}"]`)).toEqual(true)
+  expect(wrapper.exists(`[aria-label="${defaultProps['aria-label']!}"]`)).toEqual(true)
 })
 
 it('should show a spinner when loading', () => {

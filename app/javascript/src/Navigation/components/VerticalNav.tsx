@@ -40,7 +40,7 @@ const VerticalNav: React.FunctionComponent<Props> = ({
 
   return (
     <div className="pf-c-page__sidebar-body">
-      <Nav id="mainmenu" theme="dark">
+      <Nav id="mainmenu">
         {currentApi
           ? <NavGroup title={currentApi.name}>{navSections}</NavGroup>
           : <NavList>{navSections}</NavList>}
@@ -59,7 +59,7 @@ interface NavSectionProps {
 
 // eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const NavSection: React.FunctionComponent<NavSectionProps> = ({ title: navSectionTitle, isSectionActive, activeItem, items, outOfDateConfig }) => (
-  <NavExpandable className={outOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive} isExpanded={isSectionActive} title={navSectionTitle}>
+  <NavExpandable isExpanded className={outOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive} title={navSectionTitle}>
     {items.map(({ id, title, path, target, itemOutOfDateConfig }) => path
       ? <NavItem key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive && activeItem === id} target={target} to={path}>{title}</NavItem>
       : <NavGroup key={title} className="vertical-nav-label" title={title} />

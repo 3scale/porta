@@ -20,7 +20,7 @@ Feature: Provider accounts authorization
     #Then show me the page
     Then I should see the link "1 ACCOUNT" in the audience dashboard widget
     When I follow "1 Account"
-    Then I should see the link "Accounts" in the main menu
+    Then I should see "Accounts" within the main menu
 
     When I go to the <page> page
     Then I should be at url for the <page> page

@@ -171,10 +171,7 @@ def select_default_plan(plan)
 end
 
 def select_default_plan_by_name(name)
-  within('#default_plan_card .pf-c-select') do
-    find('.pf-c-button.pf-c-select__toggle-button').click unless current_scope[:class].include?('pf-m-expanded')
-    find('.pf-c-select__menu-item', text: name).click
-  end
+  pf4_select(name, from: 'Default plan')
   find('#default_plan_card .pf-c-button[type="submit"]').click(wait: 5)
 end
 

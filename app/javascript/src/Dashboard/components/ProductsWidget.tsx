@@ -4,7 +4,7 @@ import {
   CardActions,
   CardBody,
   CardFooter,
-  CardHeader,
+  CardTitle,
   DataList,
   Title
 } from '@patternfly/react-core'
@@ -38,7 +38,7 @@ const ProductsWidget: FunctionComponent<Props> = ({
   products
 }) => (
   <Card>
-    <CardHeader>
+    <CardTitle>
       <div className="dashboard-list-icon-title-layout">
         <CubesIcon />
         <Title headingLevel="h1" size="xl">
@@ -58,7 +58,7 @@ const ProductsWidget: FunctionComponent<Props> = ({
       <div className="dashboard-list-subtitle">
         Last updated
       </div>
-    </CardHeader>
+    </CardTitle>
     <CardBody>
       <DataList aria-label="">
         {products.map(api => <APIDataListItem key={api.id} api={api} />)}
