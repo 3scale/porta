@@ -12,11 +12,13 @@ interface Props {
   validationErrors?: string[];
 }
 
+const emptyArray = [] as never[]
+
 const UserDefinedField: FunctionComponent<Props> = ({
   fieldDefinition,
   value,
   onChange,
-  validationErrors = []
+  validationErrors = emptyArray
 }) => {
   const { id, label, required, name, choices } = fieldDefinition
 

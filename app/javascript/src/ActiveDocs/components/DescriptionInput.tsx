@@ -8,9 +8,11 @@ interface Props {
   setDescription: (description: string) => void;
 }
 
+const emptyArray = [] as never[]
+
 const DescriptionInput: FunctionComponent<Props> = ({
   description,
-  errors = [],
+  errors = emptyArray,
   setDescription
 }) => {
   
