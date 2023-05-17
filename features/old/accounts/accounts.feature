@@ -95,8 +95,7 @@ Feature: Account management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I navigate to the Account Settings
-    And I follow "Personal"
-    And I follow "Personal Details"
+    And I go to the provider personal details page
     When I fill in "Email" with ""
      And I fill in "Current password" with "supersecret"
     And I press "Update Details"

@@ -10,8 +10,7 @@ Feature: Personal Details
 
   Scenario: Edit personal details as provider
     When I navigate to the Account Settings
-    And I follow "Personal"
-    And I follow "Personal Details"
+    And I go to the provider personal details page
     And I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"

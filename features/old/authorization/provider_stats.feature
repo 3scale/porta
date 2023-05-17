@@ -17,7 +17,7 @@ Feature: Provider stats section authorization
       And I am logged in as provider "foo.3scale.localhost"
     When I go to the provider dashboard
     And I follow "API"
-    Then I should see the link "Analytics" in the main menu
+    Then I should see "Analytics" in the main menu
 
     When I go to the <page> page
     Then I should be on the <page> page
@@ -53,7 +53,7 @@ Feature: Provider stats section authorization
     When I log in as provider "member"
      And I go to the provider dashboard
     When I follow "API"
-    Then I should see the link "Analytics" in the main menu
+    Then I should see "Analytics" in the main menu
 
     When I go to the <page> page
     Then I should be on the <page> page

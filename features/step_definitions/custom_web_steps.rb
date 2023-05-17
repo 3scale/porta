@@ -177,7 +177,7 @@ end
 
 def assert_select_not_inclues_option(label, text)
   if page.has_css?('.pf-c-form__label', text: label)
-    select = find('.pf-c-form__label', text: label).sibling('.pf-c-select')
+    select = find_pf_select(label)
     select.find('.pf-c-select__toggle-button').click
     selector = '.pf-c-select__menu-item'
   else

@@ -269,6 +269,10 @@ World(Module.new do
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
 
+    when /^the usage rules of service "([^"]*)"$/
+      service = Service.find_by!(name: Regexp.last_match(1))
+      usage_rules_admin_service_path(service)
+
     #
     # Account plans (buyer side)
     #

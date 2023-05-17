@@ -72,7 +72,7 @@ end
 
 When(/^I send a provider invitation to "([^\"]*)"$/) do |address|
   step %(I navigate to the Account Settings)
-  click_link 'Users'
+  click_button 'Users'
   click_link 'Listing'
   click_link 'Invite a New User'
   fill_in 'Send invitation to', with: address

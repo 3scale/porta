@@ -14,6 +14,5 @@ Feature: Plans management
      And I follow "API"
      And I follow "0 application plans"
     Then I should be on the application plans admin page
-    When I follow "Subscriptions"
-     And I follow "Service Plans"
+    When I go to the service plans admin page
     Then I should be on the service plans admin page

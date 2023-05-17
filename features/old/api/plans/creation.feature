@@ -32,7 +32,6 @@ Feature: Plan creation
     And a service "Pocoyo" of provider "foo.3scale.localhost"
     And a default published service plan "Pocoyo service plan" of service "Pocoyo" of provider "foo.3scale.localhost"
     When I am on the edit page for service "Pocoyo" of provider "foo.3scale.localhost"
-    And I follow "Subscriptions"
-    And I follow "Service Plans"
+    When I go to the service plans admin page
     And I follow "Pocoyo service plan"
     Then I should see "Pocoyo"

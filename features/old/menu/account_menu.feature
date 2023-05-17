@@ -14,7 +14,7 @@ Feature: Menu of the Account screen
   Scenario: Account menu structure
     When I go to the provider account page
     Then I should see "foo.3scale.localhost"
-    And I should see menu items
+    And I should see menu sections
       | Overview  |
       | Personal  |
       | Users     |
@@ -43,15 +43,18 @@ Feature: Menu of the Account screen
   Scenario: finance disabled should not disable 3scale invoices
     Given provider "foo.3scale.localhost" has "finance" switch denied
     When I go to the provider account page
-    And I follow "Billing"
-    And I follow "3scale Invoices"
+    Then I should see menu items under "Billing"
+      | 3scale Invoices |
+      | Payment Details |
+    And I go to my invoices from 3scale page
     Then I should be on my invoices from 3scale page
 
   Scenario: Account menu when master is billing
     Given master is billing tenants
     When I go to the provider account page
-    And I follow "Billing"
-    Then I should see "3scale Invoices"
+    Then I should see menu items under "Billing"
+      | 3scale Invoices |
+      | Payment Details |
 
   Scenario: Account menu when master is not billing
     Given master is not billing tenants
