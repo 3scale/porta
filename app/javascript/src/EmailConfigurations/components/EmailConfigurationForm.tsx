@@ -21,11 +21,13 @@ interface Props {
   errors?: FormErrors;
 }
 
+const emptyObject = {} as never
+
 const EmailConfigurationForm: FunctionComponent<Props> = ({
   url,
   emailConfiguration,
   isUpdate = false,
-  errors = {}
+  errors = emptyObject
 }) => {
   const FORM_ID = 'email-configuration-form'
   const [email, setEmail] = useState<string>(emailConfiguration.email ?? '')
