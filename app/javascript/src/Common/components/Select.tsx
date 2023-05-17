@@ -49,10 +49,10 @@ const Select = <T extends IRecord>({
   isRequired = false,
   ...rest
 }: Props<T>): React.ReactElement => {
-  const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const handleSelect = (_e: unknown, option: PFSelectOptionObject | string) => {
-    setOpen(false)
+    setExpanded(false)
 
     const selected = items.find(i => i.id.toString() === (option as SelectOptionObject).id)
     onSelect(selected ?? null)
@@ -61,7 +61,7 @@ const Select = <T extends IRecord>({
   const handleOnClear = () => {
     if (isClearable) {
       onSelect(null)
-      setOpen(false)
+      setExpanded(false)
     }
   }
 
@@ -82,14 +82,14 @@ const Select = <T extends IRecord>({
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
-        isOpen={open}
+        isOpen={expanded}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
         onClear={handleOnClear}
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
-        onToggle={() => { setOpen(!open) }}
+        onToggle={() => { setExpanded(!expanded) }}
       >
         {items.map(toSelectOption)}
       </PF4Select>
