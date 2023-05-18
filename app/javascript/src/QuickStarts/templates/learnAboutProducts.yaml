@@ -21,13 +21,15 @@ spec:
   description: |-
     Learn about products
   introduction: |-
-    In this quick start, you will learn about application plans. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-products-test-api-calls_configuring-your-api).
+    In this quick start, you will learn about products . To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-products-test-api-calls_configuring-your-api).
   tasks:
     - title: Learn about products
       description: |-
         You will complete 1 task:
         
         A product is an API package to control one or more API endpoints. In the Admin Portal, you can package one or more API endpoints into a product. Use **Products** to manage customer-facing API packages.
+
+        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](/images/learn-about-products.png "API endpoints in a product")
 
       # optional - the task's Check your work module
       review:
