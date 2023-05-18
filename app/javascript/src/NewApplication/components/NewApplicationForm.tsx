@@ -126,6 +126,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
+        isWidthLimited
         acceptCharset="UTF-8"
         action={url}
         method="post"

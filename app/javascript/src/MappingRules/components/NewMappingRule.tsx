@@ -73,12 +73,12 @@ const NewMappingRule: FunctionComponent<Props> = ({
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
+        isWidthLimited
         acceptCharset="UTF-8"
         action={url}
         id="new_mapping_rule"
         method="post"
         onSubmit={() => { setLoading(true) }}
-        // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
         <input name="utf8" type="hidden" value="✓" />
