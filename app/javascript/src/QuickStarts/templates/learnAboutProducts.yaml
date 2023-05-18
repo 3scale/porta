@@ -29,7 +29,7 @@ spec:
         
         A product is an API package to control one or more API endpoints. In the Admin Portal, you can package one or more API endpoints into a product. Use **Products** to manage customer-facing API packages.
 
-        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](/images/learn-about-products.png "API endpoints in a product")
+        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](https://raw.githubusercontent.com/3scale/porta/ba34d7a9ff4a49c2fefaa36af575118927be9c90/app/javascript/src/QuickStarts/templates/images/learn-about-products.png "API endpoints in a product")
 
       # optional - the task's Check your work module
       review:
