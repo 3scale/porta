@@ -80,7 +80,7 @@ p {
   margin: line-height-times(1/2) 0 line-height-times(1) 0;
 }
 
-h1 + p,
+:not(.pf-c-content) > h1 + p,
 h2 + p {
   background-color: $body-background;
   margin-bottom: line-height-times(1);
