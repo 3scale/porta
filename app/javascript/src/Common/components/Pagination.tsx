@@ -1,14 +1,14 @@
 import { Pagination as PFPagination } from '@patternfly/react-core'
 
 import type { PaginationProps, OnPerPageSelect } from '@patternfly/react-core'
-import type { FunctionComponent, ReactElement } from 'react'
+import type { FunctionComponent } from 'react'
 
 type Props = Pick<PaginationProps, 'itemCount' | 'variant'>
 
-const Pagination: FunctionComponent<Props> = ({ variant, itemCount }): ReactElement<PaginationProps> => {
+const Pagination: FunctionComponent<Props> = ({ variant, itemCount }) => {
   const url = new URL(window.location.href)
-  const currentPage = Number(url.searchParams.get('page'))
-  const currentPerPage = Number(url.searchParams.get('per_page')) || 20
+  const currentPage = Number(url.searchParams.get('page') ?? 1)
+  const currentPerPage = Number(url.searchParams.get('per_page') ?? 20)
 
   const onPerPageSelect: OnPerPageSelect = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', String(selectedPerPage))
@@ -26,6 +26,7 @@ const Pagination: FunctionComponent<Props> = ({ variant, itemCount }): ReactElem
       itemCount={itemCount}
       page={currentPage}
       perPage={currentPerPage}
+      perPageComponent="button"
       perPageOptions={[{ title: '10', value: 10 }, { title: '20', value: 20 }]}
       variant={variant}
       widgetId="pagination-options-menu-top"
@@ -38,4 +39,5 @@ const Pagination: FunctionComponent<Props> = ({ variant, itemCount }): ReactElem
   )
 }
 
+export type { Props }
 export { Pagination }
