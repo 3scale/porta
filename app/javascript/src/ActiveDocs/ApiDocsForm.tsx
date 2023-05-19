@@ -19,8 +19,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 import type { IRecord as Service } from 'Types'
 
-import './ApiDocsForm.scss'
-
 interface Props {
   action: string;
   apiJsonSpec: string;
@@ -66,6 +64,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
+        isWidthLimited
         acceptCharset="UTF-8"
         action={action}
         method="post"
@@ -76,15 +75,15 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <NameInput errors={errors.name} name={name} setName={setName} />
 
-        <SystemNameInput 
-          errors={errors.systemName} 
-          isDisabled={isUpdate} 
-          setSystemName={setSystemName} 
-          systemName={systemName} 
+        <SystemNameInput
+          errors={errors.systemName}
+          isDisabled={isUpdate}
+          setSystemName={setSystemName}
+          systemName={systemName}
         />
 
         <input name="api_docs_service[published]" type="hidden" value="0" />
-        <Checkbox 
+        <Checkbox
           id="api_docs_service_published_input"
           isChecked={published}
           label="Publish?"
@@ -99,7 +98,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
         <input name="api_docs_service[skip_swagger_validations]" type="hidden" value="0" />
-        <Checkbox 
+        <Checkbox
           id="api_docs_service_skip_swagger_validations"
           isChecked={skipSwaggerValidations}
           label="Skip swagger validations"

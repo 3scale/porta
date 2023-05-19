@@ -38,6 +38,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
     <Card id="default_plan_card">
       <CardBody>
         <Form
+          isWidthLimited
           acceptCharset="UTF-8"
           action={url}
           method="post"

@@ -45,11 +45,11 @@ const NewBackendForm: FunctionComponent<Props> = ({
   return (
     <Form
       data-remote
+      isWidthLimited
       acceptCharset="UTF-8"
       action={action}
       id="new_backend_api_config"
       method="post"
-      // isWidthLimited TODO: use when available instead of hardcoded css
     >
       <CSRFToken />
       <input name="utf8" type="hidden" value="✓" />

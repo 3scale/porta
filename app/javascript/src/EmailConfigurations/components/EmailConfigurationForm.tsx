@@ -81,6 +81,7 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
 
   return (
     <Form
+      isWidthLimited
       acceptCharset="UTF-8"
       action={url}
       id={FORM_ID}
