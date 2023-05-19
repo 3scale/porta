@@ -57,3 +57,17 @@ it('should be able to jump from page to page', () => {
   pagination.find('button[data-action="last"]').simulate('click')
   expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
 })
+
+it('should be able to jump to a page', () => {
+  const itemCount = 100
+  mockLocation('http://example.com')
+
+  const wrapper = mountWrapper({ itemCount })
+  const pagination = wrapper.find('.pf-c-pagination').first()
+
+  const nextPage = 2
+  const input = pagination.find('.pf-c-pagination__nav-page-select input')
+  input.simulate('change', { target: { value: nextPage } })
+  input.simulate('keydown', { key: 'Enter' })
+  expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?page=${nextPage}`)
+})

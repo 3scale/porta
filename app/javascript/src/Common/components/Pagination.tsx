@@ -33,6 +33,7 @@ const Pagination: FunctionComponent<Props> = ({ variant, itemCount }) => {
       onFirstClick={goToPage}
       onLastClick={goToPage}
       onNextClick={goToPage}
+      onPageInput={goToPage}
       onPerPageSelect={onPerPageSelect}
       onPreviousClick={goToPage}
     />
