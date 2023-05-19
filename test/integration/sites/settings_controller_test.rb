@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
@@ -10,7 +12,6 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     get edit_admin_site_emails_path
 
     assert_response :success
-    assert_select 'a[href=?]', edit_admin_site_emails_path
   end
 
   test 'do not show emails tab if master account' do

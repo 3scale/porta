@@ -41,14 +41,6 @@ Feature: Audience menu
       | SSO Integrations     |
       | Liquid Reference     |
 
-  Scenario: Messages sub menu structure
-    Then I should see menu items under "Messages"
-      | Inbox           |
-      | Sent messages   |
-      | Trash           |
-      | Support Emails  |
-      | Email Templates |
-
   Scenario: Accounts sub menu structure with account plans enabled
     When the provider has "account_plans" visible
     And I go to the accounts admin page

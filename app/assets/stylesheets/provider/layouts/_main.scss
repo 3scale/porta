@@ -30,12 +30,6 @@ body {
   background-color: $gallery;
 }
 
-.pf-c-nav__link {
-  .fa-exclamation-triangle {
-    margin-left: line-height-times(1 / 4);
-  }
-}
-
 // HACK: Some PF classes still collapses with ours.
 // As we are still using both PF and not-PF links, we need this
 button.action.pf-c-button {
