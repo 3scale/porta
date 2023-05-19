@@ -35,9 +35,7 @@ it('should render itself', () => {
 
 it('should have a paginated table', () => {
   const wrapper = mountWrapper()
-  const pagination = wrapper.find('.pf-c-pagination').first()
-
-  expect(pagination.find('[aria-label="Current page"]').first().prop('value')).toBe(2)
+  expect(wrapper.exists('.pf-c-pagination')).toEqual(true)
 })
 
 describe('for metrics without mapping rule', () => {

@@ -14,7 +14,7 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<Pagination {...{ ...
 
 it('should render', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('.pf-c-pagination').exists()).toEqual(true)
+  expect(wrapper.exists('.pf-c-pagination')).toEqual(true)
 })
 
 it('should get page info from URL', () => {
