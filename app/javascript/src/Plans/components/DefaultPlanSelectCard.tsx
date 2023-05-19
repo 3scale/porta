@@ -4,11 +4,12 @@ import {
   Button,
   Card,
   CardBody,
+  HelperText,
+  HelperTextItem,
   Form
 } from '@patternfly/react-core'
 
 import { Select as SelectFormGroup } from 'Common/components/Select'
-import { HelperText, HelperTextItem } from 'Common/components/HelperText'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
