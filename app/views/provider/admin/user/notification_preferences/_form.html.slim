@@ -10,7 +10,6 @@
                                   collection: category.notifications.map { |value| [t(value, scope: :notification_preference_titles), value] },
                                   member_hint: ->(value) { t(value, scope: :notification_preference_hints) }
 
-
   = f.actions do
     = f.commit_button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label')
 
