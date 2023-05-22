@@ -1,5 +1,13 @@
-import type { FunctionComponent } from 'react'
+/* eslint-disable react/jsx-key */
+import CubeIcon from '@patternfly/react-icons/dist/js/icons/cube-icon'
+import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+import BullseyeIcon from '@patternfly/react-icons/dist/js/icons/bullseye-icon'
+import HomeIcon from '@patternfly/react-icons/dist/js/icons/home-icon'
+import CogIcon from '@patternfly/react-icons/dist/js/icons/cog-icon'
+import { Icon } from '@patternfly/react-core'
+
 import type { Menu } from 'Types'
+import type { FunctionComponent, ReactElement } from 'react'
 
 import './ActiveMenuTitle.scss'
 
@@ -8,15 +16,15 @@ interface Props {
 }
 
 const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
-  const getIconAndText: () => [string, string] = () => {
+  const getIconAndText: () => [ReactElement | undefined, string] = () => {
     switch (activeMenu) {
       case 'dashboard':
-        return ['fa-home', 'Dashboard']
+        return [<HomeIcon />, 'Dashboard']
 
       case 'personal':
       case 'account':
       case 'active_docs':
-        return ['fa-cog', 'Account Settings']
+        return [<CogIcon />, 'Account Settings']
 
       case 'audience':
       case 'buyers':
@@ -26,35 +34,32 @@ const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
       case 'settings':
       case 'apis':
       case 'applications':
-        return ['fa-bullseye', 'Audience']
+        return [<BullseyeIcon />, 'Audience']
 
       case 'serviceadmin':
       case 'monitoring':
       case 'products':
-        return ['fa-cubes', 'Products']
+        return [<CubesIcon />, 'Products']
 
       case 'backend_api':
       case 'backend_apis':
-        return ['fa-cube', 'Backends']
+        return [<CubeIcon />, 'Backends']
 
       case 'quickstarts':
-        return ['', '--']
+        return [undefined, '--']
 
       default:
-        return ['', '']
+        return [undefined, '']
     }
   }
 
   const [icon, text] = getIconAndText()
 
   return (
-    <>
-      <span className="pf-c-context-selector__toggle-text">
-        <i className={`fa ${icon}` + ' header-context-selector__toggle-text-icon'} />
-        {text}
-      </span>
-      <i className="fa fa-chevron-down  pf-c-context-selector__toggle-icon" />
-    </>
+    <span className="pf-c-context-selector__toggle-text">
+      {icon && <Icon isInline className="header-context-selector__toggle-text-icon">{icon}</Icon>}
+      {text}
+    </span>
   )
 }
 

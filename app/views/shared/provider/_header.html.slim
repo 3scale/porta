@@ -1,49 +1,7 @@
-header.pf-c-page__header id="user_widget" class='Header' class=('Header--master' if current_account.master?) role='banner'
+= javascript_packs_with_chunks_tag 'masthead'
 
-  = link_to provider_admin_dashboard_path, class: 'pf-c-page__header-brand Header-link', title: 'Dashboard' do
-      .Header-logo
-        span Red Hat 3scale API Management
+header#header-container class="pf-c-masthead pf-m-display-inline #{current_account.master? ? 'pf-c-masthead--master' : ''}" data-props=masthead_props.to_json
 
-  div
-    = render 'shared/api_selector'
-
-  .pf-c-page__header-tools
-    // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
-    div class="username" style="display:none;"
-      = current_user.username
-
-    .PopNavigation.PopNavigation--docs
-      a.PopNavigation-trigger title="Documentation"
-        => icon('question-circle-o')
-      ul#documentation-menu.PopNavigation-list
-        li.PopNavigation-listItem
-          = fixed_width_icon_link_to 'Customer Portal', 'external-link', '//access.redhat.com/products/red-hat-3scale', class: 'PopNavigation-link', target: '_blank'
-        li.PopNavigation-listItem
-          = fixed_width_icon_link_to '3scale API Docs', 'puzzle-piece', provider_admin_api_docs_path, class: 'PopNavigation-link'
-        li.PopNavigation-listItem
-          = fixed_width_icon_link_to 'Liquid Reference', 'code', provider_admin_liquid_docs_path, class: 'PopNavigation-link'
-        - if saas?
-          li.PopNavigation-listItem
-            = fixed_width_icon_link_to "What's new?", 'leaf', '//access.redhat.com/articles/3107441#newfeaturesenhancements', class: 'PopNavigation-link', target: '_blank'
-        - if Features::QuickstartsConfig.enabled?
-          li.PopNavigation-listItem
-            = fixed_width_icon_link_to 'Quick starts', 'book', provider_admin_quickstarts_path, class: 'PopNavigation-link'
-
-    .PopNavigation.PopNavigation--session
-      a.PopNavigation-trigger title="Session"
-        => icon('user')
-        => icon('bolt') if impersonating?
-      ul#session-menu.PopNavigation-list
-        li.PopNavigation-listItem
-          p.PopNavigation-info
-            - if impersonating?
-              => icon('bolt')
-              ' Impersonating a virtual admin user from
-            - else
-              ' Signed in to
-            => current_account.name
-            ' as
-            = current_user.display_name
-            | .
-
-          = fixed_width_icon_link_to 'Sign Out', 'times', provider_logout_path, class: 'PopNavigation-link', title: "Sign Out #{current_user.username}"
+/   // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
+/   div class="username" style="display:none;"
+/     = current_user.username

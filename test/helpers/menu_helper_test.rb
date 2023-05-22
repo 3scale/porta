@@ -51,6 +51,27 @@ class MenuHelperTest < ActionView::TestCase
     end
   end
 
+  test '#masthead_props' do
+    expects(:active_menu).returns(:dashboard)
+    expects(:current_user).returns(FactoryBot.create(:simple_user))
+    expects(:impersonating?).returns(false)
+
+    json = masthead_props.to_json
+
+    data = JSON.parse json
+    # Assert app/javascript/src/Navigation/components/Masthead.tsx#Props
+    assert_not_nil data['apiDocsHref']
+    assert_not_nil data['brandHref']
+    assert_not_nil data['contextSelectorProps']
+    assert_not_nil data['currentAccount']
+    assert_not_nil data['currentUser']
+    assert_not_nil data['impersonating']
+    assert_not_nil data['liquidReferenceHref']
+    assert_not_nil data['quickstartsHref']
+    assert_not_nil data['saas']
+    assert_not_nil data['signOutHref']
+  end
+
   protected
 
   def current_account

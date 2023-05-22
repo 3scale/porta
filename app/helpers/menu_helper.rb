@@ -1,4 +1,8 @@
-module MenuHelper
+# frozen_string_literal: true
+
+module MenuHelper # rubocop:disable Metrics/ModuleLength
+  include ApplicationHelper
+
   def main_menu_item(id, label, path, options = {})
     fake_active = respond_to?(:active_upgrade_notice) && (id == active_upgrade_notice)
     options[:active] = (id == active_menu) || fake_active
@@ -106,5 +110,26 @@ module MenuHelper
 
   def vertical_nav_hidden?(menu = active_menu)
     %i[dashboard products backend_apis quickstarts].include?(menu)
+  end
+
+  def masthead_props
+    {
+      apiDocsHref: provider_admin_api_docs_path,
+      brandHref: provider_admin_dashboard_path,
+      contextSelectorProps: {
+        activeMenu: active_menu,
+        audienceLink: audience_link,
+        settingsLink: settings_link,
+        productsLink: admin_services_path,
+        backendsLink: provider_admin_backend_apis_path
+      }.as_json,
+      currentAccount: current_account.name,
+      currentUser: current_user.decorate.display_name,
+      impersonating: impersonating?,
+      liquidReferenceHref: provider_admin_liquid_docs_path,
+      quickstartsHref: Features::QuickstartsConfig.enabled? ? provider_admin_quickstarts_path : nil,
+      saas: saas?,
+      signOutHref: provider_logout_path
+    }
   end
 end

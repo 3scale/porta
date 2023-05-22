@@ -22,78 +22,27 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<ContextSelector {...
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists(ContextSelector)).toEqual(true)
-})
+  wrapper.find('.pf-c-dropdown__toggle[aria-label="Context selector toggle"]').simulate('click')
 
-it('should have Dashboard, Audience, Products, Backends and Settings', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should not have Audience if not provided', () => {
-  const wrapper = mountWrapper()
-  wrapper.setProps({ audienceLink: undefined })
-  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
+  const wrapper = mountWrapper({ audienceLink: undefined })
+  wrapper.find('.pf-c-dropdown__toggle[aria-label="Context selector toggle"]').simulate('click')
+
   expect(wrapper).toMatchSnapshot()
 })
 
-it('should highlight the selected context', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
+it('should disable the selected context', () => {
+  const wrapper = mountWrapper({ activeMenu: 'dashboard' })
+  wrapper.find('.pf-c-dropdown__toggle[aria-label="Context selector toggle"]').simulate('click')
 
-  wrapper.setProps({ activeMenu: 'buyers' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Audience')
-
-  wrapper.setProps({ activeMenu: 'finance' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Audience')
-
-  wrapper.setProps({ activeMenu: 'cms' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Audience')
-
-  wrapper.setProps({ activeMenu: 'site' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Audience')
-
-  wrapper.setProps({ activeMenu: 'dashboard' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Dashboard')
-
-  wrapper.setProps({ activeMenu: 'personal' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
-
-  wrapper.setProps({ activeMenu: 'account' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
-
-  wrapper.setProps({ activeMenu: 'active_docs' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
-
-  wrapper.setProps({ activeMenu: 'serviceadmin' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Products')
-
-  wrapper.setProps({ activeMenu: 'backend_api' })
-  expect(wrapper.find('.current-context')).toHaveLength(1)
-  expect(wrapper.find('.current-context').text()).toEqual('Backends')
+  expect(wrapper.find('.pf-c-dropdown__menu')).toMatchSnapshot()
 })
 
 it('should display the current api', () => {
   const wrapper = mountWrapper({ activeMenu: 'serviceadmin' })
 
-  expect(wrapper.exists('.fa-cubes')).toEqual(true)
-  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
-
-  wrapper.setProps({ activeMenu: 'monitoring' })
-  expect(wrapper.exists('.fa-cubes')).toEqual(true)
-  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
-
-  wrapper.setProps({ activeMenu: 'backend_api' })
-  expect(wrapper.exists('.fa-cube')).toEqual(true)
-  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Backends')
+  expect(wrapper).toMatchSnapshot()
 })

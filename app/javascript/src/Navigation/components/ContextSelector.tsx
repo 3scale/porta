@@ -1,8 +1,18 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  Icon
+} from '@patternfly/react-core'
+import CubeIcon from '@patternfly/react-icons/dist/js/icons/cube-icon'
+import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+import BullseyeIcon from '@patternfly/react-icons/dist/js/icons/bullseye-icon'
+import HomeIcon from '@patternfly/react-icons/dist/js/icons/home-icon'
+import CogIcon from '@patternfly/react-icons/dist/js/icons/cog-icon'
 
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { useClickOutside } from 'utilities/useClickOutside'
 
 import type { FunctionComponent } from 'react'
 import type { Menu } from 'Types'
@@ -27,62 +37,42 @@ const ContextSelector: FunctionComponent<Props> = ({
   backendsLink
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef(null)
-  useClickOutside(ref, () => { setIsOpen(false) })
 
-  function getClassNamesForMenu (menu: Menu): string {
-    const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
-    const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].includes(activeMenu))
-    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].includes(activeMenu))
-    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].includes(activeMenu))
-    const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].includes(activeMenu))
+  // TODO: move this to menu_helper.rb
+  function isMenuDisabled (menu: string): boolean {
+    const isDashboardSelected = menu === 'Dashboard' && activeMenu === 'dashboard'
+    const isAudienceSelected = menu === 'Audience' && (['buyers', 'finance', 'cms', 'site'].includes(activeMenu))
+    const isProductsSelected = menu === 'Products' && (['serviceadmin', 'monitoring', 'products'].includes(activeMenu))
+    const isBackendsSelected = menu === 'Backends' && (['backend_api', 'backend_apis'].includes(activeMenu))
+    const isSettingsSelected = menu === 'Account Settings' && (['account', 'personal', 'active_docs'].includes(activeMenu))
 
-    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
-      return 'pf-c-context-selector__menu-list-item current-context'
-    }
-
-    return 'pf-c-context-selector__menu-list-item'
+    return isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected
   }
 
+  const dropdownItems = [
+    { title: 'Dashboard', href: DASHBOARD_PATH, icon: <HomeIcon /> },
+    { title: 'Audience', href: audienceLink, icon: <BullseyeIcon /> },
+    { title: 'Products', href: productsLink, icon: <CubesIcon /> },
+    { title: 'Backends', href: backendsLink, icon: <CubeIcon /> },
+    { title: 'Account Settings', href: settingsLink, icon: <CogIcon /> }
+  ].map(({ title, href, icon }) => (
+    <DropdownItem key={title} href={href} isDisabled={isMenuDisabled(title)}>
+      <Icon isInline className="header-context-selector__item-icon">{icon}</Icon>{title}
+    </DropdownItem>
+  ))
+
   return (
-    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} data-quickstart-id="context-selector" ref={ref}>
-      <a className="pf-c-context-selector__toggle pf-m-plain pf-m-text" title="Context Selector" onClick={() => { setIsOpen(!isOpen) }}>
-        <ActiveMenuTitle activeMenu={activeMenu} />
-      </a>
-      {isOpen && (
-        <div className="pf-c-context-selector__menu">
-          <ul className="pf-c-context-selector__menu-list" id="context-menu">
-            <li>
-              <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
-                <i className="fa fa-home header-context-selector__item-icon" />Dashboard
-              </a>
-            </li>
-            {!!audienceLink && (
-              <li>
-                <a className={getClassNamesForMenu('audience')} href={audienceLink}>
-                  <i className="fa fa-bullseye header-context-selector__item-icon" />Audience
-                </a>
-              </li>
-            )}
-            <li>
-              <a className={getClassNamesForMenu('products')} href={productsLink}>
-                <i className="fa fa-cubes header-context-selector__item-icon" />Products
-              </a>
-            </li>
-            <li>
-              <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
-                <i className="fa fa-cube header-context-selector__item-icon" />Backends
-              </a>
-            </li>
-            <li>
-              <a className={getClassNamesForMenu('account')} href={settingsLink}>
-                <i className="fa fa-cog header-context-selector__item-icon" />Account Settings
-              </a>
-            </li>
-          </ul>
-        </div>
+    <Dropdown
+      isPlain
+      data-quickstart-id="context-selector"
+      dropdownItems={dropdownItems}
+      isOpen={isOpen}
+      toggle={(
+        <DropdownToggle aria-label="Context selector toggle" onToggle={setIsOpen}>
+          <ActiveMenuTitle activeMenu={activeMenu} />
+        </DropdownToggle>
       )}
-    </div >
+    />
   )
 }
 
