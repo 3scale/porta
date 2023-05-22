@@ -24,14 +24,12 @@ module PaymentGateways
     end
 
     def create_stripe_setup_intent
-      if customer.present?
-        setup_intent_params = {
-          payment_method_types: ['card'],
-          usage: 'off_session',
-          customer: customer.id
-        }
-        Stripe::SetupIntent.create(setup_intent_params, api_key)
-      end
+      setup_intent_params = {
+        payment_method_types: ['card'],
+        usage: 'off_session',
+        customer: customer.id
+      }
+      Stripe::SetupIntent.create(setup_intent_params, api_key)
     end
 
     def customer
@@ -48,9 +46,10 @@ module PaymentGateways
 
       begin
         customer = Stripe::Customer.retrieve(customer_id, api_key)
-        customer.deleted? ? create_customer : customer
-      rescue Stripe::InvalidRequestError
-        Rails.logger.warn("An invalid request occurred.")
+        return create_customer if customer.deleted?
+        customer
+      rescue Stripe::InvalidRequestError => e
+        create_customer
       end
     end
 
