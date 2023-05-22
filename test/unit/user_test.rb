@@ -382,7 +382,7 @@ class UserTest < ActiveSupport::TestCase
     test 'send lost password email on :generate_lost_password_token!' do
       @user.account.update_column(:provider, true) # rubocop:disable Rails/SkipsModelValidations
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         @user.generate_lost_password_token!
       end
       message = ActionMailer::Base.deliveries.last
@@ -395,7 +395,7 @@ class UserTest < ActiveSupport::TestCase
     test 'send buyer lost password email on :generate_lost_password_token!' do
       @user.account.update_column(:provider, false) # rubocop:disable Rails/SkipsModelValidations
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         @user.generate_lost_password_token!
       end
 

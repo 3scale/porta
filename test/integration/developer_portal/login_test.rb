@@ -82,7 +82,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     @provider.authentication_providers.update_all(automatically_approve_accounts: false)
     stub_user_data(uid: 'uid1', email: 'foo@example.com', username: 'foo', org_name: 'company', email_verified: true)
     stub_oauth2_request
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       post session_path(system_name: @auth.system_name, code: 'example')
     end
     assert_match "Your account isn't active or hasn't been approved yet.", flash[:error]
