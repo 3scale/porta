@@ -1,7 +1,3 @@
 = javascript_packs_with_chunks_tag 'masthead'
 
 header#header-container class="pf-c-masthead pf-m-display-inline #{current_account.master? ? 'pf-c-masthead--master' : ''}" data-props=masthead_props.to_json
-
-/   // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
-/   div class="username" style="display:none;"
-/     = current_user.username

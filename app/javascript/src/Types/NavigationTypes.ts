@@ -1,1 +1,0 @@
-export type Menu = 'account' | 'active_docs' | 'apis' | 'applications' | 'audience' | 'backend_api' | 'backend_apis' | 'buyers' | 'cms' | 'dashboard' | 'finance' | 'monitoring' | 'personal' | 'products' | 'quickstarts' | 'serviceadmin' | 'settings' | 'site'

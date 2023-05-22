@@ -114,6 +114,7 @@ end
 
 When /^I log ?out$/ do
   log_out
+  @current_user = nil
 end
 
 # TODO: merge those 3 assertion steps

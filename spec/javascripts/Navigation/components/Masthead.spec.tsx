@@ -5,21 +5,15 @@ import { Masthead } from 'Navigation/components/Masthead'
 import type { Props } from 'Navigation/components/Masthead'
 
 const defaultProps: Props = {
-  apiDocsHref: '',
   brandHref: '',
   contextSelectorProps: {
-    activeMenu: 'dashboard',
-    backendsLink: '',
-    productsLink: '',
-    settingsLink: '',
-    audienceLink: undefined
+    toggle: { title: 'Dashboard', icon: 'home' },
+    menuItems: [{ title: 'Dashboard', icon: 'home', href: '/dashboard', disabled: true }]
   },
   currentAccount: 'account',
   currentUser: 'user',
+  documentationMenuItems: [],
   impersonating: undefined,
-  liquidReferenceHref: '',
-  quickstartsHref: null,
-  saas: undefined,
   signOutHref: ''
 }
 
@@ -52,24 +46,6 @@ describe('Brand', () => {
 describe('Documentation menu', () => {
   it('should feature all default items', () => {
     const wrapper = mountWrapper()
-    wrapper.find('.pf-c-dropdown__toggle[aria-label="Documentation toggle"]').simulate('click')
-    expect(wrapper.find('[title="Documentation"] .pf-c-dropdown__menu-item')).toMatchSnapshot()
-  })
-
-  it('should feature a link to news when on saas', () => {
-    const wrapper = mountWrapper({ saas: true })
-    wrapper.find('.pf-c-dropdown__toggle[aria-label="Documentation toggle"]').simulate('click')
-    expect(wrapper.find('[title="Documentation"] .pf-c-dropdown__menu-item')).toMatchSnapshot()
-  })
-
-  it('should feature a link to quickstarts when enabled', () => {
-    const wrapper = mountWrapper({ quickstartsHref: '/quickstarts' })
-    wrapper.find('.pf-c-dropdown__toggle[aria-label="Documentation toggle"]').simulate('click')
-    expect(wrapper.find('[title="Documentation"] .pf-c-dropdown__menu-item')).toMatchSnapshot()
-  })
-
-  it('should feature all links when enabled', () => {
-    const wrapper = mountWrapper({ saas: true, quickstartsHref: '/quickstarts' })
     wrapper.find('.pf-c-dropdown__toggle[aria-label="Documentation toggle"]').simulate('click')
     expect(wrapper.find('[title="Documentation"] .pf-c-dropdown__menu-item')).toMatchSnapshot()
   })
