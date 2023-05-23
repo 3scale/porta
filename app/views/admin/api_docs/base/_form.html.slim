@@ -2,6 +2,4 @@
   = javascript_packs_with_chunks_tag 'codemirror', 'api_docs_form'
   = javascript_include_tag 'codemirror/modes/liquid'
 
-- content_for :sublayout_title, 'ActiveDocs'
-
-div id="api-docs-container" data-service=api_docs_service_data(@api_docs_service).to_json
+div.remove-padding-main id="api-docs-container" data-service=api_docs_service_data(@api_docs_service).to_json

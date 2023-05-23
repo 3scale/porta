@@ -4,7 +4,11 @@ import {
   Button,
   Card,
   CardBody,
-  Form
+  Form,
+  PageSection,
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { CSRFToken } from 'utilities/CSRFToken'
@@ -16,8 +20,6 @@ import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
 
 import type { FunctionComponent } from 'react'
 import type { Backend } from 'Types'
-
-import './AddBackendForm.scss'
 
 interface Props {
   backend: Backend | null;
@@ -55,47 +57,55 @@ const AddBackendForm: FunctionComponent<Props> = ({
 
   return (
     <>
-      <Card>
-        <CardBody>
-          <Form
-            isWidthLimited
-            acceptCharset="UTF-8"
-            action={url}
-            id="new_backend_api_config"
-            method="post"
-            onSubmit={() => { setLoading(true) }}
-          >
-            <CSRFToken />
-            <input name="utf8" type="hidden" value="✓" />
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">Add a backend</Text>
+        </TextContent>
+      </PageSection>
 
-            <BackendSelect
-              backend={backend}
-              backends={updatedBackends}
-              error={inlineErrors?.backend_api_id?.[0]}
-              searchPlaceholder="Find a backend"
-              onCreateNewBackend={() => { setIsModalOpen(true) }}
-              onSelect={setBackend}
-            />
+      <PageSection>
+        <Card>
+          <CardBody>
+            <Form
+              isWidthLimited
+              acceptCharset="UTF-8"
+              action={url}
+              id="new_backend_api_config"
+              method="post"
+              onSubmit={() => { setLoading(true) }}
+            >
+              <CSRFToken />
+              <input name="utf8" type="hidden" value="✓" />
 
-            <PathInput
-              error={inlineErrors?.path?.[0]}
-              path={path}
-              setPath={setPath}
-            />
+              <BackendSelect
+                backend={backend}
+                backends={updatedBackends}
+                error={inlineErrors?.backend_api_id?.[0]}
+                searchPlaceholder="Find a backend"
+                onCreateNewBackend={() => { setIsModalOpen(true) }}
+                onSelect={setBackend}
+              />
 
-            <ActionGroup>
-              <Button
-                data-testid="addBackend-buttonSubmit"
-                isDisabled={!isFormComplete || loading}
-                type="submit"
-                variant="primary"
-              >
+              <PathInput
+                error={inlineErrors?.path?.[0]}
+                path={path}
+                setPath={setPath}
+              />
+
+              <ActionGroup>
+                <Button
+                  data-testid="addBackend-buttonSubmit"
+                  isDisabled={!isFormComplete || loading}
+                  type="submit"
+                  variant="primary"
+                >
                 Add to product
-              </Button>
-            </ActionGroup>
-          </Form>
-        </CardBody>
-      </Card>
+                </Button>
+              </ActionGroup>
+            </Form>
+          </CardBody>
+        </Card>
+      </PageSection>
 
       <NewBackendModal
         backendsPath={backendsPath}

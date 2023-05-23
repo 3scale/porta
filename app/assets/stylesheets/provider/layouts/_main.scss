@@ -21,6 +21,15 @@ body {
   // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
   padding: line-height-times(1);
 
+  // COUNTER_HACK: removes hardcoded padding in those pages that use actual PF4 styles
+  // https://github.com/3scale/porta/commit/3b904ab7d5a0b72ce5c5de14fb566eca75bdbb37#diff-df72c33ce6ccf433d374d12b7856eb703289e5e2d439f7216ace2ac6a4fb4375
+  & > div.remove-padding-main {
+    margin-top: calc(-1 * var(--pf-c-page__main-section--xl--PaddingTop));
+    margin-right: calc(-1 * var(--pf-c-page__main-section--xl--PaddingRight));
+    margin-bottom: calc(-1 * var(--pf-c-page__main-section--xl--PaddingBottom));
+    margin-left: calc(-1 * var(--pf-c-page__main-section--xl--PaddingLeft));
+  }
+
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }

@@ -22,8 +22,6 @@ import type { FunctionComponent } from 'react'
 import type { TabKey } from 'Metrics/types'
 import type { Metric } from 'Types'
 
-import './IndexPage.scss'
-
 interface Props {
   metrics: Metric[];
   metricsCount: number;
