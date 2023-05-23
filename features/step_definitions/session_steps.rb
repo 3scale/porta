@@ -114,6 +114,7 @@ end
 
 When /^I log ?out$/ do
   log_out
+  @current_user = nil
 end
 
 # TODO: merge those 3 assertion steps
@@ -144,6 +145,6 @@ When "the user logs in" do
 end
 
 def log_out
-  find(:css, '.pf-c-page__header-tools a[title="Session"]').click
+  find(:css, '[aria-label="Session toggle"]').click
   click_link 'Sign Out'
 end

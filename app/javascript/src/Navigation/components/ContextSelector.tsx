@@ -1,88 +1,57 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownToggle
+} from '@patternfly/react-core'
 
-import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
+import { InlineIcon } from 'Navigation/components/InlineIcon'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { useClickOutside } from 'utilities/useClickOutside'
 
 import type { FunctionComponent } from 'react'
-import type { Menu } from 'Types'
 
 import './ContextSelector.scss'
 
 interface Props {
-  activeMenu: Menu;
-  audienceLink?: string;
-  settingsLink: string;
-  productsLink: string;
-  backendsLink: string;
+  menuItems: {
+    title: string;
+    href: string;
+    icon: string;
+    disabled: boolean;
+  }[];
+  toggle: {
+    title: string;
+    icon: string;
+  };
 }
 
-const DASHBOARD_PATH = '/p/admin/dashboard'
-
 const ContextSelector: FunctionComponent<Props> = ({
-  activeMenu,
-  audienceLink,
-  settingsLink,
-  productsLink,
-  backendsLink
+  toggle,
+  menuItems
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef(null)
-  useClickOutside(ref, () => { setIsOpen(false) })
 
-  function getClassNamesForMenu (menu: Menu): string {
-    const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
-    const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].includes(activeMenu))
-    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].includes(activeMenu))
-    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].includes(activeMenu))
-    const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].includes(activeMenu))
-
-    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
-      return 'pf-c-context-selector__menu-list-item current-context'
-    }
-
-    return 'pf-c-context-selector__menu-list-item'
-  }
+  const dropdownItems = menuItems.map(({ title, href, icon, disabled }) => (
+    <DropdownItem key={title} href={href} isDisabled={disabled}>
+      <InlineIcon icon={icon} />{title}
+    </DropdownItem>
+  ))
 
   return (
-    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} data-quickstart-id="context-selector" ref={ref}>
-      <a className="pf-c-context-selector__toggle pf-m-plain pf-m-text" title="Context Selector" onClick={() => { setIsOpen(!isOpen) }}>
-        <ActiveMenuTitle activeMenu={activeMenu} />
-      </a>
-      {isOpen && (
-        <div className="pf-c-context-selector__menu">
-          <ul className="pf-c-context-selector__menu-list" id="context-menu">
-            <li>
-              <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
-                <i className="fa fa-home header-context-selector__item-icon" />Dashboard
-              </a>
-            </li>
-            {!!audienceLink && (
-              <li>
-                <a className={getClassNamesForMenu('audience')} href={audienceLink}>
-                  <i className="fa fa-bullseye header-context-selector__item-icon" />Audience
-                </a>
-              </li>
-            )}
-            <li>
-              <a className={getClassNamesForMenu('products')} href={productsLink}>
-                <i className="fa fa-cubes header-context-selector__item-icon" />Products
-              </a>
-            </li>
-            <li>
-              <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
-                <i className="fa fa-cube header-context-selector__item-icon" />Backends
-              </a>
-            </li>
-            <li>
-              <a className={getClassNamesForMenu('account')} href={settingsLink}>
-                <i className="fa fa-cog header-context-selector__item-icon" />Account Settings
-              </a>
-            </li>
-          </ul>
-        </div>
+    <Dropdown
+      isPlain
+      data-quickstart-id="context-selector"
+      dropdownItems={dropdownItems}
+      isOpen={isOpen}
+      ouiaId="context-selector"
+      toggle={(
+        <DropdownToggle aria-label="Context selector toggle" onToggle={setIsOpen}>
+          <span className="pf-c-context-selector__toggle-text">
+            <InlineIcon toggle icon={toggle.icon} />{toggle.title}
+          </span>
+        </DropdownToggle>
       )}
-    </div >
+    />
   )
 }
 

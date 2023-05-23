@@ -72,7 +72,7 @@ development:
 
 test:
   <<: *default
-  compile: false
+  compile: true
   webpack_compile_output: true
 
   # Compile test packs to a separate directory

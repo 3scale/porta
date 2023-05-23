@@ -50,11 +50,11 @@ def features_current_api?
 end
 
 def help_menu_selector
-  'header .PopNavigation.PopNavigation--docs'
+  'header .pf-c-dropdown[title="Documentation"]'
 end
 
 def open_help_menu
-  find("#{help_menu_selector} a", wait: false).click
+  find("#{help_menu_selector} .pf-c-dropdown__toggle", wait: false).click
 end
 
 def page_sidebar

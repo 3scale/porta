@@ -31,7 +31,7 @@ Feature: Provider side messages
     Then I should see the flash message "Message was sent."
     And account "bob" should have 0 messages
     Then a message should be sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
-    When I follow "Dashboard"
+    When I go to the provider dashboard
     And I follow "0 Messages"
     And I follow "Sent messages"
     Then I should see message to "bob" with subject "Party tonite!"

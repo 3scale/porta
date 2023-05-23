@@ -10,12 +10,6 @@
   --pf-c-context-selector--Width: initial;
 }
 
-.header-context-selector__item-icon {
-  // color: var(--pf-global--active-color--100);
-  margin-right: var(--pf-global--spacer--sm);
-  min-width: var(--pf-global--spacer--lg);
-}
-
 .header-context-selector__toggle-text-icon {
   margin-right: var(--pf-global--spacer--sm);
   color: var(--pf-global--active-color--100);
@@ -23,8 +17,4 @@
 
 .pf-c-context-selector__menu-list {
   overflow-y: auto;
-}
-
-a.pf-c-context-selector__menu-list-item {
-  color: var(--pf-global--Color--100);
 }

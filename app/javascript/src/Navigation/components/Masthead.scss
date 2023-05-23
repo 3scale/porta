@@ -1,0 +1,21 @@
+.pf-c-masthead {
+
+  &--master {
+    &:before {
+      background-color: #39a5dc; // pf-blue-300;
+      content: 'Master';
+      grid-column: 1/-1;
+      margin-left: calc(-1 * var(--pf-c-masthead--PaddingLeft));
+      margin-right: calc(-1 * var(--pf-c-masthead--PaddingRight));
+    }
+  }
+
+  .pf-c-dropdown .pf-c-dropdown__session-info {
+    color: #8b8d8f; // pf-black-500;
+    display: inline-block;
+    font-size: 13px; // Ideally? var(--pf-c-content--small--FontSize);
+    font-style: italic;
+    white-space: break-spaces;
+    width: 15rem; // This value comes way back https://github.com/3scale/system/blob/3213fb8ef08e86df86ccf837517d30b3f446fd4c/app/assets/stylesheets/provider/_pop_navigation.scss#L27
+  }
+}

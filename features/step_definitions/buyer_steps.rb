@@ -118,14 +118,16 @@ And /^application plan is paid$/ do
 end
 
 When(/^the buyer logs in to the provider$/) do
+  username = @buyer.admins.first.username
   steps %(
     When the current domain is #{@provider.external_domain}
     And I go to the login page
-    And I fill in "Username" with "#{@buyer.admins.first.username}"
+    And I fill in "Username" with "#{username}"
     And I fill in "Password" with "supersecret"
     And I press "Sign in"
-    And I should be logged in as "#{@buyer.admins.first.username}"
+    And I should be logged in as "#{username}"
   )
+  @current_user = User.find_by!(username: username)
 end
 
 When(/^I should be warned to complete my signup$/) do
