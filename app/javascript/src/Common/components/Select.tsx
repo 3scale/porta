@@ -2,10 +2,10 @@ import { useState } from 'react'
 import {
   FormGroup,
   Select as PF4Select,
-  SelectVariant
+  SelectVariant,
+  Spinner
 } from '@patternfly/react-core'
 
-import { Spinner } from 'Common/components/Spinner'
 import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/patternfly-utils'
 import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
