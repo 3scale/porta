@@ -34,7 +34,11 @@ table button.action {
   content: $content;
 }
 
-a.action, button.action, input[type='submit'].action {
+a.action,
+button.action,
+form.button-to button.action[type="submit"]:not(.pf-c-button),
+input[type='submit'].action {
+    width: auto;
     white-space: nowrap;
     border-radius: $border-radius-sm;
     padding: 0 line-height-times(1/8);
