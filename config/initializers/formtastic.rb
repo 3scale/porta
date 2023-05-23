@@ -55,12 +55,12 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # i.e. :label => true, or :hint => true (or opposite depending on initialized value)
 Formtastic::FormBuilder.i18n_lookups_by_default = true
 
-# reading strings from i18n with HTML tags escapes them otherwise
-Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false
-
 # Specifies if I18n lookups of the default I18n Localizer should be cached to improve performance.
 # Defaults to true.
 # Formtastic::FormBuilder.i18n_cache_lookups = false
+
+# reading strings from i18n with HTML tags escapes them otherwise
+Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false
 
 # Specifies the class to use for localization lookups. You can create your own
 # class and use it instead by subclassing Formtastic::Localizer (which is the default).
@@ -92,3 +92,24 @@ Formtastic::FormBuilder.use_required_attribute = false
 # this to true. Doing so will omit the `novalidate` attribute from the `<form>` tag.
 # See http://diveintohtml5.org/forms.html#validation for more info.
 Formtastic::FormBuilder.perform_browser_validations = true
+
+# By creating custom input class finder, you can change how input classes  are looked up.
+# For example you can make it to search for TextInputFilter instead of TextInput.
+# See https://github.com/formtastic/formtastic/wiki/Custom-Class-Finders
+# Formtastic::FormBuilder.input_class_finder = Formtastic::InputClassFinder
+
+# Define custom namespaces in which to look up your Input classes. Default is
+# to look up in the global scope and in Formtastic::Inputs.
+# Formtastic::FormBuilder.input_namespaces = [ ::Object, ::MyInputsModule, ::Formtastic::Inputs ]
+
+# By creating custom action class finder, you can change how action classes are looked up.
+# For example you can make it to search for MyButtonAction instead of ButtonAction.
+# See https://github.com/formtastic/formtastic/wiki/Custom-Class-Finders
+# Formtastic::FormBuilder.action_class_finder = Formtastic::ActionClassFinder
+
+# Define custom namespaces in which to look up your Action classes. Default is
+# to look up in the global scope and in Formtastic::Actions.
+# Formtastic::FormBuilder.action_namespaces = [ ::Object, ::MyActionsModule, ::Formtastic::Actions ]
+
+# Which columns to skip when automatically rendering a form without any fields specified.
+# Formtastic::FormBuilder.skipped_columns = [:created_at, :updated_at, :created_on, :updated_on, :lock_version, :version]
