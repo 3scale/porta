@@ -104,38 +104,3 @@ $dropdown-bg-color: lighten(black, 85%);
   text-align: left;
   min-width: line-height-times(10);
 }
-
-// For a typeahead select with an option marked as a group name, make the option look like the SelectGroup name should
-.pf-c-select__menu-item.pf-c-select__menu-item--group-name {
-  padding-top: var(--pf-c-select__menu-item--PaddingTop);
-  padding-right: var(--pf-c-select__menu-item--PaddingRight);
-  padding-bottom: var(--pf-c-select__menu-item--PaddingBottom);
-  padding-left: var(--pf-c-select__menu-item--PaddingLeft);
-  font-size: var(--pf-global--FontSize--sm);
-  font-weight: var(--pf-global--FontWeight--semi-bold);
-  color: var(--pf-global--Color--dark-200);
-}
-
-// fix the bottom border of the typeahead select that is being overwritten by a reset
-.pf-c-select__toggle-wrapper > .pf-c-form-control {
-  border-bottom-color: var(--pf-c-select__toggle--BorderBottomColor);
-}
-
-// fix a reset that is breaking the disabled typeahead select
-.pf-c-select__toggle.pf-m-disabled input {
-  background-color: var(--pf-global--disabled-color--300);
-}
-
-// Adds a description to select items. This will be available natively once we upgrade @patternfly/react-core
-.pf-c-select__menu {
-  .pf-c-select__menu-item-description {
-    height: auto;
-
-    &::after {
-      color: var(--pf-global--Color--200); // var(--pf-c-select__menu-item-description--Color);
-      content: "\A"attr(data-description);
-      font-size: .75rem; // var(--pf-c-select__menu-item-description--FontSize);
-      white-space: pre-wrap;
-    }
-  }
-}

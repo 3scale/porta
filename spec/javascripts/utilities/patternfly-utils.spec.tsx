@@ -18,7 +18,7 @@ it('#toSelectOption should work', () => {
 <SelectOption
   className="banana"
   component="button"
-  data-description="A standard item object"
+  description="A standard item object"
   index={0}
   inputId=""
   isChecked={false}

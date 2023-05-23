@@ -38,11 +38,9 @@ export const toSelectOption = ({
   <SelectOption
     key={String(id)}
     className={className}
-    data-description={description}
-    // TODO: when we upgrade PF, use description prop directly
-    // description={record.description}
+    description={description}
     isDisabled={disabled}
-    value={toSelectOptionObject({ id, name, description })}
+    value={toSelectOptionObject({ id, name })}
   />
 )
 
