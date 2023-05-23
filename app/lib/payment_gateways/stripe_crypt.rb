@@ -48,7 +48,7 @@ module PaymentGateways
         customer = Stripe::Customer.retrieve(customer_id, api_key)
         return create_customer if customer.deleted?
         customer
-      rescue Stripe::InvalidRequestError => e
+      rescue Stripe::InvalidRequestError
         create_customer
       end
     end

@@ -45,7 +45,7 @@ module PaymentDetailsHelper
   def stripe_form_data(intent)
     {
       stripePublishableKey: site_account.payment_gateway_options[:publishable_key],
-      setupIntentSecret: intent&.client_secret,
+      setupIntentSecret: intent.client_secret,
       billingAddress: stripe_billing_address,
       billingName: current_account[:billing_address_name],
       successUrl: hosted_success_admin_account_stripe_path,
