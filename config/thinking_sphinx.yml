@@ -42,6 +42,14 @@ base: &default
 
   binlog_path: ''
 
+  <% if ENV['THINKING_SPHINX_RT_MERGE_IOPS'].present? %>
+  rt_merge_iops: ENV['THINKING_SPHINX_RT_MERGE_IOPS']
+  <% end %>
+
+  <% if ENV['THINKING_SPHINX_RT_MERGE_MAXIOSIZE'].present? %>
+  rt_merge_maxiosize: ENV['THINKING_SPHINX_RT_MERGE_MAXIOSIZE']
+  <% end %>
+
 development:
   <<: *default
 
@@ -62,4 +70,5 @@ test: &test
 
 production:
   <<: *default
+  skip_running_check: true # daemon is remote in production
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>

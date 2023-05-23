@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SphinxTasksTest < ActiveSupport::TestCase
+class SearchdTasksTest < ActiveSupport::TestCase
   include NPlusOneControl::MinitestHelper
 
   test "enqueuing for indexing performs only one query" do
@@ -8,9 +8,19 @@ class SphinxTasksTest < ActiveSupport::TestCase
       FactoryBot.create(factory_for model)
       # two queries are for count of objects in the model and actual model IDs
       assert_number_of_queries(2) do
-        execute_rake_task("sphinx.rake", "sphinx:enqueue", model.to_s)
+        execute_rake_task("searchd.rake", "searchd:enqueue", model.to_s)
       end
     end
+  end
+
+  test "simple optimize task test" do
+    out, err = capture_io do
+      ThinkingSphinx::Test.rt_run do
+        execute_rake_task("searchd.rake", "searchd:optimize")
+      end
+    end
+
+    assert_match /_core enqueued for optimization/, out + err
   end
 
   private
