@@ -8,16 +8,19 @@ module Finance
       BillingWorker.enqueue(provider_account, now, buyers_scope)
     end
 
+    # @param account_id [Integer] the buyer account we are billing
     def self.call!(account_id, options = {})
       new(account_id, options).call!
     end
 
+    # @param account_id [Integer] the buyer account we are billing
     def self.call(account_id, options = {})
       new(account_id, options).call
     end
 
     attr_reader :account_id, :provider_account_id, :now, :skip_notifications
 
+    # @param account_id [Integer] the buyer account we are billing
     def initialize(account_id, options = {})
       @account_id = account_id
       @provider_account_id = options[:provider_account_id] || account_id
