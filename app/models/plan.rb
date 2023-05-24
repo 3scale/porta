@@ -332,6 +332,7 @@ class Plan < ApplicationRecord
 
   # Fixed cost for given period, which can be less than one month.
   def cost_for_period(period)
+    puts "=============== COST_FOR_PERIOD: #{period} (START) ==============="
     return money_in_currency(0) if (cost_per_month || 0).zero?
 
     same_month_period = (period.begin.month == period.end.month) && (period.begin.year == period.end.year)
@@ -340,6 +341,15 @@ class Plan < ApplicationRecord
     # our ranges are actually correct but for arithmetic purposes we do want the + 1 (length of the range/month)
     month_part = (BigDecimal((period.end.to_i + 1).to_s) - BigDecimal(period.begin.to_i.to_s)) /
                  (BigDecimal((period.begin.end_of_month.to_i + 1).to_s) - BigDecimal(period.begin.beginning_of_month.to_i.to_s))
+
+    puts "=============== VARIABLES ==============="
+    puts "period.end.to_i + 1: #{period.end.to_i + 1}"
+    puts "period.begin.to_i: #{period.begin.to_i}"
+    puts "period.begin.end_of_month.to_i + 1: #{period.begin.end_of_month.to_i + 1}"
+    puts "period.begin.beginning_of_month.to_i: #{period.begin.beginning_of_month.to_i}"
+    puts "month_part: #{month_part}"
+    puts "cost_per_month * month_part: #{cost_per_month * month_part}"
+    puts "(cost_per_month * month_part).round(2): #{(cost_per_month * month_part).round(2)}"
 
     (cost_per_month * month_part).round(2)
   end
