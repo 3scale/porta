@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_21_090207) do
+ActiveRecord::Schema.define(version: 2023_07_04_094429) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -1082,7 +1082,7 @@ ActiveRecord::Schema.define(version: 2023_06_21_090207) do
     t.string "oidc_issuer_endpoint"
     t.bigint "lock_version", default: 0, null: false
     t.string "authentication_method"
-    t.text "policies_config"
+    t.text "policies_config", limit: 16777215
     t.string "oidc_issuer_type", default: "keycloak"
     t.string "error_headers_limits_exceeded", default: "text/plain; charset=us-ascii"
     t.integer "error_status_limits_exceeded", default: 429
