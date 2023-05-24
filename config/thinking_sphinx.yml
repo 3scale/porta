@@ -50,6 +50,14 @@ base: &default
   rt_merge_maxiosize: ENV['THINKING_SPHINX_RT_MERGE_MAXIOSIZE']
   <% end %>
 
+  <% if ENV['THINKING_SPHINX_QUERY_LOG'].present? %>
+  query_log: ENV['THINKING_SPHINX_QUERY_LOG']
+  <% end %>
+
+  <% if ENV['THINKING_SPHINX_LOG'].present? %>
+  log: ENV['THINKING_SPHINX_LOG']
+  <% end %>
+
 development:
   <<: *default
 

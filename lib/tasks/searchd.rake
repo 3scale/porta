@@ -54,6 +54,6 @@ namespace :searchd do
     end
   end
 
-  desc "index and optimize remote search indices"
+  desc "index and optimize search indices"
   task optimal_index: ["ts:index", :optimize]
 end
