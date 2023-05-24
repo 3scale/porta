@@ -341,15 +341,6 @@ class Plan < ApplicationRecord
     month_part = (BigDecimal((period.end.to_i + 1).to_s) - BigDecimal(period.begin.to_i.to_s)) /
                  (BigDecimal((period.begin.end_of_month.to_i + 1).to_s) - BigDecimal(period.begin.beginning_of_month.to_i.to_s))
 
-    puts "=============== COST_FOR_PERIOD: #{period} ==============="
-    puts "period.end.to_i + 1: #{period.end.to_i + 1}"
-    puts "period.begin.to_i: #{period.begin.to_i}"
-    puts "period.begin.end_of_month.to_i + 1: #{period.begin.end_of_month.to_i + 1}"
-    puts "period.begin.beginning_of_month.to_i: #{period.begin.beginning_of_month.to_i}"
-    puts "month_part: #{month_part}"
-    puts "cost_per_month * month_part: #{cost_per_month * month_part}"
-    puts "(cost_per_month * month_part).round(2): #{(cost_per_month * month_part).round(2)}"
-
     (cost_per_month * month_part).round(2)
   end
 
