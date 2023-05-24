@@ -41,7 +41,7 @@ class BillingObserver < ActiveRecord::Observer
       puts "now: #{now}"
       period = TimeRange.new(now, now.end_of_month)
       puts "period: #{period}"
-      puts "period.utc: #{period}.utc"
+      puts "period.utc: #{period.utc}"
       entitlements_options[:invoice] = strategy.bill_plan_change(contract, period).try(:invoice)
       contract.update_attribute :paid_until, now.end_of_month # TODO: move this line inside the billing strategy
     end
