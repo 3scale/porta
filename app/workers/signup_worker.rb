@@ -1,4 +1,4 @@
-require_dependency 'notification_center'
+# frozen_string_literal: true
 
 class SignupWorker
   include Sidekiq::Worker
