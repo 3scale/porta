@@ -13,7 +13,7 @@ main > h1,
 main >  h2,
 #tab-content > h1,
 #tab-content > h2 {
-  font-weight: $font-weight-light;
+  font-weight: $font-weight-normal;
 }
 
 .subsubmenu + h1,
@@ -32,7 +32,8 @@ main >  h2:first-child,
 
 h1 {
   font-size: $main-title-font-size;
-  font-weight: $font-weight-light;
+  font-weight: $font-weight-normal;
+  font-family: $font-family-base;
   padding-top: line-height-times(1/3);
   margin-bottom: line-height-times(2/3);
 
