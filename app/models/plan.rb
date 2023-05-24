@@ -332,7 +332,6 @@ class Plan < ApplicationRecord
 
   # Fixed cost for given period, which can be less than one month.
   def cost_for_period(period)
-    puts "=============== COST_FOR_PERIOD: #{period} (START) ==============="
     return money_in_currency(0) if (cost_per_month || 0).zero?
 
     same_month_period = (period.begin.month == period.end.month) && (period.begin.year == period.end.year)
@@ -342,7 +341,7 @@ class Plan < ApplicationRecord
     month_part = (BigDecimal((period.end.to_i + 1).to_s) - BigDecimal(period.begin.to_i.to_s)) /
                  (BigDecimal((period.begin.end_of_month.to_i + 1).to_s) - BigDecimal(period.begin.beginning_of_month.to_i.to_s))
 
-    puts "=============== VARIABLES ==============="
+    puts "=============== COST_FOR_PERIOD: #{period} ==============="
     puts "period.end.to_i + 1: #{period.end.to_i + 1}"
     puts "period.begin.to_i: #{period.begin.to_i}"
     puts "period.begin.end_of_month.to_i + 1: #{period.begin.end_of_month.to_i + 1}"
