@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render a helperText 1`] = `
+<PageSection>
+  <Flex
+    direction={
+      {
+        "default": "column",
+      }
+    }
+  >
+    <FlexItem
+      flex={
+        {
+          "default": "flex_1",
+        }
+      }
+    >
+      <Card>
+        <CardBody>
+          <DefaultPlanSelectCard
+            initialDefaultPlan={null}
+            path="/path"
+            plans={[]}
+          />
+          <HelperText>
+            <HelperTextItem>
+              This is a helper text
+            </HelperTextItem>
+          </HelperText>
+        </CardBody>
+      </Card>
+    </FlexItem>
+    <FlexItem
+      flex={
+        {
+          "default": "flex_1",
+        }
+      }
+    >
+      <Card>
+        <PlansTable
+          columns={[]}
+          count={0}
+          plans={[]}
+        />
+      </Card>
+    </FlexItem>
+  </Flex>
+</PageSection>
+`;
+
+exports[`should render properly 1`] = `
+<PageSection>
+  <Flex
+    direction={
+      {
+        "default": "column",
+      }
+    }
+  >
+    <FlexItem
+      flex={
+        {
+          "default": "flex_1",
+        }
+      }
+    >
+      <Card>
+        <CardBody>
+          <DefaultPlanSelectCard
+            initialDefaultPlan={null}
+            path="/path"
+            plans={[]}
+          />
+        </CardBody>
+      </Card>
+    </FlexItem>
+    <FlexItem
+      flex={
+        {
+          "default": "flex_1",
+        }
+      }
+    >
+      <Card>
+        <PlansTable
+          columns={[]}
+          count={0}
+          plans={[]}
+        />
+      </Card>
+    </FlexItem>
+  </Flex>
+</PageSection>
+`;

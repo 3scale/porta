@@ -1,4 +1,4 @@
-import { ChangePlanSelectCardWrapper } from 'Plans/components/ChangePlanSelectCard'
+import { ChangePlanSelectCardWrapper } from 'Plans/components/ChangePlanSelect'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { IRecord as Plan } from 'Types'
