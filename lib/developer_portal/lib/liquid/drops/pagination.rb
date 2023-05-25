@@ -121,7 +121,7 @@ module Liquid
         def make_parts
           pagination.map do |item|
             case item
-            when Fixnum
+            when Integer
               page_number(item)
             when :previous_page, :next_page
               send(item)
