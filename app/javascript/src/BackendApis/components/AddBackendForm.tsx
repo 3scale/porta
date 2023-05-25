@@ -60,10 +60,6 @@ const AddBackendForm: FunctionComponent<Props> = ({
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
           <Text component="h1">Add a backend</Text>
-          {/* TODO: THIS IS JUST FOR TESTING!! */}
-          <Text component="p">
-            Exercitation nisi do deserunt tempor minim sint ut cupidatat et velit enim. Anim Lorem pariatur quis ex adipisicing occaecat magna voluptate et ut. Tempor magna id proident dolore laboris esse commodo. Reprehenderit minim incididunt deserunt Lorem.
-          </Text>
         </TextContent>
       </PageSection>
 
