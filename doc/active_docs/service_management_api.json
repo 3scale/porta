@@ -177,13 +177,7 @@
             "in": "query",
             "description": "Request Log allows to log status codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "type": "string",
-                  "example": 200
-                }
-              }
+              "$ref": "#/components/schemas/Log"
             },
             "style": "deepObject",
             "explode": true
@@ -481,12 +475,24 @@
           },
           "usage": {
             "$ref": "#/components/schemas/Usage"
+          },
+          "log": {
+            "$ref": "#/components/schemas/Log"
           }
         },
         "example": {
           "user_key": "example",
           "usage": {
             "hits": 1
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": 200
           }
         }
       }
