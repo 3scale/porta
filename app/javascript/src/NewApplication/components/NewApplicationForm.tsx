@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import {
   ActionGroup,
   Button,
+  Card,
+  CardBody,
   Form,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import * as flash from 'utilities/flash'
@@ -124,82 +128,94 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
-      <Form
-        isWidthLimited
-        acceptCharset="UTF-8"
-        action={url}
-        method="post"
-        onSubmit={() => { setLoading(true) }}
-      >
-        <CSRFToken />
-        <input name="utf8" type="hidden" value="✓" />
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">Create application</Text>
+        </TextContent>
+      </PageSection>
 
-        {buyers ? (
-          <BuyerSelect
-            buyer={buyer}
-            buyers={buyers}
-            buyersCount={buyersCount}
-            buyersPath={buyersPath && `${buyersPath}.json`}
-            onSelectBuyer={setBuyer}
-          />
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Either 'buyers' or 'defaultBuyer' is always defined
-        ) : <input name="account_id" type="hidden" value={defaultBuyer!.id} />}
+      <PageSection>
+        <Card>
+          <CardBody>
+            <Form
+              isWidthLimited
+              acceptCharset="UTF-8"
+              action={url}
+              method="post"
+              onSubmit={() => { setLoading(true) }}
+            >
+              <CSRFToken />
+              <input name="utf8" type="hidden" value="✓" />
 
-        {products && (
-          <ProductSelect
-            isDisabled={!buyer}
-            product={product}
-            products={products}
-            productsCount={productsCount}
-            productsPath={productsPath && `${productsPath}.json`}
-            onSelectProduct={setProduct}
-          />
-        )}
+              {buyers ? (
+                <BuyerSelect
+                  buyer={buyer}
+                  buyers={buyers}
+                  buyersCount={buyersCount}
+                  buyersPath={buyersPath && `${buyersPath}.json`}
+                  onSelectBuyer={setBuyer}
+                />
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Either 'buyers' or 'defaultBuyer' is always defined
+              ) : <input name="account_id" type="hidden" value={defaultBuyer!.id} />}
 
-        {servicePlansAllowed && (
-          <ServicePlanSelect
-            createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
-            isDisabled={!buyer || !product || !servicePlan}
-            isPlanContracted={isServiceSubscribedToBuyer}
-            servicePlan={servicePlan}
-            servicePlans={product ? product.servicePlans : null}
-            serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
-            onSelect={setServicePlan}
-          />
-        )}
+              {products && (
+                <ProductSelect
+                  isDisabled={!buyer}
+                  product={product}
+                  products={products}
+                  productsCount={productsCount}
+                  productsPath={productsPath && `${productsPath}.json`}
+                  onSelectProduct={setProduct}
+                />
+              )}
 
-        <ApplicationPlanSelect
-          appPlan={appPlan}
-          createApplicationPlanPath={createApplicationPlanPath.replace(
-            ':id',
-            product?.id.toString() ?? ''
-          )}
-          product={product}
-          onSelect={setAppPlan}
-        />
+              {servicePlansAllowed && (
+                <ServicePlanSelect
+                  createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
+                  isDisabled={!buyer || !product || !servicePlan}
+                  isPlanContracted={isServiceSubscribedToBuyer}
+                  servicePlan={servicePlan}
+                  servicePlans={product ? product.servicePlans : null}
+                  serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
+                  onSelect={setServicePlan}
+                />
+              )}
 
-        {definedFields.map(f => (
-          <UserDefinedField
-            key={f.id}
-            fieldDefinition={f}
-            validationErrors={validationErrors[f.id]}
-            value={definedFieldsState[f.id]}
-            onChange={handleOnDefinedFieldChange(f.id)}
-          />
-        ))}
+              <ApplicationPlanSelect
+                appPlan={appPlan}
+                createApplicationPlanPath={createApplicationPlanPath.replace(
+                  ':id',
+                  product?.id.toString() ?? ''
+                )}
+                product={product}
+                onSelect={setAppPlan}
+              />
 
-        <ActionGroup>
-          <Button
-            isDisabled={!isFormComplete || loading}
-            type="submit"
-            variant="primary"
-          >
-            Create application
-          </Button>
-        </ActionGroup>
-      </Form>
-    </PageSection>
+              {definedFields.map(f => (
+                <UserDefinedField
+                  key={f.id}
+                  fieldDefinition={f}
+                  validationErrors={validationErrors[f.id]}
+                  value={definedFieldsState[f.id]}
+                  onChange={handleOnDefinedFieldChange(f.id)}
+                />
+              ))}
+
+              <ActionGroup>
+                <Button
+                  isDisabled={!isFormComplete || loading}
+                  type="submit"
+                  variant="primary"
+                >
+                  Create application
+                </Button>
+              </ActionGroup>
+            </Form>
+          </CardBody>
+        </Card>
+      </PageSection>
+    </>
   )
 }
 
