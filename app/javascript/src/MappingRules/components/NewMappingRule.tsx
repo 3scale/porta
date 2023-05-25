@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import {
   ActionGroup,
   Button,
+  Card,
+  CardBody,
   Form,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { HttpMethodSelect } from 'MappingRules/components/HttpMethodSelect'
@@ -71,38 +75,50 @@ const NewMappingRule: FunctionComponent<Props> = ({
     position >= 0
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
-      <Form
-        isWidthLimited
-        acceptCharset="UTF-8"
-        action={url}
-        id="new_mapping_rule"
-        method="post"
-        onSubmit={() => { setLoading(true) }}
-      >
-        <CSRFToken />
-        <input name="utf8" type="hidden" value="✓" />
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">New mapping rule</Text>
+        </TextContent>
+      </PageSection>
 
-        <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
-        <PatternInput helperTextInvalid={helperTextInvalid} pattern={pattern} validatePattern={validatePattern} validated={patternValidated} />
-        <MetricInput methods={methods} metric={metric} setMetric={setMetric} topLevelMetrics={topLevelMetrics} />
-        {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
-        <IncrementByInput increment={increment} setIncrement={setIncrement} />
-        <IsLastCheckbox isLast={false} /> {/* TODO: check what this component does and why isLas is always false */}
-        <PositionInput position={position} setPosition={setPosition} />
+      <PageSection>
+        <Card>
+          <CardBody>
+            <Form
+              isWidthLimited
+              acceptCharset="UTF-8"
+              action={url}
+              id="new_mapping_rule"
+              method="post"
+              onSubmit={() => { setLoading(true) }}
+            >
+              <CSRFToken />
+              <input name="utf8" type="hidden" value="✓" />
 
-        <ActionGroup>
-          <Button
-            data-testid="newMappingRule-buttonSubmit"
-            isDisabled={!isFormComplete || loading}
-            type="submit"
-            variant="primary"
-          >
-            Create mapping rule
-          </Button>
-        </ActionGroup>
-      </Form>
-    </PageSection>
+              <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
+              <PatternInput helperTextInvalid={helperTextInvalid} pattern={pattern} validatePattern={validatePattern} validated={patternValidated} />
+              <MetricInput methods={methods} metric={metric} setMetric={setMetric} topLevelMetrics={topLevelMetrics} />
+              {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
+              <IncrementByInput increment={increment} setIncrement={setIncrement} />
+              <IsLastCheckbox isLast={false} /> {/* TODO: check what this component does and why isLas is always false */}
+              <PositionInput position={position} setPosition={setPosition} />
+
+              <ActionGroup>
+                <Button
+                  data-testid="newMappingRule-buttonSubmit"
+                  isDisabled={!isFormComplete || loading}
+                  type="submit"
+                  variant="primary"
+                >
+                  Create mapping rule
+                </Button>
+              </ActionGroup>
+            </Form>
+          </CardBody>
+        </Card>
+      </PageSection>
+    </>
   )
 }
 

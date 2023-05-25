@@ -37,9 +37,8 @@ $font-family-base:          RedHatDisplay, Overpass, overpass, helvetica, arial,
 // font-sizes
 $fontSize:                   1rem;
 
-$hero-title-font-size:       3 * $fontSize;
-$main-title-font-size:       2 * $fontSize;
-$secondary-title-font-size:  (3/2) * $fontSize;
+$main-title-font-size:       1.5rem; // --pf-c-content--h1--FontSize
+$secondary-title-font-size:  1.25rem; // --pf-c-content--h2--FontSize
 $sub-title-font-size:        (5/4) * $fontSize;
 $caption-font-size:          (7/8) * $fontSize;
 

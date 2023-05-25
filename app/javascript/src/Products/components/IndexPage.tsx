@@ -5,7 +5,8 @@ import {
   LevelItem,
   PageSection,
   PageSectionVariants,
-  Title,
+  Text,
+  TextContent,
   Toolbar,
   ToolbarContent,
   ToolbarItem
@@ -62,41 +63,47 @@ const IndexPage: React.FunctionComponent<Props> = ({
   }))
 
   return (
-    <PageSection id="products-index-page" variant={PageSectionVariants.light}>
-      <Level>
-        <LevelItem>
-          <Title headingLevel="h1" size="2xl">Products</Title>
-        </LevelItem>
-        <LevelItem>
-          <Button component="a" href={newProductPath} variant="primary">
-            Create Product
-          </Button>
-        </LevelItem>
-      </Level>
-      <p>Explore and manage all customer-facing APIs that contain one or more of your Backends.</p>
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Level>
+            <LevelItem><Text component="h1">Products</Text></LevelItem>
+            <LevelItem>
+              <Button component="a" href={newProductPath} variant="primary">
+               Create Product
+              </Button>
+            </LevelItem>
+          </Level>
+          <Text component="p">Explore and manage all customer-facing APIs that contain one or more of your Backends.</Text>
+        </TextContent>
+      </PageSection>
+
       <Divider />
-      <Toolbar id="top-toolbar">
-        <ToolbarContent>
-          <ToolbarItem variant="search-filter">
-            <ToolbarSearch placeholder="Find a product" />
-          </ToolbarItem>
-          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
-            <Pagination itemCount={productsCount} />
-          </ToolbarItem>
-        </ToolbarContent>
-      </Toolbar>
-      <Table actions={tableActions} aria-label="Products Table" cells={tableColumns} rows={tableRows}>
-        <TableHeader />
-        <TableBody />
-      </Table>
-      <Toolbar id="bottom-toolbar">
-        <ToolbarContent>
-          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
-            <Pagination itemCount={productsCount} />
-          </ToolbarItem>
-        </ToolbarContent>
-      </Toolbar>
-    </PageSection>
+
+      <PageSection variant={PageSectionVariants.light}>
+        <Toolbar id="top-toolbar">
+          <ToolbarContent>
+            <ToolbarItem variant="search-filter">
+              <ToolbarSearch placeholder="Find a product" />
+            </ToolbarItem>
+            <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+              <Pagination itemCount={productsCount} />
+            </ToolbarItem>
+          </ToolbarContent>
+        </Toolbar>
+        <Table actions={tableActions} aria-label="Products Table" cells={tableColumns} rows={tableRows}>
+          <TableHeader />
+          <TableBody />
+        </Table>
+        <Toolbar id="bottom-toolbar">
+          <ToolbarContent>
+            <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+              <Pagination itemCount={productsCount} />
+            </ToolbarItem>
+          </ToolbarContent>
+        </Toolbar>
+      </PageSection>
+    </>
   )
 }
 

@@ -2,7 +2,9 @@ import {
   Card,
   CardBody,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -10,8 +12,6 @@ import { EmailConfigurationForm } from 'EmailConfigurations/components/EmailConf
 
 import type { FunctionComponent } from 'react'
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
-
-import './NewPage.scss'
 
 interface Props {
   url: string;
@@ -26,7 +26,9 @@ const NewPage: FunctionComponent<Props> = ({
 }) => (
   <>
     <PageSection variant={PageSectionVariants.light}>
-      <h1>New email configuration</h1>
+      <TextContent>
+        <Text component="h1">New email configuration</Text>
+      </TextContent>
     </PageSection>
 
     <PageSection>

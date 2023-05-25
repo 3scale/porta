@@ -1,4 +1,10 @@
 import { useState } from 'react'
+import {
+  PageSection,
+  PageSectionVariants,
+  TextContent,
+  Text
+} from '@patternfly/react-core'
 
 import { ServiceDiscoveryForm } from 'NewService/components/ServiceDiscoveryForm'
 import { ServiceManualForm } from 'NewService/components/ServiceManualForm'
@@ -35,20 +41,27 @@ const NewServiceForm: FunctionComponent<Props> = ({
 
   return (
     <>
-      <h1>New Product</h1>
-      <div className="new-service-form">
-        {isServiceDiscoveryAccessible && (
-          <ServiceSourceForm
-            handleFormsVisibility={handleFormsVisibility}
-            isServiceDiscoveryUsable={isServiceDiscoveryUsable}
-            loadingProjects={loadingProjects}
-            serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
-          />
-        )}
-        {formMode === 'manual'
-          ? <ServiceManualForm backendApis={backendApis} formActionPath={adminServicesPath} template={template} />
-          : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />}
-      </div>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">New Product</Text>
+        </TextContent>
+      </PageSection>
+
+      <PageSection>
+        <div className="new-service-form">
+          {isServiceDiscoveryAccessible && (
+            <ServiceSourceForm
+              handleFormsVisibility={handleFormsVisibility}
+              isServiceDiscoveryUsable={isServiceDiscoveryUsable}
+              loadingProjects={loadingProjects}
+              serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
+            />
+          )}
+          {formMode === 'manual'
+            ? <ServiceManualForm backendApis={backendApis} formActionPath={adminServicesPath} template={template} />
+            : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />}
+        </div>
+      </PageSection>
     </>
   )
 }

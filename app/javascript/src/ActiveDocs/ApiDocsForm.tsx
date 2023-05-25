@@ -2,10 +2,14 @@ import { useState } from 'react'
 import {
   ActionGroup,
   Button,
+  Card,
+  CardBody,
   Checkbox,
   Form,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { NameInput } from 'ActiveDocs/components/NameInput'
@@ -62,57 +66,69 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   const isDisabled = !name || !apiJsonSpec
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
-      <Form
-        isWidthLimited
-        acceptCharset="UTF-8"
-        action={action}
-        method="post"
-      >
-        <CSRFToken />
-        <input name="utf8" type="hidden" value="✓" />
-        {isUpdate && <input name="_method" type="hidden" value="put" />}
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Text component="h1">ActiveDocs</Text>
+        </TextContent>
+      </PageSection>
 
-        <NameInput errors={errors.name} name={name} setName={setName} />
+      <PageSection>
+        <Card>
+          <CardBody>
+            <Form
+              isWidthLimited
+              acceptCharset="UTF-8"
+              action={action}
+              method="post"
+            >
+              <CSRFToken />
+              <input name="utf8" type="hidden" value="✓" />
+              {isUpdate && <input name="_method" type="hidden" value="put" />}
 
-        <SystemNameInput
-          errors={errors.systemName}
-          isDisabled={isUpdate}
-          setSystemName={setSystemName}
-          systemName={systemName}
-        />
+              <NameInput errors={errors.name} name={name} setName={setName} />
 
-        <input name="api_docs_service[published]" type="hidden" value="0" />
-        <Checkbox
-          id="api_docs_service_published_input"
-          isChecked={published}
-          label="Publish?"
-          name="api_docs_service[published]"
-          onChange={setPublished}
-        />
+              <SystemNameInput
+                errors={errors.systemName}
+                isDisabled={isUpdate}
+                setSystemName={setSystemName}
+                systemName={systemName}
+              />
 
-        <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
+              <input name="api_docs_service[published]" type="hidden" value="0" />
+              <Checkbox
+                id="api_docs_service_published_input"
+                isChecked={published}
+                label="Publish?"
+                name="api_docs_service[published]"
+                onChange={setPublished}
+              />
 
-        {collection && <ServiceSelect service={service} services={collection} setService={setService} />}
+              <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
-        <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
+              {collection && <ServiceSelect service={service} services={collection} setService={setService} />}
 
-        <input name="api_docs_service[skip_swagger_validations]" type="hidden" value="0" />
-        <Checkbox
-          id="api_docs_service_skip_swagger_validations"
-          isChecked={skipSwaggerValidations}
-          label="Skip swagger validations"
-          name="api_docs_service[skip_swagger_validations]"
-          onChange={setSkipSwaggerValidations}
-        />
+              <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
-        <ActionGroup>
-          <Button isDisabled={isDisabled} type="submit" variant="primary">
-            {isUpdate ? 'Update spec' : 'Create spec'}
-          </Button>
-        </ActionGroup>
-      </Form>
-    </PageSection>
+              <input name="api_docs_service[skip_swagger_validations]" type="hidden" value="0" />
+              <Checkbox
+                id="api_docs_service_skip_swagger_validations"
+                isChecked={skipSwaggerValidations}
+                label="Skip swagger validations"
+                name="api_docs_service[skip_swagger_validations]"
+                onChange={setSkipSwaggerValidations}
+              />
+
+              <ActionGroup>
+                <Button isDisabled={isDisabled} type="submit" variant="primary">
+                  {isUpdate ? 'Update spec' : 'Create spec'}
+                </Button>
+              </ActionGroup>
+            </Form>
+          </CardBody>
+        </Card>
+      </PageSection>
+    </>
   )
 }
 

@@ -1,7 +1,10 @@
 import {
   Card,
+  CardBody,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -25,16 +28,20 @@ const IndexPage: FunctionComponent<Props> = ({
 }) => (
   <div id="email-configurations-index-page">
     <PageSection variant={PageSectionVariants.light}>
-      <h1>Email configurations</h1>
+      <TextContent>
+        <Text component="h1">Email configurations</Text>
+      </TextContent>
     </PageSection>
 
     <PageSection>
       <Card>
-        <EmailConfigurationsTable
-          emailConfigurations={emailConfigurations}
-          emailConfigurationsCount={emailConfigurationsCount}
-          newEmailConfigurationPath={newEmailConfigurationPath}
-        />
+        <CardBody>
+          <EmailConfigurationsTable
+            emailConfigurations={emailConfigurations}
+            emailConfigurationsCount={emailConfigurationsCount}
+            newEmailConfigurationPath={newEmailConfigurationPath}
+          />
+        </CardBody>
       </Card>
     </PageSection>
   </div>
