@@ -3,6 +3,7 @@
 require 'three_scale/sidekiq_retry_support'
 require 'three_scale/sidekiq_logging_middleware'
 require 'sidekiq/throttled'
+require 'sidekiq/logging'
 
 Sidekiq::Throttled.setup!
 
@@ -47,5 +48,21 @@ Sidekiq.configure_client do |config|
 
   config.client_middleware do |chain|
     chain.add ThreeScale::SidekiqLoggingMiddleware
+  end
+end
+
+module Sidekiq
+  module Logging
+    # override existing log to include the arguments passed to `perform`
+    # source: https://github.com/sidekiq/sidekiq/issues/1786#issuecomment-313461945
+    # NOTE: needs to be changed after upgrading to Sidekiq 6
+    def self.job_hash_context(job_hash)
+      # If we're using a wrapper class, like ActiveJob, use the "wrapped"
+      # attribute to expose the underlying thing.
+      klass = job_hash['wrapped'] || job_hash['class']
+      bid = job_hash['bid']
+      args = job_hash['args']
+      "#{klass} JID-#{job_hash['jid']}#{" BID-#{bid}" if bid}#{" ARGS-#{args}" if args}"
+    end
   end
 end
