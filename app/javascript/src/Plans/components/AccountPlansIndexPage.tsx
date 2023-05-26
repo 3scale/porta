@@ -16,11 +16,11 @@ import type { Props as MainSectionProps } from 'Plans/components/IndexPageMainSe
 import type { FunctionComponent } from 'react'
 
 interface Props extends MainSectionProps {
-  showNotice: boolean;
+  showNoDefaultPlanWarning: boolean;
 }
 
 const AccountPlansIndexPage: FunctionComponent<Props> = ({
-  showNotice,
+  showNoDefaultPlanWarning,
   defaultPlanSelectProps,
   plansTableProps
 }) => (
@@ -37,7 +37,7 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
             </Text>
           </TextContent>
         </StackItem>
-        {showNotice && (
+        {showNoDefaultPlanWarning && (
           <StackItem>
             <Alert
               isInline

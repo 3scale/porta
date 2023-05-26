@@ -5,7 +5,7 @@ import { AccountPlansIndexPage } from 'Plans/components/AccountPlansIndexPage'
 import type { Props } from 'Plans/components/AccountPlansIndexPage'
 
 const defaultProps = {
-  showNotice: true,
+  showNoDefaultPlanWarning: true,
   defaultPlanSelectProps: {
     plans: [],
     initialDefaultPlan: null,
@@ -23,9 +23,9 @@ const defaultProps = {
 const shallowWrapper = (props: Partial<Props> = {}) => shallow(<AccountPlansIndexPage {...{ ...defaultProps, ...props }} />)
 
 it('should show a notice', () => {
-  const wrapper = shallowWrapper({ showNotice: false })
+  const wrapper = shallowWrapper({ showNoDefaultPlanWarning: false })
   expect(wrapper).toMatchSnapshot()
 
-  wrapper.setProps({ showNotice: true })
+  wrapper.setProps({ showNoDefaultPlanWarning: true })
   expect(wrapper).toMatchSnapshot()
 })
