@@ -41,8 +41,8 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
           <StackItem>
             <Alert
               isInline
-              title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</>)}
-              variant="info"
+              title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot sign up.</>)}
+              variant="warning"
             />
           </StackItem>
         )}
