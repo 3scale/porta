@@ -5,18 +5,24 @@ exports[`should show a notice 1`] = `
   <PageSection
     variant="light"
   >
-    <TextContent>
-      <Text
-        component="h1"
-      >
-        Account plans
-      </Text>
-      <Text
-        component="p"
-      >
-        Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
-      </Text>
-    </TextContent>
+    <Stack
+      hasGutter={true}
+    >
+      <StackItem>
+        <TextContent>
+          <Text
+            component="h1"
+          >
+            Account plans
+          </Text>
+          <Text
+            component="p"
+          >
+            Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
+          </Text>
+        </TextContent>
+      </StackItem>
+    </Stack>
   </PageSection>
   <IndexPageMainSection
     defaultPlanSelectProps={
@@ -44,30 +50,38 @@ exports[`should show a notice 2`] = `
   <PageSection
     variant="light"
   >
-    <TextContent>
-      <Text
-        component="h1"
-      >
-        Account plans
-      </Text>
-      <Text
-        component="p"
-      >
-        Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
-      </Text>
-    </TextContent>
-    <Alert
-      isInline={true}
-      title={
-        <React.Fragment>
-          <strong>
-            You have no published or default plan
-          </strong>
-          . Without at least one of those being present, users cannot signup.
-        </React.Fragment>
-      }
-      variant="info"
-    />
+    <Stack
+      hasGutter={true}
+    >
+      <StackItem>
+        <TextContent>
+          <Text
+            component="h1"
+          >
+            Account plans
+          </Text>
+          <Text
+            component="p"
+          >
+            Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
+          </Text>
+        </TextContent>
+      </StackItem>
+      <StackItem>
+        <Alert
+          isInline={true}
+          title={
+            <React.Fragment>
+              <strong>
+                You have no published or default plan
+              </strong>
+              . Without at least one of those being present, users cannot sign up.
+            </React.Fragment>
+          }
+          variant="warning"
+        />
+      </StackItem>
+    </Stack>
   </PageSection>
   <IndexPageMainSection
     defaultPlanSelectProps={
