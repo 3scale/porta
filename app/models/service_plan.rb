@@ -8,11 +8,15 @@ class ServicePlan < Plan
 
   belongs_to :service, :foreign_key => :issuer_id, :inverse_of => :service_plans
 
-  before_destroy :destroy_contracts
-
-  def self.provided_by(account)
-    Plan.by_type(ServicePlan).issued_by(Service, account.service_ids)
+  scope :provided_by, ->(provider) do
+    if provider == :all || provider.blank?
+      {}
+    else
+      issued_by(Service, provider.service_ids)
+    end
   end
+
+  before_destroy :destroy_contracts
 
   def provider_account
     service && service.account
