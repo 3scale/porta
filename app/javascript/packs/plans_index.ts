@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const { dataset } = accountPlansIndexContainer
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const props = safeFromJsonString<AccountPlansIndexPageProps>(dataset.plansIndex)!
-    props.showNotice = true
     AccountPlansIndexPageWrapper({ ...props }, accountPlansIndexContainerId)
   }
 })
