@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Before '@onpremises' do
+  ThreeScale.config.stubs(onpremises: true)
+end
+
 Before '@ignore-backend' do
   stub_backend_get_keys
   stub_backend_change_provider_key

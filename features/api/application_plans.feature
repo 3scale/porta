@@ -25,6 +25,11 @@ Feature: Application plans index page
     When an application plan has been deleted
     Then an admin can't select the plan as default
 
+  @onpremises
+  Scenario: Create an application plan when onpremises
+    When an admin is in the application plans page
+    Then they can add new application plans
+
   Scenario: Create an application plan
     When an admin is in the application plans page
     Then they can add new application plans

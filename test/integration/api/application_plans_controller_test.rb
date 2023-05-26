@@ -75,18 +75,14 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'GET index shows the create button for Saas' do
-      # Saas is the default
-      get admin_service_application_plans_path(service)
-      assert_xpath "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create application plan'
-    end
-
     test 'index pagination does not count custom plans' do
       get admin_service_application_plans_path(service)
-      table = Nokogiri::HTML4.parse(response.body).xpath "//*[@id='plans_table']"
 
-      pagination_count = JSON.parse table.attribute('data-count')
-      table_count = JSON.parse(table.attribute('data-plans').value).length
+      page = Nokogiri::HTML4::Document.parse(response.body)
+      props = JSON.parse(page.css('#application-plans-index-container').first.attributes['data-plans-index'].value)['plansTableProps']
+
+      pagination_count = props['count']
+      table_count = props['plans'].length
 
       assert_equal pagination_count, table_count
     end
@@ -189,14 +185,6 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
       assert_equal error_message(:customizations_has_contracts), flash[:error]
-    end
-
-    test 'GET index shows the create button indepently of the onpremises value' do
-      [true, false].each do |onpremises|
-        ThreeScale.config.stubs(onpremises: onpremises)
-        get admin_service_application_plans_path(service)
-        assert_xpath("//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create application plan')
-      end
     end
 
     test 'Actions are always authorized' do
@@ -328,7 +316,8 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
 
       page = Nokogiri::HTML4::Document.parse(response.body)
-      data_plans_ids = JSON.parse(page.css('#default_plan').first.attributes["data-plans"].value).map{|p| p["id"]}
+      props = JSON.parse(page.css('#application-plans-index-container').first.attributes['data-plans-index'].value)["defaultPlanSelectProps"]
+      data_plans_ids = props['plans'].map{|p| p["id"]}
       assert_same_elements service.application_plans.pluck(:id), data_plans_ids
       assert_not_includes data_plans_ids, forbidden_plan.id
 

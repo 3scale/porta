@@ -46,7 +46,9 @@ When "an admin is in the application plans page" do
 end
 
 Then "they can add new application plans" do
-  click_link 'Create application plan'
+  find("a[href='#{new_admin_service_application_plan_path(default_service)}']", text: 'Create application plan')
+    .click
+
   fill_in('Name', with: 'Basic')
   click_on('Create application plan', wait: 5)
 
@@ -223,10 +225,6 @@ end
 
 def plans_table
   find('[data-ouia-component-id="plans-table"]')
-end
-
-def default_plan_select
-  find(:css, "select#default_plan")
 end
 
 def new_application_plan_form
