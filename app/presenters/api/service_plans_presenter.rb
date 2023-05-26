@@ -26,7 +26,7 @@ class Api::ServicePlansPresenter < PlansBasePresenter
     return unless can_create_plan?(ServicePlan)
 
     {
-      href: new_polymorphic_path([:admin, @service, ServicePlan]),
+      href: new_polymorphic_path([:admin, service, ServicePlan]),
       label: 'Create service plan'
     }
   end

@@ -45,7 +45,6 @@ class PlansBasePresenter
 
   def plans_index_data
     {
-      showNotice: respond_to?(:no_available_plans) && no_available_plans,
       defaultPlanSelectProps: default_plan_select_data.as_json,
       plansTableProps: plans_table_data.as_json
     }

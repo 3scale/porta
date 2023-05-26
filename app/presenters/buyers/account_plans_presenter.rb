@@ -10,6 +10,10 @@ class Buyers::AccountPlansPresenter < PlansBasePresenter
     plans.default.nil? && plans.published.empty?
   end
 
+  def plans_index_data
+    super.merge({ showNotice: no_available_plans })
+  end
+
   private
 
   def current_plan
@@ -28,12 +32,8 @@ class Buyers::AccountPlansPresenter < PlansBasePresenter
     return unless can_create_plan?(AccountPlan)
 
     {
-      href: new_polymorphic_path([:admin, @service, AccountPlan]),
+      href: new_admin_account_plan_path,
       label: 'Create account plan'
     }
-  end
-
-  def notice
-
   end
 end
