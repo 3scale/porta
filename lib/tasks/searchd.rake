@@ -2,7 +2,7 @@
 
 require 'progress_counter'
 
-namespace :sphinx do
+namespace :searchd do
   desc "Enqueue indexation of tables"
   task enqueue: :environment do |_task, args|
     klasses_index = args.to_a
@@ -34,4 +34,26 @@ namespace :sphinx do
       puts
     end
   end
+
+  desc "optimize searchd indexes"
+  task optimize: :environment do |_task, args|
+    klasses_index = args.to_a
+    indices = ThinkingSphinx::RakeInterface.new.rt.send(:indices)
+    indices.select! { |ind| klasses_index.include?(ind.model.name) } if klasses_index.present?
+
+    indices.each do |index|
+      # this will enqueue all indices to be optimized, according to docs all will be done in a single thread
+      # http://sphinxsearch.com/docs/current/sphinxql-optimize-index.html
+      #
+      # no way to wait for an index optimization to finish before starting another unless we switch to manticore
+      ThinkingSphinx::Connection.take do |connection|
+        connection.execute "OPTIMIZE INDEX #{index.name}"
+      end
+
+      warn "#{index.name} enqueued for optimization"
+    end
+  end
+
+  desc "index and optimize search indices"
+  task optimal_index: ["ts:index", :optimize]
 end
