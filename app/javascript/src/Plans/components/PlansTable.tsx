@@ -1,11 +1,23 @@
 import { useState } from 'react'
-import { Button, Divider, Pagination, Toolbar, ToolbarContent, ToolbarItem } from '@patternfly/react-core'
-import { sortable, Table, TableHeader, TableBody } from '@patternfly/react-table'
+import {
+  Button,
+  Divider,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem
+} from '@patternfly/react-core'
+import {
+  sortable,
+  Table,
+  TableHeader,
+  TableBody
+} from '@patternfly/react-table'
 
 import * as flash from 'utilities/flash'
 import { ajax } from 'utilities/ajax'
 import { waitConfirm } from 'utilities/confirm-dialog'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
+import { Pagination } from 'Common/components/Pagination'
 
 import type { FunctionComponent } from 'react'
 import type { Action, Plan } from 'Types'
