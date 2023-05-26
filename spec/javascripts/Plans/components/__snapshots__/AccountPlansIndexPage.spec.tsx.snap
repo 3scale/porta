@@ -56,15 +56,19 @@ exports[`should show a notice 2`] = `
         Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
       </Text>
     </TextContent>
+    <Alert
+      isInline={true}
+      title={
+        <React.Fragment>
+          <strong>
+            You have no published or default plan
+          </strong>
+          . Without at least one of those being present, users cannot signup.
+        </React.Fragment>
+      }
+      variant="info"
+    />
   </PageSection>
-  <p
-    className="notice"
-  >
-    <strong>
-      You have no published or default plan
-    </strong>
-    . Without at least one of those being present, users cannot signup.
-  </p>
   <IndexPageMainSection
     defaultPlanSelectProps={
       {

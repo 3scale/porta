@@ -106,3 +106,7 @@ a.action.pf-c-button {
     }
   }
 }
+
+.pf-c-content + .pf-c-alert {
+  margin-top: 1rem;
+}

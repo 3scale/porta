@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import {
+  Alert,
   PageSection,
   PageSectionVariants,
   Text,
@@ -31,11 +32,14 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
           levels receive.
         </Text>
       </TextContent>
+      {showNotice && (
+        <Alert
+          isInline
+          title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</>)}
+          variant="info"
+        />
+      )}
     </PageSection>
-
-    {showNotice && (
-      <p className="notice"><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</p>
-    )}
 
     <IndexPageMainSection
       defaultPlanSelectProps={defaultPlanSelectProps}
