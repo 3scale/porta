@@ -1,7 +1,10 @@
-footer#footer
-  ul
+hr.pf-c-divider
+footer.pf-c-page__main-section
+  div.pf-l-flex
     - if ThreeScale.tenant_mode.multitenant?
-      li= link_to 'Privacy', '//www.redhat.com/en/about/privacy-policy', target: '_blank'
-    li= link_to 'Support', "//access.redhat.com/products/red-hat-3scale#support", target: '_blank'
-
-    = render 'provider/footer_powered_by_part'
+      div.pf-l-flex__item
+        = link_to 'Privacy', '//www.redhat.com/en/about/privacy-policy', target: '_blank'
+    div.pf-l-flex__item
+      = link_to 'Support', "//access.redhat.com/products/red-hat-3scale#support", target: '_blank'
+    div.pf-l-flex__item.pf-m-align-right
+      = render 'provider/footer_powered_by_part'
