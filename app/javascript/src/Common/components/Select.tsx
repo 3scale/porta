@@ -10,17 +10,18 @@ import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/
 import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import type {
+  FormGroupProps,
   SelectOptionObject as PFSelectOptionObject,
   SelectProps
 } from '@patternfly/react-core'
 
 import './Select.scss'
 
-interface Props<T extends IRecord> extends Pick<SelectProps, 'aria-label' | 'isDisabled' | 'placeholderText' | 'validated'> {
+interface Props<T extends IRecord> extends Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'> {
   item: T | null;
   items: T[];
   onSelect: (selected: T | null) => void;
-  label: React.ReactNode;
+  label: FormGroupProps['label'];
   fieldId: string;
   name: string;
   isClearable?: boolean;
@@ -78,7 +79,6 @@ const Select = <T extends IRecord>({
       {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
       {item && <input name={name} type="hidden" value={Number(item.id) >= 0 ? item.id : ''} />}
       <PF4Select
-        aria-label={rest['aria-label']}
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
@@ -90,6 +90,8 @@ const Select = <T extends IRecord>({
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
         onToggle={() => { setExpanded(!expanded) }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...rest}
       >
         {items.map(toSelectOption)}
       </PF4Select>

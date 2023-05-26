@@ -51,6 +51,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
             items={availablePlans}
             label="Default plan"
             name="id"
+            ouiaId="default-plan-select"
             placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}
             onSelect={setDefaultPlan}
           />
