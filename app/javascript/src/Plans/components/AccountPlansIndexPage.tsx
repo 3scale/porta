@@ -3,6 +3,8 @@ import {
   Alert,
   PageSection,
   PageSectionVariants,
+  Stack,
+  StackItem,
   Text,
   TextContent
 } from '@patternfly/react-core'
@@ -24,21 +26,27 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
 }) => (
   <>
     <PageSection variant={PageSectionVariants.light}>
-      <TextContent>
-        <Text component="h1">Account plans</Text>
-        <Text component="p">
+      <Stack hasGutter>
+        <StackItem>
+          <TextContent>
+            <Text component="h1">Account plans</Text>
+            <Text component="p">
           Account plans create &quot;tiers&quot; of usage within the developer portal, allowing you
           to distinguish between grades of support, content and other services partners at different
           levels receive.
-        </Text>
-      </TextContent>
-      {showNotice && (
-        <Alert
-          isInline
-          title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</>)}
-          variant="info"
-        />
-      )}
+            </Text>
+          </TextContent>
+        </StackItem>
+        {showNotice && (
+          <StackItem>
+            <Alert
+              isInline
+              title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot signup.</>)}
+              variant="info"
+            />
+          </StackItem>
+        )}
+      </Stack>
     </PageSection>
 
     <IndexPageMainSection
