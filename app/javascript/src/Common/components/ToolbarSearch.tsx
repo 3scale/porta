@@ -90,6 +90,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           aria-label="Search"
           autoComplete="off"
           name={name}
+          ouiaId="toolbar-search"
           placeholder={placeholder}
           ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
           type="search"

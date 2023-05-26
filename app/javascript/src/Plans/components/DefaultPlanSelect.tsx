@@ -59,6 +59,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
           <ActionGroup>
             <Button
               isDisabled={submitDisabled}
+              ouiaId="default-plan-submit"
               type="submit"
               variant="primary"
             >

@@ -106,7 +106,7 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
 end
 
 Then "they can filter plans by name" do
-  input = find('#plans_table input[type="search"]')
+  input = find('[data-ouia-component-id="toolbar-search"]')
 
   input.set('one')
   input.sibling('button').click
@@ -172,7 +172,7 @@ end
 
 def select_default_plan_by_name(name)
   pf4_select(name, from: 'Default plan')
-  find('#default_plan_card .pf-c-button[type="submit"]').click(wait: 5)
+  find('[data-ouia-component-id="default-plan-submit"]').click(wait: 5)
 end
 
 def delete_plan_from_table_action(plan)

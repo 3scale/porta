@@ -172,7 +172,15 @@ const PlansTable: FunctionComponent<Props> = ({
         </ToolbarContent>
       </Toolbar>
       <Divider />
-      <Table actionResolver={actionResolver} aria-label="Plans Table" cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
+      <Table
+        actionResolver={actionResolver}
+        aria-label="Plans Table"
+        cells={tableColumns}
+        ouiaId="plans-table"
+        rows={tableRows}
+        sortBy={sortBy}
+        onSort={onSort}
+      >
         <TableHeader />
         <TableBody />
       </Table>

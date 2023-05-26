@@ -222,12 +222,7 @@ Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
 end
 
 def plans_table
-  if page.has_css?('#plans_table .pf-c-table')
-    find('#plans_table .pf-c-table')
-  else
-    ThreeScale::Deprecation.warn "Detected outdated plans list, pending migration to PF4 React"
-    find(:css, '#plans')
-  end
+  find('[data-ouia-component-id="plans-table"]')
 end
 
 def default_plan_select
