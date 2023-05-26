@@ -31,7 +31,7 @@ When "an admin is in the account plans page" do
 end
 
 Then "they can add new account plans" do
-  click_link 'Create Account plan'
+  click_link 'Create account plan'
   fill_in('Name', with: 'Basic')
   click_on 'Create Account plan'
 

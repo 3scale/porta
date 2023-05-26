@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render properly 1`] = `
+<Fragment>
+  <PageSection
+    variant="light"
+  >
+    <TextContent>
+      <Text
+        component="h1"
+      >
+        Service plans
+      </Text>
+      <Text
+        component="p"
+      >
+        Service plans allow you to define grades of service for each of the services (APIs) available through your developer portal. The plans allow you to define pricing per service and features available.
+      </Text>
+    </TextContent>
+  </PageSection>
+  <IndexPageMainSection
+    defaultPlanSelectProps={
+      {
+        "initialDefaultPlan": null,
+        "path": "/path",
+        "plans": [],
+      }
+    }
+    plansTableProps={
+      {
+        "columns": [],
+        "count": 0,
+        "createButton": undefined,
+        "plans": [],
+        "searchHref": "/search",
+      }
+    }
+  />
+</Fragment>
+`;

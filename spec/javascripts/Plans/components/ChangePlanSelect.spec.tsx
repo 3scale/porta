@@ -1,11 +1,11 @@
 import { mount } from 'enzyme'
 import { Select } from '@patternfly/react-core'
 
-import { ChangePlanSelectCard } from 'Plans/components/ChangePlanSelectCard'
+import { ChangePlanSelect } from 'Plans/components/ChangePlanSelect'
 import { openSelect } from 'utilities/test-utils'
 import type { SelectOptionObject } from 'utilities/patternfly-utils'
 
-import type { Props } from 'Plans/components/ChangePlanSelectCard'
+import type { Props } from 'Plans/components/ChangePlanSelect'
 
 const plan = { id: 0, name: 'I am a plan' }
 const defaultProps: Props = {
@@ -13,7 +13,7 @@ const defaultProps: Props = {
   path: '/applications/123/change_plan'
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePlanSelect {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

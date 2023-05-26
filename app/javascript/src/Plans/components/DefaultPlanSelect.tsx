@@ -2,21 +2,16 @@ import { useState } from 'react'
 import {
   ActionGroup,
   Button,
-  Card,
-  CardBody,
-  HelperText,
-  HelperTextItem,
+  Flex,
+  FlexItem,
   Form
 } from '@patternfly/react-core'
 
 import { Select as SelectFormGroup } from 'Common/components/Select'
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
 import type { IRecord as Plan } from 'Types'
-
-import './DefaultPlanSelectCard.scss'
 
 interface Props {
   plans: Plan[];
@@ -35,49 +30,48 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
 
   const availablePlans = [NO_DEFAULT_PLAN, ...plans]
 
-  return (
-    <Card id="default_plan_card">
-      <CardBody>
-        <Form
-          isWidthLimited
-          acceptCharset="UTF-8"
-          action={url}
-          method="post"
-        >
-          <CSRFToken />
-          <input name="utf8" type="hidden" value="✓" />
+  const submitDisabled = !defaultPlan || defaultPlan.id === initialDefaultPlan?.id
+    || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)
 
+  return (
+    <Form
+      isWidthLimited
+      acceptCharset="UTF-8"
+      action={url}
+      method="post"
+    >
+      <CSRFToken />
+      <input name="utf8" type="hidden" value="✓" />
+
+      <Flex alignItems={{ default: 'alignItemsFlexEnd' }} direction={{ default: 'row' }}>
+        <FlexItem flex={{ default: 'flex_2' }}>
           <SelectFormGroup
             fieldId="id"
             item={defaultPlan}
             items={availablePlans}
             label="Default plan"
             name="id"
+            ouiaId="default-plan-select"
             placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}
             onSelect={setDefaultPlan}
           />
+        </FlexItem>
+        <FlexItem flex={{ default: 'flex_1' }}>
           <ActionGroup>
             <Button
-              isDisabled={!defaultPlan || defaultPlan.id === initialDefaultPlan?.id || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)}
+              isDisabled={submitDisabled}
+              ouiaId="default-plan-submit"
               type="submit"
               variant="primary"
             >
               Change plan
             </Button>
           </ActionGroup>
-        </Form>
-        <HelperText>
-          <HelperTextItem>
-            If an application plan is set as default, 3scale sets this plan upon service subscription.
-          </HelperTextItem>
-        </HelperText>
-      </CardBody>
-    </Card>
+        </FlexItem>
+      </Flex>
+    </Form>
   )
 }
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId) }
-
 export type { Props }
-export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper }
+export { DefaultPlanSelectCard }

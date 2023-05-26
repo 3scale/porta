@@ -16,7 +16,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
 
   test 'default plan select plans have a fixed order by name' do
     data = presenter({ sort: 'name', direction: 'desc' }).default_plan_select_data
-    ids = JSON.parse(data[:plans]).map { |n| n['id'] }
+    ids = data[:plans].map { |n| n['id'] }
     assert_equal plans.reorder(name: :asc).pluck(:id), ids
   end
 
@@ -25,17 +25,19 @@ class PlanPresentersTest < ActiveSupport::TestCase
   end
 
   test '#default_plan_select_data' do
-    assert_equal [:plans, :'current-plan', :path], presenter.default_plan_select_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal %i[plans initialDefaultPlan path], presenter.default_plan_select_data.keys
   end
 
   test '#plans_table_data' do
-    assert_equal [:columns, :plans, :count, :'search-href'], presenter.plans_table_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal %i[createButton columns plans count], presenter.plans_table_data.keys
   end
 
   class Api::ApplicationPlansPresenterTest < PlanPresentersTest
     def setup
-      @service = FactoryBot.create(:service)
+      provider = FactoryBot.create(:simple_provider)
+      @service = FactoryBot.create(:service, account: provider)
       FactoryBot.create_list(:application_plan, 5, issuer: service)
+      @user = FactoryBot.create(:simple_user, account: provider)
 
       @plans = @service.application_plans
                        .reorder(name: :asc)
@@ -55,7 +57,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ApplicationPlansPresenter.new(service: service, params: params)
+      Api::ApplicationPlansPresenter.new(service: service, params: params, user: user)
     end
   end
 
@@ -64,6 +66,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
       provider = FactoryBot.create(:simple_provider)
       @service = FactoryBot.create(:service, account: provider)
       FactoryBot.create_list(:service_plan, 5, service: service)
+      @user = FactoryBot.create(:simple_user, account: provider)
 
       @plans = provider.service_plans
                        .reorder(name: :asc)
@@ -83,7 +86,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ServicePlansPresenter.new(service: service, params: params)
+      Api::ServicePlansPresenter.new(service: service, params: params, user: user)
     end
   end
 
@@ -93,6 +96,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.create(:simple_provider)
       FactoryBot.create_list(:account_plan, 5, provider: provider)
+      @user = FactoryBot.create(:simple_user, account: provider)
 
       @plans = provider.account_plans
                         .reorder(name: :asc)
@@ -112,7 +116,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Buyers::AccountPlansPresenter.new(collection: plans, params: params)
+      Buyers::AccountPlansPresenter.new(collection: plans, params: params, user: user)
     end
   end
 
@@ -122,5 +126,5 @@ class PlanPresentersTest < ActiveSupport::TestCase
 
   private
 
-  attr_reader :service, :plans
+  attr_reader :service, :plans, :user
 end

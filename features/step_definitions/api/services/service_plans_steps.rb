@@ -24,7 +24,7 @@ When "an admin is in the service plans page" do
 end
 
 Then "they can add new service plans" do
-  click_link 'Create Service plan'
+  click_link 'Create service plan'
   fill_in('Name', with: 'Basic')
   click_on 'Create Service plan'
 

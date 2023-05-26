@@ -13,14 +13,14 @@ import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { IRecord as Plan } from 'Types'
 
-import './ChangePlanSelectCard.scss'
+import './ChangePlanSelect.scss'
 
 interface Props {
   applicationPlans: Plan[];
   path: string;
 }
 
-const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
+const ChangePlanSelect: React.FunctionComponent<Props> = ({
   applicationPlans,
   path
 }) => {
@@ -64,7 +64,7 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePlanSelectCard {...props} />, containerId) }
+const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePlanSelect {...props} />, containerId) }
 
 export type { Props }
-export { ChangePlanSelectCard, ChangePlanSelectCardWrapper }
+export { ChangePlanSelect, ChangePlanSelectCardWrapper }

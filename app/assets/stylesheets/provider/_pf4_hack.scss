@@ -19,10 +19,13 @@ main.Main.pf-hack__override-page-titles#content section.pf-c-page__main-section 
 }
 
 
-// Overrides legacy style app/assets/stylesheets/provider/_commons.scss:79
-.pf-c-page__main-section > .pf-c-content > p {
-  margin: unset;
-  padding: unset;
+// Overrides legacy style app/assets/stylesheets/provider/_commons.scss:83
+.pf-c-page__main-section .pf-c-content {
+  h1 + p,
+  h2 + p {
+    margin: unset;
+    padding: unset;
+  }
 }
 
 // Emulates .pf-c-content styles on elements WITHOUT class .pf-c-content
