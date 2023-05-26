@@ -31,9 +31,9 @@ When "an admin is in the account plans page" do
 end
 
 Then "they can add new account plans" do
-  click_link 'Create Account plan'
+  click_link 'Create account plan'
   fill_in('Name', with: 'Basic')
-  click_on 'Create Account plan'
+  click_on 'Create account plan'
 
   assert_content 'Created Account plan Basic'
   assert current_path, admin_buyers_account_plans_path

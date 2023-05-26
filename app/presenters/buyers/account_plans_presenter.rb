@@ -29,7 +29,7 @@ class Buyers::AccountPlansPresenter < PlansBasePresenter
 
     {
       href: new_polymorphic_path([:admin, @service, AccountPlan]),
-      label: 'Create Account plan'
+      label: 'Create account plan'
     }
   end
 

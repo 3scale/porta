@@ -27,7 +27,7 @@ class Api::ServicePlansPresenter < PlansBasePresenter
 
     {
       href: new_polymorphic_path([:admin, @service, ServicePlan]),
-      label: 'Create Service plan'
+      label: 'Create service plan'
     }
   end
 end

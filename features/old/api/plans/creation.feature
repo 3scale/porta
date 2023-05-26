@@ -10,7 +10,7 @@ Feature: Plan creation
   Scenario: Create simple service plan
     Given the provider has "service_plans" switch allowed
     When I go to the service plans admin page
-    And I follow "Create Service plan"
+    And I follow "Create service plan"
     And I fill in "Name" with "Basic"
     And I press "Create Service plan"
     Then I should be at url for the service plans admin page
