@@ -70,6 +70,7 @@ exports[`should show a notice 2`] = `
       <StackItem>
         <Alert
           isInline={true}
+          ouiaId="no-default-plan-warning"
           title={
             <React.Fragment>
               <strong>
