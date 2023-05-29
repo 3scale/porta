@@ -11,7 +11,7 @@ class Buyers::AccountPlansPresenter < PlansBasePresenter
   end
 
   def plans_index_data
-    super.merge({ showNotice: no_available_plans })
+    super.merge({ showNoDefaultPlanWarning: no_available_plans })
   end
 
   private
