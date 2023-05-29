@@ -17,7 +17,7 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
       ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox)
     end
 
-    respond_with(proxy.policies_config, represent_on_error: :resource)
+    respond_with(proxy.policies_config, represent_on_error: represent_on_error)
   end
 
   private
@@ -32,5 +32,11 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
 
   def proxy
     @proxy ||= service.proxy
+  end
+
+  # Either to show policy-level errors (e.g. one policy lacks a field) or chain-level errors (e.g. chain is too long)
+  # Returns +:resource+ to show policy errors, +nil+ for chain errors.
+  def represent_on_error
+    :resource if proxy.errors.messages[:policies_config] == [I18n.t(:invalid_policy, scope: 'activemodel.errors.models.policies_config.attributes.policies_config')]
   end
 end

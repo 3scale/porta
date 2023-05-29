@@ -587,12 +587,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def policies_configs_are_correct
-      # TODO: 5: errors.merge!(policy_config.errors)
-      select(&:invalid?).map(&:errors).each do |policy_errors|
-        policy_errors.each do |attribute, message|
-          errors.add(attribute, errors.full_message(attribute, message).downcase)
-        end
-      end
+      errors.add(:policies_config, :invalid_policy) if any?(&:invalid?)
       errors.add(:policies_config, :missing_apicast) unless detect(&:default?)
       errors.add(:policies_config, :too_long, count: MAX_LENGTH) if Proxy.type_for_attribute('policies_config').serialize(self).size > MAX_LENGTH
     rescue NoMethodError
@@ -603,8 +598,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def policies_config_structure
     return if policies_config.valid?
 
-    policies_config.errors.each do |attribute, message|
-      errors.add(:policies_config, errors.full_message(attribute, message))
+    policies_config.errors.each do |_attribute, message|
+      errors.add(:policies_config, message)
     end
   end
 
