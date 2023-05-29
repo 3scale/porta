@@ -791,6 +791,7 @@ en:
             policies_config:
               invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
               missing_apicast: "is missing apicast policy"
+              invalid_policy: "contains some invalid policy"
         sso_token:
           cannot_be_generated: SSO Token cannot be generated
           one_of_user_id_or_username_is_required: One of user_id or username is required
