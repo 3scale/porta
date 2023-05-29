@@ -33,19 +33,13 @@ module PaymentGateways
     end
 
     test 'customer - existing payment detail' do
-      stripe_crypt.payment_detail.delete
-      payment_detail = FactoryBot.create(:payment_detail, account: buyer_account)
-      stripe_crypt.account.reload
-      customer_id = payment_detail.credit_card_auth_code
+      customer_id = update_credit_card_auth_code
       Stripe::Customer.expects(:retrieve).with(customer_id, api_key).returns(mock_customer(id: customer_id))
       assert_equal customer_id, stripe_crypt.customer.id
     end
 
     test 'customer - existing payment detail with a "deleted" customer' do
-      stripe_crypt.payment_detail.delete
-      payment_detail = FactoryBot.create(:payment_detail, account: buyer_account)
-      stripe_crypt.account.reload
-      customer_id = payment_detail.credit_card_auth_code
+      customer_id = update_credit_card_auth_code
       Stripe::Customer.expects(:retrieve).with(customer_id, api_key).returns(mock_customer(id: customer_id, deleted: true))
       Stripe::Customer.expects(:create).with(create_customer_params, api_key).returns(mock_customer(id: 'new-created-customer-id'))
       assert_equal 'new-created-customer-id', stripe_crypt.customer.id
@@ -75,6 +69,17 @@ module PaymentGateways
       assert_equal payment_method_id, payment_detail.payment_method_id
     end
 
+    test 'create a new customer if not exists in Stripe' do
+      customer_id = update_credit_card_auth_code
+
+      assert stripe_crypt.payment_detail.credit_card_auth_code
+
+      Stripe::Customer.expects(:retrieve).with(customer_id, api_key).raises(Stripe::InvalidRequestError.new("No such customer: '#{customer_id}'", 'id', http_status: 404))
+      Stripe::Customer.expects(:create).with(create_customer_params, api_key).returns(mock_customer(id: 'new-created-customer-id'))
+
+      assert_equal 'new-created-customer-id', stripe_crypt.customer.id
+    end
+
     def api_key
       provider_account.payment_gateway_options.fetch(:login)
     end
@@ -90,6 +95,13 @@ module PaymentGateways
     def mock_customer(**attrs)
       id = attrs.delete(:id) || 'new-customer-id'
       Stripe::Customer.new(id: id).tap { |stripe_customer| stripe_customer.update_attributes(**attrs) }
+    end
+
+    def update_credit_card_auth_code
+      stripe_crypt.payment_detail.delete
+      payment_detail = FactoryBot.create(:payment_detail, account: buyer_account)
+      stripe_crypt.account.reload
+      payment_detail.credit_card_auth_code
     end
   end
 end
