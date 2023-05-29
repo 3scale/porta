@@ -788,7 +788,7 @@ en:
       models:
         policies_config:
           attributes:
-            base:
+            policies_config:
               invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
               missing_apicast: "is missing apicast policy"
         sso_token:
