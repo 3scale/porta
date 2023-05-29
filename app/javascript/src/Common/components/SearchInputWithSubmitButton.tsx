@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-newline */
 import { useRef, useState } from 'react'
 import {
   SearchInput
@@ -26,23 +25,6 @@ const SearchInputWithSubmitButton: React.FunctionComponent<Props> = ({
   const onSubmitSearch = (value: string) => {
     url.searchParams.set(name, value)
     window.location.replace(url.toString())
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- The form is rendered is this very component
-    // const form = document.forms.namedItem(FORM_ID)!
-
-    // const inputClearedBeforeAnySearch = !query && value.length === 0
-    // const inputCleared = value.length === 0
-    // const searchTextTooShortForSphinx = value.length < 3
-
-    // if (inputClearedBeforeAnySearch) {
-    //   return
-    // } else if (inputCleared) {
-    //   removeEmptySearchQueryFromURL(form)
-    // } else if (searchTextTooShortForSphinx) {
-    //   setShowPopover(true)
-    //   return
-    // }
-
-    // form.submit()
   }
 
   const onClearSearch = () => {
