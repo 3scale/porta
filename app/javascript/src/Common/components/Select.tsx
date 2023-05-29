@@ -17,19 +17,17 @@ import type {
 
 import './Select.scss'
 
-interface Props<T extends IRecord> extends Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'> {
+interface Props<T extends IRecord> extends
+  Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'>,
+  Pick<FormGroupProps, 'helperText' | 'helperTextInvalid' | 'isRequired' | 'label'> {
   item: T | null;
   items: T[];
   onSelect: (selected: T | null) => void;
-  label: FormGroupProps['label'];
   fieldId: string;
   name: string;
   isClearable?: boolean;
   hint?: React.ReactNode;
-  helperText?: string;
-  helperTextInvalid?: string;
   isLoading?: boolean;
-  isRequired?: boolean;
 }
 
 const Select = <T extends IRecord>({

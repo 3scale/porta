@@ -31,9 +31,9 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
           <TextContent>
             <Text component="h1">Account plans</Text>
             <Text component="p">
-          Account plans create &quot;tiers&quot; of usage within the developer portal, allowing you
-          to distinguish between grades of support, content and other services partners at different
-          levels receive.
+              Account plans create &quot;tiers&quot; of usage within the developer portal, allowing you
+              to distinguish between grades of support, content and other services partners at different
+              levels receive.
             </Text>
           </TextContent>
         </StackItem>
