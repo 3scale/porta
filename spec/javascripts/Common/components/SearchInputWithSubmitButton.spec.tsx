@@ -1,14 +1,14 @@
 import { mount } from 'enzyme'
 
-import { ToolbarSearch } from 'Common/components/ToolbarSearch'
+import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
 
-import type { Props } from 'Common/components/ToolbarSearch'
+import type { Props } from 'Common/components/SearchInputWithSubmitButton'
 
 const defaultProps = {
   placeholder: ''
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<ToolbarSearch {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<SearchInputWithSubmitButton {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -23,9 +23,9 @@ it('should have a placeholder', () => {
 
 it('should add more fields as children', () => {
   const wrapper = mount(
-    <ToolbarSearch placeholder="">
+    <SearchInputWithSubmitButton placeholder="">
       <input name="foo" type="hidden" value="bar" />
-    </ToolbarSearch>
+    </SearchInputWithSubmitButton>
   )
   expect(wrapper.exists('[name="foo"]')).toEqual(true)
 })

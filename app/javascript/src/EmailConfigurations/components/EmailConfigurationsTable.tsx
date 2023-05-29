@@ -13,7 +13,7 @@ import {
 } from '@patternfly/react-table'
 
 import { Pagination } from 'Common/components/Pagination'
-import { ToolbarSearch } from 'Common/components/ToolbarSearch'
+import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
 
 import type { ISortBy, OnSort } from '@patternfly/react-table'
 import type { EmailConfiguration } from 'EmailConfigurations/types'
@@ -62,7 +62,7 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <ToolbarSearch name="query" placeholder="Find an email" />
+            <SearchInputWithSubmitButton name="query" placeholder="Find an email" />
           </ToolbarItem>
           <ToolbarItem>
             <Button
