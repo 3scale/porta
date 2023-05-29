@@ -20,7 +20,7 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I |they )go to (.+)$/ do |page_name|
+When /^(?:I |they )?go(?:es)? to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 

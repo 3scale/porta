@@ -41,6 +41,7 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
           <StackItem>
             <Alert
               isInline
+              ouiaId="no-default-plan-warning"
               title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot sign up.</>)}
               variant="warning"
             />
