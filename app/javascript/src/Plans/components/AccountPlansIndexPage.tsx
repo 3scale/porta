@@ -16,11 +16,11 @@ import type { Props as MainSectionProps } from 'Plans/components/IndexPageMainSe
 import type { FunctionComponent } from 'react'
 
 interface Props extends MainSectionProps {
-  showNotice: boolean;
+  showNoDefaultPlanWarning: boolean;
 }
 
 const AccountPlansIndexPage: FunctionComponent<Props> = ({
-  showNotice,
+  showNoDefaultPlanWarning,
   defaultPlanSelectProps,
   plansTableProps
 }) => (
@@ -31,16 +31,17 @@ const AccountPlansIndexPage: FunctionComponent<Props> = ({
           <TextContent>
             <Text component="h1">Account plans</Text>
             <Text component="p">
-          Account plans create &quot;tiers&quot; of usage within the developer portal, allowing you
-          to distinguish between grades of support, content and other services partners at different
-          levels receive.
+              Account plans create &quot;tiers&quot; of usage within the developer portal, allowing you
+              to distinguish between grades of support, content and other services partners at different
+              levels receive.
             </Text>
           </TextContent>
         </StackItem>
-        {showNotice && (
+        {showNoDefaultPlanWarning && (
           <StackItem>
             <Alert
               isInline
+              ouiaId="no-default-plan-warning"
               title={(<><strong>You have no published or default plan</strong>. Without at least one of those being present, users cannot sign up.</>)}
               variant="warning"
             />
