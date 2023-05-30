@@ -20,13 +20,13 @@ Feature: Account plans index page
       When they go to the account plans admin page
       Then the admin should be warned about users not being able to sign up
 
-    Scenario: Having a default plan hides the warning
+    Scenario: Having a published account plan hides the warning
       Given the provider has no default account plan
       But the provider has a published account plan
       When they go to the account plans admin page
       Then the admin should not be warned about users not being able to sign up
 
-    Scenario: Having no published plans hides the warning
+    Scenario: Having a default account plan hides the warning
       Given the provider has no published account plans
       But the provider has a default account plan
       When they go to the account plans admin page
