@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+  Popover,
   SearchInput
 } from '@patternfly/react-core'
 
@@ -19,10 +20,18 @@ const SearchInputWithSubmitButton: React.FunctionComponent<Props> = ({
   const query = new URL(window.location.href).searchParams.get(name)
   const url = new URL(window.location.href)
   const [searchText, setSearchText] = useState<string>(query ?? '')
+  const [showPopover, setShowPopover] = useState<boolean>(false)
 
   const inputRef = useRef<HTMLInputElement>()
 
   const onSubmitSearch = (value: string) => {
+    const searchTextTooShortForSphinx = value.length < 3
+
+    if (searchTextTooShortForSphinx) {
+      setShowPopover(true)
+      return
+    }
+
     url.searchParams.set(name, value)
     window.location.replace(url.toString())
   }
@@ -32,15 +41,28 @@ const SearchInputWithSubmitButton: React.FunctionComponent<Props> = ({
     window.location.replace(url.toString())
   }
 
+  useEffect(() => {
+    if (showPopover) {
+      setShowPopover(false)
+    }
+  }, [searchText])
+
   return (
-    <SearchInput
-      placeholder={placeholder}
-      ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
-      value={searchText}
-      onChange={(_event, value) => { setSearchText(value) }}
-      onClear={() => { onClearSearch() }}
-      onSearch={(_event, value) => { onSubmitSearch(value) }}
-    />
+    <Popover
+      aria-label="search minimum length"
+      bodyContent={<div>To search, type at least 3 characters</div>}
+      isVisible={showPopover}
+      shouldClose={() => { setShowPopover(false) }}
+    >
+      <SearchInput
+        placeholder={placeholder}
+        ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
+        value={searchText}
+        onChange={(_event, value) => { setSearchText(value) }}
+        onClear={() => { onClearSearch() }}
+        onSearch={(_event, value) => { onSubmitSearch(value) }}
+      />
+    </Popover>
   )
 }
 
