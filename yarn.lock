@@ -1486,11 +1486,6 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@patternfly/patternfly@2.40.6":
-  version "2.40.6"
-  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-2.40.6.tgz#f1e13069c6c948e194de53bbd00a031bb0ddd051"
-  integrity sha512-YIusipnIPipCJNKN/Lw72MmV1dnsFQvc8Exwo5+IfROF2TnWMpVYaFPC3TvqnuMrysxrxpuGC2HzKJVX5bqbgA==
-
 "@patternfly/patternfly@4.122.2":
   version "4.122.2"
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.122.2.tgz#3e774d78996c7027b8c528edb2e90990676458a5"
