@@ -65,9 +65,7 @@ const MetricsTable: FunctionComponent<Props> = ({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <SearchInputWithSubmitButton name="query" placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`}>
-              <input name="tab" type="hidden" value={activeTabKey} />
-            </SearchInputWithSubmitButton>
+            <SearchInputWithSubmitButton name="query" placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} />
           </ToolbarItem>
           <ToolbarItem>
             {createButton}

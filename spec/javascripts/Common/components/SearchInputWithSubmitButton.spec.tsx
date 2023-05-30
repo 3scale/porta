@@ -20,12 +20,3 @@ it('should have a placeholder', () => {
   const wrapper = mountWrapper({ placeholder })
   expect(wrapper.exists(`input[placeholder="${placeholder}"]`)).toEqual(true)
 })
-
-it('should add more fields as children', () => {
-  const wrapper = mount(
-    <SearchInputWithSubmitButton placeholder="">
-      <input name="foo" type="hidden" value="bar" />
-    </SearchInputWithSubmitButton>
-  )
-  expect(wrapper.exists('[name="foo"]')).toEqual(true)
-})
