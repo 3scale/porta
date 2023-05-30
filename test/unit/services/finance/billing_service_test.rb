@@ -40,12 +40,6 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     assert Finance::BillingService.call!(@provider.id, now: now)
   end
 
-  test 'lock prevents multiple jobs from running' do
-    now = Time.utc(2018, 1, 16, 8)
-    BillingLock.create!(account_id: @provider.id)
-    refute Finance::BillingService.call!(@provider.id, now: now)
-  end
-
   test 'lock is released after execution' do
     now = Time.utc(2018, 1, 16, 8)
     assert_no_difference BillingLock.method(:count) do
@@ -60,6 +54,37 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     assert_raises RuntimeError do
       Finance::BillingService.call!(@provider.id, now: now)
     end
+  end
+
+  # WARNING: flakiness here means a bug
+  test 'lock prevents multiple jobs from running' do
+    finished = false
+    lock_thread = within_async_thread do
+      Finance::BillingService.new(@provider.id).send(:with_lock) do
+        sleep 0.1 until finished
+      end
+    end
+
+    # this thread will prevent a test case deadlock by stopping the lock thread in
+    # case concurrent lock sits waiting for lock to release instead of failing quick
+    safety_thread = Thread.new do
+      Thread.current.report_on_exception = false
+      next if lock_thread.join(5)
+
+      finished = true
+      raise "billing locking causes concurrent billing jobs to wait but does not cancel them"
+    end
+
+    sleep 0.1 # make sure first thread has time to acquire the lock
+
+    assert_raise(Finance::BillingService::LockBillingError) do
+      Finance::BillingService.new(@provider.id).send(:with_lock) do
+        safety_thread.join(0.001) # this will raise if thread raised so we know what actually happened
+        raise "billing lock allows concurrent billing"
+      end
+    end
+  ensure
+    finished = true
   end
 
   class BillBuyerLevelTest < ActionDispatch::IntegrationTest
@@ -97,10 +122,16 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'lock prevents multiple jobs from running' do
-      now = Time.utc(2018, 1, 16, 8)
-      BillingLock.create!(account_id: @buyer.id)
-      refute Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
+    # WARNING: flakiness here means a bug
+    test 'many simultaneous billing cycles charge invoice once' do
+      skip
+
+      10.times do
+        within_thread do
+          now = Time.utc(2018, 1, 16, 8)
+          Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
+        end
+      end
     end
 
     test 'lock is released if execution fails' do

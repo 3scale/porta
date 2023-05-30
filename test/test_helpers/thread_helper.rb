@@ -6,13 +6,17 @@ module ThreadHelper
   # So the global wrapping transaction is obviously not seen by this new Thread
   # When Rails rolls back the global transaction, this thread has already
   # committed changes to the DB.
-  def within_thread(*args)
+  def within_async_thread(*args)
     Thread.new(*args) do |*arguments|
       ActiveRecord::Base.transaction(requires_new: true) do
         yield *arguments
         raise ActiveRecord::Rollback
       end
-    end.join
+    end
+  end
+
+  def within_thread(*args, &block)
+    within_async_thread(*args, &block).join
   end
 end
 
