@@ -1153,18 +1153,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fortawesome/fontawesome-common-types@^0.2.36":
-  version "0.2.36"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.36.tgz#b44e52db3b6b20523e0c57ef8c42d315532cb903"
-  integrity sha512-a/7BiSgobHAgBWeN7N0w+lAhInrGxksn13uK7231n2m8EDPE3BMCl9NZLTGrj9ZXfCmC6LM0QLqXidIizVQ6yg==
-
-"@fortawesome/free-brands-svg-icons@^5.8.1":
-  version "5.15.4"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-brands-svg-icons/-/free-brands-svg-icons-5.15.4.tgz#ec8a44dd383bcdd58aa7d1c96f38251e6fec9733"
-  integrity sha512-f1witbwycL9cTENJegcmcZRYyawAFbm8+c6IirLmwbbpqz46wyjbQYLuxOc7weXFXfB7QR8/Vd2u5R3q6JYD9g==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.36"
-
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -1528,13 +1516,6 @@
     react-dropzone "9.0.0"
     tippy.js "5.1.2"
     tslib "^2.0.0"
-
-"@patternfly/react-icons@^3.14.18":
-  version "3.15.17"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-3.15.17.tgz#97a71fd6469a3f6c08dc46575a340b82cfc7e1db"
-  integrity sha512-Q0JAlxEvSAl5kcMSUMItLiKi9fweO941g5+lS45t3o/Rv4Eg91Ig7AyK1YWw6m1ah+/eHslLfox0Uqw7m7usLg==
-  dependencies:
-    "@fortawesome/free-brands-svg-icons" "^5.8.1"
 
 "@patternfly/react-icons@^4.93.6":
   version "4.93.6"
