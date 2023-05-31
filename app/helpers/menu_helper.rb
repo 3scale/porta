@@ -129,11 +129,11 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
     {
       toggle: { title: title, icon: icon },
       menuItems: [
-        { title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: %i[dashboard].include?(active_menu) },
-        { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: %i[buyers finance cms site].include?(active_menu) },
-        { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: %i[serviceadmin monitoring products].include?(active_menu) },
-        { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: %i[backend_api backend_apis].include?(active_menu) },
-        { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: %i[account personal active_docs].include?(active_menu) }
+        { title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: active_menu == :dashboard },
+        { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: false },
+        { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: active_menu == :products },
+        { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: active_menu == :backend_apis },
+        { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: false }
       ],
     }
   end
