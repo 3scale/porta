@@ -25,11 +25,12 @@ export class StatsMetricsSelector extends StatsUI {
     let selectedMetricName = this.statsState.state.selectedMetricName
     let selectedMetric = metrics.find(metric => metric.systemName === selectedMetricName)
     let total = this.statsState.state.seriesTotal
+    const format = total < 1000 ? '0' : '0.0a'
 
     return (
       <div className={`StatsSelector ${this.open ? 'is-open' : ''}`}>
         <button onclick={ev => this._toggleOpen(!this.open)} className='StatsSelector-item StatsSelector-toggle'>
-          {numeral(total).format('0.0a').toUpperCase()} {selectedMetric.name} <span className='StatsSelector-item-detail'>({selectedMetric.systemName})</span>
+          {numeral(total).format(format).toUpperCase()} {selectedMetric.name} <span className='StatsSelector-item-detail'>({selectedMetric.systemName})</span>
         </button>
         <ul className='StatsSelector-menu'>
           {

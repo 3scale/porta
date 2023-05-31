@@ -23,7 +23,10 @@ class StatsHoursOfDayChart extends StatsChart {
         },
         y: {
           tick: {
-            format: d => numeral(d).format('0.0a').toUpperCase()
+            format: d => {
+              const format = d < 1000 ? '0' : '0.0a'
+              return numeral(d).format(format).toUpperCase()
+            }
           }
         }
       },
