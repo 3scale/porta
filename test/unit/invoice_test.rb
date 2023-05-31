@@ -119,10 +119,12 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'validates presence of valid period' do
-    @invoice.update(period: 'invalid')
+    %w[invalid 2023abc-01 2023-05xxx 2023-05123456789].each do |value|
+      @invoice.update(period: value)
 
-    assert_not @invoice.valid?
-    assert_includes @invoice.errors[:period], 'Billing period format should be YYYY-MM'
+      assert_not @invoice.valid?
+      assert_includes @invoice.errors[:period], 'Billing period format should be YYYY-MM'
+    end
   end
 
   test 'validates invoice year - invalid if earlier than buyer creation date' do
