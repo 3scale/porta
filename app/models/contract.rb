@@ -167,6 +167,7 @@ class Contract < ApplicationRecord
       if paid_until.to_date < period.end.to_date
 
         period = intersect_with_unpaid_period(period, paid_until)
+        puts "=============== bill_for: period: #{period} ==============="
 
         bill_fixed_fee_for(period, invoice, plan)
 

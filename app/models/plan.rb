@@ -332,6 +332,7 @@ class Plan < ApplicationRecord
 
   # Fixed cost for given period, which can be less than one month.
   def cost_for_period(period)
+    puts "=============== cost_for_period: period: #{period} ==============="
     return money_in_currency(0) if (cost_per_month || 0).zero?
 
     same_month_period = (period.begin.month == period.end.month) && (period.begin.year == period.end.year)

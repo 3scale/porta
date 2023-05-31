@@ -38,6 +38,7 @@ class BillingObserver < ActiveRecord::Observer
 
     if !contract.trial?(now) && strategy
       period = TimeRange.new(now, now.end_of_month)
+      puts "=============== plan_changed: period: #{period} ==============="
       entitlements_options[:invoice] = strategy.bill_plan_change(contract, period).try(:invoice)
       contract.update_attribute :paid_until, now.end_of_month # TODO: move this line inside the billing strategy
     end
