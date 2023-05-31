@@ -21,8 +21,9 @@ class StatsDaysOfWeekChart extends StatsChart {
           categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         },
         y: {
+          default: [0, 10],
           tick: {
-            format: d => numeral(d).format('0.0a').toUpperCase()
+            format: d => numeral(d).format(d < 1000 ? '0' : '0.0a').toUpperCase()
           }
         }
       },
