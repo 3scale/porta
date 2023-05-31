@@ -20,8 +20,9 @@ gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 # Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
 gem 'mail', '~> 2.7.1'
 
-# Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
+
+# Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.8.2'
@@ -91,6 +92,7 @@ gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
+gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
