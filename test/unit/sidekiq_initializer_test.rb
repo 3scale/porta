@@ -1,23 +1,22 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'sidekiq/testing'
 
 class SidekiqInitializerTest < ActiveSupport::TestCase
   test 'log job arguments' do
     logged = false
-    ActiveRecord::Base.transaction
-    SphinxIndexationWorker.stubs(:perform_later)
+    invoice = FactoryBot.create(:invoice)
+
     Rails.logger.stubs(:info).with do |msg|
-      next(true) if msg.start_with?("[EventBroker] ")
+      next(true) unless /Enqueued InvoiceFriendlyIdWorker/.match?(msg)
 
-      logged = msg =~ /^Failed to reprocess invoice logo for.*/
+      logged = msg.include?("with args: [#{invoice.id}]")
     end
 
-    buyer = FactoryBot.create(:buyer_account)
+    with_sidekiq do
+      InvoiceFriendlyIdWorker.perform_async(invoice.id)
+    end
+
     assert logged
-    Testing.inline! do
-      BillingWorker.enqueue_for_buyer(buyer, Time.zone.now)
-    end
   end
 end
