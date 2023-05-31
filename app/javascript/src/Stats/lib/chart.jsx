@@ -3,7 +3,6 @@ import moment from 'moment'
 import c3 from 'c3'
 import numeral from 'numeral'
 
-
 export class StatsChart {
   constructor ({ container }) {
     this.chartContainer = container
@@ -31,10 +30,7 @@ export class StatsChart {
           },
           y: {
             tick: {
-              format: d => {
-                const format = d < 1000 ? '0' : '0.0a'
-                return numeral(d).format(format).toUpperCase()
-              }
+              format: d => numeral(d).format(d < 1000 ? '0' : '0.0a').toUpperCase()
             }
           }
         },
