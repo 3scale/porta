@@ -376,7 +376,7 @@ form.formtastic fieldset.inputs label.disabled {
   color: $disabled-color;
 }
 
-select:disabled,
+select:disabled:not(.pf-c-form-control),
 form.formtastic fieldset.inputs input:disabled,
 form.formtastic fieldset.inputs input[readonly="readonly"] {
   outline: none !important;
@@ -545,21 +545,6 @@ li.hidden {
     padding: 0 line-height-times(5 / 10);
   }
 }
-
-// Overrides
-.new-service-form {
-  @include white-box-shadow;
-
-  form.formtastic {
-    box-shadow: none;
-    margin: 0;
-
-    fieldset {
-      margin-bottom: 0;
-    }
-  }
-}
-
 
 .dashboard_card form.formtastic {
   box-shadow: none;

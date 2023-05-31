@@ -1,14 +1,14 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 
-import { ServiceDiscoveryForm } from 'NewService/components/ServiceDiscoveryForm'
+import { ServiceDiscoveryForm } from 'Products/components/ServiceDiscoveryForm'
 import * as utils from 'utilities/fetchData'
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
-import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
+import { ServiceDiscoveryListItems } from 'Products/components/ServiceDiscoveryListItems'
 import { waitForPromises } from 'utilities/test-utils'
 
-import type { Props } from 'NewService/components/ServiceDiscoveryForm'
+import type { Props } from 'Products/components/ServiceDiscoveryForm'
 
 const props: Props = {
   formActionPath: 'action-path',
