@@ -1,5 +1,6 @@
 /** @jsx StatsUI.dom */
 import $ from 'jquery'
+import numeral from 'numeral'
 import 'core-js/fn/array/find'
 
 import { StatsUI } from 'Stats/lib/ui'
@@ -28,7 +29,7 @@ export class StatsMetricsSelector extends StatsUI {
     return (
       <div className={`StatsSelector ${this.open ? 'is-open' : ''}`}>
         <button onclick={ev => this._toggleOpen(!this.open)} className='StatsSelector-item StatsSelector-toggle'>
-          { Math.round(total * 10).toString()} {selectedMetric.name} <span className='StatsSelector-item-detail'>({selectedMetric.systemName})</span>
+          {numeral(total).format('0.0a').toUpperCase()} {selectedMetric.name} <span className='StatsSelector-item-detail'>({selectedMetric.systemName})</span>
         </button>
         <ul className='StatsSelector-menu'>
           {

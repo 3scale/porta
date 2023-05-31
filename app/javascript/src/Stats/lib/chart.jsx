@@ -1,6 +1,8 @@
 import $ from 'jquery'
 import moment from 'moment'
 import c3 from 'c3'
+import numeral from 'numeral'
+
 
 export class StatsChart {
   constructor ({ container }) {
@@ -29,7 +31,7 @@ export class StatsChart {
           },
           y: {
             tick: {
-              format: d =>  Math.round(d * 10).toString()
+              format: d => numeral(d).format('0.0a').toUpperCase()
             }
           }
         },
