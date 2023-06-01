@@ -29,7 +29,7 @@ store-log-artifacts: &store-log-artifacts
     destination: log
 
 npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-v10-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.DB }}
+bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ $DB }}
 assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
 
 restore-npm-cache: &restore-npm-cache
