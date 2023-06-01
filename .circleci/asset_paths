@@ -4,7 +4,7 @@ app/javascript
 app/assets
 app/lib/pdf/images
 babel.config.js
-cdn
+public/dev-portal-assets
 config/compass.rb
 config/webpack
 config/webpacker.yml
