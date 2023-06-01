@@ -152,14 +152,17 @@ nightly-trigger: &nightly-trigger
 build-envs:
   mysql: &build-envs-mysql
     environment:
+      DB: mysql
       DATABASE_URL: mysql2://root:@127.0.0.1:3306/3scale_system_test
 
   postgresql: &build-envs-postgresql
     environment:
+      DB: postgresql
       DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/systemdb
 
   oracle: &build-envs-oracle
     environment:
+      DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
 
 ##################################### CIRCLECI COMMANDS ############################################
@@ -347,7 +350,6 @@ executors:
     docker:
       - *system-builder-ruby26
     environment:
-      DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
   builder-with-mysql-ruby26: &builder-with-mysql-ruby26
