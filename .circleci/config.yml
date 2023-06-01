@@ -327,7 +327,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - *bundle-cache-key
 
   upload-artifacts:
     steps:
