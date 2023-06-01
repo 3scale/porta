@@ -350,6 +350,7 @@ executors:
     docker:
       - *system-builder-ruby26
     environment:
+      DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
   builder-with-mysql-ruby26: &builder-with-mysql-ruby26
