@@ -29,8 +29,8 @@ store-log-artifacts: &store-log-artifacts
     destination: log
 
 npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-v10-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.DB }}
 assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+#bundle-cache-key: defined at restore-gem-cache and save-gem-cache because {{ .Environment.DB }} is not available here
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -321,7 +321,7 @@ commands: # reusable commands with parameters
   save-gem-cache:
     steps:
       - save_cache:
-          key: *bundle-cache-key
+          key: porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.DB }}
           paths:
             - ./vendor/bundle
             - ./.bundle/
@@ -329,8 +329,7 @@ commands: # reusable commands with parameters
   restore-gem-cache:
     steps:
       - restore_cache:
-          keys:
-            - *bundle-cache-key
+          key: porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ .Environment.DB }}
 
   upload-artifacts:
     steps:
