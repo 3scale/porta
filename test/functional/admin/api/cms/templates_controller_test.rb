@@ -93,7 +93,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       end
 
       def test_create_page_section_id_unknown
-        post :create, params: { section_id: 100, type: 'page',
+        post :create, params: { section_id: 1000000, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_response :unprocessable_entity
@@ -130,7 +130,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       end
 
       def test_create_page_layout_id_unknown
-        post :create, params: { layout_id: 100, type: 'page',
+        post :create, params: { layout_id: 1000000, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_response :unprocessable_entity
@@ -174,7 +174,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_section_id_unknown
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, section_id: 100,
+        put :update, params: { id: page.id, section_id: 1000000,
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_response :unprocessable_entity
@@ -226,7 +226,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_layout_id_unknown
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, layout_id: 100,
+        put :update, params: { id: page.id, layout_id: 1000000,
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_response :unprocessable_entity
