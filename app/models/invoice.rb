@@ -68,7 +68,7 @@ class Invoice < ApplicationRecord
   scope :due_on_or_before, ->(date) { where('due_on <= ?', date ) }
   scope :finalized_before, ->(date) { where("state='finalized' AND finalized_at <= ?", date) }
 
-  # The month should be a YYYY-MM formated string.
+  # The month should be a YYYY-MM formatted string.
   scope :by_month, ->(month) { where(:period => ::Month.parse_month(month)) }
   scope :by_year, ->(year) {  where.has { sift(:year, period) ==  year } }
   scope :by_month_number, ->(month) {  where.has { sift(:month_number, period) == month } }
@@ -532,18 +532,6 @@ class Invoice < ApplicationRecord
     opened.by_provider(buyer.provider_account)
            .where(['invoices.buyer_account_id = ?', buyer.id ])
            .reorder('period DESC, created_at DESC').first
-  end
-
-  # TODO: are those needed without provider/buyer scope?
-  # The month should be a YYYY-MM formated string.
-  def self.find_by_month(month)
-    by_month(month).first
-  end
-
-  # TODO: are those needed without provider/buyer scope?
-  def self.find_by_month!(month)
-    find_by_month(month) ||
-      raise(ActiveRecord::RecordNotFound, "Couldn't find #{name} by month=#{month}")
   end
 
   # TODO: investigate this ... should not be happening on-demand
