@@ -7,8 +7,6 @@ class Provider::Admin::BackendApis::Stats::BaseController < Stats::BaseControlle
 
   activate_menu :backend_api, :monitoring
 
-  sublayout :stats
-
   def index
     @metrics = @backend_api.metrics.top_level
     @methods = @backend_api.method_metrics

@@ -5,6 +5,8 @@ class Admin::UpgradeNoticesController < FrontendController
 
   activate_menu :upgrade_notices
 
+  layout false # ???? Where and when is this rendered
+
   def show
     @plan = current_account.bought_plan
     @new_plan = current_account.first_plan_with_switch(@switch)

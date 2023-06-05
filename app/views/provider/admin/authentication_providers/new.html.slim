@@ -1,4 +1,4 @@
-h1 New #{@authentication_provider.human_kind} Authentication Provider
+- content_for :page_header_title, "New #{@authentication_provider.human_kind} Authentication Provider"
 
 = semantic_form_for @authentication_provider,
         url: provider_admin_authentication_providers_path,

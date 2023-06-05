@@ -16,8 +16,6 @@ main >  h2,
   font-weight: $font-weight-light;
 }
 
-.subsubmenu + h1,
-.subsubmenu + h2,
 #subsubmenu + h1,
 #subsubmenu + h2,
 main > h1:first-child,
@@ -45,14 +43,7 @@ h2, h3 {
   margin-bottom: line-height-times(1/2);
 }
 
-.subsubmenu {
-  background-color: $body-background;
-  margin: line-height-times(-1);
-  padding: line-height-times(1);
-}
-
 #tab-content > h2:first-child,
-#content > h2:first-child,
 #subsubmenu + h2 {
   background-color: $body-background;
   font-size: $main-title-font-size;

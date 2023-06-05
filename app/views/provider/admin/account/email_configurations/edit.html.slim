@@ -1,2 +1,5 @@
-div.pf-hack__remove-main-padding id='email-configurations-edit-container' data=presenter.edit_data
+- content_for :javascripts do
   = javascript_packs_with_chunks_tag 'email_configurations_edit'
+
+- content_for :main_section_with_react do
+  div id='email-configurations-edit-container' data=presenter.edit_data

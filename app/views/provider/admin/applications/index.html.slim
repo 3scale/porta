@@ -1,6 +1,6 @@
-h2 Applications
-
-= pf_button_in_title 'Create application', new_provider_admin_application_path
+- content_for :page_header_title_with_button, 'Applications'
+- content_for :page_header_button_label, 'Create application'
+- content_for :page_header_button_href, new_provider_admin_application_path
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'

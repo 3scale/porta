@@ -1,4 +1,4 @@
-h1 Confirm your password
+- content_for :page_header_title, 'Confirm your password'
 
 = semantic_form_for [:provider, :admin, sudo], method: :post, remote: sudo.xhr do |f|
   = f.inputs do

@@ -6,6 +6,8 @@
   Domains & Access
 <% end %>
 
+<% content_for :page_header_title, 'Domain & Access' %>
+
 <%= semantic_form_for @account, :url => admin_site_dns_path do |form| %>
   <%= form.semantic_errors %>
 

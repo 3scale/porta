@@ -1,6 +1,8 @@
-<%= render 'buyers/accounts/menu' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
 
-<h2>Sent invitations for <%= @account.org_name %></h2>
+<% content_for :page_header_title, "Sent invitations for #{@account.org_name}" %>
 
 <table class="data" id="invitations">
   <thead>

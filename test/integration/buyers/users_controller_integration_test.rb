@@ -31,7 +31,7 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
       get route
 
       page = Nokogiri::HTML4::Document.parse(response.body)
-      assert_includes page.xpath('//main/h2').text, user.decorate.display_name
+      assert_includes page.xpath('//section[contains(@class, "pf-c-page__main-section")]//h1').text, user.decorate.display_name
     end
   end
 

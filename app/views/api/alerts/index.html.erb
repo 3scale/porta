@@ -2,14 +2,7 @@
  <%= javascript_include_tag 'vendor/jquery.tipsy.js' %>
 <% end %>
 
-
-<h2>
-  <% if @service %>
-    <% content_for :sublayout_title, "Alerts" %>
-  <% else %>
-    Alerts for all services
-  <% end %>
-</h2>
+<% content_for :page_header_title, @service ? 'Alerts' : 'Alerts for all services' %>
 
 <div id="limit_alerts_container">
     <table class="data" id="limit_alerts">

@@ -1,7 +1,7 @@
-h1 Logo
-p
+- content_for :page_header_title, 'Logo'
+- content_for :page_header_body do
   ' Upload your logo for usage in the developer portal through
-  = link_to 'a Liquid drop', provider_admin_liquid_docs_path(anchor: 'logo_url')
+  a href=provider_admin_liquid_docs_path(anchor: 'logo_url') a Liquid drop
   | .
 
 = semantic_form_for @profile, url: provider_admin_account_logo_path, html: {multipart: true, id: 'logo_form'} do |form|

@@ -1,4 +1,4 @@
-= content_for :sublayout_title, 'Edit Mapping Rule'
+= content_for :page_header_title, 'Edit Mapping Rule'
 
 = semantic_form_for @proxy_rule, url: admin_service_proxy_rule_path(@service, @proxy_rule) do |form|
   = render 'shared/proxy_rules/form', form: form,

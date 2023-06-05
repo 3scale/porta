@@ -28,16 +28,6 @@ body {
   margin-top: -1px;
 }
 
-#content {
-  margin: 0 auto;
-  background-color: $website-background-color;
-  p {
-    font: 15px;
-    white-space: nowrap;
-    float: left;
-  }
-}
-
 #{headings()} {
   margin-top: 0;
   color: inherit;

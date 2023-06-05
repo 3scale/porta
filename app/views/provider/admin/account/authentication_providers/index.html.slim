@@ -1,5 +1,7 @@
-h1 Single Sign-On Integrations
-p With Single sign-on (SSO) user authentication for the admin portal is federated to the authentication provider of your choice.
+- content_for :page_header_title, 'Single Sign-On Integrations'
+- content_for :page_header_body do
+  ' With Single sign-on (SSO) user authentication for the admin portal is federated to the
+  ' authentication provider of your choice.
 - if @presenter.show_toggle?
   .InfoBox
     = form_for current_account.settings, url: provider_admin_account_enforce_sso_path, method: @presenter.method, html: { class: 'account_username_password_authentication admin-portal-sso'} do |form|

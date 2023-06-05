@@ -1,6 +1,8 @@
-<%= render 'buyers/accounts/menu' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
 
-<h2>Invite user to <%= @account.org_name %></h2>
+<% content_for :page_header_title, "Invite user to #{@account.org_name}" %>
 
 <%= semantic_form_for @invitation, :url => admin_buyers_account_invitations_path(@account), :html => {:class => 'invitation-form'} do |f| %>
 

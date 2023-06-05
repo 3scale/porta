@@ -240,6 +240,9 @@ form.formtastic {
   padding: line-height-times(1);
   text-align: left; /* overriding legacy_theme text-align: center*/
   width: 100%;
+  &:first-of-type {
+    margin: 0;
+  }
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
     border: $border-width $border-color solid;

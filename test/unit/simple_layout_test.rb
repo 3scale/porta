@@ -50,8 +50,7 @@ class SimpleLayoutTest < ActiveSupport::TestCase
   test '#import - partials' do
     assert SimpleLayout.new(@provider).import!
 
-    %w( messages/menu
-        applications/form
+    %w( applications/form
         field
         shared/pagination ).each do |name|
       assert_not_nil @provider.builtin_partials.find_by_system_name(name)

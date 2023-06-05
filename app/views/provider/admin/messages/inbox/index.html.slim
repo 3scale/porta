@@ -1,6 +1,4 @@
-= render 'provider/admin/messages/menu'
-
-h2 Inbox
+- content_for :page_header_title, 'Inbox'
 
 = render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
 
