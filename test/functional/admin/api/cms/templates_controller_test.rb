@@ -93,6 +93,8 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       end
 
       def test_create_page_section_id_unknown
+        CMS::Section.find_by(id: 1000000)&.destroy
+
         post :create, params: { section_id: 1000000, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
@@ -130,6 +132,8 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       end
 
       def test_create_page_layout_id_unknown
+        CMS::Layout.find_by(id: 1000000)&.destroy
+
         post :create, params: { layout_id: 1000000, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
@@ -173,6 +177,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
       def test_update_page_section_id_unknown
         page = FactoryBot.create(:cms_page, provider: @provider)
+        CMS::Section.find_by(id: 1000000)&.destroy
 
         put :update, params: { id: page.id, section_id: 1000000,
                                title: 'About', path: '/about', format: :json, access_token: @token }
@@ -225,6 +230,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
       def test_update_page_layout_id_unknown
         page = FactoryBot.create(:cms_page, provider: @provider)
+        CMS::Layout.find_by(id: 1000000)&.destroy
 
         put :update, params: { id: page.id, layout_id: 1000000,
                                title: 'About', path: '/about', format: :json, access_token: @token }
