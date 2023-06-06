@@ -3,11 +3,17 @@
 require 'test_helper'
 
 class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
+  include BillingResultsTestHelpers
+
   attr_reader :provider, :buyer
 
   setup do
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+  end
+
+  teardown do
+    clear_locks
   end
 
   class ConcurrentBillingCalls < Finance::BillingServiceIntegrationTest
@@ -42,7 +48,10 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_not ActiveRecord::Base.connection.transaction_open?
 
-    10.times { |iteration| concurrent_billing_perform(iteration: iteration, isolation: isolation) }
+    10.times do |iteration|
+      concurrent_billing_perform(iteration: iteration, isolation: isolation)
+      clear_locks
+    end
   end
 
   def concurrent_billing_perform(iteration: 1, isolation: nil)

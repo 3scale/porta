@@ -21,4 +21,9 @@ module BillingResultsTestHelpers
     billing_results.failure(provider.billing_strategy)
     billing_results
   end
+
+  def clear_locks
+    lock_keys = System.redis.keys("lock:billing:*")
+    System.redis.del(*lock_keys) if lock_keys.present?
+  end
 end

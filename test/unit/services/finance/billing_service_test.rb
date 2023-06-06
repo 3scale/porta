@@ -10,6 +10,10 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_with_billing)
   end
 
+  teardown do
+    clear_locks
+  end
+
   test 'enqueues a sidekiq worker' do
     now = Time.utc(2018, 1, 16)
     BillingWorker.expects(:enqueue).with(@provider, now, nil).returns(true)
@@ -33,27 +37,14 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'creates a lock' do
-    now = Time.utc(2018, 1, 16, 8)
-    lock = BillingLock.create(account_id: @provider.id)
-    BillingLock.expects(:create).returns(lock)
-    assert Finance::BillingService.call!(@provider.id, now: now)
-  end
-
-  test 'lock is released after execution' do
-    now = Time.utc(2018, 1, 16, 8)
-    assert_no_difference BillingLock.method(:count) do
-      Finance::BillingService.call!(@provider.id, now: now)
-    end
-  end
-
-  test 'lock is released if execution fails' do
+  test 'lock remains if execution fails' do
     now = Time.utc(2018, 1, 16, 8)
     Finance::BillingStrategy.expects(:daily).raises RuntimeError, 'random failure'
-    BillingLock.expects(:delete).with(@provider.id).returns(true)
     assert_raises RuntimeError do
       Finance::BillingService.call!(@provider.id, now: now)
     end
+    Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::BillingService::LockBillingError }
+    Finance::BillingService.call!(@provider.id, now: now)
   end
 
   # WARNING: flakiness here means a bug
@@ -95,6 +86,10 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     end
 
+    teardown do
+      clear_locks
+    end
+
     test 'enqueues sidekiq worker' do
       now = Time.utc(2018, 1, 16)
       scope = @provider.buyer_accounts.where(id: @buyer_id)
@@ -111,50 +106,33 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'creates a lock' do
-      now = Time.utc(2018, 1, 16, 8)
-      lock = BillingLock.create(account_id: @buyer.id)
-      BillingLock.expects(:create).returns(lock)
-      assert Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
-
-      assert_raise ActiveRecord::RecordNotFound do
-        lock.reload
-      end
-    end
-
-    # WARNING: flakiness here means a bug
-    test 'many simultaneous billing cycles charge invoice once' do
-      skip
-
-      10.times do
-        within_thread do
-          now = Time.utc(2018, 1, 16, 8)
-          Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
-        end
-      end
-    end
-
-    test 'lock is released if execution fails' do
+    test 'lock remains if execution fails' do
       now = Time.utc(2018, 1, 16, 8)
       Finance::BillingStrategy.expects(:daily).raises RuntimeError, 'random failure'
-      BillingLock.expects(:delete).with(@buyer.id).returns(true)
-      assert_raises RuntimeError do
-        Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
-      end
+      Thread.new do
+        assert_raises RuntimeError do
+          Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
+        end
+      end.join
+      Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::BillingService::LockBillingError }
+      Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
     end
 
     test 'buyer locks do not affect each other' do
       buyer_2 = FactoryBot.create(:buyer_account, provider_account: @provider)
       now = Time.utc(2018, 1, 16, 8)
-      BillingLock.create!(account_id: buyer_2.id)
-      assert Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
+      Thread.new do
+        assert Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
+      end.join
+      assert Finance::BillingService.call!(buyer_2.id, provider_account_id: @provider.id, now: now)
+      assert_not Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
     end
   end
 
   test 'can run without lock' do
     now = '2018-01-16 08:00:00 UTC'
-    BillingLock.expects(:create).never
-    Finance::BillingStrategy.expects(:daily).returns(mock_billing_success(now, @provider))
+    Finance::BillingStrategy.expects(:daily).returns(mock_billing_success(now, @provider)).twice
+    Finance::BillingService.call(@provider.id, now: now)
     Finance::BillingService.call(@provider.id, now: now)
   end
 end
