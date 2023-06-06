@@ -56,9 +56,22 @@ module System
   mattr_accessor :redis
 
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    # we do here instead of using initializers because of a Rails 5.1 vs
+    # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
+    # before initializers and causes configuration not to be respected.
     config.load_defaults 6.0
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
+    # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
+    config.action_view.form_with_generates_remote_forms = false
+    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
+    config.active_support.to_time_preserves_timezone = false
+    config.action_dispatch.use_authenticated_cookie_encryption = false
+    config.active_support.use_authenticated_message_encryption = false
+
+    # Use a modern approved hashing function
+    config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
@@ -66,15 +79,6 @@ module System
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
-
-    # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
-    config.action_view.form_with_generates_remote_forms = false
-
-    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
-    config.active_support.to_time_preserves_timezone = false
-    # Use a modern approved hashing function
-    # config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
-    ActiveSupport::Digest.hash_digest_class = OpenSSL::Digest::SHA256 # option above should work with Rails 6.x
 
 
     # The old config_for gem returns HashWithIndifferentAccess
