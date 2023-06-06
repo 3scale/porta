@@ -146,6 +146,7 @@ class SimpleLayout
     create_builtin_partial!('signup/cas')
 
     # Messages
+    create_builtin_partial!('messages/menu')
     messages = find_or_create_section('Messages', '/messages')
     outbox = find_or_create_section('Outbox', '/messages/outbox', parent: messages)
     inbox = find_or_create_section('Inbox', '/messages/inbox', parent: messages)

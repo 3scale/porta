@@ -170,6 +170,7 @@ class CMS::Builtin < CMS::BasePage
     ORIGINAL_PATHS = {
       'stats/chart' => full_path('stats/_chart.html.liquid'),
       'applications/form' => full_path('applications/_form.html.liquid'),
+      'messages/menu' => full_path('messages/_menu.html.liquid'),
       'shared/pagination' => full_path('shared/_pagination.html.liquid'),
       'shared/swagger_ui' => full_path('shared/_swagger_ui.html.liquid'),
       'signup/cas' => full_path('signup/_cas.html.liquid'),
