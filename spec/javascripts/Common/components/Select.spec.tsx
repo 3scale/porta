@@ -88,13 +88,9 @@ it('should clear the selection only when clearable', () => {
   const wrapper = mountWrapper({ item: items[0], isClearable: false })
   const clearButton = () => wrapper.find('[aria-label="Clear all"]')
 
-  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(true)
-  // Note the button is still on the DOM, since it's rendered by Patternfly, but hidden by .pf-m-select__toggle-clear-hidden
-  clearButton().simulate('click')
-  expect(onSelect).not.toHaveBeenCalled()
+  expect(clearButton().exists()).toEqual(false)
 
-  wrapper.setProps({ item: items[0], isClearable: true })
-  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(false)
+  wrapper.setProps({ item: items[0], isClearable: undefined })
   clearButton().simulate('click')
   expect(onSelect).toHaveBeenCalledWith(null)
 })
