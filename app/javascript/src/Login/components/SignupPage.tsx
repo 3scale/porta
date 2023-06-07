@@ -1,10 +1,10 @@
 import { LoginPage } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
-import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
-import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
-import { SignupForm } from 'LoginPage/loginForms/SignupForm'
+import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
+import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
+import { FlashMessages } from 'Login/components/FlashMessages'
+import { SignupForm } from 'Login/components/SignupForm'
 
 import type { FunctionComponent } from 'react'
 import type { SignupProps as Props } from 'Types'

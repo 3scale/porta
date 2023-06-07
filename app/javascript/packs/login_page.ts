@@ -1,7 +1,7 @@
 import { safeFromJsonString } from 'utilities/json-utils'
-import { LoginPageWrapper } from 'LoginPage/LoginPageWrapper'
+import { LoginPageWrapper } from 'Login/components/LoginPage'
 
-import type { Props } from 'LoginPage/LoginPageWrapper'
+import type { Props } from 'Login/components/LoginPage'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'pf-login-page-container'

@@ -1,10 +1,10 @@
 import { mount } from 'enzyme'
 
-import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
-import { Login3scaleForm } from 'LoginPage/loginForms/Login3scaleForm'
+import { HiddenInputs } from 'Login/components/HiddenInputs'
+import { Login3scaleForm } from 'Login/components/Login3scaleForm'
 
 import type { FormEvent } from 'react'
-import type { Props } from 'LoginPage/loginForms/Login3scaleForm'
+import type { Props } from 'Login/components/Login3scaleForm'
 
 const props: Props = {
   providerSessionsPath: 'sessions-path',

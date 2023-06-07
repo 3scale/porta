@@ -1,9 +1,9 @@
 import { mount } from 'enzyme'
 
-import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
+import { RequestPasswordForm } from 'Login/components/RequestPasswordForm'
 
 import type { FormEvent } from 'react'
-import type { Props } from 'LoginPage/loginForms/RequestPasswordForm'
+import type { Props } from 'Login/components/RequestPasswordForm'
 
 const defaultProps = {
   flashMessages: [],
