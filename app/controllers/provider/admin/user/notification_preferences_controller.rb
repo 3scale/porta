@@ -9,7 +9,7 @@ class Provider::Admin::User::NotificationPreferencesController < Provider::Admin
   end
 
   def update
-    if @preferences_form.update_attributes(notification_preferences_params)
+    if @preferences_form.update(notification_preferences_params)
       flash[:success] = 'Preferences updated'
     end
 

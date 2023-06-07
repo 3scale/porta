@@ -131,7 +131,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   # regression test: https://github.com/3scale/system/pull/3406
-  test 'update_attributes with nil as param should not raise error' do
+  test 'update with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
     buyer.update(nil)
   end

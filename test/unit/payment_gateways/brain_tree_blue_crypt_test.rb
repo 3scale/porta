@@ -140,7 +140,7 @@ module PaymentGateways
 
     test '#buyer_reference takes into account the last saved customer.id' do
       account = FactoryBot.create(:simple_provider)
-      account.update_attributes(credit_card_auth_code: "#{@braintree.buyer_reference}-3")
+      account.update(credit_card_auth_code: "#{@braintree.buyer_reference}-3")
       @braintree.stubs(:account).returns(account)
       account.credit_card_auth_code = nil
       assert_equal "#{@braintree.buyer_reference}-3", @braintree.buyer_reference_for_update

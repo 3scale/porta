@@ -86,7 +86,7 @@ class Notifications::NewNotificationSystemMigration
 
     Account.transaction do
       account.users.find_each do |user|
-        user.notification_preferences.update_attributes!(preferences: preferences)
+        user.notification_preferences.update!(preferences: preferences)
 
         Rails.logger.info("[#{self.class.name}] User #{user.email} has been migrated")
       end

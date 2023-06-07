@@ -48,7 +48,7 @@ class MetricTest < ActiveSupport::TestCase
       owner_attributes = { owner: owner }
       metric_one = FactoryBot.create(:metric, **owner_attributes, system_name: 'frags')
       metric_two = FactoryBot.create(:metric, owner_attributes)
-      refute metric_two.update_attributes(system_name: 'frags')
+      refute metric_two.update(system_name: 'frags')
       assert_match /already been taken/, metric_two.errors[:system_name].to_s
     end
   end

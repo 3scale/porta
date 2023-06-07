@@ -26,7 +26,7 @@ class Provider::Admin::Messages::TrashControllerTest < ActionDispatch::Integrati
   end
 
   test 'index of deleted messages' do
-    provider_received_message.update_attributes deleted_at: DateTime.new(2015, 11, 11)
+    provider_received_message.update deleted_at: DateTime.new(2015, 11, 11)
     get provider_admin_messages_trash_index_path
     assert_response :success
     assert_equal 1, assigns(:messages).count
@@ -41,7 +41,7 @@ class Provider::Admin::Messages::TrashControllerTest < ActionDispatch::Integrati
     get provider_admin_messages_trash_path(buyer_sent_message)
     assert_response :success
 
-    provider_received_message.update_attributes deleted_at: DateTime.new(2015, 11, 11)
+    provider_received_message.update deleted_at: DateTime.new(2015, 11, 11)
     get provider_admin_messages_trash_path(buyer_sent_message)
     assert_response :not_found
   end

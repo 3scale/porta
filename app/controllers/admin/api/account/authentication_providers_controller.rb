@@ -21,7 +21,7 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   # PUT /admin/api/account/authentication_providers/{id}.xml
   def update
     authorize_changes
-    authentication_provider.update_attributes(authentication_provider_update_params)
+    authentication_provider.update(authentication_provider_update_params)
     respond_with authentication_provider_presenter
   end
 

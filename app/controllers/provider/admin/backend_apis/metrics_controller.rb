@@ -35,7 +35,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def edit; end
 
   def update
-    if @metric.update_attributes(update_params)
+    if @metric.update(update_params)
       flash[:notice] = "The #{metric_type} was updated"
       redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
     else

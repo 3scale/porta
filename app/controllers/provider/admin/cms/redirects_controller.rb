@@ -27,7 +27,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
   end
 
   def update
-    if redirect.update_attributes(params[:cms_redirect])
+    if redirect.update(params[:cms_redirect])
       redirect_to provider_admin_cms_redirects_path, notice: 'Redirect updated'
     else
       render :edit

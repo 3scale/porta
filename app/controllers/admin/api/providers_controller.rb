@@ -13,7 +13,7 @@ class Admin::Api::ProvidersController < Admin::Api::BaseController
   # Provider Account Update
   # PUT /admin/api/provider.xml
   def update
-    current_account.update_attributes(provider_params, without_protection: true)
+    current_account.update(provider_params, without_protection: true)
     respond_with current_account
   end
 

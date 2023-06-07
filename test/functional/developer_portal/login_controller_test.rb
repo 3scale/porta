@@ -137,7 +137,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
   def create_oauth2_provider_account
     provider_account = FactoryBot.create(:provider_account)
-    provider_account.settings.update_attributes({authentication_strategy: 'oauth2'})
+    provider_account.settings.update({authentication_strategy: 'oauth2'})
     provider_account
   end
 end

@@ -340,7 +340,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'not success update' do
-      Service.any_instance.stubs(update_attributes: false)
+      Service.any_instance.stubs(update: false)
       put admin_service_path(service), params: { service: { name: 'Supetramp' } }
       assert_response :redirect
     end

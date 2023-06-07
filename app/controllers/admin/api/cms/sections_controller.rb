@@ -33,7 +33,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   # Section Update
   # PUT /admin/api/cms/sections/{id}.json
   def update
-    @section.update_attributes(section_params)
+    @section.update(section_params)
     respond_with @section
   end
 

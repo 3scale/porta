@@ -20,7 +20,7 @@ resource "Account" do
     before do
       provider.fields_definitions.create!({ :target => "Account", :name => 'billing_address',
                                              :label => 'Billing Address', :read_only => true })
-      resource.update_attributes(billing_address_address1: 'first line', billing_address_address2: 'second line')
+      resource.update(billing_address_address1: 'first line', billing_address_address2: 'second line')
       provider.reload
       resource.reload
     end
@@ -28,7 +28,7 @@ resource "Account" do
 
   shared_context "with credit card details stored" do
     before do
-      payment_detail.update_attributes(credit_card_partial_number: 1234, credit_card_expires_on: Date.parse('2018-05-08'), credit_card_auth_code: 'anything')
+      payment_detail.update(credit_card_partial_number: 1234, credit_card_expires_on: Date.parse('2018-05-08'), credit_card_auth_code: 'anything')
     end
   end
 

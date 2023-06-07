@@ -40,7 +40,7 @@ class UserSession < ApplicationRecord
   def access(request)
     return unless valid?
 
-    update_attributes!(accessed_at: Time.zone.now,
+    update!(accessed_at: Time.zone.now,
                        ip: request.ip,
                        user_agent: request.user_agent)
   rescue => error

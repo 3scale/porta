@@ -59,7 +59,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     #  @invoice.due_on = due
     #end
 
-    if @invoice.update_attributes(params[:invoice])
+    if @invoice.update(params[:invoice])
       redirect_to admin_finance_invoice_url(@invoice), notice: 'Invoice was successfully updated.'
     else
       render :edit

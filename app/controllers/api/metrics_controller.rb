@@ -37,7 +37,7 @@ class Api::MetricsController < Api::BaseController
   def edit; end
 
   def update
-    if @metric.update_attributes(update_params)
+    if @metric.update(update_params)
       flash[:notice] = "The #{method_or_metric} was updated"
       redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
     else
