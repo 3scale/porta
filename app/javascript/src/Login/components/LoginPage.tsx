@@ -2,15 +2,15 @@ import { Component } from 'react'
 import { LoginPage } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
-import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
-import { ForgotCredentials } from 'LoginPage/loginForms/ForgotCredentials'
-import { Login3scaleForm } from 'LoginPage/loginForms/Login3scaleForm'
-import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
-import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
+import { AuthenticationProviders } from 'Login/components/AuthenticationProviders'
+import { FlashMessages } from 'Login/components/FlashMessages'
+import { ForgotCredentials } from 'Login/components/ForgotCredentials'
+import { Login3scaleForm } from 'Login/components/Login3scaleForm'
+import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
+import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 
 import type { ReactNode } from 'react'
-import type { ProvidersProps } from 'LoginPage/loginForms/AuthenticationProviders'
+import type { ProvidersProps } from 'Login/components/AuthenticationProviders'
 import type { FlashMessage } from 'Types'
 
 interface Props {

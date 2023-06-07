@@ -1,4 +1,4 @@
-import { validateSingleField } from 'LoginPage/utils/formValidation'
+import { validateSingleField } from 'Login/utils/formValidation'
 
 const fakeEvent = (type: string, value: string) => (
   { currentTarget: { value, type } } as unknown as React.SyntheticEvent<HTMLInputElement>

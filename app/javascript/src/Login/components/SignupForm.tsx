@@ -5,9 +5,9 @@ import {
   Form
 } from '@patternfly/react-core'
 
-import { TextField, EmailField, PasswordField } from 'LoginPage/loginForms/FormGroups'
-import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
-import { validateSingleField } from 'LoginPage/utils/formValidation'
+import { TextField, EmailField, PasswordField } from 'Login/components/FormGroups'
+import { HiddenInputs } from 'Login/components/HiddenInputs'
+import { validateSingleField } from 'Login/utils/formValidation'
 
 import type { ReactNode } from 'react'
 import type { InputProps, InputType, SignupProps as Props } from 'Types'
