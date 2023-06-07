@@ -4,7 +4,6 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   before_action :authorize_settings
 
   activate_menu :audience, :cms, :sso_integrations
-  sublayout 'sites/developer_portals'
 
   before_action :find_authentication_provider, only: %i[show edit update publish_or_hide destroy]
   before_action :authorize_authentication_provider, only: %i[show edit destroy]

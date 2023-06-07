@@ -18,9 +18,6 @@ body {
 }
 
 .Main {
-  // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
-  padding: line-height-times(1);
-
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }

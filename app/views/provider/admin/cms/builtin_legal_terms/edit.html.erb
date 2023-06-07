@@ -1,4 +1,4 @@
-<h1>Legal Terms for <%= @page.title %></h1>
+<% content_for :page_header_title, "Legal Terms for #{@page.title}" %>
 
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>

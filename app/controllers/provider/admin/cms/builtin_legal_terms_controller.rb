@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
-
-  sublayout 'sites/legal_terms'
-
   before_action :activate_menu_for_legal, :find_legal_term
 
   def new; end

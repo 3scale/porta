@@ -1,8 +1,9 @@
-<h2>Invoices
+<% content_for :page_header_title do %>
+  Invoices
   <%- if @buyer.present? -%>
     for account: <%= h @buyer.org_name %>
   <%- end -%>
-</h2>
+<% end %>
 
 <table class="data">
   <thead>

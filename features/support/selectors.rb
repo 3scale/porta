@@ -17,7 +17,7 @@ module HtmlSelectorsHelper
     when 'the first api dashboard widget'
       '.DashboardSection--services'
     when 'the subsubmenu'
-      '.subsubmenu'
+      '#subsubmenu'
     when 'the user widget'
       '#user_widget'
     when 'the footer'

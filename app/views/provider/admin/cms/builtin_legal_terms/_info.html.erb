@@ -1,2 +1,4 @@
-<p><%= @page.description  %></p>
-<%= t('.lt_usage_details_html', url: provider_admin_cms_templates_path) %>
+<% content_for :page_header_body do %>
+  <%= @page.description %>
+  <%= t('.lt_usage_details_html', url: provider_admin_cms_templates_path) %>
+<% end %>

@@ -4,6 +4,8 @@
   3scale API Documentation
 <% end %>
 
+<% content_for :page_header_title, '3scale API Documentation' %>
+
 <% if current_user.access_tokens.empty? %>
   <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
 <% end %>

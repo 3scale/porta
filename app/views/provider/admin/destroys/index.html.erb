@@ -1,4 +1,4 @@
-<h2>Deleted <%= @kind.human.pluralize -%></h2>
+<% content_for :page_header_title, "Deleted #{@kind.human.pluralize}" %>
 
 <table class="data" id="trash">
   <thead>
