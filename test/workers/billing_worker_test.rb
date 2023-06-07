@@ -41,9 +41,9 @@ class BillingWorkerTest < ActiveSupport::TestCase
   test 'aborts if buyer is locked' do
     time = Time.utc(2017, 12, 1, 8, 0)
 
-    Thread.new do
+    within_thread do
       assert BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
-    end.join
+    end
     refute BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
   end
 

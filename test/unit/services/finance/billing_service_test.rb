@@ -109,11 +109,11 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     test 'lock remains if execution fails' do
       now = Time.utc(2018, 1, 16, 8)
       Finance::BillingStrategy.expects(:daily).raises RuntimeError, 'random failure'
-      Thread.new do
+      within_thread do
         assert_raises RuntimeError do
           Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
         end
-      end.join
+      end
       Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::BillingService::LockBillingError }
       Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
     end
@@ -121,9 +121,9 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     test 'buyer locks do not affect each other' do
       buyer_2 = FactoryBot.create(:buyer_account, provider_account: @provider)
       now = Time.utc(2018, 1, 16, 8)
-      Thread.new do
+      within_thread do
         assert Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
-      end.join
+      end
       assert Finance::BillingService.call!(buyer_2.id, provider_account_id: @provider.id, now: now)
       assert_not Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
     end
