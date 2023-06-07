@@ -37,7 +37,7 @@ class Liquid::Drops::MessageDropTest < ActiveSupport::TestCase
     @message.update_attribute(:subject, 'SUBJECT')
     assert_equal 'SUBJECT', @drop.subject
 
-    @message.update_attributes(body: 'b' * 20, subject: nil)
+    @message.update(body: 'b' * 20, subject: nil)
     assert_equal "#{'b' * 12}...", @drop.subject
   end
 end

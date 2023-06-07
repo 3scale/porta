@@ -29,7 +29,7 @@ resource "Cinstance" do
     let (:first_traffic) { Time.zone.parse('2017-11-20 10:00:00 UTC') }
     let (:first_daily_traffic) { Time.zone.parse('2017-11-21 10:00:00 UTC') }
     before do
-      resource.update_attributes(first_traffic_at: first_traffic, first_daily_traffic_at: first_daily_traffic)
+      resource.update(first_traffic_at: first_traffic, first_daily_traffic_at: first_daily_traffic)
     end
   end
 
@@ -240,7 +240,7 @@ resource "Cinstance" do
 
   xml(:resource) do
     before do
-      resource.update_attributes(name: 'app name', description: 'app description')
+      resource.update(name: 'app name', description: 'app description')
     end
 
     it('has root') { should have_tag('application') }

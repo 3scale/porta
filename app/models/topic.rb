@@ -167,10 +167,10 @@ class Topic < ApplicationRecord
   end
 
   def update_cached_forum_and_user_counts
-    forum.update_attributes(posts_count: "posts_count - #{posts_count}")
+    forum.update(posts_count: "posts_count - #{posts_count}")
 
     @user_posts.each do |user_id, posts_size|
-      User.find(user_id).update_attributes(posts_count: "posts_count - #{posts_size}")
+      User.find(user_id).update(posts_count: "posts_count - #{posts_size}")
     end
   end
 

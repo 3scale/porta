@@ -159,7 +159,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     Account.any_instance.stubs(:provider_can_use?).with(:proxy_pro).returns(true)
 
     Proxy.any_instance.expects(:save_and_deploy).never
-    Proxy.any_instance.expects(:update_attributes).once
+    Proxy.any_instance.expects(:update).once
     ProxyTestService.expects(:new).never
     ProxyTestService.any_instance.expects(:perform).never
     Policies::PoliciesListService.expects(:call!)

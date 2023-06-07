@@ -8,7 +8,7 @@ class Sites::DnsController < Sites::BaseController
   end
 
   def update
-    if @account.update_attributes(site_params, without_protection: true)
+    if @account.update(site_params, without_protection: true)
       flash[:notice] = 'The account information was updated.'
       redirect_to(admin_site_dns_url)
     else

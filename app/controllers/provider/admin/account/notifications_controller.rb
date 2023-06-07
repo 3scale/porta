@@ -8,7 +8,7 @@ class Provider::Admin::Account::NotificationsController < Provider::Admin::Accou
 
   def update
     rule = current_account.mail_dispatch_rules.find(params.require(:id))
-    rule.update_attributes(mail_dispatch_rule_params)
+    rule.update(mail_dispatch_rule_params)
 
     @notice = 'Settings were updated.'
 

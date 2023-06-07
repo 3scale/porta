@@ -10,7 +10,7 @@ class Buyers::GroupsController < Buyers::BaseController
   end
 
   def update
-    if @account.update_attributes params[:account]
+    if @account.update params[:account]
       flash[:notice]= "Account updated"
     end
 

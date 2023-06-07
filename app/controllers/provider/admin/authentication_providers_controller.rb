@@ -42,7 +42,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   def publish_or_hide
     authorize_authentication_provider('update')
     published = params.require(:authentication_provider).require(:published)
-    persisted = @authentication_provider.update_attributes({published: published})
+    persisted = @authentication_provider.update({published: published})
     flash[:notice] = persisted ? 'Authentication provider updated' : 'Authentication provider has not been updated'
     @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
     render :show
@@ -50,7 +50,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
 
   def update
     authorize_authentication_provider('edit')
-    persisted = @authentication_provider.update_attributes(update_params)
+    persisted = @authentication_provider.update(update_params)
     if persisted
       flash[:notice] = 'Authentication provider updated'
       @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)

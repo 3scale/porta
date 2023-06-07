@@ -28,7 +28,7 @@ class Admin::Api::ApplicationPlanMetricLimitsController < Admin::Api::BaseContro
   # Limit Update
   # PUT /admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml
   def update
-    usage_limit.update_attributes(usage_limit_params)
+    usage_limit.update(usage_limit_params)
 
     respond_with(usage_limit)
   end

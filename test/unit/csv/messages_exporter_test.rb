@@ -24,7 +24,7 @@ class Csv::MessagesExporterTest < ActiveSupport::TestCase
       buyer = FactoryBot.create(:buyer_account,
                              org_name: 'Eater',
                              provider_account: @provider)
-      buyer.admins.first.update_attributes(username: 'john_doe', email: 'john@my.company.it')
+      buyer.admins.first.update(username: 'john_doe', email: 'john@my.company.it')
 
       plan = @provider.account_plans.default
       plan.update_column(:name, 'Plan of the Escape')

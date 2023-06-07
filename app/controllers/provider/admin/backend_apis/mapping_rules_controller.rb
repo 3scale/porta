@@ -20,7 +20,7 @@ class Provider::Admin::BackendApis::MappingRulesController < Provider::Admin::Ba
   def edit; end
 
   def update
-    if @proxy_rule.update_attributes(proxy_rule_params)
+    if @proxy_rule.update(proxy_rule_params)
       redirect_to provider_admin_backend_api_mapping_rules_path(@backend_api), notice: 'Mapping rule was updated.'
     else
       render :edit

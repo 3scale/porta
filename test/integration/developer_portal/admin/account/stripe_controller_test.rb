@@ -18,7 +18,7 @@ module DeveloperPortal
     attr_reader :provider, :buyer
 
     test '#show' do
-      setup_intent = Stripe::SetupIntent.new(id: 'seti_1I5s0l2eZvKYlo2CjumP89gc').tap { |si| si.update_attributes(client_secret: 'seti_1I6Fs82eZvKYlo2COrbF4OYY_secret_IhfCWxVPnPaXIYPlr9ORrd5noJDnDW7') }
+      setup_intent = Stripe::SetupIntent.new(id: 'seti_1I5s0l2eZvKYlo2CjumP89gc').tap { |si| si.update(client_secret: 'seti_1I6Fs82eZvKYlo2COrbF4OYY_secret_IhfCWxVPnPaXIYPlr9ORrd5noJDnDW7') }
       PaymentGateways::StripeCrypt.any_instance.expects(:create_stripe_setup_intent).returns(setup_intent)
 
       get admin_account_stripe_path

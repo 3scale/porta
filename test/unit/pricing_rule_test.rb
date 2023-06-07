@@ -89,7 +89,7 @@ class PricingRuleTest < ActiveSupport::TestCase
 
   should 'allow to be updated' do
     rule = @plan.pricing_rules.create!(:min => 16, :max => 100, :cost_per_unit => 0.2)
-    rule.update_attributes(:min => 12)
+    rule.update(:min => 12)
 
     assert rule.valid?
   end

@@ -8,7 +8,7 @@ class Admin::Api::WebHooksController < Admin::Api::BaseController
   # WebHooks Update
   # PUT /admin/api/webhooks.json
   def update
-    webhook.update_attributes(webhook_params)
+    webhook.update(webhook_params)
     respond_with(webhook)
   end
 

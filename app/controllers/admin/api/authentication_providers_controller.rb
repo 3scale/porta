@@ -21,7 +21,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   # Authentication Provider Developer Portal Update
   # PUT /admin/api/authentication_providers/{id}.xml
   def update
-    authentication_provider.update_attributes(authentication_provider_update_params)
+    authentication_provider.update(authentication_provider_update_params)
     respond_with authentication_provider_presenter
   end
 

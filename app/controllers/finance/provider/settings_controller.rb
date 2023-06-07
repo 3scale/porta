@@ -23,7 +23,7 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
       ok_message = "Already existent invoices won't change their id."
     end
 
-    if @billing_strategy.update_attributes(finance_billing_strategy_params)
+    if @billing_strategy.update(finance_billing_strategy_params)
       flash[:message] = "Finance settings updated. #{ok_message}"
       redirect_to :action => 'show'
     else

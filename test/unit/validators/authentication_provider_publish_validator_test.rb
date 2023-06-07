@@ -14,7 +14,7 @@ class AuthenticationProviderPublishValidatorTest < ActiveSupport::TestCase
     validator.valid?
     assert_nil validator.error_message
 
-    account.settings.update_attributes(enforce_sso: true)
+    account.settings.update(enforce_sso: true)
     validator = AuthenticationProviderPublishValidator.new(account, auth_provider)
     validator.valid?
     assert_match 'There needs to be at least 1 published SSO Integration', validator.error_message

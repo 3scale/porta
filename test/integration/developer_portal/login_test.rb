@@ -78,7 +78,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
 
   def test_create_approval_required
     # account approval required is set to TRUE and NO sso integrations have automatically approve accounts feature turned on
-    @provider.settings.update_attributes(account_approval_required: true)
+    @provider.settings.update(account_approval_required: true)
     @provider.authentication_providers.update_all(automatically_approve_accounts: false)
     stub_user_data(uid: 'uid1', email: 'foo@example.com', username: 'foo', org_name: 'company', email_verified: true)
     stub_oauth2_request
@@ -103,7 +103,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     assert user_2.account.approved?
 
     # account approval required is set to FALSE and NO sso integrations have automatically approve accounts feature turned on
-    @provider.settings.update_attributes(account_approval_required: false)
+    @provider.settings.update(account_approval_required: false)
     @provider.authentication_providers.update_all(automatically_approve_accounts: false)
     stub_user_data(uid: 'ud3', email: 'foo3@example.com', username: 'foo3', org_name: 'company3', email_verified: true)
     stub_oauth2_request
@@ -116,7 +116,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
   end
 
   def test_create_activation
-    @provider.settings.update_attributes(account_approval_required: true)
+    @provider.settings.update(account_approval_required: true)
     @provider.authentication_providers.update_all(automatically_approve_accounts: true)
     stub_user_data(uid: 'ud2', email: 'foo2@example.com', org_name: 'company', email_verified: true)
     stub_oauth2_request

@@ -27,7 +27,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
 
   def update
     current_account.updating_payment_detail = true
-    if current_account.update_attributes account_params
+    if current_account.update account_params
       redirect_to payment_details_path, notice: 'Your billing address was successfully stored'
     else
       flash[:notice] = 'Failed to update your billing address data. Check the required fields'

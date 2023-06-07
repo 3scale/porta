@@ -17,8 +17,8 @@ class Csv::BuyersExporterTest < ActiveSupport::TestCase
   def setup
     @provider = FactoryBot.create(:provider_account, org_name: 'Generalitat', domain: 'generalitat.cat')
     @buyer = create_buyer_for(@provider)
-    @buyer.admins.first.update_attributes(username: 'john_doe', email: 'john@my.company.it')
-    @buyer.update_attributes(org_name: 'Eater')
+    @buyer.admins.first.update(username: 'john_doe', email: 'john@my.company.it')
+    @buyer.update(org_name: 'Eater')
     create_buyer_for(@provider, Time.now.utc)
   end
 

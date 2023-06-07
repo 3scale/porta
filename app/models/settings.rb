@@ -35,7 +35,7 @@ class Settings < ApplicationRecord
     not_custom_account_plans.size > 1 && account_plans_ui_visible?
   end
 
-  def update_attributes(attributes)
+  def update(attributes)
     if approval_required_editable?
       value = attributes.delete(:account_approval_required) || false
       account_plan = provider.account_plans.default || not_custom_account_plans.first!
@@ -44,6 +44,7 @@ class Settings < ApplicationRecord
 
     super(attributes)
   end
+  alias update_attributes update
 
   def set_forum_enabled
     if account

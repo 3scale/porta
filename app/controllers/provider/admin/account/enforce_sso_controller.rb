@@ -5,7 +5,7 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   before_action :enforce_sso_allowed?, only: [:create]
 
   def create
-    if current_account.settings.update_attributes(enforce_sso: true)
+    if current_account.settings.update(enforce_sso: true)
       logout_all_password_users
       redirect_to index_path, notice: 'SSO successfully enforced'
     else
@@ -14,7 +14,7 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   end
 
   def destroy
-    if current_account.settings.update_attributes(enforce_sso: false)
+    if current_account.settings.update(enforce_sso: false)
       redirect_to index_path, notice: 'SSO enforcement successfully disabled'
     else
       redirect_to index_path, flash: {error: 'SSO enforcement could not be disabled'}

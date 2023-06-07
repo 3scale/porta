@@ -30,7 +30,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
 
   def update
     @file = file
-    if @file.update_attributes(file_params)
+    if @file.update(file_params)
       redirect_to edit_provider_admin_cms_file_path(@file)
     else
       render :edit

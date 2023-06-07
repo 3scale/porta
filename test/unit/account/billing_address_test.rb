@@ -56,7 +56,7 @@ class Account::BillingAddressTest < ActiveSupport::TestCase
   test 'account org_name is used when billing_address_name is blank' do
     assert_equal 'Tim', @account.billing_address.name
 
-    @account.update_attributes(billing_address_name: '')
+    @account.update(billing_address_name: '')
     @account.reload
 
     assert_equal 'PP', @account.billing_address.name

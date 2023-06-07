@@ -40,7 +40,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   # File Update
   # PUT admin/api/cms/files/{id}.json
   def update
-    @file.update_attributes(file_params)
+    @file.update(file_params)
     respond_with @file
   end
 

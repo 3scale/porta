@@ -272,7 +272,7 @@ class SimpleLayout
     # some providers have this
     if error_layout.published == "error"
       content = DeveloperPortal::VIEW_PATH.join('layouts/error.html.liquid').read
-      error_layout.update_attributes(draft: content,
+      error_layout.update(draft: content,
                                      title: 'Error layout', liquid_enabled: true)
       error_layout.publish!
     else

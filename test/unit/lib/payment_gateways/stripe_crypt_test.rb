@@ -57,7 +57,7 @@ module PaymentGateways
 
       card_data = {exp_month: 8, exp_year: 1.year.from_now.year, last4: '4242'}
       payment_method_data = {id: payment_method_id, object: 'payment_method', card: card_data, customer: 'cus_IhGaGqpp6zGwyd', type: 'card'}
-      payment_method = Stripe::PaymentMethod.new(id: payment_method_id).tap { |pm| pm.update_attributes(payment_method_data) }
+      payment_method = Stripe::PaymentMethod.new(id: payment_method_id).tap { |pm| pm.update(payment_method_data) }
       Stripe::PaymentMethod.expects(:retrieve).with(payment_method_id, api_key).returns(payment_method)
 
       assert stripe_crypt.update!(payment_method_id)
@@ -94,7 +94,7 @@ module PaymentGateways
 
     def mock_customer(**attrs)
       id = attrs.delete(:id) || 'new-customer-id'
-      Stripe::Customer.new(id: id).tap { |stripe_customer| stripe_customer.update_attributes(**attrs) }
+      Stripe::Customer.new(id: id).tap { |stripe_customer| stripe_customer.update(**attrs) }
     end
 
     def update_credit_card_auth_code

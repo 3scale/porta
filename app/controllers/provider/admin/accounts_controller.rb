@@ -40,7 +40,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   def update
     check_require_billing_information
     respond_to do |format|
-      if @account.update_attributes(account_params)
+      if @account.update(account_params)
         flash[:notice] = 'The account information was updated.'
         format.html do
           redirect_to_success

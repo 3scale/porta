@@ -32,7 +32,7 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   # APIcast Policy Registry Update
   # PUT /admin/api/registry/policies/{id}.json
   def update
-    policy.update_attributes(policy_params)
+    policy.update(policy_params)
     respond_with(policy)
   end
 

@@ -52,7 +52,7 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   def update
     @required_fields = []
-    if field_definition.update_attributes(field_definition_params)
+    if field_definition.update(field_definition_params)
       @required_fields = field_definition.target_class.required_fields
     end
 

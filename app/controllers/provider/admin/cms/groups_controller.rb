@@ -39,7 +39,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   def update
     @group = current_account.provided_groups.find(params[:id])
 
-    if @group.update_attributes(sections_params)
+    if @group.update(sections_params)
       flash[:info] = 'Group saved.'
       redirect_to( :action => :index)
     else

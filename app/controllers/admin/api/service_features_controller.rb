@@ -26,7 +26,7 @@ class Admin::Api::ServiceFeaturesController < Admin::Api::ServiceBaseController
   # Service Feature Update
   # PUT /admin/api/services/{service_id}/features/{id}.xml
   def update
-    feature.update_attributes(feature_params)
+    feature.update(feature_params)
 
     respond_with(feature)
   end
