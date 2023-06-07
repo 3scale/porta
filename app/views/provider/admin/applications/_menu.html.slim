@@ -2,10 +2,8 @@ section class="pf-c-page__main-nav pf-m-limit-width"
   div class="pf-c-page__main-body"
     nav class="pf-c-nav pf-m-horizontal pf-m-tertiary" aria-label="Local"
       ul class="pf-c-nav__list"
-        li class="pf-c-nav__item"
-          = pf4_nav_link_unless_current "Application '#{@cinstance.name}'",
-            provider_admin_application_path(@cinstance)
+        = pf4_nav_item "Application '#{@cinstance.name}'",
+          provider_admin_application_path(@cinstance)
 
-        li class="pf-c-nav__item"
-          = pf4_nav_link_unless_current 'Analytics',
-            admin_buyers_stats_application_path(@cinstance)
+        = pf4_nav_item 'Analytics',
+          admin_buyers_stats_application_path(@cinstance)

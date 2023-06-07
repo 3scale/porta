@@ -43,9 +43,11 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def pf4_nav_link_unless_current(text, url)
-    link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
-      content_tag 'a', active_text, class: 'pf-c-nav__link pf-m-current', 'aria-current': 'page'
+  def pf4_nav_item(text, url)
+    content_tag 'li', class: 'pf-c-nav__item' do
+      link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
+        content_tag 'a', active_text, class: 'pf-c-nav__link pf-m-current', 'aria-current': 'page'
+      end
     end
   end
 
