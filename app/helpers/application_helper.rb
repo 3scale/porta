@@ -3,7 +3,7 @@
 
 # Methods added to this helper will be available to all templates in the
 # application.
-module ApplicationHelper
+module ApplicationHelper # rubocop:disable Metrics/ModuleLength
 
   # this is used just to not load font awesome in tests
   def capybara_webkit?
@@ -40,6 +40,12 @@ module ApplicationHelper
   def link_to_unless_current_styled(text, url, options = {})
     link_to_unless_current text, url, options do |active_text|
       content_tag 'span', active_text, :class => 'active is-active'
+    end
+  end
+
+  def pf4_nav_link_unless_current(text, url)
+    link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
+      content_tag 'a', active_text, class: 'pf-c-nav__link pf-m-current', 'aria-current': 'page'
     end
   end
 

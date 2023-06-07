@@ -131,7 +131,7 @@ Then /^I should not see button to "(.*?)"$/ do | text |
 end
 
 Then /^I should see the app menu$/ do
-  assert has_xpath?("//ul[@id='subsubmenu']") || has_xpath?("//ul[@class='subsubmenu']")
+  assert has_css?(selector_for('the secondary nav'))
 end
 
 Then /^I should see a list of available plans$/ do |table|
