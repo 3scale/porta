@@ -53,7 +53,7 @@ end
 
 When(/^I navigate to the page of the invitations of the partner "([^\"]*)"$/) do |_org_name|
   step %(I navigate to the page of the partner "lol cats")
-  click_on('invitations', match: :one)
+  find('a', text: /invitations?/i, match: :one).click
 end
 
 When(/^I send an invitation to "([^\"]*)"$/) do |address|
