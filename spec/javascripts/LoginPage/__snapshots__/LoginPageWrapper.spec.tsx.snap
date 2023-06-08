@@ -438,7 +438,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -936,7 +936,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -1646,7 +1646,7 @@ exports[`should render itself 1`] = `
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -2166,7 +2166,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>

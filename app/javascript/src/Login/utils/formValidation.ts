@@ -23,8 +23,8 @@ const validateForm = (form: unknown, constraints: unknown): Record<string, strin
   return validate(form, constraints) as Record<string, string[]>
 }
 
-const validateSingleField = (event: FormEvent<HTMLInputElement>): boolean => {
-  const { value, type } = event.currentTarget as { value: string; type: keyof typeof constraintsTypes }
+const validateSingleField = (currentTarget: FormEvent<HTMLInputElement>['currentTarget']): boolean => {
+  const { value, type } = currentTarget as { value: string; type: keyof typeof constraintsTypes }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- TODO: check validate.single types, is it really any?
   const fieldError = validate.single(value, constraintsTypes[type])
   return !fieldError
