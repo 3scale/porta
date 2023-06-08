@@ -9,44 +9,27 @@ import { EmailField } from 'Login/components/FormGroups'
 import { HiddenInputs } from 'Login/components/HiddenInputs'
 import { validateSingleField } from 'Login/utils/formValidation'
 
-import type { FunctionComponent } from 'react'
+import type { FunctionComponent, FormEvent } from 'react'
 
 interface Props {
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
-interface State {
-  email: string;
-  validation: {
-    email?: boolean;
-  };
-}
-
 const RequestPasswordForm: FunctionComponent<Props> = (props) => {
-  const [state, setState] = useState<State>({
-    email: '',
-    validation: {
-      email: undefined
-    }
+  const [email, setEmail] = useState('')
+  const [validation, setValidation] = useState({
+    email: undefined as boolean | undefined
   })
 
-  const handleTextInputEmail: (text: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
-    const isValid = validateSingleField(event)
-    setState({ email, validation: { email: isValid } })
+  // TODO: validations should happen on loss focus or sibmission
+  const onEmailChange = (value: string, event: FormEvent<HTMLInputElement>) => {
+    const { currentTarget } = event
+    setEmail(value)
+    setValidation(prev => ({ ...prev, email: validateSingleField(currentTarget) }))
   }
 
-  const emailInputProps = {
-    isRequired: true,
-    name: 'email',
-    fieldId: 'email',
-    label: 'Email address',
-    isValid: state.validation.email,
-    value: state.email,
-    onChange: handleTextInputEmail,
-    autoFocus: true
-  } as const
-  const formDisabled = Object.values(state.validation).some(value => !value)
+  const formDisabled = Object.values(validation).some(value => !value)
   return (
     <Form
       noValidate
@@ -56,14 +39,24 @@ const RequestPasswordForm: FunctionComponent<Props> = (props) => {
       method="post"
     >
       <HiddenInputs isPasswordReset />
-      <EmailField inputProps={emailInputProps} />
+      <EmailField inputProps={{
+        isRequired: true,
+        name: 'email',
+        fieldId: 'email',
+        label: 'Email address',
+        isValid: validation.email,
+        value: email,
+        onChange: onEmailChange,
+        autoFocus: true
+      }}
+      />
       <ActionGroup>
         <Button
           className="pf-c-button pf-m-primary pf-m-block"
           isDisabled={formDisabled}
           type="submit"
         >
-            Reset password
+          Reset password
         </Button>
         <a href={props.providerLoginPath}>Sign in</a>
       </ActionGroup>

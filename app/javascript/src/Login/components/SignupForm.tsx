@@ -1,100 +1,60 @@
-import { useState } from 'react'
 import {
   ActionGroup,
   Button,
   Form
 } from '@patternfly/react-core'
+import { useState } from 'react'
 
 import { TextField, EmailField, PasswordField } from 'Login/components/FormGroups'
 import { HiddenInputs } from 'Login/components/HiddenInputs'
 import { validateSingleField } from 'Login/utils/formValidation'
 
-import type { FunctionComponent } from 'react'
-import type { InputProps, InputType, SignupProps as Props } from 'Types'
-
-type InputNames = 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password_confirmation]' | 'user[password]' | 'user[username]'
-
-type Validation = Record<InputNames, boolean | undefined>
-
-type State = Record<InputNames, string> & { validation: Validation }
-
-const INPUT_NAMES: Record<InputType, InputNames> = {
-  username: 'user[username]',
-  email: 'user[email]',
-  firstName: 'user[first_name]',
-  lastName: 'user[last_name]',
-  password: 'user[password]',
-  passwordConfirmation: 'user[password_confirmation]'
-} as const
-
-const INPUT_IDS: Record<InputType, string> = {
-  username: 'user_username',
-  email: 'user_email',
-  firstName: 'user_first_name',
-  lastName: 'user_last_name',
-  password: 'user_password',
-  passwordConfirmation: 'user_password_confirmation'
-} as const
-
-const INPUT_LABELS: Record<InputType, string> = {
-  username: 'Username',
-  email: 'Email address',
-  firstName: 'First name',
-  lastName: 'Last name',
-  password: 'Password',
-  passwordConfirmation: 'Password confirmation'
-} as const
+import type { FormEvent, FunctionComponent } from 'react'
+import type { SignupProps as Props } from 'Types'
 
 const SignupForm: FunctionComponent<Props> = (props) => {
-  const [state, setState] = useState({
-    [INPUT_NAMES.username]: props.user.username,
-    [INPUT_NAMES.email]: props.user.email,
-    [INPUT_NAMES.firstName]: props.user.firstname,
-    [INPUT_NAMES.lastName]: props.user.lastname,
-    [INPUT_NAMES.password]: '',
-    [INPUT_NAMES.passwordConfirmation]: '',
-    validation: {
-      [INPUT_NAMES.username]: props.user.username ? true : undefined,
-      [INPUT_NAMES.email]: props.user.email ? true : undefined,
-      [INPUT_NAMES.firstName]: true,
-      [INPUT_NAMES.lastName]: true,
-      [INPUT_NAMES.password]: undefined,
-      [INPUT_NAMES.passwordConfirmation]: undefined
-    }
-  } as State)
+  const [username, setUsername] = useState(props.user.username)
+  const [email, setEmail] = useState(props.user.email)
+  const [firstName, setFirstName] = useState(props.user.firstname)
+  const [lastName, setLastName] = useState(props.user.lastname)
+  const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-  const getInputProps = (name: InputType, isRequired: boolean): InputProps => ({
-    isRequired,
-    name: INPUT_NAMES[name],
-    fieldId: INPUT_IDS[name],
-    label: INPUT_LABELS[name],
-    isValid: state.validation[INPUT_NAMES[name]],
-    value: state[INPUT_NAMES[name]],
-    onChange: handleInputChange
+  const [validation, setValidation] = useState({
+    username: props.user.username ? true : undefined,
+    email: props.user.email ? true : undefined,
+    firstName: true,
+    lastName: true,
+    password: undefined as boolean | undefined,
+    passwordConfirmation: undefined as boolean | undefined
   })
 
-  const handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
-    const isValid = event.currentTarget.required ? validateSingleField(event) : true
-    const validation = {
-      // eslint-disable-next-line react/no-access-state-in-setstate -- FIXME
-      ...state.validation,
-      [event.currentTarget.name]: isValid
-    }
-
-    setState({
-      [event.currentTarget.name]: value,
-      validation
-    } as State)
+  // TODO: validations should happen on loss focus or sibmission
+  const onUsernameChange = (value: string, event: FormEvent<HTMLInputElement>) => {
+    const { currentTarget } = event
+    setUsername(value)
+    setValidation(prev => ({ ...prev, username: validateSingleField(currentTarget) }) )
   }
 
-  const formDisabled = Object.values(state.validation).some(value => value !== true)
+  const onEmailChange = (value: string, event: FormEvent<HTMLInputElement>) => {
+    const { currentTarget } = event
+    setEmail(value)
+    setValidation(prev => ({ ...prev, email: validateSingleField(currentTarget) }) )
+  }
 
-  const usernameInputProps = getInputProps('username', true)
-  const emailInputProps = getInputProps('email', true)
-  const firstNameInputProps = getInputProps('firstName', false)
-  const lastNameInputProps = getInputProps('lastName', false)
-  const passwordInputProps = getInputProps('password', true)
-  const passwordConfirmationInputProps = getInputProps('passwordConfirmation', true)
+  const onPasswordChange = (value: string, event: FormEvent<HTMLInputElement>) => {
+    const { currentTarget } = event
+    setPassword(value)
+    setValidation(prev => ({ ...prev, password: validateSingleField(currentTarget) }) )
+  }
+
+  const onPasswordConfirmationChange = (value: string, event: FormEvent<HTMLInputElement>) => {
+    const { currentTarget } = event
+    setPasswordConfirmation(value)
+    setValidation(prev => ({ ...prev, passwordConfirmation: validateSingleField(currentTarget) }) )
+  }
+
+  const formDisabled = Object.values(validation).some(value => value !== true)
 
   return (
     <Form
@@ -105,12 +65,69 @@ const SignupForm: FunctionComponent<Props> = (props) => {
       method="post"
     >
       <HiddenInputs />
-      <TextField inputProps={usernameInputProps} />
-      <EmailField inputProps={emailInputProps} />
-      <TextField inputProps={firstNameInputProps} />
-      <TextField inputProps={lastNameInputProps} />
-      <PasswordField inputProps={passwordInputProps} />
-      <PasswordField inputProps={passwordConfirmationInputProps} />
+      <TextField inputProps={{
+        isRequired: true,
+        name: 'user[username]',
+        fieldId: 'user_username',
+        label: 'Username',
+        isValid: validation.username,
+        value: username,
+        onChange: onUsernameChange
+      }}
+      />
+
+      <EmailField inputProps={{
+        isRequired: true,
+        name: 'user[email]',
+        fieldId: 'user_email',
+        label: 'Email address',
+        isValid: validation.email,
+        value: email,
+        onChange: onEmailChange
+      }}
+      />
+
+      <TextField inputProps={{
+        name: 'user[first_name]',
+        fieldId: 'user_first_name',
+        label: 'First name',
+        isValid: validation.firstName,
+        value: firstName,
+        onChange: setFirstName
+      }}
+      />
+
+      <TextField inputProps={{
+        name: 'user[last_name]',
+        fieldId: 'user_last_name',
+        label: 'Last name',
+        isValid: validation.lastName,
+        value: lastName,
+        onChange: setLastName
+      }}
+      />
+
+      <PasswordField inputProps={{
+        isRequired: true,
+        name: 'user[password]',
+        fieldId: 'user_password',
+        label: 'Password',
+        isValid: validation.password,
+        value: password,
+        onChange: onPasswordChange
+      }}
+      />
+
+      <PasswordField inputProps={{
+        isRequired: true,
+        name: 'user[password_confirmation]',
+        fieldId: 'user_password_confirmation',
+        label: 'Password confirmation',
+        isValid: validation.passwordConfirmation,
+        value: passwordConfirmation,
+        onChange: onPasswordConfirmationChange
+      }}
+      />
 
       <ActionGroup>
         <Button
@@ -119,7 +136,7 @@ const SignupForm: FunctionComponent<Props> = (props) => {
           name="commit"
           type="submit"
         >
-            Sign up
+          Sign up
         </Button>
       </ActionGroup>
     </Form>
