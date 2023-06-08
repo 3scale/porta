@@ -12,6 +12,17 @@ module System
       end
     end
 
+    def report_deprecation_warning(payload)
+      message = payload[:message]
+      deprecation_horizon = payload[:deprecation_horizon]
+
+      ::Bugsnag.notify(message) do |report|
+        report.severity = 'warning'
+        report.grouping_hash = message
+        report.add_tab 'deprecation_horizon', { description: "Rails version that won't have this feature available", value: deprecation_horizon }
+      end
+    end
+
     class LogFormatter < ActiveSupport::Logger::SimpleFormatter
 
       def initialize
