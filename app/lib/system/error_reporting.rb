@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+class DeprecationWarning < StandardError
+  def initialize(msg = nil, deprecation_horizon = nil)
+    super(msg)
+    @message = msg
+    @deprecation_horizon = deprecation_horizon
+  end
+
+  attr_accessor :message, :deprecation_horizon
+end
+
 module System
   module ErrorReporting
     module_function
@@ -13,13 +23,12 @@ module System
     end
 
     def report_deprecation_warning(payload)
-      message = payload[:message]
-      deprecation_horizon = payload[:deprecation_horizon]
+      exception = DeprecationWarning.new(payload[:message], payload[:deprecation_horizon])
 
-      ::Bugsnag.notify(message) do |report|
+      ::Bugsnag.notify(exception) do |report|
         report.severity = 'warning'
-        report.grouping_hash = message
-        report.add_tab 'deprecation_horizon', { description: "Rails version that won't have this feature available", value: deprecation_horizon }
+        report.grouping_hash = exception.message
+        report.add_tab 'deprecation_horizon', { value: exception.deprecation_horizon }
       end
     end
 
