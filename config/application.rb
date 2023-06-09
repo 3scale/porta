@@ -263,11 +263,6 @@ module System
       config.three_scale.oauth2 = config_for(:oauth2)
     end
 
-    initializer :log_formatter, after: :initialize_logger do
-      config.log_formatter = System::ErrorReporting::LogFormatter.new
-      (config.logger || Rails.logger).formatter = config.log_formatter
-    end
-
     config.paperclip_defaults = {
       storage: :s3,
       s3_credentials: ->(*) { CMS::S3.credentials },
@@ -281,11 +276,12 @@ module System
       path: ':rails_root/public/system/:url'
     }.merge(try_config_for(:paperclip) || {})
 
-    initializer :paperclip_defaults, after: :load_config_initializers do
-      Paperclip::Attachment.default_options.merge!(s3_options: CMS::S3.options) # Paperclip does not accept s3_options set as a Proc
-    end
+    config.to_prepare do
+      Rails.application.config.log_formatter = System::ErrorReporting::LogFormatter.new
+      (Rails.application.config.logger || Rails.logger).formatter = Rails.application.config.log_formatter
 
-    config.before_initialize do
+      Paperclip::Attachment.default_options[:s3_options] = CMS::S3.options # Paperclip does not accept s3_options set as a Proc
+
       require 'three_scale'
     end
 
