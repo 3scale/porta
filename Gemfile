@@ -236,7 +236,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'bootsnap', '~> 1.4'
+  gem 'bootsnap', '~> 1.16'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
