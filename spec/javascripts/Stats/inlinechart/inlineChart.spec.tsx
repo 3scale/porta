@@ -4,7 +4,7 @@ import { mount } from 'enzyme'
 import c3 from 'c3'
 
 import * as utils from 'utilities/fetchData'
-import InlineChart from 'Stats/inlinechart'
+import { InlineChart } from 'Stats/inlinechart'
 
 import type { Props, State } from 'Stats/inlinechart'
 import type { ReactWrapper } from 'enzyme'

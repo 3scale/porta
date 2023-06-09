@@ -136,4 +136,5 @@ class InlineChart extends Component<Props, State> {
   }
 }
 
-export { InlineChart as default, Props, State }
+export type { Props, State }
+export { InlineChart }

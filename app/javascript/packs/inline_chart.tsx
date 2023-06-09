@@ -1,6 +1,6 @@
 import { render } from 'react-dom'
 
-import InlineChart from 'Stats/inlinechart'
+import { InlineChart } from 'Stats/inlinechart'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'mini-charts'
@@ -10,24 +10,30 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const allCharts = container.querySelectorAll<HTMLElement>('.charts')
-
   function renderChart (chart: HTMLElement) {
     const currentChart = chart.querySelector<HTMLElement>('.inline-chart-container')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- TODO: need to give some default values or something here
-    const { endpoint, metricName, title } = currentChart!.dataset
+
+    if (!currentChart) {
+      throw new Error('Inline chart container not found')
+    }
+
+    const { endpoint, metricName, title } = currentChart.dataset
     const { unitPluralized } = chart.dataset
+
+    if (!endpoint || !metricName || !title || !unitPluralized) {
+      throw new Error('Missing some props')
+    }
+
     render((
       <InlineChart
-        endPoint={endpoint as unknown as string}
-        metricName={metricName as unknown as string}
-        title={title as unknown as string}
-        unitPluralized={unitPluralized as unknown as string}
+        endPoint={endpoint}
+        metricName={metricName}
+        title={title}
+        unitPluralized={unitPluralized}
       />
     ), currentChart)
   }
 
-  allCharts.forEach(chart => {
-    renderChart(chart)
-  })
+  container.querySelectorAll<HTMLElement>('.charts')
+    .forEach(renderChart)
 })
