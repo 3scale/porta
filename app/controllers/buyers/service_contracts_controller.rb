@@ -48,6 +48,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   def new
     @service_plans = @service.service_plans
     @service_contract = collection.build :plan => @service_plans.default_or_nil
+
+    render layout: false # Rendered inside a modal
   end
 
   def create
@@ -66,6 +68,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   def edit
     @service_plans = @service_contract.issuer.service_plans
+
+    render layout: false # Rendered inside a modal
   end
 
   def update

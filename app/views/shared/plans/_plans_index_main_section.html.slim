@@ -1,3 +1,5 @@
-= javascript_packs_with_chunks_tag 'plans_index'
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'plans_index'
 
-div.pf-hack__remove-main-padding id=id data-plans-index=plans_index_data.to_json
+- content_for :main_section_with_react do
+  div id=id data-plans-index=plans_index_data.to_json

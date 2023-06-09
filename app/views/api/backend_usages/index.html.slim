@@ -1,8 +1,9 @@
-h1 Backends
-p.intro For a product to work, it must have at least one backend with a private base URL - your API. If you add multiple backends to a product, each backend must have a unique public path.
-
-= pf_button_in_title 'Add backend', new_admin_service_backend_usage_path(@service)
-
+- content_for :page_header_title_with_button, 'Backends'
+- content_for :page_header_body do
+  ' For a product to work, it must have at least one backend with a private base URL - your API. If
+  ' you add multiple backends to a product, each backend must have a unique public path.
+- content_for :page_header_button_label, 'Add backend'
+- content_for :page_header_button_href, new_admin_service_backend_usage_path(@service)
 
 table#backend_api_configs.data
   thead

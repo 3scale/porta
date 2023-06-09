@@ -1,6 +1,4 @@
-= render 'provider/admin/messages/menu'
-h2 Sent Messages
-
+- content_for :page_header_title, 'Sent Messages'
 
 - if @messages.blank?
   p= t('provider.admin.messages.no_messages')

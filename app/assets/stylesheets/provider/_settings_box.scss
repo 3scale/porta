@@ -48,7 +48,6 @@
 
   & + .integration {
     @include white-box-shadow;
-    margin-top: line-height-times(1);
     overflow: hidden;
     padding: line-height-times(1);
   }

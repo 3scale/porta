@@ -1,8 +1,4 @@
-<% if @metric.child? %>
-  <% content_for :sublayout_title, "New Method" %>
-<% else %>
-  <% content_for :sublayout_title, "New Metric" %>
-<% end %>
+<% content_for :page_header_title, @metric.child? ? 'New Method' : 'New Metric' %>
 <%= semantic_form_for @metric,
   :url => if @metric.child?
             admin_service_metric_children_path(@service, @metric.parent)

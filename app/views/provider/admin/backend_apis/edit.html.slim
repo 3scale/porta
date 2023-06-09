@@ -1,4 +1,4 @@
-h2 Edit Backend
+- content_for :page_header_title, 'Edit Backend'
 
 = semantic_form_for @backend_api, url: provider_admin_backend_api_path(@backend_api) do |form|
   = render partial: 'provider/admin/backend_apis/forms/naming', locals: { form: form }

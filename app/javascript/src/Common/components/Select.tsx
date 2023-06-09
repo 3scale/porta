@@ -15,8 +15,6 @@ import type {
   SelectProps
 } from '@patternfly/react-core'
 
-import './Select.scss'
-
 interface Props<T extends IRecord> extends
   Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'>,
   Pick<FormGroupProps, 'helperText' | 'helperTextInvalid' | 'isRequired' | 'label'> {
@@ -58,10 +56,8 @@ const Select = <T extends IRecord>({
   }
 
   const handleOnClear = () => {
-    if (isClearable) {
-      onSelect(null)
-      setExpanded(false)
-    }
+    onSelect(null)
+    setExpanded(false)
   }
 
   return (
@@ -77,14 +73,13 @@ const Select = <T extends IRecord>({
       {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
       {item && <input name={name} type="hidden" value={Number(item.id) >= 0 ? item.id : ''} />}
       <PF4Select
-        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
         isOpen={expanded}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
-        onClear={handleOnClear}
+        onClear={isClearable ? handleOnClear : undefined}
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
         onToggle={() => { setExpanded(!expanded) }}

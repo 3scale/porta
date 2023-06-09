@@ -1,5 +1,4 @@
 class Sites::SpamProtectionsController < Sites::BaseController
-  sublayout 'sites/developer_portals'
   activate_menu :audience, :cms, :spam_protection
 
   before_action :find_settings

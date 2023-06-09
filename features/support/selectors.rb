@@ -16,8 +16,8 @@ module HtmlSelectorsHelper
     # TODO: there is no first api widget anymore, clean this up
     when 'the first api dashboard widget'
       '.DashboardSection--services'
-    when 'the subsubmenu'
-      '.subsubmenu'
+    when 'the secondary nav'
+      'nav.pf-c-nav.pf-m-horizontal'
     when 'the user widget'
       '#user_widget'
     when 'the footer'

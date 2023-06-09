@@ -1,12 +1,12 @@
 import { ActionGroup, Button, Form, LoginPage } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { useFormState } from 'ChangePassword/components/ChangePasswordHooks'
-import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
-import { PasswordField, PasswordConfirmationField } from 'LoginPage/loginForms/FormGroups'
-import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
-import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
-import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
+import { useFormState } from 'Login/utils/ChangePasswordHooks'
+import { FlashMessages } from 'Login/components/FlashMessages'
+import { PasswordField, PasswordConfirmationField } from 'Login/components/FormGroups'
+import { HiddenInputs } from 'Login/components/HiddenInputs'
+import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
+import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 
 import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'

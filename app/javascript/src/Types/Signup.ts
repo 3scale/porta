@@ -14,7 +14,7 @@ export interface SignupProps {
 }
 
 export interface InputProps {
-  isRequired: boolean;
+  isRequired?: boolean;
   label: string;
   fieldId: string;
   isValid?: boolean;
@@ -26,5 +26,3 @@ export interface InputProps {
   ariaInvalid?: boolean;
   errorMessage?: string;
 }
-
-export type InputType = 'email' | 'firstName' | 'lastName' | 'password' | 'passwordConfirmation' | 'username'

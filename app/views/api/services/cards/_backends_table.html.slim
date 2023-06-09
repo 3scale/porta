@@ -1,3 +1,5 @@
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'backends_used_list'
+
 h2 Backends used in this product
 div id='backends-used-list-container' data-backends=product.decorate.backends_table_data
-  = javascript_packs_with_chunks_tag 'backends_used_list'

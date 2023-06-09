@@ -1,6 +1,6 @@
 - if flash[:token]
   - token = @access_tokens.last
-  h1 Copy the new token and store it somewhere safe
+  - content_for :page_header_title, 'Copy the new token and store it somewhere safe'
   div.AccessTokenBox.InfoBox.InfoBox--notice
     p Make sure to copy your new personal access token now. You won't be able to see it again as it isn't stored for security reasons.
     dl.u-dl
@@ -25,7 +25,7 @@
 
   = link_to 'I have copied the token' , provider_admin_user_access_tokens_path, class: 'important-button next'
 - else
-  h1 Tokens
+  - content_for :page_header_title, 'Tokens'
   section#access-tokens.Section
     h2 Access Tokens
     p

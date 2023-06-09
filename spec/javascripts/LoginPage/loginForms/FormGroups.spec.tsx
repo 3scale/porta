@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 
-import { TextField, PasswordField, EmailField } from 'LoginPage/loginForms/FormGroups'
+import { TextField, PasswordField, EmailField } from 'Login/components/FormGroups'
 
 import type { InputProps } from 'Types'
 

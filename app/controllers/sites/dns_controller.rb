@@ -1,5 +1,4 @@
 class Sites::DnsController < Sites::BaseController
-  sublayout 'sites/developer_portals'
   activate_menu :audience, :cms, :admin_site_dns
 
   before_action :find_account

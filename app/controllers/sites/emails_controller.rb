@@ -3,7 +3,6 @@ class Sites::EmailsController < Sites::BaseController
   provider_required
 
   activate_menu :audience, :messages, :email
-  sublayout 'emails'
 
   before_action :find_account
   before_action :find_services

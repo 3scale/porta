@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { SignupPage } from 'LoginPage/SignupPageWrapper'
+import { SignupPage } from 'Login/components/SignupPage'
 
-import type { Props } from 'LoginPage/SignupPageWrapper'
+import type { Props } from 'Login/components/SignupPage'
 
 const props: Props = {
   name: 'Bob Sponge',

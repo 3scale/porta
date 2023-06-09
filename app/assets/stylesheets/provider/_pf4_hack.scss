@@ -1,23 +1,3 @@
-// Counter-hack for padding in app/assets/stylesheets/provider/layouts/_main.scss:20
-// https://github.com/3scale/porta/commit/3b904ab7d5a0b72ce5c5de14fb566eca75bdbb37#diff-df72c33ce6ccf433d374d12b7856eb703289e5e2d439f7216ace2ac6a4fb4375
-main.Main#content div.pf-hack__remove-main-padding {
-  margin-bottom: calc(-1 * var(--pf-c-page__main-section--xl--PaddingBottom));
-  margin-left: calc(-1 * var(--pf-c-page__main-section--xl--PaddingLeft));
-  margin-right: calc(-1 * var(--pf-c-page__main-section--xl--PaddingRight));
-  margin-top: calc(-1 * var(--pf-c-page__main-section--xl--PaddingTop));
-}
-
-// Overrides legacy style app/assets/stylesheets/provider/_commons.scss:33
-main.Main.pf-hack__override-page-titles#content section.pf-c-page__main-section > .pf-c-content {
-  .pf-l-level {
-    align-items: baseline;
-  }
-
-  h1 {
-    padding-top: unset;
-  }
-}
-
 
 // Overrides legacy style app/assets/stylesheets/provider/_commons.scss:83
 .pf-c-page__main-section .pf-c-content {
@@ -108,4 +88,22 @@ a.action.pf-c-button {
       color: $link-hover-color;
     }
   }
+}
+
+// Overrides app/assets/stylesheets/provider/_commons.scss:31
+// Original rule targets all h1 titles that are not in the page header
+.pf-c-content h1 {
+  font-size: unset;
+  font-weight: unset;
+  margin-bottom: unset;
+  padding-top: unset;
+
+  a {
+    text-decoration: unset;
+  }
+}
+
+// Overrides app/assets/stylesheets/provider/_commons.scss:70
+.pf-c-content p {
+  margin: unset;
 }

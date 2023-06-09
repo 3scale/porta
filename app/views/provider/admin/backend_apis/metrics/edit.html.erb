@@ -1,6 +1,6 @@
 
 <% method_or_metric = @metric.child? ? "method" : "metric" %>
-<% content_for :sublayout_title, "Edit #{method_or_metric.capitalize}" %>
+<% content_for :page_header_title, "Edit #{method_or_metric.capitalize}" %>
 
 <%= semantic_form_for @metric, :url => provider_admin_backend_api_metric_path(@backend_api, @metric) do |form| %>
   <%= render 'form_edit', form: form, backend_api: @backend_api, metric: @metric %>

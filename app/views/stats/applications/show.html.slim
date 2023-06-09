@@ -1,6 +1,7 @@
-= render 'provider/admin/applications/menu'
+- content_for :menu do
+  = render 'provider/admin/applications/menu'
 
-h2 Traffic statistics for #{@cinstance.display_name} /  #{@cinstance.user_account.org_name}
+- content_for :page_header_title, "Traffic statistics for #{@cinstance.display_name} / #{@cinstance.user_account.org_name}"
 
 - content_for :stylesheets do
   = stylesheet_link_tag 'jquery-ui/1.11.4/jquery-ui.css'

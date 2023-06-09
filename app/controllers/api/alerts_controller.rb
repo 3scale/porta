@@ -65,10 +65,6 @@ class Api::AlertsController < FrontendController
     end
   end
 
-  def sublayout
-    :stats if @service
-  end
-
   private
 
   def search_params

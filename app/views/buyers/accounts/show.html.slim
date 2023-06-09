@@ -1,10 +1,15 @@
-= render 'menu'
-h1 data-hook="account-show"
-  ' Account: #{@account.org_name}
-  - if can? :update, @account
-     = pf_link_to 'Edit',
-        edit_admin_buyers_account_path(@account),
-        class: 'action edit'
+- content_for :menu do
+  = render 'menu'
+
+- content_for :custom_page_header do
+  section class="pf-c-page__main-section pf-m-light"
+    div class="pf-c-content"
+      h1 data-hook="account-show"
+        ' Account: #{@account.org_name}
+        - if can? :update, @account
+          = pf_link_to 'Edit',
+              edit_admin_buyers_account_path(@account),
+              class: 'action edit'
 #twoCol.equal-width
   .left
     .wide_dashboard_card.round

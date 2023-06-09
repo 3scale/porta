@@ -1,4 +1,4 @@
-<h1>New Redirect</h1>
+<% content_for :page_header_title, 'New Redirect' %>
 
 <%= semantic_form_for @redirect, :url => provider_admin_cms_redirects_path do |f| %>
   <%= render :partial => 'form', :object => f %>
