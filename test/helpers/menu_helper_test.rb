@@ -56,6 +56,7 @@ class MenuHelperTest < ActionView::TestCase
     expects(:current_user).returns(FactoryBot.create(:simple_user))
     expects(:documentation_items).returns([])
     expects(:impersonating?).returns(false)
+    expects(:vertical_nav_hidden?).returns(true)
 
     data = masthead_props.as_json
 
@@ -67,6 +68,7 @@ class MenuHelperTest < ActionView::TestCase
     assert_not_nil data['documentationMenuItems']
     assert_not_nil data['impersonating']
     assert_not_nil data['signOutHref']
+    assert_not_nil data['verticalNavHidden']
   end
 
   test '#context_selector_props' do
