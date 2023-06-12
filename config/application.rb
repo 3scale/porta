@@ -286,24 +286,24 @@ module System
       config.three_scale.oauth2 = config_for(:oauth2)
     end
 
+    Rails.application.config.paperclip_defaults = {
+      storage: :s3,
+      s3_credentials: ->(*) { CMS::S3.credentials },
+      bucket: ->(*) { CMS::S3.bucket },
+      s3_protocol: ->(*) { CMS::S3.protocol },
+      s3_permissions: 'private',
+      s3_headers: { "checksum-algorithm" => "SHA256" },
+      s3_region: ->(*) { CMS::S3.region },
+      s3_host_name: ->(*) { CMS::S3.hostname },
+      url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',
+      path: ':rails_root/public/system/:url'
+    }.merge(Rails.application.try_config_for(:paperclip) || {})
+
     config.to_prepare do
       Rails.application.initializer :log_formatter, after: :initialize_logger do
         Rails.application.config.log_formatter = System::ErrorReporting::LogFormatter.new
         (Rails.application.config.logger || Rails.logger).formatter = Rails.application.config.log_formatter
       end
-
-      Rails.application.config.paperclip_defaults = {
-        storage: :s3,
-        s3_credentials: ->(*) { CMS::S3.credentials },
-        bucket: ->(*) { CMS::S3.bucket },
-        s3_protocol: ->(*) { CMS::S3.protocol },
-        s3_permissions: 'private',
-        s3_headers: { "checksum-algorithm" => "SHA256" },
-        s3_region: ->(*) { CMS::S3.region },
-        s3_host_name: ->(*) { CMS::S3.hostname },
-        url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',
-        path: ':rails_root/public/system/:url'
-      }.merge(Rails.application.try_config_for(:paperclip) || {})
 
       Rails.application.initializer :paperclip_defaults, after: :load_config_initializers do
         Paperclip::Attachment.default_options.merge!(s3_options: CMS::S3.options) # Paperclip does not accept s3_options set as a Proc
