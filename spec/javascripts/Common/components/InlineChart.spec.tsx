@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
-import c3 from 'c3'
+import { generate } from 'c3'
 
+import { InlineChart } from 'Common/components/InlineChart'
 import * as utils from 'utilities/fetchData'
-import { InlineChart } from 'Stats/inlinechart'
 import { waitForPromises } from 'utilities/test-utils'
 
 // Mocking moment.js
@@ -56,7 +56,7 @@ it('should generate chart', async () => {
   const wrapper = mountWrapper()
 
   await waitForPromises(wrapper)
-  expect(c3.generate).toHaveBeenCalledWith(expect.any(Object))
+  expect(generate).toHaveBeenCalledWith(expect.any(Object))
 })
 
 it('should print the correct label depending on the total of data', async () => {
