@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_08_155529) do
+ActiveRecord::Schema.define(version: 2023_06_12_105944) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -754,6 +754,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "updated_at", precision: 6
     t.integer "tenant_id", precision: 38
     t.binary "service_ids"
+    t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
   create_table "message_recipients", force: :cascade do |t|
