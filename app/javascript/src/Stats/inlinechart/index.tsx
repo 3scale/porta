@@ -8,8 +8,6 @@ import { fetchData } from 'utilities/fetchData'
 import type { IRecord } from 'Types'
 import type { FunctionComponent } from 'react'
 
-import './InlineChart.scss'
-
 interface Props {
   endPoint: string;
   metricName: string;
