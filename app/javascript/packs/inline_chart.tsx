@@ -1,6 +1,6 @@
-import { render } from 'react-dom'
+import { InlineChartWrapper as InlineChart } from 'Common/components/InlineChart'
 
-import { InlineChart } from 'Stats/inlinechart'
+import type { Props as InlineChartProps } from 'Common/components/InlineChart'
 
 import './inline_chart.scss'
 
@@ -12,30 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  function renderChart (chart: HTMLElement) {
-    const currentChart = chart.querySelector<HTMLElement>('.inline-chart-container')
+  const charts = container.querySelectorAll<HTMLDivElement>('.charts.inlinechart')
 
-    if (!currentChart) {
+  charts.forEach(chart => {
+    const chartContainer = chart.querySelector<HTMLElement>('.inline-chart-container')
+
+    if (!chartContainer) {
       throw new Error('Inline chart container not found')
     }
 
-    const { endpoint, metricName, title } = currentChart.dataset
-    const { unitPluralized } = chart.dataset
+    // Props defined in app/views/stats/_inlinechart.html.erb
+    const props = chartContainer.dataset as unknown as InlineChartProps
 
-    if (!endpoint || !metricName || !title || !unitPluralized) {
-      throw new Error('Missing some props')
-    }
-
-    render((
-      <InlineChart
-        endPoint={endpoint}
-        metricName={metricName}
-        title={title}
-        unitPluralized={unitPluralized}
-      />
-    ), currentChart)
-  }
-
-  container.querySelectorAll<HTMLElement>('.charts')
-    .forEach(renderChart)
+    InlineChart(props, chartContainer.id)
+  })
 })

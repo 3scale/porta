@@ -9,15 +9,15 @@
 <div id="mini-charts">
   <% Array.wrap(metrics).each do |metric| %>
     <% endpoint ||= usage_stats_api_services_path(metric.backend_api_metric? ? nil : metric.owner_id) %>
-    <div class="charts inlinechart" id="chart-<%= metric.id %>" data-unit-pluralized="<%= metric.unit.pluralize %>" data-metric="<%= metric.name %>" data-source="<%= endpoint %>">
+    <div class="charts inlinechart" id="chart-<%= metric.id %>">
       <%= content_tag :div,
         class: "inline-chart-container",
         id: "inline-chart-container-#{metric.id}",
         data: {
-          "endpoint": "#{endpoint}",
-          "metric-name": "#{metric.name}",
-          "metric-id": "#{metric.id}",
-          "title": "#{metric.friendly_name}"
+          "unit-pluralized": metric.unit.pluralize,
+          "end-point": endpoint,
+          "metric-name": metric.name,
+          "title": metric.friendly_name
         } do %>
       <% end %>
     </div>
