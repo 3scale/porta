@@ -79,20 +79,18 @@ const InlineChart: FunctionComponent<Props> = ({
     })
   }
 
-  function pluralizeUnit (unitD: string, totalD: number): string {
-    if (!unitD.endsWith('s') && totalD !== 1) {
+  function pluralizeUnit (data: Data): string {
+    if (!data.metric.unit.endsWith('s') && data.total !== 1) {
       return unitPluralized
     }
-    return unit
+    return data.metric.unit
   }
 
   function updateState (data: Data) {
-    const unitD = pluralizeUnit(data.metric.unit, data.total)
-
     generateC3Chart(data.values)
     setLoading(false)
     setTotal(data.total)
-    setUnit(unitD)
+    setUnit(pluralizeUnit(data))
   }
 
   function getURL (): URL {
