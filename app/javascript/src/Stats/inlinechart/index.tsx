@@ -1,58 +1,61 @@
-import { Component, createRef } from 'react'
-import c3 from 'c3'
-import { fetchData } from 'utilities/fetchData'
+import { useEffect, useRef, useState } from 'react'
+import { generate } from 'c3'
 import moment from 'moment'
 import numeral from 'numeral'
 
-type Props = {
-  endPoint: string,
-  metricName: string,
-  title: string,
-  unitPluralized: string
+import { fetchData } from 'utilities/fetchData'
+
+import type { IRecord } from 'Types'
+import type { FunctionComponent } from 'react'
+
+interface Props {
+  endPoint: string;
+  metricName: string;
+  title: string;
+  unitPluralized: string;
 }
 
-type State = {
-  loading: boolean,
-  title: string,
-  total: string,
-  values: Array<number>,
-  unit: string,
-  unitPluralized: string
+interface Data {
+  application: IRecord & {
+    account: IRecord & {
+      link: string;
+    };
+    description: string;
+    link: string;
+    plan: IRecord;
+    service: { id: number };
+    state: string;
+  };
+  period: {
+    name: string | null;
+    since: string;
+    until: string;
+    timezone: string;
+    granularity: string;
+  };
+  metric: IRecord & {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    system_name: string;
+    unit: string;
+  };
+  total: number;
+  values: number[];
 }
 
-type RefObject = {
-  current: null | HTMLDivElement
-}
+const InlineChart: FunctionComponent<Props> = ({
+  endPoint,
+  metricName,
+  title,
+  unitPluralized
+}) => {
+  const c3ChartContainer = useRef<HTMLDivElement>(null)
+  const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [unit, setUnit] = useState('')
 
-type DataMetric = {
-  unit: string
-}
-
-type Data = {
-  metric: DataMetric,
-  total: number,
-  values: Array<number>
-}
-
-class InlineChart extends Component<Props, State> {
-  c3ChartContainer: RefObject;
-
-  constructor (props: Props) {
-    super(props)
-    this.c3ChartContainer = createRef()
-    this.state = {
-      loading: true,
-      title: this.props.title,
-      total: '',
-      values: [],
-      unit: '',
-      unitPluralized: this.props.unitPluralized
-    }
-  }
-
-  generateC3Chart () {
-    const nodeElem = this.c3ChartContainer.current
-    c3.generate({
+  function generateC3Chart (values: number[]) {
+    const nodeElem = c3ChartContainer.current
+    generate({
       bindto: nodeElem,
       axis: {
         x: { show: false },
@@ -62,15 +65,13 @@ class InlineChart extends Component<Props, State> {
       point: { show: false },
       data: {
         columns: [
-          [...this.state.values] as any // FIXME: number not assignable to string
+          [metricName, ...values]
         ]
       },
       tooltip: {
-        contents: function (d) {
-          return `<span><i class='tooltip-dot'></i> ${d[0].value}</span>`
-        }
+        contents: (d) => `<span><i class='tooltip-dot'></i> ${d[0].value}</span>`
       },
-      onresize: function () {
+      onresize: () => {
         if (nodeElem !== null) {
           nodeElem.style.maxHeight = 'none'
         }
@@ -78,31 +79,21 @@ class InlineChart extends Component<Props, State> {
     })
   }
 
-  getTotalAsString (total: number, unit: string): string {
-    return `${numeral(total).format('0,0')} ${unit.substring(0, 10)}`
-  }
-
-  pluralizeUnit (unit: string, total: number): string {
-    if (unit.slice(-1) !== 's' && total !== 1) {
-      return this.state.unitPluralized
+  function pluralizeUnit (data: Data): string {
+    if (!data.metric.unit.endsWith('s') && data.total !== 1) {
+      return unitPluralized
     }
-    return unit
+    return data.metric.unit
   }
 
-  updateState (data: Data) {
-    const unit = this.pluralizeUnit(data.metric.unit, data.total)
-    const total = this.getTotalAsString(data.total, unit)
-
-    this.setState({
-      loading: false,
-      total,
-      unit,
-      values: data.values
-    }, () => this.generateC3Chart())
+  function updateState (data: Data) {
+    generateC3Chart(data.values)
+    setLoading(false)
+    setTotal(data.total)
+    setUnit(pluralizeUnit(data))
   }
 
-  getURL (): URL {
-    const { endPoint, metricName } = this.props
+  function getURL (): URL {
     const today = moment(new Date())
     const until = today.format('YYYY-MM-DD')
     const since = today.subtract(30, 'day').format('YYYY-MM-DD')
@@ -115,26 +106,26 @@ class InlineChart extends Component<Props, State> {
     return url
   }
 
-  async componentDidMount () {
-    const url = this.getURL().toString()
-    const response = await fetchData<Data>(url)
-    this.updateState(response)
-  }
+  useEffect(() => {
+    const url = getURL().toString()
+    void fetchData<Data>(url).then(updateState)
+  }, [])
 
-  render () {
-    const { loading, title, total } = this.state
-    return (
-      <div>
-        <div className={ `loading ${loading ? '' : 'hide'}` }>
-          <i className="fa fa-spinner fa-spin"></i>
+  return (
+    <>
+      {loading && (
+        <div className="loading">
+          <i className="fa fa-spinner fa-spin" />
         </div>
-        <div title={title} className="metric-name">{title}</div>
-        <div className="total">{total}</div>
-        <div className="inline-chart-graph" ref={this.c3ChartContainer}></div>
+      )}
+      <div className="metric-name" title={title}>{title}</div>
+      <div className="total">
+        {`${numeral(total).format('0,0')} ${unit.substring(0, 10)}`}
       </div>
-    )
-  }
+      <div className="inline-chart-graph" ref={c3ChartContainer} />
+    </>
+  )
 }
 
-export type { Props, State }
+export type { Props }
 export { InlineChart }

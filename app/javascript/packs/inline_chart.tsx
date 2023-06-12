@@ -2,6 +2,8 @@ import { render } from 'react-dom'
 
 import { InlineChart } from 'Stats/inlinechart'
 
+import './inline_chart.scss'
+
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'mini-charts'
   const container = document.getElementById(containerId)
