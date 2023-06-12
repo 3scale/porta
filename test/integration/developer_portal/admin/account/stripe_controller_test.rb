@@ -7,7 +7,9 @@ module DeveloperPortal
     include System::UrlHelpers.cms_url_helpers
 
     def setup
-      @provider = FactoryBot.create(:provider_account, payment_gateway_type: :stripe, payment_gateway_options: {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'})
+      secret_key = 'sk_test_fake_4eC39HqLyjWDarjtT1zdp7dc' # gitleaks:allow
+      publishable_key = 'pk_test_fake_TYooMQauvdEDq54NiTphI7jx' # gitleaks:allow
+      @provider = FactoryBot.create(:provider_account, payment_gateway_type: :stripe, payment_gateway_options: {login: secret_key, publishable_key: publishable_key})
       provider.settings.allow_finance!
       provider.settings.show_finance!
 
@@ -18,7 +20,9 @@ module DeveloperPortal
     attr_reader :provider, :buyer
 
     test '#show' do
-      setup_intent = Stripe::SetupIntent.new(id: 'seti_1I5s0l2eZvKYlo2CjumP89gc').tap { |si| si.update_attributes(client_secret: 'seti_1I6Fs82eZvKYlo2COrbF4OYY_secret_IhfCWxVPnPaXIYPlr9ORrd5noJDnDW7') }
+      intent_id = 'seti_fake_1I5s0l2eZvKYlo2CjumP89gc' # gitleaks:allow
+      client_secret = 'seti_fake_1I6Fs82eZvKYlo2COrbF4OYY_secret_IhfCWxVPnPaXIYPlr9ORrd5noJDnDW7' # gitleaks:allow
+      setup_intent = Stripe::SetupIntent.new(id: intent_id).tap { |si| si.update_attributes(client_secret: client_secret) }
       PaymentGateways::StripeCrypt.any_instance.expects(:create_stripe_setup_intent).returns(setup_intent)
 
       get admin_account_stripe_path
@@ -29,7 +33,7 @@ module DeveloperPortal
     end
 
     test '#hosted_success' do
-      payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'
+      payment_method_id = 'pm_fake_1I5s3n2eZvKYlo2CiO193T69' # gitleaks:allow
 
       PaymentGateways::StripeCrypt.any_instance.expects(:update!).with(payment_method_id).returns(true)
 
