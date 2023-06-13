@@ -7,8 +7,8 @@ module DeveloperPortal
     include System::UrlHelpers.cms_url_helpers
 
     def setup
-      secret_key = 'sk_test_fake_secret_key' # gitleaks:allow
-      publishable_key = 'pk_test_fake_publishable_key' # gitleaks:allow
+      secret_key = 'sk_test_fake_secret_key'
+      publishable_key = 'pk_test_fake_publishable_key'
       @provider = FactoryBot.create(:provider_account, payment_gateway_type: :stripe, payment_gateway_options: {login: secret_key, publishable_key: publishable_key})
       provider.settings.allow_finance!
       provider.settings.show_finance!
@@ -20,7 +20,7 @@ module DeveloperPortal
     attr_reader :provider, :buyer
 
     test '#show' do
-      client_secret = 'seti_fake_client_secret' # gitleaks:allow
+      client_secret = 'seti_fake_client_secret'
       setup_intent = Stripe::SetupIntent.new(id: 'seti_fake_setup_intent_id').tap { |si| si.update_attributes(client_secret: client_secret) }
       PaymentGateways::StripeCrypt.any_instance.expects(:create_stripe_setup_intent).returns(setup_intent)
 
