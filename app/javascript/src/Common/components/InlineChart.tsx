@@ -4,6 +4,7 @@ import moment from 'moment'
 import numeral from 'numeral'
 
 import { fetchData } from 'utilities/fetchData'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { IRecord } from 'Types'
 import type { FunctionComponent } from 'react'
@@ -127,5 +128,8 @@ const InlineChart: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
+const InlineChartWrapper = (props: Props, containerId: string): void => { createReactWrapper(<InlineChart {...props} />, containerId) }
+
 export type { Props }
-export { InlineChart }
+export { InlineChart, InlineChartWrapper }
