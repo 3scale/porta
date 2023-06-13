@@ -11,7 +11,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
   end
 
   teardown do
-    clear_locks
+    clear_billing_locks
   end
 
   test 'perform' do

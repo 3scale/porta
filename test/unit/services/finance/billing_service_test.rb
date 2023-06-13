@@ -11,7 +11,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    clear_locks
+    clear_billing_locks
   end
 
   test 'enqueues a sidekiq worker' do
@@ -87,7 +87,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     end
 
     teardown do
-      clear_locks
+      clear_billing_locks
     end
 
     test 'enqueues sidekiq worker' do

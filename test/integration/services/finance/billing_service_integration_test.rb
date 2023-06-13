@@ -13,7 +13,7 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    clear_locks
+    clear_billing_locks
   end
 
   class ConcurrentBillingCalls < Finance::BillingServiceIntegrationTest
@@ -50,7 +50,7 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
 
     10.times do |iteration|
       concurrent_billing_perform(iteration: iteration, isolation: isolation)
-      clear_locks
+      clear_billing_locks
     end
   end
 
