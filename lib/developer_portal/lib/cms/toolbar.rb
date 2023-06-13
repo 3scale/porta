@@ -103,7 +103,7 @@ module CMS::Toolbar
 
     controller = self
 
-    view = View.new(lookup_context, cms_toolbar.assigns, controller, [:html])
+    view = View.new(lookup_context, cms_toolbar.assigns, controller)
     view._routes = _routes
     view.render 'shared/cms/toolbar',
                 :site_account => site_account,
