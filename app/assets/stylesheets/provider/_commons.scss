@@ -50,12 +50,12 @@ h2, h3 {
   padding: line-height-times(1);
 }
 
-h2 {
+.pf-c-page__main-section h2 {
   font-weight: $font-weight-bold;
   font-size: $secondary-title-font-size;
 }
 
-h3 {
+.pf-c-page__main-section h3 {
   font-size: $sub-title-font-size;
   margin-bottom: 0;
 
@@ -68,8 +68,9 @@ p {
   margin: line-height-times(1/2) 0 line-height-times(1) 0;
 }
 
-h1 + p,
-h2 + p {
+// HACK: this gives card-like style to all pre-existing divs
+:not(.pf-c-content) > h1 + p,
+:not(.pf-c-content) > h2 + p {
   background-color: $body-background;
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
