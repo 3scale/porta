@@ -2,36 +2,36 @@
 
 require 'test_helper'
 
-class Segment::DeleteUsersServiceTest < ActiveSupport::TestCase
-  class RightResponseTest < Segment::DeleteUsersServiceTest
+class SegmentIntegration::DeleteUsersServiceTest < ActiveSupport::TestCase
+  class RightResponseTest < SegmentIntegration::DeleteUsersServiceTest
     test '#call does the right request to delete' do
       request = delete_request(status: 200)
 
-      assert Segment::DeleteUsersService.call(user_ids)
+      assert SegmentIntegration::DeleteUsersService.call(user_ids)
       assert_requested request
     end
 
     test '#call does nothing if the config is disabled' do
       Features::SegmentDeletionConfig.stubs(enabled?: false) do
-        refute Segment::DeleteUsersService.call(user_ids)
+        refute SegmentIntegration::DeleteUsersService.call(user_ids)
       end
     end
   end
 
-  class WrongResponseTest < Segment::DeleteUsersServiceTest
+  class WrongResponseTest < SegmentIntegration::DeleteUsersServiceTest
     test 'server error' do
       delete_request(status: 500)
-      assert_raise(::Segment::ServerError) { Segment::DeleteUsersService.call(user_ids) }
+      assert_raise(::SegmentIntegration::ServerError) { SegmentIntegration::DeleteUsersService.call(user_ids) }
     end
 
     test 'client error' do
       delete_request(status: 400)
-      assert_raise(::Segment::ClientError) { Segment::DeleteUsersService.call(user_ids) }
+      assert_raise(::SegmentIntegration::ClientError) { SegmentIntegration::DeleteUsersService.call(user_ids) }
     end
 
     test 'any other status' do
       delete_request(status: 300)
-      assert_raise(::Segment::UnexpectedResponseError) { Segment::DeleteUsersService.call(user_ids) }
+      assert_raise(::SegmentIntegration::UnexpectedResponseError) { SegmentIntegration::DeleteUsersService.call(user_ids) }
     end
   end
 
