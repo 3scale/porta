@@ -2,6 +2,7 @@
 
 require 'test_helper'
 
+# WARNING: flakiness in these tests means a bug
 class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
   include BillingResultsTestHelpers
 
@@ -20,31 +21,50 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
     disable_transactional_fixtures!
 
     setup do
-      # provider.stubs(:payment_gateway_configured?).returns(true) # delete, not needed
       provider.billing_strategy.update(charging_enabled: true)
     end
 
-    # WARNING: flakiness here means a bug
     test "concurrent billing calls without transaction" do
       concurrent_billing_check(isolation: :none)
     end
 
-    # WARNING: flakiness here means a bug
-    # test "concurrent billing calls with read_committed" do
-    #   concurrent_billing_check(isolation: :read_committed)
-    # end
-    #
-    # # WARNING: flakiness here means a bug
-    # test "concurrent billing calls with repeatable_read" do
-    #   concurrent_billing_check(isolation: :repeatable_read)
-    # end
+    test "simple failed charging in current thread" do
+      Account.any_instance.expects(:charge!).raises(Finance::Payment::CreditCardError, "for the heck of it")
+      invoice = prepare_invoice
+      Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
+      assert_equal "unpaid", invoice.reload.state
+    end
+
+    test "simple successful charging in current thread" do
+      Account.any_instance.expects(:charge!).returns(true).once
+      invoice = prepare_invoice
+      Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
+      assert_equal "paid", invoice.reload.state
+    end
+
+    test "fail then succeed payment" do
+      Account.any_instance.expects(:charge!).raises(Finance::Payment::CreditCardError, "for the heck of it").once
+      invoice = prepare_invoice
+      Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
+      assert_equal "unpaid", invoice.reload.state
+
+      invoice.update({ last_charging_retry: invoice.last_charging_retry - 4.days }, without_protection: true)
+      Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
+      assert_equal "unpaid", invoice.reload.state
+
+      clear_billing_locks
+
+      Account.any_instance.expects(:charge!).returns(true).once
+      Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
+      assert_equal "paid", invoice.reload.state
+    end
   end
 
   private
 
   def concurrent_billing_check(isolation: nil)
     # verify that the actual charging was attempted only once regardless of how many times Invoice#charge! was called
-    Account.any_instance.expects(:charge!).with {sleep 1}.returns(true).times(10)
+    Account.any_instance.expects(:charge!).with { true }.returns(true).times(10)
 
     assert_not ActiveRecord::Base.connection.transaction_open?
 
@@ -55,15 +75,7 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   def concurrent_billing_perform(iteration: 1, isolation: nil)
-    invoice = FactoryBot.create(:invoice,
-                                period: Month.new(Time.zone.now.beginning_of_month),
-                                provider_account: provider,
-                                buyer_account: buyer,
-                                friendly_id: "0000-00-0000000#{iteration}")
-    billing = Finance::BackgroundBilling.new(invoice)
-    billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
-    invoice.issue_and_pay_if_free!
-    assert_not_equal "paid", invoice.reload.state
+    invoice = prepare_invoice(iteration: iteration)
 
     workers = Array.new(3) do
       Thread.new do
@@ -84,14 +96,25 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal "paid", invoice.reload.state
   end
 
-  def with_transaction_isolation(isolation)
+  def prepare_invoice(iteration: 1)
+    invoice = FactoryBot.create(:invoice,
+                                period: Month.new(Time.zone.now.beginning_of_month),
+                                provider_account: provider,
+                                buyer_account: buyer,
+                                friendly_id: "0000-00-0000000#{iteration}")
+    billing = Finance::BackgroundBilling.new(invoice)
+    billing.create_line_item!(name: 'Fake', cost: 1.233, description: 'really', quantity: 1)
+    invoice.issue_and_pay_if_free!
+    assert_not_equal "paid", invoice.reload.state
+    invoice
+  end
+
+  def with_transaction_isolation(isolation, &block)
     case isolation
     when :none
       yield
     else
-      ActiveRecord::Base.transaction(requires_new: true, isolation: isolation) do
-        yield
-      end
+      ActiveRecord::Base.transaction(requires_new: true, isolation: isolation, &block)
     end
   end
 end
