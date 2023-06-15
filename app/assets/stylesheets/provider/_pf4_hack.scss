@@ -3,23 +3,6 @@
 // Some may be outdated or badly implemented. TODO: review and cleanup.
 //
 
-// HACK: Some PF classes still collapses with ours.
-// As we are still using both PF and not-PF links, we need this
-button.action.pf-c-button {
-
-  padding: 0 var(--pf-global--spacer--md);
-
-  &.pf-m-primary,
-  &.pf-m-danger {
-    color: $white;
-  }
-
-  &.pf-m-secondary {
-    color: var(--pf-c-button--m-secondary--Color);
-  }
-
-}
-
 a.action.pf-c-button {
   color: $success-color;
 

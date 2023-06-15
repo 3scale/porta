@@ -35,7 +35,7 @@ table button.action {
 }
 
 a.action,
-button.action,
+button.action:not(.pf-c-button),
 form.button-to button.action[type="submit"]:not(.pf-c-button),
 input[type='submit'].action {
     width: auto;
