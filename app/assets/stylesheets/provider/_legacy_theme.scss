@@ -5,9 +5,12 @@ div.wide_dashboard_card,
 div.narrow_dashboard_card {
   @include white-box-shadow;
   border: 0;
-  margin-bottom: line-height-times(1);
   padding: line-height-times(1);
   overflow: hidden;
+
+  &:not(:last-child) {
+    margin-bottom: line-height-times(1);
+  }
 
   &> table.list:first-child {
     margin-top: line-height-times(-1/2);
@@ -26,14 +29,12 @@ div.narrow_dashboard_card {
 div.left {
   float: left;
   width: calc(50% - #{line-height-times(1)});
-  padding-bottom: line-height-times(1);
 }
 
 div.right,
 div.right_narrow {
   float: right;
   width: calc(50% - #{line-height-times(1)});
-  padding-bottom: line-height-times(1);
 }
 
 .self_clear {

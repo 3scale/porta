@@ -18,6 +18,8 @@ body {
 }
 
 .Main {
+  padding-bottom: 1.5rem;
+
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }
