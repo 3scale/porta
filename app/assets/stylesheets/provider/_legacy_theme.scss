@@ -26,13 +26,14 @@ div.narrow_dashboard_card {
 div.left {
   float: left;
   width: calc(50% - #{line-height-times(1)});
+  padding-bottom: line-height-times(1);
 }
 
 div.right,
 div.right_narrow {
   float: right;
   width: calc(50% - #{line-height-times(1)});
-  padding-bottom: line-height-times(1/2);
+  padding-bottom: line-height-times(1);
 }
 
 .self_clear {
