@@ -41,7 +41,7 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
   property :user_id, getter: ->(opts) { opts[:user].id }
   property :role, getter: ->(opts) { opts[:user].role }
 
-  collection :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections&.sort }
+  collection :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections }
   collection :allowed_service_ids, getter: ->(opts) { opts[:user].allowed_service_ids }, render_nil: true
 
   class JSON < MemberPermissionsRepresenter
@@ -57,7 +57,7 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
     include Roar::XML
     wraps_resource :permissions
 
-    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections&.sort }
+    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections }
     collection :allowed_service_ids, as: :allowed_service_id, wrap: :allowed_service_ids, getter: ->(opts) { opts[:user].allowed_service_ids }
   end
 
