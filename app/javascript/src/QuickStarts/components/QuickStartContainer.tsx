@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// import {
-//   QuickStartContainer as PF4QuickStartContainer,
-//   QuickStartCatalogPage,
-//   useLocalStorage
-// } from '@patternfly/quickstarts/dist/quickstarts-full.es'
 
 import { QuickStartContainer as PF4QuickStartContainer, QuickStartCatalogPage, useLocalStorage } from '@patternfly/quickstarts'
 import { PageSection } from '@patternfly/react-core'
@@ -56,7 +51,6 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
         <div id={CATALOG_CONTAINER_ID}>
           <PageSection>
             <QuickStartCatalogPage
-              showFilter
               hint="Learn how to create, import, and run applications with step-by-step instructions and tasks."
               title="Quick starts"
             />
