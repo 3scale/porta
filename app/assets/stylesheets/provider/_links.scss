@@ -16,13 +16,6 @@ a {
   }
 }
 
-table a.action,
-table button.action {
-  margin: line-height-times(-1/4) 0 line-height-times(-1/4) line-height-times(1/4);
-  white-space: nowrap;
-  display: inline-block;
-}
-
 @mixin iconic($content) {
   font-family: FontAwesome;
   font-weight: $font-weight-normal;
@@ -34,8 +27,8 @@ table button.action {
   content: $content;
 }
 
-a.action,
-button.action,
+a.action:not(.pf-c-button),
+button.action:not(.pf-c-button),
 form.button-to button.action[type="submit"]:not(.pf-c-button),
 input[type='submit'].action {
     width: auto;

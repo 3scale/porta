@@ -54,7 +54,7 @@ textarea {
   height: line-height-times(4.5);
 }
 
-button {
+button:not(.pf-c-button) {
   min-width: line-height-times(2);
   width: auto;
 }
