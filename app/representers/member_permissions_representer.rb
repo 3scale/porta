@@ -9,8 +9,8 @@
 #   <user_id>10</user_id>
 #   <role>member</role>
 #   <allowed_sections>
-#     <admin_section>portal</admin_section>
 #     <admin_section>monitoring</admin_section>
+#     <admin_section>portal</admin_section>
 #     <admin_section>settings</admin_section>
 #   </allowed_sections>
 #   <allowed_service_ids>
@@ -26,7 +26,7 @@
 #     "user_id": 10,
 #     "role": "member",
 #     "allowed_service_ids": [ 2, 3 ],
-#     "allowed_sections": [ "portal", "monitoring", "settings" ],
+#     "allowed_sections": [ "monitoring", "portal", "settings" ],
 #     "links": [{
 #         "rel": "user",
 #         "href": "http://provider-admin.3scale.net/admin/api/accounts/2/users/10"
@@ -41,7 +41,7 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
   property :user_id, getter: ->(opts) { opts[:user].id }
   property :role, getter: ->(opts) { opts[:user].role }
 
-  collection :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections }
+  collection :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections&.sort }
   collection :allowed_service_ids, getter: ->(opts) { opts[:user].allowed_service_ids }, render_nil: true
 
   class JSON < MemberPermissionsRepresenter
@@ -57,7 +57,7 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
     include Roar::XML
     wraps_resource :permissions
 
-    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections }
+    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(opts) { opts[:user].allowed_sections&.sort }
     collection :allowed_service_ids, as: :allowed_service_id, wrap: :allowed_service_ids, getter: ->(opts) { opts[:user].allowed_service_ids }
   end
 
