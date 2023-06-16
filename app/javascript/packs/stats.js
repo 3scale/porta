@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import { statsApplication } from 'Stats/buyer'
+import { statsApplication } from 'Stats/buyer/stats_application'
 
 window.$ = $
 window.Stats = { statsApplication }
