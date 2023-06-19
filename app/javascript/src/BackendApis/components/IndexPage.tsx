@@ -14,7 +14,7 @@ import {
 } from '@patternfly/react-core'
 
 import { Pagination } from 'Common/components/Pagination'
-import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
@@ -84,7 +84,7 @@ const IndexPage: FunctionComponent<Props> = ({
         <Toolbar id="top-toolbar">
           <ToolbarContent>
             <ToolbarItem variant="search-filter">
-              <SearchInputWithSubmitButton placeholder="Find a backend" />
+              <ToolbarSearch placeholder="Find a backend" />
             </ToolbarItem>
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={backendsCount} />

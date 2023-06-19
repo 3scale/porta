@@ -14,7 +14,7 @@ interface Props {
 const INPUT_NAME_QUERY = 'search[query]'
 const INPUT_NAME_UTF8 = 'utf8'
 
-const SearchInputWithSubmitButton: React.FunctionComponent<Props> = ({
+const ToolbarSearch: React.FunctionComponent<Props> = ({
   placeholder,
   name = INPUT_NAME_QUERY
 }) => {
@@ -75,7 +75,7 @@ const SearchInputWithSubmitButton: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const SearchInputWithSubmitButtonWrapper = (props: Props, containerId: string): void => { createReactWrapper(<SearchInputWithSubmitButton {...props} />, containerId) }
+const ToolbarSearchWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ToolbarSearch {...props} />, containerId) }
 
 export type { Props }
-export { SearchInputWithSubmitButton, SearchInputWithSubmitButtonWrapper }
+export { ToolbarSearch, ToolbarSearchWrapper }

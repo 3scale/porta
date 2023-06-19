@@ -9,7 +9,7 @@ import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon'
 
 import { Pagination } from 'Common/components/Pagination'
-import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { TabKey } from 'Metrics/types'
 import type { Metric } from 'Types'
@@ -65,7 +65,7 @@ const MetricsTable: FunctionComponent<Props> = ({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <SearchInputWithSubmitButton name="query" placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} />
+            <ToolbarSearch name="query" placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} />
           </ToolbarItem>
           <ToolbarItem>
             {createButton}

@@ -14,7 +14,7 @@ import {
 import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 
 import { Pagination } from 'Common/components/Pagination'
-import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { Product } from 'Products/types'
@@ -84,7 +84,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
         <Toolbar id="top-toolbar">
           <ToolbarContent>
             <ToolbarItem variant="search-filter">
-              <SearchInputWithSubmitButton placeholder="Find a product" />
+              <ToolbarSearch placeholder="Find a product" />
             </ToolbarItem>
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={productsCount} />

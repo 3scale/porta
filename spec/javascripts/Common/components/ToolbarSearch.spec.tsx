@@ -2,16 +2,16 @@ import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 import { Popover, SearchInput } from '@patternfly/react-core'
 
-import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { mockLocation } from 'utilities/test-utils'
 
-import type { Props } from 'Common/components/SearchInputWithSubmitButton'
+import type { Props } from 'Common/components/ToolbarSearch'
 
 const defaultProps = {
   placeholder: ''
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<SearchInputWithSubmitButton {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ToolbarSearch {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

@@ -13,7 +13,7 @@ import {
 } from '@patternfly/react-table'
 
 import { Pagination } from 'Common/components/Pagination'
-import { SearchInputWithSubmitButton } from 'Common/components/SearchInputWithSubmitButton'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { IActionsResolver, ISortBy, OnSort } from '@patternfly/react-table'
 import type { Action, Plan } from 'Types'
@@ -72,7 +72,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <SearchInputWithSubmitButton placeholder="Find a plan" />
+            <ToolbarSearch placeholder="Find a plan" />
           </ToolbarItem>
           <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
             <Pagination itemCount={count} />
