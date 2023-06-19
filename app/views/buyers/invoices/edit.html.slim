@@ -1,4 +1,5 @@
-= render 'buyers/accounts/menu'
+- content_for :menu do
+  = render 'buyers/accounts/menu'
 
 = render '/finance/provider/shared/invoice_title', invoice: @invoice
 

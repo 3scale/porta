@@ -7,17 +7,13 @@ body {
   overflow: hidden;
 }
 
-#border {
-  min-height: calc(100vh - 92px); // Header's height
-  position: relative;
-  text-align: left;
-}
-
 #nav {
   height: auto;
 }
 
 .Main {
+  padding-bottom: 1.5rem;
+
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }
