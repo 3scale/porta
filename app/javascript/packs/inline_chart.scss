@@ -1,0 +1,67 @@
+#mini-charts {
+  .charts.inlinechart {
+    background: #fff;
+    border: 1px solid #d1d1d1;
+    border-radius: calc(1.5rem / 8);
+    height: 5.25rem;
+    margin-bottom: calc(1.5rem / 2);
+    margin-top: calc(1.5rem / 2);
+    max-width: 100%;
+    min-width: 0;
+    position: relative;
+    width: auto;
+
+    .loading {
+      background: white;
+      bottom: 0;
+      color: #393f44;
+      left: 0;
+      padding-top: 1.5rem;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .metric-name {
+      color: #8b8d8f;
+      float: right;
+      margin: calc(1.5rem / 4) calc(1.5rem * 1 / 2) 0 0;
+      margin-top: calc(1.5rem / 2);
+      overflow: hidden;
+      position: relative;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: calc(20% - 1.5rem / 2);
+      z-index: 1000;
+    }
+
+    .total {
+      bottom: calc(1.5rem / 2);
+      color: #8b8d8f;
+      font-size: calc(7rem / 8);
+      font-style: italic;
+      position: absolute;
+      right: calc(1.5rem / 2);
+      z-index: 0;
+    }
+
+    .inline-chart-graph {
+      height: calc(1.5rem * 3.5);
+      // max-height: 84px;
+      max-height: calc(1.5rem * 12);
+      position: relative;
+      width: 80%;
+    }
+  }
+}
+
+.c3-tooltip-container .tooltip-dot {
+  background-color: #0088ce;
+  border-radius: 50%;
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+}

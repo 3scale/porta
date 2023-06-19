@@ -22,7 +22,6 @@
     "target": "ES6",
   },
   "include": [
-    "app/javascript/src/Stats/**/*.jsx", // This module is too complex to properly migrate it to TS
     "app/javascript",
     "spec/javascripts"
   ],
