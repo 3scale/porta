@@ -20,8 +20,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 import type { Props as ManualFormProps } from 'Products/components/ManualForm'
 
-import './NewPage.scss'
-
 interface Props {
   service: ManualFormProps['service'];
   isServiceDiscoveryAccessible: boolean;
@@ -49,80 +47,6 @@ const NewPage: FunctionComponent<Props> = ({
           <Text component="h1">New Product</Text>
         </TextContent>
       </PageSection>
-
-      {/* <PageSection>
-        <Form>
-          <Card>
-            <FormFieldGroupExpandable
-              isExpanded
-              aria-label="Manual form"
-              header={
-                <FormFieldGroupHeader
-                  actions={}
-                  titleDescription=""
-                  titleText={{ text: 'Define manually', id: 'manual-form' }}
-                />
-              }
-              toggleAriaLabel="Details"
-            >
-              <FormGroup isRequired fieldId="1-expanded-group1-label1" label="Name">
-                <TextInput
-                  isRequired
-                  id="1-expanded-group1-label1"
-                  name="1-expanded-group1-label1"
-                  value="Pepe API"
-                  onChange={console.log}
-                />
-              </FormGroup>
-
-              <FormGroup isRequired fieldId="1-expanded-group1-label1" label="System name">
-                <TextInput
-                  isRequired
-                  id="1-expanded-group1-label1"
-                  name="1-expanded-group1-label1"
-                  value="pepe-api"
-                  onChange={console.log}
-                />
-              </FormGroup>
-
-              <FormGroup isRequired fieldId="1-expanded-group1-label1" label="Description">
-                <TextArea
-                  isRequired
-                  id="1-expanded-group1-label1"
-                  name="1-expanded-group1-label1"
-                  value=""
-                  onChange={console.log}
-                />
-              </FormGroup>
-            </FormFieldGroupExpandable>
-          </Card>
-
-          <Card>
-            <FormFieldGroupExpandable
-              isExpanded
-              aria-label="Service discovery form"
-              header={
-                <FormFieldGroupHeader
-                  actions={}
-                  titleDescription="Choosing this option will also create a Backend"
-                  titleText={{ text: 'Import from Openshift', id: 'service-discovery-form' }}
-                />
-              }
-              toggleAriaLabel="Details"
-            >
-              <FormGroup isRequired fieldId="1-expanded-group1-label1" label="Label 1">
-                <TextInput
-                  isRequired
-                  id="1-expanded-group1-label1"
-                  name="1-expanded-group1-label1"
-                  value="pepe"
-                  onChange={console.log}
-                />
-              </FormGroup>
-            </FormFieldGroupExpandable>
-          </Card>
-        </Form>
-      </PageSection> */}
 
       <PageSection>
         <Flex direction={{ default: 'column' }}>

@@ -46,8 +46,6 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
     }
   }
 
-  const listItemsProps = { projects, onError: setFetchErrorMessage } as const
-
   useEffect(() => {
     void fetchProjects() // TODO: don't search every time the radio button changes
   }, [])
@@ -82,7 +80,10 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
           <input id="service_source" name="service[source]" type="hidden" value="discover" />
           <CSRFToken />
 
-          <ServiceDiscoveryListItems {...listItemsProps} />
+          <ServiceDiscoveryListItems
+            projects={projects}
+            onError={setFetchErrorMessage}
+          />
 
           <ActionGroup>
             <Button isDisabled={disabled} type="submit" variant="primary">

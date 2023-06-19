@@ -16,9 +16,7 @@ interface Props {
   onError: (err: string) => void;
 }
 
-const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
-  const { projects, onError } = props
-
+const ServiceDiscoveryListItems: FunctionComponent<Props> = ({ projects, onError }) => {
   const [services, setServices] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -46,7 +44,6 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
     <>
       <FormGroup fieldId="service_namespace" label="Namespace">
         <FormSelect
-          // value={option}
           required
           aria-label="Namespace"
           id="service_namespace"
@@ -59,10 +56,9 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
       </FormGroup>
       <FormGroup fieldId="service_name" label="Name">
         <FormSelect
-          // value={option}
           required
           aria-label="Name"
-          id="service_names"
+          id="service_name"
           isDisabled={loading}
           name="service[name]"
           onChange={(value) => { void fetchServices(value ) }}
@@ -70,38 +66,6 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
           {services.map(s => <FormSelectOption key={s} label={s} value={s} />)}
         </FormSelect>
       </FormGroup>
-    </>
-  )
-
-  return (
-    <>
-      <div className="string required" id="service_name_input">
-        <label htmlFor="service_namespace">
-          Namespace
-        </label>
-        <select
-          required
-          disabled={loading}
-          id="service_namespace"
-          name="service[namespace]"
-          onChange={e => { void fetchServices(e.currentTarget.value) }}
-        >
-          {projects.map((p) => <option key={p} value={p}>{p}</option>)}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="service_name">
-          Name
-        </label>
-        <select
-          required
-          disabled={loading}
-          id="service_name"
-          name="service[name]"
-        >
-          {services.map((s) => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </div>
     </>
   )
 }

@@ -2,79 +2,113 @@ import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
 import { NewPage } from 'Products/components/NewPage'
-// Children components that use hooks cause some nasty warnings in the log. Mocking them prevents react-dom.development from complaining.
-import * as FOO from 'Products/components/ServiceDiscoveryForm'
+import { ServiceDiscoveryForm } from 'Products/components/ServiceDiscoveryForm'
+import { ManualForm } from 'Products/components/ManualForm'
 
+import type { Props } from 'Products/components/NewPage'
 import type { FormEvent } from 'react'
+import { toggleElementInCollection } from 'Users/utils'
 
-jest.mock('NewService/components/ServiceDiscoveryForm')
-jest.spyOn(FOO, 'ServiceDiscoveryForm')
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  .mockImplementation(() => (<></>))
-
-const props = {
-  template: {
-    service: {
-      name: 'New API',
-      system_name: 'new_api',
-      description: 'A brand new API'
-    },
+const defaultProps = {
+  service: {
+    name: 'New API',
+    system_name: 'new_api',
+    description: 'A brand new API',
     errors: {}
   },
-  isServiceDiscoveryAccessible: true,
-  isServiceDiscoveryUsable: true,
+  isServiceDiscoveryAccessible: false,
+  isServiceDiscoveryUsable: false,
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',
   providerAdminServiceDiscoveryServicesPath: 'my-path',
-  adminServicesPath: 'my-other-path',
-  backendApis: []
+  adminServicesPath: 'my-other-path'
 }
 
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewPage {...{ ...defaultProps, ...props }} />)
+
 it('should render itself', () => {
-  const wrapper = mount(<NewPage {...props} />)
-  expect(wrapper.exists('#new_service_source')).toEqual(true)
-  expect(wrapper.find('input[name=\'source\']').length).toEqual(2)
-})
-
-it('should render the correct form depending on which mode is selected', () => {
-  const clickEvent = (value: string) => ({ currentTarget: { value } }) as unknown as FormEvent
-  const wrapper = mount(<NewPage {...props} />)
-
-  expect(wrapper.exists('ServiceManualForm')).toEqual(true)
-  expect(wrapper.exists('ServiceDiscoveryForm')).toEqual(false)
-
-  act(() => {
-    wrapper.find('input#source_discover').props().onChange!(clickEvent(''))
-  })
-
-  wrapper.update()
-  expect(wrapper.exists('ServiceManualForm')).toEqual(false)
-  expect(wrapper.exists('ServiceDiscoveryForm')).toEqual(true)
-
-  act(() => {
-    wrapper.find('input#source_manual').props().onChange!(clickEvent('manual'))
-  })
-
-  wrapper.update()
-  expect(wrapper.exists('ServiceManualForm')).toEqual(true)
-  expect(wrapper.exists('ServiceDiscoveryForm')).toEqual(false)
+  const wrapper = mountWrapper()
+  expect(wrapper.exists()).toEqual(true)
 })
 
 describe('when Service Discovery is not accessible', () => {
-  beforeAll(() => {
-    props.isServiceDiscoveryAccessible = false
+  const props = { isServiceDiscoveryAccessible: false }
+
+  it('should render the manual form only', () => {
+    const wrapper = mountWrapper(props)
+    expect(wrapper.exists(ManualForm)).toEqual(true)
+    expect(wrapper.exists(ServiceDiscoveryForm)).toEqual(false)
+
+    expect(wrapper.exists('#radio-manual')).toEqual(false)
+    expect(wrapper.exists('#radio-service-discovery')).toEqual(false)
+  })
+})
+
+describe('when Service Discovery is accessible', () => {
+  const props = { isServiceDiscoveryAccessible: true }
+
+  it('should show the manual form by default', () => {
+    const wrapper = mountWrapper(props)
+    expect(wrapper.exists(ManualForm)).toEqual(true)
+    expect(wrapper.exists(ServiceDiscoveryForm)).toEqual(false)
   })
 
-  it('should not render service source inputs', () => {
-    const wrapper = mount(<NewPage {...props} />)
-    expect(wrapper.exists('ServiceSourceForm')).toEqual(false)
-    expect(wrapper.exists('input#source_manual')).toEqual(false)
-    expect(wrapper.exists('ipnut#source_discover')).toEqual(false)
+  it('should be able to switch between manual and service discovery', () => {
+    const wrapper = mountWrapper(props)
+
+    act(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Simulate event
+      wrapper.find('input#radio-service-discovery').props().onChange!({ currentTarget: {} } as any)
+    })
+
+    wrapper.update()
+    expect(wrapper.find('input#radio-service-discovery').props().checked).toEqual(true)
+    expect(wrapper.exists(ManualForm)).toEqual(false)
+    expect(wrapper.exists(ServiceDiscoveryForm)).toEqual(true)
+
+    act(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Simulate event
+      wrapper.find('input#radio-manual').props().onChange!({ currentTarget: {} } as any)
+    })
+
+    wrapper.update()
+    expect(wrapper.find('input#radio-manual').props().checked).toEqual(true)
+    expect(wrapper.exists(ManualForm)).toEqual(true)
+    expect(wrapper.exists(ServiceDiscoveryForm)).toEqual(false)
   })
 
-  it('should render new Service Manual form', () => {
-    const wrapper = mount(<NewPage {...props} />)
-    expect(wrapper.exists('ServiceManualForm')).toEqual(true)
-    expect(wrapper.exists('form#new_service')).toEqual(true)
-    expect(wrapper.exists('form#service_source')).toEqual(false)
+  it('should disable the radio buttons when loading projects', () => {
+    const wrapper = mountWrapper(props)
+
+    act(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Simulate event
+      wrapper.find('input#radio-service-discovery').props().onChange!({ currentTarget: {} } as any)
+    })
+
+    act(() => {
+      wrapper.update().find(ServiceDiscoveryForm).props().setLoadingProjects(true)
+    })
+
+    wrapper.update()
+    expect(wrapper.find('input#radio-manual').props().disabled).toEqual(true)
+    expect(wrapper.find('input#radio-service-discovery').props().disabled).toEqual(true)
+  })
+})
+
+describe('when Service Discovery is accessible but not usable', () => {
+  const props = { isServiceDiscoveryAccessible: true, isServiceDiscoveryUsable: false }
+
+  it('should need to authenticate', () => {
+    const wrapper = mountWrapper(props)
+    expect(wrapper.exists(`a[href="${defaultProps.serviceDiscoveryAuthenticateUrl}"]`)).toEqual(true)
+    expect(wrapper.find('input#radio-service-discovery').props().disabled).toEqual(true)
+  })
+})
+
+describe('when Service Discovery is accessible and usable', () => {
+  const props = { isServiceDiscoveryAccessible: true, isServiceDiscoveryUsable: true }
+
+  it('should not need to authenticate', () => {
+    const wrapper = mountWrapper(props)
+    expect(wrapper.exists(`a[href="${defaultProps.serviceDiscoveryAuthenticateUrl}"]`)).toEqual(false)
   })
 })

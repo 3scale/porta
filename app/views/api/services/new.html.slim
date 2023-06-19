@@ -3,7 +3,7 @@
 
 - content_for :main_section_with_react do
   div id='new_service_wrapper' data-new-service-data={ isServiceDiscoveryAccessible: service_discovery_accessible?,
-                                             template: @service.as_json,
+                                             service: @service.as_json,
                                              isServiceDiscoveryUsable: service_discovery_usable?,
                                              serviceDiscoveryAuthenticateUrl: service_discovery_presenter.authorize_url,
                                              providerAdminServiceDiscoveryServicesPath: provider_admin_service_discovery_services_path,
