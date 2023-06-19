@@ -22,7 +22,9 @@ const tsLoader = environment.loaders.get('ts')
 tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
 
 environment.plugins.append('BundleAnalyzerPlugin',
-  new BundleAnalyzerPlugin()
+  new BundleAnalyzerPlugin({
+    openAnalyzer: false
+  })
 )
 
 module.exports = environment.toWebpackConfig()

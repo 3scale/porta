@@ -54,7 +54,8 @@ textarea {
   height: line-height-times(4.5);
 }
 
-button {
+// TODO: where is this applied and why isn't it wrapper around form?
+button:not(.pf-c-button, .pf-c-nav__link) {
   min-width: line-height-times(2);
   width: auto;
 }

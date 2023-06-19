@@ -34,7 +34,6 @@
 @import 'provider/forum';
 @import 'provider/messages';
 @import 'provider/sidetabs';
-@import 'provider/charts';
 @import 'provider/services';
 @import 'provider/plans';
 @import 'provider/search';
@@ -49,7 +48,6 @@
 @import 'provider/admin/account';
 @import 'provider/service_access';
 @import 'provider/plans_widget';
-@import 'provider/stats';
 @import 'vendor/c3';
 @import 'provider/stats/base';
 @import 'provider/stats/selector';
@@ -94,5 +92,3 @@
 
 @import 'provider/access_tokens';
 @import 'provider/print';
-
-@import 'provider/pf4_hack'

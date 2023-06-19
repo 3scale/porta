@@ -135,10 +135,6 @@
 
     &[name='activity'] {
       @extend div.right;
-
-      #mini-charts {
-        @include fluid-charts;
-      }
     }
   }
 

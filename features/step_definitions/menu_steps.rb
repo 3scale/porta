@@ -45,6 +45,20 @@ Then /^I should see there is no current API/ do
   end
 end
 
+Given "the sidebar navigation is not collapsible" do
+  assert_not has_css?('.pf-c-masthead [data-ouia-component-id="show_hide_menu"]')
+end
+
+Given "the sidebar navigation is collapsible" do
+  sidebar = page_sidebar
+  assert sidebar[:class].match?('.pf-m-expanded')
+  assert_not sidebar[:class].match?('.pf-m-collapsed')
+
+  find('.pf-c-masthead [data-ouia-component-id="show_hide_menu"]').click
+  assert_not sidebar[:class].match?('.pf-m-expanded')
+  assert sidebar[:class].match?('.pf-m-collapsed')
+end
+
 def features_current_api?
   page_sidebar.has_css?('.pf-c-nav__section')
 end

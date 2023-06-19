@@ -7,8 +7,8 @@ html[lang="en" class="pf-m-redhat-font"]
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
     = rails_asset_url_tag
-    = javascript_packs_with_chunks_tag 'provider'
     = render 'provider/theme'
+    = javascript_packs_with_chunks_tag 'provider'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
@@ -18,7 +18,7 @@ html[lang="en" class="pf-m-redhat-font"]
     #wrapper.pf-c-page
       = render partial: 'shared/provider/header'
       = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
-      #border.pf-c-page__main class="self_clear" role="main"
+      .pf-c-page__main role="main"
         = render 'shared/provider/flash', flash: flash
         = yield :menu
         - if content_for(:main_section_with_react).present?
