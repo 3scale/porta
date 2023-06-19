@@ -59,7 +59,8 @@ def email_configurations_table
 end
 
 def filter_email_config(value)
-  input = find('input[type="search"]')
+  input = find('input[aria-label="Search input"]')
+  button = find('button[aria-label="Search"]')
   input.set(value)
-  input.sibling('button').click
+  button.click
 end

@@ -106,22 +106,23 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
 end
 
 Then "they can filter plans by name" do
-  input = find('#plans_table input[type="search"]')
+  input = find('#plans_table input[aria-label="Search input"]')
+  button = find('#plans_table button[aria-label="Search"]')
 
   input.set('one')
-  input.sibling('button').click
+  button.click
   assert_plans_table @plans.by_query('one')
 
   input.set('last')
-  input.sibling('button').click
+  button.click
   assert_plans_table @plans.by_query('last')
 
   input.set('foooo')
-  input.sibling('button').click
+  button.click
   assert_plans_table []
 
-  input.set('')
-  input.sibling('button').click
+  clear_button = find('#plans_table button[aria-label="Reset"]')
+  clear_button.click
   assert_plans_table @plans
 end
 
