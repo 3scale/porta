@@ -1,9 +1,8 @@
 import { mount } from 'enzyme'
-import { act } from 'react-dom/test-utils'
-import { Popover, SearchInput } from '@patternfly/react-core'
+import { Popover } from '@patternfly/react-core'
 
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
-import { mockLocation } from 'utilities/test-utils'
+import { mockLocation, updateInput } from 'utilities/test-utils'
 
 import type { Props } from 'Common/components/ToolbarSearch'
 
@@ -18,78 +17,44 @@ it('should render itself', () => {
   expect(wrapper.exists()).toEqual(true)
 })
 
-describe('Popover is or is not visible', () => {
-  const event = {} as React.FormEvent<HTMLInputElement>
+describe('before a search has been submitted', () => {
   const wrapper = mountWrapper()
+  mockLocation('http://example.com')
 
   it('should display the Popover if input has less than 3 characters', () => {
     const value = 'ab'
 
-    act(() => { wrapper.find(SearchInput).props().onChange!(event, value) })
-    wrapper.update()
-
-    const button = wrapper.find('button[type="submit"]')
-    button.simulate('click')
+    updateInput(wrapper, value, 'SearchInput input')
+    wrapper.find('button[type="submit"]').simulate('click')
 
     expect(wrapper.find(Popover).props().isVisible).toBe(true)
   })
 
-  it('should not display the Popover if input has more than 3 characters', () => {
-    const value = 'abc'
+  it('should not replace when clearing the input if search is not submitted', () => {
+    wrapper.find('button[aria-label="Reset"]').simulate('click')
 
-    act(() => { wrapper.find(SearchInput).props().onChange!(event, value) })
-    wrapper.update()
-
-    const button = wrapper.find('button[type="submit"]')
-    button.simulate('click')
-
-    expect(wrapper.find(Popover).props().isVisible).toBe(false)
+    expect(window.location.replace).not.toHaveBeenCalled()
   })
 })
 
-describe('Replace when search has or has not been submitted', () => {
-  const event = {} as React.FormEvent<HTMLInputElement>
-  const wrapper = mountWrapper()
-  mockLocation('http://example.com')
-
-  it('should not replace when clearing the input if search is not submitted', () => {
+describe('when a search has been submitted', () => {
+  it('should submit search and replace if input has more than 3 characters', () => {
     const value = 'abc'
+    mockLocation('http://example.com/')
+    const wrapper = mountWrapper()
 
-    act(() => { wrapper.find(SearchInput).props().onChange!(event, value) })
-    wrapper.update()
+    updateInput(wrapper, value, 'SearchInput input')
+    wrapper.find('button[type="submit"]').simulate('click')
 
-    const clearButton = wrapper.find('button[aria-label="Reset"]')
-    clearButton.simulate('click')
-
-    // expect(clearButton.exists()).toBe(false)
-    expect(window.location.replace).not.toHaveBeenCalled()
-  })
-
-  it('should replace if search is submitted', () => {
-    const value = 'abc'
-
-    act(() => { wrapper.find(SearchInput).props().onChange!(event, value) })
-    wrapper.update()
-
-    const button = wrapper.find('button[type="submit"]')
-    button.simulate('click')
-
+    expect(wrapper.find(Popover).props().isVisible).toBe(false)
     expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=${value}`)
   })
 
   it('should replace with empty search when clearing the input if search is submitted', () => {
-    const value = 'abc'
+    mockLocation('http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=abc')
+    const wrapper = mountWrapper()
 
-    act(() => { wrapper.find(SearchInput).props().onChange!(event, value) })
-    wrapper.update()
-
-    const button = wrapper.find('button[type="submit"]')
-    button.simulate('click')
-
-    expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=${value}`)
-
-    const clearButton = wrapper.find('button[aria-label="Reset"]')
-    clearButton.simulate('click')
+    wrapper.find('button[aria-label="Reset"]').simulate('click')
 
     expect(window.location.replace).toHaveBeenCalledWith('http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=')
   })
