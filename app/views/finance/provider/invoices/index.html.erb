@@ -45,7 +45,7 @@
         <td><%= price_tag(invoice.cost) %></td>
         <td><%= h invoice.state %></td>
         <td>
-          <%= invoice_pdf_link(invoice, 'PDF') %>
+          <%= invoice_pdf_link(invoice, label: 'PDF') %>
         </td>
         <% end %>
     <% end %>
