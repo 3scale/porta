@@ -25,7 +25,7 @@
   = f.actions do
     = f.commit_button I18n.t('provider.admin.authentication_providers.form.submit_button_label')
     - unless authentication_provider.new_record?
-      = pf_link_to 'Delete',
+      = link_to 'Delete',
                 provider_admin_account_authentication_provider_path(@authentication_provider),
                 data: {confirm: 'Are you sure?'}, method: :delete,
                 title: 'Delete authentication provider', class: 'action delete'

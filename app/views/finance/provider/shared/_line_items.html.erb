@@ -11,7 +11,7 @@
     <th>Charged</th>
     <th>
       <% if @invoice.editable? && editable %>
-        <%= pf_link_to 'Add', new_admin_finance_account_invoice_line_item_path(@invoice.buyer_account, @invoice),
+        <%= link_to 'Add', new_admin_finance_account_invoice_line_item_path(@invoice.buyer_account, @invoice),
                     :title => 'Add Custom Charge',
                     :class => 'action add fancybox',
                     :'data-autodimensions' => 'true'
