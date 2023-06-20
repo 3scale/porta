@@ -17,7 +17,7 @@ it('should render itself', () => {
   expect(wrapper.exists()).toEqual(true)
 })
 
-it('should have a placeholder', () => {
+it('can have a placeholder', () => {
   const placeholder = 'Find something'
   const wrapper = mountWrapper({ placeholder })
   expect(wrapper.exists(`input[placeholder="${placeholder}"]`)).toEqual(true)
