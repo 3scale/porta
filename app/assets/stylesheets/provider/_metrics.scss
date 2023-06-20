@@ -19,63 +19,20 @@ th.collapsible {
 }
 
 table.contract_table {
-  @include white-box-shadow;
-  border-collapse: collapse;
-  border-spacing: 0;
 	margin-bottom: line-height-times(1/2);
-  width: 100%;
 
   &#features {
     table-layout: fixed;
-
-    thead {
-      th:first-child,
-      th:nth-child(2) {
-        width: 35%;
-      }
-
-      th:nth-child(3) {
-        width: 10%;
-      }
-
-      th:last-child {
-        width: 20%;
-      }
-    }
   }
-  
+
   &#metrics,
   &#backend_api_metrics {
-    table-layout: fixed;
-
-    thead {
-      th {
-        width: 64%;
-      }
-      th + th {
-        width: 12%;
-      }
-    }
-
     tbody {
       tr {
         &.hidden {
           display: none;
         }
       }
-    }
-  }
-
-  tr {
-    border-bottom: $border-width solid $border-color;
-  }
-
-  th {
-    padding-top: line-height-times(1/4);
-    padding-bottom: line-height-times(1/4);
-    
-    &:first-child {
-      text-align: left;
     }
   }
 
@@ -145,27 +102,8 @@ table.contract_table {
     position: absolute;
     background: $font-color;
   }
-}
-
-
-// Overrides
-table.contract_table {
-
-  > thead tr th {
-    padding-bottom: line-height-times(1 / 2);
-    padding-top: line-height-times(1);
-    &:first-child {
-      padding-left: line-height-times(1);
-    }
-    &:last-child {
-      padding-right: line-height-times(1);
-    }
-  }
 
   tbody tr td {
-    &:first-child {
-      padding-left: line-height-times(1);
-    }
     &:last-child {
       border-top: 1px solid $altoGray;
       padding-right: line-height-times(1);
@@ -187,10 +125,4 @@ table.contract_table {
   #metrics_container > tr > th.backend_api_metric_title {
     padding-left: line-height-times(1);
   }
-
-  thead tr th.operations {
-    position: relative;
-  }
-
 }
-

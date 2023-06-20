@@ -7,19 +7,19 @@
     <% end %>
   </h2>
 
-  <table id="metrics" class="contract_table">
+  <table id="metrics" class="pf-c-table contract_table">
     <thead>
       <tr>
-        <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
+        <th class="pf-m-width-70" colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
           Product Level
         </th>
-        <th class="operations">
+        <th class="pf-m-width-10 operations">
           Enabled
         </th>
-        <th class="operations">
+        <th class="pf-m-width-10 operations">
           Visible
         </th>
-        <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
+        <th class="pf-m-width-10 operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
         </th>
       </tr>
@@ -38,19 +38,19 @@
     </tbody>
   </table>
 
-  <table id="backend_api_metrics" class="contract_table">
+  <table id="backend_api_metrics" class="pf-c-table contract_table">
     <thead>
       <tr>
-        <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
+        <th class="pf-m-width-70" colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
           Backend Level
         </th>
-        <th class="operations">
+        <th class="pf-m-width-10 operations">
           Enabled
         </th>
-        <th class="operations">
+        <th class="pf-m-width-10 operations">
           Visible
         </th>
-        <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
+        <th class="pf-m-width-10 operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
         </th>
       </tr>
