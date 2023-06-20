@@ -257,8 +257,9 @@ $stats-chart-tooltip-color: $label-color;
   }
 }
 
+// scss-lint:disable ImportantRule -- Force jQuery datepicker to have popover z-index https://github.com/patternfly/patternfly-elements/blob/933a0d6dd06c33d43291e5ed0ab87914fefd9a67/elements/pf-popover/pf-popover.css#L7
 .ui-datepicker {
-  z-index: 10;
+  z-index: 9999 !important;
 }
 
 div[id^="transaction_errors_container_"] {

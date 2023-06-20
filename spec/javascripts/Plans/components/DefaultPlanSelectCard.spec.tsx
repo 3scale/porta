@@ -1,11 +1,11 @@
 import { mount } from 'enzyme'
 
-import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
+import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelect'
 import { Select } from 'Common/components/Select'
 import { openSelect, selectOption } from 'utilities/test-utils'
 
 import type { IRecord } from 'Types'
-import type { Props } from 'Plans/components/DefaultPlanSelectCard'
+import type { Props } from 'Plans/components/DefaultPlanSelect'
 
 const plan = { id: 1, name: 'My Plan' }
 const plans = [plan]
@@ -20,15 +20,6 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCar
 it('should render', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toEqual(true)
-})
-
-it('should have a helper text', () => {
-  const wrapper = mountWrapper()
-  const text = 'If an application plan is set as default, 3scale sets this plan upon service subscription.'
-
-  const helperText = wrapper.find('.pf-c-helper-text')
-
-  expect(helperText.text()).toBe(text)
 })
 
 it('should have a "no default plan" option', () => {

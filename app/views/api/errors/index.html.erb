@@ -1,14 +1,13 @@
-<% content_for :sublayout_title, 'Integration Errors' %>
+<% content_for :page_header_title, "Integration Errors for #{@service.name}" %>
 
-<p>
-Here you can see errors related to your API's integration with 3scale, in particular in calls made to methods of 3scale's Service Management API.
-</br>
-Please refer to the
-<%= link_to('API ActiveDocs', provider_admin_api_docs_path(anchor: '/service_management_api'), target:'_blank') %>
-documentation section on using 3scale's Service Management API.
-</p>
+<% content_for :page_header_body do %>
+  Here you can see errors related to your API's integration with 3scale, in particular in calls made to methods of 3scale's Service Management API.
+  </br>
+  Please refer to the
+  <%= link_to('API ActiveDocs', provider_admin_api_docs_path(anchor: '/service_management_api'), target:'_blank') %>
+  documentation section on using 3scale's Service Management API.
+<% end %>
 
-<h3><%= @service.name %></h3>
 <div id="transaction_errors_container_<%= @service.id %>">
   <% if @errors.empty? %>
     <%= render :partial => 'no_errors' %>

@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { ForgotCredentials } from 'LoginPage/loginForms/ForgotCredentials'
+import { ForgotCredentials } from 'Login/components/ForgotCredentials'
 
-import type { Props } from 'LoginPage/loginForms/ForgotCredentials'
+import type { Props } from 'Login/components/ForgotCredentials'
 
 const props: Props = {
   requestPasswordResetPath: 'login-path'

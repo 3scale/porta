@@ -1,6 +1,4 @@
-= render 'provider/admin/messages/menu'
-
-h2 Trash
+- content_for :page_header_title, 'Trash'
 
 - if @messages.blank?
   p The trash is empty.

@@ -10,25 +10,22 @@ import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/
 import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import type {
+  FormGroupProps,
   SelectOptionObject as PFSelectOptionObject,
   SelectProps
 } from '@patternfly/react-core'
 
-import './Select.scss'
-
-interface Props<T extends IRecord> extends Pick<SelectProps, 'aria-label' | 'isDisabled' | 'placeholderText' | 'validated'> {
+interface Props<T extends IRecord> extends
+  Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'>,
+  Pick<FormGroupProps, 'helperText' | 'helperTextInvalid' | 'isRequired' | 'label'> {
   item: T | null;
   items: T[];
   onSelect: (selected: T | null) => void;
-  label: React.ReactNode;
   fieldId: string;
   name: string;
   isClearable?: boolean;
   hint?: React.ReactNode;
-  helperText?: string;
-  helperTextInvalid?: string;
   isLoading?: boolean;
-  isRequired?: boolean;
 }
 
 const Select = <T extends IRecord>({
@@ -59,10 +56,8 @@ const Select = <T extends IRecord>({
   }
 
   const handleOnClear = () => {
-    if (isClearable) {
-      onSelect(null)
-      setExpanded(false)
-    }
+    onSelect(null)
+    setExpanded(false)
   }
 
   return (
@@ -78,18 +73,18 @@ const Select = <T extends IRecord>({
       {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
       {item && <input name={name} type="hidden" value={Number(item.id) >= 0 ? item.id : ''} />}
       <PF4Select
-        aria-label={rest['aria-label']}
-        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
         isOpen={expanded}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
-        onClear={handleOnClear}
+        onClear={isClearable ? handleOnClear : undefined}
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
         onToggle={() => { setExpanded(!expanded) }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...rest}
       >
         {items.map(toSelectOption)}
       </PF4Select>

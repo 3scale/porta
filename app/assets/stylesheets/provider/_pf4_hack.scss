@@ -1,69 +1,7 @@
-// Counter-hack for padding in app/assets/stylesheets/provider/layouts/_main.scss:20
-// https://github.com/3scale/porta/commit/3b904ab7d5a0b72ce5c5de14fb566eca75bdbb37#diff-df72c33ce6ccf433d374d12b7856eb703289e5e2d439f7216ace2ac6a4fb4375
-main.Main#content div.pf-hack__remove-main-padding {
-  margin-bottom: calc(-1 * var(--pf-c-page__main-section--xl--PaddingBottom));
-  margin-left: calc(-1 * var(--pf-c-page__main-section--xl--PaddingLeft));
-  margin-right: calc(-1 * var(--pf-c-page__main-section--xl--PaddingRight));
-  margin-top: calc(-1 * var(--pf-c-page__main-section--xl--PaddingTop));
-}
-
-// Overrides legacy style app/assets/stylesheets/provider/_commons.scss:33
-main.Main.pf-hack__override-page-titles#content section.pf-c-page__main-section > .pf-c-content {
-  .pf-l-level {
-    align-items: baseline;
-  }
-
-  h1 {
-    padding-top: unset;
-  }
-}
-
-
-// Overrides legacy style app/assets/stylesheets/provider/_commons.scss:79
-.pf-c-page__main-section > .pf-c-content > p {
-  margin: unset;
-  padding: unset;
-}
-
-// Emulates .pf-c-content styles on elements WITHOUT class .pf-c-content
-main.Main.pf-hack__override-page-titles#content {
-  & > h1:first-child,
-  & > h2:first-child {
-    color: #151515; // --pf-c-content--Color
-    font-family: RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif;
-    font-weight: 400; // --pf-c-content--h1--FontWeight
-    line-height: 1.3; // --pf-c-content--h1--LineHeight
-    padding-top: 1.5rem; // .Main padding
-
-    & + p {
-      color: #151515; // --pf-c-content--Color
-      // Overrides legacy style app/assets/stylesheets/provider/_commons.scss:95
-      padding-top: 0.5rem;
-    }
-  }
-}
-
 //
 // Old HACKs
 // Some may be outdated or badly implemented. TODO: review and cleanup.
 //
-
-// HACK: Some PF classes still collapses with ours.
-// As we are still using both PF and not-PF links, we need this
-button.action.pf-c-button {
-
-  padding: 0 var(--pf-global--spacer--md);
-
-  &.pf-m-primary,
-  &.pf-m-danger {
-    color: $white;
-  }
-
-  &.pf-m-secondary {
-    color: var(--pf-c-button--m-secondary--Color);
-  }
-
-}
 
 a.action.pf-c-button {
   color: $success-color;

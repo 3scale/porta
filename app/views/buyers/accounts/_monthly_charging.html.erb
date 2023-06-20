@@ -11,7 +11,7 @@
       Monthly billing is <%= status %>.
     </td>
     <td>
-      <%= pf_fancy_button_to action,
+      <%= fancy_button_to action,
                           toggle_monthly_billing_admin_buyers_account_path(account),
                           :method => :put,
                           id: "#{action.downcase}-monthly-billing",
@@ -37,7 +37,7 @@
         Monthly charging is <%= status %>.
       </td>
       <td>
-          <%= pf_fancy_button_to action, toggle_monthly_charging_admin_buyers_account_path(account),
+          <%= fancy_button_to action, toggle_monthly_charging_admin_buyers_account_path(account),
                          :method => :put,
                          :id => "#{action.downcase}-monthly-charging",
                          :class => "action #{action.downcase}",

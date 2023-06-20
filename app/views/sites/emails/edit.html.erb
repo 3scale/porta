@@ -2,6 +2,8 @@
   Support Emails
 <% end %>
 
+<% content_for :page_header_title, 'Support Emails' %>
+
 <%= semantic_form_for @account, :url => admin_site_emails_url do |form| %>
   <%= form.inputs 'General Support Emails' do %>
     <%= form.input :support_email, :input_html => { :value => @account.support_email }, :hint => 'General support email address. Liquid usage: {{ provider.support_email }}.' %>

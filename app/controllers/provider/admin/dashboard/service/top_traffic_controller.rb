@@ -1,6 +1,8 @@
 class Provider::Admin::Dashboard::Service::TopTrafficController < Provider::Admin::Dashboard::Service::BaseController
   respond_to :json
 
+  layout false
+
   protected
 
   def widget_data

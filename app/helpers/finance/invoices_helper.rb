@@ -52,17 +52,10 @@ module Finance::InvoicesHelper
   end
 
 
-  def invoice_pdf_link(invoice, label = 'Download PDF')
+  def invoice_pdf_link(invoice, options = {})
+    label = options.delete(:label) || 'Download PDF'
     if invoice.pdf.file?
-      link_to(label, invoice.pdf.expiring_url)
-    else
-      content_tag(:em,'not yet generated')
-    end
-  end
-
-  def pf_invoice_pdf_link(invoice, label = 'Download PDF')
-    if invoice.pdf.file?
-      pf_link_as_button(label, invoice.pdf.expiring_url, modifier: 'secondary')
+      link_to(label, invoice.pdf.expiring_url, options)
     else
       content_tag(:em,'not yet generated')
     end

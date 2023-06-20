@@ -1,4 +1,4 @@
-- content_for :sublayout_title, 'Naming'
+- content_for :page_header_title, 'Naming'
 
 = semantic_form_for @service, url: admin_service_path(@service) do |form|
   = render partial: 'api/services/forms/naming', locals: { form: form }

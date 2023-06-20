@@ -19,3 +19,8 @@ Feature: Header buttons and menus
       | Liquid Reference |
       | What's new?      |
       | Quick starts     |
+
+  Scenario: Show and hide global navigation
+    Given the sidebar navigation is not collapsible
+    When they go to the accounts admin page
+    Then the sidebar navigation is collapsible

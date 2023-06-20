@@ -1,7 +1,10 @@
-div.pf-hack__remove-main-padding{ id="new-mapping-rule-form" data-url=url
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'new_mapping_rule'
+
+- content_for :main_section_with_react do
+  div#new-mapping-rule-form{ data-url=url
                                 data-http-methods=ProxyRule::ALLOWED_HTTP_METHODS
                                 data-is-proxy-pro-enabled=is_proxy_pro_enabled
                                 data-top-level-metrics=top_level_metrics
                                 data-errors=errors
                                 data-methods=methods}
-  = javascript_packs_with_chunks_tag 'new_mapping_rule'

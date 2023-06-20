@@ -1,4 +1,4 @@
-<% content_for :sublayout_title, 'Create application plan' %>
+<% content_for :page_header_title, 'Create application plan' %>
 
 <%= semantic_form_for @plan, :url => admin_service_application_plans_path(@service) do |form| %>
   <%= render :partial => 'form', :object => form %>

@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+class DeprecationWarning < StandardError
+  def initialize(msg = nil, gem_name = nil, deprecation_horizon = nil)
+    super(msg)
+    @message = msg
+    @gem_name = gem_name
+    @deprecation_horizon = deprecation_horizon
+  end
+
+  attr_accessor :message, :gem_name, :deprecation_horizon
+end
+
 module System
   module ErrorReporting
     module_function
@@ -9,6 +20,19 @@ module System
 
       ::Bugsnag.notify(exception) do |report|
         report.add_tab 'parameter', {parameters: parameters}
+      end
+    end
+
+    def report_deprecation_warning(payload)
+      exception = DeprecationWarning.new(payload[:message], payload[:gem_name], payload[:deprecation_horizon])
+
+      ::Bugsnag.notify(exception) do |report|
+        report.severity = 'warning'
+        report.grouping_hash = exception.message
+        report.add_tab 'deprecation_info', {
+          gem_name: exception.gem_name,
+          deprecation_horizon: exception.deprecation_horizon
+        }
       end
     end
 

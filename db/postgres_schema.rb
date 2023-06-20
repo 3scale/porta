@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_08_155529) do
+ActiveRecord::Schema.define(version: 2023_06_12_105944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -757,6 +757,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "updated_at"
     t.bigint "tenant_id"
     t.binary "service_ids"
+    t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
   create_table "message_recipients", force: :cascade do |t|

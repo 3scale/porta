@@ -438,7 +438,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -936,7 +936,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -984,7 +984,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -997,12 +996,11 @@ exports[`should render Login form and Authentication providers when available 1`
                                     "verticalAlign": "-0.125em",
                                   }
                                 }
-                                viewBox="0 0 512 512"
+                                viewBox="0 0 1024 1024"
                                 width="1em"
                               >
                                 <path
-                                  d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"
-                                  transform=""
+                                  d="M802,320 C748.980664,320 706,277.019336 706,224 C706,170.980664 748.980664,128 802,128 C855.019336,128 898,170.980664 898,224 C898,277.019336 855.019336,320 802,320 M704,0 C527.3,0 384,143.3 384,320 C383.937788,357.490503 390.505571,394.696657 403.4,429.9 L0,824.1 L0,1024 L192,1024 L192,896 L320,896 L320,768 L448,768 L597,622 C596.906403,621.881923 596.838304,621.745723 596.8,621.6 C631.220126,633.811107 667.47802,640.034477 704,640 C880.7,640 1024,496.7 1024,320 C1024,143.3 880.7,0 704,0"
                                 />
                               </svg>
                             </KeyIcon>
@@ -1011,7 +1009,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -1029,7 +1026,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <path
                                   d="M365.46 357.74L147.04 255.89l218.47-101.88c16.02-7.47 22.95-26.51 15.48-42.53l-13.52-29C360 66.46 340.96 59.53 324.94 67L18.48 209.91a32.014 32.014 0 0 0-18.48 29v34.24c0 12.44 7.21 23.75 18.48 29l306.31 142.83c16.06 7.49 35.15.54 42.64-15.52l13.56-29.08c7.49-16.06.54-35.15-15.53-42.64z"
-                                  transform=""
                                 />
                               </svg>
                             </LessThanIcon>
@@ -1037,7 +1033,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -1055,7 +1050,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <path
                                   d="M365.52 209.85L59.22 67.01c-16.06-7.49-35.15-.54-42.64 15.52L3.01 111.61c-7.49 16.06-.54 35.15 15.52 42.64L236.96 256.1 18.49 357.99C2.47 365.46-4.46 384.5 3.01 400.52l13.52 29C24 445.54 43.04 452.47 59.06 445l306.47-142.91a32.003 32.003 0 0 0 18.48-29v-34.23c-.01-12.45-7.21-23.76-18.49-29.01z"
-                                  transform=""
                                 />
                               </svg>
                             </GreaterThanIcon>
@@ -1079,7 +1073,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -1092,12 +1085,11 @@ exports[`should render Login form and Authentication providers when available 1`
                                     "verticalAlign": "-0.125em",
                                   }
                                 }
-                                viewBox="0 0 512 512"
+                                viewBox="0 0 1024 1024"
                                 width="1em"
                               >
                                 <path
-                                  d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"
-                                  transform=""
+                                  d="M802,320 C748.980664,320 706,277.019336 706,224 C706,170.980664 748.980664,128 802,128 C855.019336,128 898,170.980664 898,224 C898,277.019336 855.019336,320 802,320 M704,0 C527.3,0 384,143.3 384,320 C383.937788,357.490503 390.505571,394.696657 403.4,429.9 L0,824.1 L0,1024 L192,1024 L192,896 L320,896 L320,768 L448,768 L597,622 C596.906403,621.881923 596.838304,621.745723 596.8,621.6 C631.220126,633.811107 667.47802,640.034477 704,640 C880.7,640 1024,496.7 1024,320 C1024,143.3 880.7,0 704,0"
                                 />
                               </svg>
                             </KeyIcon>
@@ -1106,7 +1098,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -1124,7 +1115,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <path
                                   d="M365.46 357.74L147.04 255.89l218.47-101.88c16.02-7.47 22.95-26.51 15.48-42.53l-13.52-29C360 66.46 340.96 59.53 324.94 67L18.48 209.91a32.014 32.014 0 0 0-18.48 29v34.24c0 12.44 7.21 23.75 18.48 29l306.31 142.83c16.06 7.49 35.15.54 42.64-15.52l13.56-29.08c7.49-16.06.54-35.15-15.53-42.64z"
-                                  transform=""
                                 />
                               </svg>
                             </LessThanIcon>
@@ -1132,7 +1122,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               color="currentColor"
                               noVerticalAlign={false}
                               size="sm"
-                              title={null}
                             >
                               <svg
                                 aria-hidden={true}
@@ -1150,7 +1139,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <path
                                   d="M365.52 209.85L59.22 67.01c-16.06-7.49-35.15-.54-42.64 15.52L3.01 111.61c-7.49 16.06-.54 35.15 15.52 42.64L236.96 256.1 18.49 357.99C2.47 365.46-4.46 384.5 3.01 400.52l13.52 29C24 445.54 43.04 452.47 59.06 445l306.47-142.91a32.003 32.003 0 0 0 18.48-29v-34.23c-.01-12.45-7.21-23.76-18.49-29.01z"
-                                  transform=""
                                 />
                               </svg>
                             </GreaterThanIcon>
@@ -1658,7 +1646,7 @@ exports[`should render itself 1`] = `
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>
@@ -2178,7 +2166,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       tabIndex={null}
                                       type="submit"
                                     >
-                                       Sign in
+                                      Sign in
                                     </button>
                                   </ButtonBase>
                                 </Button>

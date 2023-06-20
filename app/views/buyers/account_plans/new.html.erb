@@ -1,4 +1,5 @@
-<h2>Create new Account Plan</h2>
+<% content_for :page_header_title, 'Create new Account Plan' %>
+
 <%= semantic_form_for @plan, :url => admin_buyers_account_plans_path do |form| %>
   <%= render :partial => 'form', :object => form %>
   <%= form.actions do %>

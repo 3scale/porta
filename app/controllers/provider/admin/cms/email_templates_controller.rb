@@ -1,7 +1,6 @@
 class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
 
   activate_menu :audience, :messages, :templates
-  sublayout 'emails'
 
   def new
     @page = templates.new_by_system_name(params[:system_name])

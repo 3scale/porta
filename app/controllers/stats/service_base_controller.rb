@@ -9,8 +9,6 @@ class Stats::ServiceBaseController < Stats::BaseController
 
   activate_menu :serviceadmin, :monitoring
 
-  sublayout :stats
-
   protected
 
   # TODO: ensure provider domain

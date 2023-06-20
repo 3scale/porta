@@ -1,5 +1,8 @@
-<%= render 'buyers/accounts/menu' %>
-<h2>Invoices for <%= h @account.org_name %></h2>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
+
+<% content_for :page_header_title, "Invoices for #{@account.org_name}" %>
 
 <table class="data">
   <thead>
@@ -24,7 +27,7 @@
         <td><%= h invoice.state %></td>
         <td><%= price_tag(invoice.cost) %></td>
         <td colspan="2">
-          <%= invoice_pdf_link(invoice, 'PDF') %>
+          <%= invoice_pdf_link(invoice, label: 'PDF') %>
         </td>
        <% end %>
     <% end %>

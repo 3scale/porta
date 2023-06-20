@@ -1,9 +1,11 @@
 import { mount } from 'enzyme'
+import { act } from 'react-dom/test-utils'
 
-import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
+import { RequestPasswordForm } from 'Login/components/RequestPasswordForm'
+import { isSubmitDisabled } from 'utilities/test-utils'
 
 import type { FormEvent } from 'react'
-import type { Props } from 'LoginPage/loginForms/RequestPasswordForm'
+import type { Props } from 'Login/components/RequestPasswordForm'
 
 const defaultProps = {
   flashMessages: [],
@@ -11,7 +13,7 @@ const defaultProps = {
   providerPasswordPath: 'password-path'
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount<RequestPasswordForm>(<RequestPasswordForm {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<RequestPasswordForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -27,9 +29,8 @@ it('should set email and validation state to true', () => {
   } as FormEvent<HTMLInputElement>
 
   const wrapper = mountWrapper()
-  wrapper.find('input#email').props().onChange!(event)
-  expect(wrapper.state().email).toEqual('bob@sponge.com')
-  expect(wrapper.state().validation.email).toEqual(true)
+  act(() => { wrapper.find('input#email').props().onChange!(event) })
+  expect(isSubmitDisabled(wrapper)).toEqual(false)
 })
 
 it('should set validation state to false when email is invalid', () => {
@@ -41,7 +42,6 @@ it('should set validation state to false when email is invalid', () => {
   } as FormEvent<HTMLInputElement>
 
   const wrapper = mountWrapper()
-  wrapper.find('input#email').props().onChange!(event)
-  expect(wrapper.state().email).toEqual('bobspongecom')
-  expect(wrapper.state().validation.email).toEqual(false)
+  act(() => { wrapper.find('input#email').props().onChange!(event) })
+  expect(isSubmitDisabled(wrapper)).toEqual(true)
 })

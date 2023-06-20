@@ -11,6 +11,7 @@ textarea,
 select,
 form.button-to button:not(.pf-c-button),
 form.formtastic button:not(.pf-c-button),
+form.formtastic textarea,
 form.formtastic fieldset.inputs input[type='text'],
 form.formtastic fieldset.inputs input[type='number'],
 form.formtastic fieldset.inputs input[type='tel'],
@@ -50,11 +51,13 @@ form.formtastic fieldset.inputs .error input[type='password'] {
   border-color: $error-color;
 }
 
+form.formtastic textarea,
 textarea {
   height: line-height-times(4.5);
 }
 
-button {
+// TODO: where is this applied and why isn't it wrapper around form?
+button:not(.pf-c-button, .pf-c-nav__link) {
   min-width: line-height-times(2);
   width: auto;
 }
@@ -240,6 +243,9 @@ form.formtastic {
   padding: line-height-times(1);
   text-align: left; /* overriding legacy_theme text-align: center*/
   width: 100%;
+  &:first-of-type {
+    margin: 0;
+  }
 
   fieldset.inputs[data-behavior~=toggle-inputs] {
     border: $border-width $border-color solid;

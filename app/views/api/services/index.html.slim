@@ -1,2 +1,5 @@
-div.pf-hack__remove-main-padding id='products' data=presenter.data
+- content_for :javascripts do
   = javascript_packs_with_chunks_tag 'products_index'
+
+- content_for :main_section_with_react do
+  div id='products' data=presenter.data

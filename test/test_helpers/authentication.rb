@@ -55,15 +55,11 @@ ActionDispatch::IntegrationTest.class_eval do
   end
 
   def provider_login_with(username, password)
-    get '/p/login'
-    follow_redirect! while redirect?
     post provider_sessions_path, params: {username: username, password: password}
     follow_redirect! while redirect?
   end
 
   def login_with(username, password)
-    get '/login'
-    follow_redirect! while redirect?
     post '/session', params: {username: username, password: password}
     follow_redirect! while redirect?
   end

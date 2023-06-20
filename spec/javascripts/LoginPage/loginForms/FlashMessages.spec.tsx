@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 
-import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
+import { FlashMessages } from 'Login/components/FlashMessages'
 
 it('should render proper error message', () => {
   const wrapper = mount(<FlashMessages flashMessages={[{ type: 'error', message: 'You lost!' }]} />)

@@ -118,11 +118,13 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal '1984-00000008', invoice.friendly_id
   end
 
-  test 'validates presence of valid period' do
-    @invoice.update(period: 'invalid')
+  %w[invalid 2023abc-01 2022-14].each do |value|
+    test "validation error for invalid value '#{value}'" do
+      @invoice.update(period: value)
 
-    assert_not @invoice.valid?
-    assert_includes @invoice.errors[:period], 'Billing period format should be YYYY-MM'
+      assert_not @invoice.valid?
+      assert_includes @invoice.errors[:period], 'Billing period format should be YYYY-MM'
+    end
   end
 
   test 'validates invoice year - invalid if earlier than buyer creation date' do
@@ -143,9 +145,11 @@ class InvoiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validates invoice invalid month' do
-    assert_raises ArgumentError do
-      @invoice.update(period: Month.new(Time.zone.local(2022, 13, 1)))
+  [123, nil, Date].each do |value|
+    test "#period= raises an error if argument of invalid type #{value.class} is passed" do
+      assert_raises ArgumentError do
+        @invoice.update(period: value)
+      end
     end
   end
 
@@ -385,12 +389,6 @@ class InvoiceTest < ActiveSupport::TestCase
   test 'find only "old ones" with #before scope' do
     setup_1984_and_2009_invoices
     assert_equal 0, Invoice.before(Time.utc(1964, 10, 2)).count
-  end
-
-  test 'find_by_month' do
-    setup_1984_and_2009_invoices
-    assert_equal @invoice_one, Invoice.find_by_month('2009-06')
-    assert_equal @invoice_two, Invoice.find_by_month('1984-10')
   end
 
   test 'opened_by_buyer' do

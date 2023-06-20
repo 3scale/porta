@@ -31,7 +31,7 @@ When "an admin is in the account plans page" do
 end
 
 Then "they can add new account plans" do
-  click_link 'Create Account plan'
+  click_link 'Create account plan'
   fill_in('Name', with: 'Basic')
   click_on 'Create Account plan'
 
@@ -118,4 +118,25 @@ When "an admin is looking for an account plan" do
   @plans = @provider.account_plans
   visit admin_buyers_account_plans_path
   assert_plans_table @plans
+end
+
+Given "{provider} has no default account plan" do |provider|
+  provider.update!(default_account_plan: nil)
+end
+
+Given "{provider} has a default account plan" do |provider|
+  assert_not_nil provider.account_plans.default
+end
+
+Given "{provider} has no published account plans" do |provider|
+  provider.account_plans.published.each(&:hide!)
+  assert_empty provider.account_plans.published
+end
+
+Given "{provider} has a published account plan" do |provider|
+  assert_not_empty provider.account_plans.published
+end
+
+Then "the admin {should} be warned about users not being able to sign up" do |should|
+  assert_equal should, has_css?('[data-ouia-component-id="no-default-plan-warning"]')
 end

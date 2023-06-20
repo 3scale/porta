@@ -1,4 +1,4 @@
-<% content_for :sublayout_title, "Application Plan #{h @plan.name}" %>
+<% content_for :page_header_title, "Application Plan #{h @plan.name}" %>
 
 <% if @plan.customized? %>
   <%= render :partial => 'api/plans/menu' %>

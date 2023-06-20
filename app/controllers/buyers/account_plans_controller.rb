@@ -6,8 +6,8 @@ class Buyers::AccountPlansController < Api::PlansBaseController
 
   activate_menu! :audience, :accounts, :account_plans
 
-  helper_method :default_plan_select_data, :plans_table_data, :no_available_plans
-  delegate :default_plan_select_data, :plans_table_data, :no_available_plans, to: :presenter
+  helper_method :plans_index_data, :no_available_plans
+  delegate :plans_index_data, :no_available_plans, to: :presenter
 
   alias account_plans plans
 
@@ -52,6 +52,6 @@ class Buyers::AccountPlansController < Api::PlansBaseController
   end
 
   def presenter
-    @presenter ||= Buyers::AccountPlansPresenter.new(collection: collection, params: params)
+    @presenter ||= Buyers::AccountPlansPresenter.new(collection: collection, params: params, user: current_user)
   end
 end

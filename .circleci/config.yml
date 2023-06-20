@@ -28,9 +28,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
-bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-assets-cache-key: &assets-cache-key v1-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -152,14 +152,17 @@ nightly-trigger: &nightly-trigger
 build-envs:
   mysql: &build-envs-mysql
     environment:
+      DB: mysql
       DATABASE_URL: mysql2://root:@127.0.0.1:3306/3scale_system_test
 
   postgresql: &build-envs-postgresql
     environment:
+      DB: postgresql
       DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/systemdb
 
   oracle: &build-envs-oracle
     environment:
+      DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
 
 ##################################### CIRCLECI COMMANDS ############################################
@@ -207,6 +210,9 @@ commands: # reusable commands with parameters
         default: []
     steps:
       - checkout
+      - run:
+          name: Make $DB Available for cache keys
+          command: echo $DB > /tmp/db
       - restore-gem-cache
       - steps: << parameters.extra-deps >>
       - run:
@@ -327,7 +333,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - *bundle-cache-key
 
   upload-artifacts:
     steps:

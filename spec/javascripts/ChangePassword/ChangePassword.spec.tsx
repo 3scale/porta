@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { ChangePassword } from 'ChangePassword/components/ChangePassword'
+import { ChangePassword } from 'Login/components/ChangePasswordPage'
 
-import type { Props } from 'ChangePassword/components/ChangePassword'
+import type { Props } from 'Login/components/ChangePasswordPage'
 
 it('should render itself', () => {
   const props: Props = {

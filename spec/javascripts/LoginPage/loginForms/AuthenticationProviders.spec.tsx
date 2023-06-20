@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
+import { AuthenticationProviders } from 'Login/components/AuthenticationProviders'
 
-import type { Props } from 'LoginPage/loginForms/AuthenticationProviders'
+import type { Props } from 'Login/components/AuthenticationProviders'
 
 const props: Props = {
   authenticationProviders: [{

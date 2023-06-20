@@ -13,6 +13,10 @@
   }
 }
 
+.Section:first-of-type > h2 {
+  margin: 0;
+}
+
 .swagger-section {
   @include white-box-shadow;
   padding: line-height-times(1);

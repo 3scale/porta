@@ -33,41 +33,19 @@ exports[`Session menu should describe who is currently signed in 1`] = `
       icon="times"
     >
       <Icon
-        className="header-context-selector__item-icon"
+        className="pf-c-icon__inline-icon"
         isInline={true}
       >
         <span
-          className="pf-c-icon pf-m-inline header-context-selector__item-icon"
+          className="pf-c-icon pf-m-inline pf-c-icon__inline-icon"
         >
           <span
             className="pf-c-icon__content"
           >
-            <TimesIcon
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
-              title={null}
-            >
-              <svg
-                aria-hidden={true}
-                aria-labelledby={null}
-                fill="currentColor"
-                height="1em"
-                role="img"
-                style={
-                  {
-                    "verticalAlign": "-0.125em",
-                  }
-                }
-                viewBox="0 0 352 512"
-                width="1em"
-              >
-                <path
-                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                  transform=""
-                />
-              </svg>
-            </TimesIcon>
+            <i
+              aria-hidden="true"
+              className="fa fa-times"
+            />
           </span>
         </span>
       </Icon>
@@ -95,7 +73,6 @@ exports[`Session menu should describe who is currently signed in 2`] = `
         color="currentColor"
         noVerticalAlign={false}
         size="sm"
-        title={null}
       >
         <svg
           aria-hidden={true}
@@ -113,7 +90,6 @@ exports[`Session menu should describe who is currently signed in 2`] = `
         >
           <path
             d="M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-1.7 275.2 9.5 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z"
-            transform=""
           />
         </svg>
       </BoltIcon>
@@ -134,41 +110,19 @@ exports[`Session menu should describe who is currently signed in 2`] = `
       icon="times"
     >
       <Icon
-        className="header-context-selector__item-icon"
+        className="pf-c-icon__inline-icon"
         isInline={true}
       >
         <span
-          className="pf-c-icon pf-m-inline header-context-selector__item-icon"
+          className="pf-c-icon pf-m-inline pf-c-icon__inline-icon"
         >
           <span
             className="pf-c-icon__content"
           >
-            <TimesIcon
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
-              title={null}
-            >
-              <svg
-                aria-hidden={true}
-                aria-labelledby={null}
-                fill="currentColor"
-                height="1em"
-                role="img"
-                style={
-                  {
-                    "verticalAlign": "-0.125em",
-                  }
-                }
-                viewBox="0 0 352 512"
-                width="1em"
-              >
-                <path
-                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                  transform=""
-                />
-              </svg>
-            </TimesIcon>
+            <i
+              aria-hidden="true"
+              className="fa fa-times"
+            />
           </span>
         </span>
       </Icon>

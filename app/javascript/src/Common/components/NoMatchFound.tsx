@@ -19,7 +19,7 @@ const NoMatchFound: FunctionComponent<Props> = ({
   onClearFiltersClick
 }) => (
   <EmptyState variant={EmptyStateVariant.large}>
-    <EmptyStateIcon icon={SearchIcon as FunctionComponent} />
+    <EmptyStateIcon icon={SearchIcon} />
     <Title headingLevel="h4" size="lg">
       No results found
     </Title>

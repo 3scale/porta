@@ -1,6 +1,7 @@
-= render 'menu'
+- content_for :menu do
+  = render 'menu'
 
-h2 = "Edit application: #{@cinstance.name}"
+- content_for :page_header_title, "Edit application: #{@cinstance.name}"
 
 = semantic_form_for @cinstance, url: provider_admin_application_path(@cinstance),
                                 builder: Fields::FormBuilder do |form|

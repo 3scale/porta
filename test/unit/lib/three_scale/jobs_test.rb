@@ -47,8 +47,8 @@ class ThreeScale::JobsTest < ActiveSupport::TestCase
   end
 
   def test_backward_compatibility_rake_deserialize
-    serialized = {'rake' => 'sphinx:enqueue'}
-    task = ThreeScale::Jobs::RakeTask.new('sphinx:enqueue')
+    serialized = {'rake' => 'searchd:enqueue'}
+    task = ThreeScale::Jobs::RakeTask.new('searchd:enqueue')
     assert_equal(task, ThreeScale::Jobs::Task.deserialize(serialized))
   end
 

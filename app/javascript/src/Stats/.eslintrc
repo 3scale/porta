@@ -1,0 +1,62 @@
+{
+  "root": true,
+  "parser": "espree",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/recommended",
+  ],
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    // Overrides eslint:recommended
+    "object-curly-spacing": ["error", "always"],
+    "array-callback-return": "error",
+    "no-duplicate-imports": "error",
+    "no-console": ["warn", { "allow": ["error"] }],
+    "semi": ["error", "never"],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "jsx-quotes": ["error", "prefer-double"],
+    "array-bracket-spacing": ["error", "never"],
+    "lines-around-comment": ["error", {
+      "allowBlockStart": true
+    }],
+
+    // From plugin import
+    "import/order": ["error", {
+      "alphabetize": {
+        "order": "asc"
+      },
+      "warnOnUnassignedImports": true,
+      "groups": [["builtin", "external"], "internal", "index", "object", "type", ["parent", "sibling"]],
+      "pathGroups": [{
+        "pattern": "utilities/**",
+        "group": "internal",
+      },{
+        "pattern": "**/*.scss",
+        "group": "sibling",
+      }],
+      "newlines-between": "always",
+    }],
+    "import/newline-after-import": "error",
+    "import/no-relative-packages": "error",
+    "import/no-named-as-default": "off",
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": false
+    }
+  },
+}

@@ -1,8 +1,9 @@
-<h2>Invoices
+<% content_for :page_header_title do %>
+  Invoices
   <%- if @buyer.present? -%>
     for account: <%= h @buyer.org_name %>
   <%- end -%>
-</h2>
+<% end %>
 
 <table class="data">
   <thead>
@@ -44,7 +45,7 @@
         <td><%= price_tag(invoice.cost) %></td>
         <td><%= h invoice.state %></td>
         <td>
-          <%= invoice_pdf_link(invoice, 'PDF') %>
+          <%= invoice_pdf_link(invoice, label: 'PDF') %>
         </td>
         <% end %>
     <% end %>

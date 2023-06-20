@@ -4,6 +4,8 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   before_action :authorize_partners
   around_action :with_password_confirmation!
 
+  layout false
+
   def new
   end
 

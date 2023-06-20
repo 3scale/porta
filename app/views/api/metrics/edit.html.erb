@@ -1,5 +1,5 @@
 <% method_or_metric = @metric.child? ? "method" : "metric" %>
-<% content_for :sublayout_title, "Edit #{method_or_metric.capitalize}" %>
+<% content_for :page_header_title, "Edit #{method_or_metric.capitalize}" %>
 
 <%= semantic_form_for @metric, :url => admin_service_metric_path(@service, @metric) do |form| %>
   <%= render 'form', :form => form %>

@@ -92,6 +92,19 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       page = Nokogiri::HTML4::Document.parse(response.body)
       assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).exclude?('Please select')
     end
+
+    test 'no n+1 queries on index' do
+      populate = ->(n) do
+        n.times do
+          buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+          service_contract = FactoryBot.create(:simple_service_contract, plan: service_plan, user_account: buyer)
+        end
+      end
+
+      assert_perform_constant_number_of_queries(populate: populate) do
+        get admin_buyers_service_contracts_path
+      end
+    end
   end
 
   class ProviderMemberTest < self
