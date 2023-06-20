@@ -106,8 +106,8 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
 end
 
 Then "they can filter plans by name" do
-  input = find('#plans_table input[aria-label="Search input"]')
-  button = find('#plans_table button[aria-label="Search"]')
+  input = find('input[aria-label="Search input"]')
+  button = find('button[aria-label="Search"]')
 
   input.set('one')
   button.click
@@ -121,7 +121,7 @@ Then "they can filter plans by name" do
   button.click
   assert_plans_table []
 
-  clear_button = find('#plans_table button[aria-label="Reset"]')
+  clear_button = find('button[aria-label="Reset"]')
   clear_button.click
   assert_plans_table @plans
 end
