@@ -1,7 +1,6 @@
 import {
   NavExpandable,
   NavItem,
-  NavGroup,
   NavItemSeparator
 } from '@patternfly/react-core'
 
@@ -29,8 +28,26 @@ const NavSection: React.FunctionComponent<Props> = ({
     isExpanded={isSectionActive}
     title={navSectionTitle}
   >
-    {items.map(({ id, title, path, target, itemOutOfDateConfig }) => path
+    {items.map(({ id, title, path, target, itemOutOfDateConfig, subItems }) => (subItems && title)
       ? (
+        <NavExpandable
+          key={title}
+          isActive={isSectionActive && subItems.some(s => s.id === activeItem)}
+          isExpanded={isSectionActive && subItems.some(s => s.id === activeItem)}
+          title={title}
+        >
+          {subItems.map(sub => (
+            <NavItem
+              key={sub.id}
+              isActive={isSectionActive && activeItem === sub.id}
+              target={sub.target}
+              to={sub.path}
+            >
+              {sub.title}
+            </NavItem>
+          ))}
+        </NavExpandable>
+      ) : title ? (
         <NavItem
           key={title}
           className={itemOutOfDateConfig ? 'outdated-config' : ''}
@@ -40,8 +57,7 @@ const NavSection: React.FunctionComponent<Props> = ({
         >
           {title}
         </NavItem>
-      )
-      : title ? <NavGroup key={title} title={title} /> : <NavItemSeparator key="separator" />
+      ) : <NavItemSeparator key="separator" />
     )}
   </NavExpandable>
 )
