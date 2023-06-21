@@ -5,6 +5,11 @@ class BillingWorker
 
   sidekiq_options queue: :billing, retry: 3
 
+  sidekiq_retry_in do |_count|
+    # after lock has been released
+    1.hours + 10
+  end
+
   class Callback
     delegate :logger, to: 'Rails'
 

@@ -66,7 +66,7 @@ module Finance
 
     def with_lock
       # intentionally skip unlocking, no further billing of account within 3 hours allowed
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 3.hours.to_i * 1000).result
+      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hours.to_i * 1000).result
 
       yield
     end
