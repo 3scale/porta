@@ -98,7 +98,7 @@ module VerticalNavHelper
     items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}  if service_plans_management_visible?
 
     if can?(:manage, :settings)
-      items << { title: 'Settings', subitems: [
+      items << { title: 'Settings', subItems: [
         { id: :usage_rules,         title: 'Usage Rules',        path: edit_admin_site_usage_rules_path },
         { id: :fields_definitions,  title: 'Fields Definitions', path: admin_fields_definitions_path }
       ]}
@@ -129,7 +129,7 @@ module VerticalNavHelper
       billing_settings_items << {id: :charging_and_gateway, title: 'Charging & Gateway',   path: admin_finance_settings_path} if can?(:manage, :finance)
       billing_settings_items << {id: :credit_card_policies, title: 'Credit Card Policies', path: edit_admin_site_settings_path}
 
-      items << { title: 'Settings', subitems: billing_settings_items }
+      items << { title: 'Settings', subItems: billing_settings_items }
     end
 
     items
@@ -153,7 +153,7 @@ module VerticalNavHelper
     items << {title: 'Visit Portal', path: access_code_url(host: current_account.external_domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
 
     if can?(:manage, :portal)
-      items << { title: 'Legal Terms', subitems: [
+      items << { title: 'Legal Terms', subItems: [
         {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)},
         {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)},
         {id: :new_application_licence,      title: 'New Application',      path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
@@ -168,10 +168,10 @@ module VerticalNavHelper
       portal_settings_items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
       portal_settings_items << {id: :forum_settings,   title: 'Forum Settings',   path: edit_admin_site_forum_path} if !current_account.forum_enabled? && provider_can_use?(:forum)
 
-      items << { title: 'Settings', subitems: portal_settings_items }
+      items << { title: 'Settings', subItems: portal_settings_items }
     end
 
-    items << { title: 'Docs', subitems: [
+    items << { title: 'Docs', subItems: [
       { id: :liquid_reference, title: 'Liquid Reference', path: provider_admin_liquid_docs_path },
     ]}
   end
@@ -183,7 +183,7 @@ module VerticalNavHelper
     items << {id: :trash,         title: 'Trash',         path: provider_admin_messages_trash_index_path}
 
     if can?(:manage, :settings) && !master_on_premises?
-      items << { title: 'Settings', subitems: [
+      items << { title: 'Settings', subItems: [
         { id: :email,     title: 'Support Emails',  path: edit_admin_site_emails_path },
         { id: :templates, title: 'Email Templates', path: provider_admin_cms_email_templates_path }
       ]}
@@ -243,7 +243,7 @@ module VerticalNavHelper
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
     unless master_on_premises?
-      items << { title: 'Settings', subitems: [
+      items << { title: 'Settings', subItems: [
         { id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service) }
       ]}
     end
