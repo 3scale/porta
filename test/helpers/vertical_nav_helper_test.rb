@@ -41,21 +41,21 @@ class VerticalNavHelperTest < ActionView::TestCase
       rolling_update(:forum, enabled: true)
 
       current_account.settings.forum_enabled = false
-      assert_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subitems].pluck(:id), :forum_settings
+      assert_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
       assert_not_includes audience_nav_sections.pluck(:id), :forum
 
       current_account.settings.forum_enabled = true
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subitems].pluck(:id), :forum_settings
+      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
       assert_includes audience_nav_sections.pluck(:id), :forum
 
       rolling_update(:forum, enabled: false)
 
       current_account.settings.forum_enabled = false
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subitems].pluck(:id), :forum_settings
+      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
       assert_not_includes audience_nav_sections.pluck(:id), :forum
 
       current_account.settings.forum_enabled = true
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subitems].pluck(:id), :forum_settings
+      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
       assert_not_includes audience_nav_sections.pluck(:id), :forum
     end
 
