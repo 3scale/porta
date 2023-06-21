@@ -28,14 +28,12 @@ div class="pf-c-card"
           td role="cell" data-label="State"
             = user.state
           td class="operations pf-c-table__action" role="cell"
-            div class="pf-c-overflow-menu__content"
-              div class="pf-c-overflow-menu__group pf-m-button-group"
-                div class="pf-c-overflow-menu__item"
-                  a class="pf-c-button pf-m-link" href=edit_admin_buyers_account_user_path(account_id: user.account_id, id: user.id)
-                    span class="pf-c-button__icon pf-m-start"
-                      i class="fa fa-pencil" aria-hidden="true"
-                    | Edit
-                div class="pf-c-overflow-menu__item"
-                  = button_activate_or_suspend(user)
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = link_to 'Edit', edit_admin_buyers_account_user_path(account_id: user.account_id, id: user.id), class: 'action edit'
+                  div class="pf-c-overflow-menu__item"
+                    = button_activate_or_suspend(user)
 
 = will_paginate @users

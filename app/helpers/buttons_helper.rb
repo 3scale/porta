@@ -99,8 +99,7 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     action_link_to('activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'action')
   end
 
-  def legacy_button_activate_or_suspend(user)
-    # DEPRECATED
+  def button_activate_or_suspend(user)
     account = user.account
     if user.active?
       fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(account, user), class: 'action off')
@@ -108,17 +107,6 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
       fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(account, user), class: 'action ok')
     elsif user.pending? && can?(:activate, user)
       link_to_activate_buyer_user(user)
-    end
-  end
-
-  def button_activate_or_suspend(user)
-    account = user.account
-    if user.active?
-      fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(account, user), class: 'pf-c-button pf-m-warning')
-    elsif user.suspended?
-      fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(account, user), class: 'pf-c-button pf-m-primary')
-    elsif user.pending? && can?(:activate, user)
-      fancy_link_to('Activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'pf-c-button pf-m-primary')
     end
   end
 
