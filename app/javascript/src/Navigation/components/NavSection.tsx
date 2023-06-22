@@ -57,7 +57,7 @@ const NavSection: React.FunctionComponent<Props> = ({
         >
           {title}
         </NavItem>
-      ) : <NavItemSeparator key="separator" />
+      ) : <NavItemSeparator key={id} />
     )}
   </NavExpandable>
 )

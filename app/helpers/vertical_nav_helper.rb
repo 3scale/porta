@@ -149,9 +149,9 @@ module VerticalNavHelper
       items << {id: :ActiveDocs,         title: 'ActiveDocs',         path: admin_api_docs_services_path}          if can?(:manage, :plans)
     end
 
-    items << {title: ''} # Separator
+    items << {id: 'separator 0'} # Separator
     items << {title: 'Visit Portal', path: access_code_url(host: current_account.external_domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
-    items << {title: ''} # Separator
+    items << {id: 'separator 1'} # Separator
 
     if can?(:manage, :portal)
       items << { title: 'Legal Terms', subItems: [
