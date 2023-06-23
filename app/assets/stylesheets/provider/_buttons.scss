@@ -32,6 +32,7 @@
 }
 
 table.data .less-important-button,
+form.formtastic .button-group button.less-important-button,
 .less-important-button {
   @include internal-potato-button($secondary-button-color, $secondary-button-bg-color, $secondary-button-border-color);
 }
