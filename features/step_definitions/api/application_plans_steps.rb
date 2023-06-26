@@ -106,9 +106,9 @@ end
 
 When "an admin is looking for an application plan" do
   ApplicationPlan.destroy_all
-  FactoryBot.create(:application_plan, issuer: default_service, name: 'This is number One')
-  FactoryBot.create(:application_plan, issuer: default_service, name: 'Now the second one')
-  FactoryBot.create(:application_plan, issuer: default_service, name: 'Finally the Last')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'First')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'Second')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'Last')
 
   FactoryBot.create(:buyer_account, provider_account: @provider).buy!(
     FactoryBot.create(:application_plan, issuer: default_service, name: 'This has been bought')

@@ -34,6 +34,10 @@ Feature: Product > Integration > Metrics
       Then I should be able to add a mapping rule to "Diavola"
       But I should see "Carbonara" already mapped
 
+    @search
+    Scenario: Sorting methods
+      Then they can filter the table by system name
+
   Rule: Tab metrics
     Background:
       Given I change to tab "Metrics"
@@ -53,3 +57,7 @@ Feature: Product > Integration > Metrics
       When I change to tab "Metrics"
       Then I should be able to add a mapping rule to "Pizza"
       But I should see "Pasta" already mapped
+
+    @search
+    Scenario: Sorting metrics
+      Then they can filter the table by system name

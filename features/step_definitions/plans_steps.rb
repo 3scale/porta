@@ -105,27 +105,6 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
 
-Then "they can filter plans by name" do
-  input = find('input[aria-label="Search input"]')
-  button = find('button[aria-label="Search"]')
-
-  input.set('one')
-  button.click
-  assert_plans_table @plans.by_query('one')
-
-  input.set('last')
-  button.click
-  assert_plans_table @plans.by_query('last')
-
-  input.set('foooo')
-  button.click
-  assert_plans_table []
-
-  clear_button = find('button[aria-label="Reset"]')
-  clear_button.click
-  assert_plans_table @plans
-end
-
 And "they can sort plans by name, no. of contracts and state" do
   within plans_table do
     click_on 'Name'

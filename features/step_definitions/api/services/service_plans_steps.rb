@@ -76,9 +76,9 @@ end
 
 When "an admin is looking for a service plan" do
   ServicePlan.destroy_all
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'This is number One')
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'Now the second one', state: 'published')
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'Finally the Last')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'First')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Second', state: 'published')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Last')
 
   FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(
     plan: FactoryBot.create(:service_plan, issuer: default_service, name: 'This has been bought')
