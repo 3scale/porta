@@ -18,7 +18,7 @@ div class="pf-c-card"
           th role="columnheader" scope="col"
             | Apps
         = th_sortable('state', 'State')
-        th role="columnheader" scope="col" class="actions pf-m-width-15 pf-c-table__action"
+        th role="columnheader" scope="col" class="actions pf-m-fit-content"
           - if can?(:create, Account)
             = link_to 'Create', create_account_path, title: 'Create new account', class: 'action add'
 
@@ -43,7 +43,7 @@ div class="pf-c-card"
             = s.select :state, account_states_for_select,
                                { include_blank: true, selected: @search.state },
                                { class: :state }
-          th role="columnheader" scope="col"
+          th role="columnheader" scope="col" class="pf-m-fit-content"
             = s.button 'Search', name: nil, class: "pf-c-button pf-m-primary"
 
     tbody role="rowgroup"
