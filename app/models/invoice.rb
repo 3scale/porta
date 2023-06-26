@@ -593,7 +593,7 @@ class Invoice < ApplicationRecord
 
   # Returns years which have invoice
   def self.years
-    self.connection.select_values(selecting { sift(:year, period).as('year') }.distinct.reorder('year desc').to_sql).map(&:to_i)
+    self.connection.select_values(selecting { sift(:year, period).as('year') }.distinct.reorder('year DESC').to_sql).map(&:to_i)
   end
 
   protected
