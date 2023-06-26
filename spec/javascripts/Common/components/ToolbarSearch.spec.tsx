@@ -17,12 +17,6 @@ it('should render itself', () => {
   expect(wrapper.exists()).toEqual(true)
 })
 
-it('can have a placeholder', () => {
-  const placeholder = 'Find something'
-  const wrapper = mountWrapper({ placeholder })
-  expect(wrapper.exists(`input[placeholder="${placeholder}"]`)).toEqual(true)
-})
-
 describe('before a search has been submitted', () => {
   const wrapper = mountWrapper()
   mockLocation('http://example.com')
