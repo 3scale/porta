@@ -18,7 +18,6 @@ Feature: Bulk operations
     Given I am logged in as provider "foo.3scale.localhost"
 
   # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-  @wip
   Scenario: Show and hide bulk operations controls
     When I navigate to the accounts page
     When I check select for "bob"
