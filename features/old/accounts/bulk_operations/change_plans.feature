@@ -57,7 +57,7 @@ Feature: Bulk operations
 
     When I follow "Group/Org."
     Then I should see following table:
-     | Group/Org. ▲ | Plan   |
+     | Group/Org.   | Plan   |
      | bob          | Bronze |
      | jane         | Bronze |
      | mike         | Bronze |
@@ -72,7 +72,7 @@ Feature: Bulk operations
 
     Then I should see "Action completed successfully"
      And I should see following table:
-     | Group/Org. ▲ | Plan   |
+     | Group/Org.   | Plan   |
      | bob          | Gold   |
      | jane         | Bronze |
      | mike         | Gold   |
