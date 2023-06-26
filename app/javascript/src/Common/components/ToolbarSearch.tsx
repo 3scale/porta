@@ -4,8 +4,6 @@ import {
   SearchInput
 } from '@patternfly/react-core'
 
-import { createReactWrapper } from 'utilities/createReactWrapper'
-
 import type { SearchInputProps } from '@patternfly/react-core'
 
 type Props = SearchInputProps
@@ -74,8 +72,5 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   )
 }
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-const ToolbarSearchWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ToolbarSearch {...props} />, containerId) }
-
 export type { Props }
-export { ToolbarSearch, ToolbarSearchWrapper }
+export { ToolbarSearch }
