@@ -2,7 +2,7 @@
 // consistent styles throughout the application, PatternFly Base CSS should be used in the project,
 // or some components may diverge in appearance. This import statement should be placed before your
 // main application component is imported.
-@import '~@patternfly/react-core/dist/styles/base.css';
+@import '~@patternfly/patternfly/patternfly-base.css';
 
 // Patternfly Layouts
 @import '~@patternfly/patternfly/layouts/Level/level.css';

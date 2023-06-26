@@ -8,20 +8,16 @@ div class="pf-c-card"
         td role="columnheader" scope="col" class="select pf-c-table__check"
           label
             = bulk_select_all
-        th role="columnheader" scope="col"
-          = sortable('org_name', 'Group/Org.')
+        = th_sortable('org_name', 'Group/Org.')
         th role="columnheader" scope="col"
           | Admin
-        th role="columnheader" scope="col"
-          = sortable('created_at', 'Signup Date')
+        = th_sortable('created_at', 'Signup Date')
         - if account_plans_size > 1
-          th role="columnheader" scope="col"
-            = sortable('plans.name', 'Plan')
+          = th_sortable('plans.name', 'Plan')
         - if can?(:see, :multiple_applications)
           th role="columnheader" scope="col"
             | Apps
-        th role="columnheader" scope="col"
-          = sortable('state', 'State')
+        = th_sortable('state', 'State')
         th role="columnheader" scope="col" class="actions pf-m-width-15"
           - if can?(:create, Account)
             = link_to 'Create', create_account_path, title: 'Create new account', class: 'action add'
