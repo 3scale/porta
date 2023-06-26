@@ -25,7 +25,7 @@ const VerticalNav: React.FunctionComponent<Props> = ({
   activeItem,
   currentApi
 }) => {
-  const navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => items
+  const navSections = sections.map(({ id, title, path, items, outOfDateConfig, target }) => items
     ? (
       <NavSection
         key={title}
@@ -39,6 +39,7 @@ const VerticalNav: React.FunctionComponent<Props> = ({
       <NavItem
         key={title}
         isActive={activeSection === id}
+        target={target}
         to={path}
       >
         {title}

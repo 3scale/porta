@@ -11,7 +11,7 @@ Then "I should see menu items under {string}" do |section, items|
   button.click if button['aria-expanded'] == 'false'
 
   nav_items = within(button.sibling('.pf-c-nav__subnav')) do
-    find_all('.pf-c-nav__item', visible: :all).map { |i| i.text(:all) }
+    find_all('.pf-c-nav__item:not(.pf-m-expandable)', visible: :all).map { |i| i.text(:all) }
   end
 
   assert_equal items.raw.flatten, nav_items

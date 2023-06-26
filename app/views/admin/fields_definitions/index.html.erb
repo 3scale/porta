@@ -20,7 +20,7 @@
   <h2>
     <%= class_name.constantize.model_name.human %>
   </h2>
-  <%= pf_fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition=> {:target => class_name}),
+  <%= fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition=> {:target => class_name}),
     :title => "Create new field for #{class_name.constantize.model_name.human}", :class => 'new-field-definition new
     action add' %>
 
@@ -35,7 +35,7 @@
 	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
 	<span class="action-set">
 	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-	  <%= pf_link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
       </li>
     <% end %>
   </ol>

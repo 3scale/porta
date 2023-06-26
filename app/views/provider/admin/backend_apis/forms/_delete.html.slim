@@ -1,30 +1,31 @@
 - if can?(:destroy, backend_api)
-  hr
-  h3
-    ' Backend deletion
-
-  p
-    ' Deleting this backend will
-    strong> irreversibly
-    ' destroy all methods and metrics and mapping rules of this backend.
-    ' It will also delete in the the application plans all limits and pricing rules set on methods and metrics of this backend.
-
-  p
-    strong> Important!
-    ' Proxy configurations of products using this backend (staging and production) will not update automatically after deleting the backend.
-    ' You need to perform this action on each product using the backend, manually via UI or 3scale API.
-
-  - if backend_api.backend_api_configs.any?
-    p The following products are using this backend:
-    ul
-      - for service in backend_api.services
-        li = link_to service.name, admin_service_path(service)
+  div.pf-c-content
+    hr
+    h3
+      ' Backend deletion
 
     p
-      ' Before deleting this backend, make sure none of the products above is using it.
+      ' Deleting this backend will
+      strong> irreversibly
+      ' destroy all methods and metrics and mapping rules of this backend.
+      ' It will also delete in the the application plans all limits and pricing rules set on methods and metrics of this backend.
 
-  - else
     p
-      - msg = t('api.backend_apis.edit.delete_confirmation', name: j(backend_api.name))
-      - delete_options = { data: { confirm: msg }, method: :delete, label: "I understand the consequences, proceed to delete '#{j(backend_api.name)}' backend" }
-      = pf_delete_link_for(provider_admin_backend_api_path(backend_api), delete_options)
+      strong> Important!
+      ' Proxy configurations of products using this backend (staging and production) will not update automatically after deleting the backend.
+      ' You need to perform this action on each product using the backend, manually via UI or 3scale API.
+
+    - if backend_api.backend_api_configs.any?
+      p The following products are using this backend:
+      ul
+        - for service in backend_api.services
+          li = link_to service.name, admin_service_path(service)
+
+      p
+        ' Before deleting this backend, make sure none of the products above is using it.
+
+    - else
+      p
+        - msg = t('api.backend_apis.edit.delete_confirmation', name: j(backend_api.name))
+        - delete_options = { data: { confirm: msg }, method: :delete, label: "I understand the consequences, proceed to delete '#{j(backend_api.name)}' backend" }
+        = delete_link_for(provider_admin_backend_api_path(backend_api), delete_options)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_12_105944) do
+ActiveRecord::Schema.define(version: 2023_06_21_090207) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -744,7 +744,7 @@ ActiveRecord::Schema.define(version: 2023_06_12_105944) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.integer "tenant_id", precision: 38
-    t.index ["system_operation_id", "account_id"], name: "index_mail_dispatch_rules_on_system_operation_id_and_account_id", unique: true
+    t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
   create_table "member_permissions", force: :cascade do |t|

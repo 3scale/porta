@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ButtonsHelper
+module ButtonsHelper # rubocop:disable Metrics/ModuleLength
 
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
@@ -99,8 +99,7 @@ module ButtonsHelper
     action_link_to('activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'action')
   end
 
-  def legacy_button_activate_or_suspend(user)
-    # DEPRECATED
+  def button_activate_or_suspend(user)
     account = user.account
     if user.active?
       fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(account, user), class: 'action off')
@@ -108,17 +107,6 @@ module ButtonsHelper
       fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(account, user), class: 'action ok')
     elsif user.pending? && can?(:activate, user)
       link_to_activate_buyer_user(user)
-    end
-  end
-
-  def button_activate_or_suspend(user)
-    account = user.account
-    if user.active?
-      fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(account, user), class: 'pf-c-button pf-m-warning')
-    elsif user.suspended?
-      fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(account, user), class: 'pf-c-button pf-m-primary')
-    elsif user.pending? && can?(:activate, user)
-      fancy_link_to('Activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'pf-c-button pf-m-primary')
     end
   end
 
@@ -156,22 +144,8 @@ module ButtonsHelper
     end
   end
 
-  PATTERNFLY_BUTTON_CLASS = 'pf-c-button'
-  PATTERNFLY_LINK_CLASS = "#{PATTERNFLY_BUTTON_CLASS} pf-m-link"
-
-  %i[link_to action_link_to fancy_button_to fancy_link_to delete_button_for delete_link_for].each do |method_sym|
-    define_method("pf_#{method_sym}") do |*args, options|
-      opts = options.respond_to?(:merge) ?
-        [options.merge(class: join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class]))] :
-        [options, { class: PATTERNFLY_LINK_CLASS }]
-      public_send(method_sym, *args, *opts)
-    end
-  end
-
-  def pf_link_as_button(label, url, options)
-    pf_class = "#{PATTERNFLY_BUTTON_CLASS} pf-m-#{options[:modifier]}"
-    options[:class] = join_dom_classes(pf_class, options[:class])
-    
+  def pf_link_to(label, url, options = {})
+    options[:class] = join_dom_classes('pf-c-button pf-m-link', options[:class])
     link_to label, url, options
   end
 

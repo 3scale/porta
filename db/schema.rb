@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_12_105944) do
+ActiveRecord::Schema.define(version: 2023_06_21_090207) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2023_06_12_105944) do
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.string "kind"
-    t.text "audited_changes"
+    t.text "audited_changes", limit: 16777215
     t.text "comment"
     t.integer "associated_id"
     t.string "associated_type"
@@ -746,7 +746,7 @@ ActiveRecord::Schema.define(version: 2023_06_12_105944) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
-    t.index ["system_operation_id", "account_id"], name: "index_mail_dispatch_rules_on_system_operation_id_and_account_id", unique: true
+    t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
   create_table "member_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|

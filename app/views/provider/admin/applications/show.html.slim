@@ -6,7 +6,7 @@
     div class="pf-c-content"
       h1
         => @cinstance.display_name
-        = pf_link_to 'Edit', edit_provider_admin_application_path(@cinstance),
+        = link_to 'Edit', edit_provider_admin_application_path(@cinstance),
                              class: 'action edit'
 
 div#twoCol.equal-width
