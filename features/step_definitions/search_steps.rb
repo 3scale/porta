@@ -57,9 +57,9 @@ Then /^they can filter the table by (?:name|system name)$/ do
 end
 
 def find_items
-  return all('td[data-label="Name"]').map(&:text).sort unless find('th[data-label="System name"]')
+  return all('td[data-label="System name"]').map(&:text).sort unless has_css?('th[data-label="Name"]')
 
-  all('td[data-label="System name"]').map(&:text).sort
+  all('td[data-label="Name"]').map(&:text).sort
 end
 
 def clear_search
