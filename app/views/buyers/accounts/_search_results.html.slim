@@ -83,7 +83,9 @@ div class="pf-c-card"
                                       title: 'Impersonate impersonation_admin user on this provider side',
                                       class: 'action bolt'
 
-      = no_search_results(can?(:see, :multiple_applications) ? 9 : 8) if accounts.empty?
+      - if accounts.empty?
+        = render partial: 'empty_state', locals: { colspan: can?(:see, :multiple_applications) ? 9 : 8,
+                                                   body: t('buyers.accounts.empty_search.body') }
 
 = will_paginate accounts
 = link_to_export_widget_for('Accounts')

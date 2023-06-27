@@ -21,6 +21,7 @@ module SearchHelper
     url_for(:per_page => params[:per_page])
   end
 
+  # DEPRECATED: use partial empty_state
   def no_search_results(colspan)
     content_tag(:tr, class: 'no_results search') do
       content_tag(:td, colspan: colspan) do
