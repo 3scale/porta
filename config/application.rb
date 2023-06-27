@@ -70,6 +70,18 @@ module System
     config.action_dispatch.use_authenticated_cookie_encryption = false
     config.active_support.use_authenticated_message_encryption = false
 
+    # Return false instead of self when enqueuing is aborted from a callback.
+    config.active_job.return_false_on_aborted_enqueue = true
+
+    # Use ActionMailer::MailDeliveryJob for sending parameterized and normal mail.
+    #
+    # The default delivery jobs (ActionMailer::Parameterized::DeliveryJob, ActionMailer::DeliveryJob),
+    # will be removed in Rails 6.1. This setting is not backwards compatible with earlier Rails versions.
+    # If you send mail in the background, job workers need to have a copy of
+    # MailDeliveryJob to ensure all delivery jobs are processed properly.
+    # Make sure your entire app is migrated and stable on 6.0 before using this setting.
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
+
     # Use a modern approved hashing function.
     # This is the default in Rails 7.0, so can be removed when we upgrade.
     config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
