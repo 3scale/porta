@@ -287,7 +287,7 @@ module System
       config.three_scale.oauth2 = config_for(:oauth2)
     end
 
-    Rails.application.config.paperclip_defaults = {
+    config.paperclip_defaults = {
       storage: :s3,
       s3_credentials: ->(*) { CMS::S3.credentials },
       bucket: ->(*) { CMS::S3.bucket },
@@ -298,7 +298,7 @@ module System
       s3_host_name: ->(*) { CMS::S3.hostname },
       url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',
       path: ':rails_root/public/system/:url'
-    }.merge(Rails.application.try_config_for(:paperclip) || {})
+    }.merge(try_config_for(:paperclip) || {})
 
     config.to_prepare do
       Rails.application.initializer :log_formatter, after: :initialize_logger do
