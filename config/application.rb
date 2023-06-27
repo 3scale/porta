@@ -70,7 +70,8 @@ module System
     config.action_dispatch.use_authenticated_cookie_encryption = false
     config.active_support.use_authenticated_message_encryption = false
 
-    # Use a modern approved hashing function
+    # Use a modern approved hashing function.
+    # This is the default in Rails 7.0, so can be removed when we upgrade.
     config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
