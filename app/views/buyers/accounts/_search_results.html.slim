@@ -68,7 +68,7 @@ div class="pf-c-card"
             = account_states_info(account)
           td role="cell" class="pf-c-table__action actions operations"
             ul.Actions
-              - if account.admin_user.try!(:pending?) || true
+              - if account.admin_user.try!(:pending?)
                 li.Actions-item
                   = link_to_activate_buyer_user(account.admins.first)
               - elsif account.pending?
