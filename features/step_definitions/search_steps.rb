@@ -30,8 +30,8 @@ Then /^I should see highlighted "([^"]*)" in "([^"]*)"$/ do |text, section|
   end
 end
 
-Then /^they can filter the table by (?:name|system name)$/ do
-  @items = find_items
+Then "they can filter the table by {string}" do |label|
+  all_items = find_items(label)
   input = find('input[aria-label="Search input"]')
   button = find('button[aria-label="Search"]')
 
@@ -40,30 +40,29 @@ Then /^they can filter the table by (?:name|system name)$/ do
   assert_selector('.pf-c-popover__body', text: "To search, type at least 3 characters")
 
   clear_search
+  assert_equal all_items, find_items(label)
 
-  input.set(@items.first)
+  input.set(all_items.first)
   button.click
-  assert_equal [@items.first], find_items
+  assert_equal [all_items.first], find_items(label)
 
-  input.set(@items.last)
+  input.set(all_items.last)
   button.click
-  assert_includes find_items, @items.last
+  assert_includes find_items(label), all_items.last
 
   input.set('foooo')
   button.click
-  assert_equal [], find_items
+  assert_empty find_items(label)
 
   clear_search
+  assert_equal all_items, find_items(label)
 end
 
-def find_items
-  return all('td[data-label="System name"]').map(&:text).sort unless has_css?('th[data-label="Name"]')
-
-  all('td[data-label="Name"]').map(&:text).sort
+def find_items(label)
+  all("td[data-label='#{label}']").map(&:text)
 end
 
 def clear_search
   clear_button = find('button[aria-label="Reset"]')
   clear_button.click
-  assert_equal @items, find_items
 end

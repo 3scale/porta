@@ -36,7 +36,7 @@ Feature: Product > Integration > Metrics
 
     @search
     Scenario: Sorting methods
-      Then they can filter the table by system name
+      Then they can filter the table by "System name"
 
   Rule: Tab metrics
     Background:
@@ -60,4 +60,4 @@ Feature: Product > Integration > Metrics
 
     @search
     Scenario: Sorting metrics
-      Then they can filter the table by system name
+      Then they can filter the table by "System name"

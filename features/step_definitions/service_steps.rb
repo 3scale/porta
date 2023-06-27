@@ -66,6 +66,10 @@ Then /^I should see the following backends being used:$/ do |table|
   end
 end
 
+When "an admin is reviewing services index page" do
+  visit admin_services_path
+end
+
 def backends_used_table
   find('#backends-used-list-container')
 end

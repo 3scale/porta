@@ -8,5 +8,7 @@ Feature: Services index page
 
   @search
   Scenario: Sorting services
+    Given a service "First"
+    And a service "Last"
     When an admin is reviewing services index page
-    Then they can filter the table by name
+    Then they can filter the table by "Name"

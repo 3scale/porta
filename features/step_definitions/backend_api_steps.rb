@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 When "an admin is reviewing backend apis index page" do
-  FactoryBot.create(:backend_api, name: 'First', system_name: 'first', account: @provider)
-  FactoryBot.create(:backend_api, name: 'Last', system_name: 'second', account: @provider)
-
   visit provider_admin_backend_apis_path
 end
 
@@ -80,6 +77,10 @@ end
 
 Given "a backend" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
+end
+
+Given /^a backend "([^"]*)"$/ do |name|
+  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
 end
 
 When "an admin is in the backend overview page" do
