@@ -18,7 +18,7 @@ div class="pf-c-card"
           th role="columnheader" scope="col"
             | Apps
         = th_sortable('state', 'State')
-        th role="columnheader" scope="col" class="actions pf-m-width-15"
+        th role="columnheader" scope="col" class="actions pf-m-width-15 pf-c-table__action"
           - if can?(:create, Account)
             = link_to 'Create', create_account_path, title: 'Create new account', class: 'action add'
 
@@ -67,7 +67,7 @@ div class="pf-c-card"
             = account_states_info(account)
           td role="cell" class="pf-c-table__action actions operations"
             ul.Actions
-              - if account.admin_user.try!(:pending?)
+              - if account.admin_user.try!(:pending?) || true
                 li.Actions-item
                   = link_to_activate_buyer_user(account.admins.first)
               - elsif account.pending?
