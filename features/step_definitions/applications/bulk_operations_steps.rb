@@ -51,3 +51,21 @@ end
 When "I should see the bulk action failed with {application}" do |application|
   assert_match "There were some errors:\n#{application.name} (#{application.user_account.org_name})", bulk_errors_container.text
 end
+
+And(/^checks if bulk-operations the div is hidden$/) do
+  assert_selector('#bulk-operations', visible: :hidden)
+end
+
+And(/^checks if bulk-operations the div is visible$/) do
+  assert_selector('#bulk-operations', visible: true)
+end
+
+Then(/^I check if none of the checkboxes are selected$/) do
+  checkboxes = all('input[type="checkbox"]')
+  expect(checkboxes.all? { |checkbox| !checkbox.checked? }).to be true
+end
+
+Then(/^I check if all checkboxes are selected$/) do
+  checkboxes = all('input[type="checkbox"]')
+  expect(checkboxes.all?(&:checked?)).to be true
+end
