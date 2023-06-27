@@ -23,6 +23,7 @@ div class="pf-c-card"
             = link_to 'Create', create_account_path, title: 'Create new account', class: 'action add'
 
       tr role="row" class="search"
+        td
         = search_form do |s|
           th role="columnheader" scope="col" colspan="3"
             = s.text_field :query, value: search_query_value,

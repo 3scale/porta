@@ -307,3 +307,11 @@ td.pattern,
 td.StatsMethodsTable-name {
   word-break: break-word;
 }
+
+// HACK: old tables that has a search form element get styled as a table-cell and it breaks the
+// total colspan. This rule makes sure the form is never visible and instead a "td" element fills
+// the colspan. Apparently this does not affect Chrome and Firefox.
+// TODO: this won't be necessary once all legacy tables have been upgraded with Patternfly.
+.pf-c-table form.search {
+  display: none;
+}
