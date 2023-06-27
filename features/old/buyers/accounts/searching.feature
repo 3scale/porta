@@ -105,6 +105,7 @@ Feature: Searching buyer accounts
     Then I should see following table:
       | Group/Org. |
       | alice      |
+    And the search input should be filled with "alice"
 
   Scenario: Search account by name substring
     When I go to the buyer accounts page

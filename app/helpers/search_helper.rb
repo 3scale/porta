@@ -1,7 +1,7 @@
 module SearchHelper
 
   def search_query_value
-     (params[:search].is_a?(Hash) && params[:search][:query] ? params[:search][:query] : nil)
+    params[:search].respond_to?(:[]) && params[:search][:query] ? params[:search][:query] : nil
   end
 
   def search_form(data = @search)
