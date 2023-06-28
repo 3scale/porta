@@ -69,7 +69,7 @@ Then /^the buyer should have following line items for "([^"]*)"(?: in the( \d(?:
 end
 
 Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
-  assert find(:xpath, '//table/tbody/tr[1]').text.include?(buyer)
+  assert has_css?('table tbody tr.invoice td[data-label="Account"]', text: buyer)
 end
 
 Then(/^I should have (\d+) invoices?$/) do |count|
