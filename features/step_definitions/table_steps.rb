@@ -30,6 +30,12 @@ Then /^I should see following table:$/ do |expected|
   end
 end
 
+Then "I should see column {string} in ascending order" do |column|
+  header = find('th.pf-m-selected', text: column)
+  # HACK: icons will be invisible unless @javascript is enabled, they are imported in packs/provider.scss
+  assert header.has_css?('i.fa-long-arrow-alt-up', visible: false)
+end
+
 # Then /^I should see the following table:$/ do |expected|
 #   table = if has_css?('.pf-c-table')
 #             extract_pf4_table
