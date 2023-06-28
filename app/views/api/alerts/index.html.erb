@@ -4,66 +4,74 @@
 
 <% content_for :page_header_title, @service ? 'Alerts' : 'Alerts for all services' %>
 
-<div id="limit_alerts_container">
-    <table class="data" id="limit_alerts">
-      <thead>
-        <tr>
-          <th>Account</th>
-          <th>Application</th>
-          <th>Message</th>
-          <th><%= sortable 'level', 'Level'%></th>
-          <th><%= sortable 'timestamp', 'Time (UTC)'%></th>
-          <th>
-            <%= action_link_to 'Delete all', polymorphic_path([:purge, :admin, @service, :alerts]), :method => :delete, data: {confirm: "Do you really want to delete all alerts and violations?"} %>
-          </th>
-          <th>
-            <%= action_link_to 'Mark all as read', polymorphic_path([:all_read, :admin, @service, :alerts]), :method => :put %>
-          </th>
-        </tr>
-        <tr class="search">
-            <%= search_form do |s| %>
-              <th colspan="2">
-                <%= s.fields_for :account do |account_search| %>
-                  <%= account_search.text_field :query, class: :query, placeholder: 'search for accounts and applications' %>
-                <% end %>
-              </th>
-              <th colspan=4>
-              </th>
-              <th>
-                <%= s.button 'Search', :name => nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary' %>
-              </th>
-            <% end %>
-        </tr>
-      </thead>
-      <tbody class="alerts events">
-        <%- @alerts.each do |alert| -%>
-          <%= content_tag :tr, :id => dom_id(alert), :'data-state' => alert.state, :class => :alert do %>
-            <td>
-              <%- if account = alert.cinstance.try(:user_account) -%>
-                <%= link_to account.org_name, admin_buyers_account_path(account) -%>
-              <%- else -%>
-                <%= account_name(account) -%>
-              <% end-%>
-            </td>
-            <%- cinstance = alert.cinstance %>
-            <td><%= link_to cinstance.name, provider_admin_application_path(cinstance) %></td>
-            <td><%= h alert.message %></td>
-            <td><%= colorize_utilization(alert.level) %></td>
-            <td><%= l alert.timestamp %></td>
-            <td>
-              <%= delete_button_for polymorphic_path([:admin, @service, alert]), :remote => true, :method => :delete, data: {:confirm => "Do you really want to delete this alert?"} %>
-            </td>
-            <td>
-              <%= action_link_to :read, polymorphic_path([:read, :admin, @service, alert]), :remote => true, :method => :put, :class => 'mark-as-read', data: {disable_with: "Marking..."}, :title => 'Mark as read' if alert.unread? %>
-            </td>
-          <%- end -%>
-        <%- end -%>
-        <%- if @alerts.empty? -%>
-          <tr class="no_results">
-            <td colspan="6">There are no recent alerts or violations.</td>
-          </tr>
-        <%- end -%>
-      </tbody>
-    </table>
-    <%= will_paginate @alerts %>
-</div>
+<table class="pf-c-table pf-m-grid-lg" role="grid" id="limit_alerts" aria-label="Alerts table">
+  <thead>
+    <tr role="row">
+      <th role="columnheader" scope="col" class="">Account</th>
+      <th role="columnheader" scope="col" class="">Application</th>
+      <th role="columnheader" scope="col" class="">Message</th>
+      <%= th_sortable 'level', 'Level'%>
+      <%= th_sortable 'timestamp', 'Time (UTC)'%>
+      <th role="columnheader" scope="col" class="pf-m-fit-content">
+        <%= action_link_to 'Delete all', polymorphic_path([:purge, :admin, @service, :alerts]), :method => :delete, data: {confirm: "Do you really want to delete all alerts and violations?"} %>
+      </th>
+      <th role="columnheader" scope="col" class="pf-m-fit-content">
+        <%= action_link_to 'Mark all as read', polymorphic_path([:all_read, :admin, @service, :alerts]), :method => :put %>
+      </th>
+    </tr>
+    <tr role="row" class="search">
+      <%= search_form do |s| %>
+        <th role="columnheader" scope="col" colspan="2">
+          <%= s.fields_for :account do |account_search| %>
+            <%= account_search.text_field :query, class: :query, placeholder: 'search for accounts and applications' %>
+          <% end %>
+        </th>
+        <th role="columnheader" scope="col" colspan=4></th>
+        <th role="columnheader" scope="col">
+          <%= s.button 'Search', :name => nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary' %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody role="rowgroup" class="alerts events">
+    <%- @alerts.each do |alert| -%>
+      <%- state = alert.state %>
+      <%= content_tag :tr, id: dom_id(alert),  :'data-state' => state, role: "row" do %>
+        <td role="cell" data-label="Account">
+          <%= content_tag(state == 'unread' ? :b : :span) do %>
+            <%- if account = alert.cinstance.try(:user_account) -%>
+              <%= link_to account.org_name, admin_buyers_account_path(account) -%>
+            <%- else -%>
+              <%= account_name(account) -%>
+            <% end-%>
+          <% end %>
+        </td>
+        <%- cinstance = alert.cinstance %>
+        <td role="cell" data-label="Application">
+          <%= link_to cinstance.name, provider_admin_application_path(cinstance) %>
+        </td>
+        <td role="cell" data-label="Message">
+          <%= h alert.message %>
+        </td>
+        <td role="cell" data-label="Level">
+          <%= colorize_utilization(alert.level) %>
+        </td>
+        <td role="cell" data-label="Time (UTC)">
+          <%= l alert.timestamp %>
+        </td>
+        <td role="cell">
+          <%= delete_button_for polymorphic_path([:admin, @service, alert]), :remote => true, :method => :delete, data: {:confirm => "Do you really want to delete this alert?"} %>
+        </td>
+        <td role="cell">
+          <%= action_link_to :read, polymorphic_path([:read, :admin, @service, alert]), :remote => true, :method => :put, :class => 'mark-as-read', data: {disable_with: "Marking..."}, :title => 'Mark as read' if alert.unread? %>
+        </td>
+      <%- end -%>
+    <%- end -%>
+    <%- if @alerts.empty? -%>
+      <tr class="no_results">
+        <td colspan="6">There are no recent alerts or violations.</td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
+<%= will_paginate @alerts %>
