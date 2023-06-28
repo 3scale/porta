@@ -46,7 +46,7 @@ Feature: Applications management
     When I follow "2 Applications"
      And I follow "Name"
     Then I should see following table:
-      | Name ▲         | State |
+      | Name           | State |
       | ComplicatedApp | live  |
       | SimpleApp      | live  |
 

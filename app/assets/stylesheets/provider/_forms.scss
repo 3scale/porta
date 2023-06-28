@@ -57,7 +57,7 @@ textarea {
 }
 
 // TODO: where is this applied and why isn't it wrapper around form?
-button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item) {
+button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item, .pf-c-select__menu-item) {
   min-width: line-height-times(2);
   width: auto;
 }
@@ -76,16 +76,15 @@ td.delta input[type='text'] {
   min-width: 0;
 }
 
-th input[type='text'],
-th select,
-td input[type='text'],
-td select {
-  //max-width: calc(100% - #{line-height-times(2)});
-  min-width: line-height-times(4);
-
-  &#search_month_number,
-  &#search_year {
-    width: calc(50% - #{line-height-times(2)});
+table tr.search {
+  th input[type='text'],
+  th select,
+  td input[type='text'],
+  td select {
+    &#search_month_number,
+    &#search_year {
+      width: 45%;
+    }
   }
 }
 

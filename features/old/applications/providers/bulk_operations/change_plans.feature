@@ -36,7 +36,7 @@ Feature: Bulk operations
     And close the colorbox
     When I follow "Name"
     Then I should see following table:
-      | Name ▲  | Plan     |
+      | Name    | Plan     |
       | BobApp  | Advanced |
       | JaneApp | Advanced |
       | MikeApp | Basic    |
