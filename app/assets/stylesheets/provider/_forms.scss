@@ -39,6 +39,11 @@ form.formtastic fieldset.inputs input[type='password'] {
   }
 }
 
+// HACK: overrides form.button-to min height so that it fits pf-c-table
+.pf-c-table form.button-to button.unset-min-height {
+  height: unset;
+}
+
 .error input[type='text'],
 .error textarea,
 .error select,
