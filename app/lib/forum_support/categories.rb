@@ -36,7 +36,7 @@ module ForumSupport
     def edit; end
 
     def update
-      if @category.update_attributes(params[:topic_category])
+      if @category.update(params[:topic_category])
         flash[:notice] = "Category was successfully updated."
         redirect_to forum_categories_url
       else

@@ -14,7 +14,7 @@ class ApicastV2DeploymentServiceTest < ActiveSupport::TestCase
     ThreeScale.config.stubs(onpremises: true)
     raw_policies = [{name: 'policy', version: '1.0.0', enabled: true, configuration: {data: { request: '1', config: '123' }}}]
     policies = [{name: 'policy', version: '1.0.0', configuration: {data: { request: '1', config: '123' }}}]
-    @proxy.update_attributes(policies_config: raw_policies.to_json)
+    @proxy.update(policies_config: raw_policies.to_json)
     Service.new(@proxy).call(environment: ProxyConfig::ENVIRONMENTS.first)
     assert_match policies.first.to_json, @proxy.proxy_configs.last.content
   end

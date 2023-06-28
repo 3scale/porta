@@ -47,7 +47,7 @@ Given /^provider "([^\"]*)" has the following users:$/ do |provider_name, table|
 end
 
 Given "{user} has email {string}" do |user, email|
-  user.update_attributes!(:email => email)
+  user.update!(:email => email)
 end
 
 Given "the admin of {account} has password {string}" do |account, password|

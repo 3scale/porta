@@ -13,7 +13,7 @@ class Sites::DocumentationsController < Sites::BaseController
                                      :documentation_enabled,
                                      :documentation_public)
 
-    if @settings.update_attributes(attrs)
+    if @settings.update(attrs)
       flash[:notice] = 'Documentations settings updated.'
       redirect_to edit_admin_site_documentation_url
     else

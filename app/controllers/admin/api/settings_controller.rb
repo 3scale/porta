@@ -23,7 +23,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   # Settings Update
   # PUT /admin/api/settings.json
   def update
-    settings.update_attributes(settings_params)
+    settings.update(settings_params)
     respond_with(settings)
   end
 

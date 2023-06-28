@@ -333,7 +333,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def save_and_deploy(attrs = {})
-    saved = update_attributes(attrs)
+    saved = update(attrs)
 
     analytics.track('Sandbox Proxy updated', analytics_attributes.merge(success: saved))
 

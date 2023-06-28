@@ -85,7 +85,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'does not render a prompt if there is a default service plan' do
-      service.update_attributes(default_service_plan: service_plan)
+      service.update(default_service_plan: service_plan)
 
       get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
 

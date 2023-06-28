@@ -15,7 +15,7 @@ class Admin::Api::Services::Proxy::OIDCConfigurationsController < Admin::Api::Se
   # OIDC Configuration Update
   # PATCH /admin/api/services/{service_id}/proxy/oidc_configuration.xml
   def update
-    configuration.update_attributes(oidc_configuration_params)
+    configuration.update(oidc_configuration_params)
     respond_with(configuration)
   end
 

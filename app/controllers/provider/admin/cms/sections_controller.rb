@@ -39,7 +39,7 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
     @section.add_remove_by_ids( :builtin, params[:cms_section][:cms_builtin_ids])
     @section.save!
 
-    if @section.update_attributes(section_params)
+    if @section.update(section_params)
       flash[:info] = 'section saved successfully.'
       redirect_to( :action => :edit, :id => @section.id)
     else

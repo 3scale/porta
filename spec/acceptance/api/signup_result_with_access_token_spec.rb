@@ -25,7 +25,7 @@ resource 'Signup::ResultWithAccessToken' do
 
     xit 'renders errors correctly' do
       # TODO: bug in rendering errors from specs
-      resource.user.update_attributes(email: '')
+      resource.user.update(email: '')
       subject.fetch('errors').should include('user' => ['Email should look like an email address'])
     end
   end
@@ -52,7 +52,7 @@ resource 'Signup::ResultWithAccessToken' do
 
     xit 'renders errors correctly' do
       # TODO: bug in rendering errors from specs
-      resource.user.update_attributes(email: '')
+      resource.user.update(email: '')
       subject { xml.root.xpath('./errors') }
       should have_tag('user', :text => ['Email should look like an email address'])
     end

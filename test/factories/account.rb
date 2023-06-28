@@ -141,7 +141,7 @@ FactoryBot.define do
       account.approve!
 
       account.services.first.update_attribute :mandatory_app_key, false
-      account.settings.update_attributes!(
+      account.settings.update!(
         account_plans_ui_visible: true,
         service_plans_ui_visible: true
       )

@@ -63,7 +63,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
       application.validate_fields!
     end
 
-    application.update_attributes(application_params)
+    application.update(application_params)
     assign_drops application: application
     # make sure to prevent xss on js rendering if this notice is changed to include e.g. application name
     if application.valid?

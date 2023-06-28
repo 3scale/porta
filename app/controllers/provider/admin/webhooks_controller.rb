@@ -42,7 +42,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   def update
-    if @webhook.update_attributes(params[:web_hook])
+    if @webhook.update(params[:web_hook])
       flash[:notice] = 'Webhooks settings were successfully updated.'
       redirect_to :action => :edit
     else

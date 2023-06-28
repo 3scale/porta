@@ -37,7 +37,7 @@ class Api::PricingRulesController < FrontendController
 
   def update
     respond_to do |format|
-      if @pricing_rule.update_attributes(pricing_rule_params)
+      if @pricing_rule.update(pricing_rule_params)
         format.js
         format.html { redirect_to(edit_admin_application_plan_pricing_rule_path(@plan, @pricing_rule), :notice => 'Pricing rule was successfully updated.')}
       else

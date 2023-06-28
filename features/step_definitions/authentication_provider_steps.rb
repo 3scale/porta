@@ -34,7 +34,7 @@ Given(/^the provider has the authentication provider "([^"]+)" published$/) do |
     authentication_provider = authentication_provider_class.create(options)
   end
   @authentication_provider = authentication_provider
-  @authentication_provider.update_attributes!(published: true)
+  @authentication_provider.update!(published: true)
 end
 
 Given(/^the Oauth2 user has all the required fields$/) do

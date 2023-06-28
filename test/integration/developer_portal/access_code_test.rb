@@ -18,7 +18,7 @@ class DeveloperPortal::AccessCodeTest < ActionDispatch::IntegrationTest
   end
 
   def test_show_no_access_code
-    @provider.update_attributes(site_access_code: nil)
+    @provider.update(site_access_code: nil)
 
     get '/access_code?access_code=12345'
     assert_response :redirect

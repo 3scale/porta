@@ -3,7 +3,7 @@ class NotificationPreferencesForm < Reform::Form
 
   attr_reader :current_user, :user_ability
 
-  delegate :update_attributes,    to: :model
+  delegate :update,               to: :model
   delegate :has_permission?,      to: :current_user
   delegate :account,              to: :current_user
   delegate :can?,                 to: :user_ability
