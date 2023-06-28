@@ -35,7 +35,6 @@ Feature: Personal Details
     And I press "Update Details"
     Then I should be on the provider users page
 
-  @wip
   Scenario: Edit personal details with invalid data
     And I go to the personal details page
     And I fill in "Email" with ""
