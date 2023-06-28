@@ -38,7 +38,7 @@ Feature: Bulk operations
     Then I should see "Action completed successfully"
 
     Then I should see following table:
-      | Group/Org. ▲ | State   |
+      | Group/Org.   | State   |
       | approved     | Approved |
       | pending      | Approved |
       | rejected     | Approved |
@@ -57,7 +57,7 @@ Feature: Bulk operations
     Then I should see "Action completed successfully"
 
     Then I should see following table:
-      | Group/Org. ▲ | State   |
+      | Group/Org.   | State   |
       | approved     | Rejected |
       | pending      | Rejected |
       | rejected     | Rejected |
@@ -76,7 +76,7 @@ Feature: Bulk operations
     Then I should see "Action completed successfully"
 
     Then I should see following table:
-      | Group/Org. ▲ | State  |
+      | Group/Org.   | State  |
       | approved     | Pending |
       | pending      | Pending |
       | rejected     | Pending |
