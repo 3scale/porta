@@ -5,25 +5,29 @@
 - content_for :page_header_button_label, 'Add backend'
 - content_for :page_header_button_href, new_admin_service_backend_usage_path(@service)
 
-table#backend_api_configs.data
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Backends table"
   thead
-    tr
-      th = sortable('backend_apis.name', 'Name')
-      th = sortable('backend_apis.private_endpoint', 'Private base URL')
-      th
-        = sortable('backend_api_configs.path', 'Public path')
-      th
-  tbody
+    tr role="row"
+      = th_sortable('backend_apis.name', 'Name')
+      = th_sortable('backend_apis.private_endpoint', 'Private base URL')
+      = th_sortable('backend_api_configs.path', 'Public path')
+      td
+  tbody role="rowgroup"
     - @backend_api_configs.each do |config|
-      tr
-        td
+      tr role="row"
+        td role="cell" data-label="Name"
           = link_to config.backend_api.name, provider_admin_backend_api_path(config.backend_api)
-        td.pattern
+        td role="cell" data-label="Private Base URL" class="pattern"
           = config.backend_api.private_endpoint
-        td.position
+        td role="cell" data-label="Public path" class="position"
           = config.path
-        td.actions
-          = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
-          = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+        td role="cell" class="pf-c-table__action actions"
+          div class="pf-c-overflow-menu"
+            div class="pf-c-overflow-menu__content"
+              div class="pf-c-overflow-menu__group pf-m-button-group"
+                div class="pf-c-overflow-menu__item"
+                  = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
+                div class="pf-c-overflow-menu__item"
+                  = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
 
 = will_paginate(@backend_api_configs)
