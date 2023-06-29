@@ -35,7 +35,7 @@ Feature: Product > Integration > Metrics
       But I should see "Carbonara" already mapped
 
     @search
-    Scenario: Sorting methods
+    Scenario: Filtering methods
       Then they can filter the table by "System name"
 
   Rule: Tab metrics
@@ -59,5 +59,5 @@ Feature: Product > Integration > Metrics
       But I should see "Pasta" already mapped
 
     @search
-    Scenario: Sorting metrics
+    Scenario: Filtering metrics
       Then they can filter the table by "System name"
