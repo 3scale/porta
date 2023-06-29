@@ -105,8 +105,8 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
 
-Then "they can filter the plans by {string}" do |label|
-  all_items = find_items(label)
+Then "they can filter the plans by name" do
+  all_items = find_items("Name")
   input = find('input[aria-label="Search input"]')
   button = find('button[aria-label="Search"]')
 
@@ -115,7 +115,7 @@ Then "they can filter the plans by {string}" do |label|
   assert_selector('.pf-c-popover__body', text: "To search, type at least 3 characters")
 
   clear_search
-  assert_equal all_items, find_items(label)
+  assert_equal all_items, find_items("Name")
 
   input.set('one')
   button.click
@@ -127,10 +127,10 @@ Then "they can filter the plans by {string}" do |label|
 
   input.set('foooo')
   button.click
-  assert_empty find_items(label)
+  assert_empty find_items("Name")
 
   clear_search
-  assert_equal all_items, find_items(label)
+  assert_equal all_items, find_items("Name")
 end
 
 And "they can sort plans by name, no. of contracts and state" do
