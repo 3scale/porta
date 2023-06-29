@@ -70,7 +70,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
             <LevelItem><Text component="h1">Products</Text></LevelItem>
             <LevelItem>
               <Button component="a" href={newProductPath} variant="primary">
-               Create Product
+                Create Product
               </Button>
             </LevelItem>
           </Level>

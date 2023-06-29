@@ -105,24 +105,32 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
 
-Then "they can filter plans by name" do
-  input = find('[data-ouia-component-id="toolbar-search"]')
+Then "they can filter the plans by name" do
+  all_items = find_items("Name")
+  input = find('input[aria-label="Search input"]')
+  button = find('button[aria-label="Search"]')
+
+  input.set('ab')
+  button.click
+  assert_selector('.pf-c-popover__body', text: "To search, type at least 3 characters")
+
+  clear_search
+  assert_equal all_items, find_items("Name")
 
   input.set('one')
-  input.sibling('button').click
+  button.click
   assert_plans_table @plans.by_query('one')
 
   input.set('last')
-  input.sibling('button').click
+  button.click
   assert_plans_table @plans.by_query('last')
 
   input.set('foooo')
-  input.sibling('button').click
-  assert_plans_table []
+  button.click
+  assert_empty find_items("Name")
 
-  input.set('')
-  input.sibling('button').click
-  assert_plans_table @plans
+  clear_search
+  assert_equal all_items, find_items("Name")
 end
 
 And "they can sort plans by name, no. of contracts and state" do
