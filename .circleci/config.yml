@@ -135,7 +135,7 @@ dnsmasq-container: &dnsmasq-container
     - --log-facility=-
     - --log-queries
     - --no-poll
-    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/127.0.0.11
+    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/circleci-binary-releases.s3.amazonaws.com/127.0.0.11
     - --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
@@ -264,9 +264,7 @@ commands: # reusable commands with parameters
       - run:
           name: Rspec tests
           command: |
-            TESTS="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-            echo "bundle exec rspec --format progress ${TESTS}"
-            bundle exec rspec --format progress ${TESTS}
+            circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
       - upload-artifacts
 
   cucumber-tests:
@@ -291,9 +289,7 @@ commands: # reusable commands with parameters
           command: |
             # saved test cases metadata can be read here:
             # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
-            TESTS=$(bundle exec ruby .circleci/features.rb | circleci tests split --split-by=timings)
-            echo "bundle exec cucumber --profile ci ${TESTS}"
-            bundle exec cucumber --profile ci ${TESTS}
+            bundle exec ruby .circleci/features.rb | circleci tests run --command="xargs bundle exec cucumber --profile ci" --verbose --split-by=timings
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -315,10 +311,10 @@ commands: # reusable commands with parameters
       - run:
           name: Run Rails tests
           command: |
+            list=/tmp/test-list-$$
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
-            TESTS=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
-            echo "bundle exec rake test:run  TESTOPTS=--verbose --verbose --trace TEST='${TESTS}'"
-            bundle exec rake test:run TEST="${TESTS}" TESTOPTS=--verbose --verbose --trace
+            bundle exec rake "test:files:${taskname}" | circleci tests run --command="cat > $list" --verbose --split-by=timings
+            bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
   save-gem-cache:
