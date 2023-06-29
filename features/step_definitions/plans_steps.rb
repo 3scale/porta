@@ -105,6 +105,34 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
 
+Then "they can filter the plans by {string}" do |label|
+  all_items = find_items(label)
+  input = find('input[aria-label="Search input"]')
+  button = find('button[aria-label="Search"]')
+
+  input.set('ab')
+  button.click
+  assert_selector('.pf-c-popover__body', text: "To search, type at least 3 characters")
+
+  clear_search
+  assert_equal all_items, find_items(label)
+
+  input.set('one')
+  button.click
+  assert_plans_table @plans.by_query('one')
+
+  input.set('last')
+  button.click
+  assert_plans_table @plans.by_query('last')
+
+  input.set('foooo')
+  button.click
+  assert_empty find_items(label)
+
+  clear_search
+  assert_equal all_items, find_items(label)
+end
+
 And "they can sort plans by name, no. of contracts and state" do
   within plans_table do
     click_on 'Name'

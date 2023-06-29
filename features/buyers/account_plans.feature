@@ -71,7 +71,7 @@ Feature: Account plans index page
     @search
     Scenario: Filtering and sorting account plans
       When an admin is looking for an account plan
-      Then they can filter the table by "Name"
+      Then they can filter the plans by "Name"
       And they can sort plans by name, no. of contracts and state
 
   Rule: Account plans hidden

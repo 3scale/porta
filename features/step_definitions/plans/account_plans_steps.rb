@@ -101,9 +101,9 @@ end
 
 When "an admin is looking for an account plan" do
   AccountPlan.destroy_all
-  FactoryBot.create(:account_plan, provider: @provider, name: 'First')
-  FactoryBot.create(:account_plan, provider: @provider, name: 'Second', state: 'published')
-  FactoryBot.create(:account_plan, provider: @provider, name: 'Last')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one', state: 'published')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last')
 
   plan = FactoryBot.create(:account_plan, provider: @provider, name: 'This has been bought')
   FactoryBot.create(:buyer_account, provider_account: @provider).buy!(plan)

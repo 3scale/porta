@@ -60,7 +60,7 @@ Feature: Service plans index page
     @search
     Scenario: Filtering and sorting service plans
       When an admin is looking for a service plan
-      Then they can filter the table by "Name"
+      Then they can filter the plans by "Name"
       And they can sort plans by name, no. of contracts and state
 
 Rule: service plans hidden
