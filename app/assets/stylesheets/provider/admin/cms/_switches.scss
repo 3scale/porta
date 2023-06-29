@@ -1,15 +1,3 @@
-hr#allowed-switches-delimiter {
-  color: $border-color;
-}
-
-table#switches {
-  p {
-    margin: 0;
-  }
-}
-
-.Switch {
-  &--inactive {
-    color: $disabled-color;
-  }
+tr.switch-inactive {
+  --pf-c-table--cell--Color: $disabled-color;
 }
