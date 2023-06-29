@@ -57,12 +57,3 @@ Then "they can filter the table by {string}" do |label|
   clear_search
   assert_equal all_items, find_items(label)
 end
-
-def find_items(label)
-  all("td[data-label='#{label}']").map(&:text)
-end
-
-def clear_search
-  clear_button = find('button[aria-label="Reset"]')
-  clear_button.click
-end
