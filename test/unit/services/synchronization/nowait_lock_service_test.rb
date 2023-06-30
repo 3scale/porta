@@ -25,11 +25,14 @@ class Synchronization::NowaitLockServiceTest < ActionDispatch::IntegrationTest
   end
 
   test "locks with a block" do
-    wait = true
+    wait = nil
     thread = Thread.new do
-      Synchronization::NowaitLockService.call(lock_key, timeout: 10000) { sleep 0.001 while wait }
+      Synchronization::NowaitLockService.call(lock_key, timeout: 10000) do
+        wait = true
+        sleep 0.001 while wait
+      end
     end
-    sleep 0.01 # wait for thread to acquire lock
+    200.times { sleep 0.01 unless wait } # wait up to 2s for thread to acquire lock
     assert_not Synchronization::NowaitLockService.call(lock_key, timeout: 10000).result
     wait = false
     assert thread.join(1)
