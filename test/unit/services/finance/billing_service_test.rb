@@ -50,6 +50,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   # WARNING: flakiness here means a bug
   test 'lock prevents multiple jobs from running' do
     finished = false
+    # this thread should hold the lock until the end of the test
     lock_thread = within_async_thread do
       Finance::BillingService.new(@provider.id).send(:with_lock) do
         sleep 0.1 until finished
@@ -70,7 +71,8 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
 
     assert_raise(Finance::BillingService::LockBillingError) do
       Finance::BillingService.new(@provider.id).send(:with_lock) do
-        safety_thread.join(0.001) # this will raise if thread raised so we know what actually happened
+        # we shouldn't reach here because +lock_thread+ holds the lock, so +LockBillingError+ should have been raised and this block never been executed
+        safety_thread.join(0.001) # this will raise if +lock_thread+ raised so we know what actually happened
         raise "billing lock allows concurrent billing"
       end
     end
