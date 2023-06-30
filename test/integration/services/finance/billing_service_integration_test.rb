@@ -80,13 +80,8 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
     workers = Array.new(3) do
       Thread.new do
         Thread.current.report_on_exception = false
-        with_transaction_isolation(isolation) do
-          # the billing service call is expected to eventually invoke invoice.charge!
-          Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
-        rescue ActiveRecord::RecordNotUnique => exception
-          Rails.logger.error exception.inspect
-          retry
-        end
+        # the billing service call is expected to eventually invoke invoice.charge!
+        Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
       end
     end
 
@@ -107,14 +102,5 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
     invoice.issue_and_pay_if_free!
     assert_not_equal "paid", invoice.reload.state
     invoice
-  end
-
-  def with_transaction_isolation(isolation, &block)
-    case isolation
-    when :none
-      yield
-    else
-      ActiveRecord::Base.transaction(requires_new: true, isolation: isolation, &block)
-    end
   end
 end
