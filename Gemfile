@@ -27,7 +27,6 @@ gem 'activemodel-serializers-xml'
 gem 'protected_attributes_continued', '~> 1.8.2'
 
 gem 'rails-observers'
-gem "rails-patterns", require: false
 
 gem 'strong_migrations', '~> 0.6.8'
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Synchronization::UnsafeUnlockService < Patterns::Service
+class Synchronization::UnsafeUnlockService < ThreeScale::Patterns::Service
   # unconditional lock release, dangerous to create race conditions based on a redlock key
   # should only be used for manual intervention in case of extraordinary circumstances
   def initialize(str_resource)

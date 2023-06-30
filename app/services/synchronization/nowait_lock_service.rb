@@ -1,18 +1,10 @@
 # frozen_string_literal: true
 
-class Synchronization::NowaitLockService < Patterns::Service
-  class << self
-    # workarounds https://github.com/Selleo/pattern/issues/39
-    def call(*args, &block)
-      args.last[:block] = block if block
-      super(*args)
-    end
-  end
-
+class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
   # @param str_resource [String] a lock key
   # @param timeout [Integer] milliseconds lock timeout
-  # @param block if nobody else holds the lock, then release the lock
-  def initialize(str_resource, timeout:, block: nil)
+  # @yield [] if lock is acquired, then execute block without parameters and ensure lock is released afterwards
+  def initialize(str_resource, timeout:, &block)
     self.resource = str_resource
     self.timeout = timeout
     self.block = block
