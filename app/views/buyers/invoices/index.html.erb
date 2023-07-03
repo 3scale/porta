@@ -4,15 +4,15 @@
 
 <% content_for :page_header_title, "Invoices for #{@account.org_name}" %>
 
-<table class="data">
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table">
   <thead>
-    <tr>
-      <th>ID</th>
-      <th>Month</th>
-      <th>State</th>
-      <th>Amount</th>
-      <th>Download</th>
-      <th class='operations'>
+    <tr role="row">
+      <th th role="columnheader" scope="col">ID</th>
+      <th th role="columnheader" scope="col">Month</th>
+      <th th role="columnheader" scope="col">State</th>
+      <th th role="columnheader" scope="col">Amount</th>
+      <th th role="columnheader" scope="col">Download</th>
+      <th th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
         <%= fancy_link_to('Create invoice', admin_buyers_account_invoices_path(@account),
                           :method => :post, :class => 'new',
                           :disabled => create_invoice_disabled(@account)) -%>
@@ -21,12 +21,12 @@
   </thead>
   <tbody>
     <% @invoices.each do |invoice| %>
-      <%= content_tag_for(:tr, invoice) do %>
-        <td><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice) , :title => "Show #{invoice.friendly_id}" %></td>
-        <td><%= invoice.name %></td>
-        <td><%= h invoice.state %></td>
-        <td><%= price_tag(invoice.cost) %></td>
-        <td colspan="2">
+      <%= content_tag_for(:tr, invoice, role: 'row') do %>
+        <td role="cell" data-label="ID"><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice) , title: "Show #{invoice.friendly_id}" %></td>
+        <td role="cell" data-label="Month"><%= invoice.name %></td>
+        <td role="cell" data-label="State"><%= h invoice.state %></td>
+        <td role="cell" data-label="Amount"><%= price_tag(invoice.cost) %></td>
+        <td role="cell" data-label="Download" colspan="2">
           <%= invoice_pdf_link(invoice, label: 'PDF') %>
         </td>
        <% end %>
