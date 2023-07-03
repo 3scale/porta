@@ -36,10 +36,13 @@ Feature: Personal Details
     Then I should be on the provider users page
 
   Scenario: Edit personal details with invalid data
+    And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
+    When I log in as "randomdude" on foo.3scale.localhost
     And I go to the personal details page
+    Then I should be on the personal details page
     And I fill in "Email" with ""
-    And I press "Update Details"
-    Then I should see "can't be blank" within "#user_email_input"
+    And I press "Update Personal Details"
+    Then I should see "should look like an email addres"
 
   Scenario: Provider should see all fields defined for user
     Given master provider has the following fields defined for "User":
