@@ -22,23 +22,6 @@ module Finance::InvoicesHelper
     end
   end
 
-
-  def invoice_field(name, value, action = nil, options = {})
-    title = case name
-            when Symbol
-        Invoice.human_attribute_name(name)
-            else
-        name
-    end
-
-    content_tag :tr do
-      row = content_tag(:th, title)
-      row += content_tag(:td, value, :id => "field-#{name.to_s.downcase}")
-      row += content_tag(:td, action)
-      row
-    end
-  end
-
   def current_invoice_link(buyer)
     link_to 'Current invoice',
             admin_finance_account_invoice_path(buyer, buyer.current_invoice.to_param),

@@ -1,0 +1,9 @@
+- id = "field-#{name.to_s.downcase}"
+
+div class="pf-c-description-list__group" id=id
+  dt class="pf-c-description-list__term"
+    span class="pf-c-description-list__text"
+      = name.is_a?(Symbol) ? Invoice.human_attribute_name(name) : name
+  dd class="pf-c-description-list__description"
+    div class="pf-c-description-list__text"
+      = value

@@ -78,7 +78,7 @@ class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_template 'buyers/invoices/show'
 
     page = Nokogiri::HTML::Document.parse(response.body)
-    period_field = page.at("td[@id='field-period']")
+    period_field = page.at("div[@id='field-period']/dd")
     assert_equal '1 July, 2023 - 31 July, 2023', period_field.text.strip
   end
 
