@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+When "an admin is reviewing backend apis index page" do
+  visit provider_admin_backend_apis_path
+end
 
 Given "an admin is at a backend api edit page" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
@@ -74,6 +77,10 @@ end
 
 Given "a backend" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
+end
+
+Given /^a backend "([^"]*)"$/ do |name|
+  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
 end
 
 When "an admin is in the backend overview page" do
