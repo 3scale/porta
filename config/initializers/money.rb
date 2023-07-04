@@ -5,5 +5,5 @@ ActiveSupport.on_load(:active_record) do
 end
 
 Rails.application.config.to_prepare do
-  ActionController::Base.helper(ThreeScale::MoneyHelper) if defined?(ActionController)
+  ActionController::Base.helper(ThreeScale::MoneyHelper)
 end
