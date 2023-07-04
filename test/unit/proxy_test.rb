@@ -21,8 +21,7 @@ class ProxyTest < ActiveSupport::TestCase
 
       proxy.policies_config = [{ name: '1' }]
       refute proxy.valid?
-      assert_match 'version can\'t be blank', proxy.errors.full_messages.to_sentence
-      assert_match 'configuration can\'t be blank', proxy.errors.full_messages.to_sentence
+      assert_match 'Policies config contains some invalid policy', proxy.errors.full_messages.to_sentence
     end
 
     def test_not_valid_json_policies_config

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_21_090207) do
+ActiveRecord::Schema.define(version: 2023_07_04_094429) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
