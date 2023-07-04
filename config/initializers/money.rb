@@ -1,4 +1,4 @@
-require 'three_scale/conversions'
+require 'three_scale/money_conversions'
 
 ActiveSupport.on_load(:active_record) do
   ActiveRecord::Base.send(:include, ThreeScale::HasMoney)
