@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module ApiAuthentication
-  module BySsoToken
+  module BySSOToken
     extend ActiveSupport::Concern
 
-    BySsoTokenError = Class.new(StandardError)
-    UserNotFoundError = Class.new(BySsoTokenError)
-    InvalidSsoTokenError = Class.new(BySsoTokenError)
+    BySSOTokenError = Class.new(StandardError)
+    UserNotFoundError = Class.new(BySSOTokenError)
+    InvalidSsoTokenError = Class.new(BySSOTokenError)
 
     def current_user
       @current_user ||= sso_token ? authenticated_user_by_sso_token : (defined?(super) && super)
@@ -14,13 +14,13 @@ module ApiAuthentication
 
     included do
       before_action :verify_sso_token
-      rescue_from ApiAuthentication::BySsoToken::BySsoTokenError, with: :show_sso_token_error
+      rescue_from ApiAuthentication::BySSOToken::BySSOTokenError, with: :show_sso_token_error
     end
 
     private
 
     def sso_strategy
-      Authentication::Strategy::Sso.new(domain_account, true)
+      Authentication::Strategy::SSO.new(domain_account, true)
     end
 
     def authenticated_user_by_sso_token

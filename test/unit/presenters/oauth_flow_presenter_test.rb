@@ -13,16 +13,16 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
       'QUERY_STRING' => 'plan_id=42'
     }
     @request = ActionDispatch::TestRequest.create env
-    @presenter = OauthFlowPresenter.new(@authentication_provider, @request)
+    @presenter = OAuthFlowPresenter.new(@authentication_provider, @request)
   end
 
   def test_sso_integration_callback_url
     @authentication_provider.kind = 'github'
-    presenter = OauthFlowPresenter.new(@authentication_provider, @request)
+    presenter = OAuthFlowPresenter.new(@authentication_provider, @request)
     assert_equal "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback", presenter.sso_integration_callback_url
 
     @authentication_provider.kind = 'auth0'
-    presenter = OauthFlowPresenter.new(@authentication_provider, @request)
+    presenter = OAuthFlowPresenter.new(@authentication_provider, @request)
     assert_equal "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback, " \
       "http://#{@provider.external_domain}/auth/invitations/auth0/#{@authentication_provider.system_name}/callback",
         presenter.sso_integration_callback_url
@@ -50,7 +50,7 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
     authentication_provider = FactoryBot.build_stubbed(:github_authentication_provider)
     @request.set_header("action_dispatch.request.query_parameters", {})
 
-    presenter = OauthFlowPresenter.new(authentication_provider, @request)
+    presenter = OAuthFlowPresenter.new(authentication_provider, @request)
 
     expected_url = "http://#{Account.master.external_domain}/master/devportal/auth/#{authentication_provider.system_name}/callback?domain=#{authentication_provider.account.external_domain}"
     assert_equal expected_url, presenter.callback_url
@@ -64,7 +64,7 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
     authentication_provider.stubs(ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE)
 
     @request.set_header("action_dispatch.request.query_parameters", {})
-    presenter = OauthFlowPresenter.new(authentication_provider, @request)
+    presenter = OAuthFlowPresenter.new(authentication_provider, @request)
     assert presenter.authorize_url
   end
 end

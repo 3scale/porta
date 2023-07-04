@@ -42,10 +42,12 @@ Sidekiq.configure_server do |config|
   Yabeda::Prometheus::Exporter.start_metrics_server!
 end
 
-Sidekiq.configure_client do |config|
-  config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
+Rails.application.config.to_prepare do
+  Sidekiq.configure_client do |config|
+    config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
 
-  config.client_middleware do |chain|
-    chain.add ThreeScale::SidekiqLoggingMiddleware
+    config.client_middleware do |chain|
+      chain.add ThreeScale::SidekiqLoggingMiddleware
+    end
   end
 end

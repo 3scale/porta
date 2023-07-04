@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Segment::ResponseError < StandardError
+class SegmentIntegration::ResponseError < StandardError
   def initialize(message, response)
     super(message)
     @response = response

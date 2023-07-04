@@ -34,7 +34,7 @@ module Liquid
 
       def oauth_flow
         request = context.registers[:request]
-        OauthFlowPresenter.new(@authentication_provider, request)
+        OAuthFlowPresenter.new(@authentication_provider, request)
       end
 
       attr_reader :authentication_provider

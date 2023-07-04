@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Segment
+module SegmentIntegration
   module DeleteUsersService
     module_function
 

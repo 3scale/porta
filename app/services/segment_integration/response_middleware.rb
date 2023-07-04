@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Segment
+module SegmentIntegration
   class ResponseMiddleware < Faraday::Response::Middleware
     def on_complete(env)
       response = env.response
