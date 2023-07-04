@@ -7,6 +7,3 @@ ThinkingSphinx::Index.define(:service, with: :real_time) do
 
   # Attributes
 end
-
-module ServiceIndex
-end

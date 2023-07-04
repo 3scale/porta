@@ -7,6 +7,3 @@ ThinkingSphinx::Index.define(:backend_api, with: :real_time) do
 
   # Attributes
 end
-
-module BackendApiIndex
-end

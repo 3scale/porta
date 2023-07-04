@@ -6,6 +6,3 @@ ThinkingSphinx::Index.define(:metric, with: :real_time) do
 
   # Attributes
 end
-
-module MetricIndex
-end
