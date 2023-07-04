@@ -53,7 +53,7 @@ class Cinstance < Contract
   include Logic::Authentication::ApplicationContract
   include Logic::Keys::ApplicationContract
 
-  include AccountIndex::ForDependency
+  include Indices::AccountIndex::ForDependency
   include ThreeScale::Search::Scopes
 
   def self.attributes_for_destroy_list

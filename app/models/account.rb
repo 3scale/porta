@@ -49,7 +49,7 @@ class Account < ApplicationRecord
   include Gateway
   include States
   include ProviderDomains
-  include AccountIndex::ForAccount
+  include Indices::AccountIndex::ForAccount
 
   self.background_deletion = [
     :users,
