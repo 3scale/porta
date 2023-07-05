@@ -2,16 +2,6 @@
 $table-columns-width: line-height-times(11);
 $search-header-width: line-height-times(4);
 
-// Utility styles
-// TODO: Move to a separate file
-.u-word-break-all {
-  word-break: break-all;
-}
-
-.u-word-break-word {
-  word-break: break-word;
-}
-
 table:not(.pf-c-table) {
   background-color: $body-background;
   width: 100%;
@@ -53,84 +43,7 @@ th.header {
   padding-top: line-height-times(2);
 }
 
-table.data:not(.pf-c-table) {
-  @include white-box-shadow;
-  border: solid $body-background line-height-times(1);
-  border-collapse: collapse;
-  border-color: transparent;
-  margin-bottom: 0;
-  margin-top: 0;
-  width: 100%;
-
-  a.is-inline {
-    display: inline;
-    padding: 0;
-    text-decoration: underline;
-  }
-
-  a {
-    display: block;
-    margin: line-height-times(-1/4) 0;
-    padding: line-height-times(1/4, true) 0;
-  }
-
-  thead {
-    vertical-align: middle;
-
-    th {
-      border-bottom: $border-width solid $border-color;
-      font-weight: $font-weight-bold;
-
-      &.actions,
-      &.right {
-        text-align: right;
-      }
-
-      a.down {
-        background: url('../images/arrow_down.gif')  no-repeat 100% 55%;
-        padding-right: line-height-times(1/2);
-      }
-
-      a.up {
-        background: url('../images/arrow_up.gif') no-repeat 100% 55%;
-        padding-right: line-height-times(1/2);
-      }
-
-      a {
-        &.up,
-        &.down {
-          background: none;
-          padding-right: 0;
-        }
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
-    }
-  }
-
-  tbody {
-    td.actions {
-      text-align: right;
-    }
-  }
-
-  &.u-sixEqualColumns tr td {
-    word-break: break-word;
-  }
-
-  td,
-  th {
-    border-bottom: $border-width solid $border-color;
-    font-weight: $font-weight-normal;
-  }
-
-  &.notification-settings,
-  &.StatsMethodsTable {
-    box-shadow: none;
-  }
-}
+// TODO: seek and destroy .is-inline, .StatsMethodsTable, .notification-settings
 
 table:not(.pf-c-table) a.action,
 table:not(.pf-c-table) button.action {

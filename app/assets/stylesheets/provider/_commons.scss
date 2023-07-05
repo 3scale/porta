@@ -215,3 +215,7 @@ hr, {
     padding: line-height-times(1);
   }
 }
+
+.pf-m-force-float-right {
+  float: right !important; /* scss-lint:disable ImportantRule */
+}

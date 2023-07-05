@@ -1,29 +1,31 @@
 <div id="application-utilization">
+  <% if utilization.error? %>
+    <p>There was a problem getting utilization data. Please try later.</p>
+  <% elsif utilization.nil? || utilization.size == 0 %>
+    <p><b>This is an unmetered application, there are no limits defined</b></p>
+  <% else %>
+    <p>Overview of the current state of this application's limits</p>
 
-<% if utilization.error? %>
-  <p>There was a problem getting utilization data. Please try later.</p>
-<% elsif utilization.nil? || utilization.size==0 %>
-  <p><b>This is an unmetered application, there are no limits defined</b>
-<% else %>
+    <table class="pf-c-table utilization" role="grid" aria-label="Utilization metrics table">
+      <thead>
+        <tr role="row">
+          <th role="columnheader" scope="col">Metric Name</th>
+          <th role="columnheader" scope="col">Period</th>
+          <th role="columnheader" scope="col">Values</th>
+          <th role="columnheader" scope="col">%</th>
+        </tr>
+      </thead>
 
-  <p>Overview of the current state of this application's limits
-
-  <p>
-  <table class="data">
-    <tbody>
-        <tr>
-          <td><b>Metric Name</b></td>
-          <td><b>Period</b></td>
-          <td><b>Values</b></td>
-          <td><b>%</b></td>
-
-        <tr/>
-      <% utilization.each do |item| %>
-        <tr>
-          <td class="u-word-break-all"><b class="u-word-break-word"><%=item.friendly_name %></b>&nbsp;(<%=item.system_name%>)</td>
-          <td>per <b><%=item.period%></b></td>
-          <%
-
+      <tbody>
+        <% utilization.each do |item| %>
+          <tr role="row">
+            <td role="cell" data-label="Metric Name">
+              <b><%= item.friendly_name %></b>&nbsp;(<%= item.system_name %>)
+            </td>
+            <td role="cell" data-label="Period">
+              per <b><%=item.period%></b>
+            </td>
+            <%
               utilization = "#{item.current_value}/#{item.max_value}"
 
               if item.max_value.to_i > 0 || (item.max_value.to_i == 0 && item.current_value.to_i == 0)
@@ -35,15 +37,16 @@
                 utilization_type = "infinity"
                 percentage = "Inf"
               end
-
-          %>
-          <td class="<%=utilization_type%>"><%=utilization%></td>
-          <td class="<%=utilization_type%>"><%=percentage%></td>
-        <tr/>
-      <% end %>
-    </tbody>
-  </table>
-
-<%end%>
-
+            %>
+            <td role="cell" data-label="Values" class="<%= utilization_type %>">
+              <%= utilization %>
+            </td>
+            <td role="cell" data-label="%" class="<%= utilization_type %>">
+              <%= percentage %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </div>
