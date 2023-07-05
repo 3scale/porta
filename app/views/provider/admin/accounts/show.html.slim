@@ -44,7 +44,7 @@ div id="account-column-wrapper"
         h2 Red Hat Account Connect Status
         - if @presenter.red_hat_verified?
           p
-            i> class="included check fa fa-check-circle-o"
+            i> class="included check fas fa-check-circle"
             ' Red Hat account
             => @presenter.red_hat_account_number
             | is connected to this 3scale account.
@@ -80,10 +80,10 @@ div id="account-column-wrapper"
             tr
               th = feature.name
               td
-                i class="included fa fa-check-circle-o"
+                i class="included fas fa-check-circle"
 
           - @presenter.absent_visible_features.each do |feature|
             tr
               th = feature.name
               td
-                i class="excluded fa fa-times-circle-o"
+                i class="excluded fas fa-times-circle"

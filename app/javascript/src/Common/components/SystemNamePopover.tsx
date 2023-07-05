@@ -1,5 +1,6 @@
 import { render } from 'react-dom'
 import { Popover } from '@patternfly/react-core'
+import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon'
 
 const SystemNamePopover: React.FunctionComponent = () => (
   <Popover
@@ -11,7 +12,7 @@ const SystemNamePopover: React.FunctionComponent = () => (
     )}
     maxWidth="420px"
   >
-    <i className="fa fa-question-circle-o" />
+    <OutlinedQuestionCircleIcon />
   </Popover>
 )
 

@@ -26,9 +26,9 @@
                 title: "#{@plan.metric_enabled?(metric) ? 'Disable' : 'Enable'} metric #{metric.friendly_name}",
                 class: 'action' do -%>
       <% if @plan.metric_enabled?(metric) %>
-        <i class="included fa fa-check-circle-o" title="Metric is enabled for this plan"></i>
+        <i class="included fas fa-check-circle" title="Metric is enabled for this plan"></i>
       <% else %>
-        <i class="excluded fa fa-times-circle-o" title="Metric is disabled for this plan"></i>
+        <i class="excluded fas fa-times-circle" title="Metric is disabled for this plan"></i>
       <% end %>
     <% end %>
   </span>
@@ -41,9 +41,9 @@
                       title: "Make metric #{metric.friendly_name} #{@plan.metric_visible?(metric) ? 'invisible' : 'visible'}",
                       class: 'action' do -%>
       <% if @plan.metric_visible?(metric) %>
-        <i class="included fa fa-check-circle-o" title="Metric is visible for this plan"></i>
+        <i class="included fas fa-check-circle" title="Metric is visible for this plan"></i>
       <% else %>
-        <i class="excluded fa fa-times-circle-o" title="Metric is hidden for this plan"></i>
+        <i class="excluded fas fa-times-circle" title="Metric is hidden for this plan"></i>
       <% end %>
     <% end %>
   </span>
@@ -55,9 +55,9 @@
                       :remote => true,
                       class: 'action' do -%>
       <% if @plan.limits_only_text?(metric) %>
-        <i class="included fa fa-check-circle-o" title="Metric limits are shown with icons and text for this plan"></i>
+        <i class="included fas fa-check-circle" title="Metric limits are shown with icons and text for this plan"></i>
       <% else %>
-        <i class="excluded fa fa-times-circle-o" title="Metri limits are text-only for this plan"></i>
+        <i class="excluded fas fa-times-circle" title="Metri limits are text-only for this plan"></i>
       <% end %>
     <% end %>
   </span>

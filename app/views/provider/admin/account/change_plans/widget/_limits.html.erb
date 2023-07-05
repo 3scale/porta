@@ -20,7 +20,7 @@
         <% plan.metrics_without_limits.each do |metric| %>
           <% if metric.visible_in_plan?(plan) %>
             <dt class="u-dl-term"> <%= display_metric_name(metric) %> </dt>
-            <dd class="u-dl-definition"><i class="included fa fa-check-circle-o"></i></dd>
+            <dd class="u-dl-definition"><i class="included fas fa-check-circle"></i></dd>
           <% end %>
         <% end %>
       <% end %>
