@@ -20,8 +20,7 @@ class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
   attr_accessor :resource, :block, :timeout
 
   def manager
-    # we may cache this as thread/fiber local variable but for now creating a new one is sufficient
-    # important is for individual workers to use a different clients, otherwise locks will be confused
+    # we may cache this as thread/fiber local variable but for now creating a new one seems good enough
     Redlock::Client.new([System.redis], { retry_count: 0, redis_timeout: 1 })
   end
 end
