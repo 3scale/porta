@@ -81,4 +81,7 @@ And "they should be able to reset the search" do
   within('.pf-c-empty-state') do
     click_link('Clear all filters')
   end
+
+  assert_not has_css?('.pf-c-empty-state')
+  assert find_all('tbody tr').size > 1
 end
