@@ -10,7 +10,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ModelExtension
 
-  audited :allow_mass_assignment => true
+  audited
 
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
