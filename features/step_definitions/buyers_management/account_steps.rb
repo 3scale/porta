@@ -55,3 +55,8 @@ When /^I create new buyer account "([^\"]*)"$/ do |name|
   fill_in "Email", :with => user[:email]
   click_button "Create"
 end
+
+When "I change the value of the customers type field to {string}" do  |custom_field|
+  fill_in "Customers Type", with: "Consumers"
+  click_button "Update Account"
+end
