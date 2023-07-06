@@ -46,4 +46,4 @@ spec:
     To learn how to package API endpoints into a product, see:
   # you can link to the next quick start(s) here
   nextQuickStart:
-    - create-an-pai-product
+    - create-an-api-product
