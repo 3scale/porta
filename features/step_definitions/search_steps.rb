@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 Given /^Sphinx is offline$/ do
   ::ThinkingSphinx::Test.stop
 end
 
-When /^I search for:$/ do |table|
+When "I/they search for:" do |table|
 
   within ".search" do
-    table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+    parameterize_headers(table)
 
     search = table.hashes.first
 
@@ -56,4 +58,30 @@ Then "they can filter the table by {string}" do |label|
 
   clear_search
   assert_equal all_items, find_items(label)
+end
+
+And "the search input should be filled with {string}" do |query|
+  assert_equal query, find('input#search_query')[:value]
+end
+
+When "they search and there are no results" do
+  fill_in('search_query', with: 'FOO BAR BANANA')
+  click_button('Search')
+end
+
+Then "they should see an empty state" do
+  assert_equal 1, find_all('tbody tr').size
+  within('.pf-c-empty-state') do
+    assert has_css?('.pf-c-title', text: 'No results found')
+    assert has_css?('.pf-c-empty-state__body', text: I18n.t('buyers.accounts.empty_search.body'))
+  end
+end
+
+And "they should be able to reset the search" do
+  within('.pf-c-empty-state') do
+    click_link('Clear all filters')
+  end
+
+  assert_not has_css?('.pf-c-empty-state')
+  assert find_all('tbody tr').size > 1
 end
