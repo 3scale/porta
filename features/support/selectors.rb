@@ -24,8 +24,6 @@ module HtmlSelectorsHelper
       '#footer'
     when 'the account details box'
       '#account_details'
-    when 'notification settings'
-      'table.notification-settings tbody'
     when 'service widget'
       '.service-widget'
 
@@ -58,7 +56,7 @@ module HtmlSelectorsHelper
       'tr.search'
 
     when 'the results'
-      'table.data > tbody'
+      'table.pf-c-table > tbody'
 
     when /the body/
       "html > body"

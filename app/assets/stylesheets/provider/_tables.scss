@@ -16,10 +16,6 @@ table:not(.pf-c-table) {
     height: line-height-times(2);
     padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
     vertical-align: top;
-
-    &.u-underline {
-      border-bottom: $border-width solid $border-color;
-    }
   }
 
 
@@ -43,7 +39,7 @@ th.header {
   padding-top: line-height-times(2);
 }
 
-// TODO: seek and destroy .is-inline, .StatsMethodsTable, .notification-settings
+// TODO: seek and destroy .is-inline, .StatsMethodsTable
 
 table:not(.pf-c-table) a.action,
 table:not(.pf-c-table) button.action {
