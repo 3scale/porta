@@ -1,7 +1,7 @@
 module SearchHelper
 
   def search_query_value
-     (params[:search].is_a?(Hash) && params[:search][:query] ? params[:search][:query] : nil)
+    params[:search].respond_to?(:[]) && params[:search][:query] ? params[:search][:query] : nil
   end
 
   def search_form(data = @search)
@@ -21,6 +21,7 @@ module SearchHelper
     url_for(:per_page => params[:per_page])
   end
 
+  # DEPRECATED: use partial empty_state
   def no_search_results(colspan)
     content_tag(:tr, class: 'no_results search') do
       content_tag(:td, colspan: colspan) do

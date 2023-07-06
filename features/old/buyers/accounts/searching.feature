@@ -21,15 +21,6 @@ Feature: Searching buyer accounts
       | bad buyer     | rejected | Default |                |
       | pending buyer | pending  | Tricky  | Italy          |
 
-  Scenario: Search
-    When I go to the buyer accounts page
-    When I search for:
-      | Group/Org. | State   | Plan   |
-      | pending    | Pending | Tricky |
-    Then I should see following table:
-      | Group/Org.    | State   | Plan   |
-      | pending buyer | Pending | Tricky |
-
   Scenario: Listing
     When I go to the buyer accounts page with 1 records per page
     Then I should see 4 pages
@@ -105,6 +96,7 @@ Feature: Searching buyer accounts
     Then I should see following table:
       | Group/Org. |
       | alice      |
+    And the search input should be filled with "alice"
 
   Scenario: Search account by name substring
     When I go to the buyer accounts page

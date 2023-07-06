@@ -463,6 +463,8 @@ en:
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
+      empty_search:
+        body: No accounts match the filter criteria. Clear all filters and try again.
       change_state:
         notice: "%{account_type} account was %{state_event_past}."
         error: "Cannot %{state_event} %{account_type} account."
