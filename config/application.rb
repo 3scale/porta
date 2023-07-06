@@ -70,9 +70,6 @@ module System
     config.action_dispatch.use_authenticated_cookie_encryption = false
     config.active_support.use_authenticated_message_encryption = false
 
-    # Return false instead of self when enqueuing is aborted from a callback.
-    config.active_job.return_false_on_aborted_enqueue = true
-
     # Use ActionMailer::MailDeliveryJob for sending parameterized and normal mail.
     #
     # The default delivery jobs (ActionMailer::Parameterized::DeliveryJob, ActionMailer::DeliveryJob),
