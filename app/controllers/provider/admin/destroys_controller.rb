@@ -8,7 +8,7 @@ class Provider::Admin::DestroysController < Provider::Admin::BaseController
     @destroy_type = kind
     @kind = ALLOWED_KINDS.fetch(@destroy_type).constantize.model_name
     @destroys = current_account.provider_audits.destroys
-        .order('audits.id desc').where(kind: @kind.to_s).paginate(page: params[:page])
+        .order('audits.id DESC').where(kind: @kind.to_s).paginate(page: params[:page])
   end
 
   private
