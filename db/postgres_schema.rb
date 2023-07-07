@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_04_094429) do
+ActiveRecord::Schema.define(version: 2023_07_07_104807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 2023_07_04_094429) do
     t.boolean "skip_swagger_validations", default: false
     t.bigint "service_id"
     t.boolean "discovered"
+    t.index ["account_id"], name: "index_api_docs_services_on_account_id"
     t.index ["service_id"], name: "fk_rails_e4d18239f1"
   end
 
