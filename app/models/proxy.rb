@@ -688,6 +688,3 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     PortGenerator.new(self).call(proxy_attribute)
   end
 end
-
-# TODO: this is needed because of overriding ::name above
-PoliciesConfig = Proxy::PoliciesConfig

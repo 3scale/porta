@@ -43,6 +43,9 @@ module System
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
     # NOTE: Symbol was later added to enabled classes by default, see https://github.com/rails/rails/pull/45584,
     # it was added to Rails 6.0.6, 6.1.7, 7.0.4
+    #
+    # TODO: many of these are needed for audited as its serialization is suboptimal and should better be changed when
+    #       possible. See also app/lib/policies_config.rb
     config.active_record.yaml_column_permitted_classes = %w[Symbol Time Date BigDecimal OpenStruct
                                                             Proxy::PolicyConfig PoliciesConfig
                                                             ActionController::Parameters

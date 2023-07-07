@@ -845,8 +845,8 @@ class ProxyTest < ActiveSupport::TestCase
     test 'update policies config with audit check' do
       proxy = FactoryBot.create :proxy
       long_string = "a" * 62 * 1024
-      # long_string = "foo"
-      # TODO serialization ends up with `ActiveModel::Errors` in there for some reason
+      # TODO: audited serialization results in `ActiveModel::Errors` and other class marshaling which is undesirable
+      #       maybe https://github.com/collectiveidea/audited/pull/664 can help in the long run
       proxy.update(policies_config: [{name: 'cors2', version: '0.0.2', configuration: {foo: long_string}}])
 
       Proxy.with_synchronous_auditing do
