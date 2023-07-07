@@ -54,11 +54,11 @@
     }
   }
 
-  .fa-folder-open-o:hover:before {
+  .fa-folder-open:hover:before {
     content: '\f07c';
   }
 
-  .fa-folder-o:hover:before {
+  .fa-folder:hover:before {
     content: '\f07b';
   }
 
@@ -74,8 +74,8 @@
     }
   }
 
-  .fa-folder-o,
-  .fa-folder-open-o {
+  .fa-folder,
+  .fa-folder-open {
     color: $brand-blue;
 
     &:hover {

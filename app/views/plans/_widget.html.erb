@@ -17,9 +17,9 @@
         <th colspan="2"><%= h feature.name %></th>
         <td>
           <% if enabled %>
-            <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+            <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
           <% else %>
-            <i class="excluded fa fa-times-circle-o" title="Feature is disabled for this plan"></i>
+            <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
           <% end %>
         </td>
       </tr>
@@ -57,7 +57,7 @@
       	<% if metric.visible_in_plan?(plan) %>
           <tr class="feature unlimited_metric" id="<%= dom_id(metric) %>_unlimited">
             <th rowspan="1"> <%= display_metric_name(metric) %></th>
-            <td colspan="2"><i class="included fa fa-check-circle-o"></i></td>
+            <td colspan="2"><i class="included fas fa-check-circle"></i></td>
           </tr>
         <% end %>
       <% end %>
