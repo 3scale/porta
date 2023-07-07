@@ -512,12 +512,12 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       to_h.slice('name', 'version', 'configuration')
     end
 
-    def to_h(options = nil)
+    def as_json(options = nil)
       %i[name version configuration enabled].each_with_object({}) do |key, obj|
         obj[key] = public_send key
       end.compact.as_json(options)
     end
-    alias as_json to_h
+    alias to_h as_json
 
     def ==(other)
       %i[name version configuration enabled].all? { |key| public_send(key) == other.public_send(key) }
