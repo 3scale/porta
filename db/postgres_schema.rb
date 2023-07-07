@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_104807) do
+ActiveRecord::Schema.define(version: 2023_07_07_110416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -894,6 +894,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_104807) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
+    t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
   create_table "payment_intents", force: :cascade do |t|

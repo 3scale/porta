@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_104807) do
+ActiveRecord::Schema.define(version: 2023_07_07_110416) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -891,6 +891,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_104807) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.integer "tenant_id", precision: 38
+    t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
   create_table "payment_intents", force: :cascade do |t|
