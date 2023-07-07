@@ -28,7 +28,7 @@ spec:
         
         An application plan is the API contract that establishes rules like access rights, limits, and pricing in response to an API consumer registered to use your API endpoint in the API package. In the Admin Portal, you must assign every API package to an application plan before exposing it. When internal services consume your API, you can set a default plan.
 
-        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](https://raw.githubusercontent.com/3scale/porta/ba34d7a9ff4a49c2fefaa36af575118927be9c90/app/javascript/src/QuickStarts/templates/images/learn-about-application-plans.png "API endpoints in a product")
+        ![An application plan is the API contract that establishes rules like access rights, limits, and pricing.](https://raw.githubusercontent.com/3scale/porta/422b6f44cf3b18b0532671513e04bd3ae85de047/app/javascript/src/QuickStarts/templates/images/learn-about-application-plans.png "Learn about API contract.")
 
       # optional - the task's Check your work module
       review:
