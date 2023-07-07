@@ -1,28 +1,43 @@
-<h1>Upgrade '<%= @provider.name %>'</h1>
+<div class="pf-c-content">
+  <h1>Upgrade '<%= @provider.name %>'</h1>
 
-<p style="text-align: left">
-You are changing the plan from <b><%= @current_plan.name %></b> to
-<b><%= @new_plan.name %></b>. You can check what switches will be enabled
-in the table below. <b>You cannot downgrade</b> reliably via this widget because
-the plan will change but the switches will remain the same.
-</p>
+  <p>
+    You are changing the plan from <b><%= @current_plan.name %></b> to <b><%= @new_plan.name %></b>.
+    You can check what switches will be enabled in the table below. <b>You cannot downgrade</b>
+    reliably via this widget because the plan will change but the switches will remain the same.
+  </p>
+</div>
 
-<table class="data">
-  <tr>
-    <th></th>
-    <th>Current Settings</th>
-    <th>On <%= @new_plan.name %></th>
-  </tr>
+<table class="pf-c-table pf-m-compact">
+  <%- plan_col_name = "On #{@new_plan.name}" %>
 
-  <% @provider.available_plans.values.flatten.uniq.each do |switch_name| %>
-    <% next if switch_name == :branding %>
-    <tr>
-      <td><b><%= t("switches.#{switch_name}.name") %></b></td>
-      <td><%= @provider.settings.send(switch_name).status.capitalize %></td>
-      <td><%= @new_switches.include?(switch_name) ? 'Allowed' : 'Denied' %></td>
+  <thead>
+    <tr role="row">
+      <td>
+      <th role="columnheader" scope="col">Current Settings</th>
+      <th role="columnheader" scope="col"><%= plan_col_name %></th>
     </tr>
-  <% end %>
+  </thead>
+
+  <tbody>
+    <% @provider.available_plans.values.flatten.uniq.each do |switch_name| %>
+      <% next if switch_name == :branding %>
+      <tr role="row">
+        <td role="cell">
+          <%= t("switches.#{switch_name}.name") %>
+        </td>
+        <td role="cell" data-label="Current Setting">
+          <%= @provider.settings.send(switch_name).status.capitalize %>
+        </td>
+        <td role="cell" data-label="<%= plan_col_name %>">
+          <%= @new_switches.include?(switch_name) ? 'Allowed' : 'Denied' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
+
+<br />
 
 <%= form_tag master_provider_plan_path(@provider), :method => :put, :remote => true do %>
   <%= hidden_field_tag :plan_id, @new_plan.id %>
