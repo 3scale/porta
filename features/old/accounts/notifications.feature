@@ -25,65 +25,60 @@ Feature: Notifications
     And the "Weekly aggregate report" checkbox should not be checked
     And the "Daily aggregate report" checkbox should not be checked
 
-  # This scenario was unDRYed from an Outline due to performance reasons, it went from ~2 minutes to 20 seconds
-  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-  @wip
   Scenario: Enable notification
     And I go to the notifications page
 
     When I check "New user signup"
-    Then I should have the notification "New user signup" enabled
+    Then mail dispatch rule "foo.3scale.localhost/user_signup" is set to "true"
     When I uncheck "New user signup"
-    Then I should have the notification "New user signup" disabled
+    Then mail dispatch rule "foo.3scale.localhost/user_signup" is set to "false"
 
     When I check "New application created"
-    Then I should have the notification "New application created" enabled
+    Then mail dispatch rule "foo.3scale.localhost/new_app" is set to "true"
     When I uncheck "New application created"
-    Then I should have the notification "New application created" disabled
+    Then mail dispatch rule "foo.3scale.localhost/new_app" is set to "false"
 
     When I check "Application suspended"
-    Then I should have the notification "Application suspended" enabled
+    Then mail dispatch rule "foo.3scale.localhost/app_suspended" is set to "true"
     When I uncheck "Application suspended"
-    Then I should have the notification "Application suspended" disabled
+    Then mail dispatch rule "foo.3scale.localhost/app_suspended" is set to "false"
 
     When I check "Application key created"
-    Then I should have the notification "Application key created" enabled
+    Then mail dispatch rule "foo.3scale.localhost/key_created" is set to "true"
     When I uncheck "Application key created"
-    Then I should have the notification "Application key created" disabled
+    Then mail dispatch rule "foo.3scale.localhost/key_created" is set to "false"
 
     When I check "Application key deleted"
-    Then I should have the notification "Application key deleted" enabled
+    Then mail dispatch rule "foo.3scale.localhost/key_deleted" is set to "true"
     When I uncheck "Application key deleted"
-    Then I should have the notification "Application key deleted" disabled
+    Then mail dispatch rule "foo.3scale.localhost/key_deleted" is set to "false"
 
     When I check "Receiving a new message"
-    Then I should have the notification "Receiving a new message" enabled
+    Then mail dispatch rule "foo.3scale.localhost/new_message" is set to "true"
     When I uncheck "Receiving a new message"
-    Then I should have the notification "Receiving a new message" disabled
+    Then mail dispatch rule "foo.3scale.localhost/new_message" is set to "false"
 
     When I check "Plan change by a user"
-    Then I should have the notification "Plan change by a user" enabled
+    Then mail dispatch rule "foo.3scale.localhost/plan_change" is set to "true"
     When I uncheck "Plan change by a user"
-    Then I should have the notification "Plan change by a user" disabled
+    Then mail dispatch rule "foo.3scale.localhost/plan_change" is set to "false"
 
-    # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-    # When I check "New forum post"
-    # Then I should have the notification "New forum post" enabled
-    # When I uncheck "New forum post"
-    # Then I should have the notification "New forum post" disabled
+    When I check "New forum post"
+    Then mail dispatch rule "foo.3scale.localhost/new_forum_post" is set to "true"
+    When I uncheck "New forum post"
+    Then mail dispatch rule "foo.3scale.localhost/new_forum_post" is set to "false"
 
     When I check "User cancels account"
-    Then I should have the notification "User cancels account" enabled
+    Then mail dispatch rule "foo.3scale.localhost/cinstance_cancellation" is set to "true"
     When I uncheck "User cancels account"
-    Then I should have the notification "User cancels account" disabled
+    Then mail dispatch rule "foo.3scale.localhost/cinstance_cancellation" is set to "false"
 
     When I check "Weekly aggregate reports"
-    Then I should have the notification "Weekly aggregate reports" enabled
+    Then mail dispatch rule "foo.3scale.localhost/weekly_reports" is set to "true"
     When I uncheck "Weekly aggregate reports"
-    Then I should have the notification "Weekly aggregate reports" disabled
+    Then mail dispatch rule "foo.3scale.localhost/weekly_reports" is set to "false"
 
     When I check "Daily aggregate reports"
-    Then I should have the notification "Daily aggregate reports" enabled
+    Then mail dispatch rule "foo.3scale.localhost/daily_reports" is set to "true"
     When I uncheck "Daily aggregate reports"
-    Then I should have the notification "Daily aggregate reports" disabled
-
+    Then mail dispatch rule "foo.3scale.localhost/daily_reports" is set to "false"
