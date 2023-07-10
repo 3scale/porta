@@ -34,6 +34,6 @@ Feature: Bulk operations
     Then all selects should be checked
     And I should see "Bulk operations"
 
-    And I uncheck select in table header
+    When I uncheck select in table header
     Then No selects should be checked
     Then I should not see "Bulk operations"
