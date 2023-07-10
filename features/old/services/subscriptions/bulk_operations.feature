@@ -25,20 +25,21 @@ Feature: Bulk operations
     And provider "foo.3scale.localhost" has "service_plans" visible
     When I go to the subscriptions admin page
     When I check select for "bob"
-    And checks if bulk-operations the div is visible
+    Then I should see "Bulk operations"
       And I should see "Send email"
       And I should see "Change service plan"
       And I should see "Change state"
+
     When I uncheck select for "bob"
-    And checks if bulk-operations the div is hidden
+    Then I should not see "Bulk operations"
 
   Scenario: Check all applications with main checkbox
     And I am on the service contracts admin page
     When I check select in table header
 
-    Then I check if all checkboxes are selected
-    And checks if bulk-operations the div is visible
+    Then all selects should be checked
+    Then I should see "Bulk operations"
 
     When I uncheck select in table header
-    Then I check if none of the checkboxes are selected
-    And checks if bulk-operations the div is hidden
+    Then No selects should be checked
+    Then I should not see "Bulk operations"
