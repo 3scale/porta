@@ -51,3 +51,13 @@ end
 When "I should see the bulk action failed with {application}" do |application|
   assert_match "There were some errors:\n#{application.name} (#{application.user_account.org_name})", bulk_errors_container.text
 end
+
+Then(/^no selects should be checked$/) do
+  checkboxes = all('input[type="checkbox"]')
+  assert checkboxes.none?(&:checked?)
+end
+
+Then(/^all selects should be checked$/) do
+  checkboxes = all('input[type="checkbox"]')
+  assert checkboxes.all?(&:checked?)
+end
