@@ -20,20 +20,20 @@ Feature: Bulk operations
   Scenario: Show and hide bulk operations controls
     When I navigate to the accounts page
     When I check select for "bob"
-    And checks if bulk-operations the div is visible
+    Then I should see "Bulk operations"
       And I should see "Send email"
       And I should see "Change account plan"
       And I should see "Change state"
     When I uncheck select for "bob"
-    And checks if bulk-operations the div is hidden
+    Then I should not see "Bulk operations"
 
   Scenario: Check all accounts with main checkbox
-      And I am on the accounts admin page
+    When I am on the accounts admin page
 
-    When I check select in table header
-    Then I check if all checkboxes are selected
-      And checks if bulk-operations the div is visible
+    And I check select in table header
+    Then all selects should be checked
+    Then I should see "Bulk operations"
 
-    When I uncheck select in table header
-    Then I check if none of the checkboxes are selected
-      And checks if bulk-operations the div is hidden
+    And I uncheck select in table header
+    Then No selects should be checked
+    Then I should not see "Bulk operations"
