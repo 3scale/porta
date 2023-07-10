@@ -4,40 +4,46 @@
 <section class="pf-c-page__main-section pf-m-light">
   <% unless @versions.blank? -%>
     <%= will_paginate @versions %>
-    <table class="data">
+    <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Versions table">
       <thead>
-      <tr>
-        <th>Created On</th>
-        <th>Author</th>
-        <th>Type of Version</th>
-        <th>Changes</th>
-        <th/>
-      </tr>
+        <tr>
+          <th role="columnheader" scope="col">Created On</th>
+          <th role="columnheader" scope="col">Author</th>
+          <th role="columnheader" scope="col">Type of Version</th>
+          <th role="columnheader" scope="col">Changes</th>
+          <td class="pf-m-fit-content"></td>
+        </tr>
       </thead>
 
-      <tbody>
+      <tbody role="rowgroup">
         <%- @versions.each.with_index do |version, index| %>
-    <tr>
-
-            <td><%= link_to l(version.created_at),
-                    provider_admin_cms_template_version_path(@page, version),
-                    :title => "Show #{version.created_at}"  %></td>
-            <td><%= version.updated_by || '' %></td>
-            <td class="<%= version.state %>"><%= version.state %></td>
-            <td class="stats">
+          <tr>
+            <td role="cell" data-label="Created On">
+              <%= link_to l(version.created_at), provider_admin_cms_template_version_path(@page, version),
+                                                 title: "Show #{version.created_at}" %>
+            </td>
+            <td role="cell" data-label="Author"><%= version.updated_by || '' %></td>
+            <td role="cell" data-label="Type of Version" class="<%= version.state %>"><%= version.state %></td>
+            <td role="cell" data-label="Changes" class="stats">
               <% if next_version = @versions[index + 1] %>
                 <%= diff_widget(version.diff(next_version))  %>
               <% end %>
             </td>
-            <td class="actions">
-
-              <%= link_to 'Revert',
-                  revert_provider_admin_cms_template_version_path(@page, version),
-                  class: 'action revert',
-                  :'data-method' => :post,
-                  :'data-confirm' => "Do you really want to revert #{@page.name} to version from #{l version.created_at}?\nIt will remove current #{version.state} version." %>
+            <td role="cell" class="pf-c-table__action actions">
+              <div class="pf-c-overflow-menu">
+                <div class="pf-c-overflow-menu__content">
+                  <div class="pf-c-overflow-menu__group pf-m-button-group">
+                    <div class="pf-c-overflow-menu__item">
+                      <%= link_to 'Revert', revert_provider_admin_cms_template_version_path(@page, version),
+                                            class: 'action revert',
+                                            :'data-method' => :post,
+                                            :'data-confirm' => "Do you really want to revert #{@page.name} to version from #{l version.created_at}?\nIt will remove current #{version.state} version." %>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </td>
-    </tr>
+          </tr>
         <%- end %>
       </tbody>
     </table>
