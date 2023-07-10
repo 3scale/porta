@@ -35,9 +35,9 @@
     <th>State</th>
     <td>
       <% if @user.active? %>
-        <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+        <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
       <% else %>
-        <i class="excluded fa fa-times-circle-o" title="Feature is disabled for this plan"></i>
+        <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
       <% end %>
       <%= h @user.state %>
       <span class="operations">

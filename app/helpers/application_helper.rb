@@ -188,9 +188,9 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
 
   def boolean_status_img(enabled, opts = {})
     if enabled
-      '<i class="included fa fa-check-circle-o" title="Enabled"></i>'.html_safe
+      '<i class="included fas fa-check-circle" title="Enabled"></i>'.html_safe
     else
-      '<i class="excluded fa fa-times-circle-o" title="Disabled"></i>'.html_safe
+      '<i class="excluded fas fa-times-circle" title="Disabled"></i>'.html_safe
     end
   end
 
