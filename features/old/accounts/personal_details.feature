@@ -36,11 +36,12 @@ Feature: Personal Details
     Then I should be on the provider users page
 
   Scenario: Edit personal details with invalid data
-    When I go to the personal details page
+    When I navigate to the Account Settings
+    And I go to the provider personal details page
     And I fill in "Username" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then I should see "is too short"
+    Then I should see "is too short"  
 
   Scenario: Provider should see all fields defined for user
     Given master provider has the following fields defined for "User":
