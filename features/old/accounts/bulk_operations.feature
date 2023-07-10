@@ -32,7 +32,7 @@ Feature: Bulk operations
 
     And I check select in table header
     Then all selects should be checked
-    Then I should see "Bulk operations"
+    And I should see "Bulk operations"
 
     And I uncheck select in table header
     Then No selects should be checked
