@@ -279,3 +279,8 @@ Then(/^new tenant should be not created$/) do
     assert_selector('.inline-errors', :text => error_message[:message])
   end
 end
+
+Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, input_name|
+  inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
+  assert_selector(inline_error_selector, text: text)
+end
