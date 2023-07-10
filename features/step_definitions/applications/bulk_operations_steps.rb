@@ -59,5 +59,5 @@ end
 
 Then(/^all selects should be checked$/) do
   checkboxes = all('input[type="checkbox"]')
-   assert checkboxes.all?(&:checked?)
+  assert checkboxes.all?(&:checked?)
 end
