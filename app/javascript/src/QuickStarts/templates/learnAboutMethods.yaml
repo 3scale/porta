@@ -28,7 +28,7 @@ spec:
         
         You can use methods to track API usage, capture the number of individual API calls of your API packages, or API endpoints. Hits is the native metric that exists for each API to track the number of API calls. Reporting traffic to a method automatically increases counters. **Method** is a way to group hits depending on the mapping rules created. Then you can define usage limits and pricing rules for individual methods within each application plan. 
 
-        ![An application plan is the API contract that establishes rules like access rights, limits, and pricing.](https://raw.githubusercontent.com/3scale/porta/422b6f44cf3b18b0532671513e04bd3ae85de047/app/javascript/src/QuickStarts/templates/images/learn-about-application-plans.png "Learn about API contract.")
+        ![use methods to track API usage, capture the number of individual API calls of your API packages.](https://raw.githubusercontent.com/3scale/porta/422b6f44cf3b18b0532671513e04bd3ae85de047/app/javascript/src/QuickStarts/templates/images/learn-about-methods.png "Learn about tracking the number of API calls.")
       # optional - the task's Check your work module
       review:
         instructions: |-
