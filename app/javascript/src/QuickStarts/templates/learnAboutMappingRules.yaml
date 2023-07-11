@@ -31,7 +31,7 @@ spec:
         Adding mapping rules to a method enables setting usage limits and pricing rules in each product’s application plan and an individual API endpoint connects to that API package.
 
 
-        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](https://raw.githubusercontent.com/3scale/porta/422b6f44cf3b18b0532671513e04bd3ae85de047/app/javascript/src/QuickStarts/templates/images/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
+        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](https://raw.githubusercontent.com/3scale/porta/203ac148362162d7e8bf4f9e6897a9d9c6c1fe98/app/javascript/src/QuickStarts/templates/images/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
       # optional - the task's Check your work module
       review:
         instructions: |-
