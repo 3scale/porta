@@ -1,4 +1,3 @@
 production:
   - :mem_cache_store
   - <%= ENV['MEMCACHE_SERVERS'].presence || 'system-memcache:11211' %>
-  - :digest_class: !ruby/class Digest::SHA256

@@ -183,6 +183,7 @@ module System
     args = config_for(:cache_store)
     store_type = args.shift
     options = args.extract_options!
+    options[:digest_class] ||= Digest::SHA256 if store_type == :mem_cache_store
     servers = args.flat_map { |arg| arg.split(',') }
     config.cache_store = store_type == :null_store ? store_type : [store_type, servers, options]
 

@@ -1,7 +1,6 @@
 base: &default
   - :mem_cache_store
   - <%= ENV['MEMCACHE_SERVERS'].presence || 'localhost:11211' %>
-  - :digest_class: !ruby/class Digest::SHA256
 
 development: *default
 
