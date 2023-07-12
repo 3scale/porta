@@ -1,0 +1,106 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: creating-an-api-product
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Create an API product
+  durationMinutes: 15
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Create an API product with 3scale.
+  introduction: |-
+    In this quick start, you will learn about how to create an API package for managing, exposing, or monitoring your API. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-products-test-api-calls_configuring-your-api).
+  tasks:
+    - title: Create a backend
+      description: |-
+        Create a backend. To learn what a backend is, see: Backends
+        
+        ### Procedure
+
+        1. Go to the <strong>Backends</strong> page: click the menu on the header and select <strong>Backends</strong>.
+        1. On the <strong>Backends</strong> page, click <strong>Create backend</strong>.
+        1. On the <strong>New backend</strong> page, fill in the details:
+              - _Name_: Give a name to your backend,for example, _Flight API_.
+              - _System name_: This is the name for 3scale to identify the backend, for example, _Flight_API_.
+              - _Description_: Add optional details about your backend.
+              - _Private Base URL_: The URL endpoint of your backend, for example, _http://flight.api.com_.
+        1. Click <strong>Create backend</strong>
+
+        If the process is successful, you will see <strong>[Your\_backend] > Overview</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a product
+      description: |-
+        Create a product. To learn what a product is, see: Products
+
+        ### Procedure
+
+        1. Go to <strong>Products</strong> page: click the menu on the header and select <strong>Products</strong>.
+        1. On the <strong>Products</strong> page, click <strong>Create product</strong>.
+        1. On the <strong>New product</strong> page, fill in the details:
+              - _Name_: Give a name to your product, for example, Flight API Product.
+              - _System name_: This is the name for 3scale to identify the product, for example, Flight_API_Product.
+              - _Description_: Add optional details about your product.
+        1. Click <strong>Create product</strong>
+
+        If the process is successful, you will see <strong>[Your\_product\_name] > Overview</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Connect the backend with the product
+      description: |-
+        Connect the backend with a product. You must associate at least one backend with the product before exposing it to the API consumers. 
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page, click <strong>Integration > Backends</strong> on the side menu.
+        1. Click <strong>Add backend</strong>.
+        1. On the _Add a backend_ page, fill in the details:
+                - _Backend_: Select the backend you want to connect to the product, for example, _Flight API_.
+                - _Path_: Path is an optional route related to a product from which you can access a particular backend. For example, if your backend is http:// flight api.com, set the path as Flight. Your product will access the backend through http://flight api.com/path. You can give the same backend the same path in different products.
+        1. Click <strong>Add to product</strong>
+
+        If the connection is successful, you will see <strong>[Your\_product\_backend] > Overview page</strong>. The path will follow port:80, which is automatically generated. You can change to a port of your choice.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+     **Next**
+     To learn how to create access tiers for your API consumers to use your API product, see:
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - creating-access-tiers-for-api-consumers
