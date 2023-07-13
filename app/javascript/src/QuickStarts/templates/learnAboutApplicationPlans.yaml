@@ -48,4 +48,4 @@ spec:
   nextQuickStart:
     - learning-about-accounts
     - learning-about-applications
-    - create-access-tiers-for-api-consumers    
+    - creating-access-tiers-for-api-consumers
