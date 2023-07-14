@@ -180,13 +180,16 @@ module System
     # We don't want Rack::Cache to be used
     config.action_dispatch.rack_cache = false
 
-    args = config_for(:cache_store)
-    store_type = args.shift
-    options = args.extract_options!
-    options[:digest_class] ||= Digest::SHA256 if store_type == :mem_cache_store
-    config.cache_store = [store_type, *args, options]
+    def cache_store_config
+      args = config_for(:cache_store)
+      store_type = args.shift
+      options = args.extract_options!
+      options[:digest_class] ||= Digest::SHA256 if store_type == :mem_cache_store
+      [store_type, *args, options]
+    end
+    config.cache_store = cache_store_config
 
-    # Configure the default encoding used in templates for Ruby 1.9.
+      # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
     config.web_hooks = ActiveSupport::OrderedOptions.new
