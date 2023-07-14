@@ -65,8 +65,6 @@ module System
     config.action_view.form_with_generates_remote_forms = false
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
-    config.action_dispatch.use_authenticated_cookie_encryption = false
-    config.active_support.use_authenticated_message_encryption = false
 
     # Use a modern approved hashing function.
     # This is the default in Rails 7.0, so can be removed when we upgrade.
