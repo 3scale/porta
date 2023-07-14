@@ -1,0 +1,7 @@
+div class="pf-c-check"
+  input type="hidden" name="settings[#{setting}]" value="0"
+  input class="pf-c-check__input" type="checkbox" id="settings_#{setting}" name="settings[#{setting}]" checked=checked
+  label class="pf-c-check__label" for="settings_#{setting}"
+    = local_assigns[:label] || t("formtastic.labels.settings.#{setting}")
+  span class="pf-c-check__description"
+    = local_assigns[:hint] || t("formtastic.hints.settings.#{setting}")

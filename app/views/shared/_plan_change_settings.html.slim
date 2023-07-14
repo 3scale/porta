@@ -1,21 +1,21 @@
-= form.input permission,
-             label: label,
-             hint: '',
-             as: :radio,
-             collection: Logic::PlanChanges::PERMISSIONS[0..1]
+- current_setting = settings.send(permission)
 
-- if can?(:see, :finance)
-  li.inline-hints
-    p.inline-hints Change plan directly if developer has credit card, otherwise:
-
-  = form.input  permission,
-                label: '',
-                hint: '',
-                as: :radio,
-                collection: Logic::PlanChanges::PERMISSIONS[2..3]
-
-  = form.input  permission,
-                label: '',
-                hint: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute it in administration interface.",
-                as: :radio,
-                collection: Logic::PlanChanges::PERMISSIONS[-1..-1]
+div class="pf-c-form__group-control pf-m-stack"
+  = render 'plan_change_radio', permission: permission,
+                                value: 'request',
+                                checked: current_setting == 'request'
+  = render 'plan_change_radio', permission: permission,
+                                value: 'direct',
+                                checked: current_setting == 'direct',
+                                hint: can?(:see, :finance) ? t('formtastic.hints.settings.change_plan_finance') : nil
+  - if can?(:see, :finance)
+    = render 'plan_change_radio', permission: permission,
+                                  value: 'credit_card',
+                                  checked: current_setting == 'credit_card'
+    = render 'plan_change_radio', permission: permission,
+                                  value: 'request_credit_card',
+                                  checked: current_setting == 'request_credit_card'
+    = render 'plan_change_radio', permission: permission,
+                                  value: 'none',
+                                  checked: current_setting == 'none',
+                                  hint: t("formtastic.hints.settings.#{permission}")

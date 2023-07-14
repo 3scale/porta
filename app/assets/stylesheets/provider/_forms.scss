@@ -1,6 +1,6 @@
 $fieldset-margin-bottom: line-height-times(1.5);
 
-form.formtastic ol, form.formtastic ul {
+form.formtastic:not(.pf-c-form) ol, form.formtastic:not(.pf-c-form) ul {
   list-style: none;
 }
 
@@ -10,14 +10,14 @@ input[type='number'],
 textarea,
 select,
 form.button-to button:not(.pf-c-button),
-form.formtastic button:not(.pf-c-button),
-form.formtastic textarea,
-form.formtastic fieldset.inputs input[type='text'],
-form.formtastic fieldset.inputs input[type='number'],
-form.formtastic fieldset.inputs input[type='tel'],
-form.formtastic fieldset.inputs input[type='email'],
-form.formtastic fieldset.inputs input[type='url'],
-form.formtastic fieldset.inputs input[type='password'] {
+form.formtastic:not(.pf-c-form) button:not(.pf-c-button),
+form.formtastic:not(.pf-c-form) textarea,
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='text'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='number'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='tel'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='email'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='url'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
@@ -47,16 +47,16 @@ form.formtastic fieldset.inputs input[type='password'] {
 .error input[type='text'],
 .error textarea,
 .error select,
-form.formtastic fieldset.inputs .error input[type='text'],
-form.formtastic fieldset.inputs .error input[type='number'],
-form.formtastic fieldset.inputs .error input[type='tel'],
-form.formtastic fieldset.inputs .error input[type='email'],
-form.formtastic fieldset.inputs .error input[type='url'],
-form.formtastic fieldset.inputs .error input[type='password'] {
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='text'],
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='number'],
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='tel'],
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='email'],
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='url'],
+form.formtastic:not(.pf-c-form) fieldset.inputs .error input[type='password'] {
   border-color: $error-color;
 }
 
-form.formtastic textarea,
+form.formtastic:not(.pf-c-form) textarea,
 textarea {
   height: line-height-times(4.5);
 }
@@ -134,12 +134,13 @@ select {
   float: right;
 }
 
-input[type='checkbox'], input[type='checkbox']:active,
-form.formtastic fieldset > ol > li.boolean label input,
-form.formtastic fieldset > ol > li.radio fieldset ol li label input[type='radio'],
-form.formtastic fieldset.inputs input[type='checkbox'],
-form.formtastic fieldset.inputs input[type='checkbox']:active,
-form.formtastic fieldset.inputs > ol > li.select select {
+input[type='checkbox']:not(.pf-c-check__input),
+input[type='checkbox']:not(.pf-c-check__input):active,
+form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label input,
+form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li label input[type='radio'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox'],
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox']:active,
+form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   position: relative;
   top: -$border-width; // to make it more or less ok in chrome, firefox and safari
   margin: 0 line-height-times(1/4) 0 $border-width;
@@ -147,7 +148,7 @@ form.formtastic fieldset.inputs > ol > li.select select {
   border-radius: $border-radius;
 }
 
-form.formtastic fieldset.actions {
+form.formtastic:not(.pf-c-form) fieldset.actions {
   border-top: $border-width solid $border-color;
   text-align: right;
 
@@ -170,7 +171,7 @@ form.formtastic fieldset.actions {
   }
 }
 
-form.formtastic fieldset.actions ol {
+form.formtastic:not(.pf-c-form) fieldset.actions ol {
 
   li {
     padding: 0 0 0 0;
@@ -195,11 +196,11 @@ form + form .action.delete {
   z-index: 1000;
 }
 
-form.formtastic ol > li#api_docs_service_body_input {
+form.formtastic:not(.pf-c-form) ol > li#api_docs_service_body_input {
     max-width: 100%;
 }
 
-form.formtastic {
+form.formtastic:not(.pf-c-form) {
   #settings,
   #staging {
     .inputs ol {
@@ -208,7 +209,7 @@ form.formtastic {
   }
 }
 
-form.formtastic ol > li {
+form.formtastic:not(.pf-c-form) ol > li {
   padding: 0 0 0 0;
   margin: 0 0 line-height-times(1) 0;
   max-width: line-height-times(32);
@@ -223,16 +224,16 @@ form.formtastic ol > li {
   }
 }
 
-form.formtastic .button-bar fieldset > ol > li {
+form.formtastic:not(.pf-c-form) .button-bar fieldset > ol > li {
   min-width: 0;
 }
 
-form.formtastic table fieldset > ol > li {
+form.formtastic:not(.pf-c-form) table fieldset > ol > li {
   margin: 0 0 line-height-times(1/2) 0;
   min-width: 0;
 }
 
-form.formtastic fieldset > ol > li.radio fieldset ol li {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li {
   margin: 0 0 line-height-times(1/4) 0;
 }
 
@@ -240,7 +241,7 @@ form.formtastic fieldset > ol > li.radio fieldset ol li {
 Load this stylesheet after formtastic.css in your layouts to override the CSS to suit your needs.
 --------------------------------------------------------------------------------------------------*/
 
-form.formtastic {
+form.formtastic:not(.pf-c-form) {
   @include white-box-shadow;
   margin: line-height-times(1) 0;
   min-width: line-height-times(20);
@@ -358,7 +359,7 @@ form.web_hook table > tbody > tr > td > fieldset > ol > li.boolean label {
   font-size: $font-size-sm;
 }
 
-form.formtastic fieldset > ol > li.boolean label {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
   padding: 0 0 0 0;
 }
 
@@ -366,7 +367,7 @@ form#new_post.formtastic fieldset > ol > li.boolean label {
   padding: 0 0 0 0;
 }
 
-form.formtastic fieldset > ol > li.text textarea {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.text textarea {
   border: $border-width solid $border-color;
   color: $font-color;
 
@@ -378,13 +379,13 @@ form.formtastic fieldset > ol > li.text textarea {
   }
 }
 
-form.formtastic fieldset.inputs label.disabled {
+form.formtastic:not(.pf-c-form) fieldset.inputs label.disabled {
   color: $disabled-color;
 }
 
 select:disabled,
-form.formtastic fieldset.inputs input:disabled,
-form.formtastic fieldset.inputs input[readonly="readonly"] {
+form.formtastic:not(.pf-c-form) fieldset.inputs input:disabled,
+form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
   outline: none !important;
   background: $disabled-background-color;
   color: $disabled-color;
@@ -392,38 +393,38 @@ form.formtastic fieldset.inputs input[readonly="readonly"] {
   -webkit-text-fill-color: $disabled-color;
 }
 
-form.formtastic fieldset.inputs input[readonly="readonly"] {
+form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
   color: $disabled-color;
 }
 
-form.formtastic fieldset.inputs input[type="submit"] {
+form.formtastic:not(.pf-c-form) fieldset.inputs input[type="submit"] {
   width: auto;
 }
 
-form.formtastic fieldset > ol > li.password input {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.password input {
   max-width: none;
 }
 
-form.formtastic fieldset > ol > li.price   input,
-form.formtastic fieldset > ol > li.numeric input {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.price   input,
+form.formtastic:not(.pf-c-form) fieldset > ol > li.numeric input {
   max-width: 25%;
 }
 
-form.formtastic fieldset fieldset fieldset {
+form.formtastic:not(.pf-c-form) fieldset fieldset fieldset {
   margin: line-height-times(1) 0 line-height-times(1) line-height-times(1);
   padding: 0 0 0 0;
 }
 
-form.formtastic table fieldset {
+form.formtastic:not(.pf-c-form) table fieldset {
   margin: 0 0 0 0;
   padding: 0 0 0 0;
 }
 
-form.formtastic .radio fieldset {
+form.formtastic:not(.pf-c-form) .radio fieldset {
   margin: 0 0 line-height-times(1/4) 0;
 }
 
-.dashboard_card form.formtastic fieldset>ol>li.boolean label {
+.dashboard_card form.formtastic:not(.pf-c-form) fieldset>ol>li.boolean label {
   padding-left:0;
 }
 
@@ -436,8 +437,8 @@ form.formtastic .radio fieldset {
   font-weight: $font-weight-bold;
 }
 
-form.formtastic fieldset > ol > li p.inline-hints,
-form.formtastic fieldset > ol > li p.inline-errors {
+form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints,
+form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   padding: 0 0 0 0;
   margin: 0 0 0 0;
   color: $hint-color;
@@ -446,16 +447,16 @@ form.formtastic fieldset > ol > li p.inline-errors {
   display: inline-block;
 }
 
-form.formtastic fieldset + p.inline-hints,
-form.formtastic fieldset > ol > li.inline-hints > p.inline-hints {
+form.formtastic:not(.pf-c-form) fieldset + p.inline-hints,
+form.formtastic:not(.pf-c-form) fieldset > ol > li.inline-hints > p.inline-hints {
   margin-left: line-height-times(1) !important;
 }
 
-form.formtastic fieldset > ol > li.inline-hints {
+form.formtastic:not(.pf-c-form) fieldset > ol > li.inline-hints {
   margin: 0;
 }
 
-form.formtastic fieldset > ol > li p.inline-errors {
+form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   color: $error-color;
 
   &::first-letter {
@@ -466,25 +467,25 @@ form.formtastic fieldset > ol > li p.inline-errors {
 /*** FancyBox Adjustmets  ***/
 /****************************/
 
-#fancybox-inner form.formtastic fieldset > ol > li label {
+#fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li label {
   float: none;
   text-align: left;
 }
 
-#fancybox-inner form.formtastic fieldset > ol > li p.inline-hints {
+#fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints {
  margin: 0;
 }
 
-#fancybox-inner form.formtastic fieldset.actions {
+#fancybox-inner form.formtastic:not(.pf-c-form) fieldset.actions {
   padding: 0;
 }
 
 
-form.formtastic fieldset > ol li.text > textarea.source_code {
+form.formtastic:not(.pf-c-form) fieldset > ol li.text > textarea.source_code {
   width: 80em;
 }
 
-form.formtastic strong small {
+form.formtastic:not(.pf-c-form) strong small {
   font-size: $font-size-sm;
 }
 
@@ -492,7 +493,7 @@ form.formtastic strong small {
   outline: none;
 }
 
-form.formtastic .radio.required abbr {
+form.formtastic:not(.pf-c-form) .radio.required abbr {
   display: none;
 }
 
@@ -514,13 +515,13 @@ form.button-to, form.button-to div, form.inline, form.inline div {
   display: inline;
 }
 
-form.formtastic fieldset > ol > li fieldset legend {
+form.formtastic:not(.pf-c-form) fieldset > ol > li fieldset legend {
   padding: 0;
   position: static;
   width: 100%;
 }
 
-form.formtastic fieldset > ol > li fieldset legend.label label {
+form.formtastic:not(.pf-c-form) fieldset > ol > li fieldset legend.label label {
   position: static;
 }
 
@@ -556,7 +557,7 @@ li.hidden {
 .new-service-form {
   @include white-box-shadow;
 
-  form.formtastic {
+  form.formtastic:not(.pf-c-form) {
     box-shadow: none;
     margin: 0;
 
@@ -567,14 +568,14 @@ li.hidden {
 }
 
 
-.dashboard_card form.formtastic {
+.dashboard_card form.formtastic:not(.pf-c-form) {
   box-shadow: none;
   margin: 0;
   padding: line-height-times(1) 0 0;
 }
 
 #integration-tabs {
-  form.formtastic {
+  form.formtastic:not(.pf-c-form) {
     box-shadow: none;
     margin: 0;
     padding: 0;
@@ -612,4 +613,19 @@ form.formtastic#new_metric {
       }
     }
   }
+}
+
+// HACK: make helper text look like radio description as a kind of sub-section
+.use-account-plans,
+.use-service-plans {
+  .pf-c-form__group-control > .pf-c-form__helper-text {
+    color: rgb(106, 110, 115); // var(--pf-c-radio__description--Color)
+    margin-left: 22px;
+  }
+}
+
+// HACK: first section is not supposed to have margin-top, but formtastic adds some hidden elements
+// before it
+.pf-c-form.formtastic.settings > .pf-c-form__section {
+  margin-top: 0;
 }

@@ -1189,10 +1189,11 @@ en:
       settings:
         account_plans_ui_visible: "Only consider using Account Plans if Application Plans don't suit your use case - for example if you offer additional non-API services."
         service_plans_ui_visible: "Only consider using Service Plans for non-API features like additional support per Service instead of for the whole Account."
-        approval_required_referer: "Set per account plan from %{link}."
+        approval_required_referer_html: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         change_account_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
         change_service_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
+        change_plan_finance: 'Change plan directly if developer has credit card, otherwise:'
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
         strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
@@ -1327,6 +1328,12 @@ en:
         public_search: 'Enable public search on Developer Portal'
         cms_escape_draft_html: 'Use Automatic Escaping for draft content'
         cms_escape_published_html: 'Use Automatic Escaping for published content'
+        change_plan_permission:
+          request: Request a plan change
+          direct: Change the plan directly
+          credit_card: Only request a plan change
+          request_credit_card: Request Credit Card entry for paid plans
+          none: Don't allow plan changes
 
       proxy:
         status: 'Response Code'
