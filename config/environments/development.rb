@@ -20,7 +20,7 @@ Rails.application.configure do
   config.asset_host = config.three_scale.asset_host.presence
 
   # Match custom domains on development
-  config.hosts << /[a-z0-9-]+\.3scale\.localhost/
+  config.hosts << /.+\.localhost/
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
