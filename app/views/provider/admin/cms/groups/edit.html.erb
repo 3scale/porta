@@ -1,4 +1,6 @@
-<h1>Edit Group '<%= @group.name %>'</h1>
+<div class="pf-c-content">
+  <h1>Edit Group '<%= @group.name %>'</h1>
+</div>
 
 <%= cms_form_for(@group) do |f| %>
   <%= render 'form', :f => f %>

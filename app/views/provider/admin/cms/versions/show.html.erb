@@ -1,6 +1,7 @@
-<h1>Version of <%= @page.class.model_name.human %> <%= @page.title %></h1>
-
-<p>Showing <%= @version.state %> version from <%= l @version.updated_at %>.</p>
+<div class="pf-c-content">
+  <h1>Version of <%= @page.class.model_name.human %> <%= @page.title %></h1>
+  <p>Showing <%= @version.state %> version from <%= l @version.updated_at %>.</p>
+</div>
 
 <%= text_area_tag "cms_template_version", @version.current %>
 
