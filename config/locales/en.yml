@@ -840,6 +840,8 @@ en:
           attributes:
             base:
               all_periods_used: "Metric cannot be disabled. Please contact support."
+              cannot_delete_in_use: "%{type} is used by the latest gateway configuration and cannot be deleted"
+              cannot_delete_hits: 'The Hits metric cannot be deleted'
         policy:
           attributes:
             base:
