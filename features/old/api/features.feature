@@ -55,7 +55,7 @@ Feature: Features :)
     Then there is no feature named "Magic"
     And there is feature named "More magic"
 
- @javascript
+  @javascript
   Scenario: Delete a feature
     Given the provider has "service_plans" switch allowed
     Given a service plan "Basic" of provider "foo.3scale.localhost"
