@@ -1,6 +1,4 @@
-<div class="pf-c-content">
-  <h1>Partial '<%= @page.system_name %>'</h1>
-</div>
+<%= render 'provider/admin/cms/tab_content_title', header: "Partial '#{@page.system_name}'" %>
 
 <%= cms_new_button_dropdown(CMS::Partial) %>
 

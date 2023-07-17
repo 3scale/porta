@@ -1,6 +1,4 @@
-<div class="pf-c-content">
-  <h1>File <%= @file.path %></h1>
-</div>
+<%= render 'provider/admin/cms/tab_content_title', header: "File '#{@file.path}'" %>
 
 <%= cms_new_button_dropdown(CMS::File) %>
 

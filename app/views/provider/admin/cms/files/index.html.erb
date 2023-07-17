@@ -1,13 +1,13 @@
-<h3>Files
-  <%= link_to 'Add a file', new_provider_admin_cms_file_path %>
-</h3>
+<%= render 'provider/admin/cms/tab_content_title', header: 'Files' %>
 
 <%= cms_new_button_dropdown(CMS::File) %>
 
-<table>
-  <% @files.each do |file| %>
-    <tr>
-      <td><%= link_to file.path, edit_provider_admin_cms_file_path(file) %><td>
-    </tr>
-  <% end %>
-</table>
+<section class="pf-c-page__main-section pf-m-light">
+  <table>
+    <% @files.each do |file| %>
+      <tr>
+        <td><%= link_to file.path, edit_provider_admin_cms_file_path(file) %><td>
+      </tr>
+    <% end %>
+  </table>
+</section>

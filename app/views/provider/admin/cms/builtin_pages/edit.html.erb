@@ -1,7 +1,5 @@
-<div class="pf-c-content">
-  <h1>Built-in page '<%= @page.title %>'</h1>
-  <p><%= @page.description.html_safe %></p>
-</div>
+<%= render 'provider/admin/cms/tab_content_title', header: "Built-in page '#{@page.title}'",
+                                                   body: @page.description.html_safe %>
 
 <%= cms_new_button_dropdown(CMS::Page) %>
 

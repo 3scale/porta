@@ -1,6 +1,4 @@
-<div class="pf-c-content">
-  <h1>Section '<%= @section.title %>'</h1>
-</div>
+<%= render 'provider/admin/cms/tab_content_title', header: "Section '#{@section.title}'" %>
 
 <%= cms_new_button_dropdown(CMS::Section) %>
 
