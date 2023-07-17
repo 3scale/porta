@@ -247,6 +247,11 @@ World(Module.new do
       service = provider.services.find_by_name! $2
       polymorphic_path [$1.to_sym, :admin, service]
 
+    when /^the edit page for feature "([^"]+)"$/
+      plan = @provider.service_plans.where(name: "Basic").last
+      feature = plan.service.features.where(name: $1).last
+      edit_admin_plan_feature_path(plan, feature, type: plan.class.name.underscore)
+
     when 'the new service page'
       new_admin_service_path
 
