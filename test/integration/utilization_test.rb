@@ -60,12 +60,12 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, utilization.size
 
-    table = utilization.search("table[@class*='utilization']")
+    table = utilization.search('table')
     assert_equal 1, table.size
-    assert_equal 1*2, table.search("td[@class='above-100']").size
-    assert_equal 1*2, table.search("td[@class='above-80']").size
-    assert_equal 2*2, table.search("td[@class='above-0']").size
-    assert_equal 0*2, table.search("td[@class='infinity']").size
+    assert_equal 1*2, table.search("span[@class='above-100']").size
+    assert_equal 1*2, table.search("span[@class='above-80']").size
+    assert_equal 2*2, table.search("span[@class='above-0']").size
+    assert_equal 0*2, table.search("span[@class='infinity']").size
   end
 
   test 'application has metrics with one disabled over the limit' do
@@ -83,12 +83,12 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, utilization.size
 
-    table = utilization.search("table[@class*='utilization']")
+    table = utilization.search("table")
     assert_equal 1, table.size
-    assert_equal 0*2, table.search("td[@class='above-100']").size
-    assert_equal 1*2, table.search("td[@class='above-80']").size
-    assert_equal 2*2, table.search("td[@class='above-0']").size
-    assert_equal 1*2, table.search("td[@class='infinity']").size
+    assert_equal 0*2, table.search("span[@class='above-100']").size
+    assert_equal 1*2, table.search("span[@class='above-80']").size
+    assert_equal 2*2, table.search("span[@class='above-0']").size
+    assert_equal 1*2, table.search("span[@class='infinity']").size
   end
 
   private

@@ -6,7 +6,7 @@
   <% else %>
     <p>Overview of the current state of this application's limits</p>
 
-    <table class="pf-c-table utilization" role="grid" aria-label="Utilization metrics table">
+    <table class="pf-c-table" role="grid" aria-label="Utilization metrics table">
       <thead>
         <tr role="row">
           <th role="columnheader" scope="col">Metric Name</th>
@@ -38,11 +38,11 @@
                 percentage = "Inf"
               end
             %>
-            <td role="cell" data-label="Values" class="<%= utilization_type %>">
-              <%= utilization %>
+            <td role="cell" data-label="Values" class="utilization">
+              <%= content_tag(:span, utilization, class: utilization_type) %>
             </td>
-            <td role="cell" data-label="%" class="<%= utilization_type %>">
-              <%= percentage %>
+            <td role="cell" data-label="%" class="utilization">
+              <%= content_tag(:span, utilization, class: utilization_type) %>
             </td>
           </tr>
         <% end %>
