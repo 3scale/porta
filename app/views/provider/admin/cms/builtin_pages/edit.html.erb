@@ -1,5 +1,5 @@
-<%= render 'provider/admin/cms/tab_content_title', header: "Built-in page '#{@page.title}'",
-                                                   body: @page.description.html_safe %>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Built-in page '#{@page.title}'",
+                                                                      body: @page.description.html_safe } %>
 
 <%= cms_new_button_dropdown(CMS::Page) %>
 

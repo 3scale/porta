@@ -1,5 +1,5 @@
-<%= render 'provider/admin/cms/tab_content_title', header: "Version of #{@page.class.model_name.human} #{@page.title}",
-                                                   body: "Showing #{@version.state} version from #{l @version.updated_at}." %>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Version of #{@page.class.model_name.human} #{@page.title}",
+                                                                      body: "Showing #{@version.state} version from #{l @version.updated_at}." } %>
 
 <section class="pf-c-page__main-section pf-m-light">
   <%= text_area_tag "cms_template_version", @version.current %>

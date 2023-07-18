@@ -1,5 +1,5 @@
-<%= render 'provider/admin/cms/tab_content_title', header: "Archived Versions of #{@page.class.model_name.human} #{@page.name}",
-                                                   body: @versions.blank? ? 'There are no archived versions for this page. Remember that a version is archived only if you publish your changes, not just when you save.' : nil %>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Archived Versions of #{@page.class.model_name.human} #{@page.name}",
+                                                                      body: @versions.blank? ? 'There are no archived versions for this page. Remember that a version is archived only if you publish your changes, not just when you save.' : nil } %>
 
 <section class="pf-c-page__main-section pf-m-light">
   <% unless @versions.blank? -%>

@@ -1,4 +1,4 @@
-<%= render 'provider/admin/cms/tab_content_title', header: "Partial '#{@page.system_name}'" %>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Partial '#{@page.system_name}'" } %>
 
 <%= cms_new_button_dropdown(CMS::Partial) %>
 
