@@ -11,3 +11,10 @@
     margin-left: 1.25rem;
   }
 }
+
+.use-account-plans,
+.use-service-plans {
+  &.hidden {
+    display: none;
+  }
+}

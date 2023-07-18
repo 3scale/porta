@@ -1318,8 +1318,8 @@ en:
 
       settings:
         account_approval_required: Account approval required
-        account_plans_ui_visible: "Account Plans"
-        service_plans_ui_visible: "Service Plans"
+        account_plans_ui_visible: "Enable Account Plans"
+        service_plans_ui_visible: "Enable Service Plans"
         change_account_plan_permission: "For their account, a user can:"
         change_service_plan_permission: "For a service, a subscribed user can:"
         useraccountarea_enabled: 'Allow the user to edit their submitted details, change passwords, etc.'

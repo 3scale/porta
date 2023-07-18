@@ -48,28 +48,46 @@ div class="pf-c-card"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'public_search', checked: settings.public_search
 
-      - if can?(:see, :account_plans) || can?(:see, :service_plans)
-        section class="pf-c-form__section" role="group" aria-labelledby="settings-section-advanced-plans"
-          h2 class="pf-c-form__section-title" id="settings-section-advanced-plans" aria-hidden="true" Advanced Plans
-          - if can?(:see, :account_plans)
-            div class="pf-c-form__group"
-              div class="pf-c-form__group-control"
-                = render 'settings_check', setting: 'account_plans_ui_visible', checked: settings.account_plans_ui_visible
-            div class="pf-c-form__group use-account-plans #{hide_class_unless_account_plans_visible(settings)}" role="radiogroup" aria-labelledby="account-plan-radio-group"
-              div class="pf-c-form__group-label" id="account-plan-radio-group"
-                label class="pf-c-form__label"
-                  span class="pf-c-form__label-text" Account Plans Changing
-              = render 'shared/plan_change_settings', permission: 'change_account_plan_permission', settings: settings
-          - if can?(:see, :service_plans)
-            div class="pf-c-form__group"
-              div class="pf-c-form__group-control"
-                = render 'settings_check', setting: 'service_plans_ui_visible', checked: settings.service_plans_ui_visible
-            div class="pf-c-form__group use-service-plans #{hide_class_unless_service_plans_visible(settings)}" role="radiogroup" aria-labelledby="service-plan-radio-group"
-              div class="pf-c-form__group-label" id="service-plan-radio-group"
-                label class="pf-c-form__label"
-                  span class="pf-c-form__label-text" Service Plan Changing
-              = render 'shared/plan_change_settings', permission: 'change_service_plan_permission', settings: settings
+      - if can?(:see, :account_plans)
+        - visible = settings.account_plans_ui_visible
+        section class="pf-c-form__section" role="group" aria-labelledby="settings-section-account-plans"
+          h2 class="pf-c-form__section-title" id="settings-section-account-plans" aria-hidden="true" Account plans
+          div class="pf-c-form__group"
+            div class="pf-c-form__group-control"
+              = render 'settings_check', setting: 'account_plans_ui_visible', checked: visible
+          div class="pf-c-form__group use-account-plans #{'hidden' unless visible}" role="radiogroup" aria-labelledby="account-plan-radio-group"
+            div class="pf-c-form__group-label" id="account-plan-radio-group"
+              label class="pf-c-form__label"
+                span class="pf-c-form__label-text" Account Plans Changing
+            = render 'shared/plan_change_settings', permission: 'change_account_plan_permission', settings: settings
+
+      - if can?(:see, :service_plans)
+        - visible = settings.service_plans_ui_visible
+        section class="pf-c-form__section" role="group" aria-labelledby="settings-section-service-plans"
+          h2 class="pf-c-form__section-title" id="settings-section-service-plans" aria-hidden="true" Service plans
+          div class="pf-c-form__group"
+            div class="pf-c-form__group-control"
+              = render 'settings_check', setting: 'service_plans_ui_visible', checked: visible
+          div class="pf-c-form__group use-service-plans #{'hidden' unless visible}" role="radiogroup" aria-labelledby="service-plan-radio-group"
+            div class="pf-c-form__group-label" id="service-plan-radio-group"
+              label class="pf-c-form__label"
+                span class="pf-c-form__label-text" Service Plan Changing
+            = render 'shared/plan_change_settings', permission: 'change_service_plan_permission', settings: settings
 
       div class="pf-c-form__group pf-m-action"
         div class="pf-c-form__actions"
           button class="pf-c-button pf-m-primary" type="submit" Update Settings
+
+javascript:
+  document.addEventListener('DOMContentLoaded', () => {
+    [
+      ['settings_account_plans_ui_visible', '.pf-c-form__group.use-account-plans'],
+      ['settings_service_plans_ui_visible', '.pf-c-form__group.use-service-plans']
+    ].forEach(([inputId, targetSelector]) => {
+      const input = document.getElementById(inputId)
+      const target = document.querySelector(targetSelector)
+      input.addEventListener('change', (e) => {
+        target.classList.toggle('hidden', !e.target.checked)
+      })
+    })
+  })
