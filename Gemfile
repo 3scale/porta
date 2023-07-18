@@ -163,7 +163,6 @@ gem 'slim-rails', '~> 3.2'
 gem 'draper', '~> 3.0'
 
 group :development do
-  gem 'bullet', '~> 6.1.5'
   gem 'listen'
 
   gem 'letter_opener', require: ENV.fetch('LETTER_OPENER', '0') == '1'
@@ -240,6 +239,7 @@ end
 
 group :development, :test do
   gem 'bootsnap', '~> 1.4'
+  gem 'bullet', '~> 6.1.5'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
