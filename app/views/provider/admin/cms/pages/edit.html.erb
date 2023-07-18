@@ -1,4 +1,4 @@
-<h1>Page '<%= @page.title %>'</h1>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Page '#{@page.title}'" } %>
 
 <%= cms_new_button_dropdown(CMS::Page) %>
 
