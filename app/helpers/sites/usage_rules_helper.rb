@@ -11,7 +11,7 @@ module Sites::UsageRulesHelper
 
   def sso_hint(account)
     if account.authentication_providers.any?
-      " #{t('sites.usage_rules.edit.sso_integrations_info_html', link: provider_admin_authentication_providers_path)}"
+      " #{t('sites.usage_rules.edit.sso_integrations_info_html', link: provider_admin_authentication_providers_path)}".html_safe
     else
       ''
     end

@@ -5,20 +5,20 @@ div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for @settings, url: admin_site_usage_rules_path, html: { class: "pf-c-form pf-m-limit-width" } do |form|
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-user-account"
-        div class="pf-c-form__section-title" id="settings-section-user-account" aria-hidden="true" User account management zone
+        h2 class="pf-c-form__section-title" id="settings-section-user-account" aria-hidden="true" User account management zone
         div class="pf-c-form__group"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'useraccountarea_enabled', checked: settings.useraccountarea_enabled
 
       - if current_account.master? && !ThreeScale.config.onpremises
         section class="pf-c-form__section" role="group" aria-labelledby="settings-section-hide-service"
-          div class="pf-c-form__section-title" id="settings-section-hide-service" aria-hidden="true" Hide services
+          h2 class="pf-c-form__section-title" id="settings-section-hide-service" aria-hidden="true" Hide services
           div class="pf-c-form__group"
             div class="pf-c-form__group-control"
               = render 'settings_check', setting: 'hide_service', checked: settings.hide_service
 
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-signup"
-        div class="pf-c-form__section-title" id="settings-section-signup" aria-hidden="true" Signup
+        h2 class="pf-c-form__section-title" id="settings-section-signup" aria-hidden="true" Signup
         div class="pf-c-form__group"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'signups_enabled', checked: settings.signups_enabled
@@ -41,7 +41,7 @@ div class="pf-c-card"
                                          hint: approval_required_disabled_hint(current_account)
 
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-users"
-        div class="pf-c-form__section-title" id="settings-section-users" aria-hidden="true" Users
+        h2 class="pf-c-form__section-title" id="settings-section-users" aria-hidden="true" Users
         div class="pf-c-form__group"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'strong_passwords_enabled',
@@ -49,21 +49,21 @@ div class="pf-c-card"
                                        hint: t("formtastic.hints.settings.strong_passwords_enabled", strong_password_definition: strong_password_definition)
 
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-search"
-        div class="pf-c-form__section-title" id="settings-section-search" aria-hidden="true" Search
+        h2 class="pf-c-form__section-title" id="settings-section-search" aria-hidden="true" Search
         div class="pf-c-form__group"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'public_search', checked: settings.public_search
 
       - if can?(:see, :account_plans) || can?(:see, :service_plans)
         section class="pf-c-form__section" role="group" aria-labelledby="settings-section-advanced-plans"
-          div class="pf-c-form__section-title" id="settings-section-advanced-plans" aria-hidden="true" Advanced Plans
+          h2 class="pf-c-form__section-title" id="settings-section-advanced-plans" aria-hidden="true" Advanced Plans
           - if can?(:see, :account_plans)
             div class="pf-c-form__group"
               div class="pf-c-form__group-control"
                 = render 'settings_check', setting: 'account_plans_ui_visible', checked: settings.account_plans_ui_visible
             div class="pf-c-form__group use-account-plans #{hide_class_unless_account_plans_visible(@settings)}" role="radiogroup" aria-labelledby="account-plan-radio-group"
               div class="pf-c-form__group-label" id="account-plan-radio-group"
-                span class="pf-c-form__label"
+                label class="pf-c-form__label"
                   span class="pf-c-form__label-text" Account Plans Changing
               = render 'shared/plan_change_settings', permission: 'change_account_plan_permission', settings: settings
           - if can?(:see, :service_plans)
@@ -72,7 +72,7 @@ div class="pf-c-card"
                 = render 'settings_check', setting: 'service_plans_ui_visible', checked: settings.service_plans_ui_visible
             div class="pf-c-form__group use-service-plans #{hide_class_unless_service_plans_visible(@settings)}" role="radiogroup" aria-labelledby="service-plan-radio-group"
               div class="pf-c-form__group-label" id="service-plan-radio-group"
-                span class="pf-c-form__label"
+                label class="pf-c-form__label"
                   span class="pf-c-form__label-text" Service Plan Changing
               = render 'shared/plan_change_settings', permission: 'change_service_plan_permission', settings: settings
 

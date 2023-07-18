@@ -615,17 +615,8 @@ form.formtastic#new_metric {
   }
 }
 
-// HACK: make helper text look like radio description as a kind of sub-section
-.use-account-plans,
-.use-service-plans {
-  .pf-c-form__group-control > .pf-c-form__helper-text {
-    color: rgb(106, 110, 115); // var(--pf-c-radio__description--Color)
-    margin-left: 22px;
-  }
-}
-
-// HACK: first section is not supposed to have margin-top, but formtastic adds some hidden elements
-// before it
+// HACK: first pf-c-section in a form don't have margin-top. However, formtastic adds hidden fields
+// before and therefore the section is not a first element and margin-top is maintained.
 .pf-c-form.formtastic.settings > .pf-c-form__section {
   margin-top: 0;
 }
