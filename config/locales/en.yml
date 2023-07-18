@@ -1189,7 +1189,7 @@ en:
       settings:
         account_plans_ui_visible: "Only consider using Account Plans if Application Plans don't suit your use case - for example if you offer additional non-API services."
         service_plans_ui_visible: "Only consider using Service Plans for non-API features like additional support per Service instead of for the whole Account."
-        approval_required_referer_html: "Set per account plan from %{link}."
+        approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         change_account_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
         change_service_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
@@ -1317,6 +1317,7 @@ en:
         skip_ssl_certificate_verification: Do not verify SSL certificate
 
       settings:
+        account_approval_required: Account approval required
         account_plans_ui_visible: "Account Plans"
         service_plans_ui_visible: "Service Plans"
         change_account_plan_permission: "For their account, a user can:"

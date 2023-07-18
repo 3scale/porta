@@ -3,7 +3,7 @@
 
 div class="pf-c-card"
   div class="pf-c-card__body"
-    = semantic_form_for @settings, url: admin_site_usage_rules_path, html: { class: "pf-c-form pf-m-limit-width" } do |form|
+    = semantic_form_for settings, url: admin_site_usage_rules_path, html: { class: "pf-c-form pf-m-limit-width" } do |form|
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-user-account"
         h2 class="pf-c-form__section-title" id="settings-section-user-account" aria-hidden="true" User account management zone
         div class="pf-c-form__group"
@@ -22,23 +22,17 @@ div class="pf-c-card"
         div class="pf-c-form__group"
           div class="pf-c-form__group-control"
             = render 'settings_check', setting: 'signups_enabled', checked: settings.signups_enabled
-        - if @settings.authentication_strategy.cas?
+        - if settings.authentication_strategy.cas?
           div class="pf-c-form__group"
             div class="pf-c-form__group-control"
               = render 'settings_check', setting: 'cas_server_url', checked: settings.cas_server_url != '0'
-        - if @settings.approval_required_editable?
+        - if settings.approval_required_editable? || settings.approval_required_disabled?
           div class="pf-c-form__group"
             div class="pf-c-form__group-control"
               = render 'settings_check', setting: 'account_approval_required',
                                          checked: settings.account_approval_required,
-                                         hint: approval_required_editable_hint(current_account)
-        - elsif @settings.approval_required_disabled?
-          div class="pf-c-form__group"
-            div class="pf-c-form__group-control"
-              = render 'settings_check', setting: 'account_approval_required',
-                                         checked: settings.account_approval_required,
-                                         disabled: true,
-                                         hint: approval_required_disabled_hint(current_account)
+                                         disabled: settings.approval_required_disabled?,
+                                         hint: account_approval_required_hint(current_account)
 
       section class="pf-c-form__section" role="group" aria-labelledby="settings-section-users"
         h2 class="pf-c-form__section-title" id="settings-section-users" aria-hidden="true" Users
@@ -61,7 +55,7 @@ div class="pf-c-card"
             div class="pf-c-form__group"
               div class="pf-c-form__group-control"
                 = render 'settings_check', setting: 'account_plans_ui_visible', checked: settings.account_plans_ui_visible
-            div class="pf-c-form__group use-account-plans #{hide_class_unless_account_plans_visible(@settings)}" role="radiogroup" aria-labelledby="account-plan-radio-group"
+            div class="pf-c-form__group use-account-plans #{hide_class_unless_account_plans_visible(settings)}" role="radiogroup" aria-labelledby="account-plan-radio-group"
               div class="pf-c-form__group-label" id="account-plan-radio-group"
                 label class="pf-c-form__label"
                   span class="pf-c-form__label-text" Account Plans Changing
@@ -70,7 +64,7 @@ div class="pf-c-card"
             div class="pf-c-form__group"
               div class="pf-c-form__group-control"
                 = render 'settings_check', setting: 'service_plans_ui_visible', checked: settings.service_plans_ui_visible
-            div class="pf-c-form__group use-service-plans #{hide_class_unless_service_plans_visible(@settings)}" role="radiogroup" aria-labelledby="service-plan-radio-group"
+            div class="pf-c-form__group use-service-plans #{hide_class_unless_service_plans_visible(settings)}" role="radiogroup" aria-labelledby="service-plan-radio-group"
               div class="pf-c-form__group-label" id="service-plan-radio-group"
                 label class="pf-c-form__label"
                   span class="pf-c-form__label-text" Service Plan Changing

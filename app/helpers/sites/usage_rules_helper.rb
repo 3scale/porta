@@ -1,19 +1,17 @@
 # frozen_string_literal: true
 
 module Sites::UsageRulesHelper
-  def approval_required_editable_hint(account)
-    t("formtastic.hints.settings.account_approval_required") + sso_hint(account)
-  end
+  def account_approval_required_hint(account)
+    hint = if account.settings.approval_required_editable?
+             t('formtastic.hints.settings.account_approval_required')
+           else
+             t('formtastic.hints.settings.approval_required_referer', link: link_to('Account Plans', admin_buyers_account_plans_path))
+           end
 
-  def approval_required_disabled_hint(account)
-    t("formtastic.hints.settings.approval_required_referer_html", link: link_to("Account Plans", admin_buyers_account_plans_path) ) + sso_hint(account)
-  end
-
-  def sso_hint(account)
-    if account.authentication_providers.any?
-      " #{t('sites.usage_rules.edit.sso_integrations_info_html', link: provider_admin_authentication_providers_path)}".html_safe
-    else
-      ''
+    if account.authentication_providers.any? # rubocop:disable Style/IfUnlessModifier
+      hint += " #{t('sites.usage_rules.edit.sso_integrations_info_html', link: provider_admin_authentication_providers_path)}"
     end
+
+    hint.html_safe # rubocop:disable Rails/OutputSafety
   end
 end
