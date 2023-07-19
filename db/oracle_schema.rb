@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_110416) do
+ActiveRecord::Schema.define(version: 2023_07_18_082519) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -230,12 +230,10 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, force: :cascade do |t|
-    t.integer "id", precision: 38, null: false
+  create_table "backend_events", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", force: :cascade do |t|

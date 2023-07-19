@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_110416) do
+ActiveRecord::Schema.define(version: 2023_07_18_082519) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -232,12 +232,10 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
-    t.bigint "id", null: false
+  create_table "backend_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
