@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_18_082519) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -517,12 +517,11 @@ ActiveRecord::Schema.define(version: 2023_07_18_082519) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, force: :cascade do |t|
-    t.integer "plan_id", precision: 38
-    t.integer "feature_id", precision: 38
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], force: :cascade do |t|
+    t.integer "plan_id", precision: 38, null: false
+    t.integer "feature_id", precision: 38, null: false
     t.string "plan_type", null: false
     t.integer "tenant_id", precision: 38
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|

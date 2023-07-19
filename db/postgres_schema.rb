@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_18_082519) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -520,12 +520,11 @@ ActiveRecord::Schema.define(version: 2023_07_18_082519) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", limit: 255, null: false
     t.bigint "tenant_id"
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|
