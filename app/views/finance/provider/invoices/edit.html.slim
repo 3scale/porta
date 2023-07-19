@@ -1,10 +1,5 @@
 = render '/finance/provider/shared/invoice_title', invoice: @invoice
 
-table class="invoice"
-  caption
-    ' Edit Details
-    = link_to 'cancel', :back, class: "next"
-
 div class="wide"
   = semantic_form_for @invoice,
     url: admin_finance_invoice_path(@invoice.id) do |invoice|

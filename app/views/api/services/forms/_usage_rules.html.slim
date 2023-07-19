@@ -16,7 +16,7 @@
   = form.input :referrer_filters_required, as: :boolean
 
   = form.input :custom_keys_enabled
-  
+
 = form.inputs "Application Plans" do
   = form.input  :buyer_can_select_plan
 
@@ -31,21 +31,17 @@
       em In order for an application to trigger usage alerts, usage limit(s) need to be set up in the Application Plan to which the application is subscribed.
 
   li.full-width
-    table id="notification-settings-table" class="data notification-settings"
+    table id="notification-settings" class="pf-c-table pf-m-grid-lg" role="grid"
       thead
-        tr
+        tr role="row"
           th
           - alert_limits.each do |level|
-            th
+            th role="columnheader" scope="col"
               = level
               | %
 
       tbody
         = row_for_alert_levels 'Show Web Alerts to Admins of this Account', :web_provider
         = row_for_alert_levels 'Send Email Alerts to Admins of this Account', :email_provider
-      thead
-        tr
-          th.spacer colspan="9"
-      tbody
         = row_for_alert_levels 'Show Web Alerts to Admins of the Developer Account', :web_buyer
         = row_for_alert_levels 'Send Email Alerts to Admins of the Developer Account', :email_buyer

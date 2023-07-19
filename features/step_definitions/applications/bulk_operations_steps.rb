@@ -31,7 +31,7 @@ When /^I (un)?check select for "(.+?)"$/ do |un, name|
 end
 
 When /^I (un)?check select in table header$/ do |un|
-  within 'table.data thead' do
+  within 'table.pf-c-table thead' do
     check_or_uncheck_selected_row un
   end
 end

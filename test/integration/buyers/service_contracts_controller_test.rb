@@ -132,7 +132,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_service_contracts_path
       assert_response :success
       page = Nokogiri::HTML4::Document.parse(response.body)
-      service_contract_ids = page.xpath("//table[@class='data']/tbody/tr/@id").map { |id| id.text[/\d+/].to_i }
+      service_contract_ids = page.xpath("//table/tbody/tr/@id").map { |id| id.text[/\d+/].to_i }
       assert_includes service_contract_ids, service_contract.id
       assert_not_includes service_contract_ids, forbidden_service_contract.id
     end

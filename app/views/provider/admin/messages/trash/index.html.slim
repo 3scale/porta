@@ -8,20 +8,24 @@
   // the whole explanation: https://github.com/3scale/system/issues/6275
   //.operations
   //  = fancy_button_to 'Empty the trash', empty_provider_admin_messages_trash_index_path, method: :delete, class: 'empty_trash'
-  table#messages.data
+  table class="pf-c-table pf-m-grid-lg" role="grid" id="messages"
     thead
-      tr
-        th Subject
-        th From
-        th Date sent
+      tr role="row"
+        th role="columnheader" scope="col" Subject
+        th role="columnheader" scope="col" From
+        th role="columnheader" scope="col" Date sent
         th
-
-    tbody
+    tbody role="rowgroup"
       - @messages.each do |message|
-        tr class=cycle('odd', 'even', name: 'messages')
-          td = link_to message.subject, provider_admin_messages_trash_path(message)
-          td = link_to message_sender(message), provider_admin_messages_trash_path(message)
-          td = message.created_at.to_s(:long)
-          td.operations = fancy_button_to 'Restore', provider_admin_messages_trash_path(message), :method => :delete, :class => 'undelete action'
+        tr role="row" class=cycle('odd', 'even', name: 'messages')
+          td role="cell" data-label="Subject" = link_to message.subject, provider_admin_messages_trash_path(message)
+          td role="cell" data-label="From" = link_to message_sender(message), provider_admin_messages_trash_path(message)
+          td role="cell" data-label="Data sent" = message.created_at.to_s(:long)
+          td role="cell" class="pf-c-table__action"
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = fancy_button_to 'Restore', provider_admin_messages_trash_path(message), method: :delete, class: 'undelete action'
 
   = will_paginate(@messages)

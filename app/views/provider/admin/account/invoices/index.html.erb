@@ -3,33 +3,33 @@
 <% if @invoices.blank?%>
   You have no invoices
 <% else %>
-  <table class="data">
+  <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table">
     <thead>
-      <tr>
-      	<th>ID</th>
-      	<th>Month</th>
-      	<th>State</th>
-      	<th>Amount</th>
-      	<th>Download</th>
+      <tr role="row">
+      	<th role="columnheader" scope="col">ID</th>
+      	<th role="columnheader" scope="col">Month</th>
+      	<th role="columnheader" scope="col">State</th>
+      	<th role="columnheader" scope="col">Amount</th>
+      	<th role="columnheader" scope="col">Download</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody role="rowgroup">
       <% @invoices.each do |invoice| %>
-	      <%= content_tag_for(:tr, invoice) do %>
-          <td>
+	      <%= content_tag_for(:tr, invoice, role: 'row') do %>
+          <td role="cell" data-label="ID">
             <%= link_to invoice.friendly_id, provider_admin_account_invoice_path(invoice) , :title => "Show #{invoice.friendly_id}" %>
           </td>
-          <td>
+          <td role="cell" data-label="Month">
             <%= invoice.name %>
             <% if invoice.current? then %>(current)<% end %>
           </td>
-          <td>
+          <td role="cell" data-label="State">
             <%= h invoice.state %>
           </td>
-          <td>
+          <td role="cell" data-label="Amount">
             <%= price_tag(invoice.cost) %>
           </td>
-          <td>
+          <td role="cell" data-label="Download">
             <%= link_to("PDF", invoice.pdf.expiring_url) if invoice.pdf.file? %>
           </td>
 	      <% end %>

@@ -1,22 +1,33 @@
 <% content_for :page_header_title, 'Groups' %>
 
-<table class="data">
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Groups table">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Allowed Sections</th>
-      <th class="actions"><%= link_to 'Create Group', new_provider_admin_cms_group_path, :class => 'add action' %></th>
+    <tr role="row">
+      <th role="columnheader" scope="col">Name</th>
+      <th role="columnheader" scope="col">Allowed Sections</th>
+      <th role="columnheader" scope="col" class="actions pf-c-table__action pf-m-fit-content">
+        <%= link_to 'Create Group', new_provider_admin_cms_group_path, class: 'add action' %>
+      </th>
     </tr>
   </thead>
 
-  <% @groups.each do |group| %>
-    <%= content_tag_for :tr, group do %>
-      <td><%= link_to h(group.name), edit_provider_admin_cms_group_path(group) %></td>
-      <td><%= group.sections.map(&:title).join(", ") %></td>
-      <td class="actions">
-        <%= fancy_link_to 'Delete', provider_admin_cms_group_path(group), data: {:confirm => 'Are you sure?' } , :method => :delete %>
-      </td>
+  <tbody role="rowgroup">
+    <% @groups.each do |group| %>
+      <%= content_tag_for :tr, group, role: 'row' do %>
+        <td role="cell" data-label="Name"><%= link_to h(group.name), edit_provider_admin_cms_group_path(group) %></td>
+        <td role="cell" data-label="Allowed Sections"><%= group.sections.map(&:title).join(", ") %></td>
+        <td role="cell" class="pf-c-table__action actions">
+          <div class="pf-c-overflow-menu">
+            <div class="pf-c-overflow-menu__content">
+              <div class="pf-c-overflow-menu__group pf-m-button-group">
+                <div class="pf-c-overflow-menu__item">
+                  <%= fancy_link_to 'Delete', provider_admin_cms_group_path(group), data: { :confirm => 'Are you sure?' }, method: :delete %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      <% end %>
     <% end %>
-  <% end %>
+  </tbody>
 </table>
-<br />

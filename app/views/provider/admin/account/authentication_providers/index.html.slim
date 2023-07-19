@@ -14,16 +14,29 @@
         p.Hint In order to edit active Single Sign-On integrations, first disable SSO enforcement.
       - else
         button.EnforceSSOButton.is-hidden.important-button.dangerous-button type="submit" yes, terminate current password-based sessions and disable password-based sign-ins for all users including myself
-table.data
+
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Authentication providers table"
   thead
-    tr
-      th Integration
-      th Created on
-      th Number of users
-      th State
-      th class="actions"
+    tr role="row"
+      th role="columnheader" scope="col" Integration
+      th role="columnheader" scope="col" Created on
+      th role="columnheader" scope="col" Number of users
+      th role="columnheader" scope="col" State
+      th role="columnheader" scope="col" class="pf-c-table__action actions pf-m-fit-content"
         = link_to 'New SSO Integration', new_provider_admin_account_authentication_provider_path,
                             title: 'Add a new Single sign-on provider',
                             class: 'action add'
-  tbody
-    = render partial: 'authentication_provider', collection: @presenter.authentication_providers
+  tbody role="rowgroup"
+    - for authentication_provider in @presenter.authentication_providers
+      tr role="row"
+        td role="cell" data-label="Integration" class="provider"
+          = link_to "#{icon(authentication_provider.kind, fixed_width: true)} #{authentication_provider.human_kind}".html_safe, provider_admin_account_authentication_provider_path(authentication_provider)
+        td role="cell" data-label="Created on"
+          = authentication_provider.created_at.to_date.to_s(:long)
+        td role="cell" data-label="Number of users"
+          = authentication_provider.sso_authorizations.count
+        td role="cell" data-label="State"
+          - test = Provider::Admin::Account::AuthenticationProvidersShowPresenter.new(authentication_provider).test_text_short
+          = "#{authentication_provider.published ? 'Visible' : 'Hidden'} (#{test})"
+        td
+

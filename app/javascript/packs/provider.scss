@@ -7,9 +7,13 @@
 // Patternfly Layouts
 @import '~@patternfly/patternfly/layouts/Level/level.css';
 @import '~@patternfly/patternfly/layouts/Flex/flex.css';
+@import '~@patternfly/patternfly/layouts/Grid/grid.css';
 
 // Patternfly components - Add everything not covered by React.
 @import '~@patternfly/patternfly/components/Content/content.css';
 @import '~@patternfly/patternfly/components/Table/table.css';
 @import '~@patternfly/patternfly/components/OverflowMenu/overflow-menu.css';
 @import '~@patternfly/patternfly/components/EmptyState/empty-state.css';
+@import '~@patternfly/patternfly/components/Card/card.css';
+@import '~@patternfly/patternfly/components/DataList/data-list.css';
+@import '~@patternfly/patternfly/components/DescriptionList/description-list.css';

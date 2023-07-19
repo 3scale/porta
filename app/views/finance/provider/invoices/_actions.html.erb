@@ -7,11 +7,13 @@
 
 <%# TODO: move this to CanCan %>
 <% if @invoice.buyer %>
-<ul id="actions">
-  <%= content_tag(:li, invoice_action_button(@invoice.pdf.file? ? 'Regenerate PDF' : 'Generate PDF', :generate_pdf, 'secondary'))  %>
-  <%= content_tag(:li, invoice_action_button('Issue invoice', :issue, 'primary')) if @invoice.state_events.include?(:issue) %>
-  <%= content_tag(:li, invoice_action_button('Charge', :charge, 'primary')) if @invoice.state_events.include?(:pay) %>
-  <%= content_tag(:li, invoice_action_button('Mark as paid', :pay, 'primary')) if @invoice.state_events.include?(:pay) %>
-  <%= content_tag(:li, invoice_action_button('Cancel invoice', :cancel, 'danger')) if @invoice.state_events.include?(:cancel) %>
-</ul>
+<div class="pf-l-grid__item pf-m-12-col">
+  <ul id="actions">
+    <%= content_tag(:li, invoice_action_button(@invoice.pdf.file? ? 'Regenerate PDF' : 'Generate PDF', :generate_pdf, 'secondary'))  %>
+    <%= content_tag(:li, invoice_action_button('Issue invoice', :issue, 'primary')) if @invoice.state_events.include?(:issue) %>
+    <%= content_tag(:li, invoice_action_button('Charge', :charge, 'primary')) if @invoice.state_events.include?(:pay) %>
+    <%= content_tag(:li, invoice_action_button('Mark as paid', :pay, 'primary')) if @invoice.state_events.include?(:pay) %>
+    <%= content_tag(:li, invoice_action_button('Cancel invoice', :cancel, 'danger')) if @invoice.state_events.include?(:cancel) %>
+  </ul>
+</div>
 <% end %>

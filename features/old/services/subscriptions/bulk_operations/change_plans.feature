@@ -49,7 +49,7 @@ Feature: Bulk operations
 
 
     Then I should see following table:
-      | Account ▲ | Plan        |
+      | Account   | Plan        |
       | bob       | Basic       |
       | bob       | Unpublished |
       | jane      | Basic       |

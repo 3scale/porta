@@ -4,15 +4,14 @@
 - content_for :page_header_title, "Users of #{@account.org_name}"
 
 div class="pf-c-card"
-  table class="data pf-c-table" role="grid" id="buyer_users"
+  table class="pf-c-table pf-m-grid-lg" role="grid" id="buyer_users"
     thead
       tr role="row"
         th role="columnheader" scope="col" Name
         th role="columnheader" scope="col" Email
         th role="columnheader" scope="col" Created on
         th role="columnheader" scope="col" Role
-        th role="columnheader" scope="col" colspan="3" State
-        td
+        th role="columnheader" scope="col" colspan="2" State
 
     tbody role="rowgroup"
       - @users.each do |user|
