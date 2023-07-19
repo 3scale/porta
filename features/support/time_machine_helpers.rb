@@ -30,6 +30,7 @@ module TimeMachineHelpers
     run(ThreeScale::Jobs::WEEK) if now == now.beginning_of_week
     run(ThreeScale::Jobs::DAILY)
     run(ThreeScale::Jobs::BILLING)
+    BillingResultsTestHelpers.clear_billing_locks
   end
 
   def run(tasks)

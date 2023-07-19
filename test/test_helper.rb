@@ -68,7 +68,7 @@ class ActiveSupport::TestCase
     assert ability.cannot?(*args), "User can #{args.join(' ')} but should not"
   end
 
-  def teardown
+  teardown do
     User.current = nil
   end
 end

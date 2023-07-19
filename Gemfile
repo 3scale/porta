@@ -91,6 +91,7 @@ gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
+gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'

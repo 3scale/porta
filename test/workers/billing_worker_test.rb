@@ -10,6 +10,10 @@ class BillingWorkerTest < ActiveSupport::TestCase
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
+  teardown do
+    clear_billing_locks
+  end
+
   test 'perform' do
     time = Time.utc(2017, 12, 1, 8, 0)
 
@@ -20,19 +24,26 @@ class BillingWorkerTest < ActiveSupport::TestCase
 
   test 'creates a lock per buyer account' do
     time = Time.utc(2017, 12, 1, 8, 0)
+    buyer_2 = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-    assert_difference BillingLock.method(:count) do
-      billing_options = { only: [@provider.id], buyer_ids: [@buyer.id], now: time, skip_notifications: true }
-      Finance::BillingStrategy.expects(:daily).with(billing_options).returns(mock_billing_success(time, @provider))
-      BillingLock.expects(:delete).with(@buyer.id).returns(false)
-      BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
-    end
+    billing_options = { only: [@provider.id], buyer_ids: [@buyer.id], now: time, skip_notifications: true }
+    billing_options_2 = { only: [@provider.id], buyer_ids: [buyer_2.id], now: time, skip_notifications: true }
+
+    Finance::BillingStrategy.expects(:daily).with(billing_options).returns(mock_billing_success(time, @provider))
+    assert BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
+
+    Finance::BillingStrategy.expects(:daily).with(billing_options_2).returns(mock_billing_success(time, @provider))
+    assert BillingWorker.new.perform(buyer_2.id, @provider.id, time.to_s(:iso8601))
+
+    assert_not BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
   end
 
   test 'aborts if buyer is locked' do
     time = Time.utc(2017, 12, 1, 8, 0)
 
-    BillingLock.create!(account_id: @buyer.id)
+    within_thread do
+      assert BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
+    end
     refute BillingWorker.new.perform(@buyer.id, @provider.id, time.to_s(:iso8601))
   end
 
