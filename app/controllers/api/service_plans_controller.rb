@@ -49,7 +49,7 @@ class Api::ServicePlansController < Api::PlansBaseController
   end
 
   def presenter
-    @presenter ||= Api::ServicePlansPresenter.new(service: service, params: params, user: current_user)
+    @presenter ||= Api::ServicePlansPresenter.new(service: service, collection: collection, params: params, user: current_user)
   end
 
 end

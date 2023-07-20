@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Api::ServicePlansPresenter < PlansBasePresenter
-  def initialize(service:, user:, params: {})
-    super(collection: service.provider.service_plans, user: user, params: params)
+  def initialize(service:, collection:, user:, params: {})
+    super(collection: collection, user: user, params: params)
     @service = service
   end
 
