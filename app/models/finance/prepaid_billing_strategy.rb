@@ -42,7 +42,7 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
   def daily(options = {})
     now = options[:now].presence || Time.now.utc
     bill_and_charge_each(options) do |buyer|
-      Rails.logger.info("Started to bill and charge of #{buyer.name} at #{now}")
+      Rails.logger.info("Started to bill and charge buyer #{buyer.id} for provider #{buyer.provider_account_id} at #{now}")
       bill_expired_trials(buyer, now)
 
       only_on_days(now, 1) do
