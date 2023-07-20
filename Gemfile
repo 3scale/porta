@@ -72,7 +72,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.11'
-gem 'cancancan', '~> 2.3.0'
+gem 'cancancan', '~> 3.0.0'
 gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
