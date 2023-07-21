@@ -109,8 +109,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
 
       assert_difference @app_plan.features.method(:count), 2 do
         post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
-        result = post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat2.id })
-        result
+        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat2.id })
       end
     end
 
