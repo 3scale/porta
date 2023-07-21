@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_110416) do
+ActiveRecord::Schema.define(version: 2023_07_21_123200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
@@ -472,7 +473,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
   end
 
-  create_table "email_configurations", force: :cascade do |t|
+  create_table "email_configurations", id: :serial, force: :cascade do |t|
     t.integer "account_id"
     t.string "email", null: false
     t.string "domain"
