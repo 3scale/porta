@@ -1,8 +1,7 @@
-<h1>Built-in page '<%= @page.title %>'</h1>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Built-in page '#{@page.title}'",
+                                                                      body: @page.description.html_safe } %>
 
 <%= cms_new_button_dropdown(CMS::Page) %>
-
-<p><%= @page.description.html_safe %></p>
 
 <%= cms_form_for(@page, :remote => true) do |f| %>
   <div id="cms-template-fields-wrapper">

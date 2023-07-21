@@ -20,9 +20,9 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     assert_service_active_docs_menus
 
     page = Nokogiri::HTML4::Document.parse(response.body)
-    assert_equal 1, page.xpath(".//table[@class='data']/tbody//tr").count
-    assert_match api_docs_service.name, page.xpath(".//table[@class='data']/tbody").text
-    assert_not_match other_api_docs_service.name, page.xpath(".//table[@class='data']/tbody").text
+    assert_equal 1, page.xpath(".//table/tbody//tr").count
+    assert_match api_docs_service.name, page.xpath(".//table/tbody").text
+    assert_not_match other_api_docs_service.name, page.xpath(".//table/tbody").text
   end
 
   test 'new works under the service scope' do

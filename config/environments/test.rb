@@ -78,6 +78,107 @@ Rails.application.configure do
     ::GATEWAY = ActiveMerchant::Billing::BogusGateway.new
   end
 
+  config.after_initialize do
+    if defined?(Bullet)
+      Bullet.enable = true
+      Bullet.bullet_logger = true
+      Bullet.raise = true
+
+      # We ignore these items because they are broken at the time commit them but we should fix them, see
+      # https://issues.redhat.com/browse/THREESCALE-9973
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :admin_user
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_contract
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_plan
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :provider_account
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_user
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_users
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_cinstances
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_plans
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_plans
+      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :contracts
+      Bullet.add_safelist class_name: "AccountContract", type: :n_plus_one_query, association: :plan
+      Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :customizations
+      Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :issuer
+      Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :pricing_rules
+      Bullet.add_safelist class_name: "AccountPlan", type: :unused_eager_loading, association: :original
+      Bullet.add_safelist class_name: "Alert", type: :n_plus_one_query, association: :cinstance
+      Bullet.add_safelist class_name: "ApiDocs::Service", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :customizations
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :issuer
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :original
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :pricing_rules
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :usage_limits
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :issuer
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :pricing_rules
+      Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "BackendApi", type: :counter_cache, association: :backend_api_configs
+      Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :children
+      Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :parent
+      Bullet.add_safelist class_name: "CMS::File", type: :n_plus_one_query, association: :provider
+      Bullet.add_safelist class_name: "CMS::Page", type: :n_plus_one_query, association: :provider
+      Bullet.add_safelist class_name: "CMS::Page", type: :n_plus_one_query, association: :section
+      Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :plan
+      Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :service
+      Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :user_account
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :plan
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :plan
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :user_account
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :user_account
+      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
+      Bullet.add_safelist class_name: "Invoice", type: :counter_cache, association: :payment_transactions
+      Bullet.add_safelist class_name: "Invoice", type: :n_plus_one_query, association: :buyer_account
+      Bullet.add_safelist class_name: "Invoice", type: :n_plus_one_query, association: :provider_account
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :buyer_account
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :buyer_account
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :provider_account
+      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :provider_account
+      Bullet.add_safelist class_name: "LineItem::PlanCost", type: :n_plus_one_query, association: :contract
+      Bullet.add_safelist class_name: "Message", type: :n_plus_one_query, association: :sender
+      Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :children
+      Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :owner
+      Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :parent
+      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :children
+      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
+      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
+      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
+      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
+      Bullet.add_safelist class_name: "Post", type: :n_plus_one_query, association: :topic
+      Bullet.add_safelist class_name: "ProxyConfig", type: :n_plus_one_query, association: :user
+      Bullet.add_safelist class_name: "ProxyRule", type: :n_plus_one_query, association: :owner
+      Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :backend_api_configs
+      Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :cinstances
+      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :account
+      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :default_application_plan
+      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :default_service_plan
+      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :metrics
+      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :proxy
+      Bullet.add_safelist class_name: "Service", type: :unused_eager_loading, association: :application_plans
+      Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :plan
+      Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :user_account
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :customizations
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :issuer
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :pricing_rules
+      Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
+      Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
+      Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post
+      Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
+      Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
+      Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :metric
+      Bullet.add_safelist class_name: "User", type: :n_plus_one_query, association: :member_permissions
+      Bullet.add_safelist class_name: "UserTopic", type: :n_plus_one_query, association: :topic
+    end
+  end
+
   # Make sure the middleware is inserted first in middleware chain
   require 'gitlab/testing/request_blocker_middleware'
   require 'gitlab/testing/request_inspector_middleware'

@@ -17,6 +17,12 @@ Metrics:
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
 
+Lint/MissingSuper:
+  Enabled: true
+  Exclude:
+  # this cop is wrong when inheriting from Patterns::Service
+  - 'app/services/**/*'
+
 Style/SymbolProc:
   AutoCorrect: false
 

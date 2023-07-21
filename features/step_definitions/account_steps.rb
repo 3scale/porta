@@ -24,7 +24,8 @@ Then "{account} should be {state}" do |account, state|
 end
 
 Then /^I should see the account details:$/ do |table|
-  table.diff! extract_table('#account-overview', 'tr', 'th,td')
+  assert_equal table.to_hash.flatten,
+               find_all('#account-overview .pf-c-data-list__cell').map(&:text)
 end
 
 Then "{provider} time zone should be {string}" do |provider, time_zone|

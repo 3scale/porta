@@ -65,6 +65,7 @@ class Finance::BillingStrategy < ApplicationRecord
   # :only - run billing only for providers with those IDs
   # :exclude - run billing for all providers, but exclude those IDs
   #
+  # This is usually called by BillingService#call with one provider in `only` and a single buyer in `buyer_ids`
   def self.daily(options = {})
     raise 'Options must be a hash' unless options.is_a?(Hash)
 

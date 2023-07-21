@@ -10,23 +10,18 @@ body {
 }
 
 main > h1,
-main >  h2,
-#tab-content > h1,
-#tab-content > h2 {
+main > h2 {
   font-weight: $font-weight-light;
 }
 
 main > h1:first-child,
-main >  h2:first-child,
-#tab-content > h1:first-child,
-#tab-content > h2:first-child {
+main > h2:first-child {
   background-color: $body-background;
   margin: line-height-times(-1);
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
 }
 
-#tab-content h1,
 h1 {
   font-size: $main-title-font-size;
   font-weight: $font-weight-light;
@@ -40,15 +35,6 @@ h1 {
 
 h2, h3 {
   margin-bottom: line-height-times(1/2);
-}
-
-#tab-content > h2:first-child {
-  background-color: $body-background;
-  font-size: $main-title-font-size;
-  line-height: 1;
-  margin: line-height-times(-1);
-  margin-bottom: line-height-times(1);
-  padding: line-height-times(1);
 }
 
 #cboxWrapper h2,
@@ -190,15 +176,6 @@ pre code {
   }
 }
 
-.u-code {
-  white-space: nowrap;
-}
-
-.u-unselectable {
-  -moz-user-select: none;     /* Firefox all */
-  -webkit-user-select: none;  /* Chrome & Safari */
-}
-
 .u-divider {
   height: line-height-times(1);
   margin: line-height-times(1/2) 0;
@@ -237,4 +214,8 @@ hr, {
     @include white-box-shadow;
     padding: line-height-times(1);
   }
+}
+
+.pf-m-force-float-right {
+  float: right !important; /* scss-lint:disable ImportantRule */
 }

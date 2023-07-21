@@ -1,7 +1,7 @@
 ;(function($) {
 
   var handle_checkboxes = function () {
-    var table = $('table.data'),
+    var table = $('table'),
         selectTotalEntries = $('#bulk-operations a.select-total-entries');
 
     // select all checkbox
@@ -61,7 +61,7 @@
         $(this).wrapInner('<button>');
         $(this).find('button').colorbox({
           href: function(){
-            var urlParts = [operation.data('url'), $('table.data tbody .select :checked').serialize()],
+            var urlParts = [operation.data('url'), $('table tbody .select :checked').serialize()],
                 url      = null;
 
             // url address might already inludes some parameters
@@ -73,7 +73,7 @@
 
             // if total entries action was selected
             // add selected_total_entries parameter to the url
-            var selectTotalEntries = $('#bulk-operations a.select-total-entries');            
+            var selectTotalEntries = $('#bulk-operations a.select-total-entries');
             if (selectTotalEntries.length && selectTotalEntries.attr('data-selected-total-entries')) {
               url += '&selected_total_entries=true';
             }
@@ -110,7 +110,7 @@
         $this.data('default-text', $this.text());
         // new text for the link
         var newText = '(only select the ';
-        newText += $('table.data tr.selected').length;
+        newText += $('table tr.selected').length;
         newText += ' ';
         newText += $this.data('association-name');
         newText += ' on this page)';

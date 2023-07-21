@@ -30,7 +30,7 @@ Feature: Providers's applications searching, sorting and filtering
       | bob  | Cheap | free  | live  |
     And I follow "Name" within table header
     Then I should see following table:
-      | Name ▲ | Account |
+      | Name   | Account |
       | BobApp | bob     |
 
   Scenario: Search scoped by service
@@ -45,7 +45,7 @@ Feature: Providers's applications searching, sorting and filtering
       | bob  | Cheap | free  | live  |
     And I follow "Name" within table header
     Then I should see following table:
-      | Name ▲ | Account |
+      | Name   | Account |
       | BobApp | bob     |
 
   Scenario: Listing
@@ -59,7 +59,7 @@ Feature: Providers's applications searching, sorting and filtering
       | Cheap |
     And I follow "Account" within table header
     And I should see following table:
-      | Account ▲ |
+      | Account   |
       | bob       |
       | jane      |
 
@@ -69,7 +69,7 @@ Feature: Providers's applications searching, sorting and filtering
       | Name | Plan  | Paid? | State |
       | bob  | Cheap | free  | live  |
     And I follow "<order by>" within table header
-    Then I should see "<order by> ▲"
+    Then I should see "<order by>"
 
     Examples:
       | order by   |

@@ -89,6 +89,7 @@ gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
+gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
@@ -160,7 +161,6 @@ gem 'slim-rails', '~> 3.2'
 gem 'draper', '~> 3.1'
 
 group :development do
-  gem 'bullet', '~> 6.1.5'
   gem 'listen'
 
   gem 'letter_opener', require: ENV.fetch('LETTER_OPENER', '0') == '1'
@@ -237,6 +237,7 @@ end
 
 group :development, :test do
   gem 'bootsnap', '~> 1.16'
+  gem 'bullet', '~> 6.1.5'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 

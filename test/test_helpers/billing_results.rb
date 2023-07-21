@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
 module BillingResultsTestHelpers
+  class << self
+    def clear_billing_locks
+      lock_keys = System.redis.keys("lock:billing:*")
+      System.redis.del(*lock_keys) if lock_keys.present?
+    end
+  end
+
   protected
+
+  delegate :clear_billing_locks, to: :BillingResultsTestHelpers
 
   def mock_billing_results(period, provider)
     billing_results = Finance::BillingStrategy::Results.new(period)

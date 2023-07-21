@@ -5,53 +5,49 @@
   <%- end -%>
 <% end %>
 
-<table class="data">
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table">
   <thead>
-    <tr>
-      <th><%= sortable('friendly_id', 'Number', :admin_finance_invoices_path) %></th>
-      <th><%= sortable('accounts.org_name', 'Account', :admin_finance_invoices_path) %></th>
-      <th><%= sortable('period', 'Month', :admin_finance_invoices_path) %></th>
-      <th>Cost</th>
-      <th><%= sortable('state', 'State', :admin_finance_invoices_path) %></th>
-      <th>Download</th>
+    <tr role="row">
+      <%= th_sortable('friendly_id', 'Number', :admin_finance_invoices_path) %>
+      <%= th_sortable('accounts.org_name', 'Account', :admin_finance_invoices_path) %>
+      <%= th_sortable('period', 'Month', :admin_finance_invoices_path) %>
+      <th role="columnheader" scope="col">Cost</th>
+      <%= th_sortable('state', 'State', :admin_finance_invoices_path) %>
+      <th role="columnheader" scope="col">Download</th>
     </tr>
+  </thead>
 
-    <tr class="search">
+  <tbody role="rowgroup" class="invoices">
+    <tr role="row" class="search">
       <%= form_for @search, :as => :search, :url => '', :html => { :method => :get, :class => :search } do |s| -%>
-        <th><%= s.text_field :number, placeholder: "2017-06-* / 2018-*"  %>
-        </th>
-        <th>
-          <%= s.text_field :buyer_query, :size => 20, :disabled => @buyer.present? %>
-        </th>
-        <th>
+        <td><%= s.text_field :number, placeholder: "2017-06-* / 2018-*"  %></td>
+        <td><%= s.text_field :buyer_query, :size => 20, :disabled => @buyer.present? %></td>
+        <td>
           <%= select_month @search.month_number.try(:to_i), :prefix => :search, :field_name => :month_number, :include_blank => true %>
           <%- years = Invoice.years %>
           <%= select_year @search.year.try(:to_i), :prefix => :search, :field_name => :year, :include_blank => true, :start_year => years.first, :end_year => years.last %>
-        <th></th>
-        <th><%= s.select :state, Invoice.state_machine.states.keys.collect(&:to_s).sort, :include_blank => true, :selected => @search.state %></th>
-        <th><%= s.button 'Search', :name => nil, :class => "pf-c-button pf-m-primary" %></th>
+        <td></td>
+        <td><%= s.select :state, Invoice.state_machine.states.keys.collect(&:to_s).sort, :include_blank => true, :selected => @search.state %></td>
+        <td><%= s.button 'Search', :name => nil, :class => "pf-c-button pf-m-primary" %></td>
       <%- end -%>
     </tr>
-  </thead>
-  <tbody class="invoices">
-    <% @invoices.each do |invoice| %>
 
-      <%= content_tag_for(:tr, invoice) do %>
-        <td><%= link_to  invoice.friendly_id,
-            admin_finance_invoice_path(invoice),
-            :title => "Show #{invoice.friendly_id}" -%></td>
-        <td><%= link_to_buyer_or_deleted(invoice.buyer, :admin_buyers_account_invoices_path) %></td>
-        <td><%= h invoice.name %></td>
-        <td><%= price_tag(invoice.cost) %></td>
-        <td><%= h invoice.state %></td>
-        <td>
-          <%= invoice_pdf_link(invoice, label: 'PDF') %>
+    <% @invoices.each do |invoice| %>
+      <%= content_tag_for(:tr, invoice, role: "row") do %>
+        <td role="cell" data-label="Number">
+          <%= link_to invoice.friendly_id, admin_finance_invoice_path(invoice),
+                                           title: "Show #{invoice.friendly_id}" %>
         </td>
-        <% end %>
+        <td role="cell" data-label="Account"><%= link_to_buyer_or_deleted(invoice.buyer, :admin_buyers_account_invoices_path) %></td>
+        <td role="cell" data-label="Month"><%= h invoice.name %></td>
+        <td role="cell" data-label="Cost"><%= price_tag(invoice.cost) %></td>
+        <td role="cell" data-label="State"><%= h invoice.state %></td>
+        <td role="cell" data-label="Download"><%= invoice_pdf_link(invoice, label: 'PDF') %></td>
+      <% end %>
     <% end %>
 
     <%- if @invoices.empty? -%>
-      <tr class="no_results">
+      <tr role="row" class="no_results">
         <td colspan="6">
           No Invoices.
         </td>

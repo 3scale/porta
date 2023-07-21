@@ -49,6 +49,13 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
     test 'returns the role as string' do
       assert_equal(@user.role.to_s, @drop.role)
     end
+
+    test '#using_password?' do
+      assert @drop.using_password?
+
+      without_password_drop = Drops::User.new(FactoryBot.create(:user, account: @buyer, password_digest: nil))
+      assert_not without_password_drop.using_password?
+    end
   end
 
   class BuyerUserTest < Liquid::Drops::UserDropTest

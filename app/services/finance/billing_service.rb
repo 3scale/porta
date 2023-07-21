@@ -8,16 +8,19 @@ module Finance
       BillingWorker.enqueue(provider_account, now, buyers_scope)
     end
 
+    # @param account_id [Integer] see #initialize
     def self.call!(account_id, options = {})
       new(account_id, options).call!
     end
 
+    # @param account_id [Integer] see #initialize
     def self.call(account_id, options = {})
       new(account_id, options).call
     end
 
     attr_reader :account_id, :provider_account_id, :now, :skip_notifications
 
+    # @param account_id [Integer] either a provider account, or a buyer account with :provider_account_id in options
     def initialize(account_id, options = {})
       @account_id = account_id
       @provider_account_id = options[:provider_account_id] || account_id
@@ -62,13 +65,10 @@ module Finance
     end
 
     def with_lock
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless BillingLock.create(account_id: account_id).persisted?
+      # intentionally skip unlocking, no further billing of account within 3 hours allowed
+      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hours.to_i * 1000).result
 
-      begin
-        yield
-      ensure
-        BillingLock.delete(account_id)
-      end
+      yield
     end
 
     def report_error(error)

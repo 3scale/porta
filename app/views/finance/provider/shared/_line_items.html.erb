@@ -1,70 +1,76 @@
-<table id="line_items" class="invoice">
-  <caption>
-    Line Items
-  </caption>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>Charged</th>
-    <th>
-      <% if @invoice.editable? && editable %>
-        <%= link_to 'Add', new_admin_finance_account_invoice_line_item_path(@invoice.buyer_account, @invoice),
-                    :title => 'Add Custom Charge',
-                    :class => 'action add fancybox',
-                    :'data-autodimensions' => 'true'
-        %>
-      <% end %>
-    </th>
-  </tr>
-  </thead>
+<div class="pf-l-grid__item pf-m-12-col">
+  <div class="pf-c-card">
+    <div class="pf-c-card__header">
+      <div class="pf-c-card__title">
+        Line Items
+      </div>
+    </div>
 
-  <tbody>
-  <%= render :partial => '/finance/provider/shared/line_item', :collection => @invoice.line_items, :locals => { :editable => editable } %>
-  </tbody>
+    <table id="line_items" class="pf-c-table pf-m-grid-lg invoice" role="grid" aria-label="Line items table">
+      <thead>
+        <tr role="row">
+          <th role="columnheader" scope="col">Name</th>
+          <th role="columnheader" scope="col">Description</th>
+          <th role="columnheader" scope="col">Quantity</th>
+          <th role="columnheader" scope="col">Price</th>
+          <th role="columnheader" scope="col">Charged</th>
+          <th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
+            <% if @invoice.editable? && editable %>
+              <%= link_to 'Add', new_admin_finance_account_invoice_line_item_path(@invoice.buyer_account, @invoice),
+                          :title => 'Add Custom Charge',
+                          :class => 'action add fancybox',
+                          :'data-autodimensions' => 'true'
+              %>
+            <% end %>
+          </th>
+        </tr>
+      </thead>
 
-  <tfoot>
-  <% if @invoice.vat_rate.nil? %>
-    <tr>
-      <th>Total cost</th>
-      <td></td>
-      <td></td>
-      <td><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
-      <td id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%></td>
-      <td></td>
-    </tr>
-  <% else %>
-    <tr>
-      <th>Total cost (without <%= @invoice.buyer_field_label('vat_rate') %>)</th>
-      <td></td>
-      <td></td>
-      <td id="invoice_cost_without_vat"><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
-      <td><%= rounded_price_tag(@invoice.charge_cost_without_vat)%></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th><%= @invoice.buyer_field_label('vat_rate') %> Amount</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td id="invoice_cost_vat_amount"><%= rounded_price_tag(@invoice.vat_amount) %></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>Total cost (<%= @invoice.buyer_field_label('vat_rate') %> <%= @invoice.vat_rate %>% included)</th>
-      <td></td>
-      <td></td>
-      <td id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%> </td>
-      <td></td>
-    </tr>
-  <% end %>
-  </tfoot>
-</table>
+      <tbody role="rowgroup">
+        <%= render :partial => '/finance/provider/shared/line_item', :collection => @invoice.line_items, :locals => { :editable => editable } %>
+      </tbody>
 
-<% if @invoice.vat_rate == 0 %>
-  <p id="vat-zero-text">
-    <%= @invoice.provider_account.vat_zero_text %>
-  </p>
-<% end %>
+      <tfoot>
+        <% if @invoice.vat_rate.nil? %>
+          <tr role="row">
+            <th role="columnheader" scope="col" colspan="3">
+              <b>Total cost</b>
+            </th>
+            <td role="cell" data-label="Price"><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
+            <td role="cell" data-label="Charged" id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%></td>
+            <td role="cell"></td>
+          </tr>
+        <% else %>
+          <tr role="row">
+            <th role="columnheader" scope="col" colspan="3">
+              <b>Total cost (without <%= @invoice.buyer_field_label('vat_rate') %>)</b>
+            </th>
+            <td role="cell" data-label="Price" id="invoice_cost_without_vat"><%= line_item_price_tag(@invoice.exact_cost_without_vat) %></td>
+            <td role="cell" data-label="Charged"><%= rounded_price_tag(@invoice.charge_cost_without_vat)%></td>
+            <td role="cell"></td>
+          </tr>
+          <tr role="row">
+            <th role="columnheader" scope="col" colspan="4">
+              <b><%= @invoice.buyer_field_label('vat_rate') %> Amount</b>
+            </th>
+            <td role="cell" data-label="Charged" id="invoice_cost_vat_amount"><%= rounded_price_tag(@invoice.vat_amount) %></td>
+            <td role="cell"></td>
+          </tr>
+          <tr role="row">
+            <th role="columnheader" scope="col" colspan="3">
+              <b>Total cost (<%= @invoice.buyer_field_label('vat_rate') %> <%= @invoice.vat_rate %>% included)</b>
+            </th>
+            <td role="cell" data-label="Price" id="invoice_cost"><%= rounded_price_tag(@invoice.charge_cost)%> </td>
+            <td role="cell"></td>
+          </tr>
+        <% end %>
+      </tfoot>
+    </table>
+
+    <% if @invoice.vat_rate == 0 %>
+      <p id="vat-zero-text">
+        <%= @invoice.provider_account.vat_zero_text %>
+      </p>
+    <% end %>
+  </div>
+</div>

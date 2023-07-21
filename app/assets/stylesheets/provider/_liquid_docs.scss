@@ -1,10 +1,6 @@
 #liquid-docs {
   @include white-box-shadow;
   padding: line-height-times(1);
-  
-  table {
-    @extend .data;
-  }
 
   hr {
     margin: line-height-times(2) 0 line-height-times(1/2) 0;

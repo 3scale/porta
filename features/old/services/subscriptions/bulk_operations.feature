@@ -21,28 +21,25 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
 
-  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-  @wip
   Scenario: Show and hide bulk operations controls
-     And provider "foo.3scale.localhost" has "service_plans" visible
-     When I go to the subscriptions admin page
+    And provider "foo.3scale.localhost" has "service_plans" visible
+    When I go to the subscriptions admin page
     When I check select for "bob"
-    Then "Bulk operations" should be visible
+    Then I should see "Bulk operations"
       And I should see "Send email"
       And I should see "Change service plan"
       And I should see "Change state"
-    When I uncheck select for "bob"
-    Then "Bulk operations" should not be visible
 
-  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
-  @wip
+    When I uncheck select for "bob"
+    Then I should not see "Bulk operations"
+
   Scenario: Check all applications with main checkbox
-      And I am on the service contracts admin page
+    And I am on the service contracts admin page
     When I check select in table header
 
     Then all selects should be checked
-      And "Bulk operations" should be visible
+    Then I should see "Bulk operations"
 
     When I uncheck select in table header
-    Then none selects should be checked
-      And "Bulk operations" should not be visible
+    Then no selects should be checked
+    And I should not see "Bulk operations"

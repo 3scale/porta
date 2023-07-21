@@ -20,89 +20,101 @@ div id="bulk-operations" style="display: none;"
 / FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock
 - show_application_plans = application_plans.size > 0 && !master_on_premises?
 - service_column_visible = service.nil? && current_account.multiservice?
-
-table class="data"
-  thead
-    tr
-      th class="select" = bulk_select_all
-      th = sortable('cinstances.name', 'Name')
-      th = sortable('cinstances.state', 'State')
-      - unless account
-        th = sortable('accounts.org_name', 'Account')
-      - if service_column_visible
-        th Service
-      - if show_application_plans
-        th = sortable('plans.name', 'Plan')
-      - if current_account.settings.finance.allowed?
-        th
-          ' Paid?
-
-      th = sortable('cinstances.created_at', 'Created on')
-      th = sortable('cinstances.first_daily_traffic_at', 'Traffic on')
-
-    - if applications.present? || account.nil?
-      tr class="search"
-        th class="select"
-        = form_for search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
-          th
-            = s.text_field :name, size: 15
-
-          th
-            = s.select :state, states, include_blank: 'All', selected: search.state
-
-          - unless account
-            th class="small"
-              = s.text_field :account_query, size: 7
-
-          - if service_column_visible
-            th
-              = s.collection_select :service_id, accessible_services, :id, :name,
-                                      { include_blank: true },
-                                      { disabled: service }
-
-          - if show_application_plans
-            - if service_column_visible
-              th = s.grouped_collection_select :plan_id, accessible_services,
-                                              :application_plans, :name, :id, :name,
-                                              { include_blank: true },
-                                              { disabled: plan }
-            - else
-              th = s.collection_select :plan_id, application_plans, :id, :name,
-                                          { include_blank: true },
-                                          { disabled: plan }
-
-          - if current_account.settings.finance.allowed?
-            th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: plan }
-
-          th
-          th
-          th
-            = s.button 'Search', name: nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
-
-  tbody class="cinstances"
-    - applications.each do |cinstance|
-      tr id=dom_id(cinstance)
-        td class="select" = bulk_select_one cinstance
-        td = link_to cinstance.display_name, provider_admin_application_path(cinstance)
-        td class="state"
-          => cinstance.state
-          - if cinstance.trial?
-            = remaining_trial_days(cinstance)
+div class="pf-c-card"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Applications table"
+    thead
+      tr role="row"
+        td role="columnheader" scope="col" class="select pf-c-table__check"
+          label
+            = bulk_select_all
+        = th_sortable('cinstances.name', 'Name')
+        = th_sortable('cinstances.state', 'State')
         - unless account
-          td = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
+          = th_sortable('accounts.org_name', 'Account')
         - if service_column_visible
-          td = link_to_service cinstance.service
+          th role="columnheader" scope="col"
+            | Service
         - if show_application_plans
-          td class="plan" = link_to_plan_edit cinstance.plan
+          = th_sortable('plans.name', 'Plan')
         - if current_account.settings.finance.allowed?
-          td class="free_or_paid" = plan_free_or_paid cinstance.plan
-        td = time_tag_with_title cinstance.created_at
-        td = last_traffic(cinstance)
+          th role="columnheader" scope="col"
+            | Paid?
+        = th_sortable('cinstances.created_at', 'Created on')
+        = th_sortable('cinstances.first_daily_traffic_at', 'Traffic on')
         td
-    - if applications.empty?
-      tr class="no_results"
-        td colspan=(service_column_visible ? 10 : 9)
-          | No applications
+
+      - if applications.present? || account.nil?
+        tr role="row" class="search"
+          th class="select"
+          = form_for search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
+            th
+              = s.text_field :name, size: 15
+
+            th
+              = s.select :state, states, include_blank: 'All', selected: search.state
+
+            - unless account
+              th class="small"
+                = s.text_field :account_query, size: 7
+
+            - if service_column_visible
+              th
+                = s.collection_select :service_id, accessible_services, :id, :name,
+                                        { include_blank: true },
+                                        { disabled: service }
+
+            - if show_application_plans
+              - if service_column_visible
+                th = s.grouped_collection_select :plan_id, accessible_services,
+                                                :application_plans, :name, :id, :name,
+                                                { include_blank: true },
+                                                { disabled: plan }
+              - else
+                th = s.collection_select :plan_id, application_plans, :id, :name,
+                                            { include_blank: true },
+                                            { disabled: plan }
+
+            - if current_account.settings.finance.allowed?
+              th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: plan }
+
+            th
+            th
+            td class="pf-m-fit-content"
+              = s.button 'Search', name: nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
+
+    tbody role="rowgroup" class="cinstances"
+      - applications.each do |cinstance|
+        tr role="row" id=dom_id(cinstance)
+          td class="pf-c-table__check select" role="cell" id=cinstance.id
+            label
+              = bulk_select_one cinstance
+          td role="cell" data-label="Name"
+            = link_to cinstance.display_name, provider_admin_application_path(cinstance)
+          td role="cell" data-label="State" class="state"
+            => cinstance.state
+            - if cinstance.trial?
+              = remaining_trial_days(cinstance)
+          - unless account
+            td role="cell" data-label="Account"
+              = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
+          - if service_column_visible
+            td role="cell" data-label="Service"
+              = link_to_service cinstance.service
+          - if show_application_plans
+            td role="cell" data-label="Plan" class="plan"
+              = link_to_plan_edit cinstance.plan
+          - if current_account.settings.finance.allowed?
+            td role="cell" data-label="Paid?" class="free_or_paid"
+              = plan_free_or_paid cinstance.plan
+          td role="cell" data-label="Created on"
+            = time_tag_with_title cinstance.created_at
+          td role="cell" data-label="Traffic on"
+            = last_traffic(cinstance)
+          td
+      - if applications.empty?
+        tr class="no_results"
+          td colspan=(service_column_visible ? 10 : 9)
+            | No applications
 
 = will_paginate applications
 

@@ -21,8 +21,6 @@ $subsection-bg-color: rgba(0,0,0,0.05);
     td { text-align: center; }
   }
 
-  @extend table.data;
-
   tbody {
     tr td {
       padding-left: line-height-times(1 / 2);
