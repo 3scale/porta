@@ -8,7 +8,7 @@ Feature: Public site access
 
   @javascript
   Scenario: View site when site access code is set
-    And I follow "Developer Portal"
+    When I follow "Developer Portal"
     And I follow "Visit Portal"
     Then the current domain in a new window should be foo.3scale.localhost
     And I should not see field "Access code"
