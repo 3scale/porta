@@ -473,7 +473,7 @@ ActiveRecord::Schema.define(version: 2023_07_21_123200) do
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
   end
 
-  create_table "email_configurations", id: :serial, force: :cascade do |t|
+  create_table "email_configurations", force: :cascade do |t|
     t.integer "account_id"
     t.string "email", null: false
     t.string "domain"
