@@ -12,6 +12,11 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   def index
     @search = ThreeScale::Search.new(params[:search] || params)
     @invoices = collection.scope_search(@search).order_by(params[:sort], params[:direction]).paginate(paginate_params).decorate
+    @years = Invoice.where(provider_account_id: current_account.id)
+               .pluck("YEAR(period)")
+               .compact
+               .map(&:to_i)
+               .presence || [Time.now.year]
   end
 
   def create
