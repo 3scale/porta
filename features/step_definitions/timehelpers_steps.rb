@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 After do
+  Time.zone = Rails.application.config.time_zone
   travel_back
 end
 
