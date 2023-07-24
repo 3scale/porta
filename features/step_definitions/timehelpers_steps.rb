@@ -41,11 +41,9 @@ When /^(?:the )?time flies to (.*)$/ do |date|
 end
 
 # Suffix 'on 5th July 2009'
-#
-Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
-  # this ensures billing actions are run
-  step %(time flies to #{date})
-  # and then we freeze the time
+# When '(without scheduled jobs)' is present, scheduled jobs will be skipped when travelling in time
+Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: [^\(]*)?)( \(without scheduled jobs\))?$/ do |original, date, skip_jobs|
+  step %(time flies to #{date}) unless skip_jobs
   safe_travel_to(Time.zone.parse(date)) do
     step original.strip
   end
