@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "4.224.2",
-    "@patternfly/quickstarts": "^1.4.1-rc.1",
+    "@patternfly/quickstarts": "^2.4.1",
     "@patternfly/react-core": "4.276.8",
     "@patternfly/react-table": "4.113.0",
     "@rails/webpacker": "5.4.4",
