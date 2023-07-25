@@ -58,10 +58,10 @@ Feature: Features :)
   @javascript
   Scenario: Delete a feature
     Given the provider has "service_plans" switch allowed
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
+    Given a service plan "Basic" for service "API" exists
     And a feature "Invulnerability" of provider "foo.3scale.localhost"
 
     When I log in as provider "foo.3scale.localhost"
     And I go to the service plans admin page
-    Then I go to the edit page for plan "Basic"
+    Then I go to the edit page for admin service plan "Basic"
     And I follow "Delete" and I confirm dialog box
