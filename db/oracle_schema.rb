@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_110416) do
+ActiveRecord::Schema.define(version: 2023_07_11_123200) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.integer "tenant_id", precision: 38
     t.integer "service_id", precision: 38
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
