@@ -64,9 +64,9 @@ Feature: Account management
 
   @javascript
   Scenario: For admins the account overview is a page to change account details
-    And current domain is the admin domain of provider "foo.3scale.localhost"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
-      And I go to the provider account page
+    And I go to the provider account page
     Then I should see "Account Details"
 
   @javascript
