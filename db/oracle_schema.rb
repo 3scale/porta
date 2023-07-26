@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_19_112703) do
+ActiveRecord::Schema.define(version: 2023_07_11_123200) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.integer "tenant_id", precision: 38
     t.integer "service_id", precision: 38
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
@@ -230,10 +231,12 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", force: :cascade do |t|
+  create_table "backend_events", id: false, force: :cascade do |t|
+    t.integer "id", precision: 38, null: false
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", force: :cascade do |t|
@@ -517,11 +520,12 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", primary_key: ["plan_id", "feature_id"], force: :cascade do |t|
-    t.integer "plan_id", precision: 38, null: false
-    t.integer "feature_id", precision: 38, null: false
+  create_table "features_plans", id: false, force: :cascade do |t|
+    t.integer "plan_id", precision: 38
+    t.integer "feature_id", precision: 38
     t.string "plan_type", null: false
     t.integer "tenant_id", precision: 38
+    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|

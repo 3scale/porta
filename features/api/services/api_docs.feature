@@ -1,5 +1,5 @@
 @javascript
-Feature: ActiveDocs
+Feature: Service ActiveDocs
   As a provider
   I want to manage my ActiveDocs
 

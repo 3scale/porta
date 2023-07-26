@@ -72,7 +72,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.11'
-gem 'cancancan', '~> 2.3.0'
+gem 'cancancan', '~> 3.0.0'
 gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
@@ -91,6 +91,7 @@ gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
+gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
@@ -163,7 +164,6 @@ gem 'slim-rails', '~> 3.2'
 gem 'draper', '~> 3.0'
 
 group :development do
-  gem 'bullet', '~> 6.1.5'
   gem 'listen'
 
   gem 'letter_opener', require: ENV.fetch('LETTER_OPENER', '0') == '1'
@@ -240,6 +240,7 @@ end
 
 group :development, :test do
   gem 'bootsnap', '~> 1.4'
+  gem 'bullet', '~> 6.1.5'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 

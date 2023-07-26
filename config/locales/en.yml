@@ -33,7 +33,7 @@ en:
   # start documentation links
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/%{major_and_minor_version_path}/html'
-    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/hero-api-portal'
+    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'
@@ -540,7 +540,7 @@ en:
         documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
-        documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
+        documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
         documentation_create_active_doc_spec: "%{docs_base_url}/providing_apis_in_the_developer_portal/create-activedocs-spec"
         # end documentation links
         proxy_rule_catch_all_warning: |
