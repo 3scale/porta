@@ -2240,7 +2240,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2265,7 +2265,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2310,7 +2310,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2337,7 +2337,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2383,7 +2383,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2391,7 +2391,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Change Role to Admin (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2430,7 +2429,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2485,7 +2484,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2510,7 +2509,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2589,7 +2588,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2635,7 +2634,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2681,7 +2680,7 @@
             "name": "user_id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "admin_ids",
             "required": true,
             "schema": {
               "type": "integer"
