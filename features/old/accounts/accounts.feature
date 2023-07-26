@@ -5,7 +5,6 @@ Feature: Account management
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And a buyer "buyer" signed up to provider "foo.3scale.localhost"
 
   @javascript
   Scenario: Edit and show account details
@@ -71,16 +70,16 @@ Feature: Account management
 
   @javascript
   Scenario: Buyer Admins can edit Customers Type on account
+    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
-    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
 
     When I go to the buyer account page for "bob"
     And I go to the fields definitions index page
     And I follow "Create"
     And create a new custom filed definition
 
-    When I log in as "buyer" on "foo.3scale.localhost"
+    When I log in as "bob" on "foo.3scale.localhost"
     And I follow "Settings"
 
     And I follow "Edit Account"
