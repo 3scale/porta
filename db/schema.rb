@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_11_123200) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -233,12 +233,10 @@ ActiveRecord::Schema.define(version: 2023_07_11_123200) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
-    t.bigint "id", null: false
+  create_table "backend_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -522,12 +520,11 @@ ActiveRecord::Schema.define(version: 2023_07_11_123200) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", null: false
     t.bigint "tenant_id"
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
