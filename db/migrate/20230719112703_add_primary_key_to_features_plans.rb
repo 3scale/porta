@@ -11,17 +11,4 @@ class AddPrimaryKeyToFeaturesPlans < ActiveRecord::Migration[5.2]
       execute 'ALTER TABLE FEATURES_PLANS ADD PRIMARY KEY (PLAN_ID, FEATURE_ID)'
     end
   end
-
-  def down
-    if System::Database.mysql?
-      add_index :features_plans, [:plan_id, :feature_id]
-      execute 'ALTER TABLE features_plans DROP PRIMARY KEY'
-    elsif System::Database.postgres?
-      add_index :features_plans, [:plan_id, :feature_id]
-      execute 'ALTER TABLE features_plans DROP CONSTRAINT features_plans_pk'
-    else
-      execute 'ALTER TABLE FEATURES_PLANS DROP PRIMARY KEY'
-      add_index :features_plans, [:plan_id, :feature_id]
-    end
-  end
 end
