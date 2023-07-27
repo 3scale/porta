@@ -903,7 +903,7 @@
                   },
                   "key": {
                     "type": "string",
-                    "description": "app_key to be added"
+                    "description": "app_key to be added.\n\n**(Only alphanumeric characters `[0-9, a-z, A-Z]`, hyphen-minus (`-`), between 5 and 256 characters long. No spaces allowed).**"
                   }
                 },
                 "required": [
@@ -9771,15 +9771,15 @@
           },
           "user_key": {
             "type": "string",
-            "description": "User Key (API Key) of the application to be created.",
+            "description": "User Key (API Key) of the application to be created.\n\n**Only alphanumeric characters `[0-9, a-z, A-Z]`, hyphen-minus (`-`), between 5 and 256 characters long. No spaces allowed.**",
             "x-data-threescale-name": "user_keys"
           },
           "application_id": {
             "type": "string",
-            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created."
+            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\n**Only alphanumeric characters `[0-9, a-z, A-Z]`, hyphen-minus (`-`), between 4 and 256 characters long. No spaces allowed.**"
           },
           "application_key": {
-            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.",
+            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\n**Only alphanumeric characters `[0-9, a-z, A-Z]`, hyphen-minus (`-`), between 5 and 256 characters long. No spaces allowed.**",
             "type": "string"
           },
           "redirect_url": {
