@@ -16,6 +16,7 @@ const metricsSelector = (totalHits) => {
 
   return new StatsMetricsSelector({ statsState: userSelectedState, metrics, container: '#selector' })
 }
+
 describe('StatsMetricsSelector', () => {
 
   beforeEach(() => {
@@ -33,9 +34,7 @@ describe('StatsMetricsSelector', () => {
   })
 
   it('should format the number correctly', () => {
-    const totalHits = 345
-    metricsSelector(totalHits).render()
-
-    expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('345 Pierogi')
+    metricsSelector(1).render()
+    expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('1 Pierogi')
   })
 })

@@ -24,7 +24,7 @@ class StatsHoursOfDayChart extends StatsChart {
         y: {
           default: [0, 10],
           tick: {
-            format: d => numeral(d).format(d < 1000 ? '0' : '0.0a').toUpperCase()
+            format: d => numeral(d).format('0[.]0a').toUpperCase()
           }
         }
       },
@@ -66,4 +66,4 @@ let statsHoursOfDay = (serviceId, options = {}) => {
   })
 }
 
-export { statsHoursOfDay }
+export { statsHoursOfDay, StatsHoursOfDayChart }
