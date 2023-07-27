@@ -106,3 +106,18 @@ Given "a service plan has been deleted" do
   visit admin_service_service_plans_path(default_service)
   @plan.destroy
 end
+
+When "there are other services with service plans" do
+  FactoryBot.create_list(:service, 3, account: @provider).each do |service|
+    assert_equal 1, service.service_plans.count
+  end
+end
+
+Then "only service plans of the current service are listed" do
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'An extra plan')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Another extra plan')
+
+  @plans = default_service.service_plans
+  visit admin_service_service_plans_path(default_service)
+  assert_plans_table @plans
+end
