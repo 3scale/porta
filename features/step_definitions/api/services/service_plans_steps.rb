@@ -19,8 +19,8 @@ Then "any new application of that product will be subscribed using this plan" do
   assert_equal @plan, Cinstance.last.buyer_account.bought_service_contracts.last.plan
 end
 
-When "an admin is in the service plans page" do
-  visit admin_service_service_plans_path(default_service)
+When "an admin is on the service plans page of {product}" do |product|
+  visit admin_service_service_plans_path(product)
 end
 
 Then "they can add new service plans" do
