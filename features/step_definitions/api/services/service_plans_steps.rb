@@ -113,11 +113,11 @@ When "there are other services with service plans" do
   end
 end
 
-Then "only service plans of the current service are listed" do
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'An extra plan')
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'Another extra plan')
+When "the product has multiple service plans" do
+  FactoryBot.create(:service_plan, issuer: @product, name: 'An extra plan')
+  FactoryBot.create(:service_plan, issuer: @product, name: 'Another extra plan')
+end
 
-  @plans = default_service.service_plans
-  visit admin_service_service_plans_path(default_service)
-  assert_plans_table @plans
+Then "only service plans of the product are listed" do
+  assert_plans_table @product.service_plans
 end
