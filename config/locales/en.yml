@@ -555,6 +555,9 @@ en:
             Start by creating an application plan.
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
+    metrics:
+      edit:
+        delete_confirmation: "Removing this %{type} will affect all plans that contain this %{type}, all associated mapping rules will be deleted too. Are you sure?"
 
   deployment_options:
     missing: |
