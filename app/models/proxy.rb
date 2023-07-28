@@ -119,7 +119,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def metric_in_latest_configs?(metric_id)
-    ProxyConfig::ENVIRONMENTS.map { |env| proxy_configs.by_environment(env).newest_first.first.contains_metric?(metric_id) }.any?
+    ProxyConfig::ENVIRONMENTS.map { |env| proxy_configs.by_environment(env).newest_first.first&.contains_metric?(metric_id) }.any?
   end
 
   # This smells of :reek:NilCheck
