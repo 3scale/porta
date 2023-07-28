@@ -30,3 +30,12 @@ Feature: Product > Integration > Metrics > Edit
     Given I change to tab "Metrics"
     When I follow "Hits"
     Then I should not see "Delete"
+
+  Scenario: Cannot delete a metric used in the latest gateway configuration
+    Given metric "Pasta" is mapped
+    And the gateway configuration is promoted to staging
+    When I change to tab "Metrics"
+    And I follow "Pasta"
+    And I press "Delete" and I confirm dialog box
+    Then I should see the flash message "Metric is used by the latest gateway configuration and cannot be deleted"
+    And I should see "Pasta" on the metrics tab
