@@ -84,7 +84,9 @@ class Account < ApplicationRecord
 
   scope :not_master, -> { where.has { (master != true) | (master == nil) } }
 
-  audited allow_mass_assignment: true
+  scope :searchable, -> { not_master.without_to_be_deleted.includes(:users, :bought_cinstances) }
+
+  audited
 
   # this is done in a callback because we want to do this AFTER the account is deleted
   # otherwise the before_destroy admin check in the user will stop the deletion
