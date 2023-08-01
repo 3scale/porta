@@ -63,9 +63,11 @@ Then /^I should (not )?see "([^"]*)" on the (metrics|methods) tab$/ do |negate, 
   step("I change to tab \"#{tab_name.capitalize}\"")
   table = tab_name == 'metrics' ? metrics_table : methods_table
 
+  assertion = method(negate ? :refute_includes : :assert_includes)
+
   with_scope table do
     table_metrics = find_all('.pf-c-table tbody tr td:first-child').map(&:text)
-    assert_includes table_metrics, metric_name
+    assertion.call table_metrics, metric_name
   end
 end
 
