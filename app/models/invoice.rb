@@ -596,6 +596,15 @@ class Invoice < ApplicationRecord
     self.connection.select_values(selecting { sift(:year, period).as('year') }.distinct.reorder('year DESC').to_sql).map(&:to_i)
   end
 
+  # Returns years which have invoice, scoped by provider
+  def self.years_by_provider(provider_id)
+    connection.select_values(
+      selecting { sift(:year, period).as('year') }
+        .where.has { provider_account_id == provider_id }
+        .distinct.reorder('year DESC').to_sql
+    ).map(&:to_i)
+  end
+
   protected
 
   def notify_buyer_about_payment
