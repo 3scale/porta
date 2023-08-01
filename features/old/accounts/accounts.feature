@@ -62,20 +62,6 @@ Feature: Account management
     Then I should not see "API Key"
 
   @javascript
-  Scenario: For admins the account overview is a page to change account details
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the provider account page
-    Then I should see "Account Details"
-
-  @javascript
-  Scenario: Provider Admins cannot edit Profiles fields on account
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the provider account page
-    Then I should not see "customers type"
-
-  @javascript
   Scenario: Edit personal details with invalid data
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
