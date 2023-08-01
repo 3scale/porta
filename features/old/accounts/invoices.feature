@@ -36,3 +36,18 @@ Feature: Show invoices from account's page (#16015909)
     And I follow "2011-01-00000001"
     # TODO: Properly check if order is opened
     Then I should see "Add"
+
+  Scenario: Display years of invoices when there are invoices
+    Given a provider is logged in on 1st January 2011
+    And the provider is charging its buyers in prepaid mode
+    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
+    And a buyer "zoidberg" signed up to application plan "Fixed"
+    And an invoice of buyer "zoidberg" for January, 2011
+    And I go to the invoices issued by me
+    Then I should see the list of years with invoices
+
+  Scenario: Display the current year when there are no invoices
+    Given a provider is logged in on 1st January 2011
+    And the provider is charging its buyers in prepaid mode
+    And I go to the invoices issued by me
+    Then I should see the current year
