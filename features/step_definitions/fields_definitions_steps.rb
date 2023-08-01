@@ -29,9 +29,3 @@ Given "{provider} has the field {string} for {string} in the position {int}" do 
   a.pos = pos
   a.save!
 end
-
-And "create a new custom filed definition" do
-  fill_in "Name", with: "customerstype"
-  fill_in "Label", with: "Customers Type"
-  click_on "Create"
-end
