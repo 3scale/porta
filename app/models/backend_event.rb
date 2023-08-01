@@ -1,7 +1,5 @@
 class BackendEvent < ApplicationRecord
 
-  self.primary_key = :id
-
   serialize :data
 
   attr_accessible :id, :data
