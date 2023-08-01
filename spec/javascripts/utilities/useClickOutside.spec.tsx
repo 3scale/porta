@@ -12,7 +12,7 @@ const HookedComponent: FunctionComponent<{ callback: jest.Mock }> = ({ callback 
   return <div ref={ref}>I am hooked</div>
 }
 
-it('should and and remove a mousedown event listener', () => {
+it('should add and remove a mousedown event listener', () => {
   const addEventListener = jest.fn()
   const removeEventListener = jest.fn()
 
@@ -20,7 +20,7 @@ it('should and and remove a mousedown event listener', () => {
   document.removeEventListener = removeEventListener
 
   const wrapper = mount(<HookedComponent callback={jest.fn()} />)
-  expect(addEventListener).toHaveBeenCalledTimes(1)
+  expect(addEventListener).toHaveBeenCalledWith('mousedown', expect.any(Function))
 
   wrapper.unmount()
   expect(removeEventListener).toHaveBeenCalledTimes(1)
