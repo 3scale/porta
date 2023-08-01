@@ -1,9 +1,7 @@
-import ReactHtmlParser from 'react-html-parser'
-
 import {
   canFeatureSetServicePermissions,
   getFeatureName,
-  getFeatureNameDescription
+  FEATURE_NAMES_DESCRIPTION_ITEMS
 } from 'Users/utils'
 
 import type { FunctionComponent } from 'react'
@@ -54,9 +52,10 @@ const FeaturesFieldset: React.FunctionComponent<Props> = ({
  * A list describing member permissions for each label.
  */
 // eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
-const LabelDescriptionItems: FunctionComponent<{ descriptionItems: string[] }> = ({ descriptionItems }) => (
+const LabelDescriptionItems: FunctionComponent<{ descriptionItems: React.ReactNode[] }> = ({ descriptionItems }) => (
   <ul className="FeatureAccessList-item--labelDescription">
-    {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
+    {/* eslint-disable-next-line react/no-array-index-key */}
+    {descriptionItems.map((item, i) => <li key={i}>{item}</li>)}
   </ul>
 )
 
@@ -80,7 +79,7 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
 }) => {
   const featuresListItemClassName = `FeatureAccessList-item FeatureAccessList-item--${value} ${checked ? 'is-checked' : 'is-unchecked'}`
   const featureCheckboxClassName = `user_member_permission_ids ${canFeatureSetServicePermissions(value) ? 'user_member_permission_ids--service' : ''}`
-  const descriptionItems = getFeatureNameDescription(value)
+  const descriptionItems = FEATURE_NAMES_DESCRIPTION_ITEMS[value]
 
   return (
     <li className={featuresListItemClassName}>
@@ -94,7 +93,7 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
           value={value}
           onChange={() => { onChange(value) }}
         />
-        {ReactHtmlParser(getFeatureName(value))}
+        {getFeatureName(value)}
         {descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} />}
       </label>
     </li>
