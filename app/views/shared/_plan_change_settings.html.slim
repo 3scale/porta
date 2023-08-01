@@ -6,8 +6,7 @@ div class="pf-c-form__group-control pf-m-stack"
                                 checked: current_setting == 'request'
   = render 'plan_change_radio', permission: permission,
                                 value: 'direct',
-                                checked: current_setting == 'direct',
-                                hint: can?(:see, :finance) ? t('formtastic.hints.settings.change_plan_finance') : nil
+                                checked: current_setting == 'direct'
   - if can?(:see, :finance)
     = render 'plan_change_radio', permission: permission,
                                   value: 'credit_card',
@@ -17,5 +16,4 @@ div class="pf-c-form__group-control pf-m-stack"
                                   checked: current_setting == 'request_credit_card'
     = render 'plan_change_radio', permission: permission,
                                   value: 'none',
-                                  checked: current_setting == 'none',
-                                  hint: t("formtastic.hints.settings.#{permission}")
+                                  checked: current_setting == 'none'

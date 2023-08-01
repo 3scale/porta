@@ -56,9 +56,13 @@ div class="pf-c-card"
             div class="pf-c-form__group-control"
               = render 'settings_check', setting: 'account_plans_ui_visible', checked: visible
           div class="pf-c-form__group use-account-plans #{'hidden' unless visible}" role="radiogroup" aria-labelledby="account-plan-radio-group"
+            div class="pf-c-content"
+              small
+                = t('sites.usage_rules.edit.plans_info')
             div class="pf-c-form__group-label" id="account-plan-radio-group"
               label class="pf-c-form__label"
-                span class="pf-c-form__label-text" Account Plans Changing
+                span class="pf-c-form__label-text"
+                  = t('sites.usage_rules.edit.plans_label')
             = render 'shared/plan_change_settings', permission: 'change_account_plan_permission', settings: settings
 
       - if can?(:see, :service_plans)
@@ -69,9 +73,13 @@ div class="pf-c-card"
             div class="pf-c-form__group-control"
               = render 'settings_check', setting: 'service_plans_ui_visible', checked: visible
           div class="pf-c-form__group use-service-plans #{'hidden' unless visible}" role="radiogroup" aria-labelledby="service-plan-radio-group"
+            div class="pf-c-content"
+              small
+                = t('sites.usage_rules.edit.plans_info')
             div class="pf-c-form__group-label" id="service-plan-radio-group"
               label class="pf-c-form__label"
-                span class="pf-c-form__label-text" Service Plan Changing
+                span class="pf-c-form__label-text"
+                  = t('sites.usage_rules.edit.plans_label')
             = render 'shared/plan_change_settings', permission: 'change_service_plan_permission', settings: settings
 
       div class="pf-c-form__group pf-m-action"
