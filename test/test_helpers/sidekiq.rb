@@ -4,7 +4,7 @@ require 'sidekiq/testing'
 require 'sidekiq/lock/testing/inline'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq::Logging.logger = nil
+Sidekiq.logger = Logger.new("/dev/null")
 module TestHelpers
   module Sidekiq
     def self.included(base)
