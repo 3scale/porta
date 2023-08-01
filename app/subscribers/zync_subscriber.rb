@@ -11,6 +11,6 @@ class ZyncSubscriber < AfterCommitSubscriber
 
   # @param [ZyncEvent] event
   def after_commit(event)
-    job.perform_async(event.event_id, event.data)
+    job.perform_async(event.event_id, event.data.as_json)
   end
 end
