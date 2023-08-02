@@ -117,7 +117,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     end
 
     test '#publish_dependency_events enqueues the jobs' do
-      %w[Proxy Service].each { |dependent_type| ZyncWorker.expects(:perform_async).with(anything, has_entry(:type, dependent_type)) }
+      %w[Proxy Service].each { |dependent_type| ZyncWorker.expects(:perform_async).with(anything, has_entry('type', dependent_type)) }
       worker.publish_dependency_events(event.create_dependencies)
     end
 
