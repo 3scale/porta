@@ -50,3 +50,18 @@ Feature: Show invoices from account's page (#16015909)
     And the provider is charging its buyers in prepaid mode
     And I go to the invoices issued by me
     Then I should see the current year
+
+  Scenario: Display only years belonging to the current provider
+    Given a provider is logged in on 1st January 2010
+    Given a buyer "zoidberg" signed up to provider "foo.3scale.localhost"
+    And the provider is charging its buyers in prepaid mode
+    And an invoice of buyer "zoidberg" for January, 2010
+
+    Given a provider "boo.3scale.localhost"
+    Given a buyer "zudio" signed up to provider "boo.3scale.localhost"
+    And the provider is charging its buyers in postpaid mode
+    And an invoice of buyer "zudio" for January, 2011
+
+    And I go to the invoices issued by me
+    Then I should see the list of years with invoices belonging to the current provider
+    And I should not see the list of years with invoices belonging to other providers

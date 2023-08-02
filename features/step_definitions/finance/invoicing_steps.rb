@@ -178,3 +178,17 @@ Then("I should see the current year") do
   current_year = Time.now.year
   assert_includes displayed_years, current_year
 end
+
+Then("I should see the list of years with invoices belonging to the current provider") do
+  select_element = find('#search_year')
+  displayed_years = select_element.all('option').map(&:value).map(&:to_i)
+
+  expect(displayed_years).to eq([0, 2010])
+end
+
+Then("I should not see the list of years with invoices belonging to other providers") do
+  select_element = find('#search_year')
+  displayed_years = select_element.all('option').map(&:value).map(&:to_i)
+
+  expect(displayed_years).not_to include(*[2011])
+end
