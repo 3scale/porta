@@ -10,7 +10,6 @@ Feature: Features :)
 
   @javascript
   Scenario: Create a feature
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     Then I go to the edit page for plan "Basic"
     And I follow "New feature"
@@ -64,4 +63,4 @@ Feature: Features :)
     When I log in as provider "foo.3scale.localhost"
     And I go to the service plans admin page
     Then I go to the edit page for admin service plan "Basic"
-    And I follow "Delete" and I confirm dialog box
+    And I press "Delete" and I confirm dialog box
