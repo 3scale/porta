@@ -6,4 +6,3 @@
 <%= form.actions do %>
   <%= form.commit_button params[:next_step] == 'credit_card' ?  I18n.t('provider.admin.accounts.form.submit_button_next_step_label') : I18n.t('provider.admin.accounts.form.submit_button_label') %>
 <% end %>
-<%= javascript_include_tag 'custom_profiles_input_texts' %>
