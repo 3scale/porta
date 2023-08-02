@@ -4,7 +4,7 @@ require 'sidekiq/testing'
 require 'sidekiq/batch'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq.logger = Logger.new("/dev/null")
+Sidekiq.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
 Sidekiq::Testing.inline!
 
 module Sidekiq
