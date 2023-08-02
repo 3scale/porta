@@ -37,7 +37,7 @@ Feature: Features :)
     And a feature "50% less bugs" of provider "foo.3scale.localhost"
 
     When I log in as provider "foo.3scale.localhost"
-    Then I go to the edit page for plan "Basic"
+    Then I go to the edit page for admin service plan "Basic"
     And I enable feature "50% less bugs"
     Then feature "50% less bugs" should be enabled
 
