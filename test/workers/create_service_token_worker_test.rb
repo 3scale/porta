@@ -26,9 +26,9 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
         ServiceTokenService.expects(:update_backend).with(instance_of(ServiceToken)).twice
 
         assert_difference ServiceToken.method(:count), +1 do
-          CreateServiceTokenWorker.perform_async(event)
+          CreateServiceTokenWorker.perform_async(event.event_id)
           # for one event there should be only one service token
-          CreateServiceTokenWorker.perform_async(event)
+          CreateServiceTokenWorker.perform_async(event.event_id)
         end
       end
     end
