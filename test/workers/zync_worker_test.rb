@@ -212,7 +212,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     zync_event = EventStore::Event.where(event_type: ZyncEvent.to_s).last!
     assert_difference(EventStore::Event.where(event_type: ZyncEvent.to_s).method(:count), +1) do
-      Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data) }
+      Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data.as_json) }
     end
 
     stub_request(:put, 'http://example.com/notification').to_return(status: 200)
@@ -220,6 +220,6 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     dependency_event_service = EventStore::Event.where(event_type: ZyncEvent.to_s).last!
     assert_equal 'Service', dependency_event_service.data[:type]
     assert_equal zync_event.data[:service_id], dependency_event_service.data[:id]
-    Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data) }
+    Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data.as_json) }
   end
 end

@@ -55,7 +55,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
       callback_options = { batch_id: batch.bid, account_id: @provider.id, billing_date: time }
       batch.on(:complete, BillingWorker::Callback, callback_options)
       batch.jobs do
-        BillingWorker.perform_async(@buyer.id, @provider.id, time)
+        BillingWorker.perform_async(@buyer.id, @provider.id, time.to_s(:iso8601))
       end
 
       Finance::BillingService.any_instance.expects(:notify_billing_finished).returns(true)
