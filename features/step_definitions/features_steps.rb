@@ -21,9 +21,8 @@ And('I disable feature {string}') do |string|
 end
 
 And('I enable feature {string}') do |string|
-  feature = @service_plan.service.features.find_by(name: string, scope: "ServicePlan")
-  @service_plan.features << feature #feature enabled
-  @service_plan.save!
+  element = find('.excluded')
+  element.click
 end
 
 Then('feature {string} should be enabled') do |string|
