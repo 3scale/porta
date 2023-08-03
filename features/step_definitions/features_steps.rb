@@ -21,16 +21,16 @@ And('I disable feature {string}') do |string|
 end
 
 And('I enable feature {string}') do |string|
-  element = find('.excluded')
+  element = find('.fa-times-circle')
   element.click
 end
 
 Then('feature {string} should be enabled') do |string|
   feature = @service_plan.service.features.find_by(name: string)
-  assert_equal feature.features_plans.count, 1
+  assert_equal 1, feature.features_plans.count
 end
 
 Then('feature {string} should be disabled') do |string|
   feature = @service_plan.service.features.find_by(name: string)
-  assert_equal feature.features_plans.count, 0
+  assert_equal 0, feature.features_plans.count
 end
