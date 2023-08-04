@@ -86,14 +86,6 @@ class IndexingTest < ActiveSupport::TestCase
 
   private
 
-  def indexed_models
-    ThinkingSphinx::Test.indexed_models
-  end
-
-  def indexed_ids(model)
-    model.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY)
-  end
-
   def factory_for(model)
     overrides = {
       account: :simple_provider,

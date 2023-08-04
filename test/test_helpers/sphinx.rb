@@ -8,6 +8,7 @@ module ThinkingSphinx
     class << self
 
       def real_time_run
+        clear
         init
         start index: false
 
@@ -57,6 +58,14 @@ module TestHelpers
 
     delegate :enable_search_jobs!, to: :'ThinkingSphinx::Test'
     delegate :disable_search_jobs!, to: :'ThinkingSphinx::Test'
+
+    def indexed_models
+      ThinkingSphinx::Test.indexed_models
+    end
+
+    def indexed_ids(model)
+      model.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY)
+    end
   end
 end
 
