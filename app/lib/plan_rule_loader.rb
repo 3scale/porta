@@ -26,7 +26,7 @@ module PlanRuleLoader
   module_function
 
   def load_config
-    config = (ThreeScale.config.plan_rules.deep_symbolize_keys || {}).reverse_merge DEFAULT_RULES
+    config = (ThreeScale.config.plan_rules || {}).reverse_merge DEFAULT_RULES
     sorted_config = sort_by_rank(config)
     convert_to_hash_with_plan_rule_objects sorted_config
   end
