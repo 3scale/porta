@@ -21,17 +21,19 @@ Feature: Features :)
 
   # TODO: Test that the "No features yet" notice dissapears when first feature is created,
   #       and appears when last one is deleted.
-  @javascript
+  @javascript @chrome
   Scenario: Disable a feature
     Given a service plan "Basic" of provider "foo.3scale.localhost"
-    And a feature "50% more bugs" of provider "foo.3scale.localhost"
+    Given the provider has "service_plans" switch allowed
+    And an enabled feature "50% more bugs" of provider "foo.3scale.localhost"
 
     When I log in as provider "foo.3scale.localhost"
-    Then I go to the edit page for plan "Basic"
+    And I go to the service plans admin page
+    And I follow "Basic"
     And I disable feature "50% more bugs"
     Then feature "50% more bugs" should be disabled
 
-  @javascript @search
+  @javascript
   Scenario: Enable a feature
     Given a service plan "Basic" of provider "foo.3scale.localhost"
     Given the provider has "service_plans" switch allowed
