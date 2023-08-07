@@ -22,24 +22,30 @@ Then('there {is} feature named {string}') do |is, string|
   assert_equal feature_name, string
 end
 
-And('I disable feature {string}') do |string|
-  element = find('.fa-check-circle')
-  element.click
+When("I {string} the feature {string}") do |enable_disable, feature_name|
+  feature = @service_plan.service.features.find_by(name: feature_name)
+
+  within(:xpath, "//tr[@id='feature_#{feature.id}']") do
+    case enable_disable
+    when 'enable'
+      find('i.excluded').click
+    when 'disable'
+      find('i.included').click
+    end
+  end
 end
 
-And('I enable feature {string}') do |string|
-  element = find('.fa-times-circle')
-  element.click
-end
-
-Then('feature {string} should be enabled') do |string|
+Then('I see feature {string} is {enabled_or_disabled}') do |string, enabled_or_disabled|
+  wait_for_requests
   feature = @service_plan.service.features.find_by(name: string)
-  assert_equal 1, feature.features_plans.count
-end
-
-Then('feature {string} should be disabled') do |string|
-  using_wait_time(10) do
-    feature = @service_plan.service.features.find_by(name: string)
-    assert_equal 0, feature.features_plans.count
+  within(:xpath, "//tr[@id='feature_#{feature.id}']") do
+    case enabled_or_disabled
+    when 'enabled'
+      expect(page).to have_css('i.included[title="Feature is enabled for this plan"]')
+      expect(find('i.included')).to be_visible
+    when 'disabled'
+      expect(page).to have_css('i.excluded[title="Metric is disabled for this plan"]')
+      expect(find('i.excluded')).to be_visible
+    end
   end
 end
