@@ -322,7 +322,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Name can\'t be blank', flash[:error]
 
       post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
-      assert_equal 'System name invalid.', flash[:error]
+      assert_equal 'System name Invalid.', flash[:error]
     end
   end
 
