@@ -60,8 +60,8 @@ class BillingWorker
   # @param [Integer] provider_id
   # @param [String] time
   def perform(buyer_id, provider_id, time)
-    Rails.logger.info("Billing worker invoked for buyer #{buyer_id} of provider #{provider_id} at #{time}")
-    billing_results = Finance::BillingService.call!(buyer_id, provider_account_id: provider_id, now: time, skip_notifications: true)
+    Rails.logger.info("[billing] provider #{provider_id} buyer #{buyer_id}: BillingWorker#perform invoked at #{time}")
+    billing_results = Finance::BillingService.call!(buyer_id, { provider_account_id: provider_id, now: time, skip_notifications: true })
     store_summary(buyer_id, billing_results[provider_id]) if billing_results
   end
 
