@@ -20,7 +20,6 @@ module Tasks
       default_service.reload
 
       ThreeScale::Core::Service.expects(:make_default).with(another_service.backend_id)
-      ThinkingSphinx::Test.disable_real_time_callbacks!
       assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)) do
         perform_enqueued_jobs do
           execute_rake_task 'services.rake', 'services:destroy_service', account.id, default_service.id
@@ -70,7 +69,7 @@ module Tasks
       ThreeScale::Core::Service.expects(:save!).never
 
       assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)) do
-        perform_enqueued_jobs(except: SphinxIndexationWorker) do
+        perform_enqueued_jobs do
           execute_rake_task 'services.rake', 'services:destroy_service', account.id, non_default_service.id
         end
       end
