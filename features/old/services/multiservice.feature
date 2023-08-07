@@ -43,7 +43,7 @@ Feature: Multiservice feature
     And I fill in "System name" with "SystemName@123"
     And I press "Create Product"
     Then I should see "Invalid."
-    Then I should see the flash message "Couldn't create Product. Check your Plan limits"
+    Then I should see the flash message "System name Invalid."
 
   @javascript
   Scenario: Create new product: with already existing System name
