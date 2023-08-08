@@ -43,13 +43,17 @@ Feature: Show invoices from account's page (#16015909)
     And the provider is charging its buyers in prepaid mode
     And an invoice of buyer "zoidberg" for January, 2011
     And I go to the invoices issued by me
-    Then I should see the list of years with invoices
+    Then I should see the list of years with invoices have the following years:
+      | 0  |
+      | 2011 |
 
   Scenario: Display the current year when there are no invoices
     Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers in prepaid mode
     And I go to the invoices issued by me
-    Then I should see the current year
+    Then I should see the list of years with invoices have the following years:
+      | 0  |
+      | current_year |
 
   Scenario: Display only years belonging to the current provider
     Given a provider is logged in on 1st January 2010
@@ -63,5 +67,7 @@ Feature: Show invoices from account's page (#16015909)
     And an invoice of buyer "zudio" for January, 2011
 
     And I go to the invoices issued by me
-    Then I should see the list of years with invoices belonging to the current provider
+    Then I should see the list of years with invoices have the following years:
+      | 0  |
+      | 2010 |
     And I should not see the list of years with invoices belonging to other providers
