@@ -1,4 +1,4 @@
-require_dependency 'notification_center'
+require 'notification_center'
 
 class MessageObserver < ActiveRecord::Observer
   observe :cinstance, :service_contract

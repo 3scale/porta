@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
+class Authentication::Strategy::OAuth2Test < ActiveSupport::TestCase
 
   setup do
     @provider = FactoryBot.create(:simple_provider)
@@ -219,7 +219,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       user_data = valid_user_data
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         assert_difference(User.method(:count), +1) do
           result = authentication_strategy.authenticate({
                                                           system_name: authentication_provider.system_name,
@@ -251,7 +251,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
         assert_difference(User.method(:count), +1) do
           result = authentication_strategy.authenticate({
                                                           system_name: authentication_provider.system_name,
@@ -324,7 +324,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
                                                         code: '1234',
                                                         request: mock_request,
                                                         invitation: invitation
-                                                      }, procedure: Authentication::Strategy::Oauth2::CreateInvitedUser)
+                                                      }, procedure: Authentication::Strategy::OAuth2::CreateInvitedUser)
 
         assert_instance_of User, result
         assert_equal result.email, user_data[:email]

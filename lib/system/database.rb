@@ -14,9 +14,9 @@ module System
     def read_configuration_specification
       configurations = Rails.application.config.database_configuration
       resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(configurations)
-      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call.to_sym
+      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call
 
-      resolver.spec(spec)
+      resolver.spec(resolver.configurations[spec])
     end
 
     def adapter

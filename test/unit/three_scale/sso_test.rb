@@ -20,7 +20,7 @@ class ThreeScale::SsoTest < ActiveSupport::TestCase
 
     decoder = ThreeScale::SSO::Encryptor.new ThreeScale::SSO.generate_sso_key
 
-    assert_raise ActiveSupport::MessageVerifier::InvalidSignature do
+    assert_raise ActiveSupport::MessageEncryptor::InvalidMessage do
       decoder.decrypt_token token
     end
   end

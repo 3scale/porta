@@ -37,7 +37,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     get usage_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', metric_name: @metric.system_name, skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json "period"=>
       {"name"=>"month",
        "granularity"=>"day",
@@ -78,7 +78,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', response_code: 200 }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json "response_code" => {'code' => '200'},
     "period"=>
       {"name"=>"month",
@@ -101,7 +101,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', response_code: 404 }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json "response_code" => {'code' => '404'},
     "period"=>
       {"name"=>"month",

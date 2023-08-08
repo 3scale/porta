@@ -14,19 +14,19 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
     params = { period: 'day', metric_name: 'hits' }
     get usage_stats_data_services_path(@service, format: :json), params: params.merge(provider_key: @provider_account.api_key)
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
     get usage_stats_data_services_path(@service, format: :json), params: params.merge(access_token: token.value)
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
   end
 
   test 'access forbidden without authentication' do
     get usage_stats_data_services_path(@service, format: :json), params: { period: 'day', metric_name: "hits" }
 
     assert_response :forbidden
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json 'status' => 'Forbidden'
   end
 

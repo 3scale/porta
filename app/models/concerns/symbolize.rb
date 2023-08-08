@@ -10,6 +10,12 @@ module Symbolize
   end
 
   module AttributesAccessor
+    def changes
+      ActiveSupport::HashWithIndifferentAccess[
+        mutations_from_database.changed_attribute_names.map { |attr| [attr, attribute_change(attr)] }
+      ]
+    end
+
     def attribute_previous_change(attr)
       __symbolize_changes(attr, super)
     end
