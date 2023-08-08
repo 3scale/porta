@@ -12,6 +12,11 @@ import learnAboutMethods from './learnAboutMethods.yaml'
 import learnAboutMappingRules from './learnAboutMappingRules.yaml'
 import createAPIproduct from './createAPIproduct.yaml'
 import createAccessTiersForAPIconsumers from './createAccessTiersForAPIconsumers.yaml'
+import learnAboutBackends from './learnAboutBackends.yaml'
+import learnAboutAccounts from './learnAboutAccounts.yaml'
+import learnAboutApplications from './learnAboutApplications.yaml'
+import learnAboutMetrics from './learnAboutMetrics.yaml'
+import trackUsageForAPIProduct from './trackUsageForAPIProduct.yaml'
 
 const resources = [
   basicAPIintegration,
@@ -28,6 +33,11 @@ const resources = [
   learnAboutMappingRules,
   createAPIproduct,
   createAccessTiersForAPIconsumers
+  learnAboutBackends
+  learnAboutAccounts
+  learnAboutApplications
+  learnAboutMetrics
+  trackUsageForAPIProduct
 ]
 
 export default resources

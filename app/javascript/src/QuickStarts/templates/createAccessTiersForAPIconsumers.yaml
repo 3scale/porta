@@ -33,7 +33,7 @@ spec:
         1. Click <strong>Create</strong>.
         1. On the <strong>New Account</strong> page, fill in the details:
               - _Username_: Give a name to your consumer, for example, _Flight API_.
-              - Email_: Give the email of your consumer. The email must be unique among all users on this admin account, for example, <em>Flight-user@travel.com</em>. This is a required field.
+              - _Email_: Give the email of your consumer. The email must be unique among all users on this admin account, for example, <em>Flight-user@travel.com</em>. This is a required field.
               - _Password_: Give a password to your consumer. You can skip the password field if you want to invite users to the account securely. This is an optional field.
               - _Organization / Group name_: This is the organization name that the consumer belongs to, for example, _M Travel Agency_.
         1. Click <strong>Create account</strong>.

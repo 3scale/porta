@@ -1,0 +1,46 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: learning-about-metrics
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Metrics
+  durationMinutes: 10
+# Optional type section, will display as a tile on the card
+  type: 
+    text: Tour
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Learn how to track the API usage with metrics.
+  introduction: |-
+    In this quick start, you will learn about metrics. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
+  tasks:
+    - title:  Learn about metrics
+      description: |-
+        
+        Metrics track API usage other than API calls of your API packages or endpoints. To capture usage of your API apart from hits, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals, such as megabytes, CPU time, or the number of elements returned by the API.
+        ![use metrics to track API usage other than API calls in different units.](https://raw.githubusercontent.com/3scale/porta/1087ca4c1f2d42df1555851b57e783c2ecb38780/app/javascript/src/QuickStarts/templates/images/learn-about-metrics.png "Learn about tracking the number of API calls.")
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did this task help you to learn about 3scale products?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    **Next**
+    Learn how to track API usage, and how to capture usage of API endpoints or API packages:
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - learning-about-methods
+    - learning-about-mapping-rules
