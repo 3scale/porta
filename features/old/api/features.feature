@@ -19,8 +19,25 @@ Feature: Features :)
     And I press "Save"
     Then I should see "T-shirt with logo of our company for free."
 
-  # TODO: Test that the "No features yet" notice dissapears when first feature is created,
-  #       and appears when last one is deleted.
+  @javascript
+  Scenario: "No features yet" notice dissapears when first feature is created
+    Given a service plan "Basic" of provider "foo.3scale.localhost"
+    Given the provider has "service_plans" switch allowed
+    And a feature "50% less bugs" of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the service plans admin page
+    And I follow "Basic"
+    Then I should not see "No features yet"
+
+  @javascript
+  Scenario: "No features yet" notice appears when last one is deleted or no feature present.
+    Given a service plan "Basic" of provider "foo.3scale.localhost"
+    Given the provider has "service_plans" switch allowed
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the service plans admin page
+    And I follow "Basic"
+    Then I should see "No features yet"
+
   @javascript
   Scenario: Disable a feature
     Given a service plan "Basic" of provider "foo.3scale.localhost"
