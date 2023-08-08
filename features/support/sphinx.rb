@@ -7,6 +7,7 @@ end
 
 Before('@search') do
   Sidekiq::Worker.clear_all
+  ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.autostop
