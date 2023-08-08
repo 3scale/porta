@@ -29,6 +29,7 @@ const X_DATA_PARAMS_DESCRIPTIONS = {
   service_ids: 'Service IDs',
   service_tokens: 'Service tokens',
   admin_ids: 'Latest 5 users (admin) from your account',
+  provider_users_ids: 'Latest 5 users of your account',
   service_plan_ids: 'Latest 5 service plans',
   application_plan_ids: 'Latest 5 application plans',
   account_plan_ids: 'Latest 5 account plans',

@@ -44,7 +44,7 @@ module Signup
         assert_equal :admin, user.role
 
         # impersonation_admin user is also created with the right attributes
-        assert_equal "#{ThreeScale.config.impersonation_admin['username']}+#{account.internal_domain}@#{imp_config['domain']}", impersonation_user.email
+        assert_equal "#{ThreeScale.config.impersonation_admin[:username]}+#{account.internal_domain}@#{imp_config[:domain]}", impersonation_user.email
         assert_equal '3scale', impersonation_user.first_name
         assert_equal 'Admin', impersonation_user.last_name
 

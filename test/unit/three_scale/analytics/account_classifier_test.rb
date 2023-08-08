@@ -7,7 +7,7 @@ class ThreeScale::Analytics::AccountClassifierTest < SimpleMiniTest
     provider = FactoryBot.build_stubbed(:provider_account)
     provider.stubs(:users).returns([
                                        FactoryBot.build_stubbed(:admin,
-                                                                 username: ThreeScale.config.impersonation_admin['username']),
+                                                                 username: ThreeScale.config.impersonation_admin[:username]),
                                        FactoryBot.build_stubbed(:admin, user_attributes)
                                    ])
 
@@ -25,10 +25,10 @@ class ThreeScale::Analytics::AccountClassifierTest < SimpleMiniTest
     assert_equal 'Customer', classifier(email: 'user@example.net', username: 'user').account_type
 
     impersonation_admin_config = ThreeScale.config.impersonation_admin
-    impersonation_admin_username = impersonation_admin_config['username']
+    impersonation_admin_username = impersonation_admin_config[:username]
     assert_equal 'Internal', classifier(email: 'user@example.net', username: impersonation_admin_username).account_type
-    assert_equal 'Customer', classifier(email: "user@#{impersonation_admin_config['domain']}", username: 'user').account_type
-    assert_equal 'Internal', classifier(email: "user@#{impersonation_admin_config['domain']}", username: impersonation_admin_username).account_type
+    assert_equal 'Customer', classifier(email: "user@#{impersonation_admin_config[:domain]}", username: 'user').account_type
+    assert_equal 'Internal', classifier(email: "user@#{impersonation_admin_config[:domain]}", username: impersonation_admin_username).account_type
 
     assert_equal 'Customer', classifier(email: nil, username: nil).account_type
     assert_equal 'Customer', classifier(email: 'user@example.com', username: nil).account_type

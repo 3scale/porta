@@ -1,4 +1,4 @@
-require_dependency 'events/importer'
+# frozen_string_literal: true
 
 class EventImportWorker
   include Sidekiq::Worker

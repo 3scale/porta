@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_07_110416) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.integer "tenant_id", precision: 38
     t.integer "service_id", precision: 38
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
@@ -230,12 +231,10 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, force: :cascade do |t|
-    t.integer "id", precision: 38, null: false
+  create_table "backend_events", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", force: :cascade do |t|
@@ -519,12 +518,11 @@ ActiveRecord::Schema.define(version: 2023_07_07_110416) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, force: :cascade do |t|
-    t.integer "plan_id", precision: 38
-    t.integer "feature_id", precision: 38
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], force: :cascade do |t|
+    t.integer "plan_id", precision: 38, null: false
+    t.integer "feature_id", precision: 38, null: false
     t.string "plan_type", null: false
     t.integer "tenant_id", precision: 38
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|

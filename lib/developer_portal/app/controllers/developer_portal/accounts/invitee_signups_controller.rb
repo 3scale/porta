@@ -21,7 +21,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
                      request:    request,
                      invitation: @invitation
                    }),
-      procedure: Authentication::Strategy::Oauth2::CreateInvitedUser
+      procedure: Authentication::Strategy::OAuth2::CreateInvitedUser
     )
 
     if signup_user

@@ -31,12 +31,13 @@ module ColumnSortingHelper
             { :class => css_class }
   end
 
-  def th_sortable(column, title = nil, path = :url_for)
+  # This smells of :reek:DataClump but it is what it is
+  def th_sortable(column, title = nil, path = :url_for, opts: {})
     title ||= column.titleize
 
     is_current_column = column.to_s == sort_column.to_s
 
-    th_class = "pf-c-table__sort#{is_current_column ? ' pf-m-selected' : ''}"
+    th_class = "pf-c-table__sort#{is_current_column ? ' pf-m-selected' : ''} #{opts[:class]}"
     icon_class = 'fas fa-arrows-alt-v'
 
     if is_current_column

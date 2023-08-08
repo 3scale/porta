@@ -58,28 +58,24 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    # This is fixed in Rails 5.2
-    config.load_defaults 5.1
+    config.load_defaults 6.0
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
+    config.action_view.form_with_generates_remote_forms = false
+    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
+    config.active_support.to_time_preserves_timezone = false
+
+    # Use a modern approved hashing function.
+    # This is the default in Rails 7.0, so can be removed when we upgrade.
+    config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
-    # NOTE: Symbol was later added to enabled classes by default, see https://github.com/rails/rails/pull/45584,
-    # it was added to Rails 6.0.6, 6.1.7, 7.0.4
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
                                                           ActionController::Parameters,
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
-
-    config.action_view.form_with_generates_remote_forms = false
-
-    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
-    config.active_support.to_time_preserves_timezone = false
-    # Use a modern approved hashing function
-    # config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
-    ActiveSupport::Digest.hash_digest_class = OpenSSL::Digest::SHA256 # option above should work with Rails 6.x
 
 
     # The old config_for gem returns HashWithIndifferentAccess
@@ -182,13 +178,16 @@ module System
     # We don't want Rack::Cache to be used
     config.action_dispatch.rack_cache = false
 
-    args = config_for(:cache_store)
-    store_type = args.shift
-    options = args.extract_options!
-    servers = args.flat_map { |arg| arg.split(',') }
-    config.cache_store = [store_type, servers, options]
+    def cache_store_config
+      args = config_for(:cache_store)
+      store_type = args.shift
+      options = args.extract_options!
+      options[:digest_class] ||= Digest::SHA256 if store_type == :mem_cache_store
+      [store_type, *args, options]
+    end
+    config.cache_store = cache_store_config
 
-    # Configure the default encoding used in templates for Ruby 1.9.
+      # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
     config.web_hooks = ActiveSupport::OrderedOptions.new

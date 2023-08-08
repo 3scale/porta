@@ -1,7 +1,17 @@
-<tr class="<%= cycle('odd', 'even', name: 'application-referrer-filters') %>" id="referrer_filter_<%= referrer_filter.id %>"
-  style="display:table-row;">
-  <td><%= h referrer_filter.value %></td>
-  <td>
-    <%= delete_button_for provider_admin_application_referrer_filter_path(cinstance, referrer_filter), :remote => true %>
+<tr role="row" class="<%= cycle('odd', 'even', name: 'application-referrer-filters') %>"
+  id="referrer_filter_<%= referrer_filter.id %>" style="display:table-row;">
+  <td role="cell">
+    <%= h referrer_filter.value %>
+  </td>
+  <td role="cell" class="pf-c-table__action">
+    <div class="pf-c-overflow-menu">
+      <div class="pf-c-overflow-menu__content">
+        <div class="pf-c-overflow-menu__group pf-m-button-group">
+          <div class="pf-c-overflow-menu__item">
+            <%= delete_button_for provider_admin_application_referrer_filter_path(cinstance, referrer_filter), :remote => true %>
+          </div>
+        </div>
+      </div>
+    </div>
   </td>
 </tr>

@@ -20,7 +20,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     service.backend_api_configs.create!(backend_api: backend_api, path: 'whatever')
     get admin_service_backend_usages_path(service)
     assert_response :success
-    assert_select 'table#backend_api_configs tbody tr', count: service.backend_apis.count
+    assert_select 'table[aria-label="Backends table"] tbody tr', count: service.backend_apis.count
   end
 
   test '#new' do

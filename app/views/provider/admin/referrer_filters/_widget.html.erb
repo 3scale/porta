@@ -8,7 +8,7 @@
     <%= context.enabled do %>
       <%= form_tag provider_admin_application_referrer_filters_path(cinstance), :class => 'remote' do %>
         <%= text_field_tag :referrer_filter %>
-        <button type='submit' class='action next button add'>Add Filter</button>
+        <button type='submit' class='pf-c-button pf-m-primary action next button add'>Add Filter</button>
       <% end %>
     <% end %>
 
@@ -18,7 +18,7 @@
     <% end %>
   <% end %>
 
-  <table class="data">
+  <table class="pf-c-table" role="grid">
     <% cinstance.referrer_filters.each do |filter| %>
       <%= render 'provider/admin/referrer_filters/item', :cinstance => cinstance, :referrer_filter => filter %>
     <% end %>

@@ -26,7 +26,7 @@ class Buyers::ImpersonationsControllerTest < ActionController::TestCase
   end
 
   test "should impersonate a provider" do
-    user = FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], :account => @provider
+    user = FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], :account => @provider
     @provider.reload
 
     login_provider master_account
@@ -37,7 +37,7 @@ class Buyers::ImpersonationsControllerTest < ActionController::TestCase
   end
 
   test "api mode should return an url to impersonate a provider" do
-    user = FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], :account => @provider
+    user = FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], :account => @provider
     @provider.reload
 
     login_provider master_account

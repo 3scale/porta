@@ -51,7 +51,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
   test '#buyer_changes_plan! - :request' do
     @plan.issuer.stubs(plan_change_permission: :request)
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       @app.buyer_changes_plan!(@new_plan)
     end
 
@@ -63,7 +63,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       @app.buyer_changes_plan!(@new_plan)
     end
 
@@ -75,7 +75,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :credit_card)
     @app.user_account.stubs(:credit_card_stored? => true)
 
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       @app.buyer_changes_plan!(@new_plan)
     end
 
@@ -88,7 +88,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => true)
 
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       @app.buyer_changes_plan!(@new_plan)
     end
 
@@ -101,7 +101,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       msg = @app.buyer_changes_plan!(@new_paid_plan)
 
       assert_equal "Please enter your credit card before changing the plan.", msg
@@ -114,7 +114,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       msg = @app.buyer_changes_plan!(@new_plan)
 
       assert_equal "Plan change was successful.", msg

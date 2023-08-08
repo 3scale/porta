@@ -4,11 +4,11 @@ module Signup
   class ImpersonationAdminBuilder
     def self.build(account:)
       config = ThreeScale.config.impersonation_admin
-      username = config['username']
+      username = config[:username]
       impersonation_admin = account.users.new(
         {
           username: username,
-          email: "#{username}+#{account.internal_domain}@#{config['domain']}",
+          email: "#{username}+#{account.internal_domain}@#{config[:domain]}",
           first_name: '3scale',
           last_name: 'Admin',
           state: 'active'

@@ -113,7 +113,9 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     account = user.account
     account_services = (account.provider? ? account : account.provider_account).services
-    account_services.merge(user.forbidden_some_services? ? where(id: user.member_permission_service_ids) : {})
+    self.merge(
+      account_services.merge(user.forbidden_some_services? ? where(id: user.member_permission_service_ids) : {})
+    )
   }
 
   validates :name, presence: true

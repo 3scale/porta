@@ -1,7 +1,4 @@
-require_dependency 'pdf/finance/invoice_report_data'
-require_dependency 'pdf/finance/invoice_generator'
-
-require_dependency 'month'
+# frozen_string_literal: true
 
 # TODO: add uniqueness check on provider/buyer/period scope
 #
@@ -442,21 +439,20 @@ class Invoice < ApplicationRecord
     ensure_payable_state!
 
     unless chargeable?
-      logger.info "Not charging invoice ID #{self.id} (#{reason_cannot_charge})"
+      logger.info "Not charging invoice #{id} (buyer #{buyer_account_id}), reason: #{reason_cannot_charge}"
       cancel! unless positive?
       return
     end
 
     if buyer_account.charge!(cost, :invoice => self)
-      provider.billing_strategy.try!(:info , "Charging invoice for #{buyer.name} for period #{period}", buyer)
+      provider.billing_strategy&.info("Invoice #{id} (buyer #{buyer_account_id}) for period #{period} was charged, marking as paid", buyer)
       pay!
     else
-      logger.info("Invoice(#{self.id}) was not charged")
+      logger.info("Invoice #{id} (buyer #{buyer_account_id}) was not charged")
       false
     end
   rescue Finance::Payment::CreditCardError, ActiveMerchant::ActiveMerchantError
-    provider.billing_strategy.try!(:error, "Charging for invoice for #{buyer.name} error", buyer)
-    logger.info("Error charging invoice #{self.id}")
+    provider.billing_strategy&.error("Error when charging invoice #{id} (buyer #{buyer_account_id})", buyer)
 
     if automatic
       self.charging_retries_count += 1
@@ -465,10 +461,10 @@ class Invoice < ApplicationRecord
       # REFACTOR: Move the logic to InvoiceMessenger
       if charging_retries_count < MAX_CHARGE_RETRIES
         if unpaid?
-          logger.info("Retrying #{self.id}, unpaid")
+          logger.info("Invoice #{id} (buyer #{buyer_account_id}) remains unpaid after #{charging_retries_count} attempts, will be retried")
           save!
         else
-          logger.info("Retrying #{self.id}, marking as unpaid")
+          logger.info("Marking invoice #{id} (buyer #{buyer_account_id}) as unpaid, will be retried")
           mark_as_unpaid!
         end
 
@@ -482,7 +478,7 @@ class Invoice < ApplicationRecord
         event = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)
       else
-        logger.info("Retrying #{self.id} failed (too many retries)")
+        logger.info("Marking invoice #{id} (buyer #{buyer_account_id}) as failed (too many retries)")
         fail!
         # TODO: Decouple the notification to observer and delete the IF
         InvoiceMessenger.unsuccessfully_charged_for_buyer_final(self).deliver
@@ -501,7 +497,7 @@ class Invoice < ApplicationRecord
   def ensure_payable_state!
     return if state_events.include?(:pay)
 
-    logger.info("Invoice(#{self.id}) was not charged because the state events don't include :pay")
+    logger.info("Invoice #{id} (buyer #{buyer_account_id}) was not charged because the state events don't include :pay")
     raise InvalidInvoiceStateException.new("Invoice #{id} is not in chargeable state!")
   end
 

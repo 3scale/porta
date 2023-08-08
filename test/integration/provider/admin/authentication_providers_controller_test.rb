@@ -14,10 +14,10 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   test 'GET index' do
     get provider_admin_authentication_providers_path
     assert_response :success
-    provider_rows = css_select 'table.data tbody tr'
+    provider_rows = css_select 'table tbody tr'
     assert_equal AuthenticationProvider.available.count, provider_rows.size
     AuthenticationProvider.available.each do |auth_provider|
-      assert_select 'table.data td.provider', count: 1, text: auth_provider.human_kind
+      assert_select 'table td.provider', count: 1, text: auth_provider.human_kind
     end
   end
 

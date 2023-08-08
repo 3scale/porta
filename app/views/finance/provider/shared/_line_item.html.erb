@@ -1,15 +1,24 @@
 <%= content_tag_for :tr, line_item, :class => "line_item" do %>
-  <th><%= h line_item.name %></th>
-  <td><%= h line_item.description %></td>
-  <td><%= h line_item.quantity %></td>
-  <td><%= line_item_price_tag(line_item.cost) %></td>
-  <td></td>
-  <td>
-    <% if line_item.invoice.editable? && editable %>
-      <%= form_tag admin_finance_account_invoice_line_item_path(line_item.invoice.buyer_account, line_item.invoice, line_item),
-        :method => 'delete', :class => 'remote' do %>
-        <button type="submit" class="pf-c-button pf-m-link action delete">Delete</button>
-      <% end %>
-    <% end %>
+  <td role="cell" data-label="Name"><%= h line_item.name %></td>
+  <td role="cell" data-label="Description"><%= h line_item.description %></td>
+  <td role="cell" data-label="Quantity"><%= h line_item.quantity %></td>
+  <td role="cell" data-label="Price"><%= line_item_price_tag(line_item.cost) %></td>
+  <td role="cell" data-label="Chardged"></td>
+  <td role="cell" class="pf-c-table__action">
+    <div class="pf-c-overflow-menu">
+      <div class="pf-c-overflow-menu__content">
+        <div class="pf-c-overflow-menu__group pf-m-button-group">
+          <% if line_item.invoice.editable? && editable %>
+            <div class="pf-c-overflow-menu__item">
+              <%= form_tag admin_finance_account_invoice_line_item_path(line_item.invoice.buyer_account, line_item.invoice, line_item),
+                           :method => 'delete',
+                           :class => 'remote' do %>
+                <button type="submit" class="pf-c-button pf-m-link action delete">Delete</button>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </td>
 <% end %>

@@ -136,7 +136,7 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
     end
 
     test 'do not track impersonation admins' do
-      @user.username = ThreeScale.config.impersonation_admin['username']
+      @user.username = ThreeScale.config.impersonation_admin[:username]
       refute UserTracking.new(@user).can_send?
     end
   end

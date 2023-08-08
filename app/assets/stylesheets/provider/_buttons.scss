@@ -31,7 +31,7 @@
 
 }
 
-table.data .less-important-button,
+table .less-important-button,
 form.formtastic .button-group button.less-important-button,
 .less-important-button {
   @include internal-potato-button($secondary-button-color, $secondary-button-bg-color, $secondary-button-border-color);
@@ -42,11 +42,11 @@ table [type='submit']:not(.action):not(.pf-c-button) {
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
 }
 
-table.data .important-button, .important-button, .formtastic .important-button {
+table .important-button, .important-button, .formtastic .important-button {
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
 }
 
-table.data .disabled-button, .disabled-button {
+table .disabled-button, .disabled-button {
   @include internal-potato-button($disabled-button-color, $disabled-button-bg-color, $disabled-button-border-color);
   cursor: default;
 }

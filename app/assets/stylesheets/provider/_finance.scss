@@ -1,39 +1,3 @@
-table.invoice,
-table.finance_data {
-  @include white-box-shadow;
-  border-collapse: collapse;
-  color: $font-color;
-  margin-bottom: line-height-times(1);
-  width: 100%;
-}
-
-table.invoice thead,
-table.finance_data thead {
-  border-top: $border-width solid $border-color;
-  background-color: $light-background-color;
-}
-
-table.invoice tr td,
-table.invoice tr th {
-  border-bottom: 1px solid $border-color;
-  padding: line-height-times(1);
-  word-break: normal;
-}
-
-table.finance_data tbody tr td {
-  padding: line-height-times(1);
-}
-
-table.invoice caption,
-table.finance_data caption {
-  background-color: $light-background-color;
-  border-bottom: 0;
-  box-shadow: $whiteBoxShadow;
-  font-weight: $font-weight-bold;
-  padding: line-height-times(1);
-  text-align: left;
-}
-
 #actions form.button-to.remote {
   @include white-box-shadow;
   display: block;

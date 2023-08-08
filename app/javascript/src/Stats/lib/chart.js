@@ -29,8 +29,9 @@ export class StatsChart {
             }
           },
           y: {
+            default: [0, 10],
             tick: {
-              format: d => numeral(d).format('0.0a').toUpperCase()
+              format: d => numeral(d).format('0[.]0a').toUpperCase()
             }
           }
         },

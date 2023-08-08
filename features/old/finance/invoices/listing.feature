@@ -51,7 +51,7 @@ Feature: Provider lists all invoices
     And I follow "Account" within "table"
     Then I should see 10 invoices
     Then I should see the first invoice belonging to "foobar"
-    And I follow "Account ▲" within "table"
+    And I follow "Account" within "table"
     Then I should see 10 invoices
     Then I should see the first invoice belonging to "mastermind"
 

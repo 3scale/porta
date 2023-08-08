@@ -4,26 +4,33 @@
 
 <% content_for :page_header_title, 'Email Templates' %>
 
-<table class="data" id="email-templates">
+<table class="pf-c-table pf-m-grid-lg" role="grid" id="email-templates" aria-label="Email templates">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th></th>
-      <th></th>
+    <tr role="row">
+      <th role="columnheader" scope="col">Name</th>
+      <th role="columnheader" scope="col">Description</th>
+      <th role="columnheader" scope="col"></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody role="rowgroup">
     <% @defaults.each do |template| %>
-      <tr>
-        <td><%= template.name %></td>
-        <td><%= template.description %></td>
-        <td class='actions'>
-          <% if template.new_record? %>
-            <%= link_to 'Override', new_provider_admin_cms_email_template_path(system_name: template.system_name), title: template.name, class: 'less-important-button' %>
-          <% else %>
-            <%= link_to 'Edit', edit_provider_admin_cms_email_template_path(template), title: template.name, class: 'important-button'%>
-          <% end %>
+      <tr role="row">
+        <td role="cell" data-label="Name"><%= template.name %></td>
+        <td role="cell" data-label="Description"><%= template.description %></td>
+        <td role="cell" class="pf-c-table__action">
+          <div class="pf-c-overflow-menu">
+            <div class="pf-c-overflow-menu__content">
+              <div class="pf-c-overflow-menu__group pf-m-button-group">
+                <div class="pf-c-overflow-menu__item">
+                  <% if template.new_record? %>
+                    <%= link_to 'Override', new_provider_admin_cms_email_template_path(system_name: template.system_name), title: template.name, class: 'pf-c-button pf-m-secondary' %>
+                  <% else %>
+                    <%= link_to 'Edit', edit_provider_admin_cms_email_template_path(template), title: template.name, class: 'pf-c-button pf-m-primary'%>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
         </td>
       </tr>
     <% end %>

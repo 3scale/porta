@@ -65,8 +65,11 @@ class Finance::BillingStrategy < ApplicationRecord
   # :only - run billing only for providers with those IDs
   # :exclude - run billing for all providers, but exclude those IDs
   #
+  # This is usually called by BillingService#call with one provider in `only` and a single buyer in `buyer_ids`
   def self.daily(options = {})
     raise 'Options must be a hash' unless options.is_a?(Hash)
+
+    Rails.logger.info("Finance::BillingStrategy.daily started for options #{options}")
 
     now = options[:now] || Time.now.utc
     skip_notifications = options[:skip_notifications]
@@ -103,7 +106,7 @@ class Finance::BillingStrategy < ApplicationRecord
       end
     end
 
-    Rails.logger.info("Billing process finished: #{results.inspect_all_things}")
+    Rails.logger.info("Finance::BillingStrategy.daily finished for options #{options}, with results: #{results.inspect_all_things}")
 
     notify_billing_results(results) unless skip_notifications
 
@@ -228,7 +231,7 @@ class Finance::BillingStrategy < ApplicationRecord
     buyer.billable_contracts_with_trial_period_expired(now - 1.day).find_each(batch_size: 50) do |contract|
       plan_type = contract.plan.class.model_name.human.downcase
 
-      info("Billing account #{buyer.name} for #{plan_type} #{contract.plan.name} (just signed up or trial period expired)", buyer)
+      info("#{log_prefix(buyer)} for #{plan_type} #{contract.plan.id} (#{contract.plan.name}) - just signed up or trial period expired", buyer)
       contract.bill_for(Month.new(now), invoice_for(buyer, now))
     end
   end
@@ -237,8 +240,7 @@ class Finance::BillingStrategy < ApplicationRecord
   # TODO: cover it by unit tests
   #
   def bill_fixed_costs(buyer, now = Time.now.utc)
-    Rails.logger.info "Billing fixed cost of account #{buyer.inspect} at #{now}"
-    info("Billing fixed cost of account #{buyer.org_name}", buyer)
+    info("#{log_prefix(buyer)} billing fixed costs at #{now}", buyer)
     buyer.billable_contracts.find_each(batch_size: 50) do |contract|
       contract.bill_for(Month.new(now), invoice_for(buyer, now))
     end
@@ -249,7 +251,7 @@ class Finance::BillingStrategy < ApplicationRecord
   #
   def finalize_invoices_of(buyer, now = Time.now.utc)
     invoices_to_finalize_of(buyer, now).find_each(:batch_size => 20) do |invoice|
-      info("Finalizing invoice for #{buyer.org_name} for period #{invoice.period}", buyer)
+      info("#{log_prefix(buyer)} finalizing invoices for period #{invoice.period}", buyer)
       invoice.finalize!
     end
   end
@@ -258,7 +260,7 @@ class Finance::BillingStrategy < ApplicationRecord
     to_issue = self.provider.buyer_invoices.by_buyer(buyer).finalized_before(now - 1.day - 22.hours)
 
     to_issue.find_each(batch_size: 100) do |invoice|
-      info("Issuing invoice for #{buyer.org_name} for period #{invoice.period}", buyer)
+      info("#{log_prefix(buyer)} issuing invoice #{invoice.id} for period #{invoice.period}", buyer)
       invoice.issue_and_pay_if_free!
 
       # TODO: extract to overloaded method?
@@ -322,17 +324,21 @@ class Finance::BillingStrategy < ApplicationRecord
       end
 
       buyer.invoices.chargeable(now).find_each(batch_size: 50) do |invoice|
-        Rails.logger.info("Trying to charge invoice #{invoice.id}")
+        Rails.logger.info("#{log_prefix(buyer)} trying to charge invoice #{invoice.id}")
         invoice.charge!
 
       end
     else
-      Rails.logger.info("Charging not enabled for #{account.org_name} - bypassing")
+      Rails.logger.info("#{log_prefix(buyer)} charging not enabled for provider #{account.org_name} - bypassing")
     end
   end
 
   def needs_credit_card?
     charging_enabled?
+  end
+
+  def log_prefix(buyer)
+    "[billing] provider #{buyer.provider_account_id} buyer #{buyer.id}:"
   end
 
   public :needs_credit_card?
@@ -414,6 +420,3 @@ class Finance::BillingStrategy < ApplicationRecord
   extend FindEachFix
   include FindEachFix
 end
-
-require_dependency 'finance/prepaid_billing_strategy'
-require_dependency 'finance/postpaid_billing_strategy'

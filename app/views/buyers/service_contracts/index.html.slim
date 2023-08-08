@@ -27,111 +27,118 @@ div id="bulk-operations" style="display: none;"
     = javascript_include_tag 'bulk_operations.js'
     = javascript_include_tag 'vendor/jquery.tipsy.js'
 
-table.data
-  thead
-    tr
-      th.select
-        = bulk_select_all
-      - unless @account
-        th
-          = sortable('accounts.org_name', 'Account')
-      - if @multiservice
-        th
-          label for="search_service_id"
-            | Service
-      th
-        = sortable('plans.name', 'Plan')
-      th
-        = sortable('cinstances.state', 'State')
-      th
-        | Paid?
-      th colspan="3"
-        = sortable('cinstances.created_at', 'Created On')
-
-    - unless @account
-      tr class="search"
-        = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
-          th
-          th
-            = s.text_field :account_query, size: 15
-
+div class="pf-l-flex pf-m-column"
+  div class="pf-l-flex__item"
+    table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Service subscriptions table"
+      thead
+        tr role="row"
+          td role="columnheader" scope="col" class="select pf-c-table__check"
+            label
+              = bulk_select_all
+          - unless @account
+            = th_sortable('accounts.org_name', 'Account')
           - if @multiservice
-            th
-              = s.collection_select :service_id, @services, :id, :name,
-                                        { include_blank: true },
-                                        { disabled: @service }
-          th
-            = s.grouped_collection_select :plan_id, @services,
-                                              :service_plans, :name, :id, :name,
-                                              { include_blank: true },
-                                              { disabled: @plan }
-          th
-            = s.select :state, @states, include_blank: true, selected: @search.state
-          th
-            = s.select :plan_type, [ ['free'], ['paid'] ],
-                           { include_blank: true},
-                           { disabled: @plan }
-          th colspan="3"
-            = s.submit 'Search', name: nil
+            th role="columnheader" scope="col"
+              label for="search_service_id"
+                | Service
+          = th_sortable('plans.name', 'Plan')
+          = th_sortable('cinstances.state', 'State')
+          th role="columnheader" scope="col"
+            | Paid?
+          = th_sortable('cinstances.created_at', 'Created On')
+          td colspan="2"
 
-  tbody
-    - @service_contracts.each do |contract|
-      - service = contract.service
-      tr id=dom_id(contract)
-        td.select
-          = bulk_select_one contract
         - unless @account
-          td
-            = link_to_buyer_or_deleted contract.account
-        - if @multiservice
-          td
-            = link_to service.name, admin_service_path(service)
-        td.plan
-          = link_to contract.plan.name, edit_polymorphic_path([:admin, contract.plan]),
-            :title => "Edit #{contract.plan.class.model_name.human} '#{contract.plan.name}'"
-        td.state
-          = contract.state
-        td.paid_or_free
-          = plan_free_or_paid contract.plan
-        td
-          = time_tag_with_title contract.created_at
-        td.action
-          - if contract
-            - if contract.pending?
-              = action_link_to 'approve', approve_admin_buyers_account_service_contract_path(contract.account, contract), method: :post
-            - else
-              = action_link_to :delete, admin_buyers_account_service_contract_path(contract.account, contract),
-                               'data-confirm': "Are you sure? Unsubscribing will delete all this account's applications that subscribe to this service (applications need to be suspended beforehand)", 'data-method': :delete,
-                               label: 'Unsubscribe'
-          -else
-            = admin_subscribe_service_link contract.account, service, contract
-        td.action
-          = admin_change_service_plan_link contract.account, service, contract if contract
-    - if @service_contracts.empty?
-      - if @account
-        tr.no_results
-          td colspan="6"
-            | No Service Subscriptions
-      - else
-        = no_search_results(@multiservice ? 7 : 6)
+          tr role="row" class="search"
+            = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
+              th role="columnheader" scope="col"
+              th role="columnheader" scope="col"
+                = s.text_field :account_query, size: 15
 
-= will_paginate @service_contracts
+              - if @multiservice
+                th role="columnheader" scope="col"
+                  = s.collection_select :service_id, @services, :id, :name,
+                                            { include_blank: true },
+                                            { disabled: @service }
+              th role="columnheader" scope="col"
+                = s.grouped_collection_select :plan_id, @services,
+                                                  :service_plans, :name, :id, :name,
+                                                  { include_blank: true },
+                                                  { disabled: @plan }
+              th role="columnheader" scope="col"
+                = s.select :state, @states, include_blank: true, selected: @search.state
+              th role="columnheader" scope="col"
+                = s.select :plan_type, [ ['free'], ['paid'] ],
+                              { include_blank: true},
+                              { disabled: @plan }
+              th role="columnheader" scope="col" colspan="3"
+                = s.submit 'Search', name: nil
 
-br
-br
+      tbody role="rowgroup"
+        - @service_contracts.each do |contract|
+          - service = contract.service
+          tr role="row" id=dom_id(contract)
+            td class="pf-c-table__check select" role="cell" id=contract.id
+              label
+                = bulk_select_one contract
+            - unless @account
+              td role="cell" data-label="Account"
+                = link_to_buyer_or_deleted contract.account
+            - if @multiservice
+              td role="cell" data-label="Service"
+                = link_to service.name, admin_service_path(service)
+            td role="cell" data-label="Plan" class="plan"
+              = link_to contract.plan.name, edit_polymorphic_path([:admin, contract.plan]),
+                :title => "Edit #{contract.plan.class.model_name.human} '#{contract.plan.name}'"
+            td role="cell" data-label="State" class="state"
+              = contract.state
+            td role="cell" data-label="Paid?" class="paid_or_free"
+              = plan_free_or_paid contract.plan
+            td role="cell" data-label="Created On"
+              = time_tag_with_title contract.created_at
+            td role="cell" class="pf-c-table__action"
+              div class="pf-c-overflow-menu"
+                div class="pf-c-overflow-menu__content"
+                  div class="pf-c-overflow-menu__group pf-m-button-group"
+                    div class="pf-c-overflow-menu__item"
+                      - if contract
+                        - if contract.pending?
+                          = action_link_to 'approve', approve_admin_buyers_account_service_contract_path(contract.account, contract), method: :post
+                        - else
+                          = action_link_to :delete, admin_buyers_account_service_contract_path(contract.account, contract),
+                                          'data-confirm': "Are you sure? Unsubscribing will delete all this account's applications that subscribe to this service (applications need to be suspended beforehand)", 'data-method': :delete,
+                                          label: 'Unsubscribe'
+                      - else
+                        = admin_subscribe_service_link contract.account, service, contract
+                    - if contract
+                      div class="pf-c-overflow-menu__item"
+                        = admin_change_service_plan_link contract.account, service, contract
+        - if @service_contracts.empty?
+          - if @account
+            tr.no_results
+              td colspan="6"
+                | No Service Subscriptions
+          - else
+            = no_search_results(@multiservice ? 7 : 6)
 
-- if @account && current_account.services_without_contracts(@account).any?
-  h2
-    | Available service subscriptions
-  table.data
-    thead
-      tr
-        th colspan="2"
-          | Service
-    tbody
-      - current_account.services_without_contracts(@account).each do |service|
-        tr id=dom_id(service)
-          td
-            = h service.name
-          td.action
-            = admin_subscribe_service_link @account, service
+    = will_paginate @service_contracts
+
+  - if @account && current_account.services_without_contracts(@account).any?
+    div class="pf-l-flex__item"
+      h2 Available service subscriptions
+      table class="pf-c-table pf-m-grid-lg" role="grid"
+        thead
+          tr role="row"
+            th role="columnheader" scope="col" Service
+            td
+        tbody
+          - current_account.services_without_contracts(@account).each do |service|
+            tr role="row" id=dom_id(service)
+              td role="cell" data-label="Service"
+                = h service.name
+              td role="cell" class="pf-c-table__action"
+                div class="pf-c-overflow-menu"
+                  div class="pf-c-overflow-menu__content"
+                    div class="pf-c-overflow-menu__group pf-m-button-group"
+                      div class="pf-c-overflow-menu__item"
+                        = admin_subscribe_service_link @account, service

@@ -38,7 +38,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'provider_create' do
-      FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin['username'])
+      FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin[:username])
       post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value }
       assert_response :success
 
@@ -48,7 +48,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'provider_create with expires_in' do
-      FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin['username'])
+      FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin[:username])
 
       freeze_time do
         post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value, expires_in: 60 }
@@ -59,4 +59,3 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     end
   end
 end
-

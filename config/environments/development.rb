@@ -19,6 +19,9 @@ Rails.application.configure do
 
   config.asset_host = config.three_scale.asset_host.presence
 
+  # Match custom domains on development
+  config.hosts << /.+\.localhost/
+
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.public_file_server.enabled = true

@@ -29,15 +29,23 @@ div id="account-column-wrapper"
         span class="operations"
           = link_to 'Edit', edit_provider_admin_account_path, class: 'action edit'
 
-    table class="list"
-      tbody
-        - @presenter.visible_extra_fields.each do |field|
-          tr
-            th = @presenter.field_label(field.name)
-            td = @presenter.field_value(field.name)
-        tr
-          th Time Zone
-          td = @presenter.timezone
+    ul class="pf-c-data-list" role="list" aria-label="Account details list"
+      - @presenter.visible_extra_fields.each do |field|
+        - name = field.name
+        - id = "account-details-list-#{name}"
+        li class="pf-c-data-list__item" aria-labelledby=id
+          div class="pf-c-data-list__item-row"
+            div class="pf-c-data-list__item-content"
+              div class="pf-c-data-list__cell"
+                span id=id = @presenter.field_label(name)
+              div class="pf-c-data-list__cell" = @presenter.field_value(name)
+
+      li class="pf-c-data-list__item" aria-labelledby="account-details-list-timezone"
+        div class="pf-c-data-list__item-row"
+          div class="pf-c-data-list__item-content"
+            div class="pf-c-data-list__cell"
+              span id="account-details-list-timezone" Time Zone
+            div class="pf-c-data-list__cell" = @presenter.timezone
 
     - if @presenter.redhat_customer_verification_enabled?
       div id="account-redhat-connect"
@@ -74,16 +82,24 @@ div id="account-column-wrapper"
 
           = render 'change_plan'
 
-      table class="data"
-        tbody
-          - @presenter.plan_features.each do |feature|
-            tr
-              th = feature.name
-              td
-                i class="included fas fa-check-circle"
-
-          - @presenter.absent_visible_features.each do |feature|
-            tr
-              th = feature.name
-              td
-                i class="excluded fas fa-times-circle"
+      ul class="pf-c-data-list" role="list" aria-label="Plan features list"
+        - @presenter.plan_features.each do |feature|
+          - name = feature.name
+          - id = "plan-features-list-#{name.parameterize}"
+          li class="pf-c-data-list__item" aria-labelledby=id
+            div class="pf-c-data-list__item-row"
+              div class="pf-c-data-list__item-content"
+                div class="pf-c-data-list__cell"
+                  span id=id = name
+                div class="pf-c-data-list__cell pf-m-no-fill"
+                  i class="included fas fa-check-circle"
+        - @presenter.absent_visible_features.each do |feature|
+          - name = feature.name
+          - id = "plan-features-list-#{name}"
+          li class="pf-c-data-list__item" aria-labelledby=id
+            div class="pf-c-data-list__item-row"
+              div class="pf-c-data-list__item-content"
+                div class="pf-c-data-list__cell"
+                  span id=id = name
+                div class="pf-c-data-list__cell pf-m-no-fill"
+                  i class="excluded fas fa-times-circle"

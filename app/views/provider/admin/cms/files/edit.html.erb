@@ -1,4 +1,4 @@
-<h1>File <%= @file.path %></h1>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "File '#{@file.path}'" } %>
 
 <%= cms_new_button_dropdown(CMS::File) %>
 

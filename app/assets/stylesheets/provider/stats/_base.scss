@@ -262,6 +262,7 @@ $stats-chart-tooltip-color: $label-color;
   z-index: 9999 !important;
 }
 
+// TODO: Remove when integration errors empty state implemented (https://issues.redhat.com/browse/THREESCALE-9808)
 div[id^="transaction_errors_container_"] {
   @include white-box-shadow;
   padding: line-height-times(1);

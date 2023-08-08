@@ -18,8 +18,12 @@
         em> edit
         | views.
 
-  table class="data"
-    thead
-      th colspan="5" class='operations' = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'action add')
+  div class="pf-c-empty-state pf-m-lg"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-plus-circle pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg" You have no specs
+      div class="pf-c-empty-state__body"
+        | Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
+      = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'pf-c-button pf-m-primary')
 
 = will_paginate(@api_docs_services)

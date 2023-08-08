@@ -1,4 +1,4 @@
-<h1>New <%= @page.class.model_name.human %> Portlet</h1>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "New #{@page.class.model_name.human} Portlet" } %>
 
 <%= cms_new_button_dropdown(CMS::Portlet) %>
 

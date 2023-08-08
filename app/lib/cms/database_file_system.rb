@@ -47,8 +47,8 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
       @details = { formats: [:html], handlers: [:liquid] }
     end
 
-    def find_template(path)
-      super(path, [])
+    def find_template(path, locals = [])
+      super(path, locals)
     end
   end
 

@@ -22,10 +22,6 @@
     background-color: $white;
     padding: line-height-times(1);
 
-    h1 {
-      background-color: transparent;
-    }
-
     &.sticked {
       overflow-y: auto;
       top: 24px !important;

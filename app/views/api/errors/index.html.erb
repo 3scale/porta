@@ -8,28 +8,30 @@
   documentation section on using 3scale's Service Management API.
 <% end %>
 
-<div id="transaction_errors_container_<%= @service.id %>">
-  <% if @errors.empty? %>
+<% if @errors.empty? %>
+  <div class="pf-c-card" id="transaction_errors_container_<%= @service.id %>">
     <%= render :partial => 'no_errors' %>
-  <% else %>
-    <div class="operations"><%= fancy_button_to 'Purge', admin_service_errors_path(@service),
-                                                :method => :delete, :class => 'delete', :remote => true %></div>
-    <table class="data" id="transaction_errors">
-      <thead>
-      <tr>
-        <th>Time (UTC)</th>
-        <th>Error</th>
+  </div>
+<% else %>
+  <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Integration errors table">
+    <thead>
+      <tr role="row">
+        <th role="columnheader" scope="col">Time (UTC)</th>
+        <th role="columnheader" scope="col">Error</th>
+        <td role="columnheader" scope="col" class="pf-m-fit-content">
+          <%= fancy_button_to 'Purge', admin_service_errors_path(@service), method: :delete, class: 'delete unset-min-height', remote: true %>
+        </td>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody role="rowgroup">
       <% @errors.each do |error| %>
-        <tr class="<%= error.code %>">
-          <td class="first"><%= error.timestamp %></td>
-          <td><%= h error.message %></td>
+        <tr role="row" class="<%= error.code %>">
+          <td role="cell" data-label="Time (UTC)" class="first"><%= error.timestamp %></td>
+          <td role="cell" data-label="Error"><%= h error.message %></td>
+          <td>
         </tr>
       <% end %>
-      </tbody>
-    </table>
-    <%= will_paginate(@errors) %>
-  <% end %>
-</div>
+    </tbody>
+  </table>
+  <%= will_paginate(@errors) %>
+<% end %>

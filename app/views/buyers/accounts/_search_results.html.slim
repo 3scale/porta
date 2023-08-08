@@ -2,7 +2,7 @@
 - create_account_path = current_account.master? ? new_provider_admin_account_path : new_admin_buyers_account_path
 
 div class="pf-c-card"
-  table class="data pf-c-table pf-m-grid-lg" role="grid" id="buyer_accounts" aria-label="Accounts table"
+  table class="pf-c-table pf-m-grid-lg" role="grid" id="buyer_accounts" aria-label="Accounts table"
     thead
       tr role="row"
         td role="columnheader" scope="col" class="select pf-c-table__check"
@@ -49,7 +49,7 @@ div class="pf-c-card"
     tbody role="rowgroup"
       - accounts.each do |account|
         tr role="row" id=dom_id(account)
-          td class="pf-c-table__check" role="cell" class="select" id=account.id
+          td class="pf-c-table__check select" role="cell" id=account.id
             label
               = bulk_select_one account
           td role="cell" data-label="Group/Org."

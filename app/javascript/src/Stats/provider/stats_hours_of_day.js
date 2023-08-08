@@ -22,8 +22,9 @@ class StatsHoursOfDayChart extends StatsChart {
             '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
         },
         y: {
+          default: [0, 10],
           tick: {
-            format: d => numeral(d).format('0.0a').toUpperCase()
+            format: d => numeral(d).format('0[.]0a').toUpperCase()
           }
         }
       },
@@ -65,4 +66,4 @@ let statsHoursOfDay = (serviceId, options = {}) => {
   })
 }
 
-export { statsHoursOfDay }
+export { statsHoursOfDay, StatsHoursOfDayChart }

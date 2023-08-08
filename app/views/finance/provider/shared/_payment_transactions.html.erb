@@ -1,21 +1,31 @@
-<table id="payment_transactions" class="finance_data" >
-  <caption>Transactions</caption>
-  <% unless @invoice.payment_transactions.empty? %>
-  <thead>
-    <tr>
-      <th></th>
-      <th>Status</th>
-      <th>Created At</th>
-      <th>Reference</th>
-      <th>Message</th>
-      <th>Amount</th>
-    </tr>
-  </thead>
-  <%= render :partial => '/finance/provider/shared/payment_transaction', :collection => @invoice.payment_transactions %>
-  <% else %>
-  <tr>
-    <td colspan="5"><em>No transactions registered for this invoice.</em></td>
-  </tr>
-  <% end %>
-</table>
+<div class="pf-l-grid__item pf-m-12-col">
+  <div class="pf-c-card">
+    <div class="pf-c-card__header">
+      <div class="pf-c-card__title">
+        Transactions
+      </div>
+    </div>
 
+    <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Transactions table">
+      <% unless @invoice.payment_transactions.empty? %>
+        <thead>
+          <tr role="row">
+            <th role="columnheader" scope="col"></th>
+            <th role="columnheader" scope="col">Status</th>
+            <th role="columnheader" scope="col">Created At</th>
+            <th role="columnheader" scope="col">Reference</th>
+            <th role="columnheader" scope="col">Message</th>
+            <th role="columnheader" scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
+          <%= render :partial => '/finance/provider/shared/payment_transaction', :collection => @invoice.payment_transactions %>
+        </tbody>
+      <% else %>
+        <tr role="row">
+          <td colspan="5"><em>No transactions registered for this invoice.</em></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

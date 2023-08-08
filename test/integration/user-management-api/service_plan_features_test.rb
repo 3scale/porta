@@ -44,13 +44,13 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     assert @service_plan.features.reload.include?(feat)
   end
 
-  test 'associate feature to service plan twice' do
+  test "can't associate feature to service plan twice" do
     already_associated_feat = FactoryBot.create(:feature, featurable: @provider.default_service, scope: 'ServicePlan')
     @service_plan.features << already_associated_feat
     @service_plan.save!
 
     post admin_api_service_plan_features_path(@service_plan), params: { feature_id: already_associated_feat.id, provider_key: @provider.api_key, format: :xml }
-    assert_response :success
+    assert_response :conflict
   end
 
   test 'associate feature to service plan of a different service replies 404' do
