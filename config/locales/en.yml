@@ -896,11 +896,6 @@ en:
         service_plan:
           has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
 
-        service:
-          attributes:
-            system_name:
-              invalid: Invalid.
-
         cinstance:
           attributes:
             plan:
