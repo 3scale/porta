@@ -20,7 +20,7 @@ Feature: Features :)
     Then I should see "T-shirt with logo of our company for free."
 
   @javascript
-  Scenario: "No features yet" notice dissapears when first feature is created
+  Scenario: "No features yet" notice disappears when first feature is created
     Given a service plan "Basic" of provider "foo.3scale.localhost"
     Given the provider has "service_plans" switch allowed
     And a feature "50% less bugs" of provider "foo.3scale.localhost"
