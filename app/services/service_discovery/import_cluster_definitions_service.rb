@@ -9,7 +9,7 @@ module ServiceDiscovery
     end
 
     def self.create_service(account, cluster_namespace:, cluster_service_name:, user: nil)
-      CreateServiceWorker.perform_async(account.id, cluster_namespace, cluster_service_name, user&.id)
+      CreateServiceWorker.perform_async(account.id, cluster_namespace.as_json, cluster_service_name.as_json, user&.id)
       build_service(account, name: cluster_service_name)
     end
 
