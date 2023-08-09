@@ -5,6 +5,7 @@
 .fa-keycloak:before {
   content: '❮❯';
   white-space: nowrap;
+  font-size: $font-size-sm;
 }
 
 .EnforceSSOButton {
