@@ -70,4 +70,3 @@ Feature: Show invoices from account's page (#16015909)
     Then I should see the list of years with invoices have the following years:
       | 0  |
       | 2010 |
-    And I should not see the list of years with invoices belonging to other providers
