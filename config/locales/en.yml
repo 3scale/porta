@@ -541,7 +541,6 @@ en:
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
-        documentation_create_active_doc_spec: "%{docs_base_url}/providing_apis_in_the_developer_portal/create-activedocs-spec"
         # end documentation links
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.

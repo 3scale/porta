@@ -1,27 +1,12 @@
 - content_for :page_header_title, 'ActiveDocs'
 
-- if @api_docs_services.any? { |service| service.needs_swagger_update? }
-  - content_for :page_header_alert do
-    br
-    div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Success alert"
-      div class="pf-c-alert__icon"
-        i class="fas fa-fw fa-info-circle" aria-hidden="true"
-      p class="pf-c-alert__title"
-        span class="pf-screen-reader" Info alert:
-        | ActiveDocs now supports Swagger 2.0
-      div class="pf-c-alert__description"
-        p
-          ' Read
-          = link_to 'the documentation', t("api.integrations.proxy.documentation_create_active_doc_spec", docs_base_url: docs_base_url)
-          '  to know why it makes sense to upgrade your service specs to Swagger 2.0
-
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
 - else
   - if current_account.api_docs_services.without_service.any? && can?(:manage, :portal)
     - content_for :page_header_alert do
       br
-      div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Success alert"
+      div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Info alert"
         div class="pf-c-alert__icon"
           i class="fas fa-fw fa-info-circle" aria-hidden="true"
         p class="pf-c-alert__title"
