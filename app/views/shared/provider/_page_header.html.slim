@@ -4,6 +4,8 @@
       h1 = title
       - if (subtitle = content_for(:page_header_body).presence)
         p = subtitle
+    - if (alert = content_for(:page_header_alert).presence)
+      = alert
 
 / TODO: this will go away once we move all buttons from page hader to a toolbar
 - elsif (title = content_for(:page_header_title_with_button).presence)
