@@ -42,9 +42,11 @@ Feature: Show invoices from account's page (#16015909)
     Given a buyer "zoidberg" signed up to provider "foo.3scale.localhost"
     And the provider is charging its buyers in prepaid mode
     And an invoice of buyer "zoidberg" for January, 2011
+    And an invoice of buyer "zoidberg" for January, 2012
     And I go to the invoices issued by me
     Then I should see the list of years with invoices have the following years:
       | 0  |
+      | 2012 |
       | 2011 |
 
   Scenario: Display the current year when there are no invoices
