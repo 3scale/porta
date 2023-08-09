@@ -158,7 +158,7 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
 
   def documentation_items
     items = [
-      { title: 'Customer Portal', href: '//access.redhat.com/products/red-hat-3scale', icon: :'external-link', target: '_blank'},
+      { title: 'Customer Portal', href: '//access.redhat.com/products/red-hat-3scale', icon: :'external-link-alt', target: '_blank'},
       { title: '3scale API Docs', href: provider_admin_api_docs_path, icon: :'puzzle-piece' },
       { title: 'Liquid Reference', href: provider_admin_liquid_docs_path, icon: :code }
     ]
