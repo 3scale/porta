@@ -8,18 +8,14 @@ require_relative 'sphinx_indexation_worker'
 # - User gets created, updated, deleted
 # - Cinstance gets created, updated, deleted
 class SphinxAccountIndexationWorker < SphinxIndexationWorker
-  def perform(model, id)
-    pk = model.primary_key
-    account = model.find_by(pk => id)
+  def perform(_model, id)
+    account = Account.searchable.find_by(id: id)
 
-    indices_for_model(model).each do |index|
-      if account && index.scope.find_by(pk => id)
-        reindex(index, account)
-      elsif account && !account.master?
-        delete_from_index(index, id, *account.buyers.pluck(:id))
-      else
-        delete_from_index(index, id)
-      end
+    if account
+      reindex(account)
+    else
+      buyers = Account.buyers.where(provider_account_id: id).pluck(:id)
+      delete_from_index(Account, id, *buyers)
     end
   end
 end

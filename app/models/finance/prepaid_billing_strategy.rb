@@ -42,7 +42,7 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
   def daily(options = {})
     now = options[:now].presence || Time.now.utc
     bill_and_charge_each(options) do |buyer|
-      Rails.logger.info("Started to bill and charge buyer #{buyer.id} for provider #{buyer.provider_account_id} at #{now}")
+      Rails.logger.info("#{log_prefix(buyer)} started daily billing and charging at #{now} (prepaid)")
       bill_expired_trials(buyer, now)
 
       only_on_days(now, 1) do
@@ -54,6 +54,8 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
       issue_invoices_of(buyer, now)
 
       charge_invoices(buyer, now)
+
+      info("#{log_prefix(buyer)} successfully finished daily billing and charging (prepaid)")
     end
 
     notify_billing_finished(now) unless options[:skip_notifications] # In Sidekiq, notifications are triggered by the callback of the jobs batch
@@ -78,7 +80,7 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
   def bill_variable_costs(buyer, now = Time.now.utc)
     month = Month.new(now)
 
-    info("Billing variable cost of #{buyer.org_name} at #{now}", buyer)
+    info("#{log_prefix(buyer)} billing variable cost at #{now}", buyer)
     buyer.billable_contracts.find_each(batch_size: 100) do |contract|
       invoice = invoice_for(buyer, now + 1.month)
       contract.bill_for_variable(month, invoice)

@@ -10,7 +10,7 @@ class PlansMessengerTest < ActiveSupport::TestCase
   test '#plan_change_request' do
     cinstance = FactoryBot.create(:cinstance)
     plan = FactoryBot.create(:account_plan)
-    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       PlansMessenger.plan_change_request(cinstance, plan).deliver
     end
 

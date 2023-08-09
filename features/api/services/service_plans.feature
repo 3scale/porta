@@ -15,6 +15,13 @@ Feature: Service plans index page
       Given a product
       Then an admin is able to see its service plans
 
+    Scenario: Service plans are scoped by service
+      Given a product
+      And there are other services with service plans
+      And the product has multiple service plans
+      When an admin is on the service plans page of the product
+      Then only service plans of the product are listed
+
     Scenario: Set a default service plan
       Given a product
       When an admin selects a published service plan as default
@@ -30,7 +37,7 @@ Feature: Service plans index page
       Then an admin can't select the plan as default
 
     Scenario: Create a service plan
-      When an admin is in the service plans page
+      When an admin is on the service plans page of the product
       Then they can add new service plans
 
     Scenario: Copy a service plan

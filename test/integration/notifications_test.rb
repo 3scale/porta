@@ -59,7 +59,7 @@ class NotificationsTest < ActiveSupport::TestCase
       MailDispatchRule.delete_all
 
       @message.save!
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal true, @message_recipient.notifiable?
@@ -71,7 +71,7 @@ class NotificationsTest < ActiveSupport::TestCase
       @message.system_operation = @operation
 
       @message.save!
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal false, @message_recipient.notifiable?
@@ -82,7 +82,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
       assert_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
-        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
       end
 
       @message_recipient = @provider_recipient.received_messages.last
@@ -96,7 +96,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
       assert_no_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
-        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
       end
     end
 
@@ -104,7 +104,7 @@ class NotificationsTest < ActiveSupport::TestCase
       @rule = FactoryBot.create(:mail_dispatch_rule, account: @provider_recipient, dispatch: false, system_operation: @operation)
 
       @message.save!
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal @message_recipient.notifiable?, false
@@ -113,7 +113,7 @@ class NotificationsTest < ActiveSupport::TestCase
     test 'notify recipient when operation has no corresponding system operation' do
       @message.update(system_operation: nil)
       @message.save!
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal true, @message_recipient.notifiable?
@@ -190,7 +190,7 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     test 'be notified' do
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @buyer.buy! @plan }
       assert_includes ActionMailer::Base.deliveries.last.bcc, @admin.email
     end
 
@@ -199,7 +199,7 @@ class NotificationsTest < ActiveSupport::TestCase
       rule = @provider.mail_dispatch_rules.create!(system_operation: op, emails: @admin.email)
       rule.update(dispatch: false)
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @buyer.buy! @plan }
 
       assert ActionMailer::Base.deliveries.empty?
     end
@@ -222,7 +222,7 @@ class NotificationsTest < ActiveSupport::TestCase
     test 'notify admins' do
       @mail_rule.update(dispatch: true)
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @buyer.make_pending! }
 
       assert_includes ActionMailer::Base.deliveries.map(&:bcc).flatten, @admin.email
     end
@@ -230,7 +230,7 @@ class NotificationsTest < ActiveSupport::TestCase
     test 'not notify admins if mail_dispatch_rule denies it' do
       @mail_rule.update(dispatch: false)
 
-      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
+      perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @buyer.make_pending! }
 
       assert_not_includes ActionMailer::Base.deliveries.map(&:bcc).flatten, @admin.email
     end

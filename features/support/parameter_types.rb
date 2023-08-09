@@ -125,6 +125,17 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'product',
+  type: Service,
+  regexp: /the product|product "([^"]*)"/,
+  transformer: ->(*args) do
+    return Service.find_by(name: args[0]) if args[0].present?
+
+    @product || @service || @provider.default_service
+  end
+)
+
+ParameterType(
   name: 'buyer',
   type: Account,
   regexp: /buyer "([^"]*)"|the buyer/,

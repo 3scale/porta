@@ -62,8 +62,10 @@ class PlanPresentersTest < ActiveSupport::TestCase
   end
 
   class Api::ServicePlansPresenterTest < PlanPresentersTest
+    attr_reader :provider
+
     def setup
-      provider = FactoryBot.create(:simple_provider)
+      @provider = FactoryBot.create(:simple_provider)
       @service = FactoryBot.create(:service, account: provider)
       FactoryBot.create_list(:service_plan, 5, service: service)
       @user = FactoryBot.create(:simple_user, account: provider)
@@ -83,6 +85,14 @@ class PlanPresentersTest < ActiveSupport::TestCase
 
       ServicePlan.expects(:scope_search).returns(empty_result).once
       assert_equal empty_result, presenter({ search: 'Foo' }).paginated_table_plans
+    end
+
+    test '#paginated_table_plans only includes plans of the current service' do
+      another_service = FactoryBot.create(:service, account: provider)
+      FactoryBot.create_list(:service_plan, 5, service: another_service)
+
+      plans = presenter.paginated_table_plans
+      assert_same_elements service.service_plans, plans
     end
 
     def presenter(params = {})

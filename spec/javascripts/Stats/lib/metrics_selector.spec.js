@@ -1,10 +1,10 @@
 import { StatsMetricsSelector } from 'Stats/lib/metrics_selector'
 
-describe('StatsMetricsSelector', () => {
+const metricsSelector = (totalHits) => {
   const userSelectedState = {
     state: {
       selectedMetricName: 'pierogi',
-      seriesTotal: 42500
+      seriesTotal: totalHits
     },
     setState: jest.fn()
   }
@@ -14,18 +14,27 @@ describe('StatsMetricsSelector', () => {
     { id: 666, name: 'Choripanes', systeName: 'choripanes' }
   ]
 
-  const metricsSelector = new StatsMetricsSelector({ statsState: userSelectedState, metrics, container: '#selector' })
+  return new StatsMetricsSelector({ statsState: userSelectedState, metrics, container: '#selector' })
+}
+
+describe('StatsMetricsSelector', () => {
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="selector"></div>'
   })
 
   it('should render the right selector', () => {
-    metricsSelector.render()
+    const totalHits = 42500
+    metricsSelector(totalHits).render()
 
     expect(document.querySelector('.StatsSelector-toggle')).toBeTruthy()
     expect(document.querySelector('.StatsSelector-menu')).toBeTruthy()
     expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('42.5K Pierogi')
     expect(document.querySelectorAll('.StatsSelector-menu > li')).toHaveLength(2)
+  })
+
+  it('should format the number correctly', () => {
+    metricsSelector(1).render()
+    expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('1 Pierogi')
   })
 })

@@ -48,4 +48,12 @@ module TimeMachineHelpers
       Sidekiq::Testing.drain_batches
     end
   end
+
+  def time_frozen?
+    before = Time.zone.now.to_f
+    sleep 0.0001
+    after = Time.zone.now.to_f
+
+    after == before
+  end
 end

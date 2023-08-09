@@ -61,35 +61,6 @@ Feature: Account management
     And I follow "Settings"
     Then I should not see "API Key"
 
-  @wip @javascript
-  Scenario: For admins the account overview is a page to change account details
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-      And I go to the provider account page
-    Then I should see the page to change account details
-
-  @wip
-  Scenario: Buyer Admins can edit Customers Type on account
-    Given provider "foo.3scale.localhost" has the following buyers with states:
-        | buyer | state    |
-        | buyer | approved |
-    When I log in as "buyer" on foo.3scale.localhost
-      And I follow "Settings"
-    Then I should be able to edit the value of the customers type field
-
-    When I change the value of the customers type field to "Consumers"
-      And I fill in the obligatory fields for accounts
-      And I press the button to update account
-    Then I should see the page to change account details
-      And I should see the value of the customers type field is "Consumers"
-
-  @wip @javascript
-  Scenario: Provider Admins cannot edit Profiles fields on account
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-      And I go to the provider account page
-    Then I should not be able to edit the value of the customers type field
-
   @javascript
   Scenario: Edit personal details with invalid data
     And current domain is the admin domain of provider "foo.3scale.localhost"

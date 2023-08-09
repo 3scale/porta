@@ -21,7 +21,7 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
     request.parameters[:controller] = controller.controller_path
     request.parameters[:application_id] = '1'
     controller.stubs(request: request)
-    _view = ActionView::Base.new('app/views', {}, controller)
+    _view = ActionView::Base.new(ActionView::LookupContext.new('app/views'), {}, controller)
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
@@ -38,7 +38,7 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
     request = ActionDispatch::TestRequest.create
     request.parameters[:controller] = controller.controller_path
     controller.stubs(request: request)
-    _view = ActionView::Base.new('app/views', {}, controller)
+    _view = ActionView::Base.new(ActionView::LookupContext.new('app/views'), {}, controller)
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
@@ -48,4 +48,3 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
     assert_nil rendered
   end
 end
-

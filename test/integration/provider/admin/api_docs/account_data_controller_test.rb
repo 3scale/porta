@@ -49,6 +49,7 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
         app_keys: [], app_ids: [], client_ids: [], client_secrets: [],
         user_keys: [{name: "#{application.name} - #{application.service.name}", value: application.user_key }],
         admin_ids: [{name: provider_admin.username, value: provider_admin.id}],
+        provider_users_ids: [{name: provider_admin.username, value: provider_admin.id}],
         metric_names: [service_metric_name, backend_api_metric_name],
         metric_ids: [service_metric_id, backend_api_metric_id],
         backend_api_metric_names: [backend_api_metric_name],

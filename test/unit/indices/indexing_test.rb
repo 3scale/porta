@@ -7,6 +7,7 @@ class IndexingTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.clear
     ThinkingSphinx::Test.init
     ThinkingSphinx::Test.start index: false
+    ThinkingSphinx::Test.enable_search_jobs!
   end
 
   teardown do
@@ -84,14 +85,6 @@ class IndexingTest < ActiveSupport::TestCase
   end
 
   private
-
-  def indexed_models
-    ThinkingSphinx::Test.indexed_models
-  end
-
-  def indexed_ids(model)
-    model.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY)
-  end
 
   def factory_for(model)
     overrides = {

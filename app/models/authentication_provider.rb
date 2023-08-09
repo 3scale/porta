@@ -150,10 +150,3 @@ class AuthenticationProvider < ApplicationRecord
     self.name ||= human_kind.to_s
   end
 end
-
-# to prevent warning: toplevel constant GitHub referenced by AuthenticationProvider::GitHub
-require_dependency 'authentication_provider/github'
-require_dependency 'authentication_provider/keycloak'
-require_dependency 'authentication_provider/auth0'
-require_dependency 'authentication_provider/custom'
-require_dependency 'authentication_provider/redhat_customer_portal'

@@ -1,4 +1,4 @@
-require_dependency "developer_portal/application_controller"
+# frozen_string_literal: true
 
 module DeveloperPortal
   class TeapotController < ApplicationController
