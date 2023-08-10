@@ -4,7 +4,7 @@ class CMS::Redirect < ApplicationRecord
   belongs_to :provider, :class_name => 'Account'
 
   validates :source, :target, :provider, presence: true
-  validates :source, uniqueness: { scope: [:provider_id] }, length: { maximum: 255 }
+  validates :source, uniqueness: { scope: [:provider_id], case_sensitive: true }, length: { maximum: 255 }
   validates :target, length: { maximum: 255 }
 
   attr_accessible :source, :target

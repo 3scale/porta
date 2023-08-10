@@ -5,7 +5,7 @@ class Policy < ApplicationRecord
 
   belongs_to :account, inverse_of: :policies
 
-  validates :version, uniqueness: { scope: %i[account_id name] }
+  validates :version, uniqueness: { scope: %i[account_id name], case_sensitive: true }
   validates :name, :version, :account_id, :schema, presence: true
   validate :belongs_to_a_tenant
   validate :validate_schema_specification
@@ -26,7 +26,7 @@ class Policy < ApplicationRecord
   end
 
   before_validation :set_identifier
-  validates :identifier, uniqueness: { scope: :account_id }
+  validates :identifier, uniqueness: { scope: :account_id, case_sensitive: true }
   validates :name, :version, length: { maximum: 255 }
 
   def self.find_by_id_or_name_version(id_or_name_version)

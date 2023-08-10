@@ -22,7 +22,7 @@ class CMS::Template < ApplicationRecord
   has_many :versions, as: :template
 
   validates :provider, presence: true
-  validates :system_name, uniqueness: { :scope => [:provider_id, :type], :allow_blank => true },
+  validates :system_name, uniqueness: { scope: [:provider_id, :type], allow_blank: true, case_sensitive: true },
             format: { :with => /\A\w[\w\-\/_]+\z/, :allow_blank => true }, length: { maximum: 255 }
   validates :handler, inclusion: { in: CMS::Handler.available, allow_blank: false, allow_nil: true },
             length: { maximum: 255 }

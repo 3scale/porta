@@ -6,7 +6,7 @@ class TopicCategory < ApplicationRecord
   attr_protected :forum_id, :tenant_id
 
   validates :name, presence: true, length: {maximum: 255}
-  validates :name, uniqueness: { :scope => :forum_id }
+  validates :name, uniqueness: { scope: :forum_id, case_sensitive: true }
 
   default_scope -> { order('name ASC') }
   #scope :with_topics, :include => :topics, :conditions => 'topics.id IS NOT NULL'

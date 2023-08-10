@@ -2,7 +2,7 @@ class SystemOperation < ApplicationRecord
   has_many :messages
   has_many :mail_dispatch_rules, :dependent => :destroy
 
-  validates :ref, uniqueness: true
+  validates :ref, uniqueness: { case_sensitive: true }
   validates :ref, :name, length: {maximum: 255}
 
   DEFAULTS = {'user_signup'            => 'New user signup',
