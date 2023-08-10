@@ -55,7 +55,7 @@ Feature: Show invoices from account's page (#16015909)
     And I go to the invoices issued by me
     Then I should see the list of years with invoices have the following years:
       | 0  |
-      | current_year |
+      | 2011 |
 
   Scenario: Display only years belonging to the current provider
     Given a provider is logged in on 1st January 2010

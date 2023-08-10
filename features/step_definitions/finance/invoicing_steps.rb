@@ -168,9 +168,7 @@ end
 
 Then "I should see the list of years with invoices have the following years:" do |table|
   actual_years = find('#search_year').find_all('option').map(&:value).map(&:to_i)
-  expected_years = table.raw.flatten.map do |value|
-    value == 'current_year' ? Time.now.year : value.to_i
-  end
+  expected_years = table.raw.flatten.map(&:to_i)
   assert_same_elements expected_years, actual_years
 end
 
