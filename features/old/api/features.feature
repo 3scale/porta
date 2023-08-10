@@ -11,7 +11,7 @@ Feature: Features :)
   @javascript
   Scenario: Create a feature
     When I log in as provider "foo.3scale.localhost"
-    Then I go to the edit page for plan "Basic"
+    And I go to the edit page for plan "Basic"
     And I follow "New feature"
     And I fill in "Name" with "Free T-shirt"
     And I fill in "System name" with "tee"
@@ -27,7 +27,7 @@ Feature: Features :)
     When I log in as provider "foo.3scale.localhost"
     And I go to the service plans admin page
     And I follow "Basic"
-    Then I should not see "No features yet"
+    Then I should not see "This plan has no features yet."
 
   @javascript
   Scenario: "No features yet" notice appears when last one is deleted or no feature present.
@@ -36,7 +36,7 @@ Feature: Features :)
     When I log in as provider "foo.3scale.localhost"
     And I go to the service plans admin page
     And I follow "Basic"
-    Then I should see "No features yet"
+    Then I should see "This plan has no features yet."
 
   @javascript
   Scenario: Disable a feature
