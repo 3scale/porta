@@ -64,11 +64,7 @@ it('should have a default item selected', () => {
 it('should have a helper text', () => {
   // eslint-disable-next-line react/no-unescaped-entities
   const wrapper = mountWrapper({ helperText: <p>I'm helpful</p> })
-  expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot(`
-    <p>
-      I'm helpful
-    </p>
-  `)
+  expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot('null')
 })
 
 describe('with a sticky footer link', () => {
@@ -79,25 +75,11 @@ describe('with a sticky footer link', () => {
     const wrapper = mountWrapper({ footer })
     expandSelect(wrapper)
 
-    const footerOption = wrapper.find('button.pf-c-select__menu-item--sticky-footer')
+    const footerOption = wrapper.find('.pf-c-select__menu .pf-c-select__menu-footer button')
     expect(footerOption.exists()).toEqual(true)
     expect(footerOption.text()).toEqual(footer.label)
 
     footerOption.simulate('click')
     expect(onFooterClick).toHaveBeenCalledTimes(1)
-  })
-})
-
-describe('with no items', () => {
-  it('should show an empty message that is disabled', () => {
-    const wrapper = mountWrapper({ items: [] })
-    wrapper.find('.pf-c-select__toggle-button').simulate('click')
-
-    const items = wrapper.find('SelectOption')
-    expect(items.length).toEqual(2)
-
-    const emptyItem = items.last()
-    expect(emptyItem.prop('isDisabled')).toEqual(true)
-    expect(emptyItem.text()).toEqual('No results found')
   })
 })

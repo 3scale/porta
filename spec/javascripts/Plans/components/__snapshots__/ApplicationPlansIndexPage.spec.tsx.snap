@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render properly 1`] = `
+<Fragment>
+  <PageSection
+    variant="light"
+  >
+    <TextContent>
+      <Text
+        component="h1"
+      >
+        Application Plans
+      </Text>
+      <Text
+        component="p"
+      >
+        Application plans establish the rules (limits, pricing, features) for using your API; every developer‘s application accessing your API will be accessing it within the constraints of an application plan. From a business perspective, application plans allow you to target different audiences by using multiple plans, that is, basic, pro, premium, with different sets of rules.
+      </Text>
+    </TextContent>
+  </PageSection>
+  <IndexPageMainSection
+    defaultPlanSelectProps={
+      {
+        "initialDefaultPlan": null,
+        "path": "/path",
+        "plans": [],
+      }
+    }
+    helperText="If an application plan is set as default, 3scale sets this plan upon service
+        subscription."
+    plansTableProps={
+      {
+        "columns": [],
+        "count": 0,
+        "createButton": undefined,
+        "plans": [],
+        "searchHref": "/search",
+      }
+    }
+  />
+</Fragment>
+`;

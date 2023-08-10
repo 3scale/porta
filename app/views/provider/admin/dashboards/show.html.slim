@@ -1,7 +1,7 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
 
-= content_for :javascripts do
+- content_for :javascripts do
   = javascript_packs_with_chunks_tag 'dashboard'
 
 .Dashboard
@@ -30,7 +30,8 @@
       - unless current_user.access_to_service_admin_sections?
         = render 'shared/service_access'
       - else
-        h1 APIs
+        div.pf-c-content
+          h1 APIs
         div.apiContainer
           div#products-widget data-products-widget=products_presenter.dashboard_widget_data.to_json
           div#backends-widget data-backends-widget=backend_apis_presenter.dashboard_widget_data.to_json

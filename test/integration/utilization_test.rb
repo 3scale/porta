@@ -21,6 +21,16 @@ class UtilizationTest < ActionDispatch::IntegrationTest
     @utilization = nil
   end
 
+  test 'utilization error' do
+    get provider_admin_application_path(@application)
+    assert_response :success
+
+    assert_equal 1, utilization.size
+    assert_equal 0, utilization.search("table").size
+    assert_equal 'There was a problem getting utilization data. Please try later.',
+                 utilization.search('p').text
+  end
+
   test 'application is unmetered' do
     stub_backend_utilization([])
     stub_backend_get_keys
@@ -30,7 +40,8 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, utilization.size
     assert_equal 0, utilization.search("table").size
-    assert_equal Nokogiri::XML::Text, utilization.children.first.class
+    assert_equal 'This is an unmetered application, there are no limits defined',
+                 utilization.search('p').text
   end
 
   test 'application has metrics' do
@@ -49,12 +60,12 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, utilization.size
 
-    table = utilization.search("table[@class='data']")
+    table = utilization.search('table')
     assert_equal 1, table.size
-    assert_equal 1*2, table.search("td[@class='above-100']").size
-    assert_equal 1*2, table.search("td[@class='above-80']").size
-    assert_equal 2*2, table.search("td[@class='above-0']").size
-    assert_equal 0*2, table.search("td[@class='infinity']").size
+    assert_equal 1*2, table.search("span[@class='above-100']").size
+    assert_equal 1*2, table.search("span[@class='above-80']").size
+    assert_equal 2*2, table.search("span[@class='above-0']").size
+    assert_equal 0*2, table.search("span[@class='infinity']").size
   end
 
   test 'application has metrics with one disabled over the limit' do
@@ -72,12 +83,12 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, utilization.size
 
-    table = utilization.search("table[@class='data']")
+    table = utilization.search("table")
     assert_equal 1, table.size
-    assert_equal 0*2, table.search("td[@class='above-100']").size
-    assert_equal 1*2, table.search("td[@class='above-80']").size
-    assert_equal 2*2, table.search("td[@class='above-0']").size
-    assert_equal 1*2, table.search("td[@class='infinity']").size
+    assert_equal 0*2, table.search("span[@class='above-100']").size
+    assert_equal 1*2, table.search("span[@class='above-80']").size
+    assert_equal 2*2, table.search("span[@class='above-0']").size
+    assert_equal 1*2, table.search("span[@class='infinity']").size
   end
 
   private

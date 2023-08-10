@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
+class ApiAuthentication::BySSOTokenTest < ActionDispatch::IntegrationTest
   def setup
     @account = FactoryBot.create(:provider_account)
     @master = Account.master
@@ -10,7 +10,7 @@ class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
 
   def test_sso_token
     # apicast mapping service use case
-    FactoryBot.create(:active_admin, account: @account, username: ThreeScale.config.impersonation_admin['username'])
+    FactoryBot.create(:active_admin, account: @account, username: ThreeScale.config.impersonation_admin[:username])
     host! Account.master.internal_admin_domain
     post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_key: @master.api_key, provider_id: @account.id }
     sso_token = JSON.parse(response.body)['sso_token']

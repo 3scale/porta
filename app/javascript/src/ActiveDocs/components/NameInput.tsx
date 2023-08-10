@@ -1,5 +1,5 @@
 import { FormGroup, TextInput } from '@patternfly/react-core'
-// import { ExclamationCircleIcon } from '@patternfly/react-icons' add the icon when we upgrade to PF4
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
 import type { FunctionComponent } from 'react'
 
@@ -9,7 +9,9 @@ interface Props {
   setName: (name: string) => void;
 }
 
-const NameInput: FunctionComponent<Props> = ({ errors = [], name, setName }) => {    
+const emptyArray = [] as never[]
+
+const NameInput: FunctionComponent<Props> = ({ errors = emptyArray, name, setName }) => {
   const validated = errors.length ? 'error' : 'default'
 
   return (
@@ -17,7 +19,7 @@ const NameInput: FunctionComponent<Props> = ({ errors = [], name, setName }) => 
       isRequired
       fieldId="api_docs_service_name"
       helperTextInvalid={errors}
-      // helperTextInvalidIcon={<ExclamationCircleIcon />} add the icon when we upgrade to PF4
+      helperTextInvalidIcon={<ExclamationCircleIcon />}
       label="Name"
       validated={validated}
     >

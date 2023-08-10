@@ -42,8 +42,8 @@ Feature: Multiservice feature
     And I fill in "Name" with "Less fancy API"
     And I fill in "System name" with "SystemName@123"
     And I press "Create Product"
-    Then I should see "Invalid."
-    Then I should see the flash message "Couldn't create Product. Check your Plan limits"
+    Then I should see "invalid"
+    And I should see the flash message "System name invalid"
 
   @javascript
   Scenario: Create new product: with already existing System name
@@ -55,6 +55,7 @@ Feature: Multiservice feature
     And I fill in "System name" with "api"
     And I press "Create Product"
     Then I should see "Has already been taken"
+    And I should see the flash message "System name has already been taken"
 
   @wip
   Scenario: Create new backend
@@ -71,10 +72,10 @@ Feature: Multiservice feature
     And I am on the edit page for service "Fancy API" of provider "foo.3scale.localhost"
     When I fill in "Name" with "Less fancy API"
     And I press "Update Product"
-    And I follow "Applications" within the main menu
-    And I follow "Usage Rules"
+    And I go to the usage rules of service "Less fancy API"
     And I uncheck "Developers can manage applications"
     And I press "Update Product"
+    And I go to the overview page of product "Less fancy API"
     And I follow "Overview"
     Then I should see "Less fancy API"
 

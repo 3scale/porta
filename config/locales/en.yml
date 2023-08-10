@@ -33,7 +33,7 @@ en:
   # start documentation links
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/%{major_and_minor_version_path}/html'
-    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/hero-api-portal'
+    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'
@@ -463,6 +463,8 @@ en:
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
+      empty_search:
+        body: No accounts match the filter criteria. Clear all filters and try again.
       change_state:
         notice: "%{account_type} account was %{state_event_past}."
         error: "Cannot %{state_event} %{account_type} account."
@@ -538,8 +540,7 @@ en:
         documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
-        documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
-        documentation_create_active_doc_spec: "%{docs_base_url}/providing_apis_in_the_developer_portal/create-activedocs-spec"
+        documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
         # end documentation links
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
@@ -788,9 +789,10 @@ en:
       models:
         policies_config:
           attributes:
-            base:
+            policies_config:
               invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
               missing_apicast: "is missing apicast policy"
+              invalid_policy: "contains some invalid policy"
         sso_token:
           cannot_be_generated: SSO Token cannot be generated
           one_of_user_id_or_username_is_required: One of user_id or username is required
@@ -893,11 +895,6 @@ en:
         service_plan:
           has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
 
-        service:
-          attributes:
-            system_name:
-              invalid: Invalid.
-
         cinstance:
           attributes:
             plan:
@@ -999,6 +996,8 @@ en:
               not_in_chargeable_state: "Invoice %{id} is not in chargeable state!"
             base:
               charging_failed: 'Failed to charge the credit card.'
+            period:
+              invalid_range: 'must be between the provider account creation date and 12 months from now'
 
     models:
       topic_category: category

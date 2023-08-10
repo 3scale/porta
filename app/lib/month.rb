@@ -66,9 +66,12 @@ class Month < Range
   def self.parse_month(month)
     return month if month.is_a?(Month)
 
-    month_params = month.split('-').first(2)
-    Month.new(*month_params)
-  rescue ArgumentError, NoMethodError
+    match = /^(\d{4})-(\d{2})$/.match(month)
+
+    raise ArgumentError unless match
+
+    Month.new(*match.captures)
+  rescue StandardError
     nil
   end
 

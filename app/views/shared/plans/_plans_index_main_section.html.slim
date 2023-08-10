@@ -1,5 +1,5 @@
-= javascript_packs_with_chunks_tag 'default_plan_selector', 'plans_table'
-section class="pf-c-page__main-section pf-m-no-padding"
-  div id='default_plan' data=default_plan_select_data
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'plans_index'
 
-  div id='plans_table' data=plans_table_data
+- content_for :main_section_with_react do
+  div id=id data-plans-index=plans_index_data.to_json

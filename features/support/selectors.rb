@@ -16,16 +16,14 @@ module HtmlSelectorsHelper
     # TODO: there is no first api widget anymore, clean this up
     when 'the first api dashboard widget'
       '.DashboardSection--services'
-    when 'the subsubmenu'
-      '.subsubmenu'
+    when 'the secondary nav'
+      'nav.pf-c-nav.pf-m-horizontal'
     when 'the user widget'
       '#user_widget'
     when 'the footer'
       '#footer'
     when 'the account details box'
       '#account_details'
-    when 'notification settings'
-      'table.notification-settings tbody'
     when 'service widget'
       '.service-widget'
 
@@ -58,7 +56,7 @@ module HtmlSelectorsHelper
       'tr.search'
 
     when 'the results'
-      'table.data > tbody'
+      'table.pf-c-table > tbody'
 
     when /the body/
       "html > body"

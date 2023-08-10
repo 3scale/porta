@@ -1,7 +1,7 @@
 module Authentication
   module Strategy
 
-    class Sso < Base
+    class SSO < Base
 
       attr_reader :error_message
 
@@ -73,7 +73,7 @@ module Authentication
         @error_message = 'User not found'
         nil
       # this happens when we fail to decrypt the message
-      rescue ActiveSupport::MessageVerifier::InvalidSignature => error
+      rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature => error
         @error_message = "Invalid SSO Token"
         nil
       # this happens when we fail to validate the decrypted message, right now only if the token expired

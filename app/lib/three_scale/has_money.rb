@@ -1,4 +1,4 @@
-require_dependency File.dirname(__FILE__) + '/money'
+# frozen_string_literal: true
 
 module ThreeScale
   module HasMoney

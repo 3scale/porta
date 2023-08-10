@@ -3,9 +3,9 @@
 module PlanRuleLoader
   DEFAULT_RULES = {
     enterprise: {
-      'rank' => 27,
-      'limits' => {'max_users' => nil, 'max_services' => nil},
-      'switches' => %w[
+      rank: 27,
+      limits: { max_users: nil, max_services: nil },
+      switches: %w[
         finance
         multiple_applications
         branding
@@ -19,7 +19,7 @@ module PlanRuleLoader
         web_hooks
         iam_tools
       ],
-      'metadata' => { 'cannot_automatically_be_upgraded_to' => true }
+      metadata: { cannot_automatically_be_upgraded_to: true }
     }
   }.freeze
 
@@ -32,7 +32,7 @@ module PlanRuleLoader
   end
 
   def sort_by_rank(yaml)
-    yaml.sort_by { |_, attributes| Integer(attributes['rank']) }
+    yaml.sort_by { |_, attributes| Integer(attributes[:rank]) }
   end
 
   def convert_to_hash_with_plan_rule_objects(config)

@@ -1,7 +1,7 @@
 class ServiceContract < Contract
   include Logic::Contracting::ServiceContract
 
-  before_create :accept_on_create, :on => :create, :unless => :live?
+  before_create :accept_on_create, :unless => :live?
 
   before_create :set_service_id
   before_validation :set_service_id
@@ -12,6 +12,10 @@ class ServiceContract < Contract
 
   scope :by_service, ->(service) do
     where(:issuer_type => service.class.model_name.to_s, :issuer_id => service.id)
+  end
+
+  scope :provided_by, ->(account) do
+    where(plan_id: ServicePlan.provided_by(account).select(:id))
   end
 
   alias service issuer
@@ -30,7 +34,6 @@ class ServiceContract < Contract
   scope :by_service_id, ->(service_id) do
     where(:plans => { :issuer_id => service_id.to_i }).joins(:plan).references(:plan)
   end
-
 
   # HACK: to enable it on-fly just when it comes from controller
   #

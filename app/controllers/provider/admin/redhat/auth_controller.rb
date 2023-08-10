@@ -45,7 +45,7 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
       'red_hat_account_number' => username,
       'red_hat_account_verified_by' => current_user.username
     }
-    current_account.update_attributes(extra_fields: extra_fields)
+    current_account.update(extra_fields: extra_fields)
   end
 
   def extract_error_message_from(user_data)

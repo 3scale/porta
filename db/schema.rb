@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_08_155529) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
@@ -125,7 +126,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.string "name"
-    t.text "body", limit: 4294967295
+    t.text "body", size: :long
     t.text "description"
     t.boolean "published", default: false
     t.datetime "created_at"
@@ -136,6 +137,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.boolean "skip_swagger_validations", default: false
     t.bigint "service_id"
     t.boolean "discovered"
+    t.index ["account_id"], name: "index_api_docs_services_on_account_id"
     t.index ["service_id"], name: "fk_rails_e4d18239f1"
   end
 
@@ -160,7 +162,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.string "kind"
-    t.text "audited_changes"
+    t.text "audited_changes", size: :medium
     t.text "comment"
     t.integer "associated_id"
     t.string "associated_type"
@@ -220,7 +222,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
   create_table "backend_apis", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "name", limit: 511, null: false
     t.string "system_name", null: false
-    t.text "description", limit: 16777215
+    t.text "description", size: :medium
     t.string "private_endpoint"
     t.bigint "account_id"
     t.datetime "created_at", null: false
@@ -231,12 +233,10 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
-    t.bigint "id", null: false
+  create_table "backend_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -390,8 +390,8 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.string "path"
     t.string "title"
     t.string "system_name"
-    t.text "published", limit: 16777215
-    t.text "draft", limit: 16777215
+    t.text "published", size: :medium
+    t.text "draft", size: :medium
     t.boolean "liquid_enabled"
     t.string "content_type"
     t.datetime "created_at"
@@ -418,8 +418,8 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.string "path"
     t.string "title"
     t.string "system_name"
-    t.text "published", limit: 16777215
-    t.text "draft", limit: 16777215
+    t.text "published", size: :medium
+    t.text "draft", size: :medium
     t.boolean "liquid_enabled"
     t.string "content_type"
     t.datetime "created_at"
@@ -492,7 +492,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.string "stream", null: false
     t.string "event_type", null: false
     t.string "event_id", null: false
-    t.text "metadata", limit: 16777215
+    t.text "metadata", size: :medium
     t.text "data"
     t.datetime "created_at", null: false
     t.bigint "provider_id"
@@ -520,12 +520,11 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", null: false
     t.bigint "tenant_id"
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -677,7 +676,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.integer "version"
     t.string "name"
     t.string "slug"
-    t.text "body", limit: 4294967295
+    t.text "body", size: :long
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "published", default: false
@@ -694,7 +693,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.integer "lock_version", default: 0
     t.string "name"
     t.string "slug"
-    t.text "body", limit: 4294967295
+    t.text "body", size: :long
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "published", default: false
@@ -746,7 +745,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
-    t.index ["system_operation_id", "account_id"], name: "index_mail_dispatch_rules_on_system_operation_id_and_account_id", unique: true
+    t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
   create_table "member_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -756,6 +755,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "updated_at"
     t.bigint "tenant_id"
     t.binary "service_ids"
+    t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
   create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -891,6 +891,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
+    t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
   create_table "payment_intents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
@@ -939,7 +940,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.bigint "issuer_id", null: false
     t.string "name"
     t.string "rights"
-    t.text "full_legal", limit: 4294967295
+    t.text "full_legal", size: :long
     t.decimal "cost_per_month", precision: 20, scale: 4, default: "0.0", null: false
     t.integer "trial_period_days"
     t.datetime "created_at"
@@ -967,7 +968,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
   create_table "policies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "version", null: false
-    t.binary "schema", limit: 4294967295, null: false
+    t.binary "schema", size: :long, null: false
     t.bigint "account_id", null: false
     t.bigint "tenant_id"
     t.datetime "created_at"
@@ -1081,7 +1082,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.string "oidc_issuer_endpoint"
     t.bigint "lock_version", default: 0, null: false
     t.string "authentication_method"
-    t.text "policies_config"
+    t.text "policies_config", size: :medium
     t.string "oidc_issuer_type", default: "keycloak"
     t.string "error_headers_limits_exceeded", default: "text/plain; charset=us-ascii"
     t.integer "error_status_limits_exceeded", default: 429
@@ -1105,7 +1106,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.integer "version", default: 0, null: false
     t.bigint "tenant_id"
     t.string "environment", null: false
-    t.text "content", limit: 16777215, null: false
+    t.text "content", size: :medium, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "hosts", limit: 8192
@@ -1117,7 +1118,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
   create_table "proxy_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "provider_id"
     t.bigint "tenant_id"
-    t.text "lua_file", limit: 16777215
+    t.text "lua_file", size: :medium
     t.string "status"
     t.datetime "created_at"
     t.datetime "updated_at"

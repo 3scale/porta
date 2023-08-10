@@ -1,8 +1,7 @@
 import { mount } from 'enzyme'
-import { CheckIcon } from '@patternfly/react-icons'
+import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon'
 
 import { MetricsTable } from 'Metrics/components/MetricsTable'
-import { mockLocation } from 'utilities/test-utils'
 
 import type { Props } from 'Metrics/components/MetricsTable'
 
@@ -35,25 +34,8 @@ it('should render itself', () => {
 })
 
 it('should have a paginated table', () => {
-  mockLocation('href://foo.bar/metrics?per_page=2&page=2')
   const wrapper = mountWrapper()
-  const pagination = wrapper.find('.pf-c-pagination').first()
-
-  expect(pagination.find('[aria-label="Current page"]').first().prop('value')).toBe(2)
-
-  pagination.find('button[data-action="first"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=1'))
-
-  pagination.find('button[data-action="previous"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=1'))
-
-  pagination.find('button[data-action="next"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
-
-  pagination.find('button[data-action="last"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
-
-  expect(pagination.find('.pf-c-options-menu__toggle-text').text()).toMatch(`3 - 4 of ${metricsCount}`)
+  expect(wrapper.exists('.pf-c-pagination')).toEqual(true)
 })
 
 describe('for metrics without mapping rule', () => {

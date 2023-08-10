@@ -90,11 +90,11 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert account.save!, "Account should save when account is new"
 
     account = Account.create!(:org_name => 'ACME')
-    assert account.update_attributes(:org_name => 'New ACME', :payment_detail_conditions => false), "Account should update when not updating credit card details"
+    assert account.update(:org_name => 'New ACME', :payment_detail_conditions => false), "Account should update when not updating credit card details"
 
     account = Account.create!(:org_name => 'ACME')
     account.updating_payment_detail = true
-    assert !account.update_attributes(:org_name => 'New ACME', :payment_detail_conditions => false), "Account shouldn't update when updating credit card details without accepting conditions"
+    assert !account.update(:org_name => 'New ACME', :payment_detail_conditions => false), "Account shouldn't update when updating credit card details without accepting conditions"
   end
 
   test '#credit_card_exires_on_with_default' do

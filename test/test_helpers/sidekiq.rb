@@ -18,19 +18,13 @@ module TestHelpers
     end
 
     def drain_all_sidekiq_jobs
-      ThinkingSphinx::Test.rt_run do
-        ::Sidekiq::Worker.drain_all
-      end
+      ::Sidekiq::Worker.drain_all
     end
 
     def with_sidekiq
-      ::SphinxIndexationWorker.stubs(:perform_later)
-
       ::Sidekiq::Testing.inline! do
         yield
       end
-    ensure
-      ::SphinxIndexationWorker.unstub(:perform_later)
     end
   end
 end

@@ -1,5 +1,5 @@
 import { Button } from '@patternfly/react-core'
-import { PlusCircleIcon } from '@patternfly/react-icons'
+import PlusCircleIcon from '@patternfly/react-icons/dist/js/icons/plus-circle-icon'
 
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 

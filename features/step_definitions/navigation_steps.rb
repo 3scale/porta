@@ -58,7 +58,7 @@ end
 private
 
 def context_selector
-  @context_selector ||= find('#api_selector')
+  @context_selector ||= find('[data-ouia-component-id="context-selector"]')
 end
 
 def select_context(context)

@@ -1,4 +1,5 @@
-h2 Create application
-
-div id="new-application-form" data=presenter.new_application_form_data
+- content_for :javascripts do
   = javascript_packs_with_chunks_tag 'new_application'
+
+- content_for :main_section_with_react do
+  div id="new-application-form" data=presenter.new_application_form_data

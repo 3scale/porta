@@ -39,7 +39,7 @@ class Api::FeaturesController < FrontendController
 
   def update
     respond_to do |format|
-      if @feature.update_attributes(feature_params)
+      if @feature.update(feature_params)
         format.js
       else
         format.js { render :action => 'error' }

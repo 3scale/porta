@@ -23,6 +23,10 @@ base: &default
   html_index_attrs: "img=alt,title; a=title"
   min_infix_len: 3
 
+  # clean-up orphan records after full reindexing
+  # see https://github.com/pat/thinking-sphinx/pull/1192
+  real_time_tidy: true
+
   # ----------------------------------
   # Data source configuration, see http://sphinxsearch.com/docs/current.html#confgroup-source
   # ----------------------------------
@@ -37,6 +41,22 @@ base: &default
   pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
 
   binlog_path: ''
+
+  <% if ENV['THINKING_SPHINX_RT_MERGE_IOPS'].present? %>
+  rt_merge_iops: <%= ENV['THINKING_SPHINX_RT_MERGE_IOPS'] %>
+  <% end %>
+
+  <% if ENV['THINKING_SPHINX_RT_MERGE_MAXIOSIZE'].present? %>
+  rt_merge_maxiosize: <%= ENV['THINKING_SPHINX_RT_MERGE_MAXIOSIZE'] %>
+  <% end %>
+
+  <% if ENV['THINKING_SPHINX_QUERY_LOG'].present? %>
+  query_log: <%= ENV['THINKING_SPHINX_QUERY_LOG'] %>
+  <% end %>
+
+  <% if ENV['THINKING_SPHINX_LOG'].present? %>
+  log: <%= ENV['THINKING_SPHINX_LOG'] %>
+  <% end %>
 
 development:
   <<: *default
@@ -58,4 +78,5 @@ test: &test
 
 production:
   <<: *default
+  skip_running_check: true # daemon is remote in production
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>

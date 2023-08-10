@@ -2149,7 +2149,7 @@
         "summary": "User List (provider account)",
         "description": "Lists the users of the provider account. You can apply filters by state and/or role.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
@@ -2198,7 +2198,7 @@
         "summary": "User Create (provider account)",
         "description": "Creates a new user in the provider account. Do not forget to activate it, otherwise he/she will not be able to sign-in. After creation the default state is pending and the default role is member. The user object can be extended using Fields Definitions in the Admin Portal where you can add/remove fields, for instance token (string), age (int), third name (string optional), etc. Additional fields have to be defined by name and value (i.e &name=value). Additional fields are the custom fields declared in the Fields Definitions section in your API Admin Portal.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "requestBody": {
           "required": true,
@@ -2240,7 +2240,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2265,7 +2265,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2310,7 +2310,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2330,14 +2330,14 @@
         "summary": "User Activate (provider account)",
         "description": "Changes the state of the user of the provider account to active (after sign-up). You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2376,14 +2376,14 @@
         "summary": "User Change Role to Admin (provider account)",
         "description": "Changes the role of the provider account to admin (full rights and privileges).",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2391,7 +2391,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Change Role to Admin (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2423,14 +2422,14 @@
         "summary": "User Change Role to Member (provider account)",
         "description": "Changes the role of the user of the provider account to member.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "string"
@@ -2469,7 +2468,7 @@
         "summary": "User Permissions Read",
         "description": "Shows the permissions of the user of the provider account.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
@@ -2485,7 +2484,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2503,14 +2502,14 @@
         "summary": "User Permissions Update",
         "description": "Updates the permissions of member user of the provider account.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2582,14 +2581,14 @@
         "summary": "User Suspend (provider account)",
         "description": "Changes the state of the user of the provider account to suspended, which removes the user's ability to sign-in. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2628,14 +2627,14 @@
         "summary": "User Unsuspend (provider account)",
         "description": "Revokes the suspension of a user of the provider account. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
         "tags": [
-          "Users"
+          "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "provider_users_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2681,7 +2680,7 @@
             "name": "user_id",
             "in": "path",
             "description": "ID of the user.",
-            "x-data-threescale-name": "user_ids",
+            "x-data-threescale-name": "admin_ids",
             "required": true,
             "schema": {
               "type": "integer"

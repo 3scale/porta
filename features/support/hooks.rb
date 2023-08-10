@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Before '@onpremises' do
+  ThreeScale.config.stubs(onpremises: true)
+end
+
 Before '@ignore-backend' do
   stub_backend_get_keys
   stub_backend_change_provider_key
@@ -169,7 +173,7 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   print "Saved page body to #{Capybara.save_page(folder.join("#{line_number}.html"))}\n"
 
   begin
-    print "Saved sceeenshot to #{Capybara.save_screenshot(folder.join("#{line_number}.png"))}\n"
+    print "Saved screenshot to #{Capybara.save_screenshot(folder.join("#{line_number}.png"))}\n"
   rescue Capybara::NotSupportedByDriverError
     # and that is fine! rack-test does not support screenshots
   end

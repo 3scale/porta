@@ -16,7 +16,6 @@ const IncrementByInput: FunctionComponent<Props> = ({
     className="pf-c-form__group-narrow"
     fieldId="proxy_rule_delta"
     label="Increment by"
-    validated="default"
   >
     <TextInput
       id="proxy_rule_delta"

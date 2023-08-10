@@ -1,12 +1,12 @@
-<h1>Drafts</h1>
+<% content_for :page_header_title, 'Drafts' %>
 
-<table class="data" id="cms-changes">
+<table class="pf-c-table pf-m-grid-lg" role="grid" id="cms-changes" aria-label="Drafts table">
   <thead>
-    <tr>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Path</th>
-      <th class="actions" colspan="2">
+    <tr role="row">
+      <th role="columnheader" scope="col">Type</th>
+      <th role="columnheader" scope="col">Name</th>
+      <th role="columnheader" scope="col">Path</th>
+      <th role="columnheader" scope="col" class="actions pf-c-table__action">
         <% if @changed.size > 1 %>
           <%= link_to 'Publish All', publish_all_provider_admin_cms_changes_path,
                        :class => 'action', :"data-method" => :put,
@@ -19,25 +19,32 @@
     </tr>
   </thead>
 
-  <tbody>
+  <tbody role="rowgroup">
     <% @changed.each do |changed_model| %>
-      <tr id="<%= dom_id(changed_model) + '_change' %>" >
-        <td><%= changed_model.class.model_name.human %></td>
-        <td><%= link_to changed_model.name, polymorphic_path([ :edit, :provider, :admin, changed_model ] )  %></td>
-        <td>
+      <tr role="row" id="<%= dom_id(changed_model) + '_change' %>" >
+        <td td role="cell" data-label="Type"><%= changed_model.class.model_name.human %></td>
+        <td td role="cell" data-label="Name"><%= link_to changed_model.name, polymorphic_path([ :edit, :provider, :admin, changed_model ] ) %></td>
+        <td td role="cell" data-label="Path">
           <% if changed_model.is_a?(CMS::BasePage) %>
-            <%=  link_to(changed_model.path || '(builtin path)', cms_draft_url(changed_model), :target => '_blank') %>
+            <%= link_to(changed_model.path || '(builtin path)', cms_draft_url(changed_model), :target => '_blank') %>
           <% end %>
         </td>
-        <td class="actions">
-          <%= link_to 'Revert', revert_provider_admin_cms_change_path(changed_model),
-          :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+        <td role="cell" class="pf-c-table__action actions">
+          <div class="pf-c-overflow-menu">
+            <div class="pf-c-overflow-menu__content">
+              <div class="pf-c-overflow-menu__group pf-m-button-group">
+                <div class="pf-c-overflow-menu__item">
+                  <%= link_to 'Revert', revert_provider_admin_cms_change_path(changed_model),
+                              :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+                </div>
+                <div class="pf-c-overflow-menu__item">
+                  <%= link_to 'Publish', publish_provider_admin_cms_change_path(changed_model),
+                              :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+                </div>
+              </div>
+            </div>
+          </div>
         </td>
-        <td class="actions">
-          <%= link_to 'Publish', publish_provider_admin_cms_change_path(changed_model),
-                       :class => 'action', :"data-method" => :put, :"data-remote" => true  %>
-        </td>
-
       </tr>
     <% end %>
   </tbody>

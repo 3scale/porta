@@ -65,29 +65,29 @@ class SettingsTest < ActiveSupport::TestCase
     assert @settings.approval_required_disabled?
   end
 
-  def test_update_attributes
+  def test_update
     @settings.expects(:approval_required_editable?).returns(false).once
     @provider.account_plans.default.expects(:update_attribute).never
 
-    @settings.update_attributes({ account_approval_required: true })
+    @settings.update({ account_approval_required: true })
 
     @settings.expects(:approval_required_editable?).returns(true).once
     @provider.account_plans.default.expects(:update_attribute).once
 
-    @settings.update_attributes({ account_approval_required: true })
+    @settings.update({ account_approval_required: true })
   end
 
   test "account_approval_required delegated to default account plan" do
     plan = @provider.account_plans.default
-    plan.update_attributes(approval_required: false)
+    plan.update(approval_required: false)
 
-    @settings.update_attributes(account_approval_required: true)
+    @settings.update(account_approval_required: true)
     assert plan.reload.approval_required
 
-    @settings.update_attributes(welcome_text: :bar)
+    @settings.update(welcome_text: :bar)
     assert_equal false, plan.reload.approval_required
 
-    @settings.update_attributes(account_approval_required: false)
+    @settings.update(account_approval_required: false)
     refute plan.reload.approval_required
   end
 
@@ -99,7 +99,7 @@ class SettingsTest < ActiveSupport::TestCase
     plan.update_attribute(:approval_required, true)
     assert @settings.reload.account_approval_required
 
-    @settings.update_attributes(account_approval_required: false)
+    @settings.update(account_approval_required: false)
     refute @provider.account_plans.first.approval_required
   end
 

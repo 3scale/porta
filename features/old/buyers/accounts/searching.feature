@@ -21,15 +21,6 @@ Feature: Searching buyer accounts
       | bad buyer     | rejected | Default |                |
       | pending buyer | pending  | Tricky  | Italy          |
 
-  Scenario: Search
-    When I go to the buyer accounts page
-    When I search for:
-      | Group/Org. | State   | Plan   |
-      | pending    | Pending | Tricky |
-    Then I should see following table:
-      | Group/Org.    | State   | Plan   |
-      | pending buyer | Pending | Tricky |
-
   Scenario: Listing
     When I go to the buyer accounts page with 1 records per page
     Then I should see 4 pages
@@ -39,11 +30,11 @@ Feature: Searching buyer accounts
     Then I should see 2 pages
     And I follow "Group/Org." within table header
     And I should see following table:
-      | Group/Org. ▲ |
+      | Group/Org.   |
       | alice        |
     When I look at 2nd page
     Then I should see following table:
-      | Group/Org. ▲ |
+      | Group/Org.   |
       | bad buyer    |
     And I should see 2 pages
 
@@ -53,7 +44,7 @@ Feature: Searching buyer accounts
       | Plan    | State    | Group/Org. | Country |
       | Awesome | Approved | bob        | Italy   |
     And I follow "<order by>" within table header
-    Then I should see "<order by> ▲"
+    Then I should see column "<order by>" in ascending order
 
     Examples:
       | order by    |
@@ -76,14 +67,14 @@ Feature: Searching buyer accounts
       | Pending |
     And I follow "Group/Org." within table header
     Then I should see following table:
-      | Group/Org. ▲  |
+      | Group/Org.    |
       | pending buyer |
 
     When I search for:
       | State    |
       | Approved |
     Then I should see following table:
-      | Group/Org. ▲ |
+      | Group/Org.   |
       | alice        |
       | bob          |
 
@@ -91,7 +82,7 @@ Feature: Searching buyer accounts
     When I go to the buyer accounts page
     And I follow "Group/Org." within table header
     Then I should see following table:
-      | Group/Org. ▲  | State    |
+      | Group/Org.    | State    |
       | alice         | Approved |
       | bad buyer     | Rejected |
       | bob           | Approved |
@@ -105,6 +96,7 @@ Feature: Searching buyer accounts
     Then I should see following table:
       | Group/Org. |
       | alice      |
+    And the search input should be filled with "alice"
 
   Scenario: Search account by name substring
     When I go to the buyer accounts page

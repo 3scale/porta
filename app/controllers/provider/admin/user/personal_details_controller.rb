@@ -5,7 +5,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   def edit; end
 
   def update
-    if current_user.update_attributes(user_params)
+    if current_user.update(user_params)
       if current_user.just_changed_password?
         current_user.kill_user_sessions(user_session)
       end

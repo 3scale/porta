@@ -69,7 +69,7 @@ Then /^the buyer should have following line items for "([^"]*)"(?: in the( \d(?:
 end
 
 Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
-  assert find(:xpath, '//table/tbody/tr[1]').text.include?(buyer)
+  assert has_css?('table tbody tr.invoice td[data-label="Account"]', text: buyer)
 end
 
 Then(/^I should have (\d+) invoices?$/) do |count|
@@ -98,10 +98,10 @@ Then(/^I should see line items$/) do |items|
     when /Total VAT Amount/
     else
       prefix      = "//table[@id='line_items']/tbody/tr[#{i + 1}]"
-      line_name = find(:xpath, "#{prefix}/th[1]").text.strip
-      description = find(:xpath, "#{prefix}/td[1]").text.strip
-      quantity    = find(:xpath, "#{prefix}/td[2]").text.strip
-      real_cost   = find(:xpath, "#{prefix}/td[3]").text.strip
+      line_name   = find(:xpath, "#{prefix}/*[1]").text.strip
+      description = find(:xpath, "#{prefix}/*[2]").text.strip
+      quantity    = find(:xpath, "#{prefix}/*[3]").text.strip
+      real_cost   = find(:xpath, "#{prefix}/*[4]").text.strip
 
       # TODO: strip double whitespace as done in https://github.com/3scale/system/commit/ce72abe4d673b1592f96ed9532c62317306c7ea6
       assert_equal line['name'], line_name unless line_name.blank?
@@ -144,7 +144,8 @@ Then(/^I should have an invoice of "(\d+\.?\d*) (.+)"$/) do |amount, currency|
 end
 
 Given(/^an invoice of the buyer with a total cost of (\d+)/) do |cost|
-  step 'an invoice of buyer "bob" for January, 2011 with items:', table(<<-TABLE)
+  date = Time.zone.now.strftime('%B, %Y')
+  step %(an invoice of buyer "bob" for #{date} with items:), table(<<-TABLE)
   | name   | cost |
   | Custom | #{cost} |
   TABLE
@@ -153,7 +154,8 @@ end
 Then(/^I should see in the invoice period for the column "(in process|overdue|paid|total)" a cost of (\d+\.\d+) (\w+)$/) do |column, cost, money|
   columns = ['month', 'total', 'in process', 'overdue', 'paid']
   position = columns.index(column) + 1
-  node = find(:xpath, %(//table//td/a[text()="January, 2011"]/../..//td[#{position}]))
+  date = Time.zone.now.strftime('%B, %Y')
+  node = find(:xpath, %(//table//td/a[text()="#{date}"]/../..//td[#{position}]))
   assert_equal "#{money} #{cost}", node.text
 end
 

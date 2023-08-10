@@ -17,13 +17,13 @@ const defaultProps: Props<IRecord> = {
   items,
   onSelect,
   label: <h1>Toys</h1>,
-  ariaLabel: 'Toys',
+  'aria-label': 'Toys',
   fieldId: 'favorite_toy',
   name: 'toy[favorite]',
   isClearable: undefined,
   placeholderText: 'Select a toy',
   hint: undefined,
-  isValid: undefined,
+  validated: undefined,
   helperText: undefined,
   helperTextInvalid: undefined,
   isDisabled: undefined,
@@ -73,7 +73,7 @@ it('should filter via typeahead', () => {
 
 it('should be aria-labelled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists(`[aria-label="${defaultProps.ariaLabel!}"]`)).toEqual(true)
+  expect(wrapper.exists(`[aria-label="${defaultProps['aria-label']!}"]`)).toEqual(true)
 })
 
 it('should show a spinner when loading', () => {
@@ -88,13 +88,9 @@ it('should clear the selection only when clearable', () => {
   const wrapper = mountWrapper({ item: items[0], isClearable: false })
   const clearButton = () => wrapper.find('[aria-label="Clear all"]')
 
-  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(true)
-  // Note the button is still on the DOM, since it's rendered by Patternfly, but hidden by .pf-m-select__toggle-clear-hidden
-  clearButton().simulate('click')
-  expect(onSelect).not.toHaveBeenCalled()
+  expect(clearButton().exists()).toEqual(false)
 
-  wrapper.setProps({ item: items[0], isClearable: true })
-  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(false)
+  wrapper.setProps({ item: items[0], isClearable: undefined })
   clearButton().simulate('click')
   expect(onSelect).toHaveBeenCalledWith(null)
 })

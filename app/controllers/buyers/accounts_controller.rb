@@ -34,7 +34,7 @@ class Buyers::AccountsController < Buyers::BaseController
     vat = account_params[:vat_rate]
     account.vat_rate = vat if vat # vat_rate is protected attribute
 
-    if account.update_attributes(account_params)
+    if account.update(account_params)
       redirect_to admin_buyers_account_path(account)
     else
       render :edit

@@ -66,7 +66,7 @@ class ImportCountriesService
       country = Country.find_by(code: country_data.code)
       if country
         info "Updating #{country_data})"
-        country.update_attributes!(country_data.attributes_for_update)
+        country.update!(country_data.attributes_for_update)
       else
         info "Creating #{country_data})"
         Country.create!(country_data.attributes)

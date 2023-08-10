@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+When "an admin is reviewing backend apis index page" do
+  visit provider_admin_backend_apis_path
+end
 
 Given "an admin is at a backend api edit page" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
@@ -36,7 +39,7 @@ Then "they will be able to update it with an existing name and url" do
 end
 
 Given "the backend is used by this product" do
-  @product.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
+  (@service || @product).backend_api_configs.create!(backend_api: @backend, path: "/my_product")
 end
 
 When "an admin tries to delete the backend api from its edit page" do
@@ -74,6 +77,10 @@ end
 
 Given "a backend" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
+end
+
+Given /^a backend "([^"]*)"$/ do |name|
+  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
 end
 
 When "an admin is in the backend overview page" do

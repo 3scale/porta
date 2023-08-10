@@ -12,7 +12,7 @@ class Api::TermsController < FrontendController
   end
 
   def update
-    if @edited_service.update_attributes(params[:edited_service])
+    if @edited_service.update(params[:edited_service])
       flash[:notice] =  'Terms & Conditions updated.'
       redirect_to edit_admin_service_terms_path(@edited_service)
     else

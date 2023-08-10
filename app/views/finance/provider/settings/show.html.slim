@@ -1,6 +1,8 @@
 - content_for(:title)
   = "Charging & Gateway"
 
+- content_for :page_header_title, 'Charging & Gateway'
+
 = form_for @billing_strategy, url: admin_finance_billing_strategy_path,
            method: :put, html: { class: 'formtastic' } do |f|
   fieldset class="inputs"

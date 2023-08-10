@@ -25,7 +25,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
   def test_index_system_message
     login_as(@admin)
 
-    @message.message.update_attributes system_operation_id: 1
+    @message.message.update system_operation_id: 1
 
     get :index
 

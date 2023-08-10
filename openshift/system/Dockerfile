@@ -36,15 +36,6 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
 
-# Install sphinx search
-RUN if [ "`uname -m`" == "x86_64" ]; then \
-      yum install -y https://sphinxsearch.com/files/sphinx-2.2.11-1.rhel7.x86_64.rpm ; \
-    else \
-      curl -sSL http://sphinxsearch.com/files/sphinx-2.2.11-release.tar.gz | tar xz -C /tmp \
-      && cd /tmp/sphinx-2.2.11-release && ./configure && make install \
-      && rm -rf /tmp/sphinx* ; \
-    fi
-
 # We don't want to redo the bundle install step every time a file has changed:
 # copying only the gemspec files and copying all the other files after the build
 ADD lib/developer_portal/*.gemspec lib/developer_portal/
@@ -98,6 +89,8 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
     THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
     THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
+    THINKING_SPHINX_QUERY_LOG=/dev/stdout \
+    THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
     SECRET_KEY_BASE=dummy \
     DATABASE_URL='mysql2://root:@localhost/porta'

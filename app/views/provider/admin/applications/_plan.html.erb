@@ -10,7 +10,7 @@
         <%= delete_button_for admin_buyers_contract_custom_application_plan_path(contract, contract.plan),
                               :label => 'Remove customization' %>
       <% else %>
-        <%= pf_fancy_link_to 'Convert to a Custom Plan',
+        <%= fancy_link_to 'Convert to a Custom Plan',
                            admin_buyers_contract_custom_application_plans_path(contract),
                            :method => :post,
                            :class => 'new',

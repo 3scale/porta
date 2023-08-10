@@ -1,6 +1,8 @@
-= javascript_packs_with_chunks_tag 'new_service'
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'new_service'
 
-#new_service_wrapper data-new-service-data={ isServiceDiscoveryAccessible: service_discovery_accessible?,
+- content_for :main_section_with_react do
+  div id='new_service_wrapper' data-new-service-data={ isServiceDiscoveryAccessible: service_discovery_accessible?,
                                              template: @service.as_json,
                                              isServiceDiscoveryUsable: service_discovery_usable?,
                                              serviceDiscoveryAuthenticateUrl: service_discovery_presenter.authorize_url,

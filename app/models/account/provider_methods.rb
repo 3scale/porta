@@ -288,7 +288,7 @@ module Account::ProviderMethods
 
   def create_service(attrs)
     services.build do |service|
-      service.update_attributes(attrs)
+      service.update(attrs)
     end
   end
 

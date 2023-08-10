@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module AlertsHelper
   def format_utilization value
@@ -21,12 +21,12 @@ module AlertsHelper
     hash ||= @service.notification_settings
     levels ||= alert_limits
 
-    content_tag :tr, id: key do
-      hidden_field_tag("service[notification_settings][#{key}][]", "") +
-        content_tag(:th, label, class: "u-underline") << levels.map do |level|
-          checked = hash.try!(:[], key.to_sym).try!(:include?, level)
-          content_tag(:td, check_box_tag("service[notification_settings][#{key}][]", level, checked, title: "#{label} at #{level}% usage"))
-        end.join.html_safe
+    content_tag :tr, id: key, role: 'row' do
+      (hidden_field_tag("service[notification_settings][#{key}][]", "") +
+        content_tag(:td, label, role: 'cell')) << levels.map do |level|
+          checked = hash.try!(:[], key.to_sym)&.include?(level)
+          content_tag(:td, check_box_tag("service[notification_settings][#{key}][]", level, checked, title: "#{label} at #{level}% usage"), role: 'cell')
+        end.join.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 

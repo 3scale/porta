@@ -22,23 +22,6 @@ module Finance::InvoicesHelper
     end
   end
 
-
-  def invoice_field(name, value, action = nil, options = {})
-    title = case name
-            when Symbol
-        Invoice.human_attribute_name(name)
-            else
-        name
-    end
-
-    content_tag :tr do
-      row = content_tag(:th, title)
-      row += content_tag(:td, value, :id => "field-#{name.to_s.downcase}")
-      row += content_tag(:td, action)
-      row
-    end
-  end
-
   def current_invoice_link(buyer)
     link_to 'Current invoice',
             admin_finance_account_invoice_path(buyer, buyer.current_invoice.to_param),
@@ -52,17 +35,10 @@ module Finance::InvoicesHelper
   end
 
 
-  def invoice_pdf_link(invoice, label = 'Download PDF')
+  def invoice_pdf_link(invoice, options = {})
+    label = options.delete(:label) || 'Download PDF'
     if invoice.pdf.file?
-      link_to(label, invoice.pdf.expiring_url)
-    else
-      content_tag(:em,'not yet generated')
-    end
-  end
-
-  def pf_invoice_pdf_link(invoice, label = 'Download PDF')
-    if invoice.pdf.file?
-      pf_link_as_button(label, invoice.pdf.expiring_url, modifier: 'secondary')
+      link_to(label, invoice.pdf.expiring_url, options)
     else
       content_tag(:em,'not yet generated')
     end

@@ -1,6 +1,6 @@
 <%= render 'includes' %>
 
-<h1>Override email "<%= @page.name %>"</h1>
+<% content_for :page_header_title, "Override email #{@page.name}" %>
 
 <%= cms_form_for(@page) do |f| %>
   <%= render 'form', :f => f %>

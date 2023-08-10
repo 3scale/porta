@@ -25,7 +25,7 @@ class Admin::Api::AccountFeaturesController < Admin::Api::BaseController
   # Account Feature Update
   # PUT /admin/api/features/{id}.xml
   def update
-    feature.update_attributes(feature_params)
+    feature.update(feature_params)
 
     respond_with(feature)
   end

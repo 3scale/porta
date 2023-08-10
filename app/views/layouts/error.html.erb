@@ -25,9 +25,7 @@
 
       <% if admin_domain || master_domain %>
         <div id='footer'>
-          <ul>
-            <%= render 'provider/footer_powered_by_part' %>
-          </ul>
+          <%= render 'provider/footer_powered_by_part' %>
         </div>
       <% else %>
         <%= render partial: 'shared/footer', locals: { site_account: site_account } %>

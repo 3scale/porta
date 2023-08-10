@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should show a notice 1`] = `
+<Fragment>
+  <PageSection
+    variant="light"
+  >
+    <Stack
+      hasGutter={true}
+    >
+      <StackItem>
+        <TextContent>
+          <Text
+            component="h1"
+          >
+            Account plans
+          </Text>
+          <Text
+            component="p"
+          >
+            Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
+          </Text>
+        </TextContent>
+      </StackItem>
+    </Stack>
+  </PageSection>
+  <IndexPageMainSection
+    defaultPlanSelectProps={
+      {
+        "initialDefaultPlan": null,
+        "path": "/path",
+        "plans": [],
+      }
+    }
+    plansTableProps={
+      {
+        "columns": [],
+        "count": 0,
+        "createButton": undefined,
+        "plans": [],
+        "searchHref": "/search",
+      }
+    }
+  />
+</Fragment>
+`;
+
+exports[`should show a notice 2`] = `
+<Fragment>
+  <PageSection
+    variant="light"
+  >
+    <Stack
+      hasGutter={true}
+    >
+      <StackItem>
+        <TextContent>
+          <Text
+            component="h1"
+          >
+            Account plans
+          </Text>
+          <Text
+            component="p"
+          >
+            Account plans create "tiers" of usage within the developer portal, allowing you to distinguish between grades of support, content and other services partners at different levels receive.
+          </Text>
+        </TextContent>
+      </StackItem>
+      <StackItem>
+        <Alert
+          isInline={true}
+          ouiaId="no-default-plan-warning"
+          title={
+            <React.Fragment>
+              <strong>
+                You have no published or default plan
+              </strong>
+              . Without at least one of those being present, users cannot sign up.
+            </React.Fragment>
+          }
+          variant="warning"
+        />
+      </StackItem>
+    </Stack>
+  </PageSection>
+  <IndexPageMainSection
+    defaultPlanSelectProps={
+      {
+        "initialDefaultPlan": null,
+        "path": "/path",
+        "plans": [],
+      }
+    }
+    plansTableProps={
+      {
+        "columns": [],
+        "count": 0,
+        "createButton": undefined,
+        "plans": [],
+        "searchHref": "/search",
+      }
+    }
+  />
+</Fragment>
+`;

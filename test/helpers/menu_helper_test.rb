@@ -51,6 +51,53 @@ class MenuHelperTest < ActionView::TestCase
     end
   end
 
+  test '#masthead_props' do
+    expects(:context_selector_props).returns([])
+    expects(:current_user).returns(FactoryBot.create(:simple_user))
+    expects(:documentation_items).returns([])
+    expects(:impersonating?).returns(false)
+    expects(:vertical_nav_hidden?).returns(true)
+
+    data = masthead_props.as_json
+
+    # Assert app/javascript/src/Navigation/components/Masthead.tsx#Props
+    assert_not_nil data['brandHref']
+    assert_not_nil data['contextSelectorProps']
+    assert_not_nil data['currentAccount']
+    assert_not_nil data['currentUser']
+    assert_not_nil data['documentationMenuItems']
+    assert_not_nil data['impersonating']
+    assert_not_nil data['signOutHref']
+    assert_not_nil data['verticalNavHidden']
+  end
+
+  test '#context_selector_props' do
+    expects(:active_menu).returns(:dashboard).at_least_once
+    data = context_selector_props.as_json
+
+    # Assert app/javascript/src/Navigation/components/ContextSelector.tsx#Props
+    assert_not_nil data['toggle']
+    assert_not_nil data['menuItems']
+  end
+
+  test '#documentation_items' do
+    expects(:saas?).returns(false)
+    Features::QuickstartsConfig.stubs(enabled?: false)
+    assert_equal documentation_items.length, 3
+
+    expects(:saas?).returns(true)
+    Features::QuickstartsConfig.stubs(enabled?: false)
+    assert_equal documentation_items.length, 4
+
+    expects(:saas?).returns(false)
+    Features::QuickstartsConfig.stubs(enabled?: true)
+    assert_equal documentation_items.length, 4
+
+    expects(:saas?).returns(true)
+    Features::QuickstartsConfig.stubs(enabled?: true)
+    assert_equal documentation_items.length, 5
+  end
+
   protected
 
   def current_account

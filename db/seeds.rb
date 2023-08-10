@@ -172,10 +172,10 @@ ActiveRecord::Base.transaction do
   impersonation_admin.signup_type = :minimal
 
   impersonation_admin_config = ThreeScale.config.impersonation_admin
-  impersonation_admin_username = impersonation_admin_config['username']
+  impersonation_admin_username = impersonation_admin_config[:username]
   impersonation_admin.attributes = {
     username: impersonation_admin_username,
-    email: "#{impersonation_admin_username}+#{provider.external_admin_domain}@#{impersonation_admin_config['domain']}",
+    email: "#{impersonation_admin_username}+#{provider.external_admin_domain}@#{impersonation_admin_config[:domain]}",
     first_name: '3scale',
     last_name: 'Admin'
   }

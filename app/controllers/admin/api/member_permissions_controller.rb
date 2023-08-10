@@ -22,7 +22,7 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   def update
     authorize! :update_permissions, user
 
-    if user.update_attributes(permission_params)
+    if user.update(permission_params)
       respond_with user.member_permissions, user: user
     else
       # errors are stored in the 'user' model

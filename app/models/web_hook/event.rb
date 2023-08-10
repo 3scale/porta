@@ -39,7 +39,7 @@ class WebHook
 
     delegate :logger, to: :Rails
 
-    def has_transactional_callbacks?
+    def trigger_transactional_callbacks?
       true
     end
 

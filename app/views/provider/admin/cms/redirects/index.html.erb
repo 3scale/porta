@@ -1,25 +1,32 @@
-<h1>Redirects</h1>
+<% content_for :page_header_title, 'Redirects' %>
 
-<table class="data">
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Redirects table">
   <thead>
-    <tr>
-      <th>From</th>
-      <th>To</th>
-      <th class="actions">
-        <%= link_to 'Create Redirect', new_provider_admin_cms_redirect_path, :class => 'add action' %>
+    <tr role="row">
+      <th role="columnheader" scope="col">From</th>
+      <th role="columnheader" scope="col">To</th>
+      <th role="columnheader" scope="col" class="actions pf-c-table__action pf-m-fit-content">
+        <%= link_to 'Create Redirect', new_provider_admin_cms_redirect_path, class: 'add action' %>
       </th>
     </tr>
   </thead>
 
-  <tbody>
+  <tbody role="rowgroup">
     <% @redirects.each do |redirect| %>
-      <tr>
-        <td><%= link_to h(redirect.source), edit_provider_admin_cms_redirect_path(redirect) %></td>
-        <td><%= redirect.target %></td>
-      <td class="actions">
-        <%= fancy_link_to 'Delete', provider_admin_cms_redirect_path(redirect), :confirm => 'Are you sure?', :method => :delete %>
-      </td>
-
+      <tr role="row">
+        <td td role="cell" data-label="From"><%= link_to h(redirect.source), edit_provider_admin_cms_redirect_path(redirect) %></>
+        <td td role="cell" data-label="To"><%= redirect.target %></>
+        <td role="cell" class="pf-c-table__action actions">
+          <div class="pf-c-overflow-menu">
+            <div class="pf-c-overflow-menu__content">
+              <div class="pf-c-overflow-menu__group pf-m-button-group">
+                <div class="pf-c-overflow-menu__item">
+                  <%= fancy_link_to 'Delete', provider_admin_cms_redirect_path(redirect), confirm: 'Are you sure?', method: :delete %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>

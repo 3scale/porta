@@ -26,7 +26,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
 
   def show
     @presenter = Provider::Admin::Account::AuthenticationProvidersShowPresenter.new(authentication_provider)
-    @oauth_presenter = ProviderOauthFlowPresenter.new(authentication_provider, request, request.host)
+    @oauth_presenter = ProviderOAuthFlowPresenter.new(authentication_provider, request, request.host)
   end
 
   def edit
@@ -36,7 +36,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
   def update
     @authentication_provider = authentication_provider
 
-    if @authentication_provider.update_attributes(authentication_provider_params)
+    if @authentication_provider.update(authentication_provider_params)
       redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration updated'
     else
       flash.now[:error] = 'SSO integration could not be updated'

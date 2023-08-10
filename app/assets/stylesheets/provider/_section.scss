@@ -7,10 +7,13 @@
     @include white-box-shadow;
   }
 
-  &#access-tokens p,
   &#service-tokens p {
     @include white-box-shadow;
   }
+}
+
+.Section:first-of-type > h2 {
+  margin: 0;
 }
 
 .swagger-section {

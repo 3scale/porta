@@ -44,8 +44,8 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
             choices: ["Orange", "Apple", "Banana"])
     @provider.reload
     @buyer1 = create_buyer_for(@provider)
-    @buyer1.update_attributes(org_name: "MoltbeCat", telephone_number: "+34 902 311 2131")
-    @buyer1.admins.first.update_attributes(username: 'akira', email: 'akira@moltbe.cat', :first_name => "Akira", :last_name => "Kurosawa")
+    @buyer1.update(org_name: "MoltbeCat", telephone_number: "+34 902 311 2131")
+    @buyer1.admins.first.update(username: 'akira', email: 'akira@moltbe.cat', :first_name => "Akira", :last_name => "Kurosawa")
     create_app_for(@buyer1)
     create_app_for(@buyer1, Time.now.utc)
   end
@@ -53,7 +53,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
   test 'to_csv' do
     travel_to(Time.utc(2011,1,1)) do
       cinstance = @provider.services.order(:id).second.cinstances.first!
-      cinstance.update_attributes(first_daily_traffic_at: '2016-03-03 00:00:00 UTC')
+      cinstance.update(first_daily_traffic_at: '2016-03-03 00:00:00 UTC')
       exporter = Csv::ApplicationsExporter.new(@provider, {data: 'applications'})
       lines = exporter.to_csv.lines.to_a
 

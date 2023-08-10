@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'base64'
 
 module CMS::Toolbar
@@ -10,43 +12,6 @@ module CMS::Toolbar
 
   def cms_toolbar
     @__cms_toolbar ||= CMS::Toolbar::Renderer.new
-  end
-
-  class Renderer
-    attr_reader :page
-    attr_writer :layout
-
-    def initialize
-      @templates = []
-      @liquids = []
-    end
-
-    def liquid(template)
-      @liquids << template
-    end
-
-    def rendered(view)
-      @templates << view
-    end
-
-    def main_page=(page)
-      if @page
-        rendered(page)
-      else
-        @page = page
-      end
-    end
-
-    def layout
-      @layout or @page.try(:layout)
-    end
-
-    def assigns
-      liquids = @liquids.try(:map){ |t| t.registers[:file_system].try(:history) } || []
-      templates = [ page, layout ] + liquids + @templates
-
-      { page: page, templates: templates.flatten.compact.uniq }
-    end
   end
 
   protected
@@ -74,7 +39,7 @@ module CMS::Toolbar
     return false if @_exception_handled
 
     is_cms_domain = site_account.provider? && !site_account.master? # => buyer domain
-    is_html_content = response.content_type.nil? || response.content_type == 'text/html' #=> only for html content type
+    is_html_content = response.media_type.nil? || response.media_type == 'text/html' #=> only for html content type
 
     return false unless is_cms_domain
     return false unless is_html_content
@@ -86,7 +51,7 @@ module CMS::Toolbar
 
   # TODO: do not overwrite existing <base>
   def inject_cms_toolbar
-    response.body = %{
+    response.body = %(
      <html>
        <head>
        </head>
@@ -94,7 +59,7 @@ module CMS::Toolbar
          #{cms_toolbar_with_iframe_html}
        </body>
      </html>
-     }
+     )
   end
 
   def cms_toolbar_with_iframe_html
@@ -103,15 +68,16 @@ module CMS::Toolbar
 
     controller = self
 
-    view = View.new(lookup_context, cms_toolbar.assigns, controller, [:html])
+    # When on development we want to clear the view cache on every request, this should be automatic, but after
+    # https://github.com/rails/rails/pull/35623 and https://github.com/rails/rails/pull/35629 this no longer works
+    # for hacked views like the +CMS::Toolbar::View+. So we have to manually clear the cache. Otherwise, we'll have
+    # to restart the server after every change in this file.
+    ActionView::LookupContext::DetailsKey.clear unless Rails.env.production?
+
+    view = CMS::Toolbar::View.new(lookup_context, cms_toolbar.assigns, controller)
     view._routes = _routes
     view.render 'shared/cms/toolbar',
                 :site_account => site_account,
                 :original_page_source => new_source
-  end
-
-  class View < ActionView::Base
-    include System::UrlHelpers.system_url_helpers
-    include ::DeveloperPortal::CMS::ToolbarHelper
   end
 end

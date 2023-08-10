@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
 # frozen_string_literal: true
 
 module VerticalNavHelper
@@ -93,13 +94,14 @@ module VerticalNavHelper
   def audience_accounts_items
     items = []
     items << {id: :listing,       title: 'Listing',       path: admin_buyers_accounts_path}           if can?(:manage, :partners)
-    items << {id: :account_plans,  title: 'Account Plans', path: admin_buyers_account_plans_path}     if account_plans_management_visible?
+    items << {id: :account_plans, title: 'Account Plans', path: admin_buyers_account_plans_path}     if account_plans_management_visible?
     items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}  if service_plans_management_visible?
 
     if can?(:manage, :settings)
-      items << {                          title: 'Settings'}
-      items << {id: :usage_rules,         title: 'Usage Rules',        path: edit_admin_site_usage_rules_path}
-      items << {id: :fields_definitions,  title: 'Fields Definitions', path: admin_fields_definitions_path}
+      items << { title: 'Settings', subItems: [
+        { id: :usage_rules,         title: 'Usage Rules',        path: edit_admin_site_usage_rules_path },
+        { id: :fields_definitions,  title: 'Fields Definitions', path: admin_fields_definitions_path }
+      ]}
     end
 
     items
@@ -116,22 +118,24 @@ module VerticalNavHelper
     items = []
 
     if can?(:manage, :finance)
-      items << {id: :earnings,  title: 'Earnings by Month',  path: admin_finance_root_path}
-      items << {id: :invoices,  title: 'Invoices',           path: admin_finance_invoices_path}
-      items << {id: :finance,   title: 'Finance Log',        path: admin_finance_log_entries_path} if current_user.impersonation_admin?
+      items << {id: :earnings,    title: 'Earnings by Month', path: admin_finance_root_path}
+      items << {id: :invoices,    title: 'Invoices',          path: admin_finance_invoices_path}
+      items << {id: :log_entries, title: 'Finance Log',       path: admin_finance_log_entries_path} if current_user.impersonation_admin?
     end
 
     if can?(:manage, :settings)
-      items << {                           title: 'Settings'}
+      billing_settings_items = []
       # this setting needs more than just editing auth, as such it's not a setting
-      items << {id: :charging_and_gateway, title: 'Charging & Gateway',   path: admin_finance_settings_path} if can?(:manage, :finance)
-      items << {id: :credit_card_policies, title: 'Credit Card Policies', path: edit_admin_site_settings_path}
+      billing_settings_items << {id: :charging_and_gateway, title: 'Charging & Gateway',   path: admin_finance_settings_path} if can?(:manage, :finance)
+      billing_settings_items << {id: :credit_card_policies, title: 'Credit Card Policies', path: edit_admin_site_settings_path}
+
+      items << { title: 'Settings', subItems: billing_settings_items }
     end
 
     items
   end
 
-  def audience_portal_items
+  def audience_portal_items # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     items = []
 
     if can?(:manage, :portal)
@@ -145,27 +149,32 @@ module VerticalNavHelper
       items << {id: :ActiveDocs,         title: 'ActiveDocs',         path: admin_api_docs_services_path}          if can?(:manage, :plans)
     end
 
-    items << {title: ' '} # Blank space
+    items << {id: 'separator 0'} # Separator
     items << {title: 'Visit Portal', path: access_code_url(host: current_account.external_domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
+    items << {id: 'separator 1'} # Separator
 
     if can?(:manage, :portal)
-      items << {                                   title: 'Legal Terms'}
-      items << {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)}
-      items << {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)}
-      items << {id: :new_application_licence,      title: 'New Application',      path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
+      items << { title: 'Legal Terms', subItems: [
+        {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)},
+        {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)},
+        {id: :new_application_licence,      title: 'New Application',      path: edit_legal_terms_url(CMS::Builtin::LegalTerm::NEW_APPLICATION_SYSTEM_NAME)}
+      ]}
     end
 
     if can?(:manage, :settings)
-      items << {                       title: 'Settings'}
-      items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
-      items << {id: :spam_protection,  title: 'Spam Protection',  path: edit_admin_site_spam_protection_path}
-      items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
-      items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
-      items << {id: :forum_settings,   title: 'Forum Settings',   path: edit_admin_site_forum_path} if !current_account.forum_enabled? && provider_can_use?(:forum)
+      portal_settings_items = []
+      portal_settings_items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
+      portal_settings_items << {id: :spam_protection,  title: 'Spam Protection',  path: edit_admin_site_spam_protection_path}
+      portal_settings_items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
+      portal_settings_items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
+      portal_settings_items << {id: :forum_settings,   title: 'Forum Settings',   path: edit_admin_site_forum_path} if !current_account.forum_enabled? && provider_can_use?(:forum)
+
+      items << { title: 'Settings', subItems: portal_settings_items }
     end
 
-    items << {                       title: 'Docs'}
-    items << {id: :liquid_reference, title: 'Liquid Reference', path: provider_admin_liquid_docs_path}
+    items << { title: 'Docs', subItems: [
+      { id: :liquid_reference, title: 'Liquid Reference', path: provider_admin_liquid_docs_path },
+    ]}
   end
 
   def audience_messages_items
@@ -175,9 +184,10 @@ module VerticalNavHelper
     items << {id: :trash,         title: 'Trash',         path: provider_admin_messages_trash_index_path}
 
     if can?(:manage, :settings) && !master_on_premises?
-      items << {                title: 'Settings'}
-      items << {id: :email,     title: 'Support Emails',  path: edit_admin_site_emails_path}
-      items << {id: :templates, title: 'Email Templates', path: provider_admin_cms_email_templates_path}
+      items << { title: 'Settings', subItems: [
+        { id: :email,     title: 'Support Emails',  path: edit_admin_site_emails_path },
+        { id: :templates, title: 'Email Templates', path: provider_admin_cms_email_templates_path }
+      ]}
     end
 
     items
@@ -234,8 +244,9 @@ module VerticalNavHelper
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
     unless master_on_premises?
-      items << {title: 'Settings'}
-      items << {id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service)}
+      items << { title: 'Settings', subItems: [
+        { id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service) }
+      ]}
     end
     items
   end
@@ -275,3 +286,5 @@ module VerticalNavHelper
     sections
   end
 end
+
+# rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength

@@ -31,4 +31,24 @@ class ServicePlanTest < ActiveSupport::TestCase
       custom_service_plan.reload
     end
   end
+
+  test '.provided_by scope' do
+    provider1 = FactoryBot.create(:simple_provider)
+    provider2 = FactoryBot.create(:simple_provider)
+    p1_service1 = FactoryBot.create(:simple_service, account: provider1)
+    p1_service2 = FactoryBot.create(:simple_service, account: provider1)
+    p2_service3 = FactoryBot.create(:simple_service, account: provider2)
+
+    # Default service plans are created on service creation, we destroy them for a clean comparison
+    p1_service1.service_plans.destroy_all
+    p1_service2.service_plans.destroy_all
+    p2_service3.service_plans.destroy_all
+
+    p1_plans = FactoryBot.create_list(:simple_service_plan, 3, issuer: p1_service1) +
+               FactoryBot.create_list(:simple_service_plan, 4, issuer: p1_service2)
+    p2_plans = FactoryBot.create_list(:simple_service_plan, 2, issuer: p2_service3)
+
+    assert_same_elements p1_plans, ServicePlan.provided_by(provider1).to_a
+    assert_same_elements p2_plans, ServicePlan.provided_by(provider2).to_a
+  end
 end

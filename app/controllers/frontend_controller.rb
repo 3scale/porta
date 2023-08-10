@@ -25,6 +25,8 @@ class FrontendController < ApplicationController
   include ThreeScale::Warnings::ControllerExtension
   include Logic::RollingUpdates::Controller
 
+  include MenuHelper # TODO: convert to a presenter
+
   # TODO: this should go to Provider::BaseController when one such will exist
   activate_menu :topmenu => :dashboard
 
@@ -37,7 +39,7 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
-  helper_method :quickstarts_presenter
+  helper_method :quickstarts_presenter, :masthead_data
 
   private
 

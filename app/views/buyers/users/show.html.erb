@@ -1,9 +1,11 @@
-<%= render 'buyers/accounts/menu' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
 
-<h2>
+<% content_for :page_header_title do %>
   User <%= h @user.display_name %> of the account <%= h @user.account.org_name %>
   <%= link_to 'Edit', edit_admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), class: 'action edit' %>
-</h2>
+<% end %>
 
 <table class="list mini">
 
@@ -33,9 +35,9 @@
     <th>State</th>
     <td>
       <% if @user.active? %>
-        <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+        <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
       <% else %>
-        <i class="excluded fa fa-times-circle-o" title="Feature is disabled for this plan"></i>
+        <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
       <% end %>
       <%= h @user.state %>
       <span class="operations">

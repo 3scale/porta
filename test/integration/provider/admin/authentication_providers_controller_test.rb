@@ -14,10 +14,10 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
   test 'GET index' do
     get provider_admin_authentication_providers_path
     assert_response :success
-    provider_rows = css_select 'table.data tbody tr'
+    provider_rows = css_select 'table tbody tr'
     assert_equal AuthenticationProvider.available.count, provider_rows.size
     AuthenticationProvider.available.each do |auth_provider|
-      assert_select 'table.data td.provider', count: 1, text: auth_provider.human_kind
+      assert_select 'table td.provider', count: 1, text: auth_provider.human_kind
     end
   end
 
@@ -83,7 +83,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
 
   test 'PUT update renders edit when there are errors' do
     @provider.settings.allow_branding
-    AuthenticationProvider.any_instance.stubs(:update_attributes).returns(false)
+    AuthenticationProvider.any_instance.stubs(:update).returns(false)
     authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, client_id: 'client_id')
     put provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {client_id: 'clientID'})
     assert_template 'provider/admin/authentication_providers/edit'
@@ -101,7 +101,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
 
   test 'PUT publish_or_hide renders show when there are errors and there is github branding denied' do
     @provider.settings.deny_branding
-    AuthenticationProvider.any_instance.stubs(:update_attributes).returns(false)
+    AuthenticationProvider.any_instance.stubs(:update).returns(false)
     authentication_provider = FactoryBot.create(:github_authentication_provider, account: @provider, branding_state: 'threescale_branded')
     patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: { published: true })
     assert_template 'provider/admin/authentication_providers/show'

@@ -3,7 +3,7 @@
 
 # Methods added to this helper will be available to all templates in the
 # application.
-module ApplicationHelper
+module ApplicationHelper # rubocop:disable Metrics/ModuleLength
 
   # this is used just to not load font awesome in tests
   def capybara_webkit?
@@ -40,6 +40,14 @@ module ApplicationHelper
   def link_to_unless_current_styled(text, url, options = {})
     link_to_unless_current text, url, options do |active_text|
       content_tag 'span', active_text, :class => 'active is-active'
+    end
+  end
+
+  def pf4_nav_item(text, url)
+    content_tag 'li', class: 'pf-c-nav__item' do
+      link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
+        content_tag 'a', active_text, class: 'pf-c-nav__link pf-m-current', 'aria-current': 'page'
+      end
     end
   end
 
@@ -180,9 +188,9 @@ module ApplicationHelper
 
   def boolean_status_img(enabled, opts = {})
     if enabled
-      '<i class="included fa fa-check-circle-o" title="Enabled"></i>'.html_safe
+      '<i class="included fas fa-check-circle" title="Enabled"></i>'.html_safe
     else
-      '<i class="excluded fa fa-times-circle-o" title="Disabled"></i>'.html_safe
+      '<i class="excluded fas fa-times-circle" title="Disabled"></i>'.html_safe
     end
   end
 
@@ -370,10 +378,9 @@ module ApplicationHelper
   end
 
   def rails_asset_host_url
-    asset_host_enabled = Rails.configuration.asset_host.present?
     asset_host_url = Rails.configuration.three_scale.asset_host.presence
-
-    return '' unless asset_host_enabled && asset_host_url
+    return '' unless asset_host_url
+    return asset_host_url if asset_host_url.match? %r{^https?://}
 
     "#{request.protocol}#{asset_host_url}"
   end

@@ -1,29 +1,47 @@
-= render 'menu'
+- content_for :menu do
+  = render 'menu'
 
-h1
-  => @cinstance.display_name
-  = pf_link_to 'Edit',
-            edit_provider_admin_application_path(@cinstance),
-            class: 'action edit'
+- content_for :custom_page_header do
+  section class="pf-c-page__main-section pf-m-light"
+    div class="pf-c-content"
+      h1
+        => @cinstance.display_name
+        = link_to 'Edit', edit_provider_admin_application_path(@cinstance),
+                             class: 'action edit'
 
 div#twoCol.equal-width
   div.left
     div.wide_dashboard_card.round
-      table.list
-        tr
-          th Account
-          td
-            - account = @cinstance.buyer_account
-            = link_to account.name, admin_buyers_account_path(account)
+      dl class="pf-c-description-list pf-m-horizontal" aria-label="Application details list"
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text" Account
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text"
+              - account = @cinstance.buyer_account
+              = link_to account.name, admin_buyers_account_path(account)
 
-        = fields_definitions_rows(@cinstance, %w{name})
-        - service = @cinstance.service
+        - if @cinstance.defined_fields.present?
+          - for field in @cinstance.defined_fields.reject{ |f| %w{name}.include? f.name }.each
+            - method = field.name
+            - if @cinstance.field(field.name).present? && field.visible_for?(current_user) && @cinstance.field_value(method.to_s).present?
+                div class="pf-c-description-list__group"
+                  dt class="pf-c-description-list__term"
+                    span class="pf-c-description-list__text" = @cinstance.field_label(method.to_s)
+                  dd class="pf-c-description-list__description"
+                    div class="pf-c-description-list__text"
+                      = h(@cinstance.field_value(method.to_s))
+
         - unless master_on_premises?
-          tr
-            th Service
-            td
-              = link_to service.name, admin_service_path(service)
-      = render 'state'
+          div class="pf-c-description-list__group"
+            dt class="pf-c-description-list__term"
+              span class="pf-c-description-list__text" Service
+            dd class="pf-c-description-list__description"
+              div class="pf-c-description-list__text"
+                - service = @cinstance.service
+                = link_to service.name, admin_service_path(service)
+        = render 'state'
+        = render 'trial'
     div.wide_dashboard_card.round#application_keys data-object="cinstance" data-url=(provider_admin_application_path(@cinstance, format: :json))
       h3 API Credentials
       = render partial: 'provider/admin/keys/widget',

@@ -1,7 +1,8 @@
+<%# WTF is this predicate for? %>
 <% unless request.xhr? %>
-  <%= render 'provider/admin/messages/menu' %>
-  <h2>Compose</h2>
 <% end %>
+
+<% content_for :page_header_title, 'Compose' %>
 
 <%= semantic_form_for @message, url: provider_admin_messages_outbox_index_path,
   html: { class: if request.xhr? then 'remote' end, id: "message-form" } do |form| %>

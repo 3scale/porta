@@ -21,14 +21,14 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   # PUT /admin/api/account/authentication_providers/{id}.xml
   def update
     authorize_changes
-    authentication_provider.update_attributes(authentication_provider_update_params)
+    authentication_provider.update(authentication_provider_update_params)
     respond_with authentication_provider_presenter
   end
 
   # Authentication Providers Admin Portal List
   # GET /admin/api/account/authentication_providers.xml
   def index
-    presenters = ProviderOauthFlowPresenter.wrap(self_authentication_providers, request, request.host)
+    presenters = ProviderOAuthFlowPresenter.wrap(self_authentication_providers, request, request.host)
     respond_with(presenters)
   end
 
@@ -51,7 +51,7 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   end
 
   def authentication_provider_presenter
-    ProviderOauthFlowPresenter.new(authentication_provider, request, request.host)
+    ProviderOAuthFlowPresenter.new(authentication_provider, request, request.host)
   end
 
   def authorize_rolling_update

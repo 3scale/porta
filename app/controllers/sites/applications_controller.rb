@@ -7,7 +7,7 @@ class Sites::ApplicationsController < Sites::BaseController
   end
 
   def update
-    if @account.update_attributes(params[:account])
+    if @account.update(params[:account])
       flash[:notice] = 'The applications settings were updated.'
       redirect_to admin_site_settings_url
     else

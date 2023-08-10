@@ -116,6 +116,7 @@
     }],
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
+    "import/no-named-as-default": "off",
 
     // From plugin jsx-expressions
     // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render" // TODO: requires eslint 8
@@ -129,9 +130,8 @@
     }
   },
   "ignorePatterns": [
-    "jest.config.js",
+    "*.config.js",
     "spec/javascripts/setupTests.ts",
-    "spec/javascripts/__mocks__/",
-    "app/javascript/src/Stats" // We better avoid touching this module, eslint may automatically fix some of the errors and break it.
+    "spec/javascripts/__mocks__/"
   ]
 }

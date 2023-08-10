@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-Then /^I should see following table:$/ do |expected|
+Then "I/they should see (the )following table:" do |expected|
   ThreeScale::Deprecation.warn "Detected old table. Move to PF4 and use step 'I should see the following table:'"
-  table = extract_table('table.data', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
+  table = extract_table('table.pf-c-table', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
   #table.first.map!{ |n| n.gsub(/(&#\d+;)|[^a-z\d\s]/i, '').strip }
@@ -28,6 +28,12 @@ Then /^I should see following table:$/ do |expected|
 
     raise
   end
+end
+
+Then "I should see column {string} in ascending order" do |column|
+  header = find('th.pf-m-selected', text: column)
+  # HACK: icons will be invisible unless @javascript is enabled, they are imported in packs/provider.scss
+  assert header.has_css?('i.fa-long-arrow-alt-up', visible: false)
 end
 
 # Then /^I should see the following table:$/ do |expected|

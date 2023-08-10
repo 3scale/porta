@@ -39,8 +39,7 @@ end
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     if page.has_css?('.pf-c-form__label', text: field)
-      input = find('.pf-c-form__label', text: field).sibling('input')
-      input.set value
+      fill_in_pf(field, with: value)
     else
       # DEPRECATED: remove when all forms implement PF4
       ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
@@ -82,7 +81,7 @@ end
 
 # TODO: Ideally we would extend Node::Actions#select to satisfy Liskov instead of using a custom method.
 def pf4_select(value, from:)
-  select = find('.pf-c-form__label', text: from).sibling('.pf-c-select')
+  select = find_pf_select(from)
   within select do
     find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
     click_on(value)
@@ -90,11 +89,16 @@ def pf4_select(value, from:)
 end
 
 def pf4_select_first(from:)
-  select = find('.pf-c-form__label', text: from).sibling('.pf-c-select')
+  select = find_pf_select(from)
   within select do
     find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    find('ul.pf-c-select__menu li button:not(.pf-m-disabled)').click
+    find('.pf-c-select__menu .pf-c-select__menu-item:not(.pf-m-disabled)').click
   end
+end
+
+def find_pf_select(label)
+  find('.pf-c-form__group-label', text: label).sibling('.pf-c-form__group-control')
+                                              .find('.pf-c-select')
 end
 
 # Overrides Node::Actions#fill_in
@@ -216,5 +220,5 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
 end
 
 When 'I change to tab {string}' do |tab|
-  find('.pf-c-tabs .pf-c-tabs__item .pf-c-tabs__button', text: tab).click
+  find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
 end

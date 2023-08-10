@@ -1,4 +1,4 @@
-- content_for :sublayout_title, 'Policies'
+- content_for :page_header_title, 'Policies'
 
 = semantic_form_for @proxy, url: admin_service_policies_path(@service) do |f|
   = render '/api/integrations/apicast/shared/policies', f: f

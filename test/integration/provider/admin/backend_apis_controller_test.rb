@@ -66,7 +66,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     backend_api.backend_api_configs.delete_all
     assert_not backend_api.backend_api_configs.any?
 
-    perform_enqueued_jobs(except: SphinxIndexationWorker) do
+    perform_enqueued_jobs do
       delete provider_admin_backend_api_path(backend_api)
       assert_redirected_to provider_admin_dashboard_path
       assert_not BackendApi.exists? backend_api.id
@@ -78,7 +78,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     backend_api = @provider.backend_apis.order(:id).first!
     assert backend_api.backend_api_configs.any?
 
-    perform_enqueued_jobs(except: SphinxIndexationWorker) do
+    perform_enqueued_jobs do
       delete provider_admin_backend_api_path(backend_api)
       assert backend_api.reload.published?
       assert_equal 'cannot be deleted because it is used by at least one Product', flash[:error]

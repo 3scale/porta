@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DetailedInvoicesByPeriodQueryTest < ActiveSupport::TestCase
   def setup
-    @provider = FactoryBot.create(:simple_provider)
+    @provider = FactoryBot.create(:simple_provider, created_at: Time.utc(2009, 1, 1))
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,

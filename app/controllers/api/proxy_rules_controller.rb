@@ -22,7 +22,7 @@ class Api::ProxyRulesController < Api::BaseController
   def edit; end
 
   def update
-    if @proxy_rule.update_attributes(proxy_rule_params)
+    if @proxy_rule.update(proxy_rule_params)
       redirect_to admin_service_proxy_rules_path(@service), notice: 'Mapping rule was updated.'
     else
       render :edit

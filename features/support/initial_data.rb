@@ -12,11 +12,7 @@ Before do |scenario|
 
   ThreeScale.config.stubs(superdomain: '3scale.localhost')
 
-  SphinxIndexationWorker.stubs(:perform_later)
-
   FieldsDefinition.create_defaults! master_account
-
-  SphinxIndexationWorker.unstub(:perform_later) if scenario.source_tag_names.include?('@search')
 
   ThreeScale.config.stubs(onpremises: false)
   ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'http://apicast.alaska/policies')

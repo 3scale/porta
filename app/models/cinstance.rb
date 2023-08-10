@@ -36,7 +36,7 @@ class Cinstance < Contract
 
   # this has to be before the include Backend::ModelExtensions::Cinstance
   # or callbacks order makes keys not to be saved in backend
-  after_save :create_first_key, on: :create
+  after_create :create_first_key
 
   # before_destroy :refund_fixed_cost
   after_commit :reject_if_pending, :on => :destroy
@@ -53,7 +53,7 @@ class Cinstance < Contract
   include Logic::Authentication::ApplicationContract
   include Logic::Keys::ApplicationContract
 
-  include AccountIndex::ForDependency
+  include Indices::AccountIndex::ForDependency
   include ThreeScale::Search::Scopes
 
   def self.attributes_for_destroy_list
@@ -515,5 +515,3 @@ class Cinstance < Contract
     plan.issuer.prefix_key(SecureRandom.hex(16))
   end
 end
-
-ApplicationContract = Cinstance

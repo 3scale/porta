@@ -141,23 +141,25 @@ end
 
 # This smells of :reek:statementsTooManyStatements but we don't care
 def assert_provider_payment_details # rubocop:disable Metrics/AbcSize
-  within('section', text: 'Personal Details') do
-    find('dt', text: 'First Name').assert_sibling('dd', text: billing_address_example_data[:first_name])
-    find('dt', text: 'Last Name').assert_sibling('dd', text: billing_address_example_data[:last_name])
-    find('dt', text: 'Phone').assert_sibling('dd', text: billing_address_example_data[:phone])
-  end
+  within('.pf-c-page__main') do
+    within('section', text: 'Personal Details') do
+      find('dt', text: 'First Name').assert_sibling('dd', text: billing_address_example_data[:first_name])
+      find('dt', text: 'Last Name').assert_sibling('dd', text: billing_address_example_data[:last_name])
+      find('dt', text: 'Phone').assert_sibling('dd', text: billing_address_example_data[:phone])
+    end
 
-  within('section', text: 'Credit Card Details') do
-    find('dt', text: 'Credit card number').assert_sibling('dd', text: "XXXX-XXXX-XXXX-#{credit_card_example_data[:partial_number]}")
-    find('dt', text: 'Expiration date').assert_sibling('dd', text: buyer_credit_card_expiration_date.strftime('%B %Y'))
-  end
+    within('section', text: 'Credit Card Details') do
+      find('dt', text: 'Credit card number').assert_sibling('dd', text: "XXXX-XXXX-XXXX-#{credit_card_example_data[:partial_number]}")
+      find('dt', text: 'Expiration date').assert_sibling('dd', text: buyer_credit_card_expiration_date.strftime('%B %Y'))
+    end
 
-  within('section', text: 'Billing Address') do
-    find('dt', text: 'Company').assert_sibling('dd', text: billing_address_example_data[:company])
-    find('dt', text: 'Address').assert_sibling('dd', text: billing_address_example_data[:street_address])
-    find('dt', text: 'Zip').assert_sibling('dd', text: billing_address_example_data[:postal_code])
-    find('dt', text: 'City').assert_sibling('dd', text: billing_address_example_data[:locality])
-    find('dt', text: 'State').assert_sibling('dd', text: billing_address_example_data[:region])
-    find('dt', text: 'Country').assert_sibling('dd', text: billing_address_example_data[:country_name])
+    within('section', text: 'Billing Address') do
+      find('dt', text: 'Company').assert_sibling('dd', text: billing_address_example_data[:company])
+      find('dt', text: 'Address').assert_sibling('dd', text: billing_address_example_data[:street_address])
+      find('dt', text: 'Zip').assert_sibling('dd', text: billing_address_example_data[:postal_code])
+      find('dt', text: 'City').assert_sibling('dd', text: billing_address_example_data[:locality])
+      find('dt', text: 'State').assert_sibling('dd', text: billing_address_example_data[:region])
+      find('dt', text: 'Country').assert_sibling('dd', text: billing_address_example_data[:country_name])
+    end
   end
 end

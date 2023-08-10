@@ -1,12 +1,29 @@
 - content_for(:title)
   = "Single Sign-on Integrations"
 
-table.data
+- content_for :page_header_title, "Single Sign-on Integrations"
+
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Authentication providers table"
   thead
-    tr
-      th Integration
+    tr role="row"
+      th role="columnheader" scope="col" Integration
       - if branding_relevant?
-        th Branding
-      th State
-  tbody
-    = render partial: 'authentication_provider', collection: @authentication_providers
+        th role="columnheader" scope="col" Branding
+      th role="columnheader" scope="col" State
+  tbody role="rowgroup"
+    - for authentication_provider in @authentication_providers
+      tr role="row"
+        td role="cell" data-label="Integration" class="provider"
+          - link = "#{icon(authentication_provider.kind, fixed_width: true)} #{authentication_provider.human_kind}".html_safe
+          - url = authentication_provider.persisted? ? \
+              provider_admin_authentication_provider_path(authentication_provider) : \
+              new_provider_admin_authentication_provider_path(kind: authentication_provider.kind)
+          - if authentication_provider.in_iam_tools_scope?
+            = switch_link link, url, switch: authentication_provider.authorization_scope, upgrade_notice: true
+          - elsif authentication_provider.in_social_scope?
+            = link_to link, url
+        - if branding_relevant?
+          td role="cell" data-label="Branding"
+            = authentication_provider.in_social_scope? ? authentication_provider.human_state_name : '-'
+        td role="cell" data-label="State"
+          = authentication_provider.published ? 'Published' : 'Hidden'

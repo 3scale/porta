@@ -319,10 +319,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
 
       post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'Name can\'t be blank', flash[:error]
 
       post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'System name invalid', flash[:error]
     end
   end
 
@@ -340,7 +340,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'not success update' do
-      Service.any_instance.stubs(update_attributes: false)
+      Service.any_instance.stubs(update: false)
       put admin_service_path(service), params: { service: { name: 'Supetramp' } }
       assert_response :redirect
     end

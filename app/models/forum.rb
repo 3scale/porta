@@ -30,7 +30,7 @@ class Forum < ApplicationRecord
   attr_protected :topics_count, :posts_count, :account_id, :tenant_id
 
   def latest_posts
-    posts.joins(:topic).order('posts.created_at desc')
+    posts.joins(:topic).order('posts.created_at DESC')
   end
 
   def to_param

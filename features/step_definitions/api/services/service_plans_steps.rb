@@ -19,12 +19,12 @@ Then "any new application of that product will be subscribed using this plan" do
   assert_equal @plan, Cinstance.last.buyer_account.bought_service_contracts.last.plan
 end
 
-When "an admin is in the service plans page" do
-  visit admin_service_service_plans_path(default_service)
+When "an admin is on the service plans page of {product}" do |product|
+  visit admin_service_service_plans_path(product)
 end
 
 Then "they can add new service plans" do
-  click_link 'Create Service plan'
+  click_link 'Create service plan'
   fill_in('Name', with: 'Basic')
   click_on 'Create Service plan'
 
@@ -105,4 +105,19 @@ Given "a service plan has been deleted" do
 
   visit admin_service_service_plans_path(default_service)
   @plan.destroy
+end
+
+When "there are other services with service plans" do
+  FactoryBot.create_list(:service, 3, account: @provider).each do |service|
+    assert_equal 1, service.service_plans.count
+  end
+end
+
+When "the product has multiple service plans" do
+  FactoryBot.create(:service_plan, issuer: @product, name: 'An extra plan')
+  FactoryBot.create(:service_plan, issuer: @product, name: 'Another extra plan')
+end
+
+Then "only service plans of the product are listed" do
+  assert_plans_table @product.service_plans
 end

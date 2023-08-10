@@ -28,7 +28,7 @@ class Admin::Api::AccountPlansController < Admin::Api::BaseController
   # Account Plan Update
   # PUT /admin/api/account_plans/{id}.xml
   def update
-    account_plan.update_attributes(account_plan_update_params)
+    account_plan.update(account_plan_update_params)
     respond_with(account_plan)
   end
 

@@ -1,11 +1,7 @@
-= render 'buyers/accounts/menu'
+- content_for :menu do
+  = render 'buyers/accounts/menu'
 
 = render '/finance/provider/shared/invoice_title', invoice: @invoice
-
-table class="invoice"
-  caption
-    ' Edit Details
-    = link_to 'cancel', :back, class: "next"
 
 div class="wide"
   = semantic_form_for @invoice,

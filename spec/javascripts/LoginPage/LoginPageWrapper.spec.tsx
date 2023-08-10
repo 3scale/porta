@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { SimpleLoginPage } from 'LoginPage/LoginPageWrapper'
+import { SimpleLoginPage } from 'Login/components/LoginPage'
 
-import type { Props } from 'LoginPage/LoginPageWrapper'
+import type { Props } from 'Login/components/LoginPage'
 
 const props: Props = {
   authenticationProviders: [],

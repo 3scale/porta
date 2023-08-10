@@ -22,7 +22,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_response_code_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json "period" => { "name" => "day",
                               "granularity" => "hour",
@@ -44,7 +44,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json "period" => { "name" => "day",
                               "granularity" => "hour",
@@ -73,7 +73,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json_contains "period" => { "name" => "day",
                                        "granularity" => "hour",
@@ -91,7 +91,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json_contains "period" => { "name" => "day",
                                        "granularity" => "hour",
                                        "since" => Time.zone.parse("2009-12-11T07:00:00+12:00"),
@@ -115,7 +115,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'UTC', skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json "period" => { "name" => "day",
                               "granularity" => "hour",
@@ -151,7 +151,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json "period" => { "name" => "year",
                               "granularity" => "month",
@@ -186,7 +186,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Azores', since: "2010-01-01", skip_change: false }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     assert_json "period" => { "name" => "year",
                               "granularity" => "month",
@@ -216,7 +216,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     get top_applications_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: :month, metric_name: @metric.system_name }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
     assert_json "period" => { "name" => "month", "since" => "2009-12-01T00:00:00Z", "until" => "2009-12-31T23:59:59Z" },
                 "applications" => [{ "name" =>nil,
                                      "plan" => { "name" => plan.name, "id" => plan.id },

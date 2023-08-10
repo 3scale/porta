@@ -1,4 +1,4 @@
-= content_for :sublayout_title, 'Edit Backend Usage'
+- content_for :page_header_title, 'Edit Backend Usage'
 
 = semantic_form_for @backend_api_config, url: admin_service_backend_usage_path(@service, @backend_api_config) do |form|
   = form.inputs do

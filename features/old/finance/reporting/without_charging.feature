@@ -8,7 +8,7 @@ Feature: Billing Reporting Without Charging
   # - IF the bill in a given month is Zero (for whatever reason) no email is sent.
 
   Background:
-      Given a provider "not.charging"
+      Given a provider "not.charging" on 1st May 2009
         And all the rolling updates features are off
         And provider "not.charging" is billing but not charging
         And an application plan "ToRuleTheWorld" of provider "not.charging" for 42000 monthly

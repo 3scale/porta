@@ -1,56 +1,50 @@
-<h1>Finance Log</h1>
+<%- content_for :page_header_title, 'Finance Log' %>
 
-
-<table class='data' id='log-entries'>
+<table class="pf-c-table" role="grid" aria-label="Log entries table">
   <thead>
-    <tr>
-      <th>Account</th>
-      <th>Level</th>
-      <th>Time UTC</th>
-      <th>Description</th>
+    <tr role="row">
+      <th role="columnheader" scope="col">Account</th>
+      <th role="columnheader" scope="col">Level</th>
+      <th role="columnheader" scope="col">Time UTC</th>
+      <th role="columnheader" scope="col">Description</th>
     </tr>
-    <tr class="search">
-      <%- search_form do |s| -%>
-	<th>
-	  <%= s.text_field :buyer_query, :size => 50 , :class => :query, :placeholder => 'search by account' %>
-	</th>
-	<th></th>
-	<th></th>
-	<th>
-          <%= s.submit 'Search', :name => nil %>
-	</th>
+
+    <tr class="search" role="row">
+      <%= search_form do |s| -%>
+	      <th colspan="3">
+	        <%= s.text_field :buyer_query, size: 50 , class: :query, placeholder: 'search by account' %>
+	      </th>
+        <td>
+          <%= s.submit 'Search', name: nil %>
+	      </td>
       <% end %>
     </tr>
   </thead>
-  <tbody>
+
+  <tbody role="rowgroup">
     <% @log_entries.each do |entry| %>
-      <%= content_tag_for(:tr, entry, :class => entry.level) do %>
-
-	<td> <%= entry.buyer.try(:name) || '--GLOBAL--' %> </td>
-
-	<td class="level">
-	  <%= entry.level.to_s.upcase %>
-	</td>
-
-	<td class="created_at" title="<%= entry.created_at %>">
-	  <%= entry.created_at.strftime("%Y-%m-%d %H:%M") %>
-	</td>
-
-	<td>
-
-	  <%=
-             if entry.buyer
-               link_to entry.description, admin_buyers_account_invoices_path(entry.buyer)
-             else
-               entry.description
-             end
-	     %>
-	</td>
+      <%= content_tag_for(:tr, entry, class: entry.level, role: 'row') do %>
+	      <td role="cell" data-label="Account">
+          <%= entry.buyer.try(:name) || '--GLOBAL--' %>
+        </td>
+        <td role="cell" data-label="Level" class="level">
+          <%= entry.level.to_s.upcase %>
+        </td>
+        <td role="cell" data-label="Time UTC" class="created_at" title="<%= entry.created_at %>">
+          <%= entry.created_at.strftime("%Y-%m-%d %H:%M") %>
+        </td>
+	      <td role="cell" data-label="Description">
+          <%=
+            if entry.buyer
+              link_to entry.description, admin_buyers_account_invoices_path(entry.buyer)
+            else
+              entry.description
+            end
+	        %>
+	      </td>
       <% end %>
     <% end %>
   </tbody>
-  <tfoot>
-  </tfoot>
 </table>
 
 <%= will_paginate @log_entries %>

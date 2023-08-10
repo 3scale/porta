@@ -6,33 +6,9 @@ Feature: Public site access
   Background:
     Given a provider is logged in
 
-  @wip @3D
-  Scenario: Provider dashboard link takes to the admin side
-      And I follow "Admin" in the user widget
-    Then the current domain should be the master domain
-
-  @wip @3D
-  Scenario: Provider admin link takes to the admin side
-    When I follow "Admin" in the user widget
-    Then the current domain should be the master domain
-
-  @wip
-  Scenario: View site on a non-standard port
-    Then the current port should not be 80
-    When I follow "Site" in the user widget
-    Then the current domain should be foo.3scale.localhost
-      And the current port should not be 80
-
   @javascript
   Scenario: View site when site access code is set
-      And I follow "Developer Portal"
-      And I follow "Visit Portal"
-     Then the current domain in a new window should be foo.3scale.localhost
-      And I should not see field "Access code"
-
-  # Scenario: Master account has neither "view site" nor "admin" links
-  #    Given current domain is the admin domain of provider "foo.3scale.localhost"
-  #     When I log in as "superadmin"
-  #      And I go to the dashboard
-  #     Then I should not see link "Site" in the user widget
-  #     And I should not see link "Admin" in the user widget
+    When I follow "Developer Portal"
+    And I follow "Visit Portal"
+    Then the current domain in a new window should be foo.3scale.localhost
+    And I should not see field "Access code"

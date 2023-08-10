@@ -1,11 +1,9 @@
-ul.subsubmenu
-  li.SubSubMenuItem.SubSubMenuItem--trunk
-    = link_to_unless_current_styled "Application '#{@cinstance.name}'",
-      provider_admin_application_path(@cinstance),
-      title: "application",
-      class: "SubSubMenuItem-link"
-  li.SubSubMenuItem.SubSubMenuItem--leaf
-    = link_to_unless_current_styled "Analytics",
-      admin_buyers_stats_application_path(@cinstance),
-      title: "analytics",
-      class: "SubSubMenuItem-link"
+section class="pf-c-page__main-nav pf-m-limit-width"
+  div class="pf-c-page__main-body"
+    nav class="pf-c-nav pf-m-horizontal pf-m-tertiary" aria-label="Local"
+      ul class="pf-c-nav__list"
+        = pf4_nav_item "Application '#{@cinstance.name}'",
+          provider_admin_application_path(@cinstance)
+
+        = pf4_nav_item 'Analytics',
+          admin_buyers_stats_application_path(@cinstance)

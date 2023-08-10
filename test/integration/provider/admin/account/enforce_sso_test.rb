@@ -26,7 +26,7 @@ class Provider::Admin::Account::EnforceSSOTest < ActionDispatch::IntegrationTest
   end
 
   def test_destroy
-    @provider.settings.update_attributes(enforce_sso: true)
+    @provider.settings.update(enforce_sso: true)
     assert @provider.reload.settings.enforce_sso
     delete provider_admin_account_enforce_sso_path
     refute @provider.reload.settings.enforce_sso

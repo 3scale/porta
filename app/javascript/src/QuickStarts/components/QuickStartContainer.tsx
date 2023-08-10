@@ -3,6 +3,7 @@ import {
   QuickStartCatalogPage,
   useLocalStorage
 } from '@patternfly/quickstarts/dist/quickstarts-full.es'
+import { PageSection } from '@patternfly/react-core'
 
 import quickStarts from 'QuickStarts/templates'
 import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
@@ -48,11 +49,13 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
 
       {renderCatalog && (
         <div id={CATALOG_CONTAINER_ID}>
-          <QuickStartCatalogPage
-            showFilter
-            hint="Learn how to create, import, and run applications with step-by-step instructions and tasks."
-            title="Quick starts"
-          />
+          <PageSection>
+            <QuickStartCatalogPage
+              showFilter
+              hint="Learn how to create, import, and run applications with step-by-step instructions and tasks."
+              title="Quick starts"
+            />
+          </PageSection>
         </div>
       )}
     </PF4QuickStartContainer>

@@ -1,4 +1,4 @@
-class ProviderOauthFlowPresenter < OauthFlowPresenter
+class ProviderOAuthFlowPresenter < OAuthFlowPresenter
   delegate :human_kind, to: :authentication_provider
 
   include System::UrlHelpers.system_url_helpers

@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { SignupPage } from 'LoginPage/SignupPageWrapper'
+import { SignupPage } from 'Login/components/SignupPage'
 
-import type { Props } from 'LoginPage/SignupPageWrapper'
+import type { Props } from 'Login/components/SignupPage'
 
 const props: Props = {
   name: 'Bob Sponge',
@@ -31,7 +31,7 @@ it('should render <SignupForm/> child component', () => {
 
 it('should render error messages', () => {
   const wrapper = mount(<SignupPage {...props} />)
-  expect(wrapper.find('.pf-m-error').length).toEqual(2)
-  expect(wrapper.find('.pf-m-error').at(0).text()).toContain('username has already been taken')
-  expect(wrapper.find('.pf-m-error').at(1).text()).toContain('password is too short (minimum is 6 characters)')
+  expect(wrapper.find('FlashMessages .pf-m-error').length).toEqual(2)
+  expect(wrapper.find('FlashMessages .pf-m-error').at(0).text()).toContain('username has already been taken')
+  expect(wrapper.find('FlashMessages .pf-m-error').at(1).text()).toContain('password is too short (minimum is 6 characters)')
 })

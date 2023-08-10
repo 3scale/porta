@@ -96,7 +96,7 @@ module Authentication
       end
 
       def authenticated?(password)
-        ActiveSupport::SecurityUtils.variable_size_secure_compare(crypted_password.to_s, encrypt(password))
+        ActiveSupport::SecurityUtils.secure_compare(crypted_password.to_s, encrypt(password))
       end
 
       # FIXME: This method is not used anymore as we removed the callback

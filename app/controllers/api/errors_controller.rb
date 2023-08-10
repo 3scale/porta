@@ -6,8 +6,6 @@ class Api::ErrorsController < Api::BaseController
 
   activate_menu :serviceadmin, :monitoring, :errors
 
-  sublayout 'stats'
-
   def index
     @errors = errors_service.list(@service.id, pagination_params)
   end

@@ -68,7 +68,7 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
         remote_ip: @request.remote_ip,
         headers:   { "HTTP_FOO" => "bar" },
       }
-      transactions = {
+      transactions = [{
         app_id: @cinstance.application_id,
         usage:  { @metric => 1 },
         log: {
@@ -77,10 +77,11 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
           code: 200,
         },
         timestamp: Time.now.utc.to_s
-      }
+      }]
 
+      master_service = @master.default_service
       ThreeScale::Client.any_instance.expects(:report)
-        .with(transactions).returns(true)
+        .with(transactions: transactions, service_id: master_service.id, service_token: master_service.service_token).returns(true)
 
       assert ReportTrafficWorker.new.perform(@account.id, @metric, request_attrs, response_attrs)
 

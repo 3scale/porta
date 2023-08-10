@@ -88,7 +88,7 @@ module Logic
         # so if this method would be called twice,
         # it would try to create second constraints instead of updating the existing
         self.provider_constraints = constraints = provider_constraints
-        constraints.update_attributes(new_limits)
+        constraints.update(new_limits)
       end
 
       private

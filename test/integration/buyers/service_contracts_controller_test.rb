@@ -85,12 +85,25 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'does not render a prompt if there is a default service plan' do
-      service.update_attributes(default_service_plan: service_plan)
+      service.update(default_service_plan: service_plan)
 
       get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
 
       page = Nokogiri::HTML4::Document.parse(response.body)
       assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).exclude?('Please select')
+    end
+
+    test 'no n+1 queries on index' do
+      populate = ->(n) do
+        n.times do
+          buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+          service_contract = FactoryBot.create(:simple_service_contract, plan: service_plan, user_account: buyer)
+        end
+      end
+
+      assert_perform_constant_number_of_queries(populate: populate) do
+        get admin_buyers_service_contracts_path
+      end
     end
   end
 
@@ -119,7 +132,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_service_contracts_path
       assert_response :success
       page = Nokogiri::HTML4::Document.parse(response.body)
-      service_contract_ids = page.xpath("//table[@class='data']/tbody/tr/@id").map { |id| id.text[/\d+/].to_i }
+      service_contract_ids = page.xpath("//table/tbody/tr/@id").map { |id| id.text[/\d+/].to_i }
       assert_includes service_contract_ids, service_contract.id
       assert_not_includes service_contract_ids, forbidden_service_contract.id
     end

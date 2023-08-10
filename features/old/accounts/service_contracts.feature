@@ -19,8 +19,20 @@ Feature: Account service plans management
 
   Scenario: Link to service contracts on account page in enterprise
     When I am on the buyer account page for "bob"
-    And I follow "Developer Portal" in the main menu
-    Then I should see "Service Subscription"
+    And I should see menu items under "Developer Portal"
+      | Content              |
+      | Drafts               |
+      | Redirects            |
+      | Feature Visibility   |
+      | ActiveDocs           |
+      | Visit Portal         |
+      | Signup               |
+      | Service Subscription |
+      | New Application      |
+      | Domains & Access     |
+      | Spam Protection      |
+      | SSO Integrations     |
+      | Liquid Reference     |
 
   Scenario: Subscribe to service with selected service plan
     When I am on the buyer account service contracts page for "bob"

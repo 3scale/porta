@@ -1,4 +1,8 @@
-module MenuHelper
+# frozen_string_literal: true
+
+module MenuHelper # rubocop:disable Metrics/ModuleLength
+  include ApplicationHelper
+
   def main_menu_item(id, label, path, options = {})
     fake_active = respond_to?(:active_upgrade_notice) && (id == active_upgrade_notice)
     options[:active] = (id == active_menu) || fake_active
@@ -106,5 +110,71 @@ module MenuHelper
 
   def vertical_nav_hidden?(menu = active_menu)
     %i[dashboard products backend_apis quickstarts].include?(menu)
+  end
+
+  def masthead_props
+    {
+      brandHref: provider_admin_dashboard_path,
+      contextSelectorProps: context_selector_props.as_json,
+      currentAccount: current_account.name,
+      currentUser: current_user.decorate.display_name,
+      documentationMenuItems: documentation_items.as_json,
+      impersonating: impersonating?,
+      signOutHref: provider_logout_path,
+      verticalNavHidden: vertical_nav_hidden?
+    }
+  end
+
+  def context_selector_props
+    title, icon = active_title_and_icon
+    {
+      toggle: { title: title, icon: icon },
+      menuItems: [
+        { title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: false }, #active_menu == :dashboard },
+        { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: false },
+        { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: false }, #active_menu == :products },
+        { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: false }, #active_menu == :backend_apis },
+        { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: false }
+      ],
+    }
+  end
+
+  def active_title_and_icon
+    case active_menu
+    when :dashboard
+      %w[Dashboard home]
+    when :personal, :account, :active_docs
+      ['Account Settings', 'cog']
+    when :audience, :buyers, :finance, :cms, :site, :settings, :apis, :applications
+      %w[Audience bullseye]
+    when :serviceadmin, :monitoring, :products
+      %w[Products cubes]
+    when :backend_api, :backend_apis
+      %w[Backends cube]
+    when :quickstarts
+      ['--', '']
+    end
+  end
+
+  def documentation_items
+    items = [
+      { title: 'Customer Portal', href: '//access.redhat.com/products/red-hat-3scale', icon: :'external-link-alt', target: '_blank'},
+      { title: '3scale API Docs', href: provider_admin_api_docs_path, icon: :'puzzle-piece' },
+      { title: 'Liquid Reference', href: provider_admin_liquid_docs_path, icon: :code }
+    ]
+
+    if saas?
+      items.push(
+        { title: "What's new?", href: '//access.redhat.com/articles/3107441#newfeaturesenhancements', icon: :leaf, target: '_blank' }
+      )
+    end
+
+    if Features::QuickstartsConfig.enabled?
+      items.push(
+        { title: 'Quick starts', href: provider_admin_quickstarts_path, icon: :book }
+      )
+    end
+
+    items
   end
 end

@@ -1,19 +1,19 @@
-- content_for :sublayout_title, 'Configuration History'
+- content_for :page_header_title, 'Configuration History'
 
-table class="data"
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Configuration history table"
   thead
-    tr
-      th Configuration file
-      th Version
-      th Date
-      th Configured by
+    tr role="row"
+      th role="columnheader" scope="col" Configuration file
+      th role="columnheader" scope="col" Version
+      th role="columnheader" scope="col" Date
+      th role="columnheader" scope="col" Configured by
 
   tbody
     - @proxy_configs.each do |proxy_config|
-      tr
-        td = link_to proxy_config.filename, admin_service_proxy_config_path(@service, proxy_config.id)
-        td = proxy_config.version
-        td = proxy_config.created_at
-        td = proxy_config.user_display_name
+      tr role="row"
+        td role="cell" data-label="Configuration file" = link_to proxy_config.filename, admin_service_proxy_config_path(@service, proxy_config.id)
+        td role="cell" data-label="Version" = proxy_config.version
+        td role="cell" data-label="Date" = proxy_config.created_at
+        td role="cell" data-label="Configured by" = proxy_config.user_display_name
 
 = will_paginate(@proxy_configs)

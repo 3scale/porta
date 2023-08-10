@@ -35,7 +35,7 @@ def add_section_to_provider(provider, protection, name, path = nil)
 end
 
 Given "the {section_of_provider} is access restricted" do |section|
-  section.update_attributes({ :public => false })
+  section.update({ :public => false })
 end
 
 #TODO: use test_helper TestHelpers::SectionsPermissions

@@ -37,7 +37,7 @@ Feature: Bulk operations
     And I follow "Name"
     # there is no transision suspended => live
     Then I should see following table:
-      | Name ▲       | State     |
+      | Name         | State     |
       | LiveApp      | live      |
       | PendingApp   | live      |
       | SuspendedApp | suspended |
@@ -55,7 +55,7 @@ Feature: Bulk operations
     And I follow "Name"
     # pending cannot be changed to suspended
     Then I should see following table:
-      | Name ▲       | State     |
+      | Name         | State     |
       | LiveApp      | suspended |
       | PendingApp   | pending   |
       | SuspendedApp | suspended |
@@ -73,7 +73,7 @@ Feature: Bulk operations
     And I follow "Name"
     # resume = suspended => live
     Then I should see following table:
-      | Name ▲       | State   |
+      | Name         | State   |
       | LiveApp      | live    |
       | PendingApp   | pending |
       | SuspendedApp | live    |

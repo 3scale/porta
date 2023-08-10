@@ -2,17 +2,7 @@
 $table-columns-width: line-height-times(11);
 $search-header-width: line-height-times(4);
 
-// Utility styles
-// TODO: Move to a separate file
-.u-word-break-all {
-  word-break: break-all;
-}
-
-.u-word-break-word {
-  word-break: break-word;
-}
-
-table {
+table:not(.pf-c-table) {
   background-color: $body-background;
   width: 100%;
 
@@ -26,10 +16,6 @@ table {
     height: line-height-times(2);
     padding: line-height-times(1/2, true) line-height-times(1/2) line-height-times(1/2) 0;
     vertical-align: top;
-
-    &.u-underline {
-      border-bottom: $border-width solid $border-color;
-    }
   }
 
 
@@ -37,7 +23,7 @@ table {
     max-width: line-height-times(5);
   }
 
-  .operations,
+  .operations:not(.pf-c-table__action),
   td.action {
     padding-right: 0;
     text-align: right;
@@ -53,71 +39,21 @@ th.header {
   padding-top: line-height-times(2);
 }
 
-table.data {
-  @include white-box-shadow;
-  border: solid $body-background line-height-times(1);
-  margin-bottom: line-height-times(1);
-  margin-top: line-height-times(1/2);
-  width: 100%;
+// TODO: seek and destroy .is-inline, .StatsMethodsTable
 
-  a.is-inline {
-    display: inline;
-    padding: 0;
-    text-decoration: underline;
+table:not(.pf-c-table) a.action,
+table:not(.pf-c-table) button.action {
+  margin: line-height-times(-1/4) 0 line-height-times(-1/4) line-height-times(1/4);
+  white-space: nowrap;
+  display: inline-block;
+}
+
+table.list {
+  td,
+  th {
+    border-bottom: $border-width solid $border-color;
+    font-weight: $font-weight-normal;
   }
-
-  a {
-    display: block;
-    margin: line-height-times(-1/4) 0;
-    padding: line-height-times(1/4, true) 0;
-  }
-
-  thead {
-    vertical-align: middle;
-
-    th {
-      border-bottom: $border-width solid $border-color;
-      font-weight: $font-weight-bold;
-
-      &.actions,
-      &.right {
-        text-align: right;
-      }
-
-      a.down {
-        background: url('../images/arrow_down.gif')  no-repeat 100% 55%;
-        padding-right: line-height-times(1/2);
-      }
-
-      a.up {
-        background: url('../images/arrow_up.gif') no-repeat 100% 55%;
-        padding-right: line-height-times(1/2);
-      }
-
-      a {
-        &.up,
-        &.down {
-          background: none;
-          padding-right: 0;
-        }
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
-    }
-  }
-
-  tbody {
-    td.actions {
-      text-align: right;
-    }
-  }
-
-  &.u-sixEqualColumns tr td {
-    word-break: break-word;
-  }
-
 }
 
 .u-fiveEqualColumns {
@@ -131,15 +67,6 @@ table.data {
   td,
   th {
     width: 16.67%;
-  }
-}
-
-table.data,
-table.list {
-  td,
-  th {
-    border-bottom: $border-width solid $border-color;
-    font-weight: $font-weight-normal;
   }
 }
 
@@ -192,7 +119,7 @@ table.mini, table#configs {
 
 // --- components/tables.css ---
 
-table.list, table.data {
+table.list {
   border-collapse: collapse;
   border-color: transparent;
   margin-bottom: 0;
@@ -221,7 +148,7 @@ table .select {
   min-width: line-height-times(1);
 }
 
-table.data td, table.horizontal th {
+table.horizontal th {
   border-bottom: $border-width solid $border-color;
 }
 
@@ -255,15 +182,7 @@ table#contracts_table tr td.thhead {
   padding-top: 0;
 }
 
-table#metrics {
-  tr td.title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-table#backend_api_configs,table#mapping_rules {
+table#mapping_rules {
   tr th a, tr td.actions a {
     display: inline-block;
   }
@@ -292,15 +211,16 @@ table#mapping_rules .actions a.action.add {
   margin: line-height-times(-1/4) line-height-times(1 / 2);
 }
 
-table.data {
-  &.notification-settings,
-  &.StatsMethodsTable {
-    box-shadow: none;
-  }
-}
-
 td.metric,
 td.pattern,
 td.StatsMethodsTable-name {
   word-break: break-word;
+}
+
+// HACK: old tables that has a search form element get styled as a table-cell and it breaks the
+// total colspan. This rule makes sure the form is never visible and instead a "td" element fills
+// the colspan. Apparently this does not affect Chrome and Firefox.
+// TODO: this won't be necessary once all legacy tables have been upgraded with Patternfly.
+.pf-c-table form.search {
+  display: none;
 }

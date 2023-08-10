@@ -1,0 +1,8 @@
+/ This is dinamically rendered by app/views/provider/admin/applications/update_state.js.erb
+- if @cinstance.trial?
+  div class="pf-c-description-list__group" id="cinstance_trial"
+    dt class="pf-c-description-list__term"
+      span class="pf-c-description-list__text" Trial days left
+    dd class="pf-c-description-list__description"
+      div class="pf-c-description-list__text"
+        = remaining_trial_days(@cinstance)

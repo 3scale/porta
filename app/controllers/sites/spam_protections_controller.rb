@@ -1,5 +1,4 @@
 class Sites::SpamProtectionsController < Sites::BaseController
-  sublayout 'sites/developer_portals'
   activate_menu :audience, :cms, :spam_protection
 
   before_action :find_settings
@@ -8,7 +7,7 @@ class Sites::SpamProtectionsController < Sites::BaseController
   end
 
   def update
-    if @settings.update_attributes(params[:settings])
+    if @settings.update(params[:settings])
       flash[:notice] = 'Spam protection settings updated.'
       redirect_to edit_admin_site_spam_protection_url
     else

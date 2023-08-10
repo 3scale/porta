@@ -2,17 +2,22 @@
 
 Given "{provider} has the following buyers:" do |provider, table|
   #TODO: dry this with buyer_steps Given /^these buyers signed up to (plan "[^"]*"):
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+  parameterize_headers(table)
 
   table.hashes.each do |hash|
-    step %{a buyer "#{hash[:name]}" signed up to provider "#{provider.org_name}"}
+    buyer = FactoryBot.create(:buyer_account, provider_account: provider,
+                                              org_name: hash[:name],
+                                              buyer: true)
 
-    buyer = Account.buyers.find_by_org_name!(hash[:name])
+    buyer.update!(state: hash[:state]) if hash[:state]
+    buyer.update!(created_at: Chronic.parse(hash[:created_at])) if hash[:created_at]
+    buyer.update!(country: Country.find_by!(name: hash[:country])) if hash[:country].present?
 
-    buyer.update_attribute :state, hash[:state] if hash[:state]
-    buyer.update_attribute :created_at, Chronic.parse(hash[:created_at]) if hash[:created_at]
-    buyer.update_attribute :country, Country.find_by_name!(hash[:country]) if hash[:country].present?
-    buyer.bought_account_contract.change_plan!(provider.account_plans.find_by_name!(hash[:plan])) if hash[:plan]
+    next unless (plan_name = hash[:plan])
+
+    plan = provider.account_plans.find_by(name: plan_name) ||
+           create_plan(:account, name: plan_name, issuer: provider)
+    buyer.buy! plan
   end
 end
 

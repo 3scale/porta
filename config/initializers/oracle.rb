@@ -13,7 +13,7 @@ ActiveSupport.on_load(:active_record) do
     end
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-      # see https://github.com/rails/rails/issues/44114
+      # Remove when https://github.com/rsim/oracle-enhanced/issues/2237 is fixed
       self.use_old_oracle_visitor = true
     end
 

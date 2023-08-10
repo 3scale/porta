@@ -1,7 +1,7 @@
-import { RequestPasswordWrapper as RequestPassword } from 'LoginPage/RequestPasswordWrapper'
+import { RequestPasswordWrapper as RequestPassword } from 'Login/components/RequestPasswordPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Props } from 'LoginPage/RequestPasswordWrapper'
+import type { Props } from 'Login/components/RequestPasswordPage'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'pf-request-page-container'

@@ -24,7 +24,7 @@ end
 
 Then "the service will not have the default plan set" do
   visit admin_service_application_plans_path(@service)
-  assert_equal('No plan selected', find('#default_plan_card .pf-c-select input').value)
+  assert_equal('No plan selected', find('[data-ouia-component-id="default-plan-select"] input').value)
   assert_nil @service.reload.default_application_plan_id
 end
 
@@ -34,8 +34,8 @@ Then "any new application will use this plan" do
   visit new_provider_admin_application_path
   pf4_select_first(from: 'Account')
   pf4_select_first(from: 'Product')
-  find('.pf-c-form__label', text: 'Name').sibling('input').set('My App')
-  find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
+  fill_in_pf('Name', with: 'My App')
+  fill_in_pf('Description', with: 'This is some kind of application')
   click_on 'Create application'
 
   assert_equal @plan, Cinstance.last.plan
@@ -46,7 +46,9 @@ When "an admin is in the application plans page" do
 end
 
 Then "they can add new application plans" do
-  click_link 'Create application plan'
+  find("a[href='#{new_admin_service_application_plan_path(default_service)}']", text: 'Create application plan')
+    .click
+
   fill_in('Name', with: 'Basic')
   click_on('Create application plan', wait: 5)
 
@@ -222,16 +224,7 @@ Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
 end
 
 def plans_table
-  if page.has_css?('#plans_table .pf-c-table')
-    find('#plans_table .pf-c-table')
-  else
-    ThreeScale::Deprecation.warn "Detected outdated plans list, pending migration to PF4 React"
-    find(:css, '#plans')
-  end
-end
-
-def default_plan_select
-  find(:css, "select#default_plan")
+  find('[data-ouia-component-id="plans-table"]')
 end
 
 def new_application_plan_form

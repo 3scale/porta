@@ -7,6 +7,7 @@ class IndexingTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.clear
     ThinkingSphinx::Test.init
     ThinkingSphinx::Test.start index: false
+    ThinkingSphinx::Test.enable_search_jobs!
   end
 
   teardown do
@@ -56,9 +57,9 @@ class IndexingTest < ActiveSupport::TestCase
 
   # the idea is to double check #indexed_models lists all models, assuring we cover them all in tests
   test "all models with index methods are indexed" do
-    exclusions = [ActiveStorage::Blob, ActiveStorage::Attachment, ApplicationRecord, Plan, Cinstance, User]
-    index_modules = [Searchable, AccountIndex::ForAccount]
-    index_modules << TopicIndex unless System::Database.oracle?
+    exclusions = [ApplicationRecord, Plan, Cinstance, User]
+    index_modules = [Searchable, Indices::AccountIndex::ForAccount]
+    index_modules << Indices::TopicIndex unless System::Database.oracle?
 
     models = ActiveRecord::Base.descendants.select do |model|
       index_modules.any? { |mod| mod === model.new } unless exclusions.include?(model)
@@ -84,14 +85,6 @@ class IndexingTest < ActiveSupport::TestCase
   end
 
   private
-
-  def indexed_models
-    ThinkingSphinx::Test.indexed_models
-  end
-
-  def indexed_ids(model)
-    model.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY)
-  end
 
   def factory_for(model)
     overrides = {

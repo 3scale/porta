@@ -10,7 +10,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform
-    ThinkingSphinx::Test.disable_real_time_callbacks!
     perform_enqueued_jobs do
       perform_expectations
 
@@ -49,7 +48,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       features_plan = plan.features_plans.create!(feature: feature)
 
       assert_difference(plan.features_plans.method(:count), -1) do
-        perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteObjectHierarchyWorker.perform_now(feature) }
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(feature) }
       end
 
       assert_raises(ActiveRecord::RecordNotFound) { feature.reload }
@@ -81,7 +80,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     def test_perform_deserialization_error
       object.destroy!
       Rails.logger.expects(:info).with { |message| message.match(/DeleteObjectHierarchyWorker#perform raised ActiveJob::DeserializationError/) }
-      perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteObjectHierarchyWorker.perform_later(object) }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(object) }
     end
 
     def test_success_record_not_found
@@ -174,7 +173,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :member, :member_permission
 
     def test_perform
-      ThinkingSphinx::Test.disable_real_time_callbacks!
       perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(member) }
 
       assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }

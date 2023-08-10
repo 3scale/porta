@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PdfReportWorker
   include Sidekiq::Worker
 
@@ -37,8 +39,4 @@ class PdfReportWorker
   end
 
   delegate :logger, to: :Rails
-end
-
-if Rails.application.config.three_scale.daily_weekly_reports_pref
-  require_dependency 'pdf/report'
 end

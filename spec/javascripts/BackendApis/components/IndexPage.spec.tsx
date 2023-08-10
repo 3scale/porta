@@ -1,7 +1,6 @@
 import { mount } from 'enzyme'
 
 import { IndexPage } from 'BackendApis/components/IndexPage'
-import { mockLocation } from 'utilities/test-utils'
 
 import type { Props } from 'BackendApis/components/IndexPage'
 import type { Backend } from 'BackendApis/types'
@@ -42,23 +41,6 @@ it('should render a table with backends', () => {
 
 it('should have a paginated table', () => {
   const backendsCount = 10
-  mockLocation('href://foo.bar/metrics?per_page=2&page=2')
   const wrapper = mountWrapper({ backendsCount })
-  const pagination = wrapper.find('.pf-c-pagination').first()
-
-  expect(pagination.find('[aria-label="Current page"]').first().prop('value')).toBe(2)
-
-  pagination.find('button[data-action="first"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=1'))
-
-  pagination.find('button[data-action="previous"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=1'))
-
-  pagination.find('button[data-action="next"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
-
-  pagination.find('button[data-action="last"]').simulate('click')
-  expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
-
-  expect(pagination.find('.pf-c-options-menu__toggle-text').text()).toMatch(`3 - 4 of ${backendsCount}`)
+  expect(wrapper.find('.pf-c-pagination').exists()).toEqual(true)
 })

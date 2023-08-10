@@ -1,7 +1,4 @@
-require_dependency 'pdf/finance/invoice_report_data'
-require_dependency 'pdf/finance/invoice_generator'
-
-require_dependency 'month'
+# frozen_string_literal: true
 
 # TODO: add uniqueness check on provider/buyer/period scope
 #
@@ -45,7 +42,10 @@ class Invoice < ApplicationRecord
   attr_accessible :provider_account, :buyer_account, :friendly_id, :period
 
   validates :provider_account, :buyer_account, :friendly_id, presence: true
+
   validates :period, presence: { :message => 'Billing period format should be YYYY-MM' }
+
+  validate :period_range_valid?, if: -> { period.present? && will_save_change_to_period? }
 
   validates :friendly_id, format: { with: /\A\d{4}(-\d{2})?-\d{8}\Z/,
                                     message: 'format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX',
@@ -65,7 +65,7 @@ class Invoice < ApplicationRecord
   scope :due_on_or_before, ->(date) { where('due_on <= ?', date ) }
   scope :finalized_before, ->(date) { where("state='finalized' AND finalized_at <= ?", date) }
 
-  # The month should be a YYYY-MM formated string.
+  # The month should be a YYYY-MM formatted string.
   scope :by_month, ->(month) { where(:period => ::Month.parse_month(month)) }
   scope :by_year, ->(year) {  where.has { sift(:year, period) ==  year } }
   scope :by_month_number, ->(month) {  where.has { sift(:month_number, period) == month } }
@@ -439,21 +439,20 @@ class Invoice < ApplicationRecord
     ensure_payable_state!
 
     unless chargeable?
-      logger.info "Not charging invoice ID #{self.id} (#{reason_cannot_charge})"
+      logger.info "Not charging invoice #{id} (buyer #{buyer_account_id}), reason: #{reason_cannot_charge}"
       cancel! unless positive?
       return
     end
 
     if buyer_account.charge!(cost, :invoice => self)
-      provider.billing_strategy.try!(:info , "Charging invoice for #{buyer.name} for period #{period}", buyer)
+      provider.billing_strategy&.info("Invoice #{id} (buyer #{buyer_account_id}) for period #{period} was charged, marking as paid", buyer)
       pay!
     else
-      logger.info("Invoice(#{self.id}) was not charged")
+      logger.info("Invoice #{id} (buyer #{buyer_account_id}) was not charged")
       false
     end
   rescue Finance::Payment::CreditCardError, ActiveMerchant::ActiveMerchantError
-    provider.billing_strategy.try!(:error, "Charging for invoice for #{buyer.name} error", buyer)
-    logger.info("Error charging invoice #{self.id}")
+    provider.billing_strategy&.error("Error when charging invoice #{id} (buyer #{buyer_account_id})", buyer)
 
     if automatic
       self.charging_retries_count += 1
@@ -462,10 +461,10 @@ class Invoice < ApplicationRecord
       # REFACTOR: Move the logic to InvoiceMessenger
       if charging_retries_count < MAX_CHARGE_RETRIES
         if unpaid?
-          logger.info("Retrying #{self.id}, unpaid")
+          logger.info("Invoice #{id} (buyer #{buyer_account_id}) remains unpaid after #{charging_retries_count} attempts, will be retried")
           save!
         else
-          logger.info("Retrying #{self.id}, marking as unpaid")
+          logger.info("Marking invoice #{id} (buyer #{buyer_account_id}) as unpaid, will be retried")
           mark_as_unpaid!
         end
 
@@ -479,7 +478,7 @@ class Invoice < ApplicationRecord
         event = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)
       else
-        logger.info("Retrying #{self.id} failed (too many retries)")
+        logger.info("Marking invoice #{id} (buyer #{buyer_account_id}) as failed (too many retries)")
         fail!
         # TODO: Decouple the notification to observer and delete the IF
         InvoiceMessenger.unsuccessfully_charged_for_buyer_final(self).deliver
@@ -498,7 +497,7 @@ class Invoice < ApplicationRecord
   def ensure_payable_state!
     return if state_events.include?(:pay)
 
-    logger.info("Invoice(#{self.id}) was not charged because the state events don't include :pay")
+    logger.info("Invoice #{id} (buyer #{buyer_account_id}) was not charged because the state events don't include :pay")
     raise InvalidInvoiceStateException.new("Invoice #{id} is not in chargeable state!")
   end
 
@@ -529,18 +528,6 @@ class Invoice < ApplicationRecord
     opened.by_provider(buyer.provider_account)
            .where(['invoices.buyer_account_id = ?', buyer.id ])
            .reorder('period DESC, created_at DESC').first
-  end
-
-  # TODO: are those needed without provider/buyer scope?
-  # The month should be a YYYY-MM formated string.
-  def self.find_by_month(month)
-    by_month(month).first
-  end
-
-  # TODO: are those needed without provider/buyer scope?
-  def self.find_by_month!(month)
-    find_by_month(month) ||
-      raise(ActiveRecord::RecordNotFound, "Couldn't find #{name} by month=#{month}")
   end
 
   # TODO: investigate this ... should not be happening on-demand
@@ -602,7 +589,7 @@ class Invoice < ApplicationRecord
 
   # Returns years which have invoice
   def self.years
-    self.connection.select_values(selecting { sift(:year, period).as('year') }.reorder('year desc').to_sql).map(&:to_i)
+    self.connection.select_values(selecting { sift(:year, period).as('year') }.distinct.reorder('year DESC').to_sql).map(&:to_i)
   end
 
   protected
@@ -611,5 +598,16 @@ class Invoice < ApplicationRecord
     run_after_commit do
       InvoiceMessenger.successfully_charged(self).deliver
     end
+  end
+
+  private
+
+  # Allowed range for the invoice period is:
+  # - from: creation date of the provider
+  # - to: 12 months from now
+  def period_range_valid?
+    return if self[:period]&.between?(provider_account.created_at.to_date.beginning_of_month, Time.zone.now + 12.months)
+
+    errors.add(:period, :invalid_range)
   end
 end

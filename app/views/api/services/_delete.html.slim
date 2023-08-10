@@ -1,12 +1,13 @@
 - if can?(:destroy, service)
-  hr
-  h3
-    ' Product deletion
+  div.pf-c-content
+    hr
+    h3
+      ' Product deletion
 
-  p
-    ' Deleting this product will
-    strong> irreversibly destroy
-    ' all applications, application plans, metrics, pricing rules, features, service plans and subscriptions of this product. Therefore all authorization and reporting calls for this product will no longer be valid.
+    p
+      ' Deleting this product will
+      strong> irreversibly destroy
+      ' all applications, application plans, metrics, pricing rules, features, service plans and subscriptions of this product. Therefore all authorization and reporting calls for this product will no longer be valid.
 
-  p
-    = delete_service_link(service, label: "I understand the consequences, proceed to delete '#{j(service.name)}' product")
+    p
+      = delete_service_link(service, label: "I understand the consequences, proceed to delete '#{j(service.name)}' product")

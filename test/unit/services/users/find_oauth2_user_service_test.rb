@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Users::FindOauth2UserServiceTest < ActiveSupport::TestCase
+class Users::FindOAuth2UserServiceTest < ActiveSupport::TestCase
 
   UsersDouble = Class.new(ActiveRecord::Relation)
 
@@ -91,6 +91,6 @@ class Users::FindOauth2UserServiceTest < ActiveSupport::TestCase
   end
 
   def service
-    Users::FindOauth2UserService
+    Users::FindOAuth2UserService
   end
 end

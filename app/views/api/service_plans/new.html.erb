@@ -1,6 +1,4 @@
-<% content_for :sublayout_title do %>
-  <h2>Create new Service Plan of '<%= h @service.name %>'</h2>
-<% end %>
+<% content_for :page_header_title, "Create new Service Plan of #{@service.name}" %>
 
 <%= semantic_form_for @plan, :url => admin_service_service_plans_path(@service) do |form| %>
   <%= render :partial => 'form', :object => form %>

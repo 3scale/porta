@@ -12,17 +12,16 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   wrap_parameters :template, include: AVAILABLE_PARAMS,
                              format: %i[json multipart_form url_encoded_form]
 
-  forbid_extra_params :reject, whitelist: %i[id page per_page type layout_name section_name]
+  forbid_extra_params :reject, whitelist: %i[id page per_page type layout_name section_name content]
 
   before_action :find_template, except: %i[index create]
-
-  before_action :can_destroy, only: :destroy
 
   # Template List
   # GET /admin/api/cms/templates.json
   def index
     templates = cms_templates.scope_search(search).paginate(pagination_params)
-    respond_with(templates, short: true, representer: CMS::TemplatesRepresenter)
+    short = !content?
+    respond_with(templates, short: short, representer: CMS::TemplatesRepresenter)
   end
 
   # Template Create
@@ -52,8 +51,10 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   # Template Delete
   # DELETE /admin/api/cms/templates/{id}.json
   def destroy
-    @template.destroy
+    Admin::Api::CMS::TemplateService::Destroy.call(@template)
     respond_with(@template)
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
+    render_error exception.message, status: :unprocessable_entity
   end
 
   # Template Publish
@@ -85,11 +86,11 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     @template.class.name[5..-1].parameterize.to_sym if @template.present?
   end
 
-  def can_destroy
-    head :locked unless @template.respond_to?(:destroy)
-  end
-
   def cms_templates
     current_account.templates.but(CMS::EmailTemplate, CMS::Builtin::LegalTerm).order(:id)
+  end
+
+  def content?
+    params[:content] == "true"
   end
 end

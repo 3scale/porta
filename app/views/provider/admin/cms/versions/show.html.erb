@@ -1,8 +1,9 @@
-<h1>Version of <%= @page.class.model_name.human %> <%= @page.title %></h1>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Version of #{@page.class.model_name.human} #{@page.title}",
+                                                                      body: "Showing #{@version.state} version from #{l @version.updated_at}." } %>
 
-<p>Showing <%= @version.state %> version from <%= l @version.updated_at %>.</p>
-
-<%= text_area_tag "cms_template_version", @version.current %>
+<section class="pf-c-page__main-section pf-m-light">
+  <%= text_area_tag "cms_template_version", @version.current %>
+</section>
 
 <%= render '/provider/admin/cms/codemirror',
            :html_id => :cms_template_version,

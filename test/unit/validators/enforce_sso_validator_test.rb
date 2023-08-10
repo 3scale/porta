@@ -23,7 +23,7 @@ class EnforceSSOValidatorTest < ActiveSupport::TestCase
     refute service.valid?
     assert_match 'You need to be logged in by SSO', service.error_message
 
-    @user_session.update_attributes(sso_authorization_id: sso_authorization.id)
+    @user_session.update(sso_authorization_id: sso_authorization.id)
     service = EnforceSSOValidator.new(@user_session)
     assert service.valid?
     assert_empty service.error_message

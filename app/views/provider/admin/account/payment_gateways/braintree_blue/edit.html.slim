@@ -1,8 +1,8 @@
-h2
+- content_for :page_header_title do
   = site_account.org_name
   |  Payment Details
 
-p
+- content_for :page_header_body do
   ' Update your credit card details here to set up monthly billing for your
   => current_account.provider_account.org_name
   ' service. You'll be charged monthly around the 7th of the following month and

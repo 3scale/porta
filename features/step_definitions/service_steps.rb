@@ -5,7 +5,7 @@ Given 'a product' do
 end
 
 Given "a service {string} of {provider}" do |name, provider|
-  provider.services.create! :name => name, :mandatory_app_key => false
+  @service = provider.services.create! name: name, mandatory_app_key: false
 end
 
 Given /^a service "([^"]*)"$/ do |name|
@@ -64,6 +64,10 @@ Then /^I should see the following backends being used:$/ do |table|
       should have_css('[data-label="Name"]', text: row[0])
     end
   end
+end
+
+When "an admin is reviewing services index page" do
+  visit admin_services_path
 end
 
 def backends_used_table

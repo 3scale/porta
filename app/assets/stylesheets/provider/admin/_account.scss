@@ -16,11 +16,6 @@
   }
 
   .overview-box {
-
-    table.data {
-      border-top-width: line-height-times(1 / 2);
-    }
-
     table.list {
       @include white-box-shadow;
       margin: 1px;

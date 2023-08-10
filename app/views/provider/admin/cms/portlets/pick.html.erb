@@ -1,20 +1,22 @@
-<h1>Pick a Portlet</h1>
-<p>Which portlet would you like to create today?</p>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: 'Pick a Portlet',
+                                                                      body: 'Which portlet would you like to create today?' } %>
 
-<table class="data">
-  <thead>
-    <tr>
-      <th>Portlet</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @available_portlets.each do |portlet| %>
+<section class="pf-c-page__main-section pf-m-light">
+  <table>
+    <thead>
       <tr>
-        <td><%= link_to portlet.human_name, :action => :new, :type => portlet %></td>
-        <td><%= portlet.description %></td>
+        <th>Portlet</th>
+        <th>Description</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @available_portlets.each do |portlet| %>
+        <tr>
+          <td><%= link_to portlet.human_name, :action => :new, :type => portlet %></td>
+          <td><%= portlet.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>

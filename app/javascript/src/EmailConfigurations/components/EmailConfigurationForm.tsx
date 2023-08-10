@@ -14,8 +14,6 @@ import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNa
 import type { FunctionComponent, FormEvent } from 'react'
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
-import './EmailConfigurationForm.scss'
-
 interface Props {
   url: string;
   emailConfiguration: FormEmailConfiguration;
@@ -23,11 +21,13 @@ interface Props {
   errors?: FormErrors;
 }
 
+const emptyObject = {} as never
+
 const EmailConfigurationForm: FunctionComponent<Props> = ({
   url,
   emailConfiguration,
   isUpdate = false,
-  errors = {}
+  errors = emptyObject
 }) => {
   const FORM_ID = 'email-configuration-form'
   const [email, setEmail] = useState<string>(emailConfiguration.email ?? '')
@@ -81,6 +81,7 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
 
   return (
     <Form
+      isWidthLimited
       acceptCharset="UTF-8"
       action={url}
       id={FORM_ID}

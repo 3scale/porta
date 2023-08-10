@@ -1,44 +1,50 @@
-table#mapping_rules.data
-  thead
-    tr
-      th = sortable('proxy_rules.http_method', 'Verb')
-      th = sortable('proxy_rules.pattern', 'Pattern')
-      - if local_assigns[:include_redirect]
-        th Redirect
-      th title="increment" +
-      th = sortable('metrics.friendly_name', 'Metric or method')
-      th = sortable('proxy_rules.last', 'Last?')
-      th = sortable('proxy_rules.position', 'Position')
-      th
-    tr.search
-      = search_form do |s|
-        th
-        th colspan="3"
-          = s.text_field :query, size: 20, class: :query, placeholder: 'Search for pattern'
-        th colspan="4"
-          = s.button 'Search', name: 'commit', data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
-  tbody
-    - proxy_rules.each do |rule|
-      tr
-        td.http_method
-          = rule.http_method
-        td.pattern
-          = rule.pattern
-          - if rule.pattern == '/'
-            span.fa.fa-exclamation-triangle.disabled#catch-all-warning title=(t('api.integrations.proxy.proxy_rule_catch_all_warning'))
+div class="pf-c-card"
+  table id="mapping_rules" class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Mapping rules table"
+    thead
+      tr role="row"
+        = th_sortable('proxy_rules.http_method', 'Verb')
+        = th_sortable('proxy_rules.pattern', 'Pattern')
         - if local_assigns[:include_redirect]
-          td.redirect_url
-            = rule.redirect_url
-        td.delta
-          = rule.delta
-        td.metric
-          = rule.metric.friendly_name
-        td.last_called_and_position
-          = rule.last
-        td.position
-          = rule.position
-        td.actions
-          = link_to '', proxy_rule_path_for(rule, edit: true), class: 'action edit'
-          = link_to '', proxy_rule_path_for(rule), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+          td role="columnheader" scope="col" Redirect
+        td role="columnheader" scope="col" title="increment" +
+        = th_sortable('metrics.friendly_name', 'Metric or method')
+        = th_sortable('proxy_rules.last', 'Last?')
+        = th_sortable('proxy_rules.position', 'Position')
+        th
+      tr role="row" class="search"
+        = search_form do |s|
+          th
+          th colspan="3"
+            = s.text_field :query, size: 20, class: :query, placeholder: 'Search for pattern'
+          th colspan="4"
+            = s.button 'Search', name: 'commit', data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
+    tbody role="rowgroup"
+      - proxy_rules.each do |rule|
+        tr role="row"
+          td role="cell" data-label="Verb" class="http_method"
+            = rule.http_method
+          td role="cell" data-label="Pattern" class="pattern"
+            = rule.pattern
+            - if rule.pattern == '/'
+              span.fa.fa-exclamation-triangle.disabled#catch-all-warning title=(t('api.integrations.proxy.proxy_rule_catch_all_warning'))
+          - if local_assigns[:include_redirect]
+            td role="cell" data-label="Redirect" class="redirect_url"
+              = rule.redirect_url
+          td role="cell" data-label="+" class="delta"
+            = rule.delta
+          td role="cell" data-label="Metric or method" class="metric"
+            = rule.metric.friendly_name
+          td role="cell" data-label="Last?" class="last_called_and_position"
+            = rule.last
+          td role="cell" data-label="Position" class="position"
+            = rule.position
+          td role="cell" class="pf-c-table__action"
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = link_to '', proxy_rule_path_for(rule, edit: true), class: 'action edit'
+                  div class="pf-c-overflow-menu__item"
+                    = link_to '', proxy_rule_path_for(rule), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
 
-= will_paginate(@proxy_rules)
+  = will_paginate(@proxy_rules)

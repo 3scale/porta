@@ -6,9 +6,10 @@ import {
   LevelItem,
   PageSection,
   PageSectionVariants,
-  PaginationVariant,
-  Title,
+  Text,
+  TextContent,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 
@@ -19,8 +20,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 import type { IActions } from '@patternfly/react-table'
 import type { Backend } from 'BackendApis/types'
-
-import './IndexPage.scss'
 
 interface Props {
   newBackendPath: string;
@@ -62,37 +61,49 @@ const IndexPage: FunctionComponent<Props> = ({
   }))
 
   return (
-    <PageSection id="backend-apis-index-page" variant={PageSectionVariants.light}>
-      <Level>
-        <LevelItem>
-          <Title headingLevel="h1" size="2xl">Backends</Title>
-        </LevelItem>
-        <LevelItem>
-          <Button component="a" href={newBackendPath} variant="primary">
-            Create Backend
-          </Button>
-        </LevelItem>
-      </Level>
-      <p>Explore and manage all your internal APIs.</p>
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <TextContent>
+          <Level>
+            <LevelItem>
+              <Text component="h1">Backends</Text>
+            </LevelItem>
+            <LevelItem>
+              <Button component="a" href={newBackendPath} variant="primary">
+                Create Backend
+              </Button>
+            </LevelItem>
+          </Level>
+          <Text component="p">Explore and manage all your internal APIs.</Text>
+        </TextContent>
+      </PageSection>
+
       <Divider />
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="top-toolbar">
-        <ToolbarItem>
-          <ToolbarSearch placeholder="Find a backend" />
-        </ToolbarItem>
-        <ToolbarItem>
-          <Pagination itemCount={backendsCount} />
-        </ToolbarItem>
-      </Toolbar>
-      <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
-        <TableHeader />
-        <TableBody />
-      </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        <ToolbarItem>
-          <Pagination itemCount={backendsCount} variant={PaginationVariant.bottom}    />
-        </ToolbarItem>
-      </Toolbar>
-    </PageSection>
+
+      <PageSection variant={PageSectionVariants.light}>
+        <Toolbar id="top-toolbar">
+          <ToolbarContent>
+            <ToolbarItem variant="search-filter">
+              <ToolbarSearch placeholder="Find a backend" />
+            </ToolbarItem>
+            <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+              <Pagination itemCount={backendsCount} />
+            </ToolbarItem>
+          </ToolbarContent>
+        </Toolbar>
+        <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
+          <TableHeader />
+          <TableBody />
+        </Table>
+        <Toolbar id="bottom-toolbar">
+          <ToolbarContent>
+            <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+              <Pagination itemCount={backendsCount} />
+            </ToolbarItem>
+          </ToolbarContent>
+        </Toolbar>
+      </PageSection>
+    </>
   )
 }
 

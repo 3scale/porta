@@ -24,7 +24,7 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingController < Pr
   private
 
   def auth_presenter
-    ProviderOauthFlowPresenter.new(authentication_provider, request, request.host)
+    ProviderOAuthFlowPresenter.new(authentication_provider, request, request.host)
   end
 
   def authentication_providers

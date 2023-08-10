@@ -1,3 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const environment = require('./environment')
 
@@ -20,7 +22,9 @@ const tsLoader = environment.loaders.get('ts')
 tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
 
 environment.plugins.append('BundleAnalyzerPlugin',
-  new BundleAnalyzerPlugin()
+  new BundleAnalyzerPlugin({
+    openAnalyzer: false
+  })
 )
 
 module.exports = environment.toWebpackConfig()

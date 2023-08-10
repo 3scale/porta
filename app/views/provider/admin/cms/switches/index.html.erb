@@ -1,35 +1,50 @@
-<h2>Feature Visibility</h2>
-
-<p>Some <b>advanced features</b> of the 3scale platform are by default not
+<% content_for :page_header_title, 'Feature Visibility' %>
+<% content_for :page_header_body do %>
+  Some <b>advanced features</b> of the 3scale platform are by default not
   visible for your developers. In other words, HTML fragments of its controls
   are not rendered on your developers portal so that your styling
   remains intact when upgrading. For example, the developers won't
   see a 'Create User' button on their portal if the 'Multiple Users'
-  feature is <b>hidden</b>.</p>
+  feature is <b>hidden</b>.
+<% end %>
 
-<table id="switches" class="data" >
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Switches table" id="switches">
   <thead>
-    <tr>
-      <th>Feature</th>
-      <th>Description</th>
-      <th colspan="2">State</th>
+    <tr role="row">
+      <th role="columnheader" scope="col">Feature</th>
+      <th role="columnheader" scope="col">Description</th>
+      <th role="columnheader" scope="col">State</th>
+      <td></td>
     </tr>
   </thead>
 
-<% @allowed.each do |name, switch| %>
- <tr class="Switch Switch--<%= switch.hidden? ? 'inactive' : 'active' %>">
-   <th><%= t("switches.#{name}.name") %></th>
-   <td>
-     <%= t("switches.#{name}.description_html") %>
-     <%= t("switches.#{name}.visibility_details_html", default: '') %>
-   </td>
-   <td>
-     <%= render 'switch_state', switch: switch %>
-   <td class="actions">
-     <%= render 'switch_toggle', switch: switch %>
-   </td>
- </tr>
-<% end %>
+  <tbody role="rowgroup">
+    <% @allowed.each do |name, switch| %>
+      <tr role="row" class="<%= switch.hidden? ? 'switch-inactive' : '' %>">
+        <td role="cell" data-label="Feature">
+          <%= t("switches.#{name}.name") %>
+        </td>
+        <td role="cell" data-label="Description">
+          <%= t("switches.#{name}.description_html") %>
+          <%= t("switches.#{name}.visibility_details_html", default: '') %>
+        </td>
+        <td role="cell" data-label="State">
+          <%= render 'switch_state', switch: switch %>
+        </td>
+        <td role="cell" class="pf-c-table__action actions">
+          <div class="pf-c-overflow-menu">
+            <div class="pf-c-overflow-menu__content">
+              <div class="pf-c-overflow-menu__group pf-m-button-group">
+                <div class="pf-c-overflow-menu__item">
+                  <%= render 'switch_toggle', switch: switch %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 <br/>
@@ -41,17 +56,27 @@
   <p>Yes, there are features that are currently disabled for your
   account but you can enable them by upgrading.</p>
 
-  <table id="switches" class="data" >
-  <% @denied.each do |name, switch| %>
-   <tr>
-     <th><%= t("switches.#{name}.name") %></th>
-     <td><%= t("switches.#{name}.description_html") %></td>
-     <td class="actions">
-       <% if new_plan = current_account.first_plan_with_switch(switch.name) %>
-         <%= render '/admin/upgrade_notices/provider_upgrade_button', plan: new_plan %>
-       <% end %>
-     </td>
-   </tr>
-  <% end %>
+  <table id="switches" class="pf-c-table" role="grid">
+    <tbody role="rowgroup">
+      <% @denied.each do |name, switch| %>
+        <tr role="row">
+          <td role="cell"><%= t("switches.#{name}.name") %></td>
+          <td role="cell"><%= t("switches.#{name}.description_html") %></td>
+          <td role="cell" class="pf-c-table__action actions">
+            <div class="pf-c-overflow-menu">
+              <div class="pf-c-overflow-menu__content">
+                <div class="pf-c-overflow-menu__group pf-m-button-group">
+                  <div class="pf-c-overflow-menu__item">
+                    <% if new_plan = current_account.first_plan_with_switch(switch.name) %>
+                      <%= render '/admin/upgrade_notices/provider_upgrade_button', plan: new_plan %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 <% end %>
