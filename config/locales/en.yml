@@ -485,7 +485,7 @@ en:
         plans_info: |
           The following options define whether the developers are allowed to change the plan
           directly, or only request a plan change. When plan change is requested,
-          notifications about the requests will be sent to the admin users by email. Th plan
+          notifications about the requests will be sent to the admin users by email. The plan
           change can then be performed in the admin portal.
         sso_integrations_info_html: |
           This setting can be overridden for <a href='%{link}'>each individual SSO integration</a>
