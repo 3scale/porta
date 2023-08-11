@@ -1,4 +1,4 @@
-Feature: Features :)
+Feature: Plan Features
   In order to list which features of my API are available for each plan
   As a provider
   I want to define features
@@ -18,70 +18,58 @@ Feature: Features :)
     And I fill in "Description" with "T-shirt with logo of our company for free."
     And I press "Save"
     Then I should see "T-shirt with logo of our company for free."
+    And I should see the flash message "Feature has been created."
 
   @javascript
-  Scenario: "No features yet" notice disappears when first feature is created
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
-    Given the provider has "service_plans" switch allowed
-    And a feature "50% less bugs" of provider "foo.3scale.localhost"
+  Scenario: "No features yet" notice disappears when the first feature is created, and appears when last one is deleted.
     When I log in as provider "foo.3scale.localhost"
-    And I go to the service plans admin page
-    And I follow "Basic"
+    And I go to the edit page for plan "Basic"
+    Then I should see "This plan has no features yet."
+
+    When application plan "Basic" has "Some Feature" enabled
+    And I go to the edit page for plan "Basic"
     Then I should not see "This plan has no features yet."
 
-  @javascript
-  Scenario: "No features yet" notice appears when last one is deleted or no feature present.
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
-    Given the provider has "service_plans" switch allowed
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the service plans admin page
-    And I follow "Basic"
+    When application plan "Basic" does not have any features
+    And I go to the edit page for plan "Basic"
     Then I should see "This plan has no features yet."
 
   @javascript
   Scenario: Disable a feature
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
-    Given the provider has "service_plans" switch allowed
-    And an enabled feature "50% more bugs" of provider "foo.3scale.localhost"
-
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the service plans admin page
-    And I follow "Basic"
-    When I "disable" the feature "50% more bugs"
-    Then I see feature "50% more bugs" is disabled
+    Given application plan "Basic" has "Some Feature" enabled
+    And I log in as provider "foo.3scale.localhost"
+    And I go to the edit page for plan "Basic"
+    And I disable the feature "Some Feature"
+    Then I see the feature "Some Feature" is disabled
+    And I should see the flash message "Feature has been disabled."
 
   @javascript
   Scenario: Enable a feature
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
-    Given the provider has "service_plans" switch allowed
-    And a feature "50% less bugs" of provider "foo.3scale.localhost"
-
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the service plans admin page
-    And I follow "Basic"
-    When I "enable" the feature "50% less bugs"
-    Then I see feature "50% less bugs" is enabled
+    Given application plan "Basic" has "Some Feature" disabled
+    And I log in as provider "foo.3scale.localhost"
+    And I go to the edit page for plan "Basic"
+    When I enable the feature "Some Feature"
+    Then I see the feature "Some Feature" is enabled
+    And I should see the flash message "Feature has been enabled."
 
   @javascript
   Scenario: Edit a feature
-    Given a service plan "Basic" of provider "foo.3scale.localhost"
-    And a feature "Magic" of provider "foo.3scale.localhost"
-
+    Given application plan "Basic" has "Some Feature" enabled
     When I log in as provider "foo.3scale.localhost"
-    Then I go to the edit page for feature "Magic"
+    And I go to the edit page for plan "Basic"
+    And I click "Edit" for the feature "Some Feature"
     Then I should see "Edit Feature"
-    And I fill in "Name" with "More magic"
+    And I fill in "Name" with "Another Feature"
     And I press "Save"
-    Then there is no feature named "Magic"
-    And there is feature named "More magic"
+    Then I see the feature "Another Feature" is enabled
+    And I should not see "Some Feature"
+    And I should see the flash message "Feature has been updated."
 
   @javascript
   Scenario: Delete a feature
-    Given the provider has "service_plans" switch allowed
-    Given a service plan "Basic" for service "API" exists
-    And a feature "Invulnerability" of provider "foo.3scale.localhost"
-
+    Given application plan "Basic" has "Some Feature" enabled
     When I log in as provider "foo.3scale.localhost"
-    And I go to the service plans admin page
-    Then I go to the edit page for admin service plan "Basic"
-    And I press "Delete" and I confirm dialog box
+    And I go to the edit page for plan "Basic"
+    And I click "Delete" for the feature "Some Feature" and I confirm dialog box
+    Then I should not see "Some Feature"
+    And I should see the flash message "Feature has been deleted."
