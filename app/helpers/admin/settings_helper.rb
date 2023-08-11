@@ -20,12 +20,4 @@ module Admin::SettingsHelper
   def toggle_monthly_charging_button_id(settings)
     "#{toggle_monthly_charging_text(settings)}-setting-monthly_charging"
   end
-
-  def hide_class_unless_account_plans_visible(settings)
-    settings.account_plans_ui_visible ? '' : 'hide'
-  end
-
-  def hide_class_unless_service_plans_visible(settings)
-    settings.service_plans_ui_visible ? '' : 'hide'
-  end
 end

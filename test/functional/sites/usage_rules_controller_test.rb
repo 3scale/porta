@@ -14,14 +14,14 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'title', 'Usage Rules | Red Hat 3scale API Management'
     assert_select 'input#settings_account_approval_required'
-    assert_select 'p.inline-hints', 'Approval is required by you before developer accounts are activated.'
+    assert_select '.pf-c-check__description', 'Approval is required by you before developer accounts are activated.'
   end
 
   test 'ingnore custom plans' do
     FactoryBot.create(:account_plan, issuer: @provider, original_id: 1)
     get :edit
     assert_select 'input#settings_account_approval_required'
-    assert_select 'p.inline-hints', 'Approval is required by you before developer accounts are activated.'
+    assert_select '.pf-c-check__description', 'Approval is required by you before developer accounts are activated.'
   end
 
   test 'hide checkbox for multiple account plans with ui hidden' do
@@ -36,6 +36,6 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
     FactoryBot.create(:account_plan, issuer: @provider)
     get :edit
     assert_select 'input#settings_account_approval_required'
-    assert_select 'p.inline-hints', 'Set per account plan from Account Plans.'
+    assert_select '.pf-c-check__description', 'Set per account plan from Account Plans.'
   end
 end
