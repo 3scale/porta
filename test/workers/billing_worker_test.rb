@@ -64,4 +64,20 @@ class BillingWorkerTest < ActiveSupport::TestCase
       assert BillingWorker::Callback.new.on_complete(Sidekiq::Batch::Status.new(batch.bid), callback_options.stringify_keys)
     end
   end
+
+  test 'does not enqueue master as a buyer' do
+    assert_equal master_account.id, master_account.provider_account_id
+
+    BillingWorker.enqueue_for_buyer(master_account, Time.zone.now)
+    assert_empty BillingWorker.jobs
+
+    BillingWorker.enqueue(master_account, Time.zone.now)
+    assert_equal 1, BillingWorker.jobs.size
+
+    provider_id = BillingWorker.jobs.first["args"][1]
+    buyer_id = BillingWorker.jobs.first["args"][0]
+
+    assert_equal master_account.id, provider_id
+    assert_equal @provider.id, buyer_id
+  end
 end

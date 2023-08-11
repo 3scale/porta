@@ -28,12 +28,12 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'triggers billing' do
+  test 'does not trigger billing without a buyer' do
     Sidekiq::Testing.inline! do
       now = Time.utc(2018, 1, 16, 8)
       billing_options = { only: [@provider.id], now: now, skip_notifications: true }
-      Finance::BillingStrategy.expects(:daily).with(billing_options).returns(mock_billing_success(now, @provider))
-      assert Finance::BillingService.call!(@provider.id, now: now, skip_notifications: true)
+      Finance::BillingStrategy.expects(:daily).never
+      Finance::BillingService.call!(@provider.id, now: now, skip_notifications: true)
     end
   end
 
@@ -41,10 +41,10 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     now = Time.utc(2018, 1, 16, 8)
     Finance::BillingStrategy.expects(:daily).raises RuntimeError, 'random failure'
     assert_raises RuntimeError do
-      Finance::BillingService.call!(@provider.id, now: now)
+      Finance::BillingService.call!(@provider.id, now: now, provider_account_id: master_account.id)
     end
-    Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::BillingService::LockBillingError }
-    Finance::BillingService.call!(@provider.id, now: now)
+    Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::LockBillingError }
+    Finance::BillingService.call!(@provider.id, now: now, provider_account_id: master_account.id)
   end
 
   # WARNING: flakiness here means a bug
@@ -69,7 +69,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
 
     sleep 0.1 # make sure first thread has time to acquire the lock
 
-    assert_raise(Finance::BillingService::LockBillingError) do
+    assert_raise(Finance::LockBillingError) do
       Finance::BillingService.new(@provider.id).send(:with_lock) do
         # we shouldn't reach here because +lock_thread+ holds the lock, so +LockBillingError+ should have been raised and this block never been executed
         safety_thread.join(0.001) # this will raise if +lock_thread+ raised so we know what actually happened
@@ -78,6 +78,35 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     end
   ensure
     finished = true
+  end
+
+  test 'raises unless a single buyer is billed and charged' do
+    opts = [
+      [5], # account == provider which means to bill a whole provider
+      [6, { provider_account_id: 6 }], # again account == provider
+      [nil], # neither provider nor a buyer specified
+    ]
+
+    opts.each do |args|
+      bs = Finance::BillingService.new(*args)
+      assert_raise(Finance::SpuriousBillingError) do
+        bs.call
+      end
+    end
+  end
+
+  test 'reports error unless a single buyer is billed and charged' do
+    opts = [
+      [5], # account == provider which means to bill a whole provider
+      [6, { provider_account_id: 6 }], # again account == provider
+      [nil], # neither provider nor a buyer specified
+    ]
+
+    Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::SpuriousBillingError }.times(opts.size)
+
+    opts.each do |args|
+      Finance::BillingService.call!(*args)
+    end
   end
 
   class BillBuyerLevelTest < ActionDispatch::IntegrationTest
@@ -116,7 +145,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
           Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
         end
       end
-      Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::BillingService::LockBillingError }
+      Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::LockBillingError }
       Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: now)
     end
 
@@ -134,7 +163,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   test 'can run without lock' do
     now = '2018-01-16 08:00:00 UTC'
     Finance::BillingStrategy.expects(:daily).returns(mock_billing_success(now, @provider)).twice
-    Finance::BillingService.call(@provider.id, now: now)
-    Finance::BillingService.call(@provider.id, now: now)
+    Finance::BillingService.call(@provider.id, now: now, provider_account_id: master_account.id)
+    Finance::BillingService.call(@provider.id, now: now, provider_account_id: master_account.id)
   end
 end

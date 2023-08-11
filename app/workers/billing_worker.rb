@@ -45,6 +45,8 @@ class BillingWorker
   end
 
   def self.enqueue_for_buyer(buyer, billing_date)
+    return if buyer.id == buyer.provider_account_id # this should filter out master and any broken accounts
+
     time = billing_date.to_s(:iso8601)
     perform_async(buyer.id, buyer.provider_account_id, time)
   end
