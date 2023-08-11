@@ -224,7 +224,7 @@ group :test do
   gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
 
   # proxy tests
-  gem 'database_cleaner', '~> 1.7', require: false
+  gem 'database_cleaner', require: false
   gem 'thin', require: false
 
   # performance tests
