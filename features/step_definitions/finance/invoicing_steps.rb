@@ -171,9 +171,3 @@ Then "I should see the list of years with invoices have the following years:" do
   expected_years = table.raw.flatten.map(&:to_i)
   assert_same_elements expected_years, actual_years
 end
-
-Then("I should not see the list of years with invoices belonging to other providers") do
-  select_element = find('#search_year')
-  displayed_years = select_element.all('option').map(&:value).map(&:to_i)
-  expect(displayed_years).not_to include(*[2011])
-end
