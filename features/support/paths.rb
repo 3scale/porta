@@ -247,11 +247,6 @@ World(Module.new do
       service = provider.services.find_by_name! $2
       polymorphic_path [$1.to_sym, :admin, service]
 
-    when /^the edit page for feature "([^"]+)"$/
-      plan = @provider.service_plans.where(name: "Basic").last
-      feature = plan.service.features.where(name: $1).last
-      edit_admin_plan_feature_path(plan, feature, type: plan.class.name.underscore)
-
     when 'the new service page'
       new_admin_service_path
 
@@ -273,10 +268,6 @@ World(Module.new do
     when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
-
-    when /^the edit page for admin service plan "([^"]*)"$/
-      plan = Plan.where(name: $1, type: "ServicePlan").last
-      edit_admin_service_plan_path(plan)
 
     when /^the usage rules of service "([^"]*)"$/
       service = Service.find_by!(name: Regexp.last_match(1))
