@@ -68,6 +68,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
   test 'does not enqueue master as a buyer' do
     assert_equal master_account.id, master_account.provider_account_id
 
+    System::ErrorReporting.expects(:report_error).with { |*args| args[0].is_a?(ArgumentError) }
     BillingWorker.enqueue_for_buyer(master_account, Time.zone.now)
     assert_empty BillingWorker.jobs
 

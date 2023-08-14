@@ -68,7 +68,7 @@ module Account::ProviderMethods
       end
     end
 
-    has_many :buyer_accounts, class_name: 'Account', foreign_key: 'provider_account_id', dependent: :destroy, inverse_of: :provider_account do
+    has_many :buyer_accounts, -> { where(Account.arel_table[:id].not_eq(Account.arel_table[:provider_account_id])) }, class_name: 'Account', foreign_key: 'provider_account_id', dependent: :destroy, inverse_of: :provider_account do
       def latest
         order(created_at: :desc).includes([:admin_users]).limit(5)
       end
