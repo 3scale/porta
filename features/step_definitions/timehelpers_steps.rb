@@ -33,18 +33,19 @@ When /^(\d+) (second|minute|hour|day|week|month|year)s? pass(?:es)?$/ do |amount
   access_user_sessions
 end
 
-When /^(?:the )?time flies to (.*)$/ do |date|
+When /^(?:the )?time flies to ([^\(]*)( \(without jobs\))?$/ do |date, skip_jobs|
   date = date.gsub(Regexp.union(%w[of st nd rd]), '')
-  time_machine(Time.zone.parse(date))
+  time_machine_opts = skip_jobs ? { skip_jobs: true } : nil
+  time_machine(Time.zone.parse(date), time_machine_opts)
   step %(the date should be #{date})
   access_user_sessions
 end
 
 # Suffix 'on 5th July 2009'
 #
-Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
+Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: [^\(]*)?)( \(without jobs\))?$/ do |original, date, skip_jobs|
   # this ensures billing actions are run
-  step %(time flies to #{date})
+  step %(time flies to #{date}#{skip_jobs})
   # and then we freeze the time
   safe_travel_to(Time.zone.parse(date)) do
     step original.strip

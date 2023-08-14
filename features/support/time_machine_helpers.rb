@@ -9,12 +9,15 @@ module TimeMachineHelpers
   # 1. Remove the user
   # 2. time_machine 1 month from now
   # 3. Assert the user has been effectively removed
-  def time_machine(till)
-    freeze_time
+  def time_machine(till, opts = {})
+    opts ||= {}
+    unless opts[:skip_jobs]
+      freeze_time
 
-    while Time.zone.now < till
-      travel_to(1.day.from_now)
-      run_jobs
+      while Time.zone.now < till
+        travel_to(1.day.from_now)
+        run_jobs
+      end
     end
     travel_to(till)
   rescue StandardError
