@@ -39,13 +39,15 @@ Feature: Show invoices from account's page (#16015909)
 
   Scenario: Display years of invoices when there are invoices
     Given a provider is logged in on 1st January 2011
-    Given a buyer "zoidberg" signed up to provider "foo.3scale.localhost"
+    And a buyer "zoidberg" signed up to provider "foo.3scale.localhost"
     And the provider is charging its buyers in prepaid mode
     And an invoice of buyer "zoidberg" for January, 2011
-    And an invoice of buyer "zoidberg" for January, 2012
-    And I go to the invoices issued by me
-    Then I should see the list of years with invoices have the following years:
-      | 0  |
+    And an invoice of buyer "zoidberg" for January, 2014 on 1st January 2014 (without jobs)
+    When I go to the invoices issued by me
+    Then the years selector should have the following options:
+      |      |
+      | 2014 |
+      | 2013 |
       | 2012 |
       | 2011 |
 
@@ -53,8 +55,8 @@ Feature: Show invoices from account's page (#16015909)
     Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers in prepaid mode
     And I go to the invoices issued by me
-    Then I should see the list of years with invoices have the following years:
-      | 0  |
+    Then the years selector should have the following options:
+      |      |
       | 2011 |
 
   Scenario: Display only years belonging to the current provider
@@ -69,6 +71,6 @@ Feature: Show invoices from account's page (#16015909)
     And an invoice of buyer "zudio" for January, 2011
 
     And I go to the invoices issued by me
-    Then I should see the list of years with invoices have the following years:
-      | 0  |
+    Then the years selector should have the following options:
+      |      |
       | 2010 |
