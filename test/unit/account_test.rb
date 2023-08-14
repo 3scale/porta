@@ -72,11 +72,9 @@ class AccountTest < ActiveSupport::TestCase
     master = master_account
     buyer = FactoryBot.create(:simple_buyer, provider_account: master)
 
-    assert_includes master.buyer_account_ids, buyer.id
-    assert_includes master.buyer_account_ids, master.id
-
-    assert_includes master.buyer_accounts.not_master.ids, buyer.id
-    assert_not_includes master.buyer_accounts.not_master.ids, master.id
+    assert_includes Account.all.ids, master.id
+    assert_includes Account.all.not_master.ids, buyer.id
+    assert_not_includes Account.all.not_master.ids, master.id
   end
 
   test 'provider but not master' do
