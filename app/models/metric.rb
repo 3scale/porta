@@ -134,7 +134,7 @@ class Metric < ApplicationRecord
   end
 
   def type
-    method_metric? ? 'method' : 'metric'
+    @type ||= method_metric? ? :method : :metric
   end
 
   alias method_metric? child?
@@ -225,7 +225,7 @@ class Metric < ApplicationRecord
   def destroyable?
     return true if destroyed_by_association
 
-    errors.add :base, :cannot_delete_in_use, type: type.capitalize if belongs_to_latest_config?
+    errors.add :base, :cannot_delete_in_use, type: type.to_s.capitalize if belongs_to_latest_config?
     errors.add :base, :cannot_delete_hits if system_name == 'hits'
 
     errors.empty?

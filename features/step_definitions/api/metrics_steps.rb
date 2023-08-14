@@ -59,18 +59,6 @@ Then('I should see {string} (already )mapped') do |name|
   assert_equal '', find_mapped_cell_in_table(name).text
 end
 
-Then /^I should (not )?see "([^"]*)" on the (metrics|methods) tab$/ do |negate, metric_name, tab_name|
-  step("I change to tab \"#{tab_name.capitalize}\"")
-  table = tab_name == 'metrics' ? metrics_table : methods_table
-
-  assertion = method(negate ? :refute_includes : :assert_includes)
-
-  with_scope table do
-    table_metrics = find_all('.pf-c-table tbody tr td:first-child').map(&:text)
-    assertion.call table_metrics, metric_name
-  end
-end
-
 def find_mapped_cell_in_table(text)
   find('.pf-c-table tbody tr', text: text).find('[data-label="Mapped"]')
 end

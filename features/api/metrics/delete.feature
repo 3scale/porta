@@ -38,4 +38,6 @@ Feature: Product > Integration > Metrics > Edit
     And I follow "Pasta"
     And I press "Delete" and I confirm dialog box
     Then I should see the flash message "Metric is used by the latest gateway configuration and cannot be deleted"
-    And I should see "Pasta" on the metrics tab
+    And I should see the following metrics:
+      | Hits  |
+      | Pasta |
