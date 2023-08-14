@@ -7,7 +7,7 @@ module TestHelpers
     included do
       class_attribute :database_cleaner_strategy
       class_attribute :database_cleaner_clean_with_strategy
-      self.database_cleaner_clean_with_strategy = self.database_cleaner_strategy = DatabaseCleaner::NullStrategy
+      self.database_cleaner_clean_with_strategy = self.database_cleaner_strategy = DatabaseCleaner::NullStrategy.new
     end
 
     class_methods do
@@ -19,11 +19,10 @@ module TestHelpers
     end
 
     def before_setup
-      case database_cleaner_clean_with_strategy
-      when Class
-        database_cleaner_clean_with_strategy.clean
-      when Symbol
+      if database_cleaner_clean_with_strategy.is_a? Symbol
         DatabaseCleaner.clean_with(database_cleaner_clean_with_strategy)
+      else
+        database_cleaner_clean_with_strategy.clean
       end
 
       DatabaseCleaner.strategy = database_cleaner_strategy
