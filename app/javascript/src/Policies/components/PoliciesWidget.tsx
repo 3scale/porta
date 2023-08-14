@@ -12,6 +12,8 @@ import type { FunctionComponent } from 'react'
 import type { Dispatch } from 'redux'
 import type { ChainPolicy, IPoliciesActions, RegistryPolicy, State, UIState } from 'Policies/types'
 
+import 'Policies/styles/policies.scss'
+
 interface Props {
   registry: RegistryPolicy[];
   chain: ChainPolicy[];
