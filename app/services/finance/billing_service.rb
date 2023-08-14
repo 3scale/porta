@@ -34,7 +34,7 @@ module Finance
     end
 
     def call
-      Finance::BillingStrategy.daily(validate_options(billing_options))
+      Finance::BillingStrategy.daily(billing_options)
     end
 
     def notify_billing_finished(_status, billing_results)
@@ -58,15 +58,10 @@ module Finance
 
     def billing_options
       options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
-      options[:buyer_ids] = [account_id] if provider_account_id != account_id
-      options
-    end
+      raise SpuriousBillingError, "whole provider will be billed when buyer id is the same: #{account_id}" if provider_account_id == account_id
 
-    def validate_options(billing_options)
-      unless billing_options[:only].presence&.size == 1 && billing_options[:buyer_ids].presence&.size == 1
-        raise SpuriousBillingError, "Expected to bill individual buyers separately but got providers: #{billing_options[:only].inspect}, buyers: #{billing_options[:buyer_ids].inspect}"
-      end
-      billing_options
+      options[:buyer_ids] = [account_id]
+      options
     end
 
     def with_lock
