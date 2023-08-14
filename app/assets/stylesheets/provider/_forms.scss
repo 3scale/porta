@@ -315,24 +315,26 @@ form.formtastic:not(.pf-c-form) {
     display: none;
   }
 
-  fieldset.inputs:not(.policies-fieldset),
-  fieldset {
-    border: 0;
-    position: relative;
-    padding: line-height-times(1) 0 0 0;
-    border-top: $border-width solid $border-color;
-    margin-bottom: $fieldset-margin-bottom;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-
-    fieldset {
-      margin-left: line-height-times(1);
-      min-width: 0;
+  fieldset.inputs,
+  :not(.form-group) > fieldset {
+    &:not(.policies-fieldset) {
+      border: 0;
+      position: relative;
+      padding: line-height-times(1) 0 0 0;
+      border-top: $border-width solid $border-color;
+      margin-bottom: $fieldset-margin-bottom;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
 
       fieldset {
-        margin-left: 0;
+        margin-left: line-height-times(1);
         min-width: 0;
+
+        fieldset {
+          margin-left: 0;
+          min-width: 0;
+        }
       }
     }
   }
