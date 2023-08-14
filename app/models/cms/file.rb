@@ -29,7 +29,7 @@ class CMS::File < ApplicationRecord
   validates_attachment :attachment, presence: true
   do_not_validate_attachment_file_type :attachment
 
-  validates :path, uniqueness: { :scope => :provider_id }, length: { maximum: 255 }
+  validates :path, uniqueness: { scope: :provider_id, case_sensitive: true }, length: { maximum: 255 }
   validates :attachment_content_type, :attachment_file_name, :random_secret, :name,
             length: { maximum: 255 }
 

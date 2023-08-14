@@ -6,7 +6,7 @@ class SSOAuthorization < ApplicationRecord
   has_many :user_sessions, dependent: :destroy
 
   validates :uid, :authentication_provider, :user, presence: true
-  validates :uid, uniqueness: { scope: :authentication_provider_id }
+  validates :uid, uniqueness: { scope: :authentication_provider_id, case_sensitive: true }
   validates :uid, length: { maximum: 255 }
 
   scope :newest, -> { order(updated_at: :desc).first }

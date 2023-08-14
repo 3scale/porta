@@ -4,7 +4,7 @@ class CMS::EmailTemplate < CMS::Template
 
   validates :system_name, presence: true
   validates :current, presence: true
-  validates :system_name, uniqueness: { scope: %i[provider_id], allow_blank: true }
+  validates :system_name, uniqueness: { scope: %i[provider_id], allow_blank: true, case_sensitive: true }
   validate :headers_formats
 
   class_attribute :templates_path

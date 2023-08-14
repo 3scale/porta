@@ -6,7 +6,7 @@ class Invitation < ApplicationRecord
   validates :account, presence: true
   validates :email, presence: true
   validate :email_is_not_taken
-  validates :email, uniqueness: { :scope => :account_id, :message => "This invitation has already been sent." } # Do you want to resend it?"
+  validates :email, uniqueness: { scope: :account_id, case_sensitive: true, message: "This invitation has already been sent." } # Do you want to resend it?"
 
   #OPTIMIZE: use the same format validations in user, account and invitation, add TESTS!
   validates :email, length: { :within => 6..100, :allow_blank => true } #r@a.wk

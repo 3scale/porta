@@ -8,7 +8,7 @@ class CMS::Group < ApplicationRecord
   belongs_to :provider, :class_name => "Account"
 
   validates :name, :provider, presence: true, length: { maximum: 255 }
-  validates :name, uniqueness: { scope: [:provider_id] }
+  validates :name, uniqueness: { scope: [:provider_id], case_sensitive: true }
 
   has_many :group_sections, :class_name => 'CMS::GroupSection'
   has_many :sections, :class_name => 'CMS::Section', :through => :group_sections

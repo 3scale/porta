@@ -5,7 +5,7 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
   NEW_APPLICATION_SYSTEM_NAME = 'new_application_licence'
   
   validates :published, presence: true
-  validates :title, uniqueness: { :scope => [:provider_id] }
+  validates :title, uniqueness: { :scope => [:provider_id], case_sensitive: true }
 
   def title
     I18n.t("builtin_legal_terms.#{system_name}.title")

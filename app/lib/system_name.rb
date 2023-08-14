@@ -16,7 +16,7 @@ module SystemName
 
       return unless opts[:uniqueness_scope]
 
-      validates :system_name, uniqueness: opts[:uniqueness_scope] == true ? true : { scope: opts[:uniqueness_scope] }
+      validates :system_name, uniqueness: opts[:uniqueness_scope] == true ? { case_sensitive: true } : { case_sensitive: true, scope: opts[:uniqueness_scope] }
     end
 
     def has_system_name(opts = {})

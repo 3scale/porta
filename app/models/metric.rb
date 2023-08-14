@@ -28,7 +28,7 @@ class Metric < ApplicationRecord
 
   attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
   validates :unit, presence: true, unless: :child?
-  validates :friendly_name, uniqueness: {scope: %i[owner_type owner_id]}, presence: true
+  validates :friendly_name, uniqueness: { scope: %i[owner_type owner_id], case_sensitive: true }, presence: true
   validates :system_name, :unit, :friendly_name, :owner_type, length: { maximum: 255 }
   validates :owner, presence: true
 

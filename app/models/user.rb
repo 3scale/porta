@@ -117,7 +117,7 @@ class User < ApplicationRecord
 
   validate :email_is_unique
   validate :username_is_unique
-  validates :open_id, uniqueness: true, allow_nil: true
+  validates :open_id, uniqueness: { case_sensitive: true }, allow_nil: true
 
   attr_accessible :title, :username, :email, :first_name, :last_name, :password,
                   :password_confirmation, :conditions, :cas_identifier, :open_id,
