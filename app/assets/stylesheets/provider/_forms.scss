@@ -315,7 +315,7 @@ form.formtastic:not(.pf-c-form) {
     display: none;
   }
 
-  fieldset.inputs,
+  fieldset.inputs:not(.policies-fieldset),
   fieldset {
     border: 0;
     position: relative;

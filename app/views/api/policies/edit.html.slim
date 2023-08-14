@@ -14,7 +14,7 @@
     = javascript_packs_with_chunks_tag 'policies'
 
   = semantic_form_for @proxy, url: admin_service_policies_path(@service) do |f|
-    = f.toggled_inputs 'policies', cookie_name: 'policies-rules', legend: "Policies", id: "policies-container" do
+    fieldset class="inputs policies-fieldset"
       div#policies data-service-id=@service.id data-registry=@registry_policies.to_json data-chain=@proxy.policies_config.to_json
 
     div class="pf-c-form__group pf-m-action"
