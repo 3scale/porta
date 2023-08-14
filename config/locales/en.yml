@@ -1330,8 +1330,12 @@ en:
         change_plan_permission:
           request: Request a plan change
           direct: Change the plan directly
-          credit_card: Only request a plan change
-          request_credit_card: Request Credit Card entry for paid plans
+          credit_card: |
+            Change the plan directly only when credit card details are stored, otherwise request a
+            plan change
+          request_credit_card: |
+            Change to free plans directly or when credit card details are stored, otherwise request
+            credit card details
           none: Don't allow plan changes
 
       proxy:
