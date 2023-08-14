@@ -587,11 +587,6 @@ class Invoice < ApplicationRecord
     (buyer_account || provider_account.buyer_accounts.build).field_label(name)
   end
 
-  # Returns years which have invoice
-  def self.years
-    self.connection.select_values(selecting { sift(:year, period).as('year') }.distinct.reorder('year DESC').to_sql).map(&:to_i)
-  end
-
   # Returns years which have invoice, scoped by provider
   def self.years_by_provider(provider_id)
     connection.select_values(
