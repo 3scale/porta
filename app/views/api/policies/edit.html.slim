@@ -17,6 +17,7 @@
     = f.toggled_inputs 'policies', cookie_name: 'policies-rules', legend: "Policies", id: "policies-container" do
       div#policies data-service-id=@service.id data-registry=@registry_policies.to_json data-chain=@proxy.policies_config.to_json
 
-    = f.actions do
-      = f.commit_button t('formtastic.actions.policies.update'), button_html: {class: 'update', name: 'update', value: '1',
-        id: 'policies-button-sav', title: 'Update Policies', disabled: (@error ? true : nil) }
+    div class="pf-c-form__group pf-m-action"
+      div class="pf-c-form__actions"
+        button class="pf-c-button pf-m-primary" type="submit" id="policies-button-sav" disabled=true
+          = t('formtastic.actions.policies.update')
