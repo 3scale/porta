@@ -75,8 +75,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
     BillingWorker.enqueue(master_account, Time.zone.now)
     assert_equal 1, BillingWorker.jobs.size
 
-    provider_id = BillingWorker.jobs.first["args"][1]
-    buyer_id = BillingWorker.jobs.first["args"][0]
+    buyer_id, provider_id = BillingWorker.jobs.first["args"]
 
     assert_equal master_account.id, provider_id
     assert_equal @provider.id, buyer_id
