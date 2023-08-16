@@ -52,8 +52,6 @@ $error-color: #c00;
   padding-bottom: 2rem;
 
   section {
-    margin: 0 auto;
-
     header {
       display: flex;
       flex-flow: row nowrap;
@@ -90,6 +88,8 @@ $error-color: #c00;
   }
 
   .PolicyConfiguration {
+    max-width: 880px; // --pf-c-form--m-limit-width--MaxWidth)
+
     &-name {
       margin: 0 0 0 0;
       padding: 0.5rem 0 0 0;
