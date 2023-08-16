@@ -1,8 +1,6 @@
 import Form from 'react-jsonschema-form'
-import { Button } from '@patternfly/react-core'
 
 import { isNotApicastPolicy } from 'Policies/util'
-import { HeaderButton } from 'Policies/components/HeaderButton'
 
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
@@ -21,8 +19,8 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
   policy,
   actions
 }) => {
-  const { submitPolicyConfig, removePolicyFromChain, closePolicyConfig, updatePolicyConfig } = actions
-  const { humanName, version, summary, description, enabled, configuration, data, removable } = policy
+  const { submitPolicyConfig, updatePolicyConfig } = actions
+  const { version, summary, description, enabled, configuration, data } = policy
 
   const onSubmit = (chainPolicy: ChainPolicy) => {
     return ({ formData, schema }: { formData: ChainPolicy['data']; schema: ChainPolicy['configuration'] }) => {
@@ -32,20 +30,11 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
   const togglePolicy = (event: React.ChangeEvent<HTMLInputElement>) => {
     updatePolicyConfig({ ...policy, enabled: event.target.checked })
   }
-  const remove = () => removePolicyFromChain(policy)
-  const cancel = () => closePolicyConfig()
 
   const isPolicyVisible = isNotApicastPolicy(policy)
 
   return (
     <section className="PolicyConfiguration">
-      <header>
-        <h2>Edit Policy</h2>
-        <HeaderButton type="cancel" onClick={cancel}>
-          Cancel
-        </HeaderButton>
-      </header>
-      <h2 className="PolicyConfiguration-name">{humanName}</h2>
       <p className="PolicyConfiguration-version-and-summary">
         {`${version} - ${summary || ''}`}
       </p>
@@ -68,16 +57,8 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
           schema={configuration}
           onSubmit={onSubmit(policy)}
         >
-          <Button className="btn-info" type="submit">Update Policy</Button>
+          <span /> { /* Prevents rendering default submit button */ }
         </Form>
-      )}
-      {removable && (
-        <Button
-          variant="danger"
-          onClick={remove}
-        >
-          Remove
-        </Button>
       )}
     </section>
   )
