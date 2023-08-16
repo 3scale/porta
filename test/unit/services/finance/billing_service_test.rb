@@ -41,7 +41,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
     now = Time.utc(2018, 1, 16, 8)
     Finance::BillingStrategy.expects(:daily).raises RuntimeError, 'random failure'
     assert_raises RuntimeError do
-      Finance::BillingService.call!(@provider.id, now: now, provider_account_id: master_account.id)
+      Finance::BillingService.call!(@provider.id, { now: now, provider_account_id: master_account.id })
     end
     Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::LockBillingError }
     Finance::BillingService.call!(@provider.id, { now: now, provider_account_id: master_account.id })
