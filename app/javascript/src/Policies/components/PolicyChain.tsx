@@ -8,10 +8,16 @@ import {
   DataListControl,
   DataListDragButton,
   DataListItemCells,
-  DataListCell
+  DataListCell,
+  Button,
+  SearchInput,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem
 } from '@patternfly/react-core'
+import { useMemo, useState } from 'react'
+import escapeRegExp from 'lodash.escaperegexp'
 
-import { HeaderButton } from 'Policies/components/HeaderButton'
 import { PolicyTile } from 'Policies/components/PolicyTile'
 
 import type { DraggableItemPosition } from '@patternfly/react-core'
@@ -32,6 +38,16 @@ const PolicyChain: React.FunctionComponent<Props> = ({
   chain,
   actions
 }) => {
+  const [search, setSearch] = useState('')
+
+  const items = useMemo(() => {
+    const term = new RegExp(escapeRegExp(search), 'i')
+
+    return search.length > 0
+      ? chain.filter(policy => term.test(policy.humanName))
+      : chain
+  }, [search])
+
   const arrayMove = (list: ChainPolicy[], startIndex: number, endIndex: number): ChainPolicy[] => {
     const result = [...list]
     const [removed] = result.splice(startIndex, 1)
@@ -40,7 +56,7 @@ const PolicyChain: React.FunctionComponent<Props> = ({
   }
 
   const onDrag = (): boolean => {
-    return true
+    return search.length === 0
   }
 
   const onDrop = (source: DraggableItemPosition, dest?: DraggableItemPosition): boolean => {
@@ -53,23 +69,32 @@ const PolicyChain: React.FunctionComponent<Props> = ({
     }
   }
 
+  const handleOnSearch = (event: React.FormEvent<HTMLInputElement>, value: string) => {
+    setSearch(value)
+  }
+
   return (
-    <section className="PolicyChain">
-      <header>
-        <h2>Policy Chain</h2>
-        <HeaderButton type="add" onClick={actions.openPolicyRegistry}>
-          Add policy
-        </HeaderButton>
-      </header>
+    <section>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <SearchInput aria-label="Items example search input" onChange={handleOnSearch} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <Button variant="primary" onClick={actions.openPolicyRegistry}>Add policy</Button>
+          </ToolbarItem>
+        </ToolbarContent>
+      </Toolbar>
+
       <DragDrop onDrag={onDrag} onDrop={onDrop}>
         <Droppable hasNoWrapper>
           <DataList isCompact aria-label="Policies list">
-            {chain.map((policy, index) => (
+            {items.map((policy, index) => (
               <Draggable key={policy.uuid} hasNoWrapper>
                 <DataListItem>
                   <DataListItemRow>
                     <DataListControl>
-                      <DataListDragButton />
+                      <DataListDragButton isDisabled={search.length > 0} />
                     </DataListControl>
 
                     <DataListItemCells
