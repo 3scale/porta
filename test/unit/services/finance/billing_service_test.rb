@@ -31,7 +31,6 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   test 'does not trigger billing without a buyer' do
     Sidekiq::Testing.inline! do
       now = Time.utc(2018, 1, 16, 8)
-      billing_options = { only: [@provider.id], now: now, skip_notifications: true }
       Finance::BillingStrategy.expects(:daily).never
       Finance::BillingService.call!(@provider.id, now: now, skip_notifications: true)
     end
