@@ -44,7 +44,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
       Finance::BillingService.call!(@provider.id, now: now, provider_account_id: master_account.id)
     end
     Finance::BillingService.any_instance.expects(:report_error).with { |error| error.is_a? Finance::LockBillingError }
-    Finance::BillingService.call!(@provider.id, now: now, provider_account_id: master_account.id)
+    Finance::BillingService.call!(@provider.id, { now: now, provider_account_id: master_account.id })
   end
 
   # WARNING: flakiness here means a bug
