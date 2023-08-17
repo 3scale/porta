@@ -56,6 +56,12 @@ Then "they can add new application plans" do
   assert current_path, admin_service_application_plans_path(default_service)
 end
 
+When "they create a plan with empty data" do
+  find("a[href='#{new_admin_service_application_plan_path(default_service)}']", text: 'Create application plan')
+    .click
+  click_on('Create application plan', wait: 5)
+end
+
 When "an admin selects the action copy of an application plan" do
   @plan = FactoryBot.create(:application_plan, issuer: default_service)
 

@@ -34,6 +34,11 @@ Feature: Application plans index page
     When an admin is in the application plans page
     Then they can add new application plans
 
+  Scenario: Empty data when creating a plan
+    When an admin is in the application plans page
+    And they create a plan with empty data
+    Then I should see error "can't be blank" for field "Name"
+
   Scenario: Copy an application plan
     When an admin selects the action copy of an application plan
     Then a copy of the plan is added to the list

@@ -70,7 +70,7 @@ class Api::PlansBaseController < Api::BaseController
   # FIXME: this method smells of :reek:TooManyStatements
   def create # rubocop:disable Metrics/AbcSize
     attrs = params.require(plan_type).permit(CREATE_PARAMS)
-    plan = collection.build(attrs)
+    @plan = collection.build(attrs)
 
     if plan.save
       if block_given?
