@@ -157,7 +157,7 @@ Given "{plan} has setup fee of {int}" do |plan, fee|
 end
 
 Given "{plan} has {string} {enabled}" do |plan, feature_name, enabled|
-  feature = plan.service.features.find_or_create_by(name: feature_name)
+  feature = plan.issuer.features.find_or_create_by(name: feature_name, scope: plan.class.to_s, featurable: plan.issuer)
   assert_not_nil feature
 
   if enabled
@@ -167,6 +167,10 @@ Given "{plan} has {string} {enabled}" do |plan, feature_name, enabled|
   end
 
   plan.save!
+end
+
+Given "{plan} does not have any features" do |plan|
+  plan.issuer.features.with_object_scope(plan).destroy_all
 end
 
 Given "{provider} has no published application plans" do |provider|
