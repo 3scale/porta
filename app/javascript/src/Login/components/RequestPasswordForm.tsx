@@ -2,63 +2,97 @@ import { useState } from 'react'
 import {
   ActionGroup,
   Button,
-  Form
+  Form,
+  FormGroup,
+  HelperText,
+  HelperTextItem,
+  TextInput
 } from '@patternfly/react-core'
 
-import { EmailField } from 'Login/components/FormGroups'
-import { HiddenInputs } from 'Login/components/HiddenInputs'
-import { validateSingleField } from 'Login/utils/formValidation'
+import { validateRequestPassword } from 'Login/utils/validations'
+import { CSRFToken } from 'utilities/CSRFToken'
 
-import type { FunctionComponent, FormEvent } from 'react'
+import type { FlashMessage } from 'Types/FlashMessages'
+import type { FunctionComponent } from 'react'
 
 interface Props {
+  error?: FlashMessage;
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
-const RequestPasswordForm: FunctionComponent<Props> = (props) => {
+const RequestPasswordForm: FunctionComponent<Props> = ({
+  error,
+  providerLoginPath,
+  providerPasswordPath
+}) => {
   const [email, setEmail] = useState('')
-  const [validation, setValidation] = useState({
-    email: undefined as boolean | undefined
-  })
+  const [validationVisibility, setValidationVisibility] = useState(false)
 
-  // TODO: validations should happen on loss focus or sibmission
-  const onEmailChange = (value: string, event: FormEvent<HTMLInputElement>) => {
-    const { currentTarget } = event
+  const onEmailChange = (value: string) => {
     setEmail(value)
-    setValidation(prev => ({ ...prev, email: validateSingleField(currentTarget) }))
+    setValidationVisibility(false)
   }
 
-  const formDisabled = Object.values(validation).some(value => !value)
+  const emailValidation = validateRequestPassword(email)
+
   return (
     <Form
       noValidate
       acceptCharset="UTF-8"
-      action={props.providerPasswordPath}
+      action={providerPasswordPath}
       id="request_password"
       method="post"
     >
-      <HiddenInputs isPasswordReset />
-      <EmailField inputProps={{
-        isRequired: true,
-        name: 'email',
-        fieldId: 'email',
-        label: 'Email address',
-        isValid: validation.email,
-        value: email,
-        onChange: onEmailChange,
-        autoFocus: true
-      }}
-      />
+      <HelperText className={error ? '' : 'invisible'}>
+        <HelperTextItem hasIcon={error?.type === 'error'} variant={error?.type as 'error'}>
+          {error?.message}
+        </HelperTextItem>
+      </HelperText>
+
+      <input name="utf8" type="hidden" value="✓" />
+      <input name="_method" type="hidden" value="delete" />
+      <CSRFToken />
+
+      <FormGroup
+        isRequired
+        autoComplete="off"
+        fieldId="email"
+        helperTextInvalid={emailValidation?.[0]}
+        label="Email address"
+        validated={(validationVisibility && emailValidation) ? 'error' : 'default'}
+      >
+        <TextInput
+          autoFocus
+          isRequired
+          autoComplete="off"
+          id="email"
+          name="email"
+          type="email"
+          validated={(validationVisibility && emailValidation) ? 'error' : 'default'}
+          value={email}
+          onBlur={() => { setValidationVisibility(true) }}
+          onChange={onEmailChange}
+        />
+      </FormGroup>
+
       <ActionGroup>
         <Button
-          className="pf-c-button pf-m-primary pf-m-block"
-          isDisabled={formDisabled}
+          isBlock
+          isDisabled={emailValidation !== undefined}
           type="submit"
+          variant="primary"
         >
           Reset password
         </Button>
-        <a href={props.providerLoginPath}>Sign in</a>
+        <a
+          className="pf-c-button pf-m-link pf-m-block"
+          href={providerLoginPath}
+          // HACK: prevent click from missing link after input loses focus and component re-renders
+          onMouseDown={(event) => { event.currentTarget.click() }}
+        >
+          Sign in
+        </a>
       </ActionGroup>
     </Form>
   )

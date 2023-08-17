@@ -1,140 +1,218 @@
 import {
   ActionGroup,
   Button,
-  Form
+  Form,
+  FormGroup,
+  HelperText,
+  HelperTextItem,
+  TextInput
 } from '@patternfly/react-core'
 import { useState } from 'react'
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
-import { TextField, EmailField, PasswordField } from 'Login/components/FormGroups'
-import { HiddenInputs } from 'Login/components/HiddenInputs'
-import { validateSingleField } from 'Login/utils/formValidation'
+import { validateSignup } from 'Login/utils/validations'
+import { CSRFToken } from 'utilities/CSRFToken'
 
-import type { FormEvent, FunctionComponent } from 'react'
-import type { SignupProps as Props } from 'Types'
+import type { FlashMessage } from 'Types'
+import type { FunctionComponent } from 'react'
 
-const SignupForm: FunctionComponent<Props> = (props) => {
-  const [username, setUsername] = useState(props.user.username)
-  const [email, setEmail] = useState(props.user.email)
-  const [firstName, setFirstName] = useState(props.user.firstname)
-  const [lastName, setLastName] = useState(props.user.lastname)
-  const [password, setPassword] = useState('')
-  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+interface Props {
+  path: string;
+  user: {
+    email: string;
+    firstname: string;
+    lastname: string;
+    username: string;
+    errors: FlashMessage[];
+  };
+}
 
-  const [validation, setValidation] = useState({
-    username: props.user.username ? true : undefined,
-    email: props.user.email ? true : undefined,
-    firstName: true,
-    lastName: true,
-    password: undefined as boolean | undefined,
-    passwordConfirmation: undefined as boolean | undefined
+const SignupForm: FunctionComponent<Props> = ({
+  path,
+  user
+}) => {
+  const [state, setState] = useState({
+    username: user.username,
+    email: user.email,
+    firstName: user.firstname,
+    lastName: user.lastname,
+    password: '',
+    passwordConfirmation: ''
   })
 
-  // TODO: validations should happen on loss focus or sibmission
-  const onUsernameChange = (value: string, event: FormEvent<HTMLInputElement>) => {
-    const { currentTarget } = event
-    setUsername(value)
-    setValidation(prev => ({ ...prev, username: validateSingleField(currentTarget) }) )
+  const [validationVisibility, setValidationVisibility] = useState({
+    username: false,
+    email: false,
+    firstName: false,
+    lastName: false,
+    password: false,
+    passwordConfirmation: false
+  })
+
+  const handleOnChange = (field: keyof typeof state) => {
+    return (value: string) => {
+      setState(prev => ({ ...prev, [field]: value }))
+      setValidationVisibility(prev => ({ ...prev, [field]: false }) )
+    }
   }
 
-  const onEmailChange = (value: string, event: FormEvent<HTMLInputElement>) => {
-    const { currentTarget } = event
-    setEmail(value)
-    setValidation(prev => ({ ...prev, email: validateSingleField(currentTarget) }) )
-  }
+  const validation = validateSignup(state)
 
-  const onPasswordChange = (value: string, event: FormEvent<HTMLInputElement>) => {
-    const { currentTarget } = event
-    setPassword(value)
-    setValidation(prev => ({ ...prev, password: validateSingleField(currentTarget) }) )
-  }
-
-  const onPasswordConfirmationChange = (value: string, event: FormEvent<HTMLInputElement>) => {
-    const { currentTarget } = event
-    setPasswordConfirmation(value)
-    setValidation(prev => ({ ...prev, passwordConfirmation: validateSingleField(currentTarget) }) )
-  }
-
-  const formDisabled = Object.values(validation).some(value => value !== true)
+  const error = user.errors.length ? user.errors[0] : undefined
 
   return (
     <Form
       noValidate
       acceptCharset="UTF-8"
-      action={props.path}
+      action={path}
       id="signup_form"
       method="post"
     >
-      <HiddenInputs />
-      <TextField inputProps={{
-        isRequired: true,
-        name: 'user[username]',
-        fieldId: 'user_username',
-        label: 'Username',
-        isValid: validation.username,
-        value: username,
-        onChange: onUsernameChange
-      }}
-      />
+      <HelperText className={error ? '' : 'invisible'}>
+        <HelperTextItem hasIcon={error?.type === 'error'} variant={error?.type as 'error'}>
+          {error?.message}
+        </HelperTextItem>
+      </HelperText>
 
-      <EmailField inputProps={{
-        isRequired: true,
-        name: 'user[email]',
-        fieldId: 'user_email',
-        label: 'Email address',
-        isValid: validation.email,
-        value: email,
-        onChange: onEmailChange
-      }}
-      />
+      <input name="utf8" type="hidden" value="✓" />
+      <CSRFToken />
 
-      <TextField inputProps={{
-        name: 'user[first_name]',
-        fieldId: 'user_first_name',
-        label: 'First name',
-        isValid: validation.firstName,
-        value: firstName,
-        onChange: setFirstName
-      }}
-      />
+      <FormGroup
+        isRequired
+        autoComplete="off"
+        fieldId="user_username"
+        helperTextInvalid={validationVisibility.username && validation?.username?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="Username"
+        validated={(validationVisibility.username && validation?.username) ? 'error' : 'default'}
+      >
+        <TextInput
+          autoFocus
+          isRequired
+          autoComplete="off"
+          id="user_username"
+          name="user[username]"
+          type="text"
+          validated={(validationVisibility.username && validation?.username) ? 'error' : 'default'}
+          value={state.username}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, username: true })) }}
+          onChange={handleOnChange('username')}
+        />
+      </FormGroup>
 
-      <TextField inputProps={{
-        name: 'user[last_name]',
-        fieldId: 'user_last_name',
-        label: 'Last name',
-        isValid: validation.lastName,
-        value: lastName,
-        onChange: setLastName
-      }}
-      />
+      <FormGroup
+        isRequired
+        autoComplete="off"
+        fieldId="user_email"
+        helperTextInvalid={validationVisibility.email && validation?.email?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="Email address"
+        validated={(validationVisibility.email && validation?.email) ? 'error' : 'default'}
+      >
+        <TextInput
+          isRequired
+          autoComplete="off"
+          id="user_email"
+          name="user[email]"
+          type="email"
+          validated={(validationVisibility.email && validation?.email) ? 'error' : 'default'}
+          value={state.email}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, email: true })) }}
+          onChange={handleOnChange('email')}
+        />
+      </FormGroup>
 
-      <PasswordField inputProps={{
-        isRequired: true,
-        name: 'user[password]',
-        fieldId: 'user_password',
-        label: 'Password',
-        isValid: validation.password,
-        value: password,
-        onChange: onPasswordChange
-      }}
-      />
+      <FormGroup
+        autoComplete="off"
+        fieldId="user_first_name"
+        helperTextInvalid={validationVisibility.username && validation?.username?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="First name"
+        validated={(validationVisibility.firstName && validation?.firstName) ? 'error' : 'default'}
+      >
+        <TextInput
+          autoComplete="off"
+          id="user_first_name"
+          name="user[first_name]"
+          type="text"
+          validated={(validationVisibility.firstName && validation?.firstName) ? 'error' : 'default'}
+          value={state.firstName}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, firstName: true })) }}
+          onChange={handleOnChange('firstName')}
+        />
+      </FormGroup>
 
-      <PasswordField inputProps={{
-        isRequired: true,
-        name: 'user[password_confirmation]',
-        fieldId: 'user_password_confirmation',
-        label: 'Password confirmation',
-        isValid: validation.passwordConfirmation,
-        value: passwordConfirmation,
-        onChange: onPasswordConfirmationChange
-      }}
-      />
+      <FormGroup
+        autoComplete="off"
+        fieldId="user_last_name"
+        helperTextInvalid={validationVisibility.lastName && validation?.lastName?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="Last name"
+        validated={(validationVisibility.lastName && validation?.lastName) ? 'error' : 'default'}
+      >
+        <TextInput
+          autoComplete="off"
+          id="user_last_name"
+          name="user[last_name]"
+          type="text"
+          validated={(validationVisibility.lastName && validation?.lastName) ? 'error' : 'default'}
+          value={state.lastName}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, lastName: true })) }}
+          onChange={handleOnChange('lastName')}
+        />
+      </FormGroup>
+
+      <FormGroup
+        isRequired
+        autoComplete="off"
+        fieldId="user_password"
+        helperTextInvalid={validationVisibility.password && validation?.password?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="Password"
+        validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+      >
+        <TextInput
+          isRequired
+          autoComplete="off"
+          id="user_password"
+          name="user[password]"
+          type="password"
+          validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+          value={state.password}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
+          onChange={handleOnChange('password')}
+        />
+      </FormGroup>
+
+      <FormGroup
+        isRequired
+        autoComplete="off"
+        fieldId="user_password_confirmation"
+        helperTextInvalid={validationVisibility.passwordConfirmation && validation?.passwordConfirmation?.[0]}
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        label="Password confirmation"
+        validated={(validationVisibility.passwordConfirmation && validation?.passwordConfirmation) ? 'error' : 'default'}
+      >
+        <TextInput
+          isRequired
+          autoComplete="off"
+          id="user_password_confirmation"
+          name="user[password_confirmation]"
+          type="password"
+          validated={(validationVisibility.passwordConfirmation && validation?.passwordConfirmation) ? 'error' : 'default'}
+          value={state.passwordConfirmation}
+          onBlur={() => { setValidationVisibility(prev => ({ ...prev, passwordConfirmation: true })) }}
+          onChange={handleOnChange('passwordConfirmation')}
+        />
+      </FormGroup>
 
       <ActionGroup>
         <Button
-          className="pf-c-button pf-m-primary pf-m-block"
-          isDisabled={formDisabled}
+          isBlock
+          isDisabled={validation !== undefined}
           name="commit"
           type="submit"
+          variant="primary"
         >
           Sign up
         </Button>

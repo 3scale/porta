@@ -3,19 +3,18 @@ import { LoginPage } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
-import { FlashMessages } from 'Login/components/FlashMessages'
 import { RequestPasswordForm } from 'Login/components/RequestPasswordForm'
 
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
 
 interface Props {
-  flashMessages?: FlashMessage[];
+  flashMessages: FlashMessage[];
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
-const RequestPassword: FunctionComponent<Props> = ({
+const RequestPasswordPage: FunctionComponent<Props> = ({
   flashMessages,
   providerLoginPath,
   providerPasswordPath
@@ -27,8 +26,8 @@ const RequestPassword: FunctionComponent<Props> = ({
     brandImgSrc={brandImg}
     loginTitle="Request Password"
   >
-    {flashMessages && <FlashMessages flashMessages={flashMessages} />}
     <RequestPasswordForm
+      error={flashMessages.length ? flashMessages[0] : undefined}
       providerLoginPath={providerLoginPath}
       providerPasswordPath={providerPasswordPath}
     />
@@ -36,7 +35,7 @@ const RequestPassword: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const RequestPasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<RequestPassword {...props} />, containerId) }
+const RequestPasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<RequestPasswordPage {...props} />, containerId) }
 
 export type { Props }
-export { RequestPassword, RequestPasswordWrapper }
+export { RequestPasswordPage, RequestPasswordWrapper }
