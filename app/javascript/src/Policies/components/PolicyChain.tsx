@@ -76,6 +76,7 @@ const PolicyChain: React.FunctionComponent<Props> = ({
                       dataListCells={[
                         <DataListCell key={policy.uuid}>
                           <PolicyTile
+                            isDisabled={!policy.enabled}
                             policy={policy}
                             title="Edit this Policy"
                             onClick={() => actions.editPolicy(policy, index)}
