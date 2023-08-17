@@ -187,13 +187,6 @@ $error-color: #c00;
   user-select: none;
   text-align: left;
 
-  &.Policy--disabled {
-    .Policy-name {
-      color: $disabledColor;
-      text-decoration: line-through;
-    }
-  }
-
   &-sortHandle {
     order: 4;
     cursor: move;
@@ -277,6 +270,13 @@ $error-color: #c00;
     margin: 1rem 0;
     border-bottom: 1px solid $subtleColor;
     border-top: 1px solid $subtleColor;
+  }
+}
+
+.Policy--disabled {
+  .Policy-name {
+    color: $disabledColor;
+    text-decoration: line-through;
   }
 }
 
