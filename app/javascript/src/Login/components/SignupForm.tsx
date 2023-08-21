@@ -3,8 +3,6 @@ import {
   Button,
   Form,
   FormGroup,
-  HelperText,
-  HelperTextItem,
   TextInput
 } from '@patternfly/react-core'
 import { useState } from 'react'
@@ -12,6 +10,7 @@ import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclama
 
 import { validateSignup } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
+import { LoginAlert } from 'Login/components/FormAlert'
 
 import type { FlashMessage } from 'Types'
 import type { FunctionComponent } from 'react'
@@ -68,11 +67,7 @@ const SignupForm: FunctionComponent<Props> = ({
       id="signup_form"
       method="post"
     >
-      <HelperText className={error ? '' : 'invisible'}>
-        <HelperTextItem hasIcon={error?.type === 'error'} variant={error?.type as 'error'}>
-          {error?.message}
-        </HelperTextItem>
-      </HelperText>
+      <LoginAlert error={error} />
 
       <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />

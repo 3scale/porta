@@ -3,8 +3,6 @@ import {
   Button,
   Form,
   FormGroup,
-  HelperText,
-  HelperTextItem,
   LoginPage,
   TextInput
 } from '@patternfly/react-core'
@@ -15,6 +13,7 @@ import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { validateChangePassword } from 'Login/utils/validations'
+import { LoginAlert } from 'Login/components/FormAlert'
 
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
@@ -68,11 +67,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
         id="edit_user_2"
         method="post"
       >
-        <HelperText className={error ? '' : 'invisible'}>
-          <HelperTextItem hasIcon={error?.type === 'error'} variant={error?.type as 'error'}>
-            {error?.message}
-          </HelperTextItem>
-        </HelperText>
+        <LoginAlert error={error} />
 
         <input name="_method" type="hidden" value="put" />
         <input name="utf8" type="hidden" value="✓" />

@@ -4,13 +4,12 @@ import {
   Button,
   Form,
   FormGroup,
-  HelperText,
-  HelperTextItem,
   TextInput
 } from '@patternfly/react-core'
 
 import { validateRequestPassword } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
+import { LoginAlert } from 'Login/components/FormAlert'
 
 import type { FlashMessage } from 'Types/FlashMessages'
 import type { FunctionComponent } from 'react'
@@ -44,11 +43,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
       id="request_password"
       method="post"
     >
-      <HelperText className={error ? '' : 'invisible'}>
-        <HelperTextItem hasIcon={error?.type === 'error'} variant={error?.type as 'error'}>
-          {error?.message}
-        </HelperTextItem>
-      </HelperText>
+      <LoginAlert error={error} />
 
       <input name="utf8" type="hidden" value="✓" />
       <input name="_method" type="hidden" value="delete" />

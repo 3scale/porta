@@ -138,25 +138,27 @@ exports[`should not render reset password button when disablePasswordReset is tr
                         method="post"
                         noValidate={true}
                       >
-                        <HelperText
-                          className="invisible"
-                        >
-                          <div
-                            className="pf-c-helper-text invisible"
+                        <LoginAlert>
+                          <HelperText
+                            className="invisible"
                           >
-                            <HelperTextItem
-                              hasIcon={false}
+                            <div
+                              className="pf-c-helper-text invisible"
                             >
-                              <div
-                                className="pf-c-helper-text__item"
+                              <HelperTextItem
+                                hasIcon={false}
                               >
-                                <span
-                                  className="pf-c-helper-text__item-text"
-                                />
-                              </div>
-                            </HelperTextItem>
-                          </div>
-                        </HelperText>
+                                <div
+                                  className="pf-c-helper-text__item"
+                                >
+                                  <span
+                                    className="pf-c-helper-text__item-text"
+                                  />
+                                </div>
+                              </HelperTextItem>
+                            </div>
+                          </HelperText>
+                        </LoginAlert>
                         <input
                           name="utf8"
                           type="hidden"
@@ -601,25 +603,27 @@ exports[`should render Login form and Authentication providers when available 1`
                         method="post"
                         noValidate={true}
                       >
-                        <HelperText
-                          className="invisible"
-                        >
-                          <div
-                            className="pf-c-helper-text invisible"
+                        <LoginAlert>
+                          <HelperText
+                            className="invisible"
                           >
-                            <HelperTextItem
-                              hasIcon={false}
+                            <div
+                              className="pf-c-helper-text invisible"
                             >
-                              <div
-                                className="pf-c-helper-text__item"
+                              <HelperTextItem
+                                hasIcon={false}
                               >
-                                <span
-                                  className="pf-c-helper-text__item-text"
-                                />
-                              </div>
-                            </HelperTextItem>
-                          </div>
-                        </HelperText>
+                                <div
+                                  className="pf-c-helper-text__item"
+                                >
+                                  <span
+                                    className="pf-c-helper-text__item-text"
+                                  />
+                                </div>
+                              </HelperTextItem>
+                            </div>
+                          </HelperText>
+                        </LoginAlert>
                         <input
                           name="utf8"
                           type="hidden"
@@ -1278,25 +1282,27 @@ exports[`should render itself 1`] = `
                         method="post"
                         noValidate={true}
                       >
-                        <HelperText
-                          className="invisible"
-                        >
-                          <div
-                            className="pf-c-helper-text invisible"
+                        <LoginAlert>
+                          <HelperText
+                            className="invisible"
                           >
-                            <HelperTextItem
-                              hasIcon={false}
+                            <div
+                              className="pf-c-helper-text invisible"
                             >
-                              <div
-                                className="pf-c-helper-text__item"
+                              <HelperTextItem
+                                hasIcon={false}
                               >
-                                <span
-                                  className="pf-c-helper-text__item-text"
-                                />
-                              </div>
-                            </HelperTextItem>
-                          </div>
-                        </HelperText>
+                                <div
+                                  className="pf-c-helper-text__item"
+                                >
+                                  <span
+                                    className="pf-c-helper-text__item-text"
+                                  />
+                                </div>
+                              </HelperTextItem>
+                            </div>
+                          </HelperText>
+                        </LoginAlert>
                         <input
                           name="utf8"
                           type="hidden"
@@ -1765,25 +1771,27 @@ exports[`should render reset password button when disablePasswordReset is false 
                         method="post"
                         noValidate={true}
                       >
-                        <HelperText
-                          className="invisible"
-                        >
-                          <div
-                            className="pf-c-helper-text invisible"
+                        <LoginAlert>
+                          <HelperText
+                            className="invisible"
                           >
-                            <HelperTextItem
-                              hasIcon={false}
+                            <div
+                              className="pf-c-helper-text invisible"
                             >
-                              <div
-                                className="pf-c-helper-text__item"
+                              <HelperTextItem
+                                hasIcon={false}
                               >
-                                <span
-                                  className="pf-c-helper-text__item-text"
-                                />
-                              </div>
-                            </HelperTextItem>
-                          </div>
-                        </HelperText>
+                                <div
+                                  className="pf-c-helper-text__item"
+                                >
+                                  <span
+                                    className="pf-c-helper-text__item-text"
+                                  />
+                                </div>
+                              </HelperTextItem>
+                            </div>
+                          </HelperText>
+                        </LoginAlert>
                         <input
                           name="utf8"
                           type="hidden"
