@@ -46,6 +46,12 @@ const LoginForm: FunctionComponent<Props> = ({
 
   const validation = validateLogin({ username, password })
 
+  const usernameErrors = validation?.username
+  const passwordErrors = validation?.password
+
+  const usernameValidated = (validationVisibility.username && usernameErrors) ? 'error' : 'default'
+  const passwordValidated = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
+
   return (
     <Form
       noValidate
@@ -64,9 +70,9 @@ const LoginForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="session_username"
-        helperTextInvalid={validation?.username?.[0]}
+        helperTextInvalid={usernameErrors?.[0]}
         label="Email or Username"
-        validated={(validationVisibility.username && validation?.username) ? 'error' : 'default'}
+        validated={usernameValidated}
       >
         <TextInput
           isRequired
@@ -75,7 +81,7 @@ const LoginForm: FunctionComponent<Props> = ({
           id="session_username"
           name="username"
           type="email"
-          validated={(validationVisibility.username && validation?.username) ? 'error' : 'default'}
+          validated={usernameValidated}
           value={username}
           onBlur={() => { setValidationVisibility(prev => ({ ...prev, username: true })) }}
           onChange={onUsernameChange}
@@ -86,9 +92,9 @@ const LoginForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="session_password"
-        helperTextInvalid={validation?.password?.[0]}
+        helperTextInvalid={passwordErrors?.[0]}
         label="Password"
-        validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+        validated={passwordValidated}
       >
         <TextInput
           isRequired
@@ -97,7 +103,7 @@ const LoginForm: FunctionComponent<Props> = ({
           id="session_password"
           name="password"
           type="password"
-          validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+          validated={passwordValidated}
           value={password}
           onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
           onChange={onPasswordChange}

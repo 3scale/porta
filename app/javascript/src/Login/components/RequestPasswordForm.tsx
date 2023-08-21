@@ -33,7 +33,8 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
     setValidationVisibility(false)
   }
 
-  const emailValidation = validateRequestPassword(email)
+  const emailValidationErrors = validateRequestPassword(email)
+  const validatedEmail = (validationVisibility && emailValidationErrors) ? 'error' : 'default'
 
   return (
     <Form
@@ -53,9 +54,9 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="email"
-        helperTextInvalid={emailValidation?.[0]}
+        helperTextInvalid={emailValidationErrors?.[0]}
         label="Email address"
-        validated={(validationVisibility && emailValidation) ? 'error' : 'default'}
+        validated={validatedEmail}
       >
         <TextInput
           autoFocus
@@ -64,7 +65,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
           id="email"
           name="email"
           type="email"
-          validated={(validationVisibility && emailValidation) ? 'error' : 'default'}
+          validated={validatedEmail}
           value={email}
           onBlur={() => { setValidationVisibility(true) }}
           onChange={onEmailChange}
@@ -74,7 +75,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
       <ActionGroup>
         <Button
           isBlock
-          isDisabled={emailValidation !== undefined}
+          isDisabled={emailValidationErrors !== undefined}
           type="submit"
           variant="primary"
         >

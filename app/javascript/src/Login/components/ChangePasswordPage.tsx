@@ -52,6 +52,12 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
 
   const validation = validateChangePassword({ password, passwordConfirmation })
 
+  const passwordErrors = validation?.password
+  const passwordConfirmationErrors = validation?.passwordConfirmation
+
+  const passwordValidated = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
+  const passwordConfirmationValidated = (validationVisibility.passwordConfirmation && passwordConfirmationErrors) ? 'error' : 'default'
+
   return (
     <LoginPage
       backgroundImgAlt="Red Hat 3scale API Management"
@@ -77,9 +83,9 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
           isRequired
           autoComplete="off"
           fieldId="user_password"
-          helperTextInvalid={validation?.password?.[0]}
+          helperTextInvalid={passwordErrors?.[0]}
           label="Password"
-          validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+          validated={passwordValidated}
         >
           <TextInput
             autoFocus
@@ -88,7 +94,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
             id="user_password"
             name="user[password]"
             type="password"
-            validated={(validationVisibility.password && validation?.password) ? 'error' : 'default'}
+            validated={passwordValidated}
             value={password}
             onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
             onChange={onPasswordChange}
@@ -99,9 +105,9 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
           isRequired
           autoComplete="off"
           fieldId="user_password_confirmation"
-          helperTextInvalid={validation?.passwordConfirmation?.[0]}
+          helperTextInvalid={passwordConfirmationErrors?.[0]}
           label="Password confirmation"
-          validated={(validationVisibility.passwordConfirmation && validation?.passwordConfirmation) ? 'error' : 'default'}
+          validated={passwordConfirmationValidated}
         >
           <TextInput
             isRequired
@@ -109,7 +115,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
             id="user_password_confirmation"
             name="user[password_confirmation]"
             type="password"
-            validated={(validationVisibility.passwordConfirmation && validation?.passwordConfirmation) ? 'error' : 'default'}
+            validated={passwordConfirmationValidated}
             value={passwordConfirmation}
             onBlur={() => { setValidationVisibility(prev => ({ ...prev, passwordConfirmation: true })) }}
             onChange={onPasswordConfirmationChange}
