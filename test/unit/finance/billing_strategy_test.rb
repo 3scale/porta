@@ -269,6 +269,15 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     @bs.notify_billing_results(results)
   end
 
+  test 'gracefully reports missing provider account' do
+    @bs.expects(:provider).returns(nil)
+    System::ErrorReporting.expects(:report_error).with do |exception, _parameters|
+      exception.is_a? Finance::BillingError
+    end
+
+    @bs.__send__ :bill_and_charge_each, {}
+  end
+
   class DailyBillingTest < ActiveSupport::TestCase
     setup do
       @providers = FactoryBot.create_list(:provider_with_billing, 3)
