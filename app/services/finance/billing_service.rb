@@ -57,9 +57,9 @@ module Finance
     private
 
     def billing_options
-      options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
-      raise SpuriousBillingError, "whole provider will be billed when buyer id is the same: #{account_id}" if provider_account_id == account_id
+      raise SpuriousBillingError, "provider and buyer ids are the same: #{account_id}" if provider_account_id == account_id
 
+      options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
       options[:buyer_ids] = [account_id]
       options
     end
