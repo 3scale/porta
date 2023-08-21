@@ -145,40 +145,11 @@ exports[`should not render reset password button when disablePasswordReset is tr
                             className="pf-c-helper-text invisible"
                           >
                             <HelperTextItem
-                              hasIcon={true}
+                              hasIcon={false}
                             >
                               <div
                                 className="pf-c-helper-text__item"
                               >
-                                <span
-                                  aria-hidden={true}
-                                  className="pf-c-helper-text__item-icon"
-                                >
-                                  <MinusIcon
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
-                                  >
-                                    <svg
-                                      aria-hidden={true}
-                                      aria-labelledby={null}
-                                      fill="currentColor"
-                                      height="1em"
-                                      role="img"
-                                      style={
-                                        {
-                                          "verticalAlign": "-0.125em",
-                                        }
-                                      }
-                                      viewBox="0 0 448 512"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                                      />
-                                    </svg>
-                                  </MinusIcon>
-                                </span>
                                 <span
                                   className="pf-c-helper-text__item-text"
                                 />
@@ -637,40 +608,11 @@ exports[`should render Login form and Authentication providers when available 1`
                             className="pf-c-helper-text invisible"
                           >
                             <HelperTextItem
-                              hasIcon={true}
+                              hasIcon={false}
                             >
                               <div
                                 className="pf-c-helper-text__item"
                               >
-                                <span
-                                  aria-hidden={true}
-                                  className="pf-c-helper-text__item-icon"
-                                >
-                                  <MinusIcon
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
-                                  >
-                                    <svg
-                                      aria-hidden={true}
-                                      aria-labelledby={null}
-                                      fill="currentColor"
-                                      height="1em"
-                                      role="img"
-                                      style={
-                                        {
-                                          "verticalAlign": "-0.125em",
-                                        }
-                                      }
-                                      viewBox="0 0 448 512"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                                      />
-                                    </svg>
-                                  </MinusIcon>
-                                </span>
                                 <span
                                   className="pf-c-helper-text__item-text"
                                 />
@@ -1343,40 +1285,11 @@ exports[`should render itself 1`] = `
                             className="pf-c-helper-text invisible"
                           >
                             <HelperTextItem
-                              hasIcon={true}
+                              hasIcon={false}
                             >
                               <div
                                 className="pf-c-helper-text__item"
                               >
-                                <span
-                                  aria-hidden={true}
-                                  className="pf-c-helper-text__item-icon"
-                                >
-                                  <MinusIcon
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
-                                  >
-                                    <svg
-                                      aria-hidden={true}
-                                      aria-labelledby={null}
-                                      fill="currentColor"
-                                      height="1em"
-                                      role="img"
-                                      style={
-                                        {
-                                          "verticalAlign": "-0.125em",
-                                        }
-                                      }
-                                      viewBox="0 0 448 512"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                                      />
-                                    </svg>
-                                  </MinusIcon>
-                                </span>
                                 <span
                                   className="pf-c-helper-text__item-text"
                                 />
@@ -1859,40 +1772,11 @@ exports[`should render reset password button when disablePasswordReset is false 
                             className="pf-c-helper-text invisible"
                           >
                             <HelperTextItem
-                              hasIcon={true}
+                              hasIcon={false}
                             >
                               <div
                                 className="pf-c-helper-text__item"
                               >
-                                <span
-                                  aria-hidden={true}
-                                  className="pf-c-helper-text__item-icon"
-                                >
-                                  <MinusIcon
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
-                                  >
-                                    <svg
-                                      aria-hidden={true}
-                                      aria-labelledby={null}
-                                      fill="currentColor"
-                                      height="1em"
-                                      role="img"
-                                      style={
-                                        {
-                                          "verticalAlign": "-0.125em",
-                                        }
-                                      }
-                                      viewBox="0 0 448 512"
-                                      width="1em"
-                                    >
-                                      <path
-                                        d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
-                                      />
-                                    </svg>
-                                  </MinusIcon>
-                                </span>
                                 <span
                                   className="pf-c-helper-text__item-text"
                                 />
