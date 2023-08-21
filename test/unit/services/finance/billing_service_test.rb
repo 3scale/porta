@@ -162,7 +162,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
   test 'can run without lock' do
     now = '2018-01-16 08:00:00 UTC'
     Finance::BillingStrategy.expects(:daily).returns(mock_billing_success(now, @provider)).twice
-    Finance::BillingService.call(@provider.id, now: now, provider_account_id: master_account.id)
-    Finance::BillingService.call(@provider.id, now: now, provider_account_id: master_account.id)
+    Finance::BillingService.call(@provider.id, { now: now, provider_account_id: master_account.id })
+    Finance::BillingService.call(@provider.id, { now: now, provider_account_id: master_account.id })
   end
 end
