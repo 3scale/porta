@@ -51,7 +51,7 @@ const LoginPage: FunctionComponent<Props> = ({
   >
     {show3scaleLoginForm && (
       <LoginForm
-        error={flashMessages.length ? flashMessages[0] : undefined}
+        flashMessages={flashMessages}
         providerSessionsPath={providerSessionsPath}
         session={session}
       />

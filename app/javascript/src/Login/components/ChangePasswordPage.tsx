@@ -13,7 +13,7 @@ import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { validateChangePassword } from 'Login/utils/validations'
-import { LoginAlert } from 'Login/components/FormAlert'
+import { LoginAlert } from 'Login/components/LoginAlert'
 
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
@@ -21,15 +21,13 @@ import type { FlashMessage } from 'Types'
 interface Props {
   lostPasswordToken?: string | null;
   url?: string;
-  errors?: FlashMessage[];
+  flashMessages: FlashMessage[];
 }
-
-const emptyArray = [] as never[]
 
 const ChangePasswordPage: FunctionComponent<Props> = ({
   lostPasswordToken = null,
   url,
-  errors = emptyArray
+  flashMessages
 }) => {
   const [state, setState] = useState({
     password: '',
@@ -53,7 +51,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
     }
   }
 
-  const error = errors.length ? errors[0] : undefined
+  const alert = flashMessages.length ? flashMessages[0] : undefined
 
   const validation = validateChangePassword(state)
 
@@ -78,7 +76,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
         id="edit_user_2"
         method="post"
       >
-        <LoginAlert error={error} />
+        <LoginAlert message={alert?.message} type={alert?.type} />
 
         <input name="_method" type="hidden" value="put" />
         <input name="utf8" type="hidden" value="✓" />

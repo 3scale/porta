@@ -5,7 +5,6 @@ class Provider::PasswordsController < FrontendController
   before_action :find_user, :only => [:show, :update]
   before_action :instantiate_sessions_presenter, only: [:show, :update]
   before_action :passwords_allowed?
-  before_action :instantiate_presenter, only: %i(show update)
 
   def new
     return redirect_back(fallback_location: root_path), error: t('.has_password') if current_user.using_password?
@@ -17,14 +16,11 @@ class Provider::PasswordsController < FrontendController
 
   def destroy
     reset_session_password_token
-    if user = @provider.users.find_by_email(email)
+    if (user = @provider.users.find_by(email: email))
       user.generate_lost_password_token!
-      flash[:notice] = "A password reset link has been emailed to you."
-      redirect_to provider_login_path
-    else
-      flash[:error] = 'Email not found.'
-      redirect_to reset_provider_password_path
     end
+    flash[:success] = t('.success', email: email)
+    redirect_to provider_login_path
   end
 
   def show
@@ -39,7 +35,7 @@ class Provider::PasswordsController < FrontendController
     user = password_params[:user]
     if @user.update_password(user[:password], user[:password_confirmation] )
       reset_session_password_token
-      flash[:notice] = "The password has been changed."
+      flash[:success] = t('.success')
       @user.kill_user_sessions
       redirect_to provider_login_path
     else
@@ -52,10 +48,6 @@ class Provider::PasswordsController < FrontendController
   end
 
   private
-
-  def instantiate_presenter
-    @password_presenter = PasswordPresenter.new(@user)
-  end
 
   # Can't be used for neither Buyer nor Master
   #

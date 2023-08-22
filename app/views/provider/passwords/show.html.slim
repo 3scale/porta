@@ -1,0 +1,7 @@
+= javascript_packs_with_chunks_tag 'change_password'
+
+- flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
+
+div#pf-login-page-container data-change-password-props={flashMessages: flash_messages,
+  lostPasswordToken: @user.lost_password_token,
+  url: provider_password_path }.to_json

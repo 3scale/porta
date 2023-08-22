@@ -27,7 +27,7 @@ const RequestPasswordPage: FunctionComponent<Props> = ({
     loginTitle="Request Password"
   >
     <RequestPasswordForm
-      error={flashMessages.length ? flashMessages[0] : undefined}
+      flashMessages={flashMessages}
       providerLoginPath={providerLoginPath}
       providerPasswordPath={providerPasswordPath}
     />
