@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Finance::BillingStrategy < ApplicationRecord
-  class BillingError < StandardError
-  end
-
   module NonAuditedColumns
     def non_audited_columns
       super - [inheritance_column]
@@ -355,7 +352,7 @@ class Finance::BillingStrategy < ApplicationRecord
     if provider.nil?
 
       message = "WARNING: tried to use billing strategy #{self.id} which has no account"
-      exception = BillingError.new message
+      exception = ::Finance::BillingError.new message
       System::ErrorReporting.report_error(exception, :error_message => message, :error_class => 'InvalidData')
       return
     end

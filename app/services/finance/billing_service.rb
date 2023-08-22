@@ -2,8 +2,6 @@
 
 module Finance
   class BillingService
-    class LockBillingError < StandardError; end
-
     def self.async_call(provider_account, now = Time.zone.now, buyers_scope = nil)
       BillingWorker.enqueue(provider_account, now, buyers_scope)
     end
@@ -30,7 +28,7 @@ module Finance
 
     def call!
       with_lock { call }
-    rescue LockBillingError => error
+    rescue LockBillingError, SpuriousBillingError => error
       report_error(error)
       nil
     end
@@ -59,14 +57,16 @@ module Finance
     private
 
     def billing_options
+      raise SpuriousBillingError, "provider and buyer ids are the same: #{account_id}" if provider_account_id == account_id
+
       options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
-      options[:buyer_ids] = [account_id] if provider_account_id != account_id
+      options[:buyer_ids] = [account_id]
       options
     end
 
     def with_lock
-      # intentionally skip unlocking, no further billing of account within 3 hours allowed
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hours.to_i * 1000).result
+      # intentionally skip unlocking, no further billing of account within 1 hour allowed
+      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hour.in_milliseconds).result
 
       yield
     end

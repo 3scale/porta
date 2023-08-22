@@ -45,6 +45,13 @@ class BillingWorker
   end
 
   def self.enqueue_for_buyer(buyer, billing_date)
+    if buyer.id == buyer.provider_account_id
+      System::ErrorReporting.report_error(ArgumentError.new("invalid buyer #{buyer.id}, has self as provider"),
+                                          buyer_id: buyer.id,
+                                          billing_date: billing_date)
+      return
+    end
+
     time = billing_date.to_s(:iso8601)
     perform_async(buyer.id, buyer.provider_account_id, time)
   end
