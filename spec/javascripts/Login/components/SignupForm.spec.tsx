@@ -4,15 +4,16 @@ import { act } from 'react-dom/test-utils'
 import { SignupForm } from 'Login/components/SignupForm'
 import { isSubmitDisabled } from 'utilities/test-utils'
 
+import type { Props } from 'Login/components/SignupForm'
 import type { FormEvent } from 'react'
-import type { SignupProps as Props } from 'Types'
 
-const defaultProps = {
+const defaultProps: Props = {
   user: {
     email: 'bob@sponge.com',
     firstname: 'Bob',
     lastname: 'Sponge',
-    username: 'bobsponge'
+    username: 'bobsponge',
+    errors: []
   },
   path: 'bikini-bottom'
 }

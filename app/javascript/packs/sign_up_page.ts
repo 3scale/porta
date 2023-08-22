@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
-  const signupPageProps = safeFromJsonString<Props>(container.dataset.signupProps)!
-  SignupPageWrapper(signupPageProps, 'pf-login-page-container')
+  const signupPageProps = safeFromJsonString<Props>(container.dataset.signupProps)
+
+  if (!signupPageProps) {
+    throw new Error('Missing props for SignupPage')
+  }
+
+  SignupPageWrapper(signupPageProps, containerId)
 })
