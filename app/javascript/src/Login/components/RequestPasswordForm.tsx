@@ -28,9 +28,13 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
   const [email, setEmail] = useState('')
   const [validationVisibility, setValidationVisibility] = useState(false)
 
-  const onEmailChange = (value: string) => {
+  const handleOnChange = (value: string) => {
     setEmail(value)
     setValidationVisibility(false)
+  }
+
+  const handleOnBlur = () => {
+    setValidationVisibility(true)
   }
 
   const emailValidationErrors = validateRequestPassword(email)
@@ -67,8 +71,8 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
           type="email"
           validated={validatedEmail}
           value={email}
-          onBlur={() => { setValidationVisibility(true) }}
-          onChange={onEmailChange}
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
         />
       </FormGroup>
 
@@ -81,14 +85,16 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
         >
           Reset password
         </Button>
-        <a
-          className="pf-c-button pf-m-link pf-m-block"
+        <Button
+          isBlock
+          component="a"
           href={providerLoginPath}
+          variant="link"
           // HACK: prevent click from missing link after input loses focus and component re-renders
           onMouseDown={(event) => { event.currentTarget.click() }}
         >
           Sign in
-        </a>
+        </Button>
       </ActionGroup>
     </Form>
   )

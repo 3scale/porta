@@ -27,24 +27,29 @@ const LoginForm: FunctionComponent<Props> = ({
   providerSessionsPath,
   session
 }) => {
-  const [username, setUsername] = useState(session.username ?? '')
-  const [password, setPassword] = useState('')
+  const [state, setState] = useState({
+    username: session.username ?? '',
+    password: ''
+  })
   const [validationVisibility, setValidationVisibility] = useState({
     username: false,
     password: false
   })
 
-  const onUsernameChange = (value: string) => {
-    setUsername(value)
-    setValidationVisibility(prev => ({ ...prev, username: false }))
+  const handleOnChange = (field: keyof typeof state) => {
+    return (value: string) => {
+      setState(prev => ({ ...prev, [field]: value }))
+      setValidationVisibility(prev => ({ ...prev, [field]: false }))
+    }
   }
 
-  const onPasswordChange = (value: string) => {
-    setPassword(value)
-    setValidationVisibility(prev => ({ ...prev, password: false }))
+  const handleOnBlur = (field: keyof typeof state) => {
+    return () => {
+      setValidationVisibility(prev => ({ ...prev, [field]: true }))
+    }
   }
 
-  const validation = validateLogin({ username, password })
+  const validation = validateLogin(state)
 
   const usernameErrors = validation?.username
   const passwordErrors = validation?.password
@@ -77,14 +82,14 @@ const LoginForm: FunctionComponent<Props> = ({
         <TextInput
           isRequired
           autoComplete="off"
-          autoFocus={!username}
+          autoFocus={!session.username}
           id="session_username"
           name="username"
           type="email"
           validated={usernameValidated}
-          value={username}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, username: true })) }}
-          onChange={onUsernameChange}
+          value={state.username}
+          onBlur={handleOnBlur('username')}
+          onChange={handleOnChange('username')}
         />
       </FormGroup>
 
@@ -99,14 +104,14 @@ const LoginForm: FunctionComponent<Props> = ({
         <TextInput
           isRequired
           autoComplete="off"
-          autoFocus={Boolean(username)}
+          autoFocus={Boolean(session.username)}
           id="session_password"
           name="password"
           type="password"
           validated={passwordValidated}
-          value={password}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
-          onChange={onPasswordChange}
+          value={state.password}
+          onBlur={handleOnBlur('password')}
+          onChange={handleOnChange('password')}
         />
       </FormGroup>
 

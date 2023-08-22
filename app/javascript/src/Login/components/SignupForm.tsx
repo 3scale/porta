@@ -55,21 +55,19 @@ const SignupForm: FunctionComponent<Props> = ({
     }
   }
 
+  const handleOnBlur = (field: keyof typeof state) => {
+    return () => {
+      setValidationVisibility(prev => ({ ...prev, [field]: true }))
+    }
+  }
+
   const validation = validateSignup(state)
 
-  const usernameErrors = validation?.username
-  const emailErrors = validation?.email
-  const firstNameErrors = validation?.firstName
-  const lastNameErrors = validation?.lastName
-  const passwordErrors = validation?.password
-  const passwordConfirmationErrors = validation?.passwordConfirmation
-
-  const validatedUsername = (validationVisibility.username && usernameErrors) ? 'error' : 'default'
-  const validatedEmail = (validationVisibility.email && emailErrors) ? 'error' : 'default'
-  const validatedFirstName = (validationVisibility.firstName && firstNameErrors) ? 'error' : 'default'
-  const validatedLastName = (validationVisibility.lastName && lastNameErrors) ? 'error' : 'default'
-  const validatedPassword = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
-  const validatedPasswordConfirmation = (validationVisibility.passwordConfirmation && passwordConfirmationErrors) ? 'error' : 'default'
+  const validated = (Object.keys(state) as (keyof typeof state)[])
+    .reduce((obj, key) => ({
+      ...obj,
+      [key]: (validationVisibility[key] && validation?.[key]) ? 'error' : 'default'
+    }), {}) as Record<keyof typeof state, 'default' | 'error' | undefined>
 
   const error = user.errors.length ? user.errors[0] : undefined
 
@@ -90,10 +88,10 @@ const SignupForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="user_username"
-        helperTextInvalid={usernameErrors?.[0]}
+        helperTextInvalid={validation?.username?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="Username"
-        validated={validatedUsername}
+        validated={validated.username}
       >
         <TextInput
           autoFocus
@@ -102,9 +100,9 @@ const SignupForm: FunctionComponent<Props> = ({
           id="user_username"
           name="user[username]"
           type="text"
-          validated={validatedUsername}
+          validated={validated.username}
           value={state.username}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, username: true })) }}
+          onBlur={handleOnBlur('username')}
           onChange={handleOnChange('username')}
         />
       </FormGroup>
@@ -116,7 +114,7 @@ const SignupForm: FunctionComponent<Props> = ({
         helperTextInvalid={validation?.email?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="Email address"
-        validated={validatedEmail}
+        validated={validated.email}
       >
         <TextInput
           isRequired
@@ -124,9 +122,9 @@ const SignupForm: FunctionComponent<Props> = ({
           id="user_email"
           name="user[email]"
           type="email"
-          validated={validatedEmail}
+          validated={validated.email}
           value={state.email}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, email: true })) }}
+          onBlur={handleOnBlur('email')}
           onChange={handleOnChange('email')}
         />
       </FormGroup>
@@ -134,19 +132,19 @@ const SignupForm: FunctionComponent<Props> = ({
       <FormGroup
         autoComplete="off"
         fieldId="user_first_name"
-        helperTextInvalid={firstNameErrors?.[0]}
+        helperTextInvalid={validation?.firstName?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="First name"
-        validated={validatedFirstName}
+        validated={validated.firstName}
       >
         <TextInput
           autoComplete="off"
           id="user_first_name"
           name="user[first_name]"
           type="text"
-          validated={validatedFirstName}
+          validated={validated.firstName}
           value={state.firstName}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, firstName: true })) }}
+          onBlur={handleOnBlur('firstName')}
           onChange={handleOnChange('firstName')}
         />
       </FormGroup>
@@ -154,19 +152,19 @@ const SignupForm: FunctionComponent<Props> = ({
       <FormGroup
         autoComplete="off"
         fieldId="user_last_name"
-        helperTextInvalid={lastNameErrors?.[0]}
+        helperTextInvalid={validation?.lastName?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="Last name"
-        validated={validatedLastName}
+        validated={validated.lastName}
       >
         <TextInput
           autoComplete="off"
           id="user_last_name"
           name="user[last_name]"
           type="text"
-          validated={validatedLastName}
+          validated={validated.lastName}
           value={state.lastName}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, lastName: true })) }}
+          onBlur={handleOnBlur('lastName')}
           onChange={handleOnChange('lastName')}
         />
       </FormGroup>
@@ -175,10 +173,10 @@ const SignupForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="user_password"
-        helperTextInvalid={passwordErrors?.[0]}
+        helperTextInvalid={validation?.password?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="Password"
-        validated={validatedPassword}
+        validated={validated.password}
       >
         <TextInput
           isRequired
@@ -186,9 +184,9 @@ const SignupForm: FunctionComponent<Props> = ({
           id="user_password"
           name="user[password]"
           type="password"
-          validated={validatedPassword}
+          validated={validated.password}
           value={state.password}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
+          onBlur={handleOnBlur('password')}
           onChange={handleOnChange('password')}
         />
       </FormGroup>
@@ -197,10 +195,10 @@ const SignupForm: FunctionComponent<Props> = ({
         isRequired
         autoComplete="off"
         fieldId="user_password_confirmation"
-        helperTextInvalid={passwordConfirmationErrors?.[0]}
+        helperTextInvalid={validation?.passwordConfirmation?.[0]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         label="Password confirmation"
-        validated={validatedPasswordConfirmation}
+        validated={validated.passwordConfirmation}
       >
         <TextInput
           isRequired
@@ -208,9 +206,9 @@ const SignupForm: FunctionComponent<Props> = ({
           id="user_password_confirmation"
           name="user[password_confirmation]"
           type="password"
-          validated={validatedPasswordConfirmation}
+          validated={validated.passwordConfirmation}
           value={state.passwordConfirmation}
-          onBlur={() => { setValidationVisibility(prev => ({ ...prev, passwordConfirmation: true })) }}
+          onBlur={handleOnBlur('passwordConfirmation')}
           onChange={handleOnChange('passwordConfirmation')}
         />
       </FormGroup>

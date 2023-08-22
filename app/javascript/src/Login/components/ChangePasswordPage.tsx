@@ -31,26 +31,31 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
   url,
   errors = emptyArray
 }) => {
-  const [password, setPassword] = useState('')
-  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [state, setState] = useState({
+    password: '',
+    passwordConfirmation: ''
+  })
   const [validationVisibility, setValidationVisibility] = useState({
     password: false,
     passwordConfirmation: false
   })
 
-  const onPasswordChange = (value: string) => {
-    setPassword(value)
-    setValidationVisibility(prev => ({ ...prev, password: false }))
+  const handleOnChange = (field: keyof typeof state) => {
+    return (value: string) => {
+      setState(prev => ({ ...prev, [field]: value }))
+      setValidationVisibility(prev => ({ ...prev, [field]: false }))
+    }
   }
 
-  const onPasswordConfirmationChange = (value: string) => {
-    setPasswordConfirmation(value)
-    setValidationVisibility(prev => ({ ...prev, passwordConfirmation: false }))
+  const handleOnBlur = (field: keyof typeof state) => {
+    return () => {
+      setValidationVisibility(prev => ({ ...prev, [field]: true }))
+    }
   }
 
   const error = errors.length ? errors[0] : undefined
 
-  const validation = validateChangePassword({ password, passwordConfirmation })
+  const validation = validateChangePassword(state)
 
   const passwordErrors = validation?.password
   const passwordConfirmationErrors = validation?.passwordConfirmation
@@ -95,9 +100,9 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
             name="user[password]"
             type="password"
             validated={passwordValidated}
-            value={password}
-            onBlur={() => { setValidationVisibility(prev => ({ ...prev, password: true })) }}
-            onChange={onPasswordChange}
+            value={state.password}
+            onBlur={handleOnBlur('password')}
+            onChange={handleOnChange('password')}
           />
         </FormGroup>
 
@@ -116,9 +121,9 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
             name="user[password_confirmation]"
             type="password"
             validated={passwordConfirmationValidated}
-            value={passwordConfirmation}
-            onBlur={() => { setValidationVisibility(prev => ({ ...prev, passwordConfirmation: true })) }}
-            onChange={onPasswordConfirmationChange}
+            value={state.passwordConfirmation}
+            onBlur={handleOnBlur('passwordConfirmation')}
+            onChange={handleOnChange('passwordConfirmation')}
           />
         </FormGroup>
 
