@@ -24,7 +24,7 @@ When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
+When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
   with_scope(selector) do
     click_button(button, visible: !invisible)
   end
@@ -36,7 +36,7 @@ When /^(?:|I |they )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |in
   end
 end
 
-When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
+When /^(?:|I |they )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
     if page.has_css?('.pf-c-form__label', text: field)
       fill_in_pf(field, with: value)
@@ -195,6 +195,10 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
     field_checked = find_field(label)['checked']
     expect(field_checked).to be_falsy
   end
+end
+
+Then "the current page is {}" do |page_name|
+  assert_current_path path_to(page_name)
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|

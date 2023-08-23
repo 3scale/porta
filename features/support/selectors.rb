@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module HtmlSelectorsHelper
-  def selector_for(scope)
+  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
     case scope
 
     #
@@ -32,11 +34,11 @@ module HtmlSelectorsHelper
     #
 
     when /^(opened|closed) order$/
-      text = case $1.to_sym
+      text = case ::Regexp.last_match(1).to_sym
              when :opened
         'open'
              else
-        $1
+        ::Regexp.last_match(1)
       end
       [:xpath, "//tr[td[text() = '#{text}']]"]
 
@@ -66,6 +68,9 @@ module HtmlSelectorsHelper
 
     when "fancybox header"
       '#cboxContent h2'
+
+    when /^section (.*)$/
+      [:xpath, "//button[text() = '#{::Regexp.last_match(1)}']/following-sibling::section[1]"]
 
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
