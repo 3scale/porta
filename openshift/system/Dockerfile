@@ -26,6 +26,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
               gd-devel \
               unixODBC-devel \
               mysql \
+              liberation-sans-fonts \
               llvm5.0-devel \
               postgresql13 postgresql13-devel postgresql13-libs \
               file \
