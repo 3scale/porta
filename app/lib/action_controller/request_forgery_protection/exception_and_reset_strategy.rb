@@ -15,7 +15,7 @@ module ActionController
       private
 
       def exception
-        @exception || ActionController::RequestForgeryProtection::ProtectionMethods::Exception.new(@controller)
+        @exception ||= ActionController::RequestForgeryProtection::ProtectionMethods::Exception.new(@controller)
       end
     end
   end
