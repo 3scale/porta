@@ -1,6 +1,8 @@
+# rubocop:disable Style/PerlBackrefs
 # frozen_string_literal: true
 
 module HtmlSelectorsHelper
+  # :reek:TooManyStatements
   def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
     case scope
 
@@ -10,7 +12,7 @@ module HtmlSelectorsHelper
     when 'page content'
       '#content'
     when 'the main menu', :main_menu
-       '#mainmenu'
+      '#mainmenu'
     when 'the audience dashboard widget', :audience_dashboard_widget
       '#audience'
     when 'the apis dashboard widget', :apis_dashboard_widget
@@ -34,12 +36,7 @@ module HtmlSelectorsHelper
     #
 
     when /^(opened|closed) order$/
-      text = case ::Regexp.last_match(1).to_sym
-             when :opened
-        'open'
-             else
-        ::Regexp.last_match(1)
-      end
+      text = $1 == 'opened' ? 'open' : $1
       [:xpath, "//tr[td[text() = '#{text}']]"]
 
     #
@@ -70,13 +67,15 @@ module HtmlSelectorsHelper
       '#cboxContent h2'
 
     when /^section (.*)$/
-      [:xpath, "//button[text() = '#{::Regexp.last_match(1)}']/following-sibling::section[1]"]
+      [:xpath, "//button[text() = '#{$1}']/following-sibling::section[1]"]
 
     else
-      raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
-        "Add mapping to #{__FILE__}"
+      raise "Can't find mapping from \"#{scope}\" to a selector.\n" \
+            "Add mapping to #{__FILE__}"
     end
   end
 end
 
 World(HtmlSelectorsHelper)
+
+# rubocop:enable Style/PerlBackrefs
