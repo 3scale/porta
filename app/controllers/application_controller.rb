@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   _helpers.module_eval { prepend DecoratorAdditions }
 
-  protect_from_forgery with: :exception # See ActionController::RequestForgeryProtection for details
+  protect_from_forgery with: ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
 
   # Disable CSRF protection for requests to REST API.
   skip_before_action :verify_authenticity_token, if: -> do
