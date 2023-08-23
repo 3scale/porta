@@ -44,5 +44,5 @@ spec:
     Learn how to create a mapping rule to capture API usage of your API product:
   # you can link to the next quick start(s) here
   nextQuickStart:
-    - track-usage-api-product
+    - tracking-usage-for-api-product
  
