@@ -44,7 +44,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get admin_buyers_accounts_path
   end
 
-  test "allowed forgery protection will return 4XX and revoke the session" do
+  test "allowed forgery protection will return 403 and revoke the session" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
     login! provider, user: user

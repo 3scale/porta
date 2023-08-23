@@ -219,7 +219,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'return 4XX and logout if authentication token is invalid' do
+  test 'return 403 and logout if authentication token is invalid' do
     host! @provider.external_admin_domain
     user = @provider.admins.first
 
