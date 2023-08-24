@@ -622,3 +622,12 @@ form.formtastic#new_metric {
 .pf-c-form.formtastic.settings > .pf-c-form__section {
   margin-top: 0;
 }
+
+// HACK: this class needs ot be under a pf-c-form but most forms are still very old and would break
+// if we add this class directly. This is to give the required "star" its styles. Remove when all
+// forms use pf-c-form
+form:not(.pf-c-form) .pf-c-form__label-required {
+  margin-left: 0.25rem; // --pf-c-form__label-required--MarginLeft
+  font-size: 0.875rem; // --pf-c-form__label-required--FontSize
+  color: #c9190b; // --pf-c-form__label-required--Color
+}
