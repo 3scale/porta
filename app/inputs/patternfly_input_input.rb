@@ -20,8 +20,10 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
   end
 
   def control
+    hint = content_tag(:p, hint_text, class: 'pf-c-form__helper-text') if hint?
     content_tag :div, class: 'pf-c-form__group-control' do
-      builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control'))
+      builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control')) +
+        hint
     end
   end
 end
