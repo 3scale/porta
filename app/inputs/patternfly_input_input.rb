@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PatternflyInput < Formtastic::Inputs::StringInput
+class PatternflyInputInput < Formtastic::Inputs::StringInput
   delegate :content_tag, to: :template
 
   def to_html
@@ -8,6 +8,8 @@ class PatternflyInput < Formtastic::Inputs::StringInput
       label + control
     end
   end
+
+  private
 
   def label
     content_tag :div, class: 'pf-c-form__group-label' do
