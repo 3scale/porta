@@ -38,13 +38,9 @@ end
 
 When /^(?:|I |they )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
-    if page.has_css?('.pf-c-form__label', text: field)
-      fill_in_pf(field, with: value)
-    else
-      # DEPRECATED: remove when all forms implement PF4
-      ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-      fill_in(field, :with => value, visible: true)
-    end
+    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field)
+
+    fill_in(field, with: value, visible: true)
   end
 end
 

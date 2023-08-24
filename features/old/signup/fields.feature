@@ -24,14 +24,14 @@ Feature: Signup with defined fields
 
   Scenario: Required fields on signup
     When I go to the sign up page
-    Then fields should be required:
+    Then fields are required:
       | user fields           |
       | Username              |
       | Password              |
       | Password confirmation |
       | User extra required   |
 
-    And fields should be required:
+    And fields are required:
       | account fields          |
       | Organization/Group Name |
       | Account extra required  |
