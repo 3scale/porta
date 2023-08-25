@@ -1,15 +1,22 @@
 import {
-  SortableContainer,
-  SortableElement,
-  SortableHandle,
-  arrayMove
-} from 'react-sortable-hoc'
+  DragDrop,
+  Droppable,
+  DataList,
+  Draggable,
+  DataListItem,
+  DataListItemRow,
+  DataListControl,
+  DataListDragButton,
+  DataListItemCells,
+  DataListCell
+} from '@patternfly/react-core'
 
-import { PolicyTile } from 'Policies/components/PolicyTile'
 import { HeaderButton } from 'Policies/components/HeaderButton'
+import { PolicyTile } from 'Policies/components/PolicyTile'
 
-import type { SortEndHandler } from 'react-sortable-hoc'
-import type { ChainPolicy, ThunkAction } from 'Policies/types'
+import type { DraggableItemPosition } from '@patternfly/react-core'
+import type { ChainPolicy } from 'Policies/types/Policies'
+import type { ThunkAction } from 'Policies/types/Actions'
 import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
 
 interface Props {
@@ -21,52 +28,29 @@ interface Props {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention -- This is adhoc componnet
-const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
-
-interface SortableItemProps {
-  value: ChainPolicy;
-  editPolicy: Props['actions']['editPolicy'];
-  index: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/naming-convention -- TODO: remove this extra component.
-const SortableItem = SortableElement<SortableItemProps>(({ value, editPolicy, index }: SortableItemProps) => {
-  const edit = () => editPolicy(value, index)
-  return (
-    <li className={value.enabled ? 'Policy' : 'Policy Policy--disabled'}>
-      <PolicyTile policy={value} title="Edit this Policy" onClick={edit} />
-      <DragHandle />
-    </li>
-  )
-})
-
-interface SortableListProps {
-  items: Props['chain'];
-  editPolicy: Props['actions']['editPolicy'];
-}
-
-// eslint-disable-next-line @typescript-eslint/naming-convention -- TODO: remove this extra component.
-const SortableList = SortableContainer<SortableListProps>(({ items, editPolicy }: SortableListProps) => (
-  <ul className="list-group">
-    {items.map((policy, index) => (
-      <SortableItem
-        key={policy.uuid}
-        editPolicy={editPolicy}
-        index={index}
-        value={policy}
-      />
-    ))}
-  </ul>
-))
-
 const PolicyChain: React.FunctionComponent<Props> = ({
   chain,
   actions
 }) => {
-  const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {
-    const sortedChain = arrayMove(chain, oldIndex, newIndex)
-    actions.sortPolicyChain(sortedChain)
+  const arrayMove = (list: ChainPolicy[], startIndex: number, endIndex: number): ChainPolicy[] => {
+    const result = [...list]
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+    return result
+  }
+
+  const onDrag = (): boolean => {
+    return true
+  }
+
+  const onDrop = (source: DraggableItemPosition, dest?: DraggableItemPosition): boolean => {
+    if (dest) {
+      const sortedChain = arrayMove(chain, source.index, dest.index)
+      actions.sortPolicyChain(sortedChain)
+      return true
+    } else {
+      return false
+    }
   }
 
   return (
@@ -77,21 +61,39 @@ const PolicyChain: React.FunctionComponent<Props> = ({
           Add policy
         </HeaderButton>
       </header>
-      <SortableList
-        useDragHandle
-        editPolicy={actions.editPolicy}
-        helperClass="Policy--sortable"
-        items={chain}
-        onSortEnd={onSortEnd}
-      />
+      <DragDrop onDrag={onDrag} onDrop={onDrop}>
+        <Droppable hasNoWrapper>
+          <DataList isCompact aria-label="Policies list">
+            {chain.map((policy, index) => (
+              <Draggable key={policy.uuid} hasNoWrapper>
+                <DataListItem>
+                  <DataListItemRow>
+                    <DataListControl>
+                      <DataListDragButton />
+                    </DataListControl>
+
+                    <DataListItemCells
+                      dataListCells={[
+                        <DataListCell key={policy.uuid}>
+                          <PolicyTile
+                            isDisabled={!policy.enabled}
+                            policy={policy}
+                            title="Edit this Policy"
+                            onClick={() => actions.editPolicy(policy, index)}
+                          />
+                        </DataListCell>
+                      ]}
+                    />
+                  </DataListItemRow>
+                </DataListItem>
+              </Draggable>
+            ))}
+          </DataList>
+        </Droppable>
+      </DragDrop>
     </section>
   )
 }
 
 export type { Props }
-export {
-  PolicyChain,
-  SortableList,
-  SortableItem,
-  DragHandle
-}
+export { PolicyChain }

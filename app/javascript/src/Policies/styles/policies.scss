@@ -58,7 +58,6 @@ $error-color: #c00;
       align-items: baseline;
       justify-content: flex-start;
       margin-bottom: 1rem;
-      border-bottom: 1px solid $subtleColor;
     }
 
     h2 {
@@ -188,13 +187,6 @@ $error-color: #c00;
   user-select: none;
   text-align: left;
 
-  &.Policy--disabled {
-    .Policy-name {
-      color: $disabledColor;
-      text-decoration: line-through;
-    }
-  }
-
   &-sortHandle {
     order: 4;
     cursor: move;
@@ -281,9 +273,11 @@ $error-color: #c00;
   }
 }
 
-.Policy--sortable {
-  background-color: $body-background;
-  z-index: 100;
+.Policy--disabled {
+  .Policy-name {
+    color: $disabledColor;
+    text-decoration: line-through;
+  }
 }
 
 .u-link {
