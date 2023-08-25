@@ -15,6 +15,8 @@ Rails.application.config.to_prepare do
     config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
     config.error_handlers << System::ErrorReporting.method(:report_error)
 
+    config.logger.formatter = Sidekiq::Logger::Formatters::Pretty.new
+
     config.server_middleware do |chain|
       chain.add ThreeScale::Analytics::SidekiqMiddleware
       chain.add ThreeScale::SidekiqRetrySupport::Middleware
