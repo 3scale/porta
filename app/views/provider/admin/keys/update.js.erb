@@ -1,8 +1,9 @@
-  <% if @cinstance.valid? -%>
+  <% if @cinstance.valid? && flash[:error].nil? -%>
     $.colorbox.close();
     $('#cinstance-user-key').html('<%= @cinstance.user_key %>');
   <% else -%>
-    $("#invalid-key-warning").text('<%= flash[:error] %>');
+    $("#invalid-key-warning .pf-c-alert__title").text('<%= escape_javascript(flash[:error]).html_safe %>');
     $("#invalid-key-warning").show();
+    document.getElementById('cinstance_user_key').setAttribute('aria-invalid', true)
     $.colorbox.resize();
   <% end -%>
