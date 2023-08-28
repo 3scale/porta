@@ -91,5 +91,5 @@ def parse_methods_table(table, owner)
 end
 
 def test_method
-  "This is test method 1"
+  "This is test method "
 end
