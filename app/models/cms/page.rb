@@ -21,7 +21,7 @@ class CMS::Page < CMS::BasePage
   validates :title, presence:   true
   validates :path,  presence:   true,
                     format:     { with: /\A\/.*\z/, message: :slash },
-                    uniqueness: { scope: [:provider_id] },
+                    uniqueness: { scope: [:provider_id], case_sensitive: true },
                     exclusion:  { in: RESERVED_PATHS }
 
   validates_associated  :section
