@@ -89,3 +89,7 @@ def parse_methods_table(table, owner)
     FactoryBot.create(:method, service: owner.instance_of?(Service) ? owner : nil, owner: owner, friendly_name: name)
   end
 end
+
+def test_method
+  "This is test method"
+end
