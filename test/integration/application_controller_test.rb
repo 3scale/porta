@@ -44,7 +44,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get admin_buyers_accounts_path
   end
 
-  test "allowed forgery protection will return 403 and revoke the session" do
+  test "allowed forgery protection will cause redirect to login page and revocation of the session" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
     login! provider, user: user
@@ -57,7 +57,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_response :forbidden
+    assert_redirected_to '/p/login'
     # Check that user session was revoked (because of token authenticity)
     assert_not_nil user.user_sessions.reload[0][:revoked_at]
   end
