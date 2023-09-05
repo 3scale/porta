@@ -147,7 +147,7 @@ class Metric < ApplicationRecord
       xml.name          name # As of February 2014 this is deprecated and should be removed
       xml.system_name   name
       xml.friendly_name friendly_name
-      xml.service_id    (backend_api_metric? ? nil : owner_id)
+      xml.service_id    service_owner&.id
       xml.description   description
       if method_metric?
         xml.metric_id parent_id
