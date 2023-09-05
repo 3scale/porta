@@ -9,10 +9,10 @@
       <th role="columnheader" scope="col" class="actions pf-c-table__action">
         <% if @changed.size > 1 %>
           <%= link_to 'Publish All', publish_all_provider_admin_cms_changes_path,
-                       :class => 'action', :"data-method" => :put,
-                       :"data-confirm" => 'Do you really want to publish all pending changes?',
-                       :"data-remote" => true,
-                       :"data-method" => 'put'
+                      class: 'action',
+                      method: :put,
+                      data: { confirm: 'Do you really want to publish all pending changes?' },
+                      remote: true
           %>
         <% end %>
       </th>
@@ -22,9 +22,9 @@
   <tbody role="rowgroup">
     <% @changed.each do |changed_model| %>
       <tr role="row" id="<%= dom_id(changed_model) + '_change' %>" >
-        <td td role="cell" data-label="Type"><%= changed_model.class.model_name.human %></td>
-        <td td role="cell" data-label="Name"><%= link_to changed_model.name, polymorphic_path([ :edit, :provider, :admin, changed_model ] ) %></td>
-        <td td role="cell" data-label="Path">
+        <td role="cell" data-label="Type"><%= changed_model.class.model_name.human %></td>
+        <td role="cell" data-label="Name"><%= link_to changed_model.name, polymorphic_path([ :edit, :provider, :admin, changed_model ] ) %></td>
+        <td role="cell" data-label="Path">
           <% if changed_model.is_a?(CMS::BasePage) %>
             <%= link_to(changed_model.path || '(builtin path)', cms_draft_url(changed_model), :target => '_blank') %>
           <% end %>
@@ -35,11 +35,11 @@
               <div class="pf-c-overflow-menu__group pf-m-button-group">
                 <div class="pf-c-overflow-menu__item">
                   <%= link_to 'Revert', revert_provider_admin_cms_change_path(changed_model),
-                              :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+                              class: 'action', method: :put, remote: true %>
                 </div>
                 <div class="pf-c-overflow-menu__item">
                   <%= link_to 'Publish', publish_provider_admin_cms_change_path(changed_model),
-                              :class => 'action', :"data-method" => :put, :"data-remote" => true %>
+                              class: 'action', method: :put, remote: true %>
                 </div>
               </div>
             </div>
