@@ -12,8 +12,8 @@ module System
     # is overridden with VERSION.
     # The information is exposed via {MASTER_PORTAL}/deploy endpoint for logged-in users.
     class Info
-      VERSION = '2.x'
-      private_constant :VERSION
+      DEFAULT_VERSION = '2.x'
+      private_constant :DEFAULT_VERSION
 
       attr_reader :revision, :deployed_at, :release
 
@@ -21,14 +21,14 @@ module System
 
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = ThreeScale.config.onpremises ? info.fetch('release', VERSION) : VERSION
+        @release = ThreeScale.config.onpremises ? info.fetch('release', DEFAULT_VERSION) : DEFAULT_VERSION
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
       end
 
       def docs_version
         # minor version is nil for RHOAM (release = 'RHOAM')
-        @docs_version ||= minor_version.nil? || release == VERSION ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{release}"
+        @docs_version ||= minor_version.nil? || release == DEFAULT_VERSION ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{release}"
       end
 
       private
