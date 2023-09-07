@@ -337,21 +337,11 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def saas?
-    ThreeScale.tenant_mode.multitenant?
-  end
-
-  def major_and_minor_version_path
-    info = System::Deploy.info
-
-    if saas?
-      "red_hat_3scale/#{info.major_version}-saas"
-    else
-      "red_hat_3scale_api_management/#{info.major_version}.#{info.minor_version}"
-    end
+    !ThreeScale.config.onpremises
   end
 
   def docs_base_url
-    I18n.t('docs.base_url', major_and_minor_version_path: major_and_minor_version_path)
+    I18n.t('docs.base_url', docs_version: System::Deploy.info.docs_version)
   end
 
   def call_to_action?

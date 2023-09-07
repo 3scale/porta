@@ -32,7 +32,7 @@
 en:
   # start documentation links
   docs:
-    base_url: 'https://access.redhat.com/documentation/en-us/%{major_and_minor_version_path}/html'
+    base_url: 'https://access.redhat.com/documentation/en-us/%{docs_version}/html'
     hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
