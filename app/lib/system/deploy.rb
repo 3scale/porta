@@ -27,8 +27,8 @@ module System
       end
 
       def docs_version
-        # minor version is nil for RHOAM (release = 'RHOAM')
-        @docs_version ||= minor_version.nil? || release == DEFAULT_VERSION ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{release}"
+        # RHOAM version has only one segment (release = 'RHOAM')
+        @docs_version ||= release == DEFAULT_VERSION || version.segments.count < 2 ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
       end
 
       private
