@@ -18,9 +18,9 @@ class ApplicationController < ActionController::Base
   skip_forgery_protection if: -> { api_controller? }
 
   before_action :set_timezone
-
   before_action :enable_analytics
   before_action :check_browser
+  before_action :set_cache_headers
 
   def status
     begin
@@ -229,5 +229,13 @@ class ApplicationController < ActionController::Base
   def other_modern_browsers?(browser)
     (browser.firefox? && browser.device.tablet? && browser.platform.android?('>= 14')) ||
       (!browser.compatibility_view? && (browser.ie?('>= 9') || browser.edge?))
+  end
+
+  def set_cache_headers
+    response.headers.merge!(
+      'Cache-Control' => 'no-cache, no-store',
+      'Pragma' => 'no-cache',
+      'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
+    )
   end
 end

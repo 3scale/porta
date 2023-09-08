@@ -127,4 +127,13 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :created
   end
+
+  test "page should not cache" do
+    provider = FactoryBot.create(:provider_account)
+    host! provider.external_admin_domain
+    get provider_login_path
+    assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+    assert_equal 'no-cache', response.headers['Pragma']
+    assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
+  end
 end
