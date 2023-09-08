@@ -4,15 +4,22 @@ module System
   module Deploy
     mattr_accessor :info
 
+    DEFAULT_DEPLOY_INFO_PATH = '.deploy_info'
+    private_constant :DEFAULT_DEPLOY_INFO_PATH
+
     # Provides information about the version of the code:
     #   - revision: low-level version, that is used by BugSnag as app version
     #   - release: customer-facing version, that is visible in the admin portal footer
     #   - deployed_at: timestamp of the deployment
-    # The data is taken from the `.deploy_info` file in the root directory, but for SaaS the release
-    # is overridden with VERSION.
+    #   - docs_version: product name and the version that are used as prefix for product documentation path in the
+    #                   Red Hat Customer Portal
+    # The data is taken from the `.deploy_info2` file in the root directory, but for SaaS the release
+    # is overridden with DEFAULT_VERSION.
+    # `.deploy_info2` file is injected to the container during container build process in CPaaS (the content is set in Dockerfile)
     # The information is exposed via {MASTER_PORTAL}/deploy endpoint for logged-in users.
     class Info
       DEFAULT_VERSION = '2.x'
+
       private_constant :DEFAULT_VERSION
 
       attr_reader :revision, :deployed_at, :release
@@ -21,14 +28,22 @@ module System
 
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = ThreeScale.config.onpremises ? info.fetch('release', DEFAULT_VERSION) : DEFAULT_VERSION
+        @release = saas? ? DEFAULT_VERSION : info.fetch('release', DEFAULT_VERSION)
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
       end
 
       def docs_version
-        # RHOAM version has only one segment (release = 'RHOAM')
-        @docs_version ||= release == DEFAULT_VERSION || version.segments.count < 2 ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
+        @docs_version ||= saas? || rhoam? ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
+      end
+
+      def saas?
+        !ThreeScale.config.onpremises
+      end
+
+      # RHOAM version has only one segment (release = 'RHOAM')
+      def rhoam?
+        version.segments.count < 2
       end
 
       private
@@ -64,8 +79,8 @@ module System
       end
     end
 
-    def self.parse_deploy_info
-      path = Rails.root.join('.deploy_info').expand_path
+    def self.parse_deploy_info(deploy_info_path = DEFAULT_DEPLOY_INFO_PATH)
+      path = Rails.root.join(deploy_info_path).expand_path
       return { error: { path: path.to_s, message: 'not found' } } unless path.exist?
 
       ActiveSupport::JSON.decode(path.read)
