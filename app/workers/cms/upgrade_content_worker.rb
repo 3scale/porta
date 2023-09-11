@@ -12,7 +12,7 @@ class CMS::UpgradeContentWorker
 
       batch.jobs do
         provider.templates.select(:id).find_each do |template|
-          CMS::UpgradeContentWorker.perform_async(template.id, kind)
+          CMS::UpgradeContentWorker.perform_async(template.id, kind.to_s)
         end
       end if valid_within_batch?
     end
@@ -31,7 +31,7 @@ class CMS::UpgradeContentWorker
     batch.description = "Upgrading CMS Content (#{kind}) of #{provider.org_name} (#{provider.id})"
 
     batch.jobs do
-      ExpandWorker.perform_async(provider.id, kind)
+      ExpandWorker.perform_async(provider.id, kind.to_s)
     end
   end
 
