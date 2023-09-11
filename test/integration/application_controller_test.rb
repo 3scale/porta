@@ -62,7 +62,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil user.user_sessions.reload[0][:revoked_at]
   end
 
-  test "allowed forgery protection won't destroy session when using API controller" do
+  test "forgery protection returns 200 for API requests with a valid access token" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
@@ -73,6 +73,70 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       post admin_api_signup_path(format: :json), params: {
         access_token: token, org_name: 'Alaska',
         username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :created
+  end
+
+  test "forgery protection returns 403 for API requests with an invalid access token" do
+    provider = FactoryBot.create(:provider_account)
+    token = 'invalid'
+
+    host! provider.external_admin_domain
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), params: {
+        access_token: token, org_name: 'Alaska',
+        username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :forbidden
+  end
+
+  test "forgery protection returns 200 for API requests with basic auth and access token" do
+    provider = FactoryBot.create(:provider_account)
+    user = provider.admins.first
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
+
+    host! provider.external_admin_domain
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), headers: {
+        Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
+      }, params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :created
+  end
+
+  test "forgery protection returns 403 for API requests with basic auth and an invalid access token" do
+    provider = FactoryBot.create(:provider_account)
+    token = 'invalid'
+
+    host! provider.external_admin_domain
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), headers: {
+        Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
+      }, params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :forbidden
+  end
+
+  test "forgery protection returns 200 for API requests with using basic auth and provider key" do
+    provider = FactoryBot.create(:provider_account)
+    token = provider.api_key
+
+    host! provider.external_admin_domain
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), headers: {
+        Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
+      }, params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
       }
     end
     assert_response :created
