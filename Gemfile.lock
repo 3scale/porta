@@ -421,6 +421,12 @@ GEM
     kgio (2.11.3)
     kramdown (2.4.0)
       rexml
+    kt-paperclip (7.2.1)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      marcel (~> 1.0.1)
+      mime-types
+      terrapin (~> 0.6.0)
     kubeclient (4.9.3)
       http (>= 3.0, < 5.0)
       jsonpath (~> 1.0)
@@ -512,12 +518,6 @@ GEM
       rack (>= 1.2, < 3)
     open_id_authentication (1.3.0)
       rack-openid (~> 1.3)
-    paperclip (6.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      mime-types
-      mimemagic (~> 0.3.0)
-      terrapin (~> 0.6.0)
     parallel (1.22.1)
     parser (3.1.3.0)
       ast (~> 2.4.1)
@@ -979,6 +979,7 @@ DEPENDENCIES
   json (~> 2.3.0)
   json-schema!
   jwt (~> 1.5.2)
+  kt-paperclip (~> 7.2)
   kubeclient
   launchy
   letter_opener
@@ -1000,7 +1001,6 @@ DEPENDENCIES
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
   open_id_authentication
-  paperclip (~> 6.0)
   pdf-inspector
   pg (~> 0.21.0)
   pisoni (~> 1.29)
