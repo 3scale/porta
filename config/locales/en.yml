@@ -555,6 +555,9 @@ en:
             Start by creating an application plan.
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
+    metrics:
+      edit:
+        delete_confirmation: "Removing this %{type} will affect all plans that contain this %{type}, all associated mapping rules will be deleted too. Are you sure?"
 
   deployment_options:
     missing: |
@@ -840,6 +843,8 @@ en:
           attributes:
             base:
               all_periods_used: "Metric cannot be disabled. Please contact support."
+              cannot_delete_in_use: "%{type} is used by the latest gateway configuration and cannot be deleted"
+              cannot_delete_hits: 'The Hits metric cannot be deleted'
         policy:
           attributes:
             base:

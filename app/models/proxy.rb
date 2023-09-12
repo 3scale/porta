@@ -118,6 +118,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
   end
 
+  def metric_in_latest_configs?(metric_id)
+    ProxyConfig::ENVIRONMENTS.map { |env| proxy_configs.by_environment(env).newest_first.first&.contains_metric?(metric_id) }.any?
+  end
+
   # This smells of :reek:NilCheck
   def authentication_method
     super.presence || service&.read_attribute(:backend_version)
