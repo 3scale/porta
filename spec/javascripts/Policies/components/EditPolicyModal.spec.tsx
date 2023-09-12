@@ -128,3 +128,8 @@ it('should be able to update the policy', () => {
   wrapper.find('button.pf-m-primary[type="submit"]').simulate('click')
   expect(requestSubmit).toHaveBeenCalledTimes(1)
 })
+
+it('should render a policy edit form', () => {
+  const wrapper = mountWrapper()
+  expect(wrapper.exists('form#edit-policy-form')).toEqual(true)
+})

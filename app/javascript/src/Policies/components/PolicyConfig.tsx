@@ -54,6 +54,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
         <Form
           className="PolicyConfiguration-form"
           formData={data}
+          id="edit-policy-form"
           schema={configuration}
           onSubmit={onSubmit(policy)}
         >

@@ -26,8 +26,6 @@ const EditPolicyModal: FunctionComponent<Props> = ({
   const { removePolicyFromChain, closePolicyConfig } = actions
   const { humanName, removable } = policy
 
-  const FORM_ID = 'edit-policy-form'
-
   const isPolicyVisible = isNotApicastPolicy(policy)
 
   const modalActions = []
@@ -39,7 +37,7 @@ const EditPolicyModal: FunctionComponent<Props> = ({
         type="submit"
         variant="primary"
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        onClick={() => { document.forms.namedItem(FORM_ID)!.requestSubmit() }}
+        onClick={() => { document.forms.namedItem('edit-policy-form')!.requestSubmit() }}
       >
         Update Policy
       </Button>,
