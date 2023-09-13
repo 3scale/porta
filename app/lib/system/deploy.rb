@@ -28,17 +28,13 @@ module System
 
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = saas? ? DEFAULT_VERSION : info.fetch('release', DEFAULT_VERSION)
+        @release = ThreeScale.saas? ? DEFAULT_VERSION : info.fetch('release', DEFAULT_VERSION)
         @deployed_at = info.fetch('deployed_at') { Time.now }
         @error = info.fetch(:error) if info.key?(:error)
       end
 
       def docs_version
-        @docs_version ||= saas? || rhoam? ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
-      end
-
-      def saas?
-        !ThreeScale.config.onpremises
+        @docs_version ||= ThreeScale.saas? || rhoam? ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
       end
 
       # RHOAM version has only one segment (release = 'RHOAM')

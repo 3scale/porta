@@ -336,10 +336,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     current_user.impersonation_admin? && !current_account.master?
   end
 
-  def saas?
-    !ThreeScale.config.onpremises
-  end
-
   def docs_base_url
     I18n.t('docs.base_url', docs_version: System::Deploy.info.docs_version)
   end
