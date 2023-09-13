@@ -15,9 +15,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
 
   # Disable CSRF protection for requests to REST API.
-  skip_before_action :verify_authenticity_token, if: -> do
-    api_controller? && logged_in?
-  end
+  skip_forgery_protection if: -> { api_controller? && logged_in? }
 
   before_action :set_timezone
 
