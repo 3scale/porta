@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
+# FIXME: this step should assert that input has required=true
 Then /^fields should be required:$/ do |table|
   table.rows.each do |row|
     field = row.first
-    assert page.has_xpath?("//label[normalize-space(text())='#{field}']/abbr[@title='required']", visible: false),
-           "Field #{field.first} is not required"
+    assert find('label', text: field).has_css?('span.pf-c-form__label-required'),
+           "Field #{field} is not required"
   end
 end
 
