@@ -13,9 +13,9 @@ module System
     #   - deployed_at: timestamp of the deployment
     #   - docs_version: product name and the version that are used as prefix for product documentation path in the
     #                   Red Hat Customer Portal
-    # The data is taken from the `.deploy_info2` file in the root directory, but for SaaS the release
+    # The data is taken from the `.deploy_info` file in the root directory, but for SaaS the release
     # is overridden with DEFAULT_VERSION.
-    # `.deploy_info2` file is injected to the container during container build process in CPaaS (the content is set in Dockerfile)
+    # `.deploy_info` file is injected to the container during container build process in CPaaS (the content is set in Dockerfile)
     # The information is exposed via {MASTER_PORTAL}/deploy endpoint for logged-in users.
     class Info
       DEFAULT_VERSION = '2.x'

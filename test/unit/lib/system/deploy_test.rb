@@ -40,6 +40,10 @@ class DeployTest < ActiveSupport::TestCase
       System::Deploy.load_info! ActiveSupport::JSON.decode('{"revision": "2.13-stable", "release": "2.13"}')
     end
 
+    teardown do
+      System::Deploy.info = nil
+    end
+
     test 'onpremises release has a major and minor version' do
       assert_equal '2', System::Deploy.info.major_version
       assert_equal '13', System::Deploy.info.minor_version
@@ -56,7 +60,11 @@ class DeployTest < ActiveSupport::TestCase
       System::Deploy.load_info! ActiveSupport::JSON.decode('{"revision": "alpha", "release": "alpha"}')
     end
 
-    test 'custom release from .deploy_info2 is ignored' do
+    teardown do
+      System::Deploy.info = nil
+    end
+
+    test 'custom release from .deploy_info is ignored' do
       assert_equal '2', System::Deploy.info.major_version
       assert_equal 'x', System::Deploy.info.minor_version
     end
@@ -69,11 +77,14 @@ class DeployTest < ActiveSupport::TestCase
   class RhoamDeployTest < ActiveSupport::TestCase
     setup do
       ThreeScale.config.stubs(onpremises: true)
+      System::Deploy.load_info! ActiveSupport::JSON.decode('{"revision": "2.x-mas", "release": "RHOAM"}')
+    end
+
+    teardown do
+      System::Deploy.info = nil
     end
 
     test 'RHOAM release has only one segment' do
-      System::Deploy.load_info! ActiveSupport::JSON.decode('{"revision": "2.x-mas", "release": "RHOAM"}')
-
       assert_equal 'RHOAM', System::Deploy.info.major_version
       assert_nil System::Deploy.info.minor_version
     end
