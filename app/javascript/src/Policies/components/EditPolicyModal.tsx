@@ -77,6 +77,7 @@ const EditPolicyModal: FunctionComponent<Props> = ({
     <Modal
       actions={modalActions}
       aria-label="Edit policy modal"
+      className="PoliciesWidget"
       id="policy-edit-modal"
       isOpen={isOpen}
       title={humanName}

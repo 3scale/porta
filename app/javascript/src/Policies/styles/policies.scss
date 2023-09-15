@@ -145,6 +145,8 @@ $error-color: #c00;
         padding-bottom: 2rem;
         border-bottom: 1px dashed $subtleColor;
       }
+
+      box-shadow: none !important; // HACK: we need formtastic styles, but not this.
     }
 
     .btn-group {
@@ -172,6 +174,14 @@ $error-color: #c00;
 
     #root__title {
       display: none;
+    }
+
+    .Policy-status input#policy-enabled[type="checkbox"][name="policy-enabled"] {
+      position: relative;
+      top: -1px;
+      margin: 0 0.375rem 0 1px;
+      vertical-align: baseline;
+      border-radius: 0.1875rem;
     }
   }
 }

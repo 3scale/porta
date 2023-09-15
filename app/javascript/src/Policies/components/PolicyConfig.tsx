@@ -52,7 +52,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
       )}
       {isPolicyVisible && (
         <Form
-          className="PolicyConfiguration-form"
+          className="PolicyConfiguration-form formtastic"
           formData={data}
           id="edit-policy-form"
           schema={configuration}
