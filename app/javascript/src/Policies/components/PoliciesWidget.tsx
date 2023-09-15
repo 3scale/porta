@@ -2,15 +2,17 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import * as actions from 'Policies/actions'
-import { PolicyConfig } from 'Policies/components/PolicyConfig'
+import { AddPolicyModal } from 'Policies/components/AddPolicyModal'
+import { EditPolicyModal } from 'Policies/components/EditPolicyModal'
 import { PolicyChain } from 'Policies/components/PolicyChain'
-import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
 import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
 import { isPolicyChainChanged } from 'Policies/util'
 
 import type { FunctionComponent } from 'react'
 import type { Dispatch } from 'redux'
 import type { ChainPolicy, IPoliciesActions, RegistryPolicy, State, UIState } from 'Policies/types'
+
+import 'Policies/styles/policies.scss'
 
 interface Props {
   registry: RegistryPolicy[];
@@ -69,12 +71,24 @@ const PolicyList: FunctionComponent<Props> = ({
   }
 
   return (
-    <div className="PoliciesWidget">
-      {ui.chain && <PolicyChain actions={chainActions} chain={chain} />}
-      {ui.registry && <PolicyRegistry actions={policyRegistryActions} items={registry} />}
-      {ui.policyConfig && <PolicyConfig actions={policyConfigActions} policy={policyConfig} />}
-      <PolicyChainHiddenInput policies={chain} />
-    </div>
+    <>
+      <div className="PoliciesWidget">
+        <PolicyChain actions={chainActions} chain={chain} />
+        <PolicyChainHiddenInput policies={chain} />
+      </div>
+
+      <EditPolicyModal
+        actions={policyConfigActions}
+        isOpen={ui.policyConfig}
+        policy={policyConfig}
+      />
+
+      <AddPolicyModal
+        actions={policyRegistryActions}
+        isOpen={ui.registry}
+        items={registry}
+      />
+    </>
   )
 }
 
