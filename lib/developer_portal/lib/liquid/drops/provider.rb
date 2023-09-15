@@ -215,7 +215,7 @@ module Liquid
         </ul>
       )
       def api_specs
-        Drops::Collection.for_drop(Drops::ApiSpec).new(@model.api_docs_services.accessible)
+        Drops::Collection.for_drop(Drops::ApiSpec).new(@model.api_docs_services.accessible.published)
       end
 
       private

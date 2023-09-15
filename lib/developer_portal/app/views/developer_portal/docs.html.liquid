@@ -1,20 +1,18 @@
 {% content_for javascripts %}
-    {{ 'active_docs.js' | javascript_include_tag }}
+ {{ 'active_docs.js' | javascript_include_tag }}
 {% endcontent_for %}
-
-{% assign spec = provider.api_specs.first %}
 
 <h1>Documentation</h1>
 
 <div class="swagger-section">
-  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-  <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+ <div id="message-bar" class="swagger-ui-wrap"></div>
+   {% for api_spec in provider.api_specs %}
+     <div id="swagger-ui-container-{{api_spec.system_name}}" class="swagger-ui-wrap"></div>
+       <script type="text/javascript">
+         (function () {
+           var serviceEndpoint = "{{api_spec.api_product_production_public_base_url}}";
+           SwaggerUI({ url: "{{api_spec.url}}", dom_id: "#swagger-ui-container-{{api_spec.system_name}}" }, serviceEndpoint);
+         }());
+       </script>
+   {% endfor %}
 </div>
-
-<script type="text/javascript">
-  (function () {
-    var url = "{{spec.url}}";
-    var serviceEndpoint = "{{spec.api_product_production_public_base_url}}"
-    SwaggerUI({ url: url, dom_id: "#swagger-ui-container" }, serviceEndpoint);
-  }());
-</script>
