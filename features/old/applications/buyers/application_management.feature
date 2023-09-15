@@ -138,7 +138,7 @@ Feature: Buyer's application management
     When I go to the applications page
     And I follow "Create new application"
 
-    Then fields should be required:
+    Then fields are required:
       | required           |
       | App extra required |
 

@@ -9,6 +9,15 @@ Then /^fields should be required:$/ do |table|
   end
 end
 
+# FIXME: this used in some liquid templates, it's wrong, remove it.
+Then /^fields are required:$/ do |table|
+  table.rows.each do |row|
+    field = row.first
+    assert page.has_xpath?("//label[normalize-space(text())='#{field}']/abbr[@title='required']", visible: false),
+           "Field #{field.first} is not required"
+  end
+end
+
 Then /^I should see error in fields:$/ do |table|
   table.rows.each do |field|
     assert has_xpath?("//*[contains(@class,'has-error')]/label[contains(text(),'#{field.first}')]"),
