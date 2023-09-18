@@ -46,7 +46,7 @@ const PolicyChain: React.FunctionComponent<Props> = ({
     return search.length > 0
       ? chain.filter(policy => term.test(policy.humanName))
       : chain
-  }, [search])
+  }, [search, chain])
 
   const arrayMove = (list: ChainPolicy[], startIndex: number, endIndex: number): ChainPolicy[] => {
     const result = [...list]
@@ -78,7 +78,12 @@ const PolicyChain: React.FunctionComponent<Props> = ({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <SearchInput aria-label="Items example search input" onChange={handleOnSearch} />
+            <SearchInput
+              placeholder="Find by name"
+              value={search}
+              onChange={handleOnSearch}
+              onClear={() => { setSearch('') }}
+            />
           </ToolbarItem>
           <ToolbarItem>
             <Button variant="primary" onClick={actions.openPolicyRegistry}>Add policy</Button>
