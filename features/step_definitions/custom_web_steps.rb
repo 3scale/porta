@@ -153,7 +153,6 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
 end
 
 [ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the first api dashboard widget',
   'the main menu' ].each do |scope|
   When /^(.*) in (#{scope})$/ do |lstep, scope|
     within(*selector_for(scope)) do

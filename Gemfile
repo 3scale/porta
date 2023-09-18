@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 # to not use insecure git protocol
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rack', '~> 2.2.6'
+gem 'rack', '~> 2.2.8'
 
 gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
@@ -51,8 +51,8 @@ gem '3scale_time_range', '0.0.6'
 gem 'statsd-ruby', require: false
 
 # Sidekiq
-gem 'sidekiq', '< 6', require: %w[sidekiq sidekiq/web]
-gem 'sidekiq-batch', '~> 0.1.6'
+gem 'sidekiq', '~> 6.4.0', require: %w[sidekiq sidekiq/web]
+gem 'sidekiq-batch'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-lock'
 gem 'sidekiq-throttled'
@@ -99,7 +99,7 @@ gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
-gem 'paperclip', '~> 6.0'
+gem 'kt-paperclip', '~> 7.2'
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
 gem 'prawn-svg'
@@ -108,7 +108,7 @@ gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
-gem 'redis', '~> 4.1.3', require: ['redis', 'redis/connection/hiredis']
+gem 'redis', '~> 4.2.0', require: ['redis', 'redis/connection/hiredis']
 gem 'redis-namespace', '~> 1.7.0'
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false

@@ -8,7 +8,7 @@ class PersistEventWorkerTest < ActiveSupport::TestCase
   end
 
   test "enqueue send correct parameters" do
-    PersistEventWorker.expects(:perform_async).with({a: :b})
+    PersistEventWorker.expects(:perform_async).with({"a" => "b"})
     PersistEventWorker.enqueue({a: :b})
   end
 

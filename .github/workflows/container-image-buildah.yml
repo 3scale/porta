@@ -43,7 +43,7 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -55,7 +55,7 @@ jobs:
             type=ref,event=tag
             type=ref,event=pr
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build image
         id: build-image

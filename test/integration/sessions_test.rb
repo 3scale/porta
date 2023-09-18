@@ -219,7 +219,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'return 403 and logout if authentication token is invalid' do
+  test 'logout if authentication token is invalid' do
     host! @provider.external_admin_domain
     user = @provider.admins.first
 
@@ -230,7 +230,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
       with_forgery_protection { put provider_admin_account_path, params: { account: { org_name: 'jose' } } }
     end
 
-    assert_response :forbidden
+    assert_redirected_to provider_login_url
 
     pre_org_name = @provider.org_name
     assert_equal pre_org_name, @provider.reload.org_name

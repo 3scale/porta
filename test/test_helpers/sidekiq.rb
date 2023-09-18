@@ -4,7 +4,8 @@ require 'sidekiq/testing'
 require 'sidekiq/lock/testing/inline'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq::Logging.logger = nil
+Sidekiq.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
+Sidekiq.strict_args! # Fail if parameters are not valid JSON
 module TestHelpers
   module Sidekiq
     def self.included(base)

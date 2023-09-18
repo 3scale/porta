@@ -15,3 +15,8 @@ Given(/^the default proxy does not use apicast configuration driven$/) do
   proxy = @provider.default_service.proxy
   proxy.update!(apicast_configuration_driven: false, sandbox_endpoint: 'https://api-2.staging.apicast.io:4443', endpoint: 'https://api-2.staging.io:4443')
 end
+
+Given /^the gateway configuration is promoted to (staging|production)$/ do |environment|
+  proxy = @provider.default_service.proxy
+  ProxyDeploymentService.call(proxy, environment: environment.to_sym)
+end

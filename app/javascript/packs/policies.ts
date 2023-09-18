@@ -1,18 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment -- FIXME */
-import { PoliciesWrapper as PoliciesWidget } from 'Policies'
+import { PoliciesWrapper as PoliciesDataList } from 'Policies/components/PoliciesWrapper'
+import { safeFromJsonString } from 'utilities/json-utils'
+
+import type { RegistryPolicy, PolicyConfig } from 'Policies/types/Policies'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const policiesContainer = document.getElementById('policies')
+  const containerId = 'policies'
+  const policiesContainer = document.getElementById(containerId)
 
   if (!policiesContainer) {
     throw new Error('Policies Widget needs a valid DOM Element to render')
   }
 
-  const { registry = '', chain = '', serviceId = '' } = policiesContainer.dataset
+  const { dataset } = policiesContainer
 
-  PoliciesWidget({
-    registry: JSON.parse(registry),
-    chain: JSON.parse(chain),
-    serviceId: JSON.parse(serviceId)
-  }, 'policies')
+  const registry = safeFromJsonString<RegistryPolicy[]>(dataset.registry)
+  const chain = safeFromJsonString<PolicyConfig[]>(dataset.chain)
+  const serviceId = safeFromJsonString<string>(dataset.serviceId)
+
+  if (!registry || !chain || !serviceId) {
+    throw new Error('Missing props for policies edit page')
+  }
+
+  PoliciesDataList({
+    registry,
+    chain,
+    serviceId
+  }, containerId)
 })

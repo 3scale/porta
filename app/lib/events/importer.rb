@@ -4,7 +4,7 @@ module Events
   module Importer
 
     def self.async_import_event!(event_attrs)
-      EventImportWorker.perform_async(event_attrs)
+      EventImportWorker.perform_async(event_attrs.as_json)
     end
 
     def self.import_event!(event_attrs)
