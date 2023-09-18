@@ -31,5 +31,9 @@ module ThreeScale
     !ThreeScale.config.onpremises
   end
 
+  def saas?
+    !config.onpremises
+  end
+
   extend PrivateModule
 end

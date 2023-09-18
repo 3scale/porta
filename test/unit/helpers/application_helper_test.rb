@@ -65,6 +65,11 @@ class ApplicationHelperTest < ActionView::TestCase
 
       assert_equal @full_asset_host, result
     end
+
+    test 'docs base url' do
+      ThreeScale.config.stubs(onpremises: false)
+      assert_equal 'https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html', docs_base_url
+    end
   end
 
   private
