@@ -17,7 +17,6 @@ namespace :sidekiq do
     envs['RAILS_MAX_THREADS'] = ENV.fetch('RAILS_MAX_THREADS', '1')
 
     args = []
-    args.push(['--index', ENV.fetch('INDEX', '0')])
     args.push(%w[backend_sync billing critical default deletion events low mailers priority web_hooks zync].flat_map { |queue| ['--queue', queue] })
 
     exec(envs, 'sidekiq', *args.flatten)

@@ -10,7 +10,8 @@ input[type='number'],
 textarea,
 select,
 form.button-to button:not(.pf-c-button),
-form.formtastic:not(.pf-c-form) button:not(.pf-c-button, .btn-add, .btn-danger),
+form.formtastic:not(.pf-c-form) button:not(.pf-c-button, .btn-add, .btn-danger,
+  .pf-c-data-list__item-draggable-button),
 form.formtastic:not(.pf-c-form) textarea,
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='text'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='number'],
@@ -62,7 +63,8 @@ textarea {
 }
 
 // TODO: where is this applied and why isn't it wrapper around form?
-button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item, .pf-c-select__menu-item) {
+button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item, .pf-c-select__menu-item,
+  .pf-c-data-list__item-draggable-button) {
   min-width: line-height-times(2);
   width: auto;
 }
@@ -134,8 +136,8 @@ select {
   float: right;
 }
 
-input[type='checkbox']:not(.pf-c-check__input),
-input[type='checkbox']:not(.pf-c-check__input):active,
+input[type='checkbox']:not(.pf-c-check__input, #root_*),
+input[type='checkbox']:not(.pf-c-check__input, #root_*):active,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label input,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li label input[type='radio'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox'],

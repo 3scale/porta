@@ -17,9 +17,6 @@ module HtmlSelectorsHelper
       '#audience'
     when 'the apis dashboard widget', :apis_dashboard_widget
       '.DashboardSection--services'
-    # TODO: there is no first api widget anymore, clean this up
-    when 'the first api dashboard widget'
-      '.DashboardSection--services'
     when 'the secondary nav'
       'nav.pf-c-nav.pf-m-horizontal'
     when 'the user widget'

@@ -16,9 +16,6 @@ Feature: Dashboard
     And I should see the link "0 DRAFTS" in the audience dashboard widget
     And I should see the link "0 MESSAGES" in the audience dashboard widget
 
-  Scenario: first API widget
-    And I should see "API" in the first api dashboard widget
-
   Scenario: Audience widget with Finance enabled
     Given the provider is charging its buyers
     And I go to the provider dashboard

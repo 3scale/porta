@@ -133,19 +133,21 @@ class Metric < ApplicationRecord
     self[:unit] = value unless child?
   end
 
+  def type
+    @type ||= method_metric? ? :method : :metric
+  end
+
   alias method_metric? child?
 
   def to_xml(options = {})
     xml = options[:builder] || ThreeScale::XML::Builder.new
 
-    metric_or_method = method_metric? ? 'method' : 'metric'
-
-    xml.__send__(:method_missing, metric_or_method) do |xml|
+    xml.__send__(:method_missing, type) do |xml|
       xml.id_           id unless new_record?
       xml.name          name # As of February 2014 this is deprecated and should be removed
       xml.system_name   name
       xml.friendly_name friendly_name
-      xml.service_id    (backend_api_metric? ? nil : owner_id)
+      xml.service_id    service_owner&.id
       xml.description   description
       if method_metric?
         xml.metric_id parent_id
@@ -222,7 +224,19 @@ class Metric < ApplicationRecord
 
   def destroyable?
     return true if destroyed_by_association
-    system_name != 'hits'
+
+    errors.add :base, :cannot_delete_in_use, type: type.to_s.capitalize if belongs_to_latest_config?
+    errors.add :base, :cannot_delete_hits if system_name == 'hits'
+
+    errors.empty?
+  end
+
+  def belongs_to_latest_config?
+    if backend_api_metric?
+      owner.services.map { |service| service.proxy.metric_in_latest_configs?(id) }.any?
+    else
+      owner.proxy.metric_in_latest_configs?(id)
+    end
   end
 
   def avoid_destruction

@@ -65,7 +65,7 @@ module AuditHacks
   end
 
   def enqueue_job
-    AuditedWorker.perform_async(attributes)
+    AuditedWorker.perform_async(attributes.as_json)
   end
 end
 

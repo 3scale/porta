@@ -9,7 +9,7 @@ class PdfReportWorker
   # @param [Account] account
   # @param [SystemOperation] system_operation
   def self.enqueue(service, period, system_operation)
-    perform_async(service.id, service.account_id, period, system_operation.ref)
+    perform_async(service.id, service.account_id, period.to_s, system_operation.ref)
   end
 
   # @param [Integer] service_id
