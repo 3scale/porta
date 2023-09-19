@@ -444,17 +444,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                     </FormBase>
                   </Form>
                 </LoginForm>
-                <div
-                  className="providers-separator"
-                >
-                  <AuthenticationProviders
-                    authenticationProviders={[]}
-                  >
-                    <div
-                      className="providers-list"
-                    />
-                  </AuthenticationProviders>
-                </div>
               </div>
             </LoginMainBody>
           </main>
@@ -1652,17 +1641,6 @@ exports[`should render itself 1`] = `
                     </FormBase>
                   </Form>
                 </LoginForm>
-                <div
-                  className="providers-separator"
-                >
-                  <AuthenticationProviders
-                    authenticationProviders={[]}
-                  >
-                    <div
-                      className="providers-list"
-                    />
-                  </AuthenticationProviders>
-                </div>
               </div>
             </LoginMainBody>
             <LoginMainFooter
@@ -2173,17 +2151,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                     </FormBase>
                   </Form>
                 </LoginForm>
-                <div
-                  className="providers-separator"
-                >
-                  <AuthenticationProviders
-                    authenticationProviders={[]}
-                  >
-                    <div
-                      className="providers-list"
-                    />
-                  </AuthenticationProviders>
-                </div>
               </div>
             </LoginMainBody>
             <LoginMainFooter
