@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { DragDrop, DraggableItemPosition } from '@patternfly/react-core'
+import { DragDrop } from '@patternfly/react-core'
 
 import { PolicyChain } from 'Policies/components/PolicyChain'
 import { updateInput } from 'utilities/test-utils'
