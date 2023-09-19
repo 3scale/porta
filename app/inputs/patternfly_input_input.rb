@@ -21,7 +21,18 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
   def control
     content_tag :div, class: 'pf-c-form__group-control' do
-      builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control'))
+      input + helper_text
     end
+  end
+
+  def input
+    builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control',
+                                                        'aria-invalid': errors.any?))
+  end
+
+  def helper_text
+    return if errors.empty?
+
+    template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
   end
 end
