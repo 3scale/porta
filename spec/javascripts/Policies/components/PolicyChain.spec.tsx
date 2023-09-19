@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { DragDrop } from '@patternfly/react-core'
+import { DragDrop, DraggableItemPosition } from '@patternfly/react-core'
 
 import { PolicyChain } from 'Policies/components/PolicyChain'
 import { updateInput } from 'utilities/test-utils'
@@ -38,13 +38,14 @@ it('should call editPolicy when clicked', () => {
 })
 
 it('should be able to drag and drop any item, unless searching', () => {
+  const source = { droppableId: '0', index: 0 }
+  const dest = { droppableId: '0', index: 1 }
   const wrapper = mountWrapper()
-  // @ts-expect-error - No need to pass Source
-  expect(wrapper.find(DragDrop).props().onDrag!()).toEqual(true)
+
+  expect(wrapper.find(DragDrop).props().onDrop!(source, dest)).toEqual(true)
 
   updateInput(wrapper, 'foo')
-  // @ts-expect-error - No need to pass Source
-  expect(wrapper.find(DragDrop).props().onDrag!()).toEqual(false)
+  expect(wrapper.find(DragDrop).props().onDrop!(source, dest)).toEqual(false)
 })
 
 it('should be able to rearrange the chain by drag and drop', () => {
