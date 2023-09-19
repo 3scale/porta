@@ -66,6 +66,12 @@ Given /^the buyer changed to plan "([^"]*)"$/ do |plan_name|
   @buyer.bought_cinstance.change_plan!(plan)
 end
 
+Given /^buyer "([^\"]*)" changed to plan "([^"]*)"$/ do |buyer_name, plan_name|
+  buyer = Account.find_by_org_name!(buyer_name)
+  plan = Plan.find_by(name: plan_name)
+  buyer.bought_cinstance.change_plan!(plan)
+end
+
 Given /^the buyer's (application|service|account) plan contract is (.*)$/ do |plan_type,state|
   plan = instance_variable_get("@paid_#{plan_type}_plan")
   contract = @buyer.contracts.where(plan_id: plan.id).first!
