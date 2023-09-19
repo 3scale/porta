@@ -19,7 +19,7 @@ module System
       logger.error('Exception') { {exception: {class: exception.class, message: (exception.try(:message) || exception.to_s), backtrace: (exception.try(:backtrace) || [])[0..3]}, parameters: parameters} }
 
       ::Bugsnag.notify(exception) do |report|
-        report.add_tab 'parameter', {parameters: parameters}
+        report.add_metadata 'parameter', { parameters: parameters }
       end
     end
 
@@ -29,7 +29,7 @@ module System
       ::Bugsnag.notify(exception) do |report|
         report.severity = 'warning'
         report.grouping_hash = exception.message
-        report.add_tab 'deprecation_info', {
+        report.add_metadata 'deprecation_info', {
           gem_name: exception.gem_name,
           deprecation_horizon: exception.deprecation_horizon
         }
