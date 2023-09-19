@@ -79,13 +79,6 @@ describe('when on the first attempt', () => {
     const wrapper = mountWrapper(props)
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
-
-  it('should autofocus username', () => {
-    const wrapper = mountWrapper()
-
-    expect(wrapper.find('input#session_username').props().autoFocus).toEqual(true)
-    expect(wrapper.find('input#session_password').props().autoFocus).toEqual(false)
-  })
 })
 
 describe('when the last attempt failed', () => {
@@ -94,13 +87,6 @@ describe('when the last attempt failed', () => {
   it('should disable the sign in button', () => {
     const wrapper = mountWrapper(props)
     expect(isSubmitDisabled(wrapper)).toEqual(true)
-  })
-
-  it('should autofocus username', () => {
-    const wrapper = mountWrapper(props)
-
-    expect(wrapper.find('input#session_username').props().autoFocus).toEqual(false)
-    expect(wrapper.find('input#session_password').props().autoFocus).toEqual(true)
   })
 
   it('should enable the sign in button when typing a password', () => {

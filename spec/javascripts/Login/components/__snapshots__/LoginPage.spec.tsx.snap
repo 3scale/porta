@@ -251,7 +251,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={true}
                                   id="session_username"
                                   isRequired={true}
                                   name="username"
@@ -264,7 +263,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={true}
                                     className=""
                                     id="session_username"
                                     innerRef={null}
@@ -285,7 +283,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={true}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-5"
                                       data-ouia-component-type="PF4/TextInput"
@@ -348,7 +345,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={false}
                                   id="session_password"
                                   isRequired={true}
                                   name="password"
@@ -361,7 +357,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={false}
                                     className=""
                                     id="session_password"
                                     innerRef={null}
@@ -382,7 +377,6 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={false}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-6"
                                       data-ouia-component-type="PF4/TextInput"
@@ -754,7 +748,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={true}
                                   id="session_username"
                                   isRequired={true}
                                   name="username"
@@ -767,7 +760,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={true}
                                     className=""
                                     id="session_username"
                                     innerRef={null}
@@ -788,7 +780,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={true}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-7"
                                       data-ouia-component-type="PF4/TextInput"
@@ -851,7 +842,6 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={false}
                                   id="session_password"
                                   isRequired={true}
                                   name="password"
@@ -864,7 +854,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={false}
                                     className=""
                                     id="session_password"
                                     innerRef={null}
@@ -885,7 +874,6 @@ exports[`should render Login form and Authentication providers when available 1`
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={false}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-8"
                                       data-ouia-component-type="PF4/TextInput"
@@ -1471,7 +1459,6 @@ exports[`should render itself 1`] = `
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={true}
                                   id="session_username"
                                   isRequired={true}
                                   name="username"
@@ -1484,7 +1471,6 @@ exports[`should render itself 1`] = `
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={true}
                                     className=""
                                     id="session_username"
                                     innerRef={null}
@@ -1505,7 +1491,6 @@ exports[`should render itself 1`] = `
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={true}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-1"
                                       data-ouia-component-type="PF4/TextInput"
@@ -1568,7 +1553,6 @@ exports[`should render itself 1`] = `
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={false}
                                   id="session_password"
                                   isRequired={true}
                                   name="password"
@@ -1581,7 +1565,6 @@ exports[`should render itself 1`] = `
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={false}
                                     className=""
                                     id="session_password"
                                     innerRef={null}
@@ -1602,7 +1585,6 @@ exports[`should render itself 1`] = `
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={false}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-2"
                                       data-ouia-component-type="PF4/TextInput"
@@ -1998,7 +1980,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={true}
                                   id="session_username"
                                   isRequired={true}
                                   name="username"
@@ -2011,7 +1992,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={true}
                                     className=""
                                     id="session_username"
                                     innerRef={null}
@@ -2032,7 +2012,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={true}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-3"
                                       data-ouia-component-type="PF4/TextInput"
@@ -2095,7 +2074,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                               >
                                 <TextInput
                                   autoComplete="off"
-                                  autoFocus={false}
                                   id="session_password"
                                   isRequired={true}
                                   name="password"
@@ -2108,7 +2086,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   <TextInputBase
                                     aria-label={null}
                                     autoComplete="off"
-                                    autoFocus={false}
                                     className=""
                                     id="session_password"
                                     innerRef={null}
@@ -2129,7 +2106,6 @@ exports[`should render reset password button when disablePasswordReset is false 
                                       aria-invalid={false}
                                       aria-label={null}
                                       autoComplete="off"
-                                      autoFocus={false}
                                       className="pf-c-form-control"
                                       data-ouia-component-id="OUIA-Generated-TextInputBase-4"
                                       data-ouia-component-type="PF4/TextInput"
