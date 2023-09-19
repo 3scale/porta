@@ -55,12 +55,8 @@ const PolicyChain: React.FunctionComponent<Props> = ({
     return result
   }
 
-  const onDrag = (): boolean => {
-    return search.length === 0
-  }
-
   const onDrop = (source: DraggableItemPosition, dest?: DraggableItemPosition): boolean => {
-    if (dest) {
+    if (search.length === 0 && dest) {
       const sortedChain = arrayMove(chain, source.index, dest.index)
       actions.sortPolicyChain(sortedChain)
       return true
@@ -91,7 +87,7 @@ const PolicyChain: React.FunctionComponent<Props> = ({
         </ToolbarContent>
       </Toolbar>
 
-      <DragDrop onDrag={onDrag} onDrop={onDrop}>
+      <DragDrop onDrop={onDrop}>
         <Droppable hasNoWrapper>
           <DataList isCompact aria-label="Policies list">
             {items.map((policy, index) => (
