@@ -23,7 +23,7 @@ When /^the buyer makes (\d+|a) service transactions? with:$/ do |count, table|
   step %(buyer "#{@buyer.name}" makes #{count} service transactions with:), table
 end
 
-Given "the backend will respond to a utilization request for the application with:" do |json|
+Given "the backend responds to a utilization request for the application with:" do |json|
   url = "/internal/services/#{@application.service_id}/applications/#{@application.application_id}/utilization/"
   TestHelpers::Backend::MockCore.stubs.get(url) { [200, {'content-type'=>'application/json'}, json] }
 end

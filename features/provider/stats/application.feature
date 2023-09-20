@@ -27,7 +27,7 @@ Feature: Application stats
     And the buyer makes 2 service transactions with:
       | Metric   | Value |
       | hits     |    20 |
-    And the backend will respond to a utilization request for the application with:
+    And the backend responds to a utilization request for the application with:
       """
       { "status": "found",
         "utilization": [{
