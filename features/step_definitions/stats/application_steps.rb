@@ -7,12 +7,6 @@ Given(/^a provider has a developer "(.*?)" with an application name "(.*?)"$/) d
   }
 end
 
-Given("the buyer made {int} service transactions {int} hours ago:") do |transactions_number, hours, table|
-  travel_to(hours.hours.ago)
-  access_user_sessions
-  step %'the buyer makes #{transactions_number} service transactions with:', table
-end
-
 Then "the Current Utilization panel should contain the following data:" do |table|
   assert_text "Overview of the current state of this application's limits"
   within "#application-utilization" do
