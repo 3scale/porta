@@ -345,6 +345,9 @@ World(Module.new do
       application = Account.find_by_org_name!($1).bought_cinstance
       provider_admin_application_path(application)
 
+    when /^the provider application page$/
+      provider_admin_application_path(@application)
+
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
       provider_admin_applications_path(per_page: $1)

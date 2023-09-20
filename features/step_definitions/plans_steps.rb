@@ -66,9 +66,7 @@ Given /^the buyer changed to plan "([^"]*)"$/ do |plan_name|
   @buyer.bought_cinstance.change_plan!(plan)
 end
 
-Given /^buyer "([^\"]*)" changed to plan "([^"]*)"$/ do |buyer_name, plan_name|
-  buyer = Account.find_by_org_name!(buyer_name)
-  plan = Plan.find_by(name: plan_name)
+Given "{buyer} changed to {plan}" do |buyer, plan|
   buyer.bought_cinstance.change_plan!(plan)
 end
 
