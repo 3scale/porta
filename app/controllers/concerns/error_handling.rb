@@ -81,11 +81,11 @@ module ErrorHandling
 
       # Add some app-specific data which will be displayed on a custom
       # "Provider" tab on each error page on bugsnag.com
-      notification.add_tab(:provider, {
-                             name: site_account.try(:org_name),
-          admin_domain: site_account.try(:self_domain),
-          domain: site_account.try(:domain)
-                           })
+      notification.add_metadata(:provider, {
+                                  name: site_account.try(:org_name),
+                                  admin_domain: site_account.try(:self_domain),
+                                  domain: site_account.try(:domain)
+                                })
     end
 
     def handle_provider_side(status, exception, title)
