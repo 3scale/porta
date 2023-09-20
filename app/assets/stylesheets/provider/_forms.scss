@@ -136,8 +136,8 @@ select {
   float: right;
 }
 
-input[type='checkbox']:not(.pf-c-check__input, #root_*),
-input[type='checkbox']:not(.pf-c-check__input, #root_*):active,
+input[type='checkbox']:not(.pf-c-check__input),
+input[type='checkbox']:not(.pf-c-check__input):active,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label input,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li label input[type='radio'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox'],
