@@ -7,7 +7,7 @@ Given(/^a provider has a developer "(.*?)" with an application name "(.*?)"$/) d
   }
 end
 
-Given(/^the buyer made (\d+) service transactions (\d+) hours ago:$/) do |transactions_number, hours, table|
+Given("the buyer made {int} service transactions {int} hours ago:") do |transactions_number, hours, table|
   travel_to(hours.hours.ago)
   access_user_sessions
   step %'the buyer makes #{transactions_number} service transactions with:', table
