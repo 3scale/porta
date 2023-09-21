@@ -82,7 +82,6 @@ const LoginForm: FunctionComponent<Props> = ({
         <TextInput
           isRequired
           autoComplete="off"
-          autoFocus={!session.username}
           id="session_username"
           name="username"
           type="email"
@@ -104,7 +103,6 @@ const LoginForm: FunctionComponent<Props> = ({
         <TextInput
           isRequired
           autoComplete="off"
-          autoFocus={Boolean(session.username)}
           id="session_password"
           name="password"
           type="password"

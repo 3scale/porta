@@ -11,7 +11,7 @@ import type { ProvidersProps } from 'Login/components/AuthenticationProviders'
 import type { FlashMessage } from 'Types'
 
 interface Props {
-  authenticationProviders?: ProvidersProps[];
+  authenticationProviders: ProvidersProps[];
   flashMessages: FlashMessage[];
   providerSessionsPath: string;
   providerRequestPasswordResetPath: string;
@@ -56,7 +56,7 @@ const LoginPage: FunctionComponent<Props> = ({
         session={session}
       />
     )}
-    {authenticationProviders && (
+    {authenticationProviders.length > 0 && (
       <div className="providers-separator">
         <AuthenticationProviders authenticationProviders={authenticationProviders} />
       </div>
