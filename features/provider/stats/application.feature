@@ -28,16 +28,8 @@ Feature: Application stats
       | Metric   | Value |
       | hits     |    20 |
     And the backend responds to a utilization request for the application with:
-      """
-      { "status": "found",
-        "utilization": [{
-            "period": "minute",
-            "metric_name": "hits",
-            "max_value": 100,
-            "current_value": 40
-        }]
-      }
-      """
+      | period   | metric_name | max_value | current_value |
+      | minute   | hits        |       100 |            40 |
     When they go to the provider application page
     Then the Current Utilization panel contains the following data:
       | Metric Name | Period     | Values | %    |
