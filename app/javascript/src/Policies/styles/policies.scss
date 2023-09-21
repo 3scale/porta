@@ -46,11 +46,11 @@ $dontColor: #ca4a4b;
 $subtleColor: #ddd;
 $error-color: #c00;
 
-.PoliciesWidget {
-  position: relative;
-  line-height: 1.5;
+fieldset.policies-fieldset {
   padding-bottom: 2rem;
+}
 
+.PoliciesWidget {
   section {
     header {
       display: flex;
@@ -64,25 +64,6 @@ $error-color: #c00;
       margin-top: 0;
       font-size: 1rem;
       font-weight: bold; // Overrides Bootstrap's h2
-    }
-  }
-
-  .PolicyChain {
-    display: flex;
-    flex-flow: column nowrap;
-
-    &-addPolicy,
-    &-addPolicy--cancel {
-      @extend .u-do;
-      margin-left: auto;
-
-      i {
-        padding-right: 3px;
-      }
-    }
-
-    .list-group {
-      margin-bottom: 0;
     }
   }
 
