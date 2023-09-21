@@ -34,14 +34,12 @@ class Liquid::Drops::ApiSpecDropTest < ActiveSupport::TestCase
     assert_equal @service.proxy.endpoint, api_spec.api_product_production_public_base_url
   end
 
-  test 'Returns fase for unpublished api spec' do
-    @spec.update(published: false)
-    assert_equal false, @spec.published?
-  end
-
-  test 'Returns true for published api spec' do
+  test '#published? returns the state of API spec' do
     @spec.update(published: true)
-    assert_equal true, @spec.published?
+    assert_equal true, api_spec.published?
+
+    @spec.update(published: false)
+    assert_equal false, api_spec.published?
   end
 
   def api_spec
