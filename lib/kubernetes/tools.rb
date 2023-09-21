@@ -9,8 +9,7 @@ module Kubernetes
       Dir.exist?('/run/secrets/kubernetes.io') || ENV.key?('KUBERNETES_PORT')
     end
 
-    def available_cpus
-      shares = 1024 # the default CPU shares value
+    def cpu_shares
       if File.exist?('/sys/fs/cgroup/cgroup.controllers')
         # Cgroups v2
         # Using the formula from https://github.com/kubernetes/kubernetes/blob/release-1.27/pkg/kubelet/cm/cgroup_manager_linux.go#L570-L574
@@ -18,10 +17,15 @@ module Kubernetes
         shares = (((weight - 1) * 262142) / 9999) + 2
       else
         # Cgroups v1
-        rd = File.read('/sys/fs/cgroup/cpu/cpu.shares')
         shares = Integer(File.read('/sys/fs/cgroup/cpu/cpu.shares'))
       end
-      (shares / 1024.0).ceil
+      shares
+    rescue StandardError => exception
+      warn "WARNING: Caught exception: #{exception}"
+    end
+
+    def available_cpus
+      (cpu_shares / 1024.0).ceil
     rescue StandardError => exception
       warn "WARNING: Caught exception: #{exception}"
     end
