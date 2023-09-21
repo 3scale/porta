@@ -8,16 +8,16 @@ Feature: Application stats
     And the provider has a buyer with an application
     And all the rolling updates features are off
 
-    @javascript
-    Scenario: Developer's Application chart has data
-      Given the buyer made 2 service transactions 12 hours ago:
-        | Metric   | Value |
-        | hits     |    20 |
-      When they go to the provider application page
-      And they follow "Analytics"
-      Then there should be a c3 chart with the following data:
-        | name          | total  |
-        | Hits          | 40   |
+  @javascript
+  Scenario: Developer's Application chart has data
+    Given the buyer made 2 service transactions 12 hours ago:
+      | Metric   | Value |
+      | hits     |    20 |
+    When they go to the provider application page
+    And they follow "Analytics"
+    Then there should be a c3 chart with the following data:
+      | name          | total  |
+      | Hits          | 40   |
 
   @javascript
   Scenario: Developer's Current Utilization section has data
