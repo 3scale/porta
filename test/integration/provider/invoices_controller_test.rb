@@ -10,8 +10,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     @provider_account.create_billing_strategy
     @provider_account.settings.allow_finance!
 
-    @invoice = FactoryBot.create(:invoice, buyer_account: @cinstance.buyer_account, provider_account: @cinstance.provider_account)
-    Invoice.any_instance.stubs(:find).returns(@invoice)
+    @invoice = FactoryBot.create(:invoice, buyer_account: @cinstance.buyer_account, provider_account: @provider_account)
 
     @line_item = FactoryBot.create(:line_item, invoice: @invoice, cost: 2000)
 
@@ -24,6 +23,17 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     assert_template 'finance/provider/invoices/index'
     assert_not_nil assigns(:invoices)
     assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
+  end
+
+  test 'default year when there are no invoices' do
+    Invoice.where(provider_account: @provider_account).destroy_all
+    @provider_account.update(timezone: 'Pacific Time (US & Canada)')
+
+    travel_to(Time.utc(2023, 1, 1))
+    get admin_finance_account_invoices_path @buyer
+
+    assert_empty assigns(:invoices)
+    assert_equal [2022], assigns(:years)
   end
 
   test 'list invoices by month' do

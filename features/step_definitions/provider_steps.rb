@@ -284,3 +284,7 @@ Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, in
   inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
   assert_selector(inline_error_selector, text: text)
 end
+
+When "the provider is at {}" do |page_name|
+  visit path_to(page_name)
+end

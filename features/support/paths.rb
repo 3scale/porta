@@ -584,7 +584,7 @@ World(Module.new do
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^the invoices issued by me$/
+    when /^all provider's invoices page$/
       admin_finance_invoices_path
 
     when /^the invoice "(.+?)" page$/

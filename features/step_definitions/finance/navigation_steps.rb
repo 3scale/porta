@@ -23,7 +23,7 @@ end
 
 # TODO: remove this legacy step
 When /^I navigate to invoices issued by me$/ do
-  step %(I go to the invoices issued by me)
+  step %(I go to all provider's invoices page)
 end
 
 When /^I navigate to my (?:earnings|revenue)$/ do
