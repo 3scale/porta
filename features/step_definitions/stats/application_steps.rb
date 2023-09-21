@@ -7,7 +7,7 @@ Given(/^a provider has a developer "(.*?)" with an application name "(.*?)"$/) d
   }
 end
 
-Then "the Current Utilization panel should contain the following data:" do |table|
+Then "the Current Utilization panel contains the following data:" do |table|
   assert_text "Overview of the current state of this application's limits"
   within "#application-utilization" do
     utilization_table = extract_pf4_table

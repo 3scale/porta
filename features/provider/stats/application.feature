@@ -39,6 +39,6 @@ Feature: Application stats
       }
       """
     When they go to the provider application page
-    Then the Current Utilization panel should contain the following data:
+    Then the Current Utilization panel contains the following data:
       | Metric Name | Period     | Values | %    |
       | Hits (hits) | per minute | 40/100 | 40.0 |
