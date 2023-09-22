@@ -3,10 +3,10 @@
 # config/unicorn.rb
 require 'pathname'
 require 'etc'
-require 'kubernetes/tools'
 
 app_path = Pathname.pwd
 require app_path.join('lib/prometheus_exporter_port').to_s
+require app_path.join('lib/kubernetes/tools').to_s
 
 Unicorn::HttpServer::START_CTX[0] = '/usr/local/bin/unicorn'
 
