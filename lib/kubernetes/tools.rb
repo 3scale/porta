@@ -10,6 +10,9 @@ module Kubernetes
     end
 
     def cpu_shares
+      # This check is from https://github.com/kubernetes/kubernetes/blob/release-1.27/test/e2e/node/pod_resize.go#L305-L314
+      # alternatively, this method can be used: https://kubernetes.io/docs/concepts/architecture/cgroups/#check-cgroup-version
+      # (`stat -fc %T /sys/fs/cgroup/` returns `cgroup2fs` or `tmpfs`)
       if File.exist?('/sys/fs/cgroup/cgroup.controllers')
         # Cgroups v2
         # Using the formula from https://github.com/kubernetes/kubernetes/blob/release-1.27/pkg/kubelet/cm/cgroup_manager_linux.go#L570-L574
