@@ -165,3 +165,9 @@ Then(/there is only one invoice for "([^"]*)"/) do |date|
   nodes = page.find_all(:xpath, ".//tr[contains(@class,'invoice')]/td[contains(text(), '#{date}')]")
   assert_equal 1, nodes.count
 end
+
+Then "invoices can be filtered by the following years:" do |table|
+  actual_years = find('#search_year').find_all('option').map(&:value).map(&:to_s)
+  expected_years = table.raw.flatten.map(&:to_s)
+  assert_same_elements expected_years, actual_years
+end
