@@ -219,7 +219,7 @@ And "the provider has a buyer with an application" do
   @buyer.buy!(@provider.account_plans.default)
   @buyer.buy!(service_plan)
 
-  FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
+  @application = FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|

@@ -7,8 +7,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
 
   def new
     activate_menu :buyers, :messages, :inbox
-    @message = messages.build({})
-    @message.to recipients
+    @message = build_message({})
   end
 
   def destroy
@@ -20,12 +19,14 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def create
-    @message = messages.build(message_params)
+    @message = build_message(message_params)
     if @message.valid?
       enqueue_message_and_respond
     else
-      flash[:error] = @message.errors.full_messages.to_sentence
-      redirect_to new_provider_admin_messages_outbox_path
+      respond_to do |format|
+        format.html { render :new }
+        format.js
+      end
     end
   end
 
@@ -42,6 +43,12 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   private
+
+  def build_message(params)
+    message = messages.build(params)
+    message.to recipients
+    message
+  end
 
   def enqueue_message_and_respond
     @message.enqueue! :to => recipient_ids

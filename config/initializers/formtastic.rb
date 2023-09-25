@@ -24,7 +24,7 @@ Rails.application.config.to_prepare do
   # '<abbr title="required">*</abbr>'. In other words, if you configure formtastic.required
   # in your locale, it will replace the abbr title properly. But if you don't want to use
   # abbr tag, you can simply give a string as below.
-  # Formtastic::FormBuilder.required_string = "(required)"
+  Formtastic::FormBuilder.required_string = '&nbsp;<span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>'
 
   # Set the string that will be appended to the labels/fieldsets which are optional.
   # Defaults to an empty string ("") and also accepts procs (see required_string above).

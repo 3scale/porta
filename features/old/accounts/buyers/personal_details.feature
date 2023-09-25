@@ -52,7 +52,7 @@ Feature: Personal Details
     When I log in as "randomdude" on foo.3scale.localhost
       And I go to the personal details page
 
-    Then fields should be required:
+    Then fields are required:
       | required            |
       | First name          |
       | User extra required |
