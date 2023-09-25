@@ -16,7 +16,7 @@ module Liquid
         @spec.system_name
       end
 
-      desc 'Returns published status true/false'
+      desc 'Returns `true` if the API spec is published ("visible"), and `false` otherwise ("hidden")'
       def published?
         @spec.published
       end
