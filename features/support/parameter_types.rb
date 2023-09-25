@@ -291,6 +291,12 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'enable',
+  regexp: /enable|disable/,
+  transformer: ->(value) { value == 'enable' }
+)
+
+ParameterType(
   name: 'default',
   regexp: /default|not default|/,
   transformer: ->(value) { value == 'default' }

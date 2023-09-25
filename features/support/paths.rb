@@ -345,6 +345,9 @@ World(Module.new do
       application = Account.find_by_org_name!($1).bought_cinstance
       provider_admin_application_path(application)
 
+    when /^the provider application page$/
+      provider_admin_application_path(@application)
+
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
       provider_admin_applications_path(per_page: $1)
@@ -584,7 +587,7 @@ World(Module.new do
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^the invoices issued by me$/
+    when /^all provider's invoices page$/
       admin_finance_invoices_path
 
     when /^the invoice "(.+?)" page$/
