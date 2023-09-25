@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PatternflyInputInput < Formtastic::Inputs::StringInput
+class PatternflyTextareaInput < Formtastic::Inputs::TextInput
   delegate :content_tag, to: :template
 
   def to_html
@@ -21,18 +21,7 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
   def control
     content_tag :div, class: 'pf-c-form__group-control' do
-      input + helper_text
+      builder.text_area(method, input_html_options.merge(class: 'pf-c-form-control pf-m-resize-vertical'))
     end
-  end
-
-  def input
-    builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control',
-                                                        'aria-invalid': errors.any?))
-  end
-
-  def helper_text
-    return if errors.empty?
-
-    template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
   end
 end
