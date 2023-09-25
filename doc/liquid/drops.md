@@ -2,7 +2,7 @@
 
 
 A developer account. See `User` drop if you are looking for the email addresses or similar information.
-
+      
 
 ```liquid
 <h1>Account organization name {{ current_account.name }}</h1>
@@ -358,6 +358,9 @@ Returns the url of the API spec.
 ### system_name
 Returns the name of the spec.
 
+### published?
+Returns `true` if the API spec is published ("visible"), and `false` otherwise ("hidden")
+
 ### service
 Returns the service of the spec if it has any or `nil` otherwise.
 
@@ -400,7 +403,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-
+           
 
 ### live?
 
@@ -410,7 +413,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-
+      
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -776,6 +779,17 @@ Returns a descriptive string for the result.
 
 
 ## Methods
+### change_plan?
+
+-----------
+
+# Can drop
+
+
+
+
+
+## Methods
 ### be_updated?
 
 ### be_destroyed?
@@ -791,17 +805,6 @@ Returns a descriptive string for the result.
 ### manage_keys?
 
 ### delete_key?
-
------------
-
-# Can drop
-
-
-
-
-
-## Methods
-### change_plan?
 
 -----------
 
@@ -850,7 +853,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-
+           
 
 ### live?
 
@@ -860,7 +863,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-
+      
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -998,13 +1001,16 @@ Returns true if user has stored oauth2 authorizations
 ### email
 Returns the email of the user.
 
+### using_password?
+Returns true if user signed up with password
+
 ### password_required?
 
 This method will return `true` for users using the built-in
 Developer Portal authentication mechanisms and `false` for
 those that are authenticated via Janrain, CAS or other
 single-sign-on method.
-
+      
 ```liquid
 {{ if user.password_required? }}
   <input name="account[user][password]" type="password">
@@ -1060,7 +1066,7 @@ Returns the URL to edit the user.
 ### can
 Exposes rights of current user which are dependent
  on your settings and user's role.
-
+        
  You can call these methods on the returned object:
 
  - invite_user?
@@ -1104,7 +1110,7 @@ Returns SSO Authorizations collection.
 
         When a form fails to submit because of invalid data, the `errors` array
         will be available on the related model.
-
+      
 
 
 
@@ -1284,7 +1290,7 @@ Each of the array elements responds to `id` and `label` which
 are usually just the same unless the field is a special built-in one (like `country`)
 It is recommended to use those methods rather that output the `choice` 'as is'
 for future compatibility.
-
+            
 ```liquid
 {% for choice in field.choices %}
   <select name="{{ field.input_name }}" id="{{ field.html_id }}_id"
@@ -1617,27 +1623,6 @@ this returns the errors that occurred.
 
 
 ## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-
-
-### text
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1677,6 +1662,27 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -1775,18 +1781,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Returns the title of the page.
-```liquid
-<title>{{ page.title }}</title>
-```
 
-### system_name
-Returns system name of the page.
-```liquid
-{% if page.system_name == 'my_page' %}
-  {% include 'custom_header' %}
-{% endif %}
-```
+### kind
+
+### url
+
+### description
 
 -----------
 
@@ -1809,12 +1809,18 @@ this returns the errors that occurred.
 ```
 
 ### title
+Returns the title of the page.
+```liquid
+<title>{{ page.title }}</title>
+```
 
-### kind
-
-### url
-
-### description
+### system_name
+Returns system name of the page.
+```liquid
+{% if page.system_name == 'my_page' %}
+  {% include 'custom_header' %}
+{% endif %}
+```
 
 -----------
 
@@ -2127,20 +2133,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2162,13 +2161,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
@@ -2256,7 +2262,7 @@ Returns the telephone number of the account.
 ### multiple_applications_allowed?
 *True* if developers can have more separate applications with
               their own keys, stats, etc. __Depends on your 3scale plan__.
-
+           
 ```liquid
 {% if provider.multiple_applications_allowed? %}
    <div>
@@ -2275,7 +2281,7 @@ Returns the telephone number of the account.
 ### multiple_services_allowed?
 *True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
-
+           
 ```liquid
 {% if provider.multiple_services_allowed? %}
   {% for service in provider.services %}
@@ -2541,7 +2547,7 @@ Returns whether the service is subscribed to.
 
 Returns subscription (`ServiceContract` drop) of the currently
 logged in user if they are subscribed to this service, Nil otherwise.
-
+            
 ```liquid
 {% if service.subscription %}
    Your applications for service {{ service.name }} are:
@@ -2607,7 +2613,7 @@ Returns the visible features of the service.
 
 Depending on the authentication mode set, returns either 'ID',
 'API key' or 'Client ID' for OAuth authentication.
-
+      
 ```liquid
 {{ service.application_key_name }}
 ```
@@ -2671,7 +2677,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-
+           
 
 ### live?
 
@@ -2681,7 +2687,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-
+      
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -2948,13 +2954,13 @@ But not these:
  - /admin/sent/messsages/received/2
 
 See also '#active?', '#current?'.
-
+      
 
 ### current?
 
 True if the URL's path is the the same as of the current. Parameters
 and other components are not taken into account. See also '#active?'.
-
+      
 ```liquid
 {% assign url = urls.messages_inbox %}
 <!-- => http://awesome.3scale.net/admin/messages/sent -->
@@ -2970,7 +2976,7 @@ and other components are not taken into account. See also '#active?'.
 
 True if the current page is in the same menu structure
 as this URL. See also '#current?'.
-
+      
 ```liquid
 {% assign url = urls.messages_inbox %}
 <!-- => http://awesome.3scale.net/admin/messages/sent -->
@@ -3158,13 +3164,16 @@ Returns true if user has stored oauth2 authorizations
 ### email
 Returns the email of the user.
 
+### using_password?
+Returns true if user signed up with password
+
 ### password_required?
 
 This method will return `true` for users using the built-in
 Developer Portal authentication mechanisms and `false` for
 those that are authenticated via Janrain, CAS or other
 single-sign-on method.
-
+      
 ```liquid
 {{ if user.password_required? }}
   <input name="account[user][password]" type="password">
