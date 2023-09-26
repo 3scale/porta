@@ -1,4 +1,4 @@
-<%= content_tag(:tr, :id => "application_key_#{key.to_param}",
+<%= content_tag(:tr, :id => dom_id(key),
                 :class => 'key', 'data-key' => key.to_param) do %>
   <td>Application key</td>
   <td class="key" <% if cinstance.backend_version.oauth? %>id="oauth_secret"<% end %>><%= key %>

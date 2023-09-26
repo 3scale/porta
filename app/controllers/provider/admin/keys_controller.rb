@@ -12,15 +12,13 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   def edit
   end
 
-  # user key
   def update
     user_key = params[:cinstance][:user_key]
-    if user_key.empty?
-      @cinstance.errors.add(:base, "Key can't be blank")
-      flash.now[:error] = "Key can't be blank"
+    if user_key.blank?
+      @cinstance.errors.add(:user_key, :invalid)
     else
       @cinstance.user_key = user_key
-      flash.now[:error] = "Enter a valid key" unless @cinstance.save
+      @notice = t('.update.success') if @cinstance.save
     end
     respond_to(:js)
   end
@@ -30,8 +28,9 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
 
     if @key.persisted?
       @keys = @cinstance.application_keys.pluck_values
+      @notice = t('.create.success')
     else
-      flash.now[:error] = "Invalid key. Please review and try submitting again."
+      @cinstance.errors.add(:keys, :invalid)
     end
 
     respond_to(:js)
@@ -41,7 +40,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
     @key = params[:id]
     @remove = @cinstance.application_keys.remove(@key)
 
-    flash.now[:error] = 'One application key minimum is required.' unless @remove
+    @flash = t(".destroy.#{@remove ? 'success' : 'error'}")
 
     respond_to(:js)
   end
