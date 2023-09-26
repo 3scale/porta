@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-module Kubernetes
+module Cgroups
   module Tools
 
     module_function
 
-    def running_on_kubernetes?
-      Dir.exist?('/run/secrets/kubernetes.io') || ENV.key?('KUBERNETES_PORT')
-    end
-
+    # CPU shares in Cgroups v1 or converted from weight in Cgroups v2 in millicores
     def cpu_shares
       # This check is from https://github.com/kubernetes/kubernetes/blob/release-1.27/test/e2e/node/pod_resize.go#L305-L314
       # alternatively, this method can be used: https://kubernetes.io/docs/concepts/architecture/cgroups/#check-cgroup-version
@@ -24,19 +21,16 @@ module Kubernetes
       end
       shares
     rescue StandardError => exception
-      warn "WARNING: Caught exception: #{exception}"
+      warn "WARNING: Caught exception getting CPU shares: #{exception}"
     end
 
+    # CPU share in CPU cores, rounded up
     def available_cpus
-      (cpu_shares / 1024.0).ceil
+      shares = cpu_shares
+      (shares / 1024.0).ceil if shares
     rescue StandardError => exception
-      warn "WARNING: Caught exception: #{exception}"
+      warn "WARNING: Caught exception calculating available CPUs: #{exception}"
     end
 
-    def kubernetes_cpu_request
-      available_cpus if running_on_kubernetes?
-    rescue StandardError => exception
-      warn "WARNING: Caught exception: #{exception}"
-    end
   end
 end
