@@ -8,12 +8,12 @@ import type { Props } from 'Login/components/SignupForm'
 import type { FormEvent } from 'react'
 
 const defaultProps: Props = {
+  flashMessages: [],
   user: {
     email: 'bob@sponge.com',
     firstname: 'Bob',
     lastname: 'Sponge',
-    username: 'bobsponge',
-    errors: []
+    username: 'bobsponge'
   },
   path: 'bikini-bottom'
 }

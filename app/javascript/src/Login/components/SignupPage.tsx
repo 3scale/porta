@@ -9,6 +9,7 @@ import type { FlashMessage } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
+  flashMessages: FlashMessage[];
   name: string;
   path: string;
   user: {
@@ -16,11 +17,11 @@ interface Props {
     firstname: string;
     lastname: string;
     username: string;
-    errors: FlashMessage[];
   };
 }
 
 const SignupPage: FunctionComponent<Props> = ({
+  flashMessages,
   user,
   name,
   path
@@ -33,6 +34,7 @@ const SignupPage: FunctionComponent<Props> = ({
     loginTitle={`Signup to ${String(name)}`}
   >
     <SignupForm
+      flashMessages={flashMessages}
       path={path}
       user={user}
     />

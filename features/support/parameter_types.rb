@@ -248,8 +248,8 @@ ParameterType(
 ParameterType(
   name: 'user',
   type: User,
-  regexp: /user "([^"]*)"/,
-  transformer: ->(name) { User.find_by!(username: name) }
+  regexp: /user "([^"]*)"|the user/,
+  transformer: ->(name) { name.present? ? User.find_by!(username: name) : @user }
 )
 
 ParameterType(
@@ -333,7 +333,7 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'enabled_or_disabled',
+  name: 'enabled_or_disabled', # TODO: use type 'enabled'
   regexp: /enabled|disabled/,
   transformer: ->(value) { value }
 )

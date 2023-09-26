@@ -11,7 +11,8 @@ function validateLogin (fields: Record<keyof typeof loginConstraints, string>): 
 
 const changePasswordConstraints = {
   password: {
-    presence: { allowEmpty: false, message: 'Password is mandatory' }
+    presence: { allowEmpty: false, message: 'Password is mandatory' },
+    length: { minimum: 6 }
   },
   passwordConfirmation: {
     presence: { allowEmpty: false, message: 'Password confirmation is mandatory' },
@@ -25,10 +26,12 @@ function validateChangePassword (fields: Record<keyof typeof changePasswordConst
 
 const signupConstraints = {
   username: {
-    presence: { allowEmpty: false, message: 'Username is mandatory' }
+    presence: { allowEmpty: false, message: 'Username is mandatory' },
+    length: { minimum: 3, maximum: 40 }
   },
   email: {
-    email: { message: 'A valid email address is mandatory' }
+    email: { message: 'A valid email address is mandatory' },
+    length: { minimum: 6, maximum: 255 }
   },
   firstName: {
     length: { maximum: 255 }

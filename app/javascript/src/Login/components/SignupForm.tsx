@@ -10,23 +10,24 @@ import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclama
 
 import { validateSignup } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
-import { LoginAlert } from 'Login/components/FormAlert'
+import { LoginAlert } from 'Login/components/LoginAlert'
 
 import type { FlashMessage } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
+  flashMessages: FlashMessage[];
   path: string;
   user: {
     email: string;
     firstname: string;
     lastname: string;
     username: string;
-    errors: FlashMessage[];
   };
 }
 
 const SignupForm: FunctionComponent<Props> = ({
+  flashMessages,
   path,
   user
 }) => {
@@ -69,7 +70,7 @@ const SignupForm: FunctionComponent<Props> = ({
       [key]: (validationVisibility[key] && validation?.[key]) ? 'error' : 'default'
     }), {}) as Record<keyof typeof state, 'default' | 'error' | undefined>
 
-  const error = user.errors.length ? user.errors[0] : undefined
+  const alert = flashMessages.length ? flashMessages[0] : undefined
 
   return (
     <Form
@@ -79,7 +80,7 @@ const SignupForm: FunctionComponent<Props> = ({
       id="signup_form"
       method="post"
     >
-      <LoginAlert error={error} />
+      <LoginAlert message={alert?.message} type={alert?.type} />
 
       <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />

@@ -5,14 +5,14 @@ import { SignupPage } from 'Login/components/SignupPage'
 import type { Props } from 'Login/components/SignupPage'
 
 const defaultProps: Props = {
+  flashMessages: [],
   name: 'Best API',
   path: 'bikini-bottom',
   user: {
     email: 'bob@sponge.com',
     firstname: 'Bob',
     lastname: 'Sponge',
-    username: 'bobsponge',
-    errors: []
+    username: 'bobsponge'
   }
 }
 

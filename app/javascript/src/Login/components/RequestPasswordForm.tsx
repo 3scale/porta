@@ -9,19 +9,19 @@ import {
 
 import { validateRequestPassword } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
-import { LoginAlert } from 'Login/components/FormAlert'
+import { LoginAlert } from 'Login/components/LoginAlert'
 
 import type { FlashMessage } from 'Types/FlashMessages'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  error?: FlashMessage;
+  flashMessages: FlashMessage[];
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
 const RequestPasswordForm: FunctionComponent<Props> = ({
-  error,
+  flashMessages,
   providerLoginPath,
   providerPasswordPath
 }) => {
@@ -40,6 +40,8 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
   const emailValidationErrors = validateRequestPassword(email)
   const validatedEmail = (validationVisibility && emailValidationErrors) ? 'error' : 'default'
 
+  const alert = flashMessages.length ? flashMessages[0] : undefined
+
   return (
     <Form
       noValidate
@@ -48,7 +50,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
       id="request_password"
       method="post"
     >
-      <LoginAlert error={error} />
+      <LoginAlert message={alert?.message} type={alert?.type} />
 
       <input name="utf8" type="hidden" value="✓" />
       <input name="_method" type="hidden" value="delete" />

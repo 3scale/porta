@@ -105,6 +105,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 className="pf-c-login__main-body"
               >
                 <LoginForm
+                  flashMessages={[]}
                   providerSessionsPath="sessions-path"
                   session={
                     {
@@ -591,6 +592,7 @@ exports[`should render Login form and Authentication providers when available 1`
                 className="pf-c-login__main-body"
               >
                 <LoginForm
+                  flashMessages={[]}
                   providerSessionsPath="sessions-path"
                   session={
                     {
@@ -1302,6 +1304,7 @@ exports[`should render itself 1`] = `
                 className="pf-c-login__main-body"
               >
                 <LoginForm
+                  flashMessages={[]}
                   providerSessionsPath="sessions-path"
                   session={
                     {
@@ -1812,6 +1815,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                 className="pf-c-login__main-body"
               >
                 <LoginForm
+                  flashMessages={[]}
                   providerSessionsPath="sessions-path"
                   session={
                     {
