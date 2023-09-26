@@ -9,8 +9,8 @@ class ToolsTest < ActiveSupport::TestCase
     File.stubs(:exist?).returns(false)
 
     # 1024 shares is equivalent to 1 cpu
-    File.stubs(:read).returns('2048')
-    assert_equal 2, Cgroups::Tools.available_cpus
+    File.stubs(:read).returns('4096')
+    assert_equal 4, Cgroups::Tools.available_cpus
 
     # CPUs number is rounded up
     File.stubs(:read).returns('5000')
