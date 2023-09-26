@@ -314,7 +314,9 @@ commands: # reusable commands with parameters
             list=/tmp/test-list-$$
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
             bundle exec rake "test:files:${taskname}" | circleci tests run --command="cat > $list" --verbose --split-by=timings
-            bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
+            if [ -s $list ]; then
+              bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
+            fi
       - upload-artifacts
 
   save-gem-cache:
