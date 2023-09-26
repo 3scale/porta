@@ -1,34 +1,30 @@
+# frozen_string_literal: true
+
 # config/unicorn.rb
 require 'pathname'
 require 'etc'
 
 app_path = Pathname.pwd
 require app_path.join('lib/prometheus_exporter_port').to_s
+require app_path.join('lib/cgroups/tools').to_s
 
 Unicorn::HttpServer::START_CTX[0] = '/usr/local/bin/unicorn'
 
 working_directory app_path.to_s
-
-def kubernetes_cpu_request
-  if Dir.exist?('/run/secrets/kubernetes.io') || ENV.key?('KUBERNETES_PORT')
-    return (Integer(File.read('/sys/fs/cgroup/cpu/cpu.shares')) / 1024.0).ceil
-  end
-rescue
-  warn "WARNING: Caught exception: #{$!}"
-end
 
 detect_unicorn_workers = -> do
   workers = ENV['UNICORN_WORKERS']
   return Integer(workers) if workers.to_i.positive?
 
   worker_multiplier = Integer(ENV['UNICORN_WORKER_MULTIPLIER'] || 2)
-  cpus = kubernetes_cpu_request || Etc.nprocessors
+  cpus = Cgroups::Tools.available_cpus || Etc.nprocessors
 
   return cpus * worker_multiplier
 end
 
-warn "Starting #{detect_unicorn_workers.call} unicorn workers"
-worker_processes detect_unicorn_workers.call
+unicorn_workers_num = detect_unicorn_workers.call
+warn "Starting #{unicorn_workers_num} unicorn workers"
+worker_processes unicorn_workers_num
 
 # listen to the default port
 listen Integer(ENV['PORT'] || 3000)
