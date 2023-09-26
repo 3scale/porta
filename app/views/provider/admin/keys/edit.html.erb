@@ -8,7 +8,7 @@
                                     html: { class: 'pf-c-form pf-m-limit-width' } do |form| %>
     <%= form.input :user_key, as: :patternfly_input,
                               required: true,
-                              input_html: { size: 100, value: nil, required: true } %>
+                              input_html: { size: 100, value: nil, required: true, autocomplete: 'off' } %>
 
     <div class="pf-c-form__group pf-m-action">
       <div class="pf-c-form__actions">
