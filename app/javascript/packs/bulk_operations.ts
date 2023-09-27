@@ -1,4 +1,6 @@
-;(function($) {
+/* eslint-disable */
+// @ts-nocheck
+;(function($) {
 
   var handle_checkboxes = function () {
     var table = $('table'),

@@ -14,7 +14,7 @@ div id="bulk-operations" style="display: none;"
 
 
   = content_for :javascripts do
-    = javascript_include_tag 'bulk_operations.js'
+    = javascript_packs_with_chunks_tag 'bulk_operations'
     = javascript_include_tag 'vendor/jquery.tipsy.js'
 
 / FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock

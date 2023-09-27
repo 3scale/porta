@@ -17,7 +17,7 @@
   </dl>
 
   <% content_for :javascripts do %>
-    <%= javascript_include_tag 'bulk_operations.js' %>
+    <% javascript_packs_with_chunks_tag 'bulk_operations' %>
   <%end%>
 </div>
 
