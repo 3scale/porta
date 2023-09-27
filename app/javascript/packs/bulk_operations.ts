@@ -127,9 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  $(function () {
-    prepareOperations()
-    handleCheckboxes()
-    handleSelectTotalEntries()
-  })
+  prepareOperations()
+  handleCheckboxes()
+  handleSelectTotalEntries()
 })
