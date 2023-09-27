@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-invalid-this */
 document.addEventListener('DOMContentLoaded', () => {
-  const handleCheckboxes = function () {
+  function handleCheckboxes () {
     const table = $('table')
     const selectTotalEntries = $('#bulk-operations a.select-total-entries')
 
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  const prepareOperations = function () {
+  function prepareOperations () {
     const operations = $('#bulk-operations')
     operations
       .on('bulk:success', function () {
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
   }
 
-  const handleSelectTotalEntries = function () {
+  function handleSelectTotalEntries () {
     $('#bulk-operations a.select-total-entries').on('click', function (e) {
       e.preventDefault()
 
