@@ -13,7 +13,7 @@ div id="bulk-operations" style="display: none;"
                     'Accept, suspend or resume selected applications'
 
 
-  = content_for :javascripts do
+  - content_for :javascripts do
     = javascript_packs_with_chunks_tag 'bulk_operations'
     = javascript_include_tag 'vendor/jquery.tipsy.js'
 
