@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-invalid-this */
 document.addEventListener('DOMContentLoaded', () => {
-  const attrName = 'data-selected-total-entries'
+  const dataSelectedTotal = 'data-selected-total-entries'
+  const dataTotalEntries = 'data-total-entries'
+  const dataModelName = 'data-association-name'
+  const dataDefaultText = 'data-default-text'
 
   const colorboxOpts = {
     autoDimensions: true,
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let href = url.concat(connector, $('table tbody .select :checked').serialize())
 
     const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
-    if (selectTotalEntries?.hasAttribute(attrName)) {
+    if (selectTotalEntries?.hasAttribute(dataSelectedTotal)) {
       href += '&selected_total_entries=true'
     }
 
@@ -59,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateSelectAllCheckbox () {
-    const selected = document.querySelectorAll('table tbody tr.selected').length
+    const selected = selectedRows()
     const unselected = document.querySelectorAll('table tbody tr:not(.selected').length
 
     const checkbox = document.querySelector<HTMLInputElement>('table thead .select .select-all')!
@@ -68,13 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
     checkbox.checked = unselected === 0
   }
 
-  function setSelectedCount (count: number) {
+  function setSelectedCount (count: number | string) {
     document.querySelector<HTMLSpanElement>('#bulk-operations .count')!.innerText = count.toString()
   }
 
   function updateBulkOperationsCard () {
     const bulk = $('#bulk-operations')
-    const selected = document.querySelectorAll('table tbody tr.selected').length
+    const selected = selectedRows()
 
     if (selected > 0) {
       bulk.slideDown()
@@ -87,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
           selectTotalEntries.classList.remove('hidden')
         } else {
           selectTotalEntries.classList.add('hidden')
-          selectTotalEntries.innerText = selectTotalEntries.dataset.defaultText!
+          selectTotalEntries.innerText = selectTotalEntries.getAttribute(dataDefaultText)!
           selectTotalEntries.removeAttribute('data-selected-total-entries')
         }
       }
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll<HTMLElement>('#bulk-operations .operation')
       .forEach((element) => {
-        $(element).wrapInner('<button>')
+        element.innerHTML = `<button>${element.innerText}</button>`
 
         element.querySelector<HTMLButtonElement>('button')!
           .addEventListener('click', () => {
@@ -134,16 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
     selectTotalEntries.addEventListener('click', function (e) {
       e.preventDefault()
 
-      if (selectTotalEntries.hasAttribute(attrName)) {
-        selectTotalEntries.removeAttribute(attrName)
-        selectTotalEntries.innerText = selectTotalEntries.dataset.defaultText!
-      } else {
-        selectTotalEntries.setAttribute(attrName, 'true')
+      const selected = selectedRows()
 
-        const newText = `(only select the ${$('table tr.selected').length} ${selectTotalEntries.dataset.associationName!} on this page)`
+      if (selectTotalEntries.hasAttribute(dataSelectedTotal)) {
+        selectTotalEntries.removeAttribute(dataSelectedTotal)
+        selectTotalEntries.innerText = selectTotalEntries.getAttribute(dataDefaultText)!
+        setSelectedCount(selected)
+      } else {
+        selectTotalEntries.setAttribute(dataSelectedTotal, 'true')
+
+        const newText = `(only select the ${selected} ${selectTotalEntries.getAttribute(dataModelName)!} on this page)`
         selectTotalEntries.innerText = newText
+
+        setSelectedCount(selectTotalEntries.getAttribute(dataTotalEntries)!)
       }
     })
+  }
+
+  function selectedRows () {
+    return document.querySelectorAll('table tr.selected').length
   }
 
   prepareOperations()
