@@ -53,8 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
           row.classList.toggle('selected', checkbox.checked)
 
           updateBulkOperationsCard()
+          updateSelectAllCheckbox()
         })
       })
+  }
+
+  function updateSelectAllCheckbox () {
+    const selected = document.querySelectorAll('table tbody tr.selected').length
+    const unselected = document.querySelectorAll('table tbody tr:not(.selected').length
+
+    const checkbox = document.querySelector<HTMLInputElement>('table thead .select .select-all')!
+
+    checkbox.indeterminate = selected > 0 && unselected > 0
+    checkbox.checked = unselected === 0
   }
 
   function setSelectedCount (count: number) {
@@ -106,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             $.colorbox({
               ...colorboxOpts,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               title: element.nextElementSibling!.textContent,
               href: hrefFor(element)
             })
