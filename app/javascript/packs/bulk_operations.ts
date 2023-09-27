@@ -1,86 +1,90 @@
-/* eslint-disable */
-// @ts-nocheck
-;(function($) {
-
-  var handle_checkboxes = function () {
-    var table = $('table'),
-        selectTotalEntries = $('#bulk-operations a.select-total-entries');
+/* eslint-disable @typescript-eslint/no-invalid-this */
+document.addEventListener('DOMContentLoaded', () => {
+  const handleCheckboxes = function () {
+    const table = $('table')
+    const selectTotalEntries = $('#bulk-operations a.select-total-entries')
 
     // select all checkbox
-    table.find('thead .select .select-all').live('change', function(){
-      $(this).closest('table').
-        find('tbody .select input[type=checkbox]').
-        attr('checked', $(this).is(':checked')).
-        trigger('change');
-    });
+    table.find('thead .select .select-all').on('change', function () {
+      $(this).closest('table')
+        .find('tbody .select input[type=checkbox]')
+        .attr('checked', $(this).is(':checked').toString())
+        .trigger('change')
+    })
 
     // single checkbox
-    table.find('tbody .select input[type=checkbox]').live('change', function(){
-      var $this = $(this);
-      var row   = $this.closest('tr');
-      var bulk  = $('#bulk-operations');
+    table.find('tbody .select input[type=checkbox]').on('change', function () {
+      const $this = $(this)
+      const row = $this.closest('tr')
+      const bulk = $('#bulk-operations')
 
-      if($this.is(':checked')) {
-        row.addClass('selected');
+      if ($this.is(':checked')) {
+        row.addClass('selected')
       } else {
-        row.removeClass('selected');
+        row.removeClass('selected')
       }
 
-      var selected = row.closest('tbody, table').find('.selected').length;
+      const selected = row.closest('tbody, table').find('.selected').length
 
-      if(selected > 0) {
+      if (selected > 0) {
         // show bulk operations section
-        bulk.slideDown();
+        bulk.slideDown()
         // show selected count
-        bulk.find('.count').text(selected);
+        bulk.find('.count').text(selected)
         // if user has selected all checkboxes -> show select total entries action
         if (selected == table.find('tbody .select input[type=checkbox]').length) {
-          selectTotalEntries.show();
+          selectTotalEntries.show()
         } else {
           // total entries action back to the default state
-          selectTotalEntries.hide();
-          selectTotalEntries.text(selectTotalEntries.data('default-text'));
-          selectTotalEntries.removeAttr('data-selected-total-entries');
+          selectTotalEntries.hide()
+          selectTotalEntries.text(selectTotalEntries.data('default-text') as string)
+          selectTotalEntries.removeAttr('data-selected-total-entries')
         }
       } else {
         // hide bulk operations section
-        bulk.slideUp();
+        bulk.slideUp()
       }
-    });
+    })
   }
 
-  var prepare_operations = function() {
-    var operations = $("#bulk-operations");
-    operations.
-      live('bulk:success', function(){
+  const prepareOperations = function () {
+    const operations = $('#bulk-operations')
+    operations
+      .on('bulk:success', function () {
+        // @ts-expect-error -- Missing types for colorbox
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         $.colorbox({
           html: '<h1>Action completed successfully</h1>',
           title: 'Bulk operation completed successfully'
-        });
-    }).
-      find('.operation').each(function(){
-        var operation = $(this);
-        $(this).wrapInner('<button>');
+        })
+      })
+      .find('.operation')
+      .each(function () {
+        const operation = $(this)
+        $(this).wrapInner('<button>')
+        // @ts-expect-error -- Missing types for colorbox
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         $(this).find('button').colorbox({
-          href: function(){
-            var urlParts = [operation.data('url'), $('table tbody .select :checked').serialize()],
-                url      = null;
+          href: function () {
+            const urlParts = [operation.data('url'), $('table tbody .select :checked').serialize()]
+            let url = null
 
             // url address might already inludes some parameters
-            if(urlParts[0].indexOf('?') > -1) {
-              url = urlParts.join('&');
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            if (urlParts[0].indexOf('?') > -1) {
+              url = urlParts.join('&')
             } else {
-              url = urlParts.join('?');
+              url = urlParts.join('?')
             }
 
             // if total entries action was selected
             // add selected_total_entries parameter to the url
-            var selectTotalEntries = $('#bulk-operations a.select-total-entries');
+            const selectTotalEntries = $('#bulk-operations a.select-total-entries')
             if (selectTotalEntries.length && selectTotalEntries.attr('data-selected-total-entries')) {
-              url += '&selected_total_entries=true';
+              url += '&selected_total_entries=true'
             }
 
-            return url;
+            return url
           },
           title: operation.next('.description').text(),
           autoDimensions: true,
@@ -89,44 +93,43 @@
           hideOnContentClick: false,
           enableEscapeButton: false,
           showCloseButton: true
-        });
-    });
+        })
+      })
   }
 
-  var handle_selectTotalEntries = function() {
-    $('#bulk-operations a.select-total-entries').live('click', function(e) {
-      e.preventDefault();
+  const handleSelectTotalEntries = function () {
+    $('#bulk-operations a.select-total-entries').on('click', function (e) {
+      e.preventDefault()
 
-      var $this    = $(this),
-          attrName = 'data-selected-total-entries';
+      const $this = $(this)
+      const attrName = 'data-selected-total-entries'
 
       if ($this.attr(attrName)) {
         // user has already selected total entries
-        $this.removeAttr(attrName);
+        $this.removeAttr(attrName)
         // set back the default text
-        $this.text($this.data('default-text'));
+        $this.text($this.data('default-text') as string)
       } else {
         // save information that user has selected total entries
-        $this.attr(attrName, true);
+        $this.attr(attrName, 'true')
         // save default text
-        $this.data('default-text', $this.text());
+        $this.data('default-text', $this.text())
         // new text for the link
-        var newText = '(only select the ';
-        newText += $('table tr.selected').length;
-        newText += ' ';
-        newText += $this.data('association-name');
-        newText += ' on this page)';
+        let newText = '(only select the '
+        newText += $('table tr.selected').length
+        newText += ' '
+        newText += $this.data('association-name')
+        newText += ' on this page)'
 
-        $this.text(newText);
+        $this.text(newText)
       }
 
-    });
+    })
   }
 
-  $(function(){
-    prepare_operations();
-    handle_checkboxes();
-    handle_selectTotalEntries();
-  });
-
-})(jQuery);
+  $(function () {
+    prepareOperations()
+    handleCheckboxes()
+    handleSelectTotalEntries()
+  })
+})
