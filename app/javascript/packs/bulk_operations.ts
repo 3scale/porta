@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-invalid-this */
 document.addEventListener('DOMContentLoaded', () => {
+  const attrName = 'data-selected-total-entries'
+
   const colorboxOpts = {
     autoDimensions: true,
     overlayShow: true, // cannot use modal, because its setting cannot be overridden
@@ -11,16 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function hrefFor (element: HTMLElement) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const url = element.dataset.url!
 
     // url address might already include some parameters
     const connector = url.includes('?') ? '&' : '?'
     let href = url.concat(connector, $('table tbody .select :checked').serialize())
 
-    const selectTotalEntries = document.querySelector<HTMLElement>('#bulk-operations a.select-total-entries')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (selectTotalEntries?.dataset.selectTotalEntries === 'true') {
+    const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+    if (selectTotalEntries?.hasAttribute(attrName)) {
       href += '&selected_total_entries=true'
     }
 
@@ -95,49 +95,44 @@ document.addEventListener('DOMContentLoaded', () => {
           title: 'Bulk operation completed successfully'
         })
       })
-      .find('.operation')
-      .each(function (_i, element) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        $(element)
-          .wrapInner('<button>')
-          .find('button')
-          // @ts-expect-error -- Missing types for colorbox
-          .colorbox({
-            ...colorboxOpts,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            title: element.nextElementSibling!.textContent,
-            href: hrefFor(element)
+
+    document.querySelectorAll<HTMLElement>('#bulk-operations .operation')
+      .forEach((element) => {
+        $(element).wrapInner('<button>')
+
+        element.querySelector<HTMLButtonElement>('button')!
+          .addEventListener('click', () => {
+            // @ts-expect-error -- Missing types for colorbox
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+            $.colorbox({
+              ...colorboxOpts,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              title: element.nextElementSibling!.textContent,
+              href: hrefFor(element)
+            })
           })
       })
   }
 
   function handleSelectTotalEntries () {
-    $('#bulk-operations a.select-total-entries').on('click', function (e) {
+    const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+
+    if (!selectTotalEntries) {
+      return
+    }
+
+    selectTotalEntries.addEventListener('click', function (e) {
       e.preventDefault()
 
-      const $this = $(this)
-      const attrName = 'data-selected-total-entries'
-
-      if ($this.attr(attrName)) {
-        // user has already selected total entries
-        $this.removeAttr(attrName)
-        // set back the default text
-        $this.text($this.data('default-text') as string)
+      if (selectTotalEntries.hasAttribute(attrName)) {
+        selectTotalEntries.removeAttribute(attrName)
+        selectTotalEntries.innerText = selectTotalEntries.dataset.defaultText!
       } else {
-        // save information that user has selected total entries
-        $this.attr(attrName, 'true')
-        // save default text
-        $this.data('default-text', $this.text())
-        // new text for the link
-        let newText = '(only select the '
-        newText += $('table tr.selected').length
-        newText += ' '
-        newText += $this.data('association-name')
-        newText += ' on this page)'
+        selectTotalEntries.setAttribute(attrName, 'true')
 
-        $this.text(newText)
+        const newText = `(only select the ${$('table tr.selected').length} ${selectTotalEntries.dataset.associationName!} on this page)`
+        selectTotalEntries.innerText = newText
       }
-
     })
   }
 
