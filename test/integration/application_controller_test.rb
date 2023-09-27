@@ -98,7 +98,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "forgery protection is skipped for API requests with using basic auth and provider key" do
+  test "forgery protection is skipped for API requests with basic auth and provider key" do
     provider = FactoryBot.create(:provider_account)
     token = provider.api_key
     host! provider.external_admin_domain
