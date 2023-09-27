@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-invalid-this */
 document.addEventListener('DOMContentLoaded', () => {
+  const colorboxOpts = {
+    autoDimensions: true,
+    overlayShow: true, // cannot use modal, because its setting cannot be overridden
+    hideOnOverlayClick: false,
+    hideOnContentClick: false,
+    enableEscapeButton: false,
+    showCloseButton: true
+  }
+
   function handleCheckboxes () {
     const table = $('table')
     const selectTotalEntries = $('#bulk-operations a.select-total-entries')
@@ -48,52 +57,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function prepareOperations () {
-    const operations = $('#bulk-operations')
-    operations
+    $('#bulk-operations')
       .on('bulk:success', function () {
         // @ts-expect-error -- Missing types for colorbox
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        $.colorbox({
+        $.colorbox({ // TODO: replace this with a flash
           html: '<h1>Action completed successfully</h1>',
           title: 'Bulk operation completed successfully'
         })
       })
       .find('.operation')
-      .each(function () {
-        const operation = $(this)
-        $(this).wrapInner('<button>')
-        // @ts-expect-error -- Missing types for colorbox
+      .each(function (_i, element) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        $(this).find('button').colorbox({
-          href: function () {
-            const urlParts = [operation.data('url'), $('table tbody .select :checked').serialize()]
-            let url = null
+        $(element)
+          .wrapInner('<button>')
+          .find('button')
+          // @ts-expect-error -- Missing types for colorbox
+          .colorbox({
+            ...colorboxOpts,
+            href: function () {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              const url = element.dataset.url!
 
-            // url address might already inludes some parameters
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            if (urlParts[0].indexOf('?') > -1) {
-              url = urlParts.join('&')
-            } else {
-              url = urlParts.join('?')
-            }
+              // url address might already include some parameters
+              const connector = url.includes('?') ? '&' : '?'
+              let href = url.concat(connector, $('table tbody .select :checked').serialize())
 
-            // if total entries action was selected
-            // add selected_total_entries parameter to the url
-            const selectTotalEntries = $('#bulk-operations a.select-total-entries')
-            if (selectTotalEntries.length && selectTotalEntries.attr('data-selected-total-entries')) {
-              url += '&selected_total_entries=true'
-            }
+              const selectTotalEntries = document.querySelector<HTMLElement>('#bulk-operations a.select-total-entries')
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              if (selectTotalEntries?.dataset.selectTotalEntries === 'true') {
+                href += '&selected_total_entries=true'
+              }
 
-            return url
-          },
-          title: operation.next('.description').text(),
-          autoDimensions: true,
-          overlayShow: true, // cannot use modal, because its setting cannot be overriden
-          hideOnOverlayClick: false,
-          hideOnContentClick: false,
-          enableEscapeButton: false,
-          showCloseButton: true
-        })
+              return href
+            },
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            title: element.nextElementSibling!.textContent
+          })
       })
   }
 
