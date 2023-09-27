@@ -9,6 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
     showCloseButton: true
   }
 
+  function hrefFor (element: HTMLElement) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const url = element.dataset.url!
+
+    // url address might already include some parameters
+    const connector = url.includes('?') ? '&' : '?'
+    let href = url.concat(connector, $('table tbody .select :checked').serialize())
+
+    const selectTotalEntries = document.querySelector<HTMLElement>('#bulk-operations a.select-total-entries')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (selectTotalEntries?.dataset.selectTotalEntries === 'true') {
+      href += '&selected_total_entries=true'
+    }
+
+    return href
+  }
+
   function handleCheckboxes () {
     const table = $('table')
     const selectTotalEntries = $('#bulk-operations a.select-total-entries')
@@ -75,24 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
           // @ts-expect-error -- Missing types for colorbox
           .colorbox({
             ...colorboxOpts,
-            href: function () {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              const url = element.dataset.url!
-
-              // url address might already include some parameters
-              const connector = url.includes('?') ? '&' : '?'
-              let href = url.concat(connector, $('table tbody .select :checked').serialize())
-
-              const selectTotalEntries = document.querySelector<HTMLElement>('#bulk-operations a.select-total-entries')
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              if (selectTotalEntries?.dataset.selectTotalEntries === 'true') {
-                href += '&selected_total_entries=true'
-              }
-
-              return href
-            },
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            title: element.nextElementSibling!.textContent
+            title: element.nextElementSibling!.textContent,
+            href: hrefFor(element)
           })
       })
   }
