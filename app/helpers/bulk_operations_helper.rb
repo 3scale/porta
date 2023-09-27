@@ -5,10 +5,10 @@ module BulkOperationsHelper
   end
 
   def bulk_select_all
-    check_box_tag 'selected[]', nil, nil, :class => 'select-all'
+    check_box_tag 'selected[]', nil, nil, class: 'select-all', autocomplete: 'off'
   end
 
   def bulk_select_one object
-    check_box_tag 'selected[]', object.id
+    check_box_tag 'selected[]', object.id, nil, autocomplete: 'off'
   end
 end
