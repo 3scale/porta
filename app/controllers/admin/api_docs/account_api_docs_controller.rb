@@ -4,6 +4,8 @@ class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
   activate_menu :audience, :cms, :ActiveDocs
   sublayout 'api/service'
 
+  before_action :disable_client_cache, only: %i[preview]
+
   class NotImplementedServiceScopeError < RuntimeError; end
   rescue_from(NotImplementedServiceScopeError) do |exception|
     System::ErrorReporting.report_error(exception)

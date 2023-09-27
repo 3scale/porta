@@ -2,6 +2,7 @@ class Sites::DnsController < Sites::BaseController
   activate_menu :audience, :cms, :admin_site_dns
 
   before_action :find_account
+  before_action :disable_client_cache
 
   def show
   end

@@ -7,6 +7,8 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
 
   before_action :find_authentication_provider, only: %i[show edit update publish_or_hide destroy]
   before_action :authorize_authentication_provider, only: %i[show edit destroy]
+  before_action :disable_client_cache, except: :index
+
 
   def index
     @authentication_providers = current_account.authentication_provider_kinds

@@ -3,6 +3,7 @@
 class Finance::Provider::SettingsController < Finance::Provider::BaseController
 
   before_action :set_strategy
+  before_action :disable_client_cache
   layout 'provider'
 
 

@@ -10,6 +10,8 @@ class Api::ServicesController < Api::BaseController
   before_action :deny_on_premises_for_master
   before_action :authorize_section
   before_action :authorize_action, only: %i[new create]
+  before_action :disable_client_cache, only: :settings
+
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, except: [:create]
 
   helper_method :presenter

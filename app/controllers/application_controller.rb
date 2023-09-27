@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
   before_action :set_timezone
   before_action :enable_analytics
   before_action :check_browser
-  before_action :set_cache_headers
 
   def status
     begin
@@ -231,7 +230,7 @@ class ApplicationController < ActionController::Base
       (!browser.compatibility_view? && (browser.ie?('>= 9') || browser.edge?))
   end
 
-  def set_cache_headers
+  def disable_client_cache
     response.headers.merge!(
       'Cache-Control' => 'no-cache, no-store',
       'Pragma' => 'no-cache',

@@ -6,6 +6,8 @@ class Admin::ApiDocs::ServiceApiDocsController < Admin::ApiDocs::BaseController
   activate_menu :serviceadmin, :ActiveDocs
   sublayout 'api/service'
 
+  before_action :disable_client_cache, only: :preview
+
   private
 
   def current_scope
