@@ -23,7 +23,10 @@
   }
 
   .select-total-entries {
-    display: none;
+    &.hidden{
+      display: none;
+    }
+    display: inline;
   }
 }
 

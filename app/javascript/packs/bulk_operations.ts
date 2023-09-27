@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-invalid-this */
 document.addEventListener('DOMContentLoaded', () => {
   const colorboxOpts = {
@@ -26,51 +27,62 @@ document.addEventListener('DOMContentLoaded', () => {
     return href
   }
 
-  function handleCheckboxes () {
-    const table = $('table')
-    const selectTotalEntries = $('#bulk-operations a.select-total-entries')
+  function prepareSelectAllCheckbox () {
+    document.querySelector<HTMLInputElement>('table thead .select .select-all')!
+      .addEventListener('change', (event) => {
+        const checked = (event.target as HTMLInputElement).checked
 
-    // select all checkbox
-    table.find('thead .select .select-all').on('change', function () {
-      $(this).closest('table')
-        .find('tbody .select input[type=checkbox]')
-        .attr('checked', $(this).is(':checked').toString())
-        .trigger('change')
-    })
+        document.querySelectorAll<HTMLTableRowElement>('table tbody tr')
+          .forEach((row) => {
+            row.classList.toggle('selected', checked)
 
-    // single checkbox
-    table.find('tbody .select input[type=checkbox]').on('change', function () {
-      const $this = $(this)
-      const row = $this.closest('tr')
-      const bulk = $('#bulk-operations')
+            const checkbox = row.querySelector<HTMLInputElement>('.select input[type=checkbox]')!
+            checkbox.checked = checked
+            checkbox.setAttribute('checked', checked.toString())
+          })
 
-      if ($this.is(':checked')) {
-        row.addClass('selected')
-      } else {
-        row.removeClass('selected')
-      }
+        updateBulkOperationsCard()
+      })
+  }
 
-      const selected = row.closest('tbody, table').find('.selected').length
+  function prepareSingleCheckboxes () {
+    document.querySelectorAll<HTMLInputElement>('table tbody .select input[type=checkbox]')
+      .forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+          const row = checkbox.closest('tr')!
+          row.classList.toggle('selected', checkbox.checked)
 
-      if (selected > 0) {
-        // show bulk operations section
-        bulk.slideDown()
-        // show selected count
-        bulk.find('.count').text(selected)
-        // if user has selected all checkboxes -> show select total entries action
-        if (selected == table.find('tbody .select input[type=checkbox]').length) {
-          selectTotalEntries.show()
+          updateBulkOperationsCard()
+        })
+      })
+  }
+
+  function setSelectedCount (count: number) {
+    document.querySelector<HTMLSpanElement>('#bulk-operations .count')!.innerText = count.toString()
+  }
+
+  function updateBulkOperationsCard () {
+    const bulk = $('#bulk-operations')
+    const selected = document.querySelectorAll('table tbody tr.selected').length
+
+    if (selected > 0) {
+      bulk.slideDown()
+      setSelectedCount(selected)
+
+      const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+      if (selectTotalEntries) {
+        const isAllSelected = document.querySelectorAll('table tbody tr:not(.selected').length === 0
+        if (isAllSelected) {
+          selectTotalEntries.classList.remove('hidden')
         } else {
-          // total entries action back to the default state
-          selectTotalEntries.hide()
-          selectTotalEntries.text(selectTotalEntries.data('default-text') as string)
-          selectTotalEntries.removeAttr('data-selected-total-entries')
+          selectTotalEntries.classList.add('hidden')
+          selectTotalEntries.innerText = selectTotalEntries.dataset.defaultText!
+          selectTotalEntries.removeAttribute('data-selected-total-entries')
         }
-      } else {
-        // hide bulk operations section
-        bulk.slideUp()
       }
-    })
+    } else {
+      bulk.slideUp()
+    }
   }
 
   function prepareOperations () {
@@ -130,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   prepareOperations()
-  handleCheckboxes()
+  prepareSelectAllCheckbox()
+  prepareSingleCheckboxes()
   handleSelectTotalEntries()
 })

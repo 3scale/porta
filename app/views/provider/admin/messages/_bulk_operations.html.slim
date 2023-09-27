@@ -5,8 +5,9 @@ div#bulk-operations
     '  messages selected
 
     - if messages.total_pages > 1
-      = link_to "(select all #{messages.total_entries} messages)", '#', class: 'select-total-entries',
-        data: { 'association-name' => 'messages' }
+      - text = "(select all #{messages.total_entries} messages)"
+      = link_to text, '#', class: 'select-total-entries',
+                           data: { 'association-name': 'messages', 'default-text': text }
 
   dl
     = bulk_action 'Delete', new_provider_admin_messages_bulk_trash_path(scope: scope),
