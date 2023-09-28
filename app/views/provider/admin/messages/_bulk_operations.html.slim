@@ -1,5 +1,4 @@
-div#bulk-operations
-  h3 Bulk operations
+= render 'shared/bulk_operations' do
   p
     span.count
     '  messages selected
@@ -9,9 +8,6 @@ div#bulk-operations
       = link_to text, '#', class: 'select-total-entries',
                            data: { 'association-name': 'messages', 'default-text': text, 'total-entries': messages.total_entries }
 
-  dl
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
     = bulk_action 'Delete', new_provider_admin_messages_bulk_trash_path(scope: scope),
                             'Delete selected emails'
-
-- content_for :javascripts do
-  - javascript_packs_with_chunks_tag 'bulk_operations'

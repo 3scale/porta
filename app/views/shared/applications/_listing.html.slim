@@ -1,20 +1,15 @@
-div id="bulk-operations" style="display: none;"
-  h3 Bulk operations
+= render 'shared/bulk_operations' do
   p
     ' You have selected
     span.count>
     | applications and you can make following operations with them:
-  dl
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
     = bulk_action 'Send email', new_admin_buyers_applications_bulk_send_email_path,
                                 'Send email to owners of selected applications'
     = bulk_action 'Change application plan', new_admin_buyers_applications_bulk_change_plan_path,
                                              'Transfer these applications to different application plan'
     = bulk_action 'Change state', new_admin_buyers_applications_bulk_change_state_path,
                                   'Accept, suspend or resume selected applications'
-
-  - content_for :javascripts do
-    = javascript_packs_with_chunks_tag 'bulk_operations'
-    = javascript_include_tag 'vendor/jquery.tipsy.js'
 
 / FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock
 - show_application_plans = application_plans.size > 0 && !master_on_premises?

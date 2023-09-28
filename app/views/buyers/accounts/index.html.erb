@@ -1,10 +1,9 @@
 <% content_for :page_header_title, 'Accounts' %>
 
-<div id="bulk-operations" style="display: none;">
-  <h3>Bulk operations</h3>
+<%= render 'shared/bulk_operations' do %>
   <p>You have selected <span class="count"></span> accounts
     and you can make following operations with them:</p>
-  <dl>
+  <dl class="pf-c-description-list pf-m-horizontal pf-m-fluid">
     <%= bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
                                   'Send email to selected accounts' %>
     <% if can? :see, :account_plans %>
@@ -14,11 +13,7 @@
     <%= bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path,
                                     'Approve, reject or make pending selected accounts' %>
   </dl>
-
-  <% content_for :javascripts do %>
-    <% javascript_packs_with_chunks_tag 'bulk_operations' %>
-  <%end%>
-</div>
+<% end %>
 
 <div id="results_list">
   <%= render :partial => 'search_results', :locals => { :accounts => presenter.buyers.decorate } %>

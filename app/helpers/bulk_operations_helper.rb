@@ -1,10 +1,12 @@
 module BulkOperationsHelper
   def bulk_action(name, url, description)
-    dt = content_tag(:dt, class: 'operation', 'data-url': url) do
-           content_tag(:button, name)
+    dt = content_tag(:dt, class: 'operation pf-c-description-list__term', 'data-url': url) do
+           content_tag(:button, name, class: 'pf-c-button pf-m-secondary')
          end
 
-    dt + content_tag(:dd, description, class: 'description')
+    dd = content_tag(:dd, description, class: 'description pf-c-description-list__description')
+
+    content_tag(:div, dt + dd, class: "pf-c-description-list__group")
   end
 
   def bulk_select_all
