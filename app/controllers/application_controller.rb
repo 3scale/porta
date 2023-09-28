@@ -79,6 +79,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def disable_client_cache
+    response.headers.merge!(
+      'Cache-Control' => 'no-cache, no-store',
+      'Pragma' => 'no-cache',
+      'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
+    )
+  end
+
   protected
 
   def check_browser
@@ -228,13 +236,5 @@ class ApplicationController < ActionController::Base
   def other_modern_browsers?(browser)
     (browser.firefox? && browser.device.tablet? && browser.platform.android?('>= 14')) ||
       (!browser.compatibility_view? && (browser.ie?('>= 9') || browser.edge?))
-  end
-
-  def disable_client_cache
-    response.headers.merge!(
-      'Cache-Control' => 'no-cache, no-store',
-      'Pragma' => 'no-cache',
-      'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
-    )
   end
 end
