@@ -16,9 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showCloseButton: true
   }
 
-  function hrefFor (element: HTMLElement) {
-    const url = element.dataset.url!
-
+  function hrefFor (url: string) {
     // url address might already include some parameters
     const connector = url.includes('?') ? '&' : '?'
     let href = url.concat(connector, $('table tbody .select :checked').serialize())
@@ -111,18 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       })
 
-    document.querySelectorAll<HTMLElement>('#bulk-operations .operation')
-      .forEach((element) => {
-        element.innerHTML = `<button>${element.innerText}</button>`
-
-        element.querySelector<HTMLButtonElement>('button')!
+    document.querySelectorAll<HTMLDataElement>('#bulk-operations dt.operation')
+      .forEach(dt => {
+        dt.querySelector('button')!
           .addEventListener('click', () => {
             // @ts-expect-error -- Missing types for colorbox
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             $.colorbox({
               ...colorboxOpts,
-              title: element.nextElementSibling!.textContent,
-              href: hrefFor(element)
+              title: dt.nextElementSibling!.textContent,
+              href: hrefFor(dt.dataset.url!)
             })
           })
       })

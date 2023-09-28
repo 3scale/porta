@@ -1,14 +1,17 @@
 module BulkOperationsHelper
-  def bulk_action name, url, description
-    content_tag(:dt, name, :class => :operation, :'data-url' => url) <<
-    content_tag(:dd, description, :class => :description)
+  def bulk_action(name, url, description)
+    dt = content_tag(:dt, class: 'operation', 'data-url': url) do
+           content_tag(:button, name)
+         end
+
+    dt + content_tag(:dd, description, class: 'description')
   end
 
   def bulk_select_all
     check_box_tag 'selected[]', nil, nil, class: 'select-all', autocomplete: 'off'
   end
 
-  def bulk_select_one object
+  def bulk_select_one(object)
     check_box_tag 'selected[]', object.id, nil, autocomplete: 'off'
   end
 end
