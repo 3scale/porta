@@ -7,7 +7,6 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_registry_policies, only: :update
   before_action :disable_client_cache
 
-
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
 

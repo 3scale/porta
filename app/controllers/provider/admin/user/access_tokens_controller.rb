@@ -7,7 +7,7 @@ class Provider::Admin::User::AccessTokensController < Provider::Admin::User::Bas
   activate_menu :account, :personal, :tokens
   before_action :authorize_access_tokens
   before_action :disable_client_cache
-  
+
   def create
     create! do |success, _failure|
       success.html do

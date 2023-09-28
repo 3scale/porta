@@ -10,7 +10,6 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   before_action :authorize_new_app, :only => [:new]
   before_action :authorize_create_app, :only => [:create]
   before_action :authorize_update_app,  :only => [:edit, :update]
-  before_action :disable_client_cache
 
   activate_menu :dashboard, :applications
 

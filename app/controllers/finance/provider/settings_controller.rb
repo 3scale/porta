@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Finance::Provider::SettingsController < Finance::Provider::BaseController
-
   before_action :set_strategy
   before_action :disable_client_cache
-  layout 'provider'
 
+  layout 'provider'
 
   def show
     activate_menu :audience, :finance, :charging_and_gateway

@@ -2,7 +2,6 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
 
   skip_before_action :login_required
 
-  before_action :disable_client_cache
   before_action :ensure_can_view_content, :if => :check_permissions?
   append_before_action :ensure_buyer_domain, only: [:show]
 
