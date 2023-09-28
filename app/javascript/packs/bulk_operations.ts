@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-invalid-this */
+
 document.addEventListener('DOMContentLoaded', () => {
   const dataSelectedTotal = 'data-selected-total-entries'
   const dataTotalEntries = 'data-total-entries'

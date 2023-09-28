@@ -11,7 +11,7 @@ div#bulk-operations
 
   dl
     = bulk_action 'Delete', new_provider_admin_messages_bulk_trash_path(scope: scope),
-      'Delete selected emails'
+                            'Delete selected emails'
 
 - content_for :javascripts do
   - javascript_packs_with_chunks_tag 'bulk_operations'

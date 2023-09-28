@@ -6,12 +6,11 @@ div id="bulk-operations" style="display: none;"
     | applications and you can make following operations with them:
   dl
     = bulk_action 'Send email', new_admin_buyers_applications_bulk_send_email_path,
-                    'Send email to owners of selected applications'
+                                'Send email to owners of selected applications'
     = bulk_action 'Change application plan', new_admin_buyers_applications_bulk_change_plan_path,
-                    'Transfer these applications to different application plan'
+                                             'Transfer these applications to different application plan'
     = bulk_action 'Change state', new_admin_buyers_applications_bulk_change_state_path,
-                    'Accept, suspend or resume selected applications'
-
+                                  'Accept, suspend or resume selected applications'
 
   - content_for :javascripts do
     = javascript_packs_with_chunks_tag 'bulk_operations'

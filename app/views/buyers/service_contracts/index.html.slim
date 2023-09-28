@@ -13,15 +13,12 @@ div id="bulk-operations" style="display: none;"
     | service subscriptions and you can make following operations with them:
 
   dl
-    = bulk_action 'Send email',
-                  new_admin_buyers_service_contracts_bulk_send_email_path,
-                  'Send email to selected subscribers'
-    = bulk_action 'Change service plan',
-                  new_admin_buyers_service_contracts_bulk_change_plan_path,
-                  'Transfer these subscriptions to different service plan'
-    = bulk_action 'Change state',
-                  new_admin_buyers_service_contracts_bulk_change_state_path,
-                  'Accept, suspend or resume selected subscriptions'
+    = bulk_action 'Send email', new_admin_buyers_service_contracts_bulk_send_email_path,
+                                'Send email to selected subscribers'
+    = bulk_action 'Change service plan', new_admin_buyers_service_contracts_bulk_change_plan_path,
+                                         'Transfer these subscriptions to different service plan'
+    = bulk_action 'Change state', ce_contracts_bulk_change_state_path,
+                                  'Accept, suspend or resume selected subscriptions'
 
   - content_for :javascripts do
     = javascript_packs_with_chunks_tag 'bulk_operations'

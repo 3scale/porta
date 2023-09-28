@@ -5,15 +5,14 @@
   <p>You have selected <span class="count"></span> accounts
     and you can make following operations with them:</p>
   <dl>
-    <%= bulk_action 'Send email',
-                    new_admin_buyers_accounts_bulk_send_email_path,
-                    'Send email to selected accounts' %>
-    <%= bulk_action 'Change account plan',
-                    new_admin_buyers_accounts_bulk_change_plan_path,
-                    'Transfer these accounts to different account plan' if can? :see, :account_plans %>
-    <%= bulk_action 'Change state',
-                    new_admin_buyers_accounts_bulk_change_state_path,
-                    'Approve, reject or make pending selected accounts' %>
+    <%= bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
+                                  'Send email to selected accounts' %>
+    <% if can? :see, :account_plans %>
+      <%= bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path,
+                                            'Transfer these accounts to different account plan' %>
+    <% end %>
+    <%= bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path,
+                                    'Approve, reject or make pending selected accounts' %>
   </dl>
 
   <% content_for :javascripts do %>
