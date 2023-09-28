@@ -5,7 +5,9 @@ class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
 
   helper_method :accounts
 
-  def create; end
+  def create
+    notify_success
+  end
 
   protected
 

@@ -15,6 +15,7 @@ class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::
     end
 
     handle_errors
+    super
   end
 
   private

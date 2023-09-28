@@ -1,4 +1,5 @@
 <%- service_contracts.each do |contract| %>
   $("#<%=dom_id(contract)%>").find(".state").text("<%= escape_javascript contract.state %>");
 <%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+$.colorbox.close()
+$.flash('<%= escape_javascript @notice %>')

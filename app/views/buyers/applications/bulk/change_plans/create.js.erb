@@ -3,4 +3,5 @@
     find(".plan").html("<%= escape_javascript link_to_plan_edit(cinstance.plan) %>").end().
     find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(cinstance.plan) %>");
 <%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+$.colorbox.close()
+$.flash('<%= escape_javascript @notice %>')

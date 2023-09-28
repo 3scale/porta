@@ -99,16 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function prepareOperations () {
-    $('#bulk-operations')
-      .on('bulk:success', function () {
-        // @ts-expect-error -- Missing types for colorbox
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        $.colorbox({ // TODO: replace this with a flash
-          html: '<h1>Action completed successfully</h1>',
-          title: 'Bulk operation completed successfully'
-        })
-      })
-
     document.querySelectorAll<HTMLDataElement>('#bulk-operations dt.operation')
       .forEach(dt => {
         dt.querySelector('button')!

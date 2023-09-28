@@ -5,7 +5,9 @@ class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseControlle
 
   helper_method :service_contracts
 
-  def create; end
+  def create
+    notify_success
+  end
 
   protected
 

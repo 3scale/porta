@@ -18,6 +18,7 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
     end
 
     handle_errors
+    super
   end
 
   def authorize_account_plans

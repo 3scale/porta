@@ -479,6 +479,49 @@ en:
         reject: 'rejected'
         suspend: 'suspended'
         resume: 'resumed'
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The account's state was changed successfully.
+            other: Successfully changed the state of %{count} accounts.
+        change_plans:
+          success:
+            one: The account's plan was changed successfully.
+            other: Successfully changed the plan of %{count} accounts.
+
+    applications:
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The application's state was changed successfully.
+            other: Successfully changed the state of %{count} applications.
+        change_plans:
+          success:
+            one: The application's plan was changed successfully.
+            other: Successfully changed the plan of %{count} applications.
+
+    service_contracts:
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The subscription's state was changed successfully.
+            other: Successfully changed the state of %{count} subscriptions.
+        change_plans:
+          success:
+            one: The subscription's plan was changed successfully.
+            other: Successfully changed the plan of %{count} subscriptions.
 
   sites:
     spam_protections:

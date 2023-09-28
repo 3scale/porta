@@ -1,4 +1,5 @@
 <%- @accounts.each do |account| %>
   $("#<%=dom_id(account)%>").find(".state").text("<%= escape_javascript account.state.capitalize %>");
 <%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+$.colorbox.close()
+$.flash('<%= escape_javascript @notice %>')

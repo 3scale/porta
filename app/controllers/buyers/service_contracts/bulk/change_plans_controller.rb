@@ -16,6 +16,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
     end
 
     handle_errors
+    super
   end
 
   private

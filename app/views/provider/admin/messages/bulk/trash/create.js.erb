@@ -4,9 +4,10 @@
 
 <% if @no_more_messages %>
   var text = '<%= t("provider.admin.messages.no_#{@scope}") %>';
-  
+
   $('<p />').text(text).insertBefore('table#messages');
   $('table#messages, #bulk-operations, .pagination').fadeOut();
 <% end %>
 
-$('#bulk-operations').trigger('bulk:success');
+$.colorbox.close()
+$.flash('<%= escape_javascript @notice %>')
