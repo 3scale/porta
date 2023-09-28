@@ -22,10 +22,6 @@
     background-color: $white;
     padding: line-height-times(1);
 
-    h1 {
-      background-color: transparent;
-    }
-
     &.sticked {
       overflow-y: auto;
       top: 24px !important;
@@ -54,11 +50,11 @@
     }
   }
 
-  .fa-folder-open-o:hover:before {
+  .fa-folder-open:hover:before {
     content: '\f07c';
   }
 
-  .fa-folder-o:hover:before {
+  .fa-folder:hover:before {
     content: '\f07b';
   }
 
@@ -74,8 +70,8 @@
     }
   }
 
-  .fa-folder-o,
-  .fa-folder-open-o {
+  .fa-folder,
+  .fa-folder-open {
     color: $brand-blue;
 
     &:hover {

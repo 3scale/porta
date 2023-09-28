@@ -2,7 +2,7 @@
 #
 # https://github.com/HakubJozak/sour
 #
-module Threescale
+module ThreeScale
   module Api
     module Sour
       module Operation

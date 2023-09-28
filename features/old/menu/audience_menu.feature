@@ -12,7 +12,7 @@ Feature: Audience menu
     Then I should see there is no current API
 
   Scenario: Audience menu structure
-    Then I should see menu items
+    Then I should see menu sections
       | Accounts         |
       | Applications     |
       | Developer Portal |
@@ -20,14 +20,12 @@ Feature: Audience menu
       | Forum            |
 
   Scenario: Accounts sub menu structure
-    Given menu "Accounts" is open
     Then I should see menu items under "Accounts"
       | Listing            |
       | Usage Rules        |
       | Fields Definitions |
 
   Scenario: Portal sub menu structure
-    Given menu "Developer Portal" is open
     Then I should see menu items under "Developer Portal"
       | Content              |
       | Drafts               |
@@ -43,19 +41,9 @@ Feature: Audience menu
       | SSO Integrations     |
       | Liquid Reference     |
 
-  Scenario: Messages sub menu structure
-    Given menu "Messages" is open
-    Then I should see menu items under "Messages"
-      | Inbox           |
-      | Sent messages   |
-      | Trash           |
-      | Support Emails  |
-      | Email Templates |
-
   Scenario: Accounts sub menu structure with account plans enabled
     When the provider has "account_plans" visible
     And I go to the accounts admin page
-    When menu "Accounts" is open
     Then I should see menu items under "Accounts"
       | Listing            |
       | Account Plans      |
@@ -65,7 +53,6 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure with account plans disabled
     When the provider has "account_plans" denied
     And I go to the accounts admin page
-    When I follow "Accounts" within the main menu
     Then I should see menu items under "Accounts"
       | Listing            |
       | Usage Rules        |
@@ -74,7 +61,6 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure with service plans enabled
     When the provider has "service_plans" visible
     And I go to the accounts admin page
-    When menu "Accounts" is open
     Then I should see menu items under "Accounts"
       | Listing            |
       | Subscriptions      |
@@ -85,7 +71,6 @@ Feature: Audience menu
     When the provider has "groups" switch allowed
     And I go to the provider dashboard
     And I follow "0 Accounts"
-    When menu "Developer Portal" is open
     Then I should see menu items under "Developer Portal"
       | Content              |
       | Drafts               |

@@ -2,7 +2,9 @@ import {
   Card,
   CardBody,
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Text,
+  TextContent
 } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -26,7 +28,9 @@ const EditPage: FunctionComponent<Props> = ({
 }) => (
   <>
     <PageSection variant={PageSectionVariants.light}>
-      <h1>Edit email configuration</h1>
+      <TextContent>
+        <Text component="h1">Edit email configuration</Text>
+      </TextContent>
     </PageSection>
 
     <PageSection>

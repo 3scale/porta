@@ -13,7 +13,7 @@ class AuthenticationProvider < ApplicationRecord
   enum account_type: {developer: 'developer', provider: 'provider'}
 
   has_system_name uniqueness_scope: [:account_id]
-  validates :kind, uniqueness: { scope: %i[account_id account_type] }, if: :developer?
+  validates :kind, uniqueness: { scope: %i[account_id account_type], case_sensitive: true }, if: :developer?
   validate  :verify_valid_kind_for_account_type
   validates :name, presence: true, length: { maximum: 255 }
   validates :identifier_key, presence: true, length: { maximum: 255 }
@@ -150,10 +150,3 @@ class AuthenticationProvider < ApplicationRecord
     self.name ||= human_kind.to_s
   end
 end
-
-# to prevent warning: toplevel constant GitHub referenced by AuthenticationProvider::GitHub
-require_dependency 'authentication_provider/github'
-require_dependency 'authentication_provider/keycloak'
-require_dependency 'authentication_provider/auth0'
-require_dependency 'authentication_provider/custom'
-require_dependency 'authentication_provider/redhat_customer_portal'

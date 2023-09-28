@@ -1,42 +1,132 @@
+import { useState } from 'react'
 import {
   Button,
   Divider,
-  PaginationVariant,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
+  sortable,
   Table,
-  TableBody,
   TableHeader,
-  sortable
+  TableBody
 } from '@patternfly/react-table'
 
-import { Pagination } from 'Common/components/Pagination'
+import * as flash from 'utilities/flash'
+import { ajax } from 'utilities/ajax'
+import { waitConfirm } from 'utilities/confirm-dialog'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
+import { Pagination } from 'Common/components/Pagination'
 
-import type { IActionsResolver, ISortBy, OnSort } from '@patternfly/react-table'
+import type { FunctionComponent } from 'react'
 import type { Action, Plan } from 'Types'
-
-import './PlansTable.scss'
+import type { IActionsResolver, ISortBy, OnSort } from '@patternfly/react-table'
 
 interface Props {
+  createButton?: {
+    href: string;
+    label: string;
+  };
   columns: {
     attribute: string;
     title: string;
   }[];
   plans: Plan[];
   count: number;
-  searchHref: string;
-  onAction: (action: Action) => void;
 }
 
-const PlansTable: React.FunctionComponent<Props> = ({
+const PlansTable: FunctionComponent<Props> = ({
+  createButton,
   columns,
-  plans,
-  count,
-  onAction
+  plans: initialPlans,
+  count
 }) => {
+  const [plans, setPlans] = useState<Plan[]>(initialPlans)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const handleActionCopy = (path: string) => ajax(path, { method: 'POST' })
+    .then(data => data.json()
+      .then((res: { notice: string; plan: string; error: string }) => {
+        if (data.status === 201) {
+          flash.notice(res.notice)
+          const newPlan = JSON.parse(res.plan) as Plan
+          setPlans([...plans, newPlan])
+        } else if (data.status === 422) {
+          flash.error(res.error)
+        }
+      })
+    )
+    .catch(err => {
+      console.error(err)
+      flash.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => { setIsLoading(false) })
+
+  const handleActionDelete = (path: string) => waitConfirm('Are you sure?')
+    .then(confirmed => {
+      if (confirmed) {
+        return ajax(path, { method: 'DELETE' })
+          .then(data => data.json()
+            .then((res: { notice: string; id: number }) => {
+              if (data.status === 200) {
+                flash.notice(res.notice)
+                const purgedPlans = plans.filter(p => p.id !== res.id)
+                setPlans(purgedPlans)
+              }
+            }))
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      flash.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => { setIsLoading(false) })
+
+  const handleActionPublishHide = (path: string) => ajax(path, { method: 'POST' })
+    .then(data => data.json()
+      .then((res: { notice: string; plan: string; error: string }) => {
+        if (data.status === 200) {
+          flash.notice(res.notice)
+          const newPlan = JSON.parse(res.plan) as Plan
+          const i = plans.findIndex(p => p.id === newPlan.id)
+          plans[i] = newPlan
+          setPlans(plans)
+        } else if (data.status === 406) {
+          flash.error(res.error)
+        }
+      })
+    )
+    .catch(err => {
+      console.error(err)
+      flash.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => { setIsLoading(false) })
+
+  const handleAction = ({ title, path }: Action) => {
+    if (isLoading) {
+      // Block table or something when is loading, show user feedback
+      return
+    }
+
+    setIsLoading(true)
+
+    switch (title) {
+      case 'Copy':
+        void handleActionCopy(path)
+        break
+      case 'Delete':
+        void handleActionDelete(path)
+        break
+      case 'Publish':
+      case 'Hide':
+        void handleActionPublishHide(path)
+        break
+      default:
+        console.error(`Unknown action: ${title}`)
+    }
+  }
+
   const tableColumns = columns.map(c => ({ title: c.title, transforms: [sortable] }))
 
   const tableRows = plans.map(p => ({
@@ -52,7 +142,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- safe to assume rowIndex is not undefined
     plans[rowIndex!].actions.map(a => ({
       title: a.title,
-      onClick: () => { onAction(a) }
+      onClick: () => { handleAction(a) }
     }))
 
   const url = new URL(window.location.href)
@@ -71,21 +161,47 @@ const PlansTable: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarItem>
-          <ToolbarSearch placeholder="Find a plan" />
-        </ToolbarItem>
-        <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-          <Pagination itemCount={count} />
-        </ToolbarItem>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <ToolbarSearch placeholder="Find a plan" />
+          </ToolbarItem>
+          {createButton && (
+            <ToolbarItem>
+              <Button
+                isInline
+                component="a"
+                href={createButton.href}
+                variant="primary"
+              >
+                {createButton.label}
+              </Button>
+            </ToolbarItem>
+          )}
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={count} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
       <Divider />
-      <Table actionResolver={actionResolver} aria-label="Plans Table" cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
+      <Table
+        actionResolver={actionResolver}
+        aria-label="Plans Table"
+        cells={tableColumns}
+        ouiaId="plans-table"
+        rows={tableRows}
+        sortBy={sortBy}
+        onSort={onSort}
+      >
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <Pagination itemCount={count} variant={PaginationVariant.bottom} />
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            <Pagination itemCount={count} />
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </>
   )

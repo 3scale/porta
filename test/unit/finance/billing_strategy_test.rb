@@ -7,7 +7,9 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   should validate_presence_of :numbering_period
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing)
+    # Ensure that the invoices created in the test (with period in 1984) pass the validation
+    @provider_created_at = Time.zone.local(1983, 11, 1)
+    @provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
 
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
@@ -161,8 +163,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     create_two_invoices
 
     last_year_invoice = @bs.create_invoice!(:buyer_account => @buyer,
-                                         :period => Month.new(Time.zone.local(1983, 1, 1)))
-    assert_equal '1983-01-00000001', last_year_invoice.friendly_id
+                                         :period => Month.new(Time.zone.local(1983, 12, 1)))
+    assert_equal '1983-12-00000001', last_year_invoice.friendly_id
 
     assert_equal '00000001', @invoice_one.friendly_id.split('-').last
     assert_equal '00000002', @invoice_two.friendly_id.split('-').last
@@ -171,7 +173,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'increment id by provider' do
     create_two_invoices
 
-    second_provider = FactoryBot.create(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.numbering_period = 'monthly'
     second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
@@ -204,7 +206,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     two = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     other_month = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 2, 2)))
 
-    second_provider = FactoryBot.create(:provider_with_billing)
+    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
     second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
@@ -265,6 +267,15 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     results = mock_billing_failure(Time.utc(2018, 3, 17, 18, 15), @provider, [buyer.id])
     BillingMailer.expects(:billing_finished).with(results).returns(mock(deliver_now: true))
     @bs.notify_billing_results(results)
+  end
+
+  test 'gracefully reports missing provider account' do
+    @bs.expects(:provider).returns(nil)
+    System::ErrorReporting.expects(:report_error).with do |exception, _parameters|
+      exception.is_a? Finance::BillingError
+    end
+
+    @bs.__send__ :bill_and_charge_each, {}
   end
 
   class DailyBillingTest < ActiveSupport::TestCase

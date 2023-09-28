@@ -25,7 +25,7 @@ class Admin::Api::MetricMethodsController < Admin::Api::MetricsBaseController
   # Service Method Update
   # PUT /admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml
   def update
-    metric_method.update_attributes(update_params)
+    metric_method.update(update_params)
 
     respond_with(metric_method)
   end

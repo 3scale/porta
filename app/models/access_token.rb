@@ -88,7 +88,7 @@ class AccessToken < ApplicationRecord
   end
 
   validates :owner, :value, :name, :permission, presence: true
-  validates :value, uniqueness: { scope: [:owner_id] }, length: { maximum: 255 }
+  validates :value, uniqueness: { scope: [:owner_id], case_sensitive: true }, length: { maximum: 255 }
   validates :permission, inclusion: { in: PERMISSIONS.values }, length: { maximum: 255 }
   validates :scopes, length: { minimum: 1, maximum: 65535 }
   validate :validate_scope_exists

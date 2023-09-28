@@ -24,7 +24,7 @@ jQuery.expr[':'].like = (el, i, selector) ->
 
 ## Sidebar class
 class Sidebar
-  FOLDER_ICONS = ['fa-folder-o', 'fa-folder-open-o']
+  FOLDER_ICONS = ['fa-folder', 'fa-folder-open']
   ICON_SETS = [FOLDER_ICONS]
   HIGHLIGHT_CLASS = 'current'
   TOGGLE_SELECTOR = '[data-behavior~=toggle]'
@@ -84,7 +84,7 @@ class Sidebar
 
   update_expand_collapse_button: (all_packed = @all_items_packed()) ->
     @expand_collapse_all_button().
-      html(Sidebar.icon(if all_packed then 'plus-square-o' else 'minus-square-o'))
+      html(Sidebar.icon(if all_packed then 'plus-square' else 'minus-square'))
 
   fire_ajax: ->
     @ajax.abort() if @ajax
@@ -402,7 +402,7 @@ class SidebarTemplates
           <ul id="cms-sidebar-section-<%= section.id %>">
             <% _.each(pages, function(page) { %>
               <li class="cms-page" data-id="<%= page.id %>" data-behavior="drag search" data-param="cms_page" <%= search(page) %>>
-                <%= icon_link_to('file-o', page.title, page.edit_path, [ page.path, '(' + page.title + ')' ]) %>
+                <%= icon_link_to('file', page.title, page.edit_path, [ page.path, '(' + page.title + ')' ]) %>
               </li>
             <% }); %>
 
@@ -420,7 +420,7 @@ class SidebarTemplates
 
             <% _.each(sections, function(section){ %>
               <li class="cms-section"  data-id="<%= section.id %>" data-behavior="toggle drag search" data-param="cms_section" <%= search(section) %>>
-                <%= icon('folder-open-o fa-fw') %>
+                <%= icon('folder-open fa-fw') %>
                 <%= link_to(section.title, section.edit_path) %>
                 <%= render(section) %>
               </li>

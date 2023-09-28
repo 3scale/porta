@@ -38,7 +38,7 @@ class Api::BackendUsagesController < Api::BaseController
   def edit; end
 
   def update
-    if @backend_api_config.update_attributes(backend_api_config_params.slice(:path))
+    if @backend_api_config.update(backend_api_config_params.slice(:path))
       redirect_to admin_service_backend_usages_path(@service), notice: 'Backend usage was updated.'
     else
       render :edit

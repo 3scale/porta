@@ -1,93 +1,74 @@
 import { mount } from 'enzyme'
+import { DragDrop } from '@patternfly/react-core'
 
-import { DragHandle, PolicyChain, SortableItem, SortableList } from 'Policies/components/PolicyChain'
+import { PolicyChain } from 'Policies/components/PolicyChain'
+import { updateInput } from 'utilities/test-utils'
 
-import type { ChainPolicy } from 'Policies/types'
+const policy1 = { uuid: '1', removable: true, enabled: true, name: 'cors', humanName: 'CORS', summary: 'CORS', description: ['CORS headers'], version: '1.0.0', configuration: {}, $schema: '{}' }
+const policy2 = { uuid: '2', removable: true, enabled: true, name: 'echo', humanName: 'Echo', summary: 'Echo', description: ['Echoes the request'], version: '1.0.0', configuration: {}, $schema: '{}' }
 
-const policies: ChainPolicy[] = [
-  { uuid: '1', removable: true, enabled: true, name: 'cors', humanName: 'CORS', summary: 'CORS', description: ['CORS headers'], version: '1.0.0', configuration: {}, $schema: '{}' },
-  { uuid: '2', removable: true, enabled: true, name: 'echo', humanName: 'Echo', summary: 'Echo', description: ['Echoes the request'], version: '1.0.0', configuration: {}, $schema: '{}' }
-]
-
-jest.mock('react-sortable-hoc')
-
-describe('PolicyChain', () => {
-  function setup () {
-    const props = {
-      visible: true,
-      chain: policies,
-      actions: {
-        openPolicyRegistry: jest.fn(),
-        editPolicy: jest.fn(),
-        sortPolicyChain: jest.fn()
-      }
-    }
-
-    const chainWrapper = mount(<PolicyChain {...props} />)
-
-    return {
-      policies,
-      props,
-      chainWrapper
-    }
+const defaultProps = {
+  visible: true,
+  chain: [policy1, policy2],
+  actions: {
+    openPolicyRegistry: jest.fn(),
+    editPolicy: jest.fn(),
+    sortPolicyChain: jest.fn()
   }
-  it('should render self', () => {
-    const { chainWrapper } = setup()
-    expect(chainWrapper.find('section').hasClass('PolicyChain')).toEqual(true)
-  })
+}
 
-  it('should render subcomponents', () => {
-    const { chainWrapper } = setup()
-    expect(chainWrapper.exists(SortableList)).toEqual(true)
-    expect(chainWrapper.find(SortableItem).length).toBe(2)
-  })
+beforeEach(() => {
+  jest.clearAllMocks()
 })
 
-describe('SortableList', () => {
-  function setup () {
-    const props = {
-      items: [...policies, {
-        uuid: '3',
-        removable: false,
-        enabled: false,
-        name: 'headers',
-        humanName: 'Headers',
-        summary: 'Headers summary',
-        description: ['Headers description'],
-        version: 'builtin',
-        configuration: {},
-        $schema: '{}'
-      }],
-      visible: true,
-      editPolicy: jest.fn()
-    }
+const mountWrapper = () => mount(<PolicyChain {...defaultProps} />)
 
-    const sortableListWrapper = mount(<SortableList {...props} />)
-    const firstSortableItem = sortableListWrapper.find(SortableItem).first()
+it('should render self', () => {
+  const wrapper = mountWrapper()
+  expect(wrapper.exists()).toEqual(true)
+})
 
-    return { sortableListWrapper, firstSortableItem, props }
-  }
+it('should call editPolicy when clicked', () => {
+  const wrapper = mountWrapper()
+  const { editPolicy } = defaultProps.actions
+  expect(editPolicy.mock.calls.length).toBe(0)
 
-  it('should render self correctly and subcomponents', () => {
-    const { sortableListWrapper, firstSortableItem } = setup()
-    expect(sortableListWrapper.find('ul').hasClass('list-group')).toEqual(true)
+  wrapper.find('article').at(0).simulate('click')
+  expect(editPolicy.mock.calls.length).toBe(1)
+})
 
-    expect(firstSortableItem.find('li').hasClass('Policy')).toEqual(true)
-    expect(firstSortableItem.find('.Policy-version-and-summary').text()).toBe('1.0.0 - CORS')
-    expect(firstSortableItem.exists(DragHandle)).toEqual(true)
-  })
+it('should be able to drag and drop any item, unless searching', () => {
+  const source = { droppableId: '0', index: 0 }
+  const dest = { droppableId: '0', index: 1 }
+  const wrapper = mountWrapper()
 
-  it('should show correctly disabled policies', () => {
-    const { sortableListWrapper } = setup()
-    const lastSortableItem = sortableListWrapper.find(SortableItem).last()
+  expect(wrapper.find(DragDrop).props().onDrop!(source, dest)).toEqual(true)
 
-    expect(lastSortableItem.find('li').hasClass('Policy--disabled')).toEqual(true)
-  })
+  updateInput(wrapper, 'foo')
+  expect(wrapper.find(DragDrop).props().onDrop!(source, dest)).toEqual(false)
+})
 
-  it('should call editPolicy when edit button is clicked', () => {
-    const { firstSortableItem, props } = setup()
-    expect(props.editPolicy.mock.calls.length).toBe(0)
-    firstSortableItem.find('article').simulate('click')
-    expect(props.editPolicy.mock.calls.length).toBe(1)
-  })
+it('should be able to rearrange the chain by drag and drop', () => {
+  const wrapper = mountWrapper()
+
+  wrapper.find(DragDrop).props().onDrop!(
+    { index: 0, droppableId: 'foo' }, // source
+    { index: 1, droppableId: 'bar' } // dest
+  )
+
+  const { sortPolicyChain } = defaultProps.actions
+
+  expect(sortPolicyChain).toHaveBeenCalledWith([policy2, policy1])
+})
+
+it('should be able to filter policies', () => {
+  const wrapper = mountWrapper()
+
+  expect(wrapper.find('.pf-c-data-list__item').length).toEqual(2)
+
+  updateInput(wrapper, 'cors')
+  expect(wrapper.find('.pf-c-data-list__item').length).toEqual(1)
+
+  updateInput(wrapper, 'empty')
+  expect(wrapper.find('.pf-c-data-list__item').length).toEqual(0)
 })

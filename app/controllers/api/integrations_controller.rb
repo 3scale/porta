@@ -97,7 +97,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def proxy_pro_update
-    if @proxy.update_attributes(proxy_params)
+    if @proxy.update(proxy_params)
       update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
       redirect_to :show

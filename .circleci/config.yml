@@ -28,9 +28,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
-bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-assets-cache-key: &assets-cache-key v1-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -80,8 +80,8 @@ attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
-system-builder-ruby26: &system-builder-ruby26
-  image: quay.io/3scale/system-builder:ruby26
+system-builder-ruby27: &system-builder-ruby27
+  image: quay.io/3scale/system-builder:ruby27
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -135,7 +135,7 @@ dnsmasq-container: &dnsmasq-container
     - --log-facility=-
     - --log-queries
     - --no-poll
-    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/127.0.0.11
+    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/circleci-binary-releases.s3.amazonaws.com/127.0.0.11
     - --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
@@ -152,14 +152,17 @@ nightly-trigger: &nightly-trigger
 build-envs:
   mysql: &build-envs-mysql
     environment:
+      DB: mysql
       DATABASE_URL: mysql2://root:@127.0.0.1:3306/3scale_system_test
 
   postgresql: &build-envs-postgresql
     environment:
+      DB: postgresql
       DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/systemdb
 
   oracle: &build-envs-oracle
     environment:
+      DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
 
 ##################################### CIRCLECI COMMANDS ############################################
@@ -207,6 +210,9 @@ commands: # reusable commands with parameters
         default: []
     steps:
       - checkout
+      - run:
+          name: Make $DB Available for cache keys
+          command: echo $DB > /tmp/db
       - restore-gem-cache
       - steps: << parameters.extra-deps >>
       - run:
@@ -258,9 +264,7 @@ commands: # reusable commands with parameters
       - run:
           name: Rspec tests
           command: |
-            TESTS="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-            echo "bundle exec rspec --format progress ${TESTS}"
-            bundle exec rspec --format progress ${TESTS}
+            circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
       - upload-artifacts
 
   cucumber-tests:
@@ -285,9 +289,7 @@ commands: # reusable commands with parameters
           command: |
             # saved test cases metadata can be read here:
             # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
-            TESTS=$(bundle exec ruby .circleci/features.rb | circleci tests split --split-by=timings)
-            echo "bundle exec cucumber --profile ci ${TESTS}"
-            bundle exec cucumber --profile ci ${TESTS}
+            bundle exec ruby .circleci/features.rb | circleci tests run --command="xargs bundle exec cucumber --profile ci" --verbose --split-by=timings
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -309,10 +311,12 @@ commands: # reusable commands with parameters
       - run:
           name: Run Rails tests
           command: |
+            list=/tmp/test-list-$$
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
-            TESTS=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
-            echo "bundle exec rake test:run  TESTOPTS=--verbose --verbose --trace TEST='${TESTS}'"
-            bundle exec rake test:run TEST="${TESTS}" TESTOPTS=--verbose --verbose --trace
+            bundle exec rake "test:files:${taskname}" | circleci tests run --command="cat > $list" --verbose --split-by=timings
+            if [ -s $list ]; then
+              bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
+            fi
       - upload-artifacts
 
   save-gem-cache:
@@ -327,7 +331,7 @@ commands: # reusable commands with parameters
     steps:
       - restore_cache:
           keys:
-            - v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - *bundle-cache-key
 
   upload-artifacts:
     steps:
@@ -339,69 +343,69 @@ commands: # reusable commands with parameters
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
-  builder-ruby26: &builder-ruby26
+  builder-ruby27: &builder-ruby27
     parameters:
       database:
         type: string
         default: mysql
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
     environment:
       DB: << parameters.database >>
     working_directory: /opt/app-root/src/project
 
-  builder-with-mysql-ruby26: &builder-with-mysql-ruby26
+  builder-with-mysql-ruby27: &builder-with-mysql-ruby27
     resource_class: small
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *mysql-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
     <<: *build-envs-mysql
 
-  builder-with-postgres-ruby26: &builder-with-postgres-ruby26
+  builder-with-postgres-ruby27: &builder-with-postgres-ruby27
     resource_class: small
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *postgres-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
     <<: *build-envs-postgresql
 
-  builder-with-oracle-ruby26: &builder-with-oracle-ruby26
+  builder-with-oracle-ruby27: &builder-with-oracle-ruby27
     resource_class: large
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *oracle-db-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/app-root/src/project
     <<: *build-envs-oracle
 
-  cucumber-with-mysql-ruby26: &cucumber-with-mysql-ruby26
+  cucumber-with-mysql-ruby27: &cucumber-with-mysql-ruby27
     resource_class: small
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-postgres-ruby26: &cucumber-with-postgres-ruby26
+  cucumber-with-postgres-ruby27: &cucumber-with-postgres-ruby27
     resource_class: small
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *dnsmasq-container
       - *postgres-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-oracle-ruby26: &cucumber-with-oracle-ruby26
+  cucumber-with-oracle-ruby27: &cucumber-with-oracle-ruby27
     resource_class: large
     docker:
-      - *system-builder-ruby26
+      - *system-builder-ruby27
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
@@ -414,7 +418,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -426,7 +430,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
       database: postgresql
@@ -438,7 +442,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
       database: oracle
@@ -452,7 +456,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -475,7 +479,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -503,7 +507,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -518,7 +522,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -538,7 +542,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby26
+        default: builder-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -555,7 +559,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby26
+        default: builder-with-mysql-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -567,7 +571,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby26
+        default: builder-with-postgres-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -579,7 +583,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby26
+        default: builder-with-oracle-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -593,7 +597,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby26
+        default: builder-with-mysql-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -605,7 +609,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby26
+        default: builder-with-postgres-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -617,7 +621,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby26
+        default: builder-with-oracle-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -631,7 +635,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby26
+        default: builder-with-mysql-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -643,7 +647,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby26
+        default: builder-with-postgres-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -655,7 +659,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby26
+        default: builder-with-oracle-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -669,7 +673,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby26
+        default: builder-with-mysql-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -681,7 +685,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby26
+        default: builder-with-postgres-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -693,7 +697,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby26
+        default: builder-with-oracle-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -708,7 +712,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-mysql-ruby26
+        default: cucumber-with-mysql-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -721,7 +725,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-postgres-ruby26
+        default: cucumber-with-postgres-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -734,7 +738,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-oracle-ruby26
+        default: cucumber-with-oracle-ruby27
     executor:
       name: << parameters.executor >>
     steps:
@@ -992,37 +996,37 @@ workflows:
   ######## Nightly workflows
 
 
-  mysql_nightly_build_ruby26:
+  mysql_nightly_build_ruby27:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - dependencies_npm:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - assets_precompile:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
-          executor: builder-with-mysql-ruby26
+          executor: builder-with-mysql-ruby27
           requires:
             - dependencies_bundler
       - functional:
-          executor: builder-with-mysql-ruby26
+          executor: builder-with-mysql-ruby27
           requires:
             - assets_precompile
       - integration:
-          executor: builder-with-mysql-ruby26
+          executor: builder-with-mysql-ruby27
           requires:
             - assets_precompile
       - rspec:
-          executor: builder-with-mysql-ruby26
+          executor: builder-with-mysql-ruby27
           requires:
             - dependencies_bundler
       - cucumber:
-          executor: cucumber-with-mysql-ruby26
+          executor: cucumber-with-mysql-ruby27
           requires:
             - assets_precompile
       - notify_success:
@@ -1035,37 +1039,37 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_nightly_build_ruby26:
+  postgres_nightly_build_ruby27:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_postgres:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - dependencies_npm:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - assets_precompile:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - deps_bundler_postgres
             - dependencies_npm
       - unit-postgres:
-          executor: builder-with-postgres-ruby26
+          executor: builder-with-postgres-ruby27
           requires:
             - deps_bundler_postgres
       - functional-postgres:
-          executor: builder-with-postgres-ruby26
+          executor: builder-with-postgres-ruby27
           requires:
             - assets_precompile
       - integration-postgres:
-          executor: builder-with-postgres-ruby26
+          executor: builder-with-postgres-ruby27
           requires:
             - assets_precompile
       - rspec-postgres:
-          executor: builder-with-postgres-ruby26
+          executor: builder-with-postgres-ruby27
           requires:
             - deps_bundler_postgres
       - cucumber-postgres:
-          executor: cucumber-with-postgres-ruby26
+          executor: cucumber-with-postgres-ruby27
           requires:
             - assets_precompile
       - notify_success:
@@ -1078,45 +1082,45 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_nightly_build_ruby26:
+  oracle_nightly_build_ruby27:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_oracle:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - dependencies_npm:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - assets_precompile:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - deps_bundler_oracle
             - dependencies_npm
       - unit-oracle:
-          executor: builder-with-oracle-ruby26
+          executor: builder-with-oracle-ruby27
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - functional-oracle:
-          executor: builder-with-oracle-ruby26
+          executor: builder-with-oracle-ruby27
           context:
             - quay
           requires:
             - assets_precompile
       - integration-oracle:
-          executor: builder-with-oracle-ruby26
+          executor: builder-with-oracle-ruby27
           context:
             - quay
           requires:
             - assets_precompile
       - rspec-oracle:
-          executor: builder-with-oracle-ruby26
+          executor: builder-with-oracle-ruby27
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - cucumber-oracle:
-          executor: cucumber-with-oracle-ruby26
+          executor: cucumber-with-oracle-ruby27
           context:
             - quay
           requires:
@@ -1131,29 +1135,29 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_nightly_build_ruby26:
+  javascript_nightly_build_ruby27:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - dependencies_npm:
-          executor: builder-ruby26
+          executor: builder-ruby27
       - assets_precompile:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - dependencies_bundler
             - dependencies_npm
       - licenses:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - dependencies_bundler
       - lint:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - dependencies_npm
       - jest:
-          executor: builder-ruby26
+          executor: builder-ruby27
           requires:
             - dependencies_npm
       - notify_success:

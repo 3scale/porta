@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 
-import { openSelectWithModal as openModal, waitForPromises } from 'utilities/test-utils'
+import { openSelectWithModal as openModal, openSelect, waitForPromises } from 'utilities/test-utils'
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 import { TableModal } from 'Common/components/TableModal'
 
@@ -56,7 +56,7 @@ it('should be able to select an item', () => {
   const targetItem = items[0]
   const wrapper = mountWrapper()
 
-  wrapper.find('.pf-c-select__toggle-button').simulate('click')
+  openSelect(wrapper)
   wrapper.find('.pf-c-select__menu li button').filterWhere(n => n.text().includes(targetItem.name)).simulate('click')
 
   expect(onSelect).toHaveBeenCalledWith(targetItem)
@@ -69,10 +69,10 @@ describe('with 20 items or less', () => {
     itemsCount: items.length
   }
 
-  it('should display all items and a title, but no sticky footer', () => {
+  it('should display all items', () => {
     const wrapper = mountWrapper(props)
-    wrapper.find('.pf-c-select__toggle-button').simulate('click')
-    expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 1)
+    openSelect(wrapper)
+    expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length)
   })
 
   it('should not be able to show a modal', () => {
@@ -88,10 +88,10 @@ describe('with more than 20 items', () => {
     itemsCount: items.length
   }
 
-  it('should display up to 20 items, a title and a sticky footer', () => {
+  it('should display up to 20 items', () => {
     const wrapper = mountWrapper(props)
-    wrapper.find('.pf-c-select__toggle-button').simulate('click')
-    expect(wrapper.find('.pf-c-select__menu li')).toHaveLength(22)
+    openSelect(wrapper)
+    expect(wrapper.find('.pf-c-select__menu li')).toHaveLength(20)
   })
 
   it('should be able to show a modal', () => {
@@ -168,15 +168,11 @@ describe('with no items', () => {
     itemsCount: 0
   }
 
-  it('should show an empty message that is disabled', () => {
+  it('should show no items', () => {
     const wrapper = mountWrapper(props)
-    wrapper.find('.pf-c-select__toggle-button').simulate('click')
+    openSelect(wrapper)
 
     const items = wrapper.find('SelectOption')
-    expect(items.length).toEqual(2)
-
-    const emptyItem = items.last()
-    expect(emptyItem.prop('isDisabled')).toEqual(true)
-    expect(emptyItem.text()).toEqual('No results found')
+    expect(items.length).toEqual(0)
   })
 })

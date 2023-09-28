@@ -7,7 +7,7 @@ class PaymentIntent < ApplicationRecord
 
   validates :invoice, :reference, :state, presence: true
   validates :reference, :state, length: { maximum: 255 }
-  validates :reference, uniqueness: true
+  validates :reference, uniqueness: { case_sensitive: true }
 
   scope :latest, ->(count = 1) { reorder(created_at: :desc, id: :desc).limit(count) }
   scope :pending, ->() { where.not(state: SUCCEEDED_STATES) }

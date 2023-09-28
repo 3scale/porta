@@ -121,6 +121,10 @@ class ProxyConfig < ApplicationRecord
     JSON.parse(content).deep_symbolize_keys
   end
 
+  def contains_metric?(metric_id)
+    parsed_content[:proxy][:proxy_rules].pluck(:metric_id).include? metric_id
+  end
+
   private
 
   delegate :service_mesh_integration?, to: :proxy, allow_nil: true

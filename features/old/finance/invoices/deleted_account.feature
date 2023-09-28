@@ -6,7 +6,7 @@ Feature: Invoices of deleted account
 
   Background:
     Given the date is 25th January 2012
-    Given a provider is logged in
+    Given a provider is logged in on 1st January 2011
     Given the provider is charging its buyers in prepaid mode
     And an application plan "Plan" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Plan"
@@ -18,7 +18,7 @@ Feature: Invoices of deleted account
       | Custom | 42   |
     And I issue the invoice number "2011-01-00000001"
     And account "bob" is deleted
-    And I go to the invoices issued by me
+    And I go to all provider's invoices page
     Then I should see 1 invoice
     When I follow "2011-01-00000001"
     Then I should see "2011-01-00000001"

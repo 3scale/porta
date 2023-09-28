@@ -1,63 +1,66 @@
-h2 Users
+- content_for :page_header_title, 'Users'
 
-table class="data" id="users"
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" id="users"
   thead
-    tr
-      th Name
-      th = current_user.field_label("email")
+    tr role="row"
+      th role="columnheader" scope="col" Name
+      th role="columnheader" scope="col"
+        = current_user.field_label("email")
       - if show_provider_sso_status_for_user?
-        th
-          ' Authenticated through SSO
-      th Role
+        th role="columnheader" scope="col" Authenticated through SSO
+      th role="columnheader" scope="col" Role
       - if can?(:manage, :permissions)
-        th Permission Groups
-      th.operations colspan="2"
+        th role="columnheader" scope="col" Permission Groups
+      th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
         - if can?(:create, Invitation) and can?(:see, :multiple_users)
-          = link_to_unless_current 'Invite a New User',
-                                   new_provider_admin_account_invitation_path,
-                                   class: 'action add'
+          = link_to_unless_current 'Invite a New User', new_provider_admin_account_invitation_path,
+                                                        class: 'action add'
 
-  tbody
+  tbody role="rowgroup"
     - @users.each do |user|
-      tr id=(dom_id(user))
-        td
+      tr role="row" id=(dom_id(user))
+        td role="cell" data-label="Name"
           - if can? :manage, user
             - if current_user == user
-              = link_to user.display_name,
-                edit_provider_admin_user_personal_details_path(origin: 'users'),
-                title: 'Personal Details'
+              = link_to user.display_name, edit_provider_admin_user_personal_details_path(origin: 'users'),
+                                           title: 'Personal Details'
             - else
-              = link_to user.display_name,
-                edit_provider_admin_account_user_path(user),
-                title: 'Edit'
+              = link_to user.display_name, edit_provider_admin_account_user_path(user),
+                                           title: 'Edit'
           - else
             = user.username
-        td = user.email
+        td role="cell" data-label="Email"
+          = user.email
         - if show_provider_sso_status_for_user?
-          td
+          td role="cell" data-label="Authenticated through SSO"
             = user.sso_authorizations.exists? ? 'yes' : 'not yet'
-        td = user.role
-
+        td role="cell" data-label="Role"
+          = user.role
         - if can?(:manage, :permissions)
-          td
+          td role="cell" data-label="Permission Groups"
             - if user.admin?
               | Unlimited Access
             - else
               = permission_groups_summary(user)
-
-        td.operations
-          - if can? :destroy, user
-            = fancy_button_to 'Delete', provider_admin_account_user_path(user),
-              class: 'action delete', method: :delete,
-              data: { confirm: "Are you sure you want to delete this user?" }
-        td.operations
-          - if can? :manage, user
-            - if current_user == user
-              = link_to 'Personal Details',
-                edit_provider_admin_user_personal_details_path(origin: 'users'),
-                title: 'Personal Details', class: 'action edit'
-            - else
-              = link_to 'Edit', edit_provider_admin_account_user_path(user),
-                title: 'Edit', class: 'action edit'
+        td role="cell" class="pf-c-table__action"
+          div class="pf-c-overflow-menu"
+            div class="pf-c-overflow-menu__content"
+              div class="pf-c-overflow-menu__group pf-m-button-group"
+                - if can? :destroy, user
+                  div class="pf-c-overflow-menu__item"
+                    = fancy_button_to 'Delete', provider_admin_account_user_path(user),
+                                                class: 'action delete',
+                                                method: :delete,
+                                                data: { confirm: "Are you sure you want to delete this user?" }
+                - if can? :manage, user
+                  div class="pf-c-overflow-menu__item"
+                    - if current_user == user
+                      = link_to 'Personal Details', edit_provider_admin_user_personal_details_path(origin: 'users'),
+                                                    title: 'Personal Details',
+                                                    class: 'action edit'
+                    - else
+                      = link_to 'Edit', edit_provider_admin_account_user_path(user),
+                                        title: 'Edit',
+                                        class: 'action edit'
 
 = will_paginate @users

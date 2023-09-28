@@ -8,7 +8,7 @@ module Whitelabel::Admin::Accounts::UsersHelper
       text << ' (full access)' if role == :admin
       text << ' (limited access, <strong>cannot create new API products  or API backends, cannot access or change account-level settings</strong>)' if role == :member && can?(:create_contributors, current_user.account)
       # text << ' (can update/create content)'     if role == :contributor
-      [text, role]
+      [text.html_safe, role]
     end
   end
 end

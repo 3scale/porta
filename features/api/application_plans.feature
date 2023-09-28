@@ -25,9 +25,19 @@ Feature: Application plans index page
     When an application plan has been deleted
     Then an admin can't select the plan as default
 
+  @onpremises
+  Scenario: Create an application plan when onpremises
+    When an admin is in the application plans page
+    Then they can add new application plans
+
   Scenario: Create an application plan
     When an admin is in the application plans page
     Then they can add new application plans
+
+  Scenario: Empty data when creating a plan
+    When an admin is in the application plans page
+    And they create a plan with empty data
+    Then I should see error "can't be blank" for field "Name"
 
   Scenario: Copy an application plan
     When an admin selects the action copy of an application plan
@@ -58,5 +68,5 @@ Feature: Application plans index page
   @search
   Scenario: Filtering and sorting application plans
     When an admin is looking for an application plan
-    Then they can filter plans by name
+    Then they can filter the plans by name
     And they can sort plans by name, no. of contracts and state

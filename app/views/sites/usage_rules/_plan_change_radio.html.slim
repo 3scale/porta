@@ -1,0 +1,9 @@
+- id = "settings_#{permission}_#{value}"
+
+div class="pf-c-radio"
+  input class="pf-c-radio__input" name="settings[#{permission}]" id=id type="radio" value=value checked=local_assigns[:checked].presence
+  label class="pf-c-radio__label" for=id
+    = t("formtastic.labels.settings.change_plan_permission.#{value}")
+  - if local_assigns[:hint].present?
+    span class="pf-c-radio__description"
+      = hint

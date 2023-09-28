@@ -28,8 +28,8 @@ class CMS::Section < ApplicationRecord
   validates :title, :system_name, :provider, presence: true
   validates :parent_id, presence: { :unless => :root? }
 
-  validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
-  validates :system_name, uniqueness: { :scope => [:provider_id] }, length: { maximum: 255 }
+  validates :title, uniqueness: { scope: [:provider_id, :parent_id], case_sensitive: true }
+  validates :system_name, uniqueness: { scope: [:provider_id], case_sensitive: true }, length: { maximum: 255 }
   validates :partial_path, :title, :type, length: { maximum: 255 }
 
   before_validation :set_system_name , on: %i[create update]

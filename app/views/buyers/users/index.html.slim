@@ -1,0 +1,38 @@
+- content_for :menu do
+  = render 'buyers/accounts/menu'
+
+- content_for :page_header_title, "Users of #{@account.org_name}"
+
+div class="pf-c-card"
+  table class="pf-c-table pf-m-grid-lg" role="grid" id="buyer_users"
+    thead
+      tr role="row"
+        th role="columnheader" scope="col" Name
+        th role="columnheader" scope="col" Email
+        th role="columnheader" scope="col" Created on
+        th role="columnheader" scope="col" Role
+        th role="columnheader" scope="col" colspan="2" State
+
+    tbody role="rowgroup"
+      - @users.each do |user|
+        tr role="row" id=dom_id(user)
+          td role="cell" data-label="Name" class=user.state
+            = link_to h(user.display_name), admin_buyers_account_user_path(account_id: user.account_id, id: user.id)
+          td role="cell" data-label="Email"
+            = user.email
+          td role="cell" data-label="Created on"
+            = user.created_at.to_date.to_s(:long)
+          td role="cell" data-label="Role"
+            = user.role.to_s
+          td role="cell" data-label="State"
+            = user.state
+          td class="operations pf-c-table__action" role="cell"
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = link_to 'Edit', edit_admin_buyers_account_user_path(account_id: user.account_id, id: user.id), class: 'action edit'
+                  div class="pf-c-overflow-menu__item"
+                    = button_activate_or_suspend(user)
+
+= will_paginate @users

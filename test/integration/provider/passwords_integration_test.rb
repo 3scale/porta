@@ -15,7 +15,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       # user requests for a forgotten password email
       delete provider_password_path(email: @user.email)
       assert_response :redirect
-      assert_match 'password reset link has been emailed', flash[:notice]
+      assert_match "We sent an email with password reset instructions to: #{@user.email}", flash[:success]
 
       # user opens forgotten password page with a password reset token parameter
       email_token = @user.reload.lost_password_token
@@ -35,7 +35,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       # user updates his password
       put provider_password_path(user: { password: 'alaska123',password_confirmation: 'alaska123' })
       assert_response :redirect
-      assert_match 'password has been changed', flash[:notice]
+      assert_match 'password has been changed', flash[:success]
       assert_nil session[:password_reset_token]
 
       # user is unable to open forgotten password page again (missing parameter)

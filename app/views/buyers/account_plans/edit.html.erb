@@ -1,7 +1,9 @@
-<h2>Edit Account Plan '<%= h @plan.name %>'</h2>
+<% content_for :page_header_title, "Edit Account Plan #{@plan.name}" %>
 
 <% if @plan.customized? %>
-  <%= render :partial => 'api/plans/menu' %>
+  <% content_for :page_header_body do %>
+    <%= render :partial => 'api/plans/menu' %>
+  <% end %>
 <% end %>
 
 <%= semantic_form_for @plan, :url => admin_account_plan_path(@plan) do |form| %>

@@ -1,0 +1,27 @@
+- if (title = content_for(:page_header_title).presence)
+  section class="pf-c-page__main-section pf-m-light"
+    div class="pf-c-content"
+      h1 = title
+      - if (subtitle = content_for(:page_header_body).presence)
+        p = subtitle
+    - if (alert = content_for(:page_header_alert).presence)
+      = alert
+
+/ TODO: this will go away once we move all buttons from page hader to a toolbar
+- elsif (title = content_for(:page_header_title_with_button).presence)
+  section class="pf-c-page__main-section pf-m-light"
+    div class="pf-c-content"
+      div class="pf-l-level"
+        div class="pf-l-level__item"
+          h1
+            = title
+        div class="pf-l-level__item"
+          a class="pf-c-button pf-m-primary" href=content_for(:page_header_button_href)
+            = content_for(:page_header_button_label)
+      - if (subtitle = content_for(:page_header_body).presence)
+        p = subtitle
+
+/ TODO: this is only a temporary workaround for those page headers not using PF4, all pages should
+/ have the same page header
+- elsif content_for(:custom_page_header).present?
+  = content_for(:custom_page_header)

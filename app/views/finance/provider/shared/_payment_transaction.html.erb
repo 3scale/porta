@@ -1,14 +1,14 @@
 <%= content_tag_for(:tr, payment_transaction) do  %>
-  <td>
+  <td role="cell">
     <%= boolean_status_img(payment_transaction.success?) %>
   </td>
-  <td>
+  <td role="cell" data-label="Status">
     <%= payment_transaction.success? ? 'Success' : 'Failure' %>
   </td>
-  <td><%= payment_transaction.created_at %></td>
-  <td><%= payment_transaction.reference %></td>
-  <td><%= payment_transaction.message %></td>
-  <td>
+  <td role="cell" data-label="Created At"><%= payment_transaction.created_at %></td>
+  <td role="cell" data-label="Reference"><%= payment_transaction.reference %></td>
+  <td role="cell" data-label="Message"><%= payment_transaction.message %></td>
+  <td role="cell" data-label="Amount">
     <%= payment_transaction.amount %>
     <%= payment_transaction.currency %>
   </td>

@@ -106,9 +106,11 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     test 'associate existing feature' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
 
-      assert_difference @app_plan.features.method(:count), 2 do
+      assert_difference @app_plan.features.method(:count), 1 do
         post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        assert_response :success
         post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        assert_response :conflict
       end
     end
 

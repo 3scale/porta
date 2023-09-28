@@ -33,7 +33,7 @@ class FieldsDefinition < ApplicationRecord
 
   validates :label, :target, :name, presence: true, length: { maximum: 255 }
   validates :name, format: { :with =>/\A[A-Za-z][A-Za-z\d_-]*\z/, :message => "Name should start with letters, and can contain numbers, - and _" }
-  validates :name, uniqueness: { :scope => [:account_id, :target] }
+  validates :name, uniqueness: { scope: [:account_id, :target], case_sensitive: true }
   validates :name, :exclusion => Fields::ExtraField::InputField.excludes
   validates :choices, :hint, length: { maximum: 65535 }
 

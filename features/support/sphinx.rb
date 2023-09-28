@@ -1,9 +1,13 @@
 require 'thinking_sphinx'
 require 'thinking_sphinx/test'
 
+Before "not @search" do
+  ::ThinkingSphinx::Test.disable_search_jobs!
+end
+
 Before('@search') do
   Sidekiq::Worker.clear_all
-  raise ::Cucumber::Core::Test::Result::Skipped, 'Sphinx does not support OracleDB' if System::Database.oracle?
+  ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.autostop
@@ -13,4 +17,8 @@ end
 
 After '@search' do
   ::ThinkingSphinx::Test.stop
+end
+
+After "not @search" do
+  ::ThinkingSphinx::Test.enable_search_jobs!
 end

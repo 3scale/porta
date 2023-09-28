@@ -19,6 +19,7 @@ export interface SelectOptionObject extends PFSelectOptionObject {
 export const toSelectOptionObject = (item: IRecord): SelectOptionObject => ({
   id: String(item.id),
   name: item.name,
+  compareTo: (other: SelectOptionObject) => other.id === String(item.id),
   toString: () => item.name
 })
 
@@ -37,11 +38,9 @@ export const toSelectOption = ({
   <SelectOption
     key={String(id)}
     className={className}
-    data-description={description}
-    // TODO: when we upgrade PF, use description prop directly
-    // description={record.description}
+    description={description}
     isDisabled={disabled}
-    value={toSelectOptionObject({ id, name, description })}
+    value={toSelectOptionObject({ id, name })}
   />
 )
 
@@ -52,8 +51,7 @@ export const handleOnFilter = <T extends IRecord>(
   items: T[],
   getSelectOptionsForItems?: (items: T[]) => React.ReactElement<SelectOptionProps>[]
 ) => {
-  return (e: React.SyntheticEvent<HTMLInputElement>): React.ReactElement<SelectOptionProps>[] => {
-    const { value } = e.currentTarget
+  return (_e: unknown, value: string): React.ReactElement[] | undefined => {
     const term = new RegExp(escapeRegExp(value), 'i')
 
     const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items

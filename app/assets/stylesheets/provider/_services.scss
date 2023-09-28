@@ -135,10 +135,6 @@
 
     &[name='activity'] {
       @extend div.right;
-
-      #mini-charts {
-        @include fluid-charts;
-      }
     }
   }
 
@@ -156,13 +152,5 @@
   .outline-button.next {
     float: none;
     display: inline-block;
-  }
-}
-
-table.data.notification-settings {
-
-  .spacer {
-    padding-top: line-height-times(1);
-    visibility: hidden;
   }
 }

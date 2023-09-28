@@ -21,14 +21,14 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   # Authentication Provider Developer Portal Update
   # PUT /admin/api/authentication_providers/{id}.xml
   def update
-    authentication_provider.update_attributes(authentication_provider_update_params)
+    authentication_provider.update(authentication_provider_update_params)
     respond_with authentication_provider_presenter
   end
 
   # Authentication Providers Developer Portal List
   # GET /admin/api/authentication_providers.xml
   def index
-    presenters = OauthFlowPresenter.wrap(authentication_providers, request)
+    presenters = OAuthFlowPresenter.wrap(authentication_providers, request)
     respond_with(presenters)
   end
 
@@ -51,7 +51,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   end
 
   def authentication_provider_presenter
-    OauthFlowPresenter.new(authentication_provider, request)
+    OAuthFlowPresenter.new(authentication_provider, request)
   end
 
   def build_authentication_provider

@@ -44,8 +44,13 @@ module PaymentGateways
       customer_id = payment_detail.credit_card_auth_code
       return create_customer if customer_id.blank?
 
-      customer = Stripe::Customer.retrieve(customer_id, api_key)
-      customer.deleted? ? create_customer : customer
+      begin
+        customer = Stripe::Customer.retrieve(customer_id, api_key)
+        return create_customer if customer.deleted?
+        customer
+      rescue Stripe::InvalidRequestError
+        create_customer
+      end
     end
 
     def create_customer

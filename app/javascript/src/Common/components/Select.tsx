@@ -2,34 +2,30 @@ import { useState } from 'react'
 import {
   FormGroup,
   Select as PF4Select,
-  SelectVariant
+  SelectVariant,
+  Spinner
 } from '@patternfly/react-core'
 
-import { Spinner } from 'Common/components/Spinner'
 import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/patternfly-utils'
 import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
-import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type {
+  FormGroupProps,
+  SelectOptionObject as PFSelectOptionObject,
+  SelectProps
+} from '@patternfly/react-core'
 
-import './Select.scss'
-
-interface Props<T extends IRecord> {
+interface Props<T extends IRecord> extends
+  Omit<SelectProps, 'label' | 'onSelect' | 'onToggle'>,
+  Pick<FormGroupProps, 'helperText' | 'helperTextInvalid' | 'isRequired' | 'label'> {
   item: T | null;
   items: T[];
   onSelect: (selected: T | null) => void;
-  label: React.ReactNode;
-  ariaLabel?: string;
   fieldId: string;
   name: string;
   isClearable?: boolean;
-  placeholderText?: string;
   hint?: React.ReactNode;
-  isValid?: boolean;
-  helperText?: string;
-  helperTextInvalid?: string;
-  isDisabled?: boolean;
   isLoading?: boolean;
-  isRequired?: boolean;
 }
 
 const Select = <T extends IRecord>({
@@ -37,18 +33,18 @@ const Select = <T extends IRecord>({
   items,
   onSelect,
   label,
-  ariaLabel,
   fieldId,
   name,
   isClearable = true,
   placeholderText = '',
   hint,
-  isValid = true,
+  validated,
   helperText,
   helperTextInvalid,
-  isDisabled = false,
+  isDisabled,
   isLoading = false,
-  isRequired = false
+  isRequired = false,
+  ...rest
 }: Props<T>): React.ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
@@ -60,10 +56,8 @@ const Select = <T extends IRecord>({
   }
 
   const handleOnClear = () => {
-    if (isClearable) {
-      onSelect(null)
-      setExpanded(false) // TODO: in PF4 this is done automatically. Remove this after upgrading.
-    }
+    onSelect(null)
+    setExpanded(false)
   }
 
   return (
@@ -72,25 +66,25 @@ const Select = <T extends IRecord>({
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
       isRequired={isRequired}
-      isValid={isValid}
       label={label}
+      validated={validated}
     >
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
       {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
       {item && <input name={name} type="hidden" value={Number(item.id) >= 0 ? item.id : ''} />}
       <PF4Select
-        aria-label={ariaLabel}
-        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
         isDisabled={isDisabled}
-        isExpanded={expanded}
+        isOpen={expanded}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
-        onClear={handleOnClear}
+        onClear={isClearable ? handleOnClear : undefined}
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
         onToggle={() => { setExpanded(!expanded) }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...rest}
       >
         {items.map(toSelectOption)}
       </PF4Select>

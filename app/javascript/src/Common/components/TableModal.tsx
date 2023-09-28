@@ -3,10 +3,12 @@ import {
   Button,
   InputGroup,
   Modal,
+  ModalVariant,
   Pagination,
   Spinner,
   TextInput,
   Toolbar,
+  ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
@@ -55,12 +57,14 @@ interface Props<T extends IRecord> {
 
 const PER_PAGE_DEFAULT = 5
 
+const emptyArray = [] as never[]
+
 const TableModal = <T extends IRecord>({
   title,
   isOpen,
   isLoading = false,
   selectedItem,
-  pageItems = [],
+  pageItems = emptyArray,
   itemsCount,
   onSelect,
   onClose,
@@ -158,38 +162,39 @@ const TableModal = <T extends IRecord>({
 
   return (
     <Modal
-      isFooterLeftAligned
-      isLarge
       actions={actions}
+      aria-label={title}
       isOpen={isOpen}
       title={title}
+      variant={ModalVariant.large}
       onClose={onCancel}
     >
-      {/* Toolbar is a component in the css, but a layout in react, so the class names are mismatched (pf-c-toolbar vs pf-l-toolbar) Styling doesn't work, but if you change it to pf-c in the inspector, it works */}
-      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarItem>
-          <InputGroup>
-            <TextInput
-              aria-label="search for an item"
-              isDisabled={isLoading || !onSearch}
-              placeholder={searchPlaceholder}
-              ref={searchInputRef}
-              type="search"
-            />
-            <Button
-              aria-label="search button for search input"
-              data-testid="search"
-              isDisabled={isLoading || !onSearch}
-              variant="control"
-              onClick={handleOnClickSearch}
-            >
-              <SearchIcon />
-            </Button>
-          </InputGroup>
-        </ToolbarItem>
-        <ToolbarItem>
-          {pagination}
-        </ToolbarItem>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem variant="search-filter">
+            <InputGroup>
+              <TextInput
+                aria-label="search for an item"
+                isDisabled={isLoading || !onSearch}
+                placeholder={searchPlaceholder}
+                ref={searchInputRef}
+                type="search"
+              />
+              <Button
+                aria-label="search button for search input"
+                data-testid="search"
+                isDisabled={isLoading || !onSearch}
+                variant="control"
+                onClick={handleOnClickSearch}
+              >
+                <SearchIcon />
+              </Button>
+            </InputGroup>
+          </ToolbarItem>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            {pagination}
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
       {isLoading ? <Spinner size="xl" /> : rows.length === 0 ? <NoMatchFound /> : (
         <Table
@@ -204,10 +209,12 @@ const TableModal = <T extends IRecord>({
           <TableBody />
         </Table>
       )}
-      <Toolbar className="pf-c-toolbar">
-        <ToolbarItem>
-          {pagination}
-        </ToolbarItem>
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
+            {pagination}
+          </ToolbarItem>
+        </ToolbarContent>
       </Toolbar>
     </Modal>
   )

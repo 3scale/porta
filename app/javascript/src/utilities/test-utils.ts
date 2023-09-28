@@ -19,7 +19,7 @@ function openSelect (wrapper: ReactWrapper<unknown>): void {
 
 function openSelectWithModal (wrapper: ReactWrapper<unknown>): void {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
+  wrapper.find('.pf-c-select__menu .pf-c-select__menu-footer button').last().simulate('click')
 }
 
 function closeSelectWithModal (wrapper: ReactWrapper<unknown>): void {

@@ -1,13 +1,9 @@
 base: &default
   url: <%= ENV.fetch('BACKEND_URL', 'http://localhost:3001') %>
-  public_url: <%= ENV.fetch('BACKEND_PUBLIC_URL') { "https://backend-#{ENV['TENANT_NAME']}.#{ENV['THREESCALE_SUPERDOMAIN']}" } %>
+  public_url: <%= ENV.fetch('BACKEND_PUBLIC_URL', 'http://localhost:3001') %>
   persistent: <%= ENV.fetch('BACKEND_PERSISTENT', '1') == '1' %>
   open_timeout: <%= ENV.fetch('BACKEND_OPEN_TIMEOUT', 3) %>
   timeout: <%= ENV.fetch('BACKEND_TIMEOUT', 3) %>
-
-  # superseded by 'url'
-  # host: <%= ENV.fetch('BACKEND_HOST', 'localhost:3001') %>
-  # secure: <%= ENV.fetch('BACKEND_SECURE', '0') == '1' %>
 
 development:
   <<: *default

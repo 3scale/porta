@@ -38,7 +38,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   def edit; end
 
   def update
-    if @backend_api.update_attributes(update_params)
+    if @backend_api.update(update_params)
       redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend updated'
     else
       flash.now[:error] = 'Backend could not be updated'

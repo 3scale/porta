@@ -7,7 +7,7 @@ resource "MemberPermission" do
   let(:user) { FactoryBot.create(:user, account: provider) }
   let(:resource) { user.member_permissions }
   let(:serialized) { representer.send(serialization_format, user: user) }
-  let(:updatable_resource){ user }
+  let(:updatable_resource) { user }
 
   before do
     provider.settings.allow_multiple_users!

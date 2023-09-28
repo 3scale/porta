@@ -41,7 +41,7 @@ class Api::UsageLimitsController < FrontendController
   end
 
   def update
-    if @usage_limit.update_attributes(usage_limit_params)
+    if @usage_limit.update(usage_limit_params)
       respond_to do |format|
         format.js
       end

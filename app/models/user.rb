@@ -18,7 +18,7 @@ class User < ApplicationRecord
   include Invitations
   include Permissions
   include ProvidedAccessTokens
-  include AccountIndex::ForDependency
+  include Indices::AccountIndex::ForDependency
 
   self.background_deletion = [
     :user_sessions,
@@ -117,7 +117,7 @@ class User < ApplicationRecord
 
   validate :email_is_unique
   validate :username_is_unique
-  validates :open_id, uniqueness: true, allow_nil: true
+  validates :open_id, uniqueness: { case_sensitive: true }, allow_nil: true
 
   attr_accessible :title, :username, :email, :first_name, :last_name, :password,
                   :password_confirmation, :conditions, :cas_identifier, :open_id,
@@ -140,8 +140,8 @@ class User < ApplicationRecord
 
   scope :latest, -> {limit(5).order(created_at: :desc)}
 
-  scope :but_impersonation_admin, -> { where.has { username != ThreeScale.config.impersonation_admin['username'] } }
-  scope :impersonation_admins, -> { where(username: ThreeScale.config.impersonation_admin['username']) }
+  scope :but_impersonation_admin, -> { where.has { username != ThreeScale.config.impersonation_admin[:username] } }
+  scope :impersonation_admins, -> { where(username: ThreeScale.config.impersonation_admin[:username]) }
 
   scope :admins, -> { where(role: 'admin') }
 
@@ -167,7 +167,7 @@ class User < ApplicationRecord
   end
 
   def impersonation_admin?
-    username == ThreeScale.config.impersonation_admin['username']
+    username == ThreeScale.config.impersonation_admin[:username]
   end
 
   def any_sso_authorizations?

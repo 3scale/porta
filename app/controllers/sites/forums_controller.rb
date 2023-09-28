@@ -1,5 +1,4 @@
 class Sites::ForumsController < Sites::BaseController
-  sublayout 'sites/developer_portals'
   activate_menu :audience, :forum, :settings
 
   before_action :authorize_forum_feature, :find_settings
@@ -9,7 +8,7 @@ class Sites::ForumsController < Sites::BaseController
   end
 
   def update
-    if @settings.update_attributes(params[:settings])
+    if @settings.update(params[:settings])
       flash[:notice] = 'Forum settings updated.'
       redirect_to edit_admin_site_forum_url
     else

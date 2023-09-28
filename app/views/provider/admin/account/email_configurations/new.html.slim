@@ -1,2 +1,5 @@
-div id='email-configurations-new-container' data=presenter.new_data
+- content_for :javascripts do
   = javascript_packs_with_chunks_tag 'email_configurations_new'
+
+- content_for :main_section_with_react do
+  div id='email-configurations-new-container' data=presenter.new_data

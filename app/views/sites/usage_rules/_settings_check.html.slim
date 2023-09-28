@@ -1,0 +1,12 @@
+- disabled = local_assigns.key?(:disabled)
+- label = local_assigns[:label] || t("formtastic.labels.settings.#{setting}")
+- hint = local_assigns[:hint] || t("formtastic.hints.settings.#{setting}")
+
+div class="pf-c-check"
+  input type="hidden" name="settings[#{setting}]" value="0"
+  input class="pf-c-check__input" type="checkbox" id="settings_#{setting}" name="settings[#{setting}]" checked=checked disabled=disabled
+  label class="pf-c-check__label#{disabled ? ' pf-m-disabled' : ''}" for="settings_#{setting}"
+    = label
+  - if hint.present?
+    span class="pf-c-check__description"
+      = hint

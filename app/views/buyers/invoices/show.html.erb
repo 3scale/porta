@@ -1,6 +1,13 @@
-<%= render 'buyers/accounts/menu' %>
-<%= render :partial => '/finance/provider/shared/invoice_header', :locals => { :editable => allow_edit?, :edit_link_scope => [:buyers, @account] } %>
-<%= render :partial => '/finance/provider/shared/line_items', :locals => { :editable => allow_edit? } %>
-<%= render :partial => '/finance/provider/shared/payment_transactions' %>
+<%= render '/finance/provider/shared/invoice_title', invoice: @invoice %>
 
-<%= render :partial => '/finance/provider/invoices/actions' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
+
+<div class="pf-l-grid pf-m-gutter">
+  <%= render :partial => '/finance/provider/shared/invoice_header', :locals => { :editable => allow_edit?, :edit_link_scope => [:buyers, @account] } %>
+  <%= render :partial => '/finance/provider/shared/line_items', :locals => { :editable => allow_edit? } %>
+  <%= render :partial => '/finance/provider/shared/payment_transactions' %>
+  <%= render :partial => '/finance/provider/invoices/actions' %>
+</div>
+

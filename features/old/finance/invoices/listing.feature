@@ -6,7 +6,7 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider is logged in
+    Given a provider is logged in on 1st October 2010
     And the provider is billing but not charging
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
     And the date is 5th October 2010
@@ -51,7 +51,7 @@ Feature: Provider lists all invoices
     And I follow "Account" within "table"
     Then I should see 10 invoices
     Then I should see the first invoice belonging to "foobar"
-    And I follow "Account ▲" within "table"
+    And I follow "Account" within "table"
     Then I should see 10 invoices
     Then I should see the first invoice belonging to "mastermind"
 

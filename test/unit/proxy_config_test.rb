@@ -294,7 +294,7 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     assert_same_elements expected_configs, ProxyConfig.by_version(1).by_host('example.com').by_environment('sandbox')
   end
 
-  test '#by_version returns the latest version of each proxy for a particular environtment and host' do
+  test '#by_version returns the latest version of each proxy for a particular environment and host' do
     proxy1 = FactoryBot.create(:proxy)
     proxy2 = FactoryBot.create(:proxy)
     proxy3 = FactoryBot.create(:proxy)
@@ -368,6 +368,20 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
 
     refute proxy_config.valid?
     assert_contains proxy_config.errors[:content], proxy_config.errors.generate_message(:content, :too_long, count: ProxyConfig::MAX_CONTENT_LENGTH)
+  end
+
+  test '#contains_metric?' do
+    metric = FactoryBot.create(:metric)
+    service = metric.owner
+    proxy = FactoryBot.create(:proxy, service: service)
+
+    proxy_config = ApicastV2DeploymentService.new(proxy).call(environment: :sandbox)
+    assert_not proxy_config.contains_metric? metric.id
+
+    FactoryBot.create(:proxy_rule, proxy: proxy, metric: metric)
+
+    proxy_config = ApicastV2DeploymentService.new(proxy.reload).call(environment: :sandbox)
+    assert proxy_config.contains_metric? metric.id
   end
 
   private

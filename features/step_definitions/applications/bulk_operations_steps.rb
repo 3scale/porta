@@ -31,7 +31,7 @@ When /^I (un)?check select for "(.+?)"$/ do |un, name|
 end
 
 When /^I (un)?check select in table header$/ do |un|
-  within 'table.data thead' do
+  within 'table.pf-c-table thead' do
     check_or_uncheck_selected_row un
   end
 end
@@ -50,4 +50,14 @@ end
 
 When "I should see the bulk action failed with {application}" do |application|
   assert_match "There were some errors:\n#{application.name} (#{application.user_account.org_name})", bulk_errors_container.text
+end
+
+Then(/^no selects should be checked$/) do
+  checkboxes = all('input[type="checkbox"]')
+  assert checkboxes.none?(&:checked?)
+end
+
+Then(/^all selects should be checked$/) do
+  checkboxes = all('input[type="checkbox"]')
+  assert checkboxes.all?(&:checked?)
 end

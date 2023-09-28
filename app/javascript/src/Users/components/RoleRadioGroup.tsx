@@ -1,9 +1,7 @@
-import ReactHtmlParser from 'react-html-parser'
-
 import type { Role } from 'Users/types'
 
 const ADMIN_LABEL = 'Admin (full access)'
-const MEMBER_LABEL = 'Member (limited access, <strong>cannot create new API products  or API backends</strong>)'
+const MEMBER_LABEL = <>Member (limited access, <strong>cannot create new API products  or API backends</strong>)</>
 
 /**
  * A radio group to select the user's role: Admin or Member.
@@ -41,7 +39,7 @@ const RoleRadioGroup: React.FunctionComponent<Props> = ({
  */
 interface UserRoleProps {
   role: Role;
-  label: string;
+  label: React.ReactNode;
   checked: boolean;
   onChange: (role: Role) => void;
 }
@@ -64,7 +62,7 @@ const UserRole: React.FunctionComponent<UserRoleProps> = ({
         value={role}
         onChange={() => { onChange(role) }}
       />
-      { ReactHtmlParser(label) }
+      {label}
     </label>
   </li>
 )

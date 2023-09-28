@@ -14,25 +14,27 @@ const UserNameInput: FunctionComponent<Props> = ({
   setUserName,
   isRequired,
   errors
-}) => (
-  <FormGroup
-    fieldId="email_configuration_user_name"
-    helperTextInvalid={errors.toString()}
-    isRequired={isRequired}
-    isValid={!errors.length}
-    label="Username"
-    validated="default"
-  >
-    <TextInput
-      id="email_configuration_user_name"
-      isValid={!errors.length}
-      name="email_configuration[user_name]"
-      type="text"
-      value={userName}
-      onChange={setUserName}
-    />
-  </FormGroup>
-)
+}) => {
+  const validated = errors.length ? 'error' : 'default'
+  return (
+    <FormGroup
+      fieldId="email_configuration_user_name"
+      helperTextInvalid={errors.toString()}
+      isRequired={isRequired}
+      label="Username"
+      validated={validated}
+    >
+      <TextInput
+        id="email_configuration_user_name"
+        name="email_configuration[user_name]"
+        type="text"
+        validated={validated}
+        value={userName}
+        onChange={setUserName}
+      />
+    </FormGroup>
+  )
+}
 
 export type { Props }
 export { UserNameInput }

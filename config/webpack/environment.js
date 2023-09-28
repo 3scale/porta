@@ -34,14 +34,6 @@ environment.loaders.append('ts', {
   loader: 'ts-loader'
 })
 
-// Remove styles added automatically by @patternfly/react because it messes up our own styles.
-// We import the necessary styles manually in our .scss files and that way it works.
-environment.loaders.append('null', {
-  test: /\.css$/,
-  include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,
-  use: ['null-loader']
-})
-
 // Quickstarts' guides are written in YAML for convenience (QuickStarts/templates), then this loader
 // allow us to import them as JSON and pass them to the React component (QuickStartContainer).
 environment.loaders.append('yaml', {

@@ -1,4 +1,5 @@
 import { FormGroup, TextArea } from '@patternfly/react-core'
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-circle-icon'
 
 import type { FunctionComponent } from 'react'
 
@@ -8,19 +9,21 @@ interface Props {
   setDescription: (description: string) => void;
 }
 
+const emptyArray = [] as never[]
+
 const DescriptionInput: FunctionComponent<Props> = ({
   description,
-  errors = [],
+  errors = emptyArray,
   setDescription
 }) => {
-  
+
   const validated = errors.length ? 'error' : 'default'
 
   return (
     <FormGroup
       fieldId="api_docs_service_description"
       helperTextInvalid={errors}
-      // helperTextInvalidIcon={<ExclamationCircleIcon />} add the icon when we upgrade to PF4
+      helperTextInvalidIcon={<ExclamationCircleIcon />}
       label="Description"
       validated={validated}
     >
@@ -28,7 +31,7 @@ const DescriptionInput: FunctionComponent<Props> = ({
         id="api_docs_service_description"
         name="api_docs_service[description]"
         validated={validated}
-        value={description} 
+        value={description}
         onChange={setDescription}
       />
     </FormGroup>

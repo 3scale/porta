@@ -106,18 +106,7 @@ Rails.application.configure do
   config.assets.compress = true
   config.assets.digest = ENV.fetch('DISABLE_DIGEST', '0') != '1'
 
-  if config.assets.digest
-    asset_host = config.three_scale.asset_host.presence
-
-    config.asset_host = ->(source) do
-      full_path = File.join(Rails.public_path, source)
-      exist_in_public_assets = File.exist?(full_path)
-
-      break unless exist_in_public_assets
-
-      asset_host
-    end
-  end
+  config.asset_host = config.three_scale.asset_host.presence
 
   # do not change the tags withotu updating logstash rules
   # https://github.com/3scale/puppet/blob/ac161671aee2019eefa87b51b150cb78fcb417e9/modules/logstash/templates/config/system-mt/filter.erb

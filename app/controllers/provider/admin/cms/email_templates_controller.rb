@@ -1,7 +1,6 @@
 class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
 
   activate_menu :audience, :messages, :templates
-  sublayout 'emails'
 
   def new
     @page = templates.new_by_system_name(params[:system_name])
@@ -18,7 +17,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
   def update
     @page = templates.find(params[:id])
 
-    if @page.update_attributes(cms_templates_params)
+    if @page.update(cms_templates_params)
       flash[:info] = 'Email Template updated.'
       redirect_to action: :index
     else

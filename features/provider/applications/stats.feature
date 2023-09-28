@@ -7,5 +7,5 @@ Feature: Application Stats
   @javascript
   Scenario: Stats access
     Given I'm on that application page
-    When I follow "Analytics" within the subsubmenu
+    When I follow "Analytics" within the secondary nav
     Then I should see that application stats

@@ -27,7 +27,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   end
 
   def update
-    if password_params[:password].present? && @user.update_attributes(password_params)
+    if password_params[:password].present? && @user.update(password_params)
       @user.expire_password_token
       flash[:notice] = "The password has been changed."
       redirect_to login_url

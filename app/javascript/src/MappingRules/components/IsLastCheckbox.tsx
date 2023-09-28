@@ -10,7 +10,6 @@ const IsLastCheckbox: FunctionComponent<Props> = ({ isLast }) => (
   <FormGroup
     isRequired
     fieldId="proxy_rule_last"
-    validated="default"
   >
     <Checkbox
       aria-label="Is Last"

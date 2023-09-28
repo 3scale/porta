@@ -25,6 +25,9 @@ class Provider::SessionsController < FrontendController
       self.current_user = @user
       create_user_session!(strategy.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
+
+      AuditLogService.call("Signed in: #{current_user.id}/#{current_user.username} #{current_user.first_name} #{current_user.last_name}")
+
       redirect_back_or_default provider_admin_path
     else
       @session = Session.new
@@ -36,13 +39,16 @@ class Provider::SessionsController < FrontendController
 
   def bounce
     auth = domain_account.self_authentication_providers.find_by!(system_name: params.require(:system_name))
-    redirect_to ProviderOauthFlowPresenter.new(auth, request, request.host).authorize_url
+    redirect_to ProviderOAuthFlowPresenter.new(auth, request, request.host).authorize_url
   end
 
   def destroy
     user = current_user
     logout_killing_session!
     destroy_user_session!
+
+    AuditLogService.call("Signed out: #{user.id}/#{user.username} #{user.first_name} #{user.last_name}")
+
     if @provider.partner? && (logout_url = @provider.partner.logout_url)
       redirect_to logout_url + {user_id: user.id, provider_id: @provider.id}.to_query
     else
@@ -56,7 +62,7 @@ class Provider::SessionsController < FrontendController
     return [] unless @provider.provider_can_use?(:provider_sso)
 
     @provider.self_authentication_providers.published.map do |auth|
-      ProviderOauthFlowPresenter.new(auth, request, request.host)
+      ProviderOAuthFlowPresenter.new(auth, request, request.host)
     end
   end
 

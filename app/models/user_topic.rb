@@ -8,5 +8,5 @@ class UserTopic < ApplicationRecord
   validates :user, presence: true
   validates :topic, presence: true
 
-  validates :user_id, uniqueness: { :scope => :topic_id }
+  validates :user_id, uniqueness: { scope: :topic_id, case_sensitive: true }
 end

@@ -46,7 +46,7 @@ Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
   step %(a provider "#{provider_name}")
   provider = Account.find_by_org_name(provider_name)
   if provider.admins.impersonation_admins.empty?
-    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin['username'], account: provider
+    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], account: provider
   end
 end
 
@@ -219,7 +219,7 @@ And "the provider has a buyer with an application" do
   @buyer.buy!(@provider.account_plans.default)
   @buyer.buy!(service_plan)
 
-  FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
+  @application = FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|
@@ -278,4 +278,13 @@ Then(/^new tenant should be not created$/) do
   @expected_flash_errors.each do |error_message|
     assert_selector('.inline-errors', :text => error_message[:message])
   end
+end
+
+Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, input_name|
+  inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
+  assert_selector(inline_error_selector, text: text)
+end
+
+When "the provider is at {}" do |page_name|
+  visit path_to(page_name)
 end

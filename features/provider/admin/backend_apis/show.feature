@@ -8,7 +8,7 @@ Feature: Backend API overview page
     Given a backend
     When an admin is in the backend overview page
     Then the name of the backend can be seen on top of the menu
-    And I should see menu items
+    And I should see menu sections
       | Overview            |
       | Analytics           |
       | Methods and Metrics |

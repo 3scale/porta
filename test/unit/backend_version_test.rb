@@ -16,11 +16,11 @@ class BackendVersionTest < ActiveSupport::TestCase
     refute versions.values.include?('oidc')
 
     rolling_update(:apicast_oidc, enabled: true)
-    service.proxy.update_attributes(apicast_configuration_driven: false)
+    service.proxy.update(apicast_configuration_driven: false)
     versions = BackendVersion.visible_versions(service: service)
     refute versions.values.include?('oidc')
 
-    service.proxy.update_attributes(apicast_configuration_driven: true)
+    service.proxy.update(apicast_configuration_driven: true)
     versions = BackendVersion.visible_versions(service: service)
     assert versions.values.include?('oidc')
   end

@@ -16,13 +16,6 @@ Feature: Login feature
     When I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
     Then I should be on the provider dashboard
 
-  @wip @3D
-  Scenario: Provider lands in admin dashboard when he requests admin login page
-    And I am logged in as "foo.3scale.localhost"
-    When I request the login page
-    Then I should be on the dashboard
-    And the current domain should be the master domain
-
   @javascript
   Scenario: Provider lands in admin dashboard when he requests public login page
     And I am logged in as provider "foo.3scale.localhost"

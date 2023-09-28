@@ -1,6 +1,38 @@
-.pf-c-nav > .pf-c-nav__section > .pf-c-nav__section-title {
-  border-bottom: 1px solid #3c3f42;
-  margin-bottom: 8px;
-  margin-top: 0;
-  font-weight: 400;
+.pf-c-page__sidebar {
+
+  // HACK: text-align: center is inherited from body app/assets/stylesheets/provider/_commons.scss:8
+  .pf-c-nav__section-title {
+    text-align: left;
+  }
+
+  // This mimics .pf-c-nav__link for the first element of the nav, when in service context
+  .pf-c-nav__current-api {
+    position: relative;
+    margin-top: var(--pf-c-nav__item--MarginTop);
+    margin: 0;
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    padding: 12px 24px;
+    font-size: var(--pf-c-nav__link--FontSize);
+    font-weight: var(--pf-c-nav__link--FontWeight);
+    color: #fff;
+    background-color: var(--pf-c-nav__link--BackgroundColor);outline-offset: var(--pf-c-nav__link--OutlineOffset);
+
+    height: 45px;
+    border-bottom: 1px solid #3c3f42;
+  }
+
+  // HACK: hidden doesn't work in pf-c-nav even tho display is not being overridden apparently anywhere
+  [hidden] { display: none !important; }
+
+  .outdated-config {
+    &:not(.pf-m-expanded) > .pf-c-nav__link:before,
+    &.pf-m-expanded .pf-c-nav__item:first-child .pf-c-nav__link::before {
+      content: '\f071';
+      font-family: FontAwesome;
+      font-weight: normal;
+      text-align: center;
+    }
+  }
 }

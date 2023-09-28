@@ -10,7 +10,7 @@ Feature: Plan creation
   Scenario: Create simple service plan
     Given the provider has "service_plans" switch allowed
     When I go to the service plans admin page
-    And I follow "Create Service plan"
+    And I follow "Create service plan"
     And I fill in "Name" with "Basic"
     And I press "Create Service plan"
     Then I should be at url for the service plans admin page
@@ -31,8 +31,6 @@ Feature: Plan creation
     Given the provider has "service_plans" switch allowed
     And a service "Pocoyo" of provider "foo.3scale.localhost"
     And a default published service plan "Pocoyo service plan" of service "Pocoyo" of provider "foo.3scale.localhost"
-    When I am on the edit page for service "Pocoyo" of provider "foo.3scale.localhost"
-    And I follow "Subscriptions"
-    And I follow "Service Plans"
+    When an admin is on the service plans page of product "Pocoyo"
     And I follow "Pocoyo service plan"
     Then I should see "Pocoyo"

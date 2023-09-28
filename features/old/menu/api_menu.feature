@@ -14,7 +14,7 @@ Feature: API menu
     Then the name of the product can be seen on top of the menu
 
   Scenario: API menu structure
-    Then I should see menu items
+    Then I should see menu sections
       | Overview     |
       | Analytics    |
       | Applications |
@@ -22,7 +22,6 @@ Feature: API menu
       | Integration  |
 
   Scenario: Analytics sub menu structure
-    When I follow "Analytics" within the main menu
     Then I should see menu items under "Analytics"
       | Traffic            |
       | Daily Averages     |
@@ -33,7 +32,6 @@ Feature: API menu
       | Integration Errors |
 
   Scenario: Applications sub menu structure
-    When I follow "Applications" within the main menu
     Then I should see menu items under "Applications"
       | Listing           |
       | Application Plans |
@@ -41,7 +39,6 @@ Feature: API menu
 
   Scenario: Integration sub menu structure
     When I follow "Overview"
-    And I follow "Integration" within the main menu
     Then I should see menu items under "Integration"
       | Configuration       |
       | Methods and Metrics |
@@ -53,7 +50,7 @@ Feature: API menu
   Scenario: API menu structure with service plans enabled
     When provider "foo.3scale.localhost" has "service_plans" switch allowed
     When I go to the API dashboard page
-    Then I should see menu items
+    Then I should see menu sections
       | Overview      |
       | Analytics     |
       | Applications  |
@@ -64,7 +61,6 @@ Feature: API menu
   Scenario: Subscriptions sub menu structure
     When provider "foo.3scale.localhost" has "service_plans" switch allowed
     When I go to the API dashboard page
-    When I follow "Subscriptions" within the main menu
     Then I should see menu items under "Subscriptions"
       | Service Subscriptions |
       | Service Plans         |

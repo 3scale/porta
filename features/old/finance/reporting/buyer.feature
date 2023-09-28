@@ -7,7 +7,7 @@ Feature: Billing Reporting
   # - IF the bill in a given month is Zero (for whatever reason) no email is sent.
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider "foo.3scale.localhost" on 1st May 2009
       And the provider is charging its buyers
       And all the rolling updates features are off
       And the provider is charging its buyers

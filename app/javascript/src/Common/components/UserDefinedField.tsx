@@ -12,11 +12,13 @@ interface Props {
   validationErrors?: string[];
 }
 
+const emptyArray = [] as never[]
+
 const UserDefinedField: FunctionComponent<Props> = ({
   fieldDefinition,
   value,
   onChange,
-  validationErrors = []
+  validationErrors = emptyArray
 }) => {
   const { id, label, required, name, choices } = fieldDefinition
 
@@ -28,16 +30,13 @@ const UserDefinedField: FunctionComponent<Props> = ({
     name: string;
   } | null) => { onChange(i !== null ? i.name : '') }
 
-  const isValid = validationErrors.length === 0
-  // TODO: 'isValid' prop is deprecated, when PF4 is up-to-date replace it with:
-  // const validated = validationErrors.length > 0 ? 'error' : 'default'
+  const validated = validationErrors.length > 0 ? 'error' : 'default'
 
   return choices ? (
     <Select
       fieldId={id}
       helperTextInvalid={validationErrors[0]}
       isRequired={required}
-      isValid={isValid}
       item={item}
       items={choices.map(str => ({
         id: str,
@@ -45,6 +44,7 @@ const UserDefinedField: FunctionComponent<Props> = ({
       }))}
       label={label}
       name={name}
+      validated={validated}
       onSelect={handleOnSelect}
     />
   ) : (
@@ -52,14 +52,14 @@ const UserDefinedField: FunctionComponent<Props> = ({
       fieldId={id}
       helperTextInvalid={validationErrors[0]}
       isRequired={required}
-      isValid={isValid}
       label={label}
+      validated={validated}
     >
       <TextInput
         id={id}
-        isValid={isValid}
         name={name}
         type="text"
+        validated={validated}
         value={value}
         onChange={onChange}
       />

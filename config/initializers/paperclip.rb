@@ -54,7 +54,8 @@ Paperclip.interpolates(:s3_path_url) do |attachment, style|
   end
 end
 
-begin
+
+Rails.application.config.to_prepare do
   CMS::S3.enable!
 rescue CMS::S3::NoConfigError
   Rails.logger.warn "[WARN] S3 storage is not enabled." unless Rails.env.test?

@@ -6,9 +6,6 @@ class FeaturesPlan < ApplicationRecord
 
   validate :feature_scope_matches_plan_class?
 
-  # TODO: enable this on rails 3.1
-  # validates :plan_id, :plan_type, :feature_id, :presence => true
-
   attr_protected :plan_id, :feature_id, :plan_type, :tenant_id
 
   private

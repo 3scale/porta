@@ -6,7 +6,6 @@ class Admin::Api::FeaturingsBaseController < Admin::Api::BaseController
   end
 
   def create
-    #TODO: check what with already enabled feature
     feature_plan = features_plans.create(feature_params)
 
     respond_with(feature_plan, serialize: issuer_feature)

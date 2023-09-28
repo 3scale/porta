@@ -6,10 +6,10 @@
   <% if can? :manage, :plans -%>
     <div class="operations">
       <% if plan.customized? %>
-      <%= pf_link_to 'Edit', edit_admin_account_plan_path(plan.id), :class => 'action edit' %>
-          <%= pf_delete_button_for admin_buyers_contract_custom_plan_path(contract, plan), :label=> 'Remove customization' %>
+      <%= link_to 'Edit', edit_admin_account_plan_path(plan.id), :class => 'action edit' %>
+          <%= delete_button_for admin_buyers_contract_custom_plan_path(contract, plan), :label=> 'Remove customization' %>
       <% else %>
-      <%= pf_fancy_link_to 'Convert to a Custom Plan' , admin_buyers_contract_custom_plans_path(contract), :method=> :post,
+      <%= fancy_link_to 'Convert to a Custom Plan' , admin_buyers_contract_custom_plans_path(contract), :method=> :post,
         :class => 'new', :remote => true %>
       <% end %>
     </div>

@@ -31,7 +31,7 @@ class Admin::Api::ServicePlansController < Admin::Api::ServiceBaseController
   # Service Plan Update
   # PUT /admin/api/services/{service_id}/service_plans/{id}.xml
   def update
-    service_plan.update_attributes(service_plan_update_params)
+    service_plan.update(service_plan_update_params)
     respond_with(service_plan)
   end
 

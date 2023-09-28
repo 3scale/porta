@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_08_155529) do
+ActiveRecord::Schema.define(version: 2023_07_19_112703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.index ["account_id", "service_id", "state", "cinstance_id"], name: "index_alerts_with_service_id"
+    t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
@@ -137,6 +138,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.boolean "skip_swagger_validations", default: false
     t.bigint "service_id"
     t.boolean "discovered"
+    t.index ["account_id"], name: "index_api_docs_services_on_account_id"
     t.index ["service_id"], name: "fk_rails_e4d18239f1"
   end
 
@@ -232,12 +234,10 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: false, force: :cascade do |t|
-    t.bigint "id", null: false
+  create_table "backend_events", id: :bigint, default: nil, force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id"], name: "index_backend_events_on_id", unique: true
   end
 
   create_table "billing_locks", primary_key: "account_id", force: :cascade do |t|
@@ -521,12 +521,11 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", id: false, force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", limit: 255, null: false
     t.bigint "tenant_id"
-    t.index ["plan_id", "feature_id"], name: "index_features_plans_on_plan_id_and_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|
@@ -747,7 +746,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
-    t.index ["system_operation_id", "account_id"], name: "index_mail_dispatch_rules_on_system_operation_id_and_account_id", unique: true
+    t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
   create_table "member_permissions", force: :cascade do |t|
@@ -757,6 +756,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "updated_at"
     t.bigint "tenant_id"
     t.binary "service_ids"
+    t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
   create_table "message_recipients", force: :cascade do |t|
@@ -892,6 +892,7 @@ ActiveRecord::Schema.define(version: 2023_03_08_155529) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "tenant_id"
+    t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
   create_table "payment_intents", force: :cascade do |t|

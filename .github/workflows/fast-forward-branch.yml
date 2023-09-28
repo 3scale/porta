@@ -13,11 +13,34 @@ jobs:
   fast-forward:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout branch
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
-      - run: |
+      - id: git_log
+        name: Generate diff log
+        run: |
+          issues=$(git log origin/${{ inputs.to_branch }}..origin/${{ inputs.ref }} | grep -ioh "THREESCALE-[0-9]\+" | sort -u | sed -e 's/^/https:\/\/issues.redhat.com\/browse\//')
+          echo "issues<<EOF" >> $GITHUB_OUTPUT
+          echo "$issues" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          log=$(git log origin/${{ inputs.to_branch }}..origin/${{ inputs.ref }} --pretty=format:'%h - %s (%an)')
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$log" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Fast-forward
+        run: |
           git fetch origin ${{ inputs.ref }}:${{ inputs.to_branch }}
           git push origin ${{ inputs.to_branch }}
+      - name: Print diff log
+        run: |
+          echo -e "\nISSUES MENTIONED IN THE CHANGELOG:"
+          cat << EOF
+          ${{ steps.git_log.outputs.issues }}
+          EOF
+          echo -e "\nCHANGELOG SUMMARY:"
+          cat << EOF
+          ${{ steps.git_log.outputs.log }}
+          EOF

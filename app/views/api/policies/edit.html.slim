@@ -1,7 +1,23 @@
-- content_for :sublayout_title, 'Policies'
+- content_for :page_header_title, 'Policies'
 
-= semantic_form_for @proxy, url: admin_service_policies_path(@service) do |f|
-  = render '/api/integrations/apicast/shared/policies', f: f
-  = f.actions do
-    = f.commit_button t('formtastic.actions.policies.update'), button_html: {class: 'update', name: 'update', value: '1',
-      id: 'policies-button-sav', title: 'Update Policies', disabled: (@error ? true : nil) }
+- if @error.present?
+  div class="pf-c-empty-state pf-m-lg"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-exclamation-circle pf-c-empty-state__icon" aria-hidden="true"
+
+      h1 class="pf-c-title pf-m-lg" A valid APIcast Policies endpoint must be provided
+      div class="pf-c-empty-state__body"
+        = @error.message
+
+- else
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'policies'
+
+  = semantic_form_for @proxy, url: admin_service_policies_path(@service) do |f|
+    fieldset class="inputs policies-fieldset"
+      div#policies data-service-id=@service.id data-registry=@registry_policies.to_json data-chain=@proxy.policies_config.to_json
+
+    div class="pf-c-form__group pf-m-action"
+      div class="pf-c-form__actions"
+        button class="pf-c-button pf-m-primary" type="submit" id="policies-button-sav" disabled=true
+          = t('formtastic.actions.policies.update')

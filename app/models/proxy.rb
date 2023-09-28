@@ -118,6 +118,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
   end
 
+  def metric_in_latest_configs?(metric_id)
+    ProxyConfig::ENVIRONMENTS.map { |env| proxy_configs.by_environment(env).newest_first.first&.contains_metric?(metric_id) }.any?
+  end
+
   # This smells of :reek:NilCheck
   def authentication_method
     super.presence || service&.read_attribute(:backend_version)
@@ -333,7 +337,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def save_and_deploy(attrs = {})
-    saved = update_attributes(attrs)
+    saved = update(attrs)
 
     analytics.track('Sandbox Proxy updated', analytics_attributes.merge(success: saved))
 
@@ -536,6 +540,9 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     include ActiveModel::Validations
     include Enumerable
 
+    # The policy chain must fit inside +ProxyConfig.content+, which is limited to 2.megabytes
+    MAX_LENGTH = 2.megabytes
+
     delegate :each, :to_json, :as_json, to: :policies_config
     alias to_s to_json
     attr_reader :policies_config
@@ -584,23 +591,19 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def policies_configs_are_correct
-      # TODO: 5: errors.merge!(policy_config.errors)
-      select(&:invalid?).map(&:errors).each do |policy_errors|
-        policy_errors.each do |attribute, message|
-          errors.add(attribute, errors.full_message(attribute, message).downcase)
-        end
-      end
-      errors.add(:base, :missing_apicast) unless detect(&:default?)
+      errors.add(:policies_config, :invalid_policy) if any?(&:invalid?)
+      errors.add(:policies_config, :missing_apicast) unless detect(&:default?)
+      errors.add(:policies_config, :too_long, count: MAX_LENGTH) if Proxy.type_for_attribute('policies_config').serialize(self).size > MAX_LENGTH
     rescue NoMethodError
-      errors.add(:base, :invalid_format)
+      errors.add(:policies_config, :invalid_format)
     end
   end
 
   def policies_config_structure
     return if policies_config.valid?
 
-    policies_config.errors.each do |attribute, message|
-      errors.add(:policies_config, errors.full_message(attribute, message))
+    policies_config.errors.each do |_attribute, message|
+      errors.add(:policies_config, message)
     end
   end
 

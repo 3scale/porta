@@ -75,9 +75,8 @@ Then "the message from {provider} to {buyer} with subject {string} should be hid
   assert_not_nil message
 end
 
-Then /^the "To" field should be fixed to "([^"]*)"$/ do |receiver|
-  assert has_no_field?('To')
-  assert_equal receiver, find_field("to").value
+Then "the {string} field should be fixed to {string}" do |field, value|
+  assert has_field?(field, readonly: true, with: value)
 end
 
 Then /^I should see message to "([^"]*)" with subject "([^"]*)"$/ do |to, subject|

@@ -22,7 +22,7 @@ class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::Integration
     get provider_admin_cms_switches_path
     assert_response :success
     assert_select '#switch-finance-toggle', true
-    assert_select %(table#switches th), text: 'Finance', count: 1
+    assert_select %(table#switches tbody td[data-label="Feature"]), text: 'Finance', count: 1
   end
 
   test 'update shows the hidden switch' do

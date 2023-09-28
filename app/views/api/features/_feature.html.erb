@@ -9,14 +9,14 @@
           :method => :delete,
           remote: true,
           :class => 'action' do -%>
-            <i class="included fa fa-check-circle-o" title="Feature is enabled for this plan"></i>
+            <i class="included fas fa-check-circle" title="Feature is enabled for this plan"></i>
         <% end %>
       <% else %>
         <%= link_to admin_plan_featurings_path(@plan, :type => @plan.class.name.underscore, id: feature.id),
           method: :post,
           remote: true,
           :class => 'action' do -%>
-          <i class="excluded fa fa-times-circle-o" title="Metric is disabled for this plan"></i>
+          <i class="excluded fas fa-times-circle" title="Feature is disabled for this plan"></i>
         <% end %>
       <% end %>
     </td>

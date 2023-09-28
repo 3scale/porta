@@ -39,7 +39,7 @@ Feature: Dev Portal Buyer Personal Details
       | user_extra_hidden    |          |           | true   |
 
     When the buyer wants to edit their personal details
-    Then fields should be required:
+    Then fields are required:
       | required            |
       | First name          |
       | User extra required |

@@ -5,7 +5,7 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider "foo.3scale.localhost" on 1st May 2009
       And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on

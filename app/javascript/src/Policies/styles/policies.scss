@@ -46,22 +46,18 @@ $dontColor: #ca4a4b;
 $subtleColor: #ddd;
 $error-color: #c00;
 
-.PoliciesWidget {
-  position: relative;
-  line-height: 1.5;
+fieldset.policies-fieldset {
   padding-bottom: 2rem;
+}
 
+.PoliciesWidget {
   section {
-    width: 510px;
-    margin: 0 auto;
-
     header {
       display: flex;
       flex-flow: row nowrap;
       align-items: baseline;
       justify-content: flex-start;
       margin-bottom: 1rem;
-      border-bottom: 1px solid $subtleColor;
     }
 
     h2 {
@@ -71,26 +67,9 @@ $error-color: #c00;
     }
   }
 
-  .PolicyChain {
-    display: flex;
-    flex-flow: column nowrap;
-
-    &-addPolicy,
-    &-addPolicy--cancel {
-      @extend .u-do;
-      margin-left: auto;
-
-      i {
-        padding-right: 3px;
-      }
-    }
-
-    .list-group {
-      margin-bottom: 0;
-    }
-  }
-
   .PolicyConfiguration {
+    max-width: 880px; // --pf-c-form--m-limit-width--MaxWidth)
+
     &-name {
       margin: 0 0 0 0;
       padding: 0.5rem 0 0 0;
@@ -147,6 +126,8 @@ $error-color: #c00;
         padding-bottom: 2rem;
         border-bottom: 1px dashed $subtleColor;
       }
+
+      box-shadow: none !important; // HACK: we need formtastic styles, but not this.
     }
 
     .btn-group {
@@ -175,6 +156,14 @@ $error-color: #c00;
     #root__title {
       display: none;
     }
+
+    .Policy-status input#policy-enabled[type="checkbox"][name="policy-enabled"] {
+      position: relative;
+      top: -1px;
+      margin: 0 0.375rem 0 1px;
+      vertical-align: baseline;
+      border-radius: 0.1875rem;
+    }
   }
 }
 
@@ -188,13 +177,6 @@ $error-color: #c00;
   padding: 0.5rem 0;
   user-select: none;
   text-align: left;
-
-  &.Policy--disabled {
-    .Policy-name {
-      color: $disabledColor;
-      text-decoration: line-through;
-    }
-  }
 
   &-sortHandle {
     order: 4;
@@ -282,9 +264,11 @@ $error-color: #c00;
   }
 }
 
-.Policy--sortable {
-  background-color: $body-background;
-  z-index: 100;
+.Policy--disabled {
+  .Policy-name {
+    color: $disabledColor;
+    text-decoration: line-through;
+  }
 }
 
 .u-link {

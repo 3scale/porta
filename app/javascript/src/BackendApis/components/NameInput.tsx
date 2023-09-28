@@ -12,7 +12,6 @@ const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
     isRequired
     fieldId="backend_api_name"
     label="Name"
-    validated="default"
   >
     <TextInput
       id="backend_api_name"

@@ -7,8 +7,8 @@ class MessageRecipientTest < ActiveSupport::TestCase
     system_message = FactoryBot.create(:received_message, receiver: account)
     normal_message = FactoryBot.create(:received_message, receiver: account)
 
-    system_message.message.update_attributes system_operation_id: 1
-    normal_message.message.update_attributes system_operation_id: nil
+    system_message.message.update system_operation_id: 1
+    normal_message.message.update system_operation_id: nil
 
     assert_equal 2, account.received_messages.count
     assert_equal [normal_message.id], account.received_messages.not_system.pluck(:id)

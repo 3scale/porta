@@ -2,23 +2,24 @@
 
 class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
 
+  # called by Finance::BillingStrategy::daily with a single :buyer_ids
   def daily(options = {})
     now = options[:now].presence || Time.now.utc
     bill_and_charge_each(options) do |buyer|
-      Rails.logger.info("Started to bill and charge of #{buyer.name} at #{now}")
+      Rails.logger.info("#{log_prefix(buyer)} started daily billing and charging at #{now} (postpaid)")
       bill_expired_trials(buyer, now)
 
       only_on_days(now, 1) do
-        bill_variable_costs(buyer, now - 1.month)
+        bill_variable_costs(buyer, now - 1.month) # bill for costs until end of yesterday (last day of month)
         finalize_invoices_of(buyer, now)
-        bill_fixed_costs(buyer, now)
+        bill_fixed_costs(buyer, now) # I assume creates the invoice for the new month
       end
 
       issue_invoices_of(buyer, now)
 
       charge_invoices(buyer, now)
 
-      info("Successfully finished billing and charging of #{buyer.name}")
+      info("#{log_prefix(buyer)} successfully finished daily billing and charging (postpaid)")
     end
 
     notify_billing_finished(now) unless options[:skip_notifications] # In Sidekiq, notifications are triggered by the callback of the jobs batch
@@ -50,7 +51,7 @@ class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
   # that is used to bill on: here it is the current month.
   #
   def bill_variable_costs(buyer, now = Time.now.utc)
-    info("Billing variable cost of #{buyer.org_name} at #{now}", buyer)
+    info("#{log_prefix(buyer)} billing variable costs at #{now}", buyer)
     buyer.billable_contracts.find_each(batch_size: 100) do |contract|
       contract.bill_for_variable(Month.new(now), invoice_for(buyer, now))
     end

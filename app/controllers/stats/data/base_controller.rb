@@ -44,7 +44,7 @@ class Stats::Data::BaseController < ApplicationController
 
     respond_to do |format|
       format.json { render :json => @data.to_json }
-      format.xml  { render :layout => false, :file => '/stats/data/usage/usage' }
+      format.xml  { render :layout => false, :template => '/stats/data/usage/usage' }
       format.csv  do
         send_data(*Stats::Views::Csv::Usage.new(@data).to_send_data)
       end

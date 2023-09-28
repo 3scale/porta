@@ -30,17 +30,18 @@ class MonthTest < ActiveSupport::TestCase
     assert_equal 2001, m.begin.year
   end
 
-  test 'parse not exactly right string' do
-    assert_equal Month.new(2011, 1), Month.parse_month('2011-01-05')
-  end
-
   test 'parse robustly' do
     assert_nil Month.parse_month nil
   end
 
   test 'return nil when parsing invalid date' do
     assert_nil Month.parse_month 'not-a-date'
-    assert_nil Month.parse_month 'giberish'
+    assert_nil Month.parse_month 'gibberish'
+    assert_nil Month.parse_month '2020-14'
+    assert_nil Month.parse_month '2011-01-05'
+    assert_nil Month.parse_month '2023abc-01'
+    assert_nil Month.parse_month '2023-05xxx'
+    assert_nil Month.parse_month '2023-05123456789'
   end
 
   test 'raise with wrong params' do

@@ -24,7 +24,8 @@ Then "{account} should be {state}" do |account, state|
 end
 
 Then /^I should see the account details:$/ do |table|
-  table.diff! extract_table('#account-overview', 'tr', 'th,td')
+  assert_equal table.to_hash.flatten,
+               find_all('#account-overview .pf-c-data-list__cell').map(&:text)
 end
 
 Then "{provider} time zone should be {string}" do |provider, time_zone|
@@ -47,4 +48,8 @@ Given "{buyer} has only one admin {string}" do |account, username|
   end
 
   to_be_admin.update_attribute(:role, :admin)
+end
+
+Given "{provider} was created on {date}" do |provider, date|
+  provider.update_attribute(:created_at, date.to_datetime)
 end

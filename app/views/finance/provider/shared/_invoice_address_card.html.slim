@@ -1,0 +1,35 @@
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title"
+      = title
+
+  div class="pf-c-card__body"
+    dl class="pf-c-description-list pf-m-horizontal"
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Organization name
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = org_name
+
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Address
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            address
+              = [address.line1, address.line2].compact.join(' ')
+              <br>
+              = [address.city, address.state].compact.join(', ')
+              '
+              = address.zip
+
+      - if address.country
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text"
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text"
+              = address.country

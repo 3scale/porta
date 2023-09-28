@@ -29,7 +29,7 @@ class UsageLimit < ApplicationRecord
   validates :metric, presence: true #, :plan #plan.customize method hinders this validation
   validates :plan, presence: true
 
-  validates :period, uniqueness: {scope: [:metric_id, :plan_id]}
+  validates :period, uniqueness: { scope: %i[metric_id plan_id], case_sensitive: true}
 
   before_save :set_value_default_value
 

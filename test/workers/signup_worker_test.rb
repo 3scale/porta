@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class SignupWorkerTest < ActiveSupport::TestCase
-
   def test_enqueue
     assert SignupWorker.enqueue(stub('provider', id: 42))
 

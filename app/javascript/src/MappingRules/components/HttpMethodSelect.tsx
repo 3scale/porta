@@ -36,7 +36,7 @@ const HttpMethodSelect: FunctionComponent<Props> = ({
       <input id="proxy_rule_http_method" name="proxy_rule[http_method]" type="hidden" value={httpMethod} />
       <Select
         aria-label="Select a httpMethod"
-        isExpanded={isExpanded}
+        isOpen={isExpanded}
         selections={httpMethod}
         variant={SelectVariant.single}
         onSelect={handleOnSelect}

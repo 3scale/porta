@@ -1,6 +1,6 @@
 class Country < ApplicationRecord
   validates :name, :code, presence: true
-  validates :code, uniqueness: true
+  validates :code, uniqueness: { case_sensitive: true }
   validates :name, :code, :currency, length: {maximum: 255}
 
   # Cuba, Iran, North Korea, Sudan, Syria

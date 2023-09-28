@@ -5,6 +5,11 @@ class BillingWorker
 
   sidekiq_options queue: :billing, retry: 3
 
+  sidekiq_retry_in do |_count|
+    # after lock has been released
+    1.hours + 10
+  end
+
   class Callback
     delegate :logger, to: 'Rails'
 
@@ -40,6 +45,13 @@ class BillingWorker
   end
 
   def self.enqueue_for_buyer(buyer, billing_date)
+    if buyer.id == buyer.provider_account_id
+      System::ErrorReporting.report_error(ArgumentError.new("invalid buyer #{buyer.id}, has self as provider"),
+                                          buyer_id: buyer.id,
+                                          billing_date: billing_date)
+      return
+    end
+
     time = billing_date.to_s(:iso8601)
     perform_async(buyer.id, buyer.provider_account_id, time)
   end
@@ -55,7 +67,8 @@ class BillingWorker
   # @param [Integer] provider_id
   # @param [String] time
   def perform(buyer_id, provider_id, time)
-    billing_results = Finance::BillingService.call!(buyer_id, provider_account_id: provider_id, now: time, skip_notifications: true)
+    Rails.logger.info("[billing] provider #{provider_id} buyer #{buyer_id}: BillingWorker#perform invoked at #{time}")
+    billing_results = Finance::BillingService.call!(buyer_id, { provider_account_id: provider_id, now: time, skip_notifications: true })
     store_summary(buyer_id, billing_results[provider_id]) if billing_results
   end
 

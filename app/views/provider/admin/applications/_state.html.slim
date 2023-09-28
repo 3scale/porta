@@ -1,18 +1,14 @@
-dl#cinstance_state.u-dl.u-dl--skinny
-  dt.u-dl-term
-    | State
-  dd.u-dl-description
-    = h @cinstance.state.capitalize
-
-    - if @cinstance.pending?
-      = render :partial => 'accept_reject'
-    - elsif @cinstance.live?
-      = pf_fancy_link_to 'Suspend', suspend_provider_admin_application_path(@cinstance), method: :post, remote: true, data: {:confirm => suspend_application_confirmation(@cinstance)}, class: 'action suspend'
-    - elsif @cinstance.suspended?
-      = pf_fancy_link_to 'Resume', resume_provider_admin_application_path(@cinstance), method: :post, remote: true, class: 'action resume'
-
-  - if @cinstance.trial?
-    dt.u-dl-term
-      | Trial days left
-    dd.u-dl-description
-      = remaining_trial_days(@cinstance) if @cinstance.trial?
+/ This is dinamically rendered by app/views/provider/admin/applications/update_state.js.erb
+div class="pf-c-description-list__group" id="cinstance_state"
+  dt class="pf-c-description-list__term"
+    span class="pf-c-description-list__text" State
+  dd class="pf-c-description-list__description"
+    div class="pf-c-description-list__text"
+      = h @cinstance.state.capitalize
+      span class="pf-m-force-float-right"
+        - if @cinstance.pending?
+          = render :partial => 'accept_reject'
+        - elsif @cinstance.live?
+          = fancy_link_to 'Suspend', suspend_provider_admin_application_path(@cinstance), method: :post, remote: true, data: {:confirm => suspend_application_confirmation(@cinstance)}, class: 'action suspend'
+        - elsif @cinstance.suspended?
+          = fancy_link_to 'Resume', resume_provider_admin_application_path(@cinstance), method: :post, remote: true, class: 'action resume'

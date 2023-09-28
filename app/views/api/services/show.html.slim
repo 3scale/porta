@@ -1,4 +1,4 @@
-h1 Overview
+- content_for :page_header_title, 'Overview'
 
 section.Section
   .SettingsBox
@@ -39,7 +39,7 @@ section class="service-widget"
         h2 = link_to 'Latest alerts', admin_service_alerts_path(service), :title => 'Show all limit alerts for this service'
         ol.latest-alerts
           = list_items_or_empty current_account.alerts.by_service(service).latest, 'There are no alerts.' do |alert|
-            li.item
+            li.item.utilization
               = link_to_cinstance_or_deleted(alert.cinstance)
               |  at
               = l alert.timestamp
@@ -55,7 +55,7 @@ section class="service-widget"
           h2.flex-item
             '  Published
             => link_to 'Application Plans', admin_service_application_plans_path(service)
-          = pf_action_link_to :new, new_admin_service_application_plan_path(service),
+          = action_link_to :new, new_admin_service_application_plan_path(service),
             label: 'Create application plan', class: 'flex-item'
 
         ul.application-plans[data-hint="published"]
@@ -76,7 +76,7 @@ section class="service-widget"
             h2.flex-item
               '  Published
               => link_to 'Service plans', admin_service_service_plans_path(service)
-            = pf_action_link_to :new,  new_admin_service_service_plan_path(service),
+            = action_link_to :new,  new_admin_service_service_plan_path(service),
               label: 'Create Service Plan', class: 'flex-item'
 
           ul.service-plans[data-hint="published"]

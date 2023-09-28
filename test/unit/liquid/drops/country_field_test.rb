@@ -13,7 +13,7 @@ class Liquid::Drops::CountryFieldTest < ActiveSupport::TestCase
   test 'country#choices' do
     drop = Drops::CountryField.new(@buyer, :country)
     country = drop.choices.first
-    assert country.id.is_a?(Fixnum)
+    assert country.id.is_a?(Integer)
     assert country.label.is_a?(String)
   end
 

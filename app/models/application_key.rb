@@ -13,7 +13,7 @@ class ApplicationKey < ApplicationRecord
   # letters, numbers, dash, cannot stat with dash, case insensitive
   validates :value, format: { with: /\A[\x20-\x7E]+\Z/ },
                     length: { within: 5..255 },
-                    uniqueness: { scope: :application_id }
+                    uniqueness: { scope: :application_id, case_sensitive: false }
 
   validate :keys_limit_reached
 

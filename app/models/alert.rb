@@ -19,7 +19,7 @@ class Alert < ApplicationRecord
 
   validates :account, :timestamp, :state, presence: true
   validates :utilization, :level, :alert_id, :cinstance, presence: true
-  validates :alert_id, uniqueness: { :scope => :account_id }
+  validates :alert_id, uniqueness: { scope: :account_id, case_sensitive: true }
   validates :level, inclusion: { :in => ALERT_LEVELS }
   validates :level, numericality: { :only_integer => true }
   validates :utilization, numericality: true

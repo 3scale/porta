@@ -1,8 +1,11 @@
-<%= render 'buyers/accounts/menu' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
 
-<h2>
+<% content_for :page_header_title do %>
   Edit User <%= h @user.display_name %> of the account <%= h @user.account.org_name %>
-</h2>
+<% end %>
+
 <%= semantic_form_for @user, url: admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), builder: Fields::FormBuilder do |form| %>
 
   <%= form.inputs :name => 'User Information' do %>
@@ -30,7 +33,6 @@
     <% end -%>
   <% end %>
 
-  <%= javascript_include_tag 'custom_profiles_input_texts' %>
   <style type="text/css">
     <%# the 'Role' radio button is unclickable without this style (see #1994)%>
     #user_role_input legend.label { width:auto; }

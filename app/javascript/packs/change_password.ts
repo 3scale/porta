@@ -1,7 +1,7 @@
-import { ChangePasswordWrapper } from 'ChangePassword/components/ChangePassword'
+import { ChangePasswordWrapper } from 'Login/components/ChangePasswordPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Props } from 'ChangePassword/components/ChangePassword'
+import type { Props } from 'Login/components/ChangePasswordPage'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'pf-login-page-container'
@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { lostPasswordToken, url, errors } = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps) ?? {}
+  const props = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps)
 
-  ChangePasswordWrapper({
-    lostPasswordToken,
-    url,
-    errors
-  }, 'pf-login-page-container')
+  if (!props) {
+    throw new Error('Missing props for ChangePassword')
+  }
+
+  ChangePasswordWrapper(props, containerId)
 })

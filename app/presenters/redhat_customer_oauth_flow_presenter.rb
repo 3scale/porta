@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RedhatCustomerOAuthFlowPresenter < OauthFlowPresenter
+class RedhatCustomerOAuthFlowPresenter < OAuthFlowPresenter
 
   def initialize(account, request)
     super(account.redhat_customer_authentication_provider, request)

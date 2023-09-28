@@ -8,7 +8,7 @@ class MailPreview < MailView
   end
 
   def application_plan_change_requested
-    event = Applications::ApplicationPlanChangeRequestedEvent.create(ApplicationContract.last, User.last, Plan.last)
+    event = Applications::ApplicationPlanChangeRequestedEvent.create(Cinstance.last, User.last, Plan.last)
 
     NotificationMailer.application_plan_change_requested(event, receiver)
   end

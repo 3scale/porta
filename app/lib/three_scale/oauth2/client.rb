@@ -20,7 +20,7 @@ module ThreeScale
       def client_class(kind)
         case kind
         when 'github'
-          ThreeScale::OAuth2::GithubClient
+          ThreeScale::OAuth2::GitHubClient
         when 'auth0'
           ThreeScale::OAuth2::Auth0Client
         when 'keycloak'
@@ -47,7 +47,7 @@ module ThreeScale
 
       # @param [::AuthenticationProvider] authentication_provider
       # @return [::ThreeScale::OAuth::ClientBase]
-      # @return [::ThreeScale::OAuth::GithubClient]
+      # @return [::ThreeScale::OAuth::GitHubClient]
       # @return [::ThreeScale::OAuth::Auth0Client]
       # @return [::ThreeScale::OAuth::KeycloakClient]
       # @return [::ThreeScale::OAuth::KeycloakClient::ImplicitFlow]

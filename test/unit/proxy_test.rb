@@ -3,7 +3,7 @@ require 'test_helper'
 class ProxyTest < ActiveSupport::TestCase
   def setup
     @proxy = FactoryBot.create(:simple_proxy, api_backend: nil)
-    @proxy.update_attributes!(apicast_configuration_driven: false)
+    @proxy.update!(apicast_configuration_driven: false)
     @service = @proxy.service
     @account = @service.account
   end
@@ -21,8 +21,7 @@ class ProxyTest < ActiveSupport::TestCase
 
       proxy.policies_config = [{ name: '1' }]
       refute proxy.valid?
-      assert_match 'version can\'t be blank', proxy.errors.full_messages.to_sentence
-      assert_match 'configuration can\'t be blank', proxy.errors.full_messages.to_sentence
+      assert_match 'Policies config contains some invalid policy', proxy.errors.full_messages.to_sentence
     end
 
     def test_not_valid_json_policies_config
@@ -400,7 +399,7 @@ class ProxyTest < ActiveSupport::TestCase
   test 'proxy api backend auto port 80' do
     endpoint = 'http://example.org'
     @proxy.api_backend = endpoint
-    @proxy.update_attributes endpoint: endpoint
+    @proxy.update endpoint: endpoint
     @proxy.secret_token = '123'
     @proxy.valid?
 
@@ -411,7 +410,7 @@ class ProxyTest < ActiveSupport::TestCase
   test 'proxy api backend auto port 443' do
     endpoint = 'https://example.org'
     @proxy.api_backend = endpoint
-    @proxy.update_attributes endpoint: endpoint
+    @proxy.update endpoint: endpoint
     @proxy.secret_token = '123'
     @proxy.valid?
 
@@ -420,7 +419,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'proxy_endpoint is unique' do
-    @proxy.update_attributes(endpoint: 'http://foo:80', api_backend: 'http://A:1', secret_token: 'fdsa')
+    @proxy.update(endpoint: 'http://foo:80', api_backend: 'http://A:1', secret_token: 'fdsa')
     p2 = FactoryBot.create(:proxy, endpoint: 'http://foo:80', service: @service, api_backend: 'http://B:1', secret_token: 'fdsafsda')
   end
 
@@ -477,7 +476,7 @@ class ProxyTest < ActiveSupport::TestCase
   test 'allowed domains' do
     Rails.stubs(:env).returns(ActiveSupport::StringInquirer.new('production'))
     %W(api.example.net).each do |b|
-      @proxy.update_attributes(api_backend: "http://#{b}:80")
+      @proxy.update(api_backend: "http://#{b}:80")
       assert @proxy.errors[:api_backend].blank?
     end
   end
@@ -632,7 +631,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
 
-    @proxy.update_attributes(staging_endpoint: 'http://example.com')
+    @proxy.update(staging_endpoint: 'http://example.com')
   end
 
   test 'domain changes events on update of self managed proxy' do
@@ -640,7 +639,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     Domains::ProxyDomainsChangedEvent.expects(:create).with(@proxy).once
 
-    @proxy.update_attributes(staging_endpoint: 'http://example.com')
+    @proxy.update(staging_endpoint: 'http://example.com')
   end
 
   test 'domain changes events on destroy of hosted proxy' do
@@ -847,7 +846,7 @@ class ProxyTest < ActiveSupport::TestCase
   class StaleObjectErrorTest < ActiveSupport::TestCase
     test 'proxy does not raise stale object error on concurrent touch' do
       class ProxyWithFiber < ::Proxy
-        def update_attributes(*)
+        def update(*)
           Fiber.yield
           super
         end
@@ -855,7 +854,7 @@ class ProxyTest < ActiveSupport::TestCase
 
       proxy_id = FactoryBot.create(:proxy).id
 
-      fiber_update = Fiber.new { ProxyWithFiber.find(proxy_id).update_attributes(error_auth_failed: 'new auth error msg') }
+      fiber_update = Fiber.new { ProxyWithFiber.find(proxy_id).update(error_auth_failed: 'new auth error msg') }
       fiber_touch = Fiber.new { Proxy.find(proxy_id).touch }
 
       fiber_update.resume

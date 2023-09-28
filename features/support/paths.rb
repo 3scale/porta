@@ -53,6 +53,9 @@ World(Module.new do
     when 'logout'
       logout_path
 
+    when 'the provider reset password page'
+      reset_provider_password_path
+
     when 'the forgot password page'
       new_admin_account_password_path
 
@@ -269,6 +272,10 @@ World(Module.new do
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
 
+    when /^the usage rules of service "([^"]*)"$/
+      service = Service.find_by!(name: Regexp.last_match(1))
+      usage_rules_admin_service_path(service)
+
     #
     # Account plans (buyer side)
     #
@@ -340,6 +347,9 @@ World(Module.new do
     when /^the provider side application page for "([^"]*)"$/
       application = Account.find_by_org_name!($1).bought_cinstance
       provider_admin_application_path(application)
+
+    when /^the provider application page$/
+      provider_admin_application_path(@application)
 
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
@@ -580,7 +590,7 @@ World(Module.new do
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^the invoices issued by me$/
+    when /^all provider's invoices page$/
       admin_finance_invoices_path
 
     when /^the invoice "(.+?)" page$/

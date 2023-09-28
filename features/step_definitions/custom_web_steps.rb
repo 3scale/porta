@@ -92,14 +92,22 @@ Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" column and "([^"]*)" row$/ do |text, column, row|
-  row_element = find(:xpath, "//td/a[text()=\"#{row}\"]/ancestor::tr")
-  column_element = find(:xpath, "//th[text()='#{column}']")
+  if has_css?('table.pf-c-table')
+    column_values = find_all("td[data-label='#{column}'").map(&:text)
+    rows = find_all('tbody tr td[data-label="Group/Org."]')
+    index = rows.find_index{ |r| r.text == row }
 
-  row_index = row_element.path.match(/^.*(\d)\]$/)[1]&.to_i
-  column_index = column_element.path.match(/^.*(\d)\]$/)[1]&.to_i
+    actual_text = column_values[index]
+  else
+    # DEPRECATED: remove when all tables use Patternfly
+    row_element = find(:xpath, "//td/a[text()=\"#{row}\"]/ancestor::tr")
+    column_element = find(:xpath, "//th[text()='#{column}']")
 
-  actual_text = find(:xpath, "//table/descendant::*/tr[#{row_index}]/td[#{column_index}]").text() if row_index && column_index
+    row_index = row_element.path.match(/^.*(\d)\]$/)[1]&.to_i
+    column_index = column_element.path.match(/^.*(\d)\]$/)[1]&.to_i
 
+    actual_text = find(:xpath, "//table/descendant::*/tr[#{row_index}]/td[#{column_index}]").text() if row_index && column_index
+  end
   assert_equal text, actual_text, "Expected #{text}, was #{actual_text}"
 end
 
@@ -145,7 +153,6 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
 end
 
 [ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the first api dashboard widget',
   'the main menu' ].each do |scope|
   When /^(.*) in (#{scope})$/ do |lstep, scope|
     within(*selector_for(scope)) do
@@ -177,7 +184,7 @@ end
 
 def assert_select_not_inclues_option(label, text)
   if page.has_css?('.pf-c-form__label', text: label)
-    select = find('.pf-c-form__label', text: label).sibling('.pf-c-select')
+    select = find_pf_select(label)
     select.find('.pf-c-select__toggle-button').click
     selector = '.pf-c-select__menu-item'
   else

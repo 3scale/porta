@@ -4,7 +4,6 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   before_action :authorize_settings
 
   activate_menu :audience, :cms, :sso_integrations
-  sublayout 'sites/developer_portals'
 
   before_action :find_authentication_provider, only: %i[show edit update publish_or_hide destroy]
   before_action :authorize_authentication_provider, only: %i[show edit destroy]
@@ -24,7 +23,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   end
 
   def show
-    @oauth_presenter = OauthFlowPresenter.new(@authentication_provider, request)
+    @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
   end
 
   def create
@@ -42,18 +41,18 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   def publish_or_hide
     authorize_authentication_provider('update')
     published = params.require(:authentication_provider).require(:published)
-    persisted = @authentication_provider.update_attributes({published: published})
+    persisted = @authentication_provider.update({published: published})
     flash[:notice] = persisted ? 'Authentication provider updated' : 'Authentication provider has not been updated'
-    @oauth_presenter = OauthFlowPresenter.new(@authentication_provider, request)
+    @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
     render :show
   end
 
   def update
     authorize_authentication_provider('edit')
-    persisted = @authentication_provider.update_attributes(update_params)
+    persisted = @authentication_provider.update(update_params)
     if persisted
       flash[:notice] = 'Authentication provider updated'
-      @oauth_presenter = OauthFlowPresenter.new(@authentication_provider, request)
+      @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
       render :show
     else
       flash[:notice] = 'Authentication provider has not been updated'

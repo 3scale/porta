@@ -10,7 +10,7 @@ class Csv::ApplicationsExporter < ::Csv::Exporter
 
       query = @account.provided_cinstances
                 .includes([ { :user_account => [:users, :country] }, :plan])
-                .order('`cinstances`.`created_at` DESC')
+                .order('cinstances.created_at DESC')
 
       query = query.where(created_at: @range) if @range
       query.find_each do |cinstance|

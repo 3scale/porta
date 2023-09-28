@@ -6,6 +6,8 @@ class Buyers::BulkBaseController < FrontendController
 
   helper_method :humanized_actions
 
+  layout false
+
   def new; end
 
   def create

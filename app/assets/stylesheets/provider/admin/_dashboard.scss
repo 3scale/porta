@@ -6,7 +6,6 @@
   float: left;
   width: 100%;
   clear: both;
-  margin: line-height-times(1) 0 line-height-times(1);
 
   &--audience + .DashboardSection--service,
   &--audience + .DashboardSection--service.is-closed {
@@ -379,6 +378,9 @@
   &-list-item {
     @include ellipsis;
     border-left: line-height-times(1.5) solid transparent;
+    @media (max-width: 1235px) {
+      border-left: line-height-times(1) solid transparent;
+    }
     color: $light-color;
 
     &:first-child {

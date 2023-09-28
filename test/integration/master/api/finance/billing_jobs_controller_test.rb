@@ -28,8 +28,6 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
   end
 
   test 'trigger billing to all buyers of a provider' do
-    SphinxIndexationWorker.stubs(:perform_later)
-
     Sidekiq::Testing.inline! do
       FactoryBot.create_list(:buyer_account, 4, provider_account: @provider)
 

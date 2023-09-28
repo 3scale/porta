@@ -29,7 +29,7 @@ Given "an active user {string} of {account} with {word} permission" do |username
 end
 
 Given "an active user {string} of {account} with email {string}" do |username, account, email|
-  FactoryBot.create(:active_user, :account => account, :username => username, :email => email)
+  @user = FactoryBot.create(:active_user, account: account, username: username, email: email)
 end
 
 Given "{user} is suspended" do |user|
@@ -47,7 +47,7 @@ Given /^provider "([^\"]*)" has the following users:$/ do |provider_name, table|
 end
 
 Given "{user} has email {string}" do |user, email|
-  user.update_attributes!(:email => email)
+  user.update!(:email => email)
 end
 
 Given "the admin of {account} has password {string}" do |account, password|

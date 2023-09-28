@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 After do
+  Time.zone = Rails.application.config.time_zone
   travel_back
 end
 
 # Wrapper for travel_to but implementing safe nested traveling
 def safe_travel_to(time, &block)
+  time_was_frozen = time_frozen?
   previous_time = Time.zone.now
   travel_back
   travel_to(time, &block)
 ensure
-  travel_to(previous_time) if block_given?
+  if block_given?
+    time_was_frozen ? travel_to(previous_time) : travel_back
+  end
 end
 
 def access_user_sessions
@@ -37,11 +41,9 @@ When /^(?:the )?time flies to (.*)$/ do |date|
 end
 
 # Suffix 'on 5th July 2009'
-#
-Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
-  # this ensures billing actions are run
-  step %(time flies to #{date})
-  # and then we freeze the time
+# When '(without scheduled jobs)' is present, scheduled jobs will be skipped when travelling in time
+Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: [^\(]*)?)( \(without scheduled jobs\))?$/ do |original, date, skip_jobs|
+  step %(time flies to #{date}) unless skip_jobs
   safe_travel_to(Time.zone.parse(date)) do
     step original.strip
   end

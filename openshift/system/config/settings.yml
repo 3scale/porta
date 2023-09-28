@@ -4,7 +4,6 @@ production:
   apicast_custom_url: true
   apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
-  assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
   billing_canaries:
   db_secret:
   email_sanitizer:

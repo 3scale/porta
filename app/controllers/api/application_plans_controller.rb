@@ -4,8 +4,8 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   activate_menu :serviceadmin, :applications, :application_plans
   sublayout 'api/service'
 
-  helper_method :default_plan_select_data, :plans_table_data
-  delegate :default_plan_select_data, :plans_table_data, to: :presenter
+  helper_method :plans_index_data
+  delegate :plans_index_data, to: :presenter
 
   alias application_plans plans
 
@@ -42,6 +42,6 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def presenter
-    @presenter ||= Api::ApplicationPlansPresenter.new(service: service, params: params)
+    @presenter ||= Api::ApplicationPlansPresenter.new(service: service, params: params, user: current_user)
   end
 end

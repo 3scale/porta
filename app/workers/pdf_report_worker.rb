@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PdfReportWorker
   include Sidekiq::Worker
 
@@ -7,7 +9,7 @@ class PdfReportWorker
   # @param [Account] account
   # @param [SystemOperation] system_operation
   def self.enqueue(service, period, system_operation)
-    perform_async(service.id, service.account_id, period, system_operation.ref)
+    perform_async(service.id, service.account_id, period.to_s, system_operation.ref)
   end
 
   # @param [Integer] service_id
@@ -37,8 +39,4 @@ class PdfReportWorker
   end
 
   delegate :logger, to: :Rails
-end
-
-if Rails.application.config.three_scale.daily_weekly_reports_pref
-  require_dependency 'pdf/report'
 end

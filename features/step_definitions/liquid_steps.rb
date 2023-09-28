@@ -23,12 +23,12 @@ Given /^I'm logged in as a malicious buyer$/ do
 end
 
 When /^provider has xss protection enabled$/ do
-  @provider.settings.update_attributes(cms_escape_draft_html: true,
+  @provider.settings.update(cms_escape_draft_html: true,
                                        cms_escape_published_html: true)
 end
 
 When /^provider has xss protection disabled$/ do
-  @provider.settings.update_attributes(cms_escape_draft_html: false,
+  @provider.settings.update(cms_escape_draft_html: false,
                                        cms_escape_published_html: false)
 end
 

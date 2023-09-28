@@ -47,7 +47,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
 
   test '#callback_url for master' do
     presenter = mock('oauth')
-    OauthFlowPresenter.expects(:new).with(@authentication_provider, @request).returns(presenter)
+    OAuthFlowPresenter.expects(:new).with(@authentication_provider, @request).returns(presenter)
 
     presenter.expects(:callback_url).with().once.returns('https://foo')
 

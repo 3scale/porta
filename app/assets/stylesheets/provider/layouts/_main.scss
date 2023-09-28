@@ -7,91 +7,15 @@ body {
   overflow: hidden;
 }
 
-#border {
-  min-height: calc(100vh - 92px); // Header's height
-  position: relative;
-  text-align: left;
-}
-
 #nav {
   height: auto;
 }
 
 .Main {
-  // HACK: import PF4 styles instead of use hardcoded value. In the future it will be included in PF class.
-  padding: line-height-times(1);
+  padding-bottom: 1.5rem;
 
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
-  }
-}
-
-.pf-c-page__main {
-  background-color: $gallery;
-}
-
-.pf-c-nav__link {
-  .fa-exclamation-triangle {
-    margin-left: line-height-times(1 / 4);
-  }
-}
-
-// HACK: Some PF classes still collapses with ours.
-// As we are still using both PF and not-PF links, we need this
-button.action.pf-c-button {
-
-  padding: 0 var(--pf-global--spacer--md);
-
-  &.pf-m-primary,
-  &.pf-m-danger {
-    color: $white;
-  }
-
-  &.pf-m-secondary {
-    color: var(--pf-c-button--m-secondary--Color);
-  }
-
-}
-
-a.action.pf-c-button {
-  color: $success-color;
-
-  &.add,
-  &.new,
-  &.approve,
-  &.activate,
-  &.ok,
-  &.enable,
-  &.resume {
-    color: $create-color;
-
-    &:hover {
-      color: $link-hover-color;
-    }
-  }
-
-  &.bolt,
-  &.fire,
-  &.off,
-  &.eye,
-  &.revert {
-    color: $warning-color;
-
-    &:hover {
-      color: $link-hover-color;
-    }
-  }
-
-  &.delete,
-  &.reject,
-  &.eye-slash,
-  &.suspend,
-  &.disable {
-    color: $delete-color;
-
-    &:hover {
-      color: $link-hover-color;
-    }
   }
 }
 

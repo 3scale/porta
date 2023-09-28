@@ -1,4 +1,4 @@
-- content_for :sublayout_title, "Response Codes"
+- content_for :page_header_title, "Response Codes"
 
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
@@ -27,9 +27,9 @@
         #{link_to('API ActiveDocs documentation', provider_admin_api_docs_path(anchor: '/service_management_api'), target:'_blank')}
         for our Service Management API methods where the Response Codes
         can be sent.
-      li Our HowTo tutorial on
-        #{link_to('Response Codes Tracking', I18n.t('api.integrations.proxy.documentation_response_codes_tracking_url', docs_base_url: docs_base_url), target:'_blank')}
-        on the 3scale support portal
+      li Follow the documentation about
+        #{link_to('response code logging', I18n.t('api.integrations.proxy.documentation_response_codes_tracking_url', docs_base_url: docs_base_url), target:'_blank')}
+        on the Red Hat Customer Portal.
 
 
 p.timezone

@@ -17,12 +17,10 @@ Rails.application.configure do
   config.assets.digest = false
   config.assets.precompile += %w( spec_helper.js )
 
-  config.asset_host = ->(*args) {
-    _source, request = args
+  config.asset_host = config.three_scale.asset_host.presence
 
-    return unless request
-    request.headers['host']
-  }
+  # Match custom domains on development
+  config.hosts << /.+\.localhost/
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 

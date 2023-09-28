@@ -1,11 +1,11 @@
 import { mount } from 'enzyme'
 
-import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
+import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelect'
 import { Select } from 'Common/components/Select'
 import { openSelect, selectOption } from 'utilities/test-utils'
 
 import type { IRecord } from 'Types'
-import type { Props } from 'Plans/components/DefaultPlanSelectCard'
+import type { Props } from 'Plans/components/DefaultPlanSelect'
 
 const plan = { id: 1, name: 'My Plan' }
 const plans = [plan]
@@ -20,15 +20,6 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCar
 it('should render', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toEqual(true)
-})
-
-it('should have a helper text', () => {
-  const wrapper = mountWrapper()
-  const text = 'If an application plan is set as default, 3scale sets this plan upon service subscription.'
-
-  const helperText = wrapper.find('.pf-c-helper-text')
-
-  expect(helperText.text()).toBe(text)
 })
 
 it('should have a "no default plan" option', () => {
@@ -68,20 +59,20 @@ it('should disable the button when the default plan is selected', () => {
   isButtonDisabled(true)
 })
 
-it('should disable the plan option when plan already selected', () => {
+it('should select the plan option when plan already selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' } as const
   const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
   const option = (plan: IRecord) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
-  const isOptionDisabled = (plan: IRecord, disabled: boolean) => { expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled) }
+  const isOptionSelected = (plan: IRecord, selected: boolean) => { expect(option(plan).prop('className').includes('pf-m-selected')).toBe(selected) }
 
   openSelect(wrapper)
-  isOptionDisabled(initialDefaultPlan, true)
-  isOptionDisabled(plan, false)
+  isOptionSelected(initialDefaultPlan, true)
+  isOptionSelected(plan, false)
 
   option(plan).simulate('click')
   openSelect(wrapper)
-  isOptionDisabled(initialDefaultPlan, false)
-  isOptionDisabled(plan, true)
+  isOptionSelected(initialDefaultPlan, false)
+  isOptionSelected(plan, true)
 })
 
 it.todo('should be able to filter by name')

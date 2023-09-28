@@ -1,6 +1,4 @@
-import { FormGroup, TextInput, Alert } from '@patternfly/react-core'
-
-import { FormAlert } from 'ActiveDocs/components/FormAlert'
+import { FormAlert, FormGroup, TextInput, Alert } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
@@ -13,7 +11,9 @@ interface Props {
   systemName: string;
 }
 
-const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = false, setSystemName, systemName }) => {
+const emptyArray = [] as never[]
+
+const SystemNameInput: FunctionComponent<Props> = ({ errors = emptyArray, isDisabled = false, setSystemName, systemName }) => {
   const validated = errors.length ? 'error' : 'default'
 
   return (
@@ -24,10 +24,10 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = f
           Only ASCII letters, numbers, dashes and underscores are allowed.
           <FormAlert>
             <Alert
-              isInline 
+              isInline
               title={(
                 <span>Warning: With ActiveDocs 1.2 the API will be described in your developer portal as <i>System name: Description</i></span>
-              )} 
+              )}
               variant="warning"
             />
           </FormAlert>

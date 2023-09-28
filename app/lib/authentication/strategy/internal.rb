@@ -1,7 +1,7 @@
 module Authentication
   module Strategy
 
-    class Internal < Sso
+    class Internal < SSO
 
       def authenticate params
         authenticate_with_username_and_password(params[:username], params[:password]) || super(params)

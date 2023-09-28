@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   include ThreeScale::SpamProtection::Integration::Model
   has_spam_protection
 
-  include TopicIndex::ForPost
+  include Indices::TopicIndex::ForPost
 
   # author of post
   belongs_to :user, :counter_cache => true

@@ -10,7 +10,7 @@ class WebHook < ApplicationRecord
 
   #TODO: limit association only to providers?
   #TODO validate url as url?
-  validates :account_id, uniqueness: true
+  validates :account_id, uniqueness: { case_sensitive: true }
 
   class << self
     delegate :perform_deliveries, :sanitized_url, :to => :configuration

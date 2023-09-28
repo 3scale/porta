@@ -9,11 +9,11 @@ class SegmentDeleteUsersWorker < ApplicationJob
     return unless Features::SegmentDeletionConfig.enabled?
     config = Features::SegmentDeletionConfig.config
     DeletedObject.users.select(:id, :object_id).order(:id).find_in_batches(batch_size: config.request_size) do |records|
-      Segment::DeleteUsersService.call(records.map(&:object_id))
+      SegmentIntegration::DeleteUsersService.call(records.map(&:object_id))
       records.each(&DeleteObjectHierarchyWorker.method(:perform_later))
       sleep(config.wait_time)
     end
-  rescue Segment::ClientError, Segment::UnexpectedResponseError => error
+  rescue SegmentIntegration::ClientError, SegmentIntegration::UnexpectedResponseError => error
     response = error.response
     System::ErrorReporting.report_error(error, parameters: {response: {status: response.status, body: response.body}})
   end

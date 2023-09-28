@@ -14,6 +14,24 @@ Feature: Account plans index page
     Scenario: Subscription section is visible
       Then an admin is able to see its account plans
 
+    Scenario: Not having available plans shows a warning
+      Given the provider has no default account plan
+      And the provider has no published account plans
+      When they go to the account plans admin page
+      Then the admin should be warned about users not being able to sign up
+
+    Scenario: Having a published account plan hides the warning
+      Given the provider has no default account plan
+      But the provider has a published account plan
+      When they go to the account plans admin page
+      Then the admin should not be warned about users not being able to sign up
+
+    Scenario: Having a default account plan hides the warning
+      Given the provider has no published account plans
+      But the provider has a default account plan
+      When they go to the account plans admin page
+      Then the admin should not be warned about users not being able to sign up
+
     Scenario: Set a default account plan
       When an admin selects a published account plan as default
       Then new accounts will subscribe to this plan
@@ -53,7 +71,7 @@ Feature: Account plans index page
     @search
     Scenario: Filtering and sorting account plans
       When an admin is looking for an account plan
-      Then they can filter plans by name
+      Then they can filter the plans by name
       And they can sort plans by name, no. of contracts and state
 
   Rule: Account plans hidden

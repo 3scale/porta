@@ -1,11 +1,2 @@
-- sections = vertical_nav_sections || []
-
-#vertical-nav-wrapper class='pf-c-page__sidebar pf-m-dark' data=vertical_nav_data()
-
-  div.pf-c-page__sidebar-body
-    nav#mainmenu class='pf-c-nav'
-      ul.pf-c-nav__list
-        - sections.each do |section|
-          = render 'shared/provider/navigation/vertical_nav_item', section: section,
-                                                                   active_section: active_submenu,
-                                                                   active_item: active_sidebar
+/ This matches <PageSidebar isNavOpen /> component
+#vertical-nav-wrapper class='pf-c-page__sidebar pf-m-expanded' data=vertical_nav_data()

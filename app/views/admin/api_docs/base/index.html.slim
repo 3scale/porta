@@ -1,25 +1,31 @@
-- content_for :sublayout_title, 'ActiveDocs'
-
-- if @api_docs_services.any? { |service| service.needs_swagger_update? }
-  = link_to t("api.integrations.proxy.documentation_create_active_doc_spec", docs_base_url: docs_base_url), class: 'SwaggerUpgradeBox' do
-    p.SwaggerUpgradeBox-message
-      span.SwaggerUpgradeBox-logo
-      | ActiveDocs now supports Swagger 2.0. Read here why it makes sense to upgrade your service specs to Swagger 2.0
+- content_for :page_header_title, 'ActiveDocs'
 
 - if @api_docs_services.any?
   = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
 - else
   - if current_account.api_docs_services.without_service.any? && can?(:manage, :portal)
-    .InfoBox.InfoBox--notice
-      p
-        ' You have
-        => link_to '1 or more ActiveDocs', admin_api_docs_services_path
-        ' that are not attached to any API. You can attach them to this (or any other) API in their respective
-        em> edit
-        | views.
+    - content_for :page_header_alert do
+      br
+      div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Info alert"
+        div class="pf-c-alert__icon"
+          i class="fas fa-fw fa-info-circle" aria-hidden="true"
+        p class="pf-c-alert__title"
+          span class="pf-screen-reader" Info alert:
+          | There are unattached ActiveDocs
+        div class="pf-c-alert__description"
+          p
+            ' You have
+            => link_to '1 or more ActiveDocs', admin_api_docs_services_path
+            ' that are not attached to any API. You can attach them to this (or any other) API in their respective
+            em> edit
+            | views.
 
-  table class="data"
-    thead
-      th colspan="5" class='operations' = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'action add')
+  div class="pf-c-empty-state pf-m-lg"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-plus-circle pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg" No ActiveDocs specs yet
+      div class="pf-c-empty-state__body"
+        | Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
+      = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'pf-c-button pf-m-primary')
 
 = will_paginate(@api_docs_services)

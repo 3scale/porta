@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Dashboard::Service::TopTrafficController < Provider::Admin::Dashboard::Service::BaseController
   respond_to :json
+
+  layout false
 
   protected
 
@@ -11,4 +15,3 @@ class Provider::Admin::Dashboard::Service::TopTrafficController < Provider::Admi
     ::Stats::Service.new(service)
   end
 end
-require_dependency 'stats/service'

@@ -12,6 +12,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   def index
     @search = ThreeScale::Search.new(params[:search] || params)
     @invoices = collection.scope_search(@search).order_by(params[:sort], params[:direction]).paginate(paginate_params).decorate
+    @years = Invoice.years_by_provider(current_account.id).presence || [(ActiveSupport::TimeZone.new(current_account.timezone) || Time.zone).now.year]
   end
 
   def create
@@ -59,7 +60,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     #  @invoice.due_on = due
     #end
 
-    if @invoice.update_attributes(params[:invoice])
+    if @invoice.update(params[:invoice])
       redirect_to admin_finance_invoice_url(@invoice), notice: 'Invoice was successfully updated.'
     else
       render :edit

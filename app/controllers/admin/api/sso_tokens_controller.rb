@@ -19,7 +19,7 @@ class Admin::Api::SSOTokensController < Admin::Api::BaseController
     provider = site_account.buyers.find(params[:provider_id])
     sso_token = SSOToken.new
     sso_token.account = provider
-    sso_token.username = ThreeScale.config.impersonation_admin['username']
+    sso_token.username = ThreeScale.config.impersonation_admin[:username]
     sso_token.expires_in = params.fetch(:expires_in) { sso_token.expires_in }
 
     sso_token.save

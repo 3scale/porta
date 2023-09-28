@@ -22,17 +22,17 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal 'one two three', css_class('one', ['two'], three: true)
   end
 
-  class AssetHostTest < ApplicationHelperTest
+  class AssetHostTest < ActionView::TestCase
     setup do
       @request = ActionDispatch::TestRequest.create
       @asset_host = 'cdn.3scale.test.localhost'
+      @full_asset_host = "https://#{@asset_host}"
     end
 
     attr_reader :request
 
     test 'asset host is not configured' do
-      Rails.configuration.expects(:asset_host).returns(nil)
-      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+      Rails.configuration.stubs(:asset_host).returns(nil)
 
       result = rails_asset_host_url
 
@@ -40,8 +40,8 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test "asset host is configured but it's value is empty" do
-      Rails.configuration.expects(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.expects(:asset_host).returns('')
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns('')
 
       result = rails_asset_host_url
 
@@ -49,12 +49,32 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test 'asset host is configured and has a proper value' do
-      Rails.configuration.expects(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns(@asset_host)
 
       result = rails_asset_host_url
 
       assert_equal "#{request.protocol}#{@asset_host}", result
+    end
+
+    test 'asset host is configured and set to a full URL with protocol' do
+      Rails.configuration.stubs(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.stubs(:asset_host).returns(@full_asset_host)
+
+      result = rails_asset_host_url
+
+      assert_equal @full_asset_host, result
+    end
+  end
+
+  class DocsBaseUrlTest < ActionView::TestCase
+    setup do
+      ThreeScale.config.stubs(onpremises: false)
+      System::Deploy.load_info!
+    end
+
+    test 'docs base url' do
+      assert_equal 'https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html', docs_base_url
     end
   end
 

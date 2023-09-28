@@ -3,7 +3,7 @@ Feature: Billing with VAT
   I want to edit them and see them affecting invoice costs
 
 Background:
-  Given a provider exists
+  Given a provider exists on 1st May 1945
     And the provider is charging its buyers
     Given provider "foo.3scale.localhost" has "finance" switch visible
     And an application plan "best" of provider "foo.3scale.localhost" for 100 monthly
@@ -54,7 +54,7 @@ Background:
 
   @javascript
   Scenario: Sums on dashboard are VAT sensitive
-   Given a buyer "europe" signed up to application plan "best"
+    Given a buyer "europe" signed up to application plan "best"
      And VAT rate of buyer "europe" is 5%
      And an invoice of buyer "europe" for May, 1945 with items
      | name       | description         | cost |

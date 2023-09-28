@@ -1,6 +1,8 @@
-<%= render :partial => 'buyers/accounts/menu' %>
+<% content_for :menu do %>
+  <%= render 'buyers/accounts/menu' %>
+<% end %>
 
-<h1>Groups of '<%= @account.org_name -%>'</h1>
+<% content_for :page_header_title, "Groups of #{@account.org_name}" %>
 
 <div id="groups">
 

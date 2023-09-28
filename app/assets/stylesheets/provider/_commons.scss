@@ -10,20 +10,12 @@ body {
 }
 
 main > h1,
-main >  h2,
-#tab-content > h1,
-#tab-content > h2 {
+main > h2 {
   font-weight: $font-weight-light;
 }
 
-.subsubmenu + h1,
-.subsubmenu + h2,
-#subsubmenu + h1,
-#subsubmenu + h2,
 main > h1:first-child,
-main >  h2:first-child,
-#tab-content > h1:first-child,
-#tab-content > h2:first-child {
+main > h2:first-child {
   background-color: $body-background;
   margin: line-height-times(-1);
   margin-bottom: line-height-times(1);
@@ -45,29 +37,13 @@ h2, h3 {
   margin-bottom: line-height-times(1/2);
 }
 
-.subsubmenu {
-  background-color: $body-background;
-  margin: line-height-times(-1);
-  padding: line-height-times(1);
-}
-
-#tab-content > h2:first-child,
-#content > h2:first-child,
-#subsubmenu + h2 {
-  background-color: $body-background;
-  font-size: $main-title-font-size;
-  line-height: 1;
-  margin: line-height-times(-1);
-  margin-bottom: line-height-times(1);
-  padding: line-height-times(1);
-}
-
-h2 {
+#cboxWrapper h2,
+.pf-c-page__main-section h2 {
   font-weight: $font-weight-bold;
   font-size: $secondary-title-font-size;
 }
 
-h3 {
+.pf-c-page__main-section h3 {
   font-size: $sub-title-font-size;
   margin-bottom: 0;
 
@@ -80,8 +56,9 @@ p {
   margin: line-height-times(1/2) 0 line-height-times(1) 0;
 }
 
-h1 + p,
-h2 + p {
+// HACK: this gives card-like style to all pre-existing divs
+:not(.pf-c-content) > h1 + p,
+:not(.pf-c-content) > h2 + p {
   background-color: $body-background;
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
@@ -199,15 +176,6 @@ pre code {
   }
 }
 
-.u-code {
-  white-space: nowrap;
-}
-
-.u-unselectable {
-  -moz-user-select: none;     /* Firefox all */
-  -webkit-user-select: none;  /* Chrome & Safari */
-}
-
 .u-divider {
   height: line-height-times(1);
   margin: line-height-times(1/2) 0;
@@ -246,4 +214,8 @@ hr, {
     @include white-box-shadow;
     padding: line-height-times(1);
   }
+}
+
+.pf-m-force-float-right {
+  float: right !important; /* scss-lint:disable ImportantRule */
 }

@@ -14,26 +14,28 @@ const PasswordInput: FunctionComponent<Props> = ({
   setPassword,
   isRequired,
   errors
-}) => (
-  <FormGroup
-    fieldId="email_configuration_password"
-    helperTextInvalid={errors.toString()}
-    isRequired={isRequired}
-    isValid={!errors.length}
-    label="Password"
-    validated="default"
-  >
-    <TextInput
-      autoComplete="new-password"
-      id="email_configuration_password"
-      isValid={!errors.length}
-      name="email_configuration[password]"
-      type="password"
-      value={password}
-      onChange={setPassword}
-    />
-  </FormGroup>
-)
+}) => {
+  const validated = errors.length ? 'error' : 'default'
+  return (
+    <FormGroup
+      fieldId="email_configuration_password"
+      helperTextInvalid={errors.toString()}
+      isRequired={isRequired}
+      label="Password"
+      validated={validated}
+    >
+      <TextInput
+        autoComplete="new-password"
+        id="email_configuration_password"
+        name="email_configuration[password]"
+        type="password"
+        validated={validated}
+        value={password}
+        onChange={setPassword}
+      />
+    </FormGroup>
+  )
+}
 
 export type { Props }
 export { PasswordInput }

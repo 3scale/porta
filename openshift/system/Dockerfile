@@ -1,16 +1,16 @@
-FROM quay.io/centos7/ruby-26-centos7 AS porta-base
+FROM quay.io/centos7/ruby-27-centos7 AS porta-base
 
 USER root
 
 ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=6
+    RUBY_MINOR_VERSION=7
 
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
     RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
 
 ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
-    VARNISH_SCL=rh-varnish5 \
+    VARNISH_SCL=rh-varnish6 \
     NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
@@ -26,6 +26,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
               gd-devel \
               unixODBC-devel \
               mysql \
+              liberation-sans-fonts \
               llvm5.0-devel \
               postgresql13 postgresql13-devel postgresql13-libs \
               file \
@@ -35,15 +36,6 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && yum -y clean all \
     && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
-
-# Install sphinx search
-RUN if [ "`uname -m`" == "x86_64" ]; then \
-      yum install -y https://sphinxsearch.com/files/sphinx-2.2.11-1.rhel7.x86_64.rpm ; \
-    else \
-      curl -sSL http://sphinxsearch.com/files/sphinx-2.2.11-release.tar.gz | tar xz -C /tmp \
-      && cd /tmp/sphinx-2.2.11-release && ./configure && make install \
-      && rm -rf /tmp/sphinx* ; \
-    fi
 
 # We don't want to redo the bundle install step every time a file has changed:
 # copying only the gemspec files and copying all the other files after the build
@@ -98,6 +90,8 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
     THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
     THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
+    THINKING_SPHINX_QUERY_LOG=/dev/stdout \
+    THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
     SECRET_KEY_BASE=dummy \
     DATABASE_URL='mysql2://root:@localhost/porta'

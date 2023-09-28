@@ -14,7 +14,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'bounce redirects to the authorize_url' do
     get authorization_provider_bounce_path(authentication_provider.system_name)
     request = ActionDispatch::TestRequest.create
-    assert_redirected_to ProviderOauthFlowPresenter.new(authentication_provider, request, @provider.external_admin_domain).authorize_url
+    assert_redirected_to ProviderOAuthFlowPresenter.new(authentication_provider, request, @provider.external_admin_domain).authorize_url
   end
 
   test 'bounce returns not found if the authentication provider belongs to another provider' do
@@ -31,8 +31,11 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'logout of provider with partner and logout_url' do
     partner = FactoryBot.create(:partner, logout_url: "http://example.net/?")
     account = FactoryBot.create(:provider_account, partner: partner)
+
+    AuditLogService.expects(:call).with { |msg| msg.start_with? "Signed in: #{account.admins.first.id}/" }
     login! account
 
+    AuditLogService.expects(:call).with { |msg| msg.start_with? "Signed out: #{account.admins.first.id}/" }
     delete provider_sessions_path
 
     assert_redirected_to "http://example.net/?provider_id=#{account.id}&user_id=#{account.admin_user.id}"

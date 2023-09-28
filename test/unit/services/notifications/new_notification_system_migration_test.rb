@@ -49,7 +49,7 @@ class Notifications::NewNotificationSystemMigrationTest < ActiveSupport::TestCas
   end
 
   def test_run!
-    @user.notification_preferences.update_attributes!(preferences: {})
+    @user.notification_preferences.update!(preferences: {})
     MailDispatchRule.delete_all
     enabled_dispatch_rules = @account.mail_dispatch_rules.enabled
 
@@ -101,6 +101,6 @@ class Notifications::NewNotificationSystemMigrationTest < ActiveSupport::TestCas
   def set_mail_dispatch_rule!(ref, enabled: true)
     operation = SystemOperation.find_by_ref(ref)
     rule = @account.mail_dispatch_rules.find_or_create_by(system_operation: operation)
-    rule.update_attributes!(dispatch: enabled)
+    rule.update!(dispatch: enabled)
   end
 end
