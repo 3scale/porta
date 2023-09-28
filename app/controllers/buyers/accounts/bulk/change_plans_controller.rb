@@ -11,11 +11,10 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
   def create
     return unless (plan = current_account.account_plans.find_by(id: plan_id_param))
 
-    accounts.each do |account|
-      contract = account.bought_account_contract
-
-      @errors << account unless contract.change_plan(plan)
-    end
+    accounts.select { |account| account.bought_account_contract.plan.id != plan.id }
+            .each do |account|
+              @errors << account unless account.bought_account_contract.change_plan(plan)
+            end
 
     handle_errors
     super
