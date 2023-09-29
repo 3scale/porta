@@ -415,6 +415,9 @@ en:
           automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
           submit_button_label: 'Create Authentication provider'
       messages:
+        bulk:
+          trash:
+            success: Messages moved into the trash
         no_metrics: "You have no metrics"
         no_methods: "You have no methods"
         no_received_messages: "You have no messages."

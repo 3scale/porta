@@ -12,7 +12,6 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
   end
 
   def create
-    # TODO: what calls this method?
     ::Messages::DeleteService.run!({
       account:           current_account,
       association_class: association_class,
@@ -22,6 +21,8 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
 
     @message_ids      = message_ids
     @no_more_messages = no_more_messages
+
+    flash[:notice] = t('.success')
   end
 
   private
