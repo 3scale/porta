@@ -1,7 +1,16 @@
-<%- applications.each do |cinstance| %>
-  $("#<%=dom_id(cinstance)%>").
-    find(".plan").html("<%= escape_javascript link_to_plan_edit(cinstance.plan) %>").end().
-    find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(cinstance.plan) %>");
-<%-end-%>
+<% applications.each do |app| %>
+  <% plan = app.plan %>
+  <% id = dom_id(app) %>
+
+  <%# TODO: define show_application_plans in an applications presenter %>
+  <% if show_application_plans = application_plans.size > 0 && !master_on_premises? %>
+    document.querySelector('<%= id %> td[data-label="Plan"]').innerHTML = '<%= j link_to_plan_edit(plan) %>'
+  <% end %>
+
+  <%# TODO: define a show_paid_column in an applications presenter %>
+  <% if current_account.settings.finance.allowed? %>
+    document.querySelector('<%= id %> td[data-label="Paid?"]').innerHTML = '<%= j plan_free_or_paid(plan) %>'
+  <% end %>
+<% end %>
 $.colorbox.close()
-$.flash('<%= escape_javascript @notice %>')
+$.flash('<%= j @notice %>')

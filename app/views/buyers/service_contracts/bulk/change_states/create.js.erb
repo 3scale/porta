@@ -1,5 +1,6 @@
-<%- service_contracts.each do |contract| %>
-  $("#<%=dom_id(contract)%>").find(".state").text("<%= escape_javascript contract.state %>");
-<%-end-%>
+<% service_contracts.each do |contract| %>
+  document.querySelector('#<%= dom_id(contract) %> td[data-label="State"]')
+    .innerText = '<%= contract.state %>'
+<% end %>
 $.colorbox.close()
-$.flash('<%= escape_javascript @notice %>')
+$.flash('<%= j @notice %>')

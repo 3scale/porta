@@ -1,5 +1,6 @@
-<%- @accounts.each do |account| %>
-  $("#<%=dom_id(account)%>").find(".state").text("<%= escape_javascript account.state.capitalize %>");
-<%-end-%>
+<% accounts.each do |account| %>
+  document.querySelector('#<%= dom_id(account) %> td[data-label="State"]')
+    .innerText = '<%= account.state.capitalize %>'
+<% end %>
 $.colorbox.close()
-$.flash('<%= escape_javascript @notice %>')
+$.flash('<%= j @notice %>')
