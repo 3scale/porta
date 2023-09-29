@@ -6,7 +6,7 @@
   <dl class="pf-c-description-list pf-m-horizontal pf-m-fluid">
     <%= bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
                                   'Send email to selected accounts' %>
-    <% if can? :see, :account_plans %>
+    <% if can?(:see, :account_plans) && @account_plans.size > 1 %>
       <%= bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path,
                                             'Transfer these accounts to different account plan' %>
     <% end %>
