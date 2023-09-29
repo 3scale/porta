@@ -9,13 +9,13 @@
     $.flash.notice('<%= @notice %>')
 
   <% else %>
-    <% if errors = @cinstance.errors[:keys].presence %>
+    <% if @error %>
       const input = document.getElementById('key')
 
       <%# HACK: Remove helperText and add it again, since replacing the text also removes the icon. %>
       input.closest('.pf-c-form__group-control').children[1].remove()
 
-      input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: errors.first } %>')
+      input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
       input.setAttribute('aria-invalid', 'true')
 
       $.colorbox.resize();

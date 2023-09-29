@@ -919,9 +919,16 @@ en:
             plan:
               not_allowed: "not allowed in this context"
             keys:
-              invalid: Invalid. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 40 characters at most.
+              invalid: Invalid characters. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters at most.
+              taken: Key is already taken. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters at most.
+              too_short: Key is too short. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters at most.
+              too_long: Key is too long. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters at most.
             user_key:
-              invalid: Invalid. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 100 characters at most.
+              blank: Key can't be blank. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters at most.
+              invalid: Invalid characters. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters at most.
+              taken: Key is already taken. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters at most.
+              too_short: Key is too short. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters at most.
+              too_long: Key is too long. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters at most.
 
         application_key:
           attributes:
@@ -1241,8 +1248,8 @@ en:
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 100 characters at most."
-        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 40 characters at most."
+        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters."
+        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters."
 
       cms:
         page:

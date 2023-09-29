@@ -15,10 +15,14 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   def update
     user_key = params[:cinstance][:user_key]
     if user_key.blank?
-      @cinstance.errors.add(:user_key, :invalid)
+      @error = t('activerecord.errors.models.cinstance.user_key.blank')
     else
       @cinstance.user_key = user_key
-      @notice = t('.update.success') if @cinstance.save
+      if @cinstance.save
+        @notice = t('.update.success')
+      else
+        @error = @cinstance.errors.messages[:user_key].first
+      end
     end
     respond_to(:js)
   end
@@ -30,7 +34,8 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
       @keys = @cinstance.application_keys.pluck_values
       @notice = t('.create.success')
     else
-      @cinstance.errors.add(:keys, :invalid)
+      error_type = @key.errors.details[:value].first[:error]
+      @error = t(errot_type, scope: 'activerecord.errors.models.cinstance.keys')
     end
 
     respond_to(:js)
