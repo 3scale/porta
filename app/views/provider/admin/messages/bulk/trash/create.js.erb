@@ -1,3 +1,4 @@
+<%# TODO: when is this used? Can we delete it? %>
 <%- @message_ids.each do |message_id| %>
   $("#message_" + <%= json(message_id) %>).fadeOut(function(){ $(this).remove() });
 <%-end-%>

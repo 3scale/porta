@@ -12,6 +12,7 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
   end
 
   def create
+    # TODO: what calls this method?
     ::Messages::DeleteService.run!({
       account:           current_account,
       association_class: association_class,
