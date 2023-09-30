@@ -11,6 +11,7 @@ class BackendApiPresenter < SimpleDelegator
       updatedAt: updated_at.to_s(:long),
       privateEndpoint: private_endpoint,
       links: links,
+      managedBy: managed_by,
       productsCount: decorate.products_count
     }
   end
@@ -21,7 +22,8 @@ class BackendApiPresenter < SimpleDelegator
       name: name,
       updated_at: updated_at.to_s(:long),
       link: decorate.link,
-      links: links
+      links: links,
+      managedBy: managed_by,
     }
   end
 

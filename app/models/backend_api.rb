@@ -5,7 +5,8 @@ class BackendApi < ApplicationRecord
   include SystemName
   include ProxyConfigAffectingChanges::ModelExtension
 
-  audited :allow_mass_assignment => true
+  audited
+  annotated
 
   define_proxy_config_affecting_attributes :private_endpoint
 

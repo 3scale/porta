@@ -16,6 +16,7 @@ class Provider::Admin::BackendApisIndexPresenter
 
   def backend_apis
     @backend_apis ||= current_account.accessible_backend_apis
+                                     .includes(:annotations)
                                      .order(sorting_params)
                                      .scope_search(search)
                                      .paginate(pagination_params)

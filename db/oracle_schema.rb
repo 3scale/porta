@@ -120,6 +120,17 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
 
+  create_table "annotations", force: :cascade do |t|
+    t.string "name", limit: 42, null: false
+    t.string "value"
+    t.string "annotated_type", null: false
+    t.integer "annotated_id", precision: 38, null: false
+    t.integer "tenant_id", limit: 19, precision: 19
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["annotated_type", "annotated_id"], name: "index_annotations_on_annotated_type_and_annotated_id"
+  end
+
   create_table "api_docs_services", force: :cascade do |t|
     t.integer "account_id", precision: 38
     t.integer "tenant_id", precision: 38
@@ -231,7 +242,8 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", force: :cascade do |t|
+  create_table "backend_events", id: false, force: :cascade do |t|
+    t.integer "id", precision: 38, null: false
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

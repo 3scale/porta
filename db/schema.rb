@@ -122,6 +122,17 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
 
+  create_table "annotations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "name", limit: 42, null: false
+    t.string "value"
+    t.string "annotated_type", null: false
+    t.bigint "annotated_id", null: false
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["annotated_type", "annotated_id"], name: "index_annotations_on_annotated_type_and_annotated_id"
+  end
+
   create_table "api_docs_services", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "tenant_id"
