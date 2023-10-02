@@ -16,5 +16,21 @@ class CreateAnnotationReferences < ActiveRecord::Migration[5.2]
     end
 
     # add_index :annotations, [:annotated_type, :annotated_id, :name], unique: true
+
+    reversible do |direction|
+      direction.up do
+        self.class.execute_trigger_action(:recreate)
+      end
+      direction.down do
+        self.class.execute_trigger_action(:drop)
+      end
+    end
+  end
+
+  def self.execute_trigger_action(action)
+    trigger = System::Database.triggers.detect { |trigger| trigger.name == "annotations_tenant_id" }
+
+    expressions = [trigger.public_send(action)].flatten
+    expressions.each(&ActiveRecord::Base.connection.method(:execute))
   end
 end
