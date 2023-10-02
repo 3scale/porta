@@ -19,8 +19,8 @@ end
 
 Then "they should not be able to edit their personal details" do
   click_on 'Update Personal Details'
-  assert has_css?('.help-block', text: 'Current password is incorrect')
-  assert_flash 'CURRENT PASSWORD IS INCORRECT.'
+  assert has_css?('.help-block', text: 'is incorrect')
+  assert_flash 'CURRENT PASSWORD IS INCORRECT'
   assert_current_path admin_account_personal_details_path
 end
 

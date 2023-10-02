@@ -24,7 +24,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
       redirect_to admin_account_users_path, notice: 'User was successfully updated.'
     else
       assign_user_drop
-      render :action => 'show'
+      render action: :show
     end
   end
 
@@ -55,7 +55,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     return unless current_user.using_password?
     return if current_user.authenticated?(user_params[:current_password])
 
-    flash.now[:error] = 'Current password is incorrect.'
-    resource.errors.add(:current_password, 'Current password is incorrect.')
+    resource.errors.add(:current_password, t('activerecord.errors.models.user.current_password_incorrect'))
+    flash.now[:error] = resource.errors.full_messages.to_sentence
   end
 end
