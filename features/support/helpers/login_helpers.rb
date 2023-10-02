@@ -21,6 +21,12 @@ module LoginHelpers
     @current_user = User.find_by!(username: username)
   end
 
+  def try_login_with_sso
+    # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
+    visit "/auth/#{@authentication_provider.system_name}/callback"
+    @current_user = Account.last.users.last
+  end
+
   def current_account
     current_user.account
   end

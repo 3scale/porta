@@ -28,6 +28,7 @@ Then "they should be able to edit their personal details" do
   click_on 'Update Personal Details'
   assert_flash 'USER WAS SUCCESSFULLY UPDATED.'
   assert_current_path admin_account_users_path
+  current_user.reload
   assert has_css?('tr > td:nth-child(2)', text: current_user.username)
   assert has_css?('tr > td:nth-child(3)', text: current_user.email)
 end
@@ -59,6 +60,7 @@ Then "they should be able to edit their custom personal details" do
   assert_flash 'USER WAS SUCCESSFULLY UPDATED.'
   assert_current_path admin_account_users_path
   click_on 'Edit user'
+  current_user.reload
   assert_equal find('#user_first_name').value, current_user.first_name
   assert_equal find('#user_user_extra_required').value, current_user.extra_fields["user_extra_required"]
 end
