@@ -32,7 +32,7 @@ Feature: Bulk operations
     Then I should see "Accept, suspend or resume selected applications"
     When I select "Accept" from "Action"
     And I press "Change state" and I confirm dialog box within fancybox
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 2 applications."
     When I go to the applications admin page
     And I follow "Name"
     # there is no transision suspended => live
@@ -50,7 +50,7 @@ Feature: Bulk operations
     Then I should see "Accept, suspend or resume selected applications"
     When I select "Suspend" from "Action"
     And I press "Change state" and I confirm dialog box within fancybox
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 2 applications."
     When I go to the applications admin page
     And I follow "Name"
     # pending cannot be changed to suspended
@@ -68,7 +68,7 @@ Feature: Bulk operations
     Then I should see "Accept, suspend or resume selected applications"
     When I select "Resume" from "Action"
     And I press "Change state" and I confirm dialog box within fancybox
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 2 applications."
     When I go to the applications admin page
     And I follow "Name"
     # resume = suspended => live

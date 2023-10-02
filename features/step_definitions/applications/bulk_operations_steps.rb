@@ -36,10 +36,6 @@ When /^I (un)?check select in table header$/ do |un|
   end
 end
 
-And(/^close the colorbox$/) do
-  find('#cboxClose').click
-end
-
 When "the application will return an error when suspended" do
   Cinstance.any_instance.stubs(:suspend).returns(false).once
 end

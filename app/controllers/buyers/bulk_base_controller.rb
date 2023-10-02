@@ -78,6 +78,7 @@ class Buyers::BulkBaseController < FrontendController
   end
 
   def notify_success
-    @notice = t('.success', count: collection.length)
+    count = collection.length - @errors.length
+    @notice = t('.success', count: count)
   end
 end

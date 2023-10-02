@@ -53,7 +53,7 @@ Feature: Mass email bulk operations
       And I fill in "Body" with "I just wanted to say hello!"
       And I press "Send" and I confirm dialog box within colorbox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully sent 2 emails."
       And "jane@jane.com" should receive 1 email with subject "Hi account!"
       And "bob@bob.com" should receive an email with the following body:
       """

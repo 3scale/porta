@@ -32,8 +32,7 @@ Feature: Bulk operations
     Then I should see "Transfer these applications to different application plan"
     When I select "Advanced" from "Plan"
     And I press "Change plan" and I confirm dialog box
-    Then I should see "Action completed successfully"
-    And close the colorbox
+    Then I should see "Successfully changed the plan of 2 applications."
     When I follow "Name"
     Then I should see following table:
       | Name    | Plan     |

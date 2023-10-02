@@ -118,7 +118,7 @@ Feature: Provider side messages
       Then I should see "It will move all your selected messages to the trash."
 
     When I press "Delete" within "#colorbox"
-      Then I should see "Action completed successfully"
+      Then I should see "Messages moved into the trash"
       And I should not see "Wildness"
       And I should see "Alaska"
 
@@ -139,6 +139,6 @@ Feature: Provider side messages
       Then I should see "It will move all your selected messages to the trash."
 
     When I press "Delete" within "#colorbox"
-      Then I should see "Action completed successfully"
+      Then I should see "Messages moved into the trash"
       And I should not see "Wildness"
       And should see "You have no messages."

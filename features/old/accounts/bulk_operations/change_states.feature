@@ -35,7 +35,7 @@ Feature: Bulk operations
     When I select "Approve" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 2 accounts."
 
     Then I should see following table:
       | Group/Org.   | State   |
@@ -54,7 +54,7 @@ Feature: Bulk operations
     When I select "Reject" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 2 accounts."
 
     Then I should see following table:
       | Group/Org.   | State   |
@@ -73,7 +73,7 @@ Feature: Bulk operations
     When I select "Make pending" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 3 accounts."
 
     Then I should see following table:
       | Group/Org.   | State  |

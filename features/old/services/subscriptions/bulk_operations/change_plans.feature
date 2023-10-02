@@ -42,7 +42,7 @@ Feature: Bulk operations
     When I select "Awesome" from "Plan"
       And I press "Change plan" and I confirm dialog box
 
-    Then I should see "Action completed successfully"
+    Then I should see "The subscription's plan was changed successfully."
 
     When I go to the service contracts admin page
      And I follow "Account" within table

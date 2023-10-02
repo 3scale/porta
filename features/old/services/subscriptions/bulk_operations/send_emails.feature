@@ -63,7 +63,7 @@ Feature: Mass email bulk operations
       And I fill in "Body" with "I just wanted to say hello!"
       And I press "Send" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully sent 3 emails."
       And "bob@me.us" should receive 2 emails with subject "Hi service subscribers!"
       And "jane@me.us" should receive an email with the following body:
       """

@@ -49,7 +49,7 @@ Feature: Bulk operations
 
     When I select "Bronze" from "Plan"
      And I press "Change plan" and I confirm dialog box
-     Then I should see "There were some errors"
+     Then I should see "The account's plan was changed successfully"
 
   Scenario: Mass change of account plans
     Given an application plan "Advanced" of provider "foo.3scale.localhost"
@@ -70,7 +70,7 @@ Feature: Bulk operations
     When I select "Gold" from "Plan"
      And I press "Change plan" and I confirm dialog box
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the plan of 2 accounts."
      And I should see following table:
      | Group/Org.   | Plan   |
      | bob          | Gold   |

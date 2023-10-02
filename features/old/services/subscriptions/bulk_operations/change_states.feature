@@ -41,7 +41,7 @@ Feature: Bulk operations
     When I select "Accept" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 3 subscriptions."
 
     When I go to the service contracts admin page
      And I follow "Account" within table
@@ -66,7 +66,7 @@ Feature: Bulk operations
     When I select "Suspend" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 3 subscriptions."
 
     When I go to the service contracts admin page
      And I follow "Account" within table
@@ -91,7 +91,7 @@ Feature: Bulk operations
     When I select "Resume" from "Action"
      And I press "Change state" and I confirm dialog box within fancybox
 
-    Then I should see "Action completed successfully"
+    Then I should see "Successfully changed the state of 3 subscriptions."
 
     When I go to the service contracts admin page
      And I follow "Account" within table
