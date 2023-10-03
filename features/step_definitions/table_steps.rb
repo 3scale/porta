@@ -36,6 +36,10 @@ Then "I should see column {string} in ascending order" do |column|
   assert header.has_css?('i.fa-long-arrow-alt-up', visible: false)
 end
 
+Then "the table {has} a column {string}" do |present, column|
+  assert_equal present, has_css?(".pf-c-table [data-label='#{column}']")
+end
+
 # Then /^I should see the following table:$/ do |expected|
 #   table = if has_css?('.pf-c-table')
 #             extract_pf4_table

@@ -412,7 +412,7 @@ ParameterType(
 
 ParameterType(
   name: 'has',
-  regexp: /has|has already|has not|has not yet|don't have/,
+  regexp: /has|has already|does not have|has not|has not yet|don't have/,
   transformer: ->(value) { ['has', 'has already'].include?(value) }
 )
 
