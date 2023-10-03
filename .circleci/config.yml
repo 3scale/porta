@@ -95,7 +95,7 @@ system-builder-ruby27: &system-builder-ruby27
     RAILS_ENV: test
 
 mysql-container: &mysql-container
-  image: cimg/mysql:5.7
+  image: cimg/mysql:8.0
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
