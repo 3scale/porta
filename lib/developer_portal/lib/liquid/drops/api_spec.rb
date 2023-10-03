@@ -16,6 +16,11 @@ module Liquid
         @spec.system_name
       end
 
+      desc 'Returns `true` if the API spec is published ("visible"), and `false` otherwise ("hidden")'
+      def published?
+        @spec.published
+      end
+
       desc 'Returns the service of the spec if it has any or `nil` otherwise.'
       def service
         return unless (service = @spec.service)

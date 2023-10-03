@@ -44,7 +44,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get admin_buyers_accounts_path
   end
 
-  test "allowed forgery protection will cause redirect to login page and revocation of the session" do
+  test "forgery protection will force a 403 and revoke the session when no CSRF token provided" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
     login! provider, user: user
@@ -57,22 +57,72 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_redirected_to '/p/login'
+    assert_response :forbidden
     # Check that user session was revoked (because of token authenticity)
     assert_not_nil user.user_sessions.reload[0][:revoked_at]
   end
 
-  test "allowed forgery protection won't destroy session when using API controller" do
+  test "forgery protection is skipped for API requests without authentication" do
+    provider = FactoryBot.create(:provider_account)
+    host! provider.external_admin_domain
+
+    ApplicationController.any_instance.expects(:verify_authenticity_token).never
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :forbidden
+  end
+
+  test "forgery protection is skipped for API requests with access token" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
-
     host! provider.external_admin_domain
+
+    ApplicationController.any_instance.expects(:verify_authenticity_token).never
 
     with_forgery_protection do
       post admin_api_signup_path(format: :json), params: {
         access_token: token, org_name: 'Alaska',
         username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :created
+  end
+
+  test "forgery protection is skipped for API requests with basic auth and access token" do
+    provider = FactoryBot.create(:provider_account)
+    user = provider.admins.first
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
+    host! provider.external_admin_domain
+
+    ApplicationController.any_instance.expects(:verify_authenticity_token).never
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), headers: {
+        Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
+      }, params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :created
+  end
+
+  test "forgery protection is skipped for API requests with basic auth and provider key" do
+    provider = FactoryBot.create(:provider_account)
+    token = provider.api_key
+    host! provider.external_admin_domain
+
+    ApplicationController.any_instance.expects(:verify_authenticity_token).never
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), headers: {
+        Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
+      }, params: {
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
       }
     end
     assert_response :created

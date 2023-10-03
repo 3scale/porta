@@ -30,7 +30,7 @@ When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |inv
   end
 end
 
-When /^(?:|I |they )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
+When /^(?:|I |they |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
     click_link(link, exact: true, visible: !invisible)
   end
@@ -149,7 +149,7 @@ end
 #   end
 # end
 
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then /^(?:|I |they )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
   with_scope(selector) do
     refute_text :visible, regex

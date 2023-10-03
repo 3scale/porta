@@ -29,7 +29,7 @@ module System
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
         @release = ThreeScale.saas? ? DEFAULT_VERSION : info.fetch('release', DEFAULT_VERSION)
-        @deployed_at = info.fetch('deployed_at') { Time.now }
+        @deployed_at = info.fetch('deployed_at') { Time.now.utc }
         @error = info.fetch(:error) if info.key?(:error)
       end
 
@@ -88,8 +88,8 @@ module System
 
     def self.load_info!(deploy_info = parse_deploy_info)
       self.info = Info.new(deploy_info)
-    rescue StandardError => error
-      self.info = InvalidInfo.new(error)
+    rescue StandardError => exception
+      self.info = InvalidInfo.new(exception)
     end
   end
 end

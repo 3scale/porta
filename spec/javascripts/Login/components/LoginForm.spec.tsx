@@ -8,6 +8,7 @@ import type { FocusEvent } from 'react'
 import type { Props } from 'Login/components/LoginForm'
 
 const defaultProps: Props = {
+  flashMessages: [],
   providerSessionsPath: 'sessions-path',
   session: { username: null }
 }

@@ -7,7 +7,7 @@ import type { Props } from 'Login/components/ChangePasswordPage'
 const defaultProps: Props = {
   lostPasswordToken: 'foo',
   url: 'foo/bar',
-  errors: []
+  flashMessages: []
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePasswordPage {...{ ...defaultProps, ...props }} />)
@@ -18,7 +18,7 @@ it('should render itself', () => {
 })
 
 it('should render with server side errors when present', () => {
-  const wrapper = mountWrapper({ errors: [{ type: 'error', message: 'Ooops!' }] })
+  const wrapper = mountWrapper({ flashMessages: [{ type: 'error', message: 'Ooops!' }] })
   expect(wrapper).toMatchSnapshot()
 })
 

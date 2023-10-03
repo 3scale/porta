@@ -9,13 +9,13 @@ import {
 
 import { validateLogin } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
-import { LoginAlert } from 'Login/components/FormAlert'
+import { LoginAlert } from 'Login/components/LoginAlert'
 
 import type { FlashMessage } from 'Types/FlashMessages'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  error?: FlashMessage;
+  flashMessages: FlashMessage[];
   providerSessionsPath: string;
   session: {
     username: string | null;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const LoginForm: FunctionComponent<Props> = ({
-  error,
+  flashMessages,
   providerSessionsPath,
   session
 }) => {
@@ -57,6 +57,8 @@ const LoginForm: FunctionComponent<Props> = ({
   const usernameValidated = (validationVisibility.username && usernameErrors) ? 'error' : 'default'
   const passwordValidated = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
 
+  const alert = flashMessages.length ? flashMessages[0] : undefined
+
   return (
     <Form
       noValidate
@@ -66,7 +68,7 @@ const LoginForm: FunctionComponent<Props> = ({
       id="new_session"
       method="post"
     >
-      <LoginAlert error={error} />
+      <LoginAlert message={alert?.message} type={alert?.type} />
 
       <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />

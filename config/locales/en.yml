@@ -391,6 +391,12 @@ en:
 
   provider:
     passwords:
+      destroy:
+        success: |
+          We sent an email with password reset instructions to: %{email}. If you do not
+          receive it soon, check your spam folder or request a password reset again.
+      update:
+        success: The password has been changed.
       new:
         has_password: 'User already has a password. Use it to change the password.'
 
@@ -944,6 +950,7 @@ en:
               blank: "can't be blank"
             password:
               blank: "can't be blank"
+          current_password_incorrect: "is incorrect"
           last_admin: "Can't delete last admin"
 
         account:
@@ -1175,6 +1182,7 @@ en:
     signups:
       create:
         notice: "Thanks for signing up! You can now sign in."
+        error: "There are some errors:\n%{errors}"
       already_logged_in: 'You are already signed up. Log out if you want to sign up again.'
 
     services:
