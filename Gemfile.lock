@@ -750,6 +750,7 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
+    shoulda-context (2.0.0)
     sidekiq (6.4.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -1043,6 +1044,7 @@ DEPENDENCIES
   sass-rails (~> 5.0.8)
   secure_headers (~> 6.3.0)
   selenium-webdriver (~> 3.142)
+  shoulda-context (~> 2.0)
   sidekiq (~> 6.4.0)
   sidekiq-batch
   sidekiq-cron

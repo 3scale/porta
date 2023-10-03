@@ -211,6 +211,8 @@ group :test do
   gem 'rspec_api_documentation'
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
+  gem 'shoulda-context', '~> 2.0'
+
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
   gem 'minitest', '5.10.3'
   gem 'minitest-ci', require: false
