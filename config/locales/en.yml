@@ -931,6 +931,7 @@ en:
               blank: "can't be blank"
             password:
               blank: "can't be blank"
+          current_password_incorrect: "is incorrect"
           last_admin: "Can't delete last admin"
 
         account:
