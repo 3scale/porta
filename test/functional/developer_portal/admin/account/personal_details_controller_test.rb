@@ -61,6 +61,6 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
     login_as @buyer.admins.first
     put :update, params: { user: {username: 'test', email: 'test@example.com'}}
     assert_response :success
-    assert_equal flash[:error], 'Current password is incorrect.'
+    assert_equal flash[:error], 'Current password is incorrect'
   end
 end
