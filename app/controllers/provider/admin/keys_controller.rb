@@ -15,7 +15,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   def update
     user_key = params[:cinstance][:user_key]
     if user_key.blank?
-      @error = t('activerecord.errors.models.cinstance.user_key.blank')
+      @error = t('activerecord.errors.models.cinstance.attributes.user_key.blank')
     else
       @cinstance.user_key = user_key
       if @cinstance.save

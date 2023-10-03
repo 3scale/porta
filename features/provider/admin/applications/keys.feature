@@ -34,14 +34,14 @@ Feature: Applications details
       And fill in "User key" with "   "
       And press "Save"
       Then the application's user key has not changed
-      And should see "Invalid. Use only alphanumeric characters"
+      And should see "Key can't be blank."
 
     Scenario: Set custom user key fails
       When follow "Set a custom User Key" within the API Credentials card
       And fill in "User key" with "invalid-Ñ$%"
       And press "Save"
       Then the application's user key has not changed
-      And should see "Invalid. Use only alphanumeric characters"
+      And should see "Invalid characters."
 
   Rule: Backend v2
     Background:
