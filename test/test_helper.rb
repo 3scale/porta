@@ -52,8 +52,6 @@ class ActiveSupport::TestCase
   self.use_transactional_tests = true
   self.use_instantiated_fixtures  = false
 
-  extend Paperclip::Shoulda::Matchers
-
   Aws.config[:s3] = { stub_responses: true }
 
   def assert_not_match(regexp, str)
