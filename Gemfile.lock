@@ -39,17 +39,17 @@ GIT
 
 GIT
   remote: https://github.com/3scale/swagger-ui_rails.git
-  revision: f88bb8bed4fdb57fcf5be6425f3fc10c638788d1
-  branch: dev-2.1.3
-  specs:
-    swagger-ui_rails2 (0.1.7)
-
-GIT
-  remote: https://github.com/3scale/swagger-ui_rails.git
   revision: 13968af8f2845f448a0b88c4ffe4cf93477c90fa
   branch: dev
   specs:
     swagger-ui_rails (0.1.7)
+
+GIT
+  remote: https://github.com/3scale/swagger-ui_rails.git
+  revision: f88bb8bed4fdb57fcf5be6425f3fc10c638788d1
+  branch: dev-2.1.3
+  specs:
+    swagger-ui_rails2 (0.1.7)
 
 GIT
   remote: https://github.com/prawnpdf/prawn-table.git
@@ -647,6 +647,8 @@ GEM
     recursive-open-struct (1.1.3)
     redcarpet (3.5.1)
     redis (4.2.5)
+    redis-client (0.17.0)
+      connection_pool
     redis-namespace (1.7.0)
       redis (>= 3.0.4)
     redis-prescription (1.0.0)
@@ -756,10 +758,11 @@ GEM
     shoulda-context (2.0.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (6.4.2)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.2.0)
+    sidekiq (7.1.3)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.14.0)
     sidekiq-batch (0.1.9)
       sidekiq (>= 3)
     sidekiq-cron (1.9.1)
@@ -1050,7 +1053,7 @@ DEPENDENCIES
   secure_headers (~> 6.3.0)
   selenium-webdriver (~> 3.142)
   shoulda (~> 4.0)
-  sidekiq (~> 6.4.0)
+  sidekiq (~> 7.1.3)
   sidekiq-batch
   sidekiq-cron
   sidekiq-lock
