@@ -4,10 +4,10 @@ Given "I have enough email configs to fill many pages" do
   25.times { FactoryBot.create(:email_configuration, account: master_account) }
 end
 
-Then "I see my email configurations sorted by last updated date" do
+Then "the latest email configurations are listed first" do
   with_scope email_configurations_table do
     rows_emails = find_all('tbody tr td:first-child').first(5).map(&:text)
-    assert_same_elements rows_emails, master_account.email_configurations.order(updated_at: :desc).first(5).pluck(:email)
+    assert_same_elements rows_emails, master_account.email_configurations.order(id: :desc).first(5).pluck(:email)
   end
 end
 
