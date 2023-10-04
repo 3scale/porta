@@ -924,17 +924,6 @@ en:
           attributes:
             plan:
               not_allowed: "not allowed in this context"
-            keys:
-              invalid: Invalid characters. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters.
-              taken: Key is already taken. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters.
-              too_short: Key is too short. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters.
-              too_long: Key is too long. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and between 5 and 255 characters.
-            user_key:
-              blank: Key can't be blank. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters.
-              invalid: Invalid characters. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters.
-              taken: Key is already taken. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters.
-              too_short: Key is too short. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters.
-              too_long: Key is too long. Use only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and up to 256 characters.
 
         application_key:
           attributes:

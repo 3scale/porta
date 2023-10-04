@@ -315,7 +315,7 @@ class CinstanceTest < ActiveSupport::TestCase
     cinstance_two = FactoryBot.build(:cinstance, plan: plan, user_key: 'foo')
 
     assert cinstance_two.invalid?
-    assert_match /Key is already taken./, cinstance_two.errors[:user_key].to_s
+    assert_match /has already been taken/, cinstance_two.errors[:user_key].to_s
 
     cinstance_two.user_key = 'bar'
     assert cinstance_two.valid?

@@ -8,7 +8,8 @@
     <%# HACK: Remove helperText and add it again, since replacing the text also removes the icon. %>
     input.closest('.pf-c-form__group-control').children[1].remove()
 
-    input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
+    input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text",
+        locals: { error: [@error.to_sentence, t('formtastic.hints.cinstance.user_key')].join('. ') } %>')
     input.setAttribute('aria-invalid', 'true')
 
     $.colorbox.resize();

@@ -34,14 +34,14 @@ Feature: Applications details
       And fill in "User key" with "   "
       And press "Save"
       Then the application's user key has not changed
-      And should see "Key can't be blank."
+      And should see "User key can't be blank."
 
     Scenario: Set custom user key fails
       When follow "Set a custom User Key" within the API Credentials card
       And fill in "User key" with "invalid-Ñ$%"
       And press "Save"
       Then the application's user key has not changed
-      And should see "Invalid characters."
+      And should see "User key invalid"
 
   Rule: Backend v2
     Background:
@@ -54,6 +54,13 @@ Feature: Applications details
       And fill in "Key" with "new-valid-key"
       And press "Save"
       Then should see "new-valid-key" within the API Credentials card
+
+    Scenario: Setting an invalid custom key fails
+      Given they are reviewing the buyer's application details
+      When follow "Add Custom key" within the API Credentials card
+      And fill in "Key" with "invalid-Ñ$%"
+      And press "Save"
+      Then should see "Value invalid."
 
     Scenario: Adding a random key
       Given the application has no keys

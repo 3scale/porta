@@ -6,27 +6,28 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
 
   layout false
 
+  # Show a modal window for adding a custom Application Key
   def new
   end
 
+  # Show a modal window for setting a custom User Key
   def edit
   end
 
+  # Set a custom User Key
   def update
     user_key = params[:cinstance][:user_key]
     if user_key.blank?
-      @error = t('activerecord.errors.models.cinstance.attributes.user_key.blank')
+      @cinstance.errors.add(:user_key, :blank)
     else
       @cinstance.user_key = user_key
-      if @cinstance.save
-        @notice = t('.update.success')
-      else
-        @error = @cinstance.errors.messages[:user_key].first
-      end
+      @notice = t('.update.success') if @cinstance.save
     end
+    @error = @cinstance.errors.full_messages_for(:user_key).presence
     respond_to(:js)
   end
 
+  # Create a custom Application Key
   def create
     @key = @cinstance.application_keys.add(params[:key])
 
@@ -34,8 +35,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
       @keys = @cinstance.application_keys.pluck_values
       @notice = t('.create.success')
     else
-      error_type = @key.errors.details[:value].first[:error]
-      @error = t(errot_type, scope: 'activerecord.errors.models.cinstance.keys')
+      @error = @key.errors.full_messages.presence
     end
 
     respond_to(:js)
