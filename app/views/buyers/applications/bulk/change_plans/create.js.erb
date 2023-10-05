@@ -7,7 +7,6 @@ const paidCol = document.querySelector('[data-label="Paid?"]') !== null;
 
   <%# FIXME: these 2 if blocks should be handled by ruby, with the same conditions used when rendering the table %>
   if (plansCol) {
-    console.log({ plansCol })
     document.querySelector('#<%= id %> td[data-label="Plan"]').innerHTML = '<%= j link_to_plan_edit(plan) %>'
   }
 
