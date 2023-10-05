@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 When /^item "(.+?)" is (un)?selected$/ do |name, unselect|
-  find(:xpath, "//td[text()='#{name}']/..")
+  find('tbody td', text: name)
+    .find(:xpath, '..')
     .find('.select input[type="checkbox"]')
     .set(unselect.nil?)
 end
@@ -24,6 +25,14 @@ Then "the bulk operations {are} visible" do |visible|
   assert has_css?(bulk_operations_selector, visible: visible)
 end
 
+Then "the bulk operation has failed for {string}" do |name|
+  assert_match "There were some errors:\n#{name}", bulk_errors_container.text
+end
+
 def bulk_operations_selector
   '#bulk-operations'
+end
+
+def bulk_errors_container
+  find('.bulk_operation.errors')
 end

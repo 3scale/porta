@@ -1,5 +1,5 @@
 @javascript
-Feature: Accounts Listing
+Feature: Buyer accounts index
 
   Background:
     Given a provider is logged in
@@ -17,14 +17,6 @@ Feature: Accounts Listing
     Scenario: The account plan is not in the table
       Given they go to the buyer accounts page
       Then the table does not have a column "Plan"
-
-    Scenario: Bulk operations does not include Change account plan
-      Given the provider has "account_plans" switch allowed
-      And they go to the buyer accounts page
-      When item "Alice" is selected
-      Then the following bulk operations are available:
-        | Send email   |
-        | Change state |
 
   Rule: Provider has many account plans
     Background:
@@ -55,37 +47,3 @@ Feature: Accounts Listing
       When they search and there are no results
       Then they should see an empty state
       And they should be able to reset the search
-
-    Scenario: Bulk operations when Account Plans are disabled
-      Given the provider has "account_plans" switch denied
-      And they go to the buyer accounts page
-      When item "Alice" is selected
-      Then the following bulk operations are available:
-        | Send email   |
-        | Change state |
-
-    Scenario: Bulk operations when Account Plans are enabled
-      Given the provider has "account_plans" switch allowed
-      And they go to the buyer accounts page
-      When item "Alice" is selected
-      Then the following bulk operations are available:
-        | Send email          |
-        | Change account plan |
-        | Change state        |
-
-    Scenario: Bulk operations card shows when an items are selected
-      Given they go to the buyer accounts page
-      When item "Alice" is selected
-      And item "Bob" is selected
-      Then the bulk operations are visible
-      And should see "You have selected 2 accounts and you can make following operations with them:"
-      But item "Alice" is unselected
-      And item "Bob" is unselected
-      Then the bulk operations are not visible
-
-    Scenario: Select all items in the table
-      Given they go to the buyer accounts page
-      And they select all items in the table
-      Then the bulk operations are visible
-      When they unselect all items in the table
-      Then the bulk operations are not visible

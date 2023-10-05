@@ -237,6 +237,18 @@ When "I won't be able to select an application plan" do
   assert app_plan_select.has_css?('.pf-m-disabled')
 end
 
+Given "the owner of {application} has email {string}" do |app, email|
+  app.account.admins.first.update_attribute(:email, email)
+end
+
+Given "the application will return an error when suspended" do
+  Cinstance.any_instance.stubs(:suspend).returns(false).once
+end
+
+Given "the application will return an error when changing its plan" do
+  Cinstance.any_instance.stubs(:change_plan).returns(false).once
+end
+
 def fill_in_new_application_form(name: 'My App', service_name: 'API')
   pf4_select_first(from: 'Account') if page.has_css?('.pf-c-form__label', text: 'Account')
   pf4_select(service_name, from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')

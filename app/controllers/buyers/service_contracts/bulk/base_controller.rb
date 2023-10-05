@@ -24,6 +24,6 @@ class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseControlle
   end
 
   def errors_template
-    'buyers/applications/bulk/shared/errors.html'
+    'buyers/service_contracts/bulk/shared/errors.html'
   end
 end
