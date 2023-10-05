@@ -21,7 +21,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
       @notice = t('.update.success') if @cinstance.save
     end
 
-    if (error = @cinstance.errors.messages[:user_key].presence&.to_sentence)
+    if (error = @cinstance.errors.full_messages_for(:user_key).presence&.to_sentence)
       @error = "#{error}. #{t('formtastic.hints.cinstance.user_key')}"
     end
 
@@ -36,7 +36,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
       @notice = t('.create.success')
     end
 
-    if (error = @key.errors.messages[:value].presence&.to_sentence)
+    if (error = @key.errors.full_messages_for(:value).presence&.to_sentence)
       @error = "#{error}. #{t('formtastic.hints.cinstance.key')}"
     end
 
