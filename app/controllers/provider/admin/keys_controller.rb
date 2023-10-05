@@ -15,15 +15,16 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   def update
     user_key = params[:cinstance][:user_key]
     if user_key.blank?
-      @error = t('activerecord.errors.models.cinstance.attributes.user_key.blank')
+      @cinstance.errors.add(:user_key, :blank)
     else
       @cinstance.user_key = user_key
-      if @cinstance.save
-        @notice = t('.update.success')
-      else
-        @error = @cinstance.errors.messages[:user_key].first
-      end
+      @notice = t('.update.success') if @cinstance.save
     end
+
+    if (error = @cinstance.errors.messages[:user_key].presence&.to_sentence)
+      @error = "#{error}. #{t('formtastic.hints.cinstance.user_key')}"
+    end
+
     respond_to(:js)
   end
 
@@ -33,9 +34,10 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
     if @key.persisted?
       @keys = @cinstance.application_keys.pluck_values
       @notice = t('.create.success')
-    else
-      error_type = @key.errors.details[:value].first[:error]
-      @error = t(errot_type, scope: 'activerecord.errors.models.cinstance.keys')
+    end
+
+    if (error = @key.errors.messages[:value].presence&.to_sentence)
+      @error = "#{error}. #{t('formtastic.hints.cinstance.key')}"
     end
 
     respond_to(:js)
