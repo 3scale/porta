@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_19_112703) do
+ActiveRecord::Schema.define(version: 2023_09_27_012615) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -235,10 +235,6 @@ ActiveRecord::Schema.define(version: 2023_07_19_112703) do
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "billing_locks", primary_key: "account_id", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
   end
 
   create_table "billing_strategies", force: :cascade do |t|
