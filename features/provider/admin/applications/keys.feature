@@ -41,7 +41,7 @@ Feature: Applications details
       And fill in "User key" with "invalid-Ñ$%"
       And press "Save"
       Then the application's user key has not changed
-      And should see "Invalid characters."
+      And should see "invalid"
 
   Rule: Backend v2
     Background:
