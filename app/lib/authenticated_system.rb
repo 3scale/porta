@@ -22,7 +22,7 @@ module AuthenticatedSystem
     clear_current_user
     super
   end
-  public :reset_session # required by protect_from_forgery with: :reset_session
+  public :reset_session # required by ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
 
   # TODO: move this to middleware
   def clear_current_user

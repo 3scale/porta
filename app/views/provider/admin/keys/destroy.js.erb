@@ -1,13 +1,13 @@
 (function($) {
   var container = $("#application_keys");
 
-  <%- if  @remove -%>
-    container.find("#application_key_<%= escape_javascript(@key) %>").fadeOut(function() {
+  <%- if @remove -%>
+    container.find("#<%= dom_id(@remove) %>").fadeOut(function() {
       $(this).remove();
     });
+    $.flash.notice('<%= @flash %>');
   <%- else -%>
-    //alert('Mandatory at least one application key.')
-    $.flash.error('<%= escape_javascript(flash.now[:error]) %>');
+    $.flash.error('<%= @flash %>');
   <%- end -%>
 
   <%- if @cinstance.application_keys.can_add? -%>

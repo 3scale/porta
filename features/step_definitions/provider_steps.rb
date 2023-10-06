@@ -247,8 +247,7 @@ When(/^the provider upgrades to plan "(.+?)"$/) do |name|
 end
 
 When(/I authenticate by Oauth2$/) do
-  # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
-  visit "/auth/#{@authentication_provider.system_name}/callback"
+  try_login_with_sso
 end
 
 And(/^the provider has one buyer$/) do

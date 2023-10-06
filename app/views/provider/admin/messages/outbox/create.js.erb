@@ -2,19 +2,16 @@
   jQuery.colorbox.close();
   jQuery.flash.notice("<%= @notice %>");
 <% else %>
-  <% errors = @message.errors %>
-
   <% [:subject, :body].each do |field| %>
-    <% if errors.include?(field) %>
+    <% if errors = @message.errors[field].presence %>
       const input = document.getElementById('<%= "message_#{field.to_s}" %>')
-      console.log(input, input.getAttribute('aria-invalid'))
 
       if (input.getAttribute('aria-invalid') === 'true') {
         // HACK: Remove helperText and add it again, since replacing the text also removes the icon.
         input.closest('.pf-c-form__group-control').children[1].remove()
       }
 
-      input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: errors[field].first } %>')
+      input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: errors.first } %>')
       input.setAttribute('aria-invalid', 'true')
     <% end %>
   <% end %>

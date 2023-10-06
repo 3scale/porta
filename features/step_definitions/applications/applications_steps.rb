@@ -17,16 +17,20 @@ Given "{buyer} has application {string} with plan {string}" do |buyer, name, pla
                     name:  name)
 end
 
+Given "{buyer} has (an )application {string}" do |buyer, name|
+  plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
+  FactoryBot.create(:cinstance, user_account: buyer,
+                                plan: plan,
+                                name: name,
+                                description: 'Blah blah')
+end
+
 Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
   FactoryBot.create(:cinstance, :user_account => buyer,
                       :plan         => plan,
                       :name         => name,
                       :description  => description)
-end
-
-Given /^buyer "([^"]*)" has application "([^"]*)"$/ do |buyer_name, application_name|
-  step %(buyer "#{buyer_name}" has application "#{application_name}" with description "Blah blah")
 end
 
 Given "{buyer} has application {string} with ID {string}" do |buyer, name, id|
@@ -247,6 +251,10 @@ end
 
 Given "the application will return an error when changing its plan" do
   Cinstance.any_instance.stubs(:change_plan).returns(false).once
+end
+
+they are reviewing the buyer's application details" do
+  visit provider_admin_application_path(@buyer.application_contracts.first)
 end
 
 def fill_in_new_application_form(name: 'My App', service_name: 'API')

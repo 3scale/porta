@@ -409,6 +409,14 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      keys:
+        create:
+          success: A new key has been added.
+        destroy:
+          error: At least one application key is required.
+          success: The key has been removed.
+        update:
+          success: User key has been updated.
 
       authentication_providers:
         form:
@@ -977,6 +985,7 @@ en:
               blank: "can't be blank"
             password:
               blank: "can't be blank"
+          current_password_incorrect: "is incorrect"
           last_admin: "Can't delete last admin"
 
         account:
@@ -1282,7 +1291,8 @@ en:
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 256 characters at most."
+        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and up to 256 characters."
+        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and between 5 and 255 characters."
 
       cms:
         page:

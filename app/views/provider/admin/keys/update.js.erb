@@ -1,8 +1,15 @@
-  <% if @cinstance.valid? -%>
+  <% if @error.nil? %>
     $.colorbox.close();
-    $('#cinstance-user-key').html('<%= @cinstance.user_key %>');
-  <% else -%>
-    $("#invalid-key-warning").text('<%= flash[:error] %>');
-    $("#invalid-key-warning").show();
+    document.getElementById('cinstance-user-key').innerHTML = '<%= @cinstance.user_key %>'
+    $.flash.notice('<%= @notice %>')
+  <% else %>
+    const input = document.getElementById('cinstance_user_key')
+
+    <%# HACK: Remove helperText and add it again, since replacing the text also removes the icon. %>
+    input.closest('.pf-c-form__group-control').children[1].remove()
+
+    input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
+    input.setAttribute('aria-invalid', 'true')
+
     $.colorbox.resize();
-  <% end -%>
+  <% end %>

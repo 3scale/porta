@@ -10,25 +10,21 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
 
   liquify prefix: 'user'
 
+  before_action :verify_current_password, only: :update
+
   def show
     assign_user_drop
   end
 
   def update
-    #TODO: write tests for this
     resource.validate_fields!
-    update! do |success, failure|
-      success.html do
-        if resource.just_changed_password?
-          resource.kill_user_sessions(user_session)
-        end
-        redirect_to(redirect_path)
-      end
+    if resource.errors.empty? && resource.update(user_params)
+      resource.kill_user_sessions(user_session) if resource.just_changed_password?
 
-      failure.html do
-        assign_user_drop
-        render :action => 'show'
-      end
+      redirect_to admin_account_users_path, notice: 'User was successfully updated.'
+    else
+      assign_user_drop
+      render action: :show
     end
   end
 
@@ -49,16 +45,17 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     end
   end
 
-  def redirect_path
-    if params[:origin] == "users"
-      if current_account.provider?
-        provider_admin_account_users_path
-      else
-        admin_account_users_path
-      end
-    else
-      admin_account_personal_details_path
-    end
+  def user_params
+    params.require(:user).permit([:current_password] +
+                                   resource.special_fields +
+                                   resource.defined_fields.map(&:name))
   end
 
+  def verify_current_password
+    return unless current_user.using_password?
+    return if current_user.authenticated?(user_params[:current_password])
+
+    resource.errors.add(:current_password, t('activerecord.errors.models.user.current_password_incorrect'))
+    flash.now[:error] = resource.errors.full_messages.to_sentence
+  end
 end
