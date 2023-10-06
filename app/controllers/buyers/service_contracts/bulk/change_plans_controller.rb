@@ -11,7 +11,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
     # TODO: really change plan
     return unless (plan = service.service_plans.find_by(id: plan_id_param))
 
-    service_contracts.reject { |contract| contract.plan.id == plan.id }
+    service_contracts.reject { |contract| contract.plan_id == plan.id }
                       .each do |contract|
                         @errors << contract unless contract.change_plan(plan)
                       end
