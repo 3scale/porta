@@ -6,7 +6,6 @@ class FieldsDefinitionDecorator < ApplicationDecorator
   def new_application_data(provider)
     type = field_type(provider)
     input_name = "#{target.downcase}#{type == 'extra' ? '[extra_fields]' : ''}[#{name}]"
-    required_value = name != 'description' # Set required to false for the description field
     {
       hidden: hidden,
       required: required_value,
