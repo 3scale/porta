@@ -10,7 +10,7 @@ class Provider::Admin::Account::EmailConfigurationsPresenter
     @provider = provider
     @email_configuration = email_configuration
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
-    @sorting_params = "#{params[:sort] || 'updated_at'} #{params[:direction] || 'desc'}"
+    @sorting_params = "#{params[:sort] || 'id'} #{params[:direction] || 'desc'}"
     @search = ThreeScale::Search.new(params[:search] || params)
   end
 
