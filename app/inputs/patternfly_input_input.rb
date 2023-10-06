@@ -31,8 +31,12 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
   end
 
   def helper_text
-    return if errors.empty?
+    unless errors.empty? # rubocop:disable Style/IfUnlessModifier
+      return template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
+    end
 
-    template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
+    if hint? # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
+      content_tag(:p, hint_text, class: 'pf-c-form__helper-text')
+    end
   end
 end

@@ -66,6 +66,12 @@ module HtmlSelectorsHelper
     when /^section (.*)$/
       [:xpath, "//button[text() = '#{$1}']/following-sibling::section[1]"]
 
+    #
+    # Application
+    #
+    when 'the API Credentials card'
+      'div#application_keys'
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" \
             "Add mapping to #{__FILE__}"

@@ -1,28 +1,37 @@
-<h2>Add key</h2>
+<div class="pf-c-card__title">
+  &nbsp;
+</div>
 
-<p id="invalid-key-warning" style="display:none;">&nbsp;</p>
+<div class="pf-c-card__body">
+  <%= form_tag provider_admin_application_keys_path(@cinstance), class: 'pf-c-form pf-m-limit-width',
+                                                                 remote: 'true' do |form| %>
+    <div class="pf-c-form__group">
+      <div class="pf-c-form__group-label">
+        <label class="pf-c-form__label" for="key">
+          <span class="pf-c-form__label-text">Key</span>&nbsp;<span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>
+        </label>
+      </div>
+      <div class="pf-c-form__group-control">
+        <input
+          autocomplete="off"
+          class="pf-c-form-control"
+          id="key"
+          name="key"
+          required="true"
+          size="40"
+          type="text"
+        />
+        <p class="pf-c-form__helper-text" id="key-helper">
+          <%= t('formtastic.hints.cinstance.key') %>
+        </p>
+      </div>
+    </div>
 
-<%= form_tag provider_admin_application_keys_path(@cinstance), :class => 'remote' do |form| %>
-  <table class='plan-edit-popup'>
-    <tr>
-      <td style="vertical-align: top">
-        <%= label_tag :key, "Key" %>
-      </td>
-      <td>
-	  <%= text_field_tag :key, "", :class => 'text', :size => "40" %>
-	      <p class="inline-hints">
-          Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-),<br/>
-	    between 5 and 256 characters long. No spaces allowed.</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <%= link_to 'Cancel', "#", :class => 'fancybox-close less-important-button' %>
-      </td>
-      <td style="text-align: right;">
-        <%= submit_tag "Save", :class => 'important-button' %>
-      </td>
-    </tr>
-  </table>
-<% end %>
+    <div class="pf-c-form__group pf-m-action">
+      <div class="pf-c-form__actions">
+        <button class="pf-c-button pf-m-primary" type="submit" data-disable-with="Saving...">Save</button>
+        <button class="pf-c-button pf-m-link fancybox-close" type="submit">Cancel</button>
+      </div>
+    </div>
+  <% end %>
+</div>

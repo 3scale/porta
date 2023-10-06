@@ -33,10 +33,14 @@ Given /^a buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, 
 end
 
 Given(/^a buyer signed up to the provider$/) do
-  step %(an approved buyer "John" signed up to provider "#{@provider.internal_domain}")
-  @buyer = @provider.buyer_accounts.find_by!(org_name: 'John')
-  step 'buyer "John" has application "TimeMachine"'
-  @application = @buyer.application_contracts.find_by_name!('TimeMachine')
+  org_name = 'John'
+  app_name = 'My App'
+
+  step %(an approved buyer "#{org_name}" signed up to provider "#{@provider.internal_domain}")
+  step %(buyer "#{org_name}" has application "#{app_name}")
+
+  @buyer = @provider.buyer_accounts.find_by!(org_name: org_name)
+  @application = @buyer.application_contracts.find_by!(name: app_name)
 end
 
 Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|

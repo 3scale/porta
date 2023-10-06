@@ -43,7 +43,7 @@ When "I navigate to the {application} of the partner {string}" do |app, partner|
   end
 end
 
-When /^I navigate to the default application of the provider$/ do
+When "they are reviewing the provider's application details" do
   provider = Account.providers.first!
   app = provider.bought_cinstances.first!
   step %(I navigate to the page of the partner "#{provider.org_name}")

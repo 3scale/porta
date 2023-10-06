@@ -9,6 +9,7 @@ Then /^I should see user key is different from what it was$/ do
   remove_instance_variable(:@user_key)
 end
 
-Then "{application} should have user key {string}" do |app, user_key|
-  app.user_key.should == user_key
+And "{application}'s user key has not changed" do |application|
+  old = application.user_key
+  assert_equal old, application.reload.user_key
 end

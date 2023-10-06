@@ -1,14 +1,20 @@
-<h2>Set Custom User Key</h2>
+<div class="pf-c-card__title">
+  &nbsp;
+</div>
 
-<p id="invalid-key-warning" style="display:none;">&nbsp;</p>
+<div class="pf-c-card__body">
+  <%= semantic_form_for @cinstance, url: provider_admin_application_key_path(@cinstance, @cinstance.user_key),
+                                    remote: true,
+                                    html: { class: 'pf-c-form pf-m-limit-width' } do |form| %>
+    <%= form.input :user_key, as: :patternfly_input,
+                              required: true,
+                              input_html: { size: 100, value: nil, required: true, autocomplete: 'off' } %>
 
-<%= semantic_form_for @cinstance, :url => provider_admin_application_key_path(@cinstance, @cinstance.user_key), remote: true do |form| %>
-  <%= form.inputs do %>
-    <%= form.input :user_key, :label => 'Custom User Key', :input_html => {:size => 100, :value => ''} %>
+    <div class="pf-c-form__group pf-m-action">
+      <div class="pf-c-form__actions">
+        <button class="pf-c-button pf-m-primary" type="submit" data-disable-with="Saving...">Save</button>
+        <button class="pf-c-button pf-m-link fancybox-close" type="submit">Cancel</button>
+      </div>
+    </div>
   <% end %>
-
-  <%= form.actions do %>
-    <%= link_to 'Cancel', "#", :class => 'fancybox-close less-important-button' %>
-    <%= form.commit_button 'Set Custom Key' %>
-  <% end %>
-<% end %>
+</div>
