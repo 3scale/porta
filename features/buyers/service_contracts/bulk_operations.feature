@@ -131,7 +131,7 @@ Feature: Service subscriptions bulk operations
     And press "Change state"
     When select "Suspend" from "Action"
     And press "Change state" and I confirm dialog box within the modal
-    Then the bulk operation has failed for "Another API (Jane)"
+    Then the bulk operation has failed for "Subscription of Jane to service Another API"
     And the table should contain the following:
       | Account | Service     | State |
       | Bob     | Fancy API   | live  |
@@ -145,7 +145,7 @@ Feature: Service subscriptions bulk operations
     And press "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and I confirm dialog box
-    Then the bulk operation has failed for "Fancy API (Alice)"
+    Then the bulk operation has failed for "Subscription of Alice to service Fancy API"
     And the table should contain the following:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan A |
