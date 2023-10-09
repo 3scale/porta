@@ -1,16 +1,13 @@
-div#bulk-operations
-  h3 Bulk operations
+= render 'shared/bulk_operations' do
   p
     span.count
     '  messages selected
 
     - if messages.total_pages > 1
-      = link_to "(select all #{messages.total_entries} messages)", '#', class: 'select-total-entries',
-        data: { 'association-name' => 'messages' }
+      - text = "(select all #{messages.total_entries} messages)"
+      = link_to text, '#', class: 'select-total-entries',
+                           data: { 'association-name': 'messages', 'default-text': text, 'total-entries': messages.total_entries }
 
-  dl
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
     = bulk_action 'Delete', new_provider_admin_messages_bulk_trash_path(scope: scope),
-      'Delete selected emails'
-
-- content_for :javascripts do
-  = javascript_include_tag 'bulk_operations.js'
+                            'Delete selected emails'

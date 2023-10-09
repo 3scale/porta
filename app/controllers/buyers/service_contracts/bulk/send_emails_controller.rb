@@ -4,6 +4,7 @@ class Buyers::ServiceContracts::Bulk::SendEmailsController < Buyers::ServiceCont
   def create
     send_emails
     handle_errors
+    super
   end
 
   private

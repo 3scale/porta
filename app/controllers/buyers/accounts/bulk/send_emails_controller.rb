@@ -4,6 +4,7 @@ class Buyers::Accounts::Bulk::SendEmailsController < Buyers::Accounts::Bulk::Bas
   def create
     send_emails
     handle_errors
+    super
   end
 
   alias recipients accounts

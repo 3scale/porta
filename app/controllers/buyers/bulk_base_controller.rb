@@ -76,4 +76,9 @@ class Buyers::BulkBaseController < FrontendController
   def handle_errors
     render errors_template, status: :unprocessable_entity, formats: [:html] if @errors.present?
   end
+
+  def notify_success
+    count = collection.length - @errors.length
+    @notice = t('.success', count: count)
+  end
 end

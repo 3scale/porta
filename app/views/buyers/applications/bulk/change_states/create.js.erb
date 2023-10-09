@@ -1,4 +1,6 @@
-<%- applications.each do |application| %>
-  $("#<%=dom_id(application)%>").find(".state").text("<%= escape_javascript application.state %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<% applications.each do |application| %>
+  document.querySelector('#<%= dom_id(application) %> td[data-label="State"]')
+    .innerText = '<%= application.state %>'
+<% end %>
+$.colorbox.close()
+$.flash('<%= j @notice %>')

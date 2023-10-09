@@ -6,6 +6,7 @@ class Buyers::ServiceContracts::Bulk::ChangeStatesController < Buyers::ServiceCo
   def create
     change_states
     handle_errors
+    super
   end
 
   private

@@ -1,4 +1,6 @@
-<%- @accounts.each do |account| %>
-  $("#<%=dom_id(account)%>").find(".plan").text("<%= escape_javascript account.bought_account_plan.name %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<% accounts.each do |account| %>
+  document.querySelector('#<%= dom_id(account) %> td[data-label="Plan"]')
+    .innerText = '<%= account.bought_account_plan.name %>'
+<% end %>
+$.colorbox.close()
+$.flash('<%= j @notice %>')

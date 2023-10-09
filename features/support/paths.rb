@@ -318,6 +318,7 @@ World(Module.new do
       admin_buyer_services_path
 
     when 'the service subscriptions list for provider',
+         'the service contracts admin page',
          'the subscriptions admin page',
          /^the subscriptions admin page with (\d+) records? per page$/
       admin_buyers_service_contracts_path(:per_page => $1)
@@ -366,13 +367,6 @@ World(Module.new do
     when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
       application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
       edit_provider_admin_application_path(application)
-
-    #
-    # Service contracts (provider side)
-    #
-    when 'the service contracts admin page'
-      admin_buyers_service_contracts_path
-
 
     #
     # Buyer management

@@ -4,6 +4,7 @@ class Buyers::Applications::Bulk::SendEmailsController < Buyers::Applications::B
   def create
     send_emails
     handle_errors
+    super
   end
 
   private

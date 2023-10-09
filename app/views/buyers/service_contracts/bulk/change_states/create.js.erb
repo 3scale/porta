@@ -1,4 +1,6 @@
-<%- service_contracts.each do |contract| %>
-  $("#<%=dom_id(contract)%>").find(".state").text("<%= escape_javascript contract.state %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<% service_contracts.each do |contract| %>
+  document.querySelector('#<%= dom_id(contract) %> td[data-label="State"]')
+    .innerText = '<%= contract.state %>'
+<% end %>
+$.colorbox.close()
+$.flash('<%= j @notice %>')
