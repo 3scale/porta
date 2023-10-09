@@ -16,12 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     showCloseButton: true
   }
 
+  const findSelectAllCheckbox = () => document.querySelector<HTMLInputElement>('table thead .select .select-all')
+  const findSelectTotalEntries = () => document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+
   function hrefFor (url: string) {
     // url address might already include some parameters
     const connector = url.includes('?') ? '&' : '?'
     let href = url.concat(connector, $('table tbody .select :checked').serialize())
 
-    const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+    const selectTotalEntries = findSelectTotalEntries()
     if (selectTotalEntries?.hasAttribute(dataSelectedTotal)) {
       href += '&selected_total_entries=true'
     }
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function prepareSelectAllCheckbox () {
-    document.querySelector<HTMLInputElement>('table thead .select .select-all')!
+    findSelectAllCheckbox()!
       .addEventListener('change', (event) => {
         const checked = (event.target as HTMLInputElement).checked
 
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selected = selectedRows()
     const unselected = document.querySelectorAll('table tbody tr:not(.selected').length
 
-    const checkbox = document.querySelector<HTMLInputElement>('table thead .select .select-all')!
+    const checkbox = findSelectAllCheckbox()!
 
     checkbox.indeterminate = selected > 0 && unselected > 0
     checkbox.checked = unselected === 0
@@ -82,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bulk.slideDown()
       setSelectedCount(selected)
 
-      const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+      const selectTotalEntries = findSelectTotalEntries()
       if (selectTotalEntries) {
         const isAllSelected = document.querySelectorAll('table tbody tr:not(.selected').length === 0
         if (isAllSelected) {
@@ -115,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleSelectTotalEntries () {
-    const selectTotalEntries = document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+    const selectTotalEntries = findSelectTotalEntries()
 
     if (!selectTotalEntries) {
       return
