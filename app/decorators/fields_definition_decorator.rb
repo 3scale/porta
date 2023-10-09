@@ -8,7 +8,7 @@ class FieldsDefinitionDecorator < ApplicationDecorator
     input_name = "#{target.downcase}#{type == 'extra' ? '[extra_fields]' : ''}[#{name}]"
     {
       hidden: hidden,
-      required: required_value,
+      required: required,
       label: label,
       name: input_name,
       id: input_name,
