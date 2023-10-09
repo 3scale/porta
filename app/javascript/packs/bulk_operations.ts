@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const findSelectAllCheckbox = () => document.querySelector<HTMLInputElement>('table thead .select .select-all')
   const findSelectTotalEntries = () => document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
+  const countUnselectedRows = () => document.querySelectorAll('table tbody tr:not(.selected').length
 
   function hrefFor (url: string) {
     // url address might already include some parameters
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateSelectAllCheckbox () {
     const selected = selectedRows()
-    const unselected = document.querySelectorAll('table tbody tr:not(.selected').length
+    const unselected = countUnselectedRows()
 
     const checkbox = findSelectAllCheckbox()!
 
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const selectTotalEntries = findSelectTotalEntries()
       if (selectTotalEntries) {
-        const isAllSelected = document.querySelectorAll('table tbody tr:not(.selected').length === 0
+        const isAllSelected = countUnselectedRows() === 0
         if (isAllSelected) {
           selectTotalEntries.classList.remove('hidden')
         } else {
