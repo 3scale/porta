@@ -253,7 +253,7 @@ Given "the application will return an error when changing its plan" do
   Cinstance.any_instance.stubs(:change_plan).returns(false).once
 end
 
-they are reviewing the buyer's application details" do
+Given "they are reviewing the buyer's application details" do
   visit provider_admin_application_path(@buyer.application_contracts.first)
 end
 
