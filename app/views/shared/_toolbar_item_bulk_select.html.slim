@@ -1,0 +1,25 @@
+- select_all_check_id = "select-all-check"
+- select_none_menu_id = "select-none-menu"
+- select_page_menu_id = "select-page-menu"
+- select_all_menu_id = "select-all-menu"
+- toggle_text_id = "toolbar-item-bulk-select-text"
+
+div class="pf-c-toolbar__item pf-m-bulk-select"
+  div class="pf-c-dropdown" id=""
+    div class="pf-c-dropdown__toggle pf-m-split-button"
+      label class="pf-c-dropdown__toggle-check" for=select_all_check_id
+        input id=select_all_check_id type="checkbox" aria-label="Select all"
+        span class="pf-c-dropdown__toggle-text" aria-hidden="true" id=toggle_text_id hidden=true
+          / Text inside this span is handled by bulk_operations.js
+      button class="pf-c-dropdown__toggle-button" type="button" aria-expanded="false" aria-label="Dropdown toggle"
+        i class="fas fa-caret-down" aria-hidden="true"
+    ul class="pf-c-dropdown__menu" hidden=true
+      li
+        button id=select_none_menu_id class="pf-c-dropdown__menu-item" type="button"
+          | Select none (0 items)
+      li
+        button id=select_page_menu_id class="pf-c-dropdown__menu-item" type="button"
+          = "Select page (#{[per_page, total_entries].min} items)"
+      li
+        button id=select_all_menu_id class="pf-c-dropdown__menu-item" type="button"
+          = "Select all (#{total_entries} items)"

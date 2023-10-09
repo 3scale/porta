@@ -2,17 +2,28 @@
 
 = render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
 
+div class="pf-c-toolbar"
+  div class="pf-c-toolbar__content"
+    div class="pf-c-toolbar__content-section pf-m-nowrap"
+      = render partial: 'shared/toolbar_item_bulk_select', locals: { total_entries: @messages.total_entries, per_page: @messages.per_page }
+
+      div class="pf-c-overflow-menu" id="-overflow-menu"
+        div class="pf-c-overflow-menu__content pf-u-display-none pf-u-display-flex-on-lg"
+          div class="pf-c-overflow-menu__group pf-m-button-group"
+            div class="pf-c-overflow-menu__item"
+              = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "pf-c-button pf-m-primary"
+
+      div class="pf-c-toolbar__item pf-m-pagination"
+        / TODO: pagination
+
 table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages"
   thead
     tr role="row"
-      td role="columnheader" scope="col" class="select pf-c-table__check"
-        label
-          = bulk_select_all
+      td role="columnheader" scope="col"
       th role="columnheader" scope="col" Subject
       th role="columnheader" scope="col" From
       th role="columnheader" scope="col" Date Sent
-      th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-        = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+      td role="columnheader" scope="col"
   tbody role="rowgroup"
     - if @messages.blank?
       tr role="row"
