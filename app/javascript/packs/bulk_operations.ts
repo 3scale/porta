@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const dataTotalEntries = 'data-total-entries'
   const dataModelName = 'data-association-name'
   const dataDefaultText = 'data-default-text'
+  const dataSelectedTotalEntries = 'data-selected-total-entries'
 
   const colorboxOpts = {
     autoDimensions: true,
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           selectTotalEntries.classList.add('hidden')
           selectTotalEntries.innerText = selectTotalEntries.getAttribute(dataDefaultText)!
-          selectTotalEntries.removeAttribute('data-selected-total-entries')
+          selectTotalEntries.removeAttribute(dataSelectedTotalEntries)
         }
       }
     } else {
