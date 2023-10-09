@@ -428,7 +428,9 @@ en:
             success: Messages moved into the trash
         no_metrics: "You have no metrics"
         no_methods: "You have no methods"
-        no_received_messages: "You have no messages."
+        empty_state:
+          title: "You have no messages."
+          body: "Your inbox is empty. Send a message to your users to get started."
         no_messages: "You have sent no messages."
       cms:
         builtin_legal_terms:

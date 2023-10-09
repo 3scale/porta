@@ -5,32 +5,45 @@ Feature: Messages inbox
     Given a provider is logged in
     And a buyer "Alice" of the provider
 
-  Scenario: Navigation
+  Scenario: Navigation from Audience
     When they press "Dashboard"
     And they follow "Audience"
     And they press "Messages"
     And they follow "Inbox"
     Then the current page is the provider inbox page
 
+  Scenario: Navigation from Dashboard
+    When they follow "0 Messages"
+    Then the current page is the provider inbox page
+
   Rule: Inbox is empty
     Scenario: Empty state
       When they go to the provider inbox page
-      And should see "You have no messages."
+      Then should see "You have no messages."
+      And should see link "Compose Message"
 
   Rule: Inbox is not empty
     Background:
-      Given 40 messages sent from buyer "Alice" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
+      Given 40 messages sent from buyer "Alice" to the provider with subject "Oh, no!" and body "Pepe is in da house"
 
     Scenario: List of messages
       When they go to the provider inbox page
       Then should not see "You have no messages."
 
+    Scenario: Reading an unread message
+      Given they go to the provider inbox page
+      And they should see unread message from "Alice" with subject "Oh, no!"
+      When follow "Oh, no!"
+      And should see "Send reply"
+      And follow "Inbox"
+      Then they should see read message from "Alice" with subject "Oh, no!"
+
     Scenario: Bulk operations
       Given they go to the provider inbox page
-      When item "Wildness" is selected
+      When item "Oh, no!" is selected
       Then the following bulk operations are available:
         | Delete |
-      But item "Wildness" is unselected
+      But item "Oh, no!" is unselected
       And the bulk operations are not visible
 
     Scenario: Select all messages in all pages

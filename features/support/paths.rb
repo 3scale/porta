@@ -379,9 +379,8 @@ World(Module.new do
     when 'the new buyer account page'
       new_admin_buyers_account_path
 
-    when /^the buyer account page for "([^"]*)"$/
-      admin_buyers_account_path(Account.find_by_org_name!($1))
-    when /^the buyer account "([^"]*)" page$/
+    when /^the buyer account page for "([^"]*)"$/,
+         /^the buyer account "([^"]*)" page$/
       admin_buyers_account_path(Account.find_by_org_name!($1))
 
     when /^the buyer account edit page for "([^"]*)"$/

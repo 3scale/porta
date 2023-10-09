@@ -38,7 +38,7 @@ Then /^I should see (?:|the )link "([^"]*)" containing "([^"]*)" in the URL$/ do
   assert page.has_css?('a', :text => label, &href_contain_params)
 end
 
-Then /^I should see (the |)link "([^"]*)"$/ do |_, label|
+Then /^(?:I )?should see (the |)link "([^"]*)"$/ do |_, label|
   assert page.has_css?('a', :text => label)
 end
 
