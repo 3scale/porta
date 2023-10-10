@@ -46,6 +46,7 @@ class Cinstance < Contract
   # FIXME: including Fields after other includes makes Fields break
   include Fields::Fields
   required_fields_are :name
+  optional_fields_are :description
   set_fields_account_source :user_account
 
   include Backend::ModelExtensions::Cinstance
