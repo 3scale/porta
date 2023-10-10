@@ -23,7 +23,6 @@ Feature: Buyer side, application extra fields
     And I go to the new application page
     Then I should see the fields:
       | name        |
-      | Description |
       | Engine      |
       | Wheels      |
       | Color       |
@@ -36,7 +35,6 @@ Feature: Buyer side, application extra fields
     When I go to the new application page
       And I fill in the following:
         | Name        | Skoda    |
-        | Description | Roomster |
       And I select "3" from "Wheels"
       And I press "Create"
     Then I should see error "can't be blank" for extra field "engine"
@@ -75,7 +73,6 @@ Feature: Buyer side, application extra fields
     When I go to the new application page
     Then I should see the fields in order:
       | name        |
-      | Description |
       | Engine      |
       | Color       |
       | Wheels      |
