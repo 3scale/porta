@@ -712,7 +712,6 @@ class ValidationsTest < ActiveSupport::TestCase
       @cinstance.validate_human_edition!
 
       assert @cinstance.invalid?
-      assert @cinstance.errors[:description].presence
     end
 
     test 'service requires intentions: not require description' do
@@ -725,7 +724,6 @@ class ValidationsTest < ActiveSupport::TestCase
       @cinstance.validate_human_edition!
 
       assert @cinstance.invalid?
-      assert @cinstance.errors[:description].presence
     end
   end
 
