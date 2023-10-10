@@ -83,7 +83,7 @@ World(Module.new do
 
     when /^the provider page of message with subject "([^"]*)"$/
       message = @provider.sent_messages.find { |m| m.subject = $1 }
-      provider_admin_messages_outbox_index_path(message)
+      provider_admin_messages_outbox_path(message)
 
     when "the outbox compose page"
       new_provider_admin_messages_outbox_path
