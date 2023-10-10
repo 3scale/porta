@@ -21,7 +21,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   def create
     service = current_account.services.build
     create_service = ServiceCreator.new(service: service)
-    create_service.call(service_params.to_h)
+    create_service.call(service_params)
     service.reload if service.persisted? # It has been touched
     respond_with(service)
   end
@@ -35,8 +35,9 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   # Service Update
   # POST /admin/api/services/{id}.xml
   def update
-    service.update(service_params.to_h)
-
+    service.assign_attributes(service_params)
+    Annotations::AnnotateWithParamsService.call(service, service_params[:annotations_attributes])
+    service.save
     respond_with(service)
   end
 

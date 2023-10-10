@@ -35,10 +35,16 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   # Tenant Create
   # POST /master/api/providers.xml
   def create
+    create_params = self.create_params
     signup_result = Signup::ProviderAccountManager.new(current_account).create(create_params, ::Signup::ResultWithAccessToken)
 
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
+
+      account = signup_result.account
+      Annotations::AnnotateWithParamsService.call(account, create_params.dig(:account_attributes, :annotations_attributes))
+      account.save!
+
       ProviderUserMailer.activation(signup_result.user).deliver_later
     end
 
@@ -50,6 +56,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   def update
     provider_account.assign_attributes(update_params, without_protection: true)
     provider_account.assign_unflattened_attributes(params.require(:account))
+    Annotations::AnnotateWithParamsService.call(buyer_account, update_params[:annotations_attributes])
     provider_account.save
 
     respond_with signup_result_with_nil_token

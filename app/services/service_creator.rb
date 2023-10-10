@@ -12,9 +12,10 @@ class ServiceCreator
 
   def call!(params = {})
     @service.transaction do
-      service_params = params.dup
+      service_params = params.to_h
       backend_api_proxy_params = service_params.extract!(:path, :private_endpoint)
       @service.attributes = service_params
+      Annotations::AnnotateWithParamsService.call(@service, params[:annotations_attributes])
       save!(backend_api_proxy_params)
     end
   end

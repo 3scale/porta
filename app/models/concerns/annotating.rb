@@ -16,7 +16,9 @@ module Annotating
     def models
       return @models if @models
 
-      Zeitwerk::Loader.eager_load_all # this is to see all models in dev env, otherwise some may not be yet loaded
+      # this is to see all models in dev env, otherwise some may not be yet loaded
+      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
+
       @models = ActiveRecord::Base.descendants.select { |model| model.include?(Model) }
     end
   end
@@ -43,14 +45,12 @@ module Annotating
       if existing
         existing.value = value
       else
-        # TODO: add DB triggers to set tenant_id
         annotations.build(name: name, value: value, tenant_id: tenant_id)
       end
     end
 
     def remove_annotation(name)
-      existing = annotation(name)
-      annotations.destroy(existing) if existing
+      annotation(name)&.mark_for_destruction
     end
   end
 end

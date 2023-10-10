@@ -22,7 +22,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   # Backend Create
   # POST /admin/api/backend_apis.json
   def create
-    backend_api = current_account.backend_apis.create(create_params)
+    backend_api = current_account.backend_apis.build(create_params)
+    Annotations::AnnotateWithParamsService.call(backend_api, create_params[:annotations_attributes])
+    backend_api.save
     respond_with(backend_api)
   end
 
@@ -35,7 +37,9 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   # Backend Update
   # PUT /admin/api/backend_apis/{id}.json
   def update
-    backend_api.update(update_params)
+    backend_api.assign_attributes(update_params)
+    Annotations::AnnotateWithParamsService.call(backend_api, update_params[:annotations_attributes])
+    backend_api.save
     respond_with(backend_api)
   end
 

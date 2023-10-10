@@ -40,7 +40,9 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     buyer_account.vat_rate = params[:vat_rate].to_f if params[:vat_rate]
     buyer_account.settings.attributes = billing_params
-    buyer_account.update_with_flattened_attributes(flat_params)
+    buyer_account.assign_unflattened_attributes(flat_params)
+    Annotations::AnnotateWithParamsService.call(buyer_account, flat_params[:annotations_attributes])
+    buyer_account.save
 
     respond_with(buyer_account)
   end
