@@ -9,7 +9,7 @@ Feature: Buyer account overview
   Scenario: Navigation
 
   Scenario: Sending a message
-    Given account "Bob Buyer" has no messages
+    Given buyer "Bob Buyer" has no messages
     And they go to the buyer account page for "Bob Buyer"
     When they follow "Send message"
     And fill in "Subject" with "Party tonite!"

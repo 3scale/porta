@@ -433,7 +433,10 @@ en:
             empty_state:
               title: "Nothing to see here"
               body: "Your inbox is empty, there are no new messages."
-        no_messages: "You have sent no messages."
+        outbox:
+          empty_state:
+            title: "There are no messages."
+            body: "Your outbox is empty. Compose a message to get started."
       cms:
         builtin_legal_terms:
           info:

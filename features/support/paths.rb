@@ -78,14 +78,21 @@ World(Module.new do
     when "the provider inbox page"
       provider_admin_messages_root_path
 
+    when "the provider sent messages page"
+      provider_admin_messages_outbox_index_path
+
+    when /^the provider page of message with subject "([^"]*)"$/
+      message = @provider.sent_messages.find { |m| m.subject = $1 }
+      provider_admin_messages_outbox_index_path(message)
+
+    when "the outbox compose page"
+      new_provider_admin_messages_outbox_path
+
     #
     # Messages - buyer side
     #
     when "the compose page"
       new_admin_messages_outbox_path
-
-    when "the outbox compose page"
-      new_provider_admin_messages_outbox_path
 
     when "the inbox page"
       admin_messages_root_path

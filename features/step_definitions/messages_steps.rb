@@ -12,7 +12,7 @@ And "{int} message(s) sent from {provider_or_buyer} to {provider_or_buyer} with 
   end
 end
 
-Given "{account} has no messages" do |account|
+Given "{provider_or_buyer} has no messages" do |account|
   account.messages.each(&:destroy)
   account.received_messages.destroy_all
 end
