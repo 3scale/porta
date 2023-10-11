@@ -109,7 +109,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   private
 
   def sorting_params
-    column = params[:sort] || 'cinstances.created_at'
+    column = params[:sort] || 'cinstances.id'
     direction =  params[:direction] || 'DESC'
     [ column, direction ]
   end
