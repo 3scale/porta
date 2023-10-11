@@ -67,9 +67,6 @@ Some models are indexed by [Sphinx](http://sphinxsearch.com/) (see app/indices).
 bundle exec rake ts:configure ts:start
 ```
 
-> By default, it will work with **mysql@5.7**
-<!-- TODO: add necessary steps to change DB -->
-
 ## Asset compilation
 
 In development, assets are compiled automatically on demand when a Rails page loads. If you want to use [live code reloading](https://guides.rubyonrails.org/webpacker.html#running-webpacker-in-development) you'll need to run:

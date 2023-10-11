@@ -58,7 +58,7 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@5.7 postgresql@14
+brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@8.0 postgresql@13
 ```
 
 * **Macs with M1** also require the following:
@@ -79,17 +79,17 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Docker](https://www.docker.com/) container:
 
 ```sh
-docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
+docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:8.0
 ```
 * **Macs with M1** require the flag `--platform linux/x86_64`:
 
   ```
-  docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:5.7
+  docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:8.0
   ```
 
 Alternatively it can be run by Homebrew:
 ```
-brew services start mysql@5.7
+brew services start mysql@8.0
 ```
 
 ###### PostgreSQL
@@ -104,7 +104,7 @@ docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=circleci --n
 
 Alternatively it can be run by Homebrew:
 ```
-brew services start postgresql@14
+brew services start postgresql@13
 ```
 
 ### Redis

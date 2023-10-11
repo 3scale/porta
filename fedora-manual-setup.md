@@ -42,7 +42,7 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mysql:8.0
 ```
 
 ### Redis
