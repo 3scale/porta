@@ -1,24 +1,29 @@
 - content_for :page_header_title, 'Inbox'
 
-= render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
+- if @messages.blank?
+  div class="pf-c-empty-state"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-inbox pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg"
+        = t('.empty_state.title')
+      div class="pf-c-empty-state__body"
+        = t('.empty_state.body')
 
-table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages"
-  thead
-    tr role="row"
-      td role="columnheader" scope="col" class="select pf-c-table__check"
-        label
-          = bulk_select_all
-      th role="columnheader" scope="col" Subject
-      th role="columnheader" scope="col" From
-      th role="columnheader" scope="col" Date Sent
-      th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-        = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
-  tbody role="rowgroup"
-    - if @messages.blank?
+- else
+  = render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
+
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages"
+    thead
       tr role="row"
-        td role="cell" colspan="5"
-          = t('provider.admin.messages.no_received_messages')
-    - else
+        td role="columnheader" scope="col" class="select pf-c-table__check"
+          label
+            = bulk_select_all
+        th role="columnheader" scope="col" Subject
+        th role="columnheader" scope="col" From
+        th role="columnheader" scope="col" Date Sent
+        th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
+          = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+    tbody role="rowgroup"
       - @messages.each do |message|
         tr role="row" class=message.state id="message_#{message.id}"
           td class="pf-c-table__check select" role="cell" id=message.id
@@ -34,5 +39,5 @@ table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id
                   div class="pf-c-overflow-menu__item"
                     = delete_button_for provider_admin_messages_inbox_path(message), class: 'action'
 
-= will_paginate(@messages)
-= link_to_export_widget_for('Messages') if can?(:export, :data)
+  = will_paginate(@messages)
+  = link_to_export_widget_for('Messages') if can?(:export, :data)

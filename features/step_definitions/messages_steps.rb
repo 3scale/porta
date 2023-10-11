@@ -62,10 +62,6 @@ Then "there should be no message from {provider} to {buyer} with subject {string
   assert messages.empty?
 end
 
-Then "{account} should have {int} message(s)" do |account, count|
-  assert_equal count.to_i, account.messages.count
-end
-
 Then "the message from {provider} to {buyer} with subject {string} should be hidden" do |sender, receiver, subject|
   message = receiver.hidden_messages.to_a.find do |message|
     message.sender  == sender &&
@@ -83,7 +79,7 @@ Then /^I should see message to "([^"]*)" with subject "([^"]*)"$/ do |to, subjec
   assert has_table_row_with_cells?(to, subject)
 end
 
-Then /^I should see (read|unread) message from "([^"]*)" with subject "([^"]*)"$/ do |state, from, subject|
+Then /^(?:I|they) should see (read|unread) message from "([^"]*)" with subject "([^"]*)"$/ do |state, from, subject|
   assert page.has_xpath?("//tr[@class='#{state}']/descendant::*[text()[contains(.,#{subject.inspect})]]/ancestor::tr/descendant::*[text()[contains(.,#{from.inspect})]]")
 end
 
