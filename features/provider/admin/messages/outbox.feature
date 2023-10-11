@@ -23,7 +23,7 @@ Feature: Audience > Messages > Outbox
 
     Scenario: Empty state
       When they go to the provider sent messages page
-      Then should see "There are no messages."
+      Then should see "Nothing to see here"
       And should see link "Compose Message"
 
   Rule: Inbox is not empty
@@ -34,7 +34,7 @@ Feature: Audience > Messages > Outbox
 
     Scenario: List of messages
       When they go to the provider sent messages page
-      Then should not see "There are no messages."
+      Then should not see "Nothing to see here"
       And the table should contain the following:
         | Subject | From  |
         | Welcome | Alice |

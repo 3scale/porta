@@ -434,9 +434,10 @@ en:
               title: "Nothing to see here"
               body: "Your inbox is empty, there are no new messages."
         outbox:
-          empty_state:
-            title: "There are no messages."
-            body: "Your outbox is empty. Compose a message to get started."
+          index:
+            empty_state:
+              title: "Nothing to see here"
+              body: "Your outbox is empty, there are no new sent messages."
       cms:
         builtin_legal_terms:
           info:
