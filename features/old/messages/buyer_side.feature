@@ -10,7 +10,7 @@ Feature: Buyer side messages
     When I log in as "bob" on foo.3scale.localhost
 
   Scenario: Sending a message
-    Given account "bob" has no messages
+    Given buyer "bob" has no messages
     When I go to the dashboard
     And I follow "Messages"
     And I follow "Compose"
