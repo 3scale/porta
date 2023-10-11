@@ -3,15 +3,12 @@
 - if @messages.blank?
   div class="pf-c-empty-state"
     div class="pf-c-empty-state__content"
-      i class="fas fa-rocket pf-c-empty-state__icon" aria-hidden="true"
-
+      i class="fas fa-inbox pf-c-empty-state__icon" aria-hidden="true"
       h1 class="pf-c-title pf-m-lg"
-        = t('provider.admin.messages.empty_state.title')
-
+        = t('.empty_state.title')
       div class="pf-c-empty-state__body"
-        = t('provider.admin.messages.empty_state.body')
+        = t('.empty_state.body')
 
-      = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "pf-c-button pf-m-primary"
 - else
   = render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
 

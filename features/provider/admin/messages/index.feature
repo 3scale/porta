@@ -1,5 +1,5 @@
 @javascript
-Feature: Messages inbox
+Feature: Audience > Messages > Inbox
 
   Background:
     Given a provider is logged in
@@ -19,8 +19,7 @@ Feature: Messages inbox
   Rule: Inbox is empty
     Scenario: Empty state
       When they go to the provider inbox page
-      Then should see "You have no messages."
-      And should see link "Compose Message"
+      Then should see "Nothing to see here"
 
   Rule: Inbox is not empty
     Background:
@@ -28,7 +27,7 @@ Feature: Messages inbox
 
     Scenario: List of messages
       When they go to the provider inbox page
-      Then should not see "You have no messages."
+      Then should not see "Nothing to see here"
 
     Scenario: Reading an unread message
       Given they go to the provider inbox page
@@ -83,4 +82,4 @@ Feature: Messages inbox
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"
-      And should see "You have no messages"
+      And should see "Nothing to see here"
