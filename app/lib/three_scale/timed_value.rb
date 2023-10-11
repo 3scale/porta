@@ -1,4 +1,5 @@
-require 'redis'
+# frozen_string_literal: true
+
 class ThreeScale::TimedValue
 
   def self.get(key)
@@ -12,10 +13,11 @@ class ThreeScale::TimedValue
     redis.expire(key, expire_in_secs)
   end
 
-  protected
+  class << self
+    protected
 
-  def self.redis
-    Redis::Namespace.new(:timed_value, redis: System.redis)
+    def redis
+      System.redis
+    end
   end
-
 end

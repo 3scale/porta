@@ -22,7 +22,9 @@ module ThreeScale
         [{ host: 'my-redis', db: '0' }, { url: 'redis://my-redis/1' }],
         [{ host: 'my-redis', db: '0' }, { host: 'my-redis', db: '1' }]
       ]
-      different_db_configs.each { |(config1, config2)| refute RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2)) }
+      different_db_configs.each do |(config1, config2)|
+        assert_not RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2))
+      end
 
       same_db_configs = [
         [{ url: 'redis://my-redis/0' }, { url: 'redis://my-redis/0' }],
@@ -32,10 +34,6 @@ module ThreeScale
       ]
       same_db_configs.each do |(config1, config2)|
         assert RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2))
-        refute RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2))
-        refute RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'ns')))
-        refute RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'other-ns')))
-        assert RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'ns')))
       end
     end
 

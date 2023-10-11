@@ -28,7 +28,6 @@ module ThreeScale
     end
 
     def prone_to_key_collision_with?(other)
-      return false if config.namespace.presence != other.namespace.presence
       db == other.db
     end
 
