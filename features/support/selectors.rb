@@ -48,6 +48,9 @@ module HtmlSelectorsHelper
     when 'table'
       'table'
 
+    when 'the toolbar'
+      '.pf-c-page__main-section .pf-c-toolbar'
+
     when 'search form'
       'tr.search'
 
@@ -64,7 +67,7 @@ module HtmlSelectorsHelper
       '#cboxContent h2'
 
     when 'the bulk operations'
-      bulk_operations_selector
+      '#bulk-operations'
 
     when /^section (.*)$/
       [:xpath, "//button[text() = '#{$1}']/following-sibling::section[1]"]

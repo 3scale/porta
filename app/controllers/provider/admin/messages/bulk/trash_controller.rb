@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Messages::Bulk::TrashController < FrontendController
 
-  ALLOWED_SCOPES = %i(messages received_messages)
-
-  respond_to :js
+  ALLOWED_SCOPES = %i[messages received_messages].freeze
 
   before_action :check_association_scope!
 
   class ForbiddenAccountScope < StandardError; end
 
   def new
+    respond_to :js
   end
 
   def create
@@ -23,6 +24,7 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
     @no_more_messages = no_more_messages
 
     flash[:notice] = t('.success')
+    redirect_to request.referer
   end
 
   private
@@ -36,9 +38,7 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
   end
 
   def check_association_scope!
-    unless ALLOWED_SCOPES.include?(scope)
-      raise ForbiddenAccountScope.new("Scope #{scope} is not allowed")
-    end
+    raise ForbiddenAccountScope, "Scope #{scope} is not allowed" unless ALLOWED_SCOPES.include?(scope)
   end
 
   def scope

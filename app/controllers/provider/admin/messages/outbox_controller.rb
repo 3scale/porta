@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Provider::Admin::Messages::OutboxController < FrontendController
+class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::BaseController
   activate_menu :buyers, :messages, :sent_messages
 
   delegate :messages, to: :current_account
@@ -15,7 +15,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
-    redirect_to action: :index
+    redirect_to request.referer
   end
 
   def create
@@ -95,7 +95,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     params.require(:id)
   end
 
-  def pagination_params
-    { page: params.permit(:page)[:page] }
+  def scope
+    :messages
   end
 end
