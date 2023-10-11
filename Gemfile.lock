@@ -1029,7 +1029,6 @@ DEPENDENCIES
   record_tag_helper (~> 1.0)
   redcarpet (~> 3.5.1)
   redis (~> 4.2.0)
-  redis-namespace (~> 1.7.0)
   redlock
   reek (= 6.01)
   reform (~> 2.0.3)

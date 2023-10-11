@@ -109,7 +109,6 @@ gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
 gem 'redis', '~> 4.2.0', require: ['redis', 'redis/connection/hiredis']
-gem 'redis-namespace', '~> 1.7.0'
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'svg-graph', require: false
