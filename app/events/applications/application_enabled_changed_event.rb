@@ -13,7 +13,7 @@ class Applications::ApplicationEnabledChangedEvent < ApplicationRelatedEvent
           provider_id: provider.id,
           zync: {
             service_id: service.id,
-            service_backend_version: service.backend_version.to_s
+            oidc_auth_enabled: service.oauth?
           }
         }
       )

@@ -15,7 +15,7 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
         zync: {
           service_id: service.id,
           proxy_id: service.proxy&.id,
-          service_backend_version: service.backend_version.to_s
+          oidc_auth_enabled: service.oauth?
         }
       }
     )

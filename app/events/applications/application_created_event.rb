@@ -18,7 +18,7 @@ class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
         provider_id: provider.try!(:id),
         zync: {
           service_id: service.id,
-          service_backend_version: service.backend_version.to_s
+          oidc_auth_enabled: service.oauth?
         }
       }
     )

@@ -23,7 +23,7 @@ class PublishZyncEventSubscriber
            when ApplicationRelatedEvent
              metadata = event.metadata.fetch(:zync, {})
              # only publish events to Zync for applications using OIDC authentication
-             ZyncEvent.create(event, event.application) if metadata[:service_backend_version] == 'oauth'
+             ZyncEvent.create(event, event.application) if metadata[:oidc_auth_enabled]
            when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent then ZyncEvent.create(event, event.proxy)
            when OIDC::ServiceChangedEvent then ZyncEvent.create(event, event.service)
            when Domains::ProviderDomainsChangedEvent then ZyncEvent.create(event, event.provider)
