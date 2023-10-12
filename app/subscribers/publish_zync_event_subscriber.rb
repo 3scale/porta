@@ -10,26 +10,36 @@ class PublishZyncEventSubscriber
 
   attr_reader :publisher
 
-  # @param [ZyncEvent] event
-  def call(event)
-    unless ThreeScale.config.onpremises
-      case event
-      when Domains::ProxyDomainsChangedEvent, Domains::ProviderDomainsChangedEvent
-        return
-      end
+  delegate :domain_event_in_saas?, :build_zync_event, to: 'self.class'
+
+  class << self
+    def domain_event_in_saas?(event)
+      ThreeScale.saas? && (event.is_a?(Domains::ProxyDomainsChangedEvent) || event.is_a?(Domains::ProviderDomainsChangedEvent))
     end
 
-    zync_event = case event
-           when ApplicationRelatedEvent
-             metadata = event.metadata.fetch(:zync, {})
-             # only publish events to Zync for applications using OIDC authentication
-             ZyncEvent.create(event, event.application) if metadata[:oidc_auth_enabled]
-           when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent then ZyncEvent.create(event, event.proxy)
-           when OIDC::ServiceChangedEvent then ZyncEvent.create(event, event.service)
-           when Domains::ProviderDomainsChangedEvent then ZyncEvent.create(event, event.provider)
-           else raise "Unknown event type #{event.class}"
-           end
+    def build_zync_event(event)
+      case event
+      when ApplicationRelatedEvent
+        # only publish events to Zync for applications using OIDC authentication
+        zync_metadata = event.metadata.fetch(:zync, {})
+        ZyncEvent.create(event, event.application) if zync_metadata[:oidc_auth_enabled]
+      when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent
+        ZyncEvent.create(event, event.proxy)
+      when OIDC::ServiceChangedEvent
+        ZyncEvent.create(event, event.service)
+      when Domains::ProviderDomainsChangedEvent
+        ZyncEvent.create(event, event.provider)
+      else raise "Unknown event type #{event.class}"
+      end
+    end
+  end
 
+  # @param [ZyncEvent] event
+  def call(event)
+    # skip domain-related events in SaaS
+    return if self.domain_event_in_saas? event
+
+    zync_event = self.build_zync_event event
     publisher.call(zync_event, 'zync') if zync_event
   end
 end
