@@ -10,44 +10,6 @@ module ThreeScale
       assert_equal 0, RedisConfig.new(url: 'redis://my-redis').db
     end
 
-    test '#next_db' do
-      assert_equal 1, RedisConfig.new(db: 0).send(:next_db)
-      assert_equal 0, RedisConfig.new(db: 15).send(:next_db)
-    end
-
-    test '#key_collision_prone?' do
-      different_db_configs = [
-        [{ url: 'redis://my-redis/0' }, { url: 'redis://my-redis/1' }],
-        [{ url: 'redis://my-redis/0' }, { host: 'my-redis', db: '1' }],
-        [{ host: 'my-redis', db: '0' }, { url: 'redis://my-redis/1' }],
-        [{ host: 'my-redis', db: '0' }, { host: 'my-redis', db: '1' }]
-      ]
-      different_db_configs.each { |(config1, config2)| refute RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2)) }
-
-      same_db_configs = [
-        [{ url: 'redis://my-redis/0' }, { url: 'redis://my-redis/0' }],
-        [{ url: 'redis://my-redis/0' }, { host: 'my-redis', db: '0' }],
-        [{ host: 'my-redis', db: '0' }, { url: 'redis://my-redis/0' }],
-        [{ host: 'my-redis', db: '0' }, { host: 'my-redis', db: '0' }]
-      ]
-      same_db_configs.each do |(config1, config2)|
-        assert RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2))
-        refute RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2))
-        refute RedisConfig.new(config1).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'ns')))
-        refute RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'other-ns')))
-        assert RedisConfig.new(config1.merge(namespace: 'ns')).prone_to_key_collision_with?(RedisConfig.new(config2.merge(namespace: 'ns')))
-      end
-    end
-
-    test 'rotate db' do
-      config = RedisConfig.new(db: 14)
-      assert_equal 14, config.db
-      config.rotate_db
-      assert_equal 15, config.db
-      config.rotate_db
-      assert_equal 0, config.db
-    end
-
     test '#reverse_merge' do
       config_1 = RedisConfig.new(host: 'localhost', db: 1)
       config_2 = RedisConfig.new(db: 2, password: 'passwd')

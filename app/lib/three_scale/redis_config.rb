@@ -27,15 +27,6 @@ module ThreeScale
       URI.parse(url).path[1..-1].to_s.to_i
     end
 
-    def prone_to_key_collision_with?(other)
-      return false if config.namespace.presence != other.namespace.presence
-      db == other.db
-    end
-
-    def rotate_db
-      config.db = next_db
-    end
-
     def reverse_merge(other)
       other.merge(config)
     end
@@ -69,10 +60,6 @@ module ThreeScale
         parsed_sentinel[:password] = password if password
         parsed_sentinel
       end
-    end
-
-    def next_db
-      (db + 1) % 16
     end
   end
 end
