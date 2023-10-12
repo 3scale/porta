@@ -715,8 +715,7 @@ class ValidationsTest < ActiveSupport::TestCase
       @provider.settings.allow_multiple_applications!
       @provider.settings.show_multiple_applications!
       @cinstance.validate_human_edition!
-
-      assert @cinstance.invalid?
+      assert @cinstance.valid?
     end
 
     test 'service requires intentions: not require description' do
@@ -728,7 +727,7 @@ class ValidationsTest < ActiveSupport::TestCase
       @service.update(intentions_required: true)
       @cinstance.validate_human_edition!
 
-      assert @cinstance.invalid?
+      assert @cinstance.valid?
     end
   end
 
