@@ -177,10 +177,6 @@ class Api::IntegrationsController < Api::BaseController
     params.require(:proxy).permit(*permitted_fields)
   end
 
-  def deploying_hosted_proxy_key
-    "#{current_account.id}/deploying_hosted"
-  end
-
   def toggle_land_path
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
   end
