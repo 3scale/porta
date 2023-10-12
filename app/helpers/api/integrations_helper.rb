@@ -24,18 +24,6 @@ module Api::IntegrationsHelper
     t("formtastic.hints.proxy.api_backend_#{scheme}")
   end
 
-  def different_from_current?
-    true #TODO: implement method
-  end
-
-  def currently_deploying?(proxy)
-    @deploying
-  end
-
-  def deployed?(proxy)
-    @ever_deployed_hosted
-  end
-
   def apicast_configuration_driven?
     # this should be driven by a boolean attribute on the service
     @service.proxy.apicast_configuration_driven
