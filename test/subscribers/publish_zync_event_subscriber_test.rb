@@ -5,10 +5,18 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
     @subscriber = PublishZyncEventSubscriber.new
   end
 
-  def test_create
-    application = FactoryBot.build_stubbed(:simple_cinstance, tenant_id: 1)
-    event = Applications::ApplicationCreatedEvent.new(application: application)
+  test 'publish Zync Event for OIDC auth' do
+    service = FactoryBot.create(:simple_service, backend_version: 'oauth')
+    application = FactoryBot.create(:simple_cinstance, service: service, tenant_id: 1)
+    event = Applications::ApplicationCreatedEvent.create(application, nil)
     assert @subscriber.call(event)
+  end
+
+  test 'do not publish Zync Event for non-OIDC auth' do
+    service = FactoryBot.create(:simple_service)
+    application = FactoryBot.create(:simple_cinstance, service: service, tenant_id: 1)
+    event = Applications::ApplicationCreatedEvent.create(application, nil)
+    assert_nil @subscriber.call(event)
   end
 
   class DomainEventsTest < ActiveSupport::TestCase
