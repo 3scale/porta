@@ -19,14 +19,17 @@ class PublishZyncEventSubscriber
       end
     end
 
-    zync = case event
-           when ApplicationRelatedEvent then ZyncEvent.create(event, event.application)
+    zync_event = case event
+           when ApplicationRelatedEvent
+             metadata = event.metadata.fetch(:zync, {})
+             # only publish events to Zync for applications using OIDC authentication
+             ZyncEvent.create(event, event.application) if metadata[:service_backend_version] == 'oauth'
            when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent then ZyncEvent.create(event, event.proxy)
            when OIDC::ServiceChangedEvent then ZyncEvent.create(event, event.service)
            when Domains::ProviderDomainsChangedEvent then ZyncEvent.create(event, event.provider)
            else raise "Unknown event type #{event.class}"
            end
 
-    publisher.call(zync, 'zync')
+    publisher.call(zync_event, 'zync') if zync_event
   end
 end

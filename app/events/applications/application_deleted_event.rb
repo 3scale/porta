@@ -14,7 +14,8 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
         provider_id: application.provider_account_id || application.tenant_id,
         zync: {
           service_id: service.id,
-          proxy_id: service.proxy&.id
+          proxy_id: service.proxy&.id,
+          service_backend_version: service.backend_version.to_s
         }
       }
     )

@@ -3,6 +3,7 @@ class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
   # @param [User] user
   def self.create(application, user)
     provider = application.provider_account
+    service = application.service || Service.new({id: application.service_id}, without_protection: true)
 
     new(
       application: application,
@@ -16,7 +17,8 @@ class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
       metadata: {
         provider_id: provider.try!(:id),
         zync: {
-          service_id: application.service_id
+          service_id: service.id,
+          service_backend_version: service.backend_version.to_s
         }
       }
     )
