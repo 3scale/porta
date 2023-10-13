@@ -75,7 +75,6 @@ Feature: Buyer's API Access Details
     When I follow "Applications"
     And I follow "Create new application"
     And I fill in "Name" with "UltimateWidget"
-    And I fill in "Description" with "Awesome ultimate super widget"
     And I press "Create"
     Then I should see "Application was successfully created"
     And I should be on the "UltimateWidget" application page

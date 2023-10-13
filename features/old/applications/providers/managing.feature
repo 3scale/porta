@@ -8,6 +8,9 @@ Feature: Applications management
     Given a provider is logged in
     And the provider uses backend v2 in his default service
     And the provider has multiple applications enabled
+    And the provider has the following fields defined for "Cinstance":
+      | name        | label           | required | read_only | hidden |
+      | description | Description     |          |           |        |
     And a default application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" is published
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
