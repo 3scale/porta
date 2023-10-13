@@ -205,7 +205,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     class Edit < ProviderLoggedInTest
       setup do
         plan = FactoryBot.create(:application_plan, issuer: provider.default_service)
-        @application = FactoryBot.create(:cinstance, plan: plan, name: 'example-name', description: 'example-description')
+        @application = FactoryBot.create(:cinstance, plan: plan, name: 'example-name')
       end
 
       attr_reader :application
