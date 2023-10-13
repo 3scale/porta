@@ -10,7 +10,7 @@ class PublishZyncEventSubscriber
 
   attr_reader :publisher
 
-  delegate :domain_event_in_saas?, :build_zync_event, to: 'self.class'
+  delegate :domain_event_in_saas?, :build_zync_event, to: :class
 
   class << self
     def domain_event_in_saas?(event)
