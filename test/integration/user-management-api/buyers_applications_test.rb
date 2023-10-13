@@ -9,6 +9,9 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     host! @provider.external_admin_domain
 
+    # Add an optional Description field on Application model
+    @provider.fields_definitions.create({ target: 'Cinstance', name: 'description', label: 'Description', required: false })
+
     @service = @provider.default_service
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
@@ -96,7 +99,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     get admin_api_account_application_path(@buyer, id: application.id, format: :xml), params: { provider_key: @provider.api_key }
 
     assert_response :success
-    assert_application(response.body, { name: "tomatoes &lt; &gt; &amp;"})
+    assert_application(response.body, { name: "tomatoes &lt; &gt; &amp;", description: "rotten &lt; &gt; &amp;" })
   end
 
   test 'show returns defined fields for json' do
@@ -110,6 +113,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     application = JSON.parse(@response.body)["application"]
 
     assert_equal "CoinBase", application["name"]
+    assert_match "like a boss", application["description"]
   end
 
   test 'show returns extra fields escaped' do
@@ -217,7 +221,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     post admin_api_account_applications_path(@buyer, format: :xml), params: { plan_id: @hidden_app_plan.id, name: "chucky", description: "rocks awesome", provider_key: @provider.api_key }
 
     assert_response :success
-    assert_application(response.body, { name: "chucky"})
+    assert_application(response.body, { name: "chucky", description: "rocks awesome" })
 
     created_app = @buyer.bought_cinstances.last
     assert_equal "chucky",        created_app.name
@@ -231,7 +235,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     post admin_api_account_applications_path(@buyer, format: :xml), params: { plan_id: @hidden_app_plan.id, name: "chucky", description: "rocks awesome", provider_key: @provider.api_key }
 
     assert_response :success
-    assert_application(response.body, { name: "chucky" })
+    assert_application(response.body, { name: "chucky", description: "rocks awesome" })
 
     created_app = @buyer.bought_cinstances.last
     assert_equal "chucky",        created_app.name
@@ -245,7 +249,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     post admin_api_account_applications_path(@buyer, format: :xml), params: { plan_id: @hidden_app_plan.id, name: "chucky", description: "rocks awesome", application_id: "superawesomeid", provider_key: @provider.api_key }
 
     assert_response :success
-    assert_application(response.body, { name: "chucky", application_id: "superawesomeid" })
+    assert_application(response.body, { name: "chucky", description: "rocks awesome", application_id: "superawesomeid" })
 
     created_app = @buyer.bought_cinstances.last
     assert_equal created_app.name, "chucky"
