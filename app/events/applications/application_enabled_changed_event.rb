@@ -5,7 +5,7 @@ class Applications::ApplicationEnabledChangedEvent < ApplicationRelatedEvent
   class << self
     def create(application)
       provider = application.provider_account || Account.new
-      service = application.service || Service.new({id: application.service_id}, without_protection: true)
+      service = application.service
 
       new(
         application: application,
