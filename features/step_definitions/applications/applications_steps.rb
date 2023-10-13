@@ -250,7 +250,6 @@ def fill_in_new_application_form(name: 'My App', service_name: 'API')
   pf4_select(service_name, from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')
   pf4_select_first(from: 'Application plan') unless app_plan_select.has_css?('.pf-m-disabled')
   fill_in_pf('Name', with: name)
-  fill_in_pf('Description', with: 'This is some kind of application')
 end
 
 def app_plan_select
