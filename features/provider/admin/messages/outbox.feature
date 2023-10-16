@@ -43,7 +43,7 @@ Feature: Audience > Messages > Outbox
     Scenario: Reading a message
       Given they go to the provider sent messages page
       When follow "Welcome"
-      Then the current page is the provider page of message with subject "Welcome Alice"
+      Then the current page is the provider page of message with subject "Welcome"
 
     Scenario: Bulk operations
       Given they go to the provider sent messages page

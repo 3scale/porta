@@ -82,7 +82,7 @@ World(Module.new do
       provider_admin_messages_outbox_index_path
 
     when /^the provider page of message with subject "([^"]*)"$/
-      message = @provider.sent_messages.find { |m| m.subject = $1 }
+      message = @provider.sent_messages.find_by(subject: Regexp.last_match(1))
       provider_admin_messages_outbox_path(message)
 
     when "the outbox compose page"
