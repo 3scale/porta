@@ -6,7 +6,7 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
   liquify prefix: 'messages/trash'
 
   def index
-    collection = current_account.hidden_messages.page(params[:page])
+    collection = current_account.trashed_messages.page(params[:page])
     messages = Liquid::Drops::Message.wrap(collection)
     pagination = Liquid::Drops::Pagination.new(collection, self)
     assign_drops messages: messages, pagination: pagination
@@ -24,7 +24,7 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
   end
 
   def empty
-    current_account.hidden_messages.destroy_all
+    current_account.trashed_messages.destroy_all
 
     flash[:notice] = 'The trash was emptied.'
     redirect_to admin_messages_trash_index_path
@@ -33,6 +33,6 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
   private
 
   def find_message
-    @message = current_account.hidden_messages.find(params[:id])
+    @message = current_account.trashed_messages.find(params[:id])
   end
 end
