@@ -4,7 +4,7 @@ class Provider::Admin::Messages::BaseController < FrontendController
   helper_method :toolbar_props
 
   def pagination_params
-    { page: params.permit(:page)[:page], per_page: params.permit(:per_page)[:per_page] }
+    { page: params.permit(:page)[:page] || 1, per_page: params.permit(:per_page)[:per_page] || 20 }
   end
 
   def toolbar_props
