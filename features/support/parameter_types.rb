@@ -190,18 +190,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'forum',
-  regexp: /"([^"]*)"|the forum of "([^"]*)"/,
-  transformer: ->(name, other_name) { provider_by_name(name.presence || other_name.presence).forum }
-)
-
-ParameterType(
-  name: 'topic',
-  regexp: /topic "([^"]*)"/,
-  transformer: ->(title) { Topic.find_by!(title: title) }
-)
-
-ParameterType(
   name: 'metric',
   regexp: /metric "([^"]*)"/,
   transformer: ->(name) { find_metric(Metric.where(parent_id: nil), name) }

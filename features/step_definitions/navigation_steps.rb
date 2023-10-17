@@ -9,33 +9,6 @@ When 'I navigate to the accounts page' do
   click_link href: admin_buyers_accounts_path
 end
 
-# TODO: THREESCALE-8033 Remove this step as it's no longer in use.
-When "I navigate to a topic in the forum of {forum}" do |forum|
-  visit forum_path
-  click_link forum.topics.first.title
-end
-
-When "I should not see forum" do
-  visit forum_path
-  step 'I should see "Page not found"'
-end
-
-When /^I navigate to the forum admin page$/ do
-  click_link 'Messages'
-  click_link 'Forum'
-  click_link 'Threads'
-end
-
-When /^I navigate to the forum categories admin page$/ do
-  step "I navigate to the forum admin page"
-  click_link "Categories"
-end
-
-When /^I navigate to the forum my posts admin page$/ do
-  step "I navigate to the forum admin page"
-  click_link "My Threads"
-end
-
 When "I navigate to the {application} of the partner {string}" do |app, partner|
   step %(I navigate to the page of the partner "#{partner}")
   within '#applications_widget' do
