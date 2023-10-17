@@ -84,4 +84,4 @@ const ToolbarWrapper = (props: Props, table: HTMLTableElement): void => {
 }
 
 export type { Props }
-export { TopToolbar as TheToolbar, ToolbarWrapper }
+export { ToolbarWrapper }
