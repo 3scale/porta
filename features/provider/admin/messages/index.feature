@@ -23,7 +23,7 @@ Feature: Audience > Messages > Inbox
 
   Rule: Inbox is not empty
     Background:
-      Given 40 messages sent from buyer "Alice" to the provider with subject "Oh, no!" and body "Pepe is in da house"
+      Given 30 messages sent from buyer "Alice" to the provider with subject "Oh, no!" and body "Pepe is in da house"
 
     Scenario: List of messages
       When they go to the provider inbox page
@@ -48,7 +48,7 @@ Feature: Audience > Messages > Inbox
     Scenario: Select all messages in all pages
       Given they go to the provider inbox page
       And they select all items
-      Then should see "40 selected" within the toolbar
+      Then should see "30 selected" within the toolbar
 
     Scenario: Delete a single message in bulk
       Given 1 messages sent from buyer "Alice" to provider "foo.3scale.localhost" with subject "Deleteme" and body "On the road."
