@@ -37,12 +37,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     "#{controller_name} - #{action_name}"
   end
 
-  def link_to_unless_current_styled(text, url, options = {})
-    link_to_unless_current text, url, options do |active_text|
-      content_tag 'span', active_text, :class => 'active is-active'
-    end
-  end
-
   def pf4_nav_item(text, url)
     content_tag 'li', class: 'pf-c-nav__item' do
       link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
@@ -113,22 +107,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
   def next_page(collection)
     unless collection.current_page == collection.total_entries || collection.total_entries == 0
       "<p style='float:right;'>" + link_to("Next page"[], { :page => collection.current_page.next }.merge(params.reject{|k,v| k=="page"})) + "</p>"
-    end
-  end
-
-  def search_posts_title
-    returning(params[:q].blank? ? 'Recent Posts'[] : "Searching for"[] + " '#{h params[:q]}'") do |title|
-      title << " "+'by {user}'[:by_user,h(@user.display_name)] if @user
-      title << " "+'in {forum}'[:in_forum,h(@forum.name)] if @forum
-    end
-  end
-
-  def topic_title_link(topic, options)
-    if topic.title =~ /\A\[([^\]]{1,15})\]((\s+)\w+.*)/
-      "<span class='flag'>#{$1}</span>" +
-      link_to(h($2.strip), forum_topic_path(@forum, topic), options)
-    else
-      link_to(h(topic.title), forum_topic_path(@forum, topic), options)
     end
   end
 
