@@ -10,7 +10,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
 
   attr_reader :application_controller
 
-  def test_check_browser
+  test 'check browser' do
     provider = FactoryBot.create(:provider_account)
     login! provider
 
@@ -126,5 +126,38 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       }
     end
     assert_response :created
+  end
+
+  class ClientCaching < ActionDispatch::IntegrationTest
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @user = @provider.admins.first
+      login! @provider, user: @user
+    end
+
+    class ClientCachingController < ApplicationController
+      before_action :disable_client_cache
+
+      def show; end
+    end
+
+    def with_test_routes
+      Rails.application.routes.draw do
+        get '/client_caching' => 'application_controller_test/client_caching/client_caching#show'
+      end
+      yield
+    ensure
+      Rails.application.routes_reloader.reload!
+    end
+
+    test "page should not cache" do
+      with_test_routes do
+        get '/client_caching'
+      end
+
+      assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+      assert_equal 'no-cache', response.headers['Pragma']
+      assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
+    end
   end
 end

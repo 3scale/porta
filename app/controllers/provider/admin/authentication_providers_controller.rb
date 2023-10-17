@@ -2,11 +2,11 @@
 
 class Provider::Admin::AuthenticationProvidersController < FrontendController
   before_action :authorize_settings
-
-  activate_menu :audience, :cms, :sso_integrations
-
   before_action :find_authentication_provider, only: %i[show edit update publish_or_hide destroy]
   before_action :authorize_authentication_provider, only: %i[show edit destroy]
+  before_action :disable_client_cache, except: :index
+
+  activate_menu :audience, :cms, :sso_integrations
 
   def index
     @authentication_providers = current_account.authentication_provider_kinds

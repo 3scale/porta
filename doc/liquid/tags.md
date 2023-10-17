@@ -63,6 +63,18 @@ We recommend __to remove this tag__ from public templates.
 ```liquid
 {% debug:help %}
 ```
+# Tag 'disable_client_cache'
+
+Adds HTTP headers to disable the browser cache for the current screen.
+
+__Example:__ Disable browser cache for this screen
+```liquid
+<html>
+  <head>
+    {% disable_client_cache %}
+  </head>
+</html>
+```
 # Tag 'email'
 
 
