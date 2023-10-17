@@ -1,39 +1,46 @@
 - content_for :page_header_title, 'Sent Messages'
 
 - if @messages.blank?
-  p= t('provider.admin.messages.no_messages')
+  div class="pf-c-empty-state"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-paper-plane pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg"
+        = t('.empty_state.title')
+      div class="pf-c-empty-state__body"
+        = t('.empty_state.body')
+      = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "pf-c-button pf-m-primary"
 
 - else
   = render 'provider/admin/messages/bulk_operations', scope: :messages, messages: @messages
 
-table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Sent messages table" id="messages"
-  thead
-    tr role="row"
-      td role="columnheader" scope="col" class="select pf-c-table__check"
-        label
-          = bulk_select_all
-      th role="columnheader" scope="col" Subject
-      th role="columnheader" scope="col" From
-      th role="columnheader" scope="col" Date Sent
-      th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-        = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
-  tbody role="rowgroup"
-    - @messages.each do |message|
-      tr role="row" id="message_#{message.id}"
-        td class="pf-c-table__check select" role="cell" id=message.id
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Sent messages table" id="messages"
+    thead
+      tr role="row"
+        td role="columnheader" scope="col" class="select pf-c-table__check"
           label
-            = bulk_select_one message
-        td role="cell" data-label="Subject"
-          = link_to message_subject(message), provider_admin_messages_outbox_path(message)
-        td role="cell" data-label="From"
-          = message_receiver(message)
-        td role="cell" data-label="Data Sent"
-          = message.created_at.to_s(:long)
-        td role="cell" class="pf-c-table__action"
-          div class="pf-c-overflow-menu"
-            div class="pf-c-overflow-menu__content"
-              div class="pf-c-overflow-menu__group pf-m-button-group"
-                div class="pf-c-overflow-menu__item"
-                  = delete_button_for provider_admin_messages_outbox_path(message), class: 'action'
+            = bulk_select_all
+        th role="columnheader" scope="col" Subject
+        th role="columnheader" scope="col" From
+        th role="columnheader" scope="col" Date Sent
+        th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
+          = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+    tbody role="rowgroup"
+      - @messages.each do |message|
+        tr role="row" id="message_#{message.id}"
+          td class="pf-c-table__check select" role="cell" id=message.id
+            label
+              = bulk_select_one message
+          td role="cell" data-label="Subject"
+            = link_to message_subject(message), provider_admin_messages_outbox_path(message)
+          td role="cell" data-label="From"
+            = message_receiver(message)
+          td role="cell" data-label="Data Sent"
+            = message.created_at.to_s(:long)
+          td role="cell" class="pf-c-table__action"
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = delete_button_for provider_admin_messages_outbox_path(message), class: 'action'
 
-  = will_paginate(@messages)
+    = will_paginate(@messages)

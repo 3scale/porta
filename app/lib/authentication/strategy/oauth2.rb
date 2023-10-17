@@ -2,7 +2,7 @@
 
 module Authentication
   module Strategy
-    class Oauth2 < Authentication::Strategy::Oauth2Base
+    class OAuth2 < Authentication::Strategy::OAuth2Base
       class FindOrCreateAccount < Procedure
 
         def call
@@ -12,7 +12,7 @@ module Authentication
         private
 
         def find_user
-          Users::FindOauth2UserService.run(user_data, authentication_provider, users).user.tap do |user|
+          Users::FindOAuth2UserService.run(user_data, authentication_provider, users).user.tap do |user|
             strategy.user_used_sso_authorization(user, user_data) if user
           end
         end

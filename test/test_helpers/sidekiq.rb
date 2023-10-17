@@ -4,7 +4,8 @@ require 'sidekiq/testing'
 require 'sidekiq/lock/testing/inline'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq::Logging.logger = nil
+Sidekiq.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
+Sidekiq.strict_args! # Fail if parameters are not valid JSON
 module TestHelpers
   module Sidekiq
     def self.included(base)
@@ -18,19 +19,13 @@ module TestHelpers
     end
 
     def drain_all_sidekiq_jobs
-      ThinkingSphinx::Test.rt_run do
-        ::Sidekiq::Worker.drain_all
-      end
+      ::Sidekiq::Worker.drain_all
     end
 
     def with_sidekiq
-      ::SphinxIndexationWorker.stubs(:perform_later)
-
       ::Sidekiq::Testing.inline! do
         yield
       end
-    ensure
-      ::SphinxIndexationWorker.unstub(:perform_later)
     end
   end
 end

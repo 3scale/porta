@@ -22,7 +22,7 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal 'one two three', css_class('one', ['two'], three: true)
   end
 
-  class AssetHostTest < ApplicationHelperTest
+  class AssetHostTest < ActionView::TestCase
     setup do
       @request = ActionDispatch::TestRequest.create
       @asset_host = 'cdn.3scale.test.localhost'
@@ -64,6 +64,17 @@ class ApplicationHelperTest < ActionView::TestCase
       result = rails_asset_host_url
 
       assert_equal @full_asset_host, result
+    end
+  end
+
+  class DocsBaseUrlTest < ActionView::TestCase
+    setup do
+      ThreeScale.config.stubs(onpremises: false)
+      System::Deploy.load_info!
+    end
+
+    test 'docs base url' do
+      assert_equal 'https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html', docs_base_url
     end
   end
 

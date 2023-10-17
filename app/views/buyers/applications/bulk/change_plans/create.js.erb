@@ -1,6 +1,18 @@
-<%- applications.each do |cinstance| %>
-  $("#<%=dom_id(cinstance)%>").
-    find(".plan").html("<%= escape_javascript link_to_plan_edit(cinstance.plan) %>").end().
-    find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(cinstance.plan) %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<%# HACK: these 2 columns are conditionally rendered in /applications/_listing.html.slim %>
+const plansCol = document.querySelector('[data-label="Plan"]') !== null;
+const paidCol = document.querySelector('[data-label="Paid?"]') !== null;
+
+<% applications.each do |app| %>
+  <% plan = app.plan %>
+  <% id = dom_id(app) %>
+
+  if (plansCol) {
+    document.querySelector('#<%= id %> td[data-label="Plan"]').innerHTML = '<%= j link_to_plan_edit(plan) %>'
+  }
+
+  if (paidCol) {
+    document.querySelector('#<%= id %> td[data-label="Paid?"]').innerHTML = '<%= j plan_free_or_paid(plan) %>'
+  }
+<% end %>
+$.colorbox.close()
+$.flash('<%= j @notice %>')

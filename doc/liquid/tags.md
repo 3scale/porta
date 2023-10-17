@@ -18,19 +18,31 @@ __Example:__ Using csrf tag in liquid
 
 
 Provides the desired asset file.
-   
+
 The assets you can use here are limited to:
 
 Font Awesome:
 - font-awesome/4.3.0/css/font-awesome.css
 - font-awesome/4.3.0/css/font-awesome.min.css
 
-jQuery 1.11.4:
-- jquery-ui/1.11.4/jquery-ui.css 
-- jquery-ui/1.11.4/jquery-ui.min.js
-
 jQuery 1.7.1:
 - jquery/1.7.1/jquery.min.js
+
+jQuery 3.5.0:
+- jquery/3.5.0/jquery.min.js
+
+jQuery UI 1.11.4:
+- jquery-ui/1.11.4/jquery-ui.css
+- jquery-ui/1.11.4/jquery-ui.min.js
+
+SwaggerUI 2.0.23
+- swagger-ui/2.0.23/swagger-ui.js
+
+SwaggerUI 2.1.3
+- swagger-ui/2.1.3/swagger-ui.js
+
+SwaggerUI 2.2.10
+- swagger-ui/2.2.10/swagger-ui.js
       
 
 __Example:__ Using cdn_asset tag in liquid
@@ -50,6 +62,18 @@ We recommend __to remove this tag__ from public templates.
 
 ```liquid
 {% debug:help %}
+```
+# Tag 'disable_client_cache'
+
+Adds HTTP headers to disable the browser cache for the current screen.
+
+__Example:__ Disable browser cache for this screen
+```liquid
+<html>
+  <head>
+    {% disable_client_cache %}
+  </head>
+</html>
 ```
 # Tag 'email'
 

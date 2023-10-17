@@ -61,9 +61,8 @@ Given "{buyer} signed up for plan {string}" do |buyer, plan_name|
   sign_up(buyer, plan_name)
 end
 
-Given /^the buyer changed to plan "([^"]*)"$/ do |plan_name|
-  plan = Plan.find_by(name: plan_name)
-  @buyer.bought_cinstance.change_plan!(plan)
+Given "{buyer} changed to {plan}" do |buyer, plan|
+  buyer.bought_cinstance.change_plan!(plan)
 end
 
 Given /^the buyer's (application|service|account) plan contract is (.*)$/ do |plan_type,state|

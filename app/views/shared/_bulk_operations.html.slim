@@ -1,0 +1,9 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'bulk_operations'
+
+div id="bulk-operations" class="pf-c-card" style="display: none;"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" Bulk operations
+
+  div class="pf-c-card__body"
+    = yield

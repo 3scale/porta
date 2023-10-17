@@ -5,27 +5,19 @@
 - else
   - content_for :page_header_title, "Service Subscriptions"
 
-div id="bulk-operations" style="display: none;"
-  h3 Bulk operations
+= render 'shared/bulk_operations' do
   p
     ' You have selected
     span.count>
     | service subscriptions and you can make following operations with them:
 
-  dl
-    = bulk_action 'Send email',
-                  new_admin_buyers_service_contracts_bulk_send_email_path,
-                  'Send email to selected subscribers'
-    = bulk_action 'Change service plan',
-                  new_admin_buyers_service_contracts_bulk_change_plan_path,
-                  'Transfer these subscriptions to different service plan'
-    = bulk_action 'Change state',
-                  new_admin_buyers_service_contracts_bulk_change_state_path,
-                  'Accept, suspend or resume selected subscriptions'
-
-  - content_for :javascripts do
-    = javascript_include_tag 'bulk_operations.js'
-    = javascript_include_tag 'vendor/jquery.tipsy.js'
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
+    = bulk_action 'Send email', new_admin_buyers_service_contracts_bulk_send_email_path,
+                                'Send email to selected subscribers'
+    = bulk_action 'Change service plan', new_admin_buyers_service_contracts_bulk_change_plan_path,
+                                         'Transfer these subscriptions to different service plan'
+    = bulk_action 'Change state', new_admin_buyers_service_contracts_bulk_change_state_path,
+                                  'Accept, suspend or resume selected subscriptions'
 
 div class="pf-l-flex pf-m-column"
   div class="pf-l-flex__item"

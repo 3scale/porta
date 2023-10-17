@@ -1,12 +1,2 @@
-<%- @message_ids.each do |message_id| %>
-  $("#message_" + <%= json(message_id) %>).fadeOut(function(){ $(this).remove() });
-<%-end-%>
-
-<% if @no_more_messages %>
-  var text = '<%= t("provider.admin.messages.no_#{@scope}") %>';
-  
-  $('<p />').text(text).insertBefore('table#messages');
-  $('table#messages, #bulk-operations, .pagination').fadeOut();
-<% end %>
-
-$('#bulk-operations').trigger('bulk:success');
+<%# Reloads messages/outbox to update table and pagination with new total entries %>
+window.location.reload();

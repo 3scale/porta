@@ -38,6 +38,11 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
     { title: 'Last updated', transforms: [sortable] }
   ]
 
+  const sortColumn = {
+    attribute: 'updated_at',
+    index: 2
+  }
+
   const tableRows = emailConfigurations.map(c => ({
     disableActions: false,
     cells: [
@@ -47,12 +52,14 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
     ]
   }))
 
+  const sortParam = url.searchParams.get('sort')
   const sortBy: ISortBy = {
-    index: 2, // updated_at by default
+    index: sortParam === sortColumn.attribute ? sortColumn.index : -1,
     direction: (url.searchParams.get('direction') as ISortBy['direction']) ?? 'desc'
   }
 
   const onSort: OnSort = (_event, _index, direction) => {
+    url.searchParams.set('sort', sortColumn.attribute)
     url.searchParams.set('direction', direction)
     window.location.replace(url.toString())
   }

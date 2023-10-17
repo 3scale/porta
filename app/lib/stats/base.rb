@@ -1,5 +1,4 @@
-
-require_dependency 'stats'
+# frozen_string_literal: true
 
 module Stats
   class Base

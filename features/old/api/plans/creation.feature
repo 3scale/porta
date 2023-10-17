@@ -31,7 +31,6 @@ Feature: Plan creation
     Given the provider has "service_plans" switch allowed
     And a service "Pocoyo" of provider "foo.3scale.localhost"
     And a default published service plan "Pocoyo service plan" of service "Pocoyo" of provider "foo.3scale.localhost"
-    When I am on the edit page for service "Pocoyo" of provider "foo.3scale.localhost"
-    When I go to the service plans admin page
+    When an admin is on the service plans page of product "Pocoyo"
     And I follow "Pocoyo service plan"
     Then I should see "Pocoyo"

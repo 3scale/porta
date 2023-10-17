@@ -319,10 +319,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
 
       post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'Name can\'t be blank', flash[:error]
 
       post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'System name invalid', flash[:error]
     end
   end
 

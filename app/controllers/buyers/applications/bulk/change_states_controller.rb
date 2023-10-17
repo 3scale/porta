@@ -6,6 +6,7 @@ class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications:
   def create
     change_states
     handle_errors
+    super
   end
 
   private

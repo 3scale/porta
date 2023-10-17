@@ -11,9 +11,20 @@ Feature: Application Keys management
 
   @ignore-backend
   Scenario: Regenerate provider key
-    When I navigate to the default application of the provider
-    And I follow "Regenerate" and I confirm dialog box
-    And I enter the admin password in "Current password"
-    Then I should see "You are now in super-user mode! Retry the action, please."
-    And I follow "Regenerate" and I confirm dialog box
-    And I should see "The key was successfully changed"
+    Given they are reviewing the provider's application details
+    When follow "Regenerate" and I confirm dialog box
+    And fill in "Current password" with "supersecret"
+    And press "Confirm Password"
+    And should see "You are now in super-user mode! Retry the action, please."
+    And follow "Regenerate" and I confirm dialog box
+    Then should see "The key was successfully changed"
+
+  Scenario: Set a custom app key
+    Given they are reviewing the provider's application details
+    When follow "Set a custom User Key" within the API Credentials card
+    And fill in "Current password" with "supersecret"
+    And press "Confirm Password"
+    And fill in "User key" with "new-valid-key"
+    And press "Save"
+    Then should see "new-valid-key" within the API Credentials card
+    And should see "User key has been updated."

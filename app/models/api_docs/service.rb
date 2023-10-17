@@ -129,7 +129,7 @@ class ApiDocs::Service < ApplicationRecord
   end
 
   def new_base_path?
-    self.class.where({:base_path => base_path}).limit(1).empty?
+    self.class.unscoped.where({base_path: base_path}).limit(1).empty?
   end
 
   def notify_new_base_path

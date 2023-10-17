@@ -2,7 +2,7 @@
 
 class Api::ServicePlansPresenter < PlansBasePresenter
   def initialize(service:, user:, params: {})
-    super(collection: service.provider.service_plans, user: user, params: params)
+    super(collection: service.service_plans, user: user, params: params)
     @service = service
   end
 

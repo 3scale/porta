@@ -35,9 +35,9 @@ class ReportTrafficWorker
 
       args = [
         account.id,
-        metric_system_name,
-        filter_request_attrs(request),
-        filter_response_attrs(response),
+        metric_system_name.to_s,
+        filter_request_attrs(request).as_json,
+        filter_response_attrs(response).as_json,
         Time.now.to_i
       ]
 

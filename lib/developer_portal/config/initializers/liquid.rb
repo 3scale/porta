@@ -56,6 +56,7 @@ Rails.application.config.to_prepare do
     Liquid::Tags::ContentFor,
     Liquid::Tags::SortLink,
     Liquid::Tags::CdnAsset,
+    Liquid::Tags::DisableClientCache,
   ].each do |tag_class|
     ::Liquid::Template.register_tag(tag_class.tag, tag_class)
   end

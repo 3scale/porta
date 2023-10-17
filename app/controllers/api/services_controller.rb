@@ -10,6 +10,8 @@ class Api::ServicesController < Api::BaseController
   before_action :deny_on_premises_for_master
   before_action :authorize_section
   before_action :authorize_action, only: %i[new create]
+  before_action :disable_client_cache, only: :settings
+
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, except: [:create]
 
   helper_method :presenter
@@ -57,7 +59,7 @@ class Api::ServicesController < Api::BaseController
       flash[:notice] = t('flash.services.create.notice')
       redirect_to admin_service_path(@service)
     else
-      flash.now[:error] = I18n.t!('flash.services.create.errors.default')
+      flash.now[:error] = @service.errors.full_messages.to_sentence.presence || I18n.t!('flash.services.create.errors.default')
       activate_menu :dashboard
       render :new
     end

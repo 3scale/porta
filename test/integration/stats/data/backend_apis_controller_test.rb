@@ -18,7 +18,7 @@ class Stats::Data::BackendApisControllerTest < ActionDispatch::IntegrationTest
     get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: access_token.value), params: stats_params
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     expected_response = {
       metric: metric.attributes.slice('id', 'system_name', 'unit').merge(name: metric.friendly_name),

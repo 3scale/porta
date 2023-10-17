@@ -1,3 +1,4 @@
+# rubocop:disable Style/HashEachMethods
 # frozen_string_literal: true
 
 Given "the key limit for {application} is reached" do |application|
@@ -12,12 +13,20 @@ Given "{application} has the following keys:" do |application, table|
   fake_application_keys(application, table.raw.map(&:first))
 end
 
-Given "{application} has {int} keys" do |application, number|
-  fake_application_keys_count(application, number)
+Given "{application} has {int} key(s)" do |application, number|
+  assert number >= 0
+  keys = application.application_keys
+  keys.delete_all
+  number.times.each { |key| keys.add(nil) }
 end
 
-Given /^application "([^"]*)" has no keys$/ do |name|
-  step %(application "#{name}" has 0 keys)
+Given "{application} has no keys" do |app|
+  app.application_keys.delete_all
+end
+
+Then "{application} shows {int} key(s)" do |application, number|
+  wait_for_requests
+  assert_equal number, find_all('table#keys tbody tr.key').length
 end
 
 Given "the application of {buyer} has the following keys:" do |buyer, table|
@@ -51,9 +60,9 @@ When /^I (press|follow) "([^"]*)" for application key "([^"]*)"$/ do |action, la
   step %(I #{action} "#{label}" within "#application_key_#{key}")
 end
 
-When %r{^I (press|follow) "([^"]*)" for first application key$} do |action, label|
+When /^I (press|follow) "([^"]*)" for first application key$/ do |action, label|
   within "#keys .key:nth-child(2) .key" do
-    step %{I #{action} "#{label}"}
+    step %(I #{action} "#{label}")
   end
 end
 
@@ -90,10 +99,10 @@ Then /^I should see application keys limit reached error$/ do
   end
 end
 
-Then /^I should(?:n't| not) see application keys limit reached error$/ do
+Then "no more keys can be added" do
   wait_for_requests
   within '#application_keys' do
-    limit_warning.should_not be_visible
+    limit_warning.should be_visible
   end
 end
 
@@ -106,3 +115,17 @@ Then /^the key "(.+?)" should(?:n't| not) be deleteable$/ do |key|
     assert find("td.delete_key").has_no_content?("Delete")
   end
 end
+
+Then "(any of )the application keys {can} be deleted" do |deleteable|
+  within '#application_keys' do
+    @application.application_keys.each do |key|
+      assert_equal deleteable, has_css?("tr##{dom_id key} a.delete", visible: true)
+    end
+  end
+end
+
+Given "{application}'s product {has} mandatory app key" do |application, mandatory|
+  application.service.update!(mandatory_app_key: mandatory)
+end
+
+# rubocop:enable Style/HashEachMethods

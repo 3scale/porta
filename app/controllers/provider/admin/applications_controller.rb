@@ -15,6 +15,7 @@ class Provider::Admin::ApplicationsController < FrontendController
   before_action :find_service_plan, only: :create
   before_action :find_cinstance, except: %i[index new create]
   before_action :initialize_cinstance, only: :create
+  before_action :disable_client_cache
 
   activate_menu :audience, :applications, :listing
 

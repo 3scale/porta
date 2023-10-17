@@ -19,5 +19,5 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
   has tenant_id,           type: :bigint
   has state,               type: :string
 
-  scope { Account.not_master.without_to_be_deleted.includes(:users, :bought_cinstances) }
+  scope { Account.searchable }
 end

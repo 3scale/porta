@@ -13,7 +13,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     provider_user = FactoryBot.create(:user, account: @provider)
     provider_user.activate!
 
-    Authentication::Strategy::ProviderOauth2.any_instance.expects(:authenticate).returns(provider_user)
+    Authentication::Strategy::ProviderOAuth2.any_instance.expects(:authenticate).returns(provider_user)
 
     open_session do |session|
       session.host! @provider.external_admin_domain
@@ -219,7 +219,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'logout if authentication token is invalid' do
+  test 'return 403 and logout if authentication token is invalid' do
     host! @provider.external_admin_domain
     user = @provider.admins.first
 
@@ -230,7 +230,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
       with_forgery_protection { put provider_admin_account_path, params: { account: { org_name: 'jose' } } }
     end
 
-    assert_redirected_to provider_login_url
+    assert_response :forbidden
 
     pre_org_name = @provider.org_name
     assert_equal pre_org_name, @provider.reload.org_name

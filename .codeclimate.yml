@@ -35,7 +35,6 @@ exclude_patterns:
   - "app/javascript"
   - "assets/bundles/*.js"
   - "bin/webpack*"
-  - "lib/action_dispatch/rails5_ssl.rb"
   - "lib/developer_portal/app/assets/stylesheets/**/*"
   - "lib/developer_portal/app/views/developer_portal/css/*"
   - "lib/developer_portal/app/views/developer_portal/javascripts/*"

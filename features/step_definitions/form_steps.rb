@@ -16,6 +16,10 @@ But "will not be able to edit its system name" do
   assert system_name_disabled?
 end
 
+Then "the submit button is {enabled}" do |enabled|
+  assert_not_equal enabled, find('[type="submit"]').disabled?
+end
+
 def system_name_disabled?
   find('input[name$="[system_name]"]').disabled?
 end

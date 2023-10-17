@@ -161,6 +161,7 @@ class Account::SearchTest < ActiveSupport::TestCase
       ThinkingSphinx::Test.clear
       ThinkingSphinx::Test.init
       ThinkingSphinx::Test.start index: false
+      ThinkingSphinx::Test.enable_search_jobs!
       perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
         @provider = FactoryBot.create(:simple_provider)
         @buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: provider)

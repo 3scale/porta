@@ -9,7 +9,7 @@ ActiveSupport.on_load(:active_record) do
     clear_validators!
 
     validates :account_id, presence: true
-    validates :name, presence: true, uniqueness: { scope: :account_id }, length: { maximum: 255 }
+    validates :name, presence: true, uniqueness: { scope: :account_id, case_sensitive: true }, length: { maximum: 255 }
 
     belongs_to :account
 

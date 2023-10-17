@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency 'stats'
-
 class LastTraffic
   DEFAULT_METRIC = 'hits'
 

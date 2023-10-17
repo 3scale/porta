@@ -3,6 +3,8 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
   before_action :authorize_changes, only: [:edit, :update, :destroy]
   activate_menu :account, :users, :sso_integrations
 
+  before_action :disable_client_cache
+
   def index
     @presenter = Provider::Admin::Account::AuthenticationProvidersIndexPresenter.new(
       current_user, self_authentication_providers, user_session)

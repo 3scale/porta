@@ -10,6 +10,7 @@ class Buyers::Accounts::Bulk::ChangeStatesController < Buyers::Accounts::Bulk::B
   def create
     change_states
     handle_errors
+    super
   end
 
   private

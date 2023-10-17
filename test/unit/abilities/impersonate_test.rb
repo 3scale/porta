@@ -13,7 +13,7 @@ module Abilities
     end
 
     test "master admin can impersonate provider accounts" do
-      @provider.admins.first.update_attribute :username, ThreeScale.config.impersonation_admin['username']
+      @provider.admins.first.update_attribute :username, ThreeScale.config.impersonation_admin[:username]
       @provider.reload
 
       user = Account.master.admins.first
@@ -21,7 +21,7 @@ module Abilities
     end
 
     test "provider admin users cannot impersonate" do
-      @provider.admins.first.update_attribute :username, ThreeScale.config.impersonation_admin['username']
+      @provider.admins.first.update_attribute :username, ThreeScale.config.impersonation_admin[:username]
       @provider.reload
 
       assert_cannot Ability.new(@provider.admins.first), :impersonate, @provider

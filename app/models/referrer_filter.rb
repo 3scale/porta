@@ -7,7 +7,7 @@ class ReferrerFilter < ApplicationRecord
 
   validates :application, presence: true
   validates :value, presence: true
-  validates :value, uniqueness: { scope: [:application_id] }
+  validates :value, uniqueness: { scope: [:application_id], case_sensitive: true }
   validates :value, format: { with: /\A[a-zA-Z0-9*.-]+\z/ }, length: { maximum: 255 }
 
   validate :keys_limit_reached

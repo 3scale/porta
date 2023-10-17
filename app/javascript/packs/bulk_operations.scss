@@ -1,0 +1,19 @@
+#bulk-operations {
+  margin-bottom: 24px;
+
+  .pf-c-card__body > p {
+    padding-bottom: var(--pf-c-card--child--PaddingBottom);
+  }
+
+  span.count {
+    font-weight: bold;
+  }
+
+  .select-total-entries {
+    &.hidden {
+      display: none;
+    }
+
+    display: inline;
+  }
+}

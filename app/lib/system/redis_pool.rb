@@ -10,7 +10,7 @@ module System
       config = config.dup
       pool_config = config.extract!(:pool_size, :pool_timeout)
       @pool = ConnectionPool.new(size: pool_config[:pool_size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
-        Redis.new_with_namespace(config)
+        Redis.new(config)
       end
     end
 

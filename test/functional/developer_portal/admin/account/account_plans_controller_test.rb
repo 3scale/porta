@@ -67,7 +67,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
          provider_key: 'fake', username: 'bob' }
 
     assert_response :forbidden
-    assert_equal 'application/xml', @response.content_type
+    assert_equal 'application/xml', @response.media_type
 
     assert_select 'error', 'provider_key is invalid'
   end
@@ -85,7 +85,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
          username: 'fake' }
 
     assert_response :forbidden
-    assert_equal 'application/xml', @response.content_type
+    assert_equal 'application/xml', @response.media_type
 
     assert_select 'error', 'username is invalid'
   end

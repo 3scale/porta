@@ -11,6 +11,12 @@ class ProviderTest < ActiveSupport::TestCase
     assert_equal master_account, Provider.find(master_account.id)
   end
 
+  test 'should never return self as a buyer account' do
+    assert_equal master_account, master_account.provider_account
+
+    assert_not_includes master_account.buyer_accounts, master_account
+  end
+
   test 'publishes domain events when changed' do
     provider = FactoryBot.create(:simple_provider)
 

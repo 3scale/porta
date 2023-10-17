@@ -1,23 +1,18 @@
-div id="bulk-operations" style="display: none;"
-  h3 Bulk operations
+= render 'shared/bulk_operations' do
   p
     ' You have selected
     span.count>
     | applications and you can make following operations with them:
-  dl
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
     = bulk_action 'Send email', new_admin_buyers_applications_bulk_send_email_path,
-                    'Send email to owners of selected applications'
+                                'Send email to owners of selected applications'
     = bulk_action 'Change application plan', new_admin_buyers_applications_bulk_change_plan_path,
-                    'Transfer these applications to different application plan'
+                                             'Transfer these applications to different application plan'
     = bulk_action 'Change state', new_admin_buyers_applications_bulk_change_state_path,
-                    'Accept, suspend or resume selected applications'
-
-
-  = content_for :javascripts do
-    = javascript_include_tag 'bulk_operations.js'
-    = javascript_include_tag 'vendor/jquery.tipsy.js'
+                                  'Accept, suspend or resume selected applications'
 
 / FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock
+/ FIXME 2: application_plans returns [] in services/:id/applications even though there are plans
 - show_application_plans = application_plans.size > 0 && !master_on_premises?
 - service_column_visible = service.nil? && current_account.multiservice?
 div class="pf-c-card"

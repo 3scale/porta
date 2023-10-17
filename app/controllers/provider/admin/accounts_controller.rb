@@ -8,6 +8,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   before_action :find_account
   before_action :deny_unless_can_update, :only => [:update, :edit]
   before_action :check_provider_signup_possible, :only => %i[new create]
+  before_action :disable_client_cache
 
   def new
     @provider = current_account.buyers.new

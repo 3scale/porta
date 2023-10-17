@@ -17,6 +17,12 @@ module ApiDocs
       end
     end
 
+    def provider_users_ids
+      @account.users.but_impersonation_admin.latest.map do |user|
+        {:name => user.username, :value => user.id}
+      end
+    end
+
     def user_ids
       accounts.map do |account|
         if user = account.admins.first
@@ -102,7 +108,7 @@ module ApiDocs
     end
 
     def data_items
-      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids backend_api_metric_names service_ids admin_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
+      %w[app_keys app_ids application_ids user_keys user_ids account_ids metric_names metric_ids backend_api_metric_names service_ids admin_ids provider_users_ids service_plan_ids application_plan_ids account_plan_ids client_ids client_secrets]
     end
   end
 end

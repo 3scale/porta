@@ -8,7 +8,7 @@ module Tasks
       queues = %w[backend_sync billing critical default deletion events low mailers priority web_hooks zync]
                  .flat_map { |queue| ['--queue', queue] }
 
-      Object.any_instance.expects(:exec).with({ 'RAILS_MAX_THREADS' => '1' }, 'sidekiq', '--index', '0', *queues)
+      Object.any_instance.expects(:exec).with({ 'RAILS_MAX_THREADS' => '1' }, 'sidekiq', *queues)
       execute_rake_task 'sidekiq.rake', 'sidekiq:worker'
     end
   end

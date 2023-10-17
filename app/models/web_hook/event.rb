@@ -39,7 +39,7 @@ class WebHook
 
     delegate :logger, to: :Rails
 
-    def has_transactional_callbacks?
+    def trigger_transactional_callbacks?
       true
     end
 
@@ -66,7 +66,8 @@ class WebHook
 
     def enqueue_now
       logger.info "Pushed WebHook::Event(#{id}) #{event} for #{model}##{resource.id}"
-      WebHookWorker.perform_async(id, provider_id: provider.id, url: url, xml: to_xml, content_type: content_type)
+      args = { provider_id: provider.id, url: url, xml: to_xml, content_type: content_type }
+      WebHookWorker.perform_async(id, args.as_json)
     end
 
     def ignore

@@ -1,4 +1,4 @@
 export interface FlashMessage {
-  type: string;
+  type: 'error' | 'notice' | 'success';
   message: string;
 }

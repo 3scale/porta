@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory (:proxy) do
+  factory(:proxy) do
     association :service
     api_backend { 'http://api.example.net:80' }
     secret_token { "123" }

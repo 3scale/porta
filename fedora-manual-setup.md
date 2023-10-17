@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 14](https://nodejs.org/download/release/v14.21.3/)**.
+The project supports **[ruby 2.7.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 14](https://nodejs.org/download/release/v14.21.3/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -42,7 +42,7 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mysql:8.0
 ```
 
 ### Redis

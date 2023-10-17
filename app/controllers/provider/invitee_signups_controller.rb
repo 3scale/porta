@@ -24,6 +24,11 @@ class Provider::InviteeSignupsController < FrontendController
       flash[:notice] = t('flash.signups.create.notice')
       redirect_to(provider_login_path)
     else
+      errors = @user.errors.full_messages.reduce do |result, error|
+        "#{result}\n#{error}"
+      end
+
+      flash[:error] = t('flash.signups.create.error', errors: errors)
       render 'show'
     end
   end

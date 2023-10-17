@@ -12,7 +12,7 @@ Feature: Email configurations
 
     Scenario: Email configurations index sorting
       When I go to the email configurations page
-      Then I see my email configurations sorted by last updated date
+      Then the latest email configurations are listed first
 
     Scenario: Email configurations index pagination
       When I go to the email configurations page

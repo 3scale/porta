@@ -1,4 +1,4 @@
-require_dependency 'last_traffic'
+# frozen_string_literal: true
 
 class LastTrafficWorker
   include Sidekiq::Worker

@@ -84,7 +84,9 @@ class Account < ApplicationRecord
 
   scope :not_master, -> { where.has { (master != true) | (master == nil) } }
 
-  audited allow_mass_assignment: true
+  scope :searchable, -> { not_master.without_to_be_deleted.includes(:users, :bought_cinstances) }
+
+  audited
 
   # this is done in a callback because we want to do this AFTER the account is deleted
   # otherwise the before_destroy admin check in the user will stop the deletion
@@ -197,7 +199,7 @@ class Account < ApplicationRecord
   end
 
   def find_impersonation_admin
-    users.admins.find_by(username: ThreeScale.config.impersonation_admin['username'])
+    users.admins.find_by(username: ThreeScale.config.impersonation_admin[:username])
   end
 
   # Users of this account + users of all buyer accounts of this account (if it is provider).

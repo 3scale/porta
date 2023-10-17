@@ -1,60 +1,65 @@
-import { ActionGroup, Button, Form, LoginPage } from '@patternfly/react-core'
+import {
+  ActionGroup,
+  Button,
+  Form,
+  FormGroup,
+  LoginPage,
+  TextInput
+} from '@patternfly/react-core'
+import { useState } from 'react'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { useFormState } from 'Login/utils/ChangePasswordHooks'
-import { FlashMessages } from 'Login/components/FlashMessages'
-import { PasswordField, PasswordConfirmationField } from 'Login/components/FormGroups'
-import { HiddenInputs } from 'Login/components/HiddenInputs'
 import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
+import { CSRFToken } from 'utilities/CSRFToken'
+import { validateChangePassword } from 'Login/utils/validations'
+import { LoginAlert } from 'Login/components/LoginAlert'
 
-import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'
+import type { FlashMessage } from 'Types'
 
 interface Props {
   lostPasswordToken?: string | null;
   url?: string;
-  errors?: FlashMessage[];
+  flashMessages: FlashMessage[];
 }
 
-const emptyArray = [] as never[]
-
-const ChangePassword: FunctionComponent<Props> = ({
+const ChangePasswordPage: FunctionComponent<Props> = ({
   lostPasswordToken = null,
-  url = '',
-  errors = emptyArray
+  url,
+  flashMessages
 }) => {
-  const {
-    isFormDisabled,
-    onFormChange,
-    password,
-    passwordConfirmation
-  } = useFormState()
+  const [state, setState] = useState({
+    password: '',
+    passwordConfirmation: ''
+  })
+  const [validationVisibility, setValidationVisibility] = useState({
+    password: false,
+    passwordConfirmation: false
+  })
 
-  const passwordProps: InputProps = {
-    isRequired: true,
-    name: 'user[password]',
-    fieldId: 'user_password',
-    label: 'Password',
-    value: password.value,
-    isValid: password.isValid,
-    errorMessage: password.errorMessage,
-    autoFocus: true,
-    onBlur: password.onBlur,
-    onChange: password.onChange
+  const handleOnChange = (field: keyof typeof state) => {
+    return (value: string) => {
+      setState(prev => ({ ...prev, [field]: value }))
+      setValidationVisibility(prev => ({ ...prev, [field]: false }))
+    }
   }
 
-  const passwordConfirmationProps = {
-    isRequired: true,
-    name: 'user[password_confirmation]',
-    fieldId: 'user_password_confirmation',
-    label: 'Password confirmation',
-    value: passwordConfirmation.value,
-    isValid: passwordConfirmation.isValid,
-    errorMessage: passwordConfirmation.errorMessage,
-    onBlur: passwordConfirmation.onBlur,
-    onChange: passwordConfirmation.onChange
+  const handleOnBlur = (field: keyof typeof state) => {
+    return () => {
+      setValidationVisibility(prev => ({ ...prev, [field]: true }))
+    }
   }
+
+  const alert = flashMessages.length ? flashMessages[0] : undefined
+
+  const validation = validateChangePassword(state)
+
+  const passwordErrors = validation?.password
+  const passwordConfirmationErrors = validation?.passwordConfirmation
+
+  const passwordValidated = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
+  const passwordConfirmationValidated = (validationVisibility.passwordConfirmation && passwordConfirmationErrors) ? 'error' : 'default'
 
   return (
     <LoginPage
@@ -64,28 +69,71 @@ const ChangePassword: FunctionComponent<Props> = ({
       brandImgSrc={brandImg}
       loginTitle="Change Password"
     >
-      {errors.length && <FlashMessages flashMessages={errors} />}
       <Form
         noValidate
         acceptCharset="UTF-8"
         action={url}
         id="edit_user_2"
         method="post"
-        onChange={onFormChange}
       >
+        <LoginAlert message={alert?.message} type={alert?.type} />
+
         <input name="_method" type="hidden" value="put" />
-        <HiddenInputs />
-        <PasswordField inputProps={passwordProps} />
-        <PasswordConfirmationField inputProps={passwordConfirmationProps} />
+        <input name="utf8" type="hidden" value="✓" />
+        <CSRFToken />
+
+        <FormGroup
+          isRequired
+          autoComplete="off"
+          fieldId="user_password"
+          helperTextInvalid={passwordErrors?.[0]}
+          label="Password"
+          validated={passwordValidated}
+        >
+          <TextInput
+            autoFocus
+            isRequired
+            autoComplete="off"
+            id="user_password"
+            name="user[password]"
+            type="password"
+            validated={passwordValidated}
+            value={state.password}
+            onBlur={handleOnBlur('password')}
+            onChange={handleOnChange('password')}
+          />
+        </FormGroup>
+
+        <FormGroup
+          isRequired
+          autoComplete="off"
+          fieldId="user_password_confirmation"
+          helperTextInvalid={passwordConfirmationErrors?.[0]}
+          label="Password confirmation"
+          validated={passwordConfirmationValidated}
+        >
+          <TextInput
+            isRequired
+            autoComplete="off"
+            id="user_password_confirmation"
+            name="user[password_confirmation]"
+            type="password"
+            validated={passwordConfirmationValidated}
+            value={state.passwordConfirmation}
+            onBlur={handleOnBlur('passwordConfirmation')}
+            onChange={handleOnChange('passwordConfirmation')}
+          />
+        </FormGroup>
+
         {!!lostPasswordToken && <input id="password_reset_token" name="password_reset_token" type="hidden" value={lostPasswordToken} />}
         <ActionGroup>
           <Button
-            className="pf-c-button pf-m-primary pf-m-block"
-            isDisabled={isFormDisabled}
-            name="commit"
+            isBlock
+            isDisabled={validation !== undefined}
             type="submit"
+            variant="primary"
           >
-          Change Password
+            Change Password
           </Button>
         </ActionGroup>
       </Form>
@@ -94,7 +142,7 @@ const ChangePassword: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ChangePasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePassword {...props} />, containerId) }
+const ChangePasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePasswordPage {...props} />, containerId) }
 
 export type { Props }
-export { ChangePassword, ChangePasswordWrapper }
+export { ChangePasswordPage, ChangePasswordWrapper }

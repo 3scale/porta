@@ -81,19 +81,19 @@ class MenuHelperTest < ActionView::TestCase
   end
 
   test '#documentation_items' do
-    expects(:saas?).returns(false)
+    ThreeScale.stubs(:saas?).returns(false)
     Features::QuickstartsConfig.stubs(enabled?: false)
     assert_equal documentation_items.length, 3
 
-    expects(:saas?).returns(true)
+    ThreeScale.stubs(:saas?).returns(true)
     Features::QuickstartsConfig.stubs(enabled?: false)
     assert_equal documentation_items.length, 4
 
-    expects(:saas?).returns(false)
+    ThreeScale.stubs(:saas?).returns(false)
     Features::QuickstartsConfig.stubs(enabled?: true)
     assert_equal documentation_items.length, 4
 
-    expects(:saas?).returns(true)
+    ThreeScale.stubs(:saas?).returns(true)
     Features::QuickstartsConfig.stubs(enabled?: true)
     assert_equal documentation_items.length, 5
   end

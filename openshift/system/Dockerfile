@@ -1,16 +1,16 @@
-FROM quay.io/centos7/ruby-26-centos7 AS porta-base
+FROM quay.io/centos7/ruby-27-centos7 AS porta-base
 
 USER root
 
 ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=6
+    RUBY_MINOR_VERSION=7
 
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
     RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
 
 ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
-    VARNISH_SCL=rh-varnish5 \
+    VARNISH_SCL=rh-varnish6 \
     NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
@@ -26,6 +26,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
               gd-devel \
               unixODBC-devel \
               mysql \
+              liberation-sans-fonts \
               llvm5.0-devel \
               postgresql13 postgresql13-devel postgresql13-libs \
               file \

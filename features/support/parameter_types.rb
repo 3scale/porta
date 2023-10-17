@@ -125,6 +125,17 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'product',
+  type: Service,
+  regexp: /the product|product "([^"]*)"/,
+  transformer: ->(*args) do
+    return Service.find_by(name: args[0]) if args[0].present?
+
+    @product || @service || @provider.default_service
+  end
+)
+
+ParameterType(
   name: 'buyer',
   type: Account,
   regexp: /buyer "([^"]*)"|the buyer/,
@@ -152,8 +163,8 @@ ParameterType(
 ParameterType(
   name: 'application',
   type: Cinstance,
-  regexp: /application "([^"]*)"/,
-  transformer: ->(name) { Cinstance.find_by!(name: name) }
+  regexp: /application "([^"]*)"|the application/,
+  transformer: ->(name) { name.present? ? Cinstance.find_by!(name: name) : @application || @cinstance }
 )
 
 ParameterType(
@@ -237,8 +248,8 @@ ParameterType(
 ParameterType(
   name: 'user',
   type: User,
-  regexp: /user "([^"]*)"/,
-  transformer: ->(name) { User.find_by!(username: name) }
+  regexp: /user "([^"]*)"|the user/,
+  transformer: ->(name) { name.present? ? User.find_by!(username: name) : @user }
 )
 
 ParameterType(
@@ -280,6 +291,12 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'enable',
+  regexp: /enable|disable/,
+  transformer: ->(value) { value == 'enable' }
+)
+
+ParameterType(
   name: 'default',
   regexp: /default|not default|/,
   transformer: ->(value) { value == 'default' }
@@ -316,7 +333,7 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'enabled_or_disabled',
+  name: 'enabled_or_disabled', # TODO: use type 'enabled'
   regexp: /enabled|disabled/,
   transformer: ->(value) { value }
 )
@@ -395,7 +412,7 @@ ParameterType(
 
 ParameterType(
   name: 'has',
-  regexp: /has|has already|has not|has not yet|don't have/,
+  regexp: /has|has already|does not have|has not|has not yet|don't have/,
   transformer: ->(value) { ['has', 'has already'].include?(value) }
 )
 

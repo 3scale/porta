@@ -23,7 +23,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansControllerTest < ActionDispatch
       action: 'create'
     }
     assert_response :unprocessable_entity
-    assert_template 'buyers/applications/bulk/shared/errors.html'
+    assert_template 'buyers/service_contracts/bulk/shared/errors.html'
   end
 
   test '#new renders with the display_name in the title of the contract' do

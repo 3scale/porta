@@ -5,7 +5,9 @@ class Buyers::Applications::Bulk::BaseController < Buyers::BulkBaseController
 
   helper_method :applications
 
-  def create; end
+  def create
+    notify_success
+  end
 
   protected
 

@@ -5,7 +5,9 @@ class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseControlle
 
   helper_method :service_contracts
 
-  def create; end
+  def create
+    notify_success
+  end
 
   protected
 
@@ -22,6 +24,6 @@ class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseControlle
   end
 
   def errors_template
-    'buyers/applications/bulk/shared/errors.html'
+    'buyers/service_contracts/bulk/shared/errors.html'
   end
 end

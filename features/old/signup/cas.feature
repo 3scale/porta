@@ -13,7 +13,7 @@ Feature: Signup using Cas
   Scenario: Signup with Internal
     When I go to the sign up page
     Then I should see "Login with CAS"
-    And fields should be required:
+    And fields are required:
       | Username                |
       | Password                |
       | Organization/Group Name |
@@ -37,13 +37,13 @@ Feature: Signup using Cas
   Scenario: Signup with Cas
     When I have a cas token in my session
     And I go to the sign up page
-    Then fields should be required:
+    Then fields are required:
       | user fields           |
       | Username              |
 
     And I should see "Please continue the signup process below."
 
-    And fields should be required:
+    And fields are required:
       | account fields          |
       | Organization/Group Name |
 

@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class Provider::Admin::WebhooksController < Sites::BaseController
 
   before_action :find_webhook
   before_action :authorize_web_hooks
+  before_action :disable_client_cache
 
   activate_menu! :account, :integrate, :webhooks
 

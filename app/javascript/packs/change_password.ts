@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { lostPasswordToken, url, errors } = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps) ?? {}
+  const props = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps)
 
-  ChangePasswordWrapper({
-    lostPasswordToken,
-    url,
-    errors
-  }, 'pf-login-page-container')
+  if (!props) {
+    throw new Error('Missing props for ChangePassword')
+  }
+
+  ChangePasswordWrapper(props, containerId)
 })

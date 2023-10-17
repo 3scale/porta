@@ -32,7 +32,7 @@
 en:
   # start documentation links
   docs:
-    base_url: 'https://access.redhat.com/documentation/en-us/%{major_and_minor_version_path}/html'
+    base_url: 'https://access.redhat.com/documentation/en-us/%{docs_version}/html'
     hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
@@ -391,6 +391,12 @@ en:
 
   provider:
     passwords:
+      destroy:
+        success: |
+          We sent an email with password reset instructions to: %{email}. If you do not
+          receive it soon, check your spam folder or request a password reset again.
+      update:
+        success: The password has been changed.
       new:
         has_password: 'User already has a password. Use it to change the password.'
 
@@ -403,16 +409,35 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      keys:
+        create:
+          success: A new key has been added.
+        destroy:
+          error: At least one application key is required.
+          success: The key has been removed.
+        update:
+          success: User key has been updated.
 
       authentication_providers:
         form:
           automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
           submit_button_label: 'Create Authentication provider'
       messages:
+        bulk:
+          trash:
+            success: Messages moved into the trash
         no_metrics: "You have no metrics"
         no_methods: "You have no methods"
-        no_received_messages: "You have no messages."
-        no_messages: "You have sent no messages."
+        inbox:
+          index:
+            empty_state:
+              title: "Nothing to see here"
+              body: "Your inbox is empty, there are no new messages."
+        outbox:
+          index:
+            empty_state:
+              title: "Nothing to see here"
+              body: "Your outbox is empty, there are no new sent messages."
       cms:
         builtin_legal_terms:
           info:
@@ -473,6 +498,49 @@ en:
         reject: 'rejected'
         suspend: 'suspended'
         resume: 'resumed'
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The account's state was changed successfully.
+            other: Successfully changed the state of %{count} accounts.
+        change_plans:
+          success:
+            one: The account's plan was changed successfully.
+            other: Successfully changed the plan of %{count} accounts.
+
+    applications:
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The application's state was changed successfully.
+            other: Successfully changed the state of %{count} applications.
+        change_plans:
+          success:
+            one: The application's plan was changed successfully.
+            other: Successfully changed the plan of %{count} applications.
+
+    service_contracts:
+      bulk:
+        send_emails:
+          success:
+            one: The email was sent successfully.
+            other: Successfully sent %{count} emails.
+        change_states:
+          success:
+            one: The subscription's state was changed successfully.
+            other: Successfully changed the state of %{count} subscriptions.
+        change_plans:
+          success:
+            one: The subscription's plan was changed successfully.
+            other: Successfully changed the plan of %{count} subscriptions.
 
   sites:
     spam_protections:
@@ -481,6 +549,12 @@ en:
         captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
     usage_rules:
       edit:
+        plans_label: 'Developers are allowed to:'
+        plans_info: |
+          The following options define whether the developers are allowed to change the plan
+          directly, or only request a plan change. When plan change is requested,
+          notifications about the requests will be sent to the admin users by email. The plan
+          change can then be performed in the admin portal.
         sso_integrations_info_html: |
           This setting can be overridden for <a href='%{link}'>each individual SSO integration</a>
           so sign ups through trusted SSO integrations will always be approved.
@@ -541,7 +615,6 @@ en:
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
-        documentation_create_active_doc_spec: "%{docs_base_url}/providing_apis_in_the_developer_portal/create-activedocs-spec"
         # end documentation links
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
@@ -550,6 +623,9 @@ en:
             Start by creating an application plan.
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
+    metrics:
+      edit:
+        delete_confirmation: "Removing this %{type} will affect all plans that contain this %{type}, all associated mapping rules will be deleted too. Are you sure?"
 
   deployment_options:
     missing: |
@@ -835,6 +911,8 @@ en:
           attributes:
             base:
               all_periods_used: "Metric cannot be disabled. Please contact support."
+              cannot_delete_in_use: "%{type} is used by the latest gateway configuration and cannot be deleted"
+              cannot_delete_hits: 'The Hits metric cannot be deleted'
         policy:
           attributes:
             base:
@@ -896,11 +974,6 @@ en:
         service_plan:
           has_contracts: 'This service plan cannot be deleted! At least one contract depends on it.'
 
-        service:
-          attributes:
-            system_name:
-              invalid: Invalid.
-
         cinstance:
           attributes:
             plan:
@@ -920,6 +993,7 @@ en:
               blank: "can't be blank"
             password:
               blank: "can't be blank"
+          current_password_incorrect: "is incorrect"
           last_admin: "Can't delete last admin"
 
         account:
@@ -1151,6 +1225,7 @@ en:
     signups:
       create:
         notice: "Thanks for signing up! You can now sign in."
+        error: "There are some errors:\n%{errors}"
       already_logged_in: 'You are already signed up. Log out if you want to sign up again.'
 
     services:
@@ -1191,9 +1266,8 @@ en:
         service_plans_ui_visible: "Only consider using Service Plans for non-API features like additional support per Service instead of for the whole Account."
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
-        change_account_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
-        change_service_plan_permission: "When 'Request plan change' is selected you will be informed about users' requests by email - you can then execute the plan change in the administration interface."
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
+        signups_enabled: ''
         strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
           Allow anyone to search on your Developer Portal.
@@ -1225,7 +1299,8 @@ en:
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-), no spaces and 256 characters at most."
+        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and up to 256 characters."
+        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and between 5 and 255 characters."
 
       cms:
         page:
@@ -1315,8 +1390,9 @@ en:
         skip_ssl_certificate_verification: Do not verify SSL certificate
 
       settings:
-        account_plans_ui_visible: "Account Plans"
-        service_plans_ui_visible: "Service Plans"
+        account_approval_required: Account approval required
+        account_plans_ui_visible: "Enable Account Plans"
+        service_plans_ui_visible: "Enable Service Plans"
         change_account_plan_permission: "For their account, a user can:"
         change_service_plan_permission: "For a service, a subscribed user can:"
         useraccountarea_enabled: 'Allow the user to edit their submitted details, change passwords, etc.'
@@ -1327,6 +1403,16 @@ en:
         public_search: 'Enable public search on Developer Portal'
         cms_escape_draft_html: 'Use Automatic Escaping for draft content'
         cms_escape_published_html: 'Use Automatic Escaping for published content'
+        change_plan_permission:
+          request: Request a plan change
+          direct: Change the plan directly
+          credit_card: |
+            Change the plan directly only when credit card details are stored, otherwise request a
+            plan change
+          request_credit_card: |
+            Change to free plans directly or when credit card details are stored, otherwise request
+            credit card details
+          none: Don't allow plan changes
 
       proxy:
         status: 'Response Code'

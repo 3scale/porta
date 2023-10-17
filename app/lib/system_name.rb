@@ -16,7 +16,7 @@ module SystemName
 
       return unless opts[:uniqueness_scope]
 
-      validates :system_name, uniqueness: opts[:uniqueness_scope] == true ? true : { scope: opts[:uniqueness_scope] }
+      validates :system_name, uniqueness: opts[:uniqueness_scope] == true ? { case_sensitive: true } : { case_sensitive: true, scope: opts[:uniqueness_scope] }
     end
 
     def has_system_name(opts = {})
@@ -59,7 +59,7 @@ module SystemName
   # we can guess a reasonable one.
   #
   def internal_system_name
-    model_name = ActiveModel::Name.new(self.class, self.class.parent)
+    model_name = ActiveModel::Name.new(self.class, self.class.module_parent)
     "#{model_name.param_key}_#{SecureRandom.hex(6)}"
   end
 end

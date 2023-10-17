@@ -1,22 +1,31 @@
 (function($) {
   var container = $("#application_keys");
 
-  <% if @key.persisted? -%>
+  <% if @key.persisted? %>
     $.colorbox.close();
     var keys = container.find("table#keys tbody");
     var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
     $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
+    $.flash.notice('<%= @notice %>')
 
-  <% else -%>
-    $("#invalid-key-warning").text('<%= flash[:error] %>');
-    $("#invalid-key-warning").show();
-    $.colorbox.resize();
-  <% end -%>
+  <% else %>
+    <% if @error %>
+      const input = document.getElementById('key')
+
+      <%# HACK: Remove helperText and add it again, since replacing the text also removes the icon. %>
+      input.closest('.pf-c-form__group-control').children[1].remove()
+
+      input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
+      input.setAttribute('aria-invalid', 'true')
+
+      $.colorbox.resize();
+    <% end %>
+  <% end %>
 
   <% unless @cinstance.application_keys.can_add? %>
     $('#app-keys-limit-warning').show(); // provider side
     $('#app-keys-operations').hide();
-  <% end -%>
+  <% end %>
 
   container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
 })(jQuery);

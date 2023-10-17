@@ -16,7 +16,7 @@ class Stats::Api::ApplicationsTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
-    assert_content_type 'application/json'
+    assert_media_type 'application/json'
 
     response = ActiveSupport::JSON.decode(@response.body)
     assert_equal response["values"], [0] * 25

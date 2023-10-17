@@ -36,7 +36,7 @@ class Cinstance < Contract
 
   # this has to be before the include Backend::ModelExtensions::Cinstance
   # or callbacks order makes keys not to be saved in backend
-  after_save :create_first_key, on: :create
+  after_create :create_first_key
 
   # before_destroy :refund_fixed_cost
   after_commit :reject_if_pending, :on => :destroy
@@ -101,11 +101,11 @@ class Cinstance < Contract
 
   validate :plan_is_unique, if: :validate_plan_is_unique?
   validate :application_id_is_unique, if: :validate_application_id_is_unique?
-  validates :application_id, uniqueness: { scope: [:service_id] }, unless: :validate_application_id_is_unique?
+  validates :application_id, uniqueness: { scope: [:service_id], case_sensitive: true }, unless: :validate_application_id_is_unique?
 
   validate :user_key_is_unique, unless: :provider_can_duplicate_user_key?
 
-  validates :user_key, uniqueness: { scope: [:service_id] }, if: :provider_can_duplicate_user_key?
+  validates :user_key, uniqueness: { scope: [:service_id], case_sensitive: true }, if: :provider_can_duplicate_user_key?
 
   validate :same_service, on: :update, if: :plan_id_changed?
 

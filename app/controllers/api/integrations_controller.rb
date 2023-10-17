@@ -5,6 +5,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_proxy
   before_action :authorize
   before_action :find_registry_policies, only: :update
+  before_action :disable_client_cache
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -175,10 +176,6 @@ class Api::IntegrationsController < Api::BaseController
     end
 
     params.require(:proxy).permit(*permitted_fields)
-  end
-
-  def deploying_hosted_proxy_key
-    "#{current_account.id}/deploying_hosted"
   end
 
   def toggle_land_path

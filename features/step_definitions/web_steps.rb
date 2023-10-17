@@ -24,27 +24,23 @@ When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
+When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
   with_scope(selector) do
     click_button(button, visible: !invisible)
   end
 end
 
-When /^(?:|I |they )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
+When /^(?:|I |they |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
     click_link(link, exact: true, visible: !invisible)
   end
 end
 
-When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
+When /^(?:|I |they )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
-    if page.has_css?('.pf-c-form__label', text: field)
-      fill_in_pf(field, with: value)
-    else
-      # DEPRECATED: remove when all forms implement PF4
-      ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-      fill_in(field, :with => value, visible: true)
-    end
+    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field)
+
+    fill_in(field, with: value, visible: true)
   end
 end
 
@@ -153,7 +149,7 @@ end
 #   end
 # end
 
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then /^(?:|I |they )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
   with_scope(selector) do
     refute_text :visible, regex
@@ -195,6 +191,10 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
     field_checked = find_field(label)['checked']
     expect(field_checked).to be_falsy
   end
+end
+
+Then "the current page is {}" do |page_name|
+  assert_current_path path_to(page_name)
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|

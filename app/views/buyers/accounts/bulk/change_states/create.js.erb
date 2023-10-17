@@ -1,4 +1,6 @@
-<%- @accounts.each do |account| %>
-  $("#<%=dom_id(account)%>").find(".state").text("<%= escape_javascript account.state.capitalize %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<% accounts.each do |account| %>
+  document.querySelector('#<%= dom_id(account) %> td[data-label="State"]')
+    .innerText = '<%= account.state.capitalize %>'
+<% end %>
+$.colorbox.close()
+$.flash('<%= j @notice %>')

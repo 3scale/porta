@@ -9,12 +9,6 @@ module ThreeScale
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels
-
-      # The ID is forced to be nil to disable the default behavior in Sidekiq < 6
-      # which invokes CLIENT SETNAME command, which incompatible with some Redis providers
-      # see https://issues.redhat.com/browse/THREESCALE-9210
-      # This can be removed when Sidekiq is upgraded to a version >= 6.0.7
-      config.id = nil
     end
 
     attr_reader :config
@@ -25,15 +19,6 @@ module ThreeScale
       url = config.url.presence
       return unless url
       URI.parse(url).path[1..-1].to_s.to_i
-    end
-
-    def prone_to_key_collision_with?(other)
-      return false if config.namespace.presence != other.namespace.presence
-      db == other.db
-    end
-
-    def rotate_db
-      config.db = next_db
     end
 
     def reverse_merge(other)
@@ -69,10 +54,6 @@ module ThreeScale
         parsed_sentinel[:password] = password if password
         parsed_sentinel
       end
-    end
-
-    def next_db
-      (db + 1) % 16
     end
   end
 end

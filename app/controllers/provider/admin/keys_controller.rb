@@ -12,12 +12,19 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   def edit
   end
 
-  # user key
   def update
-    @cinstance.user_key = params[:cinstance][:user_key]
-    unless @cinstance.save
-      flash.now[:error] = "Invalid key. Please review and try submitting again."
+    user_key = params[:cinstance][:user_key]
+    if user_key.blank?
+      @cinstance.errors.add(:user_key, :blank)
+    else
+      @cinstance.user_key = user_key
+      @notice = t('.update.success') if @cinstance.save
     end
+
+    if (error = @cinstance.errors.full_messages_for(:user_key).presence&.to_sentence)
+      @error = "#{error}. #{t('formtastic.hints.cinstance.user_key')}"
+    end
+
     respond_to(:js)
   end
 
@@ -26,8 +33,11 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
 
     if @key.persisted?
       @keys = @cinstance.application_keys.pluck_values
-    else
-      flash.now[:error] = "Invalid key. Please review and try submitting again."
+      @notice = t('.create.success')
+    end
+
+    if (error = @key.errors.full_messages_for(:value).presence&.to_sentence)
+      @error = "#{error}. #{t('formtastic.hints.cinstance.key')}"
     end
 
     respond_to(:js)
@@ -37,9 +47,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
     @key = params[:id]
     @remove = @cinstance.application_keys.remove(@key)
 
-    unless @remove
-      flash.now[:error] = 'One application key minimum is required.'
-    end
+    @flash = t(".destroy.#{@remove ? 'success' : 'error'}")
 
     respond_to(:js)
   end

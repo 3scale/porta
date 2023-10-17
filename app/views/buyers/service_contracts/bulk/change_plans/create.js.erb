@@ -1,6 +1,10 @@
-<%- @service_contracts.each do |contract| %>
-  $("#<%=dom_id(contract)%>").
-    find(".plan").html("<%= escape_javascript link_to_plan_edit(contract.plan) %>").end().
-    find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(contract.plan) %>");
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");
+<% service_contracts.each do |contract| %>
+  <% plan = contract.plan %>
+  <% id = dom_id(contract) %>
+
+  document.querySelector('#<%= id %> td[data-label="Plan"]').innerHTML = '<%= j link_to_plan_edit(plan) %>'
+  document.querySelector('#<%= id %> td[data-label="Paid?"]').innerHTML = '<%= j plan_free_or_paid(plan) %>'
+<% end %>
+
+$.colorbox.close()
+$.flash('<%= j @notice %>')

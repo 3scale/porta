@@ -43,19 +43,19 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
     DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(provider.payment_gateway_setting, anything, 'destroy')
     DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
 
-    perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteAccountHierarchyWorker.perform_now(provider) }
+    perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(provider) }
   end
 
   test 'does not perform if wrong state' do
     provider.update_column(:state, 'approved')
 
-    perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteAccountHierarchyWorker.perform_now(provider) }
+    perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(provider) }
 
     assert provider.reload
   end
 
   test 'the account ends up destroyed after the hierarchy' do
-    perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteAccountHierarchyWorker.perform_now(provider) }
+    perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(provider) }
 
     assert_raises(ActiveRecord::RecordNotFound) { provider.reload }
   end

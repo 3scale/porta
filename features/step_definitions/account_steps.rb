@@ -53,3 +53,11 @@ end
 Given "{provider} was created on {date}" do |provider, date|
   provider.update_attribute(:created_at, date.to_datetime)
 end
+
+When "the account will return an error when approved" do
+  Account.any_instance.stubs(:approve).returns(false).once
+end
+
+When "the account will return an error when changing its plan" do
+  Contract.any_instance.stubs(:change_plan).returns(false).once
+end

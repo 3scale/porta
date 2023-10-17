@@ -10,11 +10,13 @@ class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::
     # TODO: really change plan
     return unless (plan = service.application_plans.find_by(id: plan_id_param))
 
-    applications.each do |application|
-      @errors << application unless application.change_plan(plan)
-    end
+    applications.reject { |app| app.plan_id == plan.id }
+                .each do |application|
+                  @errors << application unless application.change_plan(plan)
+                end
 
     handle_errors
+    super
   end
 
   private

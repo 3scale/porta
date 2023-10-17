@@ -36,6 +36,27 @@ Then "I should see column {string} in ascending order" do |column|
   assert header.has_css?('i.fa-long-arrow-alt-up', visible: false)
 end
 
+Then "the table {has} a column {string}" do |present, column|
+  assert_equal present, has_css?(".pf-c-table [data-label='#{column}']")
+end
+
+And "the table should contain the following:" do |table|
+  expected = extract_table('table', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
+  actual = table.raw
+
+  headers = expected.first
+  headers_index = []
+  actual.first.each do |target_header|
+    headers_index << headers.find_index(target_header)
+  end
+
+  filtered = expected.map do |row|
+    row.select.with_index { |column, i| headers_index.include?(i) }
+  end
+
+  assert_same_elements actual, filtered
+end
+
 # Then /^I should see the following table:$/ do |expected|
 #   table = if has_css?('.pf-c-table')
 #             extract_pf4_table

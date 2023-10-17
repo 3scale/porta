@@ -56,6 +56,12 @@ Then "they can add new application plans" do
   assert current_path, admin_service_application_plans_path(default_service)
 end
 
+When "they create a plan with empty data" do
+  find("a[href='#{new_admin_service_application_plan_path(default_service)}']", text: 'Create application plan')
+    .click
+  click_on('Create application plan', wait: 5)
+end
+
 When "an admin selects the action copy of an application plan" do
   @plan = FactoryBot.create(:application_plan, issuer: default_service)
 
@@ -151,7 +157,7 @@ Given "{plan} has setup fee of {int}" do |plan, fee|
 end
 
 Given "{plan} has {string} {enabled}" do |plan, feature_name, enabled|
-  feature = plan.service.features.find_or_create_by(name: feature_name)
+  feature = plan.issuer.features.find_or_create_by(name: feature_name, scope: plan.class.to_s, featurable: plan.issuer)
   assert_not_nil feature
 
   if enabled
@@ -161,6 +167,10 @@ Given "{plan} has {string} {enabled}" do |plan, feature_name, enabled|
   end
 
   plan.save!
+end
+
+Given "{plan} does not have any features" do |plan|
+  plan.issuer.features.with_object_scope(plan).destroy_all
 end
 
 Given "{provider} has no published application plans" do |provider|

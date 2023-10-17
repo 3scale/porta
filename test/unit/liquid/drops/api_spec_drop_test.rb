@@ -34,6 +34,14 @@ class Liquid::Drops::ApiSpecDropTest < ActiveSupport::TestCase
     assert_equal @service.proxy.endpoint, api_spec.api_product_production_public_base_url
   end
 
+  test '#published? returns the state of API spec' do
+    @spec.update(published: true)
+    assert_equal true, api_spec.published?
+
+    @spec.update(published: false)
+    assert_equal false, api_spec.published?
+  end
+
   def api_spec
     Drops::ApiSpec.new(@spec)
   end

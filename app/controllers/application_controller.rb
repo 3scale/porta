@@ -12,15 +12,12 @@ class ApplicationController < ActionController::Base
 
   _helpers.module_eval { prepend DecoratorAdditions }
 
-  protect_from_forgery with: :reset_session # See ActionController::RequestForgeryProtection for details
+  protect_from_forgery with: ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
 
   # Disable CSRF protection for requests to REST API.
-  skip_before_action :verify_authenticity_token, if: -> do
-    api_controller? && (params.key?(:provider_key) || params.key?(:access_token))
-  end
+  skip_forgery_protection if: -> { api_controller? }
 
   before_action :set_timezone
-
   before_action :enable_analytics
   before_action :check_browser
 
@@ -60,6 +57,8 @@ class ApplicationController < ActionController::Base
                  status: :not_acceptable
   end
 
+  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_forgery_protection
+
 
   # Returns sublayout or nil - see the class level setter.
   #
@@ -78,6 +77,14 @@ class ApplicationController < ActionController::Base
     else
       sublayout
     end
+  end
+
+  def disable_client_cache
+    response.headers.merge!(
+      'Cache-Control' => 'no-cache, no-store',
+      'Pragma' => 'no-cache',
+      'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
+    )
   end
 
   protected
