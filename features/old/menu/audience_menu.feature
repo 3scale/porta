@@ -17,7 +17,6 @@ Feature: Audience menu
       | Applications     |
       | Developer Portal |
       | Messages         |
-      | Forum            |
 
   Scenario: Accounts sub menu structure
     Then I should see menu items under "Accounts"
