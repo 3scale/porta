@@ -7,7 +7,7 @@ spec:
   displayName: Backends
   # durationMinutes: 10
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -26,9 +26,9 @@ spec:
     - title: Learn about backends
       description: |-
         You will complete 1 task:
-        
-        A backend is your API service that presents an application service endpoint that you want to expose. Backends are usually in the form of a URL, for example: http://flight-api.com. Use **Backends** to map your API to 3scale. 
-        ![The paths goes from backend A to endpoint A through path /a.](https://raw.githubusercontent.com/3scale/porta/d839b02d0c3850a0f3c413541921ae88584f5739/app/javascript/src/QuickStarts/templates/images/learn-about-backends.png "Path from backend to endpoint")
+
+        A backend is your API service that presents an application service endpoint that you want to expose. Backends are usually in the form of a URL, for example: http://flight-api.com. Use **Backends** to map your API to 3scale.
+        ![The paths goes from backend A to endpoint A through path /a.](/assets/quickstarts/learn-about-backends.png "Path from backend to endpoint")
       # optional - the task's Check your work module
       review:
         instructions: |-

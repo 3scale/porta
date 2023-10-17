@@ -7,7 +7,7 @@ spec:
   displayName: Accounts
   durationMinutes: 15
  # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -25,9 +25,9 @@ spec:
   tasks:
     - title:  Learn about accounts
       description: |-
-        
+
         Accounts refer to your API consumers‘ accounts in Admin Portal. Use **Account** to set up accounts for your API consumers.
-        ![Accounts are determined bu the API consumers wether applications are determined by the consumer's app.](https://raw.githubusercontent.com/3scale/porta/b602a026d625b1f6b40d95e2713caa6637b57650/app/javascript/src/QuickStarts/templates/images/learn-about-accounts.png "Learn about Accounts.")
+        ![Accounts are determined bu the API consumers wether applications are determined by the consumer's app.](/assets/quickstarts/learn-about-accounts.png "Learn about Accounts.")
       # optional - the task's Check your work module
       review:
         instructions: |-

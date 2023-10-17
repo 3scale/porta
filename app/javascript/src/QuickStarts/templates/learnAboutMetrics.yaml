@@ -7,7 +7,7 @@ spec:
   displayName: Metrics
   durationMinutes: 10
 # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -25,9 +25,9 @@ spec:
   tasks:
     - title:  Learn about metrics
       description: |-
-        
+
         Metrics track API usage other than API calls of your API packages or endpoints. To capture usage of your API apart from hits, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals, such as megabytes, CPU time, or the number of elements returned by the API.
-        ![use metrics to track API usage other than API calls in different units.](https://raw.githubusercontent.com/3scale/porta/1087ca4c1f2d42df1555851b57e783c2ecb38780/app/javascript/src/QuickStarts/templates/images/learn-about-metrics.png "Learn about tracking the number of API calls.")
+        ![use metrics to track API usage other than API calls in different units.](/assets/quickstarts/learn-about-metrics.png "Learn about tracking the number of API calls.")
       # optional - the task's Check your work module
       review:
         instructions: |-

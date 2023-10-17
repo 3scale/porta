@@ -7,7 +7,7 @@ spec:
   displayName: Applications
   durationMinutes: 10
  # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -25,9 +25,9 @@ spec:
   tasks:
     - title:  Learn about applications
       description: |-
-        
+
         Applications are the API consumers' devices. Every consumer’s device must subscribe to an application plan to call an API. Those applications are stored within the API consumer’s account in the Admin Portal. Use **Applications** to set up the API consumer’s device.
-        ![The application is stored to the accound and consumes the API devices.](https://raw.githubusercontent.com/3scale/porta/1087ca4c1f2d42df1555851b57e783c2ecb38780/app/javascript/src/QuickStarts/templates/images/learn-about-applications.png "Learn about applications.")
+        ![The application is stored to the accound and consumes the API devices.](/assets/quickstarts/learn-about-applications.png "Learn about applications.")
       # optional - the task's Check your work module
       review:
         instructions: |-
