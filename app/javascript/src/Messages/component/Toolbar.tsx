@@ -61,7 +61,7 @@ const TopToolbar: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/no-multi-comp
-const BottomToobar: FunctionComponent<{ totalEntries: number }> = ({ totalEntries }) => (
+const BottomToolbar: FunctionComponent<{ totalEntries: number }> = ({ totalEntries }) => (
   <Toolbar>
     <ToolbarContent>
       <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
@@ -80,7 +80,7 @@ const ToolbarWrapper = (props: Props, table: HTMLTableElement): void => {
 
   // eslint-disable-next-line react/jsx-props-no-spreading
   render(<TopToolbar {...props} />, top)
-  render(<BottomToobar totalEntries={props.totalEntries} />, bottom)
+  render(<BottomToolbar totalEntries={props.totalEntries} />, bottom)
 }
 
 export type { Props }
