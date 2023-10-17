@@ -123,22 +123,6 @@ World(Module.new do
       admin_messages_trash_path(message)
 
     #
-    # Forum
-    #
-    when 'forum settings',
-         'the forum settings page'
-      edit_admin_site_forum_path
-
-    when 'the forum page'
-      forum_path
-    when 'the new topic page'
-      new_forum_topic_path
-    when /^the "([^"]*)" topic page$/
-      forum_topic_path(Topic.find_by_title!($1))
-    when 'the forum subscriptions page'
-      forum_subscriptions_path
-
-    #
     # Logged in
     #
     when /the dashboard( page)?/
@@ -529,22 +513,6 @@ World(Module.new do
 
     when /^the data exports page$/
       new_admin_data_exports_path
-
-    #
-    # Forum admin
-    #
-    when 'the admin portal forum page'
-      admin_forum_path
-    when 'the admin portal new topic page'
-      new_admin_forum_topic_path
-    when /^the admin portal "([^"]*)" topic page$/
-      admin_forum_topic_path(Topic.find_by_title!($1))
-    when /^the admin portal edit "([^"]*)" topic page$/
-      edit_admin_forum_topic_path(Topic.find_by_title!($1))
-    when 'the admin portal forum categories page'
-      admin_forum_categories_path
-    when 'the admin portal new forum category page'
-      new_admin_forum_category_path
 
     #
     # Site settings
