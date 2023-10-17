@@ -60,7 +60,7 @@ Feature: Service subscriptions bulk operations
     And "bob@example.com" should receive no emails
     When item "Jane" is selected
     And item "Bob" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with "This is the subject"
     And fill in "Body" with "This is the body"
     And press "Send" and I confirm dialog box
@@ -77,7 +77,7 @@ Feature: Service subscriptions bulk operations
       | Jane    | Another API | Another Plan |
     When item "Alice" is selected
     And item "Bob" is selected
-    And press "Change service plan"
+    And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and I confirm dialog box
     Then should see "Successfully changed the plan of 2 subscriptions"
@@ -91,7 +91,7 @@ Feature: Service subscriptions bulk operations
   Scenario: Can't change the plan of subscriptions from different services
     When item "Jane" is selected
     And item "Bob" is selected
-    And press "Change service plan"
+    And select bulk action "Change service plan"
     Then should not see "Change plan" within the modal
     And should see "You have selected subscriptions to plans from different services"
 
@@ -104,7 +104,7 @@ Feature: Service subscriptions bulk operations
       | Alice   | Another API | live  |
     When item "Bob" is selected
     And item "Jane" is selected
-    And press "Change state"
+    And select bulk action "Change state"
     And select "Suspend" from "Action"
     And press "Change state" and I confirm dialog box within the modal
     Then should see "Successfully changed the state of 2 subscriptions"
@@ -118,7 +118,7 @@ Feature: Service subscriptions bulk operations
   Scenario: Sending email throws an error
     Given the email will fail when sent
     When item "Jane" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with "Error"
     And fill in "Body" with "This will fail"
     And press "Send" and I confirm dialog box
@@ -128,7 +128,7 @@ Feature: Service subscriptions bulk operations
   Scenario: Changing state throws an error
     Given the subscription will return an error when suspended
     When item "Jane" is selected
-    And press "Change state"
+    And select bulk action "Change state"
     When select "Suspend" from "Action"
     And press "Change state" and I confirm dialog box within the modal
     Then the bulk operation has failed for "Subscription of Jane to service Another API"
@@ -142,7 +142,7 @@ Feature: Service subscriptions bulk operations
   Scenario: Changing service plan throws an error
     Given the subscription will return an error when changing its plan
     When item "Alice" is selected
-    And press "Change service plan"
+    And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and I confirm dialog box
     Then the bulk operation has failed for "Subscription of Alice to service Fancy API"

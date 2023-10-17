@@ -41,7 +41,7 @@ Feature: Provider applications bulk operations
 
   Scenario: Send an email without subject
     When item "App 1" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with ""
     And fill in "Body" with "This is the body"
     And press "Send"
@@ -49,7 +49,7 @@ Feature: Provider applications bulk operations
 
   Scenario: Send an email without body
     When item "App 1" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with "This is a subject"
     And fill in "Body" with ""
     And press "Send"
@@ -59,7 +59,7 @@ Feature: Provider applications bulk operations
     Given "buyer@example.com" should receive no emails
     When item "App 1" is selected
     And item "App 2" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with "This is the subject"
     And fill in "Body" with "This is the body"
     And press "Send" and I confirm dialog box
@@ -74,7 +74,7 @@ Feature: Provider applications bulk operations
       | Secondary App | Secondary API | Secondary Plan |
     And item "App 1" is selected
     When item "App 2" is selected
-    And press "Change application plan"
+    And select bulk action "Change application plan"
     And select "Premium" from "Plan"
     And press "Change plan" and I confirm dialog box
     Then should see "Successfully changed the plan of 2 applications"
@@ -87,7 +87,7 @@ Feature: Provider applications bulk operations
   Scenario: Can't change the plan of applications from different services
     Given item "App 1" is selected
     And item "Secondary App" is selected
-    And press "Change application plan"
+    And select bulk action "Change application plan"
     Then should not see "Change plan" within the modal
     And should see "You have selected applications from different services"
 
@@ -99,7 +99,7 @@ Feature: Provider applications bulk operations
       | Secondary App | live  | Secondary API |
     When item "App 1" is selected
     And item "Secondary App" is selected
-    And press "Change state"
+    And select bulk action "Change state"
     And select "Suspend" from "Action"
     And press "Change state" and I confirm dialog box within the modal
     Then should see "Successfully changed the state of 2 applications"
@@ -112,7 +112,7 @@ Feature: Provider applications bulk operations
   Scenario: Sending email throws an error
     Given the email will fail when sent
     When item "App 1" is selected
-    And press "Send email"
+    And select bulk action "Send email"
     And fill in "Subject" with "Error"
     And fill in "Body" with "This will fail"
     And press "Send" and I confirm dialog box
@@ -122,7 +122,7 @@ Feature: Provider applications bulk operations
   Scenario: Changing state throws an error
     Given the application will return an error when suspended
     When item "App 1" is selected
-    And press "Change state"
+    And select bulk action "Change state"
     When select "Suspend" from "Action"
     And press "Change state" and I confirm dialog box within the modal
     Then the bulk operation has failed for "App 1"
@@ -135,7 +135,7 @@ Feature: Provider applications bulk operations
   Scenario: Changing app plan throws an error
     Given the application will return an error when changing its plan
     When item "App 1" is selected
-    And press "Change application plan"
+    And select bulk action "Change application plan"
     When select "Premium" from "Plan"
     And press "Change plan" and I confirm dialog box
     Then the bulk operation has failed for "App 1"

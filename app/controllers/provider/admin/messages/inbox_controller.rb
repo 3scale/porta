@@ -1,9 +1,16 @@
-class Provider::Admin::Messages::InboxController < FrontendController
-  before_action :find_message, :only => [:show, :destroy, :reply]
+# frozen_string_literal: true
+
+class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::BaseController
+  before_action :find_message, only: %i[show destroy reply]
+
   activate_menu :buyers, :messages, :inbox
 
   def index
-    @messages = current_account.received_messages.not_system.latest_first.paginate(page: params[:page]).decorate
+    @messages = current_account.received_messages
+                               .not_system
+                               .latest_first
+                               .paginate(pagination_params)
+                               .decorate
   end
 
   def show
@@ -39,5 +46,9 @@ class Provider::Admin::Messages::InboxController < FrontendController
 
   def find_message
     @message = current_account.received_messages.find(params.require(:id)).decorate
+  end
+
+  def scope
+    :received_messages
   end
 end

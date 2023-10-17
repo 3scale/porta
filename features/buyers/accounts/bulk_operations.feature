@@ -64,7 +64,7 @@ Feature: Buyer accounts bulk operations
     Scenario: Send an email without subject
       Given they go to the buyer accounts page
       When item "Alice" is selected
-      And press "Send email"
+      And select bulk action "Send email"
       And fill in "Subject" with ""
       And fill in "Body" with "This is the body"
       And press "Send"
@@ -73,7 +73,7 @@ Feature: Buyer accounts bulk operations
     Scenario: Send an email without body
       Given they go to the buyer accounts page
       When item "Alice" is selected
-      And press "Send email"
+      And select bulk action "Send email"
       And fill in "Subject" with "This is a subject"
       And fill in "Body" with ""
       And press "Send"
@@ -85,7 +85,7 @@ Feature: Buyer accounts bulk operations
       And "bob@example.com" should receive no emails
       When item "Alice" is selected
       And item "Bob" is selected
-      And press "Send email"
+      And select bulk action "Send email"
       And fill in "Subject" with "This is the subject"
       And fill in "Body" with "This is the body"
       And press "Send" and I confirm dialog box
@@ -104,7 +104,7 @@ Feature: Buyer accounts bulk operations
         | Alice         | Default |
       When item "Alice" is selected
       And item "Bob" is selected
-      And press "Change account plan"
+      And select bulk action "Change account plan"
       And select "Awesome" from "Plan"
       And press "Change plan" and I confirm dialog box
       Then should see "Successfully changed the plan of 2 accounts"
@@ -125,7 +125,7 @@ Feature: Buyer accounts bulk operations
         | Alice         | Approved |
       When item "Alice" is selected
       And item "Bob" is selected
-      And press "Change state"
+      And select bulk action "Change state"
       And select "Make pending" from "Action"
       And press "Change state" and I confirm dialog box within the modal
       Then should see "Successfully changed the state of 2 accounts"
@@ -140,7 +140,7 @@ Feature: Buyer accounts bulk operations
       Given the email will fail when sent
       And they go to the buyer accounts page
       When item "Alice" is selected
-      And press "Send email"
+      And select bulk action "Send email"
       And fill in "Subject" with "Error"
       And fill in "Body" with "This will fail"
       And press "Send" and I confirm dialog box
@@ -152,7 +152,7 @@ Feature: Buyer accounts bulk operations
       And the account will return an error when changing its plan
       And they go to the buyer accounts page
       When item "Alice" is selected
-      And press "Change account plan"
+      And select bulk action "Change account plan"
       And select "Awesome" from "Plan"
       And press "Change plan" and I confirm dialog box
       Then the bulk operation has failed for "Alice"
@@ -161,7 +161,7 @@ Feature: Buyer accounts bulk operations
       Given the account will return an error when approved
       And they go to the buyer accounts page
       And item "Pending buyer" is selected
-      And press "Change state"
+      And select bulk action "Change state"
       When select "Approve" from "Action"
       And press "Change state" and I confirm dialog box within the modal
       Then the bulk operation has failed for "Pending buyer"
@@ -178,7 +178,7 @@ Feature: Buyer accounts bulk operations
       And item "Bad buyer" is selected
       And item "Bob" is selected
       And item "Alice" is selected
-      And press "Change state"
+      And select bulk action "Change state"
       And select "Reject" from "Action"
       And press "Change state" and I confirm dialog box within the modal
       Then should see "Successfully changed the state of 4 accounts"
