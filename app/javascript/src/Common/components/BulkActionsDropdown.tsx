@@ -1,17 +1,17 @@
+import { useState } from 'react'
 import {
   Dropdown,
   DropdownItem,
   DropdownToggle
 } from '@patternfly/react-core'
-import { useState } from 'react'
 
-import type { ButtonProps } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
+import type { ButtonProps } from '@patternfly/react-core'
 
 interface BulkAction {
   name: string;
-  url: string;
   title: string;
+  url: string;
   variant: ButtonProps['variant'];
 }
 
