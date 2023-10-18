@@ -48,6 +48,13 @@ module Fields::Fields
       @optional_fields = fields.flatten.map(&:to_s)
     end
 
+    # sets the model's default db-fields, it accepts params in several ways
+    # default_fields_are :org_name, :org_legaladdress
+    # default_fields_are %w{org_name org_legaladdress}
+    def default_fields_are(*fields)
+      @default_fields = fields.flatten.map(&:to_s)
+    end
+
     # sets the model's internal db-fields, it accepts params in several ways
     # These fields won't be editable by providers
     # internal_fields_are :org_name, :org_legaladdress
@@ -67,6 +74,10 @@ module Fields::Fields
 
     def optional_fields
       @optional_fields
+    end
+
+    def default_fields
+      @default_fields
     end
 
     def internal_fields
