@@ -195,7 +195,7 @@ resource "Cinstance" do
       buyer.bought_cinstances.last
     end
 
-    it { should have_properties('id', 'state', 'name', 'plan_id',
+    it { should have_properties('id', 'state', 'name', 'plan_id', 'description',
                       'service_id', 'first_traffic_at', 'first_daily_traffic_at',
                       'plan_name', 'org_name', 'service_name').from(resource) }
     it { should have_links('self', 'account', 'plan', 'keys', 'referrer_filters', 'service') }
@@ -250,6 +250,7 @@ resource "Cinstance" do
       it { should have_tag('id') }
       it { should have_tag('state') }
       it { should have_tag('name') }
+      it { should have_tag('description') }
       it { should have_tag('user_account_id') }
       it { should have_tag('first_traffic_at') }
       it { should have_tag('first_daily_traffic_at') }
