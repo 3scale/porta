@@ -205,7 +205,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     class Edit < ProviderLoggedInTest
       setup do
         plan = FactoryBot.create(:application_plan, issuer: provider.default_service)
-        @application = FactoryBot.create(:cinstance, plan: plan, name: 'example-name')
+        @application = FactoryBot.create(:cinstance, plan: plan, name: 'example-name', description: 'example-description')
       end
 
       attr_reader :application
@@ -215,6 +215,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         assert_response :success
         page = Nokogiri::HTML4::Document.parse(response.body)
         assert_equal 'example-name',  page.xpath("//input[@id='cinstance_name']").map { |node| node['value'] }.join
+        assert_equal "\nexample-description", page.xpath("//textarea[@id='cinstance_description']").text
         assert_equal 1, page.xpath("//button[@type='submit']").length
       end
     end
