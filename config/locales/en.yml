@@ -585,6 +585,16 @@ en:
       positive: 'non-chargeable amount'
       buyer_account_paying_monthly: 'buyer not paying monthly'
 
+  finance:
+    provider:
+      invoices:
+        index:
+          empty_state:
+            title: Nothing to see here
+            body: There are no invoices yet
+          empty_search:
+            title: No invoices found
+            primary: Clear all filters
   api:
     applications:
       edit:
