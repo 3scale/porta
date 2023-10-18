@@ -9,9 +9,6 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     host! @provider.external_admin_domain
 
-    # Add an optional Description field on Application model
-    @provider.fields_definitions.create({ target: 'Cinstance', name: 'description', label: 'Description', required: false })
-
     @service = @provider.default_service
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
@@ -99,6 +96,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     get admin_api_account_application_path(@buyer, id: application.id, format: :xml), params: { provider_key: @provider.api_key }
 
     assert_response :success
+
     assert_application(response.body, { name: "tomatoes &lt; &gt; &amp;", description: "rotten &lt; &gt; &amp;" })
   end
 

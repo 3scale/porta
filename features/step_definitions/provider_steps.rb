@@ -14,7 +14,7 @@ Given "a provider {string} signed up to {plan}" do |name, plan|
   @provider.application_contracts.delete_all
 
   unless @provider.bought?(plan)
-    @provider.buy!(plan, name: 'Default')
+    @provider.buy!(plan, name: 'Default', description: 'Default')
   end
 
   import_simple_layout(@provider)

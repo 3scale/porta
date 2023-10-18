@@ -9,9 +9,6 @@ Feature: Buyer's application management
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "service_plans" visible
     And provider "foo.3scale.localhost" has "multiple_services" visible
-    And the provider has the following fields defined for "Cinstance":
-      | name        | label           | required | read_only | hidden |
-      | description | Description     | true     |           |        |
     And an published application plan "Default" of provider "foo.3scale.localhost"
     And a service plan "Gold" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to service plan "Gold"

@@ -35,6 +35,7 @@ Then "any new application will use this plan" do
   pf4_select_first(from: 'Account')
   pf4_select_first(from: 'Product')
   fill_in_pf('Name', with: 'My App')
+  fill_in_pf('Description', with: 'This is some kind of application')
   click_on 'Create application'
 
   assert_equal @plan, Cinstance.last.plan

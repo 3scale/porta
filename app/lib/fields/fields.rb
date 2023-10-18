@@ -11,6 +11,7 @@ module Fields::Fields
 
     @optional_fields = []
     @required_fields = []
+    @default_fields = []
     @internal_fields = []
 
     after_save :clear_fields_cache

@@ -56,6 +56,7 @@ class NotificationMailerTest < ActionMailer::TestCase
 
       assert_html_email(mail) do
         assert_select 'li', text: 'Name: Bob app'
+        assert_select 'li', text: 'Description: not provided by user'
       end
     end
   end
