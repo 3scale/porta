@@ -2,6 +2,4 @@
 
 require 'three_scale/metrics/yabeda'
 
-Rails.application.config.after_initialize do
-  ThreeScale::Metrics::Yabeda.install!
-end
+ThreeScale::Metrics::Yabeda.install!

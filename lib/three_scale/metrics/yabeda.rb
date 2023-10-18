@@ -15,14 +15,6 @@ module ThreeScale
       ].freeze
 
       class << self
-        def controller_handlers
-          @controller_handlers ||= []
-        end
-
-        def on_controller_action(&block)
-          controller_handlers << block
-        end
-
         def install!
           ::Yabeda.configure do
             group :rails
@@ -45,10 +37,6 @@ module ThreeScale
 
               rails_requests_total.increment(labels)
               rails_request_duration.measure(labels, ThreeScale::Metrics::Yabeda.ms2s(event.duration))
-
-              ThreeScale::Metrics::Yabeda.controller_handlers.each do |handler|
-                handler.call(event, labels)
-              end
             end
           end
         end
