@@ -47,6 +47,7 @@ class Cinstance < Contract
   include Fields::Fields
   required_fields_are :name
   optional_fields_are :description
+  default_fields_are :name, :description
   set_fields_account_source :user_account
 
   include Backend::ModelExtensions::Cinstance
