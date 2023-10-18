@@ -711,7 +711,7 @@ class ValidationsTest < ActiveSupport::TestCase
       assert @cinstance.valid?
     end
 
-    test 'provider has multi apps enabled: not require description if a human interaction is happening' do
+    test 'provider has multi apps enabled: do not require description if a human interaction is happening' do
       @provider.settings.allow_multiple_applications!
       @provider.settings.show_multiple_applications!
       @cinstance.validate_human_edition!
@@ -723,7 +723,7 @@ class ValidationsTest < ActiveSupport::TestCase
       assert @cinstance.valid?
     end
 
-    test 'service requires intentions: not require description if a human interaction is happening' do
+    test 'service requires intentions: do not require description if a human interaction is happening' do
       @service.update(intentions_required: true)
       @cinstance.validate_human_edition!
 
