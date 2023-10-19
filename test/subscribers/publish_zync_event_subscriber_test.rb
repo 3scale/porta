@@ -11,12 +11,12 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service, backend_version: 'oauth')
       application = FactoryBot.create(:simple_cinstance, service: service)
       @event = Applications::ApplicationCreatedEvent.create(application, nil)
-      @publisher = mock('publisher', call: :ok)
+      @publisher = mock('publisher')
       @subscriber = PublishZyncEventSubscriber.new(publisher)
     end
 
     test 'publish Zync Event for OIDC auth always' do
-      publisher.expects(:call).times(3)
+      publisher.expects(:call).times(3).returns(:ok)
 
       Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
       assert @subscriber.call(event)
@@ -29,6 +29,7 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
     end
 
     test 'do not publish Zync Event for non-OIDC auth only when not disabled' do
+      publisher.expects(:call).never
       service = FactoryBot.create(:simple_service)
       application = FactoryBot.create(:simple_cinstance, service: service)
       event = Applications::ApplicationCreatedEvent.create(application, nil)
@@ -43,12 +44,12 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service)
       application = FactoryBot.create(:simple_cinstance, service: service)
       @event = Applications::ApplicationCreatedEvent.create(application, nil)
-      @publisher = mock('publisher', call: :ok)
+      @publisher = mock('publisher')
       @subscriber = PublishZyncEventSubscriber.new(publisher)
     end
 
     test 'publish Zync Event by if not skipped' do
-      publisher.expects(:call).times(2)
+      publisher.expects(:call).times(2).returns(:ok)
       Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
       assert @subscriber.call(event)
 
