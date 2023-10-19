@@ -20,9 +20,8 @@ class PublishZyncEventSubscriber
     def build_zync_event(event)
       case event
       when ApplicationRelatedEvent
-        # only publish events to Zync for applications using OIDC authentication
         zync_metadata = event.metadata.fetch(:zync, {})
-        ZyncEvent.create(event, event.application) if zync_metadata[:oidc_auth_enabled]
+        zync_metadata[:oidc_auth_enabled] && sync_non_oidc_apps ? ZyncEvent.create(event, event.application) : nil
       when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent
         ZyncEvent.create(event, event.proxy)
       when OIDC::ServiceChangedEvent
@@ -32,14 +31,22 @@ class PublishZyncEventSubscriber
       else raise "Unknown event type #{event.class}"
       end
     end
+
+    private
+
+    # The default is 'true', if the configuration is missing
+    def sync_non_oidc_apps
+      !Rails.configuration.zync.skip_non_oidc_applications
+    end
   end
 
   # @param [ZyncEvent] event
   def call(event)
     # skip domain-related events in SaaS
-    return if self.domain_event_in_saas? event
+    return if domain_event_in_saas? event
 
-    zync_event = self.build_zync_event event
+    zync_event = build_zync_event event
     publisher.call(zync_event, 'zync') if zync_event
   end
+
 end
