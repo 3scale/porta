@@ -32,11 +32,11 @@ const resources = [
   learnAboutMethods,
   learnAboutMappingRules,
   createAPIproduct,
-  createAccessTiersForAPIconsumers
-  learnAboutBackends
-  learnAboutAccounts
-  learnAboutApplications
-  learnAboutMetrics
+  createAccessTiersForAPIconsumers,
+  learnAboutBackends,
+  learnAboutAccounts,
+  learnAboutApplications,
+  learnAboutMetrics,
   trackUsageForAPIProduct
 ]
 
