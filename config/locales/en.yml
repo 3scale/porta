@@ -595,6 +595,40 @@ en:
           empty_search:
             title: No invoices found
             primary: Clear all filters
+      settings:
+        show:
+          switch_button: Switch to %{mode}
+          switch_confirm: Are you sure you want to switch to %{mode} mode?
+          postpaid_description_html:
+            <p>
+              Current mode is <b>Postpaid</b>.
+            </p>
+            <p>
+              In postpaid mode, all fixed fees as well as variable fees are billed at the end of the
+              month.
+            </p>
+          prepaid_description_html:
+            <p>
+              Current mode is <b>Prepaid</b>.
+            </p>
+            <p>
+              In prepaid mode, all fixed fees and setup fees are billed immediately at the beginning
+              of the month or at the beginning of any pro-rated billing period. Variable costs are
+              always calculated at the end of the month.
+            </p>
+          deprecation_warning:
+            The %{gateway} gateway has been deprecated. It can still be used but you won't be able
+            to switch back to it once you confirmed the switch to another gateway.
+          save_gateway_confirm_1:
+            Changing your payment gateway will make all your buyers' credit card details invalid, so
+            they will have to enter the credit card information again to be billed next month.\n\n
+            Are you sure you want to change your payment gateway?
+          save_gateway_confirm_2:
+            Are you sure? If you click OK, all credit card details from all your customers will be
+            erased and won't be recoverable. You'll need to ask your customers to enter their credit
+            card details again to be able to bill them.\n\nDo you want to remove all credit card
+            details from your customers?
+
   api:
     applications:
       edit:
@@ -1259,6 +1293,20 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      finance/billing_strategy:
+        numbering_period: It will only change the friendly ID in invoices, not the billing period.
+        charging_enabled:
+          Enables credit card transactions. When this setting is on, all due invoices will be
+          charged using the selected payment gateway. If you leave this setting off, billing will
+          take place and invoices will be issued, but no real transaction will take place.
+        currency:
+          Please make sure that the selected currency is supported by your payment gateway. If you are
+          missing currency options, don't hesitate to contact us.
+      account:
+        payment_gateway_type: Select your credit card gateway and configure it with the details of your merchant account.
+        payment_gateway_options:
+          three_ds_enabled: Make sure your Braintree account has 3D Secure enabled before you enable it here as otherwise payments initiated from the developer portal will fail.
+
       user:
         current_password: |
           Any other active session(s) for this user account will be terminated when you update your personal details
@@ -1375,6 +1423,13 @@ en:
       policies:
         update: "Update Policy Chain"
     labels:
+      account:
+        vat_zero_text: Text to show if VAT/Sales Tax is 0%
+        payment_gateway_type: Gateway
+
+      finance/billing_strategy:
+        numbering_period: Billing periods for invoice IDs
+
       service:
         intentions_required: "Signup requires a description of intended use"
         buyers_manage_apps: "Developers can manage applications"
