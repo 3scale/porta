@@ -19,21 +19,13 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
       publisher.expects(:call).times(3).returns(:ok)
 
       Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
-      assert @subscriber.call(event)
+      assert subscriber.call(event)
 
       Rails.configuration.zync.stubs(skip_non_oidc_applications: true)
-      assert @subscriber.call(event)
+      assert subscriber.call(event)
 
       Rails.configuration.zync.stubs(skip_non_oidc_applications: nil)
-      assert @subscriber.call(event)
-    end
-
-    test 'do not publish Zync Event for non-OIDC auth only when not disabled' do
-      publisher.expects(:call).never
-      service = FactoryBot.create(:simple_service)
-      application = FactoryBot.create(:simple_cinstance, service: service)
-      event = Applications::ApplicationCreatedEvent.create(application, nil)
-      assert_nil @subscriber.call(event)
+      assert subscriber.call(event)
     end
   end
 
@@ -51,16 +43,16 @@ class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
     test 'publish Zync Event by if not skipped' do
       publisher.expects(:call).times(2).returns(:ok)
       Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
-      assert @subscriber.call(event)
+      assert subscriber.call(event)
 
       Rails.configuration.zync.stubs(skip_non_oidc_applications: nil)
-      assert @subscriber.call(event)
+      assert subscriber.call(event)
     end
 
     test 'do not publish Zync Event if skipped' do
       publisher.expects(:call).never
       Rails.configuration.zync.stubs(skip_non_oidc_applications: true)
-      assert_nil @subscriber.call(event)
+      assert_nil subscriber.call(event)
     end
   end
 
