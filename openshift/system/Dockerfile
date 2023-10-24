@@ -8,7 +8,7 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 ADD . ./
 ADD openshift/system/config/* ./config/
 RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel git 'dnf-command(download)' \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel git 'dnf-command(download)' podman-catatonit \
     && gem install bundler --version 2.2.25 \
     && bundle config set --local without development:test:licenses \
     && bundle config set --local deployment true \
@@ -51,6 +51,8 @@ COPY --from=builder /opt/system/ .
 COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
 COPY --from=builder /usr/local/share/gems /usr/local/share/
 COPY --from=builder /usr/local/bin/bundle* /usr/local/bin
+# in RHEL 8 podman-catatonit pulls in too many useless deps so we don't install the RPM directly, on RHEL 9 simply use package `catatonit`
+COPY --from=builder /usr/libexec/catatonit/catatonit /usr/libexec/catatonit/catatonit
 
 RUN echo /usr/local/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
@@ -71,11 +73,13 @@ RUN bundle config set --local without development:test:licenses:assets \
 # Openshift changes the effective UID, so this git check needs to be bypassed.
 RUN git config --global --add safe.directory '*'
 
-ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+# container-entrypoint is expected by the operator so keeping it for compatibility
+RUN ln -s openshift/system/entrypoint.sh . \
+    && ln -s /opt/system/openshift/system/contrib/container-entrypoint /usr/local/bin/
+
 USER 1001
 EXPOSE 3000 9306
-# TODO: dumb-init!
-ENTRYPOINT ["/opt/system/entrypoint.sh"]
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--", "/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
 
