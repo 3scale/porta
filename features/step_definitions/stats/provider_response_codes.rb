@@ -10,9 +10,9 @@ Given(/^the provider has response codes stats data$/) do
   now = Time.now.utc
   service = @provider.first_service!
 
-  keys = RESPONSE_CODES.flat_map do |code|
-    [["stats/{service:#{service.id}}/response_code:#{code}/hour:#{now.at_beginning_of_day.to_s(:compact)}", RESPONSE_CODE_VALUE]]
-  end.to_h
+  keys_and_values = RESPONSE_CODES.flat_map do |code|
+    ["stats/{service:#{service.id}}/response_code:#{code}/hour:#{now.at_beginning_of_day.to_s(:compact)}", RESPONSE_CODE_VALUE]
+  end
 
-  storage.mapped_mset(keys)
+  storage.mset(keys_and_values)
 end

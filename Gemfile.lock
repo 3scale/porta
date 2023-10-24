@@ -1027,7 +1027,7 @@ DEPENDENCIES
   recaptcha (= 4.13.1)
   record_tag_helper (~> 1.0)
   redcarpet (~> 3.5.1)
-  redlock (~> 2.0.4)
+  redlock (~> 2.0)
   reek (= 6.01)
   reform (~> 2.0.3)
   rest-client (~> 2.0.2)
