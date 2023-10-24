@@ -5,6 +5,14 @@ base: &default
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
   name: <%= ENV['REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
+  # == ACL Params ==
+  username: <%= ENV['REDIS_ACL_USERNAME'] %>
+  password: <%= ENV['REDIS_ACL_PASSWORD'] %>
+  # == TLS Params ==
+  ssl_params:
+   ca_file: <%= ENV['REDIS_TLS_CA_FILE'] %>
+   cert: <%= ENV['REDIS_TLS_CERT'] %>
+   key: <%= ENV['REDIS_TLS_KEY'] %>
 
 development:
   <<: *default

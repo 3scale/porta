@@ -6,6 +6,14 @@ base: &default
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
   name: <%= ENV['BACKEND_REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
+  # == ACL Params ==
+  username: <%= ENV['BACKEND_REDIS_ACL_USERNAME'] %>
+  password: <%= ENV['BACKEND_REDIS_ACL_PASSWORD'] %>
+  # == TLS Params ==
+  ssl_params:
+    ca_file: <%= ENV['BACKEND_REDIS_TLS_CA_FILE'] %>
+    cert: <%= ENV['BACKEND_REDIS_TLS_CERT'] %>
+    key: <%= ENV['BACKEND_REDIS_TLS_KEY'] %>
 
 development:
   <<: *default
