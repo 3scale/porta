@@ -139,7 +139,7 @@ class ZyncWorker
     # The number of retries is usually controlled at the origin of the failure using ThreeScale::SidekiqRetrySupport::Worker#last_attempt?,
     # but in this case we are not really using Sidekiq retries, but rather re-enqueueing the job manually here
     manual_retry_count = options['manual_retry_count'].to_i + 1
-    perform_async(event.event_id, event.data, manual_retry_count)
+    perform_async(event.event_id, event.data.to_json, manual_retry_count)
   end
 
   delegate :perform_async, to: :class

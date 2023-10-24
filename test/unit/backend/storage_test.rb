@@ -24,7 +24,7 @@ test:
 }
     given_redis_config(yaml) do
       mock = mock(id: 'redis://localhost:6389/1')
-      Redis::Client.expects(:new).with(host: 'example.com', port: 1337, db: 2, logger: Rails.logger).returns(mock)
+      Redis.expects(:new).with(host: 'example.com', port: 1337, db: 2).returns(mock)
 
       storage = Backend::Storage.clone.instance
       assert_equal 'redis://localhost:6389/1', storage.id
@@ -39,9 +39,7 @@ test:
   db: 2
 }
     given_redis_config(yaml) do
-      assert_equal({ :logger => Rails.logger,
-                     :host => 'example.com', :port => 1337, :db => 2 },
-                     Backend::Storage.parse_config )
+      assert_equal({ :host => 'example.com', :port => 1337, :db => 2 }, Backend::Storage.parse_config )
     end
   end
 
