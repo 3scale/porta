@@ -10,20 +10,21 @@ module System
       cfg = config.to_h
       pool_config = cfg.extract!(:size, :pool_timeout)
       @pool = ConnectionPool.new(size: pool_config[:size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
-        Redis.new(cfg)
+        redis_config = cfg.key?(:sentinels) ? RedisClient.sentinel(**cfg) : RedisClient.config(**cfg)
+        redis_config.new_client
       end
     end
 
-    # This class only respond to public methods of Redis
+    # This class only respond to public methods of redis-client
     def respond_to_missing?(method_sym, _include_private = false)
       @pool.with do |conn|
         conn.respond_to?(method_sym, false)
       end
     end
 
-    def method_missing(method_sym, *args, &block)
+    def method_missing(...)
       @pool.with do |conn|
-        conn.public_send(method_sym, *args, &block)
+        conn.call(...)
       end
     end
   end

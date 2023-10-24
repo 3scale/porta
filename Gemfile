@@ -19,7 +19,7 @@ gem 'rails', '~> 6.0'
 # Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
 gem 'mail', '~> 2.7.1'
 
-gem "activejob-uniqueness"
+gem 'activejob-uniqueness', '~> 0.3.0'
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
@@ -87,7 +87,7 @@ gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.13.10'
 gem 'secure_headers', '~> 6.3.0'
-gem 'redlock'
+gem 'redlock', '~> 2.0.4'
 
 gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
@@ -106,7 +106,6 @@ gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
-gem 'redis', require: ['redis']
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'svg-graph', require: false
