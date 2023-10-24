@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'sidekiq/testing'
-require 'sidekiq/lock/testing/inline'
 
 # Turn off Sidekiq logging which pollutes the CI logs
 Sidekiq.configure_client do |config|
