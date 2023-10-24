@@ -107,7 +107,7 @@ fieldset ol li input[type='text'] + a {
   padding: line-height-times(1/4);
 }
 
-select {
+select:not(.pf-c-form-control) {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;

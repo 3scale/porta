@@ -29,12 +29,6 @@ class Finance::PostpaidBillingStrategy < Finance::BillingStrategy
     'postpaid'
   end
 
-  def description
-    %q{ In postpaid mode, all fixed fees as well as variable fees
-        are billed at the end of the month.
-    }
-  end
-
   def bill_plan_change(contract, period)
     plan = contract.plan
     old_plan = contract.old_plan
