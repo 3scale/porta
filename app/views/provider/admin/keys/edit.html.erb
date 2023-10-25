@@ -10,11 +10,9 @@
                               required: true,
                               input_html: { size: 100, value: nil, required: true, autocomplete: 'off' } %>
 
-    <div class="pf-c-form__group pf-m-action">
-      <div class="pf-c-form__actions">
-        <button class="pf-c-button pf-m-primary" type="submit" data-disable-with="Saving...">Save</button>
-        <button class="pf-c-button pf-m-link fancybox-close" type="submit">Cancel</button>
-      </div>
-    </div>
+    <%= form.actions do %>
+      <button class="pf-c-button pf-m-primary" type="submit" data-disable-with="Saving...">Save</button>
+      <button class="pf-c-button pf-m-link fancybox-close" type="submit">Cancel</button>
+    <% end %>
   <% end %>
 </div>

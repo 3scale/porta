@@ -27,16 +27,18 @@ const FormWrapper: FunctionComponent<Props> = ({
       <legend><span>Product</span></legend>
       <ol>{children}</ol>
     </fieldset>
-    <fieldset className="buttons">
-      <Button
-        className="create"
-        data-testid="newProductCreateProduct-buttonSubmit"
-        name="commit"
-        type="submit"
-      >
-        {submitText}
-      </Button>
-    </fieldset>
+    <div className="pf-c-form__group pf-m-action">
+      <div className="pf-c-form__actions">
+        <Button
+          className="create"
+          data-testid="newProductCreateProduct-buttonSubmit"
+          name="commit"
+          type="submit"
+        >
+          {submitText}
+        </Button>
+      </div>
+    </div>
   </form>
 )
 

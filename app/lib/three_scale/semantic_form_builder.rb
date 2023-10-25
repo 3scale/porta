@@ -2,6 +2,8 @@ module ThreeScale
   class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::SpamProtection::Integration::FormBuilder
 
+    delegate :tag, to: :template
+
     # Allow specify how to display errors for the input
     #
     # Ex:
@@ -93,6 +95,14 @@ module ThreeScale
         input :system_name, :hint => "Only ASCII letters, numbers, dashes and underscores are allowed."
       else
         input :system_name, :input_html => { :disabled => true }
+      end
+    end
+
+    def actions(*args, &block)
+      return super unless args.empty?
+
+      tag.div(class: 'pf-c-form__group pf-m-action') do
+        tag.div(class: 'pf-c-form__actions', &block)
       end
     end
   end

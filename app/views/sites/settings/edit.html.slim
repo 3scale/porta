@@ -8,6 +8,5 @@ div class="pf-c-card"
       = form.input :cc_privacy_path, as: :patternfly_input, label: 'Path to Privacy page', input_html: { type: 'text' }
       = form.input :cc_refunds_path, as: :patternfly_input, label: 'Path to Refund page', input_html: { type: 'text' }
 
-      div class="pf-c-form__group pf-m-action"
-        div class="pf-c-form__actions"
-          button class="pf-c-button pf-m-primary" type="submit" Save
+      = form.actions do
+        button class="pf-c-button pf-m-primary" type="submit" Save
