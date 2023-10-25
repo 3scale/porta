@@ -12,6 +12,7 @@ base: &default
   # == TLS Params ==
   ssl_params:
     ca_file: <%= ENV['BACKEND_REDIS_TLS_CA_FILE'] %>
+    ca_path: <%= ENV['BACKEND_REDIS_TLS_CA_PATH'] %>
     cert: <%= ENV['BACKEND_REDIS_TLS_CERT'] %>
     key: <%= ENV['BACKEND_REDIS_TLS_KEY'] %>
 
