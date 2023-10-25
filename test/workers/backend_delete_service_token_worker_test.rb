@@ -3,11 +3,6 @@
 require 'test_helper'
 
 class BackendDeleteServiceTokenWorkerTest < ActiveSupport::TestCase
-
-  def teardown
-    clear_sidekiq_lock
-  end
-
   test 'destroy service token' do
     service_token = FactoryBot.create(:service_token)
     event = ServiceTokenDeletedEvent.create_and_publish!(service_token)
