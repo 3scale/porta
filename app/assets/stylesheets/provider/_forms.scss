@@ -1,7 +1,9 @@
 $fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
 
-form.formtastic:not(.pf-c-form) ol, form.formtastic:not(.pf-c-form) ul {
+form.formtastic:not(.pf-c-form) {
+  ol, ul, li {
     list-style: none;
+  }
 }
 
 input[type='text']:not(.pf-c-form-control, .pf-c-text-input-group__text-input),
