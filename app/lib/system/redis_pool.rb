@@ -17,9 +17,12 @@ module System
 
     # This class only respond to public methods of redis-client
     def respond_to_missing?(method_sym, _include_private = false)
-      @pool.with do |conn|
-        conn.respond_to?(method_sym, false)
-      end
+      @pool.respond_to?(method_sym, false)
+    end
+
+    # This is used by some libraries, for example, Redlock
+    def with(...)
+      @pool.with(...)
     end
 
     def method_missing(...)
