@@ -18,19 +18,19 @@ interface ToolbarAction {
 
 interface Props {
   totalEntries: number;
-  rightActions?: ToolbarAction[];
+  leftActions?: ToolbarAction[];
 }
 
 const TopToolbar: FunctionComponent<Props> = ({
   totalEntries,
-  rightActions
+  leftActions
 }) => {
   return (
     <Toolbar>
       <ToolbarContent>
-        {rightActions && (
-          <ToolbarItem alignment={{ default: 'alignRight' }}>
-            {rightActions.map(({ variant, label, href }) => (
+        {leftActions && (
+          <ToolbarItem alignment={{ default: 'alignLeft' }}>
+            {leftActions.map(({ variant, label, href }) => (
               <Button key={label} component="a" href={href} variant={variant}>{label}</Button>
             ))}
           </ToolbarItem>
