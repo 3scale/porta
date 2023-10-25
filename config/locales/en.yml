@@ -636,6 +636,14 @@ en:
     backend_apis:
       edit:
         delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
+    backend_usages:
+      index:
+        empty_state:
+          title: There are no backends yet
+          body: The current product %{name} does not have any backends.
+          primary_action: Add a backend
+        toolbar:
+          primary: Add a backend
     services:
       forms:
         definition_settings:

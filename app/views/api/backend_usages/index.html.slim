@@ -1,33 +1,43 @@
-- content_for :page_header_title_with_button, 'Backends'
+- content_for :page_header_title, 'Backends'
 - content_for :page_header_body do
   ' For a product to work, it must have at least one backend with a private base URL - your API. If
   ' you add multiple backends to a product, each backend must have a unique public path.
-- content_for :page_header_button_label, 'Add backend'
-- content_for :page_header_button_href, new_admin_service_backend_usage_path(@service)
 
-table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Backends table"
-  thead
-    tr role="row"
-      = th_sortable('backend_apis.name', 'Name')
-      = th_sortable('backend_apis.private_endpoint', 'Private base URL')
-      = th_sortable('backend_api_configs.path', 'Public path')
-      td
-  tbody role="rowgroup"
-    - @backend_api_configs.each do |config|
+- if @backend_api_configs.empty?
+  div class="pf-c-empty-state"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-cube pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg"
+        = t('.empty_state.title')
+      div class="pf-c-empty-state__body"
+        = t('.empty_state.body', name: service.name)
+      a class="pf-c-button pf-m-primary" type="button" href=new_admin_service_backend_usage_path(service)
+        = t('.empty_state.primary_action')
+- else
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'toolbar'
+
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Backends table" data-toolbar-props=toolbar_props.to_json
+    thead
       tr role="row"
-        td role="cell" data-label="Name"
-          = link_to config.backend_api.name, provider_admin_backend_api_path(config.backend_api)
-        td role="cell" data-label="Private Base URL" class="pattern"
-          = config.backend_api.private_endpoint
-        td role="cell" data-label="Public path" class="position"
-          = config.path
-        td role="cell" class="pf-c-table__action actions"
-          div class="pf-c-overflow-menu"
-            div class="pf-c-overflow-menu__content"
-              div class="pf-c-overflow-menu__group pf-m-button-group"
-                div class="pf-c-overflow-menu__item"
-                  = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
-                div class="pf-c-overflow-menu__item"
-                  = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
-
-= will_paginate(@backend_api_configs)
+        = th_sortable('backend_apis.name', 'Name')
+        = th_sortable('backend_apis.private_endpoint', 'Private base URL')
+        = th_sortable('backend_api_configs.path', 'Public path')
+        td
+    tbody role="rowgroup"
+      - @backend_api_configs.each do |config|
+        tr role="row"
+          td role="cell" data-label="Name"
+            = link_to config.backend_api.name, provider_admin_backend_api_path(config.backend_api)
+          td role="cell" data-label="Private Base URL" class="pattern"
+            = config.backend_api.private_endpoint
+          td role="cell" data-label="Public path" class="position"
+            = config.path
+          td role="cell" class="pf-c-table__action actions"
+            div class="pf-c-overflow-menu"
+              div class="pf-c-overflow-menu__content"
+                div class="pf-c-overflow-menu__group pf-m-button-group"
+                  div class="pf-c-overflow-menu__item"
+                    = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
+                  div class="pf-c-overflow-menu__item"
+                    = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete

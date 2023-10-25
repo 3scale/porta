@@ -12,6 +12,8 @@ class Api::BackendUsagesController < Api::BaseController
   activate_menu :serviceadmin, :integration, :backend_api_configs
   sublayout 'api/service'
 
+  helper_method :service, :toolbar_props
+
   def index
     @backend_api_configs = service.backend_api_configs.order_by(params[:sort], params[:direction])
                                                       .includes(:backend_api)
@@ -80,5 +82,16 @@ class Api::BackendUsagesController < Api::BaseController
     flash[:error] = "Couldn't add Backend to Product"
     @inline_errors = { backend_api_id: ['Not a valid backend'] }
     render 'new'
+  end
+
+  def toolbar_props
+    {
+      totalEntries: @backend_api_configs.total_entries,
+      rightActions: [{
+        variant: :primary,
+        label: t('.toolbar.primary'),
+        href: new_admin_service_backend_usage_path(@service),
+      }]
+    }
   end
 end
