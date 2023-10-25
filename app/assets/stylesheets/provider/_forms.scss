@@ -1,7 +1,9 @@
-$fieldset-margin-bottom: line-height-times(1.5);
+$fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
 
-form.formtastic:not(.pf-c-form) ol, form.formtastic:not(.pf-c-form) ul {
-  list-style: none;
+form.formtastic:not(.pf-c-form) {
+  ol, ul, li {
+    list-style: none;
+  }
 }
 
 input[type='text']:not(.pf-c-form-control, .pf-c-text-input-group__text-input),
@@ -150,8 +152,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   border-radius: $border-radius;
 }
 
-form.formtastic:not(.pf-c-form) fieldset.actions {
-  border-top: $border-width solid $border-color;
+.button-bar fieldset.actions {
   text-align: right;
 
   li {
@@ -159,13 +160,10 @@ form.formtastic:not(.pf-c-form) fieldset.actions {
   }
 
   &-inline {
-    border-top: 0;
     margin: line-height-times(1/2) 0;
   }
-}
 
-.button-bar fieldset.actions {
-  border-top: 0 !important;
+  border-top: 0;
 
   .delete {
     margin-top: 0 !important;
@@ -245,7 +243,6 @@ Load this stylesheet after formtastic.css in your layouts to override the CSS to
 
 form.formtastic:not(.pf-c-form) {
   @include white-box-shadow;
-  margin: line-height-times(1) 0;
   min-width: line-height-times(20);
   padding: line-height-times(1);
   text-align: left; /* overriding legacy_theme text-align: center*/
@@ -320,11 +317,7 @@ form.formtastic:not(.pf-c-form) {
   fieldset.inputs,
   :not(.form-group) > fieldset {
     &:not(.policies-fieldset) {
-      border: 0;
       position: relative;
-      padding: line-height-times(1) 0 0 0;
-      border-top: $border-width solid $border-color;
-      margin-bottom: $fieldset-margin-bottom;
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
@@ -341,17 +334,22 @@ form.formtastic:not(.pf-c-form) {
     }
   }
 
+  fieldset.inputs > legend {
+    margin-bottom: 12px;
+  }
+
+  div.pf-c-form__group.pf-m-action {
+    margin-top: $fieldset-margin-bottom;
+  }
+
   fieldset {
     border: 0;
   }
 
   legend:not(.label) {
-    padding: 0 line-height-times(1/2) 0 0;
-    font-size: $font-size-base;
-    text-transform: uppercase;
-    color: $label-color;
-    position: relative;
-    white-space: nowrap;
+    color: rgb(21, 21, 21); // --pf-c-content--Color
+    font-size: 18px; // --pf-c-form__section-title--FontSize
+    font-weight: 700; // --pf-c-form__section-title--FontWeight
   }
 }
 
@@ -563,14 +561,8 @@ li.hidden {
 
   form.formtastic:not(.pf-c-form) {
     box-shadow: none;
-    margin: 0;
-
-    fieldset {
-      margin-bottom: 0;
-    }
   }
 }
-
 
 .dashboard_card form.formtastic:not(.pf-c-form) {
   box-shadow: none;

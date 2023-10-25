@@ -19,10 +19,9 @@ div class="pf-l-flex pf-m-column"
 
           - new_mode = @billing_strategy.is_a?(Finance::PostpaidBillingStrategy) ? 'prepaid' : 'postpaid'
           = hidden_field_tag 'type', new_mode
-          div class="pf-c-form__group pf-m-action"
-            div class="pf-c-form__actions"
-              button class="pf-c-button pf-m-danger" type="submit" data={ confirm: t('.switch_confirm', mode: new_mode) }
-                = t('.switch_button', mode: new_mode.upcase)
+          = form.actions do
+            button class="pf-c-button pf-m-danger" type="submit" data={ confirm: t('.switch_confirm', mode: new_mode) }
+              = t('.switch_button', mode: new_mode.upcase)
 
   div class="pf-l-flex__item"
     div class="pf-c-card"
@@ -44,9 +43,8 @@ div class="pf-l-flex pf-m-column"
                                           collection: [['Monthly (YYYY-MM-XXXXXXXX)', 'monthly'], ['Yearly (YYYY-XXXXXXXX)', 'yearly']],
                                           include_blank: false
 
-          div class="pf-c-form__group pf-m-action"
-            div class="pf-c-form__actions"
-              button class="pf-c-button pf-m-primary" type="submit" Save
+          = form.actions do
+            button class="pf-c-button pf-m-primary" type="submit" Save
 
   - if can?(:manage, :finance) && @account.billing_strategy.try(:needs_credit_card?)
     div class="pf-l-flex__item"
@@ -77,9 +75,8 @@ div class="pf-l-flex pf-m-column"
                   - if payment_gateway.deprecated
                     = pf_inline_alert t('.deprecation_warning', gateway: payment_gateway.type.capitalize), variant: :warning
 
-          div class="pf-c-form__group pf-m-action"
-            div class="pf-c-form__actions"
-              button class="pf-c-button pf-m-primary" type="submit" Save
+          = form.actions do
+            button class="pf-c-button pf-m-primary" type="submit" Save
 
     javascript:
       document.addEventListener('DOMContentLoaded', () => {

@@ -27,5 +27,5 @@
     - else
       p
         - msg = t('api.backend_apis.edit.delete_confirmation', name: j(backend_api.name))
-        - delete_options = { data: { confirm: msg }, method: :delete, label: "I understand the consequences, proceed to delete '#{j(backend_api.name)}' backend" }
+        - delete_options = { data: { confirm: msg }, method: :delete, class: 'pf-c-button pf-m-danger', label: "I understand the consequences, proceed to delete '#{j(backend_api.name)}' backend" }
         = delete_link_for(provider_admin_backend_api_path(backend_api), delete_options)
