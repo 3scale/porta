@@ -23,6 +23,7 @@ class ActionLimiter
     subject = object.to_gid_param
     @threshold = threshold
     @timespan = timespan
+    # REDIS CLIENT MIGRATION BLOCKER: `ratelimit` gem relies on `redis` and doesn't support `redis-client` or `connection_pool`
     @limiter = ::Ratelimit.new(subject, bucket_span: timespan, bucket_interval: interval, redis: System.redis)
   end
 

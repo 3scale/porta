@@ -12,6 +12,7 @@ class System::RedisPoolTest < ActiveSupport::TestCase
 
   test 'delegation' do
     redis = mock
+    # REDIS CLIENT MIGRATION: failing test
     redis.expects(:ping).returns('PONG')
     Redis.expects(:new).returns(redis)
 

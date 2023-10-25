@@ -45,6 +45,7 @@ module Stats
       value_key_without_period = value_key.match(/(.*)\/.*/)[1]
 
       begin
+        # REDIS CLIENT MIGRATION BLOCKER: SORT arguments need to be processed before passing to redis
         sorted = sort(source_key, :by => value_key,
                          :order => options[:order] && options[:order].to_s.upcase,
                          :limit => options[:limit] && [0, options[:limit]],

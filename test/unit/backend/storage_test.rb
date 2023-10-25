@@ -24,6 +24,7 @@ test:
 }
     given_redis_config(yaml) do
       mock = mock(id: 'redis://localhost:6389/1')
+      # REDIS CLIENT MIGRATION: failing test
       Redis.expects(:new).with(host: 'example.com', port: 1337, db: 2).returns(mock)
 
       storage = Backend::Storage.clone.instance
