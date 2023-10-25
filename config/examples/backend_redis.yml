@@ -7,8 +7,8 @@ base: &default
   name: <%= ENV['BACKEND_REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
   # == ACL Params ==
-  username: <%= ENV['BACKEND_REDIS_ACL_USERNAME'] %>
-  password: <%= ENV['BACKEND_REDIS_ACL_PASSWORD'] %>
+  username: <%= ENV['BACKEND_REDIS_USERNAME'] %>
+  password: <%= ENV['BACKEND_REDIS_PASSWORD'] %>
   # == TLS Params ==
   ssl_params:
     ca_file: <%= ENV['BACKEND_REDIS_TLS_CA_FILE'] %>
