@@ -313,20 +313,14 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_nil account.profile
   end
 
-  test 'forum is lazily created for providers' do
+  test 'forum is not created' do
     account = nil
 
     assert_no_change :of => -> { Forum.count } do
       account = FactoryBot.create(:simple_provider)
     end
 
-    assert_not_nil account.forum
-  end
-
-  test 'forum is created with default name' do
-    account = FactoryBot.build_stubbed(:simple_provider)
-
-    assert_equal 'Forum', account.forum.name
+    assert_nil account.forum
   end
 
   test '#forum! returns the forum when called on a provider account' do
