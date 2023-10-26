@@ -323,20 +323,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_nil account.forum
   end
 
-  test '#forum! returns the forum when called on a provider account' do
-    account = FactoryBot.build_stubbed(:simple_provider)
-
-    assert_instance_of Forum, account.forum!
-  end
-
-  test '#forum! raises an exception when called on a buyer account' do
-    account = FactoryBot.build_stubbed(:simple_buyer)
-
-    assert_raise ActiveRecord::RecordNotFound do
-      account.forum!
-    end
-  end
-
   test 'generates site_access_code if the account is a provider' do
     account = Account.new(org_name: 'Foo', subdomain: 'foo', self_subdomain: 'foo-admin')
     account.provider = true

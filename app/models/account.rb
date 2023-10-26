@@ -209,10 +209,6 @@ class Account < ApplicationRecord
     User.where(conditions).joins(:account).readonly(false)
   end
 
-  def forum!
-    forum || raise(ActiveRecord::RecordNotFound, "buyer accounts can't have forum")
-  end
-
   def build_forum(attributes = {})
     self.forum = Forum.new(attributes.reverse_merge(name: 'Forum'))
   end
