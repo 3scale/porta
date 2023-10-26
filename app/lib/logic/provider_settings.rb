@@ -20,8 +20,7 @@ module Logic
     end
 
     def forum_enabled?
-      # TODO: are there some other conditions required for that?
-      try(:settings).try!(:forum_enabled?) && provider_can_use?(:forum)
+      false
     end
 
     def single_service?

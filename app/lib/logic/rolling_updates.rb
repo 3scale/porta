@@ -240,12 +240,6 @@ module Logic
         end
       end
 
-      class Forum < Base
-        def missing_config
-          true
-        end
-      end
-
       class BillableContracts < Base
         def missing_config
           false
