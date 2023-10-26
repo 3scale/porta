@@ -19,10 +19,6 @@ module Logic
       settings.web_hooks.allowed?
     end
 
-    def forum_enabled?
-      false
-    end
-
     def single_service?
       !multiservice?
     end
