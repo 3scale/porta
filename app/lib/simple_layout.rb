@@ -289,7 +289,7 @@ class SimpleLayout
   end
 
   def builtin_static_pages
-    forum_builtin_static_pages
+    []
   end
 
   def find_or_create_section(name, path, options = {})
@@ -307,33 +307,6 @@ class SimpleLayout
   end
 
   private
-
-  def forum_builtin_static_pages
-    return [] unless provider.provider_can_use?(:forum)
-
-    forum             = find_or_create_section('Forum', '/forum')
-    forum_categories  = find_or_create_section('Categories', '/forum/categories', parent: forum)
-    forum_posts       = find_or_create_section('Posts', '/forum/posts', parent: forum)
-    forum_topics      = find_or_create_section('Topics', '/forum/topics', parent: forum)
-    forum_user_topics = find_or_create_section('User Topics', '/forum/user_topics', parent: forum)
-
-    [
-      { section: forum, system_name: 'forum/forums/show' },
-      { section: forum_posts, system_name: 'forum/posts/index' },
-      { section: forum_posts, system_name: 'forum/posts/new' },
-      { section: forum_posts, system_name: 'forum/posts/show' },
-      { section: forum_posts, system_name: 'forum/posts/edit' },
-      { section: forum_topics, system_name: 'forum/topics/my' },
-      { section: forum_topics, system_name: 'forum/topics/show' },
-      { section: forum_topics, system_name: 'forum/topics/new' },
-      { section: forum_topics, system_name: 'forum/topics/edit' },
-      { section: forum_user_topics, system_name: 'forum/user_topics/index' },
-      { section: forum_categories, system_name: 'forum/categories/index' },
-      { section: forum_categories, system_name: 'forum/categories/show' },
-      { section: forum_categories, system_name: 'forum/categories/new' },
-      { section: forum_categories, system_name: 'forum/categories/edit' }
-    ]
-  end
 
   def root
     provider.builtin_sections.root || find_or_create_section('Root', '/', parent: nil)
