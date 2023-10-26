@@ -1,8 +1,0 @@
-<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Built-in page '#{@page.title}'" } %>
-
-<%= cms_new_button_dropdown(CMS::Layout) %>
-
-<%= cms_form_for(@page) do |f| %>
-  <%= render 'form', :f => f %>
-  <%= f.actions :commit, :button_html => { :class => 'important-button', :title => 'Save' } %>
-<% end %>
