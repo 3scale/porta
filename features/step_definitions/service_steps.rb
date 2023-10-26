@@ -4,6 +4,10 @@ Given 'a product' do
   @product = @provider.default_service
 end
 
+Given 'a product with no backends' do
+  @product = FactoryBot.create(:service, account: @provider)
+end
+
 Given "a service {string} of {provider}" do |name, provider|
   @service = provider.services.create! name: name, mandatory_app_key: false
 end
