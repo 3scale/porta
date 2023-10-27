@@ -11,13 +11,6 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
   def setup
     host! master_account.internal_domain
     ::Events.stubs(shared_secret: 'SECRET')
-    # Enable CSRF protection
-    ActionController::Base.allow_forgery_protection = true
-  end
-
-  def teardown
-    # Disable CSRF protection
-    ActionController::Base.allow_forgery_protection = false
   end
 
   test 'is not accessible on other domains' do
@@ -40,5 +33,12 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
     Events.expects(:async_fetch_backend_events!)
 
     post master_events_import_path secret: Events.shared_secret, :host => master_account.internal_domain
+  end
+
+  test 'skips forgery protection' do
+    with_forgery_protection do
+      post master_events_import_path secret: Events.shared_secret
+      assert_response :ok
+    end
   end
 end
