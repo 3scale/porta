@@ -11,6 +11,13 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
   def setup
     host! master_account.internal_domain
     ::Events.stubs(shared_secret: 'SECRET')
+    # Enable CSRF protection
+    ActionController::Base.allow_forgery_protection = true
+  end
+
+  def teardown
+    # Disable CSRF protection
+    ActionController::Base.allow_forgery_protection = false
   end
 
   test 'is not accessible on other domains' do
