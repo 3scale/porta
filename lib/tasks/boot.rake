@@ -18,12 +18,10 @@ namespace :boot do
   desc 'Tries to connect to Redis'
   task :redis do
     require Rails.root.join('app', 'lib', 'three_scale', 'redis_config')
+    require Rails.root.join('app', 'lib', 'system', 'redis_pool')
 
     redis_config = ThreeScale::RedisConfig.new(Rails.application.config_for(:redis)).config
-    pool_config = redis_config.extract!(:size, :pool_timeout)
-    pool = ConnectionPool.new(size: pool_config[:size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
-      Redis.new(redis_config)
-    end
+    pool = System::RedisPool.new(redis_config)
     pool.with do |redis|
       redis.ping
       puts "Connected to #{redis.id}"
