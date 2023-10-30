@@ -34,4 +34,11 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
 
     post master_events_import_path secret: Events.shared_secret, :host => master_account.internal_domain
   end
+
+  test 'skips forgery protection' do
+    with_forgery_protection do
+      post master_events_import_path secret: Events.shared_secret
+      assert_response :ok
+    end
+  end
 end

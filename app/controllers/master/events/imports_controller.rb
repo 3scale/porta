@@ -2,6 +2,8 @@ class Master::Events::ImportsController < Master::BaseController
   include SiteAccountSupport
   respond_to :xml
 
+  skip_forgery_protection
+
   before_action :check_shared_secret
 
   def create

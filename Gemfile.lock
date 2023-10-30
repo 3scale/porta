@@ -771,9 +771,6 @@ GEM
       fugit (~> 1.8)
       globalid (>= 1.0.1)
       sidekiq (>= 6)
-    sidekiq-lock (0.6.0)
-      redis (>= 3.0.5)
-      sidekiq (>= 2.14.0)
     sidekiq-prometheus-exporter (0.2.0)
       rack (>= 1.6.0)
       sidekiq (>= 4.1.0)
@@ -1054,7 +1051,6 @@ DEPENDENCIES
   sidekiq (~> 7)
   sidekiq-batch!
   sidekiq-cron
-  sidekiq-lock
   sidekiq-prometheus-exporter
   sidekiq-throttled (~> 1.0.0.alpha.1)
   simplecov (~> 0.21.2)

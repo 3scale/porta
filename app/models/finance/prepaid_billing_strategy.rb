@@ -65,15 +65,6 @@ class Finance::PrepaidBillingStrategy < Finance::BillingStrategy
     'prepaid'
   end
 
-  def description
-    %q{In prepaid mode, all fixed fees and setup fees are
-       billed immediately at the beginning of the month or
-       at the beginning of any pro-rated billing period.
-       Variable costs are always calculated at the end
-       of the month.
-    }
-  end
-
   # Differs from Postpaid #bill_variable_costs just by the invoice
   # that is used to bill on: here it is the following month.
   #

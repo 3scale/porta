@@ -79,7 +79,7 @@ module AccountHelper
     alert = t('buyers.accounts.edit.delete.admin_restricted', admin: current_account.first_admin.try(:email))
 
     url = can?(:destroy, account) ? admin_buyers_account_path(account) : javascript_alert_url(alert)
-    delete_link_for(url, confirm: msg)
+    delete_link_for(url, confirm: msg, class: 'pf-c-button pf-m-danger')
   end
 
   def master_on_premises?

@@ -45,7 +45,9 @@ class Cinstance < Contract
 
   # FIXME: including Fields after other includes makes Fields break
   include Fields::Fields
-  required_fields_are :name, :description
+  required_fields_are :name
+  optional_fields_are :description
+  default_fields_are :name, :description
   set_fields_account_source :user_account
 
   include Backend::ModelExtensions::Cinstance
@@ -80,7 +82,6 @@ class Cinstance < Contract
 
   validates :plan, presence: true
   validates :name,        presence: { :if => :name_required? }
-  validates :description, presence: { :if => :description_required? }
 
   after_commit :push_webhook_key_updated, :on => :update, :if => :user_key_updated?
   after_commit :push_application_updated_event, on: :update, unless: :only_traffic_updated?
@@ -438,10 +439,6 @@ class Cinstance < Contract
 
   def name_required?
     @validate_human_edition
-  end
-
-  def description_required?
-    @validate_human_edition && (multiple_applications_allowed? || service_intentions_required?)
   end
 
   def service_intentions_required?

@@ -1,33 +1,37 @@
 # frozen_string_literal: true
 
 class PatternflyInputInput < Formtastic::Inputs::StringInput
-  delegate :content_tag, to: :template
+  delegate :tag, to: :template
 
   def to_html
-    content_tag :div, class: 'pf-c-form__group' do
+    tag.div(class: 'pf-c-form__group') do
       label + control
     end
   end
 
   private
 
+  def input_html_options
+    super.merge(class: 'pf-c-form-control',
+                'aria-invalid': errors.any?)
+  end
+
   def label
-    content_tag :div, class: 'pf-c-form__group-label' do
-      content_tag :label, class: 'pf-c-form__label', for: input_html_options[:id] do
-        content_tag :span, label_text, class: 'pf-c-form__label-text'
+    tag.div(class: 'pf-c-form__group-label') do
+      tag.label(class: 'pf-c-form__label', for: input_html_options[:id]) do
+        tag.span(label_text, class: 'pf-c-form__label-text')
       end
     end
   end
 
   def control
-    content_tag :div, class: 'pf-c-form__group-control' do
+    tag.div(class: 'pf-c-form__group-control') do
       input + helper_text
     end
   end
 
   def input
-    builder.text_field(method, input_html_options.merge(class: 'pf-c-form-control',
-                                                        'aria-invalid': errors.any?))
+    builder.text_field(method, input_html_options)
   end
 
   def helper_text
@@ -36,7 +40,7 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
     end
 
     if hint? # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
-      content_tag(:p, hint_text, class: 'pf-c-form__helper-text')
+      tag.p(hint_text, class: 'pf-c-form__helper-text')
     end
   end
 end

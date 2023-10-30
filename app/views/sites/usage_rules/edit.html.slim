@@ -82,9 +82,8 @@ div class="pf-c-card"
                   = t('sites.usage_rules.edit.plans_label')
             = render 'shared/plan_change_settings', permission: 'change_service_plan_permission', settings: settings
 
-      div class="pf-c-form__group pf-m-action"
-        div class="pf-c-form__actions"
-          button class="pf-c-button pf-m-primary" type="submit" Update Settings
+      = form.actions do
+        button class="pf-c-button pf-m-primary" type="submit" Update Settings
 
 javascript:
   document.addEventListener('DOMContentLoaded', () => {

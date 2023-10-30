@@ -58,7 +58,7 @@ Rails.application.config.to_prepare do
 
   # Specifies if I18n lookups of the default I18n Localizer should be cached to improve performance.
   # Defaults to true.
-  # Formtastic::FormBuilder.i18n_cache_lookups = false
+  Formtastic::FormBuilder.i18n_cache_lookups = Rails.env.production?
 
   # reading strings from i18n with HTML tags escapes them otherwise
   Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false

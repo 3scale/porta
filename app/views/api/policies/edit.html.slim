@@ -17,7 +17,6 @@
     fieldset class="inputs policies-fieldset"
       div#policies data-service-id=@service.id data-registry=@registry_policies.to_json data-chain=@proxy.policies_config.to_json
 
-    div class="pf-c-form__group pf-m-action"
-      div class="pf-c-form__actions"
-        button class="pf-c-button pf-m-primary" type="submit" id="policies-button-sav" disabled=true
-          = t('formtastic.actions.policies.update')
+    = f.actions do
+      button class="pf-c-button pf-m-primary" type="submit" id="policies-button-sav" disabled=true
+        = t('formtastic.actions.policies.update')

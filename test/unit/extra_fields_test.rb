@@ -142,11 +142,10 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       assert new_provider.defined_fields.map(&:name).include?(@master_field)
     end
 
-    test 'RequiredFields be created automatically for provider' do
+    test 'default fields are created automatically for provider' do
       provider = FactoryBot.create(:provider_account)
 
       assert provider.fields_definitions.present?
-      assert provider.fields_definitions.all?(&:required?)
     end
 
     test 'Validations never be done for provider resource' do

@@ -26,12 +26,14 @@
     <% end %>
   <% end %>
 
-  <%= form.actions do %>
-    <%= form.commit_button %>
-    <% if @user.can_be_destroyed? -%>
-      <%= delete_link_for admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), data: {confirm: "Are you sure you want to destroy user #{@user.username}?" } %>
-    <% end -%>
-  <% end %>
+  <div class="pf-c-form"><%# TODO: remove div and move class to form element %>
+    <%= form.actions do %>
+      <button class="pf-c-button pf-m-primary" type="submit">Update User</button>
+      <% if @user.can_be_destroyed? %>
+        <%= delete_link_for admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), data: {confirm: "Are you sure you want to destroy user #{@user.username}?" }, class: 'pf-c-button pf-m-danger' %>
+      <% end -%>
+    <% end %>
+  </div>
 
   <style type="text/css">
     <%# the 'Role' radio button is unclickable without this style (see #1994)%>

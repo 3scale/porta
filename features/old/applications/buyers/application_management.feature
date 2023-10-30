@@ -151,7 +151,6 @@ Feature: Buyer's application management
     Then I should see error in fields:
       | errors             |
       | Name               |
-      | Description        |
       | App extra required |
 
     When I fill in "Name" with "MyApp"

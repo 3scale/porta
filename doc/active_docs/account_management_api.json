@@ -9797,8 +9797,7 @@
         "required": [
           "access_token",
           "plan_id",
-          "name",
-          "description"
+          "name"
         ],
         "additionalProperties": {
           "type": "string"

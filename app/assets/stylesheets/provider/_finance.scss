@@ -3,3 +3,15 @@
   display: block;
   padding: line-height-times(1);
 }
+
+form#payment-gateway-form {
+  section.pf-c-form__section {
+    &.hidden {
+      display: none;
+    }
+
+    &.payment_gateway_options {
+      margin-top: 0;
+    }
+  }
+}

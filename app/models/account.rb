@@ -16,6 +16,7 @@ class Account < ApplicationRecord
                       :telephone_number, :vat_code, :vat_rate, :fiscal_code,
                       :state_region, :city, :country, :zip,
                       :primary_business, :business_category, :po_number
+  default_fields_are :org_name
   internal_fields_are :billing_address
 
   set_fields_account_source :self

@@ -61,8 +61,8 @@ And "a buyer has been billed monthly" do
 end
 
 Then "they can set the billing period to yearly" do
-  assert has_select?('Billing periods for invoice ids', selected: 'monthly')
-  select('yearly', from: 'Billing periods for invoice ids')
+  assert has_select?('Billing periods for invoice IDs', selected: 'Monthly (YYYY-MM-XXXXXXXX)')
+  select('Yearly (YYYY-XXXXXXXX)', from: 'Billing periods for invoice IDs')
   click_button('Save')
   assert_flash("Finance settings updated. Already existent invoices won't change their id.")
 end
@@ -143,7 +143,7 @@ end
 def save_changes_and_confirm
   accept_confirm do
     accept_confirm do
-      click_button 'Save changes'
+      click_button 'Save'
     end
   end
 end

@@ -7,6 +7,12 @@ Feature: Backend Usages
   Background:
     Given a provider is logged in
 
+  Scenario: Empty state
+    Given a product with no backends
+    When an admin goes to the product's backend usages page
+    Then should see "There are no backends yet"
+    And they can create a backend from there
+
   Scenario: Add a backend API
     Given a backend
     And a product

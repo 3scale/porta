@@ -56,9 +56,10 @@ class FieldsDefinition < ApplicationRecord
   def self.create_defaults!(account)
     targets.each do |target|
       klass = target.constantize
-      klass.required_fields.each do |field|
+      klass.default_fields.each do |field|
         label = DEFAULT_LABELS[field] || field.humanize
-        account.fields_definitions.create!({target: target, name: field, label: label, required: true})
+        required = klass.required_fields.include? field
+        account.fields_definitions.create!({target: target, name: field, label: label, required: required })
       end
     end
   end
