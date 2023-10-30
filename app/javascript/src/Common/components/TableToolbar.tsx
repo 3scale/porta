@@ -71,7 +71,7 @@ const TableToolbar: FunctionComponent<Props> = ({
       <PFToolbar>
         <ToolbarContent>
           {bulkActions && pageEntries && (
-            <>
+            <ToolbarGroup>
               <ToolbarItem variant="bulk-select">
                 <BulkSelectDropdown
                   numSelected={allItemsAcrossPagesSelected ? totalEntries : currentPageSelectedItemsIds.length}
@@ -88,7 +88,7 @@ const TableToolbar: FunctionComponent<Props> = ({
                   isDisabled={currentPageSelectedItemsIds.length === 0}
                 />
               </ToolbarItem>
-            </>
+            </ToolbarGroup>
           )}
           {search && (
             <ToolbarItem variant="search-filter">
