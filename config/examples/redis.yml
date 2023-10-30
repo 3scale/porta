@@ -6,14 +6,14 @@ base: &default
   name: <%= ENV['REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
   # == ACL Params ==
-  username: <%= ENV['REDIS_USERNAME'] %>
-  password: <%= ENV['REDIS_PASSWORD'] %>
+  username: <%= ENV['REDIS_USERNAME']&.to_json %>
+  password: <%= ENV['REDIS_PASSWORD']&.to_json %>
   # == TLS Params ==
   ssl_params:
-   ca_file: <%= ENV['REDIS_TLS_CA_FILE'] %>
-   ca_path: <%= ENV['REDIS_TLS_CA_PATH'] %>
-   cert: <%= ENV['REDIS_TLS_CERT'] %>
-   key: <%= ENV['REDIS_TLS_KEY'] %>
+    ca_file: <%= ENV['REDIS_TLS_CA_FILE'] %>
+    ca_path: <%= ENV['REDIS_TLS_CA_PATH'] %>
+    cert: <%= ENV['REDIS_TLS_CERT'] %>
+    key: <%= ENV['REDIS_TLS_KEY'] %>
 
 development:
   <<: *default
