@@ -10,8 +10,8 @@ production:
   password: <%= ENV['REDIS_PASSWORD']&.to_json %>
   # == TLS Params ==
   ssl_params:
-    ca_file: <%= ENV['REDIS_TLS_CA_FILE'] %>
-    ca_path: <%= ENV['REDIS_TLS_CA_PATH'] %>
-    cert: <%= ENV['REDIS_TLS_CERT'] %>
-    key: <%= ENV['REDIS_TLS_KEY'] %>
+    ca_file: <%= ENV['REDIS_CA_FILE'] %>
+    ca_path: <%= ENV['REDIS_CA_PATH'] %>
+    cert: <%= ENV['REDIS_CLIENT_CERT'] %>
+    key: <%= ENV['REDIS_PRIVATE_KEY'] %>
 
