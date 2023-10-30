@@ -93,3 +93,16 @@ end
 Then /^I should see the notice to validate my email$/ do
   assert has_content?('Validate your email')
 end
+
+Given "the current user {can} export data" do |can|
+  Ability.any_instance.stubs(:can?).with(:manage, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:admin, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:see, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:impersonate, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:update, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:show, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:read, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:create, any_parameters).returns(true)
+
+  Ability.any_instance.expects(:can?).with(:export, :data).returns(can).at_least_once
+end

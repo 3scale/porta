@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Then /^(.+) and I confirm dialog box(?: "(.*)")?$/ do |original, text|
+Then /^(.+) and (?:I )?confirm dialog box(?: "(.*)")?$/ do |original, text|
   if rack_test?
     step original
   else

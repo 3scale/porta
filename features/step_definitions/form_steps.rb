@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Then /^I fill the form with following:$/ do |table|
+Then "(I )fill the form with( following):" do |table|
   table.hashes.each do |hash|
     hash.each_pair do |key, value|
       fill_in key, :with => value

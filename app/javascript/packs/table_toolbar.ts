@@ -1,8 +1,8 @@
 // TODO: combine with Messages toolbar
 
-import { ToolbarWrapper } from 'Common/components/Toolbar'
+import { TableToolbarWrapper } from 'Common/components/TableToolbar'
 
-import type { Props } from 'Common/components/Toolbar'
+import type { Props } from 'Common/components/TableToolbar'
 
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.querySelector<HTMLTableElement>('table[data-toolbar-props]')
@@ -16,5 +16,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const props = JSON.parse(data) as Props
 
-  ToolbarWrapper(props, table)
+  TableToolbarWrapper(props, table)
 })

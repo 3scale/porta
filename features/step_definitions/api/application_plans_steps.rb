@@ -10,7 +10,7 @@ When /^an admin selects a(?:n)? (hidden )?application plan as default$/ do |hidd
   assert_equal @plan, default_service.reload.default_application_plan
 end
 
-When "the service has a default application plan" do
+When "the (default )service has a default application plan" do
   @service = default_service
   plan = FactoryBot.create(:application_plan, issuer: @service)
   @service.update!(default_application_plan: plan)

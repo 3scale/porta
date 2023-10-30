@@ -482,14 +482,19 @@ en:
 
   buyers:
     accounts:
+      index:
+        empty_state:
+          title: Nobody here
+          body: There are no accounts yet
+          primary: Add your first account
+        empty_search:
+          body: No accounts match the filter criteria. Clear all filters and try again.
       edit: &account_delete_msg
         schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
         delete_confirmation: "Are you sure you want to delete '%{name}'?"
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
-      empty_search:
-        body: No accounts match the filter criteria. Clear all filters and try again.
       change_state:
         notice: "%{account_type} account was %{state_event_past}."
         error: "Cannot %{state_event} %{account_type} account."

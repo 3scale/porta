@@ -16,7 +16,6 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def index
     @countries = Country.all
-    @account_plans = current_account.account_plans.stock
     @search = ThreeScale::Search.new(params[:search] || params)
 
     respond_to do |format|
@@ -129,6 +128,8 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def presenter
-    @presenter ||= Buyers::AccountsIndexPresenter.new(provider: current_account, params: params)
+    @presenter ||= Buyers::AccountsIndexPresenter.new(provider: current_account,
+                                                      user: current_user,
+                                                      params: params)
   end
 end
