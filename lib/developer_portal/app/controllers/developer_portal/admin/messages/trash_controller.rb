@@ -17,8 +17,8 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
   end
 
   def destroy
-    @message.unhide!
-
+    @message.restore_for!(current_account)
+ 
     flash[:notice] = 'Message was restored.'
     redirect_to admin_messages_trash_index_path
   end
@@ -33,6 +33,6 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
   private
 
   def find_message
-    @message = current_account.trashed_messages.find(params[:id])
+    @message = (current_account.received_messages + current_account.trashed_messages).find { |msg| msg.id == params[:id].to_i }
   end
 end
