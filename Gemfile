@@ -93,7 +93,7 @@ gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
-gem 'hiredis-client'
+gem 'hiredis-client', github: '3scale/redis-client', branch: 'ppc64le-fix' # Remove the fork after upgrading the image to RHEL 8
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
