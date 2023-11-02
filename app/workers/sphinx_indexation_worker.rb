@@ -10,7 +10,7 @@ class SphinxIndexationWorker < ApplicationJob
     Rails.logger.info "SphinxIndexationWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  rescue_from(ThinkingSphinx::SphinxError, ThinkingSphinx::QueryError) do |exception|
+  rescue_from(ThinkingSphinx::QueryError) do |exception|
     ThinkingSphinx::Connection.clear if exception.message.include?("unknown column")
     raise
   end
