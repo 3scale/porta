@@ -10,6 +10,11 @@ class SphinxIndexationWorker < ApplicationJob
     Rails.logger.info "SphinxIndexationWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
+  rescue_from(ThinkingSphinx::QueryError) do |exception|
+    ThinkingSphinx::Connection.clear if exception.message.include?("unknown column")
+    raise
+  end
+
   def perform(model, id)
     instance = model.find_by(model.primary_key => id)
 
