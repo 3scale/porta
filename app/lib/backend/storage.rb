@@ -7,7 +7,8 @@ module Backend
       config = File.read("#{Rails.root}/config/backend_redis.yml")
       config = ERB.new(config).result(binding)
       config = YAML.load(config)
-      config.fetch(Rails.env).deep_symbolize_keys
+      config = config.fetch(Rails.env).symbolize_keys
+      config.reverse_merge(logger: Rails.logger)
     end
 
     def initialize

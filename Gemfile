@@ -19,8 +19,8 @@ gem 'rails', '~> 6.0'
 # Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
 gem 'mail', '~> 2.7.1'
 
-gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
+gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.8.2'
@@ -51,10 +51,10 @@ gem '3scale_time_range', '0.0.6'
 gem 'statsd-ruby', require: false
 
 # Sidekiq
-gem 'sidekiq', '~> 7', require: %w[sidekiq sidekiq/web]
-gem 'sidekiq-batch', github: '3scale/sidekiq-batch', branch: 'redis-client'
+gem 'sidekiq', '~> 6.4.0', require: %w[sidekiq sidekiq/web]
+gem 'sidekiq-batch'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
-gem 'sidekiq-throttled', '~> 1.0.0.alpha.1'
+gem 'sidekiq-throttled'
 
 gem 'sidekiq-prometheus-exporter'
 
@@ -74,7 +74,7 @@ gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.12.0'
-gem 'json', '~> 2.3'
+gem 'json', '~> 2.3.0'
 
 gem 'mysql2', '~> 0.5.3'
 
@@ -93,7 +93,7 @@ gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
-gem 'hiredis-client'
+gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
@@ -106,7 +106,7 @@ gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
-gem 'redis', require: ['redis']
+gem 'redis', '~> 4.2.0', require: ['redis', 'redis/connection/hiredis']
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'svg-graph', require: false
