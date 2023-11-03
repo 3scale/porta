@@ -80,8 +80,6 @@ Feature: Create application from Account
     And I select "Basic" from "Application plan"
     And I should see button "Create application" disabled
     And I fill in "Name" with "Name"
-    And I should see button "Create application" disabled
-    And I fill in "Description" with "Description"
     Then I should see button "Create application"
 
   Scenario: Create an application with a pending contract

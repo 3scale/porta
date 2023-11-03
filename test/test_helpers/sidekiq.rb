@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 require 'sidekiq/testing'
-require 'sidekiq/lock/testing/inline'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
-Sidekiq.strict_args! # Fail if parameters are not valid JSON
+Sidekiq.configure_client do |config|
+  config.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
+end
+
 module TestHelpers
   module Sidekiq
     def self.included(base)

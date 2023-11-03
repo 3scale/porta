@@ -24,10 +24,9 @@ div class="pf-c-card"
       - if params[:to]
         = hidden_field_tag :to, params[:to]
 
-      div class="pf-c-form__group pf-m-action"
-        div class="pf-c-form__actions"
-          button class="pf-c-button pf-m-primary" type="submit" Send message
-          = link_to 'Cancel', provider_admin_messages_root_path, class: "pf-c-button pf-m-link #{is_modal ? 'fancybox-close' : ''}"
+      = form.actions do
+        button class="pf-c-button pf-m-primary" type="submit" Send message
+        = link_to 'Cancel', provider_admin_messages_root_path, class: "pf-c-button pf-m-link #{is_modal ? 'fancybox-close' : ''}"
 
 css:
   div#cboxLoadedContent {

@@ -8,7 +8,8 @@
   = form.inputs do
     = form.user_defined_form
 
-  = form.actions do
-    = form.commit_button
-    li
+  / TODO: remove div and move class to form element
+  div class='pf-c-form'
+    = form.actions do
+      button class="pf-c-button pf-m-primary" type="submit" Update Application
       = delete_application_link(@cinstance)

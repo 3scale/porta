@@ -6,6 +6,7 @@ class User < ApplicationRecord
   include Fields::Fields
   required_fields_are :username, :email
   optional_fields_are :title, :first_name, :last_name, :job_role
+  default_fields_are :username, :email
   set_fields_account_source :account
 
   include Authentication

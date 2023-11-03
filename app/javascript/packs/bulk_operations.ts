@@ -3,8 +3,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const dataSelectedTotal = 'data-selected-total-entries'
-  const dataTotalEntries = 'data-total-entries'
-  const dataModelName = 'data-association-name'
   const dataDefaultText = 'data-default-text'
   const dataSelectedTotalEntries = 'data-selected-total-entries'
 
@@ -119,33 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
   }
 
-  function handleSelectTotalEntries () {
-    const selectTotalEntries = findSelectTotalEntries()
-
-    if (!selectTotalEntries) {
-      return
-    }
-
-    selectTotalEntries.addEventListener('click', function (e) {
-      e.preventDefault()
-
-      const selected = selectedRows()
-
-      if (selectTotalEntries.hasAttribute(dataSelectedTotal)) {
-        selectTotalEntries.removeAttribute(dataSelectedTotal)
-        selectTotalEntries.innerText = selectTotalEntries.getAttribute(dataDefaultText)!
-        setSelectedCount(selected)
-      } else {
-        selectTotalEntries.setAttribute(dataSelectedTotal, 'true')
-
-        const newText = `(only select the ${selected} ${selectTotalEntries.getAttribute(dataModelName)!} on this page)`
-        selectTotalEntries.innerText = newText
-
-        setSelectedCount(selectTotalEntries.getAttribute(dataTotalEntries)!)
-      }
-    })
-  }
-
   function selectedRows () {
     return document.querySelectorAll('table tr.selected').length
   }
@@ -153,5 +124,4 @@ document.addEventListener('DOMContentLoaded', () => {
   prepareOperations()
   prepareSelectAllCheckbox()
   prepareSingleCheckboxes()
-  handleSelectTotalEntries()
 })

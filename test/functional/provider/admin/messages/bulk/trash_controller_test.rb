@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::TestCase
@@ -8,24 +10,25 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @sent_message     = FactoryBot.create(:message, sender: @provider)
 
     host! @provider.external_admin_domain
+    request.env['HTTP_REFERER'] = redirect_url
 
     login_provider @provider
   end
 
   def test_new_received_message
-    get :new, params: received_messages_params, xhr: true
+    get :new, params: received_messages_params.merge({ format: :js }), xhr: true
 
     assert_response :success
   end
 
   def test_new_sent_message
-    get :new, params: messages_params, xhr: true
+    get :new, params: messages_params.merge({ format: :js }), xhr: true
     assert_response :success
   end
 
   def test_new_forbidden_scope
     assert_raise(Provider::Admin::Messages::Bulk::TrashController::ForbiddenAccountScope) do
-      get :new, params: params_with_undefined_scope
+      get :new, params: params_with_undefined_scope.merge({ format: :js })
     end
   end
 
@@ -36,7 +39,8 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
 
     @received_message.reload
 
-    assert_response :success
+    assert_response :found
+    assert_redirected_to redirect_url
     assert_equal true, @received_message.hidden?
     assert_equal 1, assigns(:message_ids).count
   end
@@ -48,7 +52,8 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
 
     @received_message.reload
 
-    assert_response :success
+    assert_response :found
+    assert_redirected_to redirect_url
     assert_equal true, @received_message.hidden?
     assert_equal true, assigns(:no_more_messages)
   end
@@ -60,7 +65,8 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
 
     @sent_message.reload
 
-    assert_response :success
+    assert_response :found
+    assert_redirected_to redirect_url
     assert_equal true, @sent_message.hidden?
     assert_equal 1, assigns(:message_ids).count
   end
@@ -72,7 +78,8 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
 
     @sent_message.reload
 
-    assert_response :success
+    assert_response :found
+    assert_redirected_to redirect_url
     assert_equal true, @sent_message.hidden?
     assert_equal true, assigns(:no_more_messages)
   end
@@ -80,7 +87,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
   def test_blank_parameters
     assert_equal false, @sent_message.hidden?
 
-    post :create, params: { selected: [], selected_total_entries: '', scope: :messages , format: :js }
+    post :create, params: { selected: [], selected_total_entries: '', scope: :messages }
 
     @sent_message.reload
 
@@ -97,7 +104,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
   private
 
   def default_params
-    { format: :js }
+    { format: :html }
   end
 
   def messages_params
@@ -126,5 +133,9 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
       selected:               [],
       selected_total_entries: true
     }
+  end
+
+  def redirect_url
+    'example.com'
   end
 end

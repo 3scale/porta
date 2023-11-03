@@ -1,135 +1,110 @@
-- content_for(:title)
-  = "Charging & Gateway"
-
+- content_for :title, 'Charging & Gateway'
 - content_for :page_header_title, 'Charging & Gateway'
 
-= form_for @billing_strategy, url: admin_finance_billing_strategy_path,
-           method: :put, html: { class: 'formtastic' } do |f|
-  fieldset class="inputs"
-    ol
-      li
-        label Mode:
-        input type='text' value=(@billing_strategy.name.capitalize) disabled='disabled'
-        p class="inline-hints"
-          = @billing_strategy.description
+- if @current_gateway&.deprecated?
+  - content_for :page_header_alert do
+    br
+    = pf_inline_alert t('.deprecation_warning', gateway: @current_gateway.type.capitalize), variant: :warning
 
-      li
-        - new_mode = @billing_strategy.is_a?(Finance::PostpaidBillingStrategy) ? 'prepaid' : 'postpaid'
-        = button_tag "Switch to #{new_mode.upcase}",
-                     onclick: "return confirm('Are you sure you want to switch to #{new_mode} mode?');",
-                     class: "pf-c-button pf-m-danger button next"
-        = hidden_field_tag 'type', new_mode
+div class="pf-l-flex pf-m-column"
+  div class="pf-l-flex__item"
+    div class="pf-c-card"
+      div class="pf-c-card__title" Billing mode
+      div class="pf-c-card__body"
+        = semantic_form_for @billing_strategy, url: admin_finance_billing_strategy_path,
+                                               method: :put,
+                                               html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+          div class="pf-c-content"
+            = t(".#{@billing_strategy.name}_description_html")
 
-= semantic_form_for @billing_strategy.becomes(Finance::BillingStrategy),
-                    url: admin_finance_settings_path do |f|
-  = f.inputs do
-    = f.input :charging_enabled,
-              hint: "Enables credit card transactions. When this setting is on,
-                    all due invoices will be charged using the selected payment \
-                    gateway. If you leave this setting off, billing will take \
-                    place and invoices will issued, but no real transaction will \
-                    take place."
+          - new_mode = @billing_strategy.is_a?(Finance::PostpaidBillingStrategy) ? 'prepaid' : 'postpaid'
+          = hidden_field_tag 'type', new_mode
+          = form.actions do
+            button class="pf-c-button pf-m-danger" type="submit" data={ confirm: t('.switch_confirm', mode: new_mode) }
+              = t('.switch_button', mode: new_mode.upcase)
 
-    = f.input :currency,
-              as: :select,
-              collection: Finance::BillingStrategy::CURRENCIES,
-              hint: "Please make sure that the selected currency is supported by \
-                    your payment gateway. If you are missing currency options,
-                    don't hesitate to contact us."
+  div class="pf-l-flex__item"
+    div class="pf-c-card"
+      div class="pf-c-card__title" Billing settings
+      div class="pf-c-card__body"
+        = semantic_form_for @billing_strategy.becomes(Finance::BillingStrategy),
+                            url: admin_finance_settings_path,
+                            html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+          = form.input :charging_enabled, as: :patternfly_checkbox
+          = form.input :currency, as: :patternfly_select,
+                                  collection: Finance::BillingStrategy::CURRENCIES,
+                                  include_blank: false
 
+          = form.semantic_fields_for :account do |account|
+            = account.input :invoice_footnote, as: :patternfly_textarea, input_html: { rows: 2 }
+            = account.input :vat_zero_text, as: :patternfly_textarea, input_html: { rows: 2 }
 
-    = f.semantic_fields_for :account do |account|
-      = account.input :invoice_footnote, input_html: {rows: 2}
-      = account.input :vat_zero_text,
-                      label: 'Text to show if VAT/Sales Tax is 0%',
-                      input_html: {rows: 2}
+          = form.input :numbering_period, as: :patternfly_select,
+                                          collection: [['Monthly (YYYY-MM-XXXXXXXX)', 'monthly'], ['Yearly (YYYY-XXXXXXXX)', 'yearly']],
+                                          include_blank: false
 
-    = f.input :numbering_period,
-              label: 'Billing periods for invoice ids',
-              collection: ['monthly', 'yearly'],
-              include_blank: false
+          = form.actions do
+            button class="pf-c-button pf-m-primary" type="submit" Save
 
-    = f.actions do
-      = f.commit_button 'Save'
+  - if can?(:manage, :finance) && @account.billing_strategy.try(:needs_credit_card?)
+    div class="pf-l-flex__item"
+    div class="pf-c-card"
+      div class="pf-c-card__title" Credit card gateway
+      div class="pf-c-card__body"
+        = semantic_form_for @account, url: admin_account_payment_gateway_path,
+                                      html: { id: 'payment-gateway-form', class: 'pf-c-form pf-m-limit-width' } do |form|
+          = form.input :payment_gateway_type, as: :patternfly_select,
+                                              collection: @payment_gateways.map { |gateway| [gateway.display_name, gateway.type] },
+                                              include_blank: 'Choose one'
 
-- if can?(:manage, :finance)
-  - if @account.billing_strategy.try(:needs_credit_card?)
-    = semantic_form_for @account, url: admin_account_payment_gateway_path,
-                        html: { id: 'payment-gateway-form' } do |form|
-      h2 Credit card gateway
-      p Select your credit card gateway and configure it with the details of your merchant account.
-
-      = form.inputs "Basics" do
-        li class="select"
-          = form.label :payment_gateway_type, 'Gateway'
-          = form.collection_select :payment_gateway_type, @payment_gateways,
-                                   :type, :display_name, include_blank: "Choose one"
-          - if @current_gateway&.deprecated?
-            p class="InfoBox InfoBox--notice"
-              ' The
-              => @account.payment_gateway_type.capitalize
-              | gateway has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another gateway.
-
-      = form.fields_for :payment_gateway_options do |fields|
-        - @payment_gateways.each do |payment_gateway|
-          - enabled = payment_gateway.type == @account.payment_gateway_type
-          div class="payment_gateway_options" id="payment_gateway_#{payment_gateway.type}" style="display: #{enabled ? 'block' : 'none'}"
-
-            - if payment_gateway.fields.present?
-              = form.inputs "#{link_to payment_gateway.display_name, payment_gateway.homepage_url} Options" do
-                - payment_gateway.fields.each do |name, label|
-                  li class="string"
+          = form.fields_for :payment_gateway_options do |fields|
+            - @payment_gateways.each do |payment_gateway|
+              - if payment_gateway.fields.present?
+                - is_current = payment_gateway.type == @account.payment_gateway_type
+                section class="pf-c-form__section payment_gateway_options #{is_current ? '' : 'hidden'}" id="payment_gateway_#{payment_gateway.type}" role="group"
+                  - payment_gateway.fields.each do |name, label|
                     - if payment_gateway.boolean_field_keys.include?(name)
-                      = fields.label name, for: ['account', 'payment', payment_gateway.type, name].join('_') do
-                        - if enabled
-                          = fields.check_box name, checked: @account.payment_gateway_options[name].present?, id: ['account', 'payment', payment_gateway.type, name].join('_')
-                        - else
-                          = fields.check_box name, checked: false, disabled: true, id: ['account', 'payment', payment_gateway.type, name].join('_')
-
-                        = label
-                      p.inline-hints Make sure your Braintree account has 3D Secure enabled before you enable it here as otherwise payments initiated from the developer portal will fail.
-
+                      = fields.input name, as: :patternfly_checkbox,
+                                           label: label,
+                                           id: ['account', 'payment', payment_gateway.type, name].join('_'),
+                                           input_html: { checked: is_current && @account.payment_gateway_options[name].present? }
                     - else
-                      = fields.label name, label
-                      - if enabled
-                        = fields.text_field name, value: @account.payment_gateway_options[name]
-                      - else
-                        = fields.text_field name, value: '', disabled: true
+                      = fields.input name, as: :patternfly_input,
+                                           label: label,
+                                           input_html: { value: is_current ? @account.payment_gateway_options[name] : nil }
+                  - if payment_gateway.deprecated
+                    = pf_inline_alert t('.deprecation_warning', gateway: payment_gateway.type.capitalize), variant: :warning
 
-      = form.actions do
-        = form.commit_button 'Save changes'
+          = form.actions do
+            button class="pf-c-button pf-m-primary" type="submit" Save
 
-  javascript:
-    $(function() {
-      var form = $("#payment-gateway-form");
-      var gateway = $("#account_payment_gateway_type");
-      var old_val = gateway.val();
-      var new_val, old_val;
+    javascript:
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.forms['payment-gateway-form']
+        const gatewaySelect = form.querySelector('#account_payment_gateway_type')
+        const gatewaySections = form.querySelectorAll('.payment_gateway_options')
 
-      gateway.change(function() {
-        $('.payment_gateway_options:visible').hide(function() {
-          $(this).find('input').attr('disabled', true);
-        });
+        gatewaySelect.addEventListener('change', event => {
+          const selectedGatewayId = `payment_gateway_${event.target.value}`
+          gatewaySections.forEach(div => div.classList.toggle('hidden', div.id !== selectedGatewayId))
+        })
 
-        $('#payment_gateway_' + $(this).val()).show(function() {
-          $(this).find('input').removeAttr('disabled');
-        });
-      });
+        // TODO: Don't use confirm as it can be blocked by browser. Create custom modal.
+        form.addEventListener('submit', (event) => {
+          const newGatewaySelected = gatewaySelect.value !== "#{ @account.payment_gateway_type }"
 
-      form.submit(function() {
-        var new_val = $("#account_payment_gateway_type").val();
+          if (newGatewaySelected) {
+            if (!confirm("#{ raw t('.save_gateway_confirm_1') }")) {
+              event.preventDefault()
+              return
+            }
 
-        if(new_val == old_val) { return; }
+            if (!confirm("#{ raw t('.save_gateway_confirm_2') }")) {
+              event.preventDefault()
+              return
+            }
+          }
 
-        var first_question = "Changing your payment gateway will make all your buyers' credit card details invalid, "+
-        "so they will have to enter the credit card information again to be billed next month.\n\n"+
-        "Are you sure you want to change your payment gateway?";
-
-        var second_question = "Are you sure? If you click OK, all credit card details from all your customers will be erased and won't be recoverable.\n"+
-        "You'll need to ask your customers to enter their credit card details again to be able to bill them.\n\n" +
-        "Do you want to remove all credit card details from your customers?";
-
-
-        return confirm(first_question) && confirm(second_question);
-      });
-    });
+          return
+        })
+      })

@@ -23,7 +23,7 @@ Feature: Audience > Messages > Inbox
 
   Rule: Inbox is not empty
     Background:
-      Given 40 messages sent from buyer "Alice" to the provider with subject "Oh, no!" and body "Pepe is in da house"
+      Given 30 messages sent from buyer "Alice" to the provider with subject "Oh, no!" and body "Pepe is in da house"
 
     Scenario: List of messages
       When they go to the provider inbox page
@@ -47,18 +47,14 @@ Feature: Audience > Messages > Inbox
 
     Scenario: Select all messages in all pages
       Given they go to the provider inbox page
-      And they select all items in the table
-      Then should see "30 messages selected (select all 40 messages)"
-      And follow "(select all 40 messages)"
-      And should see "40 messages selected (only select the 30 messages on this page)"
-      But follow "(only select the 30 messages on this page)"
-      And should see "30 messages selected (select all 40 messages)"
+      And they select all items
+      Then should see "30 selected" within the toolbar
 
     Scenario: Delete a single message in bulk
       Given 1 messages sent from buyer "Alice" to provider "foo.3scale.localhost" with subject "Deleteme" and body "On the road."
       And they go to the provider inbox page
       When item "Deleteme" is selected
-      And press "Delete" within the bulk operations
+      And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"
@@ -67,18 +63,17 @@ Feature: Audience > Messages > Inbox
     Scenario: Delete all messages in current page
       Given they go to the provider inbox page
       When they select all items in the table
-      And press "Delete" within the bulk operations
+      And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"
       And they select all items in the table
-      And should see "10 messages selected"
+      And should see "10 selected" within the toolbar
 
     Scenario: Delete all messages in all pages
       Given they go to the provider inbox page
-      When they select all items in the table
-      And follow "(select all 40 messages)"
-      And press "Delete" within the bulk operations
+      When they select all items
+      And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"

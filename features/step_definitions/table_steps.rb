@@ -41,7 +41,7 @@ Then "the table {has} a column {string}" do |present, column|
 end
 
 And "the table should contain the following:" do |table|
-  expected = extract_table('table', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
+  expected = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   actual = table.raw
 
   headers = expected.first

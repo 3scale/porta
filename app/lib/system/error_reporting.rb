@@ -23,6 +23,10 @@ module System
       end
     end
 
+    def report_sidekiq_error(exception, _context, config)
+      report_error(exception, logger: config.logger)
+    end
+
     def report_deprecation_warning(payload)
       exception = DeprecationWarning.new(payload[:message], payload[:gem_name], payload[:deprecation_horizon])
 

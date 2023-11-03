@@ -171,3 +171,7 @@ Then "invoices can be filtered by the following years:" do |table|
   expected_years = table.raw.flatten.map(&:to_s)
   assert_same_elements expected_years, actual_years
 end
+
+Given "{buyer} has no invoices" do |buyer|
+  assert_empty buyer.invoices
+end

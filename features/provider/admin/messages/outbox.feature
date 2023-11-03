@@ -57,7 +57,7 @@ Feature: Audience > Messages > Outbox
       Given a message sent from the provider to buyer "Alice" with subject "Deleteme" and body "Deleteme"
       And they go to the provider sent messages page
       When item "Deleteme" is selected
-      And press "Delete" within the bulk operations
+      And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"

@@ -10,19 +10,17 @@
         = t('.empty_state.body')
 
 - else
-  = render 'provider/admin/messages/bulk_operations', scope: :received_messages, messages: @messages
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'messages_toolbar'
 
-  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages" data-toolbar-props=toolbar_props.to_json
     thead
       tr role="row"
         td role="columnheader" scope="col" class="select pf-c-table__check"
-          label
-            = bulk_select_all
         th role="columnheader" scope="col" Subject
         th role="columnheader" scope="col" From
         th role="columnheader" scope="col" Date Sent
-        th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-          = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+        th role="columnheader" scope="col" class="pf-c-table__action"
     tbody role="rowgroup"
       - @messages.each do |message|
         tr role="row" class=message.state id="message_#{message.id}"

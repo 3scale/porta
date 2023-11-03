@@ -11,19 +11,17 @@
       = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "pf-c-button pf-m-primary"
 
 - else
-  = render 'provider/admin/messages/bulk_operations', scope: :messages, messages: @messages
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'messages_toolbar'
 
-  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Sent messages table" id="messages"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Sent messages table" id="messages" data-toolbar-props=toolbar_props.to_json
     thead
       tr role="row"
-        td role="columnheader" scope="col" class="select pf-c-table__check"
-          label
-            = bulk_select_all
+        td role="columnheader" scope="col" class="pf-c-table__check"
         th role="columnheader" scope="col" Subject
         th role="columnheader" scope="col" From
         th role="columnheader" scope="col" Date Sent
-        th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-          = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "action new"
+        th role="columnheader" scope="col" class="pf-c-table__action"
     tbody role="rowgroup"
       - @messages.each do |message|
         tr role="row" id="message_#{message.id}"
@@ -42,5 +40,3 @@
                 div class="pf-c-overflow-menu__group pf-m-button-group"
                   div class="pf-c-overflow-menu__item"
                     = delete_button_for provider_admin_messages_outbox_path(message), class: 'action'
-
-    = will_paginate(@messages)

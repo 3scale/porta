@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/3scale/activejob-uniqueness.git
-  revision: fc560d1ab5552dc3a1602d4aaa7caaa8eba5791f
-  branch: main
-  specs:
-    activejob-uniqueness (0.2.0)
-      activejob (>= 4.2, < 7)
-      redlock (>= 1.2, < 2)
-
-GIT
   remote: https://github.com/3scale/ci_reporter_shell.git
   revision: 30b30d655512891f56463e5f1fa125ea1f2df886
   specs:
@@ -29,6 +20,16 @@ GIT
       addressable (>= 2.4)
 
 GIT
+  remote: https://github.com/3scale/redis-client.git
+  revision: 933707dd03cf5620ff14ae74d97c33969300f0e5
+  branch: ppc64le-fix
+  specs:
+    hiredis-client (0.17.0)
+      redis-client (= 0.17.0)
+    redis-client (0.17.0)
+      connection_pool
+
+GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
   revision: 58b19212afcf66540da729214287d85f586fa7cd
   branch: fix/rspec-3-with-xml-document
@@ -36,6 +37,14 @@ GIT
     rspec-html-matchers (0.9.1)
       nokogiri (~> 1)
       rspec (>= 3.0.0.a, < 4)
+
+GIT
+  remote: https://github.com/3scale/sidekiq-batch.git
+  revision: f1c56d0b8445fd3eb337614aedba1752aa19938e
+  branch: redis-client
+  specs:
+    sidekiq-batch (0.1.9)
+      sidekiq (~> 7)
 
 GIT
   remote: https://github.com/3scale/swagger-ui_rails.git
@@ -120,6 +129,9 @@ GEM
     activejob (6.0.6.1)
       activesupport (= 6.0.6.1)
       globalid (>= 0.3.6)
+    activejob-uniqueness (0.2.5)
+      activejob (>= 4.2, < 7.1)
+      redlock (>= 1.2, < 2)
     activemerchant (1.107.4)
       activesupport (>= 4.2)
       builder (>= 2.1.2, < 4.0.0)
@@ -383,7 +395,6 @@ GEM
     hashdiff (1.0.1)
     hashery (2.1.2)
     hashie (3.6.0)
-    hiredis (0.6.3)
     html-pipeline (2.12.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -414,7 +425,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.3.1)
+    json (2.6.3)
     jsonpath (1.1.2)
       multi_json
     jwt (1.5.6)
@@ -646,10 +657,11 @@ GEM
       actionview (>= 5)
     recursive-open-struct (1.1.3)
     redcarpet (3.5.1)
-    redis (4.2.5)
-    redis-namespace (1.7.0)
-      redis (>= 3.0.4)
-    redis-prescription (1.0.0)
+    redis (5.0.7)
+      redis-client (>= 0.9.0)
+    redis-namespace (1.11.0)
+      redis (>= 4)
+    redis-prescription (2.6.0)
     redlock (1.3.2)
       redis (>= 3.0.0, < 6.0)
     reek (6.1.0)
@@ -756,25 +768,21 @@ GEM
     shoulda-context (2.0.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (6.4.2)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.2.0)
-    sidekiq-batch (0.1.9)
-      sidekiq (>= 3)
-    sidekiq-cron (1.9.1)
+    sidekiq (7.1.6)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.14.0)
+    sidekiq-cron (1.10.1)
       fugit (~> 1.8)
-      sidekiq (>= 4.2.1)
-    sidekiq-lock (0.6.0)
-      redis (>= 3.0.5)
-      sidekiq (>= 2.14.0)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6)
     sidekiq-prometheus-exporter (0.2.0)
       rack (>= 1.6.0)
       sidekiq (>= 4.1.0)
-    sidekiq-throttled (0.15.0)
-      concurrent-ruby
-      redis-prescription
-      sidekiq
+    sidekiq-throttled (1.0.0.alpha.1)
+      redis-prescription (~> 2.2)
+      sidekiq (>= 6.5)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -906,7 +914,7 @@ GEM
       yabeda (~> 0.6)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.12)
     zip-zip (0.3)
       rubyzip (>= 1.0.0)
 
@@ -918,7 +926,7 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
-  activejob-uniqueness!
+  activejob-uniqueness
   activemerchant (~> 1.107.4)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 6.0)
@@ -968,14 +976,14 @@ DEPENDENCIES
   formtastic (~> 4.0)
   github-markdown
   hashie
-  hiredis (~> 0.6.3)
+  hiredis-client!
   html-pipeline
   htmlentities (~> 4.3, >= 4.3.4)
   httpclient!
   i18n
   inherited_resources (~> 1.12.0)
   jquery-rails (~> 4.4)
-  json (~> 2.3.0)
+  json (~> 2.3)
   json-schema!
   jwt (~> 1.5.2)
   kt-paperclip (~> 7.2)
@@ -1025,7 +1033,7 @@ DEPENDENCIES
   recaptcha (= 4.13.1)
   record_tag_helper (~> 1.0)
   redcarpet (~> 3.5.1)
-  redis (~> 4.2.0)
+  redis
   redlock
   reek (= 6.01)
   reform (~> 2.0.3)
@@ -1046,12 +1054,11 @@ DEPENDENCIES
   secure_headers (~> 6.3.0)
   selenium-webdriver (~> 3.142)
   shoulda (~> 4.0)
-  sidekiq (~> 6.4.0)
-  sidekiq-batch
+  sidekiq (~> 7)
+  sidekiq-batch!
   sidekiq-cron
-  sidekiq-lock
   sidekiq-prometheus-exporter
-  sidekiq-throttled
+  sidekiq-throttled (~> 1.0.0.alpha.1)
   simplecov (~> 0.21.2)
   slim-rails (~> 3.2)
   sprockets-rails

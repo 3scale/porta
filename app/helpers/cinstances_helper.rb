@@ -38,6 +38,6 @@ Are you sure?}
 
   def delete_application_link(application)
     msg = t('api.applications.edit.delete_confirmation', name: j(application.name))
-    delete_link_for(provider_admin_application_path(application), confirm: msg, title: 'Delete Application')
+    delete_link_for(provider_admin_application_path(application), confirm: msg, title: 'Delete Application', class: 'pf-c-button pf-m-danger')
   end
 end
