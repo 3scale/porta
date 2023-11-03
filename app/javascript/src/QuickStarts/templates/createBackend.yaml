@@ -3,11 +3,12 @@ metadata:
   name: creating-a-backend-quick-start
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Create a backend
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -22,19 +23,19 @@ spec:
     Create an API to map your internal schema to 3scale.
   introduction: |-
     This quick start guides you to create an API to map your internal schema to 3scale.
-    
+
     To learn more about API backend, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-backends-for-your-products_configuring-your-api).
   tasks:
     - title: Create a backend
       description: |-
         A backend is an internal API that is bundled to a product.
-        
+
         ### Procedure
         1. You have two ways to start the creating process:
-            - Go to the _Dashboard_: Under the APIs section, click <strong>Create backend</strong> in the _Backends_ card. 
+            - Go to the _Dashboard_: Under the APIs section, click <strong>Create backend</strong> in the _Backends_ card.
             - Click the context selector on the header and select _Backends_:  On the _Backend_ page, click <strong>Create backend</strong>.
         1. On the _New backend_ page, fill in the details to create the backend.
-        
+
           Important fields:
             - _System name_: 3scale needs this name to internally identify and refer to the backend.
             - _Private base URL_: It is the base URL endpoint of the private API.

@@ -3,11 +3,12 @@ metadata:
   name: creating-an-application-quick-start
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Create an application
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -22,7 +23,7 @@ spec:
     Subscribe to an application plan to obtain the key to call an API product.
   introduction: |-
     This quick start guides you to create an application to subscribe to an application plan in order to obtain the key to call an API product.
-    
+
     To learn more about application plans, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-applications-for-default-account-test-api-calls_configuring-your-api).
   tasks:
     - title: Create an application
@@ -31,8 +32,8 @@ spec:
 
         ### Prerequisites
 
-        - An application plan. To create one, see create-an-application-plan-link. 
-        
+        - An application plan. To create one, see create-an-application-plan-link.
+
         ### Procedure
         1. Navigate to <strong>Audience > Accounts > Listing</strong>.
         1. Click <strong>[Your_account]</strong>.

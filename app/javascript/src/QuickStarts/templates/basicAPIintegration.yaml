@@ -3,11 +3,12 @@ metadata:
   name: getting-started-with-quick-starts
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Complete a basic API integration
   durationMinutes: 20
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -21,20 +22,20 @@ spec:
   description: |-
     Create the required objects to complete a basic integration with 3scale.
   introduction: |-
-    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks. 
-    
+    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks.
+
     To learn more about API configuration, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#products-backends-for-threescale-apis_configuring-your-api).
   tasks:
     - title: Create a new backend
       description: |-
         A backend is an internal API that is bundled to a product. In this quick start, you first create a backend and then a product.In practice, you can create either product or backend first.
-        
+
         ### Procedure
 
         1. Go to _Backends_ page: click the context selector on the header and select <strong>Backends</strong>.
         1. On the _Backends_ page, click <strong>Create backend</strong>.
-        1. On the _New backend_ page, fill in the details to create the backend. 
-        
+        1. On the _New backend_ page, fill in the details to create the backend.
+
           Important fields:
               - _System name_:  3scale needs this name to internally identify and refer to the backend.
               - _Private Base URL_: It is the base URL endpoint of the private API.
@@ -57,8 +58,8 @@ spec:
 
         1. Go to _Products_ page: click the context selector on the header and select <strong>Products</strong>.
         1. On the _Products_ page, click <strong>Create product</strong>.
-        1. On the _New Product_ page, fill in the details to create the product. 
-        
+        1. On the _New Product_ page, fill in the details to create the product.
+
           Important fields:
               - _System name_:  3scale needs this name to internally identify and refer to the backend.
                 - A product _system\_name_ is used to generate proxy endpoints and domain names.
@@ -81,8 +82,8 @@ spec:
 
         1. On <strong>[Your\_product\_name]</strong> overview page, navigate to <strong>Integration > Backends</strong>.
         1. Click <strong>Add backend</strong>.
-        1. On the _Add a backend_ page, fill in the details. 
-        
+        1. On the _Add a backend_ page, fill in the details.
+
           Important fields:
               - _Path_: when you add a backend to a product, you define the path that the backend uses to communicate with the specified product. When defining the path for a backend:
                 - You can indicate / as the path of one of the backends.
@@ -107,8 +108,8 @@ spec:
 
         1. On <strong>[Your\_product\_name]</strong> overview page.
         1. Click <strong>Create application plan</strong>.
-        1. On the _New application plan_ page, fill in the details. 
-        
+        1. On the _New application plan_ page, fill in the details.
+
           Important fields:
               - _System name_: A system name must be unique in your 3scale installation.
               - _Application plan approval_: select the check box to require applications getting approval before they can access your API.
@@ -132,8 +133,8 @@ spec:
         1. On <strong>[Your\_product\_name]</strong> overview page: click the context selector on the header and select _Audience_.
         1. On the _Publish application plans_ card, click the <strong>x live applications</strong> link.
         1. On the Applications on your <strong>[Your\_product\_name]</strong> page, click <strong>Create application</strong>.
-        1. On the _New application page_, fill in the details. 
-        
+        1. On the _New application page_, fill in the details.
+
           Important fields:
               - _Application plan_: An application is always associated with an application plan.
         1. Click <strong>Create application</strong>

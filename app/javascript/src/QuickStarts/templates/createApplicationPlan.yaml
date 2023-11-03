@@ -3,11 +3,12 @@ metadata:
   name: creating-an-application-plan-quick-start
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Create an application plan
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -22,7 +23,7 @@ spec:
     Create rules to use your API product.
   introduction: |-
     This quick start guides you to create rules to use your API product.
-    
+
     To learn more about application plans, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-threescale-application-plans-for-products_configuring-your-api).
   tasks:
     - title: Create an application plan
@@ -30,14 +31,14 @@ spec:
         Application plans define the different sets of access rights you might want to allow for consumers of your API. These can determine anything from rate limits, which methods or resources are accessible and which features are enabled.
 
         ### Prerequiaites
-        - A product. To create one, see create-a-product-link. 
-        
+        - A product. To create one, see create-a-product-link.
+
         ### Procedure
         1. You have two ways to start the creating process:
             - Go to _[Your\_product\_name]_ overview page: Click <strong>Create application plan</strong>.
             - Navigate to <strong>[Your\_product\_name] > Applications > Application Plans</strong>: Click <strong>Create application plan</strong>.
         1. On the _New application plan_ page, fill in the details.
-        
+
           Important fields:
             - _System name_: A system name must be unique in your 3scale installation.
             - _Applications require approval?_: Select the check box to require applications getting approval before they can access your API.

@@ -3,6 +3,7 @@ metadata:
   name: learning-about-mapping-rules
   # you can add additional metadata here
   instructional: true
+  learnAbout3scaleFeatures: true
 spec:
   displayName: Mapping rules
   durationMinutes: 15

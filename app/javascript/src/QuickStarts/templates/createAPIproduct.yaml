@@ -3,11 +3,12 @@ metadata:
   name: creating-an-api-product
   # you can add additional metadata here
   instructional: true
+  commonInstances: true
 spec:
   displayName: Create an API product
   durationMinutes: 15
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -26,7 +27,7 @@ spec:
     - title: Create a backend
       description: |-
         Create a backend. To learn what a backend is, see: Backends
-        
+
         ### Procedure
 
         1. Go to the <strong>Backends</strong> page: click the menu on the header and select <strong>Backends</strong>.
@@ -76,7 +77,7 @@ spec:
         failed: Shows a failed message in the task header
     - title: Connect the backend with the product
       description: |-
-        Connect the backend with a product. You must associate at least one backend with the product before exposing it to the API consumers. 
+        Connect the backend with a product. You must associate at least one backend with the product before exposing it to the API consumers.
 
         ### Procedure
 

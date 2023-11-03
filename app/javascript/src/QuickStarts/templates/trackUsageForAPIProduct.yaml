@@ -3,11 +3,12 @@ metadata:
   name: tracking-usage-for-api-product
   # you can add additional metadata here
   instructional: true
+  commonInstances: true
 spec:
   displayName: Track usage for API product
   durationMinutes: 15
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -26,12 +27,12 @@ spec:
     - title: Create a method
       description: |-
         Create a method for your API  product.To learn about what a method is, see: Methods.
-        
+
         ### Prerequisites
 
         - A product. To learn how to create a product, see: creating-an-api-product.
         - An application plan. To learn how to create an application plan, see: creating-access-tiers-for-api-consumers.
-        
+
         ### Procedure
 
         1. Go to <strong>[Your_product_name] > Overview</strong> page: click the menu on the header, select <strong>Products</strong> and click <strong>[You_ product_name]</strong>.
@@ -70,7 +71,7 @@ spec:
               - _Last?_: Check it if this mapping rule should be considered as the last one to stop processing other mapping rules.
               - _Position_: This is for 3scale to sort the mapping rule. Set the position of the execution of the mapping rule, for example, _1_.
           1. Click <strong>Create mapping rule</strong>:
-        
+
         If the process is successful, you will see <strong>[Your_product_name] > Mapping rules</strong> page.
 
       # optional - the task's Check your work module
