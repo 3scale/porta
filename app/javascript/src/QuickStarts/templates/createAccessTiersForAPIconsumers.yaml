@@ -3,6 +3,7 @@ metadata:
   name: creating-access-tiers-for-api-consumers
   # you can add additional metadata here
   instructional: true
+  commonInstances: true
 spec:
   displayName: Create access tiers for API consumers to use your API
   durationMinutes: 15
@@ -26,14 +27,14 @@ spec:
     - title: Create an account
       description: |-
         Create an account for your API consumer who will access your API. To learn about what an account is, see: Accounts.
-        
+
         ### Procedure
 
         1. Go to the <strong>Audience</strong> page: click the menu on the header and select <strong>Audience</strong>.
         1. Click <strong>Create</strong>.
         1. On the <strong>New Account</strong> page, fill in the details:
               - _Username_: Give a name to your consumer, for example, _Flight API_.
-              - Email_: Give the email of your consumer. The email must be unique among all users on this admin account, for example, <em>Flight-user@travel.com</em>. This is a required field.
+              - _Email_: Give the email of your consumer. The email must be unique among all users on this admin account, for example, <em>Flight-user@travel.com</em>. This is a required field.
               - _Password_: Give a password to your consumer. You can skip the password field if you want to invite users to the account securely. This is an optional field.
               - _Organization / Group name_: This is the organization name that the consumer belongs to, for example, _M Travel Agency_.
         1. Click <strong>Create account</strong>.
@@ -68,7 +69,7 @@ spec:
               - _Setup fee_: Optionally, set the setup fee of using the plan, for example, _20_.
               - _Cost per month_: Optionally, set the monthly fee of using the plan, for example, _20_.
         1. Click <strong>Create application plan</strong>.
-        
+
         If the process is successful, you will see <strong>[Your\_product\_application plan]</strong> page.
 
       # optional - the task's Check your work module
@@ -96,7 +97,7 @@ spec:
               - _Name_: Give a name to the application, for example, _Flight User Services_.
               - _Description_: Add details about your application.
         1. Click <strong>Create application</strong>.
-        
+
         If the process is successful, you will see <strong>[Your\_product\_application] > Overview</strong> page.
 
       # optional - the task's Check your work module

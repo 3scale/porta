@@ -3,11 +3,12 @@ metadata:
   name: creating-a-product-quick-start
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Create a product
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -22,19 +23,19 @@ spec:
     Create a customer-facing API.
   introduction: |-
     This quick start guides you to create a customer-facing API.
-    
+
     To learn more about API products, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-products-test-api-calls_configuring-your-api).
   tasks:
     - title: Create a product
       description: |-
         An API product is a bundle of one or more API backends for which you define the application plans, and configure APIcast.
-        
+
         ### Procedure
         1. You have two ways to start the creating process:
             - Go to the _Dashboard_: Under the APIs section, click <strong>Create product</strong> in the _Products_ card.
             - Click the context selector on the header and select _Products_: On the _Products_ page, click <strong>Create product</strong>.
         1. On the _New product_ page, fill in the details to create the product.
-        
+
           Important fields:
             - _System name_: 3scale needs this name to internally identify and refer to the product.
             - A product system_name is used to generate proxy endpoints and domain names.

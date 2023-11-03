@@ -3,6 +3,7 @@ metadata:
   name: learning-about-mapping-rules
   # you can add additional metadata here
   instructional: true
+  learnAbout3scaleFeatures: true
 spec:
   displayName: Mapping rules
   durationMinutes: 15
@@ -25,11 +26,11 @@ spec:
   tasks:
     - title:  Learn about mapping rules
       description: |-
-        
-        Mapping rules specify details about the usage data that you want to capture of method or metrics. With mapping rules, you can decide which API or API packages you want to assign to which method or metric and check the counting in the analytics section. 
-        
+      
+        Mapping rules specify details about the usage data that you want to capture of method or metrics. With mapping rules, you can decide which API or API packages you want to assign to which method or metric and check the counting in the analytics section.
+
         Adding mapping rules to a method enables setting usage limits and pricing rules in each product’s application plan and an individual API endpoint connects to that API package.
-        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](https://raw.githubusercontent.com/3scale/porta/203ac148362162d7e8bf4f9e6897a9d9c6c1fe98/app/javascript/src/QuickStarts/templates/images/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
+        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](/assets/quickstarts/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
       # optional - the task's Check your work module
       review:
         instructions: |-
@@ -44,5 +45,4 @@ spec:
     Learn how to create a mapping rule to capture API usage of your API product:
   # you can link to the next quick start(s) here
   nextQuickStart:
-    - track-usage-api-product
- 
+    - tracking-usage-for-api-product

@@ -3,11 +3,12 @@ metadata:
   name: learning-about-products
   # you can add additional metadata here
   instructional: true
+  learnAbout3scaleFeatures: true
 spec:
   displayName: Products
   # durationMinutes: 10
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -26,9 +27,9 @@ spec:
     - title: Learn about products
       description: |-
         You will complete 1 task:
-        
+
         A product is an API package to control one or more API endpoints. In the Admin Portal, you can package one or more API endpoints into a product. Use **Products** to manage customer-facing API packages.
-        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](https://raw.githubusercontent.com/3scale/porta/ba34d7a9ff4a49c2fefaa36af575118927be9c90/app/javascript/src/QuickStarts/templates/images/learn-about-products.png "API endpoints in a product")
+        ![The paths in a product through backend A and backend B through to endpoint A and endpoint B respectively.](/assets/quickstarts/learn-about-products.png "API endpoints in a product")
       # optional - the task's Check your work module
       review:
         instructions: |-
@@ -43,5 +44,4 @@ spec:
     To learn how to package API endpoints into a product, see:
   # you can link to the next quick start(s) here
   nextQuickStart:
-    - create-an-api-product
-    
+    - creating-an-api-product
