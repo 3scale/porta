@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/3scale/activejob-uniqueness.git
-  revision: fc560d1ab5552dc3a1602d4aaa7caaa8eba5791f
-  branch: main
-  specs:
-    activejob-uniqueness (0.2.0)
-      activejob (>= 4.2, < 7)
-      redlock (>= 1.2, < 2)
-
-GIT
   remote: https://github.com/3scale/ci_reporter_shell.git
   revision: 30b30d655512891f56463e5f1fa125ea1f2df886
   specs:
@@ -120,6 +111,9 @@ GEM
     activejob (6.0.6.1)
       activesupport (= 6.0.6.1)
       globalid (>= 0.3.6)
+    activejob-uniqueness (0.2.5)
+      activejob (>= 4.2, < 7.1)
+      redlock (>= 1.2, < 2)
     activemerchant (1.107.4)
       activesupport (>= 4.2)
       builder (>= 2.1.2, < 4.0.0)
@@ -915,7 +909,7 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
-  activejob-uniqueness!
+  activejob-uniqueness
   activemerchant (~> 1.107.4)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 6.0)

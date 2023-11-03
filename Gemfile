@@ -19,8 +19,8 @@ gem 'rails', '~> 6.0'
 # Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
 gem 'mail', '~> 2.7.1'
 
+gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
-gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.8.2'
