@@ -1,7 +1,6 @@
 production:
   url: "<%= ENV.fetch('REDIS_URL', 'redis://system-redis/1') %>"
-  size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
-  name: <%= ENV['REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>

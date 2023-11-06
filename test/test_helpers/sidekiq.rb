@@ -3,10 +3,8 @@
 require 'sidekiq/testing'
 
 # Turn off Sidekiq logging which pollutes the CI logs
-Sidekiq.configure_client do |config|
-  config.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
-end
-
+Sidekiq.logger = Sidekiq::Logger.new(nil, level: Logger::FATAL)
+Sidekiq.strict_args! # Fail if parameters are not valid JSON
 module TestHelpers
   module Sidekiq
     def self.included(base)
