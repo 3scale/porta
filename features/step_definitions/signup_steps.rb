@@ -1,14 +1,7 @@
 # frozen_string_literal: true
 
-Given /^provider "([^"]*)" has plans already ready for signups$/ do |org_name|
-  step %{a default service of provider "#{org_name}" has name "api"}
-  step %{a account plan "account_plan" of provider "#{org_name}"}
-  step %{a service plan "service_plan" for service "api" exists}
-  step %{an application plan "application_plan" of service "api"}
-
-  step %{service plan "service_plan" is default}
-  step %{account plan "account_plan" is default}
-  step %{application plan "application_plan" is default}
+Given "{provider} has plans (already )ready for signups" do |provider|
+  create_plan(:application, name: 'application_plan', issuer: provider, published: true, default: true)
 end
 
 When /^I fill in the invitation signup with email "([^"]*)"$/ do | email |

@@ -1,32 +1,35 @@
-@ignore-backend @javascript
-Feature: Metric visibility
-  In order to configure how metrics and methods show
-  As a provider
-  I want to be able to change their looks
-
+@javascript @ignore-backend
+Feature: Product > Applications > Application Plans > Edit
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
-    And the provider uses backend v1 in his default service
-    Given provider "foo.3scale.localhost" has plans already ready for signups
-    Given the metrics with usage limits of plan "application_plan":
+    And the provider has plans ready for signups
+    And the metrics with usage limits of plan "application_plan":
       | metric  |
       | visible |
       | another |
+    And the metrics without usage limits of plan "application_plan":
+      | metric          |
+      | no_usage_limits |
     And a buyer "buyer" signed up to provider "foo.3scale.localhost"
     And buyer "buyer" has application "app"
 
-  #are this kind of scenario really needed?
+  Scenario: Metrics without limits appear in Unlimited Metrics section
+    And I go to the edit page for plan "application_plan"
+    Then I should see the metric "no_usage_limits" is visible
+    When I go to the provider side "app" application page
+    Then I should see the unlimited metric "no_usage_limits" in the plan widget
+
+  Scenario: Metrics without limits should not appear if set to invisible
+    And I go to the edit page for plan "application_plan"
+    Then I should see the metric "no_usage_limits" is visible
+    When I go to the provider side "app" application page
+    Then I should see the unlimited metric "no_usage_limits" in the plan widget
+
   Scenario: All metrics are visible by default
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "visible" is visible
     When I go to the provider side "app" application page
     Then I should see the metric "visible" in the plan widget
-
-  # TODO: Test for presence of metric in lightbox widget buyer side
-  #   When I log in as "buyer" on "foo.3scale.localhost"
-  #     And I go to the "app" application page
-  #   Then I should see the metric "visible" in the plan widget
 
   Scenario: Hide metric
     And I go to the edit page for plan "application_plan"
@@ -36,23 +39,11 @@ Feature: Metric visibility
     Then I should see the metric "visible" in the plan widget
     But I should not see the metric "another" in the plan widget
 
-  # TODO: Test for absence of metric in lightbox widget buyer side
-  # When I log in as "buyer" on "foo.3scale.localhost"
-  # And I go to the "app" application page
-  # Then I should see the metric "visible" in the plan widget
-  #   But I should not see the metric "another" in the plan widget
-
-  #are this kind of scenario really needed?
   Scenario: All metrics limits are shown with text by default
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "visible" limits show as text
     When I go to the provider side "app" application page
     Then I should see the metric "visible" limits as text in the plan widget
-
-  # TODO: Test for presence of metric in lightbox widget buyer side
-  # When I log in as "buyer" on "foo.3scale.localhost"
-  #   And I go to the "app" application page
-  # Then I should see the metric "visible" limits as text in the plan widget
 
   Scenario: Metric limits shown with icon and text
     And I go to the edit page for plan "application_plan"
