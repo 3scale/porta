@@ -19,7 +19,7 @@
       tr role="row"
         td role="columnheader" scope="col" class="pf-c-table__check"
         th role="columnheader" scope="col" Subject
-        th role="columnheader" scope="col" From
+        th role="columnheader" scope="col" To
         th role="columnheader" scope="col" Date Sent
         th role="columnheader" scope="col" class="pf-c-table__action"
     tbody role="rowgroup"
@@ -30,7 +30,7 @@
               = bulk_select_one message
           td role="cell" data-label="Subject"
             = link_to message_subject(message), provider_admin_messages_outbox_path(message)
-          td role="cell" data-label="From"
+          td role="cell" data-label="To"
             = message_receiver(message)
           td role="cell" data-label="Data Sent"
             = message.created_at.to_s(:long)
