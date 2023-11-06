@@ -1,25 +1,25 @@
+# frozen_string_literal: true
+
 class BackendStorageRewriteWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low
 
-  def self.enqueue_all(providers)
-    batch = Sidekiq::Batch.new
-    batch.description = 'Rewriting Backend Storage'
+  ENQUEUER = ->(class_name, ids) { BackendStorageRewriteWorker.perform_async(class_name, ids) }
 
-    providers.select(:id).find_in_batches do |group|
-      batch.jobs do
-        group.each do |provider|
-          perform_async(provider.id)
-        end
-      end
-    end
+  # Enqueue async processing for all providers
+  def self.enqueue_all
+    Backend::StorageRewrite::AsyncProcessor.new(enqueuer: ENQUEUER).rewrite_all
   end
 
+  # Enqueue async processing for a single provider
   def self.enqueue(provider_id)
-    perform_async(provider_id)
+    Backend::StorageRewrite::AsyncProcessor.new(enqueuer: ENQUEUER).rewrite_provider(provider_id)
   end
 
-  def perform(provider_id)
-    Backend::StorageRewrite.rewrite_provider(provider_id)
+  # The arguments of the worker are: the class name of the collection, and the array of IDs of objects of this class
+  # It should not exceed the BATCH_SIZE defined in AsyncProcessor
+  # All objects in a batch will belong to the same provider (tenant)
+  def perform(class_name, ids)
+    Backend::StorageRewrite::Processor.new.rewrite(class_name: class_name, ids: ids)
   end
 end
