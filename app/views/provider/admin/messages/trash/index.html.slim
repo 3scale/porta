@@ -13,6 +13,7 @@
       tr role="row"
         th role="columnheader" scope="col" Subject
         th role="columnheader" scope="col" From
+        th role="columnheader" scope="col" To
         th role="columnheader" scope="col" Date sent
         th
     tbody role="rowgroup"
@@ -20,6 +21,7 @@
         tr role="row" class=cycle('odd', 'even', name: 'messages')
           td role="cell" data-label="Subject" = link_to message.subject, provider_admin_messages_trash_path(message)
           td role="cell" data-label="From" = link_to message_sender(message), provider_admin_messages_trash_path(message)
+          td role="cell" data-label="To" = link_to message_receiver(message), provider_admin_messages_trash_path(message)
           td role="cell" data-label="Data sent" = message.created_at.to_s(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
