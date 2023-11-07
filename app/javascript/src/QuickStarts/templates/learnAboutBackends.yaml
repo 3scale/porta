@@ -6,7 +6,7 @@ metadata:
   learnAbout3scaleFeatures: true
 spec:
   displayName: Backends
-  # durationMinutes: 10
+  # durationMinutes: 5
   # Optional type section, will display as a tile on the card
   type:
     text: Tour
