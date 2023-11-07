@@ -15,7 +15,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
   end
 
   def show
-    message = (current_account.messages + current_account.trashed_messages).find { |msg| msg.id == message_params[:id].to_i }
+    message = current_account.messages.find(message_params[:id])
     assign_drops message: Liquid::Drops:: Message.new(message)
   end
 
@@ -25,7 +25,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
   end
 
   def destroy
-    @message = (current_account.messages + current_account.trashed_messages).find { |msg| msg.id == message_params[:id].to_i }
+    @message = current_account.messages.find(message_params[:id])
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'

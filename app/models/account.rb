@@ -159,6 +159,7 @@ class Account < ApplicationRecord
   has_many :mail_dispatch_rules, dependent: :destroy
   has_many :system_operations, through: :mail_dispatch_rules
 
+  # Deleted received messages
   has_many :hidden_messages, -> { latest_first.received.hidden }, as: :receiver, class_name: 'MessageRecipient'
   has_many :received_messages, -> { latest_first.received.visible }, as: :receiver, class_name: 'MessageRecipient'
 
