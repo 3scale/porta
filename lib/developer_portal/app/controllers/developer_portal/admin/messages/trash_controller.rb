@@ -7,7 +7,9 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
 
   def index
     collection = current_account.trashed_messages.page(params[:page])
-    messages = Liquid::Drops::Message.wrap(collection)
+    # Transform deleted *received* messages to MessageRecipient instances
+    mixed_collection = collection.map { |msg| msg.sender == current_account ? msg : msg.recipients.where(receiver: current_account) }
+    messages = Liquid::Drops::Message.wrap(mixed_collection)
     pagination = Liquid::Drops::Pagination.new(collection, self)
     assign_drops messages: messages, pagination: pagination
   end
@@ -18,21 +20,21 @@ class DeveloperPortal::Admin::Messages::TrashController < DeveloperPortal::BaseC
 
   def destroy
     @message.restore_for!(current_account)
- 
+
     flash[:notice] = 'Message was restored.'
     redirect_to admin_messages_trash_index_path
   end
 
   def empty
-    current_account.trashed_messages.destroy_all
+    current_account.hidden_messages.destroy_all
 
-    flash[:notice] = 'The trash was emptied.'
+    flash[:notice] = 'Received messages have been deleted.'
     redirect_to admin_messages_trash_index_path
   end
 
   private
 
   def find_message
-    @message = (current_account.received_messages + current_account.trashed_messages).find { |msg| msg.id == params[:id].to_i }
+    @message = current_account.trashed_messages.find(params[:id])
   end
 end
