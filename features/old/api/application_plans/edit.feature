@@ -2,14 +2,18 @@
 Feature: Product > Applications > Application Plans > Edit
   Background:
     Given a provider is logged in
+    And the default product of the provider has name "My API"
     And the provider has plans ready for signups
-    And the metrics with usage limits of plan "application_plan":
-      | metric  |
-      | visible |
-      | another |
-    And the metrics without usage limits of plan "application_plan":
-      | metric          |
+    And the product has the following metrics:
+      | Friendly name   |
+      | visible         |
+      | another         |
       | no_usage_limits |
+      | zeroed          |
+    And plan "application_plan" has defined the following usage limits:
+      | Metric  | Period | Max. value |
+      | visible | day    | 30         |
+      | another | year   | 5          |
     And a buyer "buyer" signed up to provider "foo.3scale.localhost"
     And buyer "buyer" has application "app"
 
@@ -53,7 +57,10 @@ Feature: Product > Applications > Application Plans > Edit
     Then I should see the metric "visible" limits as icons and text in the plan widget
 
   Scenario: Metric limits with value 0 only show icons in icons and text mode
-    Given the metric "zeroed" with usage limit 0 of plan "application_plan"
+    Given the product has a metric "zeroed"
+    And plan "application_plan" has defined the following usage limits:
+      | Metric   | Period | Max. value |
+      | zeroed 1 | day    | 0          |
     And I go to the edit page for plan "application_plan"
     When I change the metric "zeroed" to show with icons and text
     Then I should see the metric "zeroed" limits show as icons and text
@@ -61,7 +68,10 @@ Feature: Product > Applications > Application Plans > Edit
     Then I should see the metric "zeroed" limits as icons only in the plan widget
 
   Scenario: Metrics enabling and disabling
-    Given the metric "zeroed" with usage limit 0 of plan "application_plan"
+    Given the product has a metric "zeroed"
+    And plan "application_plan" has defined the following usage limits:
+      | Metric   | Period | Max. value |
+      | zeroed 1 | day    | 0          |
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "visible" is enabled
     But I should see the metric "zeroed" is disabled
@@ -71,6 +81,8 @@ Feature: Product > Applications > Application Plans > Edit
     But I should see the metric "visible" is disabled
 
   Scenario: Metric cannot be disabled
+    Given the product has a metric "zeroed"
+    And plan "application_plan" has defined all usage limits for "zeroed"
     Given the metric "zeroed" with all used periods of plan "application_plan"
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "zeroed" is enabled

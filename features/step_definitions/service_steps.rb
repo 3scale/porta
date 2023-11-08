@@ -12,12 +12,13 @@ Given "a service {string} of {provider}" do |name, provider|
   @service = provider.services.create! name: name, mandatory_app_key: false
 end
 
-Given /^a service "([^"]*)"$/ do |name|
-  @provider.services.create!(name: name, mandatory_app_key: false)
+Given "a service/product {string}" do |name|
+  @product = @provider.services.create!(name: name, mandatory_app_key: false)
 end
 
-Given "(a )default service of {provider} has name {string}" do |provider, name|
-  provider.first_service!.update_attribute(:name, name)
+Given "(a )(the )default service/product of {provider} has name {string}" do |provider, name|
+  @product = provider.first_service!
+  @product.update!(name: name)
 end
 
 Given "the service {string} of {provider} has deployment option {string}" do |service_name, provider, deployment_option|

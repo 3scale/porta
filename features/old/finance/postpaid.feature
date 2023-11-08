@@ -10,7 +10,7 @@ Background:
     And the provider is billing but not charging
     And provider "xyz.3scale.localhost" has "finance" switch visible
   Given a default service of provider "xyz.3scale.localhost" has name "api"
-    And a metric "transfer" of provider "xyz.3scale.localhost"
+    And a metric "transfer" with friendly name "Transfer" of provider "xyz.3scale.localhost"
     And an application plan "Variable" of provider "xyz.3scale.localhost" for 200 monthly
     And pricing rules on plan "Variable":
       | Metric   | Cost per unit | Min | Max      |
