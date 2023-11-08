@@ -20,8 +20,7 @@ class PublishZyncEventSubscriber
     def build_zync_event(event)
       case event
       when ApplicationRelatedEvent
-        zync_metadata = event.metadata.fetch(:zync, {})
-        zync_metadata[:oidc_auth_enabled] || sync_non_oidc_apps ? ZyncEvent.create(event, event.application) : nil
+        event.service&.oauth? || sync_non_oidc_apps ? ZyncEvent.create(event, event.application) : nil
       when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent
         ZyncEvent.create(event, event.proxy)
       when OIDC::ServiceChangedEvent

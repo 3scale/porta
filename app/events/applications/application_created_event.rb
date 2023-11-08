@@ -15,8 +15,7 @@ class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
       metadata: {
         provider_id: provider&.id,
         zync: {
-          service_id: service.id,
-          oidc_auth_enabled: service.oauth?
+          service_id: service.id
         }
       }
     )
