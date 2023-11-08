@@ -60,7 +60,7 @@ class FrontendController < ApplicationController
   end
 
   def provider_suspended?
-    current_account.try!(:suspended?) && current_account.try!(:provider?)
+    current_account&.suspended? && current_account&.provider?
   end
 
   def with_password_confirmation!
