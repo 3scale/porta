@@ -156,21 +156,15 @@ module Backend
     class AsyncProcessor < Processor
       BATCH_SIZE = 500
 
-      attr_reader :enqueuer
-
       def initialize(**kwargs)
-        enq = kwargs.delete(:enqueuer)
-        raise ArgumentError, ':enqueuer must be present and respond to :call' unless enq.respond_to?(:call)
-
         super(**kwargs)
-        @enqueuer = enq
         @action = :enqueue
       end
 
       # Enqueue for asynchronous processing in batches
       def process(collection)
         collection.in_batches(of: BATCH_SIZE) do |batch|
-          enqueuer.call(batch.klass.name, batch.pluck(:id))
+          BackendStorageRewriteWorker.perform_async(batch.klass.name, batch.pluck(:id))
         end
       end
     end

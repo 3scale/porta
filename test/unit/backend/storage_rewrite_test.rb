@@ -82,17 +82,20 @@ module Backend
         master = FactoryBot.create(:simple_master)
         provider = FactoryBot.create(:simple_provider)
         # Provider's app on master account
-        FactoryBot.create(:simple_cinstance, plan: master.services.first.application_plans.first, user_account: provider)
+        provider_cinstance = FactoryBot.create(:simple_cinstance, plan: master.services.first.application_plans.first, user_account: provider)
         service = FactoryBot.create(:simple_service, account: provider)
         provider_app_plan = FactoryBot.create(:simple_application_plan, issuer: service)
         buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
         # Buyer's app on provider account
-        FactoryBot.create(:simple_cinstance, plan: provider_app_plan, user_account: buyer)
-        FactoryBot.create(:usage_limit, plan: provider_app_plan)
+        buyer_cinstance = FactoryBot.create(:simple_cinstance, plan: provider_app_plan, user_account: buyer)
+        usage_limit = FactoryBot.create(:usage_limit, plan: provider_app_plan)
 
-        enqueuer = mock('enqueuer')
-        enqueuer.expects(:call).times(5).returns(:ok)
-        Backend::StorageRewrite::AsyncProcessor.new(enqueuer: enqueuer).rewrite_provider(provider.id)
+        BackendStorageRewriteWorker.expects(:perform_async).times(5).with do |klass, ids|
+          ids.each do |id|
+            assert_includes [service, provider_cinstance, buyer_cinstance, usage_limit, *service.metrics.to_a], Object.const_get(klass).find(id)
+          end
+        end
+        Backend::StorageRewrite::AsyncProcessor.new.rewrite_provider(provider.id)
       end
     end
   end

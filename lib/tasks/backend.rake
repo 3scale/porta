@@ -118,7 +118,7 @@ END
 
     desc 'Enqueue job for every provider to do backend storage rewrite.'
     task :enqueue_rewrite => :environment do
-      BackendStorageRewriteWorker.enqueue_all
+      Backend::StorageRewrite::AsyncProcessor.new.rewrite_all
       puts "Enqueued all accounts for rewrite"
     end
 
