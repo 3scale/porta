@@ -79,12 +79,25 @@ describe('ongoing search', () => {
     expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${id}`)
   })
 
-  it('should remove the search param when selecting the same option', () => {
+  it('should be close when selecting the same option', () => {
     const { title } = selectedOption
     const wrapper = mountWrapper()
 
     wrapper.find('SelectToggle').simulate('click')
     wrapper.find(`SelectOption[value="${title}"] button`).simulate('click')
+
+    expect(wrapper.exists('SelectOption')).toEqual(false)
+  })
+
+  it('should be clearable', () => {
+    const { title } = selectedOption
+    const wrapper = mountWrapper()
+
+    wrapper.find('SelectToggle').simulate('click')
+    wrapper.find(`SelectOption[value="${title}"] button`).simulate('click')
+    wrapper.update()
+
+    wrapper.find('.pf-c-select .pf-c-select__toggle-clear').simulate('click')
     wrapper.update()
 
     expect(window.location.replace).toHaveBeenCalledWith('http://example.com/?utf8=%E2%9C%93')

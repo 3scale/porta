@@ -27,21 +27,22 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
   const selectedId = url.searchParams.get(name)
 
   const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState(collection.find(item => item.id === selectedId)?.title ?? null)
+  const selected = collection.find(item => item.id === selectedId)?.title ?? null
+
+  const clearSelection = () => {
+    url.searchParams.delete(name)
+    window.location.replace(url.toString())
+  }
 
   const handleOnSelect: SelectProps['onSelect'] = (_e, value) => {
-    url.searchParams.set(INPUT_NAME_UTF8, '✓')
-
     if (value === selected) {
-      setSelected(null)
-      url.searchParams.delete(name)
-
-    } else {
-      setSelected(value as string)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      url.searchParams.set(name, collection.find(i => i.title === value)!.id)
+      setIsOpen(false)
+      return
     }
 
+    url.searchParams.set(INPUT_NAME_UTF8, '✓')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    url.searchParams.set(name, collection.find(i => i.title === value)!.id)
     window.location.replace(url.toString())
   }
 
@@ -54,6 +55,7 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
       placeholderText={placeholder}
       // @ts-expect-error -- Type is wrong...
       selections={selected}
+      onClear={clearSelection}
       onSelect={handleOnSelect}
       onToggle={setIsOpen}
     >

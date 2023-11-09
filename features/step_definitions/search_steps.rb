@@ -105,6 +105,14 @@ When "they search {string} using the toolbar" do |text|
   perform_toolbar_search(text)
 end
 
+And "can able to reset the toolbar filter {string}" do |filter|
+  within '.pf-m-filter-group' do
+    find_pf_select(filter.capitalize)
+      .find('.pf-c-select__toggle-clear')
+      .click
+  end
+end
+
 def perform_toolbar_search(text)
   within '.pf-m-search-filter' do
     find('.pf-c-text-input-group__text-input').set(text)

@@ -172,6 +172,7 @@ Feature: Audience > Accounts
       Then they should see the following table:
         | Group/Org. | State    | Plan    |
         | Alice      | Approved | Default |
+      And can able to reset the toolbar filter "plan"
 
     @search
     Scenario: Filtering by state
@@ -189,6 +190,7 @@ Feature: Audience > Accounts
         | Group/Org. | State    | Plan    |
         | Alice      | Approved | Default |
         | Bob        | Approved | Awesome |
+      And can able to reset the toolbar filter "state"
 
     @search
     Scenario: Filtering by org name
