@@ -49,14 +49,14 @@ Feature: Product > Integration > Metrics
       When the search "Pineapples" using the toolbar input
       Then they should see an empty search state
 
-    @search @wip
+    @search
     Scenario: Filtering methods
       Given they go to the methods page of product "My API"
-      And Then they should see the following table:
+      And they should see the following table:
         | Method     |
         | Margherita |
         | Diavola    |
-      When the search "dia" using the toolbar input
+      When they search "dia" using the toolbar
       Then they should see the following table:
         | Method  |
         | Diavola |
