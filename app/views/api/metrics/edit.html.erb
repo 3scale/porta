@@ -1,8 +1,0 @@
-<% content_for :page_header_title, "Edit #{@metric.type.to_s.capitalize}" %>
-
-<%= semantic_form_for @metric, :url => admin_service_metric_path(@service, @metric) do |form| %>
-  <%= render 'form', :form => form %>
-<% end %>
-<% unless @metric.default?(:hits) %>
-  <%= delete_button_for admin_service_metric_path(@service, @metric), data: { confirm: t('api.metrics.edit.delete_confirmation', type: j(@metric.type)) } %>
-<% end %>

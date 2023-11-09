@@ -8,8 +8,12 @@ Given "{plan} is {default}" do |plan, default|
   end
 end
 
-Given /^a default application plan of provider "([^"]*)"$/ do |provider_name|
-  step %(a default application plan "Default" of provider "#{provider_name}")
+Given "a default {word} plan of {provider}" do |type, provider|
+  create_plan(type, name: 'The Plan', issuer: provider, published: true, default: true)
+end
+
+Given "a default {word} {string} plan of {provider}" do |type, name, provider|
+  create_plan(type, name: name, issuer: provider, published: true, default: true)
 end
 
 Given "{provider} has no default application plan" do |provider|

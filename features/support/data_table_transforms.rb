@@ -20,6 +20,13 @@ module DataTableTransforms
     table
   end
 
+  def transform_usage_limits_table(table, plan)
+    parameterize_headers(table)
+    table.map_column!(:metric) { |metric| plan.issuer.metrics.find_by!(friendly_name: metric) }
+    table.map_column!(:max_value, &:to_i)
+    table
+  end
+
   def transform_table(table)
     parameterize_headers(table)
     table

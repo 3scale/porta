@@ -1,0 +1,3 @@
+- url = admin_service_metric_path(service_id: @metric.owner_id, id: @metric.id)
+
+= render partial: 'form', locals: { url: url, metric: @metric, scope: :edit }

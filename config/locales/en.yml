@@ -677,7 +677,19 @@ en:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
     metrics:
       edit:
+        page_header_title: Edit %{type}
         delete_confirmation: "Removing this %{type} will affect all plans that contain this %{type}, all associated mapping rules will be deleted too. Are you sure?"
+        submit: Update %{type}
+      form:
+        friendly_name_hint:
+          method: e.g. Create new user
+          metric: e.g. Transfer Out
+        system_name_hint:
+          method: e.g. users/create or create_user. Spaces are not permitted.
+          metric: e.g. transfer_out. Spaces are not permitted.
+      new:
+        page_header_title: New %{type}
+        submit: Create %{type}
 
   deployment_options:
     missing: |

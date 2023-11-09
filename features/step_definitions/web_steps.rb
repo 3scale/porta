@@ -36,91 +36,6 @@ When /^(?:|I |they |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)"
   end
 end
 
-When /^(?:|I |they )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
-  with_scope(selector) do
-    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field)
-
-    fill_in(field, with: value, visible: true)
-  end
-end
-
-# Use this to fill in an entire form with data from a table. Example:
-#
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
-#
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following(?: within "([^"]*)")?:$/ do |selector, fields|
-  with_scope(selector) do
-    fields.rows_hash.each do |name, value|
-      step %(I fill in "#{name}" with "#{value}")
-    end
-  end
-end
-
-When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    if page.has_css?('.pf-c-form__label', text: field)
-      pf4_select(value, from: field)
-    else
-      # DEPRECATED: remove when all selects have been replaced for PF4
-      ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-      find_field(field).find(:option, value).select_option
-    end
-  end
-end
-
-# TODO: Ideally we would extend Node::Actions#select to satisfy Liskov instead of using a custom method.
-def pf4_select(value, from:)
-  select = find_pf_select(from)
-  within select do
-    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    click_on(value)
-  end
-end
-
-def pf4_select_first(from:)
-  select = find_pf_select(from)
-  within select do
-    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    find('.pf-c-select__menu .pf-c-select__menu-item:not(.pf-m-disabled)').click
-  end
-end
-
-def find_pf_select(label)
-  find('.pf-c-form__group-label', text: label).sibling('.pf-c-form__group-control')
-                                              .find('.pf-c-select')
-end
-
-# Overrides Node::Actions#fill_in
-def fill_in
-  if page.has_css?('.pf-c-form__label', text: field)
-    input = find('.pf-c-form__label', text: field).sibling('input')
-    input.set value
-  else
-    # DEPRECATED: remove when all forms implement PF4
-    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-    fill_in(field, :with => text, visible: true)
-  end
-end
-
-When /^(?:|I )check "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    check(field)
-  end
-end
-
-When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    uncheck(field)
-  end
-end
-
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
   with_scope(selector) do
     attach_file(field, File.join(Rails.root,path))
@@ -217,6 +132,10 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   else
     assert_equal expected_params, actual_params
   end
+end
+
+Given "tab {string} is selected" do |tab|
+  find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
 end
 
 When 'I change to tab {string}' do |tab|

@@ -11,7 +11,6 @@ module TableHelpers
   # returns array with table content
   #
   def extract_table(table, rows, cells = nil)
-    ThreeScale::Deprecation.warn "Detected old table. Move to PF4 and use #extract_pf4_table."
     find(*table).all(*rows).map do |row|
       if cells.respond_to?(:call)
         cells.call(row)

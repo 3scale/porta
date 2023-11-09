@@ -22,10 +22,3 @@ end
 Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
   assert provider.settings.strong_passwords_enabled == enabled
 end
-
-Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
-  label = find('label', text: field)
-  input = label.sibling('input')
-
-  assert_not_equal enabled, input.disabled?
-end
