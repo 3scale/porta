@@ -1,5 +1,3 @@
-// TODO: combine with Messages toolbar
-
 import { TableToolbarWrapper } from 'Common/components/TableToolbar'
 
 import type { Props } from 'Common/components/TableToolbar'
