@@ -80,6 +80,7 @@ class Buyers::AccountsIndexPresenter
     if can?(:export, :data)
       props[:overflow].append({ href: new_provider_admin_account_data_exports_path,
                                 label: 'Export to CSV',
+                                isShared: false,
                                 variant: :secondary })
     end
 

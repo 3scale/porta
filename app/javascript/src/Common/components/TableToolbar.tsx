@@ -33,6 +33,14 @@ interface ToolbarAction extends ButtonProps {
   isPersistent?: boolean;
 }
 
+/**
+ * If the action is to be always hidden, isShared will be false.
+ * If the action is to be shown in the toolbar if there is enough room, isShared will be true.
+ */
+interface ToolbarOverflowAction extends ToolbarAction {
+  isShared?: boolean;
+}
+
 interface ToolbarFilter {
   attribute: string;
   collection: {
@@ -46,7 +54,7 @@ interface Props {
   actions?: ToolbarAction[];
   bulkActions?: BulkAction[];
   filters?: ToolbarFilter[];
-  overflow?: ToolbarAction[];
+  overflow?: ToolbarOverflowAction[];
   pageEntries?: number;
   search?: SearchInputProps;
   totalEntries: number;
@@ -116,19 +124,19 @@ const TableToolbar: FunctionComponent<Props> = ({
               <OverflowMenu breakpoint="xl" breakpointReference={toolbarRef}>
                 <OverflowMenuContent>
                   <OverflowMenuGroup groupType="button">
-                    {overflow.map(({ label, ...btnProps }) => (
+                    {overflow.filter(i => i.isShared).map(({ label, ...btnProps }) => (
                       <OverflowMenuItem key={label}>
                         <Button component="a" {...btnProps}>{label}</Button>
                       </OverflowMenuItem>
                     ))}
                   </OverflowMenuGroup>
                 </OverflowMenuContent>
-                <OverflowMenuControl>
+                <OverflowMenuControl hasAdditionalOptions={overflow.some(i => !i.isShared)}>
                   <Dropdown
                     isFlipEnabled
                     isPlain
-                    dropdownItems={overflow.map(({ label, href }) => (
-                      <OverflowMenuDropdownItem key={label} isShared component="a" href={href}>
+                    dropdownItems={overflow.map(({ label, href, isShared }) => (
+                      <OverflowMenuDropdownItem key={label} component="a" href={href} isShared={isShared}>
                         {label}
                       </OverflowMenuDropdownItem>
                     ))}
