@@ -95,31 +95,31 @@ END
     # FIXME: delete non-existing keys too
     #
 
-    rewrite_progress = ->(percent) do
-      puts "#{percent.round(2)}% completed"
-    end
-
     desc "Rewrite the data needed by the backend."
     task :rewrite => :environment do
       next if Rails.env.test? || System::Application.config.three_scale.core.fake_server
 
       if ENV['PROVIDER_ID']
-         break Rake::Task['backend:storage:rewrite_provider'].invoke
+        Rake::Task['backend:storage:rewrite_provider'].invoke
+      else
+        Backend::StorageRewrite::Processor.new(log_progress: true).rewrite_all
       end
-
-      Backend::StorageRewrite.rewrite_all(&rewrite_progress)
     end
 
     desc "Rewrites all the content of a single provider"
     task :rewrite_provider => :environment do
-      Backend::StorageRewrite.rewrite_provider(ENV['PROVIDER_ID'], &rewrite_progress)
+      provider_id = ENV.fetch('PROVIDER_ID', nil)
+      if provider_id
+        Backend::StorageRewrite::Processor.new(log_progress: true).rewrite_provider(provider_id)
+      else
+        puts 'Provider ID has to be set in PROVIDER_ID environment variable'
+      end
     end
 
     desc 'Enqueue job for every provider to do backend storage rewrite.'
     task :enqueue_rewrite => :environment do
-      accounts = Account.providers_with_master
-      BackendStorageRewriteWorker.enqueue_all(accounts)
-      puts "Enqueued #{accounts.count} accounts for rewrite"
+      Backend::StorageRewrite::AsyncProcessor.new.rewrite_all
+      puts "Enqueued all accounts for rewrite"
     end
 
     desc "Regenerate provider keys."
