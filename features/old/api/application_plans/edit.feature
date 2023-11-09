@@ -57,10 +57,9 @@ Feature: Product > Applications > Application Plans > Edit
     Then I should see the metric "visible" limits as icons and text in the plan widget
 
   Scenario: Metric limits with value 0 only show icons in icons and text mode
-    Given the product has a metric "zeroed"
-    And plan "application_plan" has defined the following usage limits:
-      | Metric   | Period | Max. value |
-      | zeroed 1 | day    | 0          |
+    Given plan "application_plan" has defined the following usage limits:
+      | Metric | Period | Max. value |
+      | zeroed | day    | 0          |
     And I go to the edit page for plan "application_plan"
     When I change the metric "zeroed" to show with icons and text
     Then I should see the metric "zeroed" limits show as icons and text
@@ -68,10 +67,9 @@ Feature: Product > Applications > Application Plans > Edit
     Then I should see the metric "zeroed" limits as icons only in the plan widget
 
   Scenario: Metrics enabling and disabling
-    Given the product has a metric "zeroed"
-    And plan "application_plan" has defined the following usage limits:
-      | Metric   | Period | Max. value |
-      | zeroed 1 | day    | 0          |
+    Given plan "application_plan" has defined the following usage limits:
+      | Metric | Period | Max. value |
+      | zeroed | day    | 0          |
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "visible" is enabled
     But I should see the metric "zeroed" is disabled
@@ -81,9 +79,7 @@ Feature: Product > Applications > Application Plans > Edit
     But I should see the metric "visible" is disabled
 
   Scenario: Metric cannot be disabled
-    Given the product has a metric "zeroed"
-    And plan "application_plan" has defined all usage limits for "zeroed"
-    Given the metric "zeroed" with all used periods of plan "application_plan"
+    Given plan "application_plan" has defined all usage limits for "zeroed"
     And I go to the edit page for plan "application_plan"
     Then I should see the metric "zeroed" is enabled
     When I disable the metric "zeroed"

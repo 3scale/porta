@@ -113,7 +113,7 @@ Background:
       | name                   | quantity | cost |
       | Fixed fee ('Variable') |          |  200 |
       | Hits                   |       40 |    4 |
-      | transfer               |       10 |    2 |
+      | Transfer               |       10 |    2 |
       | Total cost             |          |  206 |
 
  Scenario: Buyer is not billed monthly - no invoice is created

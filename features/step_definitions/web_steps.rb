@@ -26,7 +26,7 @@ end
 
 When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
   with_scope(selector) do
-    click_link_or_button(button, visible: !invisible)
+    click_button(button, visible: !invisible)
   end
 end
 

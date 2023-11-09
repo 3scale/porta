@@ -25,7 +25,7 @@ Feature: Product > Integration > Metrics > Edit
 
     Scenario: Deleting a method
       Given they go to the edit page of method "Carbonara"
-      When they press "Delete" and I confirm dialog box
+      When they follow "Delete" and I confirm dialog box
       Then should see the flash message "The method was deleted"
       And should not see method "Carbonara"
 
@@ -50,7 +50,7 @@ Feature: Product > Integration > Metrics > Edit
 
     Scenario: Deleting a metric
       Given they go to the edit page of metric "Pasta"
-      When they press "Delete" and I confirm dialog box
+      When they follow "Delete" and I confirm dialog box
       Then should see the flash message "The metric was deleted"
       And should not see metric "Pasta"
 
@@ -61,6 +61,6 @@ Feature: Product > Integration > Metrics > Edit
     Scenario: Cannot delete a metric used in the latest gateway configuration
       Given metric "Pasta" is used in the latest gateway configuration
       When they go to the edit page of metric "Pasta"
-      And press "Delete" and I confirm dialog box
+      And follow "Delete" and I confirm dialog box
       Then should see the flash message "Metric is used by the latest gateway configuration and cannot be deleted"
       And should see metric "Pasta"

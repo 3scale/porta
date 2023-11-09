@@ -36,6 +36,10 @@ Then "(I )should see field {string} {enabled}" do |field, enabled|
   assert has_field?(field, disabled: !enabled)
 end
 
+And "field {string} {is} readonly" do |field, readonly|
+  assert has_field?(field, readonly: readonly)
+end
+
 When "(I )(they )fill in {string} with {string}" do |field, value|
   ActiveSupport::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field)
   fill_in(field, with: value, visible: true)
