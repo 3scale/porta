@@ -10,7 +10,6 @@ class Applications::ApplicationDeletedEvent < ApplicationRelatedEvent
       application: MissingModel::MissingApplication.new(id: application.id),
       service_backend_id: service.backend_id,
       application_id: application.application_id,
-      service: service,
       metadata: {
         provider_id: application.provider_account_id || application.tenant_id,
         zync: {

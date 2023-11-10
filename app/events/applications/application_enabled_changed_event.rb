@@ -5,15 +5,13 @@ class Applications::ApplicationEnabledChangedEvent < ApplicationRelatedEvent
   class << self
     def create(application)
       provider = application.provider_account || Account.new
-      service = application.service
 
       new(
         application: application,
-        service: service,
         metadata: {
           provider_id: provider.id,
           zync: {
-            service_id: service.id
+            service_id: application.service_id
           }
         }
       )

@@ -20,7 +20,7 @@ class PublishZyncEventSubscriber
     def build_zync_event(event)
       case event
       when ApplicationRelatedEvent
-        event.service&.oauth? || sync_non_oidc_apps ? ZyncEvent.create(event, event.application) : nil
+        service_oidc?(event) || sync_non_oidc_apps ? ZyncEvent.create(event, event.application) : nil
       when OIDC::ProxyChangedEvent, Domains::ProxyDomainsChangedEvent
         ZyncEvent.create(event, event.proxy)
       when OIDC::ServiceChangedEvent
@@ -36,6 +36,13 @@ class PublishZyncEventSubscriber
     # The default is 'true', if the configuration is missing
     def sync_non_oidc_apps
       !Rails.configuration.zync.skip_non_oidc_applications
+    end
+
+    # Returns 'true' if the service with id exists, and has OAuth authentication, and 'false' otherwise
+    def service_oidc?(event)
+      zync_metadata = event.metadata.fetch(:zync, {})
+      service = Service.find_by(id: zync_metadata[:service_id])
+      !!service&.oauth?
     end
   end
 
