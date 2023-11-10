@@ -174,7 +174,7 @@ Feature: Audience > Accounts
         | Alice      | Approved | Default |
       And can able to reset the toolbar filter "plan"
 
-    @search
+    @search @chrome
     Scenario: Filtering by state
       Given they go to the buyer accounts page
       When the table is filtered with:

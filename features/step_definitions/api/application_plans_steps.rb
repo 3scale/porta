@@ -24,7 +24,7 @@ end
 
 Then "the service will not have the default plan set" do
   visit admin_service_application_plans_path(@service)
-  assert_equal('No plan selected', find('[data-ouia-component-id="default-plan-select"] input').value)
+  assert_equal('No plan selected', find_pf_select('Default plan').find('input').value)
   assert_nil @service.reload.default_application_plan_id
 end
 
