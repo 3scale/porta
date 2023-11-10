@@ -27,7 +27,7 @@ class Buyers::AccountsIndexPresenter
   end
 
   def account_plans_size
-    @account_plans_size ||= account_plans.length
+    @account_plans_size ||= account_plans.size
   end
 
   alias paginated_buyers buyers

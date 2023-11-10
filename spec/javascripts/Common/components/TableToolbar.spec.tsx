@@ -4,14 +4,14 @@ import { TableToolbar } from 'Common/components/TableToolbar'
 
 import type { Props } from 'Common/components/TableToolbar'
 
-const defaultProps = {
-  totalEntries: 50,
-  leftActions: undefined,
-  rightActions: undefined,
+const defaultProps: Props = {
+  actions: undefined,
   bulkActions: undefined,
   filters: undefined,
+  overflow: undefined,
   pageEntries: undefined,
-  search: undefined
+  search: undefined,
+  totalEntries: 50
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<TableToolbar {...{ ...defaultProps, ...props }} />)
