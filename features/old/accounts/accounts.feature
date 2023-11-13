@@ -35,15 +35,14 @@ Feature: Account management
         | Time Zone               | Santiago                  |
       And provider "Fantastically awesome API" time zone should be "Santiago"
 
-  @security @wip @javascript
+  @security @javascript
   Scenario: Non-admins cannot edit account details
     Given an user "bob" of account "foo.3scale.localhost"
-    And user "bob" activates himself
+    And the user "bob" is activated
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "bob"
     And I go to the provider account page
-    # FIXME: as the Edit button now resides elsewhere, this does not assert anything
-    Then I should not see link "Edit" within "#account_details"
+    Then I should see "Access denied"
 
   @javascript
   Scenario: Providers see their provider key on the account details page
