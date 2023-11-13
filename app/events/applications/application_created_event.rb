@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
   # @param [Cinstance] application
   # @param [User] user
@@ -8,9 +10,7 @@ class Applications::ApplicationCreatedEvent < ApplicationRelatedEvent
       application: application,
       account:     account = application.user_account,
       provider:    provider,
-      # this really can't be application.service as it would break:
-      # $ rspec ./spec/acceptance/api/application_spec.rb -e 'Cinstance application json format GET /admin/api/applications/find.:format with app id Get Application'
-      service:     application.plan.issuer,
+      service:     application.service,
       plan:        application.plan,
       user:        user || account&.first_admin,
       metadata: {
