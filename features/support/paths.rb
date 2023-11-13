@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/PerlBackrefs
 World(Module.new do
   break unless defined?(DeveloperPortal)
 
@@ -628,13 +629,23 @@ World(Module.new do
     when 'the refund policy page'
       '/refundpolicy'
 
-    # Proxy
-    when 'the service definition page'
-      admin_service_metrics_path(provider_first_service!, tab: 'metrics')
+    # Methods and metrics
     when 'the metrics and methods page'
       admin_service_metrics_path(@provider.default_service)
     when 'the metrics and methods page of my backend api'
       provider_admin_backend_api_metrics_path(@provider.default_service.backend_api)
+    when /^the (methods|metrics) page of product "(.+?)"/
+      admin_service_metrics_path(Service.find_by!(name: $2), tab: $1)
+    when /^the new metric page of product "(.+?)"/
+      new_admin_service_metric_path Service.find_by!(name: $1)
+    when /^the new method page of product "(.+?)"/
+      service = Service.find_by!(name: $1)
+      new_admin_service_metric_child_path(service, service.metrics.hits)
+    when /^the edit page of (?:metric|method) "(.+?)"/
+      metric = Metric.find_by!(friendly_name: $1)
+      edit_admin_service_metric_path(metric.owner, metric)
+
+    # Proxy
     when /^the integration show page for service "(.+?)"/
       service = Service.find_by!(name: $1)
       admin_service_integration_path(service)
@@ -690,3 +701,4 @@ World(Module.new do
     end
   end
 end)
+# rubocop:enable Style/PerlBackrefs

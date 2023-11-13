@@ -124,7 +124,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     test 'on batch complete' do
       event_id = event.event_id
       klass = worker.class
-      klass.expects(:perform_async).with(event_id, anything, 1)
+      klass.expects(:perform_async).with(event_id, event.data.as_json, 1)
       klass.new.on_complete(1, {'event_id' => event_id, 'manual_retry_count' => 0})
     end
 

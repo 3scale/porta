@@ -184,7 +184,7 @@ def assert_select_not_inclues_option(label, text)
     selector = '.pf-c-select__menu-item'
   else
     # DEPRECATED: remove when all selects have been replaced for PF4
-    ThreeScale::Deprecation.warn "[cucumber] Detected a select not using PF4 css"
+    ActiveSupport::Deprecation.warn "[cucumber] Detected a select not using PF4 css"
     selector = 'option'
     select = find_field(label)
   end

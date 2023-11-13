@@ -11,7 +11,10 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   rescue_from(ThinkingSphinx::QueryError) do |exception|
-    ThinkingSphinx::Connection.clear if exception.message.include?("unknown column")
+    if exception.message.include?("unknown column")
+      ThinkingSphinx::Connection.clear
+      Rails.logger.error "Attempting to workaround Searchd error by clearing connection pool."
+    end
     raise
   end
 

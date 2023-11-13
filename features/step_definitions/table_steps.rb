@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-Then "I/they should see (the )following table:" do |expected|
-  ThreeScale::Deprecation.warn "Detected old table. Move to PF4 and use step 'I should see the following table:'"
+Then "(I )(they )should see (the )following table:" do |expected|
   table = extract_table('table.pf-c-table', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
