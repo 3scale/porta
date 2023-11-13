@@ -1,4 +1,3 @@
-durationMinutes
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-an-api-product
