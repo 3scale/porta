@@ -1,0 +1,86 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: tracking-usage-for-api-product
+  # you can add additional metadata here
+  instructional: true
+  commonInstances: true
+spec:
+  displayName: Track usage for API product
+  durationMinutes: 5
+  # Optional type section, will display as a tile on the card
+  type:
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Learn how to create a mapping rule with a method to track API usage.
+  introduction: |-
+    In this quick start, you will learn about how to create a mapping rule with a method to track API usage. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html-single/administering_the_api_gateway/index#how-apicast-applies-mapping-rules-for-capturing-usage-of-threescale-apis_api-gateway-apicast).
+  tasks:
+    - title: Create a method
+      description: |-
+        Create a method for your API  product.To learn about what a method is, see: Methods.
+
+        ### Prerequisites
+
+        - A product. To learn how to create a product, see: creating-an-api-product.
+        - An application plan. To learn how to create an application plan, see: creating-access-tiers-for-api-consumers.
+
+        ### Procedure
+
+        1. Go to <strong>[Your_product_name] > Overview</strong> page: click the menu on the header, select <strong>Products</strong> and click <strong>[You_ product_name]</strong>.
+        1. On <strong>[Your_product_name] > Overview</strong> page, click <strong>Integration > Methods & Metrics</strong> on the side menu.
+        1. Click <strong>Add a method</strong>.
+        1. On the <strong>New method</strong> page, fill in the details:
+              - _Friendly name_: Give a name to the method. The friendly name must be unique for the product, for example, _Flight API Call_.
+              - _System name_: GThis is the name for 3scale to identify the method. The system name must be unique. The name can be similar to the product, for example, _Flight_API_call_.
+              - Description: Add optional details about your method.
+        1. Click <strong>Create method</strong>.
+
+        If the process is successful, you will see <strong>[Your_product_name] > Methods & metrics</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Add mapping rule to a method
+      description: |-
+        Add mapping rules to a method, which enables setting usage limits and pricing rules in the product’s application plan. To learn about what a mapping rule is, see: learning-about-mapping-rules.
+
+        ### Procedure
+
+        1. On <strong>[Your_product_name] > Overview</strong> page, click <strong>Integration > Mapping rules</strong> on the side menu.
+        1. Click <strong>Create mapping</strong> rule
+        1. On the <strong>New mapping rule<strong> page, fill in the details:
+              - _Verb_: Select the HTTP request verb, for example, select _GET_, _POST_, _DELETE_, or _PUT_.
+              - _Pattern_: This is the pattern to map a request with metric or method. Add a valid path that starts with a forward slash `/`. The URL can be from a wildcard you have specified inside curly brackets `{}`. For example, if you create a method _Flight API Call_,you can create a pattern `/Flight-API-Call/{distric`}/name`.
+              - _Method or metric to increment_: Select from one of your previously created methods. For example, select _Flight API Call_.
+              - _Increment by_: Add the counter increment number, For example, _1_.
+              - _Last?_: Check it if this mapping rule should be considered as the last one to stop processing other mapping rules.
+              - _Position_: This is for 3scale to sort the mapping rule. Set the position of the execution of the mapping rule, for example, _1_.
+          1. Click <strong>Create mapping rule</strong>:
+
+        If the process is successful, you will see <strong>[Your_product_name] > Mapping rules</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-

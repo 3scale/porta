@@ -1,15 +1,15 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
-  name: creating-a-backend-quick-start
+  name: learning-about-accounts
   # you can add additional metadata here
   instructional: true
-  learningResources: true
+  learnAbout3scaleFeatures: true
 spec:
-  displayName: Create a backend
+  displayName: Accounts
   durationMinutes: 5
-  # Optional type section, will display as a tile on the card
+ # Optional type section, will display as a tile on the card
   type:
-    text: Quick start
+    text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
   # - The icon defined as a base64 value. Example flow:
@@ -20,38 +20,28 @@ spec:
   # - If set to null (icon: ~) will not show an icon
   icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
   description: |-
-    Create an API to map your internal schema to 3scale.
+    Learn about Accounts.
   introduction: |-
-    This quick start guides you to create an API to map your internal schema to 3scale.
-
-    To learn more about API backend, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-backends-for-your-products_configuring-your-api).
+    In this quick start, you will learn about accounts. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-applications-for-default-account-test-api-calls_configuring-your-api).
   tasks:
-    - title: Create a backend
+    - title:  Learn about accounts
       description: |-
-        A backend is an internal API that is bundled to a product.
 
-        ### Procedure
-        1. You have two ways to start the creating process:
-            - Go to the _Dashboard_: Under the APIs section, click <strong>Create backend</strong> in the _Backends_ card.
-            - Click the context selector on the header and select _Backends_:  On the _Backend_ page, click <strong>Create backend</strong>.
-        1. On the _New backend_ page, fill in the details to create the backend.
-
-          Important fields:
-            - _System name_: 3scale needs this name to internally identify and refer to the backend.
-            - _Private base URL_: It is the base URL endpoint of the private API.
-        1. Click <strong>Create backend</strong>
-
+        Accounts refer to your API consumers‘ accounts in Admin Portal. Use **Account** to set up accounts for your API consumers.
+        ![Accounts are determined bu the API consumers wether applications are determined by the consumer's app.](/assets/quickstarts/learn-about-accounts.png "Learn about Accounts.")
       # optional - the task's Check your work module
       review:
         instructions: |-
-          - Did you set the system name for your backend?
+          - Did this task help you to learn about 3scale products?
         failedTaskHelp: This task isn’t verified yet. Try the task again.
       # optional - the task's success and failure messages
       summary:
         success: Shows a success message in the task header
         failed: Shows a failed message in the task header
   conclusion: |-
-    This concludes the set up of your backend for 3scale.
+    **Next**
+    To learn about the application plans, and how to create them, see:
   # you can link to the next quick start(s) here
   nextQuickStart:
-    - mas-alert-note-prereq
+    - learning-about-application-plans
+    - creating-access-tiers-for-api-consumers

@@ -3,11 +3,12 @@ metadata:
   name: creating-a-metric-quick-start
   # you can add additional metadata here
   instructional: true
+  learningResources: true
 spec:
   displayName: Create a metric
-  durationMinutes: 10
+  durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -22,7 +23,7 @@ spec:
     Track usage of products and backends.
   introduction: |-
     This quick start guides you through how to control access to your API by defining metrics to track the usage of your API.
-    
+
     To learn more about API metrics, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
 
     _Hits_ is the built-in metric that exists for each API. It tracks the number of calls made to your API. To capture usage of your API apart from _Hits_, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals such as megabytes (MB), CPU time, or the number of elements returned by the API. Metrics other than _Hits_, such as CPU time or MB are not provided by default. Obtain these metrics by using an endpoint called by an external service configured by the user.
@@ -36,19 +37,19 @@ spec:
         ### Prerequisites
 
         - A backend. To create one, see create-a-backend-link.
-        
+
         ### Procedure
 
         1. Navigate to <strong>[Your\_backend\_name] > Methods and Metrics</strong>.
         1. Click <strong>New metric</strong>.
         1. On the _New metric_ page, fill in the details to create the metric.
-        
+
           Important fields:
               - _Friendly name_: A short description of the metric. This name is displayed in different sections of the 3scale Admin Portal.
               - _System name_: The name of the metric in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.
-              
+
               > <strong>Tip:</strong> Be careful with changing the system name of the metrics or deleting them. These changes can break your already deployed 3scale integration if there are mapping rules pointing to the previous system name of the metric.
-              
+
               - _Unit_: Use a singular noun, for example, _hit_. The singular will become plural in the analytics charts.
         1. Click <strong>Create metric</strong>
 
@@ -70,14 +71,14 @@ spec:
         - A Product. To create one, see create-a-product-link.
         - An application plan. To create one, see create-an-application-plan-link.
 
-        The procedure for adding a method or metric to a product is similar to adding a method or metric to a backend. 
+        The procedure for adding a method or metric to a product is similar to adding a method or metric to a backend.
 
         ### Procedure
 
         1. Navigate to <strong>[Your\_product\_name] > Integration > Methods and Metrics</strong>.
         1. Click <strong>Add a metric</strong>.
         1. On the _New metric_ page, fill in the details to create the metric.
-        
+
           Important fields:
               - _Friendly name_: A short description of the metric. This name is displayed in different sections of the 3scale Admin Portal.
               - _System name_: The name of the metric in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.

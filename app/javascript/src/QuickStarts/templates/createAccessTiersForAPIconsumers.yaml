@@ -1,0 +1,117 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: creating-access-tiers-for-api-consumers
+  # you can add additional metadata here
+  instructional: true
+  commonInstances: true
+spec:
+  displayName: Create access tiers for API consumers to use your API
+  durationMinutes: 5
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Define API consumer's access to your API.
+  introduction: |-
+    In this quick start, you will learn how to create access tiers for your API consumers to use your API. You can define access to different collections of API endpoints, or the ability to monetize and create different business models on top of APIs. To learn more, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.13/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-products-test-api-calls_configuring-your-api).
+  tasks:
+    - title: Create an account
+      description: |-
+        Create an account for your API consumer who will access your API. To learn about what an account is, see: Accounts.
+
+        ### Procedure
+
+        1. Go to the <strong>Audience</strong> page: click the menu on the header and select <strong>Audience</strong>.
+        1. Click <strong>Create</strong>.
+        1. On the <strong>New Account</strong> page, fill in the details:
+              - _Username_: Give a name to your consumer, for example, _Flight API_.
+              - _Email_: Give the email of your consumer. The email must be unique among all users on this admin account, for example, <em>Flight-user@travel.com</em>. This is a required field.
+              - _Password_: Give a password to your consumer. You can skip the password field if you want to invite users to the account securely. This is an optional field.
+              - _Organization / Group name_: This is the organization name that the consumer belongs to, for example, _M Travel Agency_.
+        1. Click <strong>Create account</strong>.
+
+        If the process is successful, you will see <strong>[Your\_account] > Overview</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create an application plan
+      description: |-
+        Create an application plan in response to the API consumer registering to use your API. To learn about what an application plan is, see: Application plans.
+
+        When your API is consumed between internal services, then you can set up a default plan. In a typical scenario, an API consumer will sign up for an application plan using your Developer Portal. For the purpose of this quick start, you will create the plan manually using the Admin Portal.
+
+        ### Procedure
+
+        1. Go to <strong>[Your\_product\_name] > Overview</strong> page: click the menu on the header, select Products and click <strong>[Your_ product_name]</strong>.
+        1. On <strong>[Your\_product\_name] > Overview</strong> page, click <strong>Applications > Application plans</strong> on the side menu.
+        1. Click <strong>Create application plan</strong>.
+        1. On the <strong>New application plan</strong> page, fill in the details:
+              - _Name_: Give a name to your application plan, for example, _Basic plan_.
+              - _System name_: This is the name for 3scale to identify the application plan. The system name must be unique, for example, _Basic\_Plan_.
+              - _Applications require approval_: In a typical scenario when the external consumer accesses your API product, you need to approve the requirement. If the API product is used between internal services, the approval is not needed. This is an optional field.
+              - _Trial Period (days)_: Optionally, set the valid time of the plan, for example, _365_.
+              - _Setup fee_: Optionally, set the setup fee of using the plan, for example, _20_.
+              - _Cost per month_: Optionally, set the monthly fee of using the plan, for example, _20_.
+        1. Click <strong>Create application plan</strong>.
+
+        If the process is successful, you will see <strong>[Your\_product\_application plan]</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create an application
+      description: |-
+        Create an application for your API consumer’s device and subscribe to the application plan to access your API product. To learn about what an application is, see: Applications.
+
+        ### Procedure
+
+        1. Go to <strong>Audience</strong> page: click the menu on the header and select <strong>Audience</strong>.
+        1. On <strong>Audience</strong> page, click <strong>Applications > Listing</strong> on the side menu.
+        1. Click <strong>Create application</strong>.
+        1. On the <strong>New application</strong> page, fill in the details:
+              - _Account_: Select the consumer’s account name, for example, _Select Flight User_.
+              - _Product_: Select the API package you want to allow the consumer’s application to access, for example, _Select Flight API Product_.
+              - _Application plan_: Select the application plan you want to subscribe to the consumer’s application, for example, _Select Basic Plan_.
+              - _Name_: Give a name to the application, for example, _Flight User Services_.
+              - _Description_: Add details about your application.
+        1. Click <strong>Create application</strong>.
+
+        If the process is successful, you will see <strong>[Your\_product\_application] > Overview</strong> page.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+     **Next**
+     To learn about how to create a mapping rule to capture API usage of your API product, see:
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - tracking-usage-for-api-product
