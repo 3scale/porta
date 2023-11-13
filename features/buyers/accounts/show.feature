@@ -5,9 +5,6 @@ Feature: Buyer account overview
     Given a provider is logged in
     And an approved buyer "Bob Buyer" signed up to the provider
 
-  @wip
-  Scenario: Navigation
-
   Scenario: Sending a message
     Given buyer "Bob Buyer" has no messages
     And they go to the buyer account page for "Bob Buyer"
