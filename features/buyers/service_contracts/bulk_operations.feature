@@ -75,7 +75,8 @@ Feature: Service subscriptions bulk operations
       | Alice   | Another API | Another Plan |
       | Bob     | Fancy API   | Fancy Plan A |
       | Jane    | Another API | Another Plan |
-    When item "Alice" is selected
+    When table is sorted by "Plan"
+    And item "Alice" is selected
     And item "Bob" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
@@ -141,7 +142,8 @@ Feature: Service subscriptions bulk operations
 
   Scenario: Changing service plan throws an error
     Given the subscription will return an error when changing its plan
-    When item "Alice" is selected
+    When table is sorted by "Plan"
+    And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and I confirm dialog box
