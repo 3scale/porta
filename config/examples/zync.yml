@@ -5,6 +5,7 @@ base: &default
   connect_timeout: 2
   send_timeout: 2
   receive_timeout: 10
+  skip_non_oidc_applications: false
 
 development:
   <<: *default
