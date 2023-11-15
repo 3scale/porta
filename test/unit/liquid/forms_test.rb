@@ -28,6 +28,7 @@ class Liquid::FormsTest < ActiveSupport::TestCase
 
   test 'password_reset form' do
     form = get('password_reset', 'site_account')
+    form.stubs(:spam_protection).returns("")
     account = FactoryBot.create(:account)
     form.context['site_account'] = Liquid::Drops::Account.new(account)
     content = form.render('content')
