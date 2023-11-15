@@ -60,7 +60,7 @@ Feature: Buyer side messages
     Then I should see "Wassup?"
     And I should see "Everything OK?"
 
-  Scenario: Restoring a Inbox deleted message
+  Scenario: Restoring a received deleted message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
     When I go to the dashboard
     And I follow "Messages 1"
