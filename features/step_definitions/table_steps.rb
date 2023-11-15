@@ -56,6 +56,10 @@ And "the table should contain the following:" do |table|
   assert_same_elements actual, filtered
 end
 
+Then "the table should have {int} row(s)" do |count|
+  assert_equal count, find_all('table tbody tr').length
+end
+
 # Then /^I should see the following table:$/ do |expected|
 #   table = if has_css?('.pf-c-table')
 #             extract_pf4_table

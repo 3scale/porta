@@ -376,6 +376,9 @@ World(Module.new do
       application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
       edit_provider_admin_application_path(application)
 
+    when 'the provider side data exports page'
+      new_provider_admin_account_data_exports_path
+
     #
     # Buyer management
     #

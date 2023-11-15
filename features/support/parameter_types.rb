@@ -421,3 +421,9 @@ ParameterType(
   regexp: /can|can't|cannot/,
   transformer: ->(value) { value == 'can' }
 )
+
+ParameterType(
+  name: 'ordinal',
+  regexp: /(\d+)(?:st|rn|nd|th)/,
+  transformer: ->(value) { value.to_i }
+)

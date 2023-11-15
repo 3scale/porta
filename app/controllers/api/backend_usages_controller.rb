@@ -87,7 +87,7 @@ class Api::BackendUsagesController < Api::BaseController
   def toolbar_props
     {
       totalEntries: @backend_api_configs.total_entries,
-      leftActions: [{
+      actions: [{
         variant: :primary,
         label: t('.toolbar.primary'),
         href: new_admin_service_backend_usage_path(@service),

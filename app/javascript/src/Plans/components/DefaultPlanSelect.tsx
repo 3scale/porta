@@ -33,6 +33,8 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
   const submitDisabled = !defaultPlan || defaultPlan.id === initialDefaultPlan?.id
     || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)
 
+  const label = 'Default plan'
+
   return (
     <Form
       isWidthLimited
@@ -49,9 +51,9 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
             fieldId="id"
             item={defaultPlan}
             items={availablePlans}
-            label="Default plan"
+            label={label}
             name="id"
-            ouiaId="default-plan-select"
+            ouiaId={label}
             placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}
             onSelect={setDefaultPlan}
           />
