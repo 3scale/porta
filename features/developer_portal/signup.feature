@@ -65,8 +65,9 @@ Feature: Buyer signup
     And I should be warned to complete my signup
 
   @recaptcha
-  Scenario: Spam protection detects suspicious behavior
+  Scenario: Spam protection detects fast form filling and no javascript
     Given the provider has spam protection set to suspicious only
     When the buyer wants to sign up
-    Then the buyer doesn't need to pass the captcha after signup form is filled wrong
-    But the buyer will need to pass the captcha after signup form is filled in too quickly
+    And 15 seconds pass
+    Then the buyer won't need to pass the captcha after signup form is filled in wrong
+    But the buyer will need to pass the captcha after signup form is filled in correctly

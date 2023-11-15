@@ -87,15 +87,22 @@ module ReadonlyField
   end
 end
 
-Then "the buyer doesn't need to pass the captcha after signup form is filled wrong" do
-  step %(15 seconds pass)
-  step %(I fill in "Email" with "invalid email")
-  step %(I press "Sign up")
-  step %(I should not see the captcha)
+Then "the buyer {will} need to pass the captcha after signup form is filled in {how}" do |will, how|
+  fill_in("Email", with: "Invalid email") if how == 'wrong'
+  fill_in('Email', with: "user@3scale.localhost") unless how == 'wrong'
+  check_hidden_honeypot if how == 'suspiciously'
+  fill_in('Username', with: name)
+  fill_in('Organization/Group Name', with: "User stuff")
+  fill_in('Password', with: 'supersecret')
+  fill_in('Password confirmation', with: 'supersecret')
+  click_on 'Sign up'
+  page.should have_selector(RECAPTCHA_SCRIPT, visible: false) if will
+  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false) unless will
 end
 
-Then "the buyer will need to pass the captcha after signup form is filled in too quickly" do
-  fill_in("confirmation", with: "1")
-  step %(I fill in the signup fields as "hugo")
-  step %(I should see the captcha)
+def check_hidden_honeypot
+  id = find("input[name*='confirmation'][type=checkbox]", visible: :hidden)[:id]
+  page.evaluate_script <<-JS
+    document.getElementById("#{id}").checked = true
+  JS
 end

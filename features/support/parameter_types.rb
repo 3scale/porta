@@ -421,3 +421,9 @@ ParameterType(
   regexp: /can|can't|cannot/,
   transformer: ->(value) { value == 'can' }
 )
+
+ParameterType(
+  name: 'how',
+  regexp: /wrong|suspiciously|correctly|again|/,
+  transformer: ->(value) { value }
+)
