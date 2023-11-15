@@ -14,7 +14,9 @@ module ThreeScale::SpamProtection
 
     def spam_probability
       probability = @checks.reduce(0) { |sum, check| sum + check.probability(@controller) }
-      probability.to_f / @checks.count
+      probability.to_f / @checks.count # No check is sure it detected a bot, return an average
+    rescue ThreeScale::SpamProtection::Checks::SpamCheckError
+      1 # One check is sure it detected a bot, return 100% probability
     end
 
     def spam?

@@ -23,7 +23,7 @@ module ThreeScale::SpamProtection
         when "0" # noscript tag is working
           fail_check(value, 0.6)
         else # something different happened
-          fail_check(value)
+          raise SpamCheckError # Immediately marks as bot
         end
       end
     end
