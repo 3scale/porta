@@ -26,7 +26,7 @@ module Liquid
       end
 
       def spam_protection
-        protector = model.spam_protection.form(self).to_s
+        protector = controller.spam_protection_form(self).to_s
 
         return '' if protector.blank?
 

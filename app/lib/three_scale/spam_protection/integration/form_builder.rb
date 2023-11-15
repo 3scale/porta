@@ -4,8 +4,7 @@ module ThreeScale::SpamProtection
     module FormBuilder
       # Just adds fields from spam protection module
       def spam_protection
-        protection = @object.spam_protection
-        protection.form(self).to_str
+        template.controller.spam_protection_form(self).to_str
       end
     end
 

@@ -5,35 +5,27 @@ module ThreeScale::SpamProtection
       def input(form)
         template = form.template
 
-        yes = form.input :javascript, :as => :hidden, :input_html => { :value => '1' }, :wrapper_html => { :style => HIDE_STYLE }
-        no = form.input :javascript, :as => :hidden, :input_html => { :value => '0' }, :wrapper_html => { :style => HIDE_STYLE }
+        yes = template.text_field_tag :javascript, '1', hidden: true
+        no = template.text_field_tag :javascript, '0', hidden: true
 
         js = %{document.write("#{template.escape_javascript(yes)}");}
 
         output = "".html_safe
         output << template.javascript_tag(js)
         output << template.content_tag(:noscript){ no.html_safe }
-        output
+        form.template.tag.li output, class: "hidden"
       end
 
       def probability(object)
-        case value = object.javascript
+        case value = object.params[:javascript]
         when "1" # javascript is working
-          0
+          add_to_average(0)
         when "0" # noscript tag is working
-          fail(value, 0.6)
+          fail_check(value, 0.6)
         else # something different happened
-          fail(value)
+          fail_check(value)
         end
       end
-
-      def apply!(klass)
-        klass.class_eval do
-          attr_accessor :javascript
-          spam_protection_attribute :javascript
-        end
-      end
-
     end
 
   end

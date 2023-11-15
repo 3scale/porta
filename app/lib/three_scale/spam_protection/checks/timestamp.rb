@@ -1,93 +1,48 @@
+# frozen_string_literal: true
+
 module ThreeScale::SpamProtection
   module Checks
 
+    TIMESTAMP_PERIOD = 10.seconds
+
     class Timestamp < Base
-      DEFAULT_SECRET_KEY = -> { Rails.application.key_generator.generate_key('spam-protection-checks-timestamp', 32) }
-
-      def initialize(config)
-        super
-        timestamp = config[:timestamp]
-        @diff = timestamp[:diff] || 10.seconds
-        # see CookieStore for more information
-        @secret = timestamp[:secret] || secret || DEFAULT_SECRET_KEY
-        #@digest = timestamp[:digest] || 'SHA1'
-        #@verifier = ActiveSupport::MessageVerifier.new(key, @digest)
-      end
-
-      def encryptor
-        @_encryptor ||= ActiveSupport::MessageEncryptor.new(key)
-      end
 
       def input(form)
-        form.input :timestamp, :as => :hidden, :input_html => { :value => encode(timestamp_value) }, :wrapper_html => { :style => HIDE_STYLE }
+        output = form.template.text_field_tag :timestamp, encode(timestamp_value), hidden: true
+        form.template.tag.li output, class: "hidden"
       end
 
       def probability(object)
-        value = object.timestamp
+        value = object.params[:timestamp]
 
         return fail(value) if value.blank?
 
-        if value.respond_to?(:to_str) # string
-          begin
-            value = Time.zone.at(decode(value))
-            diff_from_now(value)
-          rescue TypeError, ArgumentError => error
-            Rails.logger.error "[SpamProtection] malformed timestamp #{object.timestamp}. Error: #{error} Value: #{value}"
-            fail(object.timestamp)
-          end
-        else
-          diff_from_now(value)
-        end
-      end
-
-      def diff_from_now(time)
-        current = Time.zone.now
-        diff = current - time
-        # linear for now, but would be cool to do exponential growth
-        # as in http://en.wikipedia.org/wiki/File:Exponential_pdf.svg
-        Rails.logger.info "[SpamProtection] #{name} timestamp diff is #{diff} seconds"
-        if diff > @diff
-          0
-        else
-          1 - (diff.to_f / @diff)
-        end
-      end
-
-      def encode(text)
-        encryptor.encrypt_and_sign(text)
-      end
-
-      def decode(text)
-        encryptor.decrypt_and_verify(text)
-      rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature
-        raise ArgumentError
-      end
-
-      def apply!(klass)
-        klass.class_eval do
-          spam_protection_attribute :timestamp
-
-          def timestamp
-            @spam_protection_timestamp
-          end
-
-          def timestamp=(val)
-            @spam_protection_timestamp = val
-            # check that it is string
-          end
+        begin
+          value = Time.zone.at(decode(value)).utc.to_i
+          add_to_average(diff_from_now(value))
+        rescue StandardError => exception
+          Rails.logger.error "[SpamProtection] malformed timestamp #{value}. Error: #{exception} Value: #{value}"
+          fail_check(value)
         end
       end
 
       private
 
-      attr_reader :secret
-
-      def timestamp_value
-        Time.now.to_f
+      def diff_from_now(time)
+        current = Time.now.utc.to_i
+        diff = current - time
+        # linear for now, but would be cool to do exponential growth
+        # as in http://en.wikipedia.org/wiki/File:Exponential_pdf.svg
+        Rails.logger.info "[SpamProtection] #{name} timestamp diff is #{diff} seconds"
+        if diff > TIMESTAMP_PERIOD
+          0
+        else
+          1 - (diff.to_f / TIMESTAMP_PERIOD)
+        end
       end
 
-      def key
-        secret.respond_to?(:call) ? secret.call : secret
+      def timestamp_value
+        Time.now.utc.to_i
       end
     end
 

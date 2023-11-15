@@ -1,31 +1,22 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 module ThreeScale::SpamProtection
 
   class Configuration
-    CHECKS = [:honeypot, :javascript, :timestamp]
-    LEVELS = [['Never', :none], ['Suspicious only', :auto], ['Always', :captcha]]
 
-    delegate :[], :to => :@store
-
-
-    def initialize(klass, store = {})
-      @klass = klass
-      @store = {}
-      @store[:level] ||= 0.4
+    def initialize(controller)
+      @controller = controller
+      @store = @controller.store
       @store[:enabled_checks] = []
 
       @checks = {}
-    end
-
-    def available_checks
-      CHECKS
     end
 
     def enabled_checks
       @store[:enabled_checks]
     end
 
-    def active_checks
+    def checks
       @checks.values
     end
 
@@ -39,28 +30,19 @@ module ThreeScale::SpamProtection
       enabled_checks.concat checks
       enabled_checks.uniq!
 
-      initialize_checks!(checks)
+      initialize_checks!
     end
-    alias enable_check! enable_checks!
 
     def enabled?(check)
       enabled_checks.include?(check)
     end
 
     private
-    def initialize_checks!(checks)
-      checks.each do |check|
-        # create empty hash for check configuration
+    def initialize_checks!
+      enabled_checks.each do |check|
+        # create empty hash for check configuration
         @store[check] ||= {}
-        @checks[check] = ThreeScale::SpamProtection::Checks.const_get(check.to_s.camelize).new(self)
-      end
-
-      apply!(checks)
-    end
-
-    def apply!(checks)
-      @checks.values_at(*checks).each do |check|
-        check.apply!(@klass)
+        @checks[check] = ThreeScale::SpamProtection::Checks.const_get(check.to_s.camelize).new(@store)
       end
     end
 
