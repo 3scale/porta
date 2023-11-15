@@ -15,6 +15,7 @@ Before do |scenario|
   FieldsDefinition.create_defaults! master_account
 
   ThreeScale.config.stubs(onpremises: false)
+  ThreeScale.config.stubs(saas?: true)
   ThreeScale.config.sandbox_proxy.stubs(apicast_registry_url: 'http://apicast.alaska/policies')
   ThreeScale.config.sandbox_proxy.stubs(self_managed_apicast_registry_url: 'http://self-managed.apicast.alaska/policies')
 end

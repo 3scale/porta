@@ -2,6 +2,12 @@
 
 Before '@onpremises' do
   ThreeScale.config.stubs(onpremises: true)
+  ThreeScale.config.stubs(saas?: false)
+end
+
+After '@onpremises' do
+  ThreeScale.config.stubs(onpremises: false)
+  ThreeScale.config.stubs(saas?: true)
 end
 
 Before '@ignore-backend' do
