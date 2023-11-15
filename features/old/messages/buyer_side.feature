@@ -81,7 +81,7 @@ Feature: Buyer side messages
     And there should be no message from provider "foo.3scale.localhost" to buyer "bob" with subject "Hello"
     And I should not see button "Empty the received trash"
 
-  Scenario: Restoring an Outbox deleted message
+  Scenario: Restoring a sent deleted message
     Given buyer "bob" has no messages
     When I go to the dashboard
     And I follow "Messages"
