@@ -65,7 +65,7 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
 
     enabled_notifications = %w(application_created) + hidden_notifications.map(&:to_s)
 
-    assert_equal enabled_notifications, preferences.enabled_notifications
+    assert_same_elements enabled_notifications, preferences.enabled_notifications
 
     # kind of Array because formtastic does [obj].flatten
     # see https://github.com/justinfrench/formtastic/blob/8741d76a95b7adf29d39df41f6d4f015cdd74473/lib/formtastic.rb#L1211
@@ -78,7 +78,7 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
     enabled = preferences.enabled_notifications = %w(application_created)
     enabled += hidden_notifications.map(&:to_s)
 
-    assert_equal enabled, preferences.enabled_notifications
+    assert_same_elements enabled, preferences.enabled_notifications
     assert_equal preferences.available_notifications, Set.new(preferences.preferences.keys)
   end
 end
