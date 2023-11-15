@@ -2,6 +2,7 @@
 
 class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::BaseController
   include ThreeScale::SpamProtection::Integration::Controller
+  has_spam_protection :javascript, :honeypot, :count
 
   liquify prefix: 'password'
 

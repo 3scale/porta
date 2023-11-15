@@ -44,17 +44,13 @@ When "the buyer wants to reset their password" do
   step 'I follow "Forgot password?"'
 end
 
-Then "the buyer doesn't need to pass the captcha after reset password form is filled wrong" do
-  fill_in("Email", with: "Invalid email")
+Then "the buyer {will} need to pass the captcha after reset password form is filled in {how}" do |will, how|
+  fill_in("Email", with: "Invalid email") if how == 'wrong'
+  fill_in("Email", with: "zed@3scale.localhost") unless how == 'wrong'
+  check_hidden_honeypot if how == 'suspiciously'
   click_on "Send instructions"
-  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false)
-end
-
-Then "the buyer will need to pass the captcha after reset password form is filled in too quickly" do
-  find('ol').find('#account_confirmation').set(1)
-  fill_in("Email", with: "zed@3scale.localhost")
-  click_on "Send instructions"
-  page.should have_selector(RECAPTCHA_SCRIPT, visible: false)
+  page.should have_selector(RECAPTCHA_SCRIPT, visible: false) if will
+  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false) unless will
 end
 
 Then "it should not be possible to reset their password" do
@@ -75,4 +71,11 @@ And "{user} is now able to sign in with password {string}" do |user, password|
   assert_content 'Signed in successfully'
   find(:css, '[aria-label="Session toggle"]').click
   assert_content "Signed in to #{@provider.org_name} as #{user.username}"
+end
+
+def check_hidden_honeypot
+  id = find("input[name*='confirmation'][type=checkbox]", visible: :hidden)[:id]
+  page.evaluate_script <<-JS
+    document.getElementById("#{id}").checked = true
+  JS
 end

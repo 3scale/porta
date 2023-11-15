@@ -1,5 +1,5 @@
 Feature: Buyer signup
-  I want to reset my password as a buyer
+  A buyer wants to reset their password
 
   Background:
     Given a provider exists
@@ -7,9 +7,18 @@ Feature: Buyer signup
     And the provider account allows signups
 
   @recaptcha
+  @javascript
   Scenario: Spam protection detects suspicious behavior
     Given the provider has spam protection set to suspicious only
     When the buyer wants to reset their password
-    Then 15 seconds pass
-    Then the buyer doesn't need to pass the captcha after reset password form is filled wrong
-    But the buyer will need to pass the captcha after reset password form is filled in too quickly
+    Then the buyer won't need to pass the captcha after reset password form is filled in wrong
+    But the buyer will need to pass the captcha after reset password form is filled in suspiciously
+
+  @recaptcha
+  @javascript
+  Scenario: Spam protection detects multiple attempts in less than a minute
+    Given the provider has spam protection set to suspicious only
+    When the buyer wants to reset their password
+    Then the buyer won't need to pass the captcha after reset password form is filled in correctly
+    Then the buyer won't need to pass the captcha after reset password form is filled in again
+    But the buyer will need to pass the captcha after reset password form is filled in again
