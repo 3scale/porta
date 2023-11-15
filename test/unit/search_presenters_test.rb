@@ -6,7 +6,7 @@ class SearchPresentersTest < ActiveSupport::TestCase
   test 'index presenter as json' do
 
     provider = FactoryBot.create(:simple_account)
-    provider.sections << FactoryBot.create(:root_cms_section, :provider => provider)
+    provider.sections.to_a << FactoryBot.create(:root_cms_section, :provider => provider)
 
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs only: SphinxIndexationWorker do
@@ -32,7 +32,7 @@ class SearchPresentersTest < ActiveSupport::TestCase
 
   test 'pagination' do
     provider = FactoryBot.create(:simple_account)
-    provider.sections << section = FactoryBot.create(:root_cms_section, :provider => provider)
+    provider.sections.to_a << section = FactoryBot.create(:root_cms_section, :provider => provider)
 
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs only: SphinxIndexationWorker do

@@ -559,6 +559,12 @@ class Account < ApplicationRecord
     end
   end
 
+  def sections
+    # Filter out existing forum sections (builtin static pages) from the CMS sidebar and return 404
+    # if accessed via URL. TODO: Remove forums THREESCALE-6714
+    super.where.not(system_name: %i[forum categories posts topics user-topics])
+  end
+
   private
 
   def validate_timezone
