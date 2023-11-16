@@ -1,7 +1,8 @@
 require 'test_helper'
 require 'mail'
 
-class ThreeScale::EmailConfigurationInterceptorTest < ActiveSupport::TestCase
+# ActionMailer::TestCase clears the deliveries
+class ThreeScale::EmailConfigurationInterceptorTest < ActionMailer::TestCase
   class SimpleMailer < ActionMailer::Base
     def simple_message(from)
       mail to: "me@#{ThreeScale.config.superdomain}", body: "DIES-IST-EIN-TEST", subject: "HELLO.", from: from
