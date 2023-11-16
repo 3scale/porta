@@ -76,10 +76,10 @@ Feature: Buyer side messages
     And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"
-    And I press "Empty the received trash"
+    And I press "Delete received messages"
     Then I should not see a message from "foo.3scale.localhost" with subject "Hello"
     And there should be no message from provider "foo.3scale.localhost" to buyer "bob" with subject "Hello"
-    And I should not see button "Empty the received trash"
+    And I should not see button "Delete received messages"
 
   Scenario: Restoring a sent deleted message
     Given buyer "bob" has no messages
