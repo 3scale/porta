@@ -32,7 +32,7 @@ gem 'strong_migrations', '~> 0.6.8'
 group :assets do
   gem 'coffee-rails', '~> 5.0'
   gem 'non-stupid-digest-assets', '~> 1.0'
-  gem 'sprockets-rails'
+  gem 'sprockets-rails', '~> 3.2.1'
 end
 
 gem 'sass-rails', '~> 5.0.8'
@@ -85,7 +85,7 @@ gem 'dalli'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.13.10'
+gem 'nokogiri', '~> 1.13.6'
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
