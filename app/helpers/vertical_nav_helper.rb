@@ -194,8 +194,6 @@ module VerticalNavHelper
   # Service
   def service_nav_sections
     sections = []
-    return sections unless @service
-
     sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
     sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
