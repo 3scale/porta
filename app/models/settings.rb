@@ -46,9 +46,7 @@ class Settings < ApplicationRecord
   end
 
   def set_forum_enabled
-    if account
-      self.forum_public = self.forum_enabled = !!account.provider_can_use?(:forum)
-    end
+    self.forum_public = false if account
 
     true
   end

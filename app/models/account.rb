@@ -209,10 +209,6 @@ class Account < ApplicationRecord
     User.where(conditions).joins(:account).readonly(false)
   end
 
-  def forum!
-    forum || raise(ActiveRecord::RecordNotFound, "buyer accounts can't have forum")
-  end
-
   def build_forum(attributes = {})
     self.forum = Forum.new(attributes.reverse_merge(name: 'Forum'))
   end
@@ -561,6 +557,12 @@ class Account < ApplicationRecord
     else
       id
     end
+  end
+
+  def sections
+    # Filter out existing forum sections (builtin static pages) from the CMS sidebar and return 404
+    # if accessed via URL. TODO: Remove forums THREESCALE-6714
+    super.where.not(system_name: %i[forum categories posts topics user-topics])
   end
 
   private

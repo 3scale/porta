@@ -50,14 +50,6 @@ nav.DashboardNavigation
                                                   provider_admin_cms_changes_path,
                                                   notice: true
 
-    // Forum
-    - if show_forum_on_dashboard? && forum_topics.any?
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Forum Topic',
-                                    forum_topics,
-                                    admin_forum_path,
-                                    icon_name: 'comments'
-
     // Messages
     li.DashboardNavigation-list-item
       = dashboard_collection_link 'Message',

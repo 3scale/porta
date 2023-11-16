@@ -2,7 +2,7 @@ class Sites::ForumsController < Sites::BaseController
   activate_menu :audience, :forum, :settings
 
   before_action :authorize_forum_feature, :find_settings
-  before_action :active_settings_menu, unless: :forum_enabled?
+  before_action :active_settings_menu
 
   def edit
   end
@@ -25,10 +25,6 @@ class Sites::ForumsController < Sites::BaseController
 
   def find_settings
     @settings = current_account.settings
-  end
-
-  def forum_enabled?
-    current_account.forum_enabled?
   end
 
   def active_settings_menu
