@@ -81,7 +81,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby27: &system-builder-ruby27
-  image: quay.io/3scale/system-builder:ruby27
+  image: quay.io/3scale/system-builder:stream8
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -91,7 +91,7 @@ system-builder-ruby27: &system-builder-ruby27
     TZ: UTC
     MASTER_PASSWORD: p
     USER_PASSWORD: p
-    LC_ALL: en_US.UTF-8
+    LC_ALL: C.utf8
     RAILS_ENV: test
 
 mysql-container: &mysql-container
@@ -352,7 +352,7 @@ executors:
       - *system-builder-ruby27
     environment:
       DB: << parameters.database >>
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
 
   builder-with-mysql-ruby27: &builder-with-mysql-ruby27
     resource_class: small
@@ -361,7 +361,7 @@ executors:
       - *mysql-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-mysql
 
   builder-with-postgres-ruby27: &builder-with-postgres-ruby27
@@ -371,7 +371,7 @@ executors:
       - *postgres-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-postgresql
 
   builder-with-oracle-ruby27: &builder-with-oracle-ruby27
@@ -381,7 +381,7 @@ executors:
       - *oracle-db-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-oracle
 
   cucumber-with-mysql-ruby27: &cucumber-with-mysql-ruby27
