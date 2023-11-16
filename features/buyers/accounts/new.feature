@@ -12,10 +12,10 @@ Feature: Audience > Accounts > New
   Scenario: Creating an account without legal terms
     Given the provider has no legal terms
     When they go to the new buyer account page
-    And fill the form with:
-      | Organization/Group Name | Username | Email             |
-      | Alice's Web Widget      | alice    | alice@example.com |
-    And press "Create"
+    And the form is submitted with:
+      | Organization/Group Name | Alice's Web Widget |
+      | Username                | alice              |
+      | Email                   | alice@example.com  |
     Then the current page is the buyer account page for "Alice's Web Widget"
     And account "Alice's Web Widget" should be approved
     And user "alice" should be active

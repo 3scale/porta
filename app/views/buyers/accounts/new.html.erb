@@ -1,24 +1,36 @@
 <% content_for :page_header_title, "Create new Account" %>
 
-<%= semantic_form_for @buyer,
-                     :builder => Fields::FormBuilder,
-                     :url => admin_buyers_accounts_path do |form| %>
-  <% @plans.each do |plan| %>
-    <%= hidden_field_tag('plan_ids[]', plan.id) if plan.published? %>
-  <% end %>
+<div class="pf-c-card">
+  <div class="pf-c-card__body">
+    <%= semantic_form_for @buyer, builder: Fields::PatternflyFormBuilder,
+                                  url: admin_buyers_accounts_path,
+                                  html: { class: 'pf-c-form pf-m-limit-width' } do |form| %>
+      <% @plans.each do |plan| %>
+        <%= hidden_field_tag('plan_ids[]', plan.id) if plan.published? %>
+      <% end %>
 
-  <%= form.semantic_errors :plans %>
+      <%= form.semantic_errors :plans %>
 
-  <%= form.inputs :name => 'User Information', :for => [:user, @user ] do |user| %>
-    <%= user.user_defined_form %>
-    <%= user.input :password, :required => true %>
-  <% end %>
+      <section class="pf-c-form__section" role="group" aria-labelledby="form-section-user">
+        <div class="pf-c-form__section-title" id="form-section-user" aria-hidden="true">
+          User Information
+        </div>
+        <%= form.fields_for [:user, @user ] do |user| %>
+          <%= user.user_defined_form %>
+          <%= user.input :password, as: :patternfly_input, required: true %>
+        <% end %>
+      </section>
 
-  <%= form.inputs :name => 'Organization Information' do %>
-    <%= form.user_defined_form %>
-  <% end -%>
+      <section class="pf-c-form__section" role="group" aria-labelledby="form-section-org">
+        <div class="pf-c-form__section-title" id="form-section-org" aria-hidden="true">
+          Organization Information
+        </div>
+        <%= form.user_defined_form %>
+      </section>
 
-  <%= form.actions do %>
-    <%= form.commit_button 'Create' %>
-  <% end %>
-<% end %>
+      <%= form.actions do %>
+        <%= form.commit_button 'Create' %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
