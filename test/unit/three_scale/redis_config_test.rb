@@ -43,5 +43,39 @@ module ThreeScale
       assert config.key? :size
       assert_equal 5, config[:size]
     end
+
+    %i[ca_file ca_path].each do |param|
+      test "it takes given #{param} when provided" do
+        value = 'any_value'
+        raw_config = { url: 'rediss://my-secure-redis/1', ssl_params: {}}
+        raw_config[:ssl_params][param] = value
+
+        result = RedisConfig.new(raw_config)
+
+        assert result.key? :ssl_params
+        assert result[:ssl_params].key? param
+        assert_equal value, result[:ssl_params][param]
+      end
+    end
+
+    test 'it trusts on CAs in config/ca_cert.pem if no ca_file or ca_path are provided' do
+      FakeFS do
+        FakeFS::FileSystem.clone(file_fixture_path)
+        FakeFS::FileSystem.clone(Rails.root.join('config'))
+        FileUtils.cp file_fixture('ca_cert.pem'), Rails.root.join('config')
+
+        result = RedisConfig.new(url: 'rediss://my-secure-redis/1')
+
+        assert result.key? :ssl_params
+        assert result[:ssl_params].key? :ca_file
+        assert_equal Rails.root.join('config/ca_cert.pem').to_s, result[:ssl_params][:ca_file]
+      end
+    end
+
+    test "it doesn't trust any CA if no ca_file or ca_path are provided and config/ca_cert.pem doesn't exist" do
+      result = RedisConfig.new(url: 'rediss://my-secure-redis/1')
+
+      assert_not result.key? :ssl_params
+    end
   end
 end

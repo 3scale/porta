@@ -8,6 +8,8 @@ module ThreeScale
       raw_config.delete_if { |key, value| value.blank? }
       raw_config[:size] ||= raw_config.delete(:pool_size) if raw_config.key?(:pool_size)
 
+      load_default_ca_cert(raw_config)
+
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels
     end
@@ -55,6 +57,17 @@ module ThreeScale
         parsed_sentinel[:password] = password if password
         parsed_sentinel
       end
+    end
+
+    def load_default_ca_cert(conf)
+      return if conf[:ssl_params]&.key?(:ca_file) || conf[:ssl_params]&.key?(:ca_path)
+
+      cert_path = Rails.root.join('config/ca_cert.pem').to_s
+
+      return unless File.exist?(cert_path)
+
+      conf[:ssl_params] ||= {}
+      conf[:ssl_params][:ca_file] = cert_path
     end
   end
 end
