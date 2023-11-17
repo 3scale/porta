@@ -15,7 +15,7 @@ module ThreeScale::SpamProtection
       def probability(object)
         value = object.params[:timestamp]
 
-        return fail(value) if value.blank?
+        raise SpamDetectedError if value.blank?
 
         begin
           value = Time.zone.at(decode(value)).utc.to_i
