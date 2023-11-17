@@ -69,7 +69,7 @@ module ThreeScale::SpamProtection
         when :auto
           if spam?
             @store.mark_possible_spam
-            Rails.logger.debug "[SpamProtection][Integration] Captcha filled and object is spam - verifying captcha"
+            Rails.logger.debug "[SpamProtection][Integration] Spam detected or captcha filled - verifying captcha"
             verify_captcha(object)
           else
             Rails.logger.debug "[SpamProtection][Integration] Not Spam"
