@@ -35,7 +35,7 @@ class ThreeScale::JSONValidatorTest < ActiveSupport::TestCase
     json = { json_key: 'json_value' }
     schema = {}
     validator = @klass.new(json)
-    @klass.expects(:fully_validate).with(schema, json, any_parameters)
+    ::JSON::Validator.expects(:fully_validate).with(schema, json, any_parameters)
     validator.fully_validate(schema)
   end
 end
