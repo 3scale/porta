@@ -13,7 +13,7 @@ module ThreeScale::SpamProtection
         when "0"
           add_to_average(0)
         else
-          raise SpamCheckError # Immediately marks as bot
+          raise SpamDetectedError # Immediately marks as bot
         end
       end
     end

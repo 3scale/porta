@@ -26,7 +26,7 @@ module ThreeScale::SpamProtection::Checks
         (COUNT_ATTEMPTS - 1).times do
           assert_equal 0, subject.probability(object)
         end
-        assert_raise(ThreeScale::SpamProtection::Checks::SpamCheckError) { subject.probability(object) }
+        assert_raise(ThreeScale::SpamProtection::Checks::SpamDetectedError) { subject.probability(object) }
       end
     end
 
@@ -49,7 +49,7 @@ module ThreeScale::SpamProtection::Checks
         (COUNT_ATTEMPTS - 1).times do
           assert_equal 0, subject.probability(object)
         end
-        assert_raise(ThreeScale::SpamProtection::Checks::SpamCheckError) { subject.probability(object) }
+        assert_raise(ThreeScale::SpamProtection::Checks::SpamDetectedError) { subject.probability(object) }
       end
 
       travel_to(Time.zone.now + COUNT_PERIOD + 5.seconds) do

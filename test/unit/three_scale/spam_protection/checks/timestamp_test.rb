@@ -38,7 +38,7 @@ module ThreeScale::SpamProtection::Checks
       value = (Time.now.utc - TIMESTAMP_PERIOD - 5.seconds).to_i # Given value not properly encoded
       object.stubs(:params).returns({ timestamp: value })
 
-      assert_raise ThreeScale::SpamProtection::Checks::SpamCheckError do
+      assert_raise ThreeScale::SpamProtection::Checks::SpamDetectedError do
         subject.probability(object)
       end
     end

@@ -20,7 +20,7 @@ module ThreeScale::SpamProtection
         when 1..COUNT_ATTEMPTS # Attempts left
           add_to_average(0)
         else
-          raise SpamCheckError # No attempts left, mark as bot
+          raise SpamDetectedError # No attempts left, mark as bot
         end
       end
 

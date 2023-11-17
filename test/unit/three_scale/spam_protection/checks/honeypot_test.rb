@@ -24,7 +24,7 @@ module ThreeScale::SpamProtection::Checks
     test "detects a bot when the honeypot is checked" do
       object.stubs(:params).returns({ confirmation: '1' })
 
-      assert_raise ThreeScale::SpamProtection::Checks::SpamCheckError do
+      assert_raise ThreeScale::SpamProtection::Checks::SpamDetectedError do
         subject.probability(object)
       end
     end

@@ -6,7 +6,7 @@ module ThreeScale::SpamProtection
     HIDE_STYLE = "position: absolute; width: 1px; height: 0; left: 0; overflow: hidden;"
     SPAM_CHECKS_SECRET_KEY = -> { Rails.application.key_generator.generate_key('spam-protection-checks', 32) }
 
-    class SpamCheckError < StandardError; end
+    class SpamDetectedError < StandardError; end
 
     class Base
       def initialize(store)

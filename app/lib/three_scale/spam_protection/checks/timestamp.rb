@@ -22,7 +22,7 @@ module ThreeScale::SpamProtection
           add_to_average(diff_from_now(value))
         rescue StandardError => exception
           Rails.logger.error "[SpamProtection] malformed timestamp #{value}. Error: #{exception} Value: #{value}"
-          raise SpamCheckError # Immediately mark as bot
+          raise SpamDetectedError # Immediately mark as bot
         end
       end
 
