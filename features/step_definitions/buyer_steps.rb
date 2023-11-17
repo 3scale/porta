@@ -73,10 +73,6 @@ Given /^these buyers signed up to provider "([^"]*)"$/ do |provider_name, table|
   end
 end
 
-When /^I follow the link to create a new buyer account$/ do
-  click_link "Create new account"
-end
-
 When "{buyer} is approved" do |buyer|
   buyer.approve!
 end

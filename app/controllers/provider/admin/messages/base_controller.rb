@@ -11,7 +11,11 @@ class Provider::Admin::Messages::BaseController < FrontendController
     {
       totalEntries: @messages.total_entries,
       pageEntries: @messages.length,
-      newMessageHref: new_provider_admin_messages_outbox_path,
+      actions: [{
+        label: 'Compose Message',
+        href: new_provider_admin_messages_outbox_path,
+        variant: :primary
+      }],
       bulkActions: [{
         name: 'Delete',
         url: new_provider_admin_messages_bulk_trash_path(scope: scope),

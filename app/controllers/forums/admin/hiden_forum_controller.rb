@@ -6,6 +6,6 @@ class Forums::Admin::HidenForumController < FrontendController
   private
 
   def hide_forum
-    raise ActionController::RoutingError, '' unless current_account&.provider_can_use?(:forum)
+    raise ActionController::RoutingError, ''
   end
 end

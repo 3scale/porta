@@ -1,0 +1,92 @@
+- content_for :page_header_title, 'Accounts'
+
+- account_plans_size = presenter.account_plans_size
+- accounts = presenter.buyers.decorate
+
+= render 'shared/bulk_operations' do
+  p
+    ' You have selected <span class="count"></span> accounts
+    ' and you can make following operations with them:
+  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
+    = bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
+                                'Send email to selected accounts'
+    - if can?(:see, :account_plans) && account_plans_size > 1
+      = bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path,
+                                           'Transfer these accounts to different account plan'
+    = bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path,
+                                  'Approve, reject or make pending selected accounts'
+
+- if presenter.empty_state?
+  div class="pf-c-empty-state"
+    div class="pf-c-empty-state__content"
+      i class="fas fa-ghost pf-c-empty-state__icon" aria-hidden="true"
+      h1 class="pf-c-title pf-m-lg"
+        = t('.empty_state.title')
+      div class="pf-c-empty-state__body"
+        = t('.empty_state.body')
+      - if can?(:create, Account)
+        = link_to t('.empty_state.primary'), presenter.create_account_path, class: "pf-c-button pf-m-primary"
+
+- else
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'table_toolbar'
+
+  div class="pf-c-card"
+    table class="pf-c-table pf-m-grid-lg" role="grid" id="buyer_accounts" aria-label="Accounts table" data-toolbar-props=presenter.toolbar_props.to_json
+      thead
+        tr role="row"
+          td role="columnheader" scope="col" class="select pf-c-table__check"
+            label
+              = bulk_select_all
+          = th_sortable('org_name', 'Group/Org.')
+          th role="columnheader" scope="col"
+            | Admin
+          = th_sortable('created_at', 'Signup Date')
+          - if account_plans_size > 1
+            = th_sortable('plans.name', 'Plan')
+          - if can?(:see, :multiple_applications)
+            th role="columnheader" scope="col"
+              | Apps
+          = th_sortable('state', 'State')
+          th role="columnheader" scope="col" class="actions pf-m-fit-content"
+
+      tbody role="rowgroup"
+        - if presenter.empty_search_state?
+          = render partial: 'empty_state', locals: { colspan: can?(:see, :multiple_applications) ? 9 : 8,
+                                                    body: t('.empty_search.body') }
+        - else
+          - accounts.each do |account|
+            tr role="row" id=dom_id(account)
+              td class="pf-c-table__check select" role="cell" id=account.id
+                label
+                  = bulk_select_one account
+              td role="cell" data-label="Group/Org."
+                = link_to account.org_name, admin_buyers_account_path(account)
+              td role="cell" data-label="Admin"
+                = account.admin_user_display_name
+              td role="cell" data-label="Signup Date"
+                = account.created_at.strftime("%e %b, %Y")
+              - if account_plans_size > 1
+                td role="cell" data-label="Plan" class="plan"
+                  = h account.bought_account_plan.try(:name)
+              - if can?(:see, :multiple_applications)
+                td role="cell" data-label="Apps"
+                  = link_to current_user.accessible_cinstances.bought_by(account).count, admin_buyers_account_applications_path(account)
+              td role="cell" data-label="State" class="state"
+                = account_states_info(account)
+              td role="cell" class="pf-c-table__action actions operations"
+                ul.Actions
+                  - if account.admin_user.try!(:pending?)
+                    li.Actions-item
+                      = link_to_activate_buyer_user(account.admins.first)
+                  - elsif account.pending?
+                    li.Actions-item
+                      = action_link_to 'approve', approve_admin_buyers_account_path(account),
+                                                  method: :post
+                  - elsif can? :impersonate, account
+                    li.Actions-item
+                      = link_to "Act as", admin_buyers_account_impersonation_path(account),
+                                          method: :post,
+                                          target: '_blank',
+                                          title: 'Impersonate impersonation_admin user on this provider side',
+                                          class: 'action bolt'

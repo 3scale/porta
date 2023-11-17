@@ -17,16 +17,6 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     refute account.provider_can_use?(:policy_registry)
   end
 
-  def test_forum
-    account = FactoryBot.build_stubbed(:simple_account)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ forum: true })
-    assert account.provider_can_use?(:forum)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ forum: false })
-    refute account.provider_can_use?(:forum)
-  end
-
   def test_feature
     assert Logic::RollingUpdates.feature(:service_permissions)
 

@@ -61,10 +61,6 @@ module Provider::Admin::DashboardsHelper
     current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible? && current_account.account_plans.not_custom.size > 1
   end
 
-  def show_forum_on_dashboard?
-    current_account.forum_enabled? && current_account.forum.recent_topics.any?
-  end
-
   def show_subscriptions_on_dashboard?(service)
     service_plans_management_visible? && current_account.service_plans.not_custom.size > 1
   end

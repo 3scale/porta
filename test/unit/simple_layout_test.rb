@@ -13,7 +13,7 @@ class SimpleLayoutTest < ActiveSupport::TestCase
 
     assert SimpleLayout.new(@provider).import!
     assert_equal 2, @provider.layouts.count
-    assert_equal 14, @provider.builtin_static_pages.count
+    assert_empty @provider.builtin_static_pages
 
     CMS::Builtin::Page::ORIGINAL_PATHS.keys.each do |system_name|
       page = @provider.builtin_pages.find_by_system_name(system_name)

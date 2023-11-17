@@ -287,3 +287,11 @@ end
 When "the provider is at {}" do |page_name|
   visit path_to(page_name)
 end
+
+When "{provider} is suspended" do |provider|
+  provider.suspend!
+end
+
+Then "I see the support email of {provider}" do |provider|
+  step %(I should see "#{ThreeScale.config.support_email}")
+end
