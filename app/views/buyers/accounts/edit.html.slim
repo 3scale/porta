@@ -3,15 +3,14 @@
 
 - content_for :page_header_title, "Edit account #{@account.org_name} details"
 
-div
-  = semantic_form_for @account,
-                      url: admin_buyers_account_path(@account),
-                      builder: Fields::FormBuilder  do |form|
-    = form.inputs name: 'Contact Details', class: 'inputs' do
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @account, builder: Fields::PatternflyFormBuilder,
+                        url: admin_buyers_account_path(@account),
+                        html: { class: 'pf-c-form pf-m-limit-width' } do |form|
       = form.user_defined_form
 
-    / TODO: remove div and move class to form element
-    div class='pf-c-form'
       = form.actions do
         button class="pf-c-button pf-m-primary" type="submit" Update Account
+        a class="pf-c-button pf-m-link" href=admin_buyers_account_path(@account) Cancel
         = delete_buyer_link(@account)

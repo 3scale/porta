@@ -34,6 +34,7 @@ class Buyers::AccountsController < Buyers::BaseController
     account.vat_rate = vat if vat # vat_rate is protected attribute
 
     if account.update(account_params)
+      flash[:notice] = t('.success')
       redirect_to admin_buyers_account_path(account)
     else
       render :edit

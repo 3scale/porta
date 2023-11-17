@@ -1,5 +1,5 @@
 @javascript
-Feature: Audience > Accounts > New
+Feature: Audience > Accounts > Edit
 
   Background:
     Given a provider is logged in
@@ -14,11 +14,22 @@ Feature: Audience > Accounts > New
 
   Scenario: Editing an account
     Given they go to the buyer account edit page for "Pepe"
-    And fill in "Organization/Group Name" with "Pepito"
-    And press "Update Account"
-    Then they should see "Account: Pepito"
-    # TODO: And they should see the flash message "Account updated or something"
-    But should not see "Account: Pepe"
+    When the form is submitted with:
+      | Organization/Group Name | Pepito |
+    Then the current page is the buyer account page for "Pepito"
+    And should see the flash message "Account successfully updated"
+
+  Scenario: Admin changes its mind
+    Given they go to the buyer account edit page for "Pepe"
+    When they fill in "Organization/Group Name" with "Banana"
+    And follow "Cancel"
+    Then the current page is the buyer account page for "Pepe"
+
+  Scenario: Required fields and validation
+    Given they go to the buyer account edit page for "Pepe"
+    When the form is submitted with:
+      | Organization/Group Name | |
+    Then "Organization/Group Name" shows error "can't be blank"
 
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider
