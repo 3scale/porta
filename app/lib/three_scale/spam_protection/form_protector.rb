@@ -32,7 +32,7 @@ module ThreeScale::SpamProtection
 
     # Reads the store to decide whether to show the captcha or not.
     #
-    # The value is saved in the store from Protector#spam_check on a previous PU or POST request.
+    # The value is saved in the store from Protector#spam_check on a previous PUT or POST request.
     def to_str
       return ''.html_safe unless enabled?
 
