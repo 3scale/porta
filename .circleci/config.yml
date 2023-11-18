@@ -279,6 +279,12 @@ commands: # reusable commands with parameters
           name: Rspec tests
           command: |
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
+          environment: &malloc_preload
+            LD_PRELOAD: libautohbw.so.0
+            AUTO_HBW_SIZE: 10240G
+            AUTO_HBW_LOG: "-2"
+            MEMKIND_HBW_NODES: "0"
+            MEMKIND_HEAP_MANAGER: JEMALLOC
       - upload-artifacts
 
   cucumber-tests:
@@ -298,6 +304,7 @@ commands: # reusable commands with parameters
           command: |
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
+          environment: *malloc_preload
       - run:
           name: Run cucumber tests
           command: |
@@ -331,6 +338,7 @@ commands: # reusable commands with parameters
             if [ -s $list ]; then
               bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
             fi
+          environment: *malloc_preload
       - upload-artifacts
 
   save-gem-cache:
