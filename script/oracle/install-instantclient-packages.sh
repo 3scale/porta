@@ -22,7 +22,7 @@ function install_pkg {
   # using sudo due to `/opt/oracle/` i
   # set in: https://github.com/3scale/system-builder/blob/1bc3cec26bff04e0603e1a4908594b70a114dfe8/Dockerfile#L16-L17
   unzip -o "${file}" -d /opt/oracle
-  rm -rf "${file}"
+  [[ "$ORACLE_KEEP_DOWNLOADS" ]] || rm -rf "${file}"
 }
 
 
