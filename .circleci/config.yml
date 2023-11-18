@@ -28,9 +28,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
-assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key stream8-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key stream8-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key stream8-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
 oracle-libs-cache-key: &oracle-libs-cache-key ora1-{{ .Environment.CACHE_VERSION }}-oracle-libs-cache-{{ checksum "script/oracle/install-instantclient-packages.sh" }}
 
 restore-npm-cache: &restore-npm-cache
