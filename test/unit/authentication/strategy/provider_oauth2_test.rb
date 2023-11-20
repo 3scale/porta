@@ -168,6 +168,10 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
 
     include ActiveJob::TestHelper
 
+    teardown do
+      ActionMailer::Base.deliveries.clear
+    end
+
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
@@ -192,6 +196,8 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
         assert result.active?
         assert authentication_strategy.error_message.blank?
         assert authentication_strategy.new_user_created?
+
+        assert_empty ActionMailer::Base.deliveries
       end
     end
 
