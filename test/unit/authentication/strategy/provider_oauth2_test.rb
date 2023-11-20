@@ -166,11 +166,8 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
 
   class SsoSignupTest < ActiveSupport::TestCase
 
+    include ActionMailer::TestCase::ClearTestDeliveries
     include ActiveJob::TestHelper
-
-    teardown do
-      ActionMailer::Base.deliveries.clear
-    end
 
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
