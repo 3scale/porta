@@ -72,6 +72,18 @@ module ThreeScale
       end
     end
 
+    test 'it trusts on CAs in config/ca_cert.pem if ca_file or ca_path are provided empty' do
+      FakeFS do
+        FakeFS::FileSystem.clone(file_fixture_path)
+        FakeFS::FileSystem.clone(Rails.root.join('config'))
+        FileUtils.cp file_fixture('ca_cert.pem'), Rails.root.join('config')
+
+        result = RedisConfig.new(url: 'rediss://my-secure-redis/1', ssl_params: { ca_file: nil, ca_path: ''})
+
+        assert_equal Rails.root.join('config/ca_cert.pem').to_s, result[:ssl_params][:ca_file]
+      end
+    end
+
     test "it doesn't trust any CA if no ca_file or ca_path are provided and config/ca_cert.pem doesn't exist" do
       result = RedisConfig.new(url: 'rediss://my-secure-redis/1')
 

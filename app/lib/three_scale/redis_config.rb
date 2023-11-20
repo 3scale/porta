@@ -60,7 +60,7 @@ module ThreeScale
     end
 
     def load_default_ca_cert(conf)
-      return if conf[:ssl_params]&.key?(:ca_file) || conf[:ssl_params]&.key?(:ca_path)
+      return if conf.dig(:ssl_params, :ca_file).present? || conf.dig(:ssl_params, :ca_path).present?
 
       cert_path = Rails.root.join('config/ca_cert.pem').to_s
 
