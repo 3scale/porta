@@ -45,7 +45,7 @@ Feature: Audience > Accounts
       Given the provider has the following buyers:
         | Name          | State    | Plan    |
         | Alice         | approved | Default |
-        | Bob           | approved | Awesome |
+        | Bob           | rejected | Awesome |
         | Pending buyer | pending  | Tricky  |
 
     Scenario: The account plan is in the table
@@ -65,13 +65,13 @@ Feature: Audience > Accounts
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
         | Pending buyer | Pending  | Tricky  |
       And follow "Group/Org." within table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
         | Alice         | Approved | Default |
 
     Scenario: Ordering by plan name
@@ -79,7 +79,7 @@ Feature: Audience > Accounts
       When follow "Plan" within table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
         | Alice         | Approved | Default |
         | Pending buyer | Pending  | Tricky  |
       And follow "Plan" within table header
@@ -87,36 +87,36 @@ Feature: Audience > Accounts
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
         | Alice         | Approved | Default |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
 
-    Scenario: Ordering by plan name
+    Scenario: Ordering by state
       Given they go to the buyer accounts page
       When follow "State" within table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |
-        | Bob           | Approved | Awesome |
         | Pending buyer | Pending  | Tricky  |
+        | Bob           | Rejected | Awesome |
       And follow "State" within table header
       And should see following table:
         | Group/Org.    | State    | Plan    |
+        | Bob           | Rejected | Awesome |
         | Pending buyer | Pending  | Tricky  |
-        | Bob           | Approved | Awesome |
         | Alice         | Approved | Default |
 
-    Scenario: Ordering by plan name
+    Scenario: Ordering by signup date
       Given they go to the buyer accounts page
       When follow "Signup Date" within table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
         | Alice         | Approved | Default |
       And follow "Signup Date" within table header
       And should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |
-        | Bob           | Approved | Awesome |
+        | Bob           | Rejected | Awesome |
         | Pending buyer | Pending  | Tricky  |
 
     Scenario: Current user can export accounts to CSV
@@ -189,7 +189,6 @@ Feature: Audience > Accounts
       Then they should see following table:
         | Group/Org. | State    | Plan    |
         | Alice      | Approved | Default |
-        | Bob        | Approved | Awesome |
       And can able to reset the toolbar filter "state"
 
     @search
@@ -213,7 +212,7 @@ Feature: Audience > Accounts
       And they search "eric" using the toolbar
       Then they should see following table:
         | Group/Org. | State    | Plan    |
-        | Bob        | Approved | Awesome |
+        | Bob        | Rejected | Awesome |
 
     @search
     Scenario: Filtering by user's username
@@ -222,7 +221,7 @@ Feature: Audience > Accounts
       And they search "banana" using the toolbar
       Then they should see following table:
         | Group/Org. | State    | Plan    |
-        | Bob        | Approved | Awesome |
+        | Bob        | Rejected | Awesome |
 
     @search
     Scenario: Recently created account is searchable
@@ -239,7 +238,7 @@ Feature: Audience > Accounts
       And they search "$bob" using the toolbar
       Then they should see following table:
         | Group/Org. | State    | Plan    |
-        | Bob        | Approved | Awesome |
+        | Bob        | Rejected | Awesome |
       But they search "b$ob" using the toolbar
       Then they should see an empty search state
 
