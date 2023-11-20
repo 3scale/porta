@@ -284,6 +284,25 @@ World(Module.new do
       service = Service.find_by!(name: Regexp.last_match(1))
       usage_rules_admin_service_path(service)
 
+    when /^the backends of the product$/
+      admin_service_backend_usages_path(Service.last)
+
+    when /^the backends of product "(.+?)"$/
+      product = Service.find_by!(name: $1)
+      admin_service_backend_usages_path(product)
+
+    when /^the new backend page for product "(.*)"$/
+      product = Service.find_by!(name: $1)
+      new_admin_service_backend_usage_path(product)
+
+    when /^the edit usage config page between "(.*)" and "(.*)"$/
+      if (service = Service.find_by!(name: $1))
+        config = service.backend_apis.find_by(name: $2)
+      elsif (service = Service.find_by!(name: $2))
+        config = service.backend_apis.find_by(name: $1)
+      end
+      edit_admin_service_backend_usage_path(service, config)
+
     #
     # Account plans (buyer side)
     #

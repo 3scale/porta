@@ -649,6 +649,16 @@ en:
           primary_action: Add a backend
         toolbar:
           primary: Add a backend
+        action_edit: Edit config with %{name}
+        action_delete: Delete config with %{name}
+      create:
+        success: Backend added to Product.
+        error: Couldn't add Backend to Product
+      update:
+        success: Backend usage was updated.
+      destroy:
+        success: The Backend was removed from the Product
+        error: The Backend cannot be removed from the Product
     services:
       forms:
         definition_settings:
@@ -1318,6 +1328,9 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      backend_api_config:
+        path: Changing the Public Path will only affect this Product.
+
       finance/billing_strategy:
         numbering_period: It will only change the friendly ID in invoices, not the billing period.
         charging_enabled:
