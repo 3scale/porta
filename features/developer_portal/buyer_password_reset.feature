@@ -11,7 +11,7 @@ Feature: Buyer signup
   Scenario: Spam protection detects suspicious behavior
     Given the provider has spam protection set to suspicious only
     When the buyer wants to reset their password
-    Then the buyer won't need to pass the captcha after reset password form is filled in wrong
+    Then the buyer won't need to pass the captcha after reset password form is filled in incorrectly
     But the buyer will need to pass the captcha after reset password form is filled in suspiciously
 
   @recaptcha

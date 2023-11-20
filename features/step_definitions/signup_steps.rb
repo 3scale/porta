@@ -87,9 +87,9 @@ module ReadonlyField
   end
 end
 
-Then "the buyer {will} need to pass the captcha after signup form is filled in {how}" do |will, how|
-  fill_in("Email", with: "Invalid email") if how == 'wrong'
-  fill_in('Email', with: "user@3scale.localhost") unless how == 'wrong'
+Then "the buyer {will} need to pass the captcha after signup form is filled in {word}" do |will, how|
+  fill_in("Email", with: "Invalid email") if how == 'incorrectly'
+  fill_in('Email', with: "user@3scale.localhost") unless how == 'incorrectly'
   check_hidden_honeypot if how == 'suspiciously'
   fill_in('Username', with: name)
   fill_in('Organization/Group Name', with: "User stuff")

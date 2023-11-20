@@ -69,5 +69,5 @@ Feature: Buyer signup
     Given the provider has spam protection set to suspicious only
     When the buyer wants to sign up
     And 15 seconds pass
-    Then the buyer won't need to pass the captcha after signup form is filled in wrong
+    Then the buyer won't need to pass the captcha after signup form is filled in incorrectly
     But the buyer will need to pass the captcha after signup form is filled in correctly

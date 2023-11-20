@@ -44,9 +44,9 @@ When "the buyer wants to reset their password" do
   step 'I follow "Forgot password?"'
 end
 
-Then "the buyer {will} need to pass the captcha after reset password form is filled in {how}" do |will, how|
-  fill_in("Email", with: "Invalid email") if how == 'wrong'
-  fill_in("Email", with: "zed@3scale.localhost") unless how == 'wrong'
+Then "the buyer {will} need to pass the captcha after reset password form is filled in {word}(again)" do |will, how|
+  fill_in("Email", with: "Invalid email") if how == 'incorrectly'
+  fill_in("Email", with: "zed@3scale.localhost") unless how == 'incorrectly'
   check_hidden_honeypot if how == 'suspiciously'
   click_on "Send instructions"
   page.should have_selector(RECAPTCHA_SCRIPT, visible: false) if will
