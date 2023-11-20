@@ -38,12 +38,12 @@ module ThreeScale::SpamProtection
       end
 
       def add_to_average(value)
-        Rails.logger.info("[SpamProtection] #{name} succeeded. Spam probability: #{value}")
+        Rails.logger.debug("[SpamProtection] #{name} succeeded. Spam probability: #{value}")
         value
       end
 
       def fail_check(value, probability = 1)
-        Rails.logger.info("[SpamProtection] #{name} failed with value #{value.inspect}. Spam probability: #{probability}")
+        Rails.logger.debug("[SpamProtection] #{name} failed with value #{value.inspect}. Spam probability: #{probability}")
         probability
       end
     end

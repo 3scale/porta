@@ -21,7 +21,7 @@ module ThreeScale::SpamProtection
 
     def spam?
       probability = spam_probability
-      Rails.logger.info { "[SpamProtection] probability is #{probability} and allowed level is #{SPAM_THRESHOLD}" }
+      Rails.logger.debug { "[SpamProtection] probability is #{probability} and allowed level is #{SPAM_THRESHOLD}" }
       probability >= SPAM_THRESHOLD
     end
   end

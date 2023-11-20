@@ -33,7 +33,7 @@ module ThreeScale::SpamProtection
         diff = current - time
         # linear for now, but would be cool to do exponential growth
         # as in http://en.wikipedia.org/wiki/File:Exponential_pdf.svg
-        Rails.logger.info "[SpamProtection] #{name} timestamp diff is #{diff} seconds"
+        Rails.logger.debug "[SpamProtection] #{name} timestamp diff is #{diff} seconds"
         if diff > TIMESTAMP_PERIOD
           0
         else
