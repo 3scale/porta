@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Provider::Admin::AccountsController < Provider::Admin::Account::BaseController
-  activate_menu! :buyers, :accounts, only: [:new]
   activate_menu :account, :overview
 
   before_action :find_countries, :only => [:edit, :update]
@@ -11,6 +10,8 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   before_action :disable_client_cache
 
   def new
+    activate_menu :buyers, :accounts, :listing
+
     @provider = current_account.buyers.new
     @user = @provider.admins.new
   end
