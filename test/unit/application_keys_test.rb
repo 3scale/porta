@@ -182,11 +182,11 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     @application.reload
     expected_updated_at = @application.updated_at + 2.hours
 
-    travel_to(2.hours.from_now) do
+    travel_to(expected_updated_at) do
       @application_keys.regenerate(key)
     end
-    assert_in_delta expected_updated_at, @application.updated_at, 1.second
 
+    assert_in_delta expected_updated_at, @application.updated_at, 1.second
   end
 
   test 'Value can include special characters as defined in the RFC 6749' do
