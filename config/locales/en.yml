@@ -406,6 +406,10 @@ en:
           form:
             submit_button_label: 'Update User'
       accounts:
+        create:
+          success: Tenant account was successfully created.
+        update:
+          success: The account information was updated.
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'

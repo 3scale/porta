@@ -23,7 +23,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
       ProviderUserMailer.activation(@user).deliver_later
-      flash[:notice] = 'Tenant account was successfully created.'
+      flash[:notice] = t('.success')
       redirect_to admin_buyers_account_path(@provider)
     else
       render :new
@@ -42,7 +42,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
     respond_to do |format|
       if @account.update(account_params)
-        flash[:notice] = 'The account information was updated.'
+        flash[:notice] = t('.success')
         format.html do
           redirect_to_success
         end
