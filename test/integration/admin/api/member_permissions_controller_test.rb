@@ -168,7 +168,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test "PUT: setting services, when some are non-existent only enables existent ones" do
     user.update({ allowed_sections: ['partners'], allowed_service_ids: [service1_id] })
-    params = { allowed_service_ids: [[service2_id.to_s], nonexistent_id.to_s], access_token: token }
+    params = { allowed_service_ids: [service2_id.to_s, nonexistent_id.to_s], access_token: token }
 
     put admin_api_permissions_path(id: user.id, format: :json), params: params
 
