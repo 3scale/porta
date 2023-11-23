@@ -60,7 +60,7 @@ Feature: Buyer side messages
     Then I should see "Wassup?"
     And I should see "Everything OK?"
 
-  Scenario: Restoring a deleted message
+  Scenario: Restoring a received deleted message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
     When I go to the dashboard
     And I follow "Messages 1"
@@ -76,7 +76,25 @@ Feature: Buyer side messages
     And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"
-    And I press "Empty the trash"
+    And I press "Delete received messages"
     Then I should not see a message from "foo.3scale.localhost" with subject "Hello"
     And there should be no message from provider "foo.3scale.localhost" to buyer "bob" with subject "Hello"
-    And I should not see button "Empty the trash"
+    And I should not see button "Delete received messages"
+
+  Scenario: Restoring a sent deleted message
+    Given buyer "bob" has no messages
+    When I go to the dashboard
+    And I follow "Messages"
+    And I follow "Compose"
+    Then I should see "foo.3scale.localhost"
+    When I fill in "Subject" with "Hello there"
+    And I fill in "Body" with "Just wanted to say hi"
+    And I press "Send"
+    Then a message should be sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Hello there" and body "Just wanted to say hi"
+    When I follow "Sent Messages"
+    Then I should see message to "foo.3scale.localhost" with subject "Hello there"
+    And follow "Delete message"
+    And I follow "Trash"
+    And I press a button to restore the message from "bob" with subject "Hello there"
+    And I follow "Sent Messages"
+    Then I should see a message from "boo" with subject "Hello there"

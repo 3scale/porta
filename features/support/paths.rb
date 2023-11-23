@@ -166,6 +166,9 @@ World(Module.new do
     when 'the provider account page'
       provider_admin_account_path
 
+    when 'the new provider account page'
+      new_provider_admin_account_path
+
     when 'the provider personal page'
       edit_provider_admin_user_personal_details_path
 
@@ -410,7 +413,8 @@ World(Module.new do
       new_admin_buyers_account_path
 
     when /^the buyer account page for "([^"]*)"$/,
-         /^the buyer account "([^"]*)" page$/
+         /^the buyer account "([^"]*)" page$/,
+         /^the overview page of account "([^"]*)"$/
       admin_buyers_account_path(Account.find_by_org_name!($1))
 
     when /^the buyer account edit page for "([^"]*)"$/
