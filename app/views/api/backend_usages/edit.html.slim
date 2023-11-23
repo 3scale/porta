@@ -10,5 +10,5 @@ div class="pf-c-card"
       = form.input :path, as: :patternfly_input, label: 'Public Path'
 
       = form.actions do
-        = form.commit_button 'Update'
+        button class="pf-c-button pf-m-primary" type="submit" Update
         a class="pf-c-button pf-m-link" href=admin_service_backend_usages_path(@service) Cancel
