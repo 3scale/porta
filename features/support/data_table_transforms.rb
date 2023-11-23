@@ -6,6 +6,12 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_alerts_table(table)
+    parameterize_headers(table)
+    table.map_column!(:application) { |app| Cinstance.find_by!(name: app) }
+    table
+  end
+
   def transform_applications_table(table)
     parameterize_headers(table)
     table.map_column!(:buyer) { |buyer| Account.buyers.find_by!(org_name: buyer) }

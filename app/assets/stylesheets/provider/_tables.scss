@@ -224,3 +224,11 @@ td.StatsMethodsTable-name {
 .pf-c-table form.search {
   display: none;
 }
+
+.pf-c-table {
+  tr.unread {
+    td[data-label] a {
+      font-weight: $font-weight-bold;
+    }
+  }
+}

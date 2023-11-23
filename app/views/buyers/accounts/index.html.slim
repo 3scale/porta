@@ -53,7 +53,7 @@
       tbody role="rowgroup"
         - if presenter.empty_search_state?
           = render partial: 'empty_state', locals: { colspan: can?(:see, :multiple_applications) ? 9 : 8,
-                                                    body: t('.empty_search.body') }
+                                                     body: t('.empty_search.body') }
         - else
           - accounts.each do |account|
             tr role="row" id=dom_id(account)

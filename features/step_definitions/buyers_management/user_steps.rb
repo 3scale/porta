@@ -44,5 +44,9 @@ When /^I navigate to the edit page of user "([^\"]*)" of buyer "([^\"]*)"$/ do |
   step %(I follow "#{buyer}")
   number_of_users = @provider.buyers.where(org_name: buyer).first!.users.count
   step %(I follow "#{number_of_users} Users")
-  step %(I follow "Edit" within the "#{user}" row)
+  find('tr', text: user).click_link('Edit')
+end
+
+Then "the user is a(n) {word}" do |role|
+  assert find('tr th', text: 'Role').has_sibling?('td', text: role)
 end

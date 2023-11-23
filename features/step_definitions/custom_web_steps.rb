@@ -130,22 +130,6 @@ Then /^(?:|I )should be at url for (.+)$/ do |page_name|
   end
 end
 
-# Finds a row witch contains the given content and restrict the action to that row.
-#
-#   Then I should see "foo" within the "bar" row
-#
-#   <table>
-#     <tr> <-- the 'I should see "foo"' will be restricted to this row
-#       <th>bar</th>
-#       <td>foo</th>
-#     </tr>
-#   </table>
-Then /^(.*) within the "([^"]*)" row$/ do |action, content|
-  within(:xpath, "//*[text()[contains(.,'#{content}')]]/ancestor::tr") do
-    step action
-  end
-end
-
 When /^(.*) within ([^:"]+)$/ do |lstep, scope|
   within(*selector_for(scope)) do
     step lstep

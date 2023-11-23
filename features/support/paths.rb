@@ -248,13 +248,11 @@ World(Module.new do
     when /^the overview page of product "([^"]+)"$/
       admin_service_path @provider.services.find_by!(name: $1)
 
-    when 'the API alerts page'
+    when 'the alerts page'
       admin_alerts_path
 
-    when /^the API alerts page of service "(.+?)" of provider "(.+?)"$/
-      provider = Account.providers.find_by_org_name! $2
-      service = provider.services.find_by_name! $1
-      admin_service_alerts_path(service)
+    when /^the alerts of "(.*)"$/
+      admin_service_alerts_path(Service.find_by!(name: $1))
 
     when /^the (edit|settings) page for service "([^"]+)" of provider "(.+?)"$/
       provider = Account.providers.find_by_org_name! $3
