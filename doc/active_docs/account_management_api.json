@@ -405,7 +405,6 @@
             "in": "path",
             "description": "ID of the application.",
             "x-data-threescale-name": "application_ids",
-            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -5878,10 +5877,6 @@
                     "type": "string",
                     "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter."
                   },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the metric."
-                  },
                   "description": {
                     "type": "string",
                     "description": "Description of the metric."
@@ -5889,8 +5884,7 @@
                 },
                 "required": [
                   "access_token",
-                  "friendly_name",
-                  "unit"
+                  "friendly_name"
                 ]
               }
             }
@@ -6005,10 +5999,6 @@
                   "friendly_name": {
                     "type": "string",
                     "description": "Descriptive Name of the metric."
-                  },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the metric."
                   },
                   "description": {
                     "type": "string",
