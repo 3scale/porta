@@ -55,6 +55,10 @@ When "I navigate to the Account Settings" do
   select_context 'Account Settings'
 end
 
+When "they select {string} from the context selector" do |context|
+  select_context context
+end
+
 private
 
 def context_selector

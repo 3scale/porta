@@ -176,17 +176,3 @@ toggled_input_selector = '[data-behavior="toggle-inputs"] legend'
 And(/^I toggle "([^"]*)"$/) do |name|
   find(toggled_input_selector, text: /#{name}/i).click
 end
-
-def assert_select_not_inclues_option(label, text)
-  if page.has_css?('.pf-c-form__label', text: label)
-    select = find_pf_select(label)
-    select.find('.pf-c-select__toggle-button').click
-    selector = '.pf-c-select__menu-item'
-  else
-    # DEPRECATED: remove when all selects have been replaced for PF4
-    ActiveSupport::Deprecation.warn "[cucumber] Detected a select not using PF4 css"
-    selector = 'option'
-    select = find_field(label)
-  end
-  assert select.all(selector, text: text).empty?, %(The "#{label}" select should not contain "#{text}" option, but it does)
-end
