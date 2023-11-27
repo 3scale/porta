@@ -124,7 +124,7 @@ class Cinstance < Contract
   validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },
-            allow_nil: true, allow_blank: true
+            allow_blank: true
 
   scope :order_for_dev_portal, -> { order(service_id: :desc, created_at: :desc) }
 
