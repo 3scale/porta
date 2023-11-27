@@ -81,7 +81,7 @@ class Cinstance < Contract
     acceptance: { :message => 'you should agree on the terms and conditions for this plan first' }
 
   validates :plan, presence: true
-  validates :name,        presence: { :if => :name_required? }
+  validates :name, presence: { :if => :name_required? }
 
   after_commit :push_webhook_key_updated, :on => :update, :if => :user_key_updated?
   after_commit :push_application_updated_event, on: :update, unless: :only_traffic_updated?
@@ -118,7 +118,10 @@ class Cinstance < Contract
   # NOTE: base64 format also accepts forward slash (/), however we don't allow it because of the restriction on the backend
   USER_KEY_FORMAT = /(([\w\-.]+)|([A-Za-z0-9+]{4})*([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==))/.freeze
 
-  validates :application_id, format: { with: /\A[\x20-\x7E]+\Z/ }, length: { in: 4..255 }
+  # The following characters are accepted:
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces and / are not allowed
+  validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },
             allow_nil: true, allow_blank: true

@@ -189,12 +189,22 @@ class ApplicationKeysTest < ActiveSupport::TestCase
 
   end
 
-  test 'Value can include special characters as defined in the RFC 6749' do
-    generate_random_key_with_all_chars_of_rfc_6749 = -> { ("\x20".."\x7e").to_a.shuffle.join }
-    app_key = FactoryBot.build(:application_key, value: (value = generate_random_key_with_all_chars_of_rfc_6749.call))
+  test 'value can include special characters as defined in the RFC 6749' do
+    # generate random key with all chars of RFC 6749 except /
+    random_key = -> { [*"\x21".."\x2E", *"\x30".."\x7E"].shuffle.join }
+    app_key = FactoryBot.build(:application_key, value: (value = random_key.call))
 
     assert app_key.save
     assert value, app_key.reload.value
+  end
+
+  test 'value cannot include slash or spaces' do
+    ['app_id with space', 'app_id-with-/-slash'].each do |key|
+      app_key = FactoryBot.build(:application_key, value: key)
+
+      assert app_key.invalid?
+      assert app_key.errors[:value].present?
+    end
   end
 
   test 'is audited' do
