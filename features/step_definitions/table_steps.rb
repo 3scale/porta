@@ -64,19 +64,8 @@ When "table is sorted by {string}" do |column|
   find(".pf-c-table__sort", text: column).click
 end
 
-# Then /^I should see the following table:$/ do |expected|
-#   table = if has_css?('.pf-c-table')
-#             extract_pf4_table
-#           else
-#             extract_table('table', 'tr', 'th,td')
-#           end
-
-#   expected.diff! table
-# rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
-#   if ENV['CI']
-#     puts error.message
-#     puts expected.to_s
-#   end
-
-#   raise
-# end
+When "{} in the {ordinal} row" do |lstep, n|
+  within "table tbody tr:nth-child(#{n})" do
+    step lstep
+  end
+end

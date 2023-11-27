@@ -435,6 +435,6 @@ ParameterType(
 
 ParameterType(
   name: 'ordinal',
-  regexp: /(\d+)(?:st|rn|nd|th)/,
+  regexp: /(\d+)(?:st|rd|nd|th)/,
   transformer: ->(value) { value.to_i }
 )
