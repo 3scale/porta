@@ -5005,7 +5005,7 @@
     "/admin/api/backend_apis.json": {
       "get": {
         "summary": "Backend List",
-        "description": "Returns the list of backend API's. The results can be paginated.",
+        "description": "Returns the list of backend APIs. The results can be paginated.",
         "tags": [
           "Backend APIs"
         ],
