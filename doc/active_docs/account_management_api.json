@@ -405,6 +405,7 @@
             "in": "path",
             "description": "ID of the application.",
             "x-data-threescale-name": "application_ids",
+            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -5004,7 +5005,7 @@
     "/admin/api/backend_apis.json": {
       "get": {
         "summary": "Backend List",
-        "description": "Returns the list of backend apis. The results can be paginated.",
+        "description": "Returns the list of backend API's. The results can be paginated.",
         "tags": [
           "Backend APIs"
         ],
@@ -5511,7 +5512,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics.json": {
       "get": {
         "summary": "Backend Metric List",
-        "description": "Returns the list of metrics of a backend api.",
+        "description": "Returns the list of metrics of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5562,7 +5563,7 @@
       },
       "post": {
         "summary": "Backend Metric Create",
-        "description": "Creates a metric on a backend api.",
+        "description": "Creates a metric on a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5625,7 +5626,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json": {
       "get": {
         "summary": "Backend Metric Read",
-        "description": "Returns the metric of a backend api.",
+        "description": "Returns the metric of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5667,7 +5668,7 @@
       },
       "put": {
         "summary": "Backend Metric Update",
-        "description": "Updates the metric of a backend api.",
+        "description": "Updates the metric of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5731,7 +5732,7 @@
       },
       "delete": {
         "summary": "Backend Metric Delete",
-        "description": "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits.",
+        "description": "Deletes the metric of a backend API. When you delete a metric or a method, it will also remove all the associated limits.",
         "tags": [
           "Backend APIs"
         ],
@@ -5775,7 +5776,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json": {
       "get": {
         "summary": "Backend Method List",
-        "description": "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric.",
+        "description": "List the methods of a metric that belongs to a backend API. Methods are metrics that are children of a parent metric.",
         "tags": [
           "Backend APIs"
         ],
@@ -5835,7 +5836,7 @@
       },
       "post": {
         "summary": "Backend Method Create",
-        "description": "Creates a method under a metric that belongs to a backend api.",
+        "description": "Creates a method under a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5902,7 +5903,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json": {
       "get": {
         "summary": "Backend Method Read",
-        "description": "Returns the method of a metric that belongs to a backend api.",
+        "description": "Returns the method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5953,7 +5954,7 @@
       },
       "put": {
         "summary": "Backend Method Update",
-        "description": "Updates a method of a metric that belongs to a backend api.",
+        "description": "Updates a method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -6022,7 +6023,7 @@
       },
       "delete": {
         "summary": "Backend Method Delete",
-        "description": "Deletes the method of a metric that belongs to a backend api.",
+        "description": "Deletes the method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -9822,8 +9823,7 @@
           }
         },
         "required": [
-          "access_token",
-          "name"
+          "access_token"
         ],
         "additionalProperties": {
           "type": "string"
