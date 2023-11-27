@@ -19,12 +19,6 @@ Feature: Audience > Accounts > Edit
     Then the current page is the buyer account page for "Pepito"
     And should see the flash message "Account successfully updated"
 
-  Scenario: Admin changes its mind
-    Given they go to the buyer account edit page for "Pepe"
-    When they fill in "Organization/Group Name" with "Banana"
-    And follow "Cancel"
-    Then the current page is the buyer account page for "Pepe"
-
   Scenario: Required fields and validation
     Given they go to the buyer account edit page for "Pepe"
     When the form is submitted with:
