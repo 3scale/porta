@@ -34,7 +34,7 @@ Given "a service with a {spec_version} spec" do |swagger_version|
 end
 
 And "an admin wants to update the spec" do
-  visit edit_admin_service_api_doc_path(service_id: @service.id, id: @api_doc_service.id)
+  visit edit_admin_service_api_doc_path(service_id: @api_doc_service.service, id: @api_doc_service)
 end
 
 When "they try to update the spec with invalid data" do
