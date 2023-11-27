@@ -5,14 +5,14 @@ class Api::AlertsIndexPresenter
 
   def initialize(raw_alerts:, params:, service:, current_account:)
     @raw_alerts = raw_alerts
-    @params = params
     @service = service
-    @current_account = current_account
+
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     @sorting_params = [params[:sort], params[:direction]]
+    @search = new_search(params, current_account)
   end
 
-  attr_reader :raw_alerts, :params, :service, :current_account, :pagination_params, :sorting_params
+  attr_reader :raw_alerts, :service, :pagination_params, :sorting_params, :search
 
   delegate :total_entries, to: :alerts
 
@@ -70,20 +70,19 @@ class Api::AlertsIndexPresenter
 
   private
 
-  def search
-    if @search.nil?
-      # default to account_id and cinstance_id params if no search hash is passed
-      search_params = params.fetch(:search) { params.slice(:account_id, :cinstance_id) }
+  def new_search(params, current_account)
+    # default to account_id and cinstance_id params if no search hash is passed
+    search_params = params.fetch(:search) { params.slice(:account_id, :cinstance_id) }
 
-      @search = ThreeScale::Search.new(search_params)
+    search = ThreeScale::Search.new(search_params)
 
-      if (account = @search.account.presence)
-        # HACK: threescale/search would remove all blank entries including empty array. To prevent
-        # that, pass -1 as id (which never exists) to return no results.
-        @search.account_id = current_account.buyers.scope_search(account).pluck(:id).presence || -1
-      end
+    if (account = search.account.presence)
+      # HACK: threescale/search would remove all blank entries including empty array. To prevent
+      # that, pass -1 as id (which never exists) to return no results.
+      search.account_id = current_account.buyers.scope_search(account).pluck(:id).presence || -1
     end
-    @search
+
+    search
   end
 
   def t(string, opts = {})
