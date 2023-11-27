@@ -1382,8 +1382,8 @@ en:
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and up to 256 characters."
-        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and between 5 and 255 characters."
+        user_key: "Allowed characters: [A-Z a-z 0-9 - _ .], or Base64 format without forward slash (/), no spaces and up to 256 characters."
+        key: "Allowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
 
       cms:
         page:
