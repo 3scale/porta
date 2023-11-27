@@ -7,13 +7,12 @@ class Api::AlertsIndexPresenter
     @raw_alerts = raw_alerts
     @params = params
     @service = service
+    @current_account = current_account
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     @sorting_params = [params[:sort], params[:direction]]
-
-    do_account_weird_stuff(current_account)
   end
 
-  attr_reader :raw_alerts, :params, :service, :pagination_params, :sorting_params
+  attr_reader :raw_alerts, :params, :service, :current_account, :pagination_params, :sorting_params
 
   delegate :total_entries, to: :alerts
 
@@ -72,19 +71,19 @@ class Api::AlertsIndexPresenter
   private
 
   def search
-    # default to account_id and cinstance_id params if no search hash is passed
-    search_params = params.fetch(:search) { params.slice(:account_id, :cinstance_id) }
+    if @search.nil?
+      # default to account_id and cinstance_id params if no search hash is passed
+      search_params = params.fetch(:search) { params.slice(:account_id, :cinstance_id) }
 
-    @search ||= ThreeScale::Search.new(search_params)
-  end
+      @search = ThreeScale::Search.new(search_params)
 
-  # TODO: this method looks very fishy, verify it is valid and useful.
-  def do_account_weird_stuff(current_account)
-    if (account_search = ThreeScale::Search.new(search.account).presence) # rubocop:disable Style/GuardClause
-      # threescale/search would remove all blank entries (including empty array)
-      # so to prevent that, pass -1 as id (which never exists) to return no results
-      search.account_id = current_account.buyers.scope_search(account_search).pluck(:id).presence || -1
+      if (account = @search.account.presence)
+        # HACK: threescale/search would remove all blank entries including empty array. To prevent
+        # that, pass -1 as id (which never exists) to return no results.
+        @search.account_id = current_account.buyers.scope_search(account).pluck(:id).presence || -1
+      end
     end
+    @search
   end
 
   def t(string, opts = {})
