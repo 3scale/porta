@@ -80,7 +80,7 @@ class Api::AlertsIndexPresenter
 
   # TODO: this method looks very fishy, verify it is valid and useful.
   def do_account_weird_stuff(current_account)
-    if (account_search = ThreeScale::Search.new(search.account)) # rubocop:disable Style/GuardClause
+    if (account_search = ThreeScale::Search.new(search.account).presence) # rubocop:disable Style/GuardClause
       # threescale/search would remove all blank entries (including empty array)
       # so to prevent that, pass -1 as id (which never exists) to return no results
       search.account_id = current_account.buyers.scope_search(account_search).pluck(:id).presence || -1
