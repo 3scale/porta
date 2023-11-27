@@ -111,14 +111,14 @@ class Cinstance < Contract
   validate :same_service, on: :update, if: :plan_id_changed?
 
   # letter, number, underscore (_), hyphen-minus (-), dot (.), base64 format
-  # In base64 encoding, the character set is [A-Z,a-z,0-9,and + /], if rest length is less than 4, fill of '=' character.
-  # ^([A-Za-z0-9+/]{4})* means the String start with 0 time or more base64 group.
-  # ([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==) means the String must end of 3 forms in [A-Za-z0-9+/]{4} or [A-Za-z0-9+/]{3}= or [A-Za-z0-9+/]{2}==
+  # In base64 encoding, the character set is [A-Z,a-z,0-9,and +], if rest length is less than 4, fill of '=' character.
+  # ^([A-Za-z0-9+]{4})* means the String start with 0 time or more base64 group.
+  # ([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==) means the String must end of 3 forms in [A-Za-z0-9+]{4} or [A-Za-z0-9+]{3}= or [A-Za-z0-9+]{2}==
   # matches also the non 64B case with (\A[\w\-\.]+\Z)
-  USER_KEY_FORMAT = /(([\w\-\.]+)|([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==))/
+  # NOTE: base64 format also accepts forward slash (/), however we don't allow it because of the restriction on the backend
+  USER_KEY_FORMAT = /(([\w\-.]+)|([A-Za-z0-9+]{4})*([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==))/.freeze
 
   validates :application_id, format: { with: /\A[\x20-\x7E]+\Z/ }, length: { in: 4..255 }
-
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },
             allow_nil: true, allow_blank: true
