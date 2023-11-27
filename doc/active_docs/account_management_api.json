@@ -5872,15 +5872,15 @@
                   },
                   "friendly_name": {
                     "type": "string",
-                    "description": "Descriptive Name of the metric."
+                    "description": "Descriptive Name of the method."
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter."
+                    "description": "System Name of the method. If blank a system_name will be generated for you from the friendly_name parameter."
                   },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
@@ -5999,11 +5999,11 @@
                   },
                   "friendly_name": {
                     "type": "string",
-                    "description": "Descriptive Name of the metric."
+                    "description": "Descriptive Name of the method."
                   },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
@@ -7833,7 +7833,7 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
+                    "description": "System Name of the method. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
                   },
                   "unit": {
                     "type": "string",
@@ -7967,11 +7967,11 @@
                   },
                   "unit": {
                     "type": "string",
-                    "description": "Measure unit of the metric."
+                    "description": "Measure unit of the method."
                   },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
