@@ -76,7 +76,7 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
   end
 end
 
-Given "the {provider} has the following applications:" do |provider, table|
+Given "{provider} has the following applications:" do |provider, table|
   transform_applications_table(table)
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]

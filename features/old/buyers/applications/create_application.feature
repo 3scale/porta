@@ -20,7 +20,7 @@ Feature: Create application from Account
 
   Scenario: Create an application in single application mode
     Given provider "foo.3scale.localhost" has multiple applications disabled
-    And the provider "foo.3scale.localhost" has the following applications:
+    And the provider has the following applications:
       | Buyer | Name   | Plan  |
       | bob   | BobApp | Basic |
     Then buyer "bob" should not be allowed to create more applications

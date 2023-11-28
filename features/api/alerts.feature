@@ -8,7 +8,7 @@ Feature: Audience > Applications > Alerts
     And a product "API 2"
     And the product has an application plan "Plan 2"
     And a buyer "Jane" of the provider
-    And the the provider has the following applications:
+    And the provider has the following applications:
       | Buyer | Name          | Plan   |
       | Jane  | Application 1 | Plan 1 |
       | Jane  | Application 2 | Plan 2 |

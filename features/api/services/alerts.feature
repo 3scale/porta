@@ -7,7 +7,7 @@ Feature: Product > Analytics > Alerts
     And the provider has a free application plan "Default"
     And a buyer "Jane" of the provider
     And a buyer "Bob" of the provider
-    And the the provider has the following applications:
+    And the provider has the following applications:
       | Buyer | Name     | Plan    |
       | Jane  | Jane App | Default |
       | Bob   | Bob App  | Default |
