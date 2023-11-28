@@ -599,7 +599,7 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'App ID can include special characters as defined in the RFC 6749' do
-    # generate random key with all chars of RFC 6749 except /
+    # generate random key with all chars of RFC 6749 except / and spaces
     random_key = -> { [*"\x21".."\x2E", *"\x30".."\x7E"].shuffle.join }
     cinstance = FactoryBot.build(:cinstance, application_id: (app_id = random_key.call))
 
