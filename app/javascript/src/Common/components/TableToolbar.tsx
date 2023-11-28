@@ -28,8 +28,7 @@ import type { Props as SearchInputProps } from 'Common/components/ToolbarSearch'
 import type { BulkAction } from 'Common/components/BulkActionsDropdown'
 import type { FunctionComponent } from 'react'
 
-interface ToolbarAction extends ButtonProps {
-  label: string;
+type ToolbarAction = Pick<ButtonProps, 'data' | 'href' | 'label' | 'variant'> & {
   isPersistent?: boolean;
 }
 
@@ -135,8 +134,8 @@ const TableToolbar: FunctionComponent<Props> = ({
                   <Dropdown
                     isFlipEnabled
                     isPlain
-                    dropdownItems={overflow.map(({ label, href, isShared }) => (
-                      <OverflowMenuDropdownItem key={label} component="a" href={href} isShared={isShared}>
+                    dropdownItems={overflow.map(({ label, ...btnProps }) => (
+                      <OverflowMenuDropdownItem key={label} component="a" {...btnProps}>
                         {label}
                       </OverflowMenuDropdownItem>
                     ))}

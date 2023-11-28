@@ -27,6 +27,8 @@ module HtmlSelectorsHelper
       '#account_details'
     when 'service widget'
       '.service-widget'
+    when 'the products widget'
+      '#products-widget'
 
     #
     # Invoicing helpers

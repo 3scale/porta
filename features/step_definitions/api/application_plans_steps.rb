@@ -16,6 +16,10 @@ When "the (default )service has a default application plan" do
   @service.update!(default_application_plan: plan)
 end
 
+When "{product} has an application plan {string}" do |product, name|
+  @plan = FactoryBot.create(:application_plan, issuer: product, name: name)
+end
+
 When "an admin unsets the default application plan" do
   visit admin_service_application_plans_path(@service)
   select_default_plan_by_name "No plan selected"

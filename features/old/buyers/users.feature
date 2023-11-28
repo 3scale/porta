@@ -83,11 +83,11 @@ Feature: Buyer users management
     And I navigate to the edit page of user "bob" of buyer "SpaceWidgets"
     And I choose "Admin" in the user role field
     And I press "Update User"
-    Then I should see "admin" within the "Role" row
+    Then the user is an admin
     When I follow "Edit"
     And I choose "Member" in the user role field
     And I press "Update User"
-    Then I should see "member" within the "Role" row
+    Then the user is a member
 
   Scenario: Editing role of the only buyer admin
     Given buyer "SpaceWidgets" has only one admin "alice"

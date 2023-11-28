@@ -639,6 +639,26 @@ en:
             details from your customers?
 
   api:
+    alerts:
+      index:
+        empty_state:
+          title: All clear
+          body: There are no recent alerts or violations.
+        empty_search:
+          title: No results
+          body: There are no recent alerts matching that search criteria.
+          primary: Clear all filters
+        read_all_button:
+          label: Mark all as read
+          confirm: Do you really want to mark all alerts as read?
+        purge_button:
+          label: Delete all
+          confirm: Do you really want to delete all alerts and violations?
+        search_placeholder: Search for accounts and applications
+        page_title:
+          service: Alerts
+          all: Alerts for all services
+        delete_alert_confirmation: Do you really want to delete this alert?
     applications:
       edit:
         delete_confirmation: Are you sure you want to delete this application?
@@ -653,6 +673,16 @@ en:
           primary_action: Add a backend
         toolbar:
           primary: Add a backend
+        action_edit: Edit config with %{name}
+        action_delete: Delete config with %{name}
+      create:
+        success: Backend added to Product.
+        error: Couldn't add Backend to Product
+      update:
+        success: Backend usage was updated.
+      destroy:
+        success: The Backend was removed from the Product
+        error: The Backend cannot be removed from the Product
     services:
       forms:
         definition_settings:
@@ -1322,6 +1352,9 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      backend_api_config:
+        path: Changing the Public Path will only affect this Product.
+
       finance/billing_strategy:
         numbering_period: It will only change the friendly ID in invoices, not the billing period.
         charging_enabled:
@@ -1516,3 +1549,9 @@ en:
   action_controller:
     errors:
       unknown_format: 'The server does not understand "%{request_format}" request.'
+
+  shared:
+    empty_search:
+      title: No results
+      body: There are no items matching your search criteria.
+      primary: Clear all filters

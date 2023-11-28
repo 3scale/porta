@@ -52,6 +52,16 @@ When "(I )fill in the following:" do |fields|
 end
 
 When "the form is submitted with:" do |table|
+  submit_form_with table
+end
+
+When "the modal is submitted with:" do |table|
+  within 'div.pf-c-modal-box' do
+    submit_form_with table
+  end
+end
+
+def submit_form_with(table)
   table.rows_hash.each { |name, value| fill_in(name, with: value) }
   find('.pf-c-form__actions button[type="submit"]', wait: 0).click
 end
@@ -64,6 +74,12 @@ When "(I )select {string} from {string}" do |value, field|
     ActiveSupport::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
     find_field(field).find(:option, value).select_option
   end
+end
+
+Then "(they )can't select {string} from {string}" do |option, label|
+  select = find_pf_select(label)
+  select.find('.pf-c-select__toggle').click unless select.has_css?('.pf-c-select__menu', wait: 0)
+  assert_not select.has_css?('.pf-c-select__menu .pf-c-select__menu-item', text: option, wait: 0)
 end
 
 When "(I )check {string}" do |field|

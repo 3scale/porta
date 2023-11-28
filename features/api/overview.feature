@@ -1,7 +1,7 @@
 Feature: Product > Overview page
   Background:
     Given a provider is logged in with a product "My Product"
-    And it uses the following backends:
+    And the product uses the following backends:
       | Name      | path |
       | Backend 3 | /v3  |
       | Backend 2 | /v2  |
