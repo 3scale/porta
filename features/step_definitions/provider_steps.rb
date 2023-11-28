@@ -208,7 +208,7 @@ When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do
   step %(I am on the #{account_or_service}s admin page)
   step %(I follow "#{account_or_application_name}")
   step 'I follow "Edit"'
-  step 'I follow "Delete" and I confirm dialog box'
+  step 'I follow "Delete" and confirm the dialog'
   step %(I should see "The #{account_or_service} was successfully deleted.")
 end
 

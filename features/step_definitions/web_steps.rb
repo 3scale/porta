@@ -141,3 +141,14 @@ end
 When 'I change to tab {string}' do |tab|
   find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
 end
+
+Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
+  if rack_test?
+    step original
+  else
+    accept_confirm(text) do
+      step original
+    end
+    wait_for_requests
+  end
+end

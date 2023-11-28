@@ -17,6 +17,6 @@ Feature: Create invoice
     And I follow "Create invoice"
     Then I should see "Invoice successfully created"
     And I should see "open"
-    Then I follow "Create invoice" and I confirm dialog box "You cannot create a new invoice for 'zoidberg' since it already has one open. Please issue it before creating a new one."
+    Then I follow "Create invoice" and confirm the dialogYou cannot create a new invoice for 'zoidberg' since it already has one open. Please issue it before creating a new one.
     When I follow "2009-01-00000001"
     Then I should see "Invoice for January 2009"
