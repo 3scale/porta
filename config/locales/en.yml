@@ -520,6 +520,8 @@ en:
           success:
             one: The account's plan was changed successfully.
             other: Successfully changed the plan of %{count} accounts.
+      update:
+        success: Account successfully updated
 
     applications:
       bulk:
