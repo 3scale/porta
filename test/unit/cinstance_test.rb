@@ -447,7 +447,7 @@ class CinstanceTest < ActiveSupport::TestCase
       cinstance.valid?
     end
 
-    ['you-&$#!!!', 'k'*257, 'aGVhb+Jx/g==', 'I have spaces'].each do |invalid_key|
+    ['you-&$#!!!', 'k'*257, 'aGVhb+Jx/g==', 'I have spaces', "", nil].each do |invalid_key|
       cinstance.user_key = invalid_key
       assert cinstance.invalid?
       assert cinstance.errors[:user_key].present?

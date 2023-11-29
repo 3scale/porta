@@ -23,9 +23,10 @@ class Cinstance < Contract
     backend.has_many :application_keys, &::ApplicationKey::AssociationExtension
   end
 
-  before_create :set_user_key
-  before_create :set_service_id
   before_validation :set_service_id
+  before_validation :set_user_key, on: :create
+
+  before_create :set_service_id
   before_create :set_provider_public_key
   before_create :accept_on_create, :unless => :live?
 
@@ -123,8 +124,7 @@ class Cinstance < Contract
   # Spaces and / are not allowed
   validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
 
-  validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },
-            allow_blank: true
+  validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 }
 
   scope :order_for_dev_portal, -> { order(service_id: :desc, created_at: :desc) }
 
