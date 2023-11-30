@@ -9820,6 +9820,11 @@
           "first_daily_traffic_at": {
             "type": "string",
             "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+          },
+          "user_key": {
+            "type": "string",
+            "description": "User Key (API Key) of the application to be updated.",
+            "x-data-threescale-name": "user_keys"
           }
         },
         "required": [
