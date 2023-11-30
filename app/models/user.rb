@@ -86,7 +86,7 @@ class User < ApplicationRecord
 
   #TODO: this needs tests
   validates :password, length: { :minimum => 6, :allow_blank => true,
-                      :if => ->(u){ u.validate_password? and not u.send(:provider_requires_strong_passwords?) } }
+                      :if => ->(u){ u.validate_password? && !u.requires_strong_password?} }
 
   validates :extra_fields, length: { maximum: 65535 }
   validates :crypted_password, :salt, :remember_token, :activation_code,
@@ -410,6 +410,10 @@ class User < ApplicationRecord
 
   def provider_id_for_audits
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
+  end
+
+  def requires_strong_password?
+    provider_requires_strong_passwords?
   end
 
   protected
