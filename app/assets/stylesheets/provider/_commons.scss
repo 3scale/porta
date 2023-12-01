@@ -208,14 +208,6 @@ hr, {
   cursor: move;
 }
 
-#forum {
-  .u-dl,
-  .post {
-    @include white-box-shadow;
-    padding: line-height-times(1);
-  }
-}
-
 .pf-m-force-float-right {
   float: right !important; /* scss-lint:disable ImportantRule */
 }

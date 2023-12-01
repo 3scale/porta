@@ -520,6 +520,8 @@ en:
           success:
             one: The account's plan was changed successfully.
             other: Successfully changed the plan of %{count} accounts.
+      update:
+        success: Account successfully updated
 
     applications:
       bulk:
@@ -639,6 +641,26 @@ en:
             details from your customers?
 
   api:
+    alerts:
+      index:
+        empty_state:
+          title: All clear
+          body: There are no recent alerts or violations.
+        empty_search:
+          title: No results
+          body: There are no recent alerts matching that search criteria.
+          primary: Clear all filters
+        read_all_button:
+          label: Mark all as read
+          confirm: Do you really want to mark all alerts as read?
+        purge_button:
+          label: Delete all
+          confirm: Do you really want to delete all alerts and violations?
+        search_placeholder: Search for accounts and applications
+        page_title:
+          service: Alerts
+          all: Alerts for all services
+        delete_alert_confirmation: Do you really want to delete this alert?
     applications:
       edit:
         delete_confirmation: Are you sure you want to delete this application?
@@ -1529,3 +1551,9 @@ en:
   action_controller:
     errors:
       unknown_format: 'The server does not understand "%{request_format}" request.'
+
+  shared:
+    empty_search:
+      title: No results
+      body: There are no items matching your search criteria.
+      primary: Clear all filters

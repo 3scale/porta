@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Given "{provider} logs in" do |provider|
+  try_provider_login(provider.admins.first.username, 'supersecret')
+end
+
 Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   if provider
     step %{I log in as provider "#{username}"}
