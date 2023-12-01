@@ -150,18 +150,14 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'shows and update gateway response options' do
-      # Default value
       get settings_admin_service_path(service)
+      assert_equal 'text/plain; charset=us-ascii', no_match_error_headers
 
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      default = page.at_css('#service_proxy_attributes_error_headers_no_match')['value']
-      assert_equal 'text/plain; charset=us-ascii', default
-
-
-      # Gateway Responses
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { error_headers_no_match: 'application/problem+json' } })
-
       assert_equal 'Product information updated.', flash[:notice]
+
+      follow_redirect!
+      assert_equal 'application/problem+json', no_match_error_headers
     end
 
     test 'update the settings' do
@@ -458,6 +454,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def update_params
       { service: { description: 'New description for my API' } }
+    end
+
+    def no_match_error_headers
+      page = Nokogiri::HTML4::Document.parse(response.body)
+      page.at_css('#service_proxy_attributes_error_headers_no_match')['value']
     end
   end
 end
