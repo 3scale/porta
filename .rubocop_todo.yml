@@ -591,7 +591,6 @@ Style/SelfAssignment:
     - 'lib/pdf/data.rb'
     - 'app/lib/three_scale/sso.rb'
     - 'test/proxy_helpers/sentiment/analyzer.rb'
-    - 'test/test_helpers/fake_hits.rb'
 
 # Offense count: 18
 # Cop supports --auto-correct.

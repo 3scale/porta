@@ -14,8 +14,7 @@ When /^buyer "([^\"]*)" makes (\d+|a) service transactions? with:$/ do |buyer_na
     Backend::Transaction.report!(:provider_account_id => provider_account.id,
                                  :service_id => provider_account.first_service!.id,
                                  :cinstance_id => cinstance.id,
-                                 :usage => usage,
-                                 :confirmed => true)
+                                 :usage => usage)
   end
 end
 
