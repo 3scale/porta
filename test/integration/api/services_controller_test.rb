@@ -296,6 +296,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
+
+    def no_match_error_headers
+      page = Nokogiri::HTML4::Document.parse(response.body)
+      page.at_css('#service_proxy_attributes_error_headers_no_match')['value']
+    end
   end
 
   class BackendApiCreationTest < self
@@ -454,11 +459,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def update_params
       { service: { description: 'New description for my API' } }
-    end
-
-    def no_match_error_headers
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      page.at_css('#service_proxy_attributes_error_headers_no_match')['value']
     end
   end
 end
