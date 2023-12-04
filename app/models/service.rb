@@ -259,6 +259,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     BackendVersion.new(super)
   end
 
+  # TODO: Refactor and remove me
   def prefix_key(key = id)
     key.to_s
   end
