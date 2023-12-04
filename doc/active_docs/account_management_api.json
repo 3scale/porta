@@ -7835,10 +7835,6 @@
                     "type": "string",
                     "description": "System Name of the method. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
                   },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the method."
-                  },
                   "description": {
                     "type": "string",
                     "description": "Description of the method."
@@ -7964,10 +7960,6 @@
                   "friendly_name": {
                     "type": "string",
                     "description": "Name of the method."
-                  },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the method."
                   },
                   "description": {
                     "type": "string",
@@ -9822,8 +9814,7 @@
           },
           "user_key": {
             "type": "string",
-            "description": "User Key (API Key) of the application to be updated.",
-            "x-data-threescale-name": "user_keys"
+            "description": "User Key (API Key) of the application to be updated."
           }
         },
         "required": [
