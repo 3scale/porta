@@ -20,7 +20,7 @@ Parameters:
 END
   task :fake => :environment do
     cinstance = ENV.fetch('CINSTANCE_ID') do
-      Account.find(2).provided_cinstances.live.pluck(:id)
+      Account.find(ENV.fetch('PROVIDER_ID')).provided_cinstances.live.pluck(:id)
     end
 
     zone = ActiveSupport::TimeZone.new('UTC')

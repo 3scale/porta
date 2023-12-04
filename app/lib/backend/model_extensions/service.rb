@@ -9,7 +9,9 @@ module Backend
         end
       end
 
-      alias_attribute :backend_id, :id
+      def backend_id
+        id.to_s
+      end
 
       def update_backend_service
         if account&.has_bought_cinstance?

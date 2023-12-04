@@ -3,11 +3,11 @@
 # Used by Stats tests and backend random data generator
 module Backend
   class Transaction
-    attr_accessor :id, :estimated_usage, :provider_account_id, :created_at, :service_id, :client_ip, :cinstance_id, :log
+    attr_accessor :id, :estimated_usage, :provider_account_id, :created_at, :service_id, :cinstance_id, :log
 
     attr_writer :user_key
 
-    delegate :provider_verification_key, :plan_name, :application_id, to: :cinstance_data
+    delegate :application_id, to: :cinstance_data
 
     def initialize(attributes = {})
       self.attributes = attributes
@@ -32,10 +32,6 @@ module Backend
       self.usage = estimated_usage if usage.empty?
       aggregate
       true
-    end
-
-    def user_key
-      @user_key || client_ip
     end
 
     def usage=(possibly_unparsed_data)
@@ -90,7 +86,6 @@ module Backend
       Stats::Aggregation.aggregate(:service    => service_id,
                                    :cinstance  => application_id,
                                    :created_at => created_at,
-                                   :client_ip  => client_ip,
                                    :usage      => usage,
                                    :log        => log
                                   )
