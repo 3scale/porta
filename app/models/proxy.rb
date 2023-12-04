@@ -40,7 +40,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   APP_OR_USER_KEY = /\A[\w\d_-]+\Z/
 
-  HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:-]+\Z/
+  HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:+-]+\Z/
 
   OIDC_ISSUER_TYPES = {
     keycloak: I18n.t(:keycloak, scope: 'proxy.oidc_issuer_type').freeze,
