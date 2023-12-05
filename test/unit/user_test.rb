@@ -288,6 +288,15 @@ class UserTest < ActiveSupport::TestCase
     assert user.authenticated?('new password')
   end
 
+  test 'validate password minimum length' do
+    user = FactoryBot.create(:simple_user, username: 'person', password: 'foobar')
+    user.activate!
+
+    user.update(password: '1234', password_confirmation: '1234')
+    assert_not user.valid?
+    assert_equal "is too short (minimum is 6 characters)", user.errors.messages[:password].first
+  end
+
   class ExistingProviderUserTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 

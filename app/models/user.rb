@@ -84,7 +84,6 @@ class User < ApplicationRecord
   validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false,
                               :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
 
-  #TODO: this needs tests
   validates :password, length: { :minimum => 6, :allow_blank => true,
                       :if => ->(u){ u.validate_password? && !u.requires_strong_password?} }
 
