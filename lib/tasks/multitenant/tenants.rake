@@ -12,7 +12,7 @@ namespace :multitenant do
 
     task suspend_forbidden_plans_scheduled_for_deletion: :environment do
       puts 'Account deletion is disabled. Nothing to do.' and return unless Features::AccountDeletionConfig.enabled?
-      forbidden_plans_to_be_auto_destroyed = Features::AccountDeletionConfig.config[:disabled_for_app_plans]
+      forbidden_plans_to_be_auto_destroyed = Features::AccountDeletionConfig.config.disabled_for_app_plans
       query = Account.tenants.scheduled_for_deletion.where.has do
         exists Cinstance.by_account(BabySqueel[:accounts].id).by_plan_system_name(forbidden_plans_to_be_auto_destroyed).select(:id)
       end
