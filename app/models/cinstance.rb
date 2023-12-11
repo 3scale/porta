@@ -23,9 +23,10 @@ class Cinstance < Contract
     backend.has_many :application_keys, &::ApplicationKey::AssociationExtension
   end
 
-  before_create :set_user_key
-  before_create :set_service_id
   before_validation :set_service_id
+  before_validation :set_user_key, on: :create
+
+  before_create :set_service_id
   before_create :set_provider_public_key
   before_create :accept_on_create, :unless => :live?
 
@@ -81,7 +82,7 @@ class Cinstance < Contract
     acceptance: { :message => 'you should agree on the terms and conditions for this plan first' }
 
   validates :plan, presence: true
-  validates :name,        presence: { :if => :name_required? }
+  validates :name, presence: { :if => :name_required? }
 
   after_commit :push_webhook_key_updated, :on => :update, :if => :user_key_updated?
   after_commit :push_application_updated_event, on: :update, unless: :only_traffic_updated?
@@ -111,17 +112,19 @@ class Cinstance < Contract
   validate :same_service, on: :update, if: :plan_id_changed?
 
   # letter, number, underscore (_), hyphen-minus (-), dot (.), base64 format
-  # In base64 encoding, the character set is [A-Z,a-z,0-9,and + /], if rest length is less than 4, fill of '=' character.
-  # ^([A-Za-z0-9+/]{4})* means the String start with 0 time or more base64 group.
-  # ([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==) means the String must end of 3 forms in [A-Za-z0-9+/]{4} or [A-Za-z0-9+/]{3}= or [A-Za-z0-9+/]{2}==
+  # In base64 encoding, the character set is [A-Z,a-z,0-9,and +], if rest length is less than 4, fill of '=' character.
+  # ^([A-Za-z0-9+]{4})* means the String start with 0 time or more base64 group.
+  # ([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==) means the String must end of 3 forms in [A-Za-z0-9+]{4} or [A-Za-z0-9+]{3}= or [A-Za-z0-9+]{2}==
   # matches also the non 64B case with (\A[\w\-\.]+\Z)
-  USER_KEY_FORMAT = /(([\w\-\.]+)|([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==))/
+  # NOTE: base64 format also accepts forward slash (/), however we don't allow it because of the restriction on the backend
+  USER_KEY_FORMAT = /(([\w\-.]+)|([A-Za-z0-9+]{4})*([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==))/.freeze
 
-  validates :application_id, format: { with: /\A[\x20-\x7E]+\Z/ }, length: { in: 4..255 }
+  # The following characters are accepted:
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces and / are not allowed
+  validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
 
-
-  validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 },
-            allow_nil: true, allow_blank: true
+  validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 }
 
   scope :order_for_dev_portal, -> { order(service_id: :desc, created_at: :desc) }
 
@@ -508,7 +511,6 @@ class Cinstance < Contract
   end
 
   def generate_key
-    #FIXME: service is not accessible here yet
-    plan.issuer.prefix_key(SecureRandom.hex(16))
+    SecureRandom.hex(16)
   end
 end

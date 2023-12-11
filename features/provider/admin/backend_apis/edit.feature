@@ -21,7 +21,7 @@ Feature: Backend API edit page
   Scenario: Delete a backend API used by product
     Given a backend
     And a product
-    And the backend is used by this product
+    And the backend is used by the product
     When an admin tries to delete the backend api from its edit page
     Then it is not possible to delete the backend
 

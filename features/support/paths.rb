@@ -166,6 +166,9 @@ World(Module.new do
     when 'the provider account page'
       provider_admin_account_path
 
+    when 'the new provider account page'
+      new_provider_admin_account_path
+
     when 'the provider personal page'
       edit_provider_admin_user_personal_details_path
 
@@ -245,13 +248,11 @@ World(Module.new do
     when /^the overview page of product "([^"]+)"$/
       admin_service_path @provider.services.find_by!(name: $1)
 
-    when 'the API alerts page'
+    when 'the alerts page'
       admin_alerts_path
 
-    when /^the API alerts page of service "(.+?)" of provider "(.+?)"$/
-      provider = Account.providers.find_by_org_name! $2
-      service = provider.services.find_by_name! $1
-      admin_service_alerts_path(service)
+    when /^the alerts of "(.*)"$/
+      admin_service_alerts_path(Service.find_by!(name: $1))
 
     when /^the (edit|settings) page for service "([^"]+)" of provider "(.+?)"$/
       provider = Account.providers.find_by_org_name! $3
@@ -283,6 +284,25 @@ World(Module.new do
     when /^the usage rules of service "([^"]*)"$/
       service = Service.find_by!(name: Regexp.last_match(1))
       usage_rules_admin_service_path(service)
+
+    when /^the backends of the product$/
+      admin_service_backend_usages_path(Service.last)
+
+    when /^the backends of product "(.+?)"$/
+      product = Service.find_by!(name: $1)
+      admin_service_backend_usages_path(product)
+
+    when /^the new backend page for product "(.*)"$/
+      product = Service.find_by!(name: $1)
+      new_admin_service_backend_usage_path(product)
+
+    when /^the edit usage config page between "(.*)" and "(.*)"$/
+      if (service = Service.find_by!(name: $1))
+        config = service.backend_apis.find_by(name: $2)
+      elsif (service = Service.find_by!(name: $2))
+        config = service.backend_apis.find_by(name: $1)
+      end
+      edit_admin_service_backend_usage_path(service, config)
 
     #
     # Account plans (buyer side)
@@ -391,7 +411,8 @@ World(Module.new do
       new_admin_buyers_account_path
 
     when /^the buyer account page for "([^"]*)"$/,
-         /^the buyer account "([^"]*)" page$/
+         /^the buyer account "([^"]*)" page$/,
+         /^the overview page of account "([^"]*)"$/
       admin_buyers_account_path(Account.find_by_org_name!($1))
 
     when /^the buyer account edit page for "([^"]*)"$/

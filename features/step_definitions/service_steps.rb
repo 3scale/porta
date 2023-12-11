@@ -4,16 +4,12 @@ Given 'a product' do
   @product = @provider.default_service
 end
 
-Given 'a product with no backends' do
-  @product = FactoryBot.create(:service, account: @provider)
-end
-
 Given "a service {string} of {provider}" do |name, provider|
   @service = provider.services.create! name: name, mandatory_app_key: false
 end
 
-Given "a service/product {string}" do |name|
-  @product = @provider.services.create!(name: name, mandatory_app_key: false)
+Given "a service/product {string}( with no backends)" do |name|
+  @service = @product = @provider.services.create!(name: name, mandatory_app_key: false)
 end
 
 Given "(a )(the )default service/product of {provider} has name {string}" do |provider, name|
@@ -55,11 +51,11 @@ Given "the service of {provider} has traffic" do |account|
   Service.any_instance.stubs(:has_traffic?).returns(true)
 end
 
-Given /^it uses the following backends:$/ do |table|
+Given "{product} uses the following backends:" do |product, table|
   transform_table(table).hashes.each do |hash|
-    name, path = hash.values_at(:name, :path)
-    backend = @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
-    @service.backend_api_configs.create!(backend_api: backend, path: path)
+    name, path, endpoint = hash.values_at(:name, :path, :private_endpoint)
+    backend = @provider.backend_apis.create!(name: name, private_endpoint: endpoint || 'https://foo')
+    product.backend_api_configs.create!(backend_api: backend, path: path)
   end
 end
 

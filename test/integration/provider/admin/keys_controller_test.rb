@@ -3,6 +3,7 @@ require 'test_helper'
 class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
   def setup
     provider = FactoryBot.create(:provider_account)
+    @admin = provider.admins.first
     service = provider.default_service
 
     plan = FactoryBot.create(
@@ -98,6 +99,26 @@ class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
     format = { format: :js }
 
     assert_only_qualified_members_have_access(verb, path, format)
+  end
+
+  test 'show edit form for updating user_key with a dot' do
+    login! @admin.account, user: @admin
+    @application.user_key = 'abc.123'
+    @application.save
+
+    get edit_provider_admin_application_key_path(@application, @application.user_key)
+
+    assert_response :success
+  end
+
+  test 'delete application key with a dot' do
+    login! @admin.account, user: @admin
+    key = 'abc.123'
+    @application.application_keys.add(key)
+
+    delete provider_admin_application_key_path(@application, key, params:  { format: :js })
+
+    assert_response :success
   end
 
   private
