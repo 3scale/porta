@@ -3,7 +3,7 @@ metadata:
   name: getting-started-with-quick-starts
   # you can add additional metadata here
   instructional: true
-  learningResources: true
+  basicAPIIntegrationSetup: true
 spec:
   displayName: Complete a basic API integration
   durationMinutes: 5

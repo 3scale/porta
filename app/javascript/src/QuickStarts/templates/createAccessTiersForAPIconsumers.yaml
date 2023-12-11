@@ -3,12 +3,12 @@ metadata:
   name: creating-access-tiers-for-api-consumers
   # you can add additional metadata here
   instructional: true
-  commonInstances: true
+  commonInstance: true
 spec:
   displayName: Create access tiers for API consumers to use your API
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey

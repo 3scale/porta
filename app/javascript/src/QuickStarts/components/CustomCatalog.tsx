@@ -32,11 +32,11 @@ export const CustomCatalog: React.FC = () => {
       <>
         <QuickStartCatalogSection>
           <TextContent>
-            <Text className="catalog" component="h2">Learn about 3scale features</Text>
+            <Text className="catalog" component="h2">3scale API Management features</Text>
           </TextContent>
           <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
             {allQuickStarts!
-              .filter((quickStart: QuickStart) => quickStart.metadata.learnAbout3scaleFeatures)
+              .filter((quickStart: QuickStart) => quickStart.metadata.threescaleAPIManagementFeatures)
               .map((quickStart: QuickStart) => {
                 const {
                   metadata: { name: id }
@@ -55,11 +55,11 @@ export const CustomCatalog: React.FC = () => {
         </QuickStartCatalogSection>
         <QuickStartCatalogSection>
           <TextContent>
-            <Text className="catalog" component="h2">Common instances</Text>
+            <Text className="catalog" component="h2">Common instance for creating and tracking APIs</Text>
           </TextContent>
           <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
             {allQuickStarts!
-              .filter((quickStart: QuickStart) => quickStart.metadata.commonInstances)
+              .filter((quickStart: QuickStart) => quickStart.metadata.commonInstance)
               .map((quickStart: QuickStart) => {
                 const {
                   metadata: { name: id }
@@ -78,11 +78,11 @@ export const CustomCatalog: React.FC = () => {
         </QuickStartCatalogSection>
         <QuickStartCatalogSection>
           <TextContent>
-            <Text className="catalog" component="h2">Learning resources</Text>
+            <Text className="catalog" component="h2">Basic API integration setup</Text>
           </TextContent>
           <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
             {allQuickStarts!
-              .filter((quickStart: QuickStart) => quickStart.metadata.learningResources)
+              .filter((quickStart: QuickStart) => quickStart.metadata.basicAPIIntegrationSetup)
               .map((quickStart: QuickStart) => {
                 const {
                   metadata: { name: id }
