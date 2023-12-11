@@ -613,7 +613,7 @@ form.formtastic#new_metric {
 
 // HACK: first pf-c-section in a form don't have margin-top. However, formtastic adds hidden fields
 // before and therefore the section is not a first element and margin-top is maintained.
-.pf-c-form.formtastic.settings > .pf-c-form__section {
+.pf-c-form.formtastic > input[type="hidden"] + .pf-c-form__section {
   margin-top: 0;
 }
 

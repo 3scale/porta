@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Then /^I fill the form with following:$/ do |table|
+Then "(I )fill the form with( following):" do |table|
   table.hashes.each do |hash|
     hash.each_pair do |key, value|
       fill_in key, :with => value
@@ -52,6 +52,16 @@ When "(I )fill in the following:" do |fields|
 end
 
 When "the form is submitted with:" do |table|
+  submit_form_with table
+end
+
+When "the modal is submitted with:" do |table|
+  within 'div.pf-c-modal-box' do
+    submit_form_with table
+  end
+end
+
+def submit_form_with(table)
   table.rows_hash.each { |name, value| fill_in(name, with: value) }
   find('.pf-c-form__actions button[type="submit"]', wait: 0).click
 end
@@ -66,6 +76,12 @@ When "(I )select {string} from {string}" do |value, field|
   end
 end
 
+Then "(they )can't select {string} from {string}" do |option, label|
+  select = find_pf_select(label)
+  select.find('.pf-c-select__toggle').click unless select.has_css?('.pf-c-select__menu', wait: 0)
+  assert_not select.has_css?('.pf-c-select__menu .pf-c-select__menu-item', text: option, wait: 0)
+end
+
 When "(I )check {string}" do |field|
   check(field)
 end
@@ -76,10 +92,9 @@ end
 
 # TODO: extend Node::Actions#select instead of using a custom method.
 def pf4_select(value, from:)
-  select = find_pf_select(from)
-  within select do
-    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    click_on(value)
+  within %(.pf-c-select[data-ouia-component-id="#{from}"]) do
+    find('button.pf-c-select__toggle, button.pf-c-select__toggle-button').click if has_no_css?('.pf-c-select__menu', wait: 0)
+    find('.pf-c-select__menu button', text: value).click
   end
 end
 
@@ -91,9 +106,8 @@ def pf4_select_first(from:)
   end
 end
 
-def find_pf_select(label)
-  find('.pf-c-form__group-label', text: label).sibling('.pf-c-form__group-control')
-                                              .find('.pf-c-select')
+def find_pf_select(label_or_placeholder)
+  find %(.pf-c-select[data-ouia-component-id="#{label_or_placeholder}"])
 end
 
 # Overrides Node::Actions#fill_in

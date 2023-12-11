@@ -10,10 +10,14 @@ When /^an admin selects a(?:n)? (hidden )?application plan as default$/ do |hidd
   assert_equal @plan, default_service.reload.default_application_plan
 end
 
-When "the service has a default application plan" do
+When "the (default )service has a default application plan" do
   @service = default_service
   plan = FactoryBot.create(:application_plan, issuer: @service)
   @service.update!(default_application_plan: plan)
+end
+
+When "{product} has an application plan {string}" do |product, name|
+  @plan = FactoryBot.create(:application_plan, issuer: product, name: name)
 end
 
 When "an admin unsets the default application plan" do
@@ -24,7 +28,7 @@ end
 
 Then "the service will not have the default plan set" do
   visit admin_service_application_plans_path(@service)
-  assert_equal('No plan selected', find('[data-ouia-component-id="default-plan-select"] input').value)
+  assert_equal('No plan selected', find_pf_select('Default plan').find('input').value)
   assert_nil @service.reload.default_application_plan_id
 end
 

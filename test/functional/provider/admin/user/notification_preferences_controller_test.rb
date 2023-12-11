@@ -52,7 +52,7 @@ class Provider::Admin::User::NotificationPreferencesControllerTest < ActionContr
     preferences = NotificationPreferences.last!
     enabled     = %w[application_created] + hidden_notifications.map(&:to_s)
 
-    assert_equal enabled, preferences.enabled_notifications.to_a
+    assert_same_elements enabled, preferences.enabled_notifications.to_a
   end
 
   test 'should return 400 on missing params' do

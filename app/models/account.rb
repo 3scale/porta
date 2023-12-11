@@ -159,6 +159,7 @@ class Account < ApplicationRecord
   has_many :mail_dispatch_rules, dependent: :destroy
   has_many :system_operations, through: :mail_dispatch_rules
 
+  # Deleted received messages
   has_many :hidden_messages, -> { latest_first.received.hidden }, as: :receiver, class_name: 'MessageRecipient'
   has_many :received_messages, -> { latest_first.received.visible }, as: :receiver, class_name: 'MessageRecipient'
 
@@ -207,10 +208,6 @@ class Account < ApplicationRecord
   def managed_users
     conditions = ['users.account_id = :id OR accounts.provider_account_id = :id', { id: id }]
     User.where(conditions).joins(:account).readonly(false)
-  end
-
-  def forum!
-    forum || raise(ActiveRecord::RecordNotFound, "buyer accounts can't have forum")
   end
 
   def build_forum(attributes = {})
@@ -561,6 +558,12 @@ class Account < ApplicationRecord
     else
       id
     end
+  end
+
+  def sections
+    # Filter out existing forum sections (builtin static pages) from the CMS sidebar and return 404
+    # if accessed via URL. TODO: Remove forums THREESCALE-6714
+    super.where.not(system_name: %i[forum categories posts topics user-topics])
   end
 
   private

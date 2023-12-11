@@ -66,7 +66,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     config = service.backend_api_configs.create(backend_api: backend_api, path: 'whatever')
     get edit_admin_service_backend_usage_path(service, config)
     assert_response :success
-    assert_select 'form.backend_api_config input#backend_api_config_backend_api_id[disabled=disabled][value=?]', backend_api.name
+    assert_select 'form.backend_api_config input#backend_api_config_backend_api_id[readonly=readonly][value=?]', backend_api.name
   end
 
   test '#update' do

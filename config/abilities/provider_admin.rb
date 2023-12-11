@@ -66,10 +66,6 @@ Ability.define do |user|
 
   can :create, Account
 
-  if account.provider_can_use?(:forum)
-    can :manage, :forum
-  end
-
   #COPY these come from forum.rb
   can :manage, TopicCategory do |category|
     category.forum.account = account

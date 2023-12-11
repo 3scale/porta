@@ -166,26 +166,6 @@ Given "the provider has spam protection set to suspicious only" do
   step %(provider "#{@provider.org_name}" has "spam protection level" set to "auto")
 end
 
-When /^new form to create a tenant is filled and submitted$/ do
-  @username = 'usernamepro'
-  fill_and_submit_form_to_create_tenant(username: @username)
-end
-
-When /^new form to create a tenant is filled and submitted with invalid data$/ do
-  @expected_flash_errors = [attribute: :username, message: 'is too short'] # Empty username
-  fill_and_submit_form_to_create_tenant(username: '')
-end
-
-def fill_and_submit_form_to_create_tenant(username:)
-  visit new_provider_admin_account_path
-  fill_in('account_user_username', :with => username, visible: true)
-  fill_in('account_user_email', :with => 'provider@email.com', visible: true)
-  fill_in('account_user_password', :with => '123456', visible: true)
-  fill_in('account_user_password_confirmation', :with => '123456', visible: true)
-  fill_in('account_org_name', :with => 'organizationprovider', visible: true)
-  click_button 'Create'
-end
-
 Given(/^a provider with one active member is logged in$/) do
   step 'a provider is logged in'
   step %(an active user "alex" of account "#{@provider.internal_domain}")
@@ -266,19 +246,6 @@ Given(/^master is the provider$/) do
   step "a default application plan of provider \"#{provider_or_master_name}\""
 end
 
-Then(/^new tenant should be created$/) do
-  @username ||= Account.providers.last!.users.first!.username
-  assert_selector('.flash-message--notice', :text => 'Tenant account was successfully created.')
-  step 'I go to the buyer accounts page'
-  assert_selector(:xpath, './/table[@id="buyer_accounts"]//tr', :text => @username, :count => 1)
-end
-
-Then(/^new tenant should be not created$/) do
-  @expected_flash_errors.each do |error_message|
-    assert_selector('.inline-errors', :text => error_message[:message])
-  end
-end
-
 Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, input_name|
   inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
   assert_selector(inline_error_selector, text: text)
@@ -286,4 +253,12 @@ end
 
 When "the provider is at {}" do |page_name|
   visit path_to(page_name)
+end
+
+When "{provider} is suspended" do |provider|
+  provider.suspend!
+end
+
+Then "I see the support email of {provider}" do |provider|
+  step %(I should see "#{ThreeScale.config.support_email}")
 end

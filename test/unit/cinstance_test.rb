@@ -442,22 +442,16 @@ class CinstanceTest < ActiveSupport::TestCase
   test 'user_key should validate user key' do
     cinstance = FactoryBot.create(:cinstance)
 
-    assert cinstance.valid?
+    ['you-awesome-man', 'k'*256, 'aGVhb+JxCg=='].each do |valid_key|
+      cinstance.user_key = valid_key
+      cinstance.valid?
+    end
 
-    cinstance.user_key = "you-&$#!!!"
-
-    assert cinstance.invalid?
-    assert cinstance.errors[:user_key].present?
-
-    cinstance.user_key = "you-awesome-man"
-    assert cinstance.valid?
-
-    cinstance.user_key = "k"*256
-    assert cinstance.valid?
-
-    cinstance.user_key << "k"
-    assert cinstance.invalid?
-    assert cinstance.errors[:user_key].present?
+    ['you-&$#!!!', 'k'*257, 'aGVhb+Jx/g==', 'I have spaces', "", nil].each do |invalid_key|
+      cinstance.user_key = invalid_key
+      assert cinstance.invalid?
+      assert cinstance.errors[:user_key].present?
+    end
   end
 
   test 'validate_plan_is_unique' do
@@ -518,7 +512,7 @@ class CinstanceTest < ActiveSupport::TestCase
       assert dup.errors[:application_id].presence
     end
 
-    test 'duplication is controlled by roling update' do
+    test 'duplication is controlled by rolling update' do
       Logic::RollingUpdates.stubs(enabled?: true)
 
       app_dup = FactoryBot.build(:cinstance, plan: plan_two, application_id: app_one.application_id)
@@ -605,11 +599,23 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'App ID can include special characters as defined in the RFC 6749' do
-    generate_random_key_with_all_chars_of_rfc_6749 = -> { ("\x20".."\x7e").to_a.shuffle.join }
-    cinstance = FactoryBot.build(:cinstance, application_id: (app_id = generate_random_key_with_all_chars_of_rfc_6749.call))
+    # generate random key with all chars of RFC 6749 except / and spaces
+    random_key = -> { [*"\x21".."\x2E", *"\x30".."\x7E"].shuffle.join }
+    cinstance = FactoryBot.build(:cinstance, application_id: (app_id = random_key.call))
 
     assert cinstance.save
     assert app_id, cinstance.reload.application_id
+  end
+
+  test 'App ID cannot include slash or spaces' do
+    cinstance = FactoryBot.build(:cinstance)
+
+    ['app_id with space', 'app_id-with-/-slash'].each do |key|
+      cinstance.application_id = key
+
+      assert cinstance.invalid?
+      assert cinstance.errors[:application_id].present?
+    end
   end
 
   test 'App ID length is validated to be between 4 and 255 characters' do

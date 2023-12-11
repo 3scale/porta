@@ -30,7 +30,7 @@ module ForumSupport
     private
 
     def find_forum
-      @forum = domain_account.forum!
+      nil
     end
 
     module ClassMethods

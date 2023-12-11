@@ -37,28 +37,6 @@ class VerticalNavHelperTest < ActionView::TestCase
       assert_equal([], backend_api_nav_sections.pluck(:title))
     end
 
-    test 'Forum is disabled in saas' do
-      rolling_update(:forum, enabled: true)
-
-      current_account.settings.forum_enabled = false
-      assert_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
-      assert_not_includes audience_nav_sections.pluck(:id), :forum
-
-      current_account.settings.forum_enabled = true
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
-      assert_includes audience_nav_sections.pluck(:id), :forum
-
-      rolling_update(:forum, enabled: false)
-
-      current_account.settings.forum_enabled = false
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
-      assert_not_includes audience_nav_sections.pluck(:id), :forum
-
-      current_account.settings.forum_enabled = true
-      assert_not_includes audience_portal_items.find { |item| item[:title] == 'Settings' }[:subItems].pluck(:id), :forum_settings
-      assert_not_includes audience_nav_sections.pluck(:id), :forum
-    end
-
     test 'Email configurations' do
       Features::EmailConfigurationConfig.stubs(enabled?: true)
       assert_not_includes account_nav_sections.pluck(:id), :email_configurations

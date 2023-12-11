@@ -136,6 +136,17 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'backend',
+  type: BackendApi,
+  regexp: /the backend|backend "([^"]*)"/,
+  transformer: ->(*args) do
+    return BackendApi.find_by(name: args[0]) if args[0].present?
+
+    @backend
+  end
+)
+
+ParameterType(
   name: 'buyer',
   type: Account,
   regexp: /buyer "([^"]*)"|the buyer/,
@@ -420,4 +431,10 @@ ParameterType(
   name: 'can',
   regexp: /can|can't|cannot/,
   transformer: ->(value) { value == 'can' }
+)
+
+ParameterType(
+  name: 'ordinal',
+  regexp: /(\d+)(?:st|rd|nd|th)/,
+  transformer: ->(value) { value.to_i }
 )

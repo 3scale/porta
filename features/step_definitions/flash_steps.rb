@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Then "(I )should see the flash message {string}" do |flash_text|
+Then "(I )(they )should see the flash message {string}" do |flash_text|
   assert_flash flash_text
 end
 

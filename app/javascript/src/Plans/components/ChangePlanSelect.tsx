@@ -44,6 +44,7 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
             items={applicationPlans}
             label={<h3>Change plan</h3>}
             name="cinstance[plan_id]"
+            ouiaId="Change plan"
             placeholderText="Select plan"
             onSelect={setPlan}
           />

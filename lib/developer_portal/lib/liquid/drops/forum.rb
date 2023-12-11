@@ -14,7 +14,7 @@ module Liquid
         {% endif %}
       }
       def enabled?
-        @provider.settings.forum_enabled?
+        false
       end
 
       def latest_posts

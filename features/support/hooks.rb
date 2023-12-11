@@ -2,6 +2,12 @@
 
 Before '@onpremises' do
   ThreeScale.config.stubs(onpremises: true)
+  ThreeScale.config.stubs(saas?: false)
+end
+
+After '@onpremises' do
+  ThreeScale.config.stubs(onpremises: false)
+  ThreeScale.config.stubs(saas?: true)
 end
 
 Before '@ignore-backend' do
@@ -75,8 +81,6 @@ end
 
 After do |scenario| # rubocop:disable Metrics/BlockLength
   next unless scenario.failed? # we don't care about working scenarios
-  next unless scenario.respond_to?(:feature) # example rows dont have feature
-
 
   if (console_messages = page.driver.try(:console_messages))
     puts "Console Messages:", *console_messages
@@ -87,7 +91,7 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   end
 
 
-  folder = Pathname.new(scenario.feature.file)
+  folder = Pathname.new(scenario.location.file)
   if folder.absolute?
     folder = folder.relative_path_from(Rails.root)
   end
@@ -133,7 +137,6 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
     if (logs = page.driver.browser.manage.logs.get(:browser)).present?
       entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
 
-      puts *entries
       console_log.open('w') do |f|
         f.puts *entries
       end
