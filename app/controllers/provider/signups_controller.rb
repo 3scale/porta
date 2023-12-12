@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class Provider::SignupsController < Provider::BaseController
+  include ThreeScale::BotProtection::Controller
+
   before_action :disable_x_frame
   before_action :ensure_signup_possible
 
@@ -93,7 +97,7 @@ class Provider::SignupsController < Provider::BaseController
     @provider.signup_mode!
     @provider.subdomain = account_params[:subdomain]
     @provider.self_subdomain = account_params[:self_subdomain]
-    result.add_error(message: 'spam check failed') unless spam_check(@provider)
+    result.add_error(message: 'bot check failed') unless bot_check
   end
 
   def plan

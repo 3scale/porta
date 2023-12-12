@@ -10,6 +10,7 @@
                 :label => false,
                 hint: t(".captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
                 :as => :radio,
+                :collection => ThreeScale::BotProtection::LEVELS,
                 disabled: !Recaptcha.captcha_configured?  %>
     <% end %>
 

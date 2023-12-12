@@ -1,5 +1,7 @@
 module ThreeScale
   class SemanticFormBuilder < ::Formtastic::FormBuilder
+    include ThreeScale::BotProtection::Form
+
     delegate :tag, to: :template
 
     # Allow specify how to display errors for the input
@@ -9,14 +11,14 @@ module ThreeScale
     #   f.input :bar, inline_errors: :sentence
     def inline_errors_for(method, options = {})
       original_inline_errors = inline_errors
-      @options_inline_erros = options[:inline_errors]
+      @options_inline_errors = options[:inline_errors]
       super
     ensure
-      @options_inline_erros = original_inline_errors
+      @options_inline_errors = original_inline_errors
     end
 
     def inline_errors
-      @options_inline_erros || super
+      @options_inline_errors || super
     end
 
     def text_field_with_errors( method, opts = {})
@@ -102,6 +104,11 @@ module ThreeScale
       tag.div(class: 'pf-c-form__group pf-m-action') do
         tag.div(class: 'pf-c-form__actions', &block)
       end
+    end
+
+    # Just adds fields from spam protection module
+    def bot_protection
+      bot_protection_inputs
     end
   end
 end

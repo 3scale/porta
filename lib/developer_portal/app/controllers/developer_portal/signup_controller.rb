@@ -2,6 +2,8 @@
 
 module DeveloperPortal
   class SignupController < DeveloperPortal::BaseController
+    include ThreeScale::BotProtection::Controller
+
     skip_before_action :login_required
     before_action :redirect_if_logged_in
 
@@ -71,7 +73,7 @@ module DeveloperPortal
           @signup_result = signup_result
           @user  = signup_result.user
           @buyer = signup_result.account
-          break unless spam_check(@buyer)
+          break unless bot_check
         end
       end
 
