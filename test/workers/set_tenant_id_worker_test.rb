@@ -30,5 +30,24 @@ class SetTenantIdWorkerTest < ActiveSupport::TestCase
       assert_equal accounts.last.id, backend_api2.reload.tenant_id
       assert_nil alert.reload.tenant_id
     end
+
+    test "raises on empty params" do
+      assert_raises do
+        SetTenantIdWorker::BatchEnqueueWorker.new.perform
+      end
+    end
+
+    test "raises on unsupported relations" do
+      assert_raises do
+        # unsupported relation that
+        SetTenantIdWorker::BatchEnqueueWorker.new.perform("accounts")
+      end
+    end
+
+    test "raises on non-existing relations" do
+      assert_raises do
+        SetTenantIdWorker::BatchEnqueueWorker.new.perform("non-existing-relation", "alerts")
+      end
+    end
   end
 end
