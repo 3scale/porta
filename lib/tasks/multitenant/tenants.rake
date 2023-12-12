@@ -21,7 +21,7 @@ namespace :multitenant do
     end
 
     desc 'Fix in the background tenant_id missing in alerts, log entries and backend apis'
-    task :fix_missing_in_background => :environment do |_task, relations|
+    task :fix_missing_tenant_id_async => :environment do |_task, relations|
       list = relations.to_a
       SetTenantIdWorker::BatchEnqueueWorker.validate_params(*list)
       SetTenantIdWorker::BatchEnqueueWorker.perform_later(*list)
