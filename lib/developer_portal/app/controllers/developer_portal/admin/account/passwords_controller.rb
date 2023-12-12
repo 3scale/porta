@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::BaseController
-  include ThreeScale::SpamProtection::Integration::Controller
-
   liquify prefix: 'password'
 
   skip_before_action :login_required

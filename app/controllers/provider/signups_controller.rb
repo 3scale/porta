@@ -1,6 +1,4 @@
 class Provider::SignupsController < Provider::BaseController
-  include ThreeScale::SpamProtection::Integration::Controller
-
   before_action :disable_x_frame
   before_action :ensure_signup_possible
 

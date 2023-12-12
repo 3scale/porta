@@ -22,9 +22,6 @@ class Account < ApplicationRecord
   set_fields_account_source :self
   include Fields::Provider
 
-  include ThreeScale::SpamProtection::Integration::Model
-  has_spam_protection
-
   include MasterMethods
 
   include Backend::ModelExtensions::Provider

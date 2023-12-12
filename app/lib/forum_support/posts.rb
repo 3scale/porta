@@ -3,8 +3,6 @@
 module ForumSupport
   module Posts
     def self.included(base)
-      base.send :include, ThreeScale::SpamProtection::Integration::Controller
-
       base.before_action :find_topic
       base.before_action :find_post, :only => %i[edit update destroy]
       base.before_action :authorize_resources

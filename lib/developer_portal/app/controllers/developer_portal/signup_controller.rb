@@ -2,8 +2,6 @@
 
 module DeveloperPortal
   class SignupController < DeveloperPortal::BaseController
-    include ThreeScale::SpamProtection::Integration::Controller
-
     skip_before_action :login_required
     before_action :redirect_if_logged_in
 

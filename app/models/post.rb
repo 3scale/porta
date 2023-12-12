@@ -6,9 +6,6 @@ class Post < ApplicationRecord
 
   attr_accessible :body, :markup_type, :anonymous_user
 
-  include ThreeScale::SpamProtection::Integration::Model
-  has_spam_protection
-
   include Indices::TopicIndex::ForPost
 
   # author of post
