@@ -162,8 +162,12 @@ Given(/^a master admin with extra fields is logged in/) do
   FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
 end
 
-Given "the provider has spam protection set to suspicious only" do
-  step %(provider "#{@provider.org_name}" has "spam protection level" set to "auto")
+Given "the provider has bot protection enabled" do
+  @provider.settings.update_attribute(:spam_protection_level, :captcha)
+end
+
+Given "the provider has bot protection disabled" do
+  @provider.settings.update_attribute(:spam_protection_level, :none)
 end
 
 Given(/^a provider with one active member is logged in$/) do
