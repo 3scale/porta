@@ -74,7 +74,7 @@ class AccountMailerTest < ActionMailer::TestCase
 
     def test_support_entitlements_trial_plan
       trial_plan = FactoryBot.create(:application_plan, issuer: @service)
-      trial_plan.plan_rule.metadata = {trial: true}
+      trial_plan.send(:plan_rule).metadata = {trial: true}
       @account.buy! trial_plan
 
       travel_to(Date.new(2017, 11, 21)) do
