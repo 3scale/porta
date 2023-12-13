@@ -13,6 +13,11 @@ $('.inline-errors').remove();
     codemirror.save()
   }
 
+  // Remove error styles if any
+  $('#edit_cms_template').removeClass('error');
+  $('#edit_cms_template .error').css('border-color', ''); // Reset border color
+
+
   // update the preview draft link after save
   $('#cms-preview-button a').each(function () {
     if ($(this).data('preview') === 'draft') {
