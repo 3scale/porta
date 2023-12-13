@@ -218,7 +218,7 @@ group :test do
   gem 'rspec_junit_formatter'
 
   # IMPORTANT: Load 'mocha' after 'shoulda'.
-  gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
+  gem 'mocha', require: 'mocha/minitest'
 
   # proxy tests
   gem 'database_cleaner', require: false

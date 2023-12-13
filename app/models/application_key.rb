@@ -10,8 +10,11 @@ class ApplicationKey < ApplicationRecord
   attr_accessible :application, :value
 
   validates :application, presence: true
-  # letters, numbers, dash, cannot stat with dash, case insensitive
-  validates :value, format: { with: /\A[\x20-\x7E]+\Z/ },
+
+  # The following characters are accepted:
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces and / are not allowed
+  validates :value, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ },
                     length: { within: 5..255 },
                     uniqueness: { scope: :application_id, case_sensitive: false }
 
