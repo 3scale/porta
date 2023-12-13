@@ -12,7 +12,7 @@ Feature: Applications management
   Scenario: Delete application
     When I'm on that application page
      And I follow "Edit"
-     When I follow "Delete" and I confirm dialog box
+     When I follow "Delete" and confirm the dialog
     Then I should see "The application was successfully deleted."
      And there should be 1 application cancelled event
      And all the events should be valid
