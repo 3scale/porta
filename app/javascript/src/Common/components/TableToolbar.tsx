@@ -123,7 +123,8 @@ const TableToolbar: FunctionComponent<Props> = ({
               <OverflowMenu breakpoint="xl" breakpointReference={toolbarRef}>
                 <OverflowMenuContent>
                   <OverflowMenuGroup groupType="button">
-                    {overflow.filter(i => i.isShared).map(({ label, ...btnProps }) => (
+                    {/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- Remove isShared from button props */}
+                    {overflow.filter(i => i.isShared).map(({ label, isShared, ...btnProps }) => (
                       <OverflowMenuItem key={label}>
                         <Button component="a" {...btnProps}>{label}</Button>
                       </OverflowMenuItem>
