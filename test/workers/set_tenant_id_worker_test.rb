@@ -31,6 +31,29 @@ class SetTenantIdWorkerTest < ActiveSupport::TestCase
       assert_nil alert.reload.tenant_id
     end
 
+    test "account relations are also fixed for buyer accounts" do
+      provider = FactoryBot.create(:simple_provider)
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+
+      assert_equal provider.id, buyer.reload.tenant_id
+
+      alert_provider = FactoryBot.create(:limit_alert, account: provider)
+      alert_buyer = FactoryBot.create(:limit_alert, account: buyer)
+
+      [alert_provider, alert_buyer].each do |alert|
+        assert_equal provider.id, alert.reload.tenant_id
+        alert.tenant_id = nil
+        assert_nil alert.tenant_id
+      end
+
+      perform_enqueued_jobs(only: [SetTenantIdWorker, SetTenantIdWorker::ModelTenantIdWorker]) do
+        SetTenantIdWorker::BatchEnqueueWorker.new.perform("backend_apis", "alerts")
+      end
+
+      assert_equal provider.id, alert_provider.reload.tenant_id
+      assert_equal provider.id, alert_buyer.reload.tenant_id
+    end
+
     test "raises on empty params" do
       assert_raises do
         SetTenantIdWorker::BatchEnqueueWorker.new.perform
