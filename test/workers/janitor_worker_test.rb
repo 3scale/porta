@@ -8,7 +8,7 @@ class JanitorWorkerTest < ActiveSupport::TestCase
 
     mock_purge_workers(called_times: 'once')
 
-    assert JanitorWorker.new.perform
+    JanitorWorker.new.perform
   end
 
   def test_not_enabled
@@ -21,6 +21,6 @@ class JanitorWorkerTest < ActiveSupport::TestCase
 
   def mock_purge_workers(called_times:)
     PurgeOldUserSessionsWorker.expects(:perform_async).send(called_times)
-    PurgeStaleObjectsWorker.expects(:perform_later).send(called_times).with(EventStore::Event.name, DeletedObject.name)
+    PurgeStaleObjectsWorker.expects(:perform_later).send(called_times).with(EventStore::Event.name, Alert.name, DeletedObject.name)
   end
 end

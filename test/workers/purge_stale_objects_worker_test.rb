@@ -12,6 +12,15 @@ class PurgeStaleObjectsWorkerTest < ActiveSupport::TestCase
     PurgeStaleObjectsWorker.new.perform(EventStore::Event.name)
   end
 
+  test 'perform for alerts' do
+    alerts = FactoryBot.create_list(:limit_alert, 2)
+    Alert.expects(:stale).returns(Alert.where(id: alerts.map(&:id)))
+
+    alerts.each { |alert| DeleteObjectHierarchyWorker.expects(:perform_later).with(alert) }
+
+    PurgeStaleObjectsWorker.new.perform(Alert.name)
+  end
+
   test 'perform for DeletedObject' do
     metrics = FactoryBot.create_list(:metric, 2)
     deleted_objects = metrics.map { |metric| DeletedObject.create!(object: metric, owner: metric.owner) }

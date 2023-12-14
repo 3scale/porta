@@ -9,6 +9,7 @@ class Alert < ApplicationRecord
 
   ALERT_LEVELS = [ 50, 80, 90, 100, 120, 150, 200, 300 ]
   VIOLATION_LEVEL = 100
+  TTL = 3.months
 
   belongs_to :cinstance
   belongs_to :account
@@ -30,6 +31,7 @@ class Alert < ApplicationRecord
 
   scope :violations, -> { where.has { level >=  VIOLATION_LEVEL }  }
   scope :alerts, -> { where.has { level < VIOLATION_LEVEL } }
+  scope :stale, -> { where.has { created_at <= TTL.ago } }
 
   scope :by_level, ->(value) { where.has { level >= value } }
   scope :by_timestamp, ->(from, till) { where{ timestamp.in(from..till) } }
@@ -39,7 +41,6 @@ class Alert < ApplicationRecord
     .references(:cinstance)
     .merge(Cinstance.where(user_account_id: account_id.flatten))
   end
-
 
   state_machine :initial => :unread do
     state :unread

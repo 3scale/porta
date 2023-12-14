@@ -2,10 +2,9 @@
 
 class DeleteObjectHierarchyWorker < ApplicationJob
 
-  # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
   # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
-  rescue_from(ActiveJob::DeserializationError) do |exception|
-    Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
+  discard_on ActiveJob::DeserializationError do |job, error|
+    Rails.logger.info "#{job.class.name}#perform raised #{error.class} with message #{error.message}"
   end
 
   queue_as :deletion

@@ -7,7 +7,6 @@ class JanitorWorker
     return unless ThreeScale.config.janitor_worker_enabled
 
     PurgeOldUserSessionsWorker.perform_async
-    PurgeStaleObjectsWorker.perform_later(EventStore::Event.name, DeletedObject.name)
-    true
+    PurgeStaleObjectsWorker.perform_later(*%w[EventStore::Event Alert DeletedObject])
   end
 end

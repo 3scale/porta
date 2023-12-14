@@ -6,6 +6,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   setup do
+    next if self.class != DeleteObjectHierarchyWorkerTest
+
     @object = FactoryBot.create(:metric)
   end
 
@@ -87,6 +89,21 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       object.destroy!
       Rails.logger.expects(:info).with("DeleteObjectHierarchyWorker#on_success raised ActiveRecord::RecordNotFound with message Couldn't find #{object.class} with 'id'=#{object.id}")
       DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
+    end
+  end
+
+  class DeleteAlertTest < DeleteObjectHierarchyWorkerTest
+    setup do
+      @object = @alert = FactoryBot.create(:limit_alert)
+    end
+
+    private
+
+    attr_reader :alert
+
+    def perform_expectations
+      DeleteObjectHierarchyWorker.expects(:perform_later).never
+      DeletePlainObjectWorker.expects(:perform_later).with(alert, ["Hierarchy-Alert-#{alert.id}"], "destroy")
     end
   end
 
