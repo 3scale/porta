@@ -84,8 +84,8 @@ class User < ApplicationRecord
   validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false,
                               :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
 
-  validates :password, length: { :minimum => 6, :allow_blank => true,
-                      :if => ->(u){ u.validate_password? && !u.requires_strong_password?} }
+  validates :password, length: { minimum: 6, allow_blank: true,
+                                 if: -> { validate_password? && !provider_requires_strong_passwords? } }
 
   validates :extra_fields, length: { maximum: 65535 }
   validates :crypted_password, :salt, :remember_token, :activation_code,
@@ -411,8 +411,12 @@ class User < ApplicationRecord
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
   end
 
-  def requires_strong_password?
-    provider_requires_strong_passwords?
+  def provider_requires_strong_passwords?
+    # use fields definitons source (instance variable) as backup when creating new record
+    # and there is no provider account (its still new record and not set through association.build)
+    if validate_password? && (source = fields_definitions_source_root)
+      source.settings.strong_passwords_enabled?
+    end
   end
 
   protected
@@ -436,14 +440,6 @@ class User < ApplicationRecord
 
   def nullify_authentication_id
     update_column(:authentication_id, nil)
-  end
-
-  def provider_requires_strong_passwords?
-    # use fields definitons source (instance variable) as backup when creating new record
-    # and there is no provider account (its still new record and not set through association.build)
-    if validate_password? && (source = fields_definitions_source_root)
-      source.settings.strong_passwords_enabled?
-    end
   end
 
   def trim_white_space_from_username
