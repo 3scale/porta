@@ -9,8 +9,8 @@ require "rails/railtie"
 module ThreeScale
   module Metrics
     module Yabeda
-      LONG_RUNNING_REQUEST_BUCKETS = [
-        0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, # standard
+      TIME_BUCKETS = [
+        0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, # standard
         40, # default Unicorn timeout
       ].freeze
 
@@ -19,24 +19,23 @@ module ThreeScale
           ::Yabeda.configure do
             group :rails
 
-            counter   :requests_total,   comment: "A counter of the total number of HTTP requests rails processed.",
-                      tags: %i[controller action status]
+            counter   :requests_total, comment: "A counter of the total number of HTTP requests rails processed.",
+                      tags: %i[controller status]
 
-            histogram :request_duration, tags: %i[controller action status],
+            histogram :request_duration,
                       unit: :seconds,
-                      buckets: LONG_RUNNING_REQUEST_BUCKETS,
+                      buckets: TIME_BUCKETS,
                       comment: "A histogram of the response latency."
 
             ActiveSupport::Notifications.subscribe "process_action.action_controller" do |*args|
               event = ActiveSupport::Notifications::Event.new(*args)
               labels = {
                 controller: event.payload[:params]["controller"],
-                action: event.payload[:params]["action"],
-                status: ThreeScale::Metrics::Yabeda.event_status_code(event),
+                status: ThreeScale::Metrics::Yabeda.event_status_code_class(event),
               }.merge!(event.payload.slice(*::Yabeda.default_tags.keys))
 
               rails_requests_total.increment(labels)
-              rails_request_duration.measure(labels, ThreeScale::Metrics::Yabeda.ms2s(event.duration))
+              rails_request_duration.measure({}, ThreeScale::Metrics::Yabeda.ms2s(event.duration))
             end
           end
         end
@@ -45,11 +44,29 @@ module ThreeScale
           (milliseconds / 1000.0).round(3)
         end
 
-        def event_status_code(event)
-          if event.payload[:status].nil? && event.payload[:exception].present?
-            ActionDispatch::ExceptionWrapper.status_code_for_exception(event.payload[:exception].first)
+        def event_status_code_class(event)
+          code = if event.payload[:status].nil? && event.payload[:exception].present?
+                   ActionDispatch::ExceptionWrapper.status_code_for_exception(event.payload[:exception].first)
+                 else
+                   event.payload[:status]
+                 end
+          status_class(code)
+        end
+
+        def status_class(code)
+          case code
+          when (100...200)
+            '1xx'
+          when (200...300)
+            '2xx'
+          when (300...400)
+            '3xx'
+          when (400...500)
+            '4xx'
+          when (500...600)
+            '5xx'
           else
-            event.payload[:status]
+            'unknown'
           end
         end
       end
