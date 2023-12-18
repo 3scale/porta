@@ -1,5 +1,6 @@
 $('#errorExplanation').remove();
 $('.inline-errors').remove();
+$('form .input.error').removeClass('error');
 
 <% if @page.valid? %>
   $.flash(<%= flash.now[:notice].to_json.html_safe %>);
@@ -12,11 +13,6 @@ $('.inline-errors').remove();
     codemirror.setValue(<%= (@page.published || '').to_json.html_safe %>);
     codemirror.save()
   }
-
-  // Remove error styles if any
-  $('#edit_cms_template').removeClass('error');
-  $('#edit_cms_template .error').css('border-color', ''); // Reset border color
-
 
   // update the preview draft link after save
   $('#cms-preview-button a').each(function () {
