@@ -5,8 +5,7 @@
   <%= f.input :title, :autofocus => true %>
 
   <%= f.input :section, :as => :section, :default => current_account.sections.root, :paths => true, input_html: {class: 'cms-section-picker'} %>
-  <%= f.input :path, :hint => 'Does not depend on a selected section.', input_html: {class: 'cms-path-autocomplete', name: 'cms_template[path]'} %>
-
+  <%= f.input :path, :hint => 'Does not depend on a selected section.', input_html: {class: 'cms-path-autocomplete'} %>
   <%= f.input :layout, :as => :select,
                      :collection => current_account.layouts,
                      :default => current_account.layouts.default %>
