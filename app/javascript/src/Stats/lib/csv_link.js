@@ -26,7 +26,7 @@ export class StatsCSVLink extends StatsUI {
 
   buildCSVString (data) {
     let csvMatrix = this._parseData(data)
-    return csvMatrix.map(cell => cell.join(',')).join('%0A')
+    return csvMatrix.map(row => row.map(cell => encodeURIComponent(cell)).join(',')).join('%0A')
   }
 
   _parseData (data) {

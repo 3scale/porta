@@ -20,13 +20,13 @@ describe('StatsCSVLink', () => {
         '30'
       ],
       [
-        'marvin',
+        'marvin #2',
         '11',
         '31'
       ]
     ]
   }
-  const expectedCsvString = 'datetime,zaphod,marvin%0A11 Mar 1952 07:00:00 GMT,12,11%0A11 May 2001 08:00:00 BST,30,31'
+  const expectedCsvString = 'datetime,zaphod,marvin%20%232%0A11%20Mar%201952%2007%3A00%3A00%20GMT,12,11%0A11%20May%202001%2008%3A00%3A00%20BST,30,31'
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="csv_link"></div>'
