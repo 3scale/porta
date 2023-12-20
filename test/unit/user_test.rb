@@ -774,7 +774,6 @@ class UserTest < ActiveSupport::TestCase
         user = @buyer.users.new password: "weak", password_confirmation: "weak"
         user.valid?
 
-        assert_not user.errors[:password].blank?
         assert_not user.valid?
         assert_equal "is too short (minimum is 6 characters)", user.errors.messages[:password].first
       end
