@@ -6,8 +6,6 @@ module ThreeScale
       include Base
       include Recaptcha::Adapters::ViewMethods
 
-      # This module must be included from form builders or any other
-      # form-related class that responds to `:template`
       delegate :site_account, to: :template
 
       private
