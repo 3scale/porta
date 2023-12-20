@@ -65,8 +65,13 @@ Feature: Buyer signup
     And I should be warned to complete my signup
 
   @recaptcha
-  Scenario: Spam protection detects suspicious behavior
-    Given the provider has spam protection set to suspicious only
+  Scenario: Captcha is disabled
+    Given the provider has bot protection disabled
     When the buyer wants to sign up
-    Then the buyer doesn't need to pass the captcha after signup form is filled wrong
-    But the buyer will need to pass the captcha after signup form is filled in too quickly
+    Then the captcha is not present
+
+  @recaptcha
+  Scenario: Captcha is enabled
+    Given the provider has bot protection enabled
+    When the buyer wants to sign up
+    Then the captcha is present

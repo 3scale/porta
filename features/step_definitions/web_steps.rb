@@ -53,6 +53,15 @@ Then /^(?:|I |they )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selec
   end
 end
 
+Then "the page should contain {string}" do |text|
+  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
+  if page.respond_to? :should
+    page.should have_content(regex)
+  else
+    assert page.has_content?(regex)
+  end
+end
+
 # Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
 #   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
 #   with_scope(selector) do

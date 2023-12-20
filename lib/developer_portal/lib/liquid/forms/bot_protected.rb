@@ -2,7 +2,9 @@
 
 module Liquid
   module Forms
-    class SpamProtected < Forms::Create
+    class BotProtected < Forms::Create
+      include ThreeScale::BotProtection::Form
+
       def initialize(context, _object_name, html_attributes = {})
         # FIXME: object_name should be removed and the template password/new fixed. We're
         # accidentally passing a bracket '{'
@@ -10,7 +12,7 @@ module Liquid
       end
 
       def render(content)
-        super(content + spam_protection)
+        super(content + bot_protection)
       end
 
       delegate :input, :semantic_errors, to: :form_builder
@@ -25,8 +27,8 @@ module Liquid
         @model ||= object.instance_variable_get(:@model)
       end
 
-      def spam_protection
-        protector = model.spam_protection.form(self).to_s
+      def bot_protection
+        protector = bot_protection_inputs
 
         return '' if protector.blank?
 
@@ -35,10 +37,9 @@ module Liquid
 
       def form_builder
         @form_builder ||= begin
-                            object_name = ActiveModel::Naming.param_key(model)
-                            Formtastic::FormBuilder.new(object_name, model, template, {})
-                          end
-
+          object_name = ActiveModel::Naming.param_key(model)
+          Formtastic::FormBuilder.new(object_name, model, template, {})
+        end
       end
     end
   end
