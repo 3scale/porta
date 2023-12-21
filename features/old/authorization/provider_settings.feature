@@ -29,7 +29,7 @@ Feature: Provider settings authorization
       | 0 Messages           | emails settings          |
       | 0 Messages           | email templates          |
       | Developer Portal     | dns settings             |
-      | Developer Portal     | spam protection          |
+      | Developer Portal     | bot protection          |
       | Developer Portal     | xss protection           |
       | Developer Portal     | authentication providers |
 
@@ -55,7 +55,7 @@ Feature: Provider settings authorization
       | 0 Messages           | email templates          |
       | Developer Portal     | site settings            |
       | Developer Portal     | dns settings             |
-      | Developer Portal     | spam protection          |
+      | Developer Portal     | bot protection          |
       | Developer Portal     | xss protection           |
       | Developer Portal     | authentication providers |
 
@@ -83,6 +83,6 @@ Feature: Provider settings authorization
       | Developer Portal     | site settings            |
       | Developer Portal     | feature visibility       |
       | Developer Portal     | dns settings             |
-      | Developer Portal     | spam protection          |
+      | Developer Portal     | bot protection          |
       | Developer Portal     | xss protection           |
       | Developer Portal     | authentication providers |

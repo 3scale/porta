@@ -30,7 +30,7 @@ Feature: Account service plans management
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Spam Protection      |
+      | Bot Protection      |
       | SSO Integrations     |
       | Liquid Reference     |
 

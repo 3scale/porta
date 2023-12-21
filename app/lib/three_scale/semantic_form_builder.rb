@@ -106,7 +106,7 @@ module ThreeScale
       end
     end
 
-    # Just adds fields from spam protection module
+    # Just adds fields from bot protection module
     def bot_protection
       bot_protection_inputs
     end
