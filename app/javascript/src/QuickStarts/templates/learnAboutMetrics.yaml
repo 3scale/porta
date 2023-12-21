@@ -1,9 +1,8 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: learning-about-metrics
-  # you can add additional metadata here
-  instructional: true
-  threescaleAPIManagementFeatures: true
+  labels:
+    category: threescale-api-management-features
 spec:
   displayName: Metrics
   durationMinutes: 5

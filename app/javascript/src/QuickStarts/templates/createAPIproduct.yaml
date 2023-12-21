@@ -1,9 +1,8 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-an-api-product
-  # you can add additional metadata here
-  instructional: true
-  commonInstance: true
+  labels:
+    category: common-instance
 spec:
   displayName: Create an API product
   durationMinutes: 5
