@@ -24,9 +24,14 @@ export class StatsCSVLink extends StatsUI {
     this.refresh()
   }
 
+  // Enclose in double quotes values that have commas, line breaks or double quotes (escape the latter as "")
+  escapeCellData(data) {
+    return (typeof data === 'string' && data.match(/[\r\n,"]/)) ? `"${data.replace(/"/g, '""')}"` : data
+  }
+
   buildCSVString (data) {
     let csvMatrix = this._parseData(data)
-    return csvMatrix.map(cell => cell.join(',')).join('%0A')
+    return csvMatrix.map(row => row.map(cell => encodeURIComponent(this.escapeCellData(cell))).join(',')).join('%0A')
   }
 
   _parseData (data) {
