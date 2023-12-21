@@ -166,6 +166,11 @@ Given "a buyer logged in to a provider using SSO" do
   )
 end
 
+When "the buyer wants to log in" do
+  step 'the current domain is foo.3scale.localhost'
+  step 'I go to the login page'
+end
+
 When "the buyer wants to sign up" do
   step 'the current domain is foo.3scale.localhost'
   step 'I go to the sign up page'

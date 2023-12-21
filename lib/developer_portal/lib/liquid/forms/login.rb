@@ -1,6 +1,6 @@
 module Liquid
   module Forms
-    class Login < Forms::Create
+    class Login < Forms::BotProtected
 
       def html_class_name
         'formtastic session'
