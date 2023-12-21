@@ -103,7 +103,7 @@ gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "
 gem 'prawn-svg'
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
-gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
+gem 'recaptcha', '~> 5.16.0'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
 gem 'redis', '~> 4.2.0', require: ['redis', 'redis/connection/hiredis']
@@ -218,7 +218,7 @@ group :test do
   gem 'rspec_junit_formatter'
 
   # IMPORTANT: Load 'mocha' after 'shoulda'.
-  gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
+  gem 'mocha', require: 'mocha/minitest'
 
   # proxy tests
   gem 'database_cleaner', require: false

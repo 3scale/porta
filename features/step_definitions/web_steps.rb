@@ -53,6 +53,15 @@ Then /^(?:|I |they )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selec
   end
 end
 
+Then "the page should contain {string}" do |text|
+  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
+  if page.respond_to? :should
+    page.should have_content(regex)
+  else
+    assert page.has_content?(regex)
+  end
+end
+
 # Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
 #   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
 #   with_scope(selector) do
@@ -140,4 +149,15 @@ end
 
 When 'I change to tab {string}' do |tab|
   find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
+end
+
+Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
+  if rack_test?
+    step original
+  else
+    accept_confirm(text) do
+      step original
+    end
+    wait_for_requests
+  end
 end

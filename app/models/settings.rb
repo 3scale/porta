@@ -91,6 +91,13 @@ class Settings < ApplicationRecord
     true
   end
 
+  def spam_protection_level
+    # `:auto` is the old 'Suspicious only' mode which is deprecated and replaced by `:captcha`.
+    # We accept it only for backwards compatibility with clients still having 'auto' in the DB
+    level = super.to_sym
+    level == :auto ? :captcha : level
+  end
+
   protected
 
   delegate :provider_id_for_audits, :to => :account, :allow_nil => true

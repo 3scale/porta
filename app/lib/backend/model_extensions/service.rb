@@ -10,11 +10,11 @@ module Backend
       end
 
       def backend_id
-        prefix_key
+        id.to_s
       end
 
       def update_backend_service
-        if account && account.has_bought_cinstance?
+        if account&.has_bought_cinstance?
           save_options = {
             :id                         => backend_id,
             :provider_key               => account.api_key,

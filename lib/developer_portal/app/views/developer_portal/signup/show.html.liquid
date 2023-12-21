@@ -85,7 +85,6 @@
               </fieldset>
             </div>
           </div>
-          <input type="hidden" id="captchaChecked" name="captchaChecked" value="">
         {% endform %}
       </div>
     </div>
@@ -94,14 +93,4 @@
 {{ 'validate_signup.js' | javascript_include_tag }}
 <script type="text/javascript">
   document.querySelector('input:not([type="hidden"])').focus()
-
-  const inputCaptcha = document.querySelector('#captchaChecked')
-  function onCaptchaSuccess () {
-    inputCaptcha.value = 'ok'
-    inputCaptcha.dispatchEvent(new Event('keyup'))
-  }
-  function onCaptchaFail () {
-    inputCaptcha.value = ''
-    inputCaptcha.dispatchEvent(new Event('keyup'))
-  }
 </script>

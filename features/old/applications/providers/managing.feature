@@ -33,7 +33,7 @@ Feature: Applications management
     And I follow "FunkyWidget" in the applications widget
     Then I should be on the provider side "FunkyWidget" application page
     Then I follow "Edit"
-    When I follow "Delete" and I confirm dialog box
+    When I follow "Delete" and confirm the dialog
     Then I should see "The application was successfully deleted."
     And I should not see "FunkyWidget"
     # FIXME: this fails for some reason, could we remove it? Does it make sense in this test?
@@ -54,7 +54,7 @@ Feature: Applications management
     Given buyer "bob" has application "MegaWidget"
     And I go to the provider side "MegaWidget" application page
     Then I should see that application "MegaWidget" is live
-    When I follow "Suspend" and I confirm dialog box
+    When I follow "Suspend" and confirm the dialog
     Then I should see that application "MegaWidget" is suspended
     And application "MegaWidget" should be suspended
 

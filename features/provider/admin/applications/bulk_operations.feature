@@ -62,7 +62,7 @@ Feature: Provider applications bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "This is the subject"
     And fill in "Body" with "This is the body"
-    And press "Send" and I confirm dialog box
+    And press "Send" and confirm the dialog
     Then I should see "Successfully sent 2 emails."
     Then "buyer@example.com" should receive 2 email
 
@@ -76,7 +76,7 @@ Feature: Provider applications bulk operations
     When item "App 2" is selected
     And select bulk action "Change application plan"
     And select "Premium" from "Plan"
-    And press "Change plan" and I confirm dialog box
+    And press "Change plan" and confirm the dialog
     Then should see "Successfully changed the plan of 2 applications"
     And the table should contain the following:
       | Name          | Service       | Plan           |
@@ -101,7 +101,7 @@ Feature: Provider applications bulk operations
     And item "Secondary App" is selected
     And select bulk action "Change state"
     And select "Suspend" from "Action"
-    And press "Change state" and I confirm dialog box within the modal
+    And press "Change state" and confirm the dialog within the modal
     Then should see "Successfully changed the state of 2 applications"
     And the table should contain the following:
       | Name          | State     | Service       |
@@ -115,7 +115,7 @@ Feature: Provider applications bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "Error"
     And fill in "Body" with "This will fail"
-    And press "Send" and I confirm dialog box
+    And press "Send" and confirm the dialog
     Then the bulk operation has failed for "Bob Buyer"
     And "buyer@example.com" should receive no emails
 
@@ -124,7 +124,7 @@ Feature: Provider applications bulk operations
     When item "App 1" is selected
     And select bulk action "Change state"
     When select "Suspend" from "Action"
-    And press "Change state" and I confirm dialog box within the modal
+    And press "Change state" and confirm the dialog within the modal
     Then the bulk operation has failed for "App 1"
     And the table should contain the following:
       | Name          | State | Service       |
@@ -137,7 +137,7 @@ Feature: Provider applications bulk operations
     When item "App 1" is selected
     And select bulk action "Change application plan"
     When select "Premium" from "Plan"
-    And press "Change plan" and I confirm dialog box
+    And press "Change plan" and confirm the dialog
     Then the bulk operation has failed for "App 1"
     And the table should contain the following:
       | Name          | Service       | Plan           |

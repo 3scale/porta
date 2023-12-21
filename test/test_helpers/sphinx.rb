@@ -12,7 +12,7 @@ module ThinkingSphinx
         init
         start index: false
 
-        disabled = Mocha::Mockery.instance.stubba.stubba_methods.any? {|m| m.stubbee == SphinxIndexationWorker && m.method == :perform}
+        disabled = Mocha::Mockery.instance.stubba.stubba_methods.any? {|m| m.stubbee == SphinxIndexationWorker && m.method_name == :perform}
         enable_search_jobs! if disabled
 
         yield

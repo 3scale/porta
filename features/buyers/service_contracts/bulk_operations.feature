@@ -63,7 +63,7 @@ Feature: Service subscriptions bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "This is the subject"
     And fill in "Body" with "This is the body"
-    And press "Send" and I confirm dialog box
+    And press "Send" and confirm the dialog
     Then I should see "Successfully sent 2 emails."
     Then "jane@example.com" should receive 1 email
     Then "bob@example.com" should receive 1 email
@@ -80,7 +80,7 @@ Feature: Service subscriptions bulk operations
     And item "Bob" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
-    And press "Change plan" and I confirm dialog box
+    And press "Change plan" and confirm the dialog
     Then should see "Successfully changed the plan of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | Plan         |
@@ -107,7 +107,7 @@ Feature: Service subscriptions bulk operations
     And item "Jane" is selected
     And select bulk action "Change state"
     And select "Suspend" from "Action"
-    And press "Change state" and I confirm dialog box within the modal
+    And press "Change state" and confirm the dialog within the modal
     Then should see "Successfully changed the state of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | State     |
@@ -122,7 +122,7 @@ Feature: Service subscriptions bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "Error"
     And fill in "Body" with "This will fail"
-    And press "Send" and I confirm dialog box
+    And press "Send" and confirm the dialog
     Then the bulk operation has failed for "Jane"
     And "jane@example.com" should receive no emails
 
@@ -131,7 +131,7 @@ Feature: Service subscriptions bulk operations
     When item "Jane" is selected
     And select bulk action "Change state"
     When select "Suspend" from "Action"
-    And press "Change state" and I confirm dialog box within the modal
+    And press "Change state" and confirm the dialog within the modal
     Then the bulk operation has failed for "Subscription of Jane to service Another API"
     And the table should contain the following:
       | Account | Service     | State |
@@ -146,7 +146,7 @@ Feature: Service subscriptions bulk operations
     And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
-    And press "Change plan" and I confirm dialog box
+    And press "Change plan" and confirm the dialog
     Then the bulk operation has failed for "Subscription of Alice to service Fancy API"
     And the table should contain the following:
       | Account | Service     | Plan         |

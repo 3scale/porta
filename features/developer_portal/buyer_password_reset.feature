@@ -4,12 +4,19 @@ Feature: Buyer signup
   Background:
     Given a provider exists
     And master has a application plan "enterprise"
+    And the provider has bot protection enabled
     And the provider account allows signups
 
   @recaptcha
-  Scenario: Spam protection detects suspicious behavior
-    Given the provider has spam protection set to suspicious only
+  Scenario: Bot protection doesn't detect the client as a bot
+    And the client will be marked as a bot
     When the buyer wants to reset their password
-    Then 15 seconds pass
-    Then the buyer doesn't need to pass the captcha after reset password form is filled wrong
-    But the buyer will need to pass the captcha after reset password form is filled in too quickly
+    And the buyer fills in the form
+    Then the page should contain "Bot protection failed."
+
+  @recaptcha
+  Scenario: Bot protection doesn't detect the client as a bot
+    And the client won't be marked as a bot
+    When the buyer wants to reset their password
+    And the buyer fills in the form
+    Then the page should contain "Email not found."

@@ -17,7 +17,7 @@ Feature: Emails
     And buyer "bob" has application "other"
     And I go to the provider side "other" application page
     Then I should see that application "other" is live
-    When I follow "Suspend" and I confirm dialog box
+    When I follow "Suspend" and confirm the dialog
     Then application "other" should be suspended
     And I act as "bob"
     Then I should receive no email with subject "Application has been suspended"

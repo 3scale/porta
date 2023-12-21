@@ -556,8 +556,8 @@ en:
   sites:
     spam_protections:
       edit:
-        captcha_hint_false: 'reCAPTCHA has not been configured correctly, Spam Protection cannot be enabled.'
-        captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
+        captcha_hint_false: 'reCAPTCHA has not been configured correctly, bot protection cannot be enabled.'
+        captcha_hint_true: "reCAPTCHA v3 will invisibly verify interactions to detect bots."
     usage_rules:
       edit:
         plans_label: 'Developers are allowed to:'
@@ -1421,8 +1421,8 @@ en:
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and up to 256 characters."
-        key: "Only alphanumeric characters [0-9, a-z, A-Z], hyphen-minus (-) and underscore, no spaces and between 5 and 255 characters."
+        user_key: "Allowed characters: [A-Z a-z 0-9 - _ .], or Base64 format without forward slash (/), no spaces and up to 256 characters."
+        key: "Allowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
 
       cms:
         page:

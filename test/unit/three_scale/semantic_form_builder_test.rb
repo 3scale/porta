@@ -80,4 +80,15 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
       assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary').length.positive?
     end
   end
+
+  test 'bot protection' do
+    SemanticFormBuilder.any_instance.stubs(:bot_protection_enabled?).returns(true)
+    account = FactoryBot.create(:buyer_account)
+    buffer = TestOutputBuffer.new
+    buffer.concat(semantic_form_for(account, url: '', &:bot_protection))
+
+    html_doc = Nokogiri::HTML4(buffer.output)
+
+    assert html_doc.css('.g-recaptcha').present?
+  end
 end
