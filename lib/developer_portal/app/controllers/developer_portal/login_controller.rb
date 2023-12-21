@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::LoginController < DeveloperPortal::BaseController
+  include ThreeScale::BotProtection::Controller
+
   skip_before_action :login_required
 
   wrap_parameters :session, include: %i[username password remember_me]
@@ -23,6 +25,8 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   def create
     logout_keeping_session!
 
+    return render_bot_error unless bot_check
+
     if (@user = @strategy.authenticate(params.merge(request: request)))
       self.current_user = @user
       create_user_session!
@@ -44,6 +48,12 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   end
 
   private
+
+  def render_bot_error
+    @session = Session.new
+    assign_drops add_authentication_drops
+    render action: :new
+  end
 
   def render_creation_error
     @session = Session.new
