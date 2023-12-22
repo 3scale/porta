@@ -22,17 +22,22 @@ import type {
 
 import './QuickStartContainer.scss'
 
+interface Category {
+  id: string;
+  title: string;
+}
+
 export const CustomCatalog: React.FC = () => {
   const { activeQuickStartID, allQuickStartStates, allQuickStarts, loading } =
     useContext<QuickStartContextValues>(QuickStartContext)
-  
+
   // Notes:
   // - The sections will appear in the order specified in the array
   // - The 'id' must be included in the QuickStart yaml metadata as 'category', e.g.
   //   metadata:
   //     name: getting-started-with-quick-starts
   //     category: basic-api-integration-setup
-  const categories = [
+  const categories: Category[] = [
     {
       id: 'threescale-api-management-features',
       title: '3scale API Management features'
@@ -41,7 +46,7 @@ export const CustomCatalog: React.FC = () => {
       id: 'common-instance',
       title: 'Common instance for creating and tracking APIs'
     },
-    { 
+    {
       id: 'basic-api-integration-setup',
       title: 'Basic API integration setup'
     }
@@ -69,7 +74,7 @@ export const CustomCatalog: React.FC = () => {
                         <QuickStartTile
                           isActive={id === activeQuickStartID}
                           quickStart={quickStart}
-                          status={getQuickStartStatus(allQuickStartStates!, id!)}
+                          status={getQuickStartStatus(allQuickStartStates!, id)}
                         />
                       </GalleryItem>
                     )
