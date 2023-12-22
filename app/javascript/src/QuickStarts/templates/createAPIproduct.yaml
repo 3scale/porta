@@ -2,7 +2,7 @@
 metadata:
   name: creating-an-api-product
   labels:
-    category: common-instance
+    category: common-use-cases
 spec:
   displayName: Create an API product
   durationMinutes: 5

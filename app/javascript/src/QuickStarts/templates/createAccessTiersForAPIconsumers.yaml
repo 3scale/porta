@@ -2,7 +2,7 @@
 metadata:
   name: creating-access-tiers-for-api-consumers
   labels:
-    category: common-instance
+    category: common-use-cases
 spec:
   displayName: Create access tiers for API consumers to use your API
   durationMinutes: 5

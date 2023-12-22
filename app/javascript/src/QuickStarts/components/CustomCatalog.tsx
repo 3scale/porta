@@ -43,8 +43,8 @@ export const CustomCatalog: React.FC = () => {
       title: '3scale API Management features'
     },
     {
-      id: 'common-instance',
-      title: 'Common instance for creating and tracking APIs'
+      id: 'common-use-cases',
+      title: 'Common use cases for creating and tracking APIs'
     },
     {
       id: 'basic-api-integration-setup',

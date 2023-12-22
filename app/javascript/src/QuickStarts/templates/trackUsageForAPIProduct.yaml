@@ -2,7 +2,7 @@
 metadata:
   name: tracking-usage-for-api-product
   labels:
-    category: common-instance
+    category: common-use-cases
 spec:
   displayName: Track usage for API product
   durationMinutes: 5
