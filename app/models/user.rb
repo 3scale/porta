@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/sha1'
 
 class User < ApplicationRecord
@@ -84,17 +86,6 @@ class User < ApplicationRecord
   validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false,
                               :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
 
-  validates :password, length: { minimum: 6, allow_blank: true,
-                                 if: -> { validate_password? && !provider_requires_strong_passwords? } }
-
-  validates :extra_fields, length: { maximum: 65535 }
-  validates :crypted_password, :salt, :remember_token, :activation_code,
-            length: { maximum: 40 }
-  validates :state, :role, :lost_password_token, :first_name, :last_name, :signup_type,
-            :job_role, :last_login_ip, :email_verification_code, :title, :cas_identifier,
-            :authentication_id, :open_id, :password_digest,
-            length: { maximum: 255 }
-
   # strong passwords
   special_characters = '-+=><_$#.:;!?@&*()~][}{|'
   RE_STRONG_PASSWORD = %r{
@@ -107,10 +98,20 @@ class User < ApplicationRecord
       .{8,} # at least 8 characters
     \z
   }x
-
   STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{special_characters}."
+
   validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
                                  :if => :provider_requires_strong_passwords? }
+  validates :password, length: { minimum: 6, allow_blank: true,
+                                 if: -> { validate_password? && !provider_requires_strong_passwords? } }
+
+  validates :extra_fields, length: { maximum: 65535 }
+  validates :crypted_password, :salt, :remember_token, :activation_code,
+            length: { maximum: 40 }
+  validates :state, :role, :lost_password_token, :first_name, :last_name, :signup_type,
+            :job_role, :last_login_ip, :email_verification_code, :title, :cas_identifier,
+            :authentication_id, :open_id, :password_digest,
+            length: { maximum: 255 }
 
   validates :conditions, acceptance: { :on => :create }
   validates :service_conditions, acceptance: { :on => :create }
