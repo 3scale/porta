@@ -79,3 +79,12 @@ Feature: Personal Details
     Then I should see "User was successfully updated"
     Then the "First name" field should contain "dude"
     And the "User extra required" field should contain "whatever"
+
+  Scenario: Update own password when the user was signed up with password
+    Given the user was signed up with password
+    When I navigate to the Account Settings
+    And I go to the provider personal details page
+    And I fill in "New Password" with "hi"
+    And I fill in "Current password" with "supersecret"
+    And I press "Update Details"
+    Then I should see inline error "is too short (minimum is 6 characters)" for user password input
