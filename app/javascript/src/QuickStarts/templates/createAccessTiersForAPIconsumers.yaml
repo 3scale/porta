@@ -1,9 +1,8 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-access-tiers-for-api-consumers
-  # you can add additional metadata here
-  instructional: true
-  commonInstance: true
+  labels:
+    category: common-instance
 spec:
   displayName: Create access tiers for API consumers to use your API
   durationMinutes: 5
