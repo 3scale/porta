@@ -5,7 +5,7 @@ metadata:
     category: threescale-api-management-features
 spec:
   displayName: Backends
-  # durationMinutes: 5
+  durationMinutes: 5
   # Optional type section, will display as a tile on the card
   type:
     text: Tour
