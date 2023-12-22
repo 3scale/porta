@@ -18,7 +18,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     @paid_plan = FactoryBot.create(:application_plan, issuer: @service, cost_per_month: 50)
     @enterprise_plan = FactoryBot.create(:application_plan, issuer: @service, system_name: "2017_fake_#{Logic::ProviderUpgrade::ENTERPRISE_PLAN}_3M")
     @trial_plan = FactoryBot.create(:application_plan, issuer: @service)
-    @trial_plan.plan_rule.metadata = {trial: true}
+    @trial_plan.send(:plan_rule).metadata = {trial: true}
   end
 
   test 'notifications can be disabled' do

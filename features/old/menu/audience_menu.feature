@@ -36,7 +36,7 @@ Feature: Audience menu
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Spam Protection      |
+      | Bot Protection      |
       | SSO Integrations     |
       | Liquid Reference     |
 
@@ -82,6 +82,6 @@ Feature: Audience menu
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Spam Protection      |
+      | Bot Protection      |
       | SSO Integrations     |
       | Liquid Reference     |

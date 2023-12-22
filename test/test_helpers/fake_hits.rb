@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module TestHelpers
   module FakeHits
     # Value is either number of hits or one of
     #
-    # :clickfest - all the hours, every day, get as many hits as is the current date (1..31)
+    # :clickfest - all the hours, every day, get a random number of hits (from 0 to 100)
     # Hash - every key is hour, its value is number of hits
     # Array - like clickfest, but hits only selected hours
     # Integer - fills the whole range with this value of hits
@@ -29,8 +31,7 @@ module TestHelpers
       ::Backend::Transaction.report!(:cinstance  => cinstance,
                                      :service_id => cinstance.service.id,
                                      :usage      => { metric.name => value},
-                                     :created_at => time,
-                                     :confirmed  => true)
+                                     :created_at => time)
     end
 
     private
@@ -43,7 +44,7 @@ module TestHelpers
 
     def fake_hours_in_range(date, value, range, cinstance, metric)
       range.each do |h|
-        v = (value == :clickfest) ? date.day : value
+        v = value == :clickfest ? rand(0..100) : value
         fake_hit(date + h.hours, v, cinstance, metric)
       end
     end

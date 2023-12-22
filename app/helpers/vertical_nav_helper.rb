@@ -163,7 +163,7 @@ module VerticalNavHelper
     if can?(:manage, :settings)
       portal_settings_items = []
       portal_settings_items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
-      portal_settings_items << {id: :spam_protection,  title: 'Spam Protection',  path: edit_admin_site_spam_protection_path}
+      portal_settings_items << {id: :spam_protection,  title: 'Bot Protection',  path: edit_admin_site_spam_protection_path}
       portal_settings_items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
       portal_settings_items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
 

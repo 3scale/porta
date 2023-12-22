@@ -4,7 +4,6 @@ require 'test_helper'
 
 class SphinxAccountIndexationWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
-  include TestHelpers::Master
 
   test "master account should not be indexed" do
     ThinkingSphinx::Test.rt_run do

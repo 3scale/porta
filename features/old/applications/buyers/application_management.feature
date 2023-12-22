@@ -122,7 +122,7 @@ Feature: Buyer's application management
     And I go to the applications page
     And I follow "UltraWidget" for application "UltraWidget"
     And I follow "Edit UltraWidget"
-    And I follow "Delete UltraWidget" and I confirm dialog box
+    And I follow "Delete UltraWidget" and confirm the dialog
     Then I should see "Application was successfully deleted."
     And I should be on the applications page
     And I should not see "UltraWidget"

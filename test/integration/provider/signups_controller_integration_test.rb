@@ -55,7 +55,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
   end
 
   test 'POST in case of spam check not passing' do
-    Provider::SignupsController.any_instance.expects(:spam_check).returns(false)
+    Provider::SignupsController.any_instance.expects(:bot_check).returns(false)
 
     assert_no_difference(master_account.buyer_accounts.method(:count)) do
       post provider_signup_path, params: create_params

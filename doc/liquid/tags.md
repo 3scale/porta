@@ -154,7 +154,7 @@ of the form. The supported forms are:
    <tr>
      <th>Form</th>
      <th>Allowed Field Names</th>
-     <th>Spam Protection</th>
+     <th>Bot Protection</th>
      <th>Notes</th>
    </tr>
    <tr>
