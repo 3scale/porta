@@ -276,15 +276,15 @@ commands: # reusable commands with parameters
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
+          name: jemalloc availability
+          command: ldd /bin/bash | grep "$LD_PRELOAD" || ( ldconfig -p && exit 1 )
+          environment: &malloc_preload
+            LD_PRELOAD: libjemalloc.so.2
+      - run:
           name: Rspec tests
           command: |
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
-          environment: &malloc_preload
-            LD_PRELOAD: libautohbw.so.0
-            AUTO_HBW_SIZE: 10240G
-            AUTO_HBW_LOG: "-2"
-            MEMKIND_HBW_NODES: "0"
-            MEMKIND_HEAP_MANAGER: JEMALLOC
+          environment: *malloc_preload
       - upload-artifacts
 
   cucumber-tests:
