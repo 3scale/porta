@@ -18,7 +18,7 @@ Feature: Create application from product context
 
   Scenario: Create an application in single application mode
     Given provider "foo.3scale.localhost" has multiple applications disabled
-    And the provider "foo.3scale.localhost" has the following applications:
+    And the provider has the following applications:
       | Buyer | Name    | Plan      |
       | bob   | BobApp  | Basic     |
     Then I should not be allowed to create more applications for product "API"
