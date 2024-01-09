@@ -1,33 +1,44 @@
-- content_for :page_header_title, 'Accounts'
+section.pf-c-page__main-section.pf-m-light
+  .pf-c-content
+    .pf-l-level
+      .pf-l-level__item
+        h1 Accounts
+
+    div
+      p(data-ouia-component-type="PF4/Text" data-ouia-safe="true" data-ouia-component-id="OUIA-Generated-Text-2" data-pf-content="true")  Accounts refer to organizations that own applications consuming the API. These organizations may have one or multiple users who can access application credentials and usage analytics through the developer portal.
+
 
 - account_plans_size = presenter.account_plans_size
 - accounts = presenter.buyers.decorate
 
-= render 'shared/bulk_operations' do
-  p
-    ' You have selected <span class="count"></span> accounts
-    ' and you can make following operations with them:
-  dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
-    = bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
-                                'Send email to selected accounts'
-    - if can?(:see, :account_plans) && account_plans_size > 1
-      = bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path,
-                                           'Transfer these accounts to different account plan'
-    = bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path,
-                                  'Approve, reject or make pending selected accounts'
 
-- if presenter.empty_state?
-  div class="pf-c-empty-state"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-ghost pf-c-empty-state__icon" aria-hidden="true"
-      h1 class="pf-c-title pf-m-lg"
-        = t('.empty_state.title')
-      div class="pf-c-empty-state__body"
-        = t('.empty_state.body')
-      - if can?(:create, Account)
-        = link_to t('.empty_state.primary'), presenter.create_account_path, class: "pf-c-button pf-m-primary"
+section.pf-c-page__main-section
+  .pf-c-content
+  = render 'shared/bulk_operations' do
+    p
+      ' You have selected <span class="count"></span> accounts
+      ' and you can make following operations with them:
+    dl class="pf-c-description-list pf-m-horizontal pf-m-fluid"
+      = bulk_action 'Send email', new_admin_buyers_accounts_bulk_send_email_path,
+                                  'Send email to selected accounts'
+      - if can?(:see, :account_plans) && account_plans_size > 1
+        = bulk_action 'Change account plan', new_admin_buyers_accounts_bulk_change_plan_path,
+                                             'Transfer these accounts to different account plan'
+      = bulk_action 'Change state', new_admin_buyers_accounts_bulk_change_state_path,
+                                    'Approve, reject or make pending selected accounts'
 
-- else
+  - if presenter.empty_state?
+    div class="pf-c-empty-state"
+      div class="pf-c-empty-state__content"
+        i class="fas fa-ghost pf-c-empty-state__icon" aria-hidden="true"
+        h1 class="pf-c-title pf-m-lg"
+          = t('.empty_state.title')
+        div class="pf-c-empty-state__body"
+          = t('.empty_state.body')
+        - if can?(:create, Account)
+          = link_to t('.empty_state.primary'), presenter.create_account_path, class: "pf-c-button pf-m-primary"
+
+  - else
   - content_for :javascripts do
     = javascript_packs_with_chunks_tag 'table_toolbar'
 
