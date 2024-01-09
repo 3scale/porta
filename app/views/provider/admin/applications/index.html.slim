@@ -1,14 +1,23 @@
-- content_for :page_header_title_with_button, 'Applications'
-- content_for :page_header_button_label, 'Create application'
-- content_for :page_header_button_href, new_provider_admin_application_path
+section.pf-c-page__main-section.pf-m-light
+  .pf-c-content
+    .pf-l-level
+      .pf-l-level__item
+        h1 Applications
+      .pf-l-level__item
+        a.pf-c-button.pf-m-primary(href="/p/admin/applications/new") Create application
 
-- if current_user.accessible_services.empty?
-  = render 'shared/service_access'
-- else
-  = render 'shared/applications/listing', { applications: @cinstances,
-                                            application_plans: @application_plans,
-                                            plan: @plan,
-                                            account: @account,
-                                            search: @search,
-                                            service: @service,
-                                            states: @states }
+    div
+      p(data-ouia-component-type="PF4/Text" data-ouia-safe="true" data-ouia-component-id="OUIA-Generated-Text-2" data-pf-content="true")  Applications are a representation of an API consumer. They include credentials obtained through the API's authentication method, along with usage metrics and other metadata. The application plan sets the limits for each application
+
+section.pf-c-page__main-section
+  .pf-c-content
+    - if current_user.accessible_services.empty?
+      = render 'shared/service_access'
+    - else
+      = render 'shared/applications/listing', { applications: @cinstances,
+                                                application_plans: @application_plans,
+                                                plan: @plan,
+                                                account: @account,
+                                                search: @search,
+                                                service: @service,
+                                                states: @states }
