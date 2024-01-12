@@ -25,7 +25,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   def create
     logout_keeping_session!
 
-    return render_login_error unless bot_check
+    return render_login_error if auth_strategy_is_internal? && !bot_check
 
     if (@user = @strategy.authenticate(params.merge(request: request)))
       self.current_user = @user
@@ -73,4 +73,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
     drops
   end
 
+  def auth_strategy_is_internal?
+    params.key?(:username) || params.key?(:password)
+  end
 end
