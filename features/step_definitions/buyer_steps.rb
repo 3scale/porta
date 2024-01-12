@@ -147,7 +147,7 @@ When "the developer tries to log in" do
   click_button('Sign in')
 end
 
-Then "the developer login attempt failed" do
+Then "the developer login attempt fails" do
   assert_current_path "/session"
   assert find_field('Username or Email')
   assert find_field('Password')
