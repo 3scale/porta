@@ -32,6 +32,10 @@ end
 
 When /^(?:|I |they |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
+    # there must be a capybara bug because assert_link fails with
+    # Unused parameters passed to Capybara::Queries::SelectorQuery : [:link, "..."]
+    # assert_link(link, exact: true, visible: !invisible, count: 1)
+    assert_selector(:link, link, exact: true, visible: !invisible, count: 1)
     click_link(link, exact: true, visible: !invisible)
   end
 end
