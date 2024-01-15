@@ -49,7 +49,7 @@ Feature: Providers's applications searching, sorting and filtering
       | BobApp | bob     |
 
   Scenario: Listing
-    Given the provider "foo.3scale.localhost" has the following applications:
+    Given the provider has the following applications:
       | Buyer | Name     | Plan  |
       | jane  | CheapApp | Cheap |
     When I am on the applications admin page with 1 record per page

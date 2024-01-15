@@ -22,11 +22,11 @@ jobs:
       - id: git_log
         name: Generate diff log
         run: |
-          issues=$(git log origin/${{ inputs.to_branch }}..origin/${{ inputs.ref }} | grep -ioh "THREESCALE-[0-9]\+" | sort -u | sed -e 's/^/https:\/\/issues.redhat.com\/browse\//')
+          issues=$(git log origin/${{ inputs.to_branch }}..${{ inputs.ref }} | grep -ioh "THREESCALE-[0-9]\+" | sort -u | sed -e 's/^/https:\/\/issues.redhat.com\/browse\//')
           echo "issues<<EOF" >> $GITHUB_OUTPUT
           echo "$issues" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          log=$(git log origin/${{ inputs.to_branch }}..origin/${{ inputs.ref }} --pretty=format:'%h - %s (%an)')
+          log=$(git log origin/${{ inputs.to_branch }}..${{ inputs.ref }} --pretty=format:'%h - %s (%an)')
           echo "log<<EOF" >> $GITHUB_OUTPUT
           echo "$log" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -37,10 +37,6 @@ jobs:
       - name: Print diff log
         run: |
           echo -e "\nISSUES MENTIONED IN THE CHANGELOG:"
-          cat << EOF
-          ${{ steps.git_log.outputs.issues }}
-          EOF
+          echo "${{ steps.git_log.outputs.issues }}"
           echo -e "\nCHANGELOG SUMMARY:"
-          cat << EOF
-          ${{ steps.git_log.outputs.log }}
-          EOF
+          echo "${{ steps.git_log.outputs.log }}"

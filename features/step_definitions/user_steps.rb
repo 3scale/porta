@@ -40,6 +40,10 @@ Given "{user} is email unverified" do |user|
   user.email_unverify! unless user.email_unverified?
 end
 
+Given "{user} was signed up with password" do |user|
+  user.update(signup_type: nil)
+end
+
 Given /^provider "([^\"]*)" has the following users:$/ do |provider_name, table|
   table.hashes.each do |hash|
     step %(an #{hash['State'] || 'active'} user "#{hash['User']}" of account "#{provider_name}")

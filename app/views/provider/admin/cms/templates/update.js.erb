@@ -1,5 +1,6 @@
 $('#errorExplanation').remove();
 $('.inline-errors').remove();
+$('form .input.error').removeClass('error');
 
 <% if @page.valid? %>
   $.flash(<%= flash.now[:notice].to_json.html_safe %>);

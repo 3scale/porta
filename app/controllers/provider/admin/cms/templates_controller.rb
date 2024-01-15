@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseController
   activate_menu :audience, :cms, :content
 

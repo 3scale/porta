@@ -105,6 +105,7 @@ When /^I fill in the "([^"]*)" login data$/ do |username|
 end
 
 Then /^I should be logged in as "([^"]*)"$/ do |username|
+  @user = User.find_by(username: username)
   message = "Expected #{username} to be logged in, but is not"
   assert has_content?(/Signed (?:in|up) successfully/i), message
 end
