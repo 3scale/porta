@@ -44,35 +44,35 @@ export const CustomCatalog: React.FC = () => {
   }, {})
 
   // eslint-disable-next-line @typescript-eslint/naming-convention -- Following PF team guidelines
-  const CatalogWithSections = useMemo(() => (
-    <>
-      {Object.keys(sections).map(key => (
-        <QuickStartCatalogSection key={key}>
-          <TextContent>
-            <Text className="catalog" component="h2">{key}</Text>
-          </TextContent>
-          <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
-            {sections[key].map((quickStart) => {
-              const {
-                metadata: { name: id }
-              } = quickStart
-              return (
-                <GalleryItem key={id} className="pfext-quick-start-catalog__gallery-item">
-                  <QuickStartTile
-                    isActive={id === activeQuickStartID}
-                    quickStart={quickStart}
-                    status={getQuickStartStatus(allQuickStartStates!, id)}
-                  />
-                </GalleryItem>
-              )
-            })}
-          </Gallery>
-        </QuickStartCatalogSection>
-      ))}
-    </>
-  )
-  , [activeQuickStartID, allQuickStartStates, allQuickStarts]
-  )
+  const CatalogWithSections = useMemo(() => {
+    return (
+      <>
+        {Object.keys(sections).map(key => (
+          <QuickStartCatalogSection key={key}>
+            <TextContent>
+              <Text className="catalog" component="h2">{key}</Text>
+            </TextContent>
+            <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
+              {sections[key].map((quickStart) => {
+                const {
+                  metadata: { name: id }
+                } = quickStart
+                return (
+                  <GalleryItem key={id} className="pfext-quick-start-catalog__gallery-item">
+                    <QuickStartTile
+                      isActive={id === activeQuickStartID}
+                      quickStart={quickStart}
+                      status={getQuickStartStatus(allQuickStartStates!, id)}
+                    />
+                  </GalleryItem>
+                )
+              })}
+            </Gallery>
+          </QuickStartCatalogSection>
+        ))}
+      </>
+    )
+  }, [activeQuickStartID, allQuickStartStates, allQuickStarts])
 
   const quickStartCatalog = useMemo(() => {
     return CatalogWithSections
