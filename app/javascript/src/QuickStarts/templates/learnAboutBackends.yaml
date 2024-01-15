@@ -1,8 +1,7 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: learning-about-backends
-  labels:
-    category: threescale-api-management-features
+  category: 3scale API Management features
 spec:
   displayName: Backends
   durationMinutes: 5

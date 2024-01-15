@@ -1,8 +1,7 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-a-product-quick-start
-  labels:
-    category: basic-api-integration-setup
+  category: Basic API integration setup
 spec:
   displayName: Create a product
   durationMinutes: 5

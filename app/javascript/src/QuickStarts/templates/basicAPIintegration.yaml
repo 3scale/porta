@@ -1,8 +1,7 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: getting-started-with-quick-starts
-  labels:
-    category: basic-api-integration-setup
+  category: Basic API integration setup
 spec:
   displayName: Complete a basic API integration
   durationMinutes: 5

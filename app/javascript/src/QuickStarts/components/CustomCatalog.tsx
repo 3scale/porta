@@ -22,70 +22,56 @@ import type {
 
 import './QuickStartContainer.scss'
 
-interface Category {
-  id: string;
-  title: string;
-}
+type CustomQuickStart = (QuickStart & {
+  metadata: QuickStart['metadata'] & {
+    category: string;
+  };
+})
 
 export const CustomCatalog: React.FC = () => {
   const { activeQuickStartID, allQuickStartStates, allQuickStarts, loading } =
     useContext<QuickStartContextValues>(QuickStartContext)
 
-  // Notes:
-  // - The sections will appear in the order specified in the array
-  // - The 'id' must be included in the QuickStart yaml metadata as 'category', e.g.
-  //   metadata:
-  //     name: getting-started-with-quick-starts
-  //     category: basic-api-integration-setup
-  const categories: Category[] = [
-    {
-      id: 'threescale-api-management-features',
-      title: '3scale API Management features'
-    },
-    {
-      id: 'common-use-cases',
-      title: 'Common use cases for creating and tracking APIs'
-    },
-    {
-      id: 'basic-api-integration-setup',
-      title: 'Basic API integration setup'
+  const sections = (allQuickStarts as CustomQuickStart[]).reduce<Record<string, CustomQuickStart[]>>((previousSections, quickstart) => {
+    const { category } = quickstart.metadata
+    if (!Array.isArray(previousSections[category])) {
+      previousSections[category] = []
     }
-  ]
+
+    previousSections[category].push(quickstart)
+
+    return previousSections
+  }, {})
 
   // eslint-disable-next-line @typescript-eslint/naming-convention -- Following PF team guidelines
-  const CatalogWithSections = useMemo(
-    () => (
-      <>
-        {categories.map(category => {
-          return (
-            <QuickStartCatalogSection key={category.id}>
-              <TextContent>
-                <Text className="catalog" component="h2">{category.title}</Text>
-              </TextContent>
-              <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
-                {allQuickStarts!
-                  .filter((quickStart: QuickStart) => quickStart.metadata.labels?.category == category.id)
-                  .map((quickStart: QuickStart) => {
-                    const {
-                      metadata: { name: id }
-                    } = quickStart
-                    return (
-                      <GalleryItem key={id} className="pfext-quick-start-catalog__gallery-item">
-                        <QuickStartTile
-                          isActive={id === activeQuickStartID}
-                          quickStart={quickStart}
-                          status={getQuickStartStatus(allQuickStartStates!, id)}
-                        />
-                      </GalleryItem>
-                    )
-                  })}
-              </Gallery>
-            </QuickStartCatalogSection>
-          )
-        })}
-      </>
-    ),
-    [activeQuickStartID, allQuickStartStates, allQuickStarts]
+  const CatalogWithSections = useMemo(() => (
+    <>
+      {Object.keys(sections).map(key => (
+        <QuickStartCatalogSection key={key}>
+          <TextContent>
+            <Text className="catalog" component="h2">{key}</Text>
+          </TextContent>
+          <Gallery hasGutter className="pfext-quick-start-catalog__gallery">
+            {sections[key].map((quickStart) => {
+              const {
+                metadata: { name: id }
+              } = quickStart
+              return (
+                <GalleryItem key={id} className="pfext-quick-start-catalog__gallery-item">
+                  <QuickStartTile
+                    isActive={id === activeQuickStartID}
+                    quickStart={quickStart}
+                    status={getQuickStartStatus(allQuickStartStates!, id)}
+                  />
+                </GalleryItem>
+              )
+            })}
+          </Gallery>
+        </QuickStartCatalogSection>
+      ))}
+    </>
+  )
+  , [activeQuickStartID, allQuickStartStates, allQuickStarts]
   )
 
   const quickStartCatalog = useMemo(() => {
