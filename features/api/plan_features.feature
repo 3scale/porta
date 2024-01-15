@@ -60,6 +60,6 @@ Feature: Plan Features
   @javascript
   Scenario: Delete a feature
     Given I go to the edit page for plan "Basic"
-    When I click "Delete" for the plan feature "Some Feature" and I confirm dialog box
+    When I click "Delete" for the plan feature "Some Feature" and confirm the dialog
     Then I should not see "Some Feature"
     And I should see the flash message "Feature has been deleted."

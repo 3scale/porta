@@ -71,7 +71,7 @@ Feature: Invitations
     And I go to the provider users page
     Then I should see "gentoo@foo.3scale.localhost"
     And I should not see "ubuntu@foo.3scale.localhost"
-    Then I press "Delete" for user "gentoo@foo.3scale.localhost" and I confirm dialog box
+    Then I press "Delete" for user "gentoo@foo.3scale.localhost" and confirm the dialog
     And I go to the provider sent invitations page
     Then I should not see "ubuntu@foo.3scale.localhost"
 
@@ -108,7 +108,7 @@ Feature: Invitations
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider sent invitations page
-    And I press "Delete" for an invitation from account "foo.3scale.localhost" for "alice@foo.3scale.localhost" and I confirm dialog box
+    And I press "Delete" for an invitation from account "foo.3scale.localhost" for "alice@foo.3scale.localhost" and confirm the dialog
     Then I should not see invitation for "alice@foo.3scale.localhost"
 
   @javascript

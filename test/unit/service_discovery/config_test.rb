@@ -52,8 +52,12 @@ class ServiceDiscovery::ConfigAndTest < ActiveSupport::TestCase
 
   test 'timeout' do
     assert_equal config.timeout, subject.timeout
-    config.stubs(timeout: nil)
+    # can't stub normally because of https://github.com/freerange/mocha/issues/634
+    # config.stubs(timeout: nil)
+    @config.timeout = nil
     assert_equal 1, subject.timeout
+  ensure
+    @config.timeout = 4
   end
 
   test 'open_timeout' do

@@ -12,12 +12,19 @@ namespace :multitenant do
 
     task suspend_forbidden_plans_scheduled_for_deletion: :environment do
       puts 'Account deletion is disabled. Nothing to do.' and return unless Features::AccountDeletionConfig.enabled?
-      forbidden_plans_to_be_auto_destroyed = Features::AccountDeletionConfig.config[:disabled_for_app_plans]
+      forbidden_plans_to_be_auto_destroyed = Features::AccountDeletionConfig.config.disabled_for_app_plans
       query = Account.tenants.scheduled_for_deletion.where.has do
         exists Cinstance.by_account(BabySqueel[:accounts].id).by_plan_system_name(forbidden_plans_to_be_auto_destroyed).select(:id)
       end
       query.find_each(&:suspend)
       puts(query.any? ? 'Some of the tenants haven\t been suspended' : 'All the right tenants have been suspended')
+    end
+
+    desc 'Fix in the background tenant_id missing in alerts, log entries and backend apis'
+    task :fix_missing_tenant_id_async => :environment do |_task, relations|
+      list = relations.to_a
+      SetTenantIdWorker::BatchEnqueueWorker.validate_params(*list)
+      SetTenantIdWorker::BatchEnqueueWorker.perform_later(*list)
     end
 
     desc 'Fix empty or corrupted tenant_id in accounts'
@@ -48,17 +55,17 @@ namespace :multitenant do
 
     desc 'Fix empty tenant_id in access_tokens'
     task :fix_empty_tenant_id_access_tokens, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'AccessToken'}))
+      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'AccessToken' }))
     end
 
     desc 'Restore existing tenant_id in alerts'
     task :restore_existing_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({table_name: 'Alert'}))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     desc 'Restore empty tenant_id in alerts'
     task :restore_empty_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'Alert'}))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)

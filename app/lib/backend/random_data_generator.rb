@@ -74,8 +74,7 @@ module Backend
                             :service_id => cinstance.service.id,
                             :usage      => {metric.name => value},
                             :log        => log_example,
-                            :created_at => time,
-                            :confirmed  => true)
+                            :created_at => time)
       end
     end
 

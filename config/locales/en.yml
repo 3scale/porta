@@ -556,8 +556,8 @@ en:
   sites:
     spam_protections:
       edit:
-        captcha_hint_false: 'reCAPTCHA has not been configured correctly, Spam Protection cannot be enabled.'
-        captcha_hint_true: "When 'Suspicious only' is selected then reCAPTCHA is shown only if the automated checks detect a possible spammer. For 'Always', reCAPTCHA will always appear when a form is presented to a user who is not logged in."
+        captcha_hint_false: 'reCAPTCHA has not been configured correctly, bot protection cannot be enabled.'
+        captcha_hint_true: "reCAPTCHA v3 will invisibly verify interactions to detect bots."
     usage_rules:
       edit:
         plans_label: 'Developers are allowed to:'

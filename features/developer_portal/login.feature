@@ -13,3 +13,15 @@ Feature: Login feature
     When I go to the login page
      And I fill in the "bob" login data
     Then I should be logged in the Development Portal
+
+  @recaptcha
+  Scenario: Captcha is disabled
+    Given the provider has bot protection disabled
+     When the buyer wants to log in
+     Then the captcha is not present
+
+  @recaptcha
+  Scenario: Captcha is enabled
+    Given the provider has bot protection enabled
+     When the buyer wants to log in
+     Then the captcha is present

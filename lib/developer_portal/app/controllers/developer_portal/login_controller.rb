@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::LoginController < DeveloperPortal::BaseController
+  include ThreeScale::BotProtection::Controller
+
   skip_before_action :login_required
 
   wrap_parameters :session, include: %i[username password remember_me]
@@ -23,6 +25,8 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   def create
     logout_keeping_session!
 
+    return render_login_error unless bot_check
+
     if (@user = @strategy.authenticate(params.merge(request: request)))
       self.current_user = @user
       create_user_session!
@@ -32,7 +36,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
       @strategy.on_signup(session)
       redirect_to @strategy.signup_path(params), notice: 'Successfully authenticated, please complete the signup form'
     else
-      render_creation_error
+      render_login_error(@strategy.error_message)
     end
   end
 
@@ -45,9 +49,9 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
 
   private
 
-  def render_creation_error
+  def render_login_error(error_message = nil)
     @session = Session.new
-    flash.now[:error] = @strategy.error_message
+    flash.now[:error] = error_message if error_message
     assign_drops add_authentication_drops
     render action: :new
   end

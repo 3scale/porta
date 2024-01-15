@@ -5004,7 +5004,7 @@
     "/admin/api/backend_apis.json": {
       "get": {
         "summary": "Backend List",
-        "description": "Returns the list of backend apis. The results can be paginated.",
+        "description": "Returns the list of backend APIs. The results can be paginated.",
         "tags": [
           "Backend APIs"
         ],
@@ -5511,7 +5511,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics.json": {
       "get": {
         "summary": "Backend Metric List",
-        "description": "Returns the list of metrics of a backend api.",
+        "description": "Returns the list of metrics of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5562,7 +5562,7 @@
       },
       "post": {
         "summary": "Backend Metric Create",
-        "description": "Creates a metric on a backend api.",
+        "description": "Creates a metric on a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5625,7 +5625,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json": {
       "get": {
         "summary": "Backend Metric Read",
-        "description": "Returns the metric of a backend api.",
+        "description": "Returns the metric of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5667,7 +5667,7 @@
       },
       "put": {
         "summary": "Backend Metric Update",
-        "description": "Updates the metric of a backend api.",
+        "description": "Updates the metric of a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5731,7 +5731,7 @@
       },
       "delete": {
         "summary": "Backend Metric Delete",
-        "description": "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits.",
+        "description": "Deletes the metric of a backend API. When you delete a metric or a method, it will also remove all the associated limits.",
         "tags": [
           "Backend APIs"
         ],
@@ -5775,7 +5775,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json": {
       "get": {
         "summary": "Backend Method List",
-        "description": "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric.",
+        "description": "List the methods of a metric that belongs to a backend API. Methods are metrics that are children of a parent metric.",
         "tags": [
           "Backend APIs"
         ],
@@ -5835,7 +5835,7 @@
       },
       "post": {
         "summary": "Backend Method Create",
-        "description": "Creates a method under a metric that belongs to a backend api.",
+        "description": "Creates a method under a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5872,25 +5872,20 @@
                   },
                   "friendly_name": {
                     "type": "string",
-                    "description": "Descriptive Name of the metric."
+                    "description": "Descriptive Name of the method."
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter."
-                  },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the metric."
+                    "description": "System Name of the method. If blank a system_name will be generated for you from the friendly_name parameter."
                   },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
                   "access_token",
-                  "friendly_name",
-                  "unit"
+                  "friendly_name"
                 ]
               }
             }
@@ -5907,7 +5902,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json": {
       "get": {
         "summary": "Backend Method Read",
-        "description": "Returns the method of a metric that belongs to a backend api.",
+        "description": "Returns the method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -5958,7 +5953,7 @@
       },
       "put": {
         "summary": "Backend Method Update",
-        "description": "Updates a method of a metric that belongs to a backend api.",
+        "description": "Updates a method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -6004,15 +5999,11 @@
                   },
                   "friendly_name": {
                     "type": "string",
-                    "description": "Descriptive Name of the metric."
-                  },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the metric."
+                    "description": "Descriptive Name of the method."
                   },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
@@ -6031,7 +6022,7 @@
       },
       "delete": {
         "summary": "Backend Method Delete",
-        "description": "Deletes the method of a metric that belongs to a backend api.",
+        "description": "Deletes the method of a metric that belongs to a backend API.",
         "tags": [
           "Backend APIs"
         ],
@@ -7842,11 +7833,7 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
-                  },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the method."
+                    "description": "System Name of the method. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
                   },
                   "description": {
                     "type": "string",
@@ -7855,8 +7842,7 @@
                 },
                 "required": [
                   "access_token",
-                  "friendly_name",
-                  "unit"
+                  "friendly_name"
                 ]
               }
             }
@@ -7974,13 +7960,9 @@
                     "type": "string",
                     "description": "Name of the method."
                   },
-                  "unit": {
-                    "type": "string",
-                    "description": "Measure unit of the metric."
-                  },
                   "description": {
                     "type": "string",
-                    "description": "Description of the metric."
+                    "description": "Description of the method."
                   }
                 },
                 "required": [
@@ -9828,11 +9810,14 @@
           "first_daily_traffic_at": {
             "type": "string",
             "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+          },
+          "user_key": {
+            "type": "string",
+            "description": "User Key (API Key) of the application to be updated."
           }
         },
         "required": [
-          "access_token",
-          "name"
+          "access_token"
         ],
         "additionalProperties": {
           "type": "string"

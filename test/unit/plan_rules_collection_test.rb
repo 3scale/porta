@@ -36,8 +36,8 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
 
   test '.can_upgrade? returns true if both plans have plan_rule with no metadata and the \'to\' has higher rank' do
     to, from = FactoryBot.create_list(:application_plan, 2)
-    from.plan_rule.rank = 3
-    to.plan_rule.rank = 4
+    from.send(:plan_rule).rank = 3
+    to.send(:plan_rule).rank = 4
 
     assert PlanRulesCollection.can_upgrade?(from: from, to: to)
   end
@@ -58,7 +58,7 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
 
   test '.can_upgrade? returns false if the \'to\' argument is has a plan_rule with not_automatically_upgradable_to' do
     from, to = FactoryBot.create_list(:application_plan, 2)
-    to.plan_rule.metadata = {cannot_automatically_be_upgraded_to: true}
+    to.send(:plan_rule).metadata = {cannot_automatically_be_upgraded_to: true}
 
     refute PlanRulesCollection.can_upgrade?(from: from, to: to)
   end
@@ -71,8 +71,9 @@ class PlanRulesCollectionTest < ActiveSupport::TestCase
     (3..6).to_a.each do |number|
       2.times do |plan_type_index|
         plan = FactoryBot.create((plan_types[plan_type_index]), issuer: service)
-        plan.plan_rule.switches = Switches::SWITCHES[0..number]
-        plan.plan_rule.rank = number
+        rule = plan.send :plan_rule
+        rule.switches = Switches::SWITCHES[0..number]
+        rule.rank = number
         plans << plan
       end
     end

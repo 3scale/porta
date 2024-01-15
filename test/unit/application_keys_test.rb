@@ -95,13 +95,15 @@ class ApplicationKeysTest < ActiveSupport::TestCase
   end
 
   test 'notify when scoped with notification' do
+    msg = Object.new
+    msg.expects(:deliver).twice
 
     CinstanceMessenger.expects(:key_created)
-        .with(@application, 'some-key').returns(stub(:deliver))
+        .with(@application, 'some-key').returns(msg)
     @application_keys.add('some-key')
 
     CinstanceMessenger.expects(:key_deleted)
-        .with(@application, 'some-key').returns(stub(:deliver))
+        .with(@application, 'some-key').returns(msg)
     @application_keys.remove('some-key')
   end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::BaseController
-  include ThreeScale::SpamProtection::Integration::Controller
+  include ThreeScale::BotProtection::Controller
 
   liquify prefix: 'password'
 
@@ -10,7 +10,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   before_action :find_user, :only => [:show, :update]
 
   def create
-    return redirect_to_request_password('Spam protection failed.') unless spam_check(buyer)
+    return redirect_to_request_password('Bot protection failed.') unless bot_check({ flash: false })
 
     user = @provider.buyer_users.find_by_email(params[:email])
     return redirect_to_request_password('Email not found.') unless user

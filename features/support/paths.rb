@@ -491,7 +491,7 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
-    when 'the spam protection page'
+    when 'the bot protection page'
       edit_admin_site_spam_protection_path
 
     when 'the xss protection page'
