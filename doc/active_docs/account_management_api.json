@@ -1360,6 +1360,63 @@
             "content": {}
           }
         }
+      },
+      "put": {
+        "summary": "Service Subscription Update",
+        "description": "Update plan of service subscriptions",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the fields definition.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the target account plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
       }
     },
     "/admin/api/accounts/{id}/approve.xml": {
