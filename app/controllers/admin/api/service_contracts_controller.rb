@@ -28,6 +28,15 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
     respond_with(service_subscription.unsubscribe(service_contract))
   end
 
+  # Service Subscription Update
+  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}.xml
+  def update
+    service = service_contract.issuer
+    new_plan = service.service_plans.find(service_contract_plan_id)
+    service_contract.change_plan!(new_plan)
+    respond_with(service_contract)
+  end
+
   protected
 
   def account
