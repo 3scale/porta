@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 When "I follow {string} for {user}" do |link_text, user|
-  step %(I follow "#{link_text}" within "#user_#{user.id}")
+  find("tr#user_#{user.id} .pf-c-table__action").click_link(link_text)
 end
 
 When "I press {string} for {user}" do |button_text, user|

@@ -32,7 +32,7 @@ Feature: Audience > Messages > Inbox
     Scenario: Reading an unread message
       Given they go to the provider inbox page
       And they should see unread message from "Alice" with subject "Oh, no!"
-      When follow "Oh, no!"
+      When follow any "Oh, no!"
       And should see "Send reply"
       And follow "Inbox"
       Then they should see read message from "Alice" with subject "Oh, no!"
