@@ -3,6 +3,8 @@
 module ThreeScale
   module BotProtection
     module Base
+      private
+
       def bot_protection_level
         site_account.settings.spam_protection_level
       end

@@ -53,7 +53,7 @@ When /^I log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,
   if provider
     try_provider_login(username, password)
   else
-    try_buyer_login(username, password)
+    try_buyer_login_internal(username, password)
   end
   step %(I should be logged in as "#{username}")
 end
@@ -83,11 +83,11 @@ When "I log in as {string} on the admin domain of {provider}" do |username, prov
 end
 
 When "I try to log in as {string}" do |username|
-  try_buyer_login(username, 'supersecret')
+  try_buyer_login_internal(username, 'supersecret')
 end
 
 When "I try to log in as {string} with password {string}" do |username, password|
-  try_buyer_login(username, password)
+  try_buyer_login_internal(username, password)
 end
 
 When "I try to log in as provider {string}" do |username|
