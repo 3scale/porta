@@ -15,7 +15,7 @@ Feature: API menu
 
   Scenario: API menu structure
     Then I should see menu sections
-      | Overview     |
+      | Product Overview     |
       | Analytics    |
       | Applications |
       | ActiveDocs   |
@@ -38,7 +38,7 @@ Feature: API menu
       | Usage Rules       |
 
   Scenario: Integration sub menu structure
-    When I follow "Overview"
+    When I follow "Product Overview"
     Then I should see menu items under "Integration"
       | Configuration       |
       | Methods and Metrics |
@@ -51,7 +51,7 @@ Feature: API menu
     When provider "foo.3scale.localhost" has "service_plans" switch allowed
     When I go to the API dashboard page
     Then I should see menu sections
-      | Overview      |
+      | Product Overview      |
       | Analytics     |
       | Applications  |
       | Subscriptions |
