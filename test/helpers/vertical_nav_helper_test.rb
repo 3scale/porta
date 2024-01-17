@@ -37,6 +37,28 @@ class VerticalNavHelperTest < ActionView::TestCase
       assert_equal([], backend_api_nav_sections.pluck(:title))
     end
 
+    test '#service_nav_sections' do
+      plan = FactoryBot.create(:application_plan)
+      @service= FactoryBot.create(:service)
+
+      # if permitted
+      VerticalNavHelperTest::ProviderTest.any_instance.stubs(:has_out_of_date_configuration?).returns(false)
+      assert_equal(["Product Overview", "Analytics", "Applications", "ActiveDocs", "Integration"], service_nav_sections.pluck(:title))
+
+      # if not permitted
+      stubs(can?: false)
+      assert_equal([], service_nav_sections.pluck(:title))
+
+     # When service is not persisted
+      @service = Service.new
+      assert_equal([], service_nav_sections.pluck(:title))
+
+
+      # When service is nil
+      @service = nil
+      assert_equal([], service_nav_sections.pluck(:title))
+    end
+
     test 'Email configurations' do
       Features::EmailConfigurationConfig.stubs(enabled?: true)
       assert_not_includes account_nav_sections.pluck(:id), :email_configurations
