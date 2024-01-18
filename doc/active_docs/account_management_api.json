@@ -1371,7 +1371,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the service contract.",
             "required": true,
             "schema": {
               "type": "integer"
