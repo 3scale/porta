@@ -7,7 +7,7 @@ module Liquid
 
       desc "Returns the ID of the message."
       def id
-        message.id
+        @model.id
       end
 
       desc "If subject is not present then either a truncated body or `(no subject)` string is returned."
@@ -31,7 +31,8 @@ module Liquid
       desc "URL of the message detail, points either to inbox or outbox."
       def url
         if @model.hidden_at.present?
-          admin_messages_trash_path(id)
+          # URLs in Trash always use Message (not MessageRecipient) ID
+          admin_messages_trash_path(message.id)
         else
           if @model.is_a?(MessageRecipient)
             admin_messages_inbox_path(@model.id)
