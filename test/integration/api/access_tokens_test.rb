@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
   def setup
-    @provider = FactoryBot.create(:simple_provider, provider_account: master_account)
+    @provider = FactoryBot.create(:simple_provider)
     @admin = FactoryBot.create(:simple_admin, account: @provider)
     @admin.activate!
     @member = FactoryBot.create(:simple_user, account: @provider)

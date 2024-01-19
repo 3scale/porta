@@ -22,7 +22,7 @@ FactoryBot.define do
   end
 
   factory(:cinstance, :aliases => %i[application application_contract], :parent => :contract, :class => Cinstance) do
-    association :plan, :factory => :application_plan
+    plan { association :application_plan, issuer: user_account.provider_account.default_service }
 
     sequence(:name) { |n| "Cinstance #{n + Time.now.to_i}" }
 
