@@ -5,7 +5,7 @@ module Liquid
 
       allowed_name :message, :messages, :reply
 
-      desc "Returns the ID of the message."
+      desc "Returns the ID of the model (depending on controller that is message or message recipient)."
       def id
         @model.id
       end
