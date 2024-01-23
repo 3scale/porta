@@ -46,8 +46,9 @@ Feature: Product > Integration > Backends
 
     Scenario: Editing a backend config
       When they go to the backends of product "My API"
-      And follow "Edit config with Backend 2"
-      Then the current page is the edit usage config page between "My API" and "Backend 2"
+      Then there is a link "Edit config with Backend 2" to the edit usage config page between "My API" and "Backend 2"
+      When they follow "Edit config with Backend 2"
+      And the current page is the edit usage config page between "My API" and "Backend 2"
 
     Scenario: Deleting a backend config
       When they go to the backends of product "My API"
