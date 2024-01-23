@@ -36,7 +36,7 @@ Feature: Buyer side messages
     When I follow "Inbox"
     Then I should see read message from "foo.3scale.localhost" with subject "How are you doing?"
 
-  Scenario: Repling to a message
+  Scenario: Replying to a message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
 
     When I go to the dashboard

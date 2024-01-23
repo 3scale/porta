@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "a message(s) sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
+Given "a message sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = sender.messages.create!(:to => receiver, :subject => subject, :body => body)
   message.deliver!
 end
