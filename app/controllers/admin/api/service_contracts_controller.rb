@@ -6,11 +6,12 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
+  before_action :find_service, only: %i[create]
 
   # Service Subscription Create
   # POST /admin/api/accounts/:account_id/service_contracts.xml
   def create
-    service_contract = @account.bought_service_contracts.create(service_contract_params)
+    service_contract = account.bought_service_contracts.create(service_contract_params)
     respond_with service_contract
   end
 
@@ -43,6 +44,10 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
     @account ||= current_account.buyers.find params.require(:account_id)
   end
 
+  def find_service
+    @service = service
+  end
+
   def service_contract
     @service_contract ||= account.bought_service_contracts.find params.require(:id)
   end
@@ -52,8 +57,12 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
           .fetch(:service_contract).merge(plan: service_plan)
   end
 
+  def service
+    service ||= accessible_services.find(params[:service_id])
+  end
+
   def service_plan(plan_id = service_contract_plan_id)
-    @service_plan ||= service.service_plans.find_by(id: plan_id)
+    service_plan ||= service.service_plans.find_by(id: plan_id)
   end
 
   def service_contract_plan_id
