@@ -1275,15 +1275,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "service_id",
-            "in": "query",
-            "description": "ID of the service.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
         "requestBody": {
@@ -1296,6 +1287,10 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
+                  "service_id": {
+                    "type": "integer",
+                    "description": "ID of the service."
+                  },
                   "plan_id": {
                     "type": "integer",
                     "description": "ID of the target account plan"
@@ -1303,7 +1298,8 @@
                 },
                 "required": [
                   "access_token",
-                  "plan_id"
+                  "plan_id",
+                  "service_id"
                 ]
               }
             }
