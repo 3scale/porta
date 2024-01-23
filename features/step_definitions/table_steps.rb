@@ -33,16 +33,22 @@ Then "(I )(they )should see (the )following table(:)" do |expected|
     r.replace([*row, r.join(' ')])
   end
 
-  begin
-    expected.diff! table
-  rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
-    if ENV['CI']
-      puts error.message
-      puts expected.to_s
-    end
+  retries ||= 1
 
-    raise
+  expected.diff! table
+rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
+  if retries > 0
+    retries -= 1
+    sleep 1
+    retry
   end
+
+  if ENV['CI']
+    puts error.message
+    puts expected.to_s
+  end
+
+  raise
 end
 
 Then "the table {has} a column {string}" do |present, column|
