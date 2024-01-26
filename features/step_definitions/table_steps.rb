@@ -1,7 +1,22 @@
 # frozen_string_literal: true
 
-Then "(I )(they )should see (the )following table:" do |expected|
-  table = extract_table('table.pf-c-table', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
+When "the table is sorted by {string}( again)" do |column|
+  find(".pf-c-table__sort", text: column).click
+end
+
+When "{} in the {ordinal} row" do |lstep, n|
+  within "table tbody tr:nth-child(#{n})" do
+    step lstep
+  end
+end
+
+When "(they )select action {string} of (row ){string}" do |action, row|
+  find_action_for_row(action: action, row: row).click
+end
+
+# TODO: can we use "has_table?" instead of this complex step?
+Then "(I )(they )should see (the )following table(:)" do |expected|
+  table = extract_table('table', 'tr:not(.search, .table_title)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
   #table.first.map!{ |n| n.gsub(/(&#\d+;)|[^a-z\d\s]/i, '').strip }
@@ -39,33 +54,81 @@ Then "the table {has} a column {string}" do |present, column|
   assert_equal present, has_css?(".pf-c-table [data-label='#{column}']")
 end
 
-And "the table should contain the following:" do |table|
-  expected = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
-  actual = table.raw
+# Check some rows and some columns
+#
+# And the table has the following rows:
+#   | Name            | State     |
+#   | Jane's Full App | suspended |
+#   | Jane's Lite App | live      |
+Given "the table has the following row(s):" do |table|
+  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+  expected = table.raw
 
-  headers = expected.first
+  headers = actual.first
   headers_index = []
-  actual.first.each do |target_header|
+  expected.first.each do |target_header|
     headers_index << headers.find_index(target_header)
   end
 
-  filtered = expected.map do |row|
+  actual_filtered = actual.map do |row|
     row.select.with_index { |column, i| headers_index.include?(i) }
   end
 
-  assert_same_elements actual, filtered
+  assert(expected.all? { |row| actual_filtered.include?(row) })
+end
+
+# Check all rows but not all columns
+#
+# And the table looks like:
+#   | Name            | State     |
+#   | Jane's Full App | suspended |
+#   | Jane's Lite App | live      |
+Then "the table looks like:" do |table|
+  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+  expected = table.raw
+
+  headers = actual.first
+  headers_index = []
+  expected.first.each do |target_header|
+    headers_index << headers.find_index(target_header)
+  end
+
+  actual_filtered = actual.map do |row|
+    row.select.with_index { |column, i| headers_index.include?(i) }
+  end
+
+  assert_same_elements expected, actual_filtered
+end
+
+Then "the table should be ordered by {string}" do |column|
+  assert_selector(:css, '.pf-c-table .pf-c-table__sort.pf-m-selected', text: column)
 end
 
 Then "the table should have {int} row(s)" do |count|
   assert_equal count, find_all('table tbody tr').length
 end
 
-When "table is sorted by {string}" do |column|
-  find(".pf-c-table__sort", text: column).click
+Then "the actions of row {string} are:" do |row, table|
+  dropdown = find_inline_actions_dropdown_of_row(row)
+
+  assert_same_elements table.raw.flatten,
+                       dropdown.all('.pf-c-dropdown__menu-item').map(&:text)
 end
 
-When "{} in the {ordinal} row" do |lstep, n|
-  within "table tbody tr:nth-child(#{n})" do
-    step lstep
+def find_inline_actions_dropdown_of_row(row, expand: true)
+  if has_css?('td', text: row, wait: 0)
+    dropdown = find('tr', text: row).find('.pf-c-table__action .pf-c-dropdown')
+  elsif has_css?('.pf-c-data-list__cell', text: row, wait: 0)
+    dropdown = find('.pf-c-data-list__item-row', text: row).find('.pf-c-data-list__item-action .pf-c-dropdown')
+  else
+    raise "No table or datalist row found with text: #{row}"
   end
+
+  dropdown.find('.pf-c-dropdown__toggle').click if expand && dropdown[:class].exclude?('pf-m-expanded')
+  dropdown
+end
+
+def find_action_for_row(action:, row:)
+  dropdown = find_inline_actions_dropdown_of_row(row, expand: true)
+  dropdown.find('.pf-c-dropdown__menu-item', text: action)
 end

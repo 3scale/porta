@@ -1,6 +1,7 @@
 module PlanHelpers
 
   def create_plan(type, options)
+    ActiveSupport::Deprecation.warn '[create_plan] Stop using this method, use factories'
     options[:cost] ||= 0
 
     issuer = options[:issuer]
@@ -28,12 +29,15 @@ module PlanHelpers
 
 
     if flags = options[:flags]
+      # TODO: this does nothing
       options[:default] = true if flags.include? 'default'
       options[:published] = true if flags.include? 'published'
     end
 
-    if options[:default] || options[:name] == "Default"
-      make_plan_default(plan)
+    if options[:default] || options[:name] == "Default" # TODO: name is not a good contition
+      plans_method = "#{plan.class.to_s.underscore}s"
+      plan.issuer.send(plans_method).default = plan
+      plan.issuer.save!
     end
 
     if options[:published]
@@ -46,18 +50,6 @@ module PlanHelpers
   def default_plan?(plan)
     plans_method = "#{plan.class.to_s.underscore}s"
     plan == plan.issuer.send(plans_method).default
-  end
-
-  def make_plan_default(plan)
-    plans_method = "#{plan.class.to_s.underscore}s"
-    plan.issuer.send(plans_method).default = plan
-    plan.issuer.save!
-  end
-
-  def sign_up(buyer, name)
-    plan = Plan.find_by_name(name)
-    raise "Plan #{name} not found" unless plan
-    buyer.buy!(plan)
   end
 
   def change_plan_permission_to_sym(mode)

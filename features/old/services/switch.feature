@@ -7,7 +7,10 @@ Feature: Services switch
   Background:
     Given a provider is logged in
     And the provider has multiple applications enabled
-    And an application plan "pro3M" of provider "master"
+    Given the default product of provider "master" has name "Master API"
+    Given the following application plan:
+      | Product    | Name  |
+      | Master API | pro3M |
     And service discovery is not enabled
 
   @wip

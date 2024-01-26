@@ -7,7 +7,8 @@ Feature: Provider Payment Details
   Rule: Master provider
     Scenario: Master provider cannot enter payment details
       Given master admin is logged in
-      Then the provider's payment details are not accessible
+      When they go to the provider edit account page
+      Then they should not see "Billing" within the main menu
 
   Rule: Provider
     Background:

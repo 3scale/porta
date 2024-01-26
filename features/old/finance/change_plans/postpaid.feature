@@ -7,16 +7,20 @@ Feature: Change plan
     Given a provider "foo.3scale.localhost" on 1st April 2009
       And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31000000 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100000000 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name             | Cost per month |
+      | My API  | FreeAsInBeer     | 0              |
+      | My API  | PaidAsInLunch    | 31000000       |
+      | My API  | PaidAsInDiplomat | 3100000000     |
     Given the current domain is foo.3scale.localhost
+    And a buyer "stallman"
 
   @commit-transactions
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
       And provider "foo.3scale.localhost" is charging its buyers in postpaid mode
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 28th April 2009
     When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
@@ -26,9 +30,9 @@ Feature: Change plan
 
   @commit-transactions
   Scenario: Trial period ends and no change plan POSTPAID
-    Given plan "PaidAsInLunch" has trial period of 5 days
+    Given plan "PaidAsInLunch" has a trial period of 5 days
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 1st May 2009
       When time flies to 1st June 2009
       When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
 
@@ -41,9 +45,9 @@ Feature: Change plan
   @stats
   Scenario: Plan upgrade from paid to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 30th April 2009
       And I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
+      And the buyer changes to application plan "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
       When time flies to 3rd June
 
        And I navigate to 1st invoice issued for me in "May, 2009"
@@ -58,9 +62,9 @@ Feature: Change plan
   @stats
   Scenario: Plan upgrade from free to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
-      And a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
+      And the buyer is signed up to application plan "FreeAsInBeer" on 30th April 2009
       And I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
+      And the buyer changes to application plan "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
 
      When time flies to 3rd June
       And I navigate to 1st invoice issued for me in "May, 2009"
@@ -71,11 +75,13 @@ Feature: Change plan
          | Total cost                     |                                             |          | 2,150,000,000.00 |
 
   Scenario: Plan upgrade from free to free at 10th May 12:00 AM UTC
-    Given an application plan "FreeAsInCzechBeer" of provider "foo.3scale.localhost" for 0 monthly
+    Given the following application plan:
+      | Product | Name              |
+      | My API  | FreeAsInCzechBeer |
       And the time is 30th April 2009
 
-    When a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
+    When the buyer is signed up to application plan "FreeAsInBeer" on 30th April 2009
      And I log in as "stallman" on foo.3scale.localhost
-     And I change application plan to "FreeAsInCzechBeer" on 10th May 2009 12:00 UTC
+     And the buyer changes to application plan "FreeAsInCzechBeer" on 10th May 2009 12:00 UTC
      And time flies to 8th June
     Then I should have 0 invoice

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AppsKeysHelpers
 
   def fake_application_keys_count(application, number)
@@ -6,6 +8,7 @@ module AppsKeysHelpers
 
   def fake_application_keys(application, keys)
     ApplicationKey.without_backend do
+      application.application_keys.delete_all
       keys.each do |key|
         application.application_keys.add(key)
       end
@@ -21,3 +24,5 @@ module AppsKeysHelpers
   end
 
 end
+
+World(AppsKeysHelpers)

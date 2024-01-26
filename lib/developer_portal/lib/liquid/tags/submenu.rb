@@ -14,7 +14,7 @@ module Liquid
       desc "Renders a submenu HTML snippet for a logged in user."
       def render(context)
         if context.registers[:controller].send(:logged_in?)
-          render_erb context, "shared/buyer_submenu"
+          render_erb context, "shared/developer_portal/buyer_submenu"
         end
       end
 

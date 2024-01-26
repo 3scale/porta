@@ -6,83 +6,80 @@ Feature: Provider settings authorization
 
   Background:
     Given a provider exists
-      And the provider is charging its buyers
-      And provider "foo.3scale.localhost" has Browser CMS activated
+    And the provider is charging its buyers
+    And provider "foo.3scale.localhost" has Browser CMS activated
 
-  Scenario Outline: Provider admin can access settings
+  Scenario: Provider admin can access settings
     Given current domain is the admin domain of provider "foo.3scale.localhost"
-      And I log in as provider "foo.3scale.localhost"
-     When I go to the provider dashboard
-      And I follow "<link>" within the audience dashboard widget
-      And I go to the <page> page
-     Then I should be on the <page> page
+    And I log in as provider "foo.3scale.localhost"
+    When I go to the provider dashboard
+    Then there should be a link to "Billing" within the audience dashboard widget
+    And there should be a link to "0 Accounts" within the audience dashboard widget
+    And there should be a link to "Developer Portal" within the audience dashboard widget
 
-    # not testing | Forum                | forum settings           |
-    # as it doesn't appear on dashboard if 0 threads
+  Scenario: Provider admin can access settings
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
+    Then they should be able to go to the following pages:
+      | the edit site settings page       |
+      | the finance settings page         |
+      | the usage rules settings page     |
+      | the fields definitions index page |
+      | the emails settings page          |
+      | the email templates page          |
+      | the dns settings page             |
+      | the bot protection page           |
+      | the xss protection page           |
+      | the authentication providers page |
 
-    Examples:
-      | link                 | page                     |
-      | Billing              | edit site settings       |
-      | Billing              | finance settings         |
-      | 0 Accounts           | usage rules settings     |
-      | 0 Accounts           | fields definitions index |
-      | 0 Messages           | emails settings          |
-      | 0 Messages           | email templates          |
-      | Developer Portal     | dns settings             |
-      | Developer Portal     | bot protection          |
-      | Developer Portal     | xss protection           |
-      | Developer Portal     | authentication providers |
-
-
-  Scenario Outline: Members per default cannot access settings
+  Scenario: Members per default cannot access settings
     Given an active user "member" of account "foo.3scale.localhost"
-      And user "member" does not belong to the admin group "settings" of provider "foo.3scale.localhost"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-     When I log in as provider "member"
-     And I go to the provider dashboard
+    And user "member" does not belong to the admin group "settings" of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "member"
+    And I go to the provider dashboard
+    Then there shouldn't be a link to "0 Accounts"
+    And there shouldn't be a link to "Billing"
+    And there shouldn't be a link to "Forum"
+    And there shouldn't be a link to "0 Messages"
+    And there shouldn't be a link to "Developer Portal"
 
-    Then I should not see the link "<link>"
-    When I request the url of the '<page>' page then I should see an exception
-
-    Examples:
-      | link                 | page                     |
-      | 0 Accounts           | usage rules settings     |
-      | 0 Accounts           | fields definitions index |
-      | Billing              | edit site settings       |
-      | Billing              | finance settings         |
-      | Forum                | forum settings           |
-      | 0 Messages           | emails settings          |
-      | 0 Messages           | email templates          |
-      | Developer Portal     | site settings            |
-      | Developer Portal     | dns settings             |
-      | Developer Portal     | bot protection          |
-      | Developer Portal     | xss protection           |
-      | Developer Portal     | authentication providers |
-
-  Scenario Outline: Members of settings group can access settings
+  Scenario: Members per default cannot access settings
     Given an active user "member" of account "foo.3scale.localhost"
-      And user "member" has access to the admin section "settings"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-     When I log in as provider "member"
-      And I go to the provider dashboard
-      And I follow "0 Messages"
-      And I go to the <page> page
-     Then I should be on the <page> page
+    And user "member" does not belong to the admin group "settings" of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "member"
+    And they should see an error when going to the following pages:
+      | the usage rules settings page     |
+      | the fields definitions index page |
+      | the edit site settings page       |
+      | the finance settings page         |
+      | the forum settings page           |
+      | the emails settings page          |
+      | the email templates page          |
+      | the site settings page            |
+      | the dns settings page             |
+      | the bot protection page           |
+      | the xss protection page           |
+      | the authentication providers page |
 
-    # not testing | Forum                | forum settings           |
-    # as it doesn't appear on dashboard if 0 threads
-
-    Examples:
-      | link                 | page                     |
-      | 0 Accounts           | usage rules settings     |
-      | 0 Accounts           | fields definitions index |
-      | Billing              | edit site settings       |
-      | Billing              | finance settings         |
-      | 0 Messages           | emails settings          |
-      | 0 Messages           | email templates          |
-      | Developer Portal     | site settings            |
-      | Developer Portal     | feature visibility       |
-      | Developer Portal     | dns settings             |
-      | Developer Portal     | bot protection          |
-      | Developer Portal     | xss protection           |
-      | Developer Portal     | authentication providers |
+  Scenario: Members of settings group can access settings
+    Given an active user "member" of account "foo.3scale.localhost"
+    And user "member" has access to the admin section "settings"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "member"
+    And I go to the provider dashboard
+    And I follow "0 Messages"
+    And they should be able to go to the following pages:
+      | the usage rules settings page     |
+      | the fields definitions index page |
+      | the edit site settings page       |
+      | the finance settings page         |
+      | the emails settings page          |
+      | the email templates page          |
+      | the site settings page            |
+      | the feature visibility page       |
+      | the dns settings page             |
+      | the bot protection page           |
+      | the xss protection page           |
+      | the authentication providers page |

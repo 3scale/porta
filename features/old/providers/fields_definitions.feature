@@ -24,7 +24,7 @@ Feature: Fields Definitions
     Then I should see "Editing field"
 
   Scenario: Show all buyer fields being a provider
-    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name             | required | read_only | hidden |
       | vat_code         | true     |           |        |
       | telephone_number |          | true      |        |

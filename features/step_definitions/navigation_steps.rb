@@ -47,7 +47,7 @@ When "they are reviewing the provider's application details" do
   provider = Account.providers.first!
   app = provider.bought_cinstances.first!
   step %(I navigate to the page of the partner "#{provider.org_name}")
-  step 'I go to the applications admin page'
+  step 'I go to the admin portal applications page'
   find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
 end
 

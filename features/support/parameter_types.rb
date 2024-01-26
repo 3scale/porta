@@ -18,19 +18,26 @@ ParameterType(
   transformer: ->(list) { list.from_sentence.map { |item| item.delete('"') } }
 )
 
+# TODO: rename this 'account' and accept provider/buyer/account and "current account" etc.
 ParameterType(
   name: 'provider_or_buyer',
-  regexp: /(?:(provider|buyer) "([^"]*)"|the provider)/,
+  type: Account,
+  regexp: /(?:the )?(provider|buyer)(?: "([^"]*)")?/,
   transformer: ->(type, name) {
     case type
     when 'provider'
-      provider_by_name(name)
+      name.present? ? provider_by_name(name) : @provider
     when 'buyer'
-      Account.buyers.find_by!(name: name)
-    else
-      @provider
+      name.present? ? Account.buyers.find_by!(name: name) : @buyer || @account
     end
   }
+)
+
+ParameterType(
+  name: 'account',
+  type: Account,
+  regexp: /provider|buyer|account "([^"]*)"/,
+  transformer: ->(org_name) { Account.find_by!(org_name: org_name) }
 )
 
 def provider_by_name(name)
@@ -66,50 +73,44 @@ ParameterType(
 
 ParameterType(
   name: 'page',
-  regexp: /page "([^"]*)"/,
-  transformer: ->(title) { Page.find_by!(title: title) }
+  type: String,
+  regexp: /((?:the )?.*(?: page?))/,
+  transformer: ->(page_name) { path_to(page_name) }
 )
 
 ParameterType(
   name: 'plan',
-  regexp: /(application|account|service)?\s?plan "([^"]*)"/,
-  transformer: ->(type = nil, name) do
+  type: Plan,
+  regexp: /(?:(application|account|service) )?plan "(.*)"|the plan/,
+  transformer: ->(type, name) do
+    return @plan if name.blank?
+
     case type
-    when 'application' then
-      ApplicationPlan.find_by!(name: name)
-    when 'account' then
-      AccountPlan.find_by!(name: name)
-    when 'service' then
-      ServicePlan.find_by!(name: name)
-    else
-      Plan.find_by!(name: name)
-    end
+    when 'application' then ApplicationPlan
+    when 'service' then ServicePlan
+    when 'account' then AccountPlan
+    else Plan
+    end.find_by!(name: name)
   end
 )
 
 ParameterType(
-  name: 'service_plan',
-  regexp: /service plan "([^"]*)"/,
-  transformer: ->(name) { ServicePlan.find_by!(name: name) }
+  name: 'application_plan',
+  type: ApplicationPlan,
+  regexp: /(?:application )?plan "(.*)"/,
+  transformer: ->(name) { ApplicationPlan.find_by!(name: name) }
 )
 
 ParameterType(
   name: 'plan_type',
-  regexp: /account|service|application/,
-  transformer: ->(type) { "#{type}_plan" }
+  regexp: /(published )?(account|service|application)/,
+  transformer: ->(published, type) { "#{published} #{type} plan".parameterize.underscore }
 )
 
 ParameterType(
   name: 'authentication_strategy',
   regexp: /(Janrain|internal|Cas)/,
   transformer: ->(strategy) { strategy }
-)
-
-ParameterType(
-  name: 'account',
-  type: Account,
-  regexp: /provider|buyer|account "([^"]*)"/,
-  transformer: ->(org_name) { Account.find_by!(org_name: org_name) }
 )
 
 ParameterType(
@@ -150,7 +151,11 @@ ParameterType(
   name: 'buyer',
   type: Account,
   regexp: /buyer "([^"]*)"|the buyer/,
-  transformer: ->(org_name) { org_name.present? ? Account.buyers.find_by!(org_name: org_name) : @buyer }
+  transformer: ->(org_name) do
+    return Account.buyers.find_by!(org_name: org_name) if org_name.present?
+
+    (@buyer || @account).reload
+  end
 )
 
 ParameterType(
@@ -167,7 +172,8 @@ ParameterType(
 
 ParameterType(
   name: 'the_user_key_of_buyer',
-  regexp: /the user key of buyer "([^"]*)"/,
+  type: String,
+  regexp: /the user key of "([^"]*)"/,
   transformer: ->(name) { Account.buyers.find_by!(org_name: name).bought_cinstance.user_key }
 )
 
@@ -175,7 +181,11 @@ ParameterType(
   name: 'application',
   type: Cinstance,
   regexp: /application "([^"]*)"|the application/,
-  transformer: ->(name) { name.present? ? Cinstance.find_by!(name: name) : @application || @cinstance }
+  transformer: ->(name) do
+    return Cinstance.find_by!(name: name) if name.present?
+
+    @application || @cinstance
+  end
 )
 
 ParameterType(
@@ -240,7 +250,7 @@ def find_metric(metrics, name)
 end
 
 ParameterType(
-  name: 'plan_permission',
+  name: 'change_plan_permission',
   regexp: /directly|only with credit card|by request|with credit card required/,
   transformer: ->(p) {
     include PlanHelpers # FIXME: cannot access PlanHelpers mehtod without this
@@ -251,8 +261,12 @@ ParameterType(
 ParameterType(
   name: 'service',
   type: Service,
-  regexp: /service "([^"]*)"/,
-  transformer: ->(name) { Service.find_by!(name: name) },
+  regexp: /service "([^"]*)"|the product/,
+  transformer: ->(name) do
+    return @product || @service if name.nil?
+
+    Service.find_by!(name: name)
+  end,
   prefer_for_regexp_match: true
 )
 
@@ -308,27 +322,9 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'default',
-  regexp: /default|not default|/,
-  transformer: ->(value) { value == 'default' }
-)
-
-ParameterType(
-  name: 'published',
-  regexp: /published|hidden|/,
-  transformer: ->(value) { value == 'published' }
-)
-
-ParameterType(
   name: 'public',
   regexp: /public|private|restricted/,
   transformer: ->(visibility) { visibility == 'public' }
-)
-
-ParameterType(
-  name: 'live_or_suspended',
-  regexp: /live|suspended/,
-  transformer: ->(state) { state.titleize }
 )
 
 ParameterType(
@@ -387,7 +383,7 @@ ParameterType(
 
 ParameterType(
   name: 'does',
-  regexp: /|does|does not|doesn't/,
+  regexp: /does|does not|doesn't/,
   transformer: ->(value) { value == 'does' || value.blank? }
 )
 
@@ -437,4 +433,26 @@ ParameterType(
   name: 'ordinal',
   regexp: /(\d+)(?:st|rd|nd|th)/,
   transformer: ->(value) { value.to_i }
+)
+
+ParameterType(
+  name: 'amount',
+  regexp: /(a|an|no|\d+)/,
+  transformer: ->(value) do
+    return 1 if value == 'a'
+
+    parse_email_count(value) # https://github.com/email-spec/email-spec/blob/b8d22b4d1e347fd913a7602ea01ecaed827c7ca9/lib/email_spec/helpers.rb#L160
+  end
+)
+
+ParameterType(
+  name: 'field_definition_target',
+  regexp: /(applications|users|accounts)/,
+  transformer: ->(value) do
+    {
+      'applications' => 'Cinstance',
+      'users' => 'User',
+      'accounts' => 'Account',
+    }[value]
+  end
 )

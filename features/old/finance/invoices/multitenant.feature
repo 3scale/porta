@@ -8,11 +8,14 @@ Feature: Provider lists all invoices
     # TODO: Create invoices directly from background
     Given a provider "xyz.3scale.localhost" on 1st October 2010
       And provider "xyz.3scale.localhost" is billing but not charging
+      And the default product of provider "xyz.3scale.localhost" has name "xyz API"
     Given a provider "other.3scale.localhost" on 1st October 2010
       And provider "other.3scale.localhost" is billing but not charging
-
-    Given an application plan "Fixed" of provider "xyz.3scale.localhost" for 200 monthly
-      And an application plan "Fixed_for_other" of provider "other.3scale.localhost" for 200 monthly
+      And the default product of provider "other.3scale.localhost" has name "other API"
+      And the following application plans:
+        | Product   | Name            | Cost per month |
+        | xyz API   | Fixed           | 200            |
+        | other API | Fixed_for_other | 200            |
       And the date is 5th October 2010
       And a buyer "foobar" signed up to application plan "Fixed"
       And a buyer "other_buyer" signed up to application plan "Fixed_for_other"

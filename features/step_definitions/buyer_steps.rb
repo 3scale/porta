@@ -1,5 +1,26 @@
 # frozen_string_literal: true
 
+Given "a buyer {string}" do |name|
+  @account = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: name)
+  @account.buy! @provider.account_plans.default
+end
+
+Given "a buyer {string} of {provider}" do |org_name, provider|
+  @account = FactoryBot.create(:buyer_account, provider_account: provider, org_name: org_name)
+  @account.buy! provider.account_plans.default
+end
+
+Given "{buyer} has {int} application(s)" do |buyer, number|
+  buyer.bought_cinstances.destroy_all
+
+  plan = @plan || @product.plans.first
+  FactoryBot.create_list(:cinstance, number, user_account: buyer, plan: plan)
+end
+
+Given "{buyer} has user key {string}" do |buyer, key|
+  buyer.bought_cinstance.update!(user_key: key)
+end
+
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
   buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
                         :org_name => name, :state => :created)
@@ -14,10 +35,9 @@ When "(a )buyer {string} with email {string} signs up to {provider}" do |name, e
   buyer.buy! provider.account_plans.default
 end
 
-Given "a buyer {string} of {provider}" do |org_name, provider|
-  account = FactoryBot.create(:buyer_account, :provider_account => provider,
-                    :org_name => org_name)
-  account.buy! provider.account_plans.default
+Given "{buyer} is signed up to {plan}" do |buyer, plan|
+  buyer.buy!(plan.provider_account.account_plans.default) unless plan.is_a? AccountPlan
+  buyer.buy!(plan)
 end
 
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
@@ -28,8 +48,8 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   account.buy!(plan)
 end
 
-Given /^a buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
-  step %(an approved buyer "#{account_name}" signed up to provider "#{provider_account_name}")
+Given "a buyer {string} signed up to {provider}" do |account_name, provider|
+  step %(an approved buyer "#{account_name}" signed up to provider "#{provider.org_name}")
 end
 
 Given(/^a buyer signed up to the provider$/) do
@@ -73,8 +93,69 @@ Given /^these buyers signed up to provider "([^"]*)"$/ do |provider_name, table|
   end
 end
 
+Given "{buyer} has extra fields:" do |buyer, table|
+  buyer.extra_fields = table.hashes.first
+  buyer.save!
+end
+
+Given "{buyer} subscribed to {plan}" do |buyer, plan|
+  buyer.buy!(plan)
+end
+
+Given "{buyer} {is} subscribed to {product}" do |buyer, subscribed, product|
+  if subscribed
+    @subscription = buyer.bought_service_contracts.create!(plan: product.service_plans.first)
+  else
+    buyer.bought_service_contracts.map(&:destroy)
+  end
+end
+
+Given "the contract of {buyer} with {plan} is approved" do |buyer, plan|
+  buyer.contracts.by_plan_id(plan.id).first.accept!
+end
+
+Given "{buyer} {plan} contract is {word}" do |buyer, plan, state|
+  contract = @buyer.contracts.where(plan_id: plan.id).first!
+  contract.update_column(:state, state) # rubocop:disable Rails/SkipsModelValidations
+end
+
+Given "{buyer} {plan} contract gets accepted" do |buyer, plan|
+  contract = @buyer.contracts.where(plan_id: plan.id).first!
+  contract.accept!
+end
+
+Given "{buyer} {plan} contract gets suspended" do |buyer, plan|
+  contract = @buyer.contracts.where(plan_id: plan.id).first!
+  contract.suspend!
+end
+
+Given "{buyer} {plan} contract gets resumed" do |buyer, plan|
+  contract = @buyer.contracts.where(plan_id: plan.id).first!
+  contract.resume!
+end
+
+Given "{buyer} uses a custom plan {string}" do |account, name|
+  contract = account.provider_account
+                    .provided_contracts
+                    .find_by(user_account_id: account.id)
+  contract.plan.update!(name: name)
+  contract.customize_plan!
+end
+
 When "{buyer} is approved" do |buyer|
   buyer.approve!
+end
+
+When "{provider_or_buyer} changes to {plan}" do |account, plan|
+  case plan
+  when ApplicationPlan
+    account.bought_cinstance.change_plan!(plan)
+  when AccountPlan
+    # HACK: FIXME: should use something like #bought_account_contract or ## HACK: FIXME: should use something like #bought_account_plan
+    account.contracts.first.change_plan!(plan)
+  else
+    raise ArgumentError, 'Specify the type of plan'
+  end
 end
 
 # Just an alias, to be more explicit.
@@ -84,6 +165,10 @@ end
 
 Then /^I should not see the timezone field$/ do
   assert has_no_xpath? "//*[@id='account_timezone']"
+end
+
+Then "{buyer} should be subscribed to {product}" do |buyer, product|
+  assert_not_empty buyer.bought_service_contracts.where(service_id: product.id)
 end
 
 def signup_form
@@ -98,11 +183,19 @@ And(/^has a buyer with (application|service) plan/) do |plan|
   step %(provider "#{@provider.internal_domain}" has "service_plans" switch allowed)
   step %(a default service of provider "#{@provider.internal_domain}" has name "API")
   if plan == 'service'
-    step 'a service plan "Gold" for service "API" exists'
-    step 'a buyer "Alexander" signed up to service plan "Gold"'
+    steps %(
+      And the following service plan:
+        | Product | Name |
+        | API     | Gold |
+      And a buyer "Alexander" signed up to service plan "Gold"
+    )
   else
-    step 'a application plan "Metal" of provider "foo.3scale.localhost"'
-    step 'a buyer "Alexander" signed up to application plan "Metal"'
+    steps %(
+      And the following application plan:
+        | Product | Name  |
+        | API     | Metal |
+      And a buyer "Alexander" signed up to application plan "Metal"
+    )
   end
   @buyer = @provider.buyer_accounts.find_by!(org_name: 'Alexander')
 end
@@ -114,7 +207,7 @@ When(/^a buyer signs up/) do
 end
 
 And /^application plan is paid$/ do
-  step 'plan "Metal" has monthly fee of 100'
+  step 'plan "Metal" has a monthly fee of 100'
 end
 
 When(/^the buyer logs in to the provider$/) do
@@ -158,30 +251,6 @@ When "the buyer is reviewing their account details" do
   visit path_to('the account page')
 end
 
-Given "a buyer signed up to a provider" do
-  steps %(
-    Given a provider exists
-    And the provider has a default paid application plan
-    And a buyer signed up to the provider
-  )
-end
-
-Given "a buyer logged in to a provider" do
-  steps %(
-    Given a buyer signed up to a provider
-    And the buyer logs in to the provider
-  )
-end
-
-Given "a buyer logged in to a provider using SSO" do
-  steps %(
-    Given Provider has setup RH SSO
-    And As a developer, I see RH-SSO login option on the login page
-    Given the Oauth2 user has all the required fields
-    When I authenticate by Oauth2
-  )
-end
-
 When "the buyer wants to log in" do
   step 'the current domain is foo.3scale.localhost'
   step 'I go to the login page'
@@ -190,4 +259,27 @@ end
 When "the buyer wants to sign up" do
   step 'the current domain is foo.3scale.localhost'
   step 'I go to the sign up page'
+end
+
+Given "the following buyers with service subscriptions signed up to {provider}:" do |provider, table|
+  # table is a Cucumber::MultilineArgument::DataTable
+  table.map_column!(:plans) { |plans| plans.from_sentence.map{ |plan| Plan.find_by_name!(plan) } }
+  table.map_column!(:name) { |name| FactoryBot.create :buyer_account, :provider_account => provider, :org_name => name }
+  table.map_headers! { |header| header.to_sym }
+  table.hashes.each do |row|
+    account = row[:name]
+    row[:plans].each do |plan|
+      contract = account.buy! plan
+      contract.update_attribute(:state,  row[:state]) if row[:state]
+    end
+  end
+end
+
+Given "a buyer {string} signed up to {service}" do |name, service|
+  provider = service.account
+  step %(a buyer "#{name}" signed up to provider "#{provider.name}")
+
+  plans = service.service_plans
+  plan = plans.default_or_first || plans.first
+  @buyer.buy! plan
 end

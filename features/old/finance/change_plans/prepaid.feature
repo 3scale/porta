@@ -7,15 +7,19 @@ Feature: Change plan prepaid
     Given a provider exists on 1st May 2009
       And the provider is charging its buyers in prepaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name             | Cost per month |
+      | My API  | FreeAsInBeer     | 0              |
+      | My API  | PaidAsInLunch    | 31             |
+      | My API  | PaidAsInDiplomat | 3100           |
     Given the current domain is foo.3scale.localhost
+    And a buyer "stallman"
 
   @commit-transactions
   Scenario: Paying a fee without change plan PREPAID
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 1st May 2009
     When I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
@@ -25,9 +29,9 @@ Feature: Change plan prepaid
 
   @commit-transactions
   Scenario: Trial period ends and no change plan PREPAID
-    Given plan "PaidAsInLunch" has trial period of 5 days
+    Given plan "PaidAsInLunch" has a trial period of 5 days
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 1st May 2009
       When time flies to 3rd June 2009
       When I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
 
@@ -41,9 +45,9 @@ Feature: Change plan prepaid
   @stats
   Scenario: Plan changes at 10th May 12:00 AM UTC PREPAID
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 1st May 2009
       And I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
+      And the buyer changes to application plan "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
       When time flies to 3rd June
      And I navigate to 1st invoice issued for me in "May, 2009"
     Then I should see line items

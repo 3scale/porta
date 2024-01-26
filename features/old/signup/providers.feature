@@ -7,12 +7,11 @@ Feature: Signup
 Background:
   Given provider "master" has multiple applications disabled
     And provider "master" has default service and account plan
-  Given a default application plan "Base" of provider "master"
 
 @ignore-backend @allow-rescue
 Scenario: Signup, activate, login, create sample data and let a buyer login
   Given current domain is the admin domain of provider "master"
-    And master provider has the following fields defined for "Account":
+    And master provider has the following fields defined for accounts:
     | name                 | required | read_only | hidden |
     | API_Status_3s__c     |          |           |        |
     | API_Purpose_3s__c    |          |           |        |
@@ -50,7 +49,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
 
   # TODO: this should be redone once we have new sample plans
   # so I'm leting it fail as a reminder
-  And I go to the application plans admin page
+  And I go to the product's application plans admin page
   Then I should see "Unlimited"
 
   # --- impersonation admin user cannot log in ---

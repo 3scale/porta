@@ -18,7 +18,7 @@ Feature: Service subscriptions - providers
 
   Scenario: Listing contracts by service
     Given a buyer "mouse" of provider "foo.3scale.localhost"
-    And buyer "mouse" subscribed service "Elephant Taming"
+    And the buyer is subscribed to product "Elephant Taming"
     When I go to the service subscriptions list for provider
     And I select "Elephant Taming" from "Service"
     And I press "Search"

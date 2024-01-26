@@ -66,6 +66,14 @@ Then "the page should contain {string}" do |text|
   end
 end
 
+Then "they see {}" do |selector|
+  assert_selector(:css, selector_for(selector), wait: 0)
+end
+
+Then "they don't see {}" do |selector|
+  assert_not has_css?(selector_for(selector), wait: 0)
+end
+
 # Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
 #   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
 #   with_scope(selector) do
@@ -155,7 +163,12 @@ When 'I change to tab {string}' do |tab|
   find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
 end
 
+And "confirm the dialog" do
+  accept_confirm
+end
+
 Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
+  # TODO: remove in favor of "And confirm dialog step"
   if rack_test?
     step original
   else
@@ -164,4 +177,14 @@ Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
     end
     wait_for_requests
   end
+end
+
+Then "(they )should see the following details(:)" do |table|
+  assert table.rows_hash.all? do |key, value|
+    find('dl dt', text: key).has_sibling?('dd', text: value)
+  end
+end
+
+Then "(I )(they )should see the flash message {string}" do |message|
+  assert_flash(message)
 end

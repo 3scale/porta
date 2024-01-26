@@ -104,8 +104,8 @@ Then(/^I should see (accepted|pending) invitation for "([^\"]*)"$/) do |state, e
   accepted = state == 'accepted'
 
   assert(all('tr').any? do |tr|
-    tr.has_css?('td', text: email) &&
-    tr.has_css?('td', text: accepted ? /^yes/ : 'no')
+    tr.has_css?('td', wait: 0, text: email) &&
+    tr.has_css?('td', wait: 0, text: accepted ? /^yes/ : 'no')
   end)
 end
 

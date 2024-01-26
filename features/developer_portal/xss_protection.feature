@@ -4,7 +4,10 @@ Feature: XSS protection
 
   Background:
     Given a provider exists
-    And the provider has a default free application plan
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name    | Default |
+      | My API  | Default | true    |
     And a buyer signed up to the provider
 
   @javascript

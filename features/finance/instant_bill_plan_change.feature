@@ -7,34 +7,37 @@ Feature: Instant biling plan change feature
     And the provider is charging its buyers in prepaid mode
     And the provider service allows to change application plan directly
     And the provider has "finance" visible
+    And the default product of the provider has name "My API"
     Given all the rolling updates features are off
     And I have instant_bill_plan_change feature enabled
     And the provider has one buyer
 
   Scenario: Charging variable cost on plan change
-    Given the provider has a paid application plan "NoVariable" of 31 per month
-    And the provider has another paid application plan "WithVariable" of 310 per month
+    Given the following application plans:
+      | Product | Name         | Cost per month |
+      | My API  | NoVariable   | 31             |
+      | My API  | WithVariable | 310            |
     And pricing rules on plan "WithVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 100 | infinity |
     And the date is 1st January 2017
-    And the buyer signed up for plan "NoVariable"
+    And the buyer is signed up to plan "NoVariable"
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 400   |
     When time flies to 3rd January 2017
-    And the buyer changed to plan "WithVariable"
+    And the buyer changes to application plan "WithVariable"
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 1000  |
     When time flies to 4th January 2017
-    And the buyer changed to plan "NoVariable"
+    And the buyer changes to application plan "NoVariable"
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 5000  |
 
     When time flies to 6th January 2017
-    And the buyer changed to plan "WithVariable"
+    And the buyer changes to application plan "WithVariable"
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 2000  |
@@ -64,8 +67,10 @@ Feature: Instant biling plan change feature
       | Total cost                 |          | 500.10 |
 
   Scenario: Billing variable cost on plan change after multiple billing cycles without reaching the threshold
-    Given the provider has a paid application plan "PureVariable" of 0 per month
-    And the provider has another paid application plan "PureVariable101" of 0 per month
+    Given the following application plans:
+      | Product | Name            |
+      | My API  | PureVariable    |
+      | My API  | PureVariable101 |
     And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 1   | infinity |
@@ -73,7 +78,7 @@ Feature: Instant biling plan change feature
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 101 | infinity |
     # In March, 2017
-    Given the buyer signed up for plan "PureVariable101" on 20th Mar 2017
+    Given the buyer is signed up to plan "PureVariable101" on 20th Mar 2017
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 50    |
@@ -92,7 +97,7 @@ Feature: Instant biling plan change feature
       | Metric | Value |
       | hits   | 500   |
     When time flies to 4th May 2017
-    And the buyer changed to plan "PureVariable"
+    And the buyer changes to application plan "PureVariable"
     When time flies to 7th May 2017
     # Plan changed occurred, threshold of PureVariable101 was reached
     Then the buyer should have following line items for "May, 2017" in the 1st invoice:
@@ -110,21 +115,23 @@ Feature: Instant biling plan change feature
       | Total cost |          | 10.00 |
 
   Scenario: Billing variable cost with multiple plan changes within a month
-    Given the provider has a free application plan "FreePlan"
-    And the provider has a paid application plan "PureVariable" of 0 per month
-    And the provider has another paid application plan "PureVariable101" of 0 per month
+    Given the following application plans:
+      | Product | Name            | Cost per month |
+      | My API  | FreePlan        | 0              |
+      | My API  | PureVariable    | 0              |
+      | My API  | PureVariable101 | 0              |
     And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 1   | infinity |
     And pricing rules on plan "PureVariable101":
       | Metric | Cost per unit | Min | Max      |
       | hits   | 0.1           | 101 | infinity |
-    Given the buyer signed up for plan "PureVariable" on 1st May 2018
+    Given the buyer is signed up to plan "PureVariable" on 1st May 2018
     And the buyer makes a service transactions with:
       | Metric | Value |
       | hits   | 50    |
     When time flies to 4th May 2018
-    And the buyer changed to plan "PureVariable101"
+    And the buyer changes to application plan "PureVariable101"
     When time flies to 7th May 2018
     # Plan changed occurred, accountable traffic while in PureVariable
     Then the buyer should have following line items for "May, 2018" in the 1st invoice:
@@ -135,7 +142,7 @@ Feature: Instant biling plan change feature
       | Metric | Value |
       | hits   | 80    |
     When time flies to 8th May 2018
-    And the buyer changed to plan "FreePlan"
+    And the buyer changes to application plan "FreePlan"
     When time flies to 11th May 2018
     # Plan changed occurred, threshold of PureVariable101 wasn't reached
     Then the buyer should have 1 invoices
@@ -143,7 +150,7 @@ Feature: Instant biling plan change feature
       | Metric | Value |
       | hits   | 500   |
     When time flies to 15th May 2018
-    And the buyer changed to plan "PureVariable"
+    And the buyer changes to application plan "PureVariable"
     When time flies to 18th May 2018
     # Plan changed occurred, nothing to bill since it was on free plan
     Then the buyer should have 1 invoices
@@ -151,7 +158,7 @@ Feature: Instant biling plan change feature
       | Metric | Value |
       | hits   | 300   |
     When time flies to 19th May 2018
-    And the buyer changed to plan "FreePlan"
+    And the buyer changes to application plan "FreePlan"
     When time flies to 22th May 2018
     # Plan changed occurred, accountable traffic while in PureVariable
     Then the buyer should have following line items for "May, 2018" in the 2nd invoice:

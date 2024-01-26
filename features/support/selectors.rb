@@ -17,7 +17,8 @@ module HtmlSelectorsHelper
       '#audience'
     when 'the apis dashboard widget', :apis_dashboard_widget
       '.DashboardSection--services'
-    when 'the secondary nav'
+    when /the secondary nav/,
+         /the app menu/
       'nav.pf-c-nav.pf-m-horizontal'
     when 'the user widget'
       '#user_widget'
@@ -29,6 +30,8 @@ module HtmlSelectorsHelper
       '.service-widget'
     when 'the products widget'
       '#products-widget'
+    when 'the latest apps'
+      '.pf-c-page__main-section .latest-apps'
 
     #
     # Invoicing helpers
@@ -49,6 +52,9 @@ module HtmlSelectorsHelper
 
     when 'table'
       'table'
+
+    when 'the table'
+      '.pf-c-table'
 
     when 'the toolbar'
       '.pf-c-page__main-section .pf-c-toolbar'
@@ -79,6 +85,43 @@ module HtmlSelectorsHelper
     #
     when 'the API Credentials card'
       'div#application_keys'
+
+    when 'the application widget'
+      '#applications_widget'
+
+    when 'the change plan card'
+      '#change_plan_card'
+
+    when 'the application details'
+      '[aria-label="Application details list"], dl.dl-horizontal'
+
+    when 'the referrer filters'
+      '#referrer_filters'
+
+    #
+    # Plans
+    #
+    when /metric (.*) usage limits/
+      find('#metrics_container tr', text: $1).sibling('tr', text: 'Usage Limits')
+
+    when /the features/
+      find(:xpath, '//table[@id="features"]/..')
+
+    when /the feature (.*)/
+      find('table#features tbody tr', text: $1)
+
+    when 'the plan card'
+      '#plan-widget-with-actions'
+
+    #
+    # Dev portal
+    #
+    when 'the pagination'
+      'ul.pagination'
+    when 'the navigation bar'
+      'ul.navbar-nav'
+    when 'the application keys'
+      '#application_keys'
 
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" \

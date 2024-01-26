@@ -3,7 +3,10 @@ Feature: Buyer signup
 
   Background:
     Given a provider exists
-    And master has a application plan "enterprise"
+    And the default product of provider "master" has name "Master API"
+    And the following application plan:
+      | Product    | Name       |
+      | Master API | enterprise |
     And the provider account allows signups
 
   Scenario: Signup creates account created event

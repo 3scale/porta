@@ -24,7 +24,7 @@ Then "I should not see button to delete {user}" do |user|
 end
 
 Then "I should see button to suspend buyer {user}" do |user|
-  assert has_css?(%(form[action = "#{suspend_admin_buyers_account_user_path(user.account, user)}"][method = "post"]))
+  assert_selector(:css, %(form[action = "#{suspend_admin_buyers_account_user_path(user.account, user)}"][method = "post"]))
 end
 
 Then "I should not see button to suspend buyer {user}" do |user|
@@ -32,7 +32,7 @@ Then "I should not see button to suspend buyer {user}" do |user|
 end
 
 Then "I should see button to unsuspend buyer {user}" do |user|
-  assert has_css?(%(form[action = "#{unsuspend_admin_buyers_account_user_path(user.account, user)}"][method = "post"]))
+  assert_selector(:css, %(form[action = "#{unsuspend_admin_buyers_account_user_path(user.account, user)}"][method = "post"]))
 end
 
 Then "I should not see button to unsuspend buyer {user}" do |user|

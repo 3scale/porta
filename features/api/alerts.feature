@@ -4,11 +4,13 @@ Feature: Audience > Applications > Alerts
   Background:
     Given a provider
     And a product "API 1"
-    And the product has an application plan "Plan 1"
     And a product "API 2"
-    And the product has an application plan "Plan 2"
+    And the following application plan:
+      | Product | Name   |
+      | API 1   | Plan 1 |
+      | API 2   | Plan 2 |
     And a buyer "Jane" of the provider
-    And the provider has the following applications:
+    And the following applications:
       | Buyer | Name          | Plan   |
       | Jane  | Application 1 | Plan 1 |
       | Jane  | Application 2 | Plan 2 |

@@ -45,7 +45,7 @@ end
 
 # TODO: name this step better
 # picks the right email inbox
-When /^I act as "([^"]*)"$/ do |username|
+When /^(?:they |I )?act as "([^"]*)"$/ do |username|
   act_as_user(username)
 end
 
@@ -64,6 +64,12 @@ When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
   else
     step %(I log in as "#{username}" with password "supersecret")
   end
+end
+
+When "{buyer} logs in" do |buyer|
+  set_current_domain(buyer.provider_account.domain)
+  user = buyer.users.first
+  try_buyer_login(user.username, user.password || 'supersecret')
 end
 
 When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domain|
@@ -117,7 +123,7 @@ Then /^I should be logged in the Development Portal$/ do
   GHERKIN
 end
 
-When /^I log ?out$/ do
+When /^(?:I|they) log ?out$/ do
   log_out
   @current_user = nil
 end
@@ -147,9 +153,4 @@ end
 When "the user logs in" do
   log_out
   try_provider_login(@user.username, 'supersecret')
-end
-
-def log_out
-  find(:css, '[aria-label="Session toggle"]').click
-  click_link 'Sign Out'
 end

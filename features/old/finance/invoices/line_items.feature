@@ -8,7 +8,10 @@ Feature: Provider manages line items
   Background:
     Given a provider is logged in on 1st February 2009
     Given the provider is charging its buyers
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | My API  | Fixed | 200            |
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for February, 2009 with items
       | name | cost |

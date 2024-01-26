@@ -4,41 +4,38 @@ Feature: Audience > Accounts
   Background:
     Given a provider is logged in
 
-  Rule: Provider has no buyers
-    Scenario: Empty state
-      Given they go to the buyer accounts page
-      Then they should see an empty state
-      And should see "Add your first account"
+  Scenario: Empty state
+    Given the provider has no buyers
+    When they go to the buyer accounts page
+    Then they should see an empty state
+    And should see "Add your first account"
 
-  Rule: Provider has a single account plan
-    Background:
-      Given a buyer "Alice" of the provider
+  Scenario: Provider has one account plan only
+    Given a buyer "Alice" of the provider
+    When they go to the buyer accounts page
+    Then the table does not have a column "Plan"
 
-    Scenario: The account plan is not in the table
-      Given they go to the buyer accounts page
-      Then the table does not have a column "Plan"
+  Scenario: Provider has multiple applications disabled
+    Given a buyer "Pepe" of the provider
+    And the default product of the provider has name "The API"
+    And the following application plan:
+      | Product | Name | Default |
+      | The API | Free | true    |
+    And the provider has multiple applications disabled
+    When they go to the buyer accounts page
+    Then the table don't have a column "Apps"
 
-  Rule: Provider has multiple applications disabled
-    Background:
-      Given a buyer "Pepe" of the provider
-      And the default service has a default application plan
-
-    Scenario: Table does not feature a column for apps
-      Given the provider has multiple applications disabled
-      When they go to the buyer accounts page
-      Then the table don't have a column "Apps"
-
-  Rule: Provider has multiple applications disabled
-    Background:
-      Given a buyer "Pepe" of the provider
-      And the default service has a default application plan
-
-    Scenario: Table features a column for apps
-      Given the provider has multiple applications enabled
-      When they go to the buyer accounts page
-      Then should see following table:
-        | Group/Org. | Apps |
-        | Pepe       | 0    |
+  Scenario: Provider has multiple applications enabled
+    Given a buyer "Pepe" of the provider
+    And the default product of the provider has name "The API"
+    And the following application plan:
+      | Product | Name | Default |
+      | The API | Free | true    |
+    And the provider has multiple applications enabled
+    When they go to the buyer accounts page
+    Then should see following table:
+      | Group/Org. | Apps |
+      | Pepe       | 0    |
 
   Rule: Provider has many account plans
     Background:
@@ -123,7 +120,7 @@ Feature: Audience > Accounts
       Given the current user can export data
       When they go to the buyer accounts page
       Then they select toolbar action "Export to CSV"
-      And the current page is the provider side data exports page
+      And the current page is the admin portal data exports page
 
     Scenario: Current user cannot export accounts to CSV
       Given the current user can't export data

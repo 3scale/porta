@@ -4,8 +4,13 @@ Feature: Accessing Destroys
 
   Background:
     Given a provider is logged in
-    And a default application plan "Hammer Time" of provider "foo.3scale.localhost"
-    And a published account plan "Hammer Time" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name        | Default |
+      | My API  | Hammer Time | true    |
+    And the following account plan:
+      | Issuer               | Name        | State     |
+      | foo.3scale.localhost | Hammer Time | Published |
 
   Scenario: Deleted account is found in trash
     When provider "foo.3scale.localhost" has deleted the buyer "Nicolas Von Kline Wurst"

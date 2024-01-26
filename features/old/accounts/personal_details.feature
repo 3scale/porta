@@ -41,10 +41,10 @@ Feature: Personal Details
     And I fill in "Username" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then I should see inline error "is too short (minimum is 3 characters)" for user username input
+    Then "Username" shows error "is too short (minimum is 3 characters)"
 
   Scenario: Provider should see all fields defined for user
-    Given master provider has the following fields defined for "User":
+    Given master provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -60,7 +60,6 @@ Feature: Personal Details
       | Current password    |
 
     Then I should see the fields:
-      | present              |
       | First name           |
       | Last name            |
       | Job role             |

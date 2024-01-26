@@ -205,8 +205,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'top_clients as json' do
     plan = FactoryBot.create(:application_plan, issuer: @service)
-    cinstance1 = FactoryBot.create(:cinstance, plan: plan)
-    cinstance2 = FactoryBot.create(:cinstance, plan: plan)
+    cinstance1 = FactoryBot.create(:cinstance, plan: plan, name: nil)
+    cinstance2 = FactoryBot.create(:cinstance, plan: plan, name: nil)
 
     make_transaction_at(Time.utc(2009, 12,  2), cinstance_id: cinstance1.id)
     make_transaction_at(Time.utc(2009, 12,  3), cinstance_id: cinstance2.id)

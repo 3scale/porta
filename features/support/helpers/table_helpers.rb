@@ -11,7 +11,9 @@ module TableHelpers
   # returns array with table content
   #
   def extract_table(table, rows, cells = nil)
-    find(*table).all(*rows).map do |row|
+    table = find(*table)
+    ActiveSupport::Deprecation.warn '[Cucumber] Table not implemented with Patternfly' unless table[:class].include?('pf-c-table')
+    table.all(*rows).map do |row|
       if cells.respond_to?(:call)
         cells.call(row)
       elsif block_given?
@@ -43,7 +45,6 @@ module TableHelpers
       assert_same_elements rows, table
     end
   end
-
 end
 
 World(TableHelpers)

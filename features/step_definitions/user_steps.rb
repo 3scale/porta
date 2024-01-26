@@ -16,8 +16,8 @@ Given "an active user {string} of {account}" do |username, account|
   FactoryBot.create(:active_user, :account => account, :username => username)
 end
 
-Given "an active admin {string} of {account}" do |username, account|
-  FactoryBot.create(:active_admin, :account => account, :username => username)
+Given "an (active )admin {string} of the provider" do |username|
+  FactoryBot.create(:active_admin, account: @provider, username: username)
 end
 
 Given "an active user {string} of {account} with {word} permission" do |username, account, permission|

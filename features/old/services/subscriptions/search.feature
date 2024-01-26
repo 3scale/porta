@@ -7,10 +7,12 @@ Feature: Providers's subscription searching, sorting and filtering
   Background:
     Given a provider is logged in
     And the provider has "service_plans" visible
-    And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-    And a service "New Service" of provider "foo.3scale.localhost"
-    And a default service plan "Basic" of service "Fancy API"
-    And a service plan "Unpublished" of service "New Service"
+    And a default product of the provider has name "Fancy API"
+    And a product "New Service"
+    And the following service plans:
+      | Product     | Name        | Default |
+      | Fancy API   | Basic       | true    |
+      | New Service | Unpublished |         |
     Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |

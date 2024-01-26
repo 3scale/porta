@@ -8,7 +8,10 @@ Feature: Provider lists all invoices
     # TODO: Create invoices directly from background
     Given a provider is logged in on 1st October 2010
     And the provider is billing but not charging
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
+    And the default service of the provider has name "My API"
+    And the following application plans:
+      | Product | Name   | Cost per month |
+      | My API  | Fixed  | 200            |
     And the date is 5th October 2010
     And a buyer "foobar" signed up to application plan "Fixed"
     And time flies to 10th February 2011

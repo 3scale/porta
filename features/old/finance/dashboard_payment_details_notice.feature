@@ -7,10 +7,12 @@ Feature: Notice about payment details on buyer dashboard
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has default service and account plan
+      And the default product of the provider has name "My API"
 
   Scenario: On free plan
-    Given an application plan "Basic" of provider "foo.3scale.localhost"
-    And plan "Basic" has monthly fee of 0
+    Given the following application plan:
+      | Product | Name  | Cost per month |
+      | My API  | Basic | 0              |
     And there is no user with username "bob"
     When the current domain is foo.3scale.localhost
     And I go to the sign up page for the "Basic" plan
@@ -24,8 +26,9 @@ Feature: Notice about payment details on buyer dashboard
 
   Scenario: On paid plan
     Given provider "foo.3scale.localhost" is charging
-    And an application plan "Pro" of provider "foo.3scale.localhost"
-    And plan "Pro" has monthly fee of 200
+    And the following application plan:
+      | Product | Name | Cost per month |
+      | My API  | Pro  | 200            |
     When the current domain is foo.3scale.localhost
 
     And I go to the sign up page for the "Pro" plan
@@ -40,9 +43,9 @@ Feature: Notice about payment details on buyer dashboard
 
   Scenario: On paid plan with trial period
     Given provider "foo.3scale.localhost" is charging
-    And an application plan "Pro" of provider "foo.3scale.localhost"
-    And plan "Pro" has monthly fee of 200
-    And plan "Pro" has trial period of 30 days
+    And the following application plan:
+      | Product | Name | Cost per month | Trial period |
+      | My API  | Pro  | 200            | 30           |
     When the current domain is foo.3scale.localhost
 
     When I go to the sign up page for the "Pro" plan
@@ -64,13 +67,10 @@ Feature: Notice about payment details on buyer dashboard
   @wip @buyer_change_plan
   Scenario: On free plan, then upgrade to paid plan with trial period
     Given a provider "foo.3scale.localhost" is charging
-
-    Given an application plan "Basic" of provider "foo.3scale.localhost"
-    And plan "Basic" has monthly fee of 0
- 
-    And an application plan "Pro" of provider "foo.3scale.localhost"
-    And plan "Pro" has monthly fee of 200
-    And plan "Pro" has trial period of 30 days
+    And the following application plans:
+      | Product | Name  | Cost per month | Trial period |
+      | My API  | Basic |                |              |
+      | My API  | Pro   | 200            | 30           |
 
     When the current domain is foo.3scale.localhost
 
@@ -97,15 +97,10 @@ Feature: Notice about payment details on buyer dashboard
   Scenario: On paid plan with trial period, then upgrade to another paid plan with trial period
     Given a provider "foo.3scale.localhost" with postpaid billing enabled
       And the date is March 1, 2003
-
-    And an application plan "Basic" of provider "foo.3scale.localhost"
-    And plan "Basic" has monthly fee of 100
-    And plan "Basic" has trial period of 30 days
-
-    And an application plan "Pro" of provider "foo.3scale.localhost"
-    And plan "Pro" has monthly fee of 200
-    And plan "Pro" has trial period of 30 days
-
+    And the following application plans:
+      | Product | Name  | Cost per month | Trial period |
+      | My API  | Basic | 100            | 30           |
+      | My API  | Pro   | 200            | 30           |
     When the current domain is foo.3scale.localhost
     When I go to the sign up page for the "Basic" plan
     And I fill in all required signup fields as "bob"
@@ -126,8 +121,9 @@ Feature: Notice about payment details on buyer dashboard
   Scenario: On paid plan when payment gateway is in test mode
     Given a provider "foo.3scale.localhost" with postpaid billing enabled
     And provider "foo.3scale.localhost" has payment gateway in test mode
-    And an application plan "Basic" of provider "foo.3scale.localhost"
-    And plan "Basic" has monthly fee of 100
+    And the following application plans:
+      | Product | Name  | Cost per month |
+      | My API  | Basic | 100            |
     When the current domain is foo.3scale.localhost
     And I go to the sign up page for the "Basic" plan
     And I fill in all required signup fields as "bob"

@@ -4,7 +4,13 @@ Feature: Dev Portal Buyer Payment Details
   I want to enter my billing and credit card details and keep them up to date
 
   Background:
-    Given a buyer logged in to a provider
+    Given a provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Default | Cost per month |
+      | My API  | Gold | true    | 100            |
+    And a buyer signed up to the provider
+    And the buyer logs in to the provider
 
   Scenario: Finance is disabled
     Given the provider is charging its buyers

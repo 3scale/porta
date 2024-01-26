@@ -117,7 +117,7 @@ end
 Then "the buyer can update their billing address for stripe" do
   stub_stripe_intent_setup(times: 2)
   credit_card_details_tab.click
-  assert has_css?(billing_address_descriptionlist_selector)
+  assert_selector(:css, billing_address_descriptionlist_selector)
 
   click_on 'Edit billing address'
   new_billing_address = billing_address.merge({ address_address: 'West 57th Street' })
@@ -172,7 +172,7 @@ end
 Then "the buyer can update their credit card and billing address for Braintree" do
   stub_braintree_authorization
   credit_card_details_tab.click
-  assert has_css?(billing_address_descriptionlist_selector)
+  assert_selector(:css, billing_address_descriptionlist_selector)
 
   click_on 'Edit Credit Card Details and Billing Address'
   new_billing_address = billing_address.merge({ street_address: 'West 57th Street' })

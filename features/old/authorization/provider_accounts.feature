@@ -6,11 +6,11 @@ Feature: Provider accounts authorization
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has Browser CMS activated
+    And provider "foo.3scale.localhost" has Browser CMS activated
     Given provider "foo.3scale.localhost" has multiple applications enabled
-      And a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    And a buyer "buyer" signed up to provider "foo.3scale.localhost"
 
-  Scenario Outline: Provider admin can access accounts
+  Scenario: Provider admin can access accounts
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given provider "foo.3scale.localhost" has "groups" switch allowed
     Given provider "foo.3scale.localhost" has "multiple_users" switch allowed
@@ -21,85 +21,69 @@ Feature: Provider accounts authorization
     Then I should see the link "1 ACCOUNT" in the audience dashboard widget
     When I follow "1 Account"
     Then I should see "Accounts" within the main menu
+    And they should be able to go to the following pages:
+      | the buyer accounts page                       |
+      | the approved buyer accounts page              |
+      | the pending buyer accounts page               |
+      | the rejected buyer accounts page              |
+      | the new buyer account page                    |
+      | the buyer account "buyer" page                |
+      | the buyer account "buyer" edit page           |
+      | the buyer account "buyer" users page          |
+      | the buyer user "buyer" page                   |
+      | the buyer user "buyer" edit page              |
+      | the buyer account "buyer" invitations page    |
+      | the buyer account "buyer" new invitation page |
+      | the buyer account "buyer" groups page         |
 
-    When I go to the <page> page
-    Then I should be at url for the <page> page
+  Scenario: Members per default cannot access accounts
+    Given an active user "member" of account "foo.3scale.localhost"
+    And user "member" does not belong to the admin group "partners" of provider "foo.3scale.localhost"
 
-    Examples:
-      | page                                 |
-      | buyer accounts                       |
-      | approved buyer accounts              |
-      | pending buyer accounts               |
-      | rejected buyer accounts              |
-      | new buyer account                    |
-      | buyer account "buyer"                |
-      | buyer account "buyer" edit           |
-      | buyer account "buyer" users          |
-      | buyer user "buyer"                   |
-      | buyer user "buyer" edit              |
-      | buyer account "buyer" invitations    |
-      | buyer account "buyer" new invitation |
-      | buyer account "buyer" groups         |
-
-
-  Scenario Outline: Members per default cannot access accounts
-   Given an active user "member" of account "foo.3scale.localhost"
-     And user "member" does not belong to the admin group "partners" of provider "foo.3scale.localhost"
-
-     And current domain is the admin domain of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
     Given provider "foo.3scale.localhost" has "groups" switch allowed
     Given provider "foo.3scale.localhost" has "multiple_users" switch allowed
     When I log in as provider "member"
 
-     And I go to the provider dashboard
+    And I go to the provider dashboard
     Then I should not see the link "ACCOUNTS" in the audience dashboard widget
 
-    When I request the url of the '<page>' page then I should see an exception
+    Then they should see an error when going to the following pages:
+      | the buyer accounts page                       |
+      | the approved buyer accounts page              |
+      | the pending buyer accounts page               |
+      | the rejected buyer accounts page              |
+      | the new buyer account page                    |
+      | the buyer account "buyer" page                |
+      | the buyer account "buyer" edit page           |
+      | the buyer account "buyer" users page          |
+      | the buyer user "buyer" page                   |
+      | the buyer user "buyer" edit page              |
+      | the buyer account "buyer" invitations page    |
+      | the buyer account "buyer" new invitation page |
+      | the buyer account "buyer" groups page         |
 
-    Examples:
-      | page                                 |
-      | buyer accounts                       |
-      | approved buyer accounts              |
-      | pending buyer accounts               |
-      | rejected buyer accounts              |
-      | new buyer account                    |
-      | buyer account "buyer"                |
-      | buyer account "buyer" edit           |
-      | buyer account "buyer" users          |
-      | buyer user "buyer"                   |
-      | buyer user "buyer" edit              |
-      | buyer account "buyer" invitations    |
-      | buyer account "buyer" new invitation |
-      | buyer account "buyer" groups         |
-
-
-  Scenario Outline: Members of partners group can access accounts
+  Scenario: Members of partners group can access accounts
     Given an active user "member" of account "foo.3scale.localhost"
-      And user "member" has access to the admin section "partners"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has "multiple_users" switch allowed
-     When I log in as provider "member"
-      And I go to the provider dashboard
+    And user "member" has access to the admin section "partners"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "multiple_users" switch allowed
+    When I log in as provider "member"
+    And I go to the provider dashboard
     Then I should see the link "1 ACCOUNT" in the audience dashboard widget
-
-    When I go to the <page> page
-    Then I should be at url for the <page> page
-
-    Examples:
-      | page                                 |
-      | buyer accounts                       |
-      | approved buyer accounts              |
-      | pending buyer accounts               |
-      | rejected buyer accounts              |
-      | new buyer account                    |
-      | buyer account "buyer"                |
-      | buyer account "buyer" edit           |
-      | buyer account "buyer" users          |
-      | buyer user "buyer"                   |
-      | buyer user "buyer" edit              |
-      | buyer account "buyer" invitations    |
-      | buyer account "buyer" new invitation |
-
+    And they should be able to go to the following pages:
+      | the buyer accounts page                       |
+      | the approved buyer accounts page              |
+      | the pending buyer accounts page               |
+      | the rejected buyer accounts page              |
+      | the new buyer account page                    |
+      | the buyer account "buyer" page                |
+      | the buyer account "buyer" edit page           |
+      | the buyer account "buyer" users page          |
+      | the buyer user "buyer" page                   |
+      | the buyer user "buyer" edit page              |
+      | the buyer account "buyer" invitations page |
+      | the buyer account "buyer" new invitation page |
 
   Scenario: Members of partners group can activate and approve accounts
     Given an active user "member" of account "foo.3scale.localhost"

@@ -9,7 +9,7 @@ Feature: Wizard Billing information
     And provider "foo.3scale.localhost" doesn't have billing address
     And provider "master" is charging its buyers with braintree
     And Braintree is stubbed for wizard
-    Given master provider has the following fields defined for "Account":
+    Given master provider has the following fields defined for accounts:
       | name             | choices | label          | required | read_only | hidden |
       | org_legaladdress |         | Address        | false    | false     | false  |
       | country          |         | Country        | false    | false     | false  |

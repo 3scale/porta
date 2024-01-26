@@ -166,7 +166,7 @@ end
 
 def fill_in_backend_api_form(name: 'My Backend', system_name: 'my_backend', description: 'Description...', url: 'http://api.example.com')
   fill_in('Name', with: name)
-  fill_in('System name', with: system_name) unless system_name_disabled?
+  fill_in('System name', with: system_name) unless find('input[name$="[system_name]"]').disabled?
   fill_in('Description', with: description)
   fill_in('Private Base URL', with: url)
 end

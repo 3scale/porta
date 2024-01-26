@@ -7,14 +7,19 @@ Feature: Render liquid templates from database
     Given a provider "foo.3scale.localhost" with default plans
     And provider "foo.3scale.localhost" has all the templates setup
     And provider "foo.3scale.localhost" has "multiple_users" switch visible
+    And the default product of the provider has name "My API"
 
   @search
   Scenario Outline: Override pages
     Given provider "foo.3scale.localhost" has "account_plans" visible
     And provider "foo.3scale.localhost" has "finance" switch visible
     And provider "foo.3scale.localhost" is charging its buyers with braintree
-    And a published account plan "Basic" of provider "foo.3scale.localhost"
-    And a application plan "Pro" of provider "foo.3scale.localhost"
+    And the following account plan:
+      | Issuer               | Name  | State     |
+      | foo.3scale.localhost | Basic | Published |
+    And the following application plan:
+      | Product | Name  |
+      | My API  | Pro   |
     And a buyer "bob" signed up to application plan "Pro"
     And provider "foo.3scale.localhost" has "multiple_services" visible
     And provider "foo.3scale.localhost" has "service_plans" visible
@@ -88,15 +93,17 @@ Feature: Render liquid templates from database
   # Extra because of those 3 steps to be able to reach the app
   Scenario: New Application
    Given provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a service plan "Gold" of provider "foo.3scale.localhost"
+    And the following service plan:
+      | Product | Name |
+      | My API  | Gold |
     And a buyer "john" signed up to service plan "Gold"
 
     When I log in as "john" on foo.3scale.localhost
-     And I go to the new application page
+     And I go to the dev portal new application page
     Then I should see "New Application"
 
     When builtin page "applications/new" of provider "foo.3scale.localhost" has content "EDITED app page"
-     And I go to the new application page
+     And I go to the dev portal new application page
     Then I should see "EDITED app page"
 
   # Extra because the user is not logged in

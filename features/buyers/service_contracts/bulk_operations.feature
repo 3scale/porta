@@ -4,10 +4,12 @@ Feature: Service subscriptions bulk operations
   Background:
     Given a provider is logged in
     And a service "Fancy API"
-    And a default service plan "Fancy Plan A" of service "Fancy API"
-    And a service plan "Fancy Plan B" of service "Fancy API"
     And a service "Another API"
-    And a default service plan "Another Plan" of service "Another API"
+    And the following service plans:
+      | Product     | Name         | Default |
+      | Fancy API   | Fancy Plan A | true    |
+      | Fancy API   | Fancy Plan B |         |
+      | Another API | Another Plan | true    |
     And the following buyers with service subscriptions signed up to the provider:
       | name  | plans                      |
       | Alice | Fancy Plan A, Another Plan |
@@ -69,20 +71,20 @@ Feature: Service subscriptions bulk operations
     Then "bob@example.com" should receive 1 email
 
   Scenario: Change service plan in bulk
-    Given the table should contain the following:
+    Given the table looks like:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan A |
       | Alice   | Another API | Another Plan |
       | Bob     | Fancy API   | Fancy Plan A |
       | Jane    | Another API | Another Plan |
-    When table is sorted by "Plan"
+    When the table is sorted by "Plan"
     And item "Alice" is selected
     And item "Bob" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and confirm the dialog
     Then should see "Successfully changed the plan of 2 subscriptions"
-    And the table should contain the following:
+    And the table looks like:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan B |
       | Alice   | Another API | Another Plan |
@@ -97,7 +99,7 @@ Feature: Service subscriptions bulk operations
     And should see "You have selected subscriptions to plans from different services"
 
   Scenario: Change state in bulk
-    Given the table should contain the following:
+    Given the table looks like:
       | Account | Service     | State |
       | Bob     | Fancy API   | live  |
       | Jane    | Another API | live  |
@@ -109,7 +111,7 @@ Feature: Service subscriptions bulk operations
     And select "Suspend" from "Action"
     And press "Change state" and confirm the dialog within the modal
     Then should see "Successfully changed the state of 2 subscriptions"
-    And the table should contain the following:
+    And the table looks like:
       | Account | Service     | State     |
       | Bob     | Fancy API   | suspended |
       | Jane    | Another API | suspended |
@@ -133,7 +135,7 @@ Feature: Service subscriptions bulk operations
     When select "Suspend" from "Action"
     And press "Change state" and confirm the dialog within the modal
     Then the bulk operation has failed for "Subscription of Jane to service Another API"
-    And the table should contain the following:
+    And the table looks like:
       | Account | Service     | State |
       | Bob     | Fancy API   | live  |
       | Jane    | Another API | live  |
@@ -142,13 +144,13 @@ Feature: Service subscriptions bulk operations
 
   Scenario: Changing service plan throws an error
     Given the subscription will return an error when changing its plan
-    When table is sorted by "Plan"
+    When the table is sorted by "Plan"
     And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
     And press "Change plan" and confirm the dialog
     Then the bulk operation has failed for "Subscription of Alice to service Fancy API"
-    And the table should contain the following:
+    And the table looks like:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan A |
       | Alice   | Another API | Another Plan |

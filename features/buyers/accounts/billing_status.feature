@@ -5,8 +5,13 @@ Feature: Admin Portal Buyer's Billing Status
   I want to see their billing status
 
   Background:
-    Given a provider is logged in
-    And the provider has a buyer with an application
+    Given a provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Default | Cost per month |
+      | My API  | Gold | true    | 100            |
+    And a buyer signed up to the provider
+    And the provider logs in
 
   Scenario: Provider with finance switched off
     Given the provider has "finance" denied

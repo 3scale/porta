@@ -6,10 +6,13 @@ Feature: Usage limits
 
   Background:
     Given a provider is logged in
-    And an application plan "Basic" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  |
+      | My API  | Basic |
 
   Scenario: Create a limit
-    When I go to the edit page for plan "Basic"
+    When I go to plan "Basic" admin edit page
      And I follow "Limits (0)" for metric "hits" on application plan "Basic"
      And I follow "New usage limit"
      And I select "hour" from "Period"
@@ -19,7 +22,7 @@ Feature: Usage limits
     Then plan "Basic" should have a usage limit of 1000 for metric "hits" per "hour"
 
   Scenario: 0 is a valid value
-    When I go to the edit page for plan "Basic"
+    When I go to plan "Basic" admin edit page
     And I follow "Limits (0)" for metric "hits" on application plan "Basic"
     And I follow "New usage limit"
     And I select "hour" from "Period"
@@ -32,7 +35,7 @@ Feature: Usage limits
 
   Scenario: Edit max value limit
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 2000
-    When I go to the edit page for plan "Basic"
+    When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
      And I follow "Edit" for the hourly usage limit for metric "hits" on application plan "Basic"
      And I fill in "Max. value" with "3000"
@@ -42,7 +45,7 @@ Feature: Usage limits
 
   Scenario: Edit Period of limit
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 2000
-    When I go to the edit page for plan "Basic"
+    When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
      And I follow "Edit" for the hourly usage limit for metric "hits" on application plan "Basic"
      And I select "day" from "Period"
@@ -52,7 +55,7 @@ Feature: Usage limits
 
   Scenario: Delete a limit
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 1500
-    When I go to the edit page for plan "Basic"
+    When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
      And I press "Delete" for the hourly usage limit for metric "hits" on application plan "Basic"
     Then I should not see hourly usage limit for metric "hits"
@@ -60,7 +63,7 @@ Feature: Usage limits
 
   Scenario: Limits panel
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 800
-     And I go to the edit page for plan "Basic"
+     And I go to plan "Basic" admin edit page
     Then I should not see hourly usage limit for metric "hits"
     When I follow "Limits (1)"
     Then I should see hourly usage limit for metric "hits" on application plan "Basic"

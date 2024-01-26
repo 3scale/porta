@@ -21,21 +21,16 @@ Given "a provider {string} signed up to {plan}" do |name, plan|
 end
 
 Given(/^a provider "([^"]*)"$/) do |account_name|
-  step %(a provider "#{account_name}" signed up to plan "Free")
+  step %(a provider "#{account_name}" signed up to plan "#{ApplicationPlan.first.name}")
 end
 
 Given(/^a provider "([^"]*)" with default plans$/) do |name|
   step %(a provider "#{name}")
-  step %(a default service of provider "#{name}" has name "default")
 
-  step %(a account plan "default_account_plan" of provider "#{name}")
-  step %(account plan "default_account_plan" is default)
-
-  step %(a service plan "default_service_plan" for service "default" exists)
-  step %(service plan "default_service_plan" is default)
-
-  step %(an application plan "Default" for service "default" exists)
-  step %(application plan "Default" is default)
+  product = @provider.first_service!
+  FactoryBot.create(:account_plan, name: 'default_account_plan', issuer: @provider, default: true)
+  FactoryBot.create(:service_plan, name: 'default_service_plan', issuer: product, default: true)
+  FactoryBot.create(:application_plan, name: 'default_application_plan', issuer: product, default: true)
 end
 
 Given(/^the current provider is (.+?)$/) do |name|
@@ -52,6 +47,87 @@ end
 
 Given(/^there is no provider with domain "([^"]*)"$/) do |domain|
   Account.find_by_domain(domain).try!(&:destroy)
+end
+
+Given "{provider} has the following fields defined for {field_definition_target}:" do |provider, target, table|
+  provider.fields_definitions.by_target(target).each(&:destroy)
+
+  parameterize_headers(table)
+  table.hashes.each do |hash|
+    hash.delete_if { |k, v| v.blank? }
+
+    hash['choices'] = hash['choices'].split( /\s*,\s*/ ) if hash['choices'].is_a?(String)
+
+    label = hash[:label] || hash.fetch('name').humanize
+    name = hash[:name] || hash.fetch('label').parameterize.underscore
+
+    provider.fields_definitions.create!(hash.merge!(target: target, label: label, name: name))
+  end
+end
+
+Given "{provider} has the field {string} for {string} in the position {int}" do |provider, name, klass, pos|
+  a = provider.fields_definitions.by_target(klass.underscore).find{ |fd| fd.name == name }
+  a.pos = pos
+  a.save!
+end
+
+Given "{provider} allows to change account plan {change_plan_permission}" do |provider, plan_permission|
+  provider.set_change_account_plan_permission! plan_permission
+end
+
+Given "{provider} does not allow to change account plan" do |provider|
+  provider.set_change_account_plan_permission!(:none)
+end
+
+Given "{product} allows to change application plan {change_plan_permission}" do |product, plan_permission|
+  product.set_change_application_plan_permission! plan_permission
+end
+
+Given "{provider} service allows to change application plan {change_plan_permission}" do |provider, plan_permission|
+  provider.default_service.set_change_application_plan_permission! plan_permission
+end
+
+Given "{provider} allows to change service plan {change_plan_permission}" do |provider, plan_permission|
+  provider.set_change_service_plan_permission! plan_permission
+end
+
+Given "{provider} has no published application plans" do |provider|
+  provider.application_plans.published.each(&:hide!)
+  # provider.application_plans.each(&:hide!)
+end
+
+Given "{provider} has all the templates setup" do |provider|
+  provider.files.delete_all
+  provider.templates.delete_all
+
+  SimpleLayout.new(provider).import!
+end
+
+Given "{provider} has opt-out for credit card workflow on plan changes" do |provider|
+  search = '{% plan_widget application, wizard: true %}'
+  replacement = '{% plan_widget application, wizard: false %}'
+  partial = @provider.builtin_partials.find_by!(system_name: 'applications/form')
+  draft = partial.published.dup
+  assert draft.gsub!(search, replacement), 'failed to enable the wizard'
+  partial.draft = draft
+  partial.publish!
+
+  page = @provider.builtin_pages.find_by!(system_name: 'applications/show')
+  draft = page.published.dup
+  assert draft.gsub!(search, replacement), 'failed to enable the wizard'
+  page.draft = draft
+  page.publish!
+end
+
+Given "{provider} requires cinstances to be approved before use" do |provider|
+  provider.application_plans.each do |plan|
+    plan.approval_required = true
+    plan.save!
+  end
+end
+
+Given "{provider} has no account plans" do |provider|
+  provider.account_plans.delete_all
 end
 
 When "{provider} creates sample data" do |provider|
@@ -192,18 +268,8 @@ end
 Given(/^the provider account allows signups$/) do
   step %(provider "#{@provider.internal_domain}" has multiple applications disabled)
   step %(provider "#{@provider.internal_domain}" has default service and account plan)
-  step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
-end
-
-And "the provider has a buyer with an application" do
-  application_plan = create_plan(:application, name: 'Default', issuer: @provider, published: true, default: true)
-  service_plan = create_plan(:service, name: 'Gold', issuer: @provider)
-
-  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'The Buyer INC.')
-  @buyer.buy!(@provider.account_plans.default)
-  @buyer.buy!(service_plan)
-
-  @application = FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
+  # step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
+  FactoryBot.create(:application_plan, name: 'Base', issuer: @provider.first_service!, default: true)
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|
@@ -256,11 +322,6 @@ Given(/^master is the provider$/) do
   @service ||= @provider.default_service
   step 'the provider has multiple applications enabled'
   step "a default application plan of provider \"#{provider_or_master_name}\""
-end
-
-Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, input_name|
-  inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
-  assert_selector(inline_error_selector, text: text)
 end
 
 When "the provider is at {}" do |page_name|

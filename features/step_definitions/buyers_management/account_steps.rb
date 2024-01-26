@@ -23,7 +23,7 @@ Given "{provider} has the following buyers:" do |provider, table|
   end
 end
 
-Given "{provider} has {int} buyer(s)" do |provider, number|
+Given "{provider} has {amount} buyer(s)" do |provider, number|
   provider.buyer_accounts.destroy_all
 
   number.to_i.times do

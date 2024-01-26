@@ -5,7 +5,12 @@ Feature: Dev Portal Buyer Invoices
 
   Background:
     Given it's the beginning of the month
-    And a buyer signed up to a provider
+    And a provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Default | Cost per month |
+      | My API  | Gold | true    | 100            |
+    And a buyer signed up to the provider
     And no emails have been sent
 
   Scenario: Provider has prepaid monthly charging enabled

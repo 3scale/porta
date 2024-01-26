@@ -15,10 +15,10 @@ Feature: Emails
     When a buyer "bob" signed up to provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost" on its admin domain
     And buyer "bob" has application "other"
-    And I go to the provider side "other" application page
-    Then I should see that application "other" is live
+    And they go to application "other" admin page
+    Then they should see "Live" within the application details
     When I follow "Suspend" and confirm the dialog
-    Then application "other" should be suspended
+    Then they should see "Suspended" within the application details
     And I act as "bob"
     Then I should receive no email with subject "Application has been suspended"
 
