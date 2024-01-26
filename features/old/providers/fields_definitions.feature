@@ -15,12 +15,12 @@ Feature: Fields Definitions
   # TODO: Test CRUD for real, this is just making sure the page displays ok
   Scenario: Create a new field definition
     When I go to the fields definitions index page
-    And I follow "Create"
+    And I follow any "Create"
     Then I should see "New Field"
 
   Scenario: Edit a field definition
     When I go to the fields definitions index page
-    And I follow "Edit"
+    And I follow any "Edit"
     Then I should see "Editing field"
 
   Scenario: Show all buyer fields being a provider

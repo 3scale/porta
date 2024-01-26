@@ -16,7 +16,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
   def show
     message = current_account.messages.find(message_params[:id])
-    assign_drops message: Liquid::Drops:: Message.new(message)
+    assign_drops message: Liquid::Drops::Message.new(message)
   end
 
   def new

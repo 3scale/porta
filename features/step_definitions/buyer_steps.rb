@@ -138,6 +138,22 @@ When(/^as a developer$/) do
   step 'the current domain is foo.3scale.localhost'
 end
 
+When "the developer tries to log in" do
+  username = @buyer.admins.first.username
+  set_current_domain("foo.3scale.localhost")
+  visit path_to('the login page')
+  fill_in('Username or Email', with:  username)
+  fill_in('Password', with: "supersecret")
+  click_button('Sign in')
+end
+
+Then "the developer login attempt fails" do
+  assert_current_path "/session"
+  assert find_field('Username or Email')
+  assert find_field('Password')
+  assert find_button('Sign in')
+end
+
 When "the buyer is reviewing their account details" do
   visit path_to('the account page')
 end
@@ -160,7 +176,7 @@ end
 Given "a buyer logged in to a provider using SSO" do
   steps %(
     Given Provider has setup RH SSO
-    And As a developer, I login through RH SSO
+    And As a developer, I see RH-SSO login option on the login page
     Given the Oauth2 user has all the required fields
     When I authenticate by Oauth2
   )

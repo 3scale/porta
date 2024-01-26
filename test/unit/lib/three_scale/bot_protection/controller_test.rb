@@ -35,7 +35,7 @@ class ThreeScale::BotProtection::ControllerTest < ActiveSupport::TestCase
   end
 
   class BotCheckTest < ThreeScale::BotProtection::ControllerTest
-    test 'spam_check is true when bot protection is disabled' do
+    test 'bot_check is true when bot protection is disabled' do
       @subject.stubs(:bot_protection_level).returns(:none)
 
       result = @subject.send :bot_check
@@ -43,7 +43,7 @@ class ThreeScale::BotProtection::ControllerTest < ActiveSupport::TestCase
       assert result
     end
 
-    test 'spam_check is true when the bot protection is enabled and the reCaptcha challenge succeeds' do
+    test 'bot_check is true when the bot protection is enabled and the reCaptcha challenge succeeds' do
       @subject.stubs(:bot_protection_level).returns(:captcha)
       @subject.stubs(:verify_captcha).returns(true)
 
@@ -52,7 +52,7 @@ class ThreeScale::BotProtection::ControllerTest < ActiveSupport::TestCase
       assert result
     end
 
-    test 'spam_check is false when the bot protection is enabled and the reCaptcha challenge fails' do
+    test 'bot_check is false when the bot protection is enabled and the reCaptcha challenge fails' do
       @subject.stubs(:bot_protection_level).returns(:captcha)
       @subject.stubs(:verify_captcha).returns(false)
 

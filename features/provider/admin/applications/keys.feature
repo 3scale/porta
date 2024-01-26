@@ -85,7 +85,7 @@ Feature: Applications details
     Scenario: Deleting a key
       Given the application has 2 keys
       And they are reviewing the buyer's application details
-      When follow "Delete" within the API Credentials card
+      When follow any "Delete" within the API Credentials card
       Then the application shows 1 key
 
     Scenario: Deleting last key when not mandatory

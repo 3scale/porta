@@ -124,7 +124,7 @@ Given('Provider has setup RH SSO') do
   GHERKIN
 end
 
-And('As a developer, I login through RH SSO') do
+And('As a developer, I see RH-SSO login option on the login page') do
   steps <<-GHERKIN
     And I go to the login page
     Then I should see the link "Authenticate with #{@authentication_provider.name}" containing "auth/realms/3scale/protocol/openid-connect/auth client_id= redirect_uri= response_type=code scope" in the URL
@@ -231,7 +231,15 @@ When(/^the provider upgrades to plan "(.+?)"$/) do |name|
 end
 
 When(/I authenticate by Oauth2$/) do
-  try_login_with_sso
+  try_buyer_login_oauth
+end
+
+When "the buyer authenticates by OAuth2" do
+  try_buyer_login_oauth
+end
+
+When "the buyer authenticates by SSO Token" do
+  try_buyer_login_sso_token
 end
 
 And(/^the provider has one buyer$/) do

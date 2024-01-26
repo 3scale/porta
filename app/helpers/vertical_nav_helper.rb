@@ -196,7 +196,7 @@ module VerticalNavHelper
     sections = []
     return sections unless @service
 
-    sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
+    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
     sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
@@ -254,7 +254,7 @@ module VerticalNavHelper
     sections = []
     return sections unless @backend_api&.persisted?
 
-    sections << {id: :overview,         title: 'Overview',             path: provider_admin_backend_api_path(@backend_api)}
+    sections << {id: :overview,         title: 'Backend Overview',             path: provider_admin_backend_api_path(@backend_api)}
     sections << {id: :monitoring,       title: 'Analytics',            path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
     sections << {id: :methods_metrics,  title: 'Methods and Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
     sections << {id: :mapping_rules,    title: 'Mapping Rules',        path: provider_admin_backend_api_mapping_rules_path(@backend_api)}

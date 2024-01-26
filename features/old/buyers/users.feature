@@ -28,7 +28,7 @@ Feature: Buyer users management
     When I go to the buyer users page for "SpaceWidgets"
     Then I should see buyer user "SpaceWidgets"
     And I should see link to the buyer user edit page for "SpaceWidgets"
-    When I follow "Edit"
+    When I follow "Edit" for user "SpaceWidgets"
     Then I should not see "Delete"
 
   Scenario: User details

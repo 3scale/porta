@@ -32,10 +32,10 @@ module ThreeScale
               labels = {
                 controller: event.payload[:params]["controller"],
                 status: ThreeScale::Metrics::Yabeda.event_status_code_class(event),
-              }.merge!(event.payload.slice(*::Yabeda.default_tags.keys))
+              }
 
               rails_requests_total.increment(labels)
-              rails_request_duration.measure({}, ThreeScale::Metrics::Yabeda.ms2s(event.duration))
+              rails_request_duration.measure(labels.slice(:controller), ThreeScale::Metrics::Yabeda.ms2s(event.duration))
             end
           end
         end
