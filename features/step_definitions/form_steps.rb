@@ -29,7 +29,7 @@ Then "{string} doesn't show any error" do |field|
 end
 
 And "field {string} {is} disabled" do |field, disabled|
-  assert_equal disabled, find_field(field).disabled?
+  assert_selector(:field, field, { disabled: disabled })
 end
 
 Then "(I )should see field {string} {enabled}" do |field, enabled|
