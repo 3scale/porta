@@ -5,7 +5,7 @@ module Liquid
 
       allowed_name :message, :messages, :reply
 
-      desc "Returns the ID of the model (depending on controller that is message or message recipient)."
+      desc "Returns the ID of the received or sent message."
       def id
         @model.id
       end
@@ -65,6 +65,8 @@ module Liquid
           h(@model.recipients.first.try(:receiver).try(:org_name)) || ''
         end.html_safe
       end
+
+      private
 
       def message
         @message ||= @model.is_a?(MessageRecipient) ? @model.message : @model

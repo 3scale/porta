@@ -438,3 +438,17 @@ ParameterType(
   regexp: /(\d+)(?:st|rd|nd|th)/,
   transformer: ->(value) { value.to_i }
 )
+
+ParameterType(
+  name: 'count',
+  regexp: /(\d+)|(one|multiple|zero)/,
+  transformer: ->(number, description) {
+    return number.to_i if number.present?
+
+    case description
+    when 'one' then 1
+    when 'zero' then 0
+    else 2 # multiple
+    end
+  }
+)
