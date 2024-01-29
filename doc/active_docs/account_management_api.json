@@ -1397,11 +1397,15 @@
                   "plan_id": {
                     "type": "integer",
                     "description": "ID of the target account plan"
-                  }
+                  },
+                  "service_id": {
+                    "type": "integer",
+                    "description": "ID of the service."
                 },
                 "required": [
                   "access_token",
-                  "plan_id"
+                  "plan_id",
+                  "service_id"
                 ]
               }
             }
