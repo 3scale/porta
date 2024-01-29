@@ -1,14 +1,12 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-access-tiers-for-api-consumers
-  # you can add additional metadata here
-  instructional: true
-  commonInstances: true
+  category: Common instance for creating and tracking APIs
 spec:
   displayName: Create access tiers for API consumers to use your API
   durationMinutes: 5
   # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey

@@ -1,9 +1,7 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: learning-about-accounts
-  # you can add additional metadata here
-  instructional: true
-  learnAbout3scaleFeatures: true
+  category: 3scale API Management features
 spec:
   displayName: Accounts
   durationMinutes: 5
