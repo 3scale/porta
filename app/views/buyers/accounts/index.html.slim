@@ -1,4 +1,7 @@
 - content_for :page_header_title, 'Accounts'
+- content_for :page_header_body do
+  ' Accounts refer to organizations that own applications consuming the API. These organizations may
+  ' have one or multiple users who can access application credentials and usage analytics through the developer portal.
 
 - account_plans_size = presenter.account_plans_size
 - accounts = presenter.buyers.decorate
