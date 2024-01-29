@@ -10,7 +10,9 @@ Feature: Developer portal edit application page
       | The API | Enterprise |
       | The API | Developer  |
     And a buyer "Jane" signed up to service "The API"
-    And the buyer has an application "My App" with plan "Developer"
+    And the following application:
+      | Buyer | Name   | Plan      |
+      | Jane  | My App | Developer |
     And the buyer logs in
 
   Rule: Multiple applications disabled
@@ -60,7 +62,9 @@ Feature: Developer portal edit application page
         | Phone number | true     |           |        |
         | UUID         |          | true      |        |
         | Secret sauce |          |           | true   |
-      Given the buyer has an application "My App" for the product
+      And the following application:
+        | Buyer | Name   |
+        | Jane  | My App |
       And the application has the following extra fields:
         | Phone number | 666-555-444 |
         | UUID         | 123         |

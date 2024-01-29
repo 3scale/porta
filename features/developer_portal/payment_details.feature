@@ -8,7 +8,9 @@ Feature: Developer portal payment details
       | Product | Name | default |
       | The API | Pro  | true    |
     And a buyer "Jane" signed up to the product
-    And the buyer has an application "Jane's App" for the product
+    And the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | My API  |
     And the buyer logs in
 
   Rule: Backend v1

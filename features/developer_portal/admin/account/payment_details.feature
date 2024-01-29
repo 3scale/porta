@@ -9,7 +9,10 @@ Feature: Dev Portal Buyer Payment Details
     And the following application plan:
       | Product | Name | Default | Cost per month |
       | My API  | Gold | true    | 100            |
-    And a buyer signed up to the provider
+    And an approved buyer "John" signed up to the provider
+    And the following application:
+      | Buyer | Name   |
+      | John  | My App |
     And the buyer logs in to the provider
 
   Scenario: Finance is disabled

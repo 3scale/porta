@@ -11,7 +11,9 @@ Feature: Developer portal change application plan
       | The API | Developer  |                | true    |
       | The API | Enterprise | 100            |         |
     And a buyer "Jane" signed up to service "The API"
-    And the buyer has an application "My App" with plan "Developer"
+    And the following application:
+      | Buyer | Name   | Plan      |
+      | Jane  | My App | Developer |
     And the buyer logs in
 
   Scenario: Change an application's plan requires approval

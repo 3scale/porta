@@ -15,9 +15,11 @@ Feature: Top applications stats
     And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
     And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
     And a buyer "alice" signed up to provider "foo.3scale.localhost"
-    And buyer "alice" has application "alice widget"
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    And buyer "bob" has application "bob widget"
+    And the following applications:
+      | Buyer | Name         |
+      | alice | alice widget |
+      | bob   | bob widget   |
     And all the rolling updates features are off
 
   Scenario: With transactions

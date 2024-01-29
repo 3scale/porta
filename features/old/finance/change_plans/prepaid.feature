@@ -8,7 +8,7 @@ Feature: Change plan prepaid
       And the provider is charging its buyers in prepaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
     And the default product of the provider has name "My API"
-    And the following application plan:
+    And the following application plans:
       | Product | Name             | Cost per month |
       | My API  | FreeAsInBeer     | 0              |
       | My API  | PaidAsInLunch    | 31             |

@@ -86,6 +86,9 @@ module HtmlSelectorsHelper
     when 'the API Credentials card'
       'div#application_keys'
 
+    when 'the API Credentials\' first application key'
+      first('div#application_keys .key')
+
     when 'the application widget'
       '#applications_widget'
 

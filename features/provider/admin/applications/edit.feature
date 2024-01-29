@@ -8,7 +8,9 @@ Feature: Application edit page
       | Product | Name |
       | My API  | Free |
     And a buyer "Jane"
-    And the buyer has an application "My App" for the product
+    And the following application:
+      | Buyer | Name   | Product |
+      | Jane  | My App | My API  |
 
   Scenario: Navigation
     Given they go to the application's admin page

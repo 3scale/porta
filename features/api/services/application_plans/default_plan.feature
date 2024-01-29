@@ -4,7 +4,7 @@ Feature: Product's default application plan
   Background:
     Given a provider is logged in
     And a product "My API"
-    And the following application plan:
+    And the following application plans:
       | Product | Name   | State     | Default |
       | My API  | Free   | Published | true    |
       | My API  | Pro    | Published |         |

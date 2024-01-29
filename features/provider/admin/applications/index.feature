@@ -25,7 +25,7 @@ Feature: Audience's applications list page
 
   Scenario: Navigation
     Given they go to the provider dashboard
-    When they follow "Applications" within the audience dashboard widget
+    When they follow "4 Applications" within the audience dashboard widget
     Then the current page is the admin portal applications page
 
   Scenario: Searching by multiple criteria
@@ -50,7 +50,7 @@ Feature: Audience's applications list page
 
   Scenario Outline: Ordering
     When they follow "<order by>" within table header
-    Then the table should be ordered by "<order by>"
+    Then the table should be sorted by "<order by>"
 
     Examples:
       | order by   |

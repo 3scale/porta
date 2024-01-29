@@ -18,7 +18,7 @@ module CapybaraExtensions
   def select(value = nil, from: nil, **options)
     if has_css?('.pf-c-form__group', text: from, wait: 0)
       within('.pf-c-form__group', text: from) do
-        if has_css?('select.pf-c-form-control')
+        if has_css?('select.pf-c-form-control', wait: 0)
           super
         else
           find('.pf-c-select').click

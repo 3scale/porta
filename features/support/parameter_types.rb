@@ -171,13 +171,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'the_user_key_of_buyer',
-  type: String,
-  regexp: /the user key of "([^"]*)"/,
-  transformer: ->(name) { Account.buyers.find_by!(org_name: name).bought_cinstance.user_key }
-)
-
-ParameterType(
   name: 'application',
   type: Cinstance,
   regexp: /application "([^"]*)"|the application/,

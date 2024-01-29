@@ -18,7 +18,9 @@ Feature: Developer portal application extra fields
     And the buyer logs in
 
   Scenario: Show extra fields
-    Given the buyer has an application "Jane's App" for the product
+    Given the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | The API |
     And the application has the following extra fields:
       | Engine       | foo     |
       | Wheels       | bar     |
@@ -32,7 +34,9 @@ Feature: Developer portal application extra fields
 
   Scenario: Extra fields are sorted by position
     Given provider "foo.3scale.localhost" has the field "wheels" for "Cinstance" in the position 20
-    And the buyer has an application "Jane's App" for the product
+    And the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | The API |
     And the application has the following extra fields:
       | Description | It's a car |
       | Engine      | 120        |
@@ -79,7 +83,9 @@ Feature: Developer portal application extra fields
     And buyer "Jane" should have 1 cinstance
 
   Scenario: Edit an application with extra fields
-    Given the buyer has an application "Jane's App" for the product
+    Given the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | The API |
     And the application has the following extra fields:
       | Engine       | foo     |
       | Wheels       | bar     |

@@ -29,7 +29,6 @@ module PlanHelpers
 
 
     if flags = options[:flags]
-      # TODO: this does nothing
       options[:default] = true if flags.include? 'default'
       options[:published] = true if flags.include? 'published'
     end

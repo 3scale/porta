@@ -9,9 +9,11 @@ Feature: Application plan change card
   Rule: Single application plan
     Background:
       Given the following application plan:
-      | Product | Name |
-      | My API  | Free |
-      And the buyer has an application "My App" for the product
+        | Product | Name |
+        | My API  | Free |
+      And the following application:
+        | Buyer | Name   | Product |
+        | Jane  | My App | My API  |
 
     Scenario: Change plan card hidden with one plan only
       Given they go to the application's admin page
@@ -23,7 +25,9 @@ Feature: Application plan change card
         | Product | Name    |
         | My API  | Free    |
         | My API  | Premium |
-      And the buyer has an application "My App" for the product
+      And the following application:
+        | Buyer | Name   | Product |
+        | Jane  | My App | My API  |
 
     Scenario: Change plan card visibl with multiple plans
       Given they go to the application's admin page

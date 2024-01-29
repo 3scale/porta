@@ -17,10 +17,6 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
   FactoryBot.create_list(:cinstance, number, user_account: buyer, plan: plan)
 end
 
-Given "{buyer} has user key {string}" do |buyer, key|
-  buyer.bought_cinstance.update!(user_key: key)
-end
-
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
   buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
                         :org_name => name, :state => :created)
@@ -50,17 +46,6 @@ end
 
 Given "a buyer {string} signed up to {provider}" do |account_name, provider|
   step %(an approved buyer "#{account_name}" signed up to provider "#{provider.org_name}")
-end
-
-Given(/^a buyer signed up to the provider$/) do
-  org_name = 'John'
-  app_name = 'My App'
-
-  step %(an approved buyer "#{org_name}" signed up to provider "#{@provider.internal_domain}")
-  step %(buyer "#{org_name}" has application "#{app_name}")
-
-  @buyer = @provider.buyer_accounts.find_by!(org_name: org_name)
-  @application = @buyer.application_contracts.find_by!(name: app_name)
 end
 
 Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|

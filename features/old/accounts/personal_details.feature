@@ -86,4 +86,4 @@ Feature: Personal Details
     And I fill in "New Password" with "hi"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then I should see inline error "is too short (minimum is 6 characters)" for user password input
+    Then "New Password" shows error "is too short (minimum is 6 characters)"

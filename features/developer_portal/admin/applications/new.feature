@@ -5,7 +5,7 @@ Feature: Developer portal new application page
     And the provider has "multiple_services" visible
     And the provider has "service_plans" visible
     And the default product of the provider has name "The API"
-    And the following application plan:
+    And the following application plans:
       | Product | Name       | default |
       | The API | Developer  | true    |
       | The API | Enterprise |         |

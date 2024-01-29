@@ -8,7 +8,9 @@ Feature: Application plan details card
       | Product | Name |
       | My API  | Free |
     And a buyer "Jane"
-    And the buyer has an application "My App" for the product
+    And the following application:
+      | Buyer | Name   | Product |
+      | Jane  | My App | My API  |
     And the provider logs in
 
   Scenario: Current Plan can always be customized

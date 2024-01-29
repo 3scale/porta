@@ -14,7 +14,9 @@ Feature: Emails
       """
     When a buyer "bob" signed up to provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost" on its admin domain
-    And buyer "bob" has application "other"
+    And the following application:
+      | Buyer | Name  |
+      | bob   | other |
     And they go to application "other" admin page
     Then they should see "Live" within the application details
     When I follow "Suspend" and confirm the dialog

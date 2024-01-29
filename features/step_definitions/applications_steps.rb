@@ -11,26 +11,17 @@
 #   And the following applications:
 #     | Buyer | Product | Name       | Plan  |
 #     | Jane  |         | Jane's app | Basic |
-#     |       | My API  | My App     | Basic |
+#     |       | My API  | Jane's app | Basic |
+#     | Jane  | My API  | Jane's app |       |
 #
 Given "the following application(s):" do |table|
   transform_applications_table(table)
-  table.hashes.each do |row|
-    FactoryBot.create(:cinstance, user_account: row[:buyer], **row.except('buyer'))
+  table.hashes.each do |options|
+    service = options[:service] || options[:user_account].provider_account.first_service!
+    options[:plan] ||= service.default_application_plan || service.plans.first or raise 'Provider has no default application plan'
+
+    @application = FactoryBot.create(:application, **options)
   end
-end
-
-Given "{buyer} has an application {string} with {plan}" do |buyer, name, plan|
-  @cinstance = FactoryBot.create(:cinstance, user_account: buyer,
-                                             name: name,
-                                             plan: plan)
-end
-
-Given "{buyer} has an application {string} for {product}" do |buyer, name, product|
-  plan = product.default_application_plan || product.plans.first
-  @cinstance = FactoryBot.create(:cinstance, user_account: buyer,
-                                             name: name,
-                                             plan: plan)
 end
 
 Given "{buyer} has no applications" do |buyer|
@@ -57,7 +48,7 @@ Given "{application} has the following key(s):" do |application, table|
   fake_application_keys(application, table.raw.map(&:first))
 end
 
-Given "{application} has a trial period of  {int} day(s)"  do |application, days|
+Given "{application} has a trial period of {int} day(s)"  do |application, days|
   application.trial_period_expires_at = Time.zone.now + days.to_i.days
   application.save!
 end
@@ -109,6 +100,10 @@ Given "the backend will create key {string} for {application}" do |key, applicat
   stub_request(:post, backend_application_url(application, '/keys.xml'))
     .to_return(status: fake_status(201), body: %(<key value="#{key}"/>))
   fake_application_keys(application, [key])
+end
+
+Given "{application} has user key {string}" do |application, key|
+  application.update!(user_key: key)
 end
 
 When "(they )delete the referrer filter {string}" do |value|

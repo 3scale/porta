@@ -44,12 +44,6 @@ Then "(I )(they )should see (the )following table(:)" do |expected|
   end
 end
 
-Then "I should see column {string} in ascending order" do |column|
-  header = find('th.pf-m-selected', text: column)
-  # HACK: icons will be invisible unless @javascript is enabled, they are imported in packs/provider.scss
-  assert header.has_css?('i.fa-long-arrow-alt-up', visible: false)
-end
-
 Then "the table {has} a column {string}" do |present, column|
   assert_equal present, has_css?(".pf-c-table [data-label='#{column}']")
 end
@@ -100,7 +94,7 @@ Then "the table looks like:" do |table|
   assert_same_elements expected, actual_filtered
 end
 
-Then "the table should be ordered by {string}" do |column|
+Then "the table should be sorted by {string}" do |column|
   assert_selector(:css, '.pf-c-table .pf-c-table__sort.pf-m-selected', text: column)
 end
 

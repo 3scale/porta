@@ -19,7 +19,9 @@ Feature: Accessing Destroys
 
   Scenario: Deleted application and users are found in trash
     When a buyer "Mc Hammer" signed up to account plan "Hammer Time"
-    And buyer "Mc Hammer" has application "ESTOP"
+    And the following application:
+      | Buyer     | Name  |
+      | Mc Hammer | ESTOP |
     And provider "foo.3scale.localhost" deleted existing buyer "Mc Hammer"
     And I go to the "apps" destroys page
     Then I should see "ESTOP" in the list of deleted "applications"

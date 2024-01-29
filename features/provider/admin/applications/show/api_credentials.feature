@@ -8,7 +8,9 @@ Feature: Application API credentials
       | Product | Name |
       | My API  | Free |
     And a buyer "Jane"
-    And the buyer has an application "My App" for the product
+    And the following application:
+      | Buyer | Name   | Product |
+      | Jane  | My App | My API  |
     And the provider logs in
 
   Rule: Backend v1
@@ -93,7 +95,7 @@ Feature: Application API credentials
     Scenario: Deleting a key
       Given the application has 2 keys
       And they go to the application's admin page
-      When follow "Delete" within the API Credentials card
+      When follow "Delete" within the API Credentials' first application key
       Then there is 1 key
 
     Scenario: Deleting last key when not mandatory

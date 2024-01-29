@@ -5,7 +5,7 @@ Feature: Dev Portal Buyer Personal Details SSO
 
   Background:
     Given Provider has setup RH SSO
-    And As a developer, I login through RH SSO
+    And As a developer, I see RH-SSO login option on the login page
     And the Oauth2 user has all the required fields
     And I authenticate by Oauth2
 

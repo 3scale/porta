@@ -19,10 +19,11 @@ module DataTableTransforms
   end
 
   def transform_applications_table(table)
-    parameterize_headers(table, 'Product' => 'Service')
-    table.map_column!(:buyer, false) { |buyer| Account.buyers.find_by!(org_name: buyer) }
+    parameterize_headers(table, 'Product' => 'service',
+                                'Buyer' => 'user_account')
+    table.map_column!(:user_account, false) { |buyer| Account.buyers.find_by!(org_name: buyer) }
     table.map_column!(:service, false) { |service| Service.find_by!(name: service) }
-    table.map_column!(:plan) { |plan| ApplicationPlan.find_by!(name: plan) }
+    table.map_column!(:plan, false) { |plan| ApplicationPlan.find_by!(name: plan) }
     table
   end
 

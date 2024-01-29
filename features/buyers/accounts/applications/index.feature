@@ -8,7 +8,9 @@ Feature: Audience > Accounts > Listing > Account > Applications
       | Product | Name |
       | My API  | Free |
     And a buyer "Bob"
-    And the buyer has an application "My App" for the product
+    And the following application:
+      | Buyer | Name   | Product |
+      | Bob   | My App | My API  |
     And the provider logs in
 
   Scenario: Navigation

@@ -29,10 +29,6 @@ FactoryBot.define do
     trait :as_pending do
       plan { FactoryBot.create(:application_plan, approval_required: true) }
     end
-
-    trait :with_default_plan do
-      plan { service.default_application_plan }
-    end
   end
 
   factory(:account_contract, :parent => :contract, :class => AccountContract) do

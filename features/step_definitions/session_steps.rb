@@ -69,7 +69,7 @@ end
 When "{buyer} logs in" do |buyer|
   set_current_domain(buyer.provider_account.domain)
   user = buyer.users.first
-  try_buyer_login(user.username, user.password || 'supersecret')
+  try_buyer_login_internal(user.username, user.password || 'supersecret')
 end
 
 When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domain|

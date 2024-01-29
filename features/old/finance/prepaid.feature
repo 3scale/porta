@@ -8,7 +8,7 @@ Feature: Prepaid billing of a buyer
     And the provider is billing but not charging in prepaid mode
     And provider "foo.3scale.localhost" has "finance" switch visible
     And the default product of the provider has name "My API"
-    And the following application plan:
+    And the following application plans:
       | Product | Name     | Cost per month |
       | My API  | Fixed    | 200            |
       | My API  | Variable | 200            |

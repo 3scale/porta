@@ -52,7 +52,9 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
   Rule: with application
     Background:
       Given a buyer "Goodman James"
-      And the buyer has an application "RPG-online" with application plan "Free"
+      And the following application:
+        | Buyer         | Name       | Plan |
+        | Goodman James | RPG-online | Free |
 
     Scenario: Metrics without limits appear in Unlimited Metrics section
       Given application plan "Free" has no usage limits for metric "Single rolls"

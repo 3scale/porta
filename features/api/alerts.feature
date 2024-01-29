@@ -5,7 +5,7 @@ Feature: Audience > Applications > Alerts
     Given a provider
     And a product "API 1"
     And a product "API 2"
-    And the following application plan:
+    And the following application plans:
       | Product | Name   |
       | API 1   | Plan 1 |
       | API 2   | Plan 2 |

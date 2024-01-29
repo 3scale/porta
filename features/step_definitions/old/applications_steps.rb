@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-Given "{buyer} has (an )application {string}" do |buyer, name|
-  plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
-  FactoryBot.create(:cinstance, user_account: buyer,
-                                plan: plan,
-                                name: name,
-                                description: 'Blah blah')
-end
-
-Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
-  plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
-  FactoryBot.create(:cinstance, user_account: buyer,
-                                plan: plan,
-                                name: name,
-                                description: description)
-end
-
 Given "{application} has extra field {string} blank" do |app, attr|
   app.update!(extra_fields: { attr => nil })
 end
@@ -43,54 +27,12 @@ Then "I enter my credit card details" do
   click_on 'Save details'
 end
 
-Given "{buyer} has application {string} with plan {string}" do |buyer, name, plan_name|
-  plan = ApplicationPlan.find_by!(name: plan_name)
-
-  FactoryBot.create(:cinstance, user_account: buyer,
-                                plan: plan,
-                                name:  name)
-end
-
-Given "{buyer} has application {string} with ID {string}" do |buyer, name, id|
-  plan = buyer.provider_account.first_service!.application_plans.default
-
-  FactoryBot.create(:cinstance, application_id: id,
-                                user_account: buyer,
-                                plan: plan,
-                                name: name,
-                                description: 'Blah blah')
-end
-
-Given "{buyer} has the following applications:" do |buyer, table|
-  plan = buyer.provider_account.first_service!.plans.default
-
-  table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
-  table.hashes.each do |hash|
-    attributes = hash.symbolize_keys!.slice!(:state)
-
-    cinstance = FactoryBot.build(:cinstance, attributes.merge(user_account: buyer, plan: plan))
-    cinstance.save!
-
-    cinstance.update_attribute(:state, hash[:state]) if hash[:state]
-  end
-end
-
 Given "{buyer} has no live applications" do |buyer|
   buyer.bought_cinstances.map &:suspend!
 end
 
 Then "{application} should be live" do |application|
   assert application.live?
-end
-
-And(/^has an application$/) do
-  buyer_name = SecureRandom.uuid # Use Faker ? use FactoryBot.create to generate just he values?
-  plan_name = SecureRandom.uuid
-
-  step %{an application plan "#{plan_name}" of provider "#{@provider.internal_domain}"}
-  step %{a buyer "#{buyer_name}" signed up to application plan "#{plan_name}"}
-
-  @application = @provider.buyer_accounts.find_by!(org_name: buyer_name).bought_cinstance
 end
 
 When /^I create an application "([^"]*)" from the audience context/ do |name|

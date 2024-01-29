@@ -8,7 +8,9 @@ Feature: Developer portal application credentials
       | Product | Name |
       | My API  | Free |
     And a buyer "Jane"
-    And the buyer has an application "Jane's App" for the product
+    And the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | My API  |
     And the buyer logs in
 
   Scenario: Regenerate user key
@@ -49,8 +51,11 @@ Feature: Developer portal application credentials
       Given the product uses backend v1
 
     Scenario: Backend v1 uses a single user key
+      Given the application has user key "qwerty-12345-banana"
       When they go to the dev portal API access details page
-      Then they should see the user key of "Jane"
+      Then they should see the following details:
+        | Name     | Jane's App          |
+        | User key | qwerty-12345-banana |
       But there should not be a button to "Create new key"
 
   Rule: Oauth

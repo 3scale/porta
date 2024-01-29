@@ -10,7 +10,9 @@ Feature: Audience menu
       | Product | Name |
       | My API  | Free |
     And a buyer "Bob"
-    And the buyer has an application "My App" with plan "Free"
+    And the following application:
+      | Buyer | Name   | Plan |
+      | Bob   | My App | Free |
     And the provider logs in
 
   @javascript

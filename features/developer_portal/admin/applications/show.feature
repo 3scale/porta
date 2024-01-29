@@ -8,7 +8,9 @@ Feature: Developer portal application overview page
       | The API | Enterprise |         |
       | The API | Developer  | true    |
     And a buyer "Jane" signed up to service "The API"
-    And the buyer has an application "My App" for the product
+    And the following application:
+      | Buyer | Name   | Product |
+      | Jane  | My App | The API |
     And the buyer logs in
 
   Scenario: Navigation

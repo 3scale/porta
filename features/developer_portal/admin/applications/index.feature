@@ -7,7 +7,9 @@ Feature: Developer portal applications list page
       | Product | Name  |
       | My API  | Basic |
     And a buyer "Jane"
-    And the buyer has an application "Jane's App" for the product
+    And the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | My API  |
     And the buyer logs in
 
   Rule: Multiple applications disabled

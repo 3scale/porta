@@ -24,7 +24,7 @@ Feature: Product's application plans index page
 
   Rule: Managing plans
     Background:
-      And the following application plan:
+      And the following application plans:
         | Product | Name        | State     |
         | My API  | Public Plan | Published |
         | My API  | Secret Plan | Hidden    |

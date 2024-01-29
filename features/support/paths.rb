@@ -378,6 +378,10 @@ World(Module.new do
     when 'the upgrade notice for multiple applications'
       admin_upgrade_notice_path(:multiple_applications)
 
+    when /^(application "(.*)"|the application's) traffic stats page$/
+      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      admin_buyers_stats_application_path(app)
+
     #
     # Applications (Developer portal)
     #
@@ -541,8 +545,6 @@ World(Module.new do
       buyer_stats_path
     when 'the buyer stats usage page'
       usage_stats_api_applications_path provider_first_service!.cinstances.first, *args
-    when "the application's traffic stats page"
-      admin_buyers_stats_application_path(@cinstance)
 
     #
     # Potato CMS
