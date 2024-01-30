@@ -1401,6 +1401,7 @@
                   "service_id": {
                     "type": "integer",
                     "description": "ID of the service."
+                  }
                 },
                 "required": [
                   "access_token",
