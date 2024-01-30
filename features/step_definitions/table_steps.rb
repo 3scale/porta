@@ -73,11 +73,11 @@ end
 
 # Check all rows but not all columns
 #
-# And the table looks like:
+# And the table should contain the following:
 #   | Name            | State     |
 #   | Jane's Full App | suspended |
 #   | Jane's Lite App | live      |
-Then "the table looks like:" do |table|
+Then "the table should contain the following:" do |table|
   actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   expected = table.raw
 

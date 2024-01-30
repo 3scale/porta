@@ -96,7 +96,7 @@ Feature: Buyer accounts bulk operations
     Scenario: Change account plan in bulk
       Given the provider has "account_plans" switch allowed
       And they go to the buyer accounts page
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | Plan    |
         | Pending buyer | Tricky  |
         | Bad buyer     | Default |
@@ -108,7 +108,7 @@ Feature: Buyer accounts bulk operations
       And select "Awesome" from "Plan"
       And press "Change plan" and confirm the dialog
       Then should see "Successfully changed the plan of 2 accounts"
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | Plan    |
         | Pending buyer | Tricky  |
         | Bad buyer     | Default |
@@ -117,7 +117,7 @@ Feature: Buyer accounts bulk operations
 
     Scenario: Change state in bulk
       Given they go to the buyer accounts page
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | State    |
         | Pending buyer | Pending  |
         | Bad buyer     | Rejected |
@@ -129,7 +129,7 @@ Feature: Buyer accounts bulk operations
       And select "Make pending" from "Action"
       And press "Change state" and confirm the dialog within the modal
       Then should see "Successfully changed the state of 2 accounts"
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | State    |
         | Alice         | Pending  |
         | Bob           | Pending  |
@@ -168,7 +168,7 @@ Feature: Buyer accounts bulk operations
 
     Scenario: Rejecting buyer accounts in bulk
       Given they go to the buyer accounts page
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | State    |
         | Pending buyer | Pending  |
         | Bad buyer     | Rejected |
@@ -182,7 +182,7 @@ Feature: Buyer accounts bulk operations
       And select "Reject" from "Action"
       And press "Change state" and confirm the dialog within the modal
       Then should see "Successfully changed the state of 4 accounts"
-      And the table looks like:
+      And the table should contain the following:
         | Group/Org.    | State    |
         | Alice         | Rejected |
         | Bob           | Rejected |

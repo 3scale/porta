@@ -45,7 +45,7 @@ Feature: Product's application plans index page
       When they select action "Delete" of "Public Plan"
       And confirm the dialog
       Then they should see "Plan was deleted"
-      And the table looks like:
+      And the table should contain the following:
         | Name        | Contracts | State  |
         | Secret Plan | 0         | hidden |
 
@@ -63,7 +63,7 @@ Feature: Product's application plans index page
         | Other API | Normal Plan |
         | Other API | Super Plan  |
       And they go to product "Other API" application plans admin page
-      Then the table looks like:
+      Then the table should contain the following:
         | Name        |
         | Normal Plan |
         | Super Plan  |
@@ -104,16 +104,16 @@ Feature: Product's application plans index page
     @search
     Scenario: Filtering application plans
       And they search "one" using the toolbar
-      Then the table looks like:
+      Then the table should contain the following:
         | Name               |
         | This is number One |
         | Now the second one |
       When they search "last" using the toolbar
-      Then the table looks like:
+      Then the table should contain the following:
         | Name             |
         | Finally the last |
       When they search "foooo" using the toolbar
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
 
   Rule: Sorting
@@ -127,13 +127,13 @@ Feature: Product's application plans index page
 
     Scenario: Sorting application plans by name
       When the table is sorted by "Name"
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | AAA  |
         | BBB  |
         | CCC  |
       When the table is sorted by "Name" again
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | CCC  |
         | BBB  |
@@ -143,13 +143,13 @@ Feature: Product's application plans index page
       Given application plan "BBB" has 2 contracts
       And application plan "CCC" has 1 contracts
       When the table is sorted by "Contract"
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | BBB  |
         | CCC  |
         | AAA  |
       When the table is sorted by "Contract" again
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | AAA  |
         | CCC  |
@@ -159,13 +159,13 @@ Feature: Product's application plans index page
       Given application plan "AAA" is hidden
       And application plan "CCC" is hidden
       When the table is sorted by "State"
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | BBB  |
         | AAA  |
         | CCC  |
       When the table is sorted by "State" again
-      Then the table looks like:
+      Then the table should contain the following:
         | Name |
         | AAA  |
         | CCC  |

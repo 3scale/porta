@@ -32,7 +32,7 @@ Feature: Audience's applications list page
     When they search for:
       | Name | Plan  | State |
       | Bob  | Cheap | live  |
-    Then the table looks like:
+    Then the table should contain the following:
       | Name      | Account |
       | Bob's App | Bob     |
 
@@ -43,7 +43,7 @@ Feature: Audience's applications list page
       | Plan  |
       | Cheap |
     And follow "Account" within table header
-    Then the table looks like:
+    Then the table should contain the following:
       | Account |
       | Bob     |
       | Jane    |

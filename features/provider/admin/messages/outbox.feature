@@ -35,7 +35,7 @@ Feature: Audience > Messages > Outbox
     Scenario: List of messages
       When they go to the provider sent messages page
       Then should not see "Nothing to see here"
-      And the table looks like:
+      And the table should contain the following:
         | Subject | To  |
         | Welcome | Alice |
         | Bananas | Alice |
