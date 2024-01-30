@@ -9,8 +9,8 @@ Feature: Application plan details card
       | My API  | Free |
     And a buyer "Jane"
     And the following application:
-      | Buyer | Name   | Product |
-      | Jane  | My App | My API  |
+      | Buyer | Name   | Plan |
+      | Jane  | My App | Free |
     And the provider logs in
 
   Scenario: Current Plan can always be customized
@@ -18,8 +18,7 @@ Feature: Application plan details card
     Then they should see "Convert to a Custom Plan"
 
   Scenario: Customize the plan
-    Given the application uses plan "Free"
-    And they go to the application's admin page
+    Given they go to the application's admin page
     And they should see "Application Plan: Free"
     When they follow "Convert to a Custom Plan"
     Then they should see "Custom Application Plan"

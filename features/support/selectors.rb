@@ -89,6 +89,9 @@ module HtmlSelectorsHelper
     when 'the API Credentials\' first application key'
       first('div#application_keys .key')
 
+    when /^application key "(.*)"$/
+      find %(#application_keys .key[data-key="#{$1}"])
+
     when 'the application widget'
       '#applications_widget'
 
@@ -100,6 +103,10 @@ module HtmlSelectorsHelper
 
     when 'the referrer filters'
       '#referrer_filters'
+
+    when /the referrer filter "(.*)"/
+      find('#referrer_filters tr[id^="referrer_filter_"] td', text: $1)
+        .sibling('td')
 
     #
     # Plans

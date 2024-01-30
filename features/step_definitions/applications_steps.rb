@@ -24,24 +24,16 @@ Given "the following application(s):" do |table|
   end
 end
 
-Given "{buyer} has no applications" do |buyer|
-  buyer.bought_cinstances.destroy_all
-end
-
 Given "{application} user key is {string}" do |application, key|
   application.update_column(:user_key, key) # rubocop:disable Rails/SkipsModelValidations
 end
 
-Given "{application} has {int} key(s)" do |application, number|
-  application.update!(application_keys: FactoryBot.create_list(:application_key, number))
-end
-
-Given "{application} has no keys" do |application|
-  application.application_keys.destroy_all
-end
-
-Given "{product} {has} mandatory app key" do |product, mandatory|
-  product.update!(mandatory_app_key: mandatory)
+Given "{application} has {amount} key(s)" do |application, amount|
+  if amount.positive?
+    application.update!(application_keys: FactoryBot.create_list(:application_key, amount))
+  else
+    application.application_keys.destroy_all
+  end
 end
 
 Given "{application} has the following key(s):" do |application, table|
@@ -53,17 +45,8 @@ Given "{application} has a trial period of {int} day(s)"  do |application, days|
   application.save!
 end
 
-Given "{application} uses plan {string}" do |application, name|
-  plan = application.issuer.plans.find_by!(name: 'Free')
-  application.change_plan!(plan)
-end
-
 Given "{application} uses a custom plan" do |app|
   app.customize_plan!
-end
-
-Given "{buyer} has email {string}" do |buyer, email|
-  buyer.admins.first.update!(email: email)
 end
 
 Given "the application will return an error when suspended" do
@@ -75,7 +58,7 @@ Given "the application will return an error when changing its plan" do
 end
 
 Given "{application} is suspended" do |application|
-  application.suspend!
+  application.suspend! unless application.suspended?
 end
 
 # Given the application has the following extra fields:
@@ -106,41 +89,10 @@ Given "{application} has user key {string}" do |application, key|
   application.update!(user_key: key)
 end
 
-When "(they )delete the referrer filter {string}" do |value|
-  find('tr td', text: value).sibling('td')
-                            .click_button('Delete')
-end
-
-When /^I change the app plan to "([^"]*)"$/ do |plan|
-  pf4_select(plan, from: 'Change plan')
-  click_button 'Change'
-end
-
-When "(they )delete application key {string}" do |key|
-  find("tr#application_key_#{key}").click_button("Delete")
-end
-
-Then "should see {application} stats" do |application|
-  assert has_content?("Traffic statistics for #{@application.name}")
-end
-
-Then "(any of )the application keys {can} be deleted" do |deleteable|
-  rows = find_all('#application_keys table tr.key')
-  assert rows.all? do |row|
-    row.has_css?('.delete_key', visible: deleteable, wait: 0)
-  end
-end
-
 Then "there are/is {int} key(s)" do |keys|
-  wait_for_requests
   assert_equal keys, find_all('tr.key').size
 end
 
-Then "there should not be a button to delete key {string}" do |key|
-  assert find("tr#application_key_#{key}").has_no_button?('Delete')
-end
-
-And "{application}'s user key has not changed" do |application|
-  old = application.user_key
-  assert_equal old, application.reload.user_key
+And "{application} user key should( still) be {string}" do |application, key|
+  assert_equal key, application.reload.user_key
 end

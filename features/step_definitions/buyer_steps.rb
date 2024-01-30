@@ -126,6 +126,18 @@ Given "{buyer} uses a custom plan {string}" do |account, name|
   contract.customize_plan!
 end
 
+Given "{buyer} has no applications" do |buyer|
+  buyer.bought_cinstances.destroy_all
+end
+
+Given "{buyer} has email {string}" do |buyer, email|
+  buyer.admins.first.update!(email: email)
+end
+
+Given "{buyer} has no live applications" do |buyer|
+  buyer.bought_cinstances.each &:suspend!
+end
+
 When "{buyer} is approved" do |buyer|
   buyer.approve!
 end

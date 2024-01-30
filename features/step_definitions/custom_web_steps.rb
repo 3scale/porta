@@ -135,15 +135,21 @@ Then "they should be able to go to the following pages:" do |table|
   end
 end
 
-When /^(.*) within ([^:"]+)$/ do |lstep, scope| # EXPERIMENTAL inclusion of double quotes in selector
+When /^(.*) within ([^:"]+)$/ do |lstep, scope|
   within(*selector_for(scope)) do
     step lstep
   end
 end
 
-When /^(.*) within ([^:"]+):$/ do |lstep, scope, table| # EXPERIMENTAL inclusion of double quotes in selector
+When /^(.*) within ([^:"]+):$/ do |lstep, scope, table|
   within(*selector_for(scope)) do
     step(lstep, table)
+  end
+end
+
+When /^(.*) within habba (.*)$/ do |lstep, scope|
+  within(*selector_for(scope)) do
+    step lstep
   end
 end
 

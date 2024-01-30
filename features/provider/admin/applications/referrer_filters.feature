@@ -46,5 +46,5 @@ Feature: Providers's application referrer filters
         | foo.example.org |
       And they go to the application's admin page
       And they should see "foo.example.org" within the referrer filters
-      When they delete the referrer filter "foo.example.org"
+      And they press "Delete" within habba the referrer filter "foo.example.org"
       Then they should not see "foo.example.org" within the referrer filters
