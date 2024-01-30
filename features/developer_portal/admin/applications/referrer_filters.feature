@@ -61,5 +61,5 @@ Feature: Developer portal application referrer filters
       Given the application has the following referrer filters:
         | foo.example.org |
       And they go to the application's dev portal page
-      And they press "Delete" within habba the referrer filter "foo.example.org"
+      And they press "Delete" that belongs to the referrer filter "foo.example.org"
       Then they should not see "foo.example.org" within the referrer filters

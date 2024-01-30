@@ -147,7 +147,7 @@ When /^(.*) within ([^:"]+):$/ do |lstep, scope, table|
   end
 end
 
-When /^(.*) within habba (.*)$/ do |lstep, scope|
+When /^(.*) that belongs to ([^:]+)$/ do |lstep, scope|
   within(*selector_for(scope)) do
     step lstep
   end

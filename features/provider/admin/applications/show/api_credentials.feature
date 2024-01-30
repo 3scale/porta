@@ -92,8 +92,8 @@ Feature: Application API credentials
         | key-1 |
         | key-2 |
       When they go to the application's admin page
-      Then there should be a link to "Delete" within habba application key "key-1"
-      And there should be a link to "Delete" within habba application key "key-2"
+      Then there should be a link to "Delete" that belongs to application key "key-1"
+      And there should be a link to "Delete" that belongs to application key "key-2"
 
     Scenario: Deleting a key
       Given the application has 2 keys
@@ -116,4 +116,4 @@ Feature: Application API credentials
         | the-only-key |
       And the product has mandatory app key set to "true"
       When they go to the application's admin page
-      Then there shouldn't be a link to "Delete" within habba application key "the-only-key"
+      Then there shouldn't be a link to "Delete" that belongs to application key "the-only-key"
