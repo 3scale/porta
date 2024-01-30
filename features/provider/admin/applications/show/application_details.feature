@@ -57,7 +57,7 @@ Feature: Application details card
       | Verification code |                          |
       | hidde_field       | Hidden content           |
     When they go to the application's admin page
-    Then they should see the following application details:
+    Then they should see the following details within the application details:
       | Recovery email    | This is a required field |
       | User extra hidden | Hidden content           |
     Then they should see the following details within the application details:

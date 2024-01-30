@@ -136,15 +136,6 @@ Then "there are/is {int} key(s)" do |keys|
   assert_equal keys, find_all('tr.key').size
 end
 
-Then "(they )should see the following application details:" do |table|
-  within selector_for('the application details') do
-    assert table.rows_hash.all? do |key, value|
-      find('dt.pf-c-description-list__term', text: key)
-        .has_sibling?('dd.pf-c-description-list__description', text: value)
-    end
-  end
-end
-
 Then "there should not be a button to delete key {string}" do |key|
   assert find("tr#application_key_#{key}").has_no_button?('Delete')
 end
