@@ -37,11 +37,10 @@ Given "{buyer} is signed up to {plan}" do |buyer, plan|
 end
 
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
-  account = FactoryBot.create(:buyer_account,
-                    :provider_account => plan.provider_account,
-                    :org_name => org_name)
-  account.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
-  account.buy!(plan)
+  @buyer = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
+                                             org_name: org_name)
+  @buyer.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
+  @buyer.buy!(plan)
 end
 
 Given "a buyer {string} signed up to {provider}" do |account_name, provider|
@@ -162,27 +161,6 @@ end
 
 def login_form
   find('#new_session')
-end
-
-And(/^has a buyer with (application|service) plan/) do |plan|
-  step %(provider "#{@provider.internal_domain}" has "service_plans" switch allowed)
-  step %(a default service of provider "#{@provider.internal_domain}" has name "API")
-  if plan == 'service'
-    steps %(
-      And the following service plan:
-        | Product | Name |
-        | API     | Gold |
-      And a buyer "Alexander" signed up to service plan "Gold"
-    )
-  else
-    steps %(
-      And the following application plan:
-        | Product | Name  |
-        | API     | Metal |
-      And a buyer "Alexander" signed up to application plan "Metal"
-    )
-  end
-  @buyer = @provider.buyer_accounts.find_by!(org_name: 'Alexander')
 end
 
 When(/^a buyer signs up/) do
