@@ -63,8 +63,8 @@ Feature: Developer portal edit application page
         | UUID         |          | true      |        |
         | Secret sauce |          |           | true   |
       And the following application:
-        | Buyer | Name   |
-        | Jane  | My App |
+        | Buyer | Name   | Product |
+        | Jane  | My App | The API |
       And the application has the following extra fields:
         | Phone number | 666-555-444 |
         | UUID         | 123         |
