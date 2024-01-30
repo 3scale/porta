@@ -111,12 +111,12 @@ Feature: Developer portal application credentials
         | key-one |
       And the product has mandatory app key set to "true"
       When they go to the application's dev portal page
-      Then there shouldn't be a button to "Delete" within habba application key "key-one"
+      Then there shouldn't be a button to "Delete"
 
     Scenario: Delete last key when mandatory app key unset
       Given the application has the following key:
         | key-one |
       And the product has mandatory app key set to "false"
       When they go to the application's dev portal page
-      And press "Delete" within habba application key "key-one"
+      And press "Delete"
       Then they should see "Application key was deleted."
