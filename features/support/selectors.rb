@@ -98,6 +98,9 @@ module HtmlSelectorsHelper
     when 'the change plan card'
       '#change_plan_card'
 
+    when 'the current utilization card'
+      '#application-utilization'
+
     when 'the application details'
       '[aria-label="Application details list"], dl.dl-horizontal'
 

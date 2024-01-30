@@ -46,6 +46,7 @@ Feature: Application stats
       | period   | metric_name | max_value | current_value |
       | minute   | hits        |       100 |            40 |
     When they go to application "Test App" admin page
-    Then the Current Utilization panel contains the following data:
+    Then they should see "Overview of the current state of this application's limits"
+    And they should see the following table within the current utilization card:
       | Metric Name | Period     | Values | %    |
       | Hits (hits) | per minute | 40/100 | 40.0 |
