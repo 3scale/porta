@@ -21,7 +21,7 @@ Feature: Application edit page
     Given they go to the application's admin edit page
     When the form is submitted with:
       | Name |  |
-    Then "Name" shows error "can't be blank"
+    Then field "Name" has inline error "can't be blank"
 
   Scenario: Editing an application
     Given they go to the application's admin edit page

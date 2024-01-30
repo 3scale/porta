@@ -33,7 +33,7 @@ Feature: Audience > Accounts > New
   Scenario: Required fields and validation
     Given they go to the new buyer account page
     When press "Create"
-    Then "Username" shows error "is too short"
-    And "Email" shows error "should look like an email address"
-    And "Organization/Group Name" shows error "can't be blank"
-    But "Password" doesn't show any error
+    Then field "Username" has inline error "is too short"
+    And field "Email" has inline error "should look like an email address"
+    And field "Organization/Group Name" has inline error "can't be blank"
+    But field "Password" has no inline error

@@ -114,7 +114,7 @@ Feature: Developer portal new application page
       But there is a required field "Phone number"
       When the form is submitted with:
         | Name | Cooking Mama |
-      Then "Phone number" shows error "can't be blank"
+      Then field "Phone number" has inline error "can't be blank"
       When the form is submitted with:
         | Name         | Cooking Mama |
         | Phone number | 666777888    |

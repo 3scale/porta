@@ -23,7 +23,7 @@ Feature: Audience > Accounts > Edit
     Given they go to the buyer account edit page for "Pepe"
     When the form is submitted with:
       | Organization/Group Name | |
-    Then "Organization/Group Name" shows error "can't be blank"
+    Then field "Organization/Group Name" has inline error "can't be blank"
 
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider

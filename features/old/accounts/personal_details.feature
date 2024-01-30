@@ -41,7 +41,7 @@ Feature: Personal Details
     And I fill in "Username" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then "Username" shows error "is too short (minimum is 3 characters)"
+    Then field "Username" has inline error "is too short (minimum is 3 characters)"
 
   Scenario: Provider should see all fields defined for user
     Given master provider has the following fields defined for users:
@@ -86,4 +86,4 @@ Feature: Personal Details
     And I fill in "New Password" with "hi"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then "New Password" shows error "is too short (minimum is 6 characters)"
+    Then field "New Password" has inline error "is too short (minimum is 6 characters)"

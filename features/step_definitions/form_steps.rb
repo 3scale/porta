@@ -22,13 +22,13 @@ INLINE_ERROR_SELECTORS = [
   'p.inline-errors'
 ].join(', ')
 
-Then "{string} shows error {string}" do |field, error|
+Then "field {string} has inline error {string}" do |field, error|
   text = Regexp.new(Regexp.escape(error), Regexp::IGNORECASE)
   find_field(field)
     .assert_sibling(INLINE_ERROR_SELECTORS, text: text, wait: 0)
 end
 
-Then "{string} doesn't show any error" do |field|
+Then "field {string} has no inline error" do |field|
   find_field(field)
     .assert_no_sibling(INLINE_ERROR_SELECTORS, wait: 0)
 end

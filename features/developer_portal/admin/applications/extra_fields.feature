@@ -69,8 +69,8 @@ Feature: Developer portal application extra fields
       | Name        | Skoda    |
       | Description | Roomster |
       | Wheels      | 3        |
-    Then "Engine" shows error "can't be blank"
-    But "Color" doesn't show any error
+    Then field "Engine" has inline error "can't be blank"
+    But field "Color" has no inline error
 
   Scenario: Create an application with extra fields
     When they go to the dev portal new application page

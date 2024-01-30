@@ -49,4 +49,4 @@ Feature: Product's new application plans page
     When the form is submitted with:
       | Name        | |
       | System name | |
-    Then "Name" shows error "Can't be blank"
+    Then field "Name" has inline error "Can't be blank"

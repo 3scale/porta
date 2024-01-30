@@ -54,7 +54,7 @@ Feature: Product > Integration > Backends > New
       And fill in "Public Path" with "/v1"
       And press "Add to product"
       Then they should see "Couldn't add Backend to Product"
-      Then "Public Path" shows error "This path is already taken. Specify a different path."
+      Then field "Public Path" has inline error "This path is already taken. Specify a different path."
 
     Scenario: Can't use an invalid public path
       Given a backend "Backend 1"
@@ -63,7 +63,7 @@ Feature: Product > Integration > Backends > New
       And fill in "Public Path" with "???"
       And press "Add to product"
       Then they should see "Couldn't add Backend to Product"
-      And "Public Path" shows error "must be a path separated by \"/\". E.g. \"\" or \"my/path\""
+      And field "Public Path" has inline error "must be a path separated by \"/\". E.g. \"\" or \"my/path\""
 
     Scenario: Add a backend must be accessible
       Given a backend "Backend 1"

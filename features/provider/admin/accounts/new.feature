@@ -36,15 +36,15 @@ Feature: Provider accounts management
       | Password                |  |
       | Password confirmation   |  |
       | Organization/Group Name |  |
-    Then "Username" shows error "is too short (minimum is 3 characters)"
-    And "Email" shows error "should look like an email address"
-    And "Organization/Group Name" shows error "can't be blank"
-    But "Password" doesn't show any error
+    Then field "Username" has inline error "is too short (minimum is 3 characters)"
+    And field "Email" has inline error "should look like an email address"
+    And field "Organization/Group Name" has inline error "can't be blank"
+    But field "Password" has no inline error
 
   Scenario: Create a provider account with invalid data
     Given they go to the new provider account page
     When the form is submitted with:
       | Email    | a@a.e  |
       | Password | 123456 |
-    Then "Email" shows error "is too short (minimum is 6 characters)"
-    And "Password confirmation" shows error "doesn't match Password"
+    Then field "Email" has inline error "is too short (minimum is 6 characters)"
+    And field "Password confirmation" has inline error "doesn't match Password"
