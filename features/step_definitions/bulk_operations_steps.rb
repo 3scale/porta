@@ -28,10 +28,6 @@ Then "the following bulk operations {are} available:" do |visible, operations|
   assert_same_elements find_all(bulk_action_selector).map(&:text), operations.raw.flatten
 end
 
-Then "the bulk operations {are} visible" do |visible|
-  assert_selector(:css, selector_for('the bulk operations'), visible: visible, wait: 0)
-end
-
 Then "the bulk operation has failed for {string}" do |name|
   find('.bulk_operation.errors').assert_text("There were some errors:\n#{name}")
   # assert_match "There were some errors:\n#{name}", find('.bulk_operation.errors').text

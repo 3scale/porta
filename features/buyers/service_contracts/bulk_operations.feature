@@ -29,17 +29,17 @@ Feature: Service subscriptions bulk operations
   Scenario: Bulk operations card shows when an items are selected
     When item "Alice" is selected
     And item "Bob" is selected
-    Then the bulk operations are visible
+    Then they should see the bulk operations
     And should see "You have selected 2 service subscriptions and you can make following operations with them:"
     But item "Alice" is unselected
     And item "Bob" is unselected
-    Then the bulk operations are not visible
+    Then they should not see the bulk operations
 
   Scenario: Select all items in the table
     When they select all items in the table
-    Then the bulk operations are visible
+    Then they should see the bulk operations
     When they unselect all items in the table
-    Then the bulk operations are not visible
+    Then they should not see the bulk operations
 
   Scenario: Send an email without subject
     When item "Jane" is selected

@@ -43,7 +43,7 @@ Feature: Audience > Messages > Inbox
       Then the following bulk operations are available:
         | Delete |
       But item "Oh, no!" is unselected
-      And the bulk operations are not visible
+      And they should not see the bulk operations
 
     Scenario: Select all messages in all pages
       Given they go to the provider inbox page

@@ -70,17 +70,17 @@ Feature: Audience's applications list page
   Scenario: Bulk operations card shows when an items are selected
     When item "Bob's App" is selected
     And item "Jane's Lite App" is selected
-    Then the bulk operations are visible
+    Then they should see the bulk operations
     And should see "You have selected 2 applications and you can make following operations with them:"
     But item "Bob's App" is unselected
     And item "Jane's Lite App" is unselected
-    Then the bulk operations are not visible
+    Then they should not see the bulk operations
 
   Scenario: Select all items in the table
     When they select all items in the table
-    Then the bulk operations are visible
+    Then they should see the bulk operations
     When they unselect all items in the table
-    Then the bulk operations are not visible
+    Then they should not see the bulk operations
 
   Scenario: Send an email without subject
     Given item "Bob's App" is selected

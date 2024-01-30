@@ -48,18 +48,18 @@ Feature: Buyer accounts bulk operations
       Given they go to the buyer accounts page
       When item "Alice" is selected
       And item "Bob" is selected
-      Then the bulk operations are visible
+      Then they should see the bulk operations
       And should see "You have selected 2 accounts and you can make following operations with them:"
       But item "Alice" is unselected
       And item "Bob" is unselected
-      Then the bulk operations are not visible
+      Then they should not see the bulk operations
 
     Scenario: Select all items in the table
       Given they go to the buyer accounts page
       And they select all items in the table
-      Then the bulk operations are visible
+      Then they should see the bulk operations
       When they unselect all items in the table
-      Then the bulk operations are not visible
+      Then they should not see the bulk operations
 
     Scenario: Send an email without subject
       Given they go to the buyer accounts page

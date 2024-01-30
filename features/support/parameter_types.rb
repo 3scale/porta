@@ -449,3 +449,9 @@ ParameterType(
     }[value]
   end
 )
+
+ParameterType(
+  name: 'css_selector',
+  regexp: /(.*)/,
+  transformer: ->(selector) { selector_for(selector) }
+)

@@ -66,12 +66,12 @@ Then "the page should contain {string}" do |text|
   end
 end
 
-Then "they see {}" do |selector|
-  assert_selector(:css, selector_for(selector), wait: 0)
+Then "they (should )see {css_selector}" do |selector|
+  assert_selector(:css, selector, wait: 0)
 end
 
-Then "they don't see {}" do |selector|
-  assert_not has_css?(selector_for(selector), wait: 0)
+Then "they (should not )(don't )see {css_selector}" do |selector|
+  assert_no_selector(:css, selector, wait: 0)
 end
 
 # Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
