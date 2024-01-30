@@ -62,7 +62,7 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   end
 
   def service_plan(plan_id = service_contract_plan_id)
-    service_plan ||= service.service_plans.find_by(id: plan_id)
+    @service_plan ||= service.service_plans.find_by(id: plan_id)
   end
 
   def service_contract_plan_id
