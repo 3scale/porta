@@ -1287,19 +1287,14 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                  "service_id": {
-                    "type": "integer",
-                    "description": "ID of the service."
-                  },
                   "plan_id": {
                     "type": "integer",
-                    "description": "ID of the target account plan"
+                    "description": "ID of the Service plan"
                   }
                 },
                 "required": [
                   "access_token",
-                  "plan_id",
-                  "service_id"
+                  "plan_id"
                 ]
               }
             }
