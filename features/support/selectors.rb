@@ -50,8 +50,8 @@ module HtmlSelectorsHelper
     when /the search form/
       'tr.search'
 
-    when /the bulk operations/
-      '#bulk-operations'
+    when /the bulk operations/ # Legacy bulk operations card, not the toolbar dropdown
+      '.pf-c-card#bulk-operations'
 
     #
     # Product

@@ -2,7 +2,7 @@
 
 module BulkOperationsHelper
   def bulk_action_selector
-    selector_for_bulk_operations = selector_for('the bulk operations')
+    selector_for_bulk_operations = '#bulk-operations'
     toggle_selector = "#{selector_for_bulk_operations} .pf-c-dropdown__toggle"
     if has_css?(toggle_selector, wait: 0)
       toggle = find(toggle_selector)
