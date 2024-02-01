@@ -14,7 +14,7 @@ Feature: Provider stats section authorization
     And I am logged in as provider "foo.3scale.localhost"
     When I go to the provider dashboard
     And I follow "API"
-    Then I should see "Analytics" in the main menu
+    Then I should see "Analytics" within the main menu
     And they should be able to go to the following pages:
       | the provider stats usage page |
       | the provider stats apps page  |
@@ -27,7 +27,7 @@ Feature: Provider stats section authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should not see the link "Analytics" in the apis dashboard widget
+    Then I should not see the link "Analytics" within the apis dashboard widget
     And they should see an error when going to the following pages:
       | the provider stats usage page |
       | the provider stats apps page  |
@@ -41,7 +41,7 @@ Feature: Provider stats section authorization
     When I log in as provider "member"
     And I go to the provider dashboard
     When I follow "API"
-    Then I should see "Analytics" in the main menu
+    Then I should see "Analytics" within the main menu
     And they should be able to go to the following pages:
       | the provider stats usage page |
       | the provider stats apps page  |

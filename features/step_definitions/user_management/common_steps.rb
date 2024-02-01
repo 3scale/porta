@@ -21,9 +21,13 @@ Then /^I should not see the user role field$/ do
 end
 
 Then "I should see {string} for {user}" do |text, user|
-  step %(I should see "#{text}" within "#user_#{user.id}")
+  within "#user_#{user.id}" do
+    step %(I should see "#{text}")
+  end
 end
 
 Then "I should not see {string} for {user}" do |text, user|
-  step %(I should not see "#{text}" within "#user_#{user.id}")
+  within "#user_#{user.id}" do
+    step %(I should not see "#{text}")
+  end
 end

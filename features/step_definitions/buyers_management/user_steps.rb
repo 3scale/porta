@@ -1,16 +1,22 @@
 # frozen_string_literal: true
 
 Then "I should see {user}" do |user|
-  step %(I should see "#{user.username}" within "#users ##{dom_id(user)}")
+  within "#users ##{dom_id(user)}" do
+    step %(I should see "#{user.username}")
+  end
 end
 
 #TODO: move buyer users steps outta here?
 Then "I should see buyer {user}" do |user|
-  step %(I should see "#{user.username}" within "#buyer_users ##{dom_id(user)}")
+  within "#buyer_users ##{dom_id(user)}" do
+    step %(I should see "#{user.username}")
+  end
 end
 
 Then /^I should not see buyer user "([^"]*)"$/ do |user_name|
-  step %(I should not see "#{user_name}" within "#buyer_users")
+  within "#buyer_users" do
+    step %(I should not see "#{user_name}")
+  end
 end
 
 Then "I should see button to delete {user}" do |user|

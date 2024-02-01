@@ -62,11 +62,9 @@ end
 
 When "I {word} {string} for the hourly usage limit for {metric_on_application_plan}" do |action, label, metric|
   usage_limit = metric.usage_limits.find_by_period('hour')
-  step %(I #{action} "#{label}" within "##{dom_id(usage_limit)}")
-end
-
-When "I follow {string} within usage limits panel for {metric_on_application_plan}" do |label, metric|
-  step %(I follow "#{label}" within "##{dom_id(metric)}_slot")
+  within "##{dom_id(usage_limit)}" do
+    step %(I #{action} "#{label}")
+  end
 end
 
 def metrics_container

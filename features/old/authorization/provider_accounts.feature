@@ -18,7 +18,7 @@ Feature: Provider accounts authorization
 
     When I go to the provider dashboard
     #Then show me the page
-    Then I should see the link "1 ACCOUNT" in the audience dashboard widget
+    Then I should see the link "1 ACCOUNT" within the audience dashboard widget
     When I follow "1 Account"
     Then I should see "Accounts" within the main menu
     And they should be able to go to the following pages:
@@ -46,7 +46,7 @@ Feature: Provider accounts authorization
     When I log in as provider "member"
 
     And I go to the provider dashboard
-    Then I should not see the link "ACCOUNTS" in the audience dashboard widget
+    Then I should not see the link "ACCOUNTS" within the audience dashboard widget
 
     Then they should see an error when going to the following pages:
       | the buyer accounts page                       |
@@ -70,7 +70,7 @@ Feature: Provider accounts authorization
     And provider "foo.3scale.localhost" has "multiple_users" switch allowed
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should see the link "1 ACCOUNT" in the audience dashboard widget
+    Then I should see the link "1 ACCOUNT" within the audience dashboard widget
     And they should be able to go to the following pages:
       | the buyer accounts page                       |
       | the approved buyer accounts page              |

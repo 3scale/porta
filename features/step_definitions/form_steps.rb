@@ -112,3 +112,10 @@ end
 When "(I )uncheck {string}" do |field|
   uncheck(field)
 end
+
+When "they should be able to choose one of the following(:)" do |table|
+  radio_button_selector = 'fieldset.choices .choice'
+
+  assert_same_elements table.raw.flatten,
+                       find_all(radio_button_selector).map(&:text)
+end

@@ -67,5 +67,5 @@ Feature: Usage limits
     Then I should not see hourly usage limit for metric "hits"
     When I follow "Limits (1)"
     Then I should see hourly usage limit for metric "hits" on application plan "Basic"
-    When I follow "Close" within usage limits panel for metric "hits" on application plan "Basic"
+    When I follow "Close" that belongs to metric "Hits" usage limits
     Then I should not see hourly usage limit for metric "hits" on application plan "Basic"

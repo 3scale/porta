@@ -12,7 +12,7 @@ Feature: Audience > Accounts > Listing > Account
   Scenario: No applications, no widget
     Given the buyer has no applications
     When they go to the overview page of account "Bob"
-    Then they don't see the application widget
+    Then they should not be able to see the application widget
 
   Scenario: With 1 application only, the widget is visible
     Given the following applications:
@@ -32,7 +32,7 @@ Feature: Audience > Accounts > Listing > Account
       | Bob   | My App    | Basic |
       | Bob   | Other App | Basic |
     When they go to the overview page of account "Bob"
-    Then they don't see the application widget
+    Then they should not be able to see the application widget
 
   Scenario: When plan requires approval, application is pending
     Given the following applications:

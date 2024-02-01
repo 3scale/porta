@@ -35,12 +35,12 @@ Feature: Provider lists all invoices
 
       Then I should see 10 invoices
 
-      When I select "January" from "search[month_number]" within search form
+      When I select "January" from "search[month_number]" within the search form
         And I press "Search"
 
       Then I should see 1 invoice
 
-      When I select "March" from "search[month_number]" within search form
+      When I select "March" from "search[month_number]" within the search form
         And I press "Search"
 
       Then I should see 2 invoices
@@ -48,34 +48,34 @@ Feature: Provider lists all invoices
       When I navigate to invoices issued by me
       Then I should see 10 invoices
 
-      When I fill in "search[number]" with "2010-1*-*" within search form
+      When I fill in "search[number]" with "2010-1*-*" within the search form
         And I press "Search"
 
       Then I should see 3 invoices
 
-      When I fill in "search[number]" with "2011-01-*" within search form
+      When I fill in "search[number]" with "2011-01-*" within the search form
         And I press "Search"
 
       Then I should see 1 invoice
 
-      When I fill in "search[number]" with "2011-04-*" within search form
+      When I fill in "search[number]" with "2011-04-*" within the search form
         And I press "Search"
 
       Then I should see 2 invoices
 
       When I navigate to invoices issued by me
-        And I select "pending" from "search[state]" within search form
+        And I select "pending" from "search[state]" within the search form
         And I press "Search"
 
       Then I should see 8 invoices
 
-      When I fill in "search[number]" with "2011-*" within search form
+      When I fill in "search[number]" with "2011-*" within the search form
         And I press "Search"
 
       Then I should see 5 invoices
 
-      When I fill in "search[number]" with "" within search form
-        And select "2011" from "search[year]" within search form
+      When I fill in "search[number]" with "" within the search form
+        And select "2011" from "search[year]" within the search form
         And I press "Search"
 
       Then I should see 5 invoices

@@ -7,7 +7,7 @@ Feature: Audience > Accounts > Edit
 
   Scenario: Navigation
     Given they go to the provider dashboard
-    When they follow "1 Account" in the audience dashboard widget
+    When they follow "1 Account" within the audience dashboard widget
     And follow "Pepe"
     And follow "Edit"
     Then the current page is the buyer account edit page for "Pepe"

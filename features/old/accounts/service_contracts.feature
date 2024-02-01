@@ -48,5 +48,5 @@ Feature: Account service plans management
     When I follow "Change Fancy API subscription"
     Then I should see "Change subscribed plan"
     When I select "Expensive one" from "Plan"
-    And I press "Change subscription" within fancybox
+    And I press "Change subscription" within the modal
     Then I should see "Expensive one"

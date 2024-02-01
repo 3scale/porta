@@ -23,5 +23,5 @@ Feature: Service subscriptions - providers
     And I select "Elephant Taming" from "Service"
     And I press "Search"
     Then I should see "mouse"
-    Then I should not see "Zeebra Stripe Drawing" within the results
+    Then I should not see "Zeebra Stripe Drawing" within the table body
 

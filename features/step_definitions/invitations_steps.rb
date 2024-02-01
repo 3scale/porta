@@ -36,7 +36,9 @@ end
 # OPTIMIZE: this reads awful
 When "I press {string} for an invitation from {account} for {string}" do |label, account, email|
   invitation = account.invitations.find_by_email!(email)
-  step %(I follow "#{label}" within "##{dom_id(invitation)}")
+  within "##{dom_id(invitation)}" do
+    step %(I follow "#{label}")
+  end
 end
 
 When(/^I resend the invitation to "([^\"]*)"$/) do |email|

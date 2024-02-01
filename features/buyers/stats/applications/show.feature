@@ -23,6 +23,6 @@ Feature: Product > Applications Listing > Application > Analytics
   Scenario: Navigation from product
     Given the current page is the provider dashboard
     When they follow "My API" within the products widget
-    And follow "My App" within the latest apps
+    And follow "My App"
     And follow "Analytics" within the secondary nav
     Then the current page is application "My App" traffic stats page

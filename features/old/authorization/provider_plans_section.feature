@@ -22,9 +22,9 @@ Feature: Admin portal plans section authorization
     Given an admin "admin" of the provider
     When I log in as provider "admin"
     And they go to the provider dashboard
-    Then they should see "APIs" in the apis dashboard widget
-    And should see "Products" in the apis dashboard widget
-    And should see "Backends" in the apis dashboard widget
+    Then they should see "APIs" within the apis dashboard widget
+    And should see "Products" within the apis dashboard widget
+    And should see "Backends" within the apis dashboard widget
     And they should be able to go to the following pages:
       | API dashboard                              |
       | the account plans admin page               |
@@ -39,9 +39,9 @@ Feature: Admin portal plans section authorization
     And user "member" does not belong to the admin group "plans" of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And they go to the provider dashboard
-    Then they should not see "APIs" in the apis dashboard widget
-    And should not see "Products" in the apis dashboard widget
-    And should not see "Backends" in the apis dashboard widget
+    Then they should not see "APIs" within the apis dashboard widget
+    And should not see "Products" within the apis dashboard widget
+    And should not see "Backends" within the apis dashboard widget
     And they should see an error when going to the following pages:
       | the API dashboard                          |
       | the account plans admin page               |
@@ -56,9 +56,9 @@ Feature: Admin portal plans section authorization
     And user "member" has access to the admin section "plans"
     When I log in as provider "member"
     And they go to the provider dashboard
-    Then they should see "APIs" in the apis dashboard widget
-    And should see "Products" in the apis dashboard widget
-    And should see "Backends" in the apis dashboard widget
+    Then they should see "APIs" within the apis dashboard widget
+    And should see "Products" within the apis dashboard widget
+    And should see "Backends" within the apis dashboard widget
     And they should be able to go to the following pages:
       | the API dashboard                          |
       | the account plans admin page               |

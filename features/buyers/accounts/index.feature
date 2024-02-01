@@ -58,13 +58,13 @@ Feature: Audience > Accounts
 
     Scenario: Ordering by group/org
       Given they go to the buyer accounts page
-      When follow "Group/Org." within table header
+      When follow "Group/Org." within the table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |
         | Bob           | Rejected | Awesome |
         | Pending buyer | Pending  | Tricky  |
-      And follow "Group/Org." within table header
+      And follow "Group/Org." within the table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
@@ -73,13 +73,13 @@ Feature: Audience > Accounts
 
     Scenario: Ordering by plan name
       Given they go to the buyer accounts page
-      When follow "Plan" within table header
+      When follow "Plan" within the table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Bob           | Rejected | Awesome |
         | Alice         | Approved | Default |
         | Pending buyer | Pending  | Tricky  |
-      And follow "Plan" within table header
+      And follow "Plan" within the table header
       And should see following table:
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
@@ -88,13 +88,13 @@ Feature: Audience > Accounts
 
     Scenario: Ordering by state
       Given they go to the buyer accounts page
-      When follow "State" within table header
+      When follow "State" within the table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |
         | Pending buyer | Pending  | Tricky  |
         | Bob           | Rejected | Awesome |
-      And follow "State" within table header
+      And follow "State" within the table header
       And should see following table:
         | Group/Org.    | State    | Plan    |
         | Bob           | Rejected | Awesome |
@@ -103,13 +103,13 @@ Feature: Audience > Accounts
 
     Scenario: Ordering by signup date
       Given they go to the buyer accounts page
-      When follow "Signup Date" within table header
+      When follow "Signup Date" within the table header
       Then should see following table:
         | Group/Org.    | State    | Plan    |
         | Pending buyer | Pending  | Tricky  |
         | Bob           | Rejected | Awesome |
         | Alice         | Approved | Default |
-      And follow "Signup Date" within table header
+      And follow "Signup Date" within the table header
       And should see following table:
         | Group/Org.    | State    | Plan    |
         | Alice         | Approved | Default |

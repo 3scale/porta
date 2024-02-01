@@ -29,13 +29,13 @@ Feature: Developer portal applications list page
       Given they go to the homepage
       When they follow "Applications" within the navigation bar
       Then they should see "Jane's App"
-      But they don't see the pagination
+      But they should not be able to see the pagination
 
     Scenario: Pagination
       Given the buyer has 40 applications
       And they go to the homepage
       When they follow "Applications" within the navigation bar
-      Then they see the pagination
+      Then they should be able to see the pagination
 
     Scenario: Buyer can't create an application if subscription is pending approval
       Given the following service plan:

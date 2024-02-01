@@ -24,7 +24,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan  | Paid? | State |
       | Basic | free  | live  |
-    And I follow "Account" within table header
+    And I follow "Account" within the table header
     Then I should see following table:
       | Account   |
       | bob       |
@@ -36,7 +36,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan  |
       | Basic |
-    And I follow "Account" within table header
+    And I follow "Account" within the table header
     And I should see following table:
       | Account   |
       | bob       |
@@ -47,7 +47,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan        | Paid? | State |
       | Unpublished | free  | live  |
-    And I follow "<order by>" within table header
+    And I follow "<order by>" within the table header
     Then I should see "<order by>"
 
     Examples:

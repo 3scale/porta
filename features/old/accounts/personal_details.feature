@@ -20,13 +20,13 @@ Feature: Personal Details
   Scenario: Personal details redirects back to users list if originated there
     When I go to the provider users page
     And I follow "Listing"
-    And I follow "foo.3scale.localhost" within "#users"
+    And I follow "foo.3scale.localhost"
     Then I should be on the provider personal details page
     When I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should be on the provider users page
-    When I follow "foo.3scale.localhost" within "#users"
+    When I follow "foo.3scale.localhost" within the table
     And I fill in "Email" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"

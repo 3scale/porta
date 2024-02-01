@@ -42,14 +42,14 @@ Feature: Audience's applications list page
     When they search for:
       | Plan  |
       | Cheap |
-    And follow "Account" within table header
+    And follow "Account" within the table header
     Then the table should contain the following:
       | Account |
       | Bob     |
       | Jane    |
 
   Scenario Outline: Ordering
-    When they follow "<order by>" within table header
+    When they follow "<order by>" within the table header
     Then the table should be sorted by "<order by>"
 
     Examples:
@@ -70,17 +70,17 @@ Feature: Audience's applications list page
   Scenario: Bulk operations card shows when an items are selected
     When item "Bob's App" is selected
     And item "Jane's Lite App" is selected
-    Then they should see the bulk operations
+    Then they should be able to see the bulk operations
     And should see "You have selected 2 applications and you can make following operations with them:"
     But item "Bob's App" is unselected
     And item "Jane's Lite App" is unselected
-    Then they should not see the bulk operations
+    Then they should not be able to see the bulk operations
 
   Scenario: Select all items in the table
     When they select all items in the table
-    Then they should see the bulk operations
+    Then they should be able to see the bulk operations
     When they unselect all items in the table
-    Then they should not see the bulk operations
+    Then they should not be able to see the bulk operations
 
   Scenario: Send an email without subject
     Given item "Bob's App" is selected

@@ -20,7 +20,7 @@ Feature: Providers's application referrer filters
 
     Scenario: Referrer filters not visible
       When they go to the application's admin page
-      Then they don't see the referrer filters
+      Then they shouldn't be able to see the referrer filters
 
   Rule: Referrer filters required
     Background:

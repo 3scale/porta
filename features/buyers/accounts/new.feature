@@ -6,7 +6,7 @@ Feature: Audience > Accounts > New
 
   Scenario: Navigation
     Given they go to the provider dashboard
-    When they follow "0 Accounts" in the audience dashboard widget
+    When they follow "0 Accounts" within the audience dashboard widget
     And follow "Add your first account"
     Then the current page is the new buyer account page
 

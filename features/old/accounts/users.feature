@@ -61,7 +61,7 @@ Feature: User management
     And I follow "Edit" for user "alice"
     And I fill in "Email" with ""
     And I press "Update User"
-    Then I should see "should look like an email address" within "#user_email_input"
+    Then I should see "should look like an email address"
 
   Scenario: Delete an user
     And current domain is the admin domain of provider "foo.3scale.localhost"

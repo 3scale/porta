@@ -78,7 +78,7 @@ Feature: Application, service and account plan Features
       | Name         | Description |
       | Some Feature | Bananas     |
     And they go to <plan> admin edit page
-    When they follow "Edit" within the feature Some Feature
+    When they follow "Edit" that belongs to feature "Some Feature"
     And the modal is submitted with:
       | Name | New name |
     Then they should see the flash message "Feature has been updated."
@@ -97,7 +97,7 @@ Feature: Application, service and account plan Features
       | Name         | Description |
       | Some Feature | Bananas     |
     And they go to <plan> admin edit page
-    When they press "Delete" within the feature Some Feature
+    When they press "Delete" that belongs to feature "Some Feature"
     And confirm the dialog
     Then they should see the flash message "Feature has been deleted."
     And should not see "Some Features" within the features

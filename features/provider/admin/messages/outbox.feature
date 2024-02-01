@@ -51,7 +51,7 @@ Feature: Audience > Messages > Outbox
       Then the following bulk operations are available:
         | Delete |
       But item "Welcome" is unselected
-      And they should not see the bulk operations
+      And they should not be able to see the bulk operations
 
     Scenario: Deleting messages in bulk
       Given a message sent from the provider to buyer "Alice" with subject "Deleteme" and body "Deleteme"

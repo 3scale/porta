@@ -17,7 +17,7 @@ Feature: Application plan change card
 
     Scenario: Change plan card hidden with one plan only
       Given they go to the application's admin page
-      Then they don't see the change plan card
+      Then they should not be able to see the change plan card
 
   Rule: Multple application plans
     Background:

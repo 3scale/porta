@@ -28,10 +28,8 @@ end
 
 When(/^I update the file with different image$/) do
   @previous_file = image_source
-  steps %q{
-    When I attach the file "test/fixtures/tinnytim.jpg" to "cms_file_attachment"
-    And I press "Save"
-   }
+  attach_file('cms_file_attachment', Rails.root.join('test/fixtures/tinnytim.jpg'))
+  click_on "Save"
 end
 
 Then(/^the file should be updated$/) do
@@ -66,14 +64,16 @@ Then(/^there is (not )?an image preview of that file$/) do |negative|
 end
 
 def create_cms_file(path, file_path)
-  steps %{
+  steps %(
     Given I go to the cms page
     And I follow "New File" from the CMS dropdown
     And I fill in "Path" with "#{path}"
-    And I attach the file "test/fixtures/#{file_path}" to "cms_file_attachment"
+  )
+  attach_file('cms_file_attachment', Rails.root.join("test/fixtures/#{file_path}"))
+  steps %(
     And I press "Create File"
     Then I should see "Created new file"
-  }
+  )
 end
 
 When(/^I upload a file that is not an image to the cms$/) do

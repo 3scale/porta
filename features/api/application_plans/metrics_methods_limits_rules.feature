@@ -44,7 +44,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
       | Period     | minute |
       | Max. value | 10     |
     Then they should see the flash message "Usage Limit has been created"
-    And should see the following table within metric Hits usage limits:
+    And should see the following table that belongs to metric "Hits" usage limits:
       | Period   | Value |
       | 1 minute | 10    |
 

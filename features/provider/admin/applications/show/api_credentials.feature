@@ -96,10 +96,12 @@ Feature: Application API credentials
       And there should be a link to "Delete" that belongs to application key "key-2"
 
     Scenario: Deleting a key
-      Given the application has 2 keys
+      Given the application has the following keys:
+        | key-1 |
+        | key-2 |
       And the product has mandatory app key set to "false"
       And they go to the application's admin page
-      When follow "Delete" within the API Credentials' first application key
+      When follow "Delete" that belongs to application key "key-1"
       And wait a moment
       Then there is 1 key
 

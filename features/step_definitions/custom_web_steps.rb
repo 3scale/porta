@@ -15,14 +15,6 @@ def matches_path?(url, path)
   url =~ /^(?:https?:\/\/[^\/]+)?#{Regexp.quote(path)}/
 end
 
-Then(/^I should see within "([^"]*)" the following:$/) do |selector, table|
-  within selector do
-    table.rows.flatten.each do |item|
-      step %(I should see "#{item}")
-    end
-  end
-end
-
 #TODO: turn steps into the use of the 'the'
 Then /^I should see (?:|the )link "([^"]*)" containing "([^"]*)" in the URL$/ do |label, params|
   params = params.split
@@ -135,30 +127,48 @@ Then "they should be able to go to the following pages:" do |table|
   end
 end
 
+# Confine any one step within a specific css selector from features/support/selectors.rb
+# Due to incompatibilities (FIXME?) this step do not support selectors with double quotes. If the
+# desired selector has double quotes, use the "belongs to" step instead.
+#
+#   When they follow "Application 001" within the table body
+#   Then should see the following table within the features:
+#     | Name         | Description                                |
+#     | Free T-shirt | T-shirt with logo of our company for free. |
+#
 When /^(.*) within ([^:"]+)$/ do |lstep, scope|
   within(*selector_for(scope)) do
-    step lstep
+    step(lstep)
   end
 end
 
+# Same as above, but with a data-table.
+#
 When /^(.*) within ([^:"]+):$/ do |lstep, scope, table|
   within(*selector_for(scope)) do
     step(lstep, table)
   end
 end
 
+# Confine any one step within a specific css selector from features/support/selectors.rb
+# This step supports selectors with double quotes.
+#
+#   When they follow "Delete" that belongs to application key "key-1"
+#   Then should see the following table that belongs to metric "Hits" usage limits:
+#     | Period   | Value |
+#     | 1 minute | 10    |
+#
 When /^(.*) that belongs to ([^:]+)$/ do |lstep, scope|
   within(*selector_for(scope)) do
-    step lstep
+    step(lstep)
   end
 end
 
-[ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the main menu' ].each do |scope|
-  When /^(.*) in (#{scope})$/ do |lstep, scope|
-    within(*selector_for(scope)) do
-      step lstep
-    end
+# Same as above, but with a data-table.
+#
+When /^(.*) that belongs to ([^:]+):$/ do |lstep, scope, table|
+  within(*selector_for(scope)) do
+    step(lstep, table)
   end
 end
 
