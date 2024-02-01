@@ -2,7 +2,7 @@ module ThreeScale
   class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::BotProtection::Form
 
-    delegate :tag, to: :template
+    delegate :tag, :site_account, :controller, to: :template
 
     # Allow specify how to display errors for the input
     #
