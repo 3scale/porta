@@ -74,7 +74,7 @@ Feature: Audience > Accounts > Listing > Account > Applications > New
   Scenario: Submit button should be disabled until form is filled
     Given they go to buyer "Jane" new application page
     And the submit button is disabled
-    When they select "API" from "Product"
+    When they select "My API" from "Product"
     And the submit button is disabled
     And select "Basic" from "Application plan"
     And the submit button is disabled
