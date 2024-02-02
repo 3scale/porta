@@ -13,6 +13,8 @@ module ThreeScale
       class TestFormBuilder < ::Formtastic::FormBuilder
         include ThreeScale::BotProtection::Form
 
+        delegate :controller, to: :template
+
         def bot_protection
           bot_protection_inputs
         end
