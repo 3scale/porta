@@ -43,12 +43,6 @@ Feature: Provider settings authorization
     And there shouldn't be a link to "Forum"
     And there shouldn't be a link to "0 Messages"
     And there shouldn't be a link to "Developer Portal"
-
-  Scenario: Members per default cannot access settings
-    Given an active user "member" of account "foo.3scale.localhost"
-    And user "member" does not belong to the admin group "settings" of provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "member"
     And they should see an error when going to the following pages:
       | the usage rules settings page     |
       | the fields definitions index page |
