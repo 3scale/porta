@@ -7,10 +7,15 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     @service_plan     = FactoryBot.create(:service_plan, issuer: service)
     @application_plan = FactoryBot.create(:application_plan, issuer: service)
 
+    new_service = FactoryBot.create(:simple_service, account: current_account)
+    @new_service_plan     = FactoryBot.create(:service_plan, issuer: new_service)
+    @new_application_plan = FactoryBot.create(:application_plan, issuer: new_service)
+
     @buyer            = FactoryBot.create(:buyer_account, provider_account: current_account)
     @service_contract = FactoryBot.create(:simple_service_contract, plan: @service_plan, user_account: @buyer)
 
     @buyer.buy! @application_plan
+    @buyer.buy! @new_application_plan
 
     @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: 'account_management').value
     host! current_account.internal_admin_domain
@@ -23,6 +28,38 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
 
       xml = Nokogiri::XML::Document.parse(response.body)
       assert xml.xpath('.//service_contracts/service-contract/id').text == @service_contract.id.to_s
+    end
+
+    def test_success_subscribe
+      post admin_api_account_service_contracts_path(
+        account_id: @buyer.id,
+        format: :xml,
+        access_token: @token,
+        service_contract: { plan_id: @new_service_plan.id }
+      )
+      assert_response :success
+    end
+
+    def test_already_subscribed
+      post admin_api_account_service_contracts_path(
+        account_id: @buyer.id,
+        format: :xml,
+        access_token: @token,
+        service_contract: { plan_id: @service_plan.id }
+      )
+      assert_response :unprocessable_entity
+      assert_match "already subscribed to this service", response.body
+    end
+
+    def test_failure_subscribe
+       post admin_api_account_service_contracts_path(
+        account_id: current_account.id,
+        format: :xml,
+        access_token: @token,
+        service_contract: { plan_id: @service_plan.id }
+      )
+      assert_response :unprocessable_entity
+      assert_match "Buyer not found with this account ID", response.body
     end
 
     def test_success_unsubscribe
