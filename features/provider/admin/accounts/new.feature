@@ -2,7 +2,7 @@
 Feature: Provider accounts management
 
   Background:
-    Given a master admin with extra fields is logged in
+    Given master admin is logged in
 
   Scenario: Navigation via empty state action
     Given the current page is the provider dashboard

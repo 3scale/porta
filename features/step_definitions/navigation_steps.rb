@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
-  step 'I navigate to the accounts page'
+  click_link(href: admin_buyers_accounts_path)
   click_link partner
 end
 
@@ -17,27 +17,12 @@ end
 
 When "I should not see forum" do
   visit forum_path
-  step 'I should see "Page not found"'
-end
-
-When /^I navigate to the forum admin page$/ do
-  click_link 'Messages'
-  click_link 'Forum'
-  click_link 'Threads'
-end
-
-When /^I navigate to the forum categories admin page$/ do
-  step "I navigate to the forum admin page"
-  click_link "Categories"
-end
-
-When /^I navigate to the forum my posts admin page$/ do
-  step "I navigate to the forum admin page"
-  click_link "My Threads"
+  assert_text "Page not found"
 end
 
 When "I navigate to the {application} of the partner {string}" do |app, partner|
-  step %(I navigate to the page of the partner "#{partner}")
+  click_link(href: admin_buyers_accounts_path)
+  click_link partner
   within '#applications_widget' do
     find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
   end
@@ -46,8 +31,9 @@ end
 When "they are reviewing the provider's application details" do
   provider = Account.providers.first!
   app = provider.bought_cinstances.first!
-  step %(I navigate to the page of the partner "#{provider.org_name}")
-  step 'I go to the admin portal applications page'
+  click_link(href: admin_buyers_accounts_path)
+  click_link provider.org_name
+  visit provider_admin_applications_path
   find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
 end
 

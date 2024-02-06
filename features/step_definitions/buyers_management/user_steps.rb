@@ -2,20 +2,20 @@
 
 Then "I should see {user}" do |user|
   within "#users ##{dom_id(user)}" do
-    step %(I should see "#{user.username}")
+    assert_content user.username
   end
 end
 
 #TODO: move buyer users steps outta here?
 Then "I should see buyer {user}" do |user|
   within "#buyer_users ##{dom_id(user)}" do
-    step %(I should see "#{user.username}")
+    assert_content user.username
   end
 end
 
 Then /^I should not see buyer user "([^"]*)"$/ do |user_name|
   within "#buyer_users" do
-    step %(I should not see "#{user_name}")
+    assert_no_content user_name
   end
 end
 
@@ -46,10 +46,10 @@ Then "I should not see button to unsuspend buyer {user}" do |user|
 end
 
 When /^I navigate to the edit page of user "([^\"]*)" of buyer "([^\"]*)"$/ do |user, buyer|
-  step 'I navigate to the accounts page'
-  step %(I follow "#{buyer}")
+  click_link(href: admin_buyers_accounts_path)
+  click_link buyer
   number_of_users = @provider.buyers.where(org_name: buyer).first!.users.count
-  step %(I follow "#{number_of_users} Users")
+  click_link "#{number_of_users} Users"
   find('tr', text: user).click_link('Edit')
 end
 

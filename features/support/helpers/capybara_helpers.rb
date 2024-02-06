@@ -22,6 +22,25 @@ module CapybaraHelpers
     end
     requests.first.status_code.should == status_code
   end
+
+  def assert_page_has_content(text)
+    regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
+    if page.respond_to? :should
+      page.should have_content(regex)
+    else
+      assert page.has_content?(regex)
+    end
+  end
+
+  def assert_page_has_no_content(text)
+    regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
+    refute_text :visible, regex
+  end
+
+  def assert_current_domain(domain)
+    uri = URI.parse(current_url)
+    assert_equal domain, uri.host
+  end
 end
 
 World(CapybaraHelpers)

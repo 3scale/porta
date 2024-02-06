@@ -37,12 +37,7 @@ When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"$/ do |any, i
 end
 
 Then /^(?:|I |they )should see "([^"]*)"$/ do |text|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  if page.respond_to? :should
-    page.should have_content(regex)
-  else
-    assert page.has_content?(regex)
-  end
+  assert_page_has_content text
 end
 
 Then "the page should contain {string}" do |text|
@@ -65,8 +60,7 @@ Then "they {should} be able to see {css_selector}" do |visible, selector|
 end
 
 Then /^(?:|I |they )should not see "([^"]*)"$/ do |text|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  refute_text :visible, regex
+  assert_page_has_no_content text
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|

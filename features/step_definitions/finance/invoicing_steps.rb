@@ -55,17 +55,29 @@ Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
 end
 
 Then /^the buyer should have (\d+) invoices?$/ do |number|
-  step 'the buyer logs in to the provider'
-  step 'I navigate to invoices issued for me'
+  set_current_domain @provider.external_domain
+  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  visit admin_account_invoices_path
 
-  step "I should see #{number} invoice"
+  assert_selector(:css, 'tr.invoice', count: number.to_i)
 end
 
-Then /^the buyer should have following line items for "([^"]*)"(?: in the( \d(?:nd|st|rd|th)))? invoice:$/ do |date, order, items|
-  step 'the buyer logs in to the provider'
-  step 'I navigate to invoices issued for me'
-  step %(I navigate to#{order} invoice issued for me in "#{date}")
-  step 'I should see line items', items
+Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
+  set_current_domain @provider.external_domain
+  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  visit admin_account_invoices_path
+
+  order ||= '1'
+
+  # this is kind of hack as it supposes only 1 buyer!
+  invoice_id = Time.zone.parse(date).strftime("%Y-%m-0000000#{order}")
+
+  visit admin_account_invoices_path
+  assert_page_has_content date
+  click_link "Show #{invoice_id}"
+  assert_page_has_content date
+
+  assert_line_items(items)
 end
 
 Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
@@ -73,12 +85,15 @@ Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
 end
 
 Then(/^I should have (\d+) invoices?$/) do |count|
-  step %(I navigate to invoices issued for me)
-  step %(I should see #{count} invoices)
+  assert_equal count, current_account.invoices.visible_for_buyer.size
 end
 
 # TODO: change to accept REGEXPs! (use page.body and assert)
 Then(/^I should see line items$/) do |items|
+  assert_line_items(items)
+end
+
+def assert_line_items(items)
   items.hashes.each_with_index do |line, i|
     name = line['name']
     cost = line['cost']
@@ -117,8 +132,9 @@ Then(/^I should see invoice in state "([^"]*)"$/) do |state|
 end
 
 When(/^I see my invoice from "([^"]*)" is "([^"]*)"$/) do |month, state|
-  step %(I navigate to invoice issued FOR me in "#{month}")
-  step %(I should see invoice in state "#{state}")
+  visit admin_account_invoices_path
+  click_link "Show #{Time.zone.parse(month).strftime('%Y-%m-00000001')}"
+  page.should have_css('dl', text: state.capitalize)
 end
 
 Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
@@ -145,10 +161,8 @@ end
 
 Given(/^an invoice of the buyer with a total cost of (\d+)/) do |cost|
   date = Time.zone.now.strftime('%B, %Y')
-  step %(an invoice of buyer "bob" for #{date} with items:), table(<<-TABLE)
-  | name   | cost |
-  | Custom | #{cost} |
-  TABLE
+  invoice = create_invoice(@buyer, date)
+  invoice.line_items.create!({ name: 'Custom', cost: cost })
 end
 
 Then(/^I should see in the invoice period for the column "(in process|overdue|paid|total)" a cost of (\d+\.\d+) (\w+)$/) do |column, cost, money|
@@ -160,8 +174,9 @@ Then(/^I should see in the invoice period for the column "(in process|overdue|pa
 end
 
 Then(/there is only one invoice for "([^"]*)"/) do |date|
-  step 'the buyer logs in to the provider'
-  step 'I navigate to invoices issued for me'
+  set_current_domain @provider.external_domain
+  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  visit admin_account_invoices_path
   nodes = page.find_all(:xpath, ".//tr[contains(@class,'invoice')]/td[contains(text(), '#{date}')]")
   assert_equal 1, nodes.count
 end

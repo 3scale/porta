@@ -76,7 +76,7 @@ Feature: User management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
-    Then I should see "member" for user "bob"
+    Then I should see "member" that belongs to user "bob"
     When I follow "Edit" for user "bob"
     And I choose "Admin" in the user role field
     And I press "Update User"
@@ -97,7 +97,7 @@ Feature: User management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
-    Then I should not see "delete" for user "foo.3scale.localhost"
+    Then I should not see "delete" that belongs to user "foo.3scale.localhost"
 
   Scenario: Admin cannot edit his/her own role
     And current domain is the admin domain of provider "foo.3scale.localhost"

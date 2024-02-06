@@ -40,6 +40,12 @@ module SessionHelper
     find(:css, '[aria-label="Session toggle"]').click
     click_link 'Sign Out'
   end
+
+  def assert_current_user(username)
+    @user = User.find_by(username: username)
+    message = "Expected #{username} to be logged in, but is not"
+    assert has_content?(/Signed (?:in|up) successfully/i), message
+  end
 end
 
 World(SessionHelper)

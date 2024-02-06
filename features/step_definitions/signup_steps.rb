@@ -6,7 +6,7 @@ end
 
 When /^I fill in the invitation signup with email "([^"]*)"$/ do | email |
   fill_in("Email", :with => email)
-  step %(I fill in the invitation signup as "#{email}")
+  fill_in_invitation_signup(email)
 end
 
 When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
@@ -16,7 +16,18 @@ When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
   click_button "Sign up"
 end
 
+def fill_in_invitation_signup(username)
+  fill_in("Username", :with => username)
+  fill_in("Password", :with => "supersecret")
+  fill_in("Password confirmation", :with => "supersecret")
+  click_button "Sign up"
+end
+
 When /^I fill in the signup fields as "([^"]*)"$/ do |name|
+  fill_in_signup_fields_as(name)
+end
+
+def fill_in_signup_fields_as(name)
   fill_in('Username', with: name)
   fill_in('Email', with: "#{name}@3scale.localhost")
   fill_in('Organization/Group Name', with: "#{name}'s stuff")
@@ -27,13 +38,13 @@ When /^I fill in the signup fields as "([^"]*)"$/ do |name|
 end
 
 When /^I fill in the invalid signup fields( in a non-suspicious way)?$/ do |non_suspicious|
-  step %(15 seconds pass) if non_suspicious
-  step %(I fill in "Email" with "invalid email")
-  step %(I press "Sign up")
+  pass_time(15, 'seconds') if non_suspicious
+  fill_in('Email', with: 'invalid email')
+  click_button 'Sign up'
 end
 
 When /^(?:I|someone) (?:signup|signs up) with the email "([^"]*)"$/ do |email|
-  step "I go to the sign up page"
+  visit signup_path
   fill_in "Username", :with => email.gsub(/[^\w]/, '-')
   fill_in "Email", :with => email
   fill_in "Organization/Group Name", :with => email.gsub(/[^\w]/, '-')
@@ -58,12 +69,9 @@ When /^I have a cas token in my session$/ do
 end
 
 When /^I fill and send the missing data for the signup page$/ do
-  steps <<-GHERKIN
-    Then I should be at url for the signup page
-    When I fill in the following:
-      | Organization/Group Name | Planet eXpress |
-    And I press "Sign up"
-  GHERKIN
+  assert_current_path signup_path
+  fill_in('Organization/Group Name', with: 'Planet eXpress')
+  click_button 'Sign up'
 end
 
 def password_field
@@ -85,17 +93,4 @@ module ReadonlyField
     xpath = descendant(:input)[attr(:readonly)] # rubocop:disable Style/Attr
     locate_field(xpath, locator)
   end
-end
-
-Then "the buyer doesn't need to pass the captcha after signup form is filled wrong" do
-  step %(15 seconds pass)
-  step %(I fill in "Email" with "invalid email")
-  step %(I press "Sign up")
-  step %(I should not see the captcha)
-end
-
-Then "the buyer will need to pass the captcha after signup form is filled in too quickly" do
-  fill_in("confirmation", with: "1")
-  step %(I fill in the signup fields as "hugo")
-  step %(I should see the captcha)
 end

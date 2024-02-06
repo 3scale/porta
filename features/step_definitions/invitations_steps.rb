@@ -29,7 +29,7 @@ end
 
 When(/^I follow the link to signup provider "(.*?)" in the invitation sent to "(.*?)"$/) do |provider, address|
   open_email(address)
-  step %(current domain is the admin domain of provider "#{provider}")
+  set_current_domain(Account.find_by(org_name: provider).external_admin_domain)
   click_first_link_in_email
 end
 
@@ -37,7 +37,7 @@ end
 When "I press {string} for an invitation from {account} for {string}" do |label, account, email|
   invitation = account.invitations.find_by_email!(email)
   within "##{dom_id(invitation)}" do
-    step %(I follow "#{label}")
+    click_link(label)
   end
 end
 
@@ -49,20 +49,26 @@ When(/^I resend the invitation to "([^\"]*)"$/) do |email|
 end
 
 When(/^I send "([^"]*)" an invitation to account "([^"]*)"$/) do |address, org_name|
-  step %(I navigate to the page of the invitations of the partner "#{org_name}")
-  step %(I send an invitation to "#{address}")
+  click_link(href: admin_buyers_accounts_path)
+  click_link org_name
+  find('a', text: /invitations?/i, match: :one).click
+  click_link 'Invite user'
+  @invitee_email = address
+  fill_in('Send invitation', with: address)
+  click_button 'Send'
 end
 
 When(/^I navigate to the page of the invitations of the partner "([^\"]*)"$/) do |_org_name|
-  step %(I navigate to the page of the partner "lol cats")
+  click_link(href: admin_buyers_accounts_path)
+  click_link 'lol cats'
   find('a', text: /invitations?/i, match: :one).click
 end
 
 When(/^I send an invitation to "([^\"]*)"$/) do |address|
-  step %(I follow "Invite user")
+  click_link 'Invite user'
   @invitee_email = address
-  step %(I fill in "Send invitation to" with "#{address}")
-  step %(I press "Send")
+  fill_in('Send invitation', with: address)
+  click_button 'Send'
 end
 
 # this compound When/Then steps are a result of the exception raising of the When step,
@@ -73,7 +79,7 @@ When(/^I request the url of the invitations of the partner "([^\"]*)"$/) do |org
 end
 
 When(/^I send a provider invitation to "([^\"]*)"$/) do |address|
-  step %(I navigate to the Account Settings)
+  select_context 'Account Settings'
   visit provider_admin_account_users_path
 
   click_link 'Invite a New User'
@@ -91,7 +97,7 @@ Then "an invitation with the admin domain of {account} should be sent to {string
 end
 
 Then(/^(?:the |)invitation (?:to|from) account "([^\"]*)" should be sent to "([^\"]*)"$/) do |org_name, email|
-  step %("#{email}" should receive an invitation to account "#{org_name}")
+  invitation_message_should_be_valid find_latest_email(to: email), Account.find_by(org_name: org_name)
 end
 
 Then(/^no invitation should be sent to "([^"]*)"$/) do |email|

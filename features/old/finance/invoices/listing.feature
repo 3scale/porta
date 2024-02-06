@@ -20,7 +20,7 @@ Feature: Provider lists all invoices
 
   @commit-transactions
   Scenario: Filter invoices
-    When I navigate to invoices issued by me
+    When I go to invoices issued by me
     Then I should see 10 invoices
     When I select "January" from "search[month_number]" within the search form
     And I press "Search"
@@ -28,7 +28,7 @@ Feature: Provider lists all invoices
     When I select "March" from "search[month_number]" within the search form
     And I press "Search"
     Then I should see 2 invoices
-    When I navigate to invoices issued by me
+    When I go to invoices issued by me
     Then I should see 10 invoices
     When I fill in "search[number]" with "2010-1*-*" within the search form
     And I press "Search"
@@ -39,7 +39,7 @@ Feature: Provider lists all invoices
     When I fill in "search[number]" with "2011-04-*" within the search form
     And I press "Search"
     Then I should see 2 invoices
-    When I navigate to invoices issued by me
+    When I go to invoices issued by me
     And I select "pending" from "search[state]" within the search form
     And I press "Search"
     Then I should see 8 invoices
@@ -50,7 +50,7 @@ Feature: Provider lists all invoices
     And select "2011" from "search[year]" within the search form
     And I press "Search"
     Then I should see 5 invoices
-    When I navigate to invoices issued by me
+    When I go to invoices issued by me
     And I follow "Account" within the table
     Then I should see 10 invoices
     Then I should see the first invoice belonging to "foobar"
@@ -60,5 +60,5 @@ Feature: Provider lists all invoices
 
   Scenario: Filter deleted accounts
     When account "mastermind" is deleted
-    And I navigate to invoices issued by me
+    And I go to invoices issued by me
     Then I should see 10 invoices

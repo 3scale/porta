@@ -5,7 +5,7 @@ When /^I follow the activation link in an email sent to "([^\"]*)"$/ do |email|
 end
 
 When "I follow the activation link in an email sent to {user}" do |user|
-  step %(I follow the activation link in an email sent to "#{user.email}")
+  visit_in_email(%r{http://[^/]+/(p/)?activate/[a-z0-9]+}, user.email)
 end
 
 When /^I visit a invalid activation link as a buyer$/ do

@@ -25,13 +25,13 @@ Feature: Provider lists all invoices
 
   Scenario: Filter invoices on other
       Given I log in as "other.3scale.localhost" on the admin domain of provider "other.3scale.localhost"
-      And I navigate to invoices issued by me
+      And I go to invoices issued by me
       Then I should see 7 invoices
 
   @commit-transactions
   Scenario: Filter invoices
       Given I log in as "xyz.3scale.localhost" on the admin domain of provider "xyz.3scale.localhost"
-        And I navigate to invoices issued by me
+        And I go to invoices issued by me
 
       Then I should see 10 invoices
 
@@ -45,7 +45,7 @@ Feature: Provider lists all invoices
 
       Then I should see 2 invoices
 
-      When I navigate to invoices issued by me
+      When I go to invoices issued by me
       Then I should see 10 invoices
 
       When I fill in "search[number]" with "2010-1*-*" within the search form
@@ -63,7 +63,7 @@ Feature: Provider lists all invoices
 
       Then I should see 2 invoices
 
-      When I navigate to invoices issued by me
+      When I go to invoices issued by me
         And I select "pending" from "search[state]" within the search form
         And I press "Search"
 
@@ -84,6 +84,6 @@ Feature: Provider lists all invoices
     Given account "mastermind" is deleted
 
     Given I log in as "xyz.3scale.localhost" on the admin domain of provider "xyz.3scale.localhost"
-      And I navigate to invoices issued by me
+      And I go to invoices issued by me
 
      Then I should see 10 invoices

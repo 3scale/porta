@@ -44,10 +44,16 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
 end
 
 Given "a buyer {string} signed up to {provider}" do |account_name, provider|
-  step %(an approved buyer "#{account_name}" signed up to provider "#{provider.org_name}")
+  @buyer = pending_buyer(provider, account_name)
+  @buyer.approve! unless @buyer.approved?
 end
 
 Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|
+  pending_buyer(provider, account_name)
+end
+
+def pending_buyer(provider, account_name)
+  # TODO: Refactor this method into a factory
   buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
                   :org_name => account_name,
                   :buyer => true)
@@ -55,26 +61,18 @@ Given "a pending buyer {string} signed up to {provider}" do |account_name, provi
 
   buyer.make_pending!
   assert buyer.pending?
+
+  buyer
 end
 
 Given "an approved buyer {string} signed up to {provider}" do |account_name, provider|
-  step %(a pending buyer "#{account_name}" signed up to provider "#{provider.org_name}")
-
-  @buyer = provider.buyer_accounts.find_by!(org_name: account_name)
+  @buyer = pending_buyer(provider, account_name)
   @buyer.approve! unless @buyer.approved?
 end
 
 Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
-  step %(a pending buyer "#{account_name}" signed up to provider "#{provider.org_name}")
-
-  account = provider.buyer_accounts.find_by!(org_name: account_name)
+  account = pending_buyer(provider, account_name)
   account.reject!
-end
-
-Given /^these buyers signed up to provider "([^"]*)"$/ do |provider_name, table|
-  table.raw.each do |row|
-    step %(a buyer "#{row[0]}" signed up to provider "#{provider_name}")
-  end
 end
 
 Given "{buyer} has extra fields:" do |buyer, table|
@@ -154,11 +152,6 @@ When "{provider_or_buyer} changes to {plan}" do |account, plan|
   end
 end
 
-# Just an alias, to be more explicit.
-Then /^buyer "([^\"]*)" should be (pending|approved|rejected)$/ do |name, state|
-  step %(account "#{name}" should be #{state})
-end
-
 Then /^I should not see the timezone field$/ do
   assert has_no_xpath? "//*[@id='account_timezone']"
 end
@@ -176,34 +169,22 @@ def login_form
 end
 
 When(/^a buyer signs up/) do
-  step 'the current domain is foo.3scale.localhost'
-  step %(I go to the sign up page)
-  step %(I fill in the signup fields as "supertramp")
-end
-
-And /^application plan is paid$/ do
-  step 'plan "Metal" has a monthly fee of 100'
+  set_current_domain 'foo.3scale.localhost'
+  visit signup_path
+  fill_in_signup_fields_as 'supertramp'
 end
 
 When(/^the buyer logs in to the provider$/) do
-  username = @buyer.admins.first.username
-  steps %(
-    When the current domain is #{@provider.external_domain}
-    And I go to the login page
-    And I fill in "Username" with "#{username}"
-    And I fill in "Password" with "supersecret"
-    And I press "Sign in"
-    And I should be logged in as "#{username}"
-  )
-  @current_user = User.find_by!(username: username)
+  set_current_domain @provider.external_domain
+  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
 end
 
 When(/^I should be warned to complete my signup$/) do
-  step 'I should see "To complete your signup, please fill in your credit card details."'
+  assert_text "To complete your signup, please fill in your credit card details."
 end
 
 When(/^as a developer$/) do
-  step 'the current domain is foo.3scale.localhost'
+  set_current_domain 'foo.3scale.localhost'
 end
 
 When "the developer tries to log in" do
@@ -227,13 +208,13 @@ When "the buyer is reviewing their account details" do
 end
 
 When "the buyer wants to log in" do
-  step 'the current domain is foo.3scale.localhost'
-  step 'I go to the login page'
+  set_current_domain 'foo.3scale.localhost'
+  visit login_path
 end
 
 When "the buyer wants to sign up" do
-  step 'the current domain is foo.3scale.localhost'
-  step 'I go to the sign up page'
+  set_current_domain 'foo.3scale.localhost'
+  visit signup_path
 end
 
 Given "the following buyers with service subscriptions signed up to {provider}:" do |provider, table|
@@ -251,8 +232,8 @@ Given "the following buyers with service subscriptions signed up to {provider}:"
 end
 
 Given "a buyer {string} signed up to {service}" do |name, service|
-  provider = service.account
-  step %(a buyer "#{name}" signed up to provider "#{provider.name}")
+  @buyer = pending_buyer(service.account, name)
+  @buyer.approve! unless @buyer.approved?
 
   plans = service.service_plans
   plan = plans.default_or_first || plans.first

@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 When "{buyer} makes {amount} service transaction(s) with:" do |buyer_account, count, table|
+  buyer_makes_service_transactions(buyer_account, count, table)
+end
+
+Given "{buyer} made {int} service transactions {int} hours ago:" do |buyer, count, hours, table|
+  travel_to(hours.hours.ago)
+  access_user_sessions
+  buyer_makes_service_transactions(buyer, count, table)
+end
+
+def buyer_makes_service_transactions(buyer_account, count, table)
   cinstance = buyer_account.reload.bought_cinstance
   provider_account = buyer_account.provider_account
 
@@ -13,12 +23,6 @@ When "{buyer} makes {amount} service transaction(s) with:" do |buyer_account, co
                                  :cinstance_id => cinstance.id,
                                  :usage => usage)
   end
-end
-
-Given "{buyer} made {int} service transactions {int} hours ago:" do |buyer, count, hours, table|
-  travel_to(hours.hours.ago)
-  access_user_sessions
-  step %(buyer "#{buyer.name}" makes #{count} service transactions with:), table
 end
 
 Given "the backend responds to a utilization request for {application} with:" do |application, table|

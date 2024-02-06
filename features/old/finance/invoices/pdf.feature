@@ -19,7 +19,7 @@ Feature: Invoice PDFs
   Scenario: Provider side links on the invoice index and details
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
-    When I navigate to invoices issued by me for "bob"
+    When I go to invoices issued by me for "bob"
     Then I should see secure PDF link for invoice 2011-08-00000001
     When I navigate to invoice 2011-08 issued by me for "bob"
     Then I should see secure PDF link for the shown invoice

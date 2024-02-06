@@ -16,7 +16,7 @@ Feature: Provider manages line items
     And an invoice of buyer "zoidberg" for February, 2009 with items
       | name | cost |
       | Old  | 42   |
-    And I navigate to my earnings
+    And I go to my earnings
     And I follow "February, 2009"
     And I follow "2009-02-00000001"
 

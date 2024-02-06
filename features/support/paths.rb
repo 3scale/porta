@@ -612,7 +612,9 @@ World(Module.new do
       buyer_access_details_path
 
     # Provider - Finance
-    when 'the finance page', 'the invoices by months page'
+    when 'the finance page',
+         'the invoices by months page',
+         /my (?:earnings|revenue)/
       admin_finance_root_path
 
     when /(the )?finance settings( page)?/
@@ -622,11 +624,13 @@ World(Module.new do
          /^the invoices page$/
       admin_account_invoices_path
 
-    when /^the invoices of account "(.+?)" page$/
+    when /^the invoices of account "(.+?)" page$/,
+         /^invoices issued by me for "([^"]*)"$/
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^all provider's invoices page$/
+    when /^all provider's invoices page$/,
+         /invoices issued by me/
       admin_finance_invoices_path
 
     when /^the invoice "(.+?)" page$/

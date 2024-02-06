@@ -29,10 +29,9 @@ Feature: Buyer signup
     And the provider has "service_plans" allowed
     And the default product of the provider has name "API"
     And the following application plan:
-      | Product | Name  |
-      | API     | Metal |
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
     And a buyer "Alexander" signed up to application plan "Metal"
-    And application plan is paid
     And the provider has credit card on signup feature in automatic mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch visible
@@ -46,10 +45,9 @@ Feature: Buyer signup
     And the provider has "service_plans" allowed
     And the default product of the provider has name "API"
     And the following application plan:
-      | Product | Name  |
-      | API     | Metal |
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
     And a buyer "Alexander" signed up to application plan "Metal"
-    And application plan is paid
     And the provider has credit card on signup feature in manual mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch hidden
@@ -64,10 +62,9 @@ Feature: Buyer signup
     And the provider has "service_plans" allowed
     And the default product of the provider has name "API"
     And the following application plan:
-      | Product | Name  |
-      | API     | Metal |
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
     And a buyer "Alexander" signed up to application plan "Metal"
-    And application plan is paid
     And the provider has credit card on signup feature in manual mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch hidden

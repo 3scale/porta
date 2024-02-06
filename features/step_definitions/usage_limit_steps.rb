@@ -60,13 +60,6 @@ Then "{plan} should not have hourly usage limit for metric {string}" do |plan, m
   assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
 end
 
-When "I {word} {string} for the hourly usage limit for {metric_on_application_plan}" do |action, label, metric|
-  usage_limit = metric.usage_limits.find_by_period('hour')
-  within "##{dom_id(usage_limit)}" do
-    step %(I #{action} "#{label}")
-  end
-end
-
 def metrics_container
   find(:css, '#metrics')
 end

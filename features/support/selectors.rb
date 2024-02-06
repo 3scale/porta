@@ -62,6 +62,12 @@ module HtmlSelectorsHelper
     when /authentication methods/
       '#service_proxy_authentication_method_input'
 
+    when /the hourly usage limit for metric "(.*)" on application plan "(.*)"/
+      plan = ApplicationPlan.find_by!(name: $2)
+      metric = plan.metrics.find_by!(system_name: $1)
+      usage_limit = metric.usage_limits.find_by!(period: 'hour')
+      "##{dom_id(usage_limit)}"
+
     #
     # Application
     #
@@ -104,6 +110,12 @@ module HtmlSelectorsHelper
 
     when /the plan card/
       '#plan-widget-with-actions'
+
+    #
+    # Users
+    #
+    when /user "(.*)"/
+      "#user_#{User.find_by(username: $1).id}"
 
     #
     # Dev portal

@@ -37,7 +37,7 @@ Feature: Usage limits
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 2000
     When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
-     And I follow "Edit" for the hourly usage limit for metric "hits" on application plan "Basic"
+     And I follow "Edit" that belongs to the hourly usage limit for metric "hits" on application plan "Basic"
      And I fill in "Max. value" with "3000"
      And I press "Update usage limit"
     Then I should see a usage limit of 3000 for metric "hits" on application plan "Basic" per "1 hour"
@@ -47,7 +47,7 @@ Feature: Usage limits
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 2000
     When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
-     And I follow "Edit" for the hourly usage limit for metric "hits" on application plan "Basic"
+     And I follow "Edit" that belongs to the hourly usage limit for metric "hits" on application plan "Basic"
      And I select "day" from "Period"
      And I press "Update usage limit"
     Then I should see a usage limit of 2000 for metric "hits" on application plan "Basic" per "1 day"
@@ -57,7 +57,7 @@ Feature: Usage limits
     Given an usage limit on plan "Basic" for metric "hits" with period hour and value 1500
     When I go to plan "Basic" admin edit page
      And I follow "Limits (1)" for metric "hits" on application plan "Basic"
-     And I press "Delete" for the hourly usage limit for metric "hits" on application plan "Basic"
+     And I press "Delete" that belongs to the hourly usage limit for metric "hits" on application plan "Basic"
     Then I should not see hourly usage limit for metric "hits"
      And plan "Basic" should not have hourly usage limit for metric "hits"
 

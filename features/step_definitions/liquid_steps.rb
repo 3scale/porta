@@ -3,23 +3,26 @@ Given /^the provider has cms page "(.*?)" with:$/ do |path, content|
 end
 
 Given /^I visit a page showing the current user's SSO data$/ do
-  steps <<-GHERKIN
-    Then I should be logged in the Development Portal
-    Given the provider has cms page "/sso_authorizations" with:
-      """
-      {% for authorization in current_user.sso_authorizations %}
-        <p><strong>{{ authorization.authentication_provider_system_name }}</strong>: {{ authorization.id_token }}</p>
-      {% endfor %}
-      """
-    And I visit "/sso_authorizations"
-  GHERKIN
+  assert_current_user 'foo'
+  assert_current_path '/'
+
+  content = '{% for authorization in current_user.sso_authorizations %}\n
+               <p><strong>{{ authorization.authentication_provider_system_name }}</strong>: {{ authorization.id_token }}</p>\n
+             {% endfor %}'
+  FactoryBot.create(:cms_page, provider: @provider,
+                               path: '/sso_authorizations',
+                               published: content,
+                               liquid_enabled: true)
+  visit '/sso_authorizations'
 end
 
 Given /^I'm logged in as a malicious buyer$/ do
-  step "the current domain is #{@provider.external_domain}"
-  step %|a buyer "malicious_buyer" of provider "#{@provider.org_name}"|
-  Account.buyers.last!.update_attribute(:org_name, 'malicious <script></script>buyer')
-  step 'I am logged in as "malicious_buyer"'
+  buyer_name = "malicious_buyer"
+  set_current_domain @provider.external_domain
+  @account = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: buyer_name)
+  @account.buy!(@provider.account_plans.default)
+  @account.update_attribute(:org_name, 'malicious <script></script>buyer')
+  try_buyer_login_internal(buyer_name, 'supersecret')
 end
 
 When /^provider has xss protection enabled$/ do
@@ -55,6 +58,6 @@ end
 
 Then /^the html should contain the SSO data$/ do
   authorization = User.find_by(email: 'foo@3scale.localhost').sso_authorizations.last!
-  step "the html body should contain \"#{authorization.authentication_provider.system_name}\""
-  step "the html body should contain \"#{authorization.id_token}\""
+  page.find('body').native.to_s.should match(authorization.authentication_provider.system_name)
+  page.find('body').native.to_s.should match(authorization.id_token)
 end

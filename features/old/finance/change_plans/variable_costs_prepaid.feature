@@ -51,7 +51,7 @@ Feature: Change plan
       When time flies to 16th May 2009
        And current domain is the admin domain of provider "foo.3scale.localhost"
        And I log in as provider "foo.3scale.localhost"
-       And I navigate to my earnings
+       And I go to my earnings
      Then I should have an invoice of "1.0 EUR"
       Then buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
