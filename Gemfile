@@ -56,8 +56,6 @@ gem 'sidekiq-batch'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-throttled'
 
-gem 'sidekiq-prometheus-exporter'
-
 # Yabeda metrics
 gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'

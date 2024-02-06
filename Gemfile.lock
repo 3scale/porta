@@ -758,9 +758,6 @@ GEM
     sidekiq-cron (1.9.1)
       fugit (~> 1.8)
       sidekiq (>= 4.2.1)
-    sidekiq-prometheus-exporter (0.2.0)
-      rack (>= 1.6.0)
-      sidekiq (>= 4.1.0)
     sidekiq-throttled (0.15.0)
       concurrent-ruby
       redis-prescription
@@ -1039,7 +1036,6 @@ DEPENDENCIES
   sidekiq (~> 6.4.0)
   sidekiq-batch
   sidekiq-cron
-  sidekiq-prometheus-exporter
   sidekiq-throttled
   simplecov (~> 0.21.2)
   slim-rails (~> 3.2)
