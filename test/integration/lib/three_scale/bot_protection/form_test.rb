@@ -14,17 +14,13 @@ module ThreeScale
         include ThreeScale::BotProtection::Form
 
         delegate :controller, to: :template
-
-        def bot_protection
-          bot_protection_inputs
-        end
       end
 
       class TestController < ApplicationController
         def new
           template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, self)
           form = TestFormBuilder.new(:account, Account.new, template, {})
-          render plain: form.bot_protection
+          render plain: form.bot_protection_inputs
         end
       end
 

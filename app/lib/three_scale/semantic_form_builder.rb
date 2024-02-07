@@ -4,8 +4,6 @@ module ThreeScale
 
     delegate :tag, :site_account, :controller, to: :template
 
-    alias bot_protection bot_protection_inputs
-
     # Allow specify how to display errors for the input
     #
     # Ex:

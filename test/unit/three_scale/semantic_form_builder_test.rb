@@ -85,7 +85,7 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     SemanticFormBuilder.any_instance.stubs(:bot_protection_enabled?).returns(true)
     account = FactoryBot.create(:buyer_account)
     buffer = TestOutputBuffer.new
-    buffer.concat(semantic_form_for(account, url: '', &:bot_protection))
+    buffer.concat(semantic_form_for(account, url: '', &:bot_protection_inputs))
 
     html_doc = Nokogiri::HTML4(buffer.output)
 
