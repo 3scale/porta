@@ -36,7 +36,7 @@ ParameterType(
 ParameterType(
   name: 'account',
   type: Account,
-  regexp: /provider|buyer|account "([^"]*)"/,
+  regexp: /(?:provider|buyer|account) "([^"]*)"/,
   transformer: ->(org_name) { Account.find_by!(org_name: org_name) }
 )
 
