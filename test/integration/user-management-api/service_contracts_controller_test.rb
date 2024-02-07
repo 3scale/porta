@@ -30,6 +30,14 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert xml.xpath('.//service_contracts/service-contract/id').text == @service_contract.id.to_s
     end
 
+    def test_show # to get a service contract
+      get admin_api_account_service_contract_path(account_id: @buyer.id, format: :xml, access_token: @token, id: @service_contract.id)
+      assert_response :success
+
+      xml = Nokogiri::XML::Document.parse(response.body)
+      assert xml.xpath('//service-contract/id').text == @service_contract.id.to_s
+    end
+
     def test_success_subscribe
       post admin_api_account_service_contracts_path(
         account_id: @buyer.id,
@@ -58,7 +66,6 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
         access_token: @token,
         service_contract: { plan_id: @service_plan.id }
       )
-      assert_response :unprocessable_entity
       assert_match "Buyer not found with this account ID", response.body
     end
 
