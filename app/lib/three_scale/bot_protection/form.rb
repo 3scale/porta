@@ -6,8 +6,6 @@ module ThreeScale
       include Base
       include Recaptcha::Adapters::ViewMethods
 
-      private
-
       def bot_protection_inputs
         return ''.html_safe unless bot_protection_enabled?
 

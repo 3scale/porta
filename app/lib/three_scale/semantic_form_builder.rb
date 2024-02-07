@@ -4,6 +4,8 @@ module ThreeScale
 
     delegate :tag, :site_account, :controller, to: :template
 
+    alias bot_protection bot_protection_inputs
+
     # Allow specify how to display errors for the input
     #
     # Ex:
@@ -104,11 +106,6 @@ module ThreeScale
       tag.div(class: 'pf-c-form__group pf-m-action') do
         tag.div(class: 'pf-c-form__actions', &block)
       end
-    end
-
-    # Just adds fields from bot protection module
-    def bot_protection
-      bot_protection_inputs
     end
   end
 end
