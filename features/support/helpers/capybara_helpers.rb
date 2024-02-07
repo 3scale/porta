@@ -20,6 +20,9 @@ module CapybaraHelpers
     requests = inspect_requests do
       visit path
     end
+    requests.each_with_index do |req, i|
+      puts i, req.url, req.status_code
+    end
     requests.first.status_code.should == status_code
   end
 

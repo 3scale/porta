@@ -55,7 +55,8 @@ Feature: Change plan
       Then buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      And I go to my earnings on 3rd June 2009
+      And time flies to 3rd June 2009
+      And I go to my earnings
       Then I should have an invoice of "11.0 EUR"
 
   @javascript

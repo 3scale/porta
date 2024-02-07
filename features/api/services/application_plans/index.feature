@@ -33,6 +33,7 @@ Feature: Product's application plans index page
     Scenario: Copying application plans
       When they select action "Copy" of "Public Plan"
       And they select action "Copy" of "Secret Plan"
+      And wait a moment
       Then they should see "Plan copied"
       And the table has the following row:
         | Name               | Contracts | State     |
@@ -44,6 +45,7 @@ Feature: Product's application plans index page
       And they go to the product's application plans admin page
       When they select action "Delete" of "Public Plan"
       And confirm the dialog
+      And wait a moment
       Then they should see "Plan was deleted"
       And the table should contain the following:
         | Name        | Contracts | State  |
@@ -70,6 +72,7 @@ Feature: Product's application plans index page
 
     Scenario: Hiding application plans
       When they select action "Hide" of "Public Plan"
+      And wait a moment
       Then they should see "Plan Public Plan was hidden"
       And the table has the following row:
         | Name        | State  |
@@ -81,6 +84,7 @@ Feature: Product's application plans index page
 
     Scenario: Publishing application plans
       When they select action "Publish" of "Secret Plan"
+      And wait a moment
       Then they should see "Plan Secret Plan was published"
       And the table has the following row:
         | Name        | State     |
