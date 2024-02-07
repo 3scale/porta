@@ -1309,6 +1309,47 @@
       }
     },
     "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
+      "get": {
+        "summary": "Service Subscription Show",
+        "description": "Retrieve details of a specific service contract.",
+        "tags": ["Accounts"],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
       "delete": {
         "summary": "Service Subscription Delete",
         "description": "Unsubscribe from a service. This endpoint will delete all the applications that are under the subscribed service.",
