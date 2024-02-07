@@ -1,3 +1,5 @@
+import type { QuickStart } from '@patternfly/quickstarts'
+
 import basicAPIintegration from './basicAPIintegration.yaml'
 import createBackend from './createBackend.yaml'
 import createProduct from './createProduct.yaml'
@@ -40,4 +42,4 @@ const resources = [
   trackUsageForAPIProduct
 ]
 
-export default resources
+export default resources as QuickStart[]

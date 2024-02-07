@@ -1,14 +1,12 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: learning-about-mapping-rules
-  # you can add additional metadata here
-  instructional: true
-  learnAbout3scaleFeatures: true
+  category: 3scale API Management features
 spec:
   displayName: Mapping rules
   durationMinutes: 5
 # Optional type section, will display as a tile on the card
-  type: 
+  type:
     text: Tour
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
@@ -26,7 +24,7 @@ spec:
   tasks:
     - title:  Learn about mapping rules
       description: |-
-      
+
         Mapping rules specify details about the usage data that you want to capture of method or metrics. With mapping rules, you can decide which API or API packages you want to assign to which method or metric and check the counting in the analytics section.
 
         Adding mapping rules to a method enables setting usage limits and pricing rules in each product’s application plan and an individual API endpoint connects to that API package.

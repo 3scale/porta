@@ -1,9 +1,7 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
   name: creating-a-mapping-rule-quick-start
-  # you can add additional metadata here
-  instructional: true
-  learningResources: true
+  category: Basic API integration setup
 spec:
   displayName: Create a mapping rule
   durationMinutes: 5
