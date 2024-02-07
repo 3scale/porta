@@ -20,10 +20,9 @@ module CapybaraHelpers
     requests = inspect_requests do
       visit path
     end
-    requests.each_with_index do |req, i|
-      puts i, req.url, req.status_code
-    end
-    requests.first.status_code.should == status_code
+    # HACK: the error page requests assets that return 200 and checking the first one is not always
+    # right. As an easy workaround, rule out requests with an url to assets.
+    requests.reject { |request| request.url&.include?('/assets/') }.first.status_code.should == status_code
   end
 
   def assert_page_has_content(text)

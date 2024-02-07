@@ -63,8 +63,8 @@ Feature: Account plans index page
       Given account plan "Public Plan" has 0 contracts
       And they go to the account plans admin page
       When they select action "Delete" of "Public Plan"
-      And wait a moment
       And confirm the dialog
+      And wait a moment
       Then they should see "Plan was deleted"
       And the table should contain the following:
         | Name        | Contracts | State  |
