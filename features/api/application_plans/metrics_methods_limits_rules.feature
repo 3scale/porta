@@ -17,7 +17,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
       | Complex rolls    |
       | Custom dice roll |
 
-  Scenario: Pricing rules are hidden when plan is free
+  Scenario: Pricing rules are hidden when billing disabled
     Given they go to application plan "Free" admin edit page
     Then they should see "Metrics, Methods & Limits"
 
