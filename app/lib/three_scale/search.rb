@@ -186,8 +186,8 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
     MAX_PER_PAGE = 20
 
     # By default sphinx paginates search results, and the default page size is 20.
-    # Setting to a high value "disables" sphinx-based pagination when full results are needed.
-    # e.g. Searchable::by_query scope which would not work properly otherwise.
+    # There’s no way to turn it off, but we can request really big pages as a workaround.
+    # e.g Searchable::by_query implements this workaround, otherwise it wouldn't work properly.
     # See https://freelancing-gods.com/thinking-sphinx/v5/searching.html#pagination
     SPHINX_PAGE_SIZE_INFINITE = 1_000_000
 
