@@ -42,19 +42,4 @@ Feature: Application plan edit page
       | Now paid! |
 
   @wip
-  Scenario: Edit an application plan with billing enabled
-    # See app/views/api/plans/forms/_billing_strategy.html.erb
-    Given billing is enabled
-    And they go to application plan "Free" admin edit page
-    When the form is submitted with:
-      | Name           | Not free anymore |
-      | Setup fee      | 100              |
-      | Cost per month | 10               |
-    Then the current page is the product's application plans admin page
-    And they should see "Plan was updated"
-    And the table has the following row:
-      | Name             |
-      | Not free anymore |
-
-  @wip
   Scenario: Form validation
