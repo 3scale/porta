@@ -43,6 +43,19 @@ module CapybaraHelpers
     uri = URI.parse(current_url)
     assert_equal domain, uri.host
   end
+
+  def find_inline_actions_of_row(row)
+    if has_css?('td', text: row, wait: 0)
+      dropdown = find('tr', text: row).find('.pf-c-table__action .pf-c-dropdown')
+    elsif has_css?('.pf-c-data-list__cell', text: row, wait: 0)
+      dropdown = find('.pf-c-data-list__item-row', text: row).find('.pf-c-data-list__item-action .pf-c-dropdown')
+    else
+      raise "No table or datalist row found with text: #{row}"
+    end
+
+    dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
+    dropdown.all('.pf-c-dropdown__menu-item')
+  end
 end
 
 World(CapybaraHelpers)

@@ -11,7 +11,8 @@ When "{} in the {ordinal} row" do |lstep, n|
 end
 
 When "(they )select action {string} of (row ){string}" do |action, row|
-  find_action_for_row(action: action, row: row).click
+  find_inline_actions_of_row(row).find { |node| node.text == action }
+                                 .click
 end
 
 # TODO: can we use "has_table?" instead of this complex step?
@@ -103,26 +104,7 @@ Then "the table should have {int} row(s)" do |count|
 end
 
 Then "the actions of row {string} are:" do |row, table|
-  dropdown = find_inline_actions_dropdown_of_row(row)
+  actions = find_inline_actions_of_row(row)
 
-  assert_same_elements table.raw.flatten,
-                       dropdown.all('.pf-c-dropdown__menu-item').map(&:text)
-end
-
-def find_inline_actions_dropdown_of_row(row, expand: true)
-  if has_css?('td', text: row, wait: 0)
-    dropdown = find('tr', text: row).find('.pf-c-table__action .pf-c-dropdown')
-  elsif has_css?('.pf-c-data-list__cell', text: row, wait: 0)
-    dropdown = find('.pf-c-data-list__item-row', text: row).find('.pf-c-data-list__item-action .pf-c-dropdown')
-  else
-    raise "No table or datalist row found with text: #{row}"
-  end
-
-  dropdown.find('.pf-c-dropdown__toggle').click if expand && dropdown[:class].exclude?('pf-m-expanded')
-  dropdown
-end
-
-def find_action_for_row(action:, row:)
-  dropdown = find_inline_actions_dropdown_of_row(row, expand: true)
-  dropdown.find('.pf-c-dropdown__menu-item', text: action)
+  assert_same_elements table.raw.flatten, actions.map(&:text)
 end

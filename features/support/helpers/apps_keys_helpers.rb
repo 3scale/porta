@@ -8,10 +8,9 @@ module AppsKeysHelpers
 
   def fake_application_keys(application, keys)
     ApplicationKey.without_backend do
-      application.application_keys.delete_all
-      keys.each do |key|
-        application.application_keys.add(key)
-      end
+      application_keys = application.application_keys
+      application_keys.delete_all
+      keys.each { |key| application_keys.add(key) }
     end
   end
 
