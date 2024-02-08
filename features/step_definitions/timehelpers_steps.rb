@@ -38,21 +38,14 @@ def pass_time(amount, period)
 end
 
 When /^(?:the )?time flies to (.*)$/ do |date|
-  date = date.gsub(Regexp.union(%w[of st nd rd]), '')
-  time_machine(Time.zone.parse(date))
-  assert_equal Time.zone.parse(date).beginning_of_hour, Time.zone.now.beginning_of_hour
-  access_user_sessions
+  time_flies_to(date)
 end
 
 # Suffix 'on 5th July 2009'
 # When '(without scheduled jobs)' is present, scheduled jobs will be skipped when travelling in time
 Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: [^\(]*)?)( \(without scheduled jobs\))?$/ do |original, date, skip_jobs|
-  unless skip_jobs
-    date = date.gsub(Regexp.union(%w[of st nd rd]), '')
-    time_machine(Time.zone.parse(date))
-    assert_equal Time.zone.parse(date).beginning_of_hour, Time.zone.now.beginning_of_hour
-    access_user_sessions
-  end
+  time_flies_to(date) unless skip_jobs
+
   safe_travel_to(Time.zone.parse(date)) do
     step original.strip
   end
