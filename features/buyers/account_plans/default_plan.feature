@@ -31,7 +31,7 @@ Feature: Provider's default account plan
     And "Secret" is the option selected in "Default plan"
 
   Scenario: Set an account plan that does not exist
-    Given account plan "Pro" is being deleted
+    Given account plan "Pro" has been deleted
     When they select "Pro" from "Default plan"
     And press "Change plan"
     Then they should see "Not found"

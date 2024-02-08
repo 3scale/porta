@@ -27,7 +27,7 @@ Given "{plan} has {int} contract(s)" do |plan, amount|
   end
 end
 
-Given "{plan} is being deleted" do |plan|
+Given "{plan} has been deleted" do |plan|
   plan.destroy
 end
 

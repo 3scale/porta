@@ -32,7 +32,7 @@ Feature: Product's default service plan
     And "Secret" is the option selected in "Default plan"
 
   Scenario: Set a service plan that does not exist
-    Given service plan "Pro" is being deleted
+    Given service plan "Pro" has been deleted
     When they select "Pro" from "Default plan"
     And press "Change plan"
     Then they should see "Not found"

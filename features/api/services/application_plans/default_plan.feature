@@ -31,7 +31,7 @@ Feature: Product's default application plan
     And "Secret" is the option selected in "Default plan"
 
   Scenario: Set an application plan that does not exist
-    Given application plan "Pro" is being deleted
+    Given application plan "Pro" has been deleted
     When they select "Pro" from "Default plan"
     And press "Change plan"
     Then they should see "Not found"
