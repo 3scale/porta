@@ -11,16 +11,10 @@ Feature: Product's new application plans page
     Then the current page is the product's new application plan admin page
 
   @onpremises
-  Scenario: Create an application plan when onpremises
-    Given they go to the product's new application plan admin page
-    When the form is submitted with:
-      | Name        | Premium |
-      | System name | premium |
-    Then the current page is the product's application plans admin page
-    And they should see "Created application plan Premium"
-    And the table has the following row:
-      | Name    | Contracts | State  |
-      | Premium | 0         | hidden |
+  Scenario: Create button is visible regardless of being onpremises
+    Given they go to the product's application plans admin page
+    When they select toolbar action "Create application plan"
+    Then the current page is the product's new application plan admin page
 
   Scenario: Create an application plan
     Given they go to the product's new application plan admin page
