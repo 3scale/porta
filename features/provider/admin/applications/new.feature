@@ -81,7 +81,7 @@ Feature: Audience's new application page
     And the submit button is disabled
     When they select "Jane" from "Account"
     And the submit button is disabled
-    When they select "API" from "Product"
+    When they select "My API" from "Product"
     And the submit button is disabled
     And select "Basic" from "Application plan"
     And the submit button is disabled
