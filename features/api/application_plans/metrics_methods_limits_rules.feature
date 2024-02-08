@@ -26,7 +26,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     When they go to application plan "Free" admin edit page
     Then they should see "Metrics, Methods, Limits & Pricing Rules"
 
-  Scenario: Hidding usage limits
+  Scenario: Hiding usage limits
     Given application plan "Free" has defined the following usage limit:
       | Metric       | Period | Max. value |
       | Single rolls | hour   | 30         |
