@@ -63,11 +63,15 @@ Feature: Audience > Accounts > Listing > Account > Applications > New
       | name   | required | read_only | hidden |
       | Banana | true     |           |        |
     When they go to buyer "Jane" new application page
-    And the form is submitted with:
+    And there is a required field "Banana"
+    And the form is filled with:
       | Product          | My API         |
       | Application plan | Basic          |
       | Name             | New App        |
-      | Banana           | wololo         |
+      | Banana           | |
+    Then the submit button is disabled
+    But they fill in "Banana" with "Yes, please."
+    And press "Create application"
     Then the current page is application "New App" admin page
     And they should see the flash message "Application was successfully created"
 
