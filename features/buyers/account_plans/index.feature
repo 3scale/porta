@@ -27,7 +27,7 @@ Feature: Account plans index page
         cannot sign up.
         """
 
-    Scenario: No published plans but 1 is default
+    Scenario: No published plans but the default plan is set
       Given the following account plan:
         | Issuer               | Name | State  | Default |
         | foo.3scale.localhost | Free | Hidden | true    |
