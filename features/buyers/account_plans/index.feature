@@ -183,7 +183,6 @@ Feature: Account plans index page
         | BBB  |
 
   Rule: Account plans disabled
-
     Background:
       Given the provider has "account_plans" denied
 
