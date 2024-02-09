@@ -16,6 +16,59 @@ Feature: Application, service and account plan Features
       | Product | Name |
       | My API  | Free |
 
+  Scenario Outline: Navigation
+    Given they go to <index plans page>
+    When they follow "Free" within the table
+    Then the current page is <plan> admin edit page
+
+    Examples:
+      | index plans page                           | plan                    |
+      | the product's application plans admin page | application plan "Free" |
+      | product "My API" service plans admin page  | service plan "Free"     |
+      | the account plans admin page               | account plan "Free"     |
+
+  Scenario Outline: Edit a plan without billing enabled
+    Given they go to <plan> admin edit page
+    And there is no field "Trial Period (days)"
+    And there is no field "Setup free"
+    And there is no field "Cost per month"
+    # FIXME: should be "readonly", but the input would have to be updated
+    And field "System name" is disabled
+    When the form is submitted with:
+      | Name | Still free |
+    Then the current page is <index plans page>
+    # And they should see "Plan was updated" FIXME: #edit method doesn't call flash[notice]
+    And the table has the following row:
+      | Name       |
+      | Still free |
+
+    Examples:
+      | index plans page                           | plan                    |
+      | the product's application plans admin page | application plan "Free" |
+      | product "My API" service plans admin page  | service plan "Free"     |
+      | the account plans admin page               | account plan "Free"     |
+
+  Scenario Outline: Edit a plan with billing enabled
+    # See app/views/api/plans/forms/_billing_strategy.html.erb
+    Given the provider is charging its buyers
+    And they go to <plan> admin edit page
+    When the form is submitted with:
+      | Name                | Not free anymore |
+      | Trial Period (days) | 7                |
+      | Setup fee           | 100              |
+      | Cost per month      | 10               |
+    Then the current page is <index plans page>
+    # And they should see "Plan was updated" FIXME: #edit method doesn't call flash[notice]
+    And the table has the following row:
+      | Name             |
+      | Not free anymore |
+
+    Examples:
+      | index plans page                           | plan                    |
+      | the product's application plans admin page | application plan "Free" |
+      | product "My API" service plans admin page  | service plan "Free"     |
+      | the account plans admin page               | account plan "Free"     |
+
   Scenario Outline: Adding a new plan feature
     Given they go to <plan> admin edit page
     When they follow "New feature"
@@ -33,6 +86,9 @@ Feature: Application, service and account plan Features
       | application plan "Free" |
       | service plan "Free"     |
       | account plan "Free"     |
+
+  @wip
+  Scenario Outline: Form validation
 
   Scenario Outline: Plan with no features
     Given <plan> does not have any features

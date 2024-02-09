@@ -36,6 +36,18 @@ Then /^the provider time zone is "([^"]*)"$/ do |time_zone|
   @provider.update_column(:timezone, time_zone)
 end
 
+Then "new accounts with {plan} will be pending for approval" do |plan|
+  params = Signup::SignupParams.new(plans: [plan], user_attributes: {
+    password: 'password',
+    username: 'pepe',
+    email: 'pepe@example.com'
+  }, account_attributes: {
+    org_name: 'Banana API'
+  }, defaults: {})
+  signup = Signup::DeveloperAccountManager.new(current_account).create(params)
+  assert signup.account_approval_required?
+end
+
 Then "{account} should be {account_type}" do |account, type|
   assert account.send("#{type}?"), "Account '#{account.org_name}' is not a #{type}"
 end

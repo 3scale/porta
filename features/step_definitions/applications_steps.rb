@@ -93,6 +93,10 @@ Then "there are/is {int} key(s)" do |keys|
   assert_equal keys, find_all('tr.key').size
 end
 
+Then "new applications with {plan} will be pending for approval" do |plan|
+  assert Cinstance.create(user_account: current_account, plan: plan).pending?
+end
+
 And "{application} user key should( still) be {string}" do |application, key|
   assert_equal key, application.reload.user_key
 end

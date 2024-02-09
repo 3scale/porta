@@ -94,6 +94,10 @@ Then /^I should see the following backends being used:$/ do |table|
   end
 end
 
+Then "new service subscriptions with {plan} will be pending for approval" do |plan|
+  assert ServiceContract.create(plan: plan).pending?
+end
+
 When "an admin is reviewing services index page" do
   visit admin_services_path
 end
