@@ -30,7 +30,6 @@ end
 
 Then "the bulk operation has failed for {string}" do |name|
   find('.bulk_operation.errors').assert_text("There were some errors:\n#{name}")
-  # assert_match "There were some errors:\n#{name}", find('.bulk_operation.errors').text
 end
 
 When "(they )select bulk action {string}" do |action|
