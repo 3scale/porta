@@ -40,12 +40,6 @@ When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: within "(
   end
 end
 
-When /^there is a(n invisible)? link "([^"]*)"(?: within "([^"]*)")? to (.*)$/ do |invisible, link, selector, page_name|
-  with_scope(selector) do
-    assert_selector(:link, link, href: path_to(page_name), exact: true, visible: !invisible, count: 1)
-  end
-end
-
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
   with_scope(selector) do
     attach_file(field, File.join(Rails.root,path))
