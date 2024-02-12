@@ -275,14 +275,13 @@ World(Module.new do
       product = Service.find_by!(name: $1)
       new_admin_service_backend_usage_path(product)
 
-    when /^the edit usage config page between "(.*)" and "(.*)"$/
-      if (service = Service.find_by!(name: $1))
-        config_name = $2
-      elsif (service = Service.find_by!(name: $2))
-        config_name = $1
-      end
-      config = service.backend_api_configs.references(:backend_api).includes(:backend_api).find_by!("backend_apis.name" => config_name)
-      edit_admin_service_backend_usage_path(service, config)
+    when /^the edit backend usage page of "(.*)" for product "(.*)"$/
+      product = Service.find_by!(name: $2)
+      config = product.backend_api_configs
+                      .references(:backend_api)
+                      .includes(:backend_api)
+                      .find_by!("backend_apis.name" => $1)
+      edit_admin_service_backend_usage_path(product, config)
 
     #
     # Plans (Admin portal)
