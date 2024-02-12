@@ -128,7 +128,7 @@ World(Module.new do
     #
     # Forum
     #
-    when "forum settings",
+    when 'forum settings',
          'the forum settings page'
       edit_admin_site_forum_path
 
