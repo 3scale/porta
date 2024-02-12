@@ -10,7 +10,7 @@ class ThreeScale::BotProtection::ControllerTest < ActiveSupport::TestCase
 
   setup do
     @subject = Test.new.tap do |s|
-      s.stubs(:controller_path).returns('/test')
+      s.stubs(:request).returns(stub('request', path: '/test'))
       s.stubs(:flash).returns({})
     end
     Recaptcha.stubs(:captcha_configured?).returns(true)
