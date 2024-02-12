@@ -19,7 +19,7 @@ module ThreeScale
       class TestController < ApplicationController
         def new
           template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, self)
-          form = TestFormBuilder.new(:account, Account.new, template, {})
+          form = TestFormBuilder.new(:account, Account.new, template, { url: '/test/new' })
           render plain: form.bot_protection_inputs
         end
       end
