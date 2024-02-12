@@ -21,6 +21,10 @@ module Liquid
         context.registers[:site_account]
       end
 
+      def template
+        context.registers[:view]
+      end
+
       protected
 
       def model
