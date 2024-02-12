@@ -34,7 +34,7 @@ Feature: Developer portal change application plan
     Then should see the flash message "Plan change was successful."
     And a message should be sent from buyer "Jane" to the provider with subject "API System: Application plan change" and body "plan from Developer to Enterprise"
 
-  Scenario: Change plan workflow dependent on credit card presence
+  Scenario: Without a credit card, changing an application's plan requires approval
     Given all the rolling updates features are off
     And the product allows to change application plan only with credit card
     When they go to the application's dev portal edit page
@@ -42,14 +42,17 @@ Feature: Developer portal change application plan
     And follow "Enterprise"
     And press "Request Plan Change"
     Then they should see "A request to change your application plan has been sent."
+    And a message should be sent from buyer "Jane" to the provider with subject "API System: Plan change request" and body "Jane are requesting to have their plan changed to Enterprise"
 
-    Given the buyer has a valid credit card
+  Scenario: With a valid credit card, an application's plan can be changed directly
+    Given all the rolling updates features are off
+    And the product allows to change application plan only with credit card
+    And the buyer has a valid credit card
     When they go to the application's dev portal edit page
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Change Plan"
     Then they should see "Plan change was successful."
-    And a message should be sent from buyer "Jane" to the provider with subject "API System: Plan change request" and body "Jane are requesting to have their plan changed to Enterprise"
 
   Scenario: Change plan workflow with credit card required without wizard
     Given the product allows to change application plan with credit card required
