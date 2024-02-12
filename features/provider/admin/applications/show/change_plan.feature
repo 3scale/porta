@@ -29,7 +29,7 @@ Feature: Application plan change card
         | Buyer | Name   | Product |
         | Jane  | My App | My API  |
 
-    Scenario: Change plan card visibl with multiple plans
+    Scenario: Change plan card visible with multiple plans
       Given they go to the application's admin page
       Then they should see "Change plan" within the change plan card
 

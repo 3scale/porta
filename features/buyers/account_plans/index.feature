@@ -34,7 +34,7 @@ Feature: Account plans index page
       When they go to the account plans admin page
       Then there should not be any wanrning
 
-    Scenario: A plan is publised but none default
+    Scenario: A plan is published but none default
       Given the following account plan:
         | Issuer               | Name | State     |
         | foo.3scale.localhost | Free | Published |
@@ -183,7 +183,6 @@ Feature: Account plans index page
         | BBB  |
 
   Rule: Account plans disabled
-
     Background:
       Given the provider has "account_plans" denied
 
