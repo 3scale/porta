@@ -40,7 +40,7 @@ Given "{plan} has a monthly fee of {int}" do |plan, fee|
   plan.update!(cost_per_month: fee)
 end
 
-Given "{plan} has a setup free of {int}" do |plan, fee|
+Given "{plan} has a setup fee of {int}" do |plan, fee|
   plan.update!(setup_fee: fee)
 end
 # END_TODO

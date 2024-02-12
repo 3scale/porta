@@ -15,7 +15,7 @@ Feature: On paid plans
 
   Scenario: I have to pay monthly and setup fee when the trial is over
     Given the date is 23rd November 1989
-      And plan "Rocket" has a setup free of 210
+      And plan "Rocket" has a setup fee of 210
       And plan "Rocket" has a monthly fee of 31
       And plan "Rocket" has a trial period of 15 days
       And a buyer "zoidberg" signed up to application plan "Rocket"

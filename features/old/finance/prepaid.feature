@@ -86,7 +86,7 @@ Feature: Prepaid billing of a buyer
  Scenario: Prepaid with setup fee and no trial period
   Given the date is 1st January 2009
     And plan "Fixed" has a trial period of 0 days
-    And plan "Fixed" has a setup free of 210
+    And plan "Fixed" has a setup fee of 210
     And a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
     And I log in as "zoidberg" on foo.3scale.localhost
 
