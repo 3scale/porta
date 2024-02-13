@@ -7,8 +7,11 @@ Feature: Prepaid billing of a buyer
   Given a provider on 1st January 2009
     And the provider is billing but not charging in prepaid mode
     And provider "foo.3scale.localhost" has "finance" switch visible
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
-    And an application plan "Variable" of provider "foo.3scale.localhost" for 200 monthly
+    And the default product of the provider has name "My API"
+    And the following application plans:
+      | Product | Name     | Cost per month |
+      | My API  | Fixed    | 200            |
+      | My API  | Variable | 200            |
     And pricing rules on plan "Variable":
       | Metric   | Cost per unit | Min | Max      |
       | hits     |           0.1 |   1 | infinity |
@@ -62,7 +65,7 @@ Feature: Prepaid billing of a buyer
  @commit-transactions
  Scenario: Bill and issue when the trial ends, charge when due
   Given the date is 1st January 2009
-    And plan "Fixed" has trial period of 15 days
+    And plan "Fixed" has a trial period of 15 days
     And the provider is charging its buyers
 
    When a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
@@ -82,8 +85,8 @@ Feature: Prepaid billing of a buyer
  @commit-transactions
  Scenario: Prepaid with setup fee and no trial period
   Given the date is 1st January 2009
-    And plan "Fixed" has trial period of 0 days
-    And plan "Fixed" has setup fee of 210
+    And plan "Fixed" has a trial period of 0 days
+    And plan "Fixed" has a setup fee of 210
     And a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
     And I log in as "zoidberg" on foo.3scale.localhost
 

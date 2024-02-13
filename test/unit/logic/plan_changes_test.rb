@@ -10,7 +10,7 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     # into them
     @plan = FactoryBot.create(:application_plan, name: 'Old plan')
     @new_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan')
-    @new_paid_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'Better plan', :cost_per_month => 3)
+    @new_paid_plan = FactoryBot.create(:application_plan, issuer: @plan.issuer, name: 'New Better plan', :cost_per_month => 3)
     @new_plan.publish!
 
     @app = FactoryBot.create(:cinstance, plan: @plan)

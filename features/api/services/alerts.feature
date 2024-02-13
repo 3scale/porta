@@ -4,10 +4,12 @@ Feature: Product > Analytics > Alerts
   Background:
     Given a provider
     And the default product of the provider has name "My Product"
-    And the provider has a free application plan "Default"
+    And the following published application plan:
+      | Product    | Name    |
+      | My Product | Default |
     And a buyer "Jane" of the provider
     And a buyer "Bob" of the provider
-    And the provider has the following applications:
+    And the following applications:
       | Buyer | Name     | Plan    |
       | Jane  | Jane App | Default |
       | Bob   | Bob App  | Default |

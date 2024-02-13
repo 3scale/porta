@@ -68,19 +68,19 @@ When "they try to update the spec with valid data" do
 end
 
 Then "they should see the errors" do
-  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_json'))
+  assert_selector(:css, '#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_json'))
 end
 
 Then "they should see the version is invalid" do
-  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_version'))
+  assert_selector(:css, '#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_version'))
 end
 
 Then "they should see the swagger is invalid" do
-  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_swagger'))
+  assert_selector(:css, '#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_swagger'))
 end
 
 Then "they should see the updated spec" do
-  assert has_css?('.operations', text: 'Hide')
+  assert_selector(:css, '.operations', text: 'Hide')
   assert has_text?('My spec')
   assert_flash 'ActiveDocs Spec was successfully updated.'
   assert_equal @new_service.id, @api_doc_service.reload.service_id
@@ -88,7 +88,7 @@ end
 
 Then "an admin can edit the spec" do
   visit admin_api_docs_services_path
-  assert has_css?('h1', text: 'ActiveDocs')
+  assert_selector(:css, 'h1', text: 'ActiveDocs')
   find('tr td', text: @api_doc_service.name).sibling('.operations').click_link("Edit")
 end
 
@@ -118,7 +118,7 @@ Then "the swagger autocomplete should work for {string} with {string}" do |input
   find('span', text: /get/i).click
   has_css?(".apidocs-param-tips.#{autocomplete}", visible: :hidden)
   find("input[name=#{input_name}]").click
-  assert has_css?(".apidocs-param-tips.#{autocomplete}", visible: :visible)
+  assert_selector(:css, ".apidocs-param-tips.#{autocomplete}", visible: :visible)
 end
 
 Then "{spec_version} should escape properly the curl string" do |swagger_version|

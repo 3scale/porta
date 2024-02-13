@@ -10,29 +10,23 @@ Feature: Integration Settings
   Scenario: Integration Settings options (Rolling updates Service Mesh OFF)
     And I have rolling updates "service_mesh_integration,apicast_oidc" disabled
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
-    Then I should see within "#service_deployment_option_input" the following:
-      | name                           |
-      | APIcast                        |
-      | APIcast self-managed           |
-
-    And I should see within "#service_proxy_authentication_method_input" the following:
-      | name                     |
-      | API Key (user_key)       |
-      | App_ID and App_Key Pair  |
+    Then they should be able to choose one of the following within deployment options:
+      | APIcast 3scale managed |
+      | APIcast self-managed   |
+    And they should be able to choose one of the following within authentication methods:
+      | API Key (user_key)      |
+      | App_ID and App_Key Pair |
 
   Scenario: Integration Settings options (Rolling updates ON)
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
-    Then I should see within "#service_deployment_option_input" the following:
-      | name                           |
-      | APIcast                        |
-      | APIcast self-managed           |
-      | Istio                          |
-
-    And I should see within "#service_proxy_authentication_method_input" the following:
-      | name                     |
-      | API Key (user_key)       |
-      | App_ID and App_Key Pair  |
-      | OpenID Connect           |
+    Then they should be able to choose one of the following within deployment options:
+      | APIcast 3scale managed |
+      | APIcast self-managed   |
+      | Istio                  |
+    And they should be able to choose one of the following within authentication methods:
+      | API Key (user_key)      |
+      | App_ID and App_Key Pair |
+      | OpenID Connect          |
 
   Scenario: Integration Settings and authentication method interaction
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"

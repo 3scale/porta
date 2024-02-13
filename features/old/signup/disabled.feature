@@ -6,8 +6,9 @@ Feature: Disabled signup for the provider
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has signup disabled
-      And a account plan "Tier-1" of provider "foo.3scale.localhost"
-      And account plan "Tier-1" is default
+    And the following account plan:
+      | Issuer               | Name   | Default |
+      | foo.3scale.localhost | Tier-1 | true    |
       And the current domain is foo.3scale.localhost
 
   Scenario: I try to enter the URL manually

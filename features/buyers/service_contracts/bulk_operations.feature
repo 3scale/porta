@@ -4,10 +4,12 @@ Feature: Service subscriptions bulk operations
   Background:
     Given a provider is logged in
     And a service "Fancy API"
-    And a default service plan "Fancy Plan A" of service "Fancy API"
-    And a service plan "Fancy Plan B" of service "Fancy API"
     And a service "Another API"
-    And a default service plan "Another Plan" of service "Another API"
+    And the following service plans:
+      | Product     | Name         | Default |
+      | Fancy API   | Fancy Plan A | true    |
+      | Fancy API   | Fancy Plan B |         |
+      | Another API | Another Plan | true    |
     And the following buyers with service subscriptions signed up to the provider:
       | name  | plans                      |
       | Alice | Fancy Plan A, Another Plan |
@@ -27,17 +29,17 @@ Feature: Service subscriptions bulk operations
   Scenario: Bulk operations card shows when an items are selected
     When item "Alice" is selected
     And item "Bob" is selected
-    Then the bulk operations are visible
+    Then they should be able to see the bulk operations
     And should see "You have selected 2 service subscriptions and you can make following operations with them:"
     But item "Alice" is unselected
     And item "Bob" is unselected
-    Then the bulk operations are not visible
+    Then they should not be able to see the bulk operations
 
   Scenario: Select all items in the table
     When they select all items in the table
-    Then the bulk operations are visible
+    Then they should be able to see the bulk operations
     When they unselect all items in the table
-    Then the bulk operations are not visible
+    Then they should not be able to see the bulk operations
 
   Scenario: Send an email without subject
     When item "Jane" is selected
@@ -75,7 +77,7 @@ Feature: Service subscriptions bulk operations
       | Alice   | Another API | Another Plan |
       | Bob     | Fancy API   | Fancy Plan A |
       | Jane    | Another API | Another Plan |
-    When table is sorted by "Plan"
+    When the table is sorted by "Plan"
     And item "Alice" is selected
     And item "Bob" is selected
     And select bulk action "Change service plan"
@@ -142,7 +144,7 @@ Feature: Service subscriptions bulk operations
 
   Scenario: Changing service plan throws an error
     Given the subscription will return an error when changing its plan
-    When table is sorted by "Plan"
+    When the table is sorted by "Plan"
     And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"

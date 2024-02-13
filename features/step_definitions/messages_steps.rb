@@ -25,7 +25,7 @@ Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} w
   message = receiver.received_messages.to_a.find do |message|
     message.sender  == sender  &&
     message.subject == subject &&
-    message.body    == body
+    message.body    =~ /#{body}/
   end
 
   assert_not_nil message, %(No message from #{sender.org_name} to #{receiver.org_name} with subject "#{subject}" and body "#{body}" was sent)

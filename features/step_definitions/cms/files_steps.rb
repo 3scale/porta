@@ -5,11 +5,11 @@ end
 
 When(/^the file is deleted$/) do
   find('a[href]', text: 'Download')[:href]
-  step 'I follow "Delete" and confirm the dialog'
-  steps %q{
-    Then I should see "deleted"
-    Then there is not an image preview of that file
-  }
+  accept_confirm do
+    click_link 'Delete'
+  end
+  assert_page_has_content 'deleted'
+  assert_page_has_no_content 'img.preview'
 end
 
 Then(/^the file should be the same as uploaded$/) do
@@ -28,10 +28,8 @@ end
 
 When(/^I update the file with different image$/) do
   @previous_file = image_source
-  steps %q{
-    When I attach the file "test/fixtures/tinnytim.jpg" to "cms_file_attachment"
-    And I press "Save"
-   }
+  attach_file('cms_file_attachment', Rails.root.join('test/fixtures/tinnytim.jpg'))
+  click_on "Save"
 end
 
 Then(/^the file should be updated$/) do
@@ -61,19 +59,20 @@ Then(/^there is (not )?an image preview of that file$/) do |negative|
     page.should have_selector(image_preview)
 
     visit image_source
-    steps %q{ Then the file should be the same as uploaded }
+    assert_page_is_file 'test/fixtures/hypnotoad.jpg'
   end
 end
 
 def create_cms_file(path, file_path)
-  steps %{
-    Given I go to the cms page
-    And I follow "New File" from the CMS dropdown
-    And I fill in "Path" with "#{path}"
-    And I attach the file "test/fixtures/#{file_path}" to "cms_file_attachment"
-    And I press "Create File"
-    Then I should see "Created new file"
-  }
+  visit provider_admin_cms_templates_path
+  within '#cms-new-content-button' do
+    find('.dropdown-toggle').click
+    click_on 'New File'
+  end
+  fill_in('Path', with: path)
+  attach_file('cms_file_attachment', Rails.root.join("test/fixtures/#{file_path}"))
+  click_button 'Create File'
+  assert_page_has_content 'Created new file'
 end
 
 When(/^I upload a file that is not an image to the cms$/) do
@@ -83,10 +82,8 @@ end
 Given(/^there is a (downloadable )?cms file$/) do |downloadable|
   create_cms_file('image', 'hypnotoad.jpg')
   if downloadable.present?
-    steps %q{
-     Then I check "Downloadable"
-     And I press "Save"
-    }
+    check 'Downloadable'
+    click_button 'Save'
   end
 end
 

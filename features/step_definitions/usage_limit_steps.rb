@@ -60,48 +60,10 @@ Then "{plan} should not have hourly usage limit for metric {string}" do |plan, m
   assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
 end
 
-When "I {word} {string} for the hourly usage limit for {metric_on_application_plan}" do |action, label, metric|
-  usage_limit = metric.usage_limits.find_by_period('hour')
-  step %(I #{action} "#{label}" within "##{dom_id(usage_limit)}")
-end
-
-When "I follow {string} within usage limits panel for {metric_on_application_plan}" do |label, metric|
-  step %(I follow "#{label}" within "##{dom_id(metric)}_slot")
-end
-
 def metrics_container
   find(:css, '#metrics')
 end
 
-And(/^limits hits of that plan to (\d+)$/) do |number|
-  visit_edit_plan(@plan)
-
-  within metrics_container do
-    click_on 'Edit limits of Hits'
-    click_on 'New usage limit'
-  end
-
-  within '#new_usage_limit' do
-    fill_in 'Max. value', with: number
-    click_on 'Create usage limit'
-  end
-
-  page.should have_content 'Usage Limit has been created'
-end
-
-Then(/^the plan should (not )?have visible usage limits$/) do |negate|
-  @plan.should be
-  @plan.usage_limits.visible.count.should be.send(negate ? :== : :>, 0)
-end
-
-def visit_edit_plan(plan)
-  plan.should be
-
-  step 'I go to the application plans admin page'
-
-  within plans_table do
-    click_on plan.name
-  end
-
-  page.should have_css 'h1', text: "Application Plan #{plan.name}"
+Then "{plan} {should} have visible usage limits" do |plan, should|
+  plan.usage_limits.visible.count.should be.send(should ? :> : :==, 0)
 end

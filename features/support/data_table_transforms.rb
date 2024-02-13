@@ -6,6 +6,12 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_plan_features_table(table)
+    parameterize_headers(table)
+    table.map_column!(:enabled, false) { |enabled| enabled.casecmp?('true') }
+    table
+  end
+
   def transform_alerts_table(table)
     parameterize_headers(table)
     table.map_column!(:application) { |app| Cinstance.find_by!(name: app) }
@@ -13,16 +19,31 @@ module DataTableTransforms
   end
 
   def transform_applications_table(table)
-    parameterize_headers(table)
-    table.map_column!(:buyer) { |buyer| Account.buyers.find_by!(org_name: buyer) }
-    table.map_column!(:plan) { |plan| ApplicationPlan.find_by!(name: plan) }
+    parameterize_headers(table, 'Product' => 'service',
+                                'Buyer' => 'user_account')
+    table.map_column!(:user_account, false) { |buyer| Account.buyers.find_by!(org_name: buyer) }
+    table.map_column!(:service, false) { |service| Service.find_by!(name: service) }
+    table.map_column!(:plan, false) { |plan| ApplicationPlan.find_by!(name: plan) }
     table
   end
 
-  def transform_application_plans_table(table)
-    parameterize_headers(table)
-    table.map_column!(:cost_per_month, &:to_f)
-    table.map_column!(:setup_fee, &:to_f)
+  def transform_plans_table(plan_type, table)
+    parameterize_headers(table, 'Product' => 'issuer',
+                                'Requires approval' => 'approval_required',
+                                'Trial period' => 'trial_period_days')
+
+    table.map_column!(:cost_per_month, false, &:to_f)
+    table.map_column!(:setup_fee, false, &:to_f)
+    table.map_column!(:approval_required, false) { |required| required.casecmp?('true') }
+    table.map_column!(:default, false) { |default| default.casecmp?('true') }
+    table.map_column!(:state, false, &:downcase)
+    table.map_column!(:issuer, true) do |name|
+      if plan_type == 'account_plan'
+        Account.find_by!(org_name: name)
+      else
+        Service.find_by!(name: name)
+      end
+    end
     table
   end
 
@@ -40,8 +61,11 @@ module DataTableTransforms
 
   protected
 
-  def parameterize_headers(table)
-    table.map_headers! { |header| header.parameterize.underscore.downcase.to_s }
+  def parameterize_headers(table, mappings = {})
+    table.map_headers! do |header|
+      mapped = mappings[header].presence || header
+      mapped.parameterize(separator: '_', preserve_case: false).to_s
+    end
   end
 end
 

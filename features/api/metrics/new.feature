@@ -43,9 +43,9 @@ Feature: Product > Integration > Metrics > New
         | Friendly name | Cotoletta        |
         | System name   | cotoletta        |
         | Description   | Thin and crunchy |
-      Then "Friendly name" shows error "has already been taken"
-      And "System name" shows error "has already been taken"
-      But "Description" doesn't show any error
+      Then field "Friendly name" has inline error "has already been taken"
+      And field "System name" has inline error "has already been taken"
+      But field "Description" has no inline error
 
   Rule: Tab metrics
     Background:
@@ -72,7 +72,7 @@ Feature: Product > Integration > Metrics > New
         | System name   | carni         |
         | Unit          | serving       |
         | Description   | Orders served |
-      Then "Friendly name" shows error "has already been taken"
-      And "System name" shows error "has already been taken"
-      But "Unit" doesn't show any error
-      But "Description" doesn't show any error
+      Then field "Friendly name" has inline error "has already been taken"
+      And field "System name" has inline error "has already been taken"
+      But field "Unit" has no inline error
+      But field "Description" has no inline error

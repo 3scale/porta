@@ -7,35 +7,20 @@ def import_simple_layout(provider)
 end
 
 Given "a provider {string} signed up to {plan}" do |name, plan|
-  @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan,
-                      org_name: name,
-                      domain: name,
-                      self_domain: "admin.#{name}")
-  @provider.application_contracts.delete_all
-
-  unless @provider.bought?(plan)
-    @provider.buy!(plan, name: 'Default', description: 'Default')
-  end
-
-  import_simple_layout(@provider)
+  create_provider_with_plan(name, plan)
 end
 
 Given(/^a provider "([^"]*)"$/) do |account_name|
-  step %(a provider "#{account_name}" signed up to plan "Free")
+  create_provider_with_plan(account_name, ApplicationPlan.first)
 end
 
 Given(/^a provider "([^"]*)" with default plans$/) do |name|
-  step %(a provider "#{name}")
-  step %(a default service of provider "#{name}" has name "default")
+  create_provider_with_plan(name, ApplicationPlan.first)
 
-  step %(a account plan "default_account_plan" of provider "#{name}")
-  step %(account plan "default_account_plan" is default)
-
-  step %(a service plan "default_service_plan" for service "default" exists)
-  step %(service plan "default_service_plan" is default)
-
-  step %(an application plan "Default" for service "default" exists)
-  step %(application plan "Default" is default)
+  product = @provider.first_service!
+  FactoryBot.create(:account_plan, name: 'default_account_plan', issuer: @provider, default: true)
+  FactoryBot.create(:service_plan, name: 'default_service_plan', issuer: product, default: true)
+  FactoryBot.create(:application_plan, name: 'default_application_plan', issuer: product, default: true)
 end
 
 Given(/^the current provider is (.+?)$/) do |name|
@@ -43,8 +28,8 @@ Given(/^the current provider is (.+?)$/) do |name|
 end
 
 Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
-  step %(a provider "#{provider_name}")
-  provider = Account.find_by_org_name(provider_name)
+  create_provider_with_plan(provider_name, ApplicationPlan.first)
+  provider = @provider
   if provider.admins.impersonation_admins.empty?
     FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], account: provider
   end
@@ -54,12 +39,93 @@ Given(/^there is no provider with domain "([^"]*)"$/) do |domain|
   Account.find_by_domain(domain).try!(&:destroy)
 end
 
+Given "{provider} has the following fields defined for {field_definition_target}:" do |provider, target, table|
+  provider.fields_definitions.by_target(target).each(&:destroy)
+
+  parameterize_headers(table)
+  table.hashes.each do |hash|
+    hash.delete_if { |k, v| v.blank? }
+
+    hash['choices'] = hash['choices'].split( /\s*,\s*/ ) if hash['choices'].is_a?(String)
+
+    label = hash[:label] || hash.fetch('name').humanize
+    name = hash[:name] || hash.fetch('label').parameterize.underscore
+
+    provider.fields_definitions.create!(hash.merge!(target: target, label: label, name: name))
+  end
+end
+
+Given "{provider} has the field {string} for {string} in the position {int}" do |provider, name, klass, pos|
+  a = provider.fields_definitions.by_target(klass.underscore).find{ |fd| fd.name == name }
+  a.pos = pos
+  a.save!
+end
+
+Given "{provider} allows to change account plan {change_plan_permission}" do |provider, plan_permission|
+  provider.set_change_account_plan_permission! plan_permission
+end
+
+Given "{provider} does not allow to change account plan" do |provider|
+  provider.set_change_account_plan_permission!(:none)
+end
+
+Given "{product} allows to change application plan {change_plan_permission}" do |product, plan_permission|
+  product.set_change_application_plan_permission! plan_permission
+end
+
+Given "{provider} service allows to change application plan {change_plan_permission}" do |provider, plan_permission|
+  provider.default_service.set_change_application_plan_permission! plan_permission
+end
+
+Given "{provider} allows to change service plan {change_plan_permission}" do |provider, plan_permission|
+  provider.set_change_service_plan_permission! plan_permission
+end
+
+Given "{provider} has no published application plans" do |provider|
+  provider.application_plans.published.each(&:hide!)
+  # provider.application_plans.each(&:hide!)
+end
+
+Given "{provider} has all the templates setup" do |provider|
+  provider.files.delete_all
+  provider.templates.delete_all
+
+  SimpleLayout.new(provider).import!
+end
+
+Given "{provider} has opt-out for credit card workflow on plan changes" do |provider|
+  search = '{% plan_widget application, wizard: true %}'
+  replacement = '{% plan_widget application, wizard: false %}'
+  partial = @provider.builtin_partials.find_by!(system_name: 'applications/form')
+  draft = partial.published.dup
+  assert draft.gsub!(search, replacement), 'failed to enable the wizard'
+  partial.draft = draft
+  partial.publish!
+
+  page = @provider.builtin_pages.find_by!(system_name: 'applications/show')
+  draft = page.published.dup
+  assert draft.gsub!(search, replacement), 'failed to enable the wizard'
+  page.draft = draft
+  page.publish!
+end
+
+Given "{provider} requires cinstances to be approved before use" do |provider|
+  provider.application_plans.each do |plan|
+    plan.approval_required = true
+    plan.save!
+  end
+end
+
+Given "{provider} has no account plans" do |provider|
+  provider.account_plans.delete_all
+end
+
 When "{provider} creates sample data" do |provider|
   provider.create_sample_data!
 end
 
 Given(/^a provider signs up and activates his account$/) do
-  step 'current domain is the admin domain of provider "master"'
+  set_current_domain Account.master.external_admin_domain
   visit provider_signup_path
 
   user = FactoryBot.build_stubbed(:user)
@@ -76,7 +142,7 @@ Given(/^a provider signs up and activates his account$/) do
 
   page.should have_content('Thank you for signing up.')
 
-  step 'current domain is the admin domain of provider "provider"'
+  set_current_domain Account.find_by(org_name: 'provider').external_admin_domain
 
   email = open_email(user.email, with_subject: 'Account Activation')
   click_first_link_in_email(email)
@@ -110,25 +176,31 @@ def login_form
 end
 
 Given('a provider exists') do
-  step 'a provider "foo.3scale.localhost"'
+  create_provider_with_plan('foo.3scale.localhost', ApplicationPlan.first)
   @service ||= @provider.default_service
 end
 
 Given('Provider has setup RH SSO') do
-  step 'a provider "foo.3scale.localhost"'
-  steps <<-GHERKIN
-  And the provider account allows signups
-  And the provider has the authentication provider "Keycloak" published
-  And current domain is the admin domain of provider "#{@provider.internal_domain}"
-  And the current domain is "#{@provider.external_domain}"
-  GHERKIN
+  create_provider_with_plan('foo.3scale.localhost', ApplicationPlan.first)
+  @provider.settings.deny_multiple_applications! if @provider.settings.can_deny_multiple_applications?
+
+  service = @provider.first_service!
+  service.publish!
+  @provider.update_attribute(:default_account_plan, @provider.account_plans.first)
+
+  plans = service.service_plans
+  plans.default!(plans.default_or_first || plans.first)
+
+  FactoryBot.create(:application_plan, name: 'Base',
+                                       issuer: @provider.first_service!,
+                                       default: true)
+  provider_publish_auth_provider "Keycloak"
+  set_current_domain @provider.external_domain
 end
 
 And('As a developer, I see RH-SSO login option on the login page') do
-  steps <<-GHERKIN
-    And I go to the login page
-    Then I should see the link "Authenticate with #{@authentication_provider.name}" containing "auth/realms/3scale/protocol/openid-connect/auth client_id= redirect_uri= response_type=code scope" in the URL
-  GHERKIN
+  visit login_path
+  has_link?("Authenticate with #{@authentication_provider.name}", href: %r{auth/realms/3scale/protocol/openid-connect/auth\?client_id=.*redirect_uri=.*response_type=code&scope=.*})
 end
 
 Given(/^a provider( is logged in)?$/) do |login|
@@ -141,25 +213,33 @@ Given(/^a provider( is logged in)? with a product "([^"]*)"$/) do |login, name|
 end
 
 def setup_provider(login)
-  step 'a provider "foo.3scale.localhost"'
-  step 'current domain is the admin domain of provider "foo.3scale.localhost"'
+  create_provider_with_plan("foo.3scale.localhost", ApplicationPlan.first)
+  set_current_domain(@provider.external_admin_domain)
   stub_integration_errors_dashboard
-  step 'I log in as provider "foo.3scale.localhost"' if login
 
-  @provider = Account.find_by_domain!('foo.3scale.localhost')
+  return unless login
+
+  try_provider_login('foo.3scale.localhost', 'supersecret')
+  assert_current_user('foo.3scale.localhost')
+end
+
+def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
+  @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan, org_name: name,
+                                                                                           domain: name,
+                                                                                           self_domain: "admin.#{name}")
+  @provider.application_contracts.delete_all
+
+  @provider.buy!(plan, name: 'Default', description: 'Default') unless @provider.bought?(plan)
+
+  import_simple_layout(@provider)
 end
 
 Given(/^master admin( is logged in)?/) do |login|
   @master = @provider = Account.master
   admin = @provider.admins.first!
-  step %(the current domain is "#{Account.master.external_domain}")
+  set_current_domain @master.external_domain
   stub_integration_errors_dashboard
-  step %(I log in as provider "#{admin.username}") if login
-end
-
-Given(/^a master admin with extra fields is logged in/) do
-  step 'master admin is logged in'
-  FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
+  try_provider_login(admin.username, 'supersecret') if login
 end
 
 Given "the provider has bot protection enabled" do
@@ -170,15 +250,11 @@ Given "the provider has bot protection disabled" do
   @provider.settings.update_attribute(:spam_protection_level, :none)
 end
 
-Given(/^a provider with one active member is logged in$/) do
-  step 'a provider is logged in'
-  step %(an active user "alex" of account "#{@provider.internal_domain}")
-end
-
 When(/^I have opened edit page for the active member$/) do
-  step 'I go to the provider users page'
-  step 'I follow "Edit" for user "alex"'
-  step 'I should see "Edit User"'
+  visit provider_admin_account_users_path
+  user = User.find_by!(username: 'alex')
+  find("tr#user_#{user.id} .pf-c-table__action").click_link('Edit')
+  assert_text 'Edit User'
 end
 
 Then(/^no permissions should be checked$/) do
@@ -190,30 +266,25 @@ Then(/^no permissions should be checked$/) do
 end
 
 Given(/^the provider account allows signups$/) do
-  step %(provider "#{@provider.internal_domain}" has multiple applications disabled)
-  step %(provider "#{@provider.internal_domain}" has default service and account plan)
-  step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
-end
+  @provider.settings.deny_multiple_applications! if @provider.settings.can_deny_multiple_applications?
+  service = @provider.first_service!
+  service.publish!
+  @provider.update_attribute(:default_account_plan, @provider.account_plans.first)
 
-And "the provider has a buyer with an application" do
-  application_plan = create_plan(:application, name: 'Default', issuer: @provider, published: true, default: true)
-  service_plan = create_plan(:service, name: 'Gold', issuer: @provider)
-
-  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'The Buyer INC.')
-  @buyer.buy!(@provider.account_plans.default)
-  @buyer.buy!(service_plan)
-
-  @application = FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
+  plans = service.service_plans
+  plans.default!(plans.default_or_first || plans.first)
+  FactoryBot.create(:application_plan, name: 'Base', issuer: service, default: true)
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|
   account_or_application_name ||= account_or_service == 'application' ? "Alexisonfire" : "Alexander"
 
-  step %(I am on the #{account_or_service}s admin page)
-  step %(I follow "#{account_or_application_name}")
-  step 'I follow "Edit"'
-  step 'I follow "Delete" and confirm the dialog'
-  step %(I should see "The #{account_or_service} was successfully deleted.")
+  object = if account_or_service == 'application'
+             Application.find_by(name: account_or_application_name)
+           else
+             Account.find_by(name: account_or_application_name)
+           end
+  object.destroy
 end
 
 # This is a maze for your brain
@@ -243,24 +314,25 @@ When "the buyer authenticates by SSO Token" do
 end
 
 And(/^the provider has one buyer$/) do
-  step %(a buyer "bob" signed up to provider "#{@provider.internal_domain}")
+  @buyer = pending_buyer(@provider, 'bob')
+  @buyer.approve! unless @buyer.approved?
 end
 
 And(/^the provider enables credit card on signup feature manually/) do
-  step %(provider "#{@provider.internal_domain}" has "require_cc_on_signup" switch visible)
-  @provider.reload
+  settings = @provider.settings
+  settings.allow_require_cc_on_signup! unless settings.require_cc_on_signup.allowed?
+  settings.show_require_cc_on_signup!  unless settings.require_cc_on_signup.visible?
 end
 
 Given(/^master is the provider$/) do
   @provider = Account.master
   @service ||= @provider.default_service
-  step 'the provider has multiple applications enabled'
-  step "a default application plan of provider \"#{provider_or_master_name}\""
-end
-
-Then /^(?:|I |they )should see inline error "([^"]*)" for ([^"]*)$/ do |text, input_name|
-  inline_error_selector = "li##{input_name.parameterize.underscore} p.inline-errors"
-  assert_selector(inline_error_selector, text: text)
+  @provider.settings.allow_multiple_applications!
+  @provider.settings.show_multiple_applications!
+  FactoryBot.create(:application_plan, name: 'The Plan',
+                                       issuer: @service,
+                                       state: :published,
+                                       default: true)
 end
 
 When "the provider is at {}" do |page_name|
@@ -272,5 +344,5 @@ When "{provider} is suspended" do |provider|
 end
 
 Then "I see the support email of {provider}" do |provider|
-  step %(I should see "#{ThreeScale.config.support_email}")
+  assert_text ThreeScale.config.support_email
 end

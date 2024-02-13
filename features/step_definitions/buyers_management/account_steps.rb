@@ -23,7 +23,7 @@ Given "{provider} has the following buyers:" do |provider, table|
   end
 end
 
-Given "{provider} has {int} buyer(s)" do |provider, number|
+Given "{provider} has {amount} buyer(s)" do |provider, number|
   provider.buyer_accounts.destroy_all
 
   number.to_i.times do
@@ -52,7 +52,7 @@ end
 Given "a recently creater buyer account {string}" do |name|
   user = FactoryBot.attributes_for(:user)
 
-  step %(I go to the new buyer account page)
+  visit new_admin_buyers_account_path
   fill_in "Organization/Group Name", :with => name
   fill_in "Username", :with => user[:username]
   fill_in "Email", :with => user[:email]

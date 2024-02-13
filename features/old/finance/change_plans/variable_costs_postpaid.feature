@@ -9,9 +9,12 @@ Feature: Change plan
       And provider "foo.3scale.localhost" is charging its buyers in postpaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on
-    Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "ExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "VeryExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
+      And the default product of the provider has name "My API"
+      And the following application plans:
+        | Product | Name              | Cost per month |
+        | My API  | CheapPlan         | 0              |
+        | My API  | ExpensivePlan     | 0              |
+        | My API  | VeryExpensivePlan | 0              |
     Given the current domain is foo.3scale.localhost
       And pricing rules on plan "CheapPlan":
       | Metric | Cost per unit | Min | Max      |
@@ -22,14 +25,15 @@ Feature: Change plan
       And pricing rules on plan "VeryExpensivePlan":
       | Metric | Cost per unit | Min | Max      |
       | hits   |           100 |   1 | infinity |
+    And a buyer "stallman"
 
   Scenario: Change plan with variable costs in both plans in the same month (POSTPAID)
-    Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+    Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
-      And I change application plan to "ExpensivePlan"
+      And the buyer changes to application plan "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -38,12 +42,12 @@ Feature: Change plan
 
   @javascript
   Scenario: Hit and change plan the next day bills hit on the old plan
-    Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+    Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 2nd May 2009
-       And I change application plan to "ExpensivePlan"
+       And the buyer changes to application plan "ExpensivePlan"
        And current domain is the admin domain of provider "foo.3scale.localhost" on 16th May 2009
        And I log in as provider "foo.3scale.localhost"
 
@@ -51,17 +55,18 @@ Feature: Change plan
       Then buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      And I navigate to my earnings on 3rd June 2009
+      And time flies to 3rd June 2009
+      And I go to my earnings
       Then I should have an invoice of "11.0 EUR"
 
   @javascript
   Scenario: Hit and change plan the same day bills hit on the new plan
-    Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+    Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost
-       And I change application plan to "ExpensivePlan"
+       And the buyer changes to application plan "ExpensivePlan"
       Then buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -71,12 +76,12 @@ Feature: Change plan
 
   @javascript
   Scenario: Change plan. Provider sees the invoice the day after. (POSTPAID)
-    Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+    Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
-       And I change application plan to "ExpensivePlan"
+       And the buyer changes to application plan "ExpensivePlan"
        And current domain is the admin domain of provider "foo.3scale.localhost" on 16th May 2009
        And I log in as provider "foo.3scale.localhost"
       Then I should have an invoice of "1.0 EUR"
@@ -84,14 +89,14 @@ Feature: Change plan
   Scenario: Variable costs are charged if the cinstance now is in a plan in trial period POSTPAID
     # Only one trial period per account. if you change to a plan with
     # trial period, no trial for you anyway
-    Given plan "ExpensivePlan" has trial period of 25 days
+    Given plan "ExpensivePlan" has a trial period of 25 days
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When I log in as "stallman" on foo.3scale.localhost on 16th May 2009
-      And I change application plan to "ExpensivePlan"
+      And the buyer changes to application plan "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -102,17 +107,17 @@ Feature: Change plan
       Then I should see "EUR 10.00"
 
   Scenario: 2 plan changes in one month POSTPAID
-      Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
         And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
-      And I change application plan to "ExpensivePlan"
+      And the buyer changes to application plan "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 17th May 2009
-      And I change application plan to "CheapPlan"
+      And the buyer changes to application plan "CheapPlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -120,17 +125,17 @@ Feature: Change plan
       Then I should see "EUR 12.00"
 
   # Scenario: change plan in 2 different months
-  #   Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+  #   Given the buyer is signed up to application plan "CheapPlan" on 1st May 2009
   #   When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
   #     And buyer "stallman" makes 1 service transactions with:
   #     | Metric | Value |
   #     | hits   |     1 |
-  #   And I change application plan to "ExpensivePlan"
+  #   And the buyer changes to application plan "ExpensivePlan"
   #   And buyer "stallman" makes 1 service transactions with:
   #   | Metric | Value |
   #   | hits   |     1 |
   #   When I log in as "stallman" on foo.3scale.localhost on 17th May 2009
-  #   And I change application plan to "CheapPlan"
+  #   And the buyer changes to application plan "CheapPlan"
   #   And buyer "stallman" makes 1 service transactions with:
   #   | Metric | Value |
   #   | hits   |     1 |
@@ -140,7 +145,7 @@ Feature: Change plan
   #   Then I should see "EUR 12.00"
 
   Scenario: 2 plan changes in one month the same day POSTPAID
-      Given a buyer "stallman" signed up to application plan "CheapPlan" on 14th May 2009
+      Given the buyer is signed up to application plan "CheapPlan" on 14th May 2009
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
@@ -148,11 +153,11 @@ Feature: Change plan
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
-      And I change application plan to "ExpensivePlan"
+      And the buyer changes to application plan "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      And I change application plan to "VeryExpensivePlan"
+      And the buyer changes to application plan "VeryExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -161,17 +166,17 @@ Feature: Change plan
       Then I should see "EUR 301.00"
 
   Scenario: 2 plan changes in one month in 2 consecutive days POSTPAID
-      Given a buyer "stallman" signed up to application plan "CheapPlan" on 14th May 2009
+      Given the buyer is signed up to application plan "CheapPlan" on 14th May 2009
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
-       And I change application plan to "ExpensivePlan"
+       And the buyer changes to application plan "ExpensivePlan"
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
       When I log in as "stallman" on foo.3scale.localhost on 16th May 2009
-      And I change application plan to "VeryExpensivePlan"
+      And the buyer changes to application plan "VeryExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |

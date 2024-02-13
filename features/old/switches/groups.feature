@@ -5,14 +5,12 @@ Feature: Groups switch
 
   Background:
     Given a provider is logged in
-    And an application plan "power1M" of provider "master"
     And the provider has multiple applications enabled
     Given provider "foo.3scale.localhost" has Browser CMS activated
 
   Scenario: Groups not accessible if not enabled
     Given the provider has "groups" switch denied
-    When I want to go to the groups page
-    Then I should get access denied
+    When I request the url of the groups page then I should see an exception
 
   Scenario: Groups tab works if enabled
     Given the provider has "groups" switch allowed

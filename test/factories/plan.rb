@@ -1,33 +1,53 @@
 # frozen_string_literal: true
 
 FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory (:plan) do
-    sequence(:name) { |n| "plan#{n}" }
-    sequence(:system_name) {|n| "plan#{n}" }
+  factory(:plan) do
+    sequence(:name) { |n| "Plan #{n.days.ago.to_i}" }
+
+    system_name { name.parameterize(separator: '_', preserve_case: false) }
+
+    transient do
+      default { false }
+      # published { false }
+    end
 
     after(:stub) do |plan|
       plan.stubs(:features).returns([])
       plan.features.stubs(:find).with(:all, Mocha::ParameterMatchers::AnyParameters.new).returns([])
       plan.features.stubs(:visible).returns([])
     end
+
+    # trait :published do
+    #   state { 'published' }
+    # end
+
+    # trait :hidden do
+    #   state { 'hidden' }
+    # end
   end
 
-  factory(:account_plan, :parent => :plan, :class => AccountPlan) do
-    association(:issuer, :factory => :provider_account)
-  end
+  factory(:account_plan, parent: :plan, class: AccountPlan) do
+    association(:issuer, factory: :provider_account)
 
-  factory(:published_account_plan, parent: :account_plan) do
-    after(:create) do |plan|
-      plan.publish!
+    after(:build) do |plan, evaluator|
+      plan.issuer.update(default_account_plan: plan) if evaluator.default
     end
   end
 
-  factory(:service_plan, :parent => :plan, :class => ServicePlan) do
-    association(:issuer, :factory => :service)
+  factory(:service_plan, parent: :plan, class: ServicePlan) do
+    association(:issuer, factory: :service)
+
+    after(:build) do |plan, evaluator|
+      plan.issuer.update(default_service_plan: plan) if evaluator.default
+    end
   end
 
   factory(:application_plan_without_rules, parent: :plan, class: ApplicationPlan) do
     association(:issuer, factory: :service)
+
+    after(:build) do |plan, evaluator|
+      plan.issuer.update(default_application_plan: plan) if evaluator.default
+    end
   end
 
   factory(:application_plan, parent: :application_plan_without_rules) do

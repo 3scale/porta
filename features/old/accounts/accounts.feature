@@ -5,11 +5,12 @@ Feature: Account management
 
   Background:
     Given a provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
 
   @javascript
   Scenario: Edit and show account details
     Given the admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
-    Given master provider has the following fields defined for "Account":
+    Given master provider has the following fields defined for accounts:
     | name              | choices | label   | required | read_only | hidden |
     | org_legaladdress  |         | Address | false    | false     | false  |
     | country           |         | Country | false    | false     | false  |
@@ -53,7 +54,9 @@ Feature: Account management
     Then I should see the provider key of provider "foo.3scale.localhost"
 
   Scenario: Buyers don't see their keys on the account details page
-    Given an application plan "Default" of provider "foo.3scale.localhost"
+    Given the following application plan:
+      | Product | Name    |
+      | My API  | Default |
     And a buyer "bob" signed up to application plan "Default"
 
     When I log in as "bob" on foo.3scale.localhost
@@ -82,7 +85,7 @@ Feature: Account management
   @javascript
   Scenario: Provider should see all fields defined for account
     And provider "foo.3scale.localhost" has multiple applications enabled
-      And provider "foo.3scale.localhost" has the following fields defined for "Account":
+      And provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name                 | required | read_only | hidden | label                |
       | vat_code             | true     |           |        | VAT Code             |
       | telephone_number     |          | true      |        | Telephone Number     |
@@ -105,7 +108,6 @@ Feature: Account management
       And I go to the buyer account "randomdude" edit page
 
     Then I should see the fields:
-      | present              |
       | VAT Code             |
       | Telephone Number     |
       | VAT Rate             |

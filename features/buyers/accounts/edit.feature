@@ -7,7 +7,7 @@ Feature: Audience > Accounts > Edit
 
   Scenario: Navigation
     Given they go to the provider dashboard
-    When they follow "1 Account" in the audience dashboard widget
+    When they follow "1 Account" within the audience dashboard widget
     And follow "Pepe"
     And follow "Edit"
     Then the current page is the buyer account edit page for "Pepe"
@@ -23,7 +23,7 @@ Feature: Audience > Accounts > Edit
     Given they go to the buyer account edit page for "Pepe"
     When the form is submitted with:
       | Organization/Group Name | |
-    Then "Organization/Group Name" shows error "can't be blank"
+    Then field "Organization/Group Name" has inline error "can't be blank"
 
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider

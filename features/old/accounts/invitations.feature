@@ -17,8 +17,7 @@ Feature: Invitations
      And I go to the provider users page
     Then I should not see "Invite a New Team Member"
 
-    When I want to go to the provider new invitation page
-    Then I should get access denied
+    When I request the url of the provider new invitation page then I should see an exception
 
   Scenario: When switch is denied as buyer
     Given a buyer "apininja" signed up to provider "foo.3scale.localhost"

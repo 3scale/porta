@@ -6,7 +6,10 @@ Background:
   Given a provider exists on 1st May 1945
     And the provider is charging its buyers
     Given provider "foo.3scale.localhost" has "finance" switch visible
-    And an application plan "best" of provider "foo.3scale.localhost" for 100 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Cost per month |
+      | My API  | best | 100            |
 
   @commit-transactions
   Scenario: Buyer sees no VAT on an invoice by default

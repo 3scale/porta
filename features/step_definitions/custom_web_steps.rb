@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-When /^I leave "([^\"]*)" blank$/ do |field|
-  fill_in field, :with => ''
-end
-
-Then /^I should see link to (.+)$/ do |page_name|
+Then "(I )(they )should see (a )(the )link to {}" do |page_name|
   path = path_to(page_name)
   assert page.all('a').any? { |node| matches_path?(node[:href], path) }
 end
@@ -17,14 +13,6 @@ end
 #TODO: move this outta here!
 def matches_path?(url, path)
   url =~ /^(?:https?:\/\/[^\/]+)?#{Regexp.quote(path)}/
-end
-
-Then(/^I should see within "([^"]*)" the following:$/) do |selector, table|
-  within selector do
-    table.rows.flatten.each do |item|
-      step %(I should see "#{item}")
-    end
-  end
 end
 
 #TODO: turn steps into the use of the 'the'
@@ -46,6 +34,14 @@ Then /^I should not see (?:the )?link "([^"]*)"$/ do |label|
   assert page.has_no_xpath? ".//a[text()='#{label}']"
 end
 
+Then "there {should} be a button to {string}" do |visible, label|
+  assert_equal visible, has_button?(label)
+end
+
+Then "there {should} be a link to {string}" do |visible, label|
+  assert_equal visible, has_link?(label)
+end
+
 Then(/^I should see button "([^"]*)"( disabled)?$/) do |label, disabled|
   assert find_button(label, disabled: disabled.present?)
 end
@@ -59,28 +55,16 @@ Then /^the "([^"]*)" select should have "([^"]*)" selected$/ do |label, text|
   assert select.has_css?(%(option[selected]:contains("#{text}")))
 end
 
-Then /^I should see the fields:$/ do |table|
-  table.rows.each do |field|
-    step %{I should see field "#{field.first}"}
-  end
+Then "(I )(they ){should} see the fields:" do |visible, table|
+  assert(table.raw.flatten.all? { |field| has_field?(field, wait: 0) == visible })
 end
 
-Then /^I should see the fields in order:$/ do |table|
+Then "(I )(they ){should} see field {string}" do |visible, field|
+  assert_equal visible, has_field?(field, wait: 0)
+end
+
+Then "I/they should see the fields in order:" do |table|
   page.html.should match /#{table.rows.map(&:first).map(&:downcase).join(".*")}/mi
-end
-
-Then /^I should see field "([^\"]*)"$/ do |field|
-  should have_field(field)
-end
-
-Then /^(?:I|they) should not see the fields:$/ do |table|
-  table.rows.each do |field|
-    step %{I should not see field "#{field.first}"}
-  end
-end
-
-Then /^I should not see field "([^"]*)"$/ do |field|
-  should_not have_field(field)
 end
 
 Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
@@ -116,12 +100,12 @@ Then /^I should not see "([^"]*)" column$/ do |text|
 end
 
 Then /^I should see "([^\"]*)" in bold$/ do |text|
-  assert has_css?('strong', :text => text)
+  assert_selector(:css, 'strong', :text => text)
 end
 
 # this is being used only because of params[:type] in api/plans controller urls
 # remove if that is not more used?
-Then /^(?:|I )should be at url for (.+)$/ do |page_name|
+Then /^(?:|I |they )should be at url for (.+)$/ do |page_name|
   current_path = URI.parse(current_url).request_uri
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
@@ -130,18 +114,61 @@ Then /^(?:|I )should be at url for (.+)$/ do |page_name|
   end
 end
 
-When /^(.*) within ([^:"]+)$/ do |lstep, scope|
-  within(*selector_for(scope)) do
-    step lstep
+Then "they should be able to go to {page}" do |path|
+  visit path
+  assert_current_path path
+end
+
+Then "they should be able to go to the following pages:" do |table|
+  table.raw.flatten.each do |page|
+    path = path_to(page)
+    visit path
+    assert_current_path path
   end
 end
 
-[ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the main menu' ].each do |scope|
-  When /^(.*) in (#{scope})$/ do |lstep, scope|
-    within(*selector_for(scope)) do
-      step lstep
-    end
+# Confine any one step within a specific css selector from features/support/selectors.rb
+# Due to incompatibilities (FIXME?) this step do not support selectors with double quotes. If the
+# desired selector has double quotes, use the "belongs to" step instead.
+#
+#   When they follow "Application 001" within the table body
+#   Then should see the following table within the features:
+#     | Name         | Description                                |
+#     | Free T-shirt | T-shirt with logo of our company for free. |
+#
+When /^(.*) within ([^:"]+)$/ do |lstep, scope|
+  within(*selector_for(scope)) do
+    step(lstep)
+  end
+end
+
+# Same as above, but with a data-table.
+#
+When /^(.*) within ([^:"]+):$/ do |lstep, scope, table|
+  within(*selector_for(scope)) do
+    step(lstep, table)
+  end
+end
+
+# Confine any one step within a specific css selector from features/support/selectors.rb
+# This step supports selectors with double quotes.
+#
+#   When they follow "Delete" that belongs to application key "key-1"
+#   Then should see the following table that belongs to metric "Hits" usage limits:
+#     | Period   | Value |
+#     | 1 minute | 10    |
+#
+When /^(.*) that belongs to ([^:]+)$/ do |lstep, scope|
+  within(*selector_for(scope)) do
+    step(lstep)
+  end
+end
+
+# Same as above, but with a data-table.
+#
+When /^(.*) that belongs to ([^:]+):$/ do |lstep, scope, table|
+  within(*selector_for(scope)) do
+    step(lstep, table)
   end
 end
 
@@ -159,4 +186,12 @@ toggled_input_selector = '[data-behavior="toggle-inputs"] legend'
 
 And(/^I toggle "([^"]*)"$/) do |name|
   find(toggled_input_selector, text: /#{name}/i).click
+end
+
+Then "the following warning should be visible:" do |doc_string|
+  assert has_css?('.pf-c-alert.pf-m-warning', text: doc_string.tr("\n", ' '))
+end
+
+Then "there should not be any wanrning" do
+  assert has_no_css?('.pf-c-alert.pf-m-warning', wait: 0)
 end

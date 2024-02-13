@@ -33,7 +33,9 @@ Feature: Provider stats
 
   Scenario: Top users (single application mode)
     Given the provider has multiple applications disabled
-    And an application plan "Default" of provider "foo.3scale.localhost"
+    And the following application plan:
+      | Product | Name    | Default |
+      | API     | Default | true    |
     And a buyer "bob" signed up to application plan "Default"
     And I follow "API"
     And I follow "Analytics"

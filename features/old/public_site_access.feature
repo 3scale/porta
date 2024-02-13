@@ -1,7 +1,7 @@
 Feature: Public site access
   In order to see how the public/buyer side of my site looks like
   As a provider
-  I want to get there while logged in in the provider side
+  I want to get there while logged in in the admin portal
 
   Background:
     Given a provider is logged in

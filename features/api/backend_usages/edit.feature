@@ -29,7 +29,7 @@ Feature: Product > Integration > Backends > Edit
     Given they go to the edit usage config page between "My API" and "Backend 1"
     When the form is submitted with:
       | Public Path | ??? |
-    Then "Path" shows error "must be a path separated by \"/\". E.g. \"\" or \"my/path\""
+    Then field "Path" has inline error "must be a path separated by \"/\". E.g. \"\" or \"my/path\""
 
   Scenario: Can't use the same public path twice
     Given the product uses the following backends:
@@ -38,7 +38,7 @@ Feature: Product > Integration > Backends > Edit
     Given they go to the edit usage config page between "My API" and "Backend 1"
     When the form is submitted with:
       | Public Path | /v2 |
-    Then "Path" shows error "This path is already taken. Specify a different path."
+    Then field "Path" has inline error "This path is already taken. Specify a different path."
 
   Scenario: User changes their mind
     Given they go to the edit usage config page between "My API" and "Backend 1"

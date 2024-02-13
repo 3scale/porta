@@ -19,7 +19,7 @@ end
 
 Then "they should not be able to edit their personal details" do
   click_on 'Update Personal Details'
-  assert has_css?('.help-block', text: 'is incorrect')
+  assert_selector(:css, '.help-block', text: 'is incorrect')
   assert_flash 'CURRENT PASSWORD IS INCORRECT'
   assert_current_path admin_account_personal_details_path
 end
@@ -29,8 +29,8 @@ Then "they should be able to edit their personal details" do
   assert_flash 'USER WAS SUCCESSFULLY UPDATED.'
   assert_current_path admin_account_users_path
   current_user.reload
-  assert has_css?('tr > td:nth-child(2)', text: current_user.username)
-  assert has_css?('tr > td:nth-child(3)', text: current_user.email)
+  assert_selector(:css, 'tr > td:nth-child(2)', text: current_user.username)
+  assert_selector(:css, 'tr > td:nth-child(3)', text: current_user.email)
 end
 
 And "password has changed" do
@@ -44,8 +44,8 @@ end
 
 Then "they should not be able to edit the email" do
   click_on 'Update Personal Details'
-  assert has_css?('#user_email.error')
-  assert has_css?('.inline-errors', text: 'is too short (minimum is 6 characters) and should look like an email address')
+  assert_selector(:css, '#user_email.error')
+  assert_selector(:css, '.inline-errors', text: 'is too short (minimum is 6 characters) and should look like an email address')
 end
 
 When "the buyer edits their custom personal details" do

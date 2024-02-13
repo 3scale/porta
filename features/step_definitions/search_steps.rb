@@ -14,7 +14,7 @@ end
 
 # DEPRECATED: remove and use "the table is filtered with:"
 When "I/they search for:" do |table|
-
+  ActiveSupport::Deprecation.warn 'remove and use "the table is filtered with:"'
   within ".search" do
     parameterize_headers(table)
 
@@ -79,16 +79,16 @@ end
 
 Then "they should see an empty state" do
   within('.pf-c-empty-state') do
-    assert has_css?('.pf-c-title')
-    assert has_css?('.pf-c-empty-state__body')
+    assert_selector(:css, '.pf-c-title')
+    assert_selector(:css, '.pf-c-empty-state__body')
   end
 end
 
 Then "they should see an empty search state" do
   within('tbody .pf-c-empty-state') do
-    assert has_css?('.pf-c-title', text: 'No results found')
-    assert has_css?('.pf-c-empty-state__body')
-    assert has_css?('.pf-c-empty-state__primary', text: 'Clear all filters')
+    assert_selector(:css, '.pf-c-title', text: 'No results found')
+    assert_selector(:css, '.pf-c-empty-state__body')
+    assert_selector(:css, '.pf-c-empty-state__primary', text: 'Clear all filters')
   end
 end
 

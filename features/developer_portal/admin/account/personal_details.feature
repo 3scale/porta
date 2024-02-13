@@ -3,7 +3,16 @@ Feature: Dev Portal Buyer Personal Details
   I want to change my personal details
 
   Background:
-    Given a buyer logged in to a provider
+    Given a provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Default | Cost per month |
+      | My API  | Gold | true    | 100            |
+    And an approved buyer "John" signed up to the provider
+    And the following application:
+      | Buyer | Name   |
+      | John  | My App |
+    And the buyer logs in to the provider
 
   @javascript
   Scenario: Buyer doesn't use current password
@@ -29,7 +38,7 @@ Feature: Dev Portal Buyer Personal Details
 
   @javascript
   Scenario: Provider has custom personal details fields
-    Given the provider has the following fields defined for "User":
+    Given the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |

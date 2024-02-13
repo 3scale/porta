@@ -8,9 +8,12 @@ Feature: Provider invoices for 3scale
     Given the time is 1st May 2009
     And master provider was created on May 01, 2009
     And provider "master" is charging its buyers
-    Given an application plan "Base" of provider "master" for 0 monthly
-    And an application plan "Mega" of provider "master" for 31 monthly
-    And an application plan "Pro" of provider "master" for 3100 monthly
+    And the default product of provider "master" has name "Master API"
+    And the following application plans:
+      | Product    | Name | Cost per month |
+      | Master API | Base | 0              |
+      | Master API | Mega | 31             |
+      | Master API | Pro  | 3100           |
 
   Scenario: List my invoices - full for Mega
     And a provider "foo.3scale.localhost" signed up to plan "Mega"
@@ -35,7 +38,7 @@ Feature: Provider invoices for 3scale
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
     And time flies to 25th May 2009
-    And I change application plan to "Pro"
+    And the provider changes to application plan "Pro"
     And time flies to 1st June 2009
     And I navigate to invoice issued for me in "May, 2009"
     Then I should see line items
@@ -52,9 +55,9 @@ Feature: Provider invoices for 3scale
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given the time is 5th May 2009
     And I log in as provider "foo.3scale.localhost"
-    And I change application plan to "Mega"
+    And the provider changes to application plan "Mega"
     And time flies to 25th May 2009
-    And I change application plan to "Pro"
+    And the provider changes to application plan "Pro"
     And time flies to 1st June 2009
     And I navigate to invoice issued for me in "May, 2009"
     Then I should see line items

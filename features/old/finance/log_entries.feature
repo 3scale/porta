@@ -7,9 +7,11 @@ Feature: Log Entries
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" is charging
       And provider "foo.3scale.localhost" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
+    And the following application plans:
+      | Product | Name             | Cost per month |
+      | API     | FreeAsInBeer     | 0              |
+      | API     | PaidAsInLunch    | 31             |
+      | API     | PaidAsInDiplomat | 3100           |
     Given the current domain is foo.3scale.localhost
 
 @wip

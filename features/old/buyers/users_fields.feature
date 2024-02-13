@@ -8,7 +8,7 @@ Feature: Buyer users fields management
     Given a provider is logged in
     And the provider has multiple applications enabled
     And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
-    Given the provider has the following fields defined for "User":
+    And the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -24,7 +24,6 @@ Feature: Buyer users fields management
       | First name          |
       | User extra required |
     Then I should see the fields:
-      | present              |
       | First name           |
       | Last name            |
       | Job role             |

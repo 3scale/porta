@@ -9,76 +9,123 @@ module HtmlSelectorsHelper
     #
     # Page sections
     #
-    when 'page content'
-      '#content'
-    when 'the main menu', :main_menu
+    when /the main menu/
       '#mainmenu'
-    when 'the audience dashboard widget', :audience_dashboard_widget
-      '#audience'
-    when 'the apis dashboard widget', :apis_dashboard_widget
+
+    when /^the main manu's section (.*)$/
+      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav')
+
+    when /the apis dashboard widget/
       '.DashboardSection--services'
-    when 'the secondary nav'
+
+    when /the secondary nav/
       'nav.pf-c-nav.pf-m-horizontal'
-    when 'the user widget'
-      '#user_widget'
-    when 'the footer'
-      '#footer'
-    when 'the account details box'
-      '#account_details'
-    when 'service widget'
-      '.service-widget'
-    when 'the products widget'
+
+    when /the modal/
+      '#cboxContent' # '#fancybox-content'
+
+    #
+    # Dashboard
+    #
+    when /the audience dashboard widget/
+      '#audience'
+    when /the products widget/
       '#products-widget'
 
     #
-    # Invoicing helpers
+    # Tables
     #
-
-    when /^(opened|closed) order$/
-      text = $1 == 'opened' ? 'open' : $1
-      [:xpath, "//tr[td[text() = '#{text}']]"]
-
-    #
-    # General helpers
-    #
-    when /^(the )?table header$/
+    when /^the table header$/
       'table thead'
 
-    when /^(the )?table body$/
+    when /^the table body$/
       'table tbody'
 
-    when 'table'
-      'table'
+    when /the table/
+      '.pf-c-table'
 
-    when 'the toolbar'
+    when /the toolbar/
       '.pf-c-page__main-section .pf-c-toolbar'
 
-    when 'search form'
+    when /the search form/
       'tr.search'
 
-    when 'the results'
-      'table.pf-c-table > tbody'
+    when /the bulk operations/ # Legacy bulk operations card, not the toolbar dropdown
+      '.pf-c-card#bulk-operations'
 
-    when /the body/
-      "html > body"
+    #
+    # Product
+    #
+    when /deployment options/
+      '#service_deployment_option_input'
 
-    when 'fancybox', 'colorbox', 'the modal'
-      '#cboxContent' # '#fancybox-content'
+    when /authentication methods/
+      '#service_proxy_authentication_method_input'
 
-    when "fancybox header"
-      '#cboxContent h2'
-
-    when 'the bulk operations'
-      '#bulk-operations'
-
-    when /^section (.*)$/
-      [:xpath, "//button[text() = '#{$1}']/following-sibling::section[1]"]
+    when /the hourly usage limit for metric "(.*)" on application plan "(.*)"/
+      plan = ApplicationPlan.find_by!(name: $2)
+      metric = plan.metrics.find_by!(system_name: $1)
+      usage_limit = metric.usage_limits.find_by!(period: 'hour')
+      "##{dom_id(usage_limit)}"
 
     #
     # Application
     #
-    when 'the API Credentials card'
+    when /the API Credentials card/
       'div#application_keys'
+
+    when /^application key "(.*)"$/
+      find %(#application_keys .key[data-key="#{$1}"])
+
+    when /the application widget/
+      '#applications_widget'
+
+    when /the change plan card/
+      '#change_plan_card'
+
+    when /the current utilization card/
+      '#application-utilization'
+
+    when /the application details/
+      '[aria-label="Application details list"], dl.dl-horizontal'
+
+    when /the referrer filters/
+      '#referrer_filters'
+
+    when /the referrer filter "(.*)"/
+      find('#referrer_filters tr[id^="referrer_filter_"] td', text: $1)
+        .sibling('td')
+
+    #
+    # Plans
+    #
+    when /metric "(.*)" usage limits/
+      find('#metrics_container tr', text: $1).sibling('tr', text: 'Usage Limits')
+
+    when /the features/
+      find(:xpath, '//table[@id="features"]/..')
+
+    when /feature "(.*)"/
+      find('table#features tbody tr', text: $1)
+
+    when /the plan card/
+      '#plan-widget-with-actions'
+
+    #
+    # Users
+    #
+    when /user "(.*)"/
+      "#user_#{User.find_by(username: $1).id}"
+
+    #
+    # Dev portal
+    #
+    when 'the pagination'
+      'ul.pagination'
+    when 'the navigation bar'
+      'ul.navbar-nav'
+    when 'the application keys'
+      '#application_keys'
 
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" \

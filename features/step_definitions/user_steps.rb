@@ -16,8 +16,8 @@ Given "an active user {string} of {account}" do |username, account|
   FactoryBot.create(:active_user, :account => account, :username => username)
 end
 
-Given "an active admin {string} of {account}" do |username, account|
-  FactoryBot.create(:active_admin, :account => account, :username => username)
+Given "an (active )admin {string} of the provider" do |username|
+  FactoryBot.create(:active_admin, account: @provider, username: username)
 end
 
 Given "an active user {string} of {account} with {word} permission" do |username, account, permission|
@@ -42,12 +42,6 @@ end
 
 Given "{user} was signed up with password" do |user|
   user.update(signup_type: nil)
-end
-
-Given /^provider "([^\"]*)" has the following users:$/ do |provider_name, table|
-  table.hashes.each do |hash|
-    step %(an #{hash['State'] || 'active'} user "#{hash['User']}" of account "#{provider_name}")
-  end
 end
 
 Given "{user} has email {string}" do |user, email|

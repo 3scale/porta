@@ -6,13 +6,11 @@ Feature: Buyer signup to service allowing multiple applications per buyer
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-      And provider "foo.3scale.localhost" has multiple applications enabled
-      And provider "foo.3scale.localhost" requires cinstances to be approved before use
-      And provider "foo.3scale.localhost" requires accounts to be approved
-      # TODO: add scenario without default app plan
-      And an application plan "iPhone" of service "default"
-      And application plan "iPhone" is default
-      And the current domain is foo.3scale.localhost
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" requires cinstances to be approved before use
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    # TODO: add scenario without default app plan
+    And the current domain is foo.3scale.localhost
 
   Scenario: Signup, activate, approve and login
     When I go to the sign up page
@@ -39,6 +37,6 @@ Feature: Buyer signup to service allowing multiple applications per buyer
 
   Scenario: Attempt to sign up with Invalid details
     When I go to the sign up page
-    When I leave "Username" blank
-    And I press "Sign up"
+    And the form is submitted with:
+      | Username |  |
     And I should see error "is too short (minimum is 3 characters)" for field "Username"
