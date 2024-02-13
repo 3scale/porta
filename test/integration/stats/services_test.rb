@@ -205,8 +205,8 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'top_clients as json' do
     plan = FactoryBot.create(:application_plan, issuer: @service)
-    cinstance1 = FactoryBot.create(:cinstance, plan: plan, name: nil)
-    cinstance2 = FactoryBot.create(:cinstance, plan: plan, name: nil)
+    cinstance1 = FactoryBot.create(:cinstance, plan: plan)
+    cinstance2 = FactoryBot.create(:cinstance, plan: plan)
 
     make_transaction_at(Time.utc(2009, 12,  2), cinstance_id: cinstance1.id)
     make_transaction_at(Time.utc(2009, 12,  3), cinstance_id: cinstance2.id)
@@ -218,13 +218,13 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_media_type 'application/json'
     assert_json "period" => { "name" => "month", "since" => "2009-12-01T00:00:00Z", "until" => "2009-12-31T23:59:59Z" },
-                "applications" => [{ "name" =>nil,
+                "applications" => [{ "name" => cinstance1.name,
                                      "plan" => { "name" => plan.name, "id" => plan.id },
                                      "id" => cinstance1.id,
                                      "value" => "2",
                                      "account" => { "name" => cinstance1.user_account.org_name, "id" => cinstance1.user_account.id },
                                      "service" => { "id" => cinstance1.service_id } },
-                                   { "name" => nil,
+                                   { "name" => cinstance2.name,
                                      "plan" => { "name" => plan.name, "id" => plan.id },
                                      "id" => cinstance2.id,
                                      "value" => "1",
