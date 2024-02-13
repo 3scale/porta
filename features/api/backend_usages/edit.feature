@@ -13,7 +13,7 @@ Feature: Product > Integration > Backends > Edit
     And follow "My API"
     And press "Integration" within the main menu
     And follow "Backends" within the main menu
-    And follow "Edit config with Backend 1"
+    And follow "Edit config with Backend 1" to the edit backend usage page of "Backend 1" for product "My API"
     Then the current page is the edit backend usage page of "Backend 1" for product "My API"
 
   Scenario: Changing the public path

@@ -28,11 +28,14 @@ When /^(?:|I |they )press( invisible)? "([^"]*)"$/ do |invisible, button|
   click_button(button, visible: !invisible)
 end
 
-When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"$/ do |any, invisible, link|
+When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(?! within))*))?$/ do |any, invisible, link, page_name|
   # there must be a capybara bug because assert_link fails with
   # Unused parameters passed to Capybara::Queries::SelectorQuery : [:link, "..."]
   # assert_link(link, exact: true, visible: !invisible, count: 1) unless any
-  assert_selector(:link, link, exact: true, visible: !invisible, count: 1) unless any
+  assert_opts = { exact: true, visible: !invisible }
+  assert_opts[:count] = 1 unless any
+  assert_opts[:href] = path_to(page_name) if page_name
+  assert_selector(:link, link, **assert_opts)
   click_link(link, exact: true, visible: !invisible)
 end
 
