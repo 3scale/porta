@@ -1,1 +1,1 @@
-//= require vendor/jquery-1.7.1.min
+//= require vendor/jquery-3.5.0.min

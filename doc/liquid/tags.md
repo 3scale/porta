@@ -25,9 +25,6 @@ Font Awesome:
 - font-awesome/4.3.0/css/font-awesome.css
 - font-awesome/4.3.0/css/font-awesome.min.css
 
-jQuery 1.7.1:
-- jquery/1.7.1/jquery.min.js
-
 jQuery 3.5.0:
 - jquery/3.5.0/jquery.min.js
 
@@ -43,7 +40,7 @@ SwaggerUI 2.1.3
 
 SwaggerUI 2.2.10
 - swagger-ui/2.2.10/swagger-ui.js
-      
+
 
 __Example:__ Using cdn_asset tag in liquid
 ```liquid
@@ -58,7 +55,7 @@ Renders body of a page. Use this only inside a layout.
 
 Prints all liquid variables available in a template into an HTML comment.'
 We recommend __to remove this tag__ from public templates.
-      
+
 
 ```liquid
 {% debug:help %}
@@ -94,7 +91,7 @@ SMTP header for the message.
 | reply-to      |                    | {% reply-to = 'support@example.com' %}            |
 | header        | custom SMTP header | {% header 'X-SMTP-Group' = 'Important' %}         |
 | do_not_send   | discard the email  | {% do_not_send %}                                 |
-    
+
 
 __Example:__ Conditional blind carbon copy
 ```liquid
@@ -212,7 +209,7 @@ of the form. The supported forms are:
      </td>
    </tr>
  </table>
-      
+
 
 __Example:__ A form to create an application
 ```liquid
@@ -283,7 +280,7 @@ Includes a widget to review or change application plan
 
 
 This tag includes portlet by system name.
-      
+
 # Tag 'sort_link'
 
 Renders a link that sorts the column of table based on current params
