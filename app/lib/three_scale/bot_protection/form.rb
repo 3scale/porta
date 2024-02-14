@@ -9,7 +9,11 @@ module ThreeScale
       def bot_protection_inputs
         return ''.html_safe unless bot_protection_enabled?
 
-        recaptcha_v3(action: options[:url])
+        recaptcha_v3(action: recaptcha_action)
+      end
+
+      def recaptcha_action
+        controller.controller_path
       end
     end
   end
