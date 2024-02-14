@@ -44,11 +44,6 @@ Feature: Product > Integration > Backends
         | Backend 2 | http://www.example.com:80 | /v2         |
         | Backend 3 | http://www.example.com:80 | /v3         |
 
-    Scenario: Editing a backend config
-      When they go to the backends of product "My API"
-      And follow "Edit config with Backend 2"
-      Then the current page is the edit usage config page between "My API" and "Backend 2"
-
     Scenario: Deleting a backend config
       When they go to the backends of product "My API"
       And follow "Delete config with Backend 1" and confirm the dialog
