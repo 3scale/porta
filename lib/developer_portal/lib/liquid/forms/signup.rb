@@ -34,6 +34,10 @@ module Liquid
         signup_path
       end
 
+      def recaptcha_action
+        DeveloperPortal::Engine.routes.recognize_path(path).fetch(:controller)
+      end
+
       protected
 
       def selected_plans
