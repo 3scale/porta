@@ -15,7 +15,7 @@ module Liquid
         super(content + bot_protection_inputs)
       end
 
-      delegate :input, :semantic_errors, :options, to: :form_builder
+      delegate :input, :semantic_errors, to: :form_builder
 
       def site_account
         context.registers[:site_account]
@@ -34,7 +34,7 @@ module Liquid
       def form_builder
         @form_builder ||= begin
           object_name = ActiveModel::Naming.param_key(model)
-          Formtastic::FormBuilder.new(object_name, model, template, { url: path })
+          Formtastic::FormBuilder.new(object_name, model, template, {})
         end
       end
     end
