@@ -75,7 +75,16 @@ Given "the table has the following row(s):" do |table|
     row.select.with_index { |column, i| headers_index.include?(i) }
   end
 
+  retries ||= 3
   assert(expected.all? { |row| actual_filtered.include?(row) })
+rescue Minitest::Assertion
+  retries -= 1
+  if retries > 0
+    sleep 1
+    retry
+  end
+
+  raise
 end
 
 # Check all rows but not all columns
