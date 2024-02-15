@@ -62,7 +62,7 @@ export const CustomCatalog: React.FC = () => {
                     <QuickStartTile
                       isActive={id === activeQuickStartID}
                       quickStart={quickStart}
-                      status={getQuickStartStatus(allQuickStartStates!, id)}
+                      status={getQuickStartStatus(allQuickStartStates!, id!)}
                     />
                   </GalleryItem>
                 )
