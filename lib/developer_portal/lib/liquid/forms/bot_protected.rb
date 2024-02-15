@@ -12,27 +12,27 @@ module Liquid
       end
 
       def render(content)
-        super(content + bot_protection)
+        super(content + bot_protection_inputs)
       end
 
       delegate :input, :semantic_errors, to: :form_builder
 
+      def site_account
+        context.registers[:site_account]
+      end
+
       def template
         context.registers[:view]
+      end
+
+      def recaptcha_action
+        DeveloperPortal::Engine.routes.recognize_path(path).fetch(:controller)
       end
 
       protected
 
       def model
         @model ||= object.instance_variable_get(:@model)
-      end
-
-      def bot_protection
-        protector = bot_protection_inputs
-
-        return '' if protector.blank?
-
-        form_builder.inputs { template.concat(protector) }
       end
 
       def form_builder

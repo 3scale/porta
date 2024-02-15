@@ -24,6 +24,12 @@ module ThreeScale
 
         success
       end
+
+      unless defined? :controller_path
+        def controller_path
+          raise NotImplementedError, "#{self.class} must implement #controller_path"
+        end
+      end
     end
   end
 end

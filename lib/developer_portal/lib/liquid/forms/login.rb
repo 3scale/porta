@@ -13,6 +13,10 @@ module Liquid
       def path
         session_path
       end
+
+      def recaptcha_action
+        DeveloperPortal::Engine.routes.recognize_path(login_path).fetch(:controller)
+      end
     end
   end
 end

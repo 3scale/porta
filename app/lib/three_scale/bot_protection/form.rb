@@ -6,14 +6,14 @@ module ThreeScale
       include Base
       include Recaptcha::Adapters::ViewMethods
 
-      delegate :site_account, to: :template
-
-      private
-
       def bot_protection_inputs
         return ''.html_safe unless bot_protection_enabled?
 
-        recaptcha_v3(action: template.controller.controller_path)
+        recaptcha_v3(action: recaptcha_action)
+      end
+
+      def recaptcha_action
+        raise NotImplementedError, "#{self.class} must implement #recaptcha_action"
       end
     end
   end

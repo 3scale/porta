@@ -13,8 +13,10 @@ module ThreeScale
       class TestFormBuilder < ::Formtastic::FormBuilder
         include ThreeScale::BotProtection::Form
 
-        def bot_protection
-          bot_protection_inputs
+        delegate :controller, to: :template
+
+        def recaptcha_action
+          '/test/create'
         end
       end
 
@@ -22,7 +24,7 @@ module ThreeScale
         def new
           template = ActionView::Base.new(ActionView::LookupContext.new([]), {}, self)
           form = TestFormBuilder.new(:account, Account.new, template, {})
-          render plain: form.bot_protection
+          render plain: form.bot_protection_inputs
         end
       end
 

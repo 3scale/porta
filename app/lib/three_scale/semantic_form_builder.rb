@@ -2,7 +2,7 @@ module ThreeScale
   class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::BotProtection::Form
 
-    delegate :tag, to: :template
+    delegate :tag, :site_account, :controller, to: :template
 
     # Allow specify how to display errors for the input
     #
@@ -106,9 +106,8 @@ module ThreeScale
       end
     end
 
-    # Just adds fields from bot protection module
-    def bot_protection
-      bot_protection_inputs
+    def recaptcha_action
+      controller.controller_path
     end
   end
 end

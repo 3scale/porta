@@ -26,7 +26,7 @@ class ThreeScale::BotProtection::FormTest < ActiveSupport::TestCase
 
     test 'bot_protection_inputs returns reCaptcha if bot protection is enabled' do
       @subject.stubs(:bot_protection_enabled?).returns(true)
-      @subject.template.stubs(:controller).returns(mock('controller', controller_path: '/test'))
+      @subject.stubs(:recaptcha_action).returns('/test')
 
       result = @subject.send(:bot_protection_inputs)
 
