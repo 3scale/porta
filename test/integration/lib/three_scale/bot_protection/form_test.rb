@@ -14,6 +14,10 @@ module ThreeScale
         include ThreeScale::BotProtection::Form
 
         delegate :controller, to: :template
+
+        def recaptcha_action
+          '/test/create'
+        end
       end
 
       class TestController < ApplicationController

@@ -105,9 +105,9 @@ module ThreeScale
         tag.div(class: 'pf-c-form__actions', &block)
       end
     end
-  end
 
-  def recaptcha_action
-    controller.controller_path
+    def recaptcha_action
+      controller.controller_path
+    end
   end
 end
