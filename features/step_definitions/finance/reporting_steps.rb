@@ -1,6 +1,6 @@
 Then /^on (.*), me and "([^\"]+)" should get email about (\d{1})\.payment problem$/ do |date, provider,attempt|
-  step %(a clear email queue)
-  step %(time flies to #{date})
-  step %(I should receive an email with subject "Problem with payment")
-  step %("#{provider}" should receive an email with subject "User payment problem")
+  reset_mailer
+  time_flies_to(date)
+  assert_equal(1, unread_emails_for(nil).count { |m| m.subject =~ Regexp.new(Regexp.escape("Problem with payment")) })
+  assert_equal(1, unread_emails_for(provider).count { |m| m.subject =~ Regexp.new(Regexp.escape("User payment problem")) })
 end

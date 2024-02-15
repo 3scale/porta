@@ -10,11 +10,11 @@ Feature: Account service plans management
     And the provider has "service_plans" visible
     Given a default service of provider "foo.3scale.localhost" has name "Regular API"
     And a service "Fancy API" of provider "foo.3scale.localhost"
-    Given a service plan "Only one" for service "Regular API" exists
-    And service plan "Only one" is default
-    Given a service plan "Expensive one" for service "Fancy API" exists
-    And a service plan "Cheap one" for service "Fancy API" exists
-    And service plan "Cheap one" is default
+    And the following service plans:
+      | Product     | Name          | Default |
+      | Regular API | Only one      | true    |
+      | Fancy API   | Expensive one |         |
+      | Fancy API   | Cheap one     | true    |
     Given a buyer "bob" signed up to provider "foo.3scale.localhost"
 
   Scenario: Link to service contracts on account page in enterprise
@@ -30,7 +30,7 @@ Feature: Account service plans management
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Bot Protection      |
+      | Bot Protection       |
       | SSO Integrations     |
       | Liquid Reference     |
 
@@ -48,5 +48,5 @@ Feature: Account service plans management
     When I follow "Change Fancy API subscription"
     Then I should see "Change subscribed plan"
     When I select "Expensive one" from "Plan"
-    And I press "Change subscription" within fancybox
+    And I press "Change subscription" within the modal
     Then I should see "Expensive one"

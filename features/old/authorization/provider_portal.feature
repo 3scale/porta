@@ -6,70 +6,49 @@ Feature: Provider portal section authorization
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has Browser CMS activated
+    And provider "foo.3scale.localhost" has Browser CMS activated
     Given current domain is the admin domain of provider "foo.3scale.localhost"
 
-  Scenario Outline: Provider admin can access portal
+  Scenario: Provider admin can access portal
     When I log in as provider "foo.3scale.localhost"
-
     When I go to the provider dashboard
-    Then I should see the link "PORTAL" in the audience dashboard widget
-
-    When I go to the <page> page
-    Then I should be on the <page> page
-
-    Examples:
-      | page          |
-      | CMS Templates |
-      | CMS Sections  |
-      | CMS Files     |
+    Then I should see the link "PORTAL" within the audience dashboard widget
+    Then they should be able to go to the following pages:
+      | the CMS Templates page |
+      | the CMS Sections page  |
+      | the CMS Files page     |
 
   Scenario: Provider admin can access portal groups
     When I log in as provider "foo.3scale.localhost"
-    When I want to go to the groups page
-    Then I should get access denied
-
+    Then they should see an error when going to the groups page
     When provider "foo.3scale.localhost" has "groups" switch allowed
+    Then they should be able to go to the groups page
 
-    When I go to the groups page
-    Then I should be on the groups page
-
-  Scenario Outline: Members by default cannot access portal
+  Scenario: Members by default cannot access portal
     Given an active user "member" of account "foo.3scale.localhost"
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-
+    And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
-     And I go to the provider dashboard
-    Then I should not see "Portal" in the audience dashboard widget
-
-    When I request the url of the '<page>' page then I should see an exception
-
-    Examples:
-      | page          |
-      | CMS Templates |
-      | CMS Sections  |
-      | CMS Files     |
-      #not groups
-      | groups |
+    And I go to the provider dashboard
+    Then I should not see "Portal" within the audience dashboard widget
+    And they should see an error when going to the following pages:
+      | the CMS Templates page |
+      | the CMS Sections page  |
+      | the CMS Files page     |
+      | the groups page        |
 
   Scenario: Members of portal group can not access portal groups area
     Given an active user "member" of account "foo.3scale.localhost"
-     And user "member" has access to the admin section "portal"
-     When I log in as provider "member"
-     When I request the url of the 'groups' page then I should see an exception
+    And user "member" has access to the admin section "portal"
+    When I log in as provider "member"
+    Then they should see an error when going to the groups page
 
-  Scenario Outline: Members of portal group can access portal
+  Scenario: Members of portal group can access portal
     Given an active user "member" of account "foo.3scale.localhost"
-      And user "member" has access to the admin section "portal"
-     When I log in as provider "member"
-      And I go to the provider dashboard
-    Then I should see "Portal" in the audience dashboard widget
-
-    When I go to the <page> page
-    Then I should be on the <page> page
-
-    Examples:
-      | page          |
-      | CMS Templates |
-      | CMS Sections  |
-      | CMS Files     |
+    And user "member" has access to the admin section "portal"
+    When I log in as provider "member"
+    And I go to the provider dashboard
+    Then I should see "Portal" within the audience dashboard widget
+    Then they should be able to go to the following pages:
+      | the CMS Templates page |
+      | the CMS Sections page  |
+      | the CMS Files page     |

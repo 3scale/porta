@@ -6,18 +6,25 @@ Feature: All kind of contracts are billed
 
   Background:
     Given a provider on 1st January 2009
+    And the default product of the provider has name "My API"
     And the provider is charging its buyers
     And the provider has "finance" visible
     And the provider has one buyer
-    And the provider has a paid application plan "Application Plan" of 100 per month
-    And the provider has a paid service plan "Service Plan" of 31 per month
-    And the provider has a paid account plan "Account Plan" of 1 per month
+    And the following application plan:
+      | Product | Name             | Cost per month |
+      | My API  | Application Plan | 100            |
+    And the following service plan:
+      | Product | Name         | Cost per month |
+      | My API  | Service Plan | 31             |
+    And the following account plan:
+      | Issuer               | Name         | Cost per month |
+      | foo.3scale.localhost | Account Plan | 1              |
 
   Scenario: Monthly fee on application plan (no billable contracts)
     Given all the rolling updates features are off
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid application plan
-    And the buyer's application plan contract is pending
+    And the buyer is signed up to application plan "Application Plan"
+    And the buyer plan "Application Plan" contract is pending
     When time flies to 3rd March 2009
 
     Then the buyer should have following line items for "January, 2009" invoice:
@@ -25,12 +32,11 @@ Feature: All kind of contracts are billed
       | Fixed fee ('Application Plan')    |          | 100.00   |
       | Total cost                        |          | 100.00   |
 
-
   Scenario: Monthly fee on account plan (no billable contracts)
     Given all the rolling updates features are off
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid account plan
-    And the buyer's account plan contract is pending
+    And the buyer is signed up to account plan "Account Plan"
+    And the buyer plan "Account Plan" contract is pending
     When time flies to 3rd March 2009
 
     Then the buyer should have following line items for "January, 2009" invoice:
@@ -42,8 +48,8 @@ Feature: All kind of contracts are billed
   Scenario: Monthly fee on service plan (no billable contracts)
     Given all the rolling updates features are off
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid service plan
-    And the buyer's service plan contract is pending
+    And the buyer is signed up to service plan "Service Plan"
+    And the buyer plan "Service Plan" contract is pending
     When time flies to 3rd March 2009
 
     Then the buyer should have following line items for "January, 2009" invoice:
@@ -58,8 +64,8 @@ Feature: All kind of contracts are billed
     Given all the rolling updates features are off
     And I have billable_contracts feature enabled
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid application plan
-    And the buyer's application plan contract is pending
+    And the buyer is signed up to application plan "Application Plan"
+    And the buyer plan "Application Plan" contract is pending
     When time flies to 3rd March 2009
     Then the buyer should have 0 invoice
 
@@ -67,8 +73,8 @@ Feature: All kind of contracts are billed
     Given all the rolling updates features are off
     And I have billable_contracts feature enabled
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid account plan
-    And the buyer's account plan contract is pending
+    And the buyer is signed up to account plan "Account Plan"
+    And the buyer plan "Account Plan" contract is pending
     When time flies to 3rd March 2009
     Then the buyer should have 0 invoice
 
@@ -76,8 +82,8 @@ Feature: All kind of contracts are billed
     Given all the rolling updates features are off
     And I have billable_contracts feature enabled
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid service plan
-    And the buyer's service plan contract is pending
+    And the buyer is signed up to service plan "Service Plan"
+    And the buyer plan "Service Plan" contract is pending
     When time flies to 3rd March 2009
     Then the buyer should have 0 invoice
 
@@ -85,10 +91,10 @@ Feature: All kind of contracts are billed
     Given all the rolling updates features are off
     And I have billable_contracts feature enabled
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid service plan
-    And the buyer's service plan contract is pending
+    And the buyer is signed up to service plan "Service Plan"
+    And the buyer plan "Service Plan" contract is pending
     When time flies to 15th January 2009
-    And the provider accepts the buyer's service plan contract
+    And the buyer plan "Service Plan" contract gets accepted
     When time flies to 3rd March 2009
     Then the buyer should have following line items for "January, 2009" invoice:
       | name                              | quantity |  cost      |
@@ -102,10 +108,10 @@ Feature: All kind of contracts are billed
   Scenario: Monthly fee: contracts activated in middle of month. Without billable contracts feature
     Given all the rolling updates features are off
     And the date is 1st January 2009
-    And the buyer signed up for provider's paid service plan
-    And the buyer's service plan contract is pending
+    And the buyer is signed up to service plan "Service Plan"
+    And the buyer plan "Service Plan" contract is pending
     When time flies to 15th January 2009
-    And the provider accepts the buyer's service plan contract
+    And the buyer plan "Service Plan" contract gets accepted
     When time flies to 3rd March 2009
     Then the buyer should have following line items for "January, 2009" invoice:
       | name                              | quantity |  cost      |
@@ -119,8 +125,8 @@ Feature: All kind of contracts are billed
   Scenario: Monthly fee prorated with contract subscribed in the middle of the month
     Given all the rolling updates features are off
     And the date is 15th January 2009
-    And the buyer signed up for provider's paid service plan
-    And the buyer's service plan contract is live
+    And the buyer is signed up to service plan "Service Plan"
+    And the buyer plan "Service Plan" contract is live
     When time flies to 3rd March 2009
     Then the buyer should have following line items for "January, 2009" invoice:
       | name                              | quantity |  cost    |

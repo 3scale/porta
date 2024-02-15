@@ -10,6 +10,10 @@ OAUTH_PROVIDER_OPTIONS = {
 }.freeze
 
 Given(/^the provider has the authentication provider "([^"]+)" published$/) do |authentication_provider_name|
+  provider_publish_auth_provider(authentication_provider_name)
+end
+
+def provider_publish_auth_provider(authentication_provider_name) # rubocop:disable Metrics/MethodLength
   # Extracted from deleted transformer https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L233-L255 since it needs
   # access to @provider
   authentication_provider = @provider.authentication_providers.find_by(name: authentication_provider_name)

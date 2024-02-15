@@ -4,8 +4,14 @@ Feature: XSS protection
 
   Background:
     Given a provider exists
-    And the provider has a default free application plan
-    And a buyer signed up to the provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name    | Default |
+      | My API  | Default | true    |
+    And an approved buyer "John" signed up to the provider
+    And the following application:
+      | Buyer | Name   |
+      | John  | My App |
 
   @javascript
   Scenario: Inline javascript attempted into error messages rendered

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-Then "they should not be able to see any invoices" do
+Then "they should not have access to invoices" do
   assert_raise(Capybara::ElementNotFound) { invoices_tab }
   visit admin_account_invoices_path
   assert_text 'Access Denied'
 end
 
-Then "they should be able to see an invoice for last month" do
+Then "they should have access last's month invoice" do
   invoices_tab.click
   assert admin_account_invoices_path, current_path
 

@@ -11,7 +11,12 @@ Background:
     And provider "xyz.3scale.localhost" has "finance" switch visible
   Given a default service of provider "xyz.3scale.localhost" has name "api"
     And a metric "transfer" with friendly name "Transfer" of provider "xyz.3scale.localhost"
-    And an application plan "Variable" of provider "xyz.3scale.localhost" for 200 monthly
+    And the default service of the provider has name "My API"
+    And the following application plans:
+      | Product | Name         | Cost per month |
+      | My API  | FreeAsInBeer | 0              |
+      | My API  | PureVariable | 0              |
+      | My API  | Variable     | 200            |
     And pricing rules on plan "Variable":
       | Metric   | Cost per unit | Min | Max      |
       | hits     |           0.1 |   1 | infinity |
@@ -19,7 +24,6 @@ Background:
 
 
   Scenario: With free plan, no invoice is created
-      Given an application plan "FreeAsInBeer" of provider "xyz.3scale.localhost" for 0 monthly
       And a buyer "broke" signed up to application plan "FreeAsInBeer"
 
       Given the time is 15th January 2009
@@ -37,18 +41,18 @@ Background:
 
   Scenario: Variable only
    Given all the rolling updates features are off
-   Given an application plan "PureVariable" of provider "xyz.3scale.localhost" for 0 monthly
      And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |
 
-     And a buyer "varnish" signed up to application plan "PureVariable" on 10th January 2009
+     And a buyer "varnish"
+     And the buyer is signed up to application plan "PureVariable" on 10th January 2009
      And buyer "varnish" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    20 |
 
     And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
-    And I change application plan to "Variable"
+    And the buyer changes to application plan "Variable"
 
     When time flies to 3rd February 2009
     And I navigate to invoice issued for me in "January, 2009"
@@ -68,18 +72,18 @@ Background:
 
   Scenario: Variable only instant bill enabled
    Given all the rolling updates features are on
-   Given an application plan "PureVariable" of provider "xyz.3scale.localhost" for 0 monthly
      And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |
 
-     And a buyer "varnish" signed up to application plan "PureVariable" on 10th January 2009
+     And a buyer "varnish"
+     And the buyer is signed up to application plan "PureVariable" on 10th January 2009
      And buyer "varnish" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    20 |
 
     And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
-    And I change application plan to "Variable"
+    And the buyer changes to application plan "Variable"
 
     When time flies to 3rd February 2009
     And I navigate to invoice issued for me in "January, 2009"

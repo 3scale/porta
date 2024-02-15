@@ -24,37 +24,23 @@ When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
-  with_scope(selector) do
-    click_button(button, visible: !invisible)
-  end
+When /^(?:|I |they )press( invisible)? "([^"]*)"$/ do |invisible, button|
+  click_button(button, visible: !invisible)
 end
 
-When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |any, invisible, link, selector|
-  with_scope(selector) do
-    # there must be a capybara bug because assert_link fails with
-    # Unused parameters passed to Capybara::Queries::SelectorQuery : [:link, "..."]
-    # assert_link(link, exact: true, visible: !invisible, count: 1) unless any
-    assert_selector(:link, link, exact: true, visible: !invisible, count: 1) unless any
-    click_link(link, exact: true, visible: !invisible)
-  end
+When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(?! within))*))?$/ do |any, invisible, link, page_name|
+  # there must be a capybara bug because assert_link fails with
+  # Unused parameters passed to Capybara::Queries::SelectorQuery : [:link, "..."]
+  # assert_link(link, exact: true, visible: !invisible, count: 1) unless any
+  assert_opts = { exact: true, visible: !invisible }
+  assert_opts[:count] = 1 unless any
+  assert_opts[:href] = path_to(page_name) if page_name
+  assert_selector(:link, link, **assert_opts)
+  click_link(link, exact: true, visible: !invisible)
 end
 
-When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
-  with_scope(selector) do
-    attach_file(field, File.join(Rails.root,path))
-  end
-end
-
-Then /^(?:|I |they )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(regex)
-    else
-      assert page.has_content?(regex)
-    end
-  end
+Then /^(?:|I |they )should see "([^"]*)"$/ do |text|
+  assert_page_has_content text
 end
 
 Then "the page should contain {string}" do |text|
@@ -66,59 +52,47 @@ Then "the page should contain {string}" do |text|
   end
 end
 
-# Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-#   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-#   with_scope(selector) do
-#     if page.respond_to? :should
-#       page.should have_xpath('//*', :text => regexp)
-#     else
-#       assert page.has_xpath?('//*', :text => regexp)
-#     end
-#   end
-# end
-
-Then /^(?:|I |they )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    refute_text :visible, regex
-  end
+# Check whether a specific selector from features/support/selectors.rb is currently visible
+# on the page.
+#
+#   And they should be able to see the products widget
+#   And they should not be able to see the feature "Max. Speed"
+#
+Then "they {should} be able to see {css_selector}" do |visible, selector|
+  assert_equal visible, has_selector?(:css, selector, wait: 0)
 end
 
-Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
+Then /^(?:|I |they )should not see "([^"]*)"$/ do |text|
+  assert_page_has_no_content text
+end
+
+Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_xpath('//*', :text => regexp)
-    else
-      assert page.has_no_xpath?('//*', :text => regexp)
-    end
+  if page.respond_to? :should
+    page.should have_no_xpath('//*', :text => regexp)
+  else
+    assert page.has_no_xpath?('//*', :text => regexp)
   end
 end
 
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = field['value'] || field.native.attribute('value').to_s
-    if field_value.respond_to? :should
-      field_value.should =~ /#{value}/
-    else
-      assert_match(/#{value}/, field_value)
-    end
+Then /^the "([^"]*)" field should contain "([^"]*)"$/ do |field, value|
+  field = find_field(field)
+  field_value = field['value'] || field.native.attribute('value').to_s
+  if field_value.respond_to? :should
+    field_value.should =~ /#{value}/
+  else
+    assert_match(/#{value}/, field_value)
   end
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_truthy
-  end
+Then /^the "([^"]*)" checkbox should be checked$/ do |label|
+  field_checked = find_field(label)['checked']
+  expect(field_checked).to be_truthy
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_falsy
-  end
+Then /^the "([^"]*)" checkbox should not be checked$/ do |label|
+  field_checked = find_field(label)['checked']
+  expect(field_checked).to be_falsy
 end
 
 Then "the current page is {}" do |page_name|
@@ -155,7 +129,12 @@ When 'I change to tab {string}' do |tab|
   find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
 end
 
+And "confirm the dialog" do
+  accept_confirm
+end
+
 Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
+  ActiveSupport::Deprecation.warn "🥒 Replace with step 'And confirm the dialog'"
   if rack_test?
     step original
   else
@@ -164,4 +143,14 @@ Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
     end
     wait_for_requests
   end
+end
+
+Then "(they )should see the following details(:)" do |table|
+  assert table.rows_hash.all? do |key, value|
+    find('dl dt', text: key).has_sibling?('dd', text: value)
+  end
+end
+
+Then "(I )(they )should see the flash message {string}" do |message|
+  assert_flash(message)
 end

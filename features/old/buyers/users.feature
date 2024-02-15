@@ -95,7 +95,7 @@ Feature: Buyer users management
     Then I should not see the user role field
 
   Scenario: Fields are not required/hidden/read_only for Provider when editing users
-    Given the provider has the following fields defined for "User":
+    Given the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -109,7 +109,6 @@ Feature: Buyer users management
       | First name          |
       | User extra required |
     Then I should see the fields:
-      | present              |
       | First name           |
       | Last name            |
       | Job role             |
@@ -120,7 +119,7 @@ Feature: Buyer users management
     Then I should see "User was successfully updated."
 
   Scenario: Fields edition by provider
-    Given provider "foo.3scale.localhost" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |

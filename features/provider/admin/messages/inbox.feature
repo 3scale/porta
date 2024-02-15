@@ -43,11 +43,11 @@ Feature: Audience > Messages > Inbox
       Then the following bulk operations are available:
         | Delete |
       But item "Oh, no!" is unselected
-      And the bulk operations are not visible
+      And they should not be able to see the bulk operations
 
     Scenario: Select all messages in all pages
       Given they go to the provider inbox page
-      And they select all items
+      And they select all items in the table
       Then should see "30 selected" within the toolbar
 
     Scenario: Delete a single message in bulk
@@ -62,17 +62,17 @@ Feature: Audience > Messages > Inbox
 
     Scenario: Delete all messages in current page
       Given they go to the provider inbox page
-      When they select all items in the table
+      When they select all items in the current page
       And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment
       And should see "Messages moved into the trash"
-      And they select all items in the table
+      And they select all items in the current page
       And should see "10 selected" within the toolbar
 
     Scenario: Delete all messages in all pages
       Given they go to the provider inbox page
-      When they select all items
+      When they select all items in the table
       And select bulk action "Delete"
       And press "Delete" within the modal
       Then wait a moment

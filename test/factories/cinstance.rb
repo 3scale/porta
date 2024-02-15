@@ -24,12 +24,10 @@ FactoryBot.define do
   factory(:cinstance, :aliases => %i[application application_contract], :parent => :contract, :class => Cinstance) do
     association :plan, :factory => :application_plan
 
+    sequence(:name) { |n| "Cinstance #{n + Time.now.to_i}" }
+
     trait :as_pending do
       plan { FactoryBot.create(:application_plan, approval_required: true) }
-    end
-
-    trait :with_default_plan do
-      plan { service.default_application_plan }
     end
   end
 

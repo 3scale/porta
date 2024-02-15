@@ -24,18 +24,18 @@ end
 
 # TODO: replace this with with more generic step?!
 Then /^I should still be in the "(.+?)"$/ do |menu_item|
-  assert has_css?('.pf-c-nav__item.pf-m-current', text: menu_item)
+  assert_selector(:css, '.pf-c-nav__item.pf-m-current', text: menu_item)
 end
 
 Then "the name of the product can be seen on top of the menu" do
   within page_sidebar do
-    assert has_css?('.pf-c-nav__current-api', text: @provider.default_service.name)
+    assert_selector(:css, '.pf-c-nav__current-api', text: @provider.default_service.name)
   end
 end
 
 Then "the name of the backend can be seen on top of the menu" do
   within page_sidebar do
-    assert has_css?('.pf-c-nav__current-api', text: @backend.name)
+    assert_selector(:css, '.pf-c-nav__current-api', text: @backend.name)
   end
 end
 
@@ -73,18 +73,4 @@ end
 
 def page_sidebar
   find('.pf-c-page__sidebar')
-end
-
-def subsection_from_vertical_nav?(section, subsection)
-  within page_sidebar do
-    anchor = find(:css, '.pf-c-nav__link', text: section)
-    click_on(section) unless anchor[:'aria-expanded'] == 'true'
-    return has_content?(subsection)
-  end
-end
-
-def section_from_vertical_nav?(section)
-  within page_sidebar do
-    return has_content?(section)
-  end
 end

@@ -4,7 +4,10 @@ Feature: Branding switch
   Controls the Branding feature
 
   Background:
-    Given a published application plan "plus" of provider "master"
+    Given the default product of provider "master" has name "Master API"
+    And the following application plan:
+      | Product    | Name | State     |
+      | Master API | Plus | Published |
     And a provider is logged in
 
   Scenario: Dns link invites to upgrade

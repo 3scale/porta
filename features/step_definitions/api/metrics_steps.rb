@@ -52,27 +52,6 @@ Given "a metric {string} with friendly name {string} of {provider}" do |name, fr
   FactoryBot.create(:metric, owner: provider.default_service, system_name: name, friendly_name: friendly_name)
 end
 
-Given "{plan} has defined the following usage limits:" do |plan, table|
-  transform_usage_limits_table(table, plan)
-  table.hashes.each do |row|
-    FactoryBot.create(:usage_limit, plan: plan,
-                                    metric: row[:metric],
-                                    period: row[:period],
-                                    value: row[:max_value])
-  end
-end
-
-Given "{plan} has defined all usage limits for {string}" do |plan, metric|
-  metric = plan.issuer.metrics.find_by!(friendly_name: metric)
-
-  UsageLimit::PERIODS.each do |period|
-    FactoryBot.create(:usage_limit, plan: plan,
-                                    period: period,
-                                    value: 1,
-                                    metric: metric)
-  end
-end
-
 When "I hide the {metric}" do |metric|
   find(:xpath, "//span[@id='metric_#{metric.id}_visible']//a").click
 end
@@ -155,16 +134,4 @@ end
 
 And "{metric} is used in the latest gateway configuration" do |metric|
   Proxy.any_instance.expects(:metric_in_latest_configs?).with(metric.id).returns(true).at_least_once
-end
-
-And(/^makes hits invisible for that plan$/) do
-  visit_edit_plan(@plan)
-
-  visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
-  assert_equal 'visible', visibility_field[:class]
-  visibility_field.click
-  block_and_wait_for_requests_complete
-  # need to query again the page so it does not use the cached object defined before
-  visibility_field = find(:xpath, "//*[@id='metric_#{@plan.metrics.first!.id}_visible']")
-  assert_equal 'hidden', visibility_field[:class]
 end

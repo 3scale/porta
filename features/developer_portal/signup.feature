@@ -3,7 +3,10 @@ Feature: Buyer signup
 
   Background:
     Given a provider exists
-    And master has a application plan "enterprise"
+    And the default product of provider "master" has name "Master API"
+    And the following application plan:
+      | Product    | Name       |
+      | Master API | enterprise |
     And the provider account allows signups
 
   Scenario: Signup creates account created event
@@ -23,8 +26,12 @@ Feature: Buyer signup
   Scenario: Signup forces to fill in credit card for paid plan
     Given the provider is charging its buyers with braintree
     And the provider has "finance" visible
-    And has a buyer with application plan
-    And application plan is paid
+    And the provider has "service_plans" allowed
+    And the default product of the provider has name "API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
+    And a buyer "Alexander" signed up to application plan "Metal"
     And the provider has credit card on signup feature in automatic mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch visible
@@ -35,9 +42,12 @@ Feature: Buyer signup
   # This is the behaviour for existing providers as of 05-07-2016
   Scenario: Signup does not require to fill in credit card on paid plan
     And the provider is charging its buyers with braintree
-
-    And has a buyer with application plan
-    And application plan is paid
+    And the provider has "service_plans" allowed
+    And the default product of the provider has name "API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
+    And a buyer "Alexander" signed up to application plan "Metal"
     And the provider has credit card on signup feature in manual mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch hidden
@@ -49,9 +59,12 @@ Feature: Buyer signup
   Scenario: Signup require to fill in credit card on paid plan if switch is enabled
     And the provider is charging its buyers with braintree
     And the provider has "finance" visible
-
-    And has a buyer with application plan
-    And application plan is paid
+    And the provider has "service_plans" allowed
+    And the default product of the provider has name "API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | API     | Metal | 100            |
+    And a buyer "Alexander" signed up to application plan "Metal"
     And the provider has credit card on signup feature in manual mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch hidden

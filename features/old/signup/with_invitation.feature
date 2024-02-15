@@ -11,7 +11,7 @@ Feature: Signup with invitation
   @javascript
   Scenario: Receiving an invitation, signing up with extra fields and signing in
      Given the admin domain of provider "foo.3scale.localhost" is "admin.foo.3scale.localhost"
-     And master provider has the following fields defined for "User":
+     And master provider has the following fields defined for users:
       | name       |
       | first_name |
       | last_name  |

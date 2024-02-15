@@ -677,7 +677,7 @@ class ValidationsTest < ActiveSupport::TestCase
     @provider = FactoryBot.create :provider_account
     @service = FactoryBot.create :service, account: @provider
     plan = FactoryBot.create :application_plan, issuer: @service
-    @cinstance = FactoryBot.build :cinstance, plan: plan
+    @cinstance = FactoryBot.build :cinstance, plan: plan, name: ''
   end
 
   class NameValidationTest < ValidationsTest

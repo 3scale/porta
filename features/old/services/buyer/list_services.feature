@@ -7,12 +7,14 @@ Feature: Buyer's service subscription
     And provider "foo.3scale.localhost" has "multiple_services" visible
     And a service "Frutas" of provider "foo.3scale.localhost"
     And a service "Verduras" of provider "foo.3scale.localhost"
-
-    And a published account plan "Pakistani" of provider "foo.3scale.localhost"
-    And a published service plan "Melon" of service "Frutas"
-    And a published service plan "Tomato" of service "Verduras"
-    And a published service plan "Pepper" of service "Verduras"
-
+    And the following account plan:
+      | Product              | Name      | State     |
+      | foo.3scale.localhost | Pakistani | Published |
+    And the following service plans:
+      | Product  | Name   | State     |
+      | Frutas   | Melon  | Published |
+      | Verduras | Tomato | Published |
+      | Verduras | Pepper | Published |
     And a buyer "bob" signed up to account plan "Pakistani"
 
    Scenario: Services that do not allow contracts are not visible to buyers

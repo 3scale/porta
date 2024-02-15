@@ -22,6 +22,13 @@ module TimeMachineHelpers
     raise
   end
 
+  def time_flies_to(date)
+    date = date.gsub(Regexp.union(%w[of st nd rd]), '')
+    time_machine(Time.zone.parse(date))
+    assert_equal Time.zone.parse(date).beginning_of_hour, Time.zone.now.beginning_of_hour
+    access_user_sessions
+  end
+
   private
 
   def run_jobs

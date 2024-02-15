@@ -6,15 +6,15 @@ end
 
 Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   if provider
-    step %{I log in as provider "#{username}"}
+    try_provider_login(username, 'supersecret')
   else
-    step %{I log in as "#{username}"}
+    try_buyer_login_internal(username, 'supersecret')
   end
 end
 
 Given /^I am logged in as provider "([^\"]*)" on its admin domain$/ do |username|
-  step %{current domain is the admin domain of provider "#{username}"}
-  step %{I am logged in as provider "#{username}"}
+  set_current_domain(Account.providers.find_by(org_name: username).external_admin_domain)
+  try_provider_login(username, 'supersecret')
 end
 
 Given /^I am logged in as (provider )?"([^\"]*)" on (\S+)$/ do |provider,username, domain|
@@ -22,12 +22,12 @@ Given /^I am logged in as (provider )?"([^\"]*)" on (\S+)$/ do |provider,usernam
   # In 1.9 Array#to_s is different so we need to handle it
   domain = domain.first if domain.is_a? Array
 
-  step %(the current domain is #{domain})
+  set_current_domain(domain)
 
   if provider
-    step %(I log in as provider "#{username}")
+    try_provider_login(username, 'supersecret')
   else
-    step %(I log in as "#{username}")
+    try_buyer_login_internal(username, 'supersecret')
   end
 end
 
@@ -39,13 +39,14 @@ Given /^the master account admin has username "([^\"]*)" and password "([^\"]*)"
 end
 
 When /^I am logged in as master admin on master domain$/ do
-  step %(the current domain is #{Account.master.external_domain})
-  step %(I log in as provider "#{Account.master.admins.first.username}")
+  master = Account.master
+  set_current_domain(master.external_domain)
+  try_provider_login(master.admins.first.username, 'supersecret')
 end
 
 # TODO: name this step better
 # picks the right email inbox
-When /^I act as "([^"]*)"$/ do |username|
+When /^(?:they |I )?act as "([^"]*)"$/ do |username|
   act_as_user(username)
 end
 
@@ -55,15 +56,21 @@ When /^I log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,
   else
     try_buyer_login_internal(username, password)
   end
-  step %(I should be logged in as "#{username}")
+  assert_current_user(username)
 end
 
 When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
   if provider
-    step %(I log in as provider "#{username}" with password "supersecret")
+    try_provider_login(username, 'supersecret')
   else
-    step %(I log in as "#{username}" with password "supersecret")
+    try_buyer_login_internal(username, 'supersecret')
   end
+end
+
+When "{buyer} logs in" do |buyer|
+  set_current_domain(buyer.provider_account.domain)
+  user = buyer.users.first
+  try_buyer_login_internal(user.username, user.password || 'supersecret')
 end
 
 When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domain|
@@ -71,15 +78,17 @@ When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domai
   # so we need to handle it
   domain = domain.first if domain.is_a? Array
 
+  set_current_domain(domain)
   if provider
-    step %{I am logged in as provider "#{username}" on #{domain}}
+    try_provider_login(username, 'supersecret')
   else
-    step %{I am logged in as "#{username}" on #{domain}}
+    try_buyer_login_internal(username, 'supersecret')
   end
 end
 
 When "I log in as {string} on the admin domain of {provider}" do |username, provider|
-  step %(I log in as provider "#{username}" on #{provider.internal_admin_domain})
+  set_current_domain(provider.internal_admin_domain)
+  try_provider_login(username, 'supersecret')
 end
 
 When "I try to log in as {string}" do |username|
@@ -105,19 +114,15 @@ When /^I fill in the "([^"]*)" login data$/ do |username|
 end
 
 Then /^I should be logged in as "([^"]*)"$/ do |username|
-  @user = User.find_by(username: username)
-  message = "Expected #{username} to be logged in, but is not"
-  assert has_content?(/Signed (?:in|up) successfully/i), message
+  assert_current_user(username)
 end
 
 Then /^I should be logged in the Development Portal$/ do
-  steps <<-GHERKIN
-    Then I should be logged in as "foo"
-    And I should be at url for the home page
-  GHERKIN
+  assert_current_user('foo')
+  assert_current_path('/')
 end
 
-When /^I log ?out$/ do
+When /^(?:I|they) log ?out$/ do
   log_out
   @current_user = nil
 end
@@ -140,16 +145,10 @@ Then /^I should not be logged in as "([^"]*)"$/ do |username|
 end
 
 Then /^I should not be logged in$/ do
-  # HAX: Check the logout link is not present. Don't know how to check this in a more explicit way.
-  step 'I should not see link to logout'
+  assert_includes [provider_sessions_path, session_path], current_path
 end
 
 When "the user logs in" do
   log_out
   try_provider_login(@user.username, 'supersecret')
-end
-
-def log_out
-  find(:css, '[aria-label="Session toggle"]').click
-  click_link 'Sign Out'
 end

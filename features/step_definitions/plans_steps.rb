@@ -1,217 +1,103 @@
 # frozen_string_literal: true
 
-PLANS = /account|service|application/.freeze
-
-Given "the {provider} has following {plan_type} plan(s):" do |provider, plan_type, table|
-  transform_application_plans_table(table).hashes.each do |row|
-    FactoryBot.create plan_type, row.reverse_merge!(issuer: provider.first_service!)
+# Example:
+#
+# Given a product "My API"
+# And the following application plans:
+#   | Product | Name    | Cost per month | Setup fee | Requires approval | State     | Default |
+#   | My API  | Free    |                |           | true              | Published |         |
+#   | My API  | Premium |                |        10 |                   | Hidden    | True    |
+Given "the following {plan_type} plan(s):" do |plan_type, table|
+  transform_plans_table(plan_type, table).hashes.each do |row|
+    FactoryBot.create(plan_type, row)
   end
 end
 
-Given "a published service plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :service, :name => plan_name, :issuer => service, :published => true
+Given "{plan} is published" do |plan|
+  plan.publish! unless plan.published?
 end
 
-Given "a default published service plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :service, :name => plan_name, :issuer => service, :published => true, :default => true
+Given "{plan} is hidden" do |plan|
+  plan.hide! unless plan.hidden?
 end
 
-Given(/^the provider has a (default )?free application plan(?: "([^"]*)")?$/) do |default, plan_name|
-  @free_application_plan ||= create_plan :application, name: plan_name || 'Copper', issuer: @provider.default_service, published: true, default: default.present?
-end
-
-Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (application|service|account) plan(?: "([^"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|
-  plan_type_name = (other ? "#{other.strip}_" : '') + plan_type
-  return instance_variable_get("@paid_#{plan_type_name}_plan") if instance_variable_defined?("@paid_#{plan_type_name}_plan")
-
-  default_plan_names = {
-    'application' => 'Gold',
-    'service' => 'Star',
-    'account' => 'Premium'
-  }
-  default_plan_costs = {
-    'application' => 100,
-    'service' => 10,
-    'account' => 1
-  }
-  service = @service || @provider.default_service
-  plan_name = (plan_name || default_plan_names[plan_type])
-  plan = create_plan plan_type.to_sym, name: plan_name, issuer: service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
-  instance_variable_set("@paid_#{plan_type_name}_plan", plan)
-end
-
-Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^"]*)" (?:of|for) (?:provider) "([^"]*)"(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, domain, cost|
-  type ||= :application
-  issuer = provider_by_name(domain)
-  create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
-end
-
-Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^"]*)" (?:of|for) (?:service) "([^"]*)"(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, issuer, cost|
-  type ||= :application
-  issuer = Service.find_by!(name: issuer)
-  create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
-end
-
-Given /^the buyer signed up for provider's paid (application|service|account) plan$/ do |plan_type|
-  plan = instance_variable_get("@paid_#{plan_type}_plan")
-  sign_up(@buyer, plan.name)
-end
-
-Given "{buyer} signed up for plan {string}" do |buyer, plan_name|
-  sign_up(buyer, plan_name)
-end
-
-Given "{buyer} changed to {plan}" do |buyer, plan|
-  buyer.bought_cinstance.change_plan!(plan)
-end
-
-Given /^the buyer's (application|service|account) plan contract is (.*)$/ do |plan_type,state|
-  plan = instance_variable_get("@paid_#{plan_type}_plan")
-  contract = @buyer.contracts.where(plan_id: plan.id).first!
-  contract.update_column(:state, state) # rubocop:disable Rails/SkipsModelValidations
-end
-
-Given "{plan} is {published}" do |plan, published|
-  if published
-    plan.publish! unless plan.published?
-  else
-    plan.hide! unless plan.hidden?
+Given "{plan} has {int} contract(s)" do |plan, amount|
+  FactoryBot.create_list(:buyer_account, amount, provider_account: @provider).each do |buyer|
+    buyer.buy!(plan)
   end
 end
 
-Given "{plan} requires approval( of contracts)" do |plan|
-  plan.update_attribute :approval_required, true # rubocop:disable Rails/SkipsModelValidations
+Given "{plan} has been deleted" do |plan|
+  plan.destroy
 end
 
-Given /^the application "([^"]*)" of the partner "([^"]*)" has a trial period of (\d+) days?$/  do |application_name, buyer_name, days|
-  cinstance = @provider.buyers.where(org_name: buyer_name)
-      .first.application_contracts.where(name: application_name).first
-  cinstance.trial_period_expires_at = Time.zone.now + days.to_i.days
-  cinstance.save!
+# TODO: make a general, attribute setting step for plan?
+Given "{plan} has a trial period of {int} days" do |plan, days|
+  plan.update!(trial_period_days: days)
 end
 
-Given(/^I want to change the plan of my application to paid$/) do
-  steps %(
-    Given the buyer logs in to the provider
-    And I go to my application page
-    And I follow "Edit #{@application.name}"
-    And I follow "Review/Change"
-    And I follow "#{@paid_application_plan.name}"
-  )
+Given "{plan} has a monthly fee of {int}" do |plan, fee|
+  plan.update!(cost_per_month: fee)
 end
 
-Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
-  create_plan :application, name: plan_name, issuer: Account.master
+Given "{plan} has a setup fee of {int}" do |plan, fee|
+  plan.update!(setup_fee: fee)
+end
+# END_TODO
+
+Given "{application_plan} has no usage limits for metric {string}" do |plan, metric|
+  plan.issuer
+      .metrics
+      .find_by!(friendly_name: metric)
+      .usage_limits
+      .delete_all
 end
 
-Then "they can filter the plans by name" do
-  all_items = find_items("Name")
-  input = find('input[aria-label="Search input"]')
-  button = find('button[aria-label="Search"]')
-
-  input.set('ab')
-  button.click
-  assert_selector('.pf-c-popover__body', text: "To search, type at least 3 characters")
-
-  clear_search
-  assert_equal all_items, find_items("Name")
-
-  input.set('one')
-  button.click
-  assert_plans_table @plans.by_query('one')
-
-  input.set('last')
-  button.click
-  assert_plans_table @plans.by_query('last')
-
-  input.set('foooo')
-  button.click
-  assert_empty find_items("Name")
-
-  clear_search
-  assert_equal all_items, find_items("Name")
-end
-
-And "they can sort plans by name, no. of contracts and state" do
-  within plans_table do
-    click_on 'Name'
-    assert_plans_table @plans.reorder(name: :asc), sort: true
-
-    click_on 'Name'
-    assert_plans_table @plans.reorder(name: :desc), sort: true
-
-    click_on 'Contracts'
-    assert_plans_table @plans.reorder(contracts_count: :asc, name: :asc), sort: true
-
-    click_on 'Contracts'
-    assert_plans_table @plans.reorder(contracts_count: :desc, name: :asc), sort: true
-
-    click_on 'State'
-    assert_plans_table @plans.reorder(state: :asc, name: :asc), sort: true
-
-    click_on 'State'
-    assert_plans_table @plans.reorder(state: :desc, name: :asc), sort: true
+Given "{application_plan} has defined the following usage limit(s):" do |plan, table|
+  transform_usage_limits_table(table, plan)
+  table.hashes.each do |row|
+    FactoryBot.create(:usage_limit, plan: plan,
+                                    metric: row[:metric],
+                                    period: row[:period],
+                                    value: row[:max_value])
   end
 end
 
-def find_action_for_plan(action, plan)
-  td = find('td', text: plan.name)
-  dropdown = td.sibling('.pf-c-table__action').find('.pf-c-dropdown')
-  dropdown.find('.pf-c-dropdown__toggle').click unless dropdown[:class].include? 'pf-m-expanded'
+Given "{application_plan} has defined all usage limits for {string}" do |plan, metric|
+  metric = plan.issuer.metrics.find_by!(friendly_name: metric)
 
-  return nil unless dropdown.has_css?('.pf-c-dropdown__menu-item', text: action)
-
-  dropdown.find('.pf-c-dropdown__menu-item', text: action)
-end
-
-Then "an admin can't select the plan as default" do
-  select_default_plan @plan
-  assert has_content? /not found/i
-end
-
-def default_service
-  @default_service ||= @provider.default_service
-end
-
-def select_default_plan(plan)
-  select_default_plan_by_name(plan.name)
-end
-
-def select_default_plan_by_name(name)
-  pf4_select(name, from: 'Default plan')
-  find('[data-ouia-component-id="default-plan-submit"]').click(wait: 5)
-end
-
-def delete_plan_from_table_action(plan)
-  accept_confirm do
-    find_action_for_plan(/delete/i, plan).click
+  UsageLimit::PERIODS.each do |period|
+    FactoryBot.create(:usage_limit, plan: plan,
+                                    period: period,
+                                    value: 1,
+                                    metric: metric)
   end
-  assert_flash 'The plan was deleted'
-  assert_not has_content?(plan.name) # TODO: assert table row not whole content
 end
 
-def hide_plan_and_assert(plan)
-  find_action_for_plan(/hide/i, plan).click
-  assert has_content?("Plan #{plan.name} was hidden.")
+# Given application plan "Free" has the following features:
+#   | Name          | Description | Enabled? |
+#   | Some Feature  |             | True     |
+#   | Other Feature | Bananas     |          |
+Given "{plan} has the following features:" do |plan, table|
+  issuer = plan.issuer
+  all_features = issuer.features
+  plan_features = plan.features
 
-  find('td', text: plan.name).sibling('[data-label="State"]', text: /hidden/i)
+  transform_plan_features_table(table)
+  table.hashes.each do |row|
+    # TODO: use a factory FactoryBot.create(:feature)
+    enabled = row.delete('enabled')
+    feature = all_features.find_or_create_by(scope: plan.class.to_s, featurable: issuer, **row)
+    plan_features << feature if enabled
+  end
 end
 
-Then "the plan is hidden" do
-  assert @plan.reload.hidden?
-  assert find_action_for_plan(/publish/i, @plan)
-  assert_not find_action_for_plan(/hide/i, @plan)
+Given "{plan} does not have any features" do |plan|
+  plan.issuer.features.with_object_scope(plan).destroy_all
 end
 
-def publish_plan_and_assert(plan)
-  find_action_for_plan(/publish/i, plan).click
-  assert has_content?("Plan #{plan.name} was published.")
-
-  find('td', text: plan.name).sibling('[data-label="State"]', text: /published/i)
-end
-
-Then "the plan is published" do
-  assert @plan.reload.published?
-  assert_not find_action_for_plan(/publish/i, @plan)
-  assert find_action_for_plan(/hide/i, @plan)
+When('they {enable} feature {string}') do |enable, feature_name|
+  find('table#features tbody tr', text: feature_name)
+    .find(".operations i.#{enable ? 'excluded' : 'included'}")
+    .click
 end

@@ -6,17 +6,28 @@ Feature: Sign Up of enterprise buyers
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has multiple applications enabled
-      And a account plan "Tier-1" of provider "foo.3scale.localhost"
+    And the following account plan:
+      | Issuer               | Name   |
+      | foo.3scale.localhost | Tier-1 |
       And a default service of provider "foo.3scale.localhost" has name "api"
-      And a service plan "Gold" for service "api" exists
-      And an application plan "iPhone" of service "api"
+    And the following service plan:
+      | Product | Name   |
+      | api     | Gold   |
+    And the following application plan:
+      | Product | Name   |
+      | api     | iPhone |
 
     Given a provider "foo2.3scale.localhost"
-      # And provider "foo2.3scale.localhost" has multiple applications enabled
-      And a account plan "Tier-2" of provider "foo2.3scale.localhost"
+    And the following account plan:
+      | Issuer               | Name   |
+      | foo.3scale.localhost | Tier-2 |
       And a default service of provider "foo2.3scale.localhost" has name "api2"
-      And a service plan "Gold2" for service "api2" exists
-      And an application plan "iPhone2" of service "api2"
+    And the following service plan:
+      | Product | Name    |
+      | api2    | Gold2   |
+    And the following application plan:
+      | Product | Name    |
+      | api2    | iPhone2 |
 
     Given an approved buyer "bar" signed up to provider "foo.3scale.localhost"
 

@@ -7,7 +7,10 @@ Feature: Menu of the buyers
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
-    And an application plan "Default" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name    | State     |
+      | My API  | Default | Published |
     And a buyer "bob" signed up to application plan "Default"
 
   Scenario: Without live applications menu item Stats is not visible

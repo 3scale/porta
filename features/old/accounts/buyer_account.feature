@@ -5,7 +5,10 @@ Feature: Buyer account management
 
   Background:
     Given a provider "foo.3scale.localhost"
-     And an application plan "Default" of provider "foo.3scale.localhost"
+     And the default service of the provider has name "My API"
+     And the following application plan:
+      | Product | Name    |
+      | My API  | Default |
       And a buyer "bob" signed up to application plan "Default"
 
   Scenario: Account edit does not immeditaly shows validation errors (#7486981)

@@ -6,12 +6,9 @@ require 'prometheus_exporter_port'
 Rails.application.routes.draw do
 
   constraints PortConstraint.new(PrometheusExporterPort.call) do
-    require 'sidekiq/prometheus/exporter'
     require 'yabeda/prometheus/mmap'
 
-    mount Sidekiq::Prometheus::Exporter, at: '/metrics'
-    # DEPRECATED: this endpoint will be removed in future versions and Yabeda metrics will be at `/metrics`
-    mount Yabeda::Prometheus::Exporter, at: '/yabeda-metrics'
+    mount Yabeda::Prometheus::Exporter, at: '/metrics'
     mount ::System::Deploy, at: 'deploy'
   end
 

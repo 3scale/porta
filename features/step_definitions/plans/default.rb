@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-Given "{plan} is {default}" do |plan, default|
-  unless default
-    assert !default_plan?(plan)
-  else
-    make_plan_default(plan)
-  end
-end
-
 Given "a default {word} plan of {provider}" do |type, provider|
   create_plan(type, name: 'The Plan', issuer: provider, published: true, default: true)
 end

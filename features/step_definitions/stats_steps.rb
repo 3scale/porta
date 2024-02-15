@@ -6,7 +6,7 @@ end
 
 Then /^I should see a chart called "([^\"]*)"$/ do |chart|
   within("##{chart}") do
-    assert has_css?("svg")
+    assert_selector(:css, "svg")
   end
 end
 
@@ -16,8 +16,4 @@ Then /^I should see a list of metrics:$/ do |table|
       assert_text :all, row['Buyer']
     end
   end
-end
-
-Then(/^I should see that application stats$/) do
-  page.should have_content "Traffic statistics for #{@application.name}"
 end
