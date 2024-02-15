@@ -89,6 +89,9 @@ module HtmlSelectorsHelper
     when /the application details/
       '[aria-label="Application details list"], dl.dl-horizontal'
 
+    when /the account details card/
+      '[aria-label="Account details"], div.dashboard_card'
+
     when /the referrer filters/
       '#referrer_filters'
 
