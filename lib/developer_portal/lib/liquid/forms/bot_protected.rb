@@ -25,6 +25,10 @@ module Liquid
         context.registers[:view]
       end
 
+      def recaptcha_action
+        DeveloperPortal::Engine.routes.recognize_path(path).fetch(:controller)
+      end
+
       protected
 
       def model

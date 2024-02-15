@@ -11,10 +11,6 @@ module Liquid
       def path
         admin_account_password_path
       end
-
-      def recaptcha_action
-        DeveloperPortal::Engine.routes.recognize_path(path).fetch(:controller)
-      end
     end
   end
 end

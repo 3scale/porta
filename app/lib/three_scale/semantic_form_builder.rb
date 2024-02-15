@@ -106,4 +106,8 @@ module ThreeScale
       end
     end
   end
+
+  def recaptcha_action
+    controller.controller_path
+  end
 end

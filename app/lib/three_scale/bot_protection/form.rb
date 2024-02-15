@@ -13,7 +13,7 @@ module ThreeScale
       end
 
       def recaptcha_action
-        controller.controller_path
+        raise NotImplementedError, "#{self.class} must implement #recaptcha_action"
       end
     end
   end
