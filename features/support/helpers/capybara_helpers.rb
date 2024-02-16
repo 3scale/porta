@@ -22,7 +22,8 @@ module CapybaraHelpers
     end
     # HACK: the error page requests assets that return 200 and checking the first one is not always
     # right. As an easy workaround, rule out requests with an url to assets.
-    requests.reject { |request| request.url&.include?('/assets/') }.first.status_code.should == status_code
+    request = requests.reject { |request| request.url&.include?('/assets/') }.first
+    assert_equal status_code, request.status_code, "Expected: #{status_code} Actual: #{request.status_code} for #{request.url}"
   end
 
   def assert_page_has_content(text)
