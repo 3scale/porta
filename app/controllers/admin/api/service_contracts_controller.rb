@@ -6,9 +6,6 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
-  before_action :find_account
-  before_action :find_service_contract, only: [:show, :update, :destroy]
-
 
   # Service Subscription Create
   # POST /admin/api/accounts/:account_id/service_contracts.xml
@@ -26,48 +23,40 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   # Service Subscription List
   # GET /admin/api/accounts/{account_id}/service_contracts.xml
   def index
-    respond_with @account.bought_service_contracts
+    respond_with account.bought_service_contracts
   end
 
   # Service Subscription Delete
   # DELETE /admin/api/accounts/{account_id}/service_contracts/{id}.xml
   def destroy
-    service_subscription = ServiceSubscriptionService.new(@account)
+    service_subscription = ServiceSubscriptionService.new(account)
 
-    respond_with(service_subscription.unsubscribe(@service_contract))
+    respond_with(service_subscription.unsubscribe(service_contract))
   end
 
   # Service Subscription Update
   # PUT /admin/api/accounts/{account_id}/service_contracts/{id}.xml
   def update
-    service = @service_contract.issuer
+    service = service_contract.issuer
     new_plan = service.service_plans.find(service_contract_plan_id)
-    @service_contract.change_plan!(new_plan)
-    respond_with(@service_contract)
+    service_contract.change_plan!(new_plan)
+    respond_with(service_contract)
   end
 
   # Service Subscription Show
   # GET /admin/api/accounts/:account_id/service_contracts/:id.xml
   def show
-    respond_with @service_contract
+    respond_with service_contract
   end
 
   protected
 
-  def find_account
-    @account ||= current_account.buyers.find_by(id: params.require(:account_id))
-
-    unless @account
-      render_error('Buyer not found with this account ID', status: :not_found)
-    end
+  def account
+    @account ||= current_account.buyers.find params.require(:account_id)
   end
 
-  def find_service_contract
-    @service_contract ||= @account.bought_service_contracts.find_by(id: params.require(:id))
-
-    unless @service_contract
-      render_error('Service contract not found', status: :not_found)
-    end
+  def service_contract
+    @service_contract ||= account.bought_service_contracts.find_by(id: params.require(:id))
   end
 
 
@@ -81,8 +70,8 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   end
 
   def create_service_contract(plan)
-    service_contract = @account.bought_service_contracts.create(service_contract_params.merge(plan: plan))
-    respond_with service_contract
+    @service_contract = account.bought_service_contracts.create(service_contract_params.merge(plan: plan))
+    respond_with @service_contract
   end
 
   def service_contract_plan_id
@@ -91,6 +80,6 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   # Validate service plan and account
   def valid_plan_and_account?(plan)
-    plan && @account.provider_account_id == plan.service.account_id
+    plan && account.provider_account_id == plan.service.account_id
   end
 end
