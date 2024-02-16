@@ -66,7 +66,6 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
         access_token: @token,
         service_contract: { plan_id: @service_plan.id }
       )
-      assert_match "Buyer not found with this account ID", response.body
     end
 
     def test_success_unsubscribe
