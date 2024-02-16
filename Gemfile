@@ -83,7 +83,7 @@ gem 'dalli'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.15.5'
+gem 'nokogiri', '~> 1.16.2'
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
