@@ -488,7 +488,7 @@ GEM
     multi_json (1.15.0)
     multi_test (0.1.2)
     multi_xml (0.6.0)
-    multipart-post (2.3.0)
+    multipart-post (2.4.0)
     mustache (1.1.1)
     mysql2 (0.5.3)
     n_plus_one_control (0.6.2)
@@ -526,7 +526,7 @@ GEM
       ruby-rc4
       ttfunk
     pg (0.21.0)
-    pisoni (1.29.1)
+    pisoni (1.29.2)
       faraday (>= 0.9.1)
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
