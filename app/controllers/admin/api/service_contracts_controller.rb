@@ -6,18 +6,12 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
+  before_action :validate_same_service, only: :update
 
   # Service Subscription Create
   # POST /admin/api/accounts/:account_id/service_contracts.xml
   def create
-    plan = service_plan
-
-    unless valid_plan_and_account?(plan)
-      render_error('Invalid service plan or account id', status: :unprocessable_entity)
-      return
-    end
-
-    create_service_contract(plan)
+    respond_with account.bought_service_contracts.create(plan: service_plan)
   end
 
   # Service Subscription List
@@ -37,9 +31,7 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   # Service Subscription Update
   # PUT /admin/api/accounts/{account_id}/service_contracts/{id}.xml
   def update
-    service = service_contract.issuer
-    new_plan = service.service_plans.find(service_contract_plan_id)
-    service_contract.change_plan!(new_plan)
+    service_contract.change_plan!(service_plan)
     respond_with(service_contract)
   end
 
@@ -49,37 +41,29 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
     respond_with service_contract
   end
 
-  protected
+  private
 
   def account
     @account ||= current_account.buyers.find params.require(:account_id)
   end
 
   def service_contract
-    @service_contract ||= account.bought_service_contracts.find_by(id: params.require(:id))
-  end
-
-
-  def service_contract_params
-    params.permit(service_contract: [:plan_id])
-          .fetch(:service_contract).merge(plan: service_plan)
+    @service_contract ||= account.bought_service_contracts.find(params.require(:id))
   end
 
   def service_plan
-    ServicePlan.find_by(id: service_contract_plan_id)
-  end
-
-  def create_service_contract(plan)
-    @service_contract = account.bought_service_contracts.create(service_contract_params.merge(plan: plan))
-    respond_with @service_contract
+    @service_plan ||= ServicePlan.provided_by(current_account).find(service_contract_plan_id)
   end
 
   def service_contract_plan_id
-    params[:service_contract][:plan_id]
+    @service_contract_plan_id ||= service_contract_params[:plan_id]
   end
 
-  # Validate service plan and account
-  def valid_plan_and_account?(plan)
-    plan && account.provider_account_id == plan.service.account_id
+  def service_contract_params
+    @service_contract_params ||= params.permit(service_contract: [:plan_id]).fetch(:service_contract)
+  end
+
+  def validate_same_service
+    render_error('Service plan must belong to the same product', status: :unprocessable_entity) unless service_plan.issuer == service_contract.issuer
   end
 end
