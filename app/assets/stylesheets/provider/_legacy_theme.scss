@@ -1,8 +1,6 @@
 @import 'provider/layouts/main';
 
-div.dashboard_card,
-div.wide_dashboard_card,
-div.narrow_dashboard_card {
+div.dashboard_card {
   @include white-box-shadow;
   border: 0;
   padding: line-height-times(1);
