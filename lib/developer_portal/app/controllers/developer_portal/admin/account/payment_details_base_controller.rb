@@ -26,8 +26,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   end
 
   def update
-    current_account.updating_payment_detail = true
-    if current_account.update account_params
+    if update_billing_address
       redirect_to payment_details_path, notice: 'Your billing address was successfully stored'
     else
       flash[:notice] = 'Failed to update your billing address data. Check the required fields'
@@ -73,5 +72,18 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   def account_params
     allowed_fields = %i[name address1 address2 city country state phone zip first_name last_name]
     params.require(:account).permit(billing_address: allowed_fields)
+  end
+
+  def update_billing_address
+    current_account.updating_payment_detail = true
+    current_account.transaction do
+      raise ActiveRecord::Rollback unless current_account.update(account_params) && update_address_on_payment_gateway
+
+      true
+    end
+  end
+
+  def update_address_on_payment_gateway
+    true
   end
 end
