@@ -15,7 +15,6 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     @service_contract = FactoryBot.create(:simple_service_contract, plan: @service_plan, user_account: @buyer)
 
     @buyer.buy! @application_plan
-    @buyer.buy! @new_application_plan
 
     @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: 'account_management').value
     host! current_account.internal_admin_domain
@@ -59,13 +58,15 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_match "already subscribed to this service", response.body
     end
 
-    def test_failure_subscribe
+    # Test that attempting to subscribe to a service plan that doesn't belong to the buyer's provider should result in a failure (404).
+    def test_failure_subscribe_to_external_service_plan
        post admin_api_account_service_contracts_path(
         account_id: current_account.id,
         format: :xml,
         access_token: @token,
         service_contract: { plan_id: @service_plan.id }
       )
+      assert_response :not_found
     end
 
     def test_success_unsubscribe
