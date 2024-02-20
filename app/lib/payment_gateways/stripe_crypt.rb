@@ -36,6 +36,45 @@ module PaymentGateways
       @customer ||= find_or_create_customer
     end
 
+    def update_billing_address(billing_address)
+      begin
+        Stripe.api_key = api_key  # Set actual Stripe secret key
+
+        # Retrieve the latest payment method (card) for the customer
+          latest_payment_method = Stripe::PaymentMethod.list(
+            customer: customer.id,
+            type: 'card',
+            limit: 1
+          ).data.first.id
+
+        # Retrieve the payment method
+        payment_method = Stripe::PaymentMethod.retrieve(latest_payment_method)
+
+        # Update the billing details
+        payment_method.billing_details = {
+          address: {
+            line1: billing_address[:address1],
+            line2: billing_address[:address2],
+            city: billing_address[:city],
+            state: billing_address[:state],
+            postal_code: billing_address[:zip],
+            country: billing_address[:country]
+          }
+        }
+
+        # Save the updated payment method
+        payment_method.save
+
+        return true
+      rescue Stripe::StripeError => e
+        report_error("Failed to update billing address on Stripe: #{e.message}")
+        return false
+      ensure
+        # Reset the Stripe API key to avoid potential issues elsewhere in your code
+        Stripe.api_key = nil
+      end
+    end
+
     private
 
     delegate :payment_detail, to: :account
