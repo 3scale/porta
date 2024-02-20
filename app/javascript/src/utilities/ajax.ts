@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export type Method = 'DELETE' | 'GET' | 'POST'
 
-interface FetchOptions { method: Method; body?: URLSearchParams; signal?: AbortSignal }
+interface FetchOptions { method: Method; body?: URLSearchParams | string; signal?: AbortSignal }
 type FetchFunction = (url: string, opts: FetchOptions) => Promise<Response>
 
 export interface FetchItemsRequestParams { page: number; perPage: number; query?: string }
