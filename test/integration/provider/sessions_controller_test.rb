@@ -41,7 +41,7 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to "http://example.net/?provider_id=#{account.id}&user_id=#{account.admin_user.id}"
   end
 
-  test "does not redirect users to SSO" do
+  test "does not redirect users to SSO even with enforce_sso and single provider" do
     @provider.settings.update_column(:enforce_sso, true)
     get new_provider_sessions_path
     assert_response :success
