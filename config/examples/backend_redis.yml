@@ -4,8 +4,8 @@ base: &default
   size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
-  sentinel_username: <%= ENV['BACKEND_REDIS_USERNAME'].to_json %>
-  sentinel_password: <%= ENV['BACKEND_REDIS_PASSWORD'].to_json %>
+  sentinel_username: <%= ENV['BACKEND_REDIS_SENTINEL_USERNAME'].to_json %>
+  sentinel_password: <%= ENV['BACKEND_REDIS_SENTINEL_PASSWORD'].to_json %>
   name: <%= ENV['BACKEND_REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
   # == ACL Params ==
