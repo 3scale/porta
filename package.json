@@ -80,7 +80,7 @@
     "codemirror": "5.65.9",
     "css-loader": "^2.1.1",
     "file-loader": "^6.2.0",
-    "jquery-ui": "1.13.2",
+    "jquery-ui": "1.12.1",
     "jquery": "3.7.0",
     "lodash.escaperegexp": "^4.1.2",
     "moment-range": "^4.0.2",
