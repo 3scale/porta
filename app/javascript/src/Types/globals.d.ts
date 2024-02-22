@@ -6,6 +6,7 @@ import type { compose } from 'redux'
 declare global {
   interface Window {
     $: JQueryStatic;
+    jQueryUI: JQueryStatic;
     CodeMirror: typeof CodeMirror;
     statsUsage: unknown;
     statsDaysOfWeek: unknown;
@@ -27,19 +28,33 @@ declare global {
     renderChartWidget: (widget: string, data: unknown) => void;
   }
 
-  // Overrides jquery typings from node_modules to include jquery-ui. This has nothing to do
-  // with JQueryV1 or JQueryV1Plugins. This is for TS files with: import $ from 'jquery'
+  // jQueryUI static props injected into jQuery 3.7 when imported from webpack
   interface JQueryStatic {
-    ui: {
+    ui?: {
       version: string;
     };
   }
 
-  // Overrides jquery typings from node_modules to include jquery-ui. This has nothing to do
-  // with JQueryV1 or JQueryV1Plugins. This is for TS files with: import $ from 'jquery'
+  // jQueryUI widgets injected into jQuery 3.7 when imported from webpack. Only the ones imported
+  // will be available hence the optional nature.
   interface JQuery {
-    sortable: (opts: string | {
+    sortable?: (opts: string | {
       update: (event: Event, ui: { item: JQuery }) => void;
     }) => string | undefined;
+    tabs?: (opts: Partial<{
+      active: boolean | number;
+      activate: (event: Event, ui: { newPanel: JQuery }) => void;
+      show: (event: Event, ui: { panel: JQuery }) => void;
+    }>) => void;
+    droppable?: (opts: {
+      hoverClass: string;
+      drop: (event: Event, ui: { helper: JQuery }) => void;
+    }) => void;
+    draggable?: (opts: {
+      helper: (event: Event) => unknown;
+      revert: string;
+    }) => void;
   }
+
+  type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
 }
