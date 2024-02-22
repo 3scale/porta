@@ -166,6 +166,7 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
 
   class SsoSignupTest < ActiveSupport::TestCase
 
+    include ActionMailer::TestCase::ClearTestDeliveries
     include ActiveJob::TestHelper
 
     test 'create an active user through sso' do
@@ -192,11 +193,9 @@ class Authentication::Strategy::ProviderOAuth2Test < ActiveSupport::TestCase
         assert result.active?
         assert authentication_strategy.error_message.blank?
         assert authentication_strategy.new_user_created?
-      end
 
-      last_email = ActionMailer::Base.deliveries.last
-      assert_match 'Account Activation', last_email.subject
-      assert_match 'activate your account', last_email.body.to_s
+        assert_empty ActionMailer::Base.deliveries
+      end
     end
 
     test 'create a non active user through sso' do

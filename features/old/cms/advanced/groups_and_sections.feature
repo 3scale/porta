@@ -37,13 +37,13 @@ Feature: Groups and Sections
   @allow-rescue
   Scenario: Access restricted sections are access denied to not-allowed users
     Given the section "Docs" of provider "foo.3scale.localhost" is access restricted
-      And I am logged in as "alice" on "foo.3scale.localhost"
+      And I am logged in as "alice" on foo.3scale.localhost
      When I request the url "/docs/first"
      Then I should see "Not found"
 
   Scenario: Access restricted sections are access granted to allowed users
     Given the section "Docs" of provider "foo.3scale.localhost" is access restricted
       And the buyer "alice" has access to the section "Docs" of provider "foo.3scale.localhost"
-    Given I am logged in as "alice" on "foo.3scale.localhost"
+    Given I am logged in as "alice" on foo.3scale.localhost
      When I request the url "/docs/first"
     Then I should see "First"

@@ -27,16 +27,19 @@ const HttpMethodSelect: FunctionComponent<Props> = ({
     setHttpMethod(value as string)
   }
 
+  const label = 'Verb'
+
   return (
     <FormGroup
       isRequired
       fieldId="proxy_rule_http_method"
-      label="Verb"
+      label={label}
     >
       <input id="proxy_rule_http_method" name="proxy_rule[http_method]" type="hidden" value={httpMethod} />
       <Select
         aria-label="Select a httpMethod"
         isOpen={isExpanded}
+        ouiaId={label}
         selections={httpMethod}
         variant={SelectVariant.single}
         onSelect={handleOnSelect}

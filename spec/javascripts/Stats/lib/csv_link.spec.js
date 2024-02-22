@@ -15,18 +15,28 @@ describe('StatsCSVLink', () => {
         '2001-05-11T07:00:00+00:00'
       ],
       [
-        'zaphod',
+        'with "quotes"',
         '12',
         '30'
       ],
       [
-        'marvin',
+        'marvin #2',
         '11',
         '31'
+      ],
+      [
+        'with, comma',
+        '10',
+        '32'
       ]
     ]
   }
-  const expectedCsvString = 'datetime,zaphod,marvin%0A11 Mar 1952 07:00:00 GMT,12,11%0A11 May 2001 08:00:00 BST,30,31'
+  const cells = [
+    ['datetime', '"with ""quotes"""', 'marvin #2', '"with, comma"'],
+    ['11 Mar 1952 07:00:00 GMT', '12', '11', '10'],
+    ['11 May 2001 08:00:00 BST', '30', '31', '32']
+  ]
+  const expectedCsvString = cells.map(row => row.map(cell => encodeURIComponent(cell)).join(',')).join('%0A')
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="csv_link"></div>'

@@ -1,8 +1,27 @@
-= form.inputs do
-  = form.input :friendly_name, hint: @metric.child? ? 'e.g. Create new user' : 'e.g. Transfer Out', input_html: { autofocus: true }
-  = form.input :system_name, hint: ( @metric.child? ? 'e.g. users/create or create_user' : 'e.g. transfer_out' ) + '. Spaces are not permitted.', input_html: { disabled: @metric.persisted? }
-  = form.input :unit unless @metric.child?
-  = form.input :description, input_html: { rows: 3 }
+- type = metric.type.to_s.capitalize
+- is_metric = metric.parent_id.blank?
+- deleteable = !metric.default?(:hits) && !metric.new_record?
 
-= form.actions do
-  = form.commit_button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"
+- content_for :page_header_title, t("api.metrics.#{scope}.page_header_title", type: type)
+
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for metric, url: url,
+                                html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+      = form.input :friendly_name, as: :patternfly_input,
+                                   hint: t(".friendly_name_hint.#{metric.type}"),
+                                   input_html: { autofocus: true }
+      = form.input :system_name, as: :patternfly_input,
+                                 hint: t(".system_name_hint.#{metric.type}"),
+                                 input_html: { disabled: metric.persisted? }
+      - if is_metric
+        = form.input :unit, as: :patternfly_input
+      = form.input :description, as: :patternfly_textarea, input_html: { rows: 3 }
+
+      = form.actions do
+        button type="submit" class="pf-c-button pf-m-primary" = t("api.metrics.#{scope}.submit", type: type)
+        - if deleteable
+          = link_to 'Delete', admin_service_metric_path(service_id: metric.owner_id, id: metric.id),
+                              class: 'pf-c-button pf-m-danger',
+                              data: { confirm: t('api.metrics.edit.delete_confirmation', type: metric.type) },
+                              method: :delete

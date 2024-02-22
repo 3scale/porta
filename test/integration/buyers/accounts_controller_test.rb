@@ -249,7 +249,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
             org_name: 'My organization'
           }
         }
-        assert_select '#account_user_username_input.required.error'
+        assert_select 'input#account_user_username + .pf-m-error'
         assert_response :success
       end
 

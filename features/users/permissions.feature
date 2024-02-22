@@ -4,7 +4,8 @@ Feature: Member permissions
   I want manage member's permissions
 
   Background:
-      Given a provider with one active member is logged in
+    Given a provider is logged in
+    And an active user "alex" of account "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "groups" switch allowed
 
   Scenario: Enable and disable billing section

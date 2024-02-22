@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 module Backend
   # This class holds various auxiliary data for a cinstance, necessary for transaction processing.
   class CinstanceData
-    attr_reader :provider_account_id
-    attr_reader :cinstance_id
-    attr_reader :service_id
+    attr_reader :provider_account_id, :cinstance_id, :service_id
 
     def initialize(provider_account, cinstance, service)
 

@@ -11,7 +11,10 @@ Feature: Billing Reporting Without Charging
       Given a provider "not.charging" on 1st May 2009
         And all the rolling updates features are off
         And provider "not.charging" is billing but not charging
-        And an application plan "ToRuleTheWorld" of provider "not.charging" for 42000 monthly
+    And the default service of the provider has name "My API"
+    And the following application plans:
+      | Product | Name           | Cost per month |
+      | My API  | ToRuleTheWorld | 42000          |
         And admin of account "not.charging" has email "admin@not.charging"
 
   Scenario: I don't want to get email if my provider is not charging

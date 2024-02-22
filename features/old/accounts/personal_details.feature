@@ -20,13 +20,13 @@ Feature: Personal Details
   Scenario: Personal details redirects back to users list if originated there
     When I go to the provider users page
     And I follow "Listing"
-    And I follow "foo.3scale.localhost" within "#users"
+    And I follow "foo.3scale.localhost"
     Then I should be on the provider personal details page
     When I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should be on the provider users page
-    When I follow "foo.3scale.localhost" within "#users"
+    When I follow "foo.3scale.localhost" within the table
     And I fill in "Email" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
@@ -41,10 +41,10 @@ Feature: Personal Details
     And I fill in "Username" with ""
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then I should see inline error "is too short (minimum is 3 characters)" for user username input
+    Then field "Username" has inline error "is too short (minimum is 3 characters)"
 
   Scenario: Provider should see all fields defined for user
-    Given master provider has the following fields defined for "User":
+    Given master provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -60,7 +60,6 @@ Feature: Personal Details
       | Current password    |
 
     Then I should see the fields:
-      | present              |
       | First name           |
       | Last name            |
       | Job role             |
@@ -79,3 +78,12 @@ Feature: Personal Details
     Then I should see "User was successfully updated"
     Then the "First name" field should contain "dude"
     And the "User extra required" field should contain "whatever"
+
+  Scenario: Update own password when the user was signed up with password
+    Given the user was signed up with password
+    When I navigate to the Account Settings
+    And I go to the provider personal details page
+    And I fill in "New Password" with "hi"
+    And I fill in "Current password" with "supersecret"
+    And I press "Update Details"
+    Then field "New Password" has inline error "is too short (minimum is 6 characters)"

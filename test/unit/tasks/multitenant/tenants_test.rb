@@ -120,7 +120,7 @@ module Tasks
       class SuspendEnterpriseScheduledForDeletionTest < Multitenant::TenantsTest
         setup do
           config = {'account_suspension' => 2, 'account_inactivity' => 3, 'contract_unpaid_time' => 4, disabled_for_app_plans: ['enterprise']}
-          Features::AccountDeletionConfig.configure(config)
+          Features::AccountDeletionConfig.config.stubs(**config)
           Features::AccountDeletionConfig.stubs(enabled?: true)
 
           enterprise_plan = FactoryBot.create(:application_plan, system_name: 'enterprise', issuer: master_account.default_service)

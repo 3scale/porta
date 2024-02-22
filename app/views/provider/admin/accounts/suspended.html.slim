@@ -1,22 +1,16 @@
 h1 Hello #{current_user.display_name},
 p
-  | Your 3scale trial has expired and the account is de-activated.
-    To continue using the service, you’ll need to move onto a paid plan.
+  | Your account 
+  strong #{current_account.external_admin_domain} 
+  | is suspended.
 
-p
-  | Please contact
-  =>< mail_to ThreeScale.config.sales_email, nil, subject: %q{I'd like to continue using 3scale}, id: 'continue-using-3scale'
-  | to enable your upgrade or if you have questions.
-
-p = mail_to ThreeScale.config.sales_email, 'Purchase paid plan',
-        subject: %q{I'd like to purchase a paid plan}, class: 'button', id: 'purchase-paid-plan'
-
-javascript:
-  analytics.trackLink(document.getElementById('continue-using-3scale'), 'Suspended account page', {
-    step: 'click help suspended account',
-    path: window.location.pathname
-  })
-  analytics.trackLink(document.getElementById('purchase-paid-plan'), 'Suspended account page', {
-    step: 'click upgrade suspended account',
-    path: window.location.pathname
-  })
+- if ThreeScale.config.saas?
+  p
+    ' Please
+    => link_to 'open a Support Case', 'https://access.redhat.com/support/', target: '_blank'
+    | if you think that your account was suspended by mistake.
+- else
+  p
+    ' Please contact
+    => mail_to ThreeScale.config.support_email
+    | if you think that your account was suspended by mistake.

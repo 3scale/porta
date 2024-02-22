@@ -26,7 +26,7 @@ Then /^I should see the invitation to upgrade my plan$/ do
 end
 
 Then /^I should see upgrade notice for "(.+?)"$/ do |switch|
-  step %{I should be on the upgrade notice page for "#{switch}"}
+  assert_current_path admin_upgrade_notice_path(switch)
 end
 
 Then(/^the provider should have credit card on signup switch (hidden|visible)/) do |status|

@@ -49,7 +49,7 @@ And "buyers will receive new invoices with that currency" do
   create_invoice(buyer)
 
   visit admin_finance_root_path
-  assert has_css?('td.u-amount', text: 'EUR')
+  assert_selector(:css, 'td.u-amount', text: 'EUR')
   assert_not has_css?('td.u-amount', text: 'USD')
 end
 

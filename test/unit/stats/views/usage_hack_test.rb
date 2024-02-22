@@ -4,6 +4,7 @@ class Stats::Views::UsageHackTest < ActiveSupport::TestCase
   def setup
     @storage = Stats::Base.storage
     @storage.flushdb
+    Stats::Views::UsageHack::StorageFake.instance.cached_keys&.clear
   end
 
   def prepare_stats

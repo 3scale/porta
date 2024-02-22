@@ -213,10 +213,8 @@ FactoryBot.define do
       service = FactoryBot.create(:service, :account => account)
 
       # Defaults
-      application_plan = FactoryBot.create(:application_plan, :issuer => service, :name => 'Free')
-      application_plan.publish!
-      account_plan = FactoryBot.create(:account_plan, :issuer => account, :name => 'FreeAccountPlan')
-      account_plan.publish!
+      application_plan = FactoryBot.create(:application_plan, issuer: service, state: 'published')
+      account_plan = FactoryBot.create(:account_plan, issuer: account, state: 'published')
 
       service.update_attribute :default_application_plan, application_plan
       service.update_attribute :default_service_plan, service.service_plans.first

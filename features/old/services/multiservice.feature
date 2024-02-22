@@ -76,12 +76,12 @@ Feature: Multiservice feature
     And I uncheck "Developers can manage applications"
     And I press "Update Product"
     And I go to the overview page of product "Less fancy API"
-    And I follow "Overview"
+    And I follow "Product Overview"
     Then I should see "Less fancy API"
 
   Scenario: Delete Service
     And provider "foo.3scale.localhost" has "multiple_services" switch allowed
     And a service "Second service" of provider "foo.3scale.localhost"
     And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
-    When I follow "I understand the consequences, proceed to delete 'Second service' product" and I confirm dialog box
+    When I follow "I understand the consequences, proceed to delete 'Second service' product" and confirm the dialog
     Then I should see "Product 'Second service' will be deleted shortly."

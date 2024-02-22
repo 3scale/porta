@@ -12,7 +12,7 @@ class Pdf::DataTest < ActiveSupport::TestCase
     # @cinstance = @buyer_account.buy!(@plan)
 
     # Stats::Base.storage.flushdb
-    # Backend::Transaction.report!(:cinstance => @cinstance, :usage => {'hits' => 1}, :confirmed => true)
+    # Backend::Transaction.report!(:cinstance => @cinstance, :usage => {'hits' => 1})
   end
 
   test 'fail without :period supplied' do

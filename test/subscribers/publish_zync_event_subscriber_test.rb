@@ -1,14 +1,59 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class PublishZyncEventSubscriberTest < ActiveSupport::TestCase
-  def setup
-    @subscriber = PublishZyncEventSubscriber.new
+
+  class OIDCApplicationEventTest < ActiveSupport::TestCase
+    attr_reader :event, :subscriber, :publisher
+
+    setup do
+      service = FactoryBot.create(:simple_service, backend_version: 'oauth')
+      application = FactoryBot.create(:simple_cinstance, service: service)
+      @event = Applications::ApplicationCreatedEvent.create(application, nil)
+      @publisher = mock('publisher')
+      @subscriber = PublishZyncEventSubscriber.new(publisher)
+    end
+
+    test 'publish Zync Event for OIDC auth always' do
+      publisher.expects(:call).times(3).returns(:ok)
+
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
+      assert subscriber.call(event)
+
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: true)
+      assert subscriber.call(event)
+
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: nil)
+      assert subscriber.call(event)
+    end
   end
 
-  def test_create
-    application = FactoryBot.build_stubbed(:simple_cinstance, tenant_id: 1)
-    event = Applications::ApplicationCreatedEvent.new(application: application)
-    assert @subscriber.call(event)
+  class NonOIDCApplicationEventTest < ActiveSupport::TestCase
+    attr_reader :event, :subscriber, :publisher
+
+    setup do
+      service = FactoryBot.create(:simple_service)
+      application = FactoryBot.create(:simple_cinstance, service: service)
+      @event = Applications::ApplicationCreatedEvent.create(application, nil)
+      @publisher = mock('publisher')
+      @subscriber = PublishZyncEventSubscriber.new(publisher)
+    end
+
+    test 'publish Zync Event by if not skipped' do
+      publisher.expects(:call).times(2).returns(:ok)
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: false)
+      assert subscriber.call(event)
+
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: nil)
+      assert subscriber.call(event)
+    end
+
+    test 'do not publish Zync Event if skipped' do
+      publisher.expects(:call).never
+      Rails.configuration.zync.stubs(skip_non_oidc_applications: true)
+      assert_nil subscriber.call(event)
+    end
   end
 
   class DomainEventsTest < ActiveSupport::TestCase

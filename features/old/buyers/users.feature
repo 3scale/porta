@@ -28,7 +28,7 @@ Feature: Buyer users management
     When I go to the buyer users page for "SpaceWidgets"
     Then I should see buyer user "SpaceWidgets"
     And I should see link to the buyer user edit page for "SpaceWidgets"
-    When I follow "Edit"
+    When I follow "Edit" for user "SpaceWidgets"
     Then I should not see "Delete"
 
   Scenario: User details
@@ -51,7 +51,7 @@ Feature: Buyer users management
   Scenario: Delete buyer user
     When I go to the buyer user page for "bob"
     And I follow "Edit"
-    Then I follow "Delete" and I confirm dialog box
+    Then I follow "Delete" and confirm the dialog
     # TODO: confirm step here
     Then I should be on the buyer users page for "SpaceWidgets"
     And I should not see buyer user "bob"
@@ -83,11 +83,11 @@ Feature: Buyer users management
     And I navigate to the edit page of user "bob" of buyer "SpaceWidgets"
     And I choose "Admin" in the user role field
     And I press "Update User"
-    Then I should see "admin" within the "Role" row
+    Then the user is an admin
     When I follow "Edit"
     And I choose "Member" in the user role field
     And I press "Update User"
-    Then I should see "member" within the "Role" row
+    Then the user is a member
 
   Scenario: Editing role of the only buyer admin
     Given buyer "SpaceWidgets" has only one admin "alice"
@@ -95,7 +95,7 @@ Feature: Buyer users management
     Then I should not see the user role field
 
   Scenario: Fields are not required/hidden/read_only for Provider when editing users
-    Given the provider has the following fields defined for "User":
+    Given the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -109,7 +109,6 @@ Feature: Buyer users management
       | First name          |
       | User extra required |
     Then I should see the fields:
-      | present              |
       | First name           |
       | Last name            |
       | Job role             |
@@ -120,7 +119,7 @@ Feature: Buyer users management
     Then I should see "User was successfully updated."
 
   Scenario: Fields edition by provider
-    Given provider "foo.3scale.localhost" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |

@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('signup_form') as HTMLFormElement
   // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style -- Need to cast to HTMLButtonElement
   const submitBtn = document.querySelector('input[type="submit"]') as HTMLButtonElement
-  const captchaInput = document.getElementById('captchaChecked') as HTMLInputElement
 
   /* eslint-disable @typescript-eslint/naming-convention */
   // Fields 'org_name', 'username' and 'email' are always required
@@ -38,18 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   /* eslint-enable @typescript-eslint/naming-convention */
 
-  const captchaRequired: boolean = document.querySelector('.g-recaptcha') !== null
-  const captchaFields = captchaRequired && {
-    'captchaChecked': {
-      presence: true,
-      length: { minimum: 1 }
-    }
-  }
-
-  const constraints = Object.assign({}, mandatoryFields, passwordFields, captchaFields)
-
-  submitBtn.disabled = validate(form, constraints) !== undefined
-  captchaInput.value = captchaRequired ? '' : 'ok'
+  const constraints = Object.assign({}, mandatoryFields, passwordFields)
+  submitBtn.disabled = true
 
   const inputs = document.querySelectorAll('input')
   inputs.forEach(input => {

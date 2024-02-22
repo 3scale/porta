@@ -35,7 +35,7 @@ module Liquid
       end
 
       def forum?
-        @account.settings.forum_enabled?
+        false
       end
 
       def service

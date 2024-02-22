@@ -106,7 +106,7 @@ class Sidebar
 
         @update_expand_collapse_button()
 
-        @items('[data-behavior~=drag]').draggable
+        jQueryUI('[data-behavior~=drag]').draggable
           handle: ":not(.cms-section > i:first-child)"
           helper: (event) ->
             el = $(this)

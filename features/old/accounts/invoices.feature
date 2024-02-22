@@ -7,7 +7,10 @@ Feature: Show invoices from account's page (#16015909)
   Scenario: List the invoices
     Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers in prepaid mode
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | My API  | Fixed | 0              |
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for January, 2011
     When I go to the buyer account page for "zoidberg"
@@ -15,12 +18,15 @@ Feature: Show invoices from account's page (#16015909)
     Then I should see 1 invoice
     When I follow "2011-01-00000001"
     Then I should see "Invoice for January 2011"
-    And I should still be in the "Accounts" in the main menu
+    And I should still be in the "Accounts" within the main menu
 
   Scenario: Don't show invoices when billing is not enabled
     Given a provider is logged in
     And the provider has "finance" denied
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | My API  | Fixed | 0              |
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And I go to the buyer account page for "zoidberg"
     Then I should not see "Invoices"
@@ -28,7 +34,10 @@ Feature: Show invoices from account's page (#16015909)
   Scenario: Ability to add line items to opened invoice
     Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers in prepaid mode
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  | Cost per month |
+      | My API  | Fixed | 0              |
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for January, 2011
     And I go to the buyer account page for "zoidberg"

@@ -1,3 +1,6 @@
-$(function(){
-  $("<%= '#' << dom_id(@alert) %>").attr('data-state','read').find('.mark-as-read').fadeOut();
-});
+<%# frozen_string_literal: true %>
+
+const row = document.getElementById("<%= dom_id(@alert) %>")
+row.classList.replace('unread', 'read')
+row.querySelector('td.pf-c-table__action .pf-c-overflow-menu__item:last-of-type')
+  .remove()

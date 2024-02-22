@@ -54,6 +54,11 @@ end
 # Check how many emails have been sent/received
 #
 
+Given "{buyer} has received {amount} email(s)" do |buyer, amount|
+  address = buyer.admins.first.email
+  assert_equal amount, unread_emails_for(address).size
+end
+
 Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails?$/ do |address, amount|
   unread_emails_for(address).size.should == parse_email_count(amount)
 end

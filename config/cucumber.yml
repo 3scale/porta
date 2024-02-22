@@ -1,5 +1,5 @@
 <% std_opts = "--strict --tags 'not @wip' #{ENV['CUCUMBER_OPTIONS']} --publish-quiet" %>
-default: <%= std_opts %>
+default: <%= std_opts %> --order random
 <% tags = %w[ @backend @emails @stats @no-txn ] %>
 list: --dry-run --format Cucumber::Formatter::List
 ci: --profile default --backtrace --strict --verbose --format junit,fileattribute=true --out tmp/junit/cucumber --format progress

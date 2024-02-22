@@ -9,7 +9,7 @@ Feature: Backend API overview page
     When an admin is in the backend overview page
     Then the name of the backend can be seen on top of the menu
     And I should see menu sections
-      | Overview            |
+      | Backend Overview            |
       | Analytics           |
       | Methods and Metrics |
       | Mapping Rules       |
@@ -17,14 +17,14 @@ Feature: Backend API overview page
   Scenario: Products used by backend table
     Given a product
     And a backend
-    And the backend is used by this product
+    And the backend is used by the product
     When an admin is in the backend overview page
     Then there is a list of all products using it
 
   Scenario: Only accessible products are visible
     Given a product
     And a backend
-    And the backend is used by this product
+    And the backend is used by the product
     And the product becomes inaccessible
     When an admin is in the backend overview page
     Then the product is not in the list of all products using it

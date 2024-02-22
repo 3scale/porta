@@ -9,6 +9,7 @@ Given "{provider} has signup {enabled}" do |provider, enabled|
 end
 
 Given "{provider} has multiple applications {enabled}" do |provider, enabled|
+  ActiveSupport::Deprecation.warn '[cucumber] use steps from switches_steps.rb'
   if enabled
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
@@ -17,12 +18,14 @@ Given "{provider} has multiple applications {enabled}" do |provider, enabled|
   end
 end
 
+# TODO: remove this nonsense
 Given /^provider "([^"]*)" has Browser CMS (activated|deactivated)$/ do |provider, value|
   if value == 'deactivated'
     raise 'BCMS cannot be deactivated!'
   end
 end
 
+# TODO: too generic. Replace it with "{product} uses backend {backend_version}"
 Given "{provider} uses backend {backend_version} in his default service" do |provider, backend_version|
   service = provider.default_service
   service.backend_version = backend_version

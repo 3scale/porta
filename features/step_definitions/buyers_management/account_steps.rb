@@ -4,7 +4,9 @@ Given "{provider} has the following buyers:" do |provider, table|
   #TODO: dry this with buyer_steps Given /^these buyers signed up to (plan "[^"]*"):
   parameterize_headers(table)
 
-  table.hashes.each do |hash|
+  table.hashes.each_with_index do |hash, index|
+    travel_to(Time.zone.now - index.day) # Prevent all buyer from having same sign up date
+
     buyer = FactoryBot.create(:buyer_account, provider_account: provider,
                                               org_name: hash[:name],
                                               buyer: true)
@@ -21,7 +23,7 @@ Given "{provider} has the following buyers:" do |provider, table|
   end
 end
 
-Given "{provider} has {int} buyer(s)" do |provider, number|
+Given "{provider} has {amount} buyer(s)" do |provider, number|
   provider.buyer_accounts.destroy_all
 
   number.to_i.times do
@@ -39,10 +41,6 @@ Then /^(.*) for (?:buyer|provider|account) "([^"]*)"$/ do |action, org_name|
   within('#' + dom_id(account)) { step action }
 end
 
-Then /^I should see (?:only )?(\d+) buyers$/ do |number|
-  assert_equal number.to_i, all('tbody tr').count
-end
-
 Then "I should not see button to approve {buyer}" do |buyer|
   assert has_no_css?(%(form[action = "#{approve_admin_buyers_account_path(buyer)}"][method = "post"]))
 end
@@ -51,10 +49,10 @@ Then "I should not see button to reject {buyer}" do |buyer|
   assert has_no_css?(%(form[action = "#{reject_admin_buyers_account_path(buyer)}"][method = "post"]))
 end
 
-When /^I create new buyer account "([^\"]*)"$/ do |name|
+Given "a recently creater buyer account {string}" do |name|
   user = FactoryBot.attributes_for(:user)
 
-  step %(I go to the new buyer account page)
+  visit new_admin_buyers_account_path
   fill_in "Organization/Group Name", :with => name
   fill_in "Username", :with => user[:username]
   fill_in "Email", :with => user[:email]

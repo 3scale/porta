@@ -15,7 +15,7 @@
         = t('.empty_state.primary_action')
 - else
   - content_for :javascripts do
-    = javascript_packs_with_chunks_tag 'toolbar'
+    = javascript_packs_with_chunks_tag 'table_toolbar'
 
   table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Backends table" data-toolbar-props=toolbar_props.to_json
     thead
@@ -38,6 +38,10 @@
               div class="pf-c-overflow-menu__content"
                 div class="pf-c-overflow-menu__group pf-m-button-group"
                   div class="pf-c-overflow-menu__item"
-                    = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit'
+                    = link_to '', edit_admin_service_backend_usage_path(@service, config), class: 'action edit',
+                                                                                           title: t('.action_edit', name: config.backend_api.name)
                   div class="pf-c-overflow-menu__item"
-                    = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete', data: {confirm: 'Are you sure?'}, method: :delete
+                    = link_to '', admin_service_backend_usage_path(@service, config), class: 'action delete',
+                                                                                      data: { confirm: 'Are you sure?' },
+                                                                                      method: :delete,
+                                                                                      title: t('.action_delete', name: config.backend_api.name)

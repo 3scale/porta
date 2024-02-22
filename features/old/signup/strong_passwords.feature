@@ -5,8 +5,10 @@ Feature: Signup with strong passwords
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-      And an application plan "iPhone" of service "default"
-      And application plan "iPhone" is default
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name   | Default |
+      | My API  | iPhone | true    |
     Given the current domain is foo.3scale.localhost
 
 

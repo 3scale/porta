@@ -38,8 +38,9 @@ Then "they will be able to update it with an existing name and url" do
   assert_updated
 end
 
-Given "the backend is used by this product" do
-  (@service || @product).backend_api_configs.create!(backend_api: @backend, path: "/my_product")
+Given "{backend} is used by {product}" do |backend, product|
+  configs = product.backend_api_configs
+  configs.create!(backend_api: backend, path: "/my_product") if configs.find_by(backend_api_id: backend.id).nil?
 end
 
 When "an admin tries to delete the backend api from its edit page" do
@@ -75,12 +76,12 @@ When "an admin is creating a new backend api" do
   visit new_provider_admin_backend_api_path
 end
 
-Given "a backend" do
-  @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
+Given /^a backend(?: "(.*)")?$/ do |name|
+  @backend = @provider.backend_apis.create!(name: name || 'My Backend', private_endpoint: 'https://foo')
 end
 
-Given /^a backend "([^"]*)"$/ do |name|
-  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
+Given "the following backends:" do |table|
+
 end
 
 When "an admin is in the backend overview page" do
@@ -139,6 +140,10 @@ But "it is not possible to use the same system name" do
   assert_not_created(error: 'has already been taken')
 end
 
+And '{backend} is unavailable' do |backend|
+  backend.update!(state: 'deleted')
+end
+
 def products_used_table
   find('#products-used-list-container')
 end
@@ -161,7 +166,7 @@ end
 
 def fill_in_backend_api_form(name: 'My Backend', system_name: 'my_backend', description: 'Description...', url: 'http://api.example.com')
   fill_in('Name', with: name)
-  fill_in('System name', with: system_name) unless system_name_disabled?
+  fill_in('System name', with: system_name) unless find('input[name$="[system_name]"]').disabled?
   fill_in('Description', with: description)
   fill_in('Private Base URL', with: url)
 end

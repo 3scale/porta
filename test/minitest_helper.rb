@@ -22,9 +22,7 @@ end
 
 require 'minitest/autorun'
 if defined?(::Mocha)
-  require 'mocha/integration/mini_test'
-  # This will be in upcomming versions of mocha
-  # ::Mocha::Integration::MiniTest.activate
+  ::Mocha::Integration::MiniTest.activate
 else
   require 'mocha/setup'
 end

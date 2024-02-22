@@ -24,173 +24,75 @@ When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
-  with_scope(selector) do
-    click_button(button, visible: !invisible)
-  end
+When /^(?:|I |they )press( invisible)? "([^"]*)"$/ do |invisible, button|
+  click_button(button, visible: !invisible)
 end
 
-When /^(?:|I |they |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
-  with_scope(selector) do
-    click_link(link, exact: true, visible: !invisible)
-  end
+When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(?! within))*))?$/ do |any, invisible, link, page_name|
+  # there must be a capybara bug because assert_link fails with
+  # Unused parameters passed to Capybara::Queries::SelectorQuery : [:link, "..."]
+  # assert_link(link, exact: true, visible: !invisible, count: 1) unless any
+  assert_opts = { exact: true, visible: !invisible }
+  assert_opts[:count] = 1 unless any
+  assert_opts[:href] = path_to(page_name) if page_name
+  assert_selector(:link, link, **assert_opts)
+  click_link(link, exact: true, visible: !invisible)
 end
 
-When /^(?:|I |they )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
-  with_scope(selector) do
-    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field)
-
-    fill_in(field, with: value, visible: true)
-  end
+Then /^(?:|I |they )should see "([^"]*)"$/ do |text|
+  assert_page_has_content text
 end
 
-# Use this to fill in an entire form with data from a table. Example:
-#
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
-#
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following(?: within "([^"]*)")?:$/ do |selector, fields|
-  with_scope(selector) do
-    fields.rows_hash.each do |name, value|
-      step %(I fill in "#{name}" with "#{value}")
-    end
-  end
-end
-
-When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    if page.has_css?('.pf-c-form__label', text: field)
-      pf4_select(value, from: field)
-    else
-      # DEPRECATED: remove when all selects have been replaced for PF4
-      ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-      find_field(field).find(:option, value).select_option
-    end
-  end
-end
-
-# TODO: Ideally we would extend Node::Actions#select to satisfy Liskov instead of using a custom method.
-def pf4_select(value, from:)
-  select = find_pf_select(from)
-  within select do
-    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    click_on(value)
-  end
-end
-
-def pf4_select_first(from:)
-  select = find_pf_select(from)
-  within select do
-    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-    find('.pf-c-select__menu .pf-c-select__menu-item:not(.pf-m-disabled)').click
-  end
-end
-
-def find_pf_select(label)
-  find('.pf-c-form__group-label', text: label).sibling('.pf-c-form__group-control')
-                                              .find('.pf-c-select')
-end
-
-# Overrides Node::Actions#fill_in
-def fill_in
-  if page.has_css?('.pf-c-form__label', text: field)
-    input = find('.pf-c-form__label', text: field).sibling('input')
-    input.set value
+Then "the page should contain {string}" do |text|
+  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
+  if page.respond_to? :should
+    page.should have_content(regex)
   else
-    # DEPRECATED: remove when all forms implement PF4
-    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-    fill_in(field, :with => text, visible: true)
+    assert page.has_content?(regex)
   end
 end
 
-When /^(?:|I )check "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    check(field)
-  end
+# Check whether a specific selector from features/support/selectors.rb is currently visible
+# on the page.
+#
+#   And they should be able to see the products widget
+#   And they should not be able to see the feature "Max. Speed"
+#
+Then "they {should} be able to see {css_selector}" do |visible, selector|
+  assert_equal visible, has_selector?(:css, selector, wait: 0)
 end
 
-When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    uncheck(field)
-  end
+Then /^(?:|I |they )should not see "([^"]*)"$/ do |text|
+  assert_page_has_no_content text
 end
 
-When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
-  with_scope(selector) do
-    attach_file(field, File.join(Rails.root,path))
-  end
-end
-
-Then /^(?:|I |they )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(regex)
-    else
-      assert page.has_content?(regex)
-    end
-  end
-end
-
-# Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-#   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-#   with_scope(selector) do
-#     if page.respond_to? :should
-#       page.should have_xpath('//*', :text => regexp)
-#     else
-#       assert page.has_xpath?('//*', :text => regexp)
-#     end
-#   end
-# end
-
-Then /^(?:|I |they )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    refute_text :visible, regex
-  end
-end
-
-Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
+Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_xpath('//*', :text => regexp)
-    else
-      assert page.has_no_xpath?('//*', :text => regexp)
-    end
+  if page.respond_to? :should
+    page.should have_no_xpath('//*', :text => regexp)
+  else
+    assert page.has_no_xpath?('//*', :text => regexp)
   end
 end
 
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = field['value'] || field.native.attribute('value').to_s
-    if field_value.respond_to? :should
-      field_value.should =~ /#{value}/
-    else
-      assert_match(/#{value}/, field_value)
-    end
+Then /^the "([^"]*)" field should contain "([^"]*)"$/ do |field, value|
+  field = find_field(field)
+  field_value = field['value'] || field.native.attribute('value').to_s
+  if field_value.respond_to? :should
+    field_value.should =~ /#{value}/
+  else
+    assert_match(/#{value}/, field_value)
   end
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_truthy
-  end
+Then /^the "([^"]*)" checkbox should be checked$/ do |label|
+  field_checked = find_field(label)['checked']
+  expect(field_checked).to be_truthy
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_falsy
-  end
+Then /^the "([^"]*)" checkbox should not be checked$/ do |label|
+  field_checked = find_field(label)['checked']
+  expect(field_checked).to be_falsy
 end
 
 Then "the current page is {}" do |page_name|
@@ -219,6 +121,36 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
+Given "tab {string} is selected" do |tab|
+  find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
+end
+
 When 'I change to tab {string}' do |tab|
   find('.pf-c-tabs .pf-c-tabs__item button', text: tab).click
+end
+
+And "confirm the dialog" do
+  accept_confirm
+end
+
+Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
+  ActiveSupport::Deprecation.warn "🥒 Replace with step 'And confirm the dialog'"
+  if rack_test?
+    step original
+  else
+    accept_confirm(text) do
+      step original
+    end
+    wait_for_requests
+  end
+end
+
+Then "(they )should see the following details(:)" do |table|
+  assert table.rows_hash.all? do |key, value|
+    find('dl dt', text: key).has_sibling?('dd', text: value)
+  end
+end
+
+Then "(I )(they )should see the flash message {string}" do |message|
+  assert_flash(message)
 end

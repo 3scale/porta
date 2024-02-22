@@ -4,9 +4,6 @@ class Topic < ApplicationRecord
   acts_as_taggable
   include Tagging
 
-  include ThreeScale::SpamProtection::Integration::Model
-  has_spam_protection
-
   include Indices::TopicIndex
 
   ORDER_BY = [['Newest post', ''], ["Most views", "hits"], ["Number of posts", "posts_count"]]

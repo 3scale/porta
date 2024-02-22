@@ -18,6 +18,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   }.freeze
 
   def setup
+    Recaptcha.stubs(:captcha_configured?).returns(true)
     @provider = FactoryBot.create(:provider_account)
 
     host! @provider.internal_domain

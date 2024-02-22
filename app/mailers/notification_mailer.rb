@@ -323,9 +323,10 @@ class NotificationMailer < ActionMailer::Base
     mail to: @receiver.email, subject: "New message from #{event.sender.name}"
   end
 
+  # TODO: Remove forums THREESCALE-6714
   # @param [Posts::PostCreatedEvent] event
   # @param [User] receiver
-  delivers Posts::PostCreatedEvent, abilities: { manage: :forum }, hidden_onprem_multitenancy: true
+  delivers Posts::PostCreatedEvent, abilities: { manage: :forum }, hidden: true
   def post_created(event, receiver)
     @provider_account = event.provider
     @receiver         = receiver.decorate

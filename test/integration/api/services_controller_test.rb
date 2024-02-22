@@ -124,7 +124,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       default = page.at_css('#service_proxy_authentication_method_1')
       assert default.attribute('checked').present?
 
-      # App_Id and App_Key Pair 
+      # App_Id and App_Key Pair
       put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '2' })
 
       assert_equal 'Product information updated.', flash[:notice]
@@ -147,6 +147,17 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       api_key_option = page.at_css('#service_proxy_authentication_method_1')
 
       assert api_key_option.attribute('checked').present?
+    end
+
+    test 'shows and update gateway response options' do
+      get settings_admin_service_path(service)
+      assert_equal 'text/plain; charset=us-ascii', no_match_error_headers
+
+      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { error_headers_no_match: 'application/problem+json' } })
+      assert_equal 'Product information updated.', flash[:notice]
+
+      follow_redirect!
+      assert_equal 'application/problem+json', no_match_error_headers
     end
 
     test 'update the settings' do
@@ -284,6 +295,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
           }
         }
       }
+    end
+
+    def no_match_error_headers
+      page = Nokogiri::HTML4::Document.parse(response.body)
+      page.at_css('#service_proxy_attributes_error_headers_no_match')['value']
     end
   end
 

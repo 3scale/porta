@@ -19,7 +19,7 @@ create_intro_tabs = () ->
     tab = tab_ids[0]
 
   try
-    $('#cms-intro-tabs').tabs
+    jQueryUI('#cms-intro-tabs').tabs
       active: $("#cms-intro-tabs > ##{tab}").data('ui-tabs-index')
       activate: (event,ui) -> 
         currentTab = ui.newPanel.selector.slice(1)

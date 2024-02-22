@@ -13,10 +13,6 @@ class Sites::ForumsControllerTest < ActionDispatch::IntegrationTest
   def test_edit
     Account.any_instance.expects(:provider_can_use?).returns(true).at_least_once
     get edit_admin_site_forum_path
-    assert_response :success
-
-    Account.any_instance.expects(:provider_can_use?).returns(false).at_least_once
-    get edit_admin_site_forum_path
     assert_response :forbidden
   end
 end

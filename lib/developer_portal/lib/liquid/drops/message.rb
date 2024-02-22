@@ -5,7 +5,7 @@ module Liquid
 
       allowed_name :message, :messages, :reply
 
-      desc "Returns the ID of the message."
+      desc "Returns the ID of the received or sent message."
       def id
         @model.id
       end
@@ -31,7 +31,8 @@ module Liquid
       desc "URL of the message detail, points either to inbox or outbox."
       def url
         if @model.hidden_at.present?
-          admin_messages_trash_path(@model.id)
+          # URLs in Trash always use Message (not MessageRecipient) ID
+          admin_messages_trash_path(message.id)
         else
           if @model.is_a?(MessageRecipient)
             admin_messages_inbox_path(@model.id)
@@ -63,6 +64,12 @@ module Liquid
         else
           h(@model.recipients.first.try(:receiver).try(:org_name)) || ''
         end.html_safe
+      end
+
+      private
+
+      def message
+        @message ||= @model.is_a?(MessageRecipient) ? @model.message : @model
       end
     end
   end

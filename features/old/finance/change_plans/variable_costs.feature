@@ -9,8 +9,11 @@ Feature: Change plan
       And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on
-    Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "ExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
+    And the default service of the provider has name "My API"
+    And the following application plans:
+      | Product | Name          | Cost per month |
+      | My API  | CheapPlan     | 0              |
+      | My API  | ExpensivePlan | 0              |
     Given the current domain is foo.3scale.localhost
       And pricing rules on plan "CheapPlan":
       | Metric | Cost per unit | Min | Max      |
@@ -18,12 +21,13 @@ Feature: Change plan
       And pricing rules on plan "ExpensivePlan":
       | Metric | Cost per unit | Min | Max      |
       | hits   |            10 |   1 | infinity |
+    And a buyer "stallman"
 
       @wip
   Scenario: Keeps price of the moment of the hit was done even if plan doesn't change.
     Given the time is 1st May 2009
       And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
@@ -43,13 +47,13 @@ Feature: Change plan
   Scenario: Change plan with variable costs in both plans in the same month (PREPAID)
     Given the time is 1st May 2009
       And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
       When I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
+      And the buyer changes to application plan "ExpensivePlan" on 15th May 2009 UTC
       When time flies to 16th May 2009
       Then I should have 0 invoices
       When time flies to 20th May 2009
@@ -66,17 +70,17 @@ Feature: Change plan
   Scenario: Change plan with variable costs in both plans in the same month. Provider sees it the day after. Buyer end of month (PREPAID)
     Given the time is 1st May 2009
       And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
       When I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
+      And the buyer changes to application plan "ExpensivePlan" on 15th May 2009 UTC
       When time flies to 16th May 2009
        And current domain is the admin domain of provider "foo.3scale.localhost"
        And I log in as provider "foo.3scale.localhost"
-       And I navigate to my earnings
+       And I go to my earnings
        And follow "May, 2009"
       Then I should see "EUR 1.00"
       Then buyer "stallman" makes 1 service transactions with:
@@ -88,13 +92,13 @@ Feature: Change plan
 
   Scenario: Change plan with variable costs in both plans in the same month (POSTPAID)
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
       When I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
+      And the buyer changes to application plan "ExpensivePlan" on 15th May 2009 UTC
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
@@ -105,15 +109,15 @@ Feature: Change plan
       # should be 11
 
   Scenario: No variable costs are charged if the cinstance now is in a plan in trial period
-    Given plan "ExpensivePlan" has trial period of 25 days
+    Given plan "ExpensivePlan" has a trial period of 25 days
     Given the time is 1st May 2009
-      And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
+      And the buyer is signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
       When I log in as "stallman" on foo.3scale.localhost
-      And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
+      And the buyer changes to application plan "ExpensivePlan" on 15th May 2009 UTC
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |

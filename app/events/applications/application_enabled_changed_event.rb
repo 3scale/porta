@@ -10,9 +10,9 @@ class Applications::ApplicationEnabledChangedEvent < ApplicationRelatedEvent
         application: application,
         metadata: {
           provider_id: provider.id,
-            zync: {
-              service_id: application.service_id
-            }
+          zync: {
+            service_id: application.service_id
+          }
         }
       )
     end

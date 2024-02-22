@@ -96,7 +96,7 @@
 
         // DRAG ...
         $(document).on('sidebar:init', function(event){
-            $(event.target).find('li.draggable').draggable({
+            jQueryUI(event.target).find('li.draggable').draggable({
                 helper: function(e){
                     var element = $(e.currentTarget);
 
@@ -108,7 +108,7 @@
 
         // ... & DROP
         $(document).on('cms-template:init', function(event){
-            $(event.target).find('#subsections-container').droppable({
+            jQueryUI(event.target).find('#subsections-container').droppable({
                 hoverClass: 'subsection-hover',
                 drop: function(event, ui) {
                     var el = $(ui.helper);
@@ -164,7 +164,7 @@
         });
 
         $(document).on('cms-template:init', function(event){
-            $(event.target).find('#cms-template-editor-tabs').parent().tabs({
+            jQueryUI(event.target).find('#cms-template-editor-tabs').parent().tabs({
                 show: function(event, ui){
                     $(ui.panel).trigger('cms.refresh');
                 }

@@ -39,22 +39,14 @@ Then 'I should see the password confirmation error' do
 end
 
 When "the buyer wants to reset their password" do
-  step 'the current domain is foo.3scale.localhost'
-  step 'I go to the login page'
-  step 'I follow "Forgot password?"'
+  set_current_domain 'foo.3scale.localhost'
+  visit login_path
+  click_link 'Forgot password?'
 end
 
-Then "the buyer doesn't need to pass the captcha after reset password form is filled wrong" do
-  fill_in("Email", with: "Invalid email")
-  click_on "Send instructions"
-  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false)
-end
-
-Then "the buyer will need to pass the captcha after reset password form is filled in too quickly" do
-  find('ol').find('#account_confirmation').set(1)
+Then "the buyer fills in the form" do
   fill_in("Email", with: "zed@3scale.localhost")
   click_on "Send instructions"
-  page.should have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
 
 Then "it should not be possible to reset their password" do

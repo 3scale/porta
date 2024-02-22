@@ -44,7 +44,7 @@ Rails.application.configure do
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
 
-  config.active_support.test_order = :sorted # who has the balls can set it to :random
+  config.active_support.test_order = :random
 
   config.three_scale.payments.merge!(enabled: true, active_merchant_mode: :test, active_merchant_logging: false)
 

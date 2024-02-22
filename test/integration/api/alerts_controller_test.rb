@@ -27,17 +27,18 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
     [cinstance1, cinstance2].each { |cinstance|FactoryBot.create(:limit_alert, account: provider, cinstance: cinstance) }
 
     get admin_alerts_path
-    assert_equal 2, assigns(:alerts).count
+    alerts = assigns(:presenter).alerts
+    assert_equal 2, alerts.count
 
     get admin_alerts_path, params: { account_id: buyer1.id }
 
-    alerts = assigns(:alerts)
+    alerts = assigns(:presenter).alerts
     assert_equal 1, alerts.count
     assert_equal buyer1, alerts.first.cinstance.buyer_account
 
     get admin_alerts_path, params: { cinstance_id: cinstance2.id }
 
-    alerts = assigns(:alerts)
+    alerts = assigns(:presenter).alerts
     assert_equal 1, alerts.count
     assert_equal cinstance2, alerts.first.cinstance
 
@@ -45,7 +46,7 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
 
     get admin_alerts_path, params: { search: {account: { query: buyer1.name} } }
 
-    alerts = assigns(:alerts)
+    alerts = assigns(:presenter).alerts
     assert_equal 1, alerts.count
     assert_equal buyer1, alerts.first.cinstance.buyer_account
   end

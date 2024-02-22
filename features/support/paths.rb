@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/PerlBackrefs
 World(Module.new do
   break unless defined?(DeveloperPortal)
 
@@ -29,7 +30,9 @@ World(Module.new do
       plan = Plan.find_by_name!($1)
       signup_path(:'plan_ids[]' => plan.id)
 
-    when /the sign ?up page/, 'the old multiapps sign up page'
+    when /the sign ?up page/,
+         'the old multiapps sign up page',
+         'the signup page'
       signup_path
 
     when 'the provider sign up page'
@@ -43,9 +46,6 @@ World(Module.new do
 
     when 'the login page'
       login_path
-
-    when 'the signup page'
-      signup_path
 
     when /^the login page on ([a-z0-9\.\-]+)$/
       login_url(:host => $1)
@@ -72,7 +72,7 @@ World(Module.new do
       edit_provider_admin_account_path(next_step: 'credit_card')
 
     #
-    # Messages - provider side
+    # Messages - Admin portal
     #
 
     when "the provider inbox page"
@@ -128,7 +128,8 @@ World(Module.new do
     #
     # Forum
     #
-    when "forum settings"
+    when 'forum settings',
+         'the forum settings page'
       edit_admin_site_forum_path
 
     when 'the forum page'
@@ -149,14 +150,14 @@ World(Module.new do
     when 'the provider dashboard'
       provider_admin_dashboard_path
 
-    when 'search'
-      search_path
-    when 'the search page'
+    when 'search',
+         'the search page'
       search_path
     #
     # Account management
     #
-    when 'the account page'
+    when 'the account page',
+          'settings'
       admin_account_path
 
     when 'the account edit page'
@@ -165,14 +166,19 @@ World(Module.new do
     when 'the provider account page'
       provider_admin_account_path
 
-    when 'the provider personal page'
+    when 'the new provider account page'
+      new_provider_admin_account_path
+
+    when 'the provider personal page',
+         'the provider personal details page'
       edit_provider_admin_user_personal_details_path
 
     when 'the provider edit account page',
          'the provider account edit page'
       edit_provider_admin_account_path
 
-    when 'the edit credit card details page'
+    when 'the edit credit card details page',
+         'the braintree edit credit card details page'
       edit_admin_account_braintree_blue_path
     when 'the credit card details page'
       admin_account_payment_details_path
@@ -183,14 +189,10 @@ World(Module.new do
 
     when 'the braintree credit card details page'
       admin_account_braintree_blue_path
-    when 'the braintree edit credit card details page'
-      edit_admin_account_braintree_blue_path
     when 'the stripe credit card details page'
       admin_account_stripe_path
     when 'the stripe edit credit card details page'
       edit_admin_account_stripe_path
-    when 'the provider personal details page'
-      edit_provider_admin_user_personal_details_path
     when 'the personal details page'
       admin_account_personal_details_path
     when 'the notifications page'
@@ -205,9 +207,6 @@ World(Module.new do
     when /^the user edit page for "([^"]*)"$/
       user = User.find_by_username!($1)
       edit_admin_account_user_path(user)
-    when /^the provider user edit page for "([^"]*)"$/
-      user = User.find_by_username!($1)
-      edit_provider_admin_account_user_path(user)
     when 'the new invitation page'
       new_admin_account_invitation_path
     when 'the sent invitations page'
@@ -244,13 +243,11 @@ World(Module.new do
     when /^the overview page of product "([^"]+)"$/
       admin_service_path @provider.services.find_by!(name: $1)
 
-    when 'the API alerts page'
+    when 'the alerts page'
       admin_alerts_path
 
-    when /^the API alerts page of service "(.+?)" of provider "(.+?)"$/
-      provider = Account.providers.find_by_org_name! $2
-      service = provider.services.find_by_name! $1
-      admin_service_alerts_path(service)
+    when /^the alerts of "(.*)"$/
+      admin_service_alerts_path(Service.find_by!(name: $1))
 
     when /^the (edit|settings) page for service "([^"]+)" of provider "(.+?)"$/
       provider = Account.providers.find_by_org_name! $3
@@ -260,69 +257,83 @@ World(Module.new do
     when 'the new service page'
       new_admin_service_path
 
-    when 'the account plans admin page'
-      admin_buyers_account_plans_path
-
-    when 'the new account plan page'
-      new_admin_buyers_account_plan_path
-
-    when 'the application plans admin page'
-      admin_service_application_plans_path provider_first_service!
-
-    when 'the default application plan admin page'
-      edit_polymorphic_path([:admin, provider_first_service!.application_plans.first])
-
     when 'the service plans admin page'
       admin_service_service_plans_path provider_first_service!
-
-    when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
-      plan = Plan.find_by_name!($1)
-      edit_polymorphic_path([:admin, plan])
 
     when /^the usage rules of service "([^"]*)"$/
       service = Service.find_by!(name: Regexp.last_match(1))
       usage_rules_admin_service_path(service)
 
-    #
-    # Account plans (buyer side)
-    #
-    when "the account plans page"
-      admin_account_account_plans_path
+    when /^the backends of the product$/
+      admin_service_backend_usages_path(Service.last)
+
+    when /^the backends of product "(.+?)"$/
+      product = Service.find_by!(name: $1)
+      admin_service_backend_usages_path(product)
+
+    when /^the new backend page for product "(.*)"$/
+      product = Service.find_by!(name: $1)
+      new_admin_service_backend_usage_path(product)
+
+    when /^the edit backend usage page of "(.*)" for product "(.*)"$/
+      product = Service.find_by!(name: $2)
+      config = product.backend_api_configs
+                      .references(:backend_api)
+                      .includes(:backend_api)
+                      .find_by!("backend_apis.name" => $1)
+      edit_admin_service_backend_usage_path(product, config)
 
     #
-    # Applications (buyer side)
+    # Plans (Admin portal)
     #
-    when 'the applications page'
-      admin_applications_path
-    when 'the new application page'
-      new_admin_application_path
-    when /^the new application page for service "([^"]*)"$/
-      service = Service.find_by_name!($1)
-      new_admin_service_application_path(service_id: service.id)
+    when /^(?:(application|service|account) )?plan "(.*)" admin edit page$/
+      model = case $1
+              when 'application' then ApplicationPlan
+              when 'service' then ServicePlan
+              when 'account' then AccountPlan
+              else Plan
+              end
 
-    when /^my application page$/
-      admin_application_path(@application)
-    when /^the "([^"]*)" application page$/
-      cinstance = Cinstance.find_by_name!($1)
-      admin_application_path(cinstance)
-    when /^the "([^"]*)" application edit page$/
-      cinstance = Cinstance.find_by_name!($1)
-      edit_admin_application_path(cinstance)
-    when 'the API access details page'
-      admin_applications_access_details_path
+      plan = model.find_by!(name: $2)
+      edit_polymorphic_path([:admin, plan])
 
-    when /^the alerts page of application "(.+?)"$/
-      cinstance = Cinstance.find_by_name!($1)
-      admin_application_alerts_path(cinstance)
+    #
+    # Application plans (Admin portal)
+    #
+    when /^(product "(.*)"|the product's) application plans admin page$/
+      product = Service.find_by(name: $2) || @product || @service || provider_first_service!
+      admin_service_application_plans_path(product)
+
+    when /^(product "(.*)"|the product's) new application plan admin page$/
+      product = Service.find_by(name: $2) || @product || @service || provider_first_service!
+      new_admin_service_application_plan_path(product)
+
+    #
+    # Service plans (Admin portal)
+    #
+    when /^(product "(.*)"|the product's) service plans admin page$/
+      product = Service.find_by(name: $2) || @product || @service || provider_first_service!
+      admin_service_service_plans_path(product)
+
+    when /^(product "(.*)"|the product's) new service plan admin page$/
+      product = Service.find_by(name: $2) || @product || @service || provider_first_service!
+      new_admin_service_service_plan_path(product)
+
+    #
+    # Account plans (Admin portal)
+    #
+    when 'the account plans admin page'
+      admin_buyers_account_plans_path
+
+    when 'the new account plan admin page'
+      # FIXME: this should be new_admin_buyers_account_plan_path
+      new_admin_account_plan_path
 
     #
     # Service contracts (subscriptions)
     #
     when 'the service subscription page'
       new_admin_service_contract_path
-
-    when /the services list for buyers( page)?$/
-      admin_buyer_services_path
 
     when 'the service subscriptions list for provider',
          'the service contracts admin page',
@@ -331,49 +342,86 @@ World(Module.new do
       admin_buyers_service_contracts_path(:per_page => $1)
 
     #
-    # Applications (provider side)
+    # Applications (Admin portal)
     #
-    when /^the account context create application page for "([^"]*)"$/
-      buyer = Account.buyers.find_by!(org_name: $1)
-      new_admin_buyers_account_application_path(buyer)
+    when /^(buyer|product|the admin portal)( "(.*)")? applications page(?: with (\d+) records? per page)?$/
+      case $1
+      when 'buyer'
+        admin_buyers_account_applications_path(Account.buyers.find_by!(org_name: $3), per_page: $4)
+      when 'product'
+        admin_service_applications_path(Service.find_by!(name: $3), per_page: $4)
+      when 'the admin portal'
+        provider_admin_applications_path(per_page: $4)
+      end
 
-    when 'the provider new application page'
-      new_provider_admin_application_path
+    when /^(buyer|product|the admin portal)( "(.*)")? new application page$/
+      case $1
+      when 'buyer'
+        new_admin_buyers_account_application_path(Account.buyers.find_by!(org_name: $3))
+      when 'product'
+        new_admin_service_application_path(Service.find_by!(name: $3))
+      when "the admin portal"
+        new_provider_admin_application_path
+      end
 
-    when /^the product context create application page for "([^"]*)"$/
-      product = Service.find_by!(name: $1)
-      new_admin_service_application_path(product)
+    when /^(application "(.*)"|the application's) admin page$/
+      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      provider_admin_application_path(app)
 
-    when /^the provider side "([^"]*)" application page$/
-      application = Cinstance.find_by_name!($1)
-      provider_admin_application_path(application)
+    when /^(application "(.*)"|the application's) admin edit page$/
+      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      edit_provider_admin_application_path(app)
 
-    when /^the provider side "([^"]*)" edit application page$/
-      application = Cinstance.find_by_name!($1)
-      edit_provider_admin_application_path(application)
+    when 'the admin portal data exports page'
+      new_provider_admin_account_data_exports_path
 
-    when /^the provider side application page for "([^"]*)"$/
-      application = Account.find_by_org_name!($1).bought_cinstance
-      provider_admin_application_path(application)
+    when 'the upgrade notice for multiple applications'
+      admin_upgrade_notice_path(:multiple_applications)
 
-    when /^the provider application page$/
-      provider_admin_application_path(@application)
+    when /^(application "(.*)"|the application's) traffic stats page$/
+      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      admin_buyers_stats_application_path(app)
 
-    when 'the applications admin page',
-         /^the applications admin page with (\d+) records? per page$/
-      provider_admin_applications_path(per_page: $1)
+    #
+    # Applications (Developer portal)
+    #
+    when 'the dev portal applications page'
+      admin_applications_path
 
-    when /^the account context applications page for "([^"]*)"$/
-      buyer = Account.buyers.find_by!(org_name: $1)
-      admin_buyers_account_applications_path(buyer) # TODO: replace this route with audience context show page
+    when 'the service selection page'
+      choose_service_admin_applications_path
 
-    when /^the product context applications page for "([^"]*)"$/
-      product = Service.find_by!(name: $1)
-      admin_service_applications_path(product)
+    when 'the dev portal API access details page'
+      admin_applications_access_details_path
 
-    when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
-      application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
-      edit_provider_admin_application_path(application)
+    when /^(?:application "(.*)"|the application's) dev portal page$/
+      app = Cinstance.find_by(name: $1) || @cinstance || @application
+      admin_application_path(app)
+
+    when /^(?:application "(.*)"|the application's) dev portal edit page$/
+      app = Cinstance.find_by(name: $1) || @cinstance || @application
+      edit_admin_application_path(app)
+
+    when 'the dev portal new application page'
+      new_admin_application_path
+
+    when /^(?:product "(.*)"|the product's) dev portal new application page$/
+      service = Service.find_by(name: $1) || @product || @service
+      new_admin_application_path(service_id: service.system_name)
+
+    when /^the alerts page of application "(.+?)"$/
+      cinstance = Cinstance.find_by_name!($1)
+      admin_application_alerts_path(cinstance)
+
+
+    #
+    # Developer portal
+    #
+    when "the account plans page"
+      admin_account_account_plans_path
+
+    when /the services list for buyers( page)?$/
+      admin_buyer_services_path
 
     #
     # Buyer management
@@ -387,30 +435,26 @@ World(Module.new do
       new_admin_buyers_account_path
 
     when /^the buyer account page for "([^"]*)"$/,
-         /^the buyer account "([^"]*)" page$/
-      admin_buyers_account_path(Account.find_by_org_name!($1))
+         /^the buyer account "([^"]*)" page$/,
+         /^buyer "(.*)" overview page$/,
+         /^the overview page of account "([^"]*)"$/
+      admin_buyers_account_path(Account.find_by!(org_name: $1))
 
-    when /^the buyer account edit page for "([^"]*)"$/
+    when /^the buyer account edit page for "([^"]*)"$/,
+         /^the buyer account "([^"]*)" edit page$/
       edit_admin_buyers_account_path(Account.find_by_org_name!($1))
-    when /^the buyer account "([^"]*)" edit page$/
-      edit_admin_buyers_account_path(Account.find_by_org_name!($1))
 
-    when /^the buyer users page for "([^"]*)"$/
-      admin_buyers_account_users_path(Account.find_by_org_name!($1))
-    when /^the buyer account "([^"]*)" users page$/
+    when /^the buyer users page for "([^"]*)"$/,
+         /^the buyer account "([^"]*)" users page$/
       admin_buyers_account_users_path(Account.find_by_org_name!($1))
 
-    when /^the buyer user page for "([^"]*)"$/
-      user = User.find_by_username!($1)
-      admin_buyers_account_user_path(user.account, user)
-    when /^the buyer user "([^"]*)" page$/
+    when /^the buyer user page for "([^"]*)"$/,
+         /^the buyer user "([^"]*)" page$/
       user = User.find_by_username!($1)
       admin_buyers_account_user_path(user.account, user)
 
-    when /^the buyer user edit page for "([^"]*)"$/
-      user = User.find_by_username!($1)
-      edit_admin_buyers_account_user_path(user.account, user)
-    when /^the buyer user "([^"]*)" edit page$/
+    when /^the buyer user edit page for "([^"]*)"$/,
+         /^the buyer user "([^"]*)" edit page$/
       user = User.find_by_username!($1)
       edit_admin_buyers_account_user_path(user.account, user)
 
@@ -435,26 +479,24 @@ World(Module.new do
     #
     # Forum admin
     #
-    when 'the provider side forum page'
+    when 'the admin portal forum page'
       admin_forum_path
-    when 'the provider side new topic page'
+    when 'the admin portal new topic page'
       new_admin_forum_topic_path
-    when /^the provider side "([^"]*)" topic page$/
+    when /^the admin portal "([^"]*)" topic page$/
       admin_forum_topic_path(Topic.find_by_title!($1))
-    when /^the provider side edit "([^"]*)" topic page$/
+    when /^the admin portal edit "([^"]*)" topic page$/
       edit_admin_forum_topic_path(Topic.find_by_title!($1))
-    when 'the provider side forum categories page'
+    when 'the admin portal forum categories page'
       admin_forum_categories_path
-    when 'the provider side new forum category page'
+    when 'the admin portal new forum category page'
       new_admin_forum_category_path
 
     #
     # Site settings
     #
-    when 'the edit site settings page'
-      edit_admin_site_settings_path
-
-    when 'the site settings page'
+    when 'the edit site settings page',
+         'the site settings page'
       edit_admin_site_settings_path
 
     when 'the usage rules settings page'
@@ -466,7 +508,7 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
-    when 'the spam protection page'
+    when 'the bot protection page'
       edit_admin_site_spam_protection_path
 
     when 'the xss protection page'
@@ -483,9 +525,6 @@ World(Module.new do
 
     when 'the documentation settings page'
       edit_admin_site_documentation_path
-
-    when 'the forum settings page'
-      edit_admin_site_forum_path
 
     when 'the emails settings page'
       edit_admin_site_emails_path
@@ -506,11 +545,9 @@ World(Module.new do
       buyer_stats_path
     when 'the buyer stats usage page'
       usage_stats_api_applications_path provider_first_service!.cinstances.first, *args
+
     #
     # Potato CMS
-    when /^the (?:CMS|cms) page$/
-      provider_admin_cms_templates_path
-
     when 'the CMS new partial page'
       new_provider_admin_cms_partial_path
 
@@ -541,8 +578,6 @@ World(Module.new do
       provider_admin_cms_changes_path
 
     ## DELETE THESE & FIX CUKES
-    when /^the CMS Templates page$/
-      provider_admin_cms_templates_path
     when /^the CMS Sections page$/
       provider_admin_cms_sections_path
     when /^the CMS Files page$/
@@ -558,7 +593,10 @@ World(Module.new do
     #
     # Advanced CMS (BrowserCMS)
     #
-    when 'the CMS content library page', 'the portal area page'
+    when 'the CMS content library page',
+         'the portal area page',
+         /^the CMS Templates page$/,
+         /^the (?:CMS|cms) page$/
       provider_admin_cms_templates_path
 
     when /^the edit page of the html block "([^"]*)"$/
@@ -573,24 +611,26 @@ World(Module.new do
     when 'the buyer access details page'
       buyer_access_details_path
 
-    when 'the buyer dashboard'
-      '/'
-
     # Provider - Finance
-    when 'the finance page', 'the invoices by months page'
+    when 'the finance page',
+         'the invoices by months page',
+         /my (?:earnings|revenue)/
       admin_finance_root_path
 
     when /(the )?finance settings( page)?/
       admin_finance_settings_path
 
-    when 'my invoices'
+    when 'my invoices',
+         /^the invoices page$/
       admin_account_invoices_path
 
-    when /^the invoices of account "(.+?)" page$/
+    when /^the invoices of account "(.+?)" page$/,
+         /^invoices issued by me for "([^"]*)"$/
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^all provider's invoices page$/
+    when /^all provider's invoices page$/,
+         /invoices issued by me/
       admin_finance_invoices_path
 
     when /^the invoice "(.+?)" page$/
@@ -598,9 +638,6 @@ World(Module.new do
       raise "Couldn't find Invoice with id #{$1}" unless invoice
 
       admin_finance_account_invoice_path(invoice.buyer_account, invoice)
-
-    when /^the invoices page$/
-      admin_account_invoices_path
 
     when 'the credit card gateway page'
       admin_account_payment_gateway_path
@@ -628,13 +665,23 @@ World(Module.new do
     when 'the refund policy page'
       '/refundpolicy'
 
-    # Proxy
-    when 'the service definition page'
-      admin_service_metrics_path(provider_first_service!, tab: 'metrics')
+    # Methods and metrics
     when 'the metrics and methods page'
       admin_service_metrics_path(@provider.default_service)
     when 'the metrics and methods page of my backend api'
       provider_admin_backend_api_metrics_path(@provider.default_service.backend_api)
+    when /^the (methods|metrics) page of product "(.+?)"/
+      admin_service_metrics_path(Service.find_by!(name: $2), tab: $1)
+    when /^the new metric page of product "(.+?)"/
+      new_admin_service_metric_path Service.find_by!(name: $1)
+    when /^the new method page of product "(.+?)"/
+      service = Service.find_by!(name: $1)
+      new_admin_service_metric_child_path(service, service.metrics.hits)
+    when /^the edit page of (?:metric|method) "(.+?)"/
+      metric = Metric.find_by!(friendly_name: $1)
+      edit_admin_service_metric_path(metric.owner, metric)
+
+    # Proxy
     when /^the integration show page for service "(.+?)"/
       service = Service.find_by!(name: $1)
       admin_service_integration_path(service)
@@ -690,3 +737,4 @@ World(Module.new do
     end
   end
 end)
+# rubocop:enable Style/PerlBackrefs

@@ -8,7 +8,7 @@ class AutoAccountDeletionQueriesTest < ActiveSupport::TestCase
     @account_inactivity   = 50
     @contract_unpaid_time = 70
     config = {'account_suspension' => account_suspension, 'account_inactivity' => account_inactivity, 'contract_unpaid_time' => contract_unpaid_time, disabled_for_app_plans: ['enterprise']}
-    Features::AccountDeletionConfig.configure(config)
+    Features::AccountDeletionConfig.config.stubs(config)
     Features::AccountDeletionConfig.stubs(enabled?: true)
   end
 

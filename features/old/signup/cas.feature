@@ -5,8 +5,10 @@ Feature: Signup using Cas
   Background:
     Given a provider "foo.3scale.localhost" with default plans
       And provider "foo.3scale.localhost" uses Cas authentication
-      And an application plan "iRage" of service "default"
-      And application plan "iRage" is default
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  | Default |
+      | My API  | iRage | true    |
 
     Given the current domain is foo.3scale.localhost
 

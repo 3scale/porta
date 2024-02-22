@@ -46,9 +46,7 @@ class Settings < ApplicationRecord
   end
 
   def set_forum_enabled
-    if account
-      self.forum_public = self.forum_enabled = !!account.provider_can_use?(:forum)
-    end
+    self.forum_public = false if account
 
     true
   end
@@ -91,6 +89,13 @@ class Settings < ApplicationRecord
 
   def password_login_allowed?
     true
+  end
+
+  def spam_protection_level
+    # `:auto` is the old 'Suspicious only' mode which is deprecated and replaced by `:captcha`.
+    # We accept it only for backwards compatibility with clients still having 'auto' in the DB
+    level = super.to_sym
+    level == :auto ? :captcha : level
   end
 
   protected

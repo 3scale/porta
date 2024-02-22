@@ -6,36 +6,28 @@ When /^I navigate to (?:(\d)(?:nd|st|rd|th) )?invoice issued (?:for|FOR) me (?:f
   # this is kind of hack as it supposes only 1 buyer!
   invoice_id = Time.zone.parse(date).strftime("%Y-%m-0000000#{order}")
 
-  step %{I navigate to Invoices issued for me}
-  step %(I should see "#{date}")
-  step %(I follow "Show #{invoice_id}")
-  step %(I should see "#{date}")
+  if current_account.provider?
+    visit provider_admin_account_invoices_path
+  else
+    visit admin_account_invoices_path
+  end
+
+  assert_page_has_content date
+  click_link "Show #{invoice_id}"
+  assert_page_has_content date
 end
 
 # TODO: remove this legacy step
 When /^I navigate to [Ii]?nvoices issued (?:FOR|for) me$/ do
    if current_account.provider?
-     step %(I go to my invoices from 3scale page)
+     visit provider_admin_account_invoices_path
    else
-     step %(I go to my invoices)
+     visit admin_account_invoices_path
    end
 end
 
-# TODO: remove this legacy step
-When /^I navigate to invoices issued by me$/ do
-  step %(I go to all provider's invoices page)
-end
-
-When /^I navigate to my (?:earnings|revenue)$/ do
-  step %(I go to the invoices by months page)
-end
-
-When /^I navigate to invoices issued by me for "([^"]*)"$/ do |buyer_name|
-  step %(I go to the invoices of account "#{buyer_name}" page)
-end
-
 When /^I navigate to invoice (.*) issued by me for "([^"]*)"$/ do |invoice_number, buyer_name|
-  step %(I navigate to invoices issued by me for "#{buyer_name}")
+  visit admin_buyers_account_invoices_path(Account.find_by(org_name: buyer_name))
 
   find('tr.invoice', text: invoice_number).click_link('Show')
 end

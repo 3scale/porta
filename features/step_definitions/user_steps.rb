@@ -16,8 +16,8 @@ Given "an active user {string} of {account}" do |username, account|
   FactoryBot.create(:active_user, :account => account, :username => username)
 end
 
-Given "an active admin {string} of {account}" do |username, account|
-  FactoryBot.create(:active_admin, :account => account, :username => username)
+Given "an (active )admin {string} of the provider" do |username|
+  FactoryBot.create(:active_admin, account: @provider, username: username)
 end
 
 Given "an active user {string} of {account} with {word} permission" do |username, account, permission|
@@ -40,10 +40,8 @@ Given "{user} is email unverified" do |user|
   user.email_unverify! unless user.email_unverified?
 end
 
-Given /^provider "([^\"]*)" has the following users:$/ do |provider_name, table|
-  table.hashes.each do |hash|
-    step %(an #{hash['State'] || 'active'} user "#{hash['User']}" of account "#{provider_name}")
-  end
+Given "{user} was signed up with password" do |user|
+  user.update(signup_type: nil)
 end
 
 Given "{user} has email {string}" do |user, email|
@@ -92,4 +90,17 @@ end
 
 Then /^I should see the notice to validate my email$/ do
   assert has_content?('Validate your email')
+end
+
+Given "the current user {can} export data" do |can|
+  Ability.any_instance.stubs(:can?).with(:manage, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:admin, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:see, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:impersonate, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:update, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:show, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:read, any_parameters).returns(true)
+  Ability.any_instance.stubs(:can?).with(:create, any_parameters).returns(true)
+
+  Ability.any_instance.expects(:can?).with(:export, :data).returns(can).at_least_once
 end

@@ -4,7 +4,6 @@ require 'test_helper'
 
 class SphinxAccountIndexationWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
-  include TestHelpers::Master
 
   test "master account should not be indexed" do
     ThinkingSphinx::Test.rt_run do
@@ -39,7 +38,7 @@ class SphinxAccountIndexationWorkerTest < ActiveSupport::TestCase
         buyers = []
         providers.each { |provider| buyers << FactoryBot.create(:simple_buyer, provider_account: provider) }
 
-        assert_equal (providers + buyers).map(&:id), indexed_ids(Account).to_a
+        assert_equal (providers + buyers).map(&:id).to_set, indexed_ids(Account).to_set
 
         providers.first.schedule_for_deletion
         providers.first.save!

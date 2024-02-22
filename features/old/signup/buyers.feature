@@ -6,12 +6,16 @@ Feature: Sign Up of enterprise buyers
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And a account plan "Tier-1" of provider "foo.3scale.localhost"
-
+    And the following account plan:
+      | Issuer               | Name   | Default |
+      | foo.3scale.localhost | Tier-1 | true    |
       And a default service of provider "foo.3scale.localhost" has name "api"
-      And a service plan "Gold" for service "api" exists
-      And an application plan "iPhone" of service "api"
-
+    And the following service plan:
+      | Product | Name | Default |
+      | api     | Gold | true    |
+    And the following application plan:
+      | Product | Name   | Default | State     |
+      | api     | iPhone | true    | Published |
       And the current domain is foo.3scale.localhost
 
   # regression test for https://github.com/3scale/system/pull/2902
@@ -20,9 +24,6 @@ Feature: Sign Up of enterprise buyers
     Then I should see "Activation error"
 
    Scenario: (Enterprise, Single App Mode) Plain signup, activate and login
-    Given service plan "Gold" is default
-      And account plan "Tier-1" is default
-      And application plan "iPhone" is default
       And provider "foo.3scale.localhost" has multiple applications disabled
 
      When I go to the sign up page
@@ -41,10 +42,6 @@ Feature: Sign Up of enterprise buyers
 
   Scenario: Choose application plan, the rest is default
     Given provider "foo.3scale.localhost" has multiple applications disabled
-      And service plan "Gold" is default
-      And account plan "Tier-1" is default
-      And plan "iPhone" is published
-
     When I go to the sign up page for the "iPhone" plan
     Then I should see "You are signing up to plan iPhone."
      And I fill in the signup fields as "hugo"

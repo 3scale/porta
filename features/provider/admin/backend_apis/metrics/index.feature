@@ -18,7 +18,8 @@ Feature: BackendApi > Metrics index
 
   Rule: Tab methods
     Scenario: Default tab is methods
-      Then I should see the following methods:
+      Then should see the following table:
+        | Method      |
         | Margherita  |
         | Diavola     |
         | Carbonara   |
@@ -46,10 +47,11 @@ Feature: BackendApi > Metrics index
       Given I change to tab "Metrics"
 
     Scenario: Metrics table
-      Then I should see the following metrics:
-        | Hits  |
-        | Pizza |
-        | Pasta |
+      Then should see the following table:
+        | Metric |
+        | Hits   |
+        | Pizza  |
+        | Pasta  |
 
     Scenario: New metrics button
       Then I should see "Add a metric"

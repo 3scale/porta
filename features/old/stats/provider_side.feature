@@ -33,7 +33,9 @@ Feature: Provider stats
 
   Scenario: Top users (single application mode)
     Given the provider has multiple applications disabled
-    And an application plan "Default" of provider "foo.3scale.localhost"
+    And the following application plan:
+      | Product | Name    | Default |
+      | API     | Default | true    |
     And a buyer "bob" signed up to application plan "Default"
     And I follow "API"
     And I follow "Analytics"
@@ -44,7 +46,7 @@ Feature: Provider stats
   Scenario: Default metric when creating a backend after product
     Given a service "My API" of the provider
     And a backend
-    And the backend is used by this product
+    And the backend is used by the product
     When I go to the overview page of product "My API"
     And I follow "Analytics"
     And I follow "Traffic"
@@ -54,7 +56,7 @@ Feature: Provider stats
   Scenario: Default metric when creating a backend before product
     Given a backend
     And a service "My API" of the provider
-    And the backend is used by this product
+    And the backend is used by the product
     When I go to the overview page of product "My API"
     And I follow "Analytics"
     And I follow "Traffic"

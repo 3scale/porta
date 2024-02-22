@@ -2,6 +2,12 @@
 
 Before '@onpremises' do
   ThreeScale.config.stubs(onpremises: true)
+  ThreeScale.config.stubs(saas?: false)
+end
+
+After '@onpremises' do
+  ThreeScale.config.stubs(onpremises: false)
+  ThreeScale.config.stubs(saas?: true)
 end
 
 Before '@ignore-backend' do
@@ -75,8 +81,6 @@ end
 
 After do |scenario| # rubocop:disable Metrics/BlockLength
   next unless scenario.failed? # we don't care about working scenarios
-  next unless scenario.respond_to?(:feature) # example rows dont have feature
-
 
   if (console_messages = page.driver.try(:console_messages))
     puts "Console Messages:", *console_messages
@@ -87,7 +91,7 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   end
 
 
-  folder = Pathname.new(scenario.feature.file)
+  folder = Pathname.new(scenario.location.file)
   if folder.absolute?
     folder = folder.relative_path_from(Rails.root)
   end
@@ -115,16 +119,21 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
 
   # Network logs
   if page.driver.browser.respond_to?(:manage)
-    logs = page.driver.browser.manage.logs.get(:performance)
-    array = logs.each_with_object([]) do |entry, messages|
-      message = JSON.parse(entry.message)
-      # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
-      messages << message
-    end
+    # performance logs may fail if this logging type is not configured or not supported by driver
+    if page.driver.browser.manage.logs.available_types.include? :performance
+      logs = page.driver.browser.manage.logs.get(:performance)
+      array = logs.each_with_object([]) do |entry, messages|
+        message = JSON.parse(entry.message)
+        # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
+        messages << message
+      end
 
-    file = folder.join("#{line_number}-network.json")
-    file.open('w') do  |f|
-      f.puts JSON.dump(array)
+      file = folder.join("#{line_number}-network.json")
+      file.open('w') do |f|
+        f.puts JSON.dump(array)
+      end
+    else
+      warn "Browser driver not configured to collect performance logs."
     end
 
 
@@ -133,7 +142,6 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
     if (logs = page.driver.browser.manage.logs.get(:browser)).present?
       entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
 
-      puts *entries
       console_log.open('w') do |f|
         f.puts *entries
       end
@@ -213,7 +221,7 @@ print_banner = ->(title, step) do
     | #{title}: #{step_name.bold} |
     | #{'=' * (step_name.length + title.length + 2)} |
     #{step.multiline_arg}
-NEXT
+  NEXT
 end
 
 Before do |scenario|

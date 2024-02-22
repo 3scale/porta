@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# This is a hack used only for debugging.
 When '(I )wait a moment' do
   wait_for_requests
 end

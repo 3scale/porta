@@ -4,13 +4,14 @@ Feature: Invitations on partner accounts for admins
   As an admin I want to manage the invitations of users to the partner accounts
 
   Background:
-    Given a provider is logged in
-    And an application plan "power1M" of provider "master"
+    Given the default product of provider "master" has name "Master API"
+    And the following application plan:
+      | Product    | Name    |
+      | Master API | power1M |
+    And a provider is logged in
     And the provider has multiple applications enabled
     And the provider has "multiple_users" switch allowed
-    And the provider has the following buyers:
-      | Name     |
-      | lol cats |
+    And a buyer "lol cats"
 
   Scenario: Upgrade notice when provider does not have switch
     Given provider "foo.3scale.localhost" has "multiple_users" switch denied
@@ -46,7 +47,7 @@ Feature: Invitations on partner accounts for admins
   Scenario: Destroying invitations
     Given an invitation sent to "alice@lolcats.com" to join account "lol cats"
     When I navigate to the page of the invitations of the partner "lol cats"
-    And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com" and I confirm dialog box
+    And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com" and confirm the dialog
     Then I should not see invitation for "alice@lolcats.com"
 
   Scenario: Resending invitations

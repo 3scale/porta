@@ -50,7 +50,8 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     ENV=/opt/app-root/etc/scl_enable \
     PROMPT_COMMAND=". /opt/app-root/etc/scl_enable" \
     RAILS_ENV=production \
-    SAFETY_ASSURED=1
+    SAFETY_ASSURED=1 \
+    prometheus_multiproc_dir=/opt/system/tmp/prometheus-client-mmap-dir
 
 RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
@@ -67,7 +68,7 @@ ADD openshift/system/config/* ./config/
 
 RUN source /opt/app-root/etc/scl_enable \
     && bundle exec rake tmp:create \
-    && mkdir -p public/assets db/sphinx \
+    && mkdir -p public/assets db/sphinx tmp/prometheus-client-mmap-dir \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \
     && cd /opt/system \

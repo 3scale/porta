@@ -56,8 +56,6 @@ gem 'sidekiq-batch', github: '3scale/sidekiq-batch', branch: 'redis-client'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-throttled', '~> 1.0.0.alpha.1'
 
-gem 'sidekiq-prometheus-exporter'
-
 # Yabeda metrics
 gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'
@@ -85,7 +83,7 @@ gem 'dalli'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.13.10'
+gem 'nokogiri', '~> 1.15.5'
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
@@ -103,7 +101,7 @@ gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "
 gem 'prawn-svg'
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
-gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
+gem 'recaptcha', '~> 5.16.0'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
 gem 'redis', require: ['redis']
@@ -218,7 +216,7 @@ group :test do
   gem 'rspec_junit_formatter'
 
   # IMPORTANT: Load 'mocha' after 'shoulda'.
-  gem 'mocha', '~> 1.1.0', require: 'mocha/setup'
+  gem 'mocha', require: 'mocha/minitest'
 
   # proxy tests
   gem 'database_cleaner', require: false

@@ -10,18 +10,24 @@ Feature: Buyer's service subscription
     And provider "foo.3scale.localhost" has "multiple_services" visible
     And a service "Second" of provider "foo.3scale.localhost"
     And a buyer "bob" of provider "foo.3scale.localhost"
-    And a published service plan "SoundsLike" of service "API" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following service plan:
+      | Product | Name       | State     |
+      | My API  | SoundsLike | Published |
     And I log in as "bob" on foo.3scale.localhost
 
   Scenario: Simple subscription
-   Given a published service plan "AnotherOne" of service "API" of provider "foo.3scale.localhost"
+    And the following service plan:
+      | Product | Name       | State     |
+      | My API  | AnotherOne | Published |
      And I go to the service subscription page
      And I press "Subscribe"
     Then I should see "You have successfully subscribed to a service."
 
   Scenario: Subscription with approval
-   Given a published service plan "Platinum" of service "Second" of provider "foo.3scale.localhost"
-     And service plan "Platinum" requires approval
+    Given the following service plan:
+      | Product | Name     | State     | Requires approval |
+      | Second  | Platinum | Published | true              |
 
     When I go to the service subscription page
      And I select "Platinum" from "Plan"
@@ -35,7 +41,9 @@ Feature: Buyer's service subscription
      <h1>Magna Charta Libertatum</h1>
      <p>All your base are belong to us.</p>
      """
-    And a published service plan "Cool" of service "Second"
+    And the following service plan:
+      | Product | Name | State     |
+      | Second  | Cool | Published |
 
     When I go to the service subscription page
     Then I should see "Magna Charta"

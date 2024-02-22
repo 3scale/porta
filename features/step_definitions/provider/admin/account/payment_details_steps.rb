@@ -66,7 +66,7 @@ Then "the provider's payment details can be added only after completing account 
   assert_match 'next_step=credit_card', current_url
   assert_equal @provider.domain, find(:label, text: I18n.t('activerecord.attributes.account.org_name')).sibling('input').value
   assert_equal 'UTC', find(:label, text: I18n.t('activerecord.attributes.account.timezone')).sibling('select').value
-  assert has_css?(:button, text: I18n.t('provider.admin.accounts.form.submit_button_next_step_label'))
+  assert_selector(:css, :button, text: I18n.t('provider.admin.accounts.form.submit_button_next_step_label'))
 end
 
 Then "the admin can edit the provider's payment details" do
@@ -115,11 +115,6 @@ Then "the provider's payment details can't be stored because something went wron
   click_on 'Save credit card'
 
   assert_flash 'Credit Card details could not be stored.'
-end
-
-Then "the provider's payment details are not accessible" do
-  visit edit_provider_admin_account_path
-  assert_not section_from_vertical_nav?('Billing')
 end
 
 Then "an admin can remove the provider's payment details" do

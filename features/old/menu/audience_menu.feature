@@ -17,7 +17,6 @@ Feature: Audience menu
       | Applications     |
       | Developer Portal |
       | Messages         |
-      | Forum            |
 
   Scenario: Accounts sub menu structure
     Then I should see menu items under "Accounts"
@@ -37,7 +36,7 @@ Feature: Audience menu
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Spam Protection      |
+      | Bot Protection      |
       | SSO Integrations     |
       | Liquid Reference     |
 
@@ -83,6 +82,6 @@ Feature: Audience menu
       | Service Subscription |
       | New Application      |
       | Domains & Access     |
-      | Spam Protection      |
+      | Bot Protection      |
       | SSO Integrations     |
       | Liquid Reference     |

@@ -2,12 +2,10 @@ require "mocha/api"
 
 World(Mocha::API)
 
-Before do
-  mocha_setup
-end
-
-After do
+Around do |scenario, block|
   begin
+    mocha_setup
+    block.call
     mocha_verify
   ensure
     mocha_teardown

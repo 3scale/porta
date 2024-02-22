@@ -1635,7 +1635,7 @@ this returns the errors that occurred.
 ```
 
 ### id
-Returns the ID of the message.
+Returns the ID of the received or sent message.
 
 ### subject
 If subject is not present then either a truncated body or `(no subject)` string is returned.

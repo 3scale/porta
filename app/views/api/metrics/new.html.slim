@@ -1,0 +1,6 @@
+- if @metric.child?
+  - url = admin_service_metric_children_path(@service, @metric.parent)
+- else
+  - url = admin_service_metrics_path(@service)
+
+= render partial: 'form', locals: { url: url, metric: @metric, scope: :new }

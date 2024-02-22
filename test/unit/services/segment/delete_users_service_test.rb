@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class SegmentIntegration::DeleteUsersServiceTest < ActiveSupport::TestCase
+  setup { configure }
+
   class RightResponseTest < SegmentIntegration::DeleteUsersServiceTest
     test '#call does the right request to delete' do
       request = delete_request(status: 200)
@@ -59,13 +61,17 @@ class SegmentIntegration::DeleteUsersServiceTest < ActiveSupport::TestCase
     [1, 2, 3]
   end
 
-  def config
-    @config ||= Features::SegmentDeletionConfig.configure({
-      enabled: true,
+  def configure
+    Features::SegmentDeletionConfig.stubs(:enabled?).returns(true)
+    Features::SegmentDeletionConfig.config.stubs(
       token: 'TOKEN',
       root_uri: 'https://platform.segmentapis.com/v1beta',
       workspace: 'my-workspace',
       api: 'regulations'
-    }).config
+    )
+  end
+
+  def config
+    Features::SegmentDeletionConfig.config
   end
 end

@@ -86,6 +86,7 @@ const FancySelect = <T extends IRecord>({
         }}
         isDisabled={isDisabled}
         isOpen={expanded}
+        ouiaId={label}
         placeholderText={placeholderText}
         selections={item && toSelectOptionObject(item)}
         variant={SelectVariant.typeahead}

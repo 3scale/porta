@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { QuickStartContainer as PF4QuickStartContainer, QuickStartCatalogPage, useLocalStorage } from '@patternfly/quickstarts'
+import { QuickStartContainer as PF4QuickStartContainer, useLocalStorage } from '@patternfly/quickstarts'
 import { PageSection } from '@patternfly/react-core'
 
 import quickStarts from 'QuickStarts/templates'
 import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import type { QuickStart } from '@patternfly/quickstarts'
-
-import './QuickStartContainer.scss'
+import { CustomCatalog } from './CustomCatalog'
 
 interface Props {
   links: [string, string, string][];
@@ -39,7 +37,7 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
       language="en"
       loading={false}
       markdown={markdown}
-      quickStarts={quickStarts as QuickStart[]}
+      quickStarts={quickStarts}
       setActiveQuickStartID={setActiveQuickStartID}
       setAllQuickStartStates={setAllQuickStartStates}
       showCardFooters={false}
@@ -50,10 +48,7 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
       {renderCatalog && (
         <div id={CATALOG_CONTAINER_ID}>
           <PageSection>
-            <QuickStartCatalogPage
-              hint="Learn how to create, import, and run applications with step-by-step instructions and tasks."
-              title="Quick starts"
-            />
+            <CustomCatalog />
           </PageSection>
         </div>
       )}

@@ -8,7 +8,7 @@ Feature: Buyer side, account fields
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has multiple applications enabled
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name            | choices | required | read_only | hidden |
       | false_field     |         |          |           |        |
       | required_field  |         | true     |           |        |
@@ -16,12 +16,11 @@ Feature: Buyer side, account fields
       | non_editable    |         |          | true      |        |
       | hidden_field    |         |          |           | true   |
 
-
+  @javascript
   Scenario: Hidden and not editable extra fields should not be editable
     Given I log in as "bob" on foo.3scale.localhost
     When I go to the account edit page
     Then I should see the fields:
-      | name                    |
       | Organization/Group Name |
       | False field             |
       | Required field          |
@@ -36,10 +35,10 @@ Feature: Buyer side, account fields
   Scenario: Update an account with extra fields
     Given I log in as "bob" on foo.3scale.localhost
     When I go to the account edit page
-      And I leave "Required field" blank
-      And I leave "False field" blank
-      And I select "3" from "Choices field"
-      And I press "Update"
+    And the form is submitted with:
+      | Required field |   |
+      | False field    |   |
+      | Choices field  | 3 |
     Then I should see error "can't be blank" for extra field "Required field"
       But I should not see errors for extra field "False field"
 
@@ -74,7 +73,7 @@ Feature: Buyer side, account fields
 
 
   Scenario: Country field works correctly
-    Given provider "foo.3scale.localhost" only has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name    |
       | country |
       And I log in as "bob" on foo.3scale.localhost

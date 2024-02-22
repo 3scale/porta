@@ -89,9 +89,11 @@
               "type": "string",
               "enum": [
                 "open",
+                "finalized",
                 "pending",
                 "paid",
                 "unpaid",
+                "failed",
                 "cancelled"
               ]
             }
@@ -156,9 +158,11 @@
               "type": "string",
               "enum": [
                 "open",
+                "finalized",
                 "pending",
                 "paid",
                 "unpaid",
+                "failed",
                 "cancelled"
               ]
             }

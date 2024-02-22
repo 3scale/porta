@@ -20,12 +20,15 @@ Then /^I should see the settings updated$/ do
 end
 
 Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
-  assert provider.settings.strong_passwords_enabled == enabled
+  assert provider.settings.reload.strong_passwords_enabled == enabled
 end
 
-Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
-  label = find('label', text: field)
-  input = label.sibling('input')
-
-  assert_not_equal enabled, input.disabled?
+Given "{provider} has {count} account plan(s)" do |provider, count|
+  current_size = provider.account_plans.size
+  if count > current_size
+    FactoryBot.create_list(:account_plan, count - current_size, provider: provider)
+  else
+    keep_ids = provider.account_plans.take(count).pluck(:id)
+    provider.account_plans.where.not(id: keep_ids).destroy_all
+  end
 end

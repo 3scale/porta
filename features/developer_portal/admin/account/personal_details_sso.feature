@@ -4,7 +4,10 @@ Feature: Dev Portal Buyer Personal Details SSO
   After I log in with SSO
 
   Background:
-    Given a buyer logged in to a provider using SSO
+    Given Provider has setup RH SSO
+    And As a developer, I see RH-SSO login option on the login page
+    And the Oauth2 user has all the required fields
+    And I authenticate by Oauth2
 
   Scenario: Buyer shouldn't see any password input
     Given the buyer wants to edit their personal details

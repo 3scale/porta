@@ -5,11 +5,12 @@ Feature: Account management
 
   Background:
     Given a provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
 
   @javascript
   Scenario: Edit and show account details
     Given the admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
-    Given master provider has the following fields defined for "Account":
+    Given master provider has the following fields defined for accounts:
     | name              | choices | label   | required | read_only | hidden |
     | org_legaladdress  |         | Address | false    | false     | false  |
     | country           |         | Country | false    | false     | false  |
@@ -35,15 +36,14 @@ Feature: Account management
         | Time Zone               | Santiago                  |
       And provider "Fantastically awesome API" time zone should be "Santiago"
 
-  @security @wip @javascript
+  @security @javascript
   Scenario: Non-admins cannot edit account details
     Given an user "bob" of account "foo.3scale.localhost"
-    And user "bob" activates himself
+    And the user "bob" is activated
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "bob"
     And I go to the provider account page
-    # FIXME: as the Edit button now resides elsewhere, this does not assert anything
-    Then I should not see link "Edit" within "#account_details"
+    Then I should see "Access denied"
 
   @javascript
   Scenario: Providers see their provider key on the account details page
@@ -54,7 +54,9 @@ Feature: Account management
     Then I should see the provider key of provider "foo.3scale.localhost"
 
   Scenario: Buyers don't see their keys on the account details page
-    Given an application plan "Default" of provider "foo.3scale.localhost"
+    Given the following application plan:
+      | Product | Name    |
+      | My API  | Default |
     And a buyer "bob" signed up to application plan "Default"
 
     When I log in as "bob" on foo.3scale.localhost
@@ -83,7 +85,7 @@ Feature: Account management
   @javascript
   Scenario: Provider should see all fields defined for account
     And provider "foo.3scale.localhost" has multiple applications enabled
-      And provider "foo.3scale.localhost" has the following fields defined for "Account":
+      And provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name                 | required | read_only | hidden | label                |
       | vat_code             | true     |           |        | VAT Code             |
       | telephone_number     |          | true      |        | Telephone Number     |
@@ -106,7 +108,6 @@ Feature: Account management
       And I go to the buyer account "randomdude" edit page
 
     Then I should see the fields:
-      | present              |
       | VAT Code             |
       | Telephone Number     |
       | VAT Rate             |

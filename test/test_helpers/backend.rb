@@ -119,8 +119,7 @@ module TestHelpers
         options = options.reverse_merge(:provider_account_id => @provider_account.id,
                                         :service_id => @service.id,
                                         :usage => {'hits' => 1},
-                                        :confirmed => true,
-                                        :log => {'code' => 200},
+                                        :log => {'code' => 200}
                                        )
 
         ::Backend::Transaction.report!(options)

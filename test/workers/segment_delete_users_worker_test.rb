@@ -23,7 +23,7 @@ class SegmentDeleteUsersWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test 'perform does not do anything is the config is disabled' do
+  test 'perform does not do anything if the config is disabled' do
     Features::SegmentDeletionConfig.stubs(enabled?: false)
 
     SegmentIntegration::DeleteUsersService.expects(:call).never
@@ -37,9 +37,12 @@ class SegmentDeleteUsersWorkerTest < ActiveSupport::TestCase
   end
 
   test 'perform does the call with the users ids using the config batches size' do
-    config = Features::SegmentDeletionConfig.configure(enabled: true, request_size: 3, wait_time: 5).config
+    options = {enabled: true, request_size: 3, wait_time: 0}
+    Features::SegmentDeletionConfig.config.stubs(options)
+    config = Features::SegmentDeletionConfig.config
     FactoryBot.build_stubbed_list(:admin, 10).each { |user| DeletedObject.create!(object: user, owner: user.account) }
 
+    assert_equal 3, config.request_size
     DeletedObject.users.order(:id).select(:id, :object_id).map(&:object_id).in_groups_of(config.request_size) do |expected_user_ids|
       SegmentIntegration::DeleteUsersService.expects(:call).with(expected_user_ids)
     end

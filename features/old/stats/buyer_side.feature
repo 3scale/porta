@@ -16,7 +16,10 @@ Feature: Buyer stats
   @javascript
   Scenario: Access stats page
     Given a provider "foo.3scale.localhost"
-      And an application plan "Pro" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product  | Name |
+      | My API   | Pro  |
       And a buyer "alice" signed up to application plan "Pro"
       And buyer "alice" made 2 service transactions 12 hours ago:
         | Metric   | Value |

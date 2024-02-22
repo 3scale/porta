@@ -8,16 +8,20 @@ Feature: Change plan
     Given a provider exists on 1st April 2009
       And the provider is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
+    And the default product of the provider has name "My API"
+    And the following application plans:
+      | Product | Name             | Cost per month |
+      | My API  | FreeAsInBeer     | 0              |
+      | My API  | PaidAsInLunch    | 31             |
+      | My API  | PaidAsInDiplomat | 3100           |
+    And a buyer "stallman"
 
   Scenario: Change without billed cost
       Given the time is 5th May 2009
-        And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 5th May 2009
+        And the buyer is signed up to application plan "PaidAsInLunch" on 5th May 2009
 
        When I log in as "stallman" on foo.3scale.localhost
-        And I change application plan to "PaidAsInDiplomat" on 15th May 2009 UTC
+        And the buyer changes to application plan "PaidAsInDiplomat" on 15th May 2009 UTC
         And time flies to 3rd June 2009
         And I navigate to invoice issued for me in "May, 2009"
        Then I should see line items
@@ -30,10 +34,10 @@ Feature: Change plan
   Scenario: Should not refund but bill upgrade on PREPAID billing
       Given the time is 25th April 2009
         And the provider is charging its buyers in prepaid mode
-        And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 25th April 2009
+        And the buyer is signed up to application plan "PaidAsInLunch" on 25th April 2009
 
        When I log in as "stallman" on foo.3scale.localhost
-        And I change application plan to "PaidAsInDiplomat" on 15th May 2009 UTC
+        And the buyer changes to application plan "PaidAsInDiplomat" on 15th May 2009 UTC
         And time flies to 3rd June 2009
         And I navigate to 2nd invoice issued for me in "May, 2009"
        Then I should see line items
@@ -44,7 +48,7 @@ Feature: Change plan
 
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 28th April 2009
     When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
@@ -54,9 +58,9 @@ Feature: Change plan
 
 
   Scenario: Trial period ends and no change plan POSTPAID
-    Given plan "PaidAsInLunch" has trial period of 5 days
+    Given plan "PaidAsInLunch" has a trial period of 5 days
     Given the time is 30 April 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 30th April 2009
       When time flies to 3rd June 2009
        And I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
        And I navigate to invoice issued for me in "May, 2009"
@@ -66,7 +70,7 @@ Feature: Change plan
          | Total cost                   |                                             |          | 27.00 |
 
   Scenario: Change on trial causes no billing
-    Given plan "PaidAsInLunch" has trial period of 15 days
+    Given plan "PaidAsInLunch" has a trial period of 15 days
       And pricing rules on plan "PaidAsInLunch":
       | Metric | Cost per unit | Min | Max      |
       | hits   |           0.1 |   1 | infinity |
@@ -76,14 +80,14 @@ Feature: Change plan
 
       # This should be ignored (trial period)
       When the time is 30 April 2009
-      And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
+      And the buyer is signed up to application plan "PaidAsInLunch" on 30th April 2009
       And buyer "stallman" makes 1 service transaction with:
         | Metric | Value |
         | hits   |     3 |
 
       # This should be ignored (different plan but still in trial period)
       And I log in as "stallman" on foo.3scale.localhost on 10th May 2009
-      And I change application plan to "PaidAsInDiplomat"
+      And the buyer changes to application plan "PaidAsInDiplomat"
       And buyer "stallman" makes 1 service transaction with:
         | Metric | Value |
         | hits   |     5 |

@@ -13,7 +13,7 @@ Feature: Provider account management
     When I follow "Accounts"
      And I follow "foo.3scale.localhost"
     Then I should see "Account Summary" in a header
-     And I should see "Provider Key" in the applications widget
+     And I should see "Provider Key" within the application widget
 
     When I follow "Edit"
      And I fill in the following:
@@ -24,9 +24,9 @@ Feature: Provider account management
     Then I should see "BBB"
      And I should see "6.78"
 
-  Scenario: Test application does not show in the applications widget
+  Scenario: Test application does not show in the application widget
     Given provider "foo.3scale.localhost" has test application
     When I follow "Accounts"
       And I follow "foo.3scale.localhost"
-    Then I should not see "Application on plan test" in the applications widget
+    Then I should not see "Application on plan test" within the application widget
 

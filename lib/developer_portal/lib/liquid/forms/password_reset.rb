@@ -2,7 +2,7 @@
 
 module Liquid
   module Forms
-    class PasswordReset < Forms::SpamProtected
+    class PasswordReset < Forms::BotProtected
 
       def html_class_name
         'formtastic'

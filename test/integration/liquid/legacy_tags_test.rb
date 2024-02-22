@@ -10,6 +10,7 @@ class Liquid::LegacyTagsTest < ActionDispatch::IntegrationTest
   end
 
   test 'latest_forum_posts' do
+    @provider.forum = FactoryBot.create(:forum)
     topic = FactoryBot.create(:topic, forum: @provider.forum)
     FactoryBot.create(:post, forum: @provider.forum, topic: topic)
     override_dashboard_with '{% latest_forum_posts %}'

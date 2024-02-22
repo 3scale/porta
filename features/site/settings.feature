@@ -10,7 +10,7 @@ Feature: Credit Card policies
       When they press "Dashboard"
       And they follow "Audience"
       And they press "Billing"
-      And they press "Settings" within section Billing
+      And they press "Settings" within the main manu's section Billing
       And they follow "Credit Card Policies"
       Then the current page is the edit site settings page
 

@@ -5,7 +5,7 @@ Feature: Accounts management
 
   Background:
     Given a provider is logged in
-    And has a buyer with service plan
+    And a buyer "Alexander"
     And there are no events
 
   Scenario: Delete account events

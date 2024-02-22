@@ -14,7 +14,7 @@ const PathInput: FunctionComponent<Props> = ({ error, path, setPath }) => {
     <FormGroup
       fieldId="backend_api_config_path"
       helperTextInvalid={error}
-      label="Path"
+      label="Public Path"
       validated={validated}
     >
       <TextInput

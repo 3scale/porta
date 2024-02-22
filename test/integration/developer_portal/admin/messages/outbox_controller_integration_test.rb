@@ -30,4 +30,11 @@ class DeveloperPortal::Admin::Messages::OutboxControllerIntegrationTest < Action
     get admin_messages_outbox_index_path
     assert_not_equal [], assigns['_assigned_drops']['messages']
   end
+
+  def test_show
+    sent_message = FactoryBot.create(:message, sender: @buyer)
+    get admin_messages_outbox_path(sent_message)
+
+    assert_equal sent_message.id, assigns(:_assigned_drops)['message'].id
+  end
 end

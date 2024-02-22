@@ -7,10 +7,12 @@ Feature: Providers's subscription searching, sorting and filtering
   Background:
     Given a provider is logged in
     And the provider has "service_plans" visible
-    And a default service of provider "foo.3scale.localhost" has name "Fancy API"
-    And a service "New Service" of provider "foo.3scale.localhost"
-    And a default service plan "Basic" of service "Fancy API"
-    And a service plan "Unpublished" of service "New Service"
+    And a default product of the provider has name "Fancy API"
+    And a product "New Service"
+    And the following service plans:
+      | Product     | Name        | Default |
+      | Fancy API   | Basic       | true    |
+      | New Service | Unpublished |         |
     Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |
@@ -22,7 +24,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan  | Paid? | State |
       | Basic | free  | live  |
-    And I follow "Account" within table header
+    And I follow "Account" within the table header
     Then I should see following table:
       | Account   |
       | bob       |
@@ -34,7 +36,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan  |
       | Basic |
-    And I follow "Account" within table header
+    And I follow "Account" within the table header
     And I should see following table:
       | Account   |
       | bob       |
@@ -45,7 +47,7 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan        | Paid? | State |
       | Unpublished | free  | live  |
-    And I follow "<order by>" within table header
+    And I follow "<order by>" within the table header
     Then I should see "<order by>"
 
     Examples:

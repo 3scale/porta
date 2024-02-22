@@ -3,7 +3,7 @@
 module RecaptchaHelper
   # :reek:UtilityFunction
   def skip_recaptcha(skip)
-    Recaptcha::Verify.stubs(:skip?).returns(skip)
+    Recaptcha.stubs(:skip_env?).returns(skip)
   end
 end
 

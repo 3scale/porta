@@ -85,3 +85,18 @@ Feature: CMS Pages
     And I press "Publish"
     And I should see "Page saved and published"
     Then preview draft link should link to "/hattori"
+
+  Scenario: Update page after unsuccessful validation
+    Given the provider has cms page "/some-path" with:
+    """
+    Sample content
+    """
+    And I go to the CMS Page "/some-path" page
+    And I fill in "Title" with ""
+    And I press "Save"
+    And I should see "Title can't be blank"
+    And I fill in "Title" with "New title"
+    And I press "Save"
+    And I should see "Page saved."
+    And I go to the CMS Page "/some-path" page
+    Then I should see "Page 'New title'"

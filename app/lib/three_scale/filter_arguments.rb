@@ -15,7 +15,7 @@ module ThreeScale
         case argument
         when Struct
           FILTER.filter(argument.to_h)
-        when Enumerable
+        when Hash
           FILTER.filter(argument)
         else
           argument

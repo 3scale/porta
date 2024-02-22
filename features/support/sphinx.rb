@@ -12,7 +12,7 @@ Before('@search') do
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.autostop
   output = ::ThinkingSphinx::Test.start index: false
-  assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output}"
+  assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output.output}"
 end
 
 After '@search' do

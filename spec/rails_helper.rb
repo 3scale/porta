@@ -124,9 +124,31 @@ RSpec.configure do |config|
 
   end
 
+  config.after(:each) do |ex|
+    # I hope this would be easy to maintain in the long run, but it is optional.
+    # Just to remind anybody trying to use Mocha expectations in specs that this is not mandated.
+    has_expectations = Mocha::Mockery.instance.mocks.any? do |mock|
+      mock.__expectations__.to_a.any? do |expectation|
+        !expectation.instance_variable_get(:@cardinality).allowed_any_number_of_times?
+      end
+    end
+
+    raise "use rspec mocking instead of Mocha" if has_expectations
+  end
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)
+    Mocha::Mockery.setup # because we stub things with mocha in factories
     master_account
+  end
+
+  config.after(:suite) do
+    mocha_needs_teardown = begin
+      Mocha::Mockery.instance.present?
+    rescue NoMethodError
+      false
+    end
+    Mocha::Mockery.teardown if mocha_needs_teardown
   end
 
   if ENV['CI']

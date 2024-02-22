@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "a message(s) sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
+Given "a message sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = sender.messages.create!(:to => receiver, :subject => subject, :body => body)
   message.deliver!
 end
@@ -25,7 +25,7 @@ Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} w
   message = receiver.received_messages.to_a.find do |message|
     message.sender  == sender  &&
     message.subject == subject &&
-    message.body    == body
+    message.body    =~ /#{body}/
   end
 
   assert_not_nil message, %(No message from #{sender.org_name} to #{receiver.org_name} with subject "#{subject}" and body "#{body}" was sent)

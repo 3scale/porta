@@ -7,8 +7,10 @@ Feature: Invoice lifecycle
     Given a provider "foo.3scale.localhost" on 1st May 2009
       And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
-
-      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name          | Cost per month |
+      | My API  | PaidAsInLunch | 31             |
       And the time is 29th May 2009
       And a buyer "alice" signed up to application plan "PaidAsInLunch"
       And I log in as "alice" on foo.3scale.localhost

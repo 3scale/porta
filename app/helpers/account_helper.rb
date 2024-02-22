@@ -37,12 +37,6 @@ module AccountHelper
     current_account.org_name.parameterize if current_account
   end
 
-  def account_states_for_select
-    states = %w[approved pending rejected]
-    states << 'suspended' if current_account == Account.master
-    options = states.map { |state| [state.titleize, state] }
-  end
-
   def account_states_info(account)
     state_info = account.state.humanize
     if account.scheduled_for_deletion?

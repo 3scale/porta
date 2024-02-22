@@ -9,14 +9,6 @@ module Abilities
       ThreeScale.config.stubs(onpremises: false)
     end
 
-    def test_forum
-      Account.any_instance.expects(:provider_can_use?).returns(true).at_least_once
-      assert_can ability, :manage, :forum
-
-      Account.any_instance.expects(:provider_can_use?).returns(false).at_least_once
-      assert_cannot ability, :manage, :forum
-    end
-
     def test_web_hooks
       Settings::Switch.any_instance.stubs(:allowed?).returns(false)
       assert_can ability, :admin, :web_hooks

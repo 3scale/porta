@@ -6,7 +6,10 @@ Feature: Create invoice
   Background:
     Given a provider is logged in on 1st Jan 2009
     And the provider is charging its buyers in prepaid mode
-    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name  |
+      | My API  | Fixed |
     And a buyer "zoidberg" signed up to application plan "Fixed"
 
   @javascript
@@ -17,6 +20,6 @@ Feature: Create invoice
     And I follow "Create invoice"
     Then I should see "Invoice successfully created"
     And I should see "open"
-    Then I follow "Create invoice" and I confirm dialog box "You cannot create a new invoice for 'zoidberg' since it already has one open. Please issue it before creating a new one."
+    Then I follow "Create invoice" and confirm the dialog "You cannot create a new invoice for 'zoidberg' since it already has one open. Please issue it before creating a new one."
     When I follow "2009-01-00000001"
     Then I should see "Invoice for January 2009"

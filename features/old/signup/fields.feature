@@ -6,14 +6,13 @@ Feature: Signup with defined fields
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-    Given a default application plan "iPhone" of service "default"
-    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name                      | required | read_only | hidden |
       | account_extra_required    | true     |           |        |
       | account_extra_read_only   |          | true      |        |
       | account_extra_hidden      |          |           | true   |
 
-    Given provider "foo.3scale.localhost" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for users:
       | name                  | required | read_only | hidden |
       | user_extra_required   | true     |           |        |
       | user_extra_read_only  |          | true      |        |

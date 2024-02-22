@@ -50,24 +50,16 @@ nav.DashboardNavigation
                                                   provider_admin_cms_changes_path,
                                                   notice: true
 
-    // Forum
-    - if show_forum_on_dashboard? && forum_topics.any?
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Forum Topic',
-                                    forum_topics,
-                                    admin_forum_path,
-                                    icon_name: 'comments'
-
     // Messages
     li.DashboardNavigation-list-item
       = dashboard_collection_link 'Message',
-                                  current_account.messages.where(sender: !current_account),
+                                  current_account.received_messages.not_system,
                                   provider_admin_messages_root_path,
                                   icon_name: 'envelope'
 
-        - if unread_messages_presenter.show_counter?
-          '
-          | (
-          span.u-notice
-            = unread_messages_presenter.unread_messages_size
-          | )
+      - if unread_messages_presenter.show_counter?
+        '
+        | (
+        span.u-notice
+          = unread_messages_presenter.unread_messages_size
+        | )

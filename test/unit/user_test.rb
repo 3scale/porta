@@ -760,21 +760,38 @@ class UserTest < ActiveSupport::TestCase
     setup do
       provider = FactoryBot.create(:simple_provider)
       @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      @user_with_password = ->(password) do
+        @buyer.users.new username: 'user', email: 'user@example.com', password: password, password_confirmation: password
+      end
     end
 
-    class WeakPasswordTest < PasswordStrengthTest
-      test 'should by default allow weak ones' do
-        user = @buyer.users.new password: "weakpassword", password_confirmation: "weakpassword"
-        user.valid?
+    attr_reader :user_with_password
 
+    class WeakPasswordTest < PasswordStrengthTest
+      setup do
+        @buyer.provider_account.settings.update_attribute(:strong_passwords_enabled, false) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      test 'should by default allow weak ones' do
+        user = user_with_password.call('weakpassword')
+
+        assert user.valid?
         assert user.errors[:password].blank?
       end
 
-      test 'should weak password must be 6 chars at least' do
-        user = @buyer.users.new password: "weak", password_confirmation: "weak"
-        user.valid?
+      test 'weak password must be 6 chars at least when password is required' do
+        user = user_with_password.call('weak')
 
-        assert_not user.errors[:password].blank?
+        assert_not user.valid?
+        assert_equal "is too short (minimum is 6 characters)", user.errors.messages[:password].first
+      end
+
+      test 'password is not validated when not required' do
+        user = user_with_password.call('weak')
+        user.signup_type = :api
+
+        assert user.valid?
+        assert user.errors[:password].blank?
       end
     end
 

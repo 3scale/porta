@@ -289,7 +289,7 @@ class SimpleLayout
   end
 
   def builtin_static_pages
-    forum_builtin_static_pages
+    []
   end
 
   def find_or_create_section(name, path, options = {})
@@ -308,9 +308,8 @@ class SimpleLayout
 
   private
 
-  def forum_builtin_static_pages
-    return [] unless provider.provider_can_use?(:forum)
-
+  def forum_builtin_static_pages # rubocop:disable Metrics/MethodLength
+    # TODO: clean up
     forum             = find_or_create_section('Forum', '/forum')
     forum_categories  = find_or_create_section('Categories', '/forum/categories', parent: forum)
     forum_posts       = find_or_create_section('Posts', '/forum/posts', parent: forum)

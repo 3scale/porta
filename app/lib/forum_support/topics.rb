@@ -2,8 +2,6 @@
 
 module ForumSupport::Topics
   def self.included(base)
-    base.send :include, ThreeScale::SpamProtection::Integration::Controller
-
     base.before_action :find_topic, :only => %i[show edit update destroy]
     base.before_action :authorize_topic
 

@@ -8,13 +8,16 @@ Feature: On paid plans
     Given a provider "planet.express.com" on 1st November 1989
       And provider "planet.express.com" is charging its buyers
       And provider "planet.express.com" has "finance" switch visible
-      Given an application plan "Rocket" of provider "planet.express.com"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name   | State     |
+      | My API  | Rocket | Published |
 
   Scenario: I have to pay monthly and setup fee when the trial is over
     Given the date is 23rd November 1989
-      And plan "Rocket" has setup fee of 210
-      And plan "Rocket" has monthly fee of 31
-      And plan "Rocket" has trial period of 15 days
+      And plan "Rocket" has a setup fee of 210
+      And plan "Rocket" has a monthly fee of 31
+      And plan "Rocket" has a trial period of 15 days
       And a buyer "zoidberg" signed up to application plan "Rocket"
 
      When 10 days pass
@@ -46,10 +49,10 @@ Feature: On paid plans
     Given pricing rules on plan "Rocket":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |
-    And plan "Rocket" has monthly fee of 30
+    And plan "Rocket" has a monthly fee of 30
 
     When the date is 1st November 1989
-      And plan "Rocket" has trial period of 20 days
+      And plan "Rocket" has a trial period of 20 days
       And a buyer "zoidberg" signed up to application plan "Rocket"
 
     When 10 days pass

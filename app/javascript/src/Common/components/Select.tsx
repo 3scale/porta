@@ -76,6 +76,7 @@ const Select = <T extends IRecord>({
         id={fieldId}
         isDisabled={isDisabled}
         isOpen={expanded}
+        ouiaId={rest.ouiaId ?? label as string}
         placeholderText={placeholderText}
         selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}

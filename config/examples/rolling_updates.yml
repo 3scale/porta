@@ -5,7 +5,6 @@ base: &default
   billable_contracts:
   duplicate_application_id: true
   duplicate_user_key: true
-  forum: false
   instant_bill_plan_change: false
   new_notification_system: true
   plan_changes_wizard: false

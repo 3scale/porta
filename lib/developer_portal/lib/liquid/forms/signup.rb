@@ -1,6 +1,6 @@
 module Liquid
   module Forms
-    class Signup < Forms::SpamProtected
+    class Signup < Forms::BotProtected
 
       def html_class_name
         'account formtastic'

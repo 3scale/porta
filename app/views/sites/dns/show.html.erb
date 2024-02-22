@@ -30,7 +30,7 @@
         <% if readonly_dns_domains? %>
           <%= form.label :domain_type_subdomain, 'Developer Portal Site' %>
           <%= form.text_field :subdomain, :value => current_account.external_domain , :disabled => 'disabled' %>
-          <%= switch_link "Change", contact_3scale_admin_site_dns_path, :switch => :branding, :upgrade_notice => true, :class => "fancybox" %>
+          <%= switch_link "Change", contact_3scale_admin_site_dns_path, :switch => :branding, :upgrade_notice => true, :class => "fancybox", :title => "Change account subdomain" %>
           <p class="inline-hints">You can change the domain of your
   	Developer Portal to your own domain, for instance
 	https://developer.example.com. You can also change the

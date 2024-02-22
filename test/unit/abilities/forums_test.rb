@@ -52,7 +52,7 @@ module Abilities
     end
 
     test 'posts' do
-      forum = FactoryBot.create(:provider_account).forum
+      forum = FactoryBot.create(:forum)
       assert_equal [], forum.posts.to_a
       assert_equal 0, forum.posts.size
     end

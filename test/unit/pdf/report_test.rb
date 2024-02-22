@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class Pdf::ReportTest < ActiveSupport::TestCase
+  include TestHelpers::FakeHits
 
   class SimpleReportTest < ActiveSupport::TestCase
     setup do
@@ -118,24 +119,22 @@ class Pdf::ReportTest < ActiveSupport::TestCase
 
     buyer = FactoryBot.create(:buyer_account, org_name: company_name)
     provider = buyer.provider_account
-    cinstance = FactoryBot.create(:cinstance, user_account: buyer)
-    plan = cinstance.application_plan
-    plan.update!(name: plan_name)
-    plan.publish!
-    FactoryBot.create(:metric, friendly_name: metric_name, owner: cinstance.service)
+    service = provider.services.first
+    plan = FactoryBot.create(:application_plan, service: service, name: plan_name, state: 'published')
 
-    zone = ActiveSupport::TimeZone.new(buyer.timezone)
+    cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: plan)
+    custom_metric = FactoryBot.create(:metric, friendly_name: metric_name, owner: service)
+    hits_metric = service.metrics.hits!
 
-    set_env({
-      "CINSTANCE_ID" => cinstance.id.to_s,
-      "SINCE" => zone.today.prev_day.to_s,
-      "UNTIL" => zone.today.to_s,
-      "FREQUENCY" => "0.00005",
-    }) do
-      execute_rake_task 'backend.rake', 'backend:fake'
-    end
+    today = ActiveSupport::TimeZone.new(buyer.timezone).today
 
-    report = Pdf::Report.new(provider, cinstance.service, period: :day).generate
+    from = today.prev_day.to_time
+    to = today.to_time
+
+    fake_hits(from, to, :clickfest, cinstance, hits_metric)
+    fake_hits(from, to, :clickfest, cinstance, custom_metric)
+
+    report = Pdf::Report.new(provider, service, period: :day).generate
     strings = PDF::Inspector::Text.analyze_file(report.pdf_file_path).strings.dup
 
     assert_operator strings, :delete_at, strings.index(metric_name)
@@ -144,6 +143,6 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     assert_operator strings, :delete_at, strings.index(company_name)
     assert_operator strings, :delete_at, strings.index(company_name)
     assert_operator strings, :delete_at, strings.index(buyer.emails.first)
-    assert strings.none? { |str| str.include?("<") || str.include?("&") || str.include?("\\") }
+    assert(strings.none? { |str| str.include?("<") || str.include?("&") || str.include?("\\") })
   end
 end

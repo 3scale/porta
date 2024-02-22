@@ -144,8 +144,8 @@ class MessageObserverTest < ActiveSupport::TestCase
   private
 
   def message
-    mock 'message' do
-      expects(:deliver).returns(true)
+    Object.new.tap do |msg|
+      msg.expects(:deliver).returns(true)
     end
   end
 

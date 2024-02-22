@@ -87,7 +87,6 @@ module VerticalNavHelper
     sections << {id: :finance,      title: 'Billing',          items: audience_billing_items}       if can?(:see, :finance) && (can?(:manage, :finance) || can?(:manage, :settings))
     sections << {id: :cms,          title: 'Developer Portal', items: audience_portal_items}        if (can?(:manage, :portal) || can?(:manage, :settings) || can?(:manage, :plans)) && !master_on_premises?
     sections << {id: :messages,     title: 'Messages',         items: audience_messages_items}
-    sections << {id: :forum,        title: 'Forum',            items: audience_forum_items}         if can?(:manage, :portal) && current_account.forum_enabled?
     sections
   end
 
@@ -164,10 +163,9 @@ module VerticalNavHelper
     if can?(:manage, :settings)
       portal_settings_items = []
       portal_settings_items << {id: :admin_site_dns,   title: 'Domains & Access', path: admin_site_dns_path}
-      portal_settings_items << {id: :spam_protection,  title: 'Spam Protection',  path: edit_admin_site_spam_protection_path}
+      portal_settings_items << {id: :spam_protection,  title: 'Bot Protection',  path: edit_admin_site_spam_protection_path}
       portal_settings_items << {id: :xss_protection,   title: 'XSS Protection',   path: edit_admin_site_developer_portal_path} if current_account.show_xss_protection_options?
       portal_settings_items << {id: :sso_integrations, title: 'SSO Integrations', path: provider_admin_authentication_providers_path}
-      portal_settings_items << {id: :forum_settings,   title: 'Forum Settings',   path: edit_admin_site_forum_path} if !current_account.forum_enabled? && provider_can_use?(:forum)
 
       items << { title: 'Settings', subItems: portal_settings_items }
     end
@@ -193,28 +191,12 @@ module VerticalNavHelper
     items
   end
 
-  def audience_forum_items
-    items = []
-    items << {id: :threads,          title: 'Threads',          path: admin_forum_path}
-    items << {id: :categories,       title: 'Categories',       path: forum_categories_path}
-
-    items << {id: :my_threads,       title: 'My Threads',       path: my_admin_forum_topics_path} if logged_in?
-    items << {id: :my_subscriptions, title: 'My subscriptions', path: forum_subscriptions_path}   if user_has_subscriptions?
-
-    if can?(:manage, :settings)
-      items << {               title: ' '} # Blank space
-      items << {id: :settings, title: 'Preferences', path: edit_admin_site_forum_path}
-    end
-
-    items
-  end
-
   # Service
   def service_nav_sections
     sections = []
     return sections unless @service
 
-    sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
+    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
     sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
@@ -272,7 +254,7 @@ module VerticalNavHelper
     sections = []
     return sections unless @backend_api&.persisted?
 
-    sections << {id: :overview,         title: 'Overview',             path: provider_admin_backend_api_path(@backend_api)}
+    sections << {id: :overview,         title: 'Backend Overview',             path: provider_admin_backend_api_path(@backend_api)}
     sections << {id: :monitoring,       title: 'Analytics',            path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
     sections << {id: :methods_metrics,  title: 'Methods and Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
     sections << {id: :mapping_rules,    title: 'Mapping Rules',        path: provider_admin_backend_api_mapping_rules_path(@backend_api)}

@@ -5,7 +5,15 @@ Feature: Dev Portal Buyer Invoices
 
   Background:
     Given it's the beginning of the month
-    And a buyer signed up to a provider
+    And a provider
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | Default | Cost per month |
+      | My API  | Gold | true    | 100            |
+    And an approved buyer "John" signed up to the provider
+    And the following application:
+      | Buyer | Name   |
+      | John  | My App |
     And no emails have been sent
 
   Scenario: Provider has prepaid monthly charging enabled
@@ -14,7 +22,7 @@ Feature: Dev Portal Buyer Invoices
     And 1 month pass
     When the buyer logs in to the provider
     And the buyer is reviewing their account settings
-    Then they should be able to see an invoice for last month
+    Then they should have access last's month invoice
     And the buyer should receive some emails
 
   Scenario: Provider has charging disabled
@@ -22,5 +30,5 @@ Feature: Dev Portal Buyer Invoices
     And 1 month pass
     When the buyer logs in to the provider
     And the buyer is reviewing their account settings
-    Then they should not be able to see any invoices
+    Then they should not have access to invoices
     And the buyer should receive no emails

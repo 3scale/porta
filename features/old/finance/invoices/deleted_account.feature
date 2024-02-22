@@ -8,7 +8,10 @@ Feature: Invoices of deleted account
     Given the date is 25th January 2012
     Given a provider is logged in on 1st January 2011
     Given the provider is charging its buyers in prepaid mode
-    And an application plan "Plan" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name | State     |
+      | My API  | Plan | Published |
     And a buyer "bob" signed up to application plan "Plan"
 
   @commit-transactions

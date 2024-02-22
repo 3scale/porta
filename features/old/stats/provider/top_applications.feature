@@ -8,13 +8,18 @@ Feature: Top applications stats
     Given a provider is logged in
     And the provider uses backend v1 in his default service
     And the provider has multiple applications enabled
-    And an application plan "Default" of provider "foo.3scale.localhost"
+    And the default product of the provider has name "My API"
+    And the following application plan:
+      | Product | Name    | State     | Default |
+      | My API  | Default | Published | true    |
     And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
     And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
     And a buyer "alice" signed up to provider "foo.3scale.localhost"
-    And buyer "alice" has application "alice widget"
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    And buyer "bob" has application "bob widget"
+    And the following applications:
+      | Buyer | Name         |
+      | alice | alice widget |
+      | bob   | bob widget   |
     And all the rolling updates features are off
 
   Scenario: With transactions
