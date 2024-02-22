@@ -9,7 +9,7 @@ import { ajax } from 'utilities/ajax'
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.fields-definitions-list.ui-sortable')
     .forEach(list => {
-      const $list = $(list)
+      const $list = $(list) as WithRequiredProp<JQuery, 'sortable'> // imported in this file
       $list.sortable({
         update: () => {
           void ajax('/admin/fields_definitions/sort', { method: 'POST', body: $list.sortable('serialize') })
