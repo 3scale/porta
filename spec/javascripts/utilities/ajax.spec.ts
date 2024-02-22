@@ -24,6 +24,23 @@ describe('#ajax', () => {
       signal: undefined
     })
   })
+
+  it('should accept string as body', () => {
+    void ajax('url', {
+      method: 'GET',
+      body: 'da body'
+    })
+
+    expect(mockedFetch).toHaveBeenCalledWith('url', {
+      method: 'GET',
+      body: 'da body',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-CSRF-Token': ''
+      },
+      signal: undefined
+    })
+  })
 })
 
 describe('#ajaxJSON', () => {
