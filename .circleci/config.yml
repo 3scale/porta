@@ -123,7 +123,7 @@ memcached-container: &memcached-container
   image: memcached:1.5-alpine
 
 redis-container: &redis-container
-  image: redis:4.0-alpine
+  image: redis:6.2-alpine
 
 # https://github.com/poseidon/dnsmasq
 # TODO: create our own image like https://www.redhat.com/en/blog/build-ubi-containers-github-actions-buildah-and-podman
