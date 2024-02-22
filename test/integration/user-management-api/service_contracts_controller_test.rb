@@ -84,6 +84,30 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_response :forbidden
     end
 
+    def test_update_subscription_success
+      patch admin_api_account_service_contract_path(
+        account_id: @buyer.id,
+        id: @service_contract.id,
+        format: :xml,
+        access_token: @token,
+        service_contract: { plan_id: @service_plan.id }
+      )
+      assert_response :success
+    end
+
+    def test_update_subscription_failure
+      patch admin_api_account_service_contract_path(
+        account_id: @buyer.id,
+        id: @service_contract.id,
+        format: :xml,
+        access_token: @token,
+        service_contract: { plan_id: @new_service_plan.id }
+      )
+
+      assert_response :unprocessable_entity
+      assert_match "Service plan must belong to the same product", response.body #Inavalid plan id fails the scenario
+    end
+
     private
 
     def current_account
