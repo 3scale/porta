@@ -20,7 +20,8 @@
 
     tbody role="rowgroup"
       - if presenter.empty_search?
-        = render partial: 'shared/empty_search_state', locals: { scope: 'api.alerts.index' }
+        = render partial: 'shared/empty_search_state', locals: { title: t('.empty_state.title'),
+                                                                 body: t('.empty_state.body') }
       - else
         - confirm_delete = t('.delete_alert_confirmation')
         - presenter.alerts.each do |alert|
