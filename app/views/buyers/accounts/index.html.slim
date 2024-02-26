@@ -20,15 +20,11 @@
                                   'Approve, reject or make pending selected accounts'
 
 - if presenter.empty_state?
-  div class="pf-c-empty-state"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-ghost pf-c-empty-state__icon" aria-hidden="true"
-      h1 class="pf-c-title pf-m-lg"
-        = t('.empty_state.title')
-      div class="pf-c-empty-state__body"
-        = t('.empty_state.body')
-      - if can?(:create, Account)
-        = link_to t('.empty_state.primary'), presenter.create_account_path, class: "pf-c-button pf-m-primary"
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'ghost',
+                                                    primary: can?(:create, Account) && { title: t('.empty_state.primary'),
+                                                                                         href: presenter.create_account_path } }
 
 - else
   - content_for :javascripts do

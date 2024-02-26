@@ -5,18 +5,9 @@
   <% end %>
 <% end %>
 
-<% if @invoices.empty? && params[:search].nil? %>
-  <div class="pf-c-empty-state">
-    <div class="pf-c-empty-state__content">
-      <i class="fas fa-search pf-c-empty-state__icon" aria-hidden="true"></i>
-      <h1 class="pf-c-title pf-m-lg">
-        <%= t('.empty_state.title') %>
-      </h1>
-      <div class="pf-c-body">
-        <%= t('.empty_state.body') %>
-      </div>
-    </div>
-  </div>
+<% if empty_state? %>
+  <%= render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                      body: t('.empty_state.body'),} %>
 <% else %>
   <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table">
     <thead>

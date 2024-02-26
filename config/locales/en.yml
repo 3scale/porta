@@ -156,6 +156,10 @@ en:
           # start documentation links
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
           # end documentation links
+          empty_state:
+            title: No ActiveDocs specs yet
+            body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
+            primary: Create your first spec
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
@@ -435,13 +439,14 @@ en:
         inbox:
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your inbox is empty, there are no new messages."
+              title: Nothing to see here
+              body: Your inbox is empty, there are no new messages.
         outbox:
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your outbox is empty, there are no new sent messages."
+              title: Nothing to see here
+              body: Your outbox is empty, there are no new sent messages.
+              primary: Compose Message
       cms:
         builtin_legal_terms:
           info:
@@ -672,7 +677,7 @@ en:
         empty_state:
           title: There are no backends yet
           body: The current product %{name} does not have any backends.
-          primary_action: Add a backend
+          primary: Add a backend
         toolbar:
           primary: Add a backend
         action_edit: Edit config with %{name}
@@ -731,6 +736,10 @@ en:
       new:
         page_header_title: New %{type}
         submit: Create %{type}
+    policies:
+      edit:
+        empty_state:
+          title: A valid APIcast Policies endpoint must be provided
 
   deployment_options:
     missing: |
@@ -1557,3 +1566,5 @@ en:
       title: No results
       body: There are no items matching your search criteria.
       primary: Clear all filters
+    empty_state:
+      title: This page is empty
