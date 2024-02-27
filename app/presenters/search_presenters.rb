@@ -124,10 +124,12 @@ module SearchPresenters
     end
 
     def options
-      super.merge(:classes => [Topic, CMS::Page])
+      super.merge(:classes => [CMS::Page])
     end
 
     def search
+      return @search if @search
+
       super
 
       # We do not want to display pages not accessible by the user
