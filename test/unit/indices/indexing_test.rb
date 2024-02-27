@@ -89,6 +89,7 @@ class IndexingTest < ActiveSupport::TestCase
   def factory_for(model)
     overrides = {
       account: :simple_provider,
+      cms_page: :cms_published_page,
     }
 
     factory = model.name.gsub(/:+/, "_").underscore.to_sym
