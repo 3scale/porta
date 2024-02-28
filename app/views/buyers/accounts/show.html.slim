@@ -10,7 +10,7 @@
           = link_to 'Edit', edit_admin_buyers_account_path(@account), class: 'action edit'
 #twoCol.equal-width
   .left
-    .wide_dashboard_card.round
+    .dashboard_card.round aria-label="Account details"
       table.list
         tr
           th = @account.field_label("org_name")

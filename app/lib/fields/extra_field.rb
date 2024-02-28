@@ -38,11 +38,11 @@ class Fields::ExtraField < Fields::BaseField
     @name = val
   end
 
-  def input(builder)
+  def input(builder, options = builder_options)
     field = InputField.new(@name, builder.object)
 
     builder.fields_for :extra_fields, field do |form|
-      form.input(@name, builder_options)
+      form.input(@name, options)
     end
   end
 end
