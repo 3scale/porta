@@ -4,11 +4,7 @@ module Admin::PaymentDetailsHelper
     txt = if account.credit_card_stored?
             ccexp = l account.credit_card_expires_on_with_default, format: :month
 
-            if current_account.payment_gateway_type  != :authorize_net
-              "Credit Card details are on file. Card expires in: #{ccexp}"
-            else
-              "Credit Card details are on file"
-            end
+            "Credit Card details are on file. Card expires in: #{ccexp}"
           else
             'Credit Card details are not stored'
           end
