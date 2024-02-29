@@ -61,7 +61,7 @@ end
 #   | Name            | State     |
 #   | Jane's Full App | suspended |
 #   | Jane's Lite App | live      |
-Given "the table has the following row(s):" do |table|
+Given "the table has the following row(s)(:)" do |table|
   actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   expected = table.raw
 
@@ -122,4 +122,11 @@ Then "the actions of row {string} are:" do |row, table|
   actions = find_inline_actions_of_row(row)
 
   assert_same_elements table.raw.flatten, actions.map(&:text)
+end
+
+# The table where the first column contains headers, and the second one contains values
+Then "the inverted table has the following row(s)(:)" do |table|
+  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+  expected = table.raw.first
+  assert_includes actual, expected
 end

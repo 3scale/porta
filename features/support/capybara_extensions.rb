@@ -34,7 +34,7 @@ module CapybaraExtensions
   # Overrides Capybara::Node::Finders#find_field
   def find_field(locator, **options)
     if has_css?('.pf-c-form__label', text: locator, wait: 0)
-      find('.pf-c-form__group', text: locator).find('input, textarea', options)
+      find('.pf-c-form__group', text: locator).find('input, textarea, select', options)
     else
       super
     end

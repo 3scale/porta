@@ -27,7 +27,7 @@ Then /^(?:I|they) should see error in fields:$/ do |table|
   end
 end
 
-Then /^I should not see error in fields:$/ do |table|
+Then /^(?:I|they) should not see error in fields:$/ do |table|
   table.rows.each do |field|
     assert has_no_xpath?("//*[contains(@class,'has-error')]/label[contains(text(),'#{field.first}')]"),
           "Field '#{field.first}' has error and shouldn't"

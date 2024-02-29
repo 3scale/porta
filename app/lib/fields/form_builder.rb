@@ -31,15 +31,20 @@ class Fields::FormBuilder < ThreeScale::SemanticFormBuilder
   end
 
   def output_html(field, options = {})
-    opts = field.attributes.dup.merge(options)
+    typed_input_field = input_field(field, options)
+    typed_input_field.input(self)
+  end
 
-    input_field = if @object.extra_field?(field.name)
-                    Fields::ExtraField.new(opts)
-                  elsif @object.internal_field?(field.name)
-                    Fields::InternalField.new(opts)
-                  else
-                    Fields::BuiltinField.new(opts)
-                  end
-    input_field.input(self)
+  def input_field(field, options = {})
+    opts = field.attributes.dup.merge(options)
+    field_name = field.name
+
+    if @object.extra_field?(field_name)
+      Fields::ExtraField.new(opts)
+    elsif @object.internal_field?(field_name)
+      Fields::InternalField.new(opts)
+    else
+      Fields::BuiltinField.new(opts)
+    end
   end
 end

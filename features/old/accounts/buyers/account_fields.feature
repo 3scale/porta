@@ -71,7 +71,6 @@ Feature: Buyer side, account fields
       | Choices field           |
       | Required field          |
 
-
   Scenario: Country field works correctly
     Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name    |
