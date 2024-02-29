@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module SegmentIntegration
-  class ResponseMiddleware < Faraday::Response::Middleware
+  class ResponseMiddleware < Faraday::Middleware
     def on_complete(env)
       response = env.response
       case env.status
@@ -10,7 +10,7 @@ module SegmentIntegration
       when 500..599
         raise ServerError.new('An error occurred from the server side', response)
       when 400..499
-        raise ClientError.new('An error ocurred from the client side', response)
+        raise ClientError.new('An error occurred from the client side', response)
       else
         raise UnexpectedResponseError.new('The response was unexpected', response)
       end
