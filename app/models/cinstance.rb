@@ -120,9 +120,9 @@ class Cinstance < Contract
   USER_KEY_FORMAT = /(([\w\-.]+)|([A-Za-z0-9+]{4})*([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==))/.freeze
 
   # The following characters are accepted:
-  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
-  # Spaces and / are not allowed
-  validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces are not allowed
+  validates :application_id, format: { with: /\A[\x21-\x7E]+\Z/ }, length: { in: 4..255 }
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 }
 
