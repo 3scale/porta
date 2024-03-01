@@ -124,7 +124,7 @@ module SearchPresenters
     end
 
     def options
-      super.merge(:classes => [CMS::Page])
+      super.merge(classes: [CMS::Page])
     end
 
     def search
