@@ -20,12 +20,9 @@
             em> edit
             | views.
 
-  div class="pf-c-empty-state pf-m-lg"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-plus-circle pf-c-empty-state__icon" aria-hidden="true"
-      h1 class="pf-c-title pf-m-lg" No ActiveDocs specs yet
-      div class="pf-c-empty-state__body"
-        | Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
-      = link_to('Create your first spec', new_api_docs_service_path(@service), class: 'pf-c-button pf-m-primary')
-
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'plus-circle',
+                                                    primary: { title: t('.empty_state.primary'),
+                                                               href: new_api_docs_service_path(@service) } }
 = will_paginate(@api_docs_services)

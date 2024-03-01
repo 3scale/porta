@@ -156,6 +156,10 @@ en:
           # start documentation links
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
           # end documentation links
+          empty_state:
+            title: No ActiveDocs specs yet
+            body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
+            primary: Create your first spec
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
@@ -435,13 +439,14 @@ en:
         inbox:
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your inbox is empty, there are no new messages."
+              title: Nothing to see here
+              body: Your inbox is empty, there are no new messages.
         outbox:
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your outbox is empty, there are no new sent messages."
+              title: Nothing to see here
+              body: Your outbox is empty, there are no new sent messages.
+              primary: Compose Message
       cms:
         builtin_legal_terms:
           info:
@@ -492,6 +497,7 @@ en:
           body: There are no accounts yet
           primary: Add your first account
         empty_search:
+          title: No accounts found
           body: No accounts match the filter criteria. Clear all filters and try again.
       edit: &account_delete_msg
         schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
@@ -605,7 +611,7 @@ en:
             body: There are no invoices yet
           empty_search:
             title: No invoices found
-            primary: Clear all filters
+            body: There are no invoices matching the search criteria.
       settings:
         show:
           switch_button: Switch to %{mode}
@@ -649,7 +655,6 @@ en:
         empty_search:
           title: No results
           body: There are no recent alerts matching that search criteria.
-          primary: Clear all filters
         read_all_button:
           label: Mark all as read
           confirm: Do you really want to mark all alerts as read?
@@ -672,7 +677,7 @@ en:
         empty_state:
           title: There are no backends yet
           body: The current product %{name} does not have any backends.
-          primary_action: Add a backend
+          primary: Add a backend
         toolbar:
           primary: Add a backend
         action_edit: Edit config with %{name}
@@ -731,6 +736,10 @@ en:
       new:
         page_header_title: New %{type}
         submit: Create %{type}
+    policies:
+      edit:
+        empty_state:
+          title: A valid APIcast Policies endpoint must be provided
 
   deployment_options:
     missing: |
@@ -1553,7 +1562,9 @@ en:
       unknown_format: 'The server does not understand "%{request_format}" request.'
 
   shared:
-    empty_search:
+    empty_search_state:
       title: No results
       body: There are no items matching your search criteria.
       primary: Clear all filters
+    empty_state:
+      title: This page is empty

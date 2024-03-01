@@ -86,7 +86,7 @@ end
 
 Then "they should see an empty search state" do
   within('tbody .pf-c-empty-state') do
-    assert_selector(:css, '.pf-c-title', text: 'No results found')
+    assert_selector(:css, '.pf-c-title')
     assert_selector(:css, '.pf-c-empty-state__body')
     assert_selector(:css, '.pf-c-empty-state__primary', text: 'Clear all filters')
   end

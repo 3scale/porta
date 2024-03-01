@@ -1,13 +1,9 @@
 - content_for :page_header_title, 'Inbox'
 
 - if @messages.blank?
-  div class="pf-c-empty-state"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-inbox pf-c-empty-state__icon" aria-hidden="true"
-      h1 class="pf-c-title pf-m-lg"
-        = t('.empty_state.title')
-      div class="pf-c-empty-state__body"
-        = t('.empty_state.body')
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'inbox' }
 
 - else
   - content_for :javascripts do

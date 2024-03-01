@@ -4,7 +4,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   helper Finance::InvoicesHelper
   helper ColumnSortingHelper
   include ThreeScale::Search::Helpers
-  helper_method :allow_edit?
+  helper_method :allow_edit?, :empty_state?
 
   before_action :find_buyer, only: [ :create ]
   before_action :find_invoice, except: [ :index, :create ]
@@ -124,5 +124,9 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   def find_invoice
     @invoice = collection.find(params[:id])
+  end
+
+  def empty_state?
+    collection.empty?
   end
 end
