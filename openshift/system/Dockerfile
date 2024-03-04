@@ -15,6 +15,7 @@ RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
     && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
     && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm -rf tmp/cache /usr/local/share/gems/cache /usr/local/share/gems/doc
 
@@ -44,8 +45,8 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 WORKDIR /opt/system
 
 RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
-    && yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file \
-    && yum -y clean all
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file \
+    && dnf -y clean all
 
 COPY --from=builder /opt/system/ .
 COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
@@ -91,11 +92,11 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_QUERY_LOG=/dev/stdout \
     THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
     SECRET_KEY_BASE=dummy \
-    SAFETY_ASSURED=1 \
     DATABASE_URL='mysql2://root:@localhost/porta'
 USER 0
-RUN yum install -y mysql-server mysql-test \
+RUN dnf install -y mysql-server mysql-test \
     && setcap -r /usr/libexec/mysqld \
     && setpriv --reuid 27 --regid 27 --clear-groups mysqld --initialize-insecure \
     && (mysqld_safe &) \
