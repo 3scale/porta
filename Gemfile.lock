@@ -560,6 +560,7 @@ GEM
     pry-stack_explorer (0.6.1)
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
+    psych (3.2.1)
     public_suffix (4.0.7)
     raabro (1.4.0)
     racc (1.7.3)
@@ -999,6 +1000,7 @@ DEPENDENCIES
   pry-rails
   pry-shell
   pry-stack_explorer
+  psych (~> 3.2.0)
   rack (~> 2.2.8)
   rack-cors
   rack-no_animations (~> 1.0.3)

@@ -23,6 +23,9 @@ gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
+# Fixing https://github.com/ruby/psych/pull/438, remove after upgrading Ruby
+gem 'psych', '~> 3.2.0'
+
 gem 'protected_attributes_continued', '~> 1.8.2'
 
 gem 'rails-observers'
