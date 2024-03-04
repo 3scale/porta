@@ -37,42 +37,17 @@ module PaymentGateways
     end
 
     def update_billing_address(billing_address)
-      begin
-        Stripe.api_key = api_key  # Set actual Stripe secret key
+      Stripe.api_key = api_key
 
-        # Retrieve the latest payment method (card) for the customer
-          latest_payment_method = Stripe::PaymentMethod.list(
-            customer: customer.id,
-            type: 'card',
-            limit: 1
-          ).data.first.id
+      latest_payment_method = latest_payment_method_id
+      payment_method = Stripe::PaymentMethod.retrieve(latest_payment_method)
 
-        # Retrieve the payment method
-        payment_method = Stripe::PaymentMethod.retrieve(latest_payment_method)
-
-        # Update the billing details
-        payment_method.billing_details = {
-          address: {
-            line1: billing_address[:address1],
-            line2: billing_address[:address2],
-            city: billing_address[:city],
-            state: billing_address[:state],
-            postal_code: billing_address[:zip],
-            country: billing_address[:country]
-          }
-        }
-
-        # Save the updated payment method
-        payment_method.save
-
-        return true
-      rescue Stripe::StripeError => e
-        report_error("Failed to update billing address on Stripe: #{e.message}")
-        return false
-      ensure
-        # Reset the Stripe API key to avoid potential issues elsewhere in your code
-        Stripe.api_key = nil
-      end
+      update_billing_details(payment_method, billing_address)
+    rescue Stripe::StripeError => e
+      report_error("Failed to update billing address on Stripe: #{e.message}")
+      false
+    ensure
+      Stripe.api_key = nil
     end
 
     private
@@ -104,6 +79,29 @@ module PaymentGateways
 
     def api_key
       payment_gateway_options.fetch(:login)
+    end
+
+    def latest_payment_method_id
+      Stripe::PaymentMethod.list(
+        customer: customer.id,
+        type: 'card',
+        limit: 1
+      ).data.first&.id
+    end
+
+    def update_billing_details(payment_method, billing_address)
+      payment_method.billing_details = {
+        address: {
+          line1: billing_address[:address1],
+          line2: billing_address[:address2],
+          city: billing_address[:city],
+          state: billing_address[:state],
+          postal_code: billing_address[:zip],
+          country: billing_address[:country]
+        }
+      }
+
+      payment_method.save
     end
 
     def report_error(message)

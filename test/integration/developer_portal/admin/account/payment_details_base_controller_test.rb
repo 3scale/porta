@@ -13,6 +13,12 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider.reload)
     login_buyer @buyer
+
+    # Ensure that :login is set in payment_gateway_options
+    @gateway_setting = PaymentGatewaySetting.where(account_id: @provider).last
+    @gateway_setting.gateway_type = :stripe
+    @gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
+    @gateway_setting.save
   end
 
   test '#update should only accept billing address params' do
