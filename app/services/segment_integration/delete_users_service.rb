@@ -6,6 +6,7 @@ module SegmentIntegration
 
     def call(user_ids)
       return unless Features::SegmentDeletionConfig.enabled?
+
       connection.post do |request|
         request.headers.merge!(request_headers)
         request.body = request_body(user_ids)
@@ -15,7 +16,6 @@ module SegmentIntegration
     def connection
       Faraday.new(uri) do |faraday|
         faraday.use ResponseMiddleware
-        faraday.use Faraday::Adapter::NetHttp
       end
     end
 
