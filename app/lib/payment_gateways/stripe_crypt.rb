@@ -43,8 +43,8 @@ module PaymentGateways
       payment_method = Stripe::PaymentMethod.retrieve(latest_payment_method)
 
       update_billing_details(payment_method, billing_address)
-    rescue Stripe::StripeError => e
-      report_error("Failed to update billing address on Stripe: #{e.message}")
+    rescue Stripe::StripeError => stripe_error
+      report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
       false
     ensure
       Stripe.api_key = nil
