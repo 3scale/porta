@@ -59,7 +59,7 @@ module Account::BillingAddress
     end
 
     # Quacking like Hash makes BillingAddress compatible with
-    # ActiveMerchant.
+    # ActiveMerchant. See AuthorizeNetCimGateway#add_address for interface.
     #
     def [](key)
       case key
