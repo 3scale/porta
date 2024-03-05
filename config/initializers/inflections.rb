@@ -12,7 +12,6 @@
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.uncountable << 'trash'
   inflect.uncountable << 'braintree_blue'
-  inflect.uncountable << 'authorize_net'
   inflect.uncountable << 'stripe'
   inflect.uncountable << 'sudo'
   inflect.uncountable << 'github'

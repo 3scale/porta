@@ -20,12 +20,10 @@ Rails.application.config.to_prepare do
     Liquid::Template.register_filter(klass)
   end
 
-  [
+  tags = [
     Liquid::Tags::IncludeWithComments,
-    Liquid::Tags::AuthorizeNetForm,
     Liquid::Tags::PaymentExpressForm,
     Liquid::Tags::BraintreeCustomerForm,
-    Liquid::Tags::OgoneForm,
     Liquid::Tags::StripeForm,
     Liquid::Tags::Content,
     Liquid::Tags::Container,
@@ -57,9 +55,32 @@ Rails.application.config.to_prepare do
     Liquid::Tags::SortLink,
     Liquid::Tags::CdnAsset,
     Liquid::Tags::DisableClientCache,
-  ].each do |tag_class|
-    ::Liquid::Template.register_tag(tag_class.tag, tag_class)
-  end
+  ]
+
+  # These tags no longer exist in then codebase but they need to be registered for backwards
+  # compatibility with outdated customers' dev portal templates. If they are not, any existing
+  # template or parital referencing them will break
+  # For instance, payment_gateways/show.html.liquid will throw an error if it has:
+  #
+  #  {% if provider.payment_gateway.type == "authorize_net" %}
+  #    {% if current_account.credit_card_stored? %}
+  #      {% authorize_net_form "Edit Credit Card Details" %}
+  #    {% else %}
+  #      {% authorize_net_form "Add Credit Card Details" %}
+  #    {% endif %}
+  #  {% endif }
+  #
+  # Even if the condition is never met and the method #authorize_net_form is never called. This
+  # happens because Liquid evaluates the whole templates before rendering them.
+  removed_tags = [
+    Liquid::Tags::AuthorizeNetForm,
+    Liquid::Tags::OgoneForm,
+  ]
+
+  tags.concat(removed_tags)
+    .each do |tag_class|
+      ::Liquid::Template.register_tag(tag_class.tag, tag_class)
+    end
 
   Liquid::XssProtection.enable!
   # Xss protection can be enabled by passing :html_escape to registers when rendering

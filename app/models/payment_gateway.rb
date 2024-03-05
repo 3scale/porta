@@ -16,7 +16,6 @@ class PaymentGateway
 
   # So far hardcoded list of gateways, later maybe this will be loaded from a config file or db.
   GATEWAYS = [
-    PaymentGateway.new(:authorize_net, deprecated: true, login: 'LoginID', password: 'Transaction Key'),
     PaymentGateway.new(:braintree_blue, public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key', three_ds_enabled: '3D Secure enabled', boolean: %i[three_ds_enabled]),
     PaymentGateway.new(:stripe, login: 'Secret Key', publishable_key: 'Publishable Key', endpoint_secret: 'Webhook Signing Secret')
   ].freeze
@@ -50,7 +49,7 @@ class PaymentGateway
   #
   # Example:
   #
-  # PaymentGateway.implementation(:authorize_net) # ActiveMerchant::Billing::AuthorizeNetGateway
+  # PaymentGateway.implementation(:stripe) # ActiveMerchant::Billing::StripeGateway
   #
   # Note:
   #

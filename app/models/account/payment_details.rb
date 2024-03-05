@@ -10,7 +10,6 @@ module Account::PaymentDetails
       :credit_card_auth_code,
       :credit_card_partial_number,
       :credit_card_expires_on,
-      :credit_card_authorize_net_payment_profile_token
     ].freeze
 
     delegate(
@@ -49,6 +48,5 @@ module Account::PaymentDetails
     self[:credit_card_auth_code] = nil
     self[:credit_card_partial_number] = nil
     self[:credit_card_expires_on] = nil
-    self[:credit_card_authorize_net_payment_profile_token] = nil
   end
 end

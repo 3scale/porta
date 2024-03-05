@@ -899,7 +899,6 @@ Style/UnneededPercentQ:
 # SupportedStyles: snake_case, camelCase
 Style/VariableName:
   Exclude:
-    - 'lib/payment_gateways/authorize_net_cim_crypt.rb'
     - 'app/lib/three_scale/swagger/specification.rb'
     - 'test/unit/logic/provider_upgrade_test.rb'
 
