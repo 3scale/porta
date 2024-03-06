@@ -4,54 +4,6 @@ require 'test_helper'
 
 module Finance
   class ChargingServiceTest < ActiveSupport::TestCase
-    class ChargeWithAuthorizeNetGatewayTest < ActiveSupport::TestCase
-      setup do
-        gateway_options = { login: 'login_authorize_net', password: 'password_authorize_net' }
-        @gateway = ActiveMerchant::Billing::AuthorizeNetGateway.new(gateway_options)
-        @cim_gateway = ActiveMerchant::Billing::AuthorizeNetCimGateway.new(gateway_options)
-        gateway.stubs(cim_gateway: cim_gateway)
-        @service = ChargingService.new(gateway, buyer_reference: '1234', amount: ThreeScale::Money.new(10, 'EUR'))
-      end
-
-      attr_reader :gateway, :cim_gateway, :service
-
-      test '#charge_with_authorize_net with arrays' do
-        array_of_profile_hashes = [{}, { 'customer_payment_profile_id' => '5678' }]
-        stub_profile_response_with(array_of_profile_hashes)
-
-        cim_gateway.expects(:create_customer_profile_transaction).with(create_customer_profile_hash).returns(true)
-        assert service.send(:charge_with_authorize_net)
-      end
-
-      test '#charge_with_authorize_net with hashes' do
-        single_profile_hash = { 'customer_payment_profile_id' => '5678' }
-        stub_profile_response_with(single_profile_hash)
-
-        cim_gateway.expects(:create_customer_profile_transaction).with(create_customer_profile_hash).returns(true)
-        assert service.send(:charge_with_authorize_net)
-      end
-
-      private
-
-      def stub_profile_response_with(payment_profiles)
-        profile_response = stubs(:profile_response)
-        profile_response.stubs(:success?).returns(true)
-        profile_response.stubs(:params).returns({ 'profile' => { 'payment_profiles' => payment_profiles } })
-        service.stubs(authorize_net_customer_profile: profile_response)
-      end
-
-      def create_customer_profile_hash
-        {
-          transaction: {
-            customer_profile_id: '1234',
-            customer_payment_profile_id: '5678',
-            type: :auth_capture,
-            amount: 10.0
-          }
-        }
-      end
-    end
-
     class ChargeWithStripeGatewayTest < ActiveSupport::TestCase
       def setup
         @order_id = 3

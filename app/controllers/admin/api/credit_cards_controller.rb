@@ -11,17 +11,9 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
                         :billing_address_city, :billing_address_country, :credit_card_expiration_year,
                         :credit_card_expiration_month
 
-    if @buyer.provider_account.payment_gateway_type == :authorize_net
-      forced_parameters <<  :credit_card_authorize_net_payment_profile_token
-    end
-
     failed = nil
     unless failed = required_params(forced_parameters)
-
       @buyer.credit_card_auth_code = params[:credit_card_token]
-
-      @buyer.credit_card_authorize_net_payment_profile_token =
-        params[:credit_card_authorize_net_payment_profile_token]
 
       @buyer.billing_address_name = params[:billing_address_name]
       @buyer.billing_address_address1 = params[:billing_address_address]

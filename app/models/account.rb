@@ -4,6 +4,7 @@ class Account < ApplicationRecord
   attribute :credit_card_expires_on, :date
   self.ignored_columns = %i[proxy_configs_file_name proxy_configs_content_type proxy_configs_file_size
                             proxy_configs_updated_at proxy_configs_conf_file_name proxy_configs_conf_content_type
+                            credit_card_authorize_net_payment_profile_token
                             proxy_configs_conf_file_size proxy_configs_conf_updated_at]
 
   # it has to be THE FIRST callback after create, so associations get the tenant id

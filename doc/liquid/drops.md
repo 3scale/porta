@@ -1938,10 +1938,7 @@ Elements that render a user-friendly pagination. See the [part drop](#part-drop)
 
 ## Methods
 ### braintree_blue?
-Returns whether current payment gateway is authorize.Net.
-
-### authorize_net?
-Returns whether current payment gateway is authorize.Net.
+Returns whether current payment gateway is Braintree.
 
 ### type
 Returns the type of the payment gateway.

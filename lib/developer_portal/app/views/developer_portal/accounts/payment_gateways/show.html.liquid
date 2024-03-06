@@ -61,10 +61,8 @@
               <dt>Credit card number</dt>
               <dd>{{ current_account.credit_card_display_number }}</dd>
 
-              {% unless provider.payment_gateway.authorize_net? %}
-                <dt>Expiration date</dt>
-                <dd>{{ current_account.credit_card_expiration_date }}<dd>
-              {% endunless %}
+              <dt>Expiration date</dt>
+              <dd>{{ current_account.credit_card_expiration_date }}<dd>
             {% endif %}
           </dl>
         {% endif %}
@@ -79,14 +77,6 @@
             Add Credit Card Details and Billing Address
           {% endunless %}
         </a>
-
-        {% comment %} Authorize.net combines billing address + cc details in 1 external form {% endcomment %}
-        {% when "authorize_net" %}
-          {% if current_account.credit_card_stored? %}
-            {% authorize_net_form "Edit Credit Card Details" %}
-          {% else %}
-            {% authorize_net_form "Add Credit Card Details" %}
-          {% endif %}
 
         {% comment %} Stripe renders the form in place once a billing address has been added {% endcomment %}
         {% when "stripe" %}

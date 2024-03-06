@@ -1408,7 +1408,7 @@
     "/admin/api/accounts/{id}/credit_card.xml": {
       "put": {
         "summary": "Account Set Credit Card",
-        "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions",
+        "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by braintree, payment express and merchant e solutions",
         "tags": [
           "Accounts"
         ],
@@ -1438,11 +1438,7 @@
                   },
                   "credit_card_token": {
                     "type": "string",
-                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
-                  },
-                  "credit_card_authorize_net_payment_profile_token": {
-                    "type": "string",
-                    "description": "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'"
+                    "description": "Token used by the payment gateway to identify the buyer (customer ID in Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged."
                   },
                   "credit_card_expiration_year": {
                     "type": "string",

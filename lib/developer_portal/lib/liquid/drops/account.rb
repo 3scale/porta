@@ -94,7 +94,7 @@ A developer account. See `User` drop if you are looking for the email addresses 
       end
 
       def credit_card_expiration_date
-        @model.credit_card_expires_on_with_default.strftime("%B, %Y") unless @model.provider_account.payment_gateway_type == :authorize_net
+        @model.credit_card_expires_on_with_default.strftime("%B, %Y")
       end
 
       desc "Returns whether the account is required to enter credit card details."
