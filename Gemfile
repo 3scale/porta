@@ -41,13 +41,13 @@ end
 gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
-gem 'oauth2', '~> 1.4'
+gem 'oauth2', '~> 2.0'
 gem 'open_id_authentication'
 
 gem 'i18n'
 
 # Apisonator client
-gem 'pisoni', '~> 1.29'
+gem 'pisoni', '~> 1.30'
 
 gem '3scale_time_range', '0.0.6'
 
@@ -75,7 +75,7 @@ gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.12.0'
-gem 'json', '~> 2.3.0'
+gem 'json', '~> 2.7', '>= 2.7.1'
 
 gem 'mysql2', '~> 0.5.3'
 
@@ -83,8 +83,7 @@ gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
 gem 'dalli'
-gem 'faraday', '~> 0.15.3'
-gem 'faraday_middleware', '~> 0.13.1'
+gem 'faraday', '~> 2.0', '<= 2.9'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.15.5'
 gem 'secure_headers', '~> 6.3.0'
