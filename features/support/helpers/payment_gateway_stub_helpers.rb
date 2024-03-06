@@ -10,6 +10,7 @@ module PaymentGatewayStubHelpers
     instance = mock
     instance.stubs(:client_secret).returns(provider_stripe_client_secret_example)
     stripe_crypt.expects(:create_stripe_setup_intent).returns(instance).times(times)
+    stripe_crypt.expects(:update_billing_address).returns(true).once
   end
 
   def stub_successful_braintree_update(billing_address: billing_address_example_data, credit_card: credit_card_example_data)
