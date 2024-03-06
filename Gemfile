@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 6.1'
 
 # Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
 # https://github.com/mikel/mail/blob/2-8-stable/CHANGELOG.rdoc#version-281-unreleased-
