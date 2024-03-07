@@ -79,6 +79,7 @@ Then "the buyer can see their billing information" do
 end
 
 Then "the buyer can add their billing address for the first time for stripe" do
+  stripe_crypt.expects(:update_billing_address).returns(true).once
   stub_stripe_intent_setup(times: 2)
 
   credit_card_details_tab.click
@@ -115,6 +116,8 @@ But "credit card information still needs to be added" do
 end
 
 Then "the buyer can update their billing address for stripe" do
+  stripe_crypt.expects(:update_billing_address).returns(true).once
+
   stub_stripe_intent_setup(times: 2)
   credit_card_details_tab.click
   assert_selector(:css, billing_address_descriptionlist_selector)
@@ -198,6 +201,10 @@ end
 
 def billing_address_descriptionlist_selector
   '#billing_address'
+end
+
+def stripe_crypt
+  PaymentGateways::StripeCrypt.any_instance
 end
 
 # This smells of :reek:statementsTooManyStatements but we don't care
