@@ -12,6 +12,7 @@ base: &default
   username: <%= ENV['BACKEND_REDIS_USERNAME'].to_json %>
   password: <%= ENV['BACKEND_REDIS_PASSWORD'].to_json %>
   # == TLS Params ==
+  ssl: <%= ENV['BACKEND_REDIS_SSL'] %>
   ssl_params:
     ca_file: <%= ENV['BACKEND_REDIS_CA_FILE'] %>
     ca_path: <%= ENV['BACKEND_REDIS_CA_PATH'] %>
