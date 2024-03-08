@@ -90,7 +90,7 @@ gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
-gem 'baby_squeel', '~> 1.4.3'
+gem 'baby_squeel', '~> 2.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
