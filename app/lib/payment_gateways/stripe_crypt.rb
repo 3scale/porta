@@ -42,12 +42,12 @@ module PaymentGateways
         payment_method = retrieve_payment_method(latest_payment_method_id)
 
         update_billing_details(payment_method, billing_address)
-        save_updated_payment_method(payment_method)
+        payment_method.save
       rescue Stripe::StripeError => stripe_error
         report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
         false
       ensure
-        reset_stripe_api_key
+        Stripe.api_key = nil
       end
     end
 
@@ -60,14 +60,6 @@ module PaymentGateways
       return create_customer if customer_id.blank?
 
       retrieve_customer(customer_id)
-    end
-
-    def retrieve_customer(customer_id)
-      Stripe::Customer.retrieve(customer_id, api_key).tap do |customer|
-        create_customer if customer.deleted?
-      rescue Stripe::InvalidRequestError
-        create_customer
-      end
     end
 
     def create_customer
@@ -86,14 +78,6 @@ module PaymentGateways
       payment_gateway_options.fetch(:login)
     end
 
-    def update_payment_detail(card, payment_method_id)
-      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
-      payment_detail.credit_card_partial_number = card.last4
-      payment_detail.credit_card_auth_code      = payment_method.customer
-      payment_detail.payment_method_id          = payment_method_id
-      payment_detail.save
-    end
-
     def latest_payment_method_id_for_customer
       latest_payment_method = Stripe::PaymentMethod.list(
         customer: customer.id,
@@ -104,27 +88,6 @@ module PaymentGateways
 
     def retrieve_payment_method(payment_method_id)
       Stripe::PaymentMethod.retrieve(payment_method_id)
-    end
-
-    def update_billing_details(payment_method, billing_address)
-      payment_method.billing_details = {
-        address: {
-          line1: billing_address[:address1],
-          line2: billing_address[:address2],
-          city: billing_address[:city],
-          state: billing_address[:state],
-          postal_code: billing_address[:zip],
-          country: billing_address[:country]
-        }
-      }
-    end
-
-    def save_updated_payment_method(payment_method)
-      payment_method.save
-    end
-
-    def reset_stripe_api_key
-      Stripe.api_key = nil
     end
 
     def report_error(message)

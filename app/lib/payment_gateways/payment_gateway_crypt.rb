@@ -41,6 +41,35 @@ module PaymentGateways
       Rails.logger.error(msg)
     end
 
+    def retrieve_customer(customer_id)
+      Stripe::Customer.retrieve(customer_id, api_key).tap do |customer|
+        create_customer if customer.deleted?
+      rescue Stripe::InvalidRequestError
+        create_customer
+      end
+    end
+
+    def update_payment_detail(card, payment_method_id)
+      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
+      payment_detail.credit_card_partial_number = card.last4
+      payment_detail.credit_card_auth_code      = payment_method.customer
+      payment_detail.payment_method_id          = payment_method_id
+      payment_detail.save
+    end
+
+     def update_billing_details(payment_method, billing_address)
+      payment_method.billing_details = {
+        address: {
+          line1: billing_address[:address1],
+          line2: billing_address[:address2],
+          city: billing_address[:city],
+          state: billing_address[:state],
+          postal_code: billing_address[:zip],
+          country: billing_address[:country]
+        }
+      }
+    end
+
     private
 
     def log_gateway_action_explicit(gateway, action)
