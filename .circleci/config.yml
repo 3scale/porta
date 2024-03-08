@@ -28,9 +28,10 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
-assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key stream8-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key stream8-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key stream8-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+oracle-libs-cache-key: &oracle-libs-cache-key ora1-{{ .Environment.CACHE_VERSION }}-oracle-libs-cache-{{ checksum "script/oracle/install-instantclient-packages.sh" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -41,6 +42,16 @@ save-npm-cache: &save-npm-cache
     key: *npm-cache-key
     paths:
       - ./node_modules
+
+restore-oracle-libs-cache: &restore-oracle-libs-cache
+  restore_cache:
+    key: *oracle-libs-cache-key
+
+save-oracle-libs-cache: &save-oracle-libs-cache
+  save_cache:
+    key: *oracle-libs-cache-key
+    paths:
+      - vendor/oracle
 
 save-assets-cache: &save-assets-cache
   save_cache:
@@ -81,7 +92,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby27: &system-builder-ruby27
-  image: quay.io/3scale/system-builder:ruby27
+  image: quay.io/3scale/system-builder:stream8
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -91,7 +102,7 @@ system-builder-ruby27: &system-builder-ruby27
     TZ: UTC
     MASTER_PASSWORD: p
     USER_PASSWORD: p
-    LC_ALL: en_US.UTF-8
+    LC_ALL: C.utf8
     RAILS_ENV: test
 
 mysql-container: &mysql-container
@@ -233,11 +244,14 @@ commands: # reusable commands with parameters
 
   clone-oracle-libraries:
     steps:
+      - *restore-oracle-libs-cache
       - run:
           name: "Fetch oracle libraries"
           command: |
             set +o pipefail
-            sudo ./script/oracle/install-instantclient-packages.sh
+            ls vendor/oracle
+            sudo ORACLE_KEEP_DOWNLOADS=1 ./script/oracle/install-instantclient-packages.sh
+      - *save-oracle-libs-cache
 
   prepare-db-for-tests:
     steps:
@@ -262,9 +276,15 @@ commands: # reusable commands with parameters
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
+          name: jemalloc availability
+          command: ldd /bin/bash | grep "$LD_PRELOAD" || ( ldconfig -p && exit 1 )
+          environment: &malloc_preload
+            LD_PRELOAD: libjemalloc.so.2
+      - run:
           name: Rspec tests
           command: |
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
+          environment: *malloc_preload
       - upload-artifacts
 
   cucumber-tests:
@@ -284,6 +304,7 @@ commands: # reusable commands with parameters
           command: |
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
+          environment: *malloc_preload
       - run:
           name: Run cucumber tests
           command: |
@@ -317,6 +338,7 @@ commands: # reusable commands with parameters
             if [ -s $list ]; then
               bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
             fi
+          environment: *malloc_preload
       - upload-artifacts
 
   save-gem-cache:
@@ -352,7 +374,7 @@ executors:
       - *system-builder-ruby27
     environment:
       DB: << parameters.database >>
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
 
   builder-with-mysql-ruby27: &builder-with-mysql-ruby27
     resource_class: small
@@ -361,7 +383,7 @@ executors:
       - *mysql-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-mysql
 
   builder-with-postgres-ruby27: &builder-with-postgres-ruby27
@@ -371,7 +393,7 @@ executors:
       - *postgres-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-postgresql
 
   builder-with-oracle-ruby27: &builder-with-oracle-ruby27
@@ -381,7 +403,7 @@ executors:
       - *oracle-db-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-oracle
 
   cucumber-with-mysql-ruby27: &cucumber-with-mysql-ruby27

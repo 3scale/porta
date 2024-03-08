@@ -1,92 +1,90 @@
-FROM quay.io/centos7/ruby-27-centos7 AS porta-base
+FROM quay.io/centos/centos:stream8 as builder
+WORKDIR /opt/system
+ENV RUBY_MAJOR_VERSION=2 \
+    RUBY_MINOR_VERSION=7 \
+    RAILS_ENV=production \
+    NODE_ENV=production
+ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
+ADD . ./
+ADD openshift/system/config/* ./config/
+RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel git 'dnf-command(download)' podman-catatonit \
+    && gem install bundler --version 2.2.25 \
+    && bundle config set --local without development:test:licenses \
+    && bundle config set --local deployment true \
+    && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
+    && npm install -g yarn \
+    && yarn install:safe --no-progress \
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
+    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
+    && rm -rf tmp/cache /usr/local/share/gems/cache /usr/local/share/gems/doc
+
+# can just install memkind once it is fixed, see
+# https://issues.redhat.com/browse/RHEL-14497
+RUN cd /tmp \
+    && dnf download --source memkind \
+    && rpm2cpio memkind-*.src.rpm | cpio -idmv "memkind-*.tar.gz" \
+    && tar xvfz memkind-*.tar.gz \
+    && cd memkind-*/jemalloc/ \
+    && ./autogen.sh && ./configure --libdir=/usr/local/lib64/ && make
+
+
+FROM quay.io/centos/centos:stream8 AS base
 
 USER root
 
 ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=7
+    RUBY_MINOR_VERSION=7 \
+    RAILS_ENV=production \
+    SAFETY_ASSURED=1 \
+    TZ=:/etc/localtime \
+    prometheus_multiproc_dir=/opt/system/tmp/prometheus-client-mmap-dir
 
-ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
-    RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
-
-ENV TZ=:/etc/localtime \
-    BUNDLE_GEMFILE=Gemfile \
-    VARNISH_SCL=rh-varnish6 \
-    NODEJS_SCL=rh-nodejs14 \
-    RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
-    GIT_SCL=rh-git227
+ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 
 WORKDIR /opt/system
 
-RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-candidate_x86_64_os_.skip_if_unavailable=true \
-    && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-    && yum -y update \
-    && yum remove -y postgresql \
-    && yum install -y epel-release \
-    && yum -y install centos-release-scl-rh \
-              gd-devel \
-              unixODBC-devel \
-              mysql \
-              liberation-sans-fonts \
-              llvm5.0-devel \
-              postgresql13 postgresql13-devel postgresql13-libs \
-              file \
-              $NODEJS_SCL \
-              $VARNISH_SCL-jemalloc \
-              $GIT_SCL \
-    && yum -y clean all \
-    && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
+RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file \
+    && dnf -y clean all
+
+COPY --from=builder /opt/system/ .
+COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
+COPY --from=builder /usr/local/share/gems /usr/local/share/
+COPY --from=builder /usr/local/bin/bundle* /usr/local/bin
+# in RHEL 8 podman-catatonit pulls in too many useless deps so we don't install the RPM directly, on RHEL 9 simply use package `catatonit`
+COPY --from=builder /usr/libexec/catatonit/catatonit /usr/libexec/catatonit/catatonit
+
+RUN echo /usr/local/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
 
-# We don't want to redo the bundle install step every time a file has changed:
-# copying only the gemspec files and copying all the other files after the build
-ADD lib/developer_portal/*.gemspec lib/developer_portal/
-ADD vendor/active-docs/*.gemspec vendor/active-docs/
-ADD Gemfile* ./
-ADD Rakefile ./
-
-COPY openshift/system/contrib/scl_enable /opt/app-root/etc/
-
-ENV BASH_ENV=/opt/app-root/etc/scl_enable \
-    ENV=/opt/app-root/etc/scl_enable \
-    PROMPT_COMMAND=". /opt/app-root/etc/scl_enable" \
-    RAILS_ENV=production \
-    SAFETY_ASSURED=1 \
-    prometheus_multiproc_dir=/opt/system/tmp/prometheus-client-mmap-dir
-
-RUN source /opt/app-root/etc/scl_enable \
-    && gem install bundler --version 2.2.25 \
-    && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
-    && bundle config set --local without development:test:licenses \
-    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
-
-RUN chgrp root /opt/system/
-
-ADD . ./
-ADD package.json ./
-ADD yarn.lock ./
-ADD openshift/system/config/* ./config/
-
-RUN source /opt/app-root/etc/scl_enable \
+RUN bundle config set --local without development:test:licenses:assets \
     && bundle exec rake tmp:create \
-    && mkdir -p public/assets db/sphinx tmp/prometheus-client-mmap-dir \
+    && mkdir -p db/sphinx tmp/prometheus-client-mmap-dir \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \
-    && cd /opt/system \
-    && npm install -g yarn \
-    && yarn install:safe --no-progress \
-    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
-    && rm log/*.log \
+    && rm -f log/*.log \
     && chmod g+w /opt/system/config
 
-ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+# Bundler runs git commands on git dependencies
+# https://bundler.io/guides/git.html#local-git-repos
+# git will check if the current user is the owner of the git repository folder
+# This was included in git v2.35.2 or newer.
+# https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
+# Openshift changes the effective UID, so this git check needs to be bypassed.
+RUN git config --global --add safe.directory '*'
+
+# container-entrypoint is expected by the operator so keeping it for compatibility
+RUN ln -s openshift/system/entrypoint.sh . \
+    && ln -s /opt/system/openshift/system/contrib/container-entrypoint /usr/local/bin/
+
 USER 1001
 EXPOSE 3000 9306
-# TODO: dumb-init!
-ENTRYPOINT ["/opt/system/entrypoint.sh"]
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--", "/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
 
-FROM porta-base AS porta-sphinx-config
+FROM base AS sphinx-config
 ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
     THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
@@ -94,15 +92,17 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_QUERY_LOG=/dev/stdout \
     THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
     SECRET_KEY_BASE=dummy \
     DATABASE_URL='mysql2://root:@localhost/porta'
 USER 0
-RUN yum install -y mariadb-server \
-    && setpriv --reuid 27 --regid 27 --clear-groups mysql_install_db \
+RUN dnf install -y mysql-server mysql-test \
+    && setcap -r /usr/libexec/mysqld \
+    && setpriv --reuid 27 --regid 27 --clear-groups mysqld --initialize-insecure \
     && (mysqld_safe &) \
-    && ./entrypoint.sh bundle exec rake db:create db:schema:load openshift:thinking_sphinx:configure \
+    && ./entrypoint.sh rake db:create db:schema:load openshift:thinking_sphinx:configure \
     && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
-    && kill $(</var/run/mariadb/mariadb.pid)
+    && kill $(</run/mysqld/mysqld.pid)
 
-FROM porta-base AS porta-prod
-COPY --from=porta-sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
+FROM base AS porta-prod
+COPY --from=sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
