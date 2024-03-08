@@ -33,7 +33,7 @@ Feature: Product's application plans index page
     Scenario: Copying application plans
       When they select action "Copy" of "Public Plan"
       Then they should see "Plan copied"
-      And the table has the following rows:
+      And the table has the following row:
         | Name               | Contracts | State     |
         | Public Plan (copy) | 0         | published |
 
