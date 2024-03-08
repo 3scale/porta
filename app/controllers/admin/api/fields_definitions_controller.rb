@@ -3,7 +3,7 @@
 class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
 
   # we need to include position, because FieldsDefinition is creating it as an alias
-  wrap_parameters include: FieldsDefinition.attribute_names << 'position'
+  wrap_parameters include: FieldsDefinition.attribute_names + ['position']
   representer FieldsDefinition
 
   # Fields Definitions List
