@@ -44,10 +44,9 @@ module PaymentGateways
         update_billing_details(payment_method, billing_address)
         payment_method.save
       rescue Stripe::StripeError => stripe_error
-        report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
-        false
+        handle_stripe_error(stripe_error)
       ensure
-        Stripe.api_key = nil
+        reset_stripe_api_key
       end
     end
 
@@ -60,6 +59,16 @@ module PaymentGateways
       return create_customer if customer_id.blank?
 
       retrieve_customer(customer_id)
+    end
+
+    def retrieve_customer(customer_id)
+      customer = Stripe::Customer.retrieve(customer_id, api_key)
+
+      return create_customer if customer.nil? || customer.deleted?
+
+      customer
+    rescue Stripe::InvalidRequestError
+      create_customer
     end
 
     def create_customer
@@ -84,10 +93,6 @@ module PaymentGateways
         type: 'card',
         limit: 1
       ).data.first&.id
-    end
-
-    def retrieve_payment_method(payment_method_id)
-      Stripe::PaymentMethod.retrieve(payment_method_id)
     end
 
     def report_error(message)

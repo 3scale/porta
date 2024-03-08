@@ -41,14 +41,6 @@ module PaymentGateways
       Rails.logger.error(msg)
     end
 
-    def retrieve_customer(customer_id)
-      Stripe::Customer.retrieve(customer_id, api_key).tap do |customer|
-        create_customer if customer.deleted?
-      rescue Stripe::InvalidRequestError
-        create_customer
-      end
-    end
-
     def update_payment_detail(card, payment_method_id, payment_method)
       payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
       payment_detail.credit_card_partial_number = card.last4
@@ -68,6 +60,19 @@ module PaymentGateways
           country: billing_address[:country]
         }
       }
+    end
+
+    def reset_stripe_api_key
+      Stripe.api_key = nil
+    end
+
+    def handle_stripe_error(stripe_error)
+      report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
+      false
+    end
+
+    def retrieve_payment_method(payment_method_id)
+      Stripe::PaymentMethod.retrieve(payment_method_id)
     end
 
     private
