@@ -21,7 +21,7 @@ module PlanRuleLoader
       ],
       metadata: { cannot_automatically_be_upgraded_to: true }
     }
-  }.freeze
+  }.with_indifferent_access.freeze
 
   module_function
 
