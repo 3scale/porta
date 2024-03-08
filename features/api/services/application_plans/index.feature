@@ -32,12 +32,15 @@ Feature: Product's application plans index page
 
     Scenario: Copying application plans
       When they select action "Copy" of "Public Plan"
-      And they select action "Copy" of "Secret Plan"
-      And wait a moment
       Then they should see "Plan copied"
       And the table has the following row:
         | Name               | Contracts | State     |
         | Public Plan (copy) | 0         | published |
+
+      When  they select action "Copy" of "Secret Plan"
+      Then they should see "Plan copied"
+      And the table has the following row:
+        | Name               | Contracts | State     |
         | Secret Plan (copy) | 0         | hidden    |
 
     Scenario: Deleting application plans

@@ -51,12 +51,15 @@ Feature: Account plans index page
 
     Scenario: Copying account plans
       When they select action "Copy" of "Public Plan"
-      And they select action "Copy" of "Secret Plan"
-      And wait a moment
       Then they should see "Plan copied"
       And the table has the following rows:
         | Name               | Contracts | State     |
         | Public Plan (copy) | 0         | published |
+
+      When they select action "Copy" of "Secret Plan"
+      Then they should see "Plan copied"
+      And the table has the following rows:
+        | Name               | Contracts | State     |
         | Secret Plan (copy) | 0         | hidden    |
 
     Scenario: Deleting account plans
@@ -64,7 +67,6 @@ Feature: Account plans index page
       And they go to the account plans admin page
       When they select action "Delete" of "Public Plan"
       And confirm the dialog
-      And wait a moment
       Then they should see "Plan was deleted"
       And the table should contain the following:
         | Name        | Contracts | State  |
