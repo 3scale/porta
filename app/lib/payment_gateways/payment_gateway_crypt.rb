@@ -49,7 +49,7 @@ module PaymentGateways
       end
     end
 
-    def update_payment_detail(card, payment_method_id)
+    def update_payment_detail(card, payment_method_id, payment_method)
       payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
       payment_detail.credit_card_partial_number = card.last4
       payment_detail.credit_card_auth_code      = payment_method.customer

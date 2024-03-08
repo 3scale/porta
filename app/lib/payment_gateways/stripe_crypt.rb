@@ -16,7 +16,7 @@ module PaymentGateways
       payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
       card = payment_method.card
 
-      update_payment_detail(card, payment_method_id)
+      update_payment_detail(card, payment_method_id, payment_method)
     end
 
     def create_stripe_setup_intent
