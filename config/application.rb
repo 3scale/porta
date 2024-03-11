@@ -240,7 +240,7 @@ module System
     config.three_scale.cors.enabled = false
     config.three_scale.cors.merge!(try_config_for(:cors) || {})
 
-    three_scale = config_for(:settings).symbolize_keys
+    three_scale = config_for(:settings).deep_symbolize_keys
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
     payment_settings = three_scale.extract!(:active_merchant_mode, :active_merchant_logging, :billing_canaries)
