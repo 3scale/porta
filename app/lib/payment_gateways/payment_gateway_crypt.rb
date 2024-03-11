@@ -62,10 +62,6 @@ module PaymentGateways
       }
     end
 
-    def reset_stripe_api_key
-      Stripe.api_key = nil
-    end
-
     def handle_stripe_error(stripe_error)
       report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
       false

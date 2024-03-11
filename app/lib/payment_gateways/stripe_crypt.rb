@@ -35,12 +35,9 @@ module PaymentGateways
     def update_billing_address(billing_address)
       begin
         Stripe.api_key = api_key  # Set actual Stripe secret key
-
         latest_payment_method_id = latest_payment_method_id_for_customer
         return true unless latest_payment_method_id.present?
-
         payment_method = retrieve_payment_method(latest_payment_method_id)
-
         update_billing_details(payment_method, billing_address)
         payment_method.save
       rescue Stripe::StripeError => stripe_error
@@ -57,15 +54,12 @@ module PaymentGateways
     def find_or_create_customer
       customer_id = payment_detail.credit_card_auth_code
       return create_customer if customer_id.blank?
-
       retrieve_customer(customer_id)
     end
 
     def retrieve_customer(customer_id)
       customer = Stripe::Customer.retrieve(customer_id, api_key)
-
-      return create_customer if customer.nil? || customer.deleted?
-
+      return create_customer if customer&.deleted?
       customer
     rescue Stripe::InvalidRequestError
       create_customer
@@ -77,7 +71,6 @@ module PaymentGateways
         email: user.email,
         metadata: { '3scale_account_reference' => buyer_reference }
       }
-
       Stripe::Customer.create(customer_params, api_key).tap do |stripe_customer|
         payment_detail.update(credit_card_auth_code: stripe_customer.id)
       end
@@ -85,6 +78,10 @@ module PaymentGateways
 
     def api_key
       payment_gateway_options.fetch(:login)
+    end
+
+    def reset_stripe_api_key
+      Stripe.api_key = nil
     end
 
     def latest_payment_method_id_for_customer
