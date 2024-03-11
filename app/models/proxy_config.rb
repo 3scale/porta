@@ -104,7 +104,7 @@ class ProxyConfig < ApplicationRecord
 
     # Read the value
     version = config.connection.select_value(config.select(:version)).to_i
-    write_attribute_without_type_cast :version, version
+    write_attribute_without_type_cast 'version', version
   end
 
   def clone_to(environment:)
