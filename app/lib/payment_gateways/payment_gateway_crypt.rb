@@ -54,10 +54,6 @@ module PaymentGateways
       false
     end
 
-    def retrieve_payment_method(payment_method_id)
-      Stripe::PaymentMethod.retrieve(payment_method_id)
-    end
-
     private
 
     def log_gateway_action_explicit(gateway, action)

@@ -37,7 +37,7 @@ module PaymentGateways
         Stripe.api_key = api_key  # Set actual Stripe secret key
         latest_payment_method_id = latest_payment_method_id_for_customer
         return true unless latest_payment_method_id.present?
-        payment_method = retrieve_payment_method(latest_payment_method_id)
+        payment_method = Stripe::PaymentMethod.retrieve(payment_method_id)
         update_billing_details(payment_method, billing_address)
         payment_method.save
       rescue Stripe::StripeError => stripe_error
