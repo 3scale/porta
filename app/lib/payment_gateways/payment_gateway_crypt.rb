@@ -49,19 +49,6 @@ module PaymentGateways
       payment_detail.save
     end
 
-     def update_billing_details(payment_method, billing_address)
-      payment_method.billing_details = {
-        address: {
-          line1: billing_address[:address1],
-          line2: billing_address[:address2],
-          city: billing_address[:city],
-          state: billing_address[:state],
-          postal_code: billing_address[:zip],
-          country: billing_address[:country]
-        }
-      }
-    end
-
     def handle_stripe_error(stripe_error)
       report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
       false

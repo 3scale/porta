@@ -92,6 +92,19 @@ module PaymentGateways
       ).data.first&.id
     end
 
+    def update_billing_details(payment_method, billing_address)
+      payment_method.billing_details = {
+        address: {
+          line1: billing_address[:address1],
+          line2: billing_address[:address2],
+          city: billing_address[:city],
+          state: billing_address[:state],
+          postal_code: billing_address[:zip],
+          country: billing_address[:country]
+        }
+      }
+    end
+
     def report_error(message)
       @errors.add(:base, message)
       false
