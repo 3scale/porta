@@ -50,7 +50,14 @@ module PaymentGateways
     end
 
     def handle_stripe_error(stripe_error)
-      report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
+      case stripe_error
+      when Stripe::CardError
+        report_error("Card error: #{stripe_error.message}")
+      when Stripe::InvalidRequestError
+        report_error("Invalid request error: #{stripe_error.message}")
+      else
+        report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
+      end
       false
     end
 

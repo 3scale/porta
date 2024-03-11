@@ -38,8 +38,7 @@ module PaymentGateways
         latest_payment_method_id = latest_payment_method_id_for_customer
         return true unless latest_payment_method_id.present?
         payment_method = Stripe::PaymentMethod.retrieve(payment_method_id)
-        update_billing_details(payment_method, billing_address)
-        payment_method.save
+        update_and_save_billing_details(payment_method, billing_address)
       rescue Stripe::StripeError => stripe_error
         handle_stripe_error(stripe_error)
       ensure
@@ -55,6 +54,11 @@ module PaymentGateways
       customer_id = payment_detail.credit_card_auth_code
       return create_customer if customer_id.blank?
       retrieve_customer(customer_id)
+    end
+
+    def update_and_save_billing_details(payment_method, billing_address)
+      update_billing_details(payment_method, billing_address)
+      payment_method.save
     end
 
     def retrieve_customer(customer_id)
