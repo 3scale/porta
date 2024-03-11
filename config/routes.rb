@@ -287,7 +287,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
 
       scope 'applications/:application_id', :as => :application do
-        resources :keys, constraints: { id: %r{[^/]+} }, only: %i[new create edit update destroy] do
+        resources :keys, constraints: { id: /.+/ }, only: %i[new create edit update destroy] do
           member do
             put :regenerate
           end
