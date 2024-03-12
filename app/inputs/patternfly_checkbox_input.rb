@@ -24,7 +24,9 @@ class PatternflyCheckboxInput < Formtastic::Inputs::BooleanInput
   end
 
   def label
-    tag.label(label_text, class: 'pf-c-check__label', for: input_html_options[:id])
+    disabled = input_html_options[:disabled]
+    tag.label(label_text, class: "pf-c-check__label#{disabled ? ' pf-m-disabled' : ''}",
+                          for: input_html_options[:id])
   end
 
   def description
