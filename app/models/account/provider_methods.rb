@@ -171,20 +171,6 @@ module Account::ProviderMethods
     partner_id.present?
   end
 
-  # @return [Array<AuthenticationProvider>]
-  def authentication_provider_kinds
-    available = AuthenticationProvider.available
-    indexed = authentication_providers.where(type: available.map(&:name)).group_by(&:type)
-
-    available.each do |model|
-      unless indexed[model.name].present?
-        indexed[model.name] = model.new
-      end
-    end
-
-    indexed.values.flatten.sort_by{ |a| a.to_param.to_s }.reverse
-  end
-
   def provided_cinstances
     Cinstance.provided_by self
   end

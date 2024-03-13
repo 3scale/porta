@@ -75,6 +75,14 @@ module ColumnSortingHelper
 
   private
 
+  def sort_column
+    params[:sort]
+  end
+
+  def sort_direction
+    params[:direction]
+  end
+
   def order_indicator_for(order)
     case order.try!(:to_sym)
     when :asc, :up
