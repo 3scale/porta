@@ -266,4 +266,4 @@ end
 
 gem 'kubeclient'
 
-gem 'pg', '~> 0.21.0'
+gem 'pg', '~> 1.3.5'
