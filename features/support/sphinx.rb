@@ -6,7 +6,7 @@ Before "not @search" do
 end
 
 Before('@search') do
-  Sidekiq::Worker.clear_all
+  Sidekiq::Job.clear_all
   ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
   ::ThinkingSphinx::Test.stop

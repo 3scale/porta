@@ -1,5 +1,5 @@
 class ProcessNotificationEventWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def self.enqueue(event)
     batch = Sidekiq::Batch.new
@@ -17,7 +17,7 @@ class ProcessNotificationEventWorker
   end
 
   class UserNotificationWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
 
     def perform(user_id, event_id, system_name)
       user = User.find(user_id)
