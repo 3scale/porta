@@ -101,7 +101,7 @@ And "they should be able to reset the search" do
   assert find_all('tbody tr').size > 1
 end
 
-When "they search {string} using the toolbar" do |text|
+When "(they )search {string} using the toolbar" do |text|
   perform_toolbar_search(text)
 end
 

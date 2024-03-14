@@ -18,7 +18,7 @@ class Provider::Admin::BackendApis::MappingRulesControllerTest < ActionDispatch:
     get provider_admin_backend_api_mapping_rules_path(backend_api)
 
     assert_response :success
-    assert_select 'table tr', count: @backend_api.mapping_rules.count+2
+    assert_select 'table tbody tr', count: @backend_api.mapping_rules.count
     @backend_api.mapping_rules.each { |rule| assert_select 'table tr td', text: rule.pattern }
   end
 

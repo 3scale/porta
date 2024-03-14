@@ -39,7 +39,7 @@ class Provider::Admin::BackendApis::MappingRulesController < Provider::Admin::Ba
 
   private
 
-  def owner_id
-    @backend_api.id
+  def proxy
+    @backend_api
   end
 end

@@ -46,8 +46,8 @@ Feature: Product mapping rules
 
   @search
   Scenario: Pagination when search results are multi-page
-    Given a service "ManyRules"
-    And the service "ManyRules" has 30 mapping rules starting with pattern "/test"
-    When I go to the mapping rules index page for service "ManyRules"
-    And I search mapping rules for pattern "/test"
-    Then I should see 2 pages
+    Given a product "ManyRules"
+    And the product has 30 mapping rules starting with pattern "/test"
+    When they go to the mapping rules index page for service "ManyRules"
+    And search "/test" using the toolbar
+    Then they should see 2 pages
