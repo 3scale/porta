@@ -599,23 +599,18 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'App ID can include special characters as defined in the RFC 6749' do
-    # generate random key with all chars of RFC 6749 except / and spaces
-    random_key = -> { [*"\x21".."\x2E", *"\x30".."\x7E"].shuffle.join }
+    # generate random key with all chars of RFC 6749 except space
+    random_key = -> { [*"\x21".."\x7E"].shuffle.join }
     cinstance = FactoryBot.build(:cinstance, application_id: (app_id = random_key.call))
 
     assert cinstance.save
     assert app_id, cinstance.reload.application_id
   end
 
-  test 'App ID cannot include slash or spaces' do
-    cinstance = FactoryBot.build(:cinstance)
-
-    ['app_id with space', 'app_id-with-/-slash'].each do |key|
-      cinstance.application_id = key
-
-      assert cinstance.invalid?
-      assert cinstance.errors[:application_id].present?
-    end
+  test 'App ID cannot include spaces' do
+    cinstance = FactoryBot.build(:cinstance, application_id: 'app_id with space')
+    assert cinstance.invalid?
+    assert cinstance.errors[:application_id].present?
   end
 
   test 'App ID length is validated to be between 4 and 255 characters' do

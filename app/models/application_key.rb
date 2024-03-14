@@ -12,9 +12,9 @@ class ApplicationKey < ApplicationRecord
   validates :application, presence: true
 
   # The following characters are accepted:
-  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
-  # Spaces and / are not allowed
-  validates :value, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ },
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces are not allowed
+  validates :value, format: { with: /\A[\x21-\x7E]+\Z/ },
                     length: { within: 5..255 },
                     uniqueness: { scope: :application_id, case_sensitive: false }
 
