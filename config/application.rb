@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
 # We don't want to load any Rails component we don't use
 # See https://github.com/rails/rails/blob/v6.1.7.3/railties/lib/rails/all.rb for the list
@@ -108,9 +108,10 @@ module System
 
     config.boot_time = Time.now
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
 
     # Include developer_portal into the autoload and eager load path
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]

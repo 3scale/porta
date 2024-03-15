@@ -1,4 +1,4 @@
-require File.expand_path('../config/application', __FILE__)
+require_relative "config/application"
 
 # Workaround for https://github.com/ruby/rake/issues/116
 # until we upgrade rspec
