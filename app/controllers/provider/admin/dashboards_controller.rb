@@ -16,6 +16,10 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
+    first_login = flash.delete(:first_login)
+    return unless first_login
+
+    flash[:quick_starts_notice] = t('provider.admin.dashboards.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 
   include DashboardTimeRange
