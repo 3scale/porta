@@ -133,12 +133,6 @@ en:
         weekly_report: '%{name} weekly report'
         daily_report: '%{name} daily report'
 
-  controller:
-    title:
-      provider:
-        admin:
-          authentication_providers: SSO Integrations
-
   admin:
     api_docs:
       services:
@@ -427,6 +421,9 @@ en:
           success: User key has been updated.
 
       authentication_providers:
+        index:
+          header:
+            title: Single Sign-On Integrations
         form:
           automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
           submit_button_label: 'Create Authentication provider'

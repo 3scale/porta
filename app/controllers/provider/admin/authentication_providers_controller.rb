@@ -8,8 +8,12 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
 
   activate_menu :audience, :cms, :sso_integrations
 
+  helper_method :presenter
+
+  attr_reader :presenter
+
   def index
-    @authentication_providers = current_account.authentication_provider_kinds
+    @presenter = Provider::Admin::AuthenticationProvidersIndexPresenter.new(account: current_account)
   end
 
   def new
