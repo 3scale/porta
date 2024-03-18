@@ -737,6 +737,12 @@ en:
       edit:
         empty_state:
           title: A valid APIcast Policies endpoint must be provided
+    proxy_rules:
+      index:
+        empty_state:
+          title: No mapping rules
+          body: There are no mapping rules defined for %{name} yet
+          primary: Create a mapping rule
 
   deployment_options:
     missing: |

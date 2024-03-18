@@ -8,8 +8,9 @@ FactoryBot.define do
 
   factory(:proxy_rule) do
     http_method { "GET" }
-    pattern { '/foo/bar' }
     delta { 1 }
+    sequence(:created_at) { |n| Time.zone.now - n.days }
+    sequence(:pattern) { |n| "/foo/bar/#{n}" }
     association :metric
     association :proxy
   end

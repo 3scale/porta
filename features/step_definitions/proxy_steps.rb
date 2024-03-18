@@ -31,16 +31,15 @@ Then(/^the mapping rules should be in the following order:$/) do |table|
   end
 end
 
-Given('the service {string} has {int} mapping rules starting with pattern {string}') do |service_name, rules_size, pattern|
-  service = @provider.services.find_by(name: service_name)
-  hits_metric = service.metrics.first
-  proxy_rules = service.proxy.proxy_rules
-  rules_size.times do |num|
-    proxy_rules.create(http_method: 'GET', pattern: "#{pattern}/num", delta: 1, metric: hits_metric)
-  end
+Given "{product} has {int} mapping rules starting with pattern {string}" do |product, rules_size, pattern|
+  FactoryBot.create_list(:proxy_rule, rules_size, proxy: product.proxy,
+                                                  pattern: pattern,
+                                                  metric: product.metrics.first)
 end
 
-When('I search mapping rules for pattern {string}') do |query|
-  fill_in('search_query', :with => query)
-  click_button('Search')
+Given "{backend} has {int} mapping rules starting with pattern {string}" do |backend, rules_size, pattern|
+  FactoryBot.create_list(:proxy_rule, rules_size, proxy: nil,
+                                                  pattern: pattern,
+                                                  owner: backend,
+                                                  metric: backend.metrics.first)
 end

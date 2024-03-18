@@ -32,3 +32,11 @@ Feature: Backend API mapping rules
   Scenario: New mapping rule form can't have redirect url
     When I go to the create mapping rule page for backend "My Backend"
     Then I should not see field "Redirect URL"
+
+  @search
+  Scenario: Pagination when search results are multi-page
+    Given a backend "ManyRules"
+    And the backend has 30 mapping rules starting with pattern "/test"
+    When they go to the mapping rules index page for backend "ManyRules"
+    And search "/test" using the toolbar
+    Then they should see 2 pages

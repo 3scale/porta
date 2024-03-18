@@ -48,8 +48,4 @@ class Api::ProxyRulesController < Api::BaseController
   def service
     @service ||= current_user.accessible_services.find(params[:service_id])
   end
-
-  def owner_id
-    proxy.id
-  end
 end
