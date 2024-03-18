@@ -35,3 +35,19 @@
   grid-gap: 16px;
   grid-template-columns: 1fr 1fr;
 }
+
+@media screen and (min-width: 1200px) {
+  button.pf-c-button.pf-m-primary.pf-c-button__float-button {
+    background-color: #b1b1e6;
+    top: 0;
+    color:black;
+    margin: 400px -50px 0 0;
+    position: absolute;
+    right: 0;
+    transform: rotate(-90deg);
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+}
