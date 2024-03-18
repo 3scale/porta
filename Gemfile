@@ -124,7 +124,8 @@ gem 'rack-x_served_by', '~> 0.1.1'
 gem 'rack-cors'
 gem 'roar-rails'
 
-gem 'reform', '~> 2.0.3', require: false
+gem 'reform', '~> 2.3.0', require: false
+gem 'reform-rails', '~> 0.2.2', require: false
 
 # sanitize params passed to rack
 gem 'rack-utf8_sanitizer'
