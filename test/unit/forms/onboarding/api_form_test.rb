@@ -51,10 +51,10 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
 
 
     assert api.validate(backend: 'invalid', name: 'foo')
-    assert api.errors.empty?
+    assert api.errors.to_a.empty?
 
     refute api.save
 
-    assert api.errors.present?
+    assert api.errors.to_a.present?
   end
 end
