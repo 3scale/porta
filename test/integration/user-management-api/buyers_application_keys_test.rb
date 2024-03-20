@@ -70,20 +70,21 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy key' do
-    rm_key = "foo-key"
+    %w[foo-key foo.key].each do |rm_key|
 
-    application = @buyer.bought_cinstances.last
-    expect_backend_create_key(application, rm_key)
-    expect_backend_delete_key(application, rm_key)
+      application = @buyer.bought_cinstances.last
+      expect_backend_create_key(application, rm_key)
+      expect_backend_delete_key(application, rm_key)
 
+      application.application_keys.add(rm_key)
 
-    application.application_keys.add(rm_key)
+      delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key),
+             params: { provider_key: @provider.api_key,
+                       method: '_destroy',
+                       format: :xml })
 
-    delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key),
-           params: { provider_key: @provider.api_key,
-           method: "_destroy", format: :xml })
-
-    assert_response :success
+      assert_response :success
+    end
   end
 
   test 'destroy not existing key returns not found' do

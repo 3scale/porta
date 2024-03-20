@@ -607,7 +607,8 @@ without fake Core server your after commit callbacks will crash and you might ge
             put :suspend
             put :resume
           end
-          resources :keys, :controller => 'buyer_application_keys', :only => [:index, :create, :destroy]
+          resources :keys, constraints: { id: %r{([^/]+?)(?=\.json|\.xml|$|/)} }, controller: 'buyer_application_keys', only: %i[index create destroy]
+
           resources :referrer_filters, :controller => 'buyer_application_referrer_filters', :only => [:index, :create, :destroy]
         end
 
