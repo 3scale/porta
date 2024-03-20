@@ -26,7 +26,7 @@ spec:
       description: |-
 
         Metrics track API usage other than API calls of your API packages or endpoints. To capture usage of your API apart from hits, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals, such as megabytes, CPU time, or the number of elements returned by the API.
-        ![use metrics to track API usage other than API calls in different units.](/assets/quickstarts/learn-about-metrics.png "Learn about tracking the number of API calls.")
+        ![Metrics with units "megabytes" or "CPU" may belong to either a Product or a Backend.](/assets/quickstarts/learn-about-metrics.png "Learn about tracking the number of API calls.")
       # optional - the task's Check your work module
       review:
         instructions: |-
