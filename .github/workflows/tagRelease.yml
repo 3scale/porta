@@ -22,7 +22,7 @@ jobs:
       runs-on: ubuntu-latest
       name: Create Release
       steps:
-        - uses: softprops/action-gh-release@v1 #This action will create the release with the params specified.
+        - uses: softprops/action-gh-release@v2 #This action will create the release with the params specified.
           with:
            tag_name: ${{ inputs.tag }}
            target_commitish: ${{ inputs.git_ref }}
