@@ -26,7 +26,7 @@ spec:
       description: |-
 
         Accounts refer to your API consumers‘ accounts in Admin Portal. Use **Account** to set up accounts for your API consumers.
-        ![Accounts are determined bu the API consumers wether applications are determined by the consumer's app.](/assets/quickstarts/learn-about-accounts.png "Learn about Accounts.")
+        ![Accounts are determined bu the API consumers wether applications are determined by the consumer's app.](/packs/images/quickstarts/learn-about-accounts.png "Learn about Accounts.")
       # optional - the task's Check your work module
       review:
         instructions: |-
