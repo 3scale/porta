@@ -77,6 +77,36 @@ namespace :multitenant do
       Rails.logger.error "Inconsistent tenant_ids for:\n#{inconsistent.map {_1.join(" ")}.join("\n")}"
     end
 
+    desc 'Check and remove orphaned objects (whose tenant is missing), pass "destroy" argument to delete'
+    task :cleanup_orphans, [:mode] => :environment do |_task, args|
+      destroy = args[:mode] == "destroy"
+
+      puts "Checking orphaned objects..."
+      puts "WARNING: the found orphan objects will be destroyed" if destroy
+
+      provider_account_ids = Account.where(provider: true).pluck(:id) + [Account.master.id]
+
+      ApplicationRecord.descendants.each do |model|
+        next unless model.table_exists? && model.column_names.include?('tenant_id')
+
+        orphaned_objects = model.where.not(tenant_id: provider_account_ids)
+
+        if orphaned_objects.exists?
+          puts "Found orphaned objects for model #{model.name}:"
+          orphaned_objects.find_each { |obj| puts "- ID: #{obj.id}, Tenant ID: #{obj.tenant_id}" }
+
+          if destroy
+            puts "Destroying orphaned objects for model #{model.name}..."
+            orphaned_objects.in_batches(of: 100).destroy_all
+          end
+        else
+          puts "No orphaned objects found for model #{model.name}."
+        end
+      end
+
+      puts 'Orphaned objects check completed.'
+    end
+
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
       query = args[:table_name].constantize.joining(&association_block).where.has(&condition)
       puts "------ Updating #{args[:table_name]} ------"
