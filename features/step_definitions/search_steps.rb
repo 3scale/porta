@@ -5,9 +5,14 @@ Given "the search server is offline" do
 end
 
 When "the table is filtered with:" do |table|
-  table.hashes.each do |search|
-    within '.pf-c-toolbar .pf-m-filter-group' do
-      pf4_select(search[:value], from: search[:filter])
+  within '.pf-c-page__main-section .pf-c-toolbar' do
+    if has_css?('[data-ouia-component-id="attribute-search"]', wait: 0)
+      table.hashes.each do |search|
+        select_attribute_filter(search[:filter])
+        fill_attribute_filter(search[:value])
+      end
+    else
+      table.hashes.each { |search| pf4_select(search[:value], from: search[:filter]) }
     end
   end
 end

@@ -3,8 +3,20 @@
 module ApplicationsControllerMethods
   def self.included(base)
     base.class_eval do
-      helper_method :accessible_services
+      helper_method :accessible_services, :presenter
+      attr_reader :presenter
     end
+  end
+
+  def index
+    @presenter = ApplicationsIndexPresenter.new(application_plans: @application_plans,
+                                                accessible_services: accessible_services,
+                                                cinstances: @cinstances,
+                                                search: @search,
+                                                service: @service,
+                                                current_account: current_account,
+                                                accessible_plans: accessible_plans,
+                                                account: @account)
   end
 
   protected

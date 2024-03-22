@@ -14,14 +14,11 @@ class Api::ApplicationsController < FrontendController
   before_action :find_application_plan, only: :create
   before_action :find_service_plan, only: :create
   before_action :initialize_cinstance, only: :create
+  before_action :initialize_new_presenter, only: :new
 
   activate_menu :serviceadmin, :applications, :listing
 
   sublayout 'api/service'
-
-  helper_method :presenter
-
-  def index; end
 
   def new; end
 
@@ -30,6 +27,7 @@ class Api::ApplicationsController < FrontendController
       flash[:notice] = 'Application was successfully created.'
       redirect_to provider_admin_application_path(@cinstance)
     else
+      initialize_new_presenter
       @cinstance.extend(AccountForNewPlan)
       render action: :new
     end
@@ -53,10 +51,10 @@ class Api::ApplicationsController < FrontendController
     super.where(service: @service)
   end
 
-  def presenter
-    @presenter ||= Api::ApplicationsNewPresenter.new(provider: current_account,
-                                                     service: @service,
-                                                     user: current_user,
-                                                     cinstance: @cinstance)
+  def initialize_new_presenter
+    @presenter = Api::ApplicationsNewPresenter.new(provider: current_account,
+                                                   service: @service,
+                                                   user: current_user,
+                                                   cinstance: @cinstance)
   end
 end

@@ -29,9 +29,11 @@ Feature: Audience's applications list page
     Then the current page is the admin portal applications page
 
   Scenario: Searching by multiple criteria
-    When they search for:
-      | Name | Plan  | State |
-      | Bob  | Cheap | live  |
+    When the table is filtered with:
+      | filter | value |
+      | Name   | Bob   |
+      | Plan   | Cheap |
+      | State  | Live  |
     Then the table should contain the following:
       | Name      | Account |
       | Bob's App | Bob     |
@@ -39,14 +41,14 @@ Feature: Audience's applications list page
   Scenario: Searching by plan
     Given they go to the admin portal applications page with 1 record per page
     And they should see 4 pages
-    When they search for:
-      | Plan  |
-      | Cheap |
+    When the table is filtered with:
+      | filter | value |
+      | Plan   | Cheap |
     And follow "Account" within the table header
     Then the table should contain the following:
       | Account |
       | Bob     |
-      | Jane    |
+    And they should see 2 pages
 
   Scenario Outline: Ordering
     When they follow "<order by>" within the table header

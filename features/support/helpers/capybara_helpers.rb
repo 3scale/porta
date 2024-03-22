@@ -57,6 +57,26 @@ module CapybaraHelpers
     dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
     dropdown.all('.pf-c-dropdown__menu-item')
   end
+
+  def select_attribute_filter(label)
+    selector = find('[data-ouia-component-id="attribute-search"] .pf-c-toolbar__item:first-child')
+    selector.click unless selector.has_css?('.pf-c-menu-toggle.pf-m-expanded', wait: 0)
+    selector.find('.pf-c-menu')
+            .find('.pf-c-menu__list-item', text: label)
+            .click
+  end
+
+  def fill_attribute_filter(value)
+    within '[data-ouia-component-id="attribute-search"] .pf-c-toolbar__item:last-child' do
+      if has_css?('input')
+        find('input').set(value)
+        find('button.pf-m-control').click
+      else
+        find('button.pf-c-select__toggle, button.pf-c-select__toggle-button').click unless has_css?('.pf-c-select.pf-m-expanded', wait: 0)
+        find('.pf-c-select__menu-item', text: value).click
+      end
+    end
+  end
 end
 
 World(CapybaraHelpers)
