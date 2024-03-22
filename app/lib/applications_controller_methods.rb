@@ -16,7 +16,8 @@ module ApplicationsControllerMethods
                                                 service: @service,
                                                 current_account: current_account,
                                                 accessible_plans: accessible_plans,
-                                                account: @account)
+                                                account: @account,
+                                                user: current_user)
   end
 
   protected

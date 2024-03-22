@@ -1,6 +1,4 @@
-- content_for :page_header_title_with_button, "Applications on #{@service.name}"
-- content_for :page_header_button_label, 'Create application'
-- content_for :page_header_button_href, new_admin_service_application_path(@service)
+- content_for :page_header_title, "Applications on #{@service.name}"
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'

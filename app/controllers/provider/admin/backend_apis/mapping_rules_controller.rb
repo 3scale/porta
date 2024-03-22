@@ -8,6 +8,10 @@ class Provider::Admin::BackendApis::MappingRulesController < Provider::Admin::Ba
 
   delegate :proxy_rules, to: :@backend_api
 
+  def index
+    @presenter = Provider::Admin::BackendApis::MappingRulesIndexPresenter.new(backend_api: @backend_api, params: params)
+  end
+
   def create
     @proxy_rule = proxy_rules.build(proxy_rule_params)
     if @proxy_rule.save
@@ -35,11 +39,5 @@ class Provider::Admin::BackendApis::MappingRulesController < Provider::Admin::Ba
     end
 
     redirect_to provider_admin_backend_api_mapping_rules_path(@backend_api)
-  end
-
-  private
-
-  def proxy
-    @backend_api
   end
 end

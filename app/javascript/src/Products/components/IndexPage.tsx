@@ -1,8 +1,6 @@
 import {
   Button,
   Divider,
-  Level,
-  LevelItem,
   PageSection,
   PageSectionVariants,
   Text,
@@ -66,14 +64,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Level>
-            <LevelItem><Text component="h1">Products</Text></LevelItem>
-            <LevelItem>
-              <Button component="a" href={newProductPath} variant="primary">
-                Create Product
-              </Button>
-            </LevelItem>
-          </Level>
+          <Text component="h1">Products</Text>
           <Text component="p">Explore and manage all customer-facing APIs that contain one or more of your Backends.</Text>
         </TextContent>
       </PageSection>
@@ -83,8 +74,13 @@ const IndexPage: React.FunctionComponent<Props> = ({
       <PageSection variant={PageSectionVariants.light}>
         <Toolbar id="top-toolbar">
           <ToolbarContent>
-            <ToolbarItem variant="search-filter">
+            <ToolbarItem spacer={{ default: 'spacerMd' }} variant="search-filter">
               <ToolbarSearch placeholder="Find a product" />
+            </ToolbarItem>
+            <ToolbarItem>
+              <Button component="a" href={newProductPath} variant="primary">
+                Create a product
+              </Button>
             </ToolbarItem>
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={productsCount} />
