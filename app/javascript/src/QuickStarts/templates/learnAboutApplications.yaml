@@ -26,7 +26,7 @@ spec:
       description: |-
 
         Applications are the API consumers' devices. Every consumer’s device must subscribe to an application plan to call an API. Those applications are stored within the API consumer’s account in the Admin Portal. Use **Applications** to set up the API consumer’s device.
-        ![The application is stored to the accound and consumes the API devices.](/assets/quickstarts/learn-about-applications.png "Learn about applications.")
+        ![The Application belongs to the Account, and is associated to the Product through the Application Plan.](/assets/quickstarts/learn-about-applications.png "Learn about applications.")
       # optional - the task's Check your work module
       review:
         instructions: |-
