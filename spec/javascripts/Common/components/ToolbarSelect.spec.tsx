@@ -13,8 +13,8 @@ const collection = [
 ]
 
 const defaultProps = {
-  attribute,
   collection,
+  name: `search[${attribute}]`,
   placeholder: 'Select a plan'
 }
 

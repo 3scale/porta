@@ -11,12 +11,15 @@
     = bulk_action 'Change state', new_admin_buyers_applications_bulk_change_state_path,
                                   'Accept, suspend or resume selected applications'
 
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'table_toolbar'
+
 / FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock
 / FIXME 2: application_plans returns [] in services/:id/applications even though there are plans
 - show_application_plans = application_plans.size > 0 && !master_on_premises?
 - service_column_visible = service.nil? && current_account.multiservice?
 div class="pf-c-card"
-  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Applications table"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Applications table" data-toolbar-props=@presenter.toolbar_props.to_json
     thead
       tr role="row"
         td role="columnheader" scope="col" class="select pf-c-table__check"
@@ -37,45 +40,6 @@ div class="pf-c-card"
         = th_sortable('cinstances.created_at', 'Created on')
         = th_sortable('cinstances.first_daily_traffic_at', 'Traffic on')
         td
-
-      - if applications.present? || account.nil?
-        tr role="row" class="search"
-          th class="select"
-          = form_for search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
-            th
-              = s.text_field :name, size: 15
-
-            th
-              = s.select :state, states, include_blank: 'All', selected: search.state
-
-            - unless account
-              th class="small"
-                = s.text_field :account_query, size: 7
-
-            - if service_column_visible
-              th
-                = s.collection_select :service_id, accessible_services, :id, :name,
-                                        { include_blank: true },
-                                        { disabled: service }
-
-            - if show_application_plans
-              - if service_column_visible
-                th = s.grouped_collection_select :plan_id, accessible_services,
-                                                :application_plans, :name, :id, :name,
-                                                { include_blank: true },
-                                                { disabled: plan }
-              - else
-                th = s.collection_select :plan_id, application_plans, :id, :name,
-                                            { include_blank: true },
-                                            { disabled: plan }
-
-            - if current_account.settings.finance.allowed?
-              th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: plan }
-
-            th
-            th
-            td class="pf-m-fit-content"
-              = s.button 'Search', name: nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
 
     tbody role="rowgroup" class="cinstances"
       - applications.each do |cinstance|

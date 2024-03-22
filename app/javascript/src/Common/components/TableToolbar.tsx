@@ -22,7 +22,9 @@ import { BulkSelectDropdown } from 'Common/components/BulkSelectDropdown'
 import { BulkActionsDropdown } from 'Common/components/BulkActionsDropdown'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { ToolbarSelect } from 'Common/components/ToolbarSelect'
+import { ToolbarAttributeSearch } from 'Common/components/ToolbarAttributeSearch'
 
+import type { AttributeSearchFilter } from 'Common/components/ToolbarAttributeSearch'
 import type { ButtonProps } from '@patternfly/react-core'
 import type { Props as SearchInputProps } from 'Common/components/ToolbarSearch'
 import type { BulkAction } from 'Common/components/BulkActionsDropdown'
@@ -40,7 +42,7 @@ interface ToolbarOverflowAction extends ToolbarAction {
   isShared?: boolean;
 }
 
-interface ToolbarFilter {
+export interface IToolbarFilter {
   attribute: string;
   collection: {
     id: string;
@@ -50,9 +52,10 @@ interface ToolbarFilter {
 }
 
 interface Props {
+  attributeFilters?: AttributeSearchFilter[];
   actions?: ToolbarAction[];
   bulkActions?: BulkAction[];
-  filters?: ToolbarFilter[];
+  filters?: IToolbarFilter[];
   overflow?: ToolbarOverflowAction[];
   pageEntries?: number;
   search?: SearchInputProps;
@@ -63,6 +66,7 @@ const TableToolbar: FunctionComponent<Props> = ({
   actions,
   bulkActions,
   filters,
+  attributeFilters,
   overflow,
   pageEntries,
   search,
@@ -75,7 +79,7 @@ const TableToolbar: FunctionComponent<Props> = ({
 
   return (
     <div ref={toolbarRef}>
-      <PFToolbar>
+      <PFToolbar clearAllFilters={() => { window.location.search = '' }}>
         <ToolbarContent>
           {bulkActions && pageEntries && (
             <ToolbarGroup>
@@ -97,6 +101,7 @@ const TableToolbar: FunctionComponent<Props> = ({
               </ToolbarItem>
             </ToolbarGroup>
           )}
+          {attributeFilters && <ToolbarAttributeSearch filters={attributeFilters} />}
           {search && (
             <ToolbarItem variant="search-filter">
               <ToolbarSearch {...search} />
@@ -104,8 +109,13 @@ const TableToolbar: FunctionComponent<Props> = ({
           )}
           {filters && (
             <ToolbarGroup variant="filter-group">
-              {filters.map(filter => (
-                <ToolbarSelect key={filter.attribute} {...filter} />
+              {filters.map(({ collection, attribute, placeholder }) => (
+                <ToolbarSelect
+                  key={attribute}
+                  collection={collection}
+                  name={`search[${attribute}]`}
+                  placeholder={placeholder}
+                />
               ))}
             </ToolbarGroup>
           )}

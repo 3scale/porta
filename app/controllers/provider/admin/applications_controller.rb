@@ -16,14 +16,11 @@ class Provider::Admin::ApplicationsController < FrontendController
   before_action :find_cinstance, except: %i[index new create]
   before_action :initialize_cinstance, only: :create
   before_action :disable_client_cache
+  before_action :initialize_new_presenter, only: :new
 
   activate_menu :audience, :applications, :listing
 
   layout 'provider'
-
-  helper_method :presenter
-
-  def index; end
 
   def show
     @service = @cinstance.service
@@ -37,6 +34,7 @@ class Provider::Admin::ApplicationsController < FrontendController
       flash[:notice] = 'Application was successfully created.'
       redirect_to provider_admin_application_path(@cinstance)
     else
+      initialize_new_presenter
       @cinstance.extend(AccountForNewPlan)
       render action: :new
     end
@@ -110,9 +108,9 @@ class Provider::Admin::ApplicationsController < FrontendController
 
   protected
 
-  def presenter
-    @presenter ||= Provider::Admin::ApplicationsNewPresenter.new(provider: current_account,
-                                                                 user: current_user,
-                                                                 cinstance: @cinstance)
+  def initialize_new_presenter
+    @presenter = Provider::Admin::ApplicationsNewPresenter.new(provider: current_account,
+                                                               user: current_user,
+                                                               cinstance: @cinstance)
   end
 end

@@ -27,6 +27,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   }, [searchText])
 
   const onSubmitSearch = (value: string) => {
+    url.searchParams.delete('page')
     url.searchParams.set(INPUT_NAME_UTF8, '✓')
     url.searchParams.set(name, value)
     window.location.replace(url.toString())

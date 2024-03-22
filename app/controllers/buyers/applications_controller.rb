@@ -14,12 +14,9 @@ class Buyers::ApplicationsController < FrontendController
   before_action :find_service, only: :create
   before_action :find_service_plan, only: :create
   before_action :initialize_cinstance, only: :create
+  before_action :initialize_new_presenter, only: :new
 
   activate_menu :buyers, :accounts, :listing
-
-  helper_method :presenter
-
-  def index; end
 
   def new
     @cinstance = @account.bought_cinstances.build
@@ -31,6 +28,7 @@ class Buyers::ApplicationsController < FrontendController
       flash[:notice] = 'Application was successfully created.'
       redirect_to provider_admin_application_path(@cinstance)
     else
+      initialize_new_presenter
       @cinstance.extend(AccountForNewPlan)
       render action: :new
     end
@@ -42,11 +40,11 @@ class Buyers::ApplicationsController < FrontendController
     super opts.reverse_merge(account: @account.id)
   end
 
-  def presenter
-    @presenter ||= Buyers::ApplicationsNewPresenter.new(provider: current_account,
-                                                        buyer: @account,
-                                                        user: current_user,
-                                                        cinstance: @cinstance)
+  def initialize_new_presenter
+    @presenter = Buyers::ApplicationsNewPresenter.new(provider: current_account,
+                                                      buyer: @account,
+                                                      user: current_user,
+                                                      cinstance: @cinstance)
   end
 
 end
