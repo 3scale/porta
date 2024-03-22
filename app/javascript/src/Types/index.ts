@@ -1,5 +1,3 @@
-import type { Method } from 'utilities/ajax'
-
 export * from 'Types/Api'
 export * from 'Types/FlashMessages'
 
@@ -11,7 +9,7 @@ export interface IRecord {
 export interface Action {
   title: string;
   path: string;
-  method: Method;
+  method: Request['method'];
 }
 
 export type Plan = IRecord & {

@@ -153,8 +153,9 @@ World(Module.new do
     when 'search',
          'the search page'
       search_path
+
     #
-    # Account management
+    # Account settings (Admin portal)
     #
     when 'the account page',
           'settings'
@@ -221,6 +222,8 @@ World(Module.new do
       provider_admin_account_email_configurations_path
     when 'the new email configurations page'
       new_provider_admin_account_email_configurations_path
+    when 'the users sso integrations page'
+      provider_admin_account_authentication_providers_path
 
     #
     # API Management

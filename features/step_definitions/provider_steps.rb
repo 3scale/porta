@@ -120,6 +120,22 @@ Given "{provider} has no account plans" do |provider|
   provider.account_plans.delete_all
 end
 
+Given "{provider} has an sso integration for the admin portal" do |provider|
+  @authentication_provider = FactoryBot.create(:self_authentication_provider, account: provider)
+end
+
+Given "{provider} has sso {enabled} for all users" do |provider, enabled|
+  provider.settings.update!(enforce_sso: enabled)
+end
+
+And /^the sso integration is (published|hidden)$/ do |state|
+  @authentication_provider.update!(published: state == 'published')
+end
+
+And /^the sso integration is tested$/ do
+  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true).at_most(2)
+end
+
 When "{provider} creates sample data" do |provider|
   provider.create_sample_data!
 end
