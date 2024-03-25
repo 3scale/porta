@@ -16,7 +16,7 @@ Feature: Audience's new application page
 
   Scenario: Navigation
     Given they go to the admin portal applications page
-    When they follow "Create application"
+    When they follow "Create an application"
     Then the current page is the admin portal new application page
 
   Scenario: Create an application
@@ -110,7 +110,7 @@ Feature: Audience's new application page
 
     Scenario: Manual navigation
       Given they go to the admin portal applications page
-      When they follow "Create application"
+      When they follow "Create an application"
       When the form is submitted with:
         | Account          | Jane           |
         | Product          | My API        |

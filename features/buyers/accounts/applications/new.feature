@@ -16,7 +16,7 @@ Feature: Audience > Accounts > Listing > Account > Applications > New
 
   Scenario: Navigation
     Given they go to buyer "Jane" applications page
-    When they follow "Create application"
+    When they follow "Create an application"
     Then the current page is buyer "Jane" new application page
 
   Scenario: Create an application
@@ -102,7 +102,7 @@ Feature: Audience > Accounts > Listing > Account > Applications > New
 
     Scenario: Manual navigation
       Given they go to buyer "Jane" applications page
-      When they follow "Create application"
+      When they follow "Create an application"
       Then the current page is the upgrade notice for multiple applications
 
     Scenario: Navigation via url

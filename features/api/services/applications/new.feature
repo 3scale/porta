@@ -16,7 +16,7 @@ Feature: Product > Applications > New
 
   Scenario: Navigation
     Given they go to product "My API" applications page
-    When they follow "Create application"
+    When they follow "Create an application"
     Then the current page is product "My API" new application page
 
   Scenario: Create an application
@@ -101,7 +101,7 @@ Feature: Product > Applications > New
 
     Scenario: Manual navigation
       Given they go to product "My API" applications page
-      When they follow "Create application"
+      When they follow "Create an application"
       When the form is submitted with:
         | Account          | Jane          |
         | Application plan | Basic         |
