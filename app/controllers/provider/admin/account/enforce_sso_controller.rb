@@ -7,7 +7,7 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   def create
     if current_account.settings.update(enforce_sso: true)
       logout_all_password_users
-      render json: { redirect: provider_login_path, notice: t('.success') }
+      render json: { redirect: (provider_login_path if current_user.using_password?), notice: t('.success') }
     else
       render json: { error: t('.error') }
     end

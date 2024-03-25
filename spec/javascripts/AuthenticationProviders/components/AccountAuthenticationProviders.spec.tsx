@@ -60,7 +60,7 @@ describe('when SSO toggle is visible', () => {
   })
 
   it('should confirm before enabling SSO', async () => {
-    const payload = { notice: 'Enabled', error: undefined, redirect: 'http://example.org/login' }
+    const payload = { notice: 'Enabled', error: undefined, redirect: null }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: false })
@@ -78,7 +78,29 @@ describe('when SSO toggle is visible', () => {
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
     expect(notice).toHaveBeenCalledWith(payload.notice)
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  it('should redirect after enabling SSO', async () => {
+    const payload = { notice: 'Enabled', error: undefined, redirect: 'http://example.org/login' }
+    ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
+
+    const wrapper = mountWrapper({ ...props, ssoEnabled: false })
+    expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
+    expect(wrapper.exists(Modal)).toEqual(false)
+
+    act(() => { wrapper.find(EnforceSSOSwitch).props().onChange(true) })
+
+    await waitForPromises(wrapper)
+    expect(wrapper.exists(Modal)).toEqual(true)
+
+    // @ts-expect-error -- We don't need mouse event
+    act(() => { wrapper.find('Modal button.pf-m-primary').props().onClick() })
+
+    await waitForPromises(wrapper)
+    expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
     expect(window.location.href).toEqual(payload.redirect)
+    expect(notice).not.toHaveBeenCalled()
     expect(error).not.toHaveBeenCalled()
   })
 

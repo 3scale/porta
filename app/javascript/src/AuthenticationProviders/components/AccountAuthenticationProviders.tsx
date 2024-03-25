@@ -47,9 +47,10 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
           if (res.error) {
             flash.error(res.error)
             setIsSSOEnabled(false)
-          } else { /* eslint-disable @typescript-eslint/no-non-null-assertion -- Expected notice and redirect on success */
-            flash.notice(res.notice!)
-            window.location.href = res.redirect!
+          } else if (res.redirect) {
+            window.location.href = res.redirect
+          } else if (res.notice) {
+            flash.notice(res.notice)
           }
         })
         .finally(() => {
