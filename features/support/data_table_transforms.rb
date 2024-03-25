@@ -6,6 +6,12 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_backend_apis_table(table)
+    parameterize_headers(table, 'System name' => 'system_name',
+                                'Private Base URL' => 'private_endpoint')
+    table
+  end
+
   def transform_plan_features_table(table)
     parameterize_headers(table)
     table.map_column!(:enabled, false) { |enabled| enabled.casecmp?('true') }

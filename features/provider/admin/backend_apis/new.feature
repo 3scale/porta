@@ -4,18 +4,58 @@ Feature: Backend API new page
   Background:
     Given a provider is logged in
 
+  Scenario: Navigation from Dashboard widget
+    Given the current page is the provider dashboard
+    When they follow "Create Backend" within the apis dashboard widget
+    Then the current page is the admin portal new backend api page
+
+  Scenario: Navigation from context selector
+    Given the current page is the provider dashboard
+    When they select "Backends" from the context selector
+    And follow "Create Backend"
+    Then the current page is the admin portal new backend api page
+
   Scenario: Create a new Backend API
-    When an admin goes to the backend apis page
-    And they create a new backend api
-    Then they are redirected to the new backend api overview page
+    Given they go to the admin portal new backend api page
+    When the form is submitted with:
+      | Name             | My Backend                 |
+      | System name      | my-backend                 |
+      | Description      | This is my new backend API |
+      | Private Base URL | http://api.example.org     |
+    Then they should see the flash message "Backend created"
+    And the current page is the admin portal overview page of backend "My Backend"
 
-  Scenario: Form validation
-    When an admin is creating a new backend api
-    Then it is not possible to create it without a name, a valid url or system name
-    But it is possible to create it without system name
+  Scenario: The form won't be submitted withouth Name and URL
+    Given they go to the admin portal new backend api page
+    When the form is submitted with:
+      | Name             | My Backend |
+      | Private Base URL |            |
+    Then the current page is the admin portal new backend api page
+    When the form is submitted with:
+      | Name             |                             |
+      | Private Base URL | https://backend.example.org |
+    Then the current page is the admin portal new backend api page
+    But the form is submitted with:
+      | Name             | My Backend                  |
+      | Private Base URL | https://backend.example.org |
+    Then the current page is the admin portal overview page of backend "My Backend"
 
-  Scenario: Create a Backend API with duplicate fields
-    Given a backend
-    When an admin is creating a new backend api
-    Then it is possible to create it using the same name and url
-    But it is not possible to use the same system name
+  Scenario: System name is invalid
+    Given they go to the admin portal new backend api page
+    When the form is submitted with:
+      | Name             | My Backend                  |
+      | System name      | '$                          |
+      | Private Base URL | https://backend.example.org |
+    Then field "System name" has inline error "invalid"
+
+  Scenario: System name is in use
+    Given the provider has the following backend api:
+      | Name             | My Backend                  |
+      | System name      | backend-api                 |
+      | Private Base URL | https://backend.example.org |
+    Given they go to the admin portal new backend api page
+    When the form is submitted with:
+      | Name             | My Other Backend              |
+      | System name      | backend-api                   |
+      | Private Base URL | https://backend-2.example.org |
+    Then field "System name" has inline error "has already been taken"

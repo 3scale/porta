@@ -704,6 +704,10 @@ World(Module.new do
       '/the-404-page'
 
     # Backend API
+    when /^the admin portal new backend api page/
+      new_provider_admin_backend_api_path
+    when /^the admin portal overview page of backend "(.*)"/
+      provider_admin_backend_api_path(BackendApi.find_by!(name: $1))
     when /^the backend api overview/
       provider_admin_backend_api_path(provider_first_service!.backend_api)
 
