@@ -12,7 +12,7 @@ Feature: Backend API new page
   Scenario: Navigation from context selector
     Given the current page is the provider dashboard
     When they select "Backends" from the context selector
-    And follow "Create Backend"
+    And follow "Create a backend"
     Then the current page is the admin portal new backend api page
 
   Scenario: Create a new Backend API
