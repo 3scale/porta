@@ -411,6 +411,10 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      backend_apis:
+        edit:
+          delete_link: I understand the consequences, proceed to delete '%{name}' backend
+          delete_confirmation: Are you sure you want to delete the backend '%{name}'?
       keys:
         create:
           success: A new key has been added.
@@ -666,9 +670,6 @@ en:
     applications:
       edit:
         delete_confirmation: Are you sure you want to delete this application?
-    backend_apis:
-      edit:
-        delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
     backend_usages:
       index:
         empty_state:
@@ -1504,6 +1505,9 @@ en:
       account:
         vat_zero_text: Text to show if VAT/Sales Tax is 0%
         payment_gateway_type: Gateway
+
+      backend_api:
+        private_endpoint: Private Base URL
 
       finance/billing_strategy:
         numbering_period: Billing periods for invoice IDs
