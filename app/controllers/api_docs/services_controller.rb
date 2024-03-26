@@ -42,6 +42,7 @@ class ApiDocs::ServicesController < FrontendController
     def json
       parsed_content = JSON.parse(file_content)
       parsed_content['servers'] = [{ 'url' => backend_base_host }] if backend_api?
+      parsed_content['components'] = parsed_content.delete('components') if parsed_content.key?('components')
 
       parsed_content
     end
