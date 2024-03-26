@@ -11,5 +11,5 @@ div class="pf-c-card"
       = form.user_defined_form
 
       = form.actions do
-        button class="pf-c-button pf-m-primary" type="submit" Update Account
+        = form.commit_button 'Update Account'
         = delete_buyer_link(@account)

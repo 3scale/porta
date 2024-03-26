@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Fields::PatternflyFormBuilder < Fields::FormBuilder
+  delegate :tag, to: :template
+
   def output_html(field, options = {})
     typed_input_field = input_field(field, options)
     builder_options = typed_input_field.builder_options
@@ -9,5 +11,9 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
     type = default_type == :select ? :patternfly_select : :patternfly_input
 
     typed_input_field.input(self, builder_options.merge({ as: type }))
+  end
+
+  def commit_button(title, opts = {})
+    tag.button(title, type: :submit, class: 'pf-c-button pf-m-primary', **opts)
   end
 end
