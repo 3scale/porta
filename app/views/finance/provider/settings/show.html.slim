@@ -48,35 +48,35 @@ div class="pf-l-flex pf-m-column"
 
   - if can?(:manage, :finance) && @account.billing_strategy.try(:needs_credit_card?)
     div class="pf-l-flex__item"
-    div class="pf-c-card"
-      div class="pf-c-card__title" Credit card gateway
-      div class="pf-c-card__body"
-        = semantic_form_for @account, url: admin_account_payment_gateway_path,
-                                      html: { id: 'payment-gateway-form', class: 'pf-c-form pf-m-limit-width' } do |form|
-          = form.input :payment_gateway_type, as: :patternfly_select,
-                                              collection: @payment_gateways.map { |gateway| [gateway.display_name, gateway.type] },
-                                              include_blank: 'Choose one'
+      div class="pf-c-card"
+        div class="pf-c-card__title" Credit card gateway
+        div class="pf-c-card__body"
+          = semantic_form_for @account, url: admin_account_payment_gateway_path,
+                                        html: { id: 'payment-gateway-form', class: 'pf-c-form pf-m-limit-width' } do |form|
+            = form.input :payment_gateway_type, as: :patternfly_select,
+                                                collection: @payment_gateways.map { |gateway| [gateway.display_name, gateway.type] },
+                                                include_blank: 'Choose one'
 
-          = form.fields_for :payment_gateway_options do |fields|
-            - @payment_gateways.each do |payment_gateway|
-              - if payment_gateway.fields.present?
-                - is_current = payment_gateway.type == @account.payment_gateway_type
-                section class="pf-c-form__section payment_gateway_options #{is_current ? '' : 'hidden'}" id="payment_gateway_#{payment_gateway.type}" role="group"
-                  - payment_gateway.fields.each do |name, label|
-                    - if payment_gateway.boolean_field_keys.include?(name)
-                      = fields.input name, as: :patternfly_checkbox,
-                                           label: label,
-                                           id: ['account', 'payment', payment_gateway.type, name].join('_'),
-                                           input_html: { checked: is_current && @account.payment_gateway_options[name].present? }
-                    - else
-                      = fields.input name, as: :patternfly_input,
-                                           label: label,
-                                           input_html: { value: is_current ? @account.payment_gateway_options[name] : nil }
-                  - if payment_gateway.deprecated
-                    = pf_inline_alert t('.deprecation_warning', gateway: payment_gateway.type.capitalize), variant: :warning
+            = form.fields_for :payment_gateway_options do |fields|
+              - @payment_gateways.each do |payment_gateway|
+                - if payment_gateway.fields.present?
+                  - is_current = payment_gateway.type == @account.payment_gateway_type
+                  section class="pf-c-form__section payment_gateway_options #{is_current ? '' : 'hidden'}" id="payment_gateway_#{payment_gateway.type}" role="group"
+                    - payment_gateway.fields.each do |name, label|
+                      - if payment_gateway.boolean_field_keys.include?(name)
+                        = fields.input name, as: :patternfly_checkbox,
+                                            label: label,
+                                            id: ['account', 'payment', payment_gateway.type, name].join('_'),
+                                            input_html: { checked: is_current && @account.payment_gateway_options[name].present? }
+                      - else
+                        = fields.input name, as: :patternfly_input,
+                                            label: label,
+                                            input_html: { value: is_current ? @account.payment_gateway_options[name] : nil }
+                    - if payment_gateway.deprecated
+                      = pf_inline_alert t('.deprecation_warning', gateway: payment_gateway.type.capitalize), variant: :warning
 
-          = form.actions do
-            button class="pf-c-button pf-m-primary" type="submit" Save
+            = form.actions do
+              button class="pf-c-button pf-m-primary" type="submit" Save
 
     javascript:
       document.addEventListener('DOMContentLoaded', () => {
