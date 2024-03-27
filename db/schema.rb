@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_27_012615) do
+ActiveRecord::Schema.define(version: 2024_02_29_072029) do
 
   create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -70,7 +70,6 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.text "vat_zero_text"
     t.bigint "default_account_plan_id"
     t.bigint "default_service_id"
-    t.string "credit_card_authorize_net_payment_profile_token"
     t.bigint "tenant_id"
     t.string "self_domain"
     t.string "s3_prefix"
