@@ -8,7 +8,8 @@
     "baseUrl": "./app/javascript/src",
     "module": "ES6",
     "moduleResolution": "NodeNext",
-    "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
+    "typeRoots": ["app/javascript/src/Types"],
+    "types": ["@types/jest"],
 
     // Emit
     "declaration": false,
