@@ -29,4 +29,9 @@ class Provider::Admin::DashboardsControllerTest < ActionDispatch::IntegrationTes
     get provider_admin_dashboard_path
     assert_xpath(xpath_selector, element_text)
   end
+
+  test 'receives quickstarts flash on first login and first_login cookie is false' do
+    assert_equal 'You can use quick starts to learn about 3scale features step by step. <a href="/p/admin/quickstarts">Take tour</a>', flash[:quickstarts_notice]
+    assert_equal 'false', cookies[:first_login]
+  end
 end

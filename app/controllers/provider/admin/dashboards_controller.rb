@@ -16,6 +16,10 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
+    return unless cookies[:first_login] == 'true'
+
+    flash[:quickstarts_notice] = 'You can use quick starts to learn about 3scale features step by step. <a href="/p/admin/quickstarts">Take tour</a>'.html_safe
+    cookies[:first_login] = { value: 'false' }
   end
 
   include DashboardTimeRange
