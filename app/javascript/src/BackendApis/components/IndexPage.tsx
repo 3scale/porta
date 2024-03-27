@@ -2,8 +2,6 @@ import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import {
   Button,
   Divider,
-  Level,
-  LevelItem,
   PageSection,
   PageSectionVariants,
   Text,
@@ -64,16 +62,7 @@ const IndexPage: FunctionComponent<Props> = ({
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Level>
-            <LevelItem>
-              <Text component="h1">Backends</Text>
-            </LevelItem>
-            <LevelItem>
-              <Button component="a" href={newBackendPath} variant="primary">
-                Create Backend
-              </Button>
-            </LevelItem>
-          </Level>
+          <Text component="h1">Backends</Text>
           <Text component="p">Explore and manage all your internal APIs.</Text>
         </TextContent>
       </PageSection>
@@ -83,8 +72,13 @@ const IndexPage: FunctionComponent<Props> = ({
       <PageSection variant={PageSectionVariants.light}>
         <Toolbar id="top-toolbar">
           <ToolbarContent>
-            <ToolbarItem variant="search-filter">
+            <ToolbarItem spacer={{ default: 'spacerMd' }} variant="search-filter">
               <ToolbarSearch placeholder="Find a backend" />
+            </ToolbarItem>
+            <ToolbarItem>
+              <Button component="a" href={newBackendPath} variant="primary">
+                Create a backend
+              </Button>
             </ToolbarItem>
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={backendsCount} />

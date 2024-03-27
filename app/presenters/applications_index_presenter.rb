@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 class ApplicationsIndexPresenter
-  def initialize(application_plans:, accessible_services:, cinstances:, search:, service:, current_account:, accessible_plans:, account:)
+  include System::UrlHelpers.system_url_helpers
+  include ApplicationsHelper
+
+  delegate :can?, to: :ability
+
+  def initialize(application_plans:, accessible_services:, cinstances:, search:, service:, current_account:, accessible_plans:, account:, user:)
     @accessible_services = accessible_services
     @application_plans = application_plans
     @cinstances = cinstances
@@ -10,16 +15,29 @@ class ApplicationsIndexPresenter
     @current_account = current_account
     @accessible_plans = accessible_plans
     @account = account
+    @ability = Ability.new(user)
   end
 
-  attr_reader :application_plans, :accessible_services, :cinstances, :search, :service, :current_account, :accessible_plans, :account
+  attr_reader :application_plans, :accessible_services, :cinstances, :search, :service, :current_account, :accessible_plans, :account, :ability
 
   def toolbar_props
     show_application_plans = !application_plans.empty? && !current_account.master_on_premises?
     service_column_visible = service.nil? && current_account.multiservice?
+    new_application_path = if service.present?
+                             new_admin_service_application_path(service)
+                           elsif account.present?
+                             create_application_link_href(account)
+                           else
+                             new_provider_admin_application_path
+                           end
 
     props = {
       totalEntries: cinstances.total_entries,
+      actions: [{
+        label: 'Create an application',
+        href: new_application_path,
+        variant: :primary
+      }],
       attributeFilters: [{
         name: 'search[name]',
         title: 'Name',

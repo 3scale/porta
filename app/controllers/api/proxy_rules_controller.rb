@@ -10,6 +10,10 @@ class Api::ProxyRulesController < Api::BaseController
 
   sublayout 'api/service'
 
+  def index
+    @presenter = Api::ProxyRulesIndexPresenter.new(service: service, params: params)
+  end
+
   def create
     @proxy_rule = proxy_rules.build(proxy_rule_params)
     if @proxy_rule.save
