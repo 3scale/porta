@@ -76,15 +76,15 @@ The application requires a database that can either be [PostgreSQL](https://www.
 
 ###### MySQL
 
-We recommend running it in a [Docker](https://www.docker.com/) container:
+We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:8.0
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:8.0
 ```
 * **Macs with M1** require the flag `--platform linux/x86_64`:
 
   ```
-  docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:8.0
+  podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:8.0
   ```
 
 Alternatively it can be run by Homebrew:
@@ -94,12 +94,12 @@ brew services start mysql@8.0
 
 ###### PostgreSQL
 
-We recommend running it in a [Docker](https://www.docker.com/) container:
+We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
 export DATABASE_URL=postgresql://postgres:@localhost:5433/circleci
 
-docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=circleci --name postgres10 circleci/postgres:10.5-alpine"
+podman run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=circleci --name postgres10 circleci/postgres:10.5-alpine
 ```
 
 Alternatively it can be run by Homebrew:
@@ -109,10 +109,10 @@ brew services start postgresql@13
 
 ### Redis
 
-[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Docker](https://www.docker.com/) container:
+[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-docker run -d -p 6379:6379 redis
+podman run -d -p 6379:6379 redis
 ```
 
 Alternatively, Redis can be run directly on your machine with Homebrew:
@@ -124,10 +124,10 @@ brew services start redis
 
 ### Memcached
 
-If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Docker](https://www.docker.com/) container:
+If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-docker run -d -p 11211:11211 memcached
+podman run -d -p 11211:11211 memcached
 ```
 
 Alternatively, Memcached can be run directly on your machine with Homebrew:
