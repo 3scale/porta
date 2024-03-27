@@ -16,4 +16,8 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
   def commit_button(title, opts = {})
     tag.button(title, type: :submit, class: 'pf-c-button pf-m-primary', **opts)
   end
+
+  def collection_select(*opts)
+    super(*opts.first(4), {}, { class: 'pf-c-form-control' })
+  end
 end
