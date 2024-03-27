@@ -19,24 +19,6 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   def perform(model, id)
-    instance = model.find_by(model.primary_key => id)
-
-    if instance
-      reindex(instance)
-    else
-      delete_from_index(model, id)
-    end
-  end
-
-  protected
-
-  def reindex(instance)
-    ThinkingSphinx::Processor.new(instance: instance).upsert
-  end
-
-  def delete_from_index(model, *ids)
-    ids.each do |id|
-      ThinkingSphinx::Processor.new(model: model, id: id).delete
-    end
+    ThinkingSphinx::Processor.new(model: model, id: id).stage
   end
 end

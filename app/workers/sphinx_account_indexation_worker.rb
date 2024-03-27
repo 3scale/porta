@@ -18,4 +18,16 @@ class SphinxAccountIndexationWorker < SphinxIndexationWorker
       delete_from_index(Account, id, *buyers)
     end
   end
+
+  protected
+
+  def reindex(instance)
+    ThinkingSphinx::Processor.new(instance: instance).upsert
+  end
+
+  def delete_from_index(model, *ids)
+    ids.each do |id|
+      ThinkingSphinx::Processor.new(model: model, id: id).delete
+    end
+  end
 end

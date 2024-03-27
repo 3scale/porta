@@ -8,5 +8,5 @@ ThinkingSphinx::Index.define('cms/page'.to_sym, with: :real_time) do
   has tenant_id, type: :bigint
 
   indexes :published
-  scope { CMS::Page.where(searchable: true) }
+  scope { CMS::Page.where(searchable: true).where.not(published: nil) }
 end
