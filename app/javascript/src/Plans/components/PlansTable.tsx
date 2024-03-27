@@ -45,15 +45,15 @@ const PlansTable: FunctionComponent<Props> = ({
   const [plans, setPlans] = useState<Plan[]>(initialPlans)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleActionCopy = (path: string) => ajax(path, { method: 'POST' })
+  const handleActionCopy = (path: string) => ajax<{ plan: string }>(path, { method: 'POST' })
     .then(data => data.json()
-      .then((res: { notice: string; plan: string; error: string }) => {
+      .then((res) => { /* eslint-disable @typescript-eslint/no-non-null-assertion -- FIXME types */
         if (data.status === 201) {
-          flash.notice(res.notice)
+          flash.notice(res.notice!)
           const newPlan = JSON.parse(res.plan) as Plan
           setPlans([...plans, newPlan])
         } else if (data.status === 422) {
-          flash.error(res.error)
+          flash.error(res.error!)
         }
       })
     )
@@ -66,11 +66,12 @@ const PlansTable: FunctionComponent<Props> = ({
   const handleActionDelete = (path: string) => waitConfirm('Are you sure?')
     .then(confirmed => {
       if (confirmed) {
-        return ajax(path, { method: 'DELETE' })
+        return ajax<{ id: number }>(path, { method: 'DELETE' })
           .then(data => data.json()
-            .then((res: { notice: string; id: number }) => {
+            .then((res) => {
               if (data.status === 200) {
-                flash.notice(res.notice)
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+                flash.notice(res.notice!)
                 const purgedPlans = plans.filter(p => p.id !== res.id)
                 setPlans(purgedPlans)
               }
@@ -83,17 +84,17 @@ const PlansTable: FunctionComponent<Props> = ({
     })
     .finally(() => { setIsLoading(false) })
 
-  const handleActionPublishHide = (path: string) => ajax(path, { method: 'POST' })
+  const handleActionPublishHide = (path: string) => ajax<{ plan: string }>(path, { method: 'POST' })
     .then(data => data.json()
-      .then((res: { notice: string; plan: string; error: string }) => {
+      .then((res) => { /* eslint-disable @typescript-eslint/no-non-null-assertion -- FIXME */
         if (data.status === 200) {
-          flash.notice(res.notice)
+          flash.notice(res.notice!)
           const newPlan = JSON.parse(res.plan) as Plan
           const i = plans.findIndex(p => p.id === newPlan.id)
           plans[i] = newPlan
           setPlans(plans)
         } else if (data.status === 406) {
-          flash.error(res.error)
+          flash.error(res.error!)
         }
       })
     )

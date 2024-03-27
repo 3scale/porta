@@ -57,6 +57,7 @@ describe('#ajaxJSON', () => {
       body: params,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -77,6 +78,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -89,6 +91,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -101,6 +104,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
