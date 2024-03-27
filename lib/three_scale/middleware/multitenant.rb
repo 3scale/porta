@@ -85,10 +85,10 @@ module ThreeScale
       end
 
       module EnforceTenant
-        # adding after_initialize does not work, it would have to be done for every model
-        def after_initialize
-          enforce_tenant!
-          super if defined?(super)
+        extend ActiveSupport::Concern
+
+        included do
+          after_initialize :enforce_tenant!
         end
 
         private
