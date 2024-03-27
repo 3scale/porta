@@ -1,0 +1,14 @@
+- account = local_assigns[:account]
+- plans = local_assigns[:plans]
+
+= form_for account.bought_account_contract, builder: Fields::PatternflyFormBuilder,
+                                            url: admin_buyers_account_contract_path(account),
+                                            html: { method: :put, class: "pf-c-form" } do |form|
+  div class="pf-c-form__group"
+    div class="pf-c-form__group-label"
+      label class="pf-c-form__label" for="cinstance_plan_id"
+        span class="pf-c-form__label-text" Change Plan
+    = form.collection_select :plan_id, plans, :id, :name
+
+  = form.actions do
+    = form.commit_button 'Change', data: { confirm: plan_confirm_message(account.bought_account_plan) }
