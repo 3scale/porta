@@ -1,37 +1,31 @@
-<%- cinstances = @account.bought_cinstances -%>
-<%- cinstance = cinstances.first! if cinstances.count == 1 -%>
+<%- cinstance = local_assigns[:cinstance] %>
 
-<%- if cinstance && can?(:read, cinstance) -%>
-  <div class="dashboard_card round">
-    <div id="applications_widget">
-      <h2>Application</h2>
-      <table class="list">
-        <tr>
-          <th>Name</th>
-          <td>
-            <%= link_to cinstance.name, provider_admin_application_path(cinstance) %>
-          </td>
-        </tr>
+<div id="applications_widget">
+  <table class="list">
+    <tr>
+      <th>Name</th>
+      <td>
+        <%= link_to cinstance.name, provider_admin_application_path(cinstance) %>
+      </td>
+    </tr>
 
-        <%- unless master_on_premises? -%>
-        <tr>
-          <th>Service</th>
-          <td><%= h cinstance.service.name %></td>
-        </tr>
+    <%- unless master_on_premises? -%>
+    <tr>
+      <th>Service</th>
+      <td><%= h cinstance.service.name %></td>
+    </tr>
 
-          <tr>
-            <th>Plan</th>
-            <td><%= h cinstance.plan.name %></td>
-          </tr>
-        <% end %>
+      <tr>
+        <th>Plan</th>
+        <td><%= h cinstance.plan.name %></td>
+      </tr>
+    <% end %>
 
-        <tr>
-          <th>State</th>
-          <td><%= h cinstance.state.to_s.humanize %></td>
-        </tr>
-      </table>
+    <tr>
+      <th>State</th>
+      <td><%= h cinstance.state.to_s.humanize %></td>
+    </tr>
+  </table>
 
-      <%= render 'stats/inlinechart', :cinstance => cinstance, :metrics => cinstance.service.top_level_metrics %>
-    </div>
-  </div>
-<% end %>
+  <%= render 'stats/inlinechart', :cinstance => cinstance, :metrics => cinstance.service.top_level_metrics %>
+</div>
