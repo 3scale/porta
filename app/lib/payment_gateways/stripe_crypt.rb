@@ -16,11 +16,7 @@ module PaymentGateways
       payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
       card = payment_method.card
 
-      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
-      payment_detail.credit_card_partial_number = card.last4
-      payment_detail.credit_card_auth_code      = payment_method.customer
-      payment_detail.payment_method_id          = payment_method_id
-      payment_detail.save
+      update_payment_detail(card, payment_method_id, payment_method)
     end
 
     def create_stripe_setup_intent
@@ -36,6 +32,20 @@ module PaymentGateways
       @customer ||= find_or_create_customer
     end
 
+    def update_billing_address(billing_address)
+      begin
+        Stripe.api_key = api_key  # Set actual Stripe secret key
+        latest_payment_method_id = latest_payment_method_id_for_customer
+        return true unless latest_payment_method_id.present?
+        payment_method = Stripe::PaymentMethod.retrieve(payment_method_id)
+        update_and_save_billing_details(payment_method, billing_address)
+      rescue Stripe::StripeError => stripe_error
+        handle_stripe_error(stripe_error)
+      ensure
+        reset_stripe_api_key
+      end
+    end
+
     private
 
     delegate :payment_detail, to: :account
@@ -43,14 +53,20 @@ module PaymentGateways
     def find_or_create_customer
       customer_id = payment_detail.credit_card_auth_code
       return create_customer if customer_id.blank?
+      retrieve_customer(customer_id)
+    end
 
-      begin
-        customer = Stripe::Customer.retrieve(customer_id, api_key)
-        return create_customer if customer.deleted?
-        customer
-      rescue Stripe::InvalidRequestError
-        create_customer
-      end
+    def update_and_save_billing_details(payment_method, billing_address)
+      update_billing_details(payment_method, billing_address)
+      payment_method.save
+    end
+
+    def retrieve_customer(customer_id)
+      customer = Stripe::Customer.retrieve(customer_id, api_key)
+      return create_customer if customer&.deleted?
+      customer
+    rescue Stripe::InvalidRequestError
+      create_customer
     end
 
     def create_customer
@@ -59,12 +75,38 @@ module PaymentGateways
         email: user.email,
         metadata: { '3scale_account_reference' => buyer_reference }
       }
-
-      Stripe::Customer.create(customer_params, api_key).tap { |stripe_customer| payment_detail.update(credit_card_auth_code: stripe_customer.id) }
+      Stripe::Customer.create(customer_params, api_key).tap do |stripe_customer|
+        payment_detail.update(credit_card_auth_code: stripe_customer.id)
+      end
     end
 
     def api_key
       payment_gateway_options.fetch(:login)
+    end
+
+    def reset_stripe_api_key
+      Stripe.api_key = nil
+    end
+
+    def latest_payment_method_id_for_customer
+      latest_payment_method = Stripe::PaymentMethod.list(
+        customer: customer.id,
+        type: 'card',
+        limit: 1
+      ).data.first&.id
+    end
+
+    def update_billing_details(payment_method, billing_address)
+      payment_method.billing_details = {
+        address: {
+          line1: billing_address[:address1],
+          line2: billing_address[:address2],
+          city: billing_address[:city],
+          state: billing_address[:state],
+          postal_code: billing_address[:zip],
+          country: billing_address[:country]
+        }
+      }
     end
 
     def report_error(message)

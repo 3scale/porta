@@ -28,7 +28,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   def update
     current_account.updating_payment_detail = true
     if current_account.update account_params
-      redirect_to payment_details_path, notice: 'Your billing address was successfully stored'
+      update_billing_address_on_stripe(account_params)
     else
       flash[:notice] = 'Failed to update your billing address data. Check the required fields'
       assign_drops countries: Liquid::Drops::Country.wrap(Country.all)
@@ -73,5 +73,16 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   def account_params
     allowed_fields = %i[name address1 address2 city country state phone zip first_name last_name]
     params.require(:account).permit(billing_address: allowed_fields)
+  end
+
+  def update_billing_address_on_stripe(billing_address)
+    stripe_crypt = PaymentGateways::StripeCrypt.new(current_user)
+    if stripe_crypt.update_billing_address(billing_address['billing_address'])
+      redirect_to payment_details_path, notice: 'Your billing address was successfully stored'
+    else
+      flash[:notice] = "Failed to update billing address on Stripe. #{stripe_crypt.errors.full_messages.to_sentence}"
+      assign_drops(countries: Liquid::Drops::Country.wrap(Country.all))
+      render template: 'accounts/payment_gateways/edit'
+    end
   end
 end

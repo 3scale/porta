@@ -41,6 +41,19 @@ module PaymentGateways
       Rails.logger.error(msg)
     end
 
+    def update_payment_detail(card, payment_method_id, payment_method)
+      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
+      payment_detail.credit_card_partial_number = card.last4
+      payment_detail.credit_card_auth_code      = payment_method.customer
+      payment_detail.payment_method_id          = payment_method_id
+      payment_detail.save
+    end
+
+    def handle_stripe_error(stripe_error)
+      report_error("Failed to update billing address on Stripe: #{stripe_error.message}")
+      false
+    end
+
     private
 
     def log_gateway_action_explicit(gateway, action)
