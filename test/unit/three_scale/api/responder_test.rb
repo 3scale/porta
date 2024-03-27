@@ -18,7 +18,7 @@ class ThreeScale::Api::ResponderTest < ActiveSupport::TestCase
 
   test '#to_format PATCH' do
     @controller.formats = [:json]
-    @controller.request = ActionDispatch::Request.new('REQUEST_METHOD' => 'PATCH')
+    @controller.request = ActionDispatch::Request.new('REQUEST_METHOD' => 'PATCH', 'rack.input' => StringIO.new)
 
     responder = ThreeScale::Api::Responder.new(@controller, ['foo'], representer: Representer, plain: 'foo')
 

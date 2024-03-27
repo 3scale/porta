@@ -7,16 +7,11 @@ module System
     class ConnectionError < ActiveRecord::NoDatabaseError; end
     module_function
 
-    def configuration_specification
-      @configuration_specification ||= read_configuration_specification
-    end
-
-    def read_configuration_specification
-      configurations = Rails.application.config.database_configuration
-      resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(configurations)
-      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call
-
-      resolver.spec(resolver.configurations[spec])
+    def database_config
+      @database_config ||= begin
+        configurations = Rails.application.config.database_configuration
+        ActiveRecord::DatabaseConfigurations.new(configurations).configs_for(env_name: Rails.env).first
+      end
     end
 
     def adapter
@@ -24,19 +19,19 @@ module System
     end
 
     def adapter_method
-      ActiveSupport::StringInquirer.new(configuration_specification.adapter_method)
+      @adapter_method ||= ActiveSupport::StringInquirer.new(database_config.adapter)
     end
 
     def oracle?
-      adapter_method.oracle_enhanced_connection?
+      adapter_method.oracle_enhanced?
     end
 
     def mysql?
-      adapter_method.mysql2_connection?
+      adapter_method.mysql2?
     end
 
     def postgres?
-      adapter_method.postgresql_connection?
+      adapter_method.postgresql?
     end
 
     def execute_procedure(name, *params)
