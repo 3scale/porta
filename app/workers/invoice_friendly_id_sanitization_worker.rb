@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InvoiceFriendlyIdSanitizationWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   sidekiq_options queue: :billing
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DeletePlainObjectWorker < ApplicationJob
-  include Sidekiq::Throttled::Worker
+  include Sidekiq::Throttled::Job
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError, ActiveRecord::RecordNotFound
   rescue_from(ActiveJob::DeserializationError, ActiveRecord::RecordNotFound) do |exception|

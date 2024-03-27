@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BackendDeleteServiceWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def self.enqueue(event)
     perform_async(event.event_id)

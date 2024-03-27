@@ -6,6 +6,7 @@ module ThreeScale
       raw_config = (redis_config || {}).symbolize_keys
       sentinels = raw_config.delete(:sentinels).presence
       raw_config.delete_if { |key, value| value.blank? }
+      raw_config[:size] ||= raw_config.delete(:pool_size) if raw_config.key?(:pool_size)
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels

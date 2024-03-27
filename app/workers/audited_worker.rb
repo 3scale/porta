@@ -1,5 +1,5 @@
 class AuditedWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def perform(attributes)
     audit = Audited.audit_class.new

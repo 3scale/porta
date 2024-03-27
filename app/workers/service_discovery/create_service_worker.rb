@@ -2,7 +2,7 @@
 
 module ServiceDiscovery
   class CreateServiceWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
 
     def perform(account_id, cluster_namespace, cluster_service_name, user_id=nil)
       user = User.where(id: user_id).first

@@ -23,7 +23,7 @@ class ReportTrafficWorker
     end
   end
 
-  include Sidekiq::Worker
+  include Sidekiq::Job
   sidekiq_options queue: :low
 
   DISCARD_CODES = 200...300

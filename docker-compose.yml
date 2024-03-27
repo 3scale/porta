@@ -89,7 +89,7 @@ services:
       - RACK_ENV=production
 
   redis:
-    image: redis:alpine
+    image: redis:6.2-alpine
     container_name: redis-compose
     ports:
       - "6379:6379"

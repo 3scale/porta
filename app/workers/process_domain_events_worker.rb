@@ -1,5 +1,5 @@
 class ProcessDomainEventsWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def perform(event_id)
     event = EventStore::Repository.find_event!(event_id)

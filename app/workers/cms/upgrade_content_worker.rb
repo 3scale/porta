@@ -1,10 +1,10 @@
 class CMS::UpgradeContentWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   sidekiq_options queue: :low
 
   class ExpandWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
     sidekiq_options queue: :low
 
     def perform(provider_id, kind)

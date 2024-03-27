@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SignupWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
   sidekiq_options queue: :critical
 
   def self.enqueue(provider)
@@ -19,7 +19,7 @@ class SignupWorker
   end
 
   class SampleDataWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
     sidekiq_options queue: :critical
 
     def perform(provider_id)
@@ -37,7 +37,7 @@ class SignupWorker
   end
 
   class ImportSimpleLayoutWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
     sidekiq_options queue: :critical
 
     def perform(provider_id)
