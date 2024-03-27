@@ -4,7 +4,7 @@ class StateMachine::InvalidTransitionRepresenter < ThreeScale::Representer
   property :from
   property :event
   property :error, getter: ->(*) { machine.errors_for(object) }
-  property :object, extend: ->(object, *) { "#{object.class}Representer".constantize }
+  property :object, extend: ->(options) { "#{options[:input].class}Representer".constantize }
 
   class JSON < StateMachine::InvalidTransitionRepresenter
     include Roar::JSON

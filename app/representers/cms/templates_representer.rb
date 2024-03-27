@@ -3,5 +3,5 @@ module CMS::TemplatesRepresenter
 
   wraps_collection :collection
 
-  items extend: ->(template, *) { "#{template.type}Representer".constantize }
+  items extend: ->(options) { "#{options[:input].type}Representer".constantize }
 end

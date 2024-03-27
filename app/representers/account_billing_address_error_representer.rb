@@ -1,7 +1,7 @@
 class AccountBillingAddressErrorRepresenter < ThreeScale::Representer
   wraps_resource :error
 
-  property :object, extend: ->(object, *) { "#{object.class}Representer".constantize }
+  property :object, extend: ->(options) { "#{options[:input].class}Representer".constantize }
   property :errors, getter: ->(*) { message }
 
   class JSON < AccountBillingAddressErrorRepresenter

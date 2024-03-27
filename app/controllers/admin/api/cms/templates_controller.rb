@@ -21,7 +21,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def index
     templates = cms_templates.scope_search(search).paginate(pagination_params)
     short = !content?
-    respond_with(templates, short: short, representer: CMS::TemplatesRepresenter)
+    respond_with(templates, representer: CMS::TemplatesRepresenter, user_options: { short: short })
   end
 
   # Template Create

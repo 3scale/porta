@@ -24,17 +24,13 @@ module ThreeScale
     protected
 
     def merge_errors
-      definitions = property_definitions.values
-      definitions.each do |definition|
+      schema.each do |value|
+        definition = value.instance_values['options']
         model = (on = definition[:on]) ? mapper[on] : self.model
         model.errors[definition[:private_name]].each do |error|
-          self.errors.add(definition.name, error)
+          errors.add(definition[:name], error)
         end
       end
-    end
-
-    def property_definitions
-      self.class.representer_class.representable_attrs[:definitions]
     end
 
     module ClassMethods
