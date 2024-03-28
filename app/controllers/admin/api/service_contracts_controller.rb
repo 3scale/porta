@@ -12,10 +12,11 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   # POST /admin/api/accounts/:account_id/service_contracts.xml
   def create
     service_contract = account.bought_service_contracts.create(plan: service_plan)
+    contract_attributes = service_contract.attributes
 
     respond_to do |format|
-      format.json { render json: service_contract.attributes, status: :created }
-      format.xml { render xml: service_contract.attributes, status: :created }
+      format.json { render json: contract_attributes, status: :created }
+      format.xml { render xml: contract_attributes, status: :created }
     end
   end
 
