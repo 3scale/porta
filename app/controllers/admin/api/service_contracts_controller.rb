@@ -6,6 +6,19 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
+  before_action :validate_same_service, only: :update
+
+  # Service Subscription Create
+  # POST /admin/api/accounts/:account_id/service_contracts.xml
+  def create
+    service_contract = account.bought_service_contracts.create(plan: service_plan)
+    contract_attributes = service_contract.attributes
+
+    respond_to do |format|
+      format.json { render json: contract_attributes, status: :created }
+      format.xml { render xml: contract_attributes, status: :created }
+    end
+  end
 
   # Service Subscription List
   # GET /admin/api/accounts/{account_id}/service_contracts.xml
@@ -21,14 +34,42 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
     respond_with(service_subscription.unsubscribe(service_contract))
   end
 
-  protected
+  # Service Subscription Update
+  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}.xml
+  def update
+    service_contract.change_plan!(service_plan)
+    respond_with(service_contract)
+  end
+
+  # Service Subscription Show
+  # GET /admin/api/accounts/:account_id/service_contracts/:id.xml
+  def show
+    respond_with service_contract
+  end
+
+  private
 
   def account
     @account ||= current_account.buyers.find params.require(:account_id)
   end
 
   def service_contract
-    @service_contract ||= account.bought_service_contracts.find params.require(:id)
+    @service_contract ||= account.bought_service_contracts.find(params.require(:id))
   end
 
+  def service_plan
+    @service_plan ||= ServicePlan.provided_by(current_account).find(service_contract_plan_id)
+  end
+
+  def service_contract_plan_id
+    @service_contract_plan_id ||= service_contract_params[:plan_id]
+  end
+
+  def service_contract_params
+    @service_contract_params ||= params.permit(service_contract: [:plan_id]).fetch(:service_contract)
+  end
+
+  def validate_same_service
+    render_error('Service plan must belong to the same product', status: :unprocessable_entity) unless service_plan.issuer == service_contract.issuer
+  end
 end
