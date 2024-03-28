@@ -11,7 +11,12 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   # Service Subscription Create
   # POST /admin/api/accounts/:account_id/service_contracts.xml
   def create
-    respond_with account.bought_service_contracts.create(plan: service_plan)
+    service_contract = account.bought_service_contracts.create(plan: service_plan)
+
+    respond_to do |format|
+      format.json { render json: service_contract.attributes, status: :created }
+      format.xml { render xml: service_contract.attributes, status: :created }
+    end
   end
 
   # Service Subscription List
