@@ -67,7 +67,7 @@ RUN bundle config set --local without development:test:licenses:assets \
     && mkdir -p db/sphinx tmp/prometheus-client-mmap-dir \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && rm -f log/*.log \
-    && chmod g+w /opt/system/config
+    && chmod g+w /opt/system /opt/system/config
 
 # Bundler runs git commands on git dependencies
 # https://bundler.io/guides/git.html#local-git-repos
