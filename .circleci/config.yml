@@ -232,6 +232,7 @@ commands: # reusable commands with parameters
             echo "Running gems install for database: $DB"
             echo "$(bundle version)"
             bundle config set --local deployment 'true'
+            bundle config build.nokogiri --use-system-libraries
             bundle check || bundle install
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
