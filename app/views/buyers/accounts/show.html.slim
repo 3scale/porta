@@ -8,107 +8,55 @@
         ' Account: #{@account.org_name}
         - if can? :update, @account
           = link_to 'Edit', edit_admin_buyers_account_path(@account), class: 'action edit'
-#twoCol.equal-width
-  .left
-    .dashboard_card.round aria-label="Account details"
-      table.list
-        tr
-          th = @account.field_label("org_name")
-          td
-            = @account.field_value("org_name")
-            - if can? :impersonate, @account
-              => link_to 'Impersonate',
-                         admin_buyers_account_impersonation_path(@account),
-                         class: 'action bolt', method: 'post', target: '_blank'
-            => link_to 'Send message',
-                       new_provider_admin_messages_outbox_path(to: @account),
-                       class: 'action message fancybox'
-        - if current_account.master? && @account.provider?
-          tr
-            th Public domain
-            td = link_to @account.external_domain, public_domain(@account), target: "_blank"
-          tr
-            th Admin domain
-            td = link_to @account.external_admin_domain,
-                         provider_admin_dashboard_url(host: @account.external_admin_domain),
-                         target: "_blank"
-        - if @account.admins.present?
-          tr
-            th Administrator
-            td
-              => @account.admin_user_display_name
-              - admin_user_email = @account.admin_user.email
-              - if admin_user_email.present?
-                | (#{mail_to admin_user_email})
-        tr
-          th Signed up on
-          td = @account.created_at.to_s(:long)
-        = fields_definitions_rows @account,
-                                  %w{org_name org_legaladdress org_legaladdress_cont city state_region}
-        - unless @account.org_legaladdress.blank? \
-                 && @account.org_legaladdress_cont.blank? \
-                 && @account.city.blank? && @account.state_region.blank? \
-                 && @account.country.try(:name).blank?
-          tr
-            th Address
-            td = account_address(@account)
-        tr
-          th Status
-          td
-            => account_states_info(@account)
-            - if @account.pending?
-              => fancy_button_to 'Approve',
-                                 approve_admin_buyers_account_path(@account),
-                                 method: :post,
-                                 class: 'approve action'
-              => fancy_button_to 'Reject',
-                                 reject_admin_buyers_account_path(@account),
-                                 method: :post,
-                                 class: 'reject action'
-            - unless @account.suspended_or_scheduled_for_deletion?
-              = action_link_to 'Suspend',
-                                suspend_admin_buyers_account_path(@account),
-                                method: :post,
-                                data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
-                                class: 'action suspend'
-            - if can?(:resume, @account) && @account.can_resume?
-              = action_link_to 'Resume',
-                               resume_admin_buyers_account_path(@account),
-                               method: :post,
-                               data: { confirm: 'Are you sure?', disable_with: 'resuming…' },
-                               class: 'action resume'
-    - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
-      = render 'master/providers/plans/widget', provider: @account
-    - if can?(:manage, :finance)
-      .dashboard_card.round
-        = render 'monthly_charging', account: @account
 
-  .right_narrow
-    - if account_plans_management_visible?
-      = render partial: 'account_plan',
-               locals: { \
-                 plan: @account.bought_account_plan,
-                 contract:  @account.bought_account_contract \
-               }
+div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
+  / Left column
+  div class="pf-l-grid__item"
+    div class="pf-l-flex pf-m-column pf-m-flex-1"
+      div class="pf-l-flex__item"
+        div class="pf-c-card" aria-label="Account details"
+          div class="pf-c-card__body"
+            = render partial: 'account_details', locals: { account: @account }
 
-      - if can?(:manage, :plans) \
-           && @account.provider_account.account_plans.stock.published.size > 1
-        .dashboard_card.round
-          h3
-            label for="cinstance_plan_id" Change Plan
+      - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
+        div class="pf-l-flex__item"
+          = render 'master/providers/plans/widget', provider: @account
 
-          = form_for @account.bought_account_contract,
-                    url: admin_buyers_account_contract_path(@account),
-                    html: { method: :put, class: "formtastic" } do |form|
-            = form.collection_select :plan_id,
-                                     @available_account_plans,
-                                     :id,
-                                     :name
-            fieldset.actions
-              ol
-                li.commit
-                  = form.submit 'Change',
-                                data: { confirm: plan_confirm_message(@account.bought_account_plan) },
-                                class: "pf-c-button pf-m-primary"
+      - if can?(:manage, :finance)
+        div class="pf-l-flex__item"
+          div class="pf-c-card"
+            div class="pf-c-card__title" Billing Status
+            div class="pf-c-card__body"
+              = render 'monthly_charging', account: @account
+  / Right column
+  div class="pf-l-grid__item"
+    div class="pf-l-flex pf-m-column pf-m-flex-1"
+      - if account_plans_management_visible?
+        div class="pf-l-flex__item"
+          div class="pf-c-card"
+            div class="pf-c-card__body"
+              = render partial: 'account_plan', locals: { plan: @account.bought_account_plan,
+                                                          contract:  @account.bought_account_contract }
 
-    = render 'buyers/applications/widget', account: @account
+        - if can?(:manage, :plans) && @account.provider_account.account_plans.stock.published.size > 1
+          div class="pf-l-flex__item"
+            div class="pf-c-card"
+              div class="pf-c-card__body"
+                = render partial: 'change_plan', locals: { account: @account,
+                                                           plans: @available_account_plans }
+
+      - cinstances = @account.bought_cinstances
+      - cinstance = cinstances.first! if cinstances.count == 1
+      - if cinstance && can?(:read, cinstance)
+        div class="pf-l-flex__item"
+          div class="pf-c-card"
+            div class="pf-c-card__title" Application
+            div class="pf-c-card__body"
+              = render partial: 'buyers/applications/widget', locals: { cinstance: cinstance }
+
+/ HACK: This is old style from dashboard_card. Remove it once table.list is replaced with Patternfly
+css:
+  table.list tr:last-child th,
+  table.list tr:last-child td {
+    border-bottom: none;
+  }
