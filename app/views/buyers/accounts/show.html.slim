@@ -20,9 +20,7 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
 
       - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
         div class="pf-l-flex__item"
-          div class="pf-c-card"
-            div class="pf-c-card__body"
-              = render 'master/providers/plans/widget', provider: @account
+          = render 'master/providers/plans/widget', provider: @account
 
       - if can?(:manage, :finance)
         div class="pf-l-flex__item"
