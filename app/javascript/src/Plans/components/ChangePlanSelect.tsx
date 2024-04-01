@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardTitle,
   Form
 } from '@patternfly/react-core'
 
@@ -28,6 +29,7 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
 
   return (
     <Card id="change_plan_card">
+      <CardTitle>Change plan</CardTitle>
       <CardBody>
         <Form
           acceptCharset="UTF-8"
@@ -42,7 +44,6 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
             fieldId="cinstance_plan_id"
             item={plan}
             items={applicationPlans}
-            label={<h3>Change plan</h3>}
             name="cinstance[plan_id]"
             ouiaId="Change plan"
             placeholderText="Select plan"

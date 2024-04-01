@@ -1,0 +1,33 @@
+- app = local_assigns[:app]
+
+dl class="pf-c-description-list pf-m-horizontal" aria-label="Application details list"
+  div class="pf-c-description-list__group"
+    dt class="pf-c-description-list__term"
+      span class="pf-c-description-list__text" Account
+    dd class="pf-c-description-list__description"
+      div class="pf-c-description-list__text"
+        - account = app.buyer_account
+        = link_to account.name, admin_buyers_account_path(account)
+
+  - if app.defined_fields.present?
+    - for field in app.defined_fields.reject{ |f| %w{name}.include? f.name }.each
+      - method = field.name
+      - if app.field(field.name).present? && field.visible_for?(current_user) && app.field_value(method.to_s).present?
+          div class="pf-c-description-list__group"
+            dt class="pf-c-description-list__term"
+              span class="pf-c-description-list__text" = app.field_label(method.to_s)
+            dd class="pf-c-description-list__description"
+              div class="pf-c-description-list__text"
+                = h(app.field_value(method.to_s))
+
+  - unless master_on_premises?
+    div class="pf-c-description-list__group"
+      dt class="pf-c-description-list__term"
+        span class="pf-c-description-list__text" Service
+      dd class="pf-c-description-list__description"
+        div class="pf-c-description-list__text"
+          - service = app.service
+          = link_to service.name, admin_service_path(service)
+
+  = render 'state'
+  = render 'trial'

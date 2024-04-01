@@ -72,12 +72,9 @@ table.list {
   .feature {
     td,
     th {
-      width: 60%;
-
       &:last-child {
         padding-right: 0;
         text-align: right;
-        width: 40%;
       }
     }
   }
