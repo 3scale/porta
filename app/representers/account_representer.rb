@@ -18,8 +18,8 @@ module AccountRepresenter
   end
 
   with_options(if: ->(*) { provider? }) do
-    property :admin_domain # TODO
-    property :domain # TODO
+    property :external_admin_domain, as: :admin_domain
+    property :external_domain, as: :domain
     property :admin_base_url
     property :base_url
     property :from_email
