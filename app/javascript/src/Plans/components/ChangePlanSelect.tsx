@@ -13,8 +13,6 @@ import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { IRecord as Plan } from 'Types'
 
-import './ChangePlanSelect.scss'
-
 interface Props {
   applicationPlans: Plan[];
   path: string;
@@ -42,7 +40,7 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
             fieldId="cinstance_plan_id"
             item={plan}
             items={applicationPlans}
-            label={<h3>Change plan</h3>}
+            label="Change plan"
             name="cinstance[plan_id]"
             ouiaId="Change plan"
             placeholderText="Select plan"
