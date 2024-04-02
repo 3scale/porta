@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardTitle,
   Form
 } from '@patternfly/react-core'
 
@@ -13,8 +12,6 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { IRecord as Plan } from 'Types'
-
-import './ChangePlanSelect.scss'
 
 interface Props {
   applicationPlans: Plan[];
@@ -29,7 +26,6 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
 
   return (
     <Card id="change_plan_card">
-      <CardTitle>Change plan</CardTitle>
       <CardBody>
         <Form
           acceptCharset="UTF-8"
@@ -44,6 +40,7 @@ const ChangePlanSelect: React.FunctionComponent<Props> = ({
             fieldId="cinstance_plan_id"
             item={plan}
             items={applicationPlans}
+            label="Change plan"
             name="cinstance[plan_id]"
             ouiaId="Change plan"
             placeholderText="Select plan"

@@ -26,7 +26,7 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
 
       - if @cinstance.service.referrer_filters_required?
         div class="pf-l-flex__item"
-          div class="pf-c-card"
+          div class="pf-c-card" id="referrer_filters"
             div class="pf-c-card__title" Referrer filters
             div class="pf-c-card__body"
               = render partial: 'provider/admin/referrer_filters/widget', locals: { cinstance: @cinstance }
