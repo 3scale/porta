@@ -14,7 +14,7 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
   def show
     authorize! :show, user
 
-    respond_with user.member_permissions, user: user
+    respond_with user.member_permissions, user_options: { user: user }
   end
 
   # User Permissions Update
@@ -23,7 +23,7 @@ class Admin::Api::MemberPermissionsController < Admin::Api::BaseController
     authorize! :update_permissions, user
 
     if user.update(permission_params)
-      respond_with user.member_permissions, user: user
+      respond_with user.member_permissions, user_options: { user: user }
     else
       # errors are stored in the 'user' model
       respond_with(user)
