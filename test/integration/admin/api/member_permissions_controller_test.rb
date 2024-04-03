@@ -20,7 +20,11 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test 'get' do
     get admin_api_permissions_path(id: user.id, format: :json, access_token: token)
+    permissions = JSON.parse(response.body)['permissions']
+
     assert_response :success
+    assert_equal %w[allowed_sections allowed_service_ids links role user_id], permissions.keys.sort
+    assert_equal %w[href rel], permissions['links'].first.keys.sort
   end
 
   test "PUT: enable 'analytics' section for service 1" do
