@@ -1,7 +1,6 @@
 require 'roar/decorator'
 require 'roar/representer'
 require 'roar/hypermedia'
-require 'representable/binding'
 
 class ThreeScale::Representer < Roar::Decorator
   include Roar::Representer
@@ -22,8 +21,4 @@ class ThreeScale::Representer < Roar::Decorator
     end
   end
   extend Wrapping
-
-  def representable_map(options, format)
-    Representable::Binding::Map.new(representable_bindings_for(format, options))
-  end
 end
