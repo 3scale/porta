@@ -3,16 +3,16 @@
 (function($) {
 
   $.fn.ajaxUpload = function() {
-    this.live("submit", function() {
+    $(document).on('submit', this.selector, function () { // FIXME: don't use .selector on jquery objects (jquery 1.9)
       var form   = $(this);
       var iframe = createIFrame();
 
       form.attr("target", iframe.name);
-    
+
       // HACK: force :format=js (Rails only!)
       form.attr("action", form.attr("action").replace(/(\.[^\.\/]+)?$/, '.js'));
 
-	    var toDeleteFlag = false;	
+	    var toDeleteFlag = false;
 
       $(iframe).load(function() {
   	    if (iframe.src == "about:blank") {
@@ -22,34 +22,34 @@
 			  		setTimeout($(iframe).remove, 0);
 				  }
   				return;
-	  		}				
-				
+	  		}
+
   			var doc = iframe.contentDocument ? iframe.contentDocument : frames[iframe.id].document;
         var response = doc.body.innerHTML;
         response = response.replace(/(^<[^>]+>)|(<\/[^>]+>$)/g, '')
                            .replace(/&lt;/g,'<')
                            .replace(/&gt;/g,'>')
-                           .replace(/&amp;/g,'&'); 
+                           .replace(/&amp;/g,'&');
 
         form.find("input[type=file]").val("");
         eval(response);
-				
+
   			// Reload blank page, so that reloading main page
 	  		// does not re-submit the post. Also, remember to
 		  	// delete the frame
-			  toDeleteFlag = true;				
+			  toDeleteFlag = true;
   			iframe.src = "about:blank"; //load event fired
       });
     });
   };
-  
+
   var createIFrame = function() {
 		// unique name
 		// We cannot use getTime, because it sometimes return
 		// same value in safari :(
 		var id = getUID();
-		
-		// Remove ie6 "This page contains both secure and nonsecure items" prompt 
+
+		// Remove ie6 "This page contains both secure and nonsecure items" prompt
 		// http://tinyurl.com/77w9wh
     return $("<iframe>")
       .attr("src", "javascript:false;")
@@ -65,6 +65,6 @@
     return function() {
       return 'ajax-upload-' + id++;
     };
-  }(); 
+  }();
 
 })(jQuery);

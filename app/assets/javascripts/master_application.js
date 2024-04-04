@@ -119,7 +119,7 @@
 	    return false;
     });
 
-    $('.metric_slot_close_button').live('click', function(){
+    $(document).on('click', '.metric_slot_close_button', function () {
       $('.metrics-subtable-toggle').removeClass('selected');
       $('.metric_slot, .plans_widget').remove();
       return false;
@@ -176,7 +176,7 @@
     // Behaviour stuff for plans management
     (function(){
       var $img = $('#infinity_image');
-      $('input.watch_infinity').live('keypress', function(){
+      $(document).on('keypress', 'input.watch_infinity', function () {
         this.value == '' ? $('#infinity_image').show() : $('#infinity_image').hide();
       });
 

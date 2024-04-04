@@ -1,5 +1,5 @@
 <%= javascript_tag do %>
-  $('#actions button.action').live('click', function () {
+  $(document).on('click', '#actions button.action', function () {
     return confirm('Are you sure?');
   });
 <% end %>
