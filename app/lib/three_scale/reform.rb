@@ -28,7 +28,7 @@ module ThreeScale
         definition = value.instance_values['options']
         model = (on = definition[:on]) ? mapper[on] : self.model
         model.errors[definition[:private_name]].each do |error|
-          errors.add(definition[:name], error)
+          errors.add(definition[:name].to_sym, error)
         end
       end
     end

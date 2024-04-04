@@ -56,5 +56,6 @@ class Onboarding::ApiFormTest < ActiveSupport::TestCase
     refute api.save
 
     assert api.errors.to_a.present?
+    assert_equal api.model[:proxy].errors[:api_backend], api.errors[:backend]
   end
 end
