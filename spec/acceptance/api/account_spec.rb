@@ -99,7 +99,7 @@ resource "Account" do
     end
 
     post '/admin/api/signup.:format', action: :create do
-      let(:serialized) { representer.send(serialization_format, with_apps: true) }
+      let(:serialized) { representer.send(serialization_format, user_options: { with_apps: true }) }
 
       parameter :org_name, 'Organization Name of the buyer account'
       parameter :username, 'Username od the admin user (on the new buyer account)'

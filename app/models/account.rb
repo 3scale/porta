@@ -516,7 +516,7 @@ class Account < ApplicationRecord
         bought_plans.to_xml(builder: xml, root: 'plans')
         users.to_xml(builder: xml, root: 'users')
 
-        bought_cinstances.to_xml(builder: xml, root: 'applications') if options[:with_apps]
+        bought_cinstances.to_xml(builder: xml, root: 'applications') if options.dig(:user_options, :with_apps)
       end
     end
 
