@@ -12,7 +12,6 @@
 //= require application
 //= require vendor/jquery.iframe-post-form.js
 //= require vendor/colorbox/jquery.colorbox.js
-//= require vendor/farbtastic
 //= require threescale
 //= require vendor/pluralize
 //= require master_application
