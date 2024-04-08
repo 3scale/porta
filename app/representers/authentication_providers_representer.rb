@@ -8,7 +8,7 @@ class AuthenticationProvidersRepresenter < ThreeScale::CollectionRepresenter
   end
 
   class XML < AuthenticationProvidersRepresenter
-    include Roar::XML
+    include Representable::XML::Collection
     wraps_resource :authentication_providers
     items extend: AuthenticationProviderRepresenter
   end

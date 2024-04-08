@@ -10,7 +10,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
     @signup_result = Signup::DeveloperAccountManager.new(current_account).create(signup_params)
 
     check_creation_errors
-    respond_with(@signup_result.account, with_apps: true)
+    respond_with(@signup_result.account, user_options: { with_apps: true })
   end
 
   private
