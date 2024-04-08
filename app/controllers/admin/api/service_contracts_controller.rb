@@ -3,6 +3,8 @@
 class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   wrap_parameters ServiceContract
   representer ServiceContract
+  represents :json, entity: ::ServiceContractRepresenter, collection: ::ServiceContractsRepresenter::JSON
+  represents :xml, entity: ::ServiceContractRepresenter, collection: ::ServiceContractsRepresenter::XML
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
