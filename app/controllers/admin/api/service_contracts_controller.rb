@@ -8,7 +8,6 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
-  before_action :validate_same_service, only: :update
 
   # Service Subscription Create
   # POST /admin/api/accounts/:account_id/service_contracts.xml
@@ -63,9 +62,5 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
 
   def service_contract_params
     @service_contract_params ||= params.permit(service_contract: [:plan_id]).fetch(:service_contract)
-  end
-
-  def validate_same_service
-    render_error('Service plan must belong to the same product', status: :unprocessable_entity) unless service_plan.issuer == service_contract.issuer
   end
 end

@@ -1188,6 +1188,9 @@ en:
               unsuspended_applications:
                 one: 'There is 1 unsuspended application subscribed to the service'
                 other: 'There are %{count} unsuspended applications subscribed to the service'
+            plan:
+              service_conflict: 'must belong to the same product'
+
         invoice:
           attributes:
             state:
