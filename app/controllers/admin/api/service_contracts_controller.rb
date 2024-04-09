@@ -29,11 +29,11 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
     respond_with(service_subscription.unsubscribe(service_contract))
   end
 
-  # Service Subscription Update
-  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}.xml
-  def update
-    service_contract.change_plan!(service_plan)
-    respond_with(service_contract)
+  # Service Subscription Change Plan
+  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}/change_plan.xml
+  def change_plan
+    service_contract.change_plan(service_plan)
+    respond_with(service_contract, serialize: service_plan, representer: ServicePlanRepresenter)
   end
 
   # Service Subscription Show
