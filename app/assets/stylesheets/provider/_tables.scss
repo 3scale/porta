@@ -48,14 +48,6 @@ table:not(.pf-c-table) button.action {
   display: inline-block;
 }
 
-table.list {
-  td,
-  th {
-    border-bottom: $border-width solid $border-color;
-    font-weight: $font-weight-normal;
-  }
-}
-
 .u-fiveEqualColumns {
   td,
   th {
@@ -71,29 +63,21 @@ table.list {
 }
 
 table.list {
+  td,
+  th {
+    border-bottom: $border-width solid $border-color;
+    font-weight: $font-weight-normal;
+  }
 
   .feature {
     td,
     th {
-      width: 60%;
-
       &:last-child {
         padding-right: 0;
         text-align: right;
-        width: 40%;
       }
     }
   }
-
-  td,
-  th {
-    width: 40%;
-
-    &:last-child {
-      width: 60%;
-    }
-  }
-
 
   .action:last-child,
   input[type='submit']:last-child {
@@ -102,6 +86,22 @@ table.list {
     height: auto;
     line-height: $line-height-base;
     margin: 0 line-height-times(-1/2) 0 0;
+  }
+
+  border-collapse: collapse;
+  border-color: transparent;
+  margin-bottom: 0;
+  margin-top: 0;
+  width: 100%;
+
+  th {
+    border-bottom: $border-width solid $border-color;
+    padding-right: line-height-times(1/2);
+    text-align: left;
+  }
+
+  &.list-checkmarks tr th {
+    word-break: break-word;
   }
 }
 
@@ -118,14 +118,6 @@ table.mini, table#configs {
 }
 
 // --- components/tables.css ---
-
-table.list {
-  border-collapse: collapse;
-  border-color: transparent;
-  margin-bottom: 0;
-  margin-top: 0;
-  width: 100%;
-}
 
 td.right {
   text-align: right;
@@ -150,12 +142,6 @@ table .select {
 
 table.horizontal th {
   border-bottom: $border-width solid $border-color;
-}
-
-table.list th {
-  border-bottom: $border-width solid $border-color;
-  padding-right: line-height-times(1/2);
-  text-align: left;
 }
 
 table.inverted th {
@@ -200,10 +186,6 @@ td.thhead h3 {
 
 .u-amount {
   text-align: right;
-}
-
-table.list.list-checkmarks tr th {
-  word-break: break-word;
 }
 
 // Overrides

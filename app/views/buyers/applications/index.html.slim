@@ -1,9 +1,7 @@
 - content_for :menu do
   = render '/buyers/accounts/menu'
 
-- content_for :page_header_title_with_button, "Applications for #{@account.name}"
-- content_for :page_header_button_label, 'Create application'
-- content_for :page_header_button_href, create_application_link_href(@account)
+- content_for :page_header_title, "Applications for #{@account.name}"
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'

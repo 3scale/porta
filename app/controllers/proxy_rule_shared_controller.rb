@@ -11,11 +11,6 @@ module ProxyRuleSharedController
     end
   end
 
-  def index
-    @presenter = Api::ProxyRulesIndexPresenter.new(proxy: proxy,
-                                                   params: params)
-  end
-
   def new
     last_position = proxy_rules.maximum(:position) || 0
     next_position = last_position + 1

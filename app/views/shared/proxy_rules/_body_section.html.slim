@@ -1,5 +1,7 @@
+- content_for :page_header_title, 'Mapping Rules'
+
 - content_for :javascripts do
-    = javascript_packs_with_chunks_tag 'table_toolbar'
+  = javascript_packs_with_chunks_tag 'table_toolbar'
 
 div class="pf-c-card"
   table id="mapping_rules" class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Mapping rules table" data-toolbar-props=@presenter.toolbar_props.to_json

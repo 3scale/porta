@@ -1,8 +1,58 @@
 - content_for :page_header_title, 'Edit Backend'
 
-= semantic_form_for @backend_api, url: provider_admin_backend_api_path(@backend_api) do |form|
-  = render partial: 'provider/admin/backend_apis/forms/naming', locals: { form: form }
-  = form.actions do
-    = form.commit_button 'Update Backend'
+div class="pf-l-flex pf-m-column"
+  div class="pf-l-flex__item"
+    div class="pf-c-card"
+      div class="pf-c-card__body"
+        = semantic_form_for @backend_api, builder: Fields::PatternflyFormBuilder,
+                                          url: provider_admin_backend_api_path(@backend_api),
+                                          html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+          = form.input :name, as: :patternfly_input,
+                              input_html: { autofocus: true, required: true }
+          = form.input :system_name, as: :patternfly_input,
+                                     hint: false,
+                                     required: false,
+                                     input_html: { disabled: true }
+          = form.input :description, as: :patternfly_textarea,
+                                    input_html: { rows: 3 }
+          = form.input :private_endpoint, as: :patternfly_input,
+                                          hint: t('formtastic.hints.backend_api.private_endpoint_html'),
+                                          input_html: { required: true }
 
-= render partial: 'provider/admin/backend_apis/forms/delete', locals: { backend_api: @backend_api }
+          = form.actions do
+            = form.commit_button 'Update Backend'
+
+  - if can?(:destroy, @backend_api)
+    div class="pf-l-flex__item"
+      div class="pf-c-card"
+        div class="pf-c-card__title" Backend deletion
+        div class="pf-c-card__body"
+          div.pf-c-content
+            p
+              ' Deleting this backend will
+              strong> irreversibly
+              ' destroy all methods and metrics and mapping rules of this backend.
+              ' It will also delete in the the application plans all limits and pricing rules set on methods and metrics of this backend.
+
+            p
+              strong> Important!
+              ' Proxy configurations of products using this backend (staging and production) will not update automatically after deleting the backend.
+              ' You need to perform this action on each product using the backend, manually via UI or 3scale API.
+
+            - if @backend_api.backend_api_configs.any?
+              p The following products are using this backend:
+              ul
+                - for service in @backend_api.services
+                  li = link_to service.name, admin_service_path(service)
+
+              p
+                ' Before deleting this backend, make sure none of the products above is using it.
+
+            - else
+              p
+                - backend_api_name = j(@backend_api.name)
+                = delete_link_for provider_admin_backend_api_path(@backend_api), data: { confirm: t('.delete_confirmation', name: backend_api_name) },
+                                                                                 method: :delete,
+                                                                                 class: 'pf-c-button pf-m-danger',
+                                                                                 label: t('.delete_link', name: backend_api_name)
+

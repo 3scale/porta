@@ -9,65 +9,51 @@
         = link_to 'Edit', edit_provider_admin_application_path(@cinstance),
                              class: 'action edit'
 
-div#twoCol.equal-width
-  div.left
-    div.dashboard_card.round
-      dl class="pf-c-description-list pf-m-horizontal" aria-label="Application details list"
-        div class="pf-c-description-list__group"
-          dt class="pf-c-description-list__term"
-            span class="pf-c-description-list__text" Account
-          dd class="pf-c-description-list__description"
-            div class="pf-c-description-list__text"
-              - account = @cinstance.buyer_account
-              = link_to account.name, admin_buyers_account_path(account)
+div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
+  / Left column
+  div class="pf-l-grid__item"
+    div class="pf-l-flex pf-m-column pf-m-flex-1"
+      div class="pf-l-flex__item"
+        div class="pf-c-card"
+          div class="pf-c-card__body"
+            = render partial: 'details', locals: { app: @cinstance }
 
-        - if @cinstance.defined_fields.present?
-          - for field in @cinstance.defined_fields.reject{ |f| %w{name}.include? f.name }.each
-            - method = field.name
-            - if @cinstance.field(field.name).present? && field.visible_for?(current_user) && @cinstance.field_value(method.to_s).present?
-                div class="pf-c-description-list__group"
-                  dt class="pf-c-description-list__term"
-                    span class="pf-c-description-list__text" = @cinstance.field_label(method.to_s)
-                  dd class="pf-c-description-list__description"
-                    div class="pf-c-description-list__text"
-                      = h(@cinstance.field_value(method.to_s))
+      div class="pf-l-flex__item" id="application_keys" data-object="cinstance" data-url=(provider_admin_application_path(@cinstance, format: :json))
+        div class="pf-c-card"
+          div class="pf-c-card__title" API Credentials
+          div class="pf-c-card__body"
+            = render partial: 'provider/admin/keys/widget', locals: { cinstance: @cinstance }
 
-        - unless master_on_premises?
-          div class="pf-c-description-list__group"
-            dt class="pf-c-description-list__term"
-              span class="pf-c-description-list__text" Service
-            dd class="pf-c-description-list__description"
-              div class="pf-c-description-list__text"
-                - service = @cinstance.service
-                = link_to service.name, admin_service_path(service)
-        = render 'state'
-        = render 'trial'
-    div.dashboard_card.round#application_keys data-object="cinstance" data-url=(provider_admin_application_path(@cinstance, format: :json))
-      h3 API Credentials
-      = render partial: 'provider/admin/keys/widget',
-               locals: { cinstance: @cinstance }
+      - if @cinstance.service.referrer_filters_required?
+        div class="pf-l-flex__item"
+          div class="pf-c-card" id="referrer_filters"
+            div class="pf-c-card__title" Referrer filters
+            div class="pf-c-card__body"
+              = render partial: 'provider/admin/referrer_filters/widget', locals: { cinstance: @cinstance }
 
+      div class="pf-l-flex__item"
+        div class="pf-c-card"
+          div class="pf-c-card__title" Usage in last 30 days
+          div class="pf-c-card__body"
+            = render 'stats/inlinechart', cinstance: @cinstance,
+                                          metrics: @cinstance.service.metrics.top_level
 
-    - if @cinstance.service.referrer_filters_required?
-      div.dashboard_card.round
-        = render partial: 'provider/admin/referrer_filters/widget',
-               locals: { cinstance: @cinstance }
-
-    div.dashboard_card.round
-      h3 Usage in last 30 Days
-      = render 'stats/inlinechart',
-               cinstance: @cinstance,
-               metrics: @cinstance.service.metrics.top_level
-
-    div.dashboard_card.round
-      h3 Current Utilization
-      = render partial: 'utilization',
-               locals: { utilization: @utilization, cinstance: @cinstance }
+      div class="pf-l-flex__item"
+        div class="pf-c-card"
+          div class="pf-c-card__title" Current utilization
+          div class="pf-c-card__body"
+            = render partial: 'utilization', locals: { utilization: @utilization, cinstance: @cinstance }
 
   - unless master_on_premises?
-    div.right_narrow
-      = render partial: 'plan', locals: { contract: @cinstance }
+    / Right column
+    div class="pf-l-grid__item"
+      div class="pf-l-flex pf-m-column pf-m-flex-1"
+        div class="pf-l-flex__item"
+          div class="pf-c-card"
+            div class="pf-c-card__body"
+              = render partial: 'plan', locals: { contract: @cinstance }
 
-      // HACK: this condition really hurts - more than dancing CanCan
-      - if can?( :manage, :plans) && @cinstance.available_application_plans.size > 0 && !current_account.master?
-        = render 'change_plan'
+        / HACK: this condition really hurts - more than dancing CanCan
+        - if can?( :manage, :plans) && @cinstance.available_application_plans.size > 0 && !current_account.master?
+          div class="pf-l-flex__item"
+            = render 'change_plan'

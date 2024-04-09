@@ -18,7 +18,7 @@ resource 'CMS::Layout' do
 
     context 'when requesting the shorten version' do
       let(:expected_attributes) { %w[id created_at updated_at title system_name liquid_enabled] }
-      let(:serialized) { representer.public_send(serialization_format, short: true) }
+      let(:serialized) { representer.public_send(serialization_format, user_options: { short: true }) }
 
       json(:resource, skip_root_check: true) do
         it { should have_properties(expected_attributes).from(resource) }

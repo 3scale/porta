@@ -8,7 +8,7 @@ resource 'CMS::Section' do
   api 'cms section', format: [:json] do
     get '/admin/api/cms/sections', action: :index do
       let(:collection) { provider.sections.order(:id) }
-      let(:serialized) { representer.public_send(serialization_format, short: true) }
+      let(:serialized) { representer.public_send(serialization_format, user_options: { short: true }) }
     end
 
     get '/admin/api/cms/sections/:id', action: :show

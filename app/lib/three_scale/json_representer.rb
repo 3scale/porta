@@ -19,7 +19,7 @@ module ThreeScale::JSONRepresenter
   # This allows only JSON representers to merge XML content from the models
   def to_node(options)
     builder = ThreeScale::XML::Builder.new(skip_instruct: true)
-    doc = options.fetch(:doc)
+    doc = options.fetch(:doc, Nokogiri::XML::Document.new)
     xml = to_xml(builder: builder)
 
     Nokogiri::XML::Node.new('root', doc).add_child(xml)

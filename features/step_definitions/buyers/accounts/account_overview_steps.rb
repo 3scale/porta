@@ -77,7 +77,7 @@ end
 Then "{string} can be enabled" do |switch|
   within_plan_settings_card do
     accept_confirm do
-      find('td', text: switch).sibling('td', text: 'Denied')
+      find('td', text: switch).sibling('td:last-of-type')
                               .click_button('enable')
     end
   end
@@ -104,15 +104,11 @@ def within_billing_status_card(&block)
 end
 
 def billing_status_card_selector
-  '.dashboard_card #finance-status'
+  '.pf-c-card #finance-status'
 end
 
 def within_plan_settings_card(&block)
-  within plan_settings_card_selector do
+  within '#provider-change-plan .pf-c-card' do
     yield block
   end
-end
-
-def plan_settings_card_selector
-  '.dashboard_card#provider-change-plan'
 end

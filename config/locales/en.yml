@@ -411,6 +411,10 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      backend_apis:
+        edit:
+          delete_link: I understand the consequences, proceed to delete '%{name}' backend
+          delete_confirmation: Are you sure you want to delete the backend '%{name}'?
       keys:
         create:
           success: A new key has been added.
@@ -666,9 +670,6 @@ en:
     applications:
       edit:
         delete_confirmation: Are you sure you want to delete this application?
-    backend_apis:
-      edit:
-        delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
     backend_usages:
       index:
         empty_state:
@@ -1366,6 +1367,11 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      backend_api:
+        system_name: Only ASCII letters, numbers, dashes and underscores are allowed.
+        private_endpoint_html:
+          Private address of your API that will be called by the API gateway.
+          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
       backend_api_config:
         path: Changing the Public Path will only affect this Product.
 
@@ -1450,9 +1456,6 @@ en:
           <span>Make sure to <a href="https://docs.openshift.com/container-platform/3.11/dev_guide/routes.html#creating-routes">add the correct route</a></span>
         endpoint_apicast_2_html: >
           Public address of your API gateway in the %{environment_name} environment.
-        api_backend_https: |
-          Private address of your API that will be called by the API gateway.
-          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
         api_backend_http: |
           Private address of your API that will be called by the API gateway.
         oauth_login_url: |
@@ -1502,6 +1505,9 @@ en:
       account:
         vat_zero_text: Text to show if VAT/Sales Tax is 0%
         payment_gateway_type: Gateway
+
+      backend_api:
+        private_endpoint: Private Base URL
 
       finance/billing_strategy:
         numbering_period: Billing periods for invoice IDs
