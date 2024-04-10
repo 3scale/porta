@@ -7,5 +7,3 @@
 //= require ajax_upload
 //= require autosubmit
 //= require extra_fields
-
-//= require application
