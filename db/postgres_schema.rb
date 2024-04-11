@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_29_072029) do
+ActiveRecord::Schema.define(version: 2024_03_02_090207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,6 @@ ActiveRecord::Schema.define(version: 2024_02_29_072029) do
     t.index ["master"], name: "index_accounts_on_master", unique: true
     t.index ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at"
     t.index ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state"
-    t.index ["provider_account_id"], name: "index_accounts_on_provider_account_id"
     t.index ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at"
     t.index ["self_domain"], name: "index_accounts_on_self_domain", unique: true
     t.index ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at"
@@ -641,7 +640,6 @@ ActiveRecord::Schema.define(version: 2024_02_29_072029) do
     t.index ["buyer_account_id", "state"], name: "index_invoices_on_buyer_account_id_and_state"
     t.index ["buyer_account_id"], name: "index_invoices_on_buyer_account_id"
     t.index ["provider_account_id", "buyer_account_id"], name: "index_invoices_on_provider_account_id_and_buyer_account_id"
-    t.index ["provider_account_id"], name: "index_invoices_on_provider_account_id"
   end
 
   create_table "legal_term_acceptances", force: :cascade do |t|
