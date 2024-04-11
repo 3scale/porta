@@ -68,7 +68,6 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.text "vat_zero_text"
     t.integer "default_account_plan_id", precision: 38
     t.integer "default_service_id", precision: 38
-    t.string "credit_card_authorize_net_payment_profile_token"
     t.integer "tenant_id", precision: 38
     t.string "self_domain"
     t.string "s3_prefix"
