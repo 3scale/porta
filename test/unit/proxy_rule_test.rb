@@ -200,6 +200,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
 
       setup do
         @proxy = FactoryBot.create(:simple_proxy)
+        stub_event_rolledback!
       end
 
       attr_reader :proxy
@@ -218,6 +219,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
         service = FactoryBot.create(:simple_service)
         @backend_api = FactoryBot.create(:backend_api, account: service.account)
         FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service)
+        stub_event_rolledback!
       end
 
       attr_reader :backend_api

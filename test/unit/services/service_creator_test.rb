@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class ServiceCreatorTest < ActiveSupport::TestCase
+
+  setup do
+    stub_event_rolledback!
+  end
+
   test 'service creation without path and endpoint' do
     service = FactoryBot.build(:service)
     creator = ServiceCreator.new(service: service)

@@ -45,6 +45,8 @@ module EventStore
     # and metadata contain timestamp when the event was created
     # https://github.com/rails/rails/issues/18519
     # serialize :metadata, WithGlobalId
+    # TODO: review this statement, because the abovementioned issue is fixed
+    # in Rails 6.0 by https://github.com/rails/rails/pull/32026
 
     attr_readonly :provider_id
 

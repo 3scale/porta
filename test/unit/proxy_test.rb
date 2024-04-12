@@ -749,6 +749,7 @@ class ProxyTest < ActiveSupport::TestCase
     setup do
       @provider = FactoryBot.create(:provider_account)
       @service = @provider.first_service
+      stub_event_rolledback!
     end
 
     attr_reader :provider, :service
