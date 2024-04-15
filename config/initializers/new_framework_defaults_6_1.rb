@@ -6,8 +6,9 @@
 #
 # Read the Guide for Upgrading Ruby on Rails for more info on each option.
 
+# NOTE: set to false in config/application.rb
 # Support for inversing belongs_to -> has_many Active Record associations.
-Rails.application.config.active_record.has_many_inversing = true
+# Rails.application.config.active_record.has_many_inversing = true
 
 # Apply random variation to the delay when retrying failed jobs.
 Rails.application.config.active_job.retry_jitter = 0.15
@@ -16,12 +17,14 @@ Rails.application.config.active_job.retry_jitter = 0.15
 # `before_enqueue`/`before_perform` respectively halts with `throw :abort`.
 Rails.application.config.active_job.skip_after_callbacks_if_terminated = true
 
+# NOTE: will be applied later
 # Specify cookies SameSite protection level: either :none, :lax, or :strict.
 #
 # This change is not backwards compatible with earlier Rails versions.
 # It's best enabled when your entire app is migrated and stable on 6.1.
 # Rails.application.config.action_dispatch.cookies_same_site_protection = :lax
 
+# NOTE: will be applied later
 # Generate CSRF tokens that are encoded in URL-safe Base64.
 #
 # This change is not backwards compatible with earlier Rails versions.

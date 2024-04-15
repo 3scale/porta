@@ -2,6 +2,8 @@
 
 require 'rails_helper'
 
+# NOTE: for some reason Rails 6.1 default has_many_inversing = true affects the behavior tested here.
+# property :value is not added, because AccessToken#show_value? returns false when this config is enabled.
 resource 'AccessToken' do
   let(:resource) { FactoryBot.build(:access_token) }
   let(:expected_properties) { %w[id name scopes permission value] }

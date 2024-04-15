@@ -13,6 +13,7 @@ class DeveloperPortal::Admin::Applications::AccessDetailsControllerTest < Develo
     get :show
 
     assert_not_nil cinstance = assigns(:cinstance)
+    # NOTE: this assertion fails when has_many_inversing = true (Rails 6.1 default)
     assert_equal cinstance.referrer_filters.size, cinstance.referrer_filters.count
   end
 

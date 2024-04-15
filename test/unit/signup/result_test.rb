@@ -26,6 +26,9 @@ module Signup
     test '#valid? returns false if the user is not valid but the account is' do
       user.username = nil
       refute user.valid?
+      # NOTE: With Rails 6.1 default has_many_inversing = true this assertion fails,
+      # because account has errors: {:users=>["invalid"]}
+      # Note that this only happens when the objects are built, and not when created.
       assert account.valid?
       refute signup_result.valid?
     end

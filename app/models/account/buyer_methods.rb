@@ -25,6 +25,7 @@ module Account::BuyerMethods
 
     alias_method :application_contracts, :bought_cinstances
 
+    # This causes issues with the Rails 6.1 default config has_many_inversing = true
     has_many :contracts, foreign_key: :user_account_id, dependent: :destroy
 
     module UniqueAssociation

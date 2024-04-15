@@ -191,6 +191,9 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     assert_in_delta expected_updated_at, @application.updated_at, 1.second
   end
 
+  # NOTE: with Rails 6.1 default has_many_inversing = true this test fails with the issue:
+  # Minitest::UnexpectedError: NoMethodError: undefined method `admins' for nil:NilClass
+  #     app/messengers/contract_messenger.rb:7:in `setup'
   test 'value can include special characters as defined in the RFC 6749' do
     # generate random key with all chars of RFC 6749 except space
     random_key = -> { [*"\x21".."\x7E"].shuffle.join }
@@ -207,6 +210,9 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     assert app_key.errors[:value].present?
   end
 
+  # NOTE: with Rails 6.1 default has_many_inversing = true this test fails with the issue:
+  # Minitest::UnexpectedError: NoMethodError: undefined method `admins' for nil:NilClass
+  #     app/messengers/contract_messenger.rb:7:in `setup'
   test 'is audited' do
     app_key = FactoryBot.build(:application_key)
 
