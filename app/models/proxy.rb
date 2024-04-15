@@ -344,7 +344,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return false unless saved
 
     success = ProxyDeploymentService.call(self)
-    analytics.track('Sandbox Proxy Deploy', success: success)
+    analytics.track('Sandbox Proxy Deploy', { success: success })
     success
   end
 

@@ -5,7 +5,7 @@ class ServiceTokenServiceTest < ActiveSupport::TestCase
     token = ServiceToken.new(value: 'foo', service_id: 42)
 
     ThreeScale::Core::ServiceToken.expects(:save!)
-      .with({ 'foo' => { service_id: 42 } }).returns(true)
+      .with('foo' => { service_id: 42 }).returns(true)
 
     ServiceTokenService.update_backend(token)
   end
