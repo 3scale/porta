@@ -78,6 +78,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/unicorn.rb
 /config/web_hooks.yml
 /config/zync.yml
+/config/*.sphinx.conf
 /db/*.sql
 /db/safe.json
 /db/*.sql*
@@ -102,8 +103,6 @@ C:\\nppdf32Log\\debuglog.txt
 Session.vim
 /TAGS
 /tags
-config/*.sphinx.conf
-config/amazon_s3.yml
 db/sphinx
 public/.com.apple*
 *_flymake.rb
