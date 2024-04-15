@@ -26,15 +26,15 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_response :success
 
       xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('.//service_contracts/service-contract/id').text == @service_contract.id.to_s
+      assert xml.xpath('.//service_contract/id').text == @service_contract.id.to_s
     end
 
-    def test_show # to get a service contract
+    def test_show
       get admin_api_account_service_contract_path(account_id: @buyer.id, format: :xml, access_token: @token, id: @service_contract.id)
       assert_response :success
 
       xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('//service-contract/id').text == @service_contract.id.to_s
+      assert xml.xpath('.//id').text == @service_contract.id.to_s
     end
 
     def test_success_subscribe
@@ -85,7 +85,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_subscription_success
-      patch admin_api_account_service_contract_path(
+      put change_plan_admin_api_account_service_contract_path(
         account_id: @buyer.id,
         id: @service_contract.id,
         format: :xml,
@@ -96,7 +96,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_subscription_failure
-      patch admin_api_account_service_contract_path(
+      put change_plan_admin_api_account_service_contract_path(
         account_id: @buyer.id,
         id: @service_contract.id,
         format: :xml,
@@ -105,7 +105,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       )
 
       assert_response :unprocessable_entity
-      assert_match "Service plan must belong to the same product", response.body #Inavalid plan id fails the scenario
+      assert_match "Plan must belong to the same product", response.body #Inavalid plan id fails the scenario
     end
 
     private
