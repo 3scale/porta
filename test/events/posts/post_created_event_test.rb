@@ -8,12 +8,12 @@ class Posts::PostCreatedEventTest < ActiveSupport::TestCase
     event = Posts::PostCreatedEvent.create(post)
 
     assert event
-    assert_equal event.forum, forum
-    assert_equal event.post, post
-    assert_equal event.provider, forum.account
-    assert_equal event.metadata[:provider_id], forum.account_id
-    assert_equal event.user, post.user
-    assert_equal event.account, post.user.account
+    assert_equal forum, event.forum
+    assert_equal post, event.post
+    assert_equal forum.account, event.provider
+    assert_equal forum.account_id, event.metadata[:provider_id]
+    assert_equal post.user, event.user
+    assert_equal post.user.account, event.account
   end
 
   def test_create_anonymous_user
@@ -22,11 +22,11 @@ class Posts::PostCreatedEventTest < ActiveSupport::TestCase
     event = Posts::PostCreatedEvent.create(post)
 
     assert event
-    assert_equal event.forum, forum
-    assert_equal event.post, post
-    assert_equal event.provider, forum.account
-    assert_equal event.metadata[:provider_id], forum.account_id
-    assert_equal event.try(:user), nil
-    assert_equal event.try(:account), nil
+    assert_equal forum, event.forum
+    assert_equal post, event.post
+    assert_equal forum.account, event.provider
+    assert_equal forum.account_id, event.metadata[:provider_id]
+    assert_nil event.try(:user)
+    assert_nil event.try(:account)
   end
 end

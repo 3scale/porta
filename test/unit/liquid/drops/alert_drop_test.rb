@@ -5,7 +5,7 @@ class Liquid::Drops::AlertTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @alert = FactoryBot.build_stubbed(:limit_alert)
+    @alert = FactoryBot.build_stubbed(:limit_alert, message: 'some message')
     @drop = Drops::Alert.new(@alert)
   end
 
@@ -23,10 +23,6 @@ class Liquid::Drops::AlertTest < ActiveSupport::TestCase
 
   test 'returns timestamp' do
     assert_equal @alert.timestamp, @drop.timestamp
-  end
-
-  test 'returns description' do
-    assert_equal @alert.message, @drop.message
   end
 
   test 'returns unread?' do

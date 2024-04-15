@@ -4,7 +4,7 @@ class Liquid::Drops::PaymentTransactionDropTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @payment_transaction = FactoryBot.build(:payment_transaction)
+    @payment_transaction = FactoryBot.build(:payment_transaction, message: 'message', reference: 'ref', created_at: Time.now.utc)
     @drop = Drops::PaymentTransaction.new(@payment_transaction)
   end
 
