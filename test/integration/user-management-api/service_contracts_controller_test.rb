@@ -26,7 +26,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_response :success
 
       xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('.//service_contract/id').text == @service_contract.id.to_s
+      assert xml.xpath('/service_contracts/service_contract/id').text == @service_contract.id.to_s
     end
 
     def test_show
@@ -34,7 +34,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_response :success
 
       xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('.//id').text == @service_contract.id.to_s
+      assert xml.xpath('/service_contract/id').text == @service_contract.id.to_s
     end
 
     def test_success_subscribe
