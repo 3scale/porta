@@ -612,7 +612,9 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :referrer_filters, :controller => 'buyer_application_referrer_filters', :only => [:index, :create, :destroy]
         end
 
-        resources :service_contracts, except: %i[update] do
+        resources :service_contracts, :only => [:index, :destroy]
+
+        resources :service_subscriptions, except: %i[update] do
           member do
             put :change_plan
           end

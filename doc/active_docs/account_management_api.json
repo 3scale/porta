@@ -266,7 +266,7 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_contracts.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions.xml": {
       "get": {
         "summary": "Service Subscription List",
         "description": "List all the service subscriptions of an account.",
@@ -349,7 +349,7 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}.xml": {
       "get": {
         "summary": "Service Subscription Show",
         "description": "Retrieve details of a specific service subscription.",
@@ -437,7 +437,7 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_contracts/{id}/change_plan.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/change_plan.xml": {
       "put": {
         "summary": "Service Subscription Change Plan",
         "description": "Update the plan of a service subscription.",
@@ -1443,6 +1443,87 @@
             "in": "path",
             "description": "ID of the account.",
             "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_contracts.xml": {
+      "get": {
+        "summary": "[DEPRECATED] Service Subscription List",
+        "description": "This endpoint is deprecated, use `GET /admin/api/accounts/{account_id}/service_subscriptions.xml` instead.",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
+      "delete": {
+        "summary": "[DEPRECATED] Service Subscription Delete",
+        "description": "This endpoint is deprecated, use `DELETE /admin/api/accounts/{account_id}/service_subscriptions/{id}.xml` instead.",
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
             "required": true,
             "schema": {
               "type": "integer"

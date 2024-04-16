@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module ServiceContractRepresenter
+module ServiceSubscriptionRepresenter
   include ThreeScale::JSONRepresenter
   include Roar::XML
-  wraps_resource
+  wraps_resource :service_subscription
 
   property :id
   property :plan_id

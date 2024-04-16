@@ -7,10 +7,6 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     @service_plan     = FactoryBot.create(:service_plan, issuer: service)
     @application_plan = FactoryBot.create(:application_plan, issuer: service)
 
-    new_service = FactoryBot.create(:simple_service, account: current_account)
-    @new_service_plan     = FactoryBot.create(:service_plan, issuer: new_service)
-    @new_application_plan = FactoryBot.create(:application_plan, issuer: new_service)
-
     @buyer            = FactoryBot.create(:buyer_account, provider_account: current_account)
     @service_contract = FactoryBot.create(:simple_service_contract, plan: @service_plan, user_account: @buyer)
 
@@ -26,47 +22,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
       assert_response :success
 
       xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('/service_contracts/service_contract/id').text == @service_contract.id.to_s
-    end
-
-    def test_show
-      get admin_api_account_service_contract_path(account_id: @buyer.id, format: :xml, access_token: @token, id: @service_contract.id)
-      assert_response :success
-
-      xml = Nokogiri::XML::Document.parse(response.body)
-      assert xml.xpath('/service_contract/id').text == @service_contract.id.to_s
-    end
-
-    def test_success_subscribe
-      post admin_api_account_service_contracts_path(
-        account_id: @buyer.id,
-        format: :xml,
-        access_token: @token,
-        service_contract: { plan_id: @new_service_plan.id }
-      )
-      assert_response :success
-    end
-
-    def test_already_subscribed
-      post admin_api_account_service_contracts_path(
-        account_id: @buyer.id,
-        format: :xml,
-        access_token: @token,
-        service_contract: { plan_id: @service_plan.id }
-      )
-      assert_response :unprocessable_entity
-      assert_match "already subscribed to this service", response.body
-    end
-
-    # Test that attempting to subscribe to a service plan that doesn't belong to the buyer's provider should result in a failure (404).
-    def test_failure_subscribe_to_external_service_plan
-       post admin_api_account_service_contracts_path(
-        account_id: current_account.id,
-        format: :xml,
-        access_token: @token,
-        service_contract: { plan_id: @service_plan.id }
-      )
-      assert_response :not_found
+      assert xml.xpath('.//service_contracts/service-contract/id').text == @service_contract.id.to_s
     end
 
     def test_success_unsubscribe
@@ -82,30 +38,6 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     def test_failure_unsubscribe
       delete admin_api_account_service_contract_path(@service_contract.id, account_id: @buyer.id, format: :xml, access_token: @token)
       assert_response :forbidden
-    end
-
-    def test_update_subscription_success
-      put change_plan_admin_api_account_service_contract_path(
-        account_id: @buyer.id,
-        id: @service_contract.id,
-        format: :xml,
-        access_token: @token,
-        service_contract: { plan_id: @service_plan.id }
-      )
-      assert_response :success
-    end
-
-    def test_update_subscription_failure
-      put change_plan_admin_api_account_service_contract_path(
-        account_id: @buyer.id,
-        id: @service_contract.id,
-        format: :xml,
-        access_token: @token,
-        service_contract: { plan_id: @new_service_plan.id }
-      )
-
-      assert_response :unprocessable_entity
-      assert_match "Plan must belong to the same product", response.body #Inavalid plan id fails the scenario
     end
 
     private
