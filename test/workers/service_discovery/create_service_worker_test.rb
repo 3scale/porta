@@ -14,7 +14,7 @@ module ServiceDiscovery
       account = FactoryBot.create(:simple_provider)
       ServiceDiscovery::OAuthManager.expects(:new).with(@user).returns(oauth_manager).at_least_once
       import_definition = mock
-      import_definition.expects(:create_service).with(account, cluster_namespace: 'fake-project', cluster_service_name: 'fake-api')
+      import_definition.expects(:create_service).with(account, { cluster_namespace: 'fake-project', cluster_service_name: 'fake-api' })
       ImportClusterDefinitionsService.expects(:new).with(@user).returns(import_definition)
       CreateServiceWorker.new.perform(account.id, 'fake-project', 'fake-api', @user&.id)
     end

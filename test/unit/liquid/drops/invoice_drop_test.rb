@@ -67,10 +67,12 @@ class Liquid::Drops::InvoiceDropTest < ActiveSupport::TestCase
   end
 
   should 'return due_on' do
+    @invoice.stubs due_on: Time.now.utc.to_date
     assert_equal @invoice.due_on, @drop.due_on
   end
 
   should 'return paid_on' do
+    @invoice.stubs paid_at: Time.now.utc.to_date
     assert_equal @invoice.paid_at, @drop.paid_on
   end
 

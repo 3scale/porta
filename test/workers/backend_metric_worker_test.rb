@@ -13,7 +13,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
   attr_reader :service, :metric
 
   test '#perform for update metric' do
-    ThreeScale::Core::Metric.expects(:save).with(id: metric.id, service_id: service.backend_id, name: metric.system_name, parent_id: nil)
+    ThreeScale::Core::Metric.expects(:save).with({ id: metric.id, service_id: service.backend_id, name: metric.system_name, parent_id: nil })
 
     perform_enqueued_jobs(only: BackendMetricWorker) do
       BackendMetricWorker.perform_later(service.backend_id, metric.id)

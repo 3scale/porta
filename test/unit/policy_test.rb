@@ -137,9 +137,9 @@ class PolicyTest < ActiveSupport::TestCase
     assert policy.idle?
 
     FactoryBot.create(:service, account: policy.account)
-    Proxy.any_instance.expects(:find_policy_config_by).at_least_once.
-                       with({ name: policy.name, version: policy.version }).
-                       returns(policy.schema.slice('name', 'version', 'configuration'))
+    Proxy.any_instance.expects(:find_policy_config_by).at_least_once
+         .with(name: policy.name, version: policy.version)
+         .returns(policy.schema.slice('name', 'version', 'configuration'))
 
     assert policy.reload.in_use?
     refute policy.idle?
