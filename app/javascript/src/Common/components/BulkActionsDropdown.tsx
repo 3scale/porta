@@ -21,6 +21,8 @@ interface Props {
   isDisabled: boolean;
 }
 
+const jquery1 = window.$
+
 const BulkActionsDropdown: FunctionComponent<Props> = ({ actions, allSelected, isDisabled }) => {
   const [actionsDropdownOpen, setActionsDropdownOpen] = useState(false)
 
@@ -32,7 +34,7 @@ const BulkActionsDropdown: FunctionComponent<Props> = ({ actions, allSelected, i
       return url.concat(connector, 'selected_total_entries=true')
     } else {
       // TODO: can we generate this data without reading the DOM? Using selectedItems as a prop
-      return url.concat(connector, $('table tbody .pf-c-table__check input:checked').serialize())
+      return url.concat(connector, jquery1('table tbody .pf-c-table__check input:checked').serialize())
     }
   }
 
@@ -40,15 +42,7 @@ const BulkActionsDropdown: FunctionComponent<Props> = ({ actions, allSelected, i
     <DropdownItem
       key={name}
       onClick={() => {
-        // @ts-expect-error -- Missing types for colorbox
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        $.colorbox({
-          autoDimensions: true,
-          overlayShow: true,
-          hideOnOverlayClick: false,
-          hideOnContentClick: false,
-          enableEscapeButton: false,
-          showCloseButton: true,
+        jquery1.colorbox({
           title,
           href: generateHrefForColorbox(url)
         })
