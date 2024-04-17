@@ -5,7 +5,7 @@ class Cinstances::CinstanceCancellationEventTest < ActiveSupport::TestCase
   def test_create
     service   = FactoryBot.build_stubbed(:simple_service, id: 2)
     plan      = FactoryBot.build_stubbed(:simple_application_plan, id: 3, issuer: service)
-    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1, plan: plan)
+    cinstance = FactoryBot.build_stubbed(:simple_cinstance, id: 1, name: 'app', plan: plan)
     event     = Cinstances::CinstanceCancellationEvent.create(cinstance)
 
     assert event

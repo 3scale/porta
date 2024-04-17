@@ -19,7 +19,7 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
             = render partial: 'account_details', locals: { account: @account }
 
       - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
-        div class="pf-l-flex__item"
+        div class="pf-l-flex__item" id="provider-change-plan"
           = render 'master/providers/plans/widget', provider: @account
 
       - if can?(:manage, :finance)

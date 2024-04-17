@@ -27,7 +27,7 @@ resource "CMS::Partial" do
 
     context 'when requesting the shorten version' do
       let(:expected_attributes) { %w[id type created_at updated_at system_name] }
-      let(:serialized) { representer.public_send(serialization_format, short: true) }
+      let(:serialized) { representer.public_send(serialization_format, user_options: { short: true }) }
 
       json(:resource, skip_root_check: true) do
         it 'should have the correct attributes' do

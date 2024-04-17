@@ -108,7 +108,7 @@ def billing_status_card_selector
 end
 
 def within_plan_settings_card(&block)
-  within '.pf-c-card #provider-change-plan' do
+  within '#provider-change-plan .pf-c-card' do
     yield block
   end
 end

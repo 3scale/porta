@@ -55,17 +55,18 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test 'callback_account' do
-      auth_provider = FactoryBot.build_stubbed(:authentication_provider)
-          .becomes(AuthenticationProvider::GitHub)
-      master = FactoryBot.build_stubbed(:master_account)
+    account = FactoryBot.create(:simple_provider)
+    auth_provider = FactoryBot.build_stubbed(:authentication_provider, account: account)
+                              .becomes(AuthenticationProvider::GitHub)
+    master = FactoryBot.build_stubbed(:master_account)
 
-      auth_provider.branding_state = 'threescale_branded'
-      assert auth_provider.threescale_branded?, 'should be 3scale branded'
-      assert_equal master, auth_provider.callback_account
+    auth_provider.branding_state = 'threescale_branded'
+    assert auth_provider.threescale_branded?, 'should be 3scale branded'
+    assert_equal master, auth_provider.callback_account
 
-      auth_provider.branding_state = 'custom_branded'
-      assert auth_provider.custom_branded?, 'should have custom branding'
-      assert_equal auth_provider.account, auth_provider.callback_account
+    auth_provider.branding_state = 'custom_branded'
+    assert auth_provider.custom_branded?, 'should have custom branding'
+    assert_equal auth_provider.account, auth_provider.callback_account
   end
 
   test 'find_kind' do

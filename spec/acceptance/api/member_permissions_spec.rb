@@ -6,7 +6,7 @@ resource "MemberPermission" do
 
   let(:user) { FactoryBot.create(:user, account: provider) }
   let(:resource) { user.member_permissions }
-  let(:serialized) { representer.send(serialization_format, user: user) }
+  let(:serialized) { representer.send(serialization_format, user_options: { user: user }) }
   let(:updatable_resource) { user }
 
   before do

@@ -129,6 +129,7 @@ class EmailConfigurationTest < ActiveSupport::TestCase
       enable_starttls_auto: true,
       enable_starttls: false,
       tls: true,
+      openssl_verify_mode: 'peer'
     }.freeze
   end
 

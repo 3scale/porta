@@ -10,7 +10,7 @@ resource 'CMS::File' do
   api 'cms file', format: [:json] do
     get '/admin/api/cms/files', action: :index do
       let(:collection) { provider.files }
-      let(:serialized) { representer.public_send(serialization_format, short: true) }
+      let(:serialized) { representer.public_send(serialization_format, user_options: { short: true }) }
     end
 
     get '/admin/api/cms/files/:id', action: :show

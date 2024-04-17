@@ -42,7 +42,7 @@ class Liquid::Tags::PlanWidgetTest < ActiveSupport::TestCase
     tag = Liquid::Tags::PlanWidget.parse('plan_widget', 'myvar', [], {})
     @context['myvar'] = Liquid::Drops::Application.new('contract')
 
-    tag.expects(:render_erb).with(@context, 'applications/applications/plan_widget', { contract: @context['myvar'], wizard: false }).returns('Hello world')
+    tag.expects(:render_erb).with(@context, 'applications/applications/plan_widget', contract: @context['myvar'], wizard: false).returns('Hello world')
     assert_equal 'Hello world', tag.render(@context)
   end
 

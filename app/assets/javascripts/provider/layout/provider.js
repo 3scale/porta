@@ -4,7 +4,6 @@
 //= require remote
 //= require switch
 //= require ajax_events
-//= require ajax_upload
 //= require autosubmit
 //= require extra_fields
 //= require vendor/underscore.min.js
@@ -12,7 +11,6 @@
 //= require application
 //= require vendor/jquery.iframe-post-form.js
 //= require vendor/colorbox/jquery.colorbox.js
-//= require vendor/farbtastic
 //= require threescale
 //= require vendor/pluralize
 //= require master_application
