@@ -651,11 +651,6 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
-
-    setup do
-      stub_event_rolledback!
-    end
-
     test 'does not track changes on build' do
       with_proxy_config_affecting_changes_tracker do |tracker|
         service = FactoryBot.build(:simple_service) # backend_version not touched

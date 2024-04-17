@@ -60,11 +60,47 @@ module EventStore
     # we still want the events of the relationships to be saved in order to do the correspondent actions
     # once the provider is deleted (whatever the subscribers tells them to do).
 
+    after_rollback :hello
+
+    def hello
+      logger.info 'boom'
+    end
+
     alias provider account
 
     TTL = 1.week
 
     scope :stale, -> { where.has { created_at <= TTL.ago } }
+
+    class EventRollbackError < StandardError
+      include Bugsnag::MetaData
+
+      def initialize(error:, event:)
+        event_details = event.to_h.as_json
+        self.bugsnag_meta_data = { event: event_details }
+
+        super "Error raised trying to roll back #{event}: #{self}, event details: #{event_details}"
+        set_backtrace error.backtrace
+      end
+    end
+
+    # Since Rails 6.1 the EventStore::Event records (among others) are added to the
+    # list of the objects, belonging to a current transaction, and #rolledback! is called on them
+    # if the transaction is rolled back on the DB.
+    # The problem is that this triggers the Event's `load` and `deserialize` (to restore the original state), and if
+    # the object referenced in the event via GlobalID does not exist, the deserialization of the event will fail.
+    # This causes some tests (that have explicit transactions and rollbacks) to fail, and can potentially cause issues
+    # in production as well. Currently, it's safe to ignore these errors for Events rollback. But in case any transactional
+    # callbacks are added to Events in future, we will report this to BugSnag.
+    def rolledback!(*)
+      super
+    rescue StandardError => exception
+      System::ErrorReporting.report_error EventRollbackError.new(error: exception, event: self) if has_transactional_callbacks?
+    end
+
+    def to_h
+      %i[id event_type event_id metadata created_at provider_id tenant_id metadata].index_with { |key| send(key) }
+    end
 
     private
 
