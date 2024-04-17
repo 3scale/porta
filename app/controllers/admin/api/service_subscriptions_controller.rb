@@ -23,16 +23,16 @@ class Admin::Api::ServiceSubscriptionsController < Admin::Api::ServiceBaseContro
   # Service Subscription Delete
   # DELETE /admin/api/accounts/{account_id}/service_contracts/{id}.xml
   def destroy
-    service_subscription = ServiceSubscriptionService.new(account)
+    service = ServiceSubscriptionService.new(account)
 
-    respond_with(service_subscription.unsubscribe(service_contract))
+    respond_with(service.unsubscribe(service_subscription))
   end
 
   # Service Subscription Change Plan
   # PUT /admin/api/accounts/{account_id}/service_contracts/{id}/change_plan.xml
   def change_plan
-    service_contract.change_plan(service_plan)
-    respond_with(service_contract, serialize: service_plan, representer: ServicePlanRepresenter)
+    service_subscription.change_plan(service_plan)
+    respond_with(service_subscription, serialize: service_plan, representer: ServicePlanRepresenter)
   end
 
   # Service Subscription Show
