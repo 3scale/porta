@@ -164,7 +164,7 @@
 
     // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed.
     // Response of this form will be presented inside a colorbox.
-    $("form.colorbox[data-remote]").live("submit", function(e) {
+    $(document).on('submit', 'form.colorbox[data-remote]', function (e) {
       $(this).on('ajax:complete', function(event, xhr, status){
         var form = $(this).closest('form');
         var width = form.data('width');
@@ -178,12 +178,12 @@
       })
     });
 
-    $("a.fancybox, a.colorbox").live("click", function(e) {
+    $(document).on("click", "a.fancybox, a.colorbox", function (e) {
       $(this).colorbox({ open:true });
       e.preventDefault();
     });
 
-    $(".fancybox-close").live("click", function() {
+    $(document).on('click', '.fancybox-close', function () {
       $.colorbox.close();
       return false;
     });
@@ -226,7 +226,7 @@
     // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed. Also jquery-ujs has been replaced with rails-ujs.
     // Added #colorbox selector to target only non-React forms
     // show errors from ajax in formtastic
-    $('form:not(.pf-c-form)').live('ajax:error', function(event, xhr, status, error) {
+    $(document).on('ajax:error', 'form:not(.pf-c-form)', function (event, xhr, status, error) {
       switch(status){
         case 'error':
           $.colorbox({html: xhr.responseText});
@@ -236,7 +236,7 @@
     });
 
 
-    $('#search_deleted_accounts').live('change', function(){
+    $(document).on('change', '#search_deleted_accounts', function () {
       $(this.form).submit();
     });
   });

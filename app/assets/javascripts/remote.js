@@ -22,17 +22,17 @@
     };
 
     // Ajax forms
-    $("form.remote").live("submit", remote);
+    $(document).on("submit", "form.remote", remote)
 
     // Ajax links
-    $("a.remote").live("click", function() {
+    $(document).on("click", "a.remote", function () {
       $.ajax({url: this.href, beforeSend: addAcceptHeader});
       return false;
     });
 
     // Ajax forms if rails.js is not loaded.
     if ($.rails === void 0) {
-      $("form[data-remote]").live("submit", remote);
+      $(document).on("submit", "form[data-remote]", remote);
     }
   });
 })(jQuery);
