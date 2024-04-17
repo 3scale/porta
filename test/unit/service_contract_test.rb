@@ -54,4 +54,25 @@ class ServiceContractTest < ActiveSupport::TestCase
     assert_same_elements p1_contracts, ServiceContract.provided_by(provider1).to_a
     assert_same_elements p2_contracts, ServiceContract.provided_by(provider2).to_a
   end
+
+  test 'update plan within the same service' do
+    service = FactoryBot.create(:simple_service)
+    plan1 = FactoryBot.create(:service_plan, issuer: service)
+    plan2 = FactoryBot.create(:service_plan, issuer: service)
+    service_contract = FactoryBot.create(:service_contract, plan: plan1)
+
+    assert service_contract.change_plan(plan2)
+    assert plan2.id, service_contract.reload.plan.id
+  end
+
+  test 'update plan from a different service' do
+    service1 = FactoryBot.create(:simple_service)
+    plan1 = FactoryBot.create(:service_plan, issuer: service1)
+    service2 = FactoryBot.create(:simple_service)
+    plan2 = FactoryBot.create(:service_plan, issuer: service2)
+    service_contract = FactoryBot.create(:service_contract, plan: plan1)
+
+    assert_not service_contract.change_plan(plan2)
+    assert service_contract.errors.of_kind? :plan, :service_conflict
+  end
 end
