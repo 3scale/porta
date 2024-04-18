@@ -1,3 +1,4 @@
+/* eslint-env jest */
 /**
  * Include here any methods used in the test suite
  */

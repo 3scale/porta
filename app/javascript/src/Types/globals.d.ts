@@ -2,10 +2,11 @@
 import type CodeMirror from 'codemirror'
 import type SwaggerUI from 'swagger-ui'
 import type { compose } from 'redux'
+import type { JQueryStatic as JQueryStaticV1, JQueryXHR } from 'Types/jquery/v1'
 
 declare global {
   interface Window {
-    $: JQueryStatic;
+    $: JQueryStaticV1 & JQueryStaticV1Plugins;
     jQueryUI: JQueryStatic;
     CodeMirror: typeof CodeMirror;
     statsUsage: unknown;
@@ -26,6 +27,24 @@ declare global {
       loadAudienceWidget: (widgetPath: string) => void;
     };
     renderChartWidget: (widget: string, data: unknown) => void;
+    setLocationHash: (value: string) => void; // Defined in app/assets/javascripts/provider/utils.js.coffee
+  }
+
+  // Declared as global function in app/assets/javascripts/provider/toggled_inputs.js FIXME 😭
+  function toggledInputsInit (): void
+
+  // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
+  // This should be de default jQuery available, only TS files loaded by webpack have v3.7.0
+  interface JQueryStaticV1Plugins {
+    colorbox: ColorboxStatic;
+    cookie: (name: string, value?: string) => string;
+    flash: ((message: string) => void) & {
+      notice: (message: string) => void;
+      error: (message: string) => void;
+    };
+    rails: {
+      handleRemote: (arg: Element) => JQueryXHR | false;
+    };
   }
 
   // jQueryUI static props injected into jQuery 3.7 when imported from webpack
@@ -57,4 +76,19 @@ declare global {
   }
 
   type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
+
+  // Defined in app/assets/javascripts/vendor/mousetrap.min.js
+  // imported in app/assets/javascripts/provider/cms.js
+  // used in app/javascript/packs/cms.ts
+  namespace Mousetrap {
+    function bind (arr: unknown[], fun: (event: unknown) => false): void
+  }
+
+  namespace ThreeScale {
+    // Made globally available in assets/javascripts/provider/cms/sidebar.js.coffee and available
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+    class Sidebar {
+      public constructor (selector: string)
+    }
+  }
 }
