@@ -614,6 +614,12 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :service_contracts, :only => [:index, :destroy]
 
+        resources :service_subscriptions, constraints: { format: :json }, defaults: { format: :json }, except: %i[new edit update] do
+          member do
+            put :change_plan
+          end
+        end
+
         resources :messages, :only => [:create]
       end
 
