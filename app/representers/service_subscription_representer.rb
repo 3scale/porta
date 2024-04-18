@@ -2,7 +2,6 @@
 
 module ServiceSubscriptionRepresenter
   include ThreeScale::JSONRepresenter
-  include Roar::XML
   wraps_resource :service_subscription
 
   property :id

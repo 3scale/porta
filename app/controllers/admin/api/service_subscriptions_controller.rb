@@ -2,26 +2,25 @@
 
 class Admin::Api::ServiceSubscriptionsController < Admin::Api::ServiceBaseController
   wrap_parameters ServiceContract, name: :service_subscription
-  represents :json, entity: ::ServiceSubscriptionRepresenter, collection: ::ServiceSubscriptionsRepresenter::JSON
-  represents :xml, entity: ::ServiceSubscriptionRepresenter, collection: ::ServiceSubscriptionsRepresenter::XML
+  representer entity: ::ServiceSubscriptionRepresenter, collection: ::ServiceSubscriptionsRepresenter
 
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
 
   # Service Subscription Create
-  # POST /admin/api/accounts/:account_id/service_subscriptions.xml
+  # POST /admin/api/accounts/:account_id/service_subscriptions.json
   def create
     respond_with account.bought_service_contracts.create(plan: service_plan)
   end
 
   # Service Subscription List
-  # GET /admin/api/accounts/{account_id}/service_contracts.xml
+  # GET /admin/api/accounts/{account_id}/service_contracts.json
   def index
     respond_with account.bought_service_contracts
   end
 
   # Service Subscription Delete
-  # DELETE /admin/api/accounts/{account_id}/service_contracts/{id}.xml
+  # DELETE /admin/api/accounts/{account_id}/service_contracts/{id}.json
   def destroy
     service = ServiceSubscriptionService.new(account)
 
@@ -29,14 +28,14 @@ class Admin::Api::ServiceSubscriptionsController < Admin::Api::ServiceBaseContro
   end
 
   # Service Subscription Change Plan
-  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}/change_plan.xml
+  # PUT /admin/api/accounts/{account_id}/service_contracts/{id}/change_plan.json
   def change_plan
     service_subscription.change_plan(service_plan)
     respond_with(service_subscription, serialize: service_plan, representer: ServicePlanRepresenter)
   end
 
   # Service Subscription Show
-  # GET /admin/api/accounts/:account_id/service_contracts/:id.xml
+  # GET /admin/api/accounts/:account_id/service_contracts/:id.json
   def show
     respond_with service_subscription
   end
