@@ -60,12 +60,6 @@ module EventStore
     # we still want the events of the relationships to be saved in order to do the correspondent actions
     # once the provider is deleted (whatever the subscribers tells them to do).
 
-    after_rollback :hello
-
-    def hello
-      logger.info 'boom'
-    end
-
     alias provider account
 
     TTL = 1.week
