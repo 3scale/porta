@@ -266,7 +266,7 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_subscriptions.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions.json": {
       "get": {
         "summary": "Service Subscription List",
         "description": "List all the service subscriptions of an account.",
@@ -349,7 +349,7 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_subscriptions/{id}.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}.json": {
       "get": {
         "summary": "Service Subscription Show",
         "description": "Retrieve details of a specific service subscription.",
@@ -437,7 +437,61 @@
         }
       }
     },
-    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/change_plan.xml": {
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/approve.json": {
+      "put": {
+        "summary": "Service Subscription Approve",
+        "description": "Approve a pending service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service subscription.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/change_plan.json": {
       "put": {
         "summary": "Service Subscription Change Plan",
         "description": "Update the plan of a service subscription.",

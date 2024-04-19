@@ -111,6 +111,34 @@ class Admin::Api::ServiceSubscriptionsControllerTest < ActionDispatch::Integrati
       assert_equal 'must belong to the same product', json_body.dig('errors', 'plan', 0)
     end
 
+    test 'approve pending subscription' do
+      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true)
+      subscription = FactoryBot.create(:simple_service_contract, plan: plan_with_approval, user_account: buyer)
+
+      assert 'pending', subscription.state
+
+      put approve_admin_api_account_service_subscription_path(subscription.id, account_id: buyer.id, format: :json, access_token: token)
+      assert_response :ok
+
+      json_body = JSON.parse(response.body)
+      assert_equal 'live', json_body.dig('service_subscription', 'state')
+    end
+
+    test 'approval fails if incorrect state' do
+      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true)
+      subscription = FactoryBot.create(:simple_service_contract, plan: plan_with_approval, user_account: buyer)
+
+      assert 'pending', subscription.state
+
+      subscription.update_attribute('state', 'live')
+
+      put approve_admin_api_account_service_subscription_path(subscription.id, account_id: buyer.id, format: :json, access_token: token)
+      assert_response :unprocessable_entity
+
+      json_body = JSON.parse(response.body)
+      assert_not_empty json_body.dig('errors', 'state')
+    end
+
     private
 
     def current_account

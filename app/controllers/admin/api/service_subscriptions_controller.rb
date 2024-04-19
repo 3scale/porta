@@ -40,6 +40,13 @@ class Admin::Api::ServiceSubscriptionsController < Admin::Api::ServiceBaseContro
     respond_with service_subscription
   end
 
+  # Service Subscription Approve
+  # PUT /admin/api/accounts/{account_id}/service_subscriptions/{id}/approve.json
+  def approve
+    service_subscription.accept
+    respond_with service_subscription
+  end
+
   private
 
   def account
