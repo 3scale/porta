@@ -39,6 +39,14 @@ When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(
   click_link(link, exact: true, visible: !invisible)
 end
 
+When "(they )switch {string} on" do |switch|
+  check(switch, allow_label_click: true)
+end
+
+When "(they )switch {string} off" do |switch|
+  uncheck(switch, allow_label_click: true)
+end
+
 Then /^(?:|I |they )should see "([^"]*)"$/ do |text|
   assert_page_has_content text
 end

@@ -403,6 +403,32 @@ en:
         users:
           form:
             submit_button_label: 'Update User'
+        authentication_providers:
+          index:
+            header:
+              title: Single Sign-On Integrations
+              body:
+                Access the Admin Portal using your chosen authentication provider’s single sign-on
+                (SSO).
+          create:
+            error:
+              SSO integration could not be created
+          destroy:
+            success: SSO integration deleted
+          authorize_changes:
+            error: You cannot edit active SSO Providers when SSO is enforced
+          update:
+            error: SSO integration could not be updated
+        enforce_sso:
+          error_test: Password-based authentication could not be disabled. Authentication flow has to be checked.
+          error_by_sso: Password-based authentication could not be disabled. You need to be logged in by SSO.
+          error_exist: Password-based authentication could not be disabled. No published authentication providers.
+          create:
+            success: Password-based authentication disabled
+            error: Password-based authentication could not be disabled
+          destroy:
+            success: Password-based authentication enabled
+            error: Password-based authentication could not be enabled
       accounts:
         create:
           success: Tenant account was successfully created.

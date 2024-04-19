@@ -38,7 +38,12 @@ function closeSelectWithModal (wrapper: ReactWrapper<unknown>): void {
  * @param href The URL to be expected
  */
 function mockLocation (href: string): void {
-  const location = { href: href, toString: () => href, replace: jest.fn() } as unknown as Location
+  const location = {
+    href: href,
+    reload: jest.fn(),
+    replace: jest.fn(),
+    toString: () => href
+  } as unknown as Location
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- HACK: need to delete location
   delete (window as any).location
