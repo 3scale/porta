@@ -87,7 +87,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'branded_available?' do
     config = { client_id: 'id', client_secret: 'secret' }
-    ThreeScale::OAuth2.stubs(config: { 'authentication_provider' => config })
+    ThreeScale::OAuth2.stubs(config: { authentication_provider: config })
 
     refute_predicate AuthenticationProvider, :branded_available?
 

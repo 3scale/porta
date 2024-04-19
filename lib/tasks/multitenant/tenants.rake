@@ -32,7 +32,7 @@ namespace :multitenant do
       batch_size = (args[:batch_size] || 100).to_i
       sleep_time = (args[:sleep_time] || 1).to_i
 
-      ids = Rails.application.simple_try_config_for(ENV['FILE']) || []
+      ids = Rails.application.try_config_for(ENV['FILE']) || []
 
       ids.in_groups_of(batch_size).each do |group|
         puts "Executing update for a batch of size: #{group.size}"
