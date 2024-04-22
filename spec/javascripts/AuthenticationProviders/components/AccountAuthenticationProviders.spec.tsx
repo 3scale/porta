@@ -60,7 +60,7 @@ describe('when SSO toggle is visible', () => {
   })
 
   it('should confirm before disabling password-based authentication', async () => {
-    const payload = { notice: 'Enabled', error: undefined, redirect: null }
+    const payload = { notice: 'Enabled', error: undefined  }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: false })
