@@ -81,11 +81,10 @@ module EventStore
     # Since Rails 6.1 the EventStore::Event records (among others) are added to the
     # list of the objects, belonging to a current transaction, and #rolledback! is called on them
     # if the transaction is rolled back on the DB.
+    # see https://github.com/rails/rails/commit/77f7b2df#diff-8dd03b7fb9b72a3bd338955c1de75652d60453230c6544f3851c0d0b3746a675L345-R349
     # The problem is that this triggers the Event's `load` and `deserialize` (to restore the original state), and if
     # the object referenced in the event via GlobalID does not exist, the deserialization of the event will fail.
-    # This causes some tests (that have explicit transactions and rollbacks) to fail, and can potentially cause issues
-    # in production as well. Currently, it's safe to ignore these errors for Events rollback. But in case any transactional
-    # callbacks are added to Events in future, we will report this to BugSnag.
+    # Prevent an exception during rollback but try to report when that's unsafe.
     def rolledback!(*)
       super
     rescue StandardError => exception
