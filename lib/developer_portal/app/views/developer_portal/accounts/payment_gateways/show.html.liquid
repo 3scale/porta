@@ -7,36 +7,39 @@
     <div class="panel panel-default">
       <div class="panel-heading important">
         <div class="pull-right">
-          {% comment %} In this example we're only using the heading for edit links {% endcomment %}
+          {% comment %}
+            We render a link to edit the user billing information, depending on your payment gateway.
+            In case of Braintree, billing address and credit card are collected in the same form.
+            Stripe on the other hand use two separate forms.
+          {% endcomment %}
+          {% case provider.payment_gateway.type %}
 
-          {% comment %} Braintree combines billing address + cc details in 1 form {% endcomment %}
-          {% if provider.payment_gateway.type == "braintree_blue" %}
-            <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
-              {% if current_account.has_billing_address? and current_account.credit_card_stored? %}
-                <i class="fa fa-pencil"></i>
+          {% when "braintree_blue" %}
+            {% if current_account.has_billing_address? and current_account.credit_card_stored? %}
+              <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
+                <i class="icon-pencil"></i>
                 Edit Credit Card Details and Billing Address
-              {% endif %}
-            </a>
-          {% endif %}
+              </a>
+            {% endif %}
 
-          {% comment %} Stripe has separate forms for billing address + cc details {% endcomment %}
-          {% if current_account.has_billing_address? %}
-            {% case provider.payment_gateway.type %}
-
-            {% when "stripe" %}
+          {% when "stripe" %}
+            {% if current_account.has_billing_address? %}
               <a href="{{ current_account.edit_stripe_billing_address_url }}">
                 <i class="fa fa-pencil"></i>
                 Edit billing address
               </a>
+            {% endif %}
 
-            {% endcase %}
-          {% endif %}
+          {% endcase %}
         </div>
         <div class="clearfix"></div>
       </div>
 
       <div class="panel-body">
-        {% comment %} In this example we're only rendering billing address and cc card info if they exist {% endcomment %}
+        {% comment %}
+          We render the user's billing address and credit card details only after they have
+          added it previously. Otherwise, we render a link to do so.
+        {% endcomment %}
         {% if current_account.has_billing_address? %}
           <dl class="dl-horizontal" id="billing_address">
             <dt>Address</dt>
@@ -66,19 +69,16 @@
             {% endif %}
           </dl>
         {% endif %}
-        {% comment %} In this example we're mostly using main content area for first add links {% endcomment %}
 
         {% case provider.payment_gateway.type %}
 
-        {% comment %} Braintree combines billing address + cc details in 1 form {% endcomment %}
         {% when "braintree_blue" %}
-        <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
           {% unless current_account.has_billing_address? and current_account.credit_card_stored? %}
-            Add Credit Card Details and Billing Address
+            <a href="{{ current_account.edit_braintree_blue_credit_card_details_url }}">
+              Add Credit Card Details and Billing Address
+            </a>
           {% endunless %}
-        </a>
 
-        {% comment %} Stripe renders the form in place once a billing address has been added {% endcomment %}
         {% when "stripe" %}
           {% if current_account.has_billing_address? %}
             {% stripe_form %}
@@ -87,8 +87,8 @@
           {% endif %}
 
         {% endcase %}
-
       </div>
+
       <div class="panel-footer">
         <p>By <strong>Entering Credit Card details</strong> you agree to the <a href="{{ urls.credit_card_terms }}" id="terms-link">Terms of Service</a>, <a href="{{ urls.credit_card_privacy }}" id="privacy-link">Privacy</a> and <a href="{{ urls.credit_card_refunds }}" id="refunds-link">Refund</a>.</p>
       </div>
