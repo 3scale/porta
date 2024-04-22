@@ -36,5 +36,12 @@ module ThreeScale
       ]
       assert_equal expected_sentinels, config.sentinels
     end
+
+    test ':pool_size is renamed to :size' do
+      config = RedisConfig.new(pool_size: 5)
+
+      assert config.key? :size
+      assert_equal 5, config[:size]
+    end
   end
 end

@@ -29,6 +29,14 @@ GIT
       rspec (>= 3.0.0.a, < 4)
 
 GIT
+  remote: https://github.com/3scale/sidekiq-batch.git
+  revision: f1c56d0b8445fd3eb337614aedba1752aa19938e
+  branch: redis-client
+  specs:
+    sidekiq-batch (0.1.9)
+      sidekiq (~> 7)
+
+GIT
   remote: https://github.com/3scale/swagger-ui_rails.git
   revision: f88bb8bed4fdb57fcf5be6425f3fc10c638788d1
   branch: dev-2.1.3
@@ -211,7 +219,7 @@ GEM
     braintree (2.104.1)
       builder (>= 2.0.0)
     browser (5.3.1)
-    bugsnag (6.26.0)
+    bugsnag (6.26.3)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.5)
@@ -389,7 +397,8 @@ GEM
     hashdiff (1.0.1)
     hashery (2.1.2)
     hashie (3.6.0)
-    hiredis (0.6.3)
+    hiredis-client (0.21.1)
+      redis-client (= 0.21.1)
     html-pipeline (2.12.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -576,7 +585,7 @@ GEM
     public_suffix (4.0.7)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (2.2.8.1)
+    rack (2.2.9)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-no_animations (1.0.3)
@@ -653,10 +662,13 @@ GEM
       actionview (>= 5)
     recursive-open-struct (1.1.3)
     redcarpet (3.5.1)
-    redis (4.2.5)
+    redis (5.1.0)
+      redis-client (>= 0.17.0)
+    redis-client (0.21.1)
+      connection_pool
     redis-namespace (1.7.0)
       redis (>= 3.0.4)
-    redis-prescription (1.0.0)
+    redis-prescription (2.6.0)
     redlock (1.3.2)
       redis (>= 3.0.0, < 6.0)
     reek (6.1.0)
@@ -770,19 +782,18 @@ GEM
     shoulda-context (2.0.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (6.4.2)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.2.0)
-    sidekiq-batch (0.1.9)
-      sidekiq (>= 3)
+    sidekiq (7.2.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.19.0)
     sidekiq-cron (1.9.1)
       fugit (~> 1.8)
       sidekiq (>= 4.2.1)
-    sidekiq-throttled (0.15.0)
-      concurrent-ruby
-      redis-prescription
-      sidekiq
+    sidekiq-throttled (1.4.0)
+      concurrent-ruby (>= 1.2.0)
+      redis-prescription (~> 2.2)
+      sidekiq (>= 6.5)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -978,7 +989,7 @@ DEPENDENCIES
   formtastic (~> 4.0)
   github-markdown
   hashie
-  hiredis (~> 0.6.3)
+  hiredis-client
   html-pipeline
   htmlentities (~> 4.3, >= 4.3.4)
   httpclient!
@@ -1036,7 +1047,7 @@ DEPENDENCIES
   recaptcha (~> 5.16.0)
   record_tag_helper (~> 1.0)
   redcarpet (~> 3.5.1)
-  redis (~> 4.2.0)
+  redis
   redlock
   reek (= 6.01)
   reform (~> 2.3.0)
@@ -1058,10 +1069,10 @@ DEPENDENCIES
   secure_headers (~> 6.3.0)
   selenium-webdriver (~> 3.142)
   shoulda (~> 4.0)
-  sidekiq (~> 6.4.0)
-  sidekiq-batch
+  sidekiq (~> 7)
+  sidekiq-batch!
   sidekiq-cron
-  sidekiq-throttled
+  sidekiq-throttled (~> 1.4.0)
   simplecov (~> 0.21.2)
   slim-rails (~> 3.2)
   sprockets-rails

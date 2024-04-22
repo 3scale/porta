@@ -54,10 +54,13 @@ gem '3scale_time_range', '0.0.6'
 gem 'statsd-ruby', require: false
 
 # Sidekiq
-gem 'sidekiq', '~> 6.4.0', require: %w[sidekiq sidekiq/web]
-gem 'sidekiq-batch'
+gem 'sidekiq', '~> 7', require: %w[sidekiq sidekiq/web]
+# Use a forked sidekiq-batch with support for Sidekiq 7
+# The next upstream version will add support Sidekiq 7 as well
+# Remove this fork when they release the new version
+gem 'sidekiq-batch', github: '3scale/sidekiq-batch', branch: 'redis-client'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
-gem 'sidekiq-throttled'
+gem 'sidekiq-throttled', '~> 1.4.0'
 
 # Yabeda metrics
 gem 'yabeda-prometheus-mmap'
@@ -93,7 +96,7 @@ gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.4.3'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
-gem 'hiredis', '~> 0.6.3'
+gem 'hiredis-client'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
@@ -106,7 +109,7 @@ gem 'ratelimit'
 gem 'recaptcha', '~> 5.16.0'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
-gem 'redis', '~> 4.2.0', require: ['redis', 'redis/connection/hiredis']
+gem 'redis'
 gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'svg-graph', require: false

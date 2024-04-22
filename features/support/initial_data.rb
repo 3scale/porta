@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Before do |scenario|
-  Sidekiq::Worker.clear_all
+  Sidekiq::Job.clear_all
 
   countries = {'ES' => 'Spain',
     'US' => 'United States of America'}

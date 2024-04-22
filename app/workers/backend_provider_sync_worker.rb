@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BackendProviderSyncWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def self.enqueue(provider_id)
     perform_async(provider_id)
