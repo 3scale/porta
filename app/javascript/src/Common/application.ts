@@ -13,41 +13,6 @@ export default function (): void { /* eslint-disable */
     return false
   })
 
-  ;(function () {
-    if ($('#plan-select').length == 0) return
-    const currentPlanID = $('#plans-selector').attr('data-plan-id')
-    const $plans = $('div.plan-preview')
-
-    $('#plan-select')[0].options[0].value
-    const options = $('#plan-select')[0].options
-
-    for (let i = options.length - 1; i >= 0; i--) {
-      if (options[i].value == currentPlanID) {
-        options.selectedIndex = (i - length)
-      }
-    }
-
-    function attachEvents () {
-      $('#plan-select').change(function () {
-
-        const planID = this.options[this.selectedIndex].value
-        $plans.hide()
-        $('div.plan-preview[data-plan-id="' + planID + '"]').show()
-
-        // HACK HACK HACK - redo the plan selector!
-        if ($('#plans-selector').attr('data-plan-id') == planID) {
-          $('#plan-change-submit').hide()
-        } else {
-          $('#plan-change-submit').show()
-        }
-
-        return false
-      })
-    }
-
-    attachEvents()
-  })()
-
   // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed.
   // Response of this form will be presented inside a colorbox.
   $(document).on('submit', 'form.colorbox[data-remote]', function (e) {
