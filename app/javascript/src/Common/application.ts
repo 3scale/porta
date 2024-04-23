@@ -4,13 +4,6 @@
 const $ = window.$
 
 export default function (): void { /* eslint-disable */
-  $(document).on('click', '.show-trace-lr', function (e) {
-    e.preventDefault()
-    // Show the next tr
-    $(this).parents('tr').next().toggle()
-    $(this).parents('tr').toggleClass('showing')
-  })
-
   // disable links with 'data-disabled' attribute and display alert instead
   // delegation on body fires before rails.js
   $('body').delegate('a[data-disabled]', 'click', function (event) {
