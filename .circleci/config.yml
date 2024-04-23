@@ -137,7 +137,7 @@ redis-container: &redis-container
   image: redis:4.0-alpine
 
 dnsmasq-container: &dnsmasq-container
-  image: quay.io/jlledo/dnsmasq
+  image: quay.io/3scale/dnsmasq
   command:
     - --user=root
     - --keep-in-foreground
