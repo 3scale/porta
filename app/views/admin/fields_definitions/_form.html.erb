@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'fields_definitions_form' %>
+<% end %>
+
 <%= f.input :target, :as => :hidden %>
 <%= f.input :name , :hint => true, :html =>  {:id => "fields_definition_name" } %>
 <%= f.input :label , :hint => true %>
