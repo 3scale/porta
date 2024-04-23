@@ -7,7 +7,7 @@ class System::RedisPoolTest < ActiveSupport::TestCase
     ConnectionPool.expects(:new).with(timeout: 5, size: 5).at_least_once
     pool = System::RedisPool.new
     ConnectionPool.expects(:new).with(size: 3, timeout: 7).at_least_once
-    pool = System::RedisPool.new(pool_size: 3, pool_timeout: 7)
+    pool = System::RedisPool.new(size: 3, pool_timeout: 7)
   end
 
   test 'delegation' do

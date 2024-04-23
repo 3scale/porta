@@ -6,13 +6,15 @@ Before "not @search" do
 end
 
 Before('@search') do
-  Sidekiq::Worker.clear_all
+  Sidekiq::Job.clear_all
   ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.autostop
   output = ::ThinkingSphinx::Test.start index: false
-  assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output.output}"
+
+  3.times { ::ThinkingSphinx::Test.config.controller.running? && break || sleep(1) }
+  raise "thinking sphinx should be running:\n#{output.output}" unless ::ThinkingSphinx::Test.config.controller.running?
 end
 
 After '@search' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class JanitorWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def perform
     return unless ThreeScale.config.janitor_worker_enabled

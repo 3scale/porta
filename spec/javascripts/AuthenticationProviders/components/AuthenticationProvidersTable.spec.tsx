@@ -39,7 +39,8 @@ afterAll(() => {
 })
 
 it('should be able to delete an authentication provider', async () => {
-  ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve({}) } as Response)
+  const payload = { redirect: '/authentication_providers' }
+  ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
   const wrapper = mountWrapper()
   wrapper.find('tr button.pf-c-dropdown__toggle').simulate('click')
@@ -49,7 +50,7 @@ it('should be able to delete an authentication provider', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(window.location.reload).toHaveBeenCalled()
+  expect(window.location.replace).toHaveBeenCalledWith('/authentication_providers')
 })
 
 it('should handle deletion errors gracefully', async () => {
