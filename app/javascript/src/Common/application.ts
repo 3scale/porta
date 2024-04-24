@@ -5,11 +5,11 @@ const $ = window.$
 
 export default function (): void { /* eslint-disable */
   // disable links with 'data-disabled' attribute and display alert instead
-  // delegation on body fires before rails.js
-  $('body').delegate('a[data-disabled]', 'click', function (event) {
-    event.preventDefault()
-    event.stopImmediatePropagation()
-    alert($(this).data('disabled'))
+  // delegation on body fires before rails.js. FIXME: this is not a valid guard. If "data-disabled"
+  // removed manually from the DOM, the request will still go through. The link should be disabled
+  // (not clickable) and the server should return a flash error.
+  $('body').delegate('a[data-disabled]', 'click', (event) => {
+    alert((event.currentTarget as HTMLAnchorElement).dataset.disabled)
     return false
   })
 
