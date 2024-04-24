@@ -86,6 +86,20 @@ Given "{product} does not allow buyers to manage application keys" do |product|
   product.update!(buyers_manage_keys: false)
 end
 
+Given "{product} has the following integration errors:" do |product, table|
+  transform_table(table)
+  errors = table.hashes.map { |error| ThreeScale::Core::ServiceError.new(error) }
+
+  ThreeScale::Core::ServiceError.stubs(:load_all)
+                                .with(product.id, any_parameters)
+                                .returns(ThreeScale::Core::APIClient::Collection.new(errors, errors.size))
+
+  ThreeScale::Core::ServiceError.stubs(:delete_all)
+                                .with(product.id)
+                                .at_most_once
+
+end
+
 Then /^I should see the following backends being used:$/ do |table|
   within backends_used_table do
     table.raw.each do |row|

@@ -286,6 +286,10 @@ World(Module.new do
                       .find_by!("backend_apis.name" => $1)
       edit_admin_service_backend_usage_path(product, config)
 
+    when /^the integration errors page of product "([^"]+)"$/
+      service = Service.find_by!(name: $1)
+      admin_service_errors_path(service)
+
     #
     # Plans (Admin portal)
     #
