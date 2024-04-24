@@ -37,13 +37,14 @@ class Stats::Data::BackendApisControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test 'user permissions' do
+  test 'user permissions: usage allowed for members with Analytics permissions' do
     member_user = FactoryBot.create(:member, account: provider)
     member_access_token  = FactoryBot.create(:access_token, owner: member_user, scopes: ['stats'])
     get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: member_access_token.value), params: stats_params
     assert_response :forbidden
 
-    get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: access_token.value), params: stats_params
+    member_user.update(allowed_sections: [:monitoring])
+    get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: member_access_token.value), params: stats_params
     assert_response :success
   end
 
