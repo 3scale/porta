@@ -29,12 +29,16 @@ export default function (): void { /* eslint-disable */
     })
   })
 
-  $(document).on('click', 'a.fancybox, a.colorbox', function (e) {
-    $(this).colorbox({ open: true })
-    e.preventDefault()
+  // TODO: replace .fancybox with .colorbox
+  // This link will load its content into a colorbox modal
+  $(document).on('click', 'a.fancybox, a.colorbox', ({ currentTarget }) => {
+    $(currentTarget).colorbox({ open: true })
+    return false
   })
 
-  $(document).on('click', '.fancybox-close', function () {
+  // TODO: replace .fancybox with .colorbox
+  // This is used in some modals with a "Cancel" button.
+  $(document).on('click', '.fancybox-close', () => {
     $.colorbox.close()
     return false
   })
