@@ -47,6 +47,11 @@ namespace :searchd do
       #
       # no way to wait for an index optimization to finish before starting another unless we switch to manticore
       ThinkingSphinx::Connection.take do |connection|
+        # The best performance of a RT index is achieved after flushing the RAM chunk and
+        # optimizing the index - the RT index will have all the data in a single chunk and
+        # will have same performance as a plain index.
+        # see https://manticoresearch.com/blog/basics-of-manticore-indexes/
+        connection.execute "FLUSH RAMCHUNK #{index.name}"
         connection.execute "OPTIMIZE INDEX #{index.name}"
       end
 
