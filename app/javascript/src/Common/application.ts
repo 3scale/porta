@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
+import type { JQueryXHR } from 'Types/jquery/v1'
+
 const $ = window.$
 
 export default function (): void { /* eslint-disable */
@@ -43,15 +45,17 @@ export default function (): void { /* eslint-disable */
     return false
   })
 
-  // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed. Also jquery-ujs has been replaced with rails-ujs.
-  // Added #colorbox selector to target only non-React forms
-  // show errors from ajax in formtastic
-  $(document).on('ajax:error', 'form:not(.pf-c-form)', function (event, xhr, status, error) {
-    switch (status) {
-      case 'error':
-        $.colorbox({ html: xhr.responseText })
-        event.stopPropagation()
-        break
+  /**
+   * Handle errors in formtastic forms rendered inside a colorbox. The error template is passed a
+   * responseText inside the XHR response.
+   *
+   * DEPRECATED: replace jquery/colorbox modals with Patternfly modals.
+   * TODO: add a colorbox specific selector to separate this with non-legacy implementations.
+   */
+  $(document).on('ajax:error', 'form:not(.pf-c-form)', (_event, xhr: JQueryXHR, status) => {
+    if (status === 'error') {
+      $.colorbox({ html: xhr.responseText })
+      return false
     }
   })
 
