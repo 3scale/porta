@@ -251,7 +251,7 @@ module System
     email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {})
     config.three_scale.email_sanitizer.merge!(email_sanitizer_configs)
 
-    config.three_scale.merge!(three_scale.slice!(:force_ssl, :access_code))
+    config.three_scale.merge!(three_scale.slice!(:force_ssl))
     three_scale.each do |key, val|
       config.public_send("#{key}=", val)
     end

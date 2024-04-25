@@ -1,0 +1,12 @@
+base: &default
+  perform_deliveries: <%= ENV.fetch('WEBHOOK_PERFORM_DELIVERIES', '1') == '1' %>
+
+development:
+  <<: *default
+  sanitized_url: <%= ENV.fetch('WEBHOOK_SANITIZED_URL', 'http://127.0.0.1/') %>
+
+test:
+  <<: *default
+
+production:
+  <<: *default

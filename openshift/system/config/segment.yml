@@ -1,4 +1,0 @@
-production:
-  enabled: false
-  stub: false
-  write_key: true

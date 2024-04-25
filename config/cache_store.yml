@@ -7,4 +7,6 @@ development: *default
 test:
   - :null_store
 
-production: *default
+production:
+  - :mem_cache_store
+  - <%= ENV['MEMCACHE_SERVERS'].presence || 'system-memcache:11211' %>

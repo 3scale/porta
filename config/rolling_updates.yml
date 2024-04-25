@@ -1,16 +1,29 @@
-production:
+base: &default
   apicast_oidc: true
   apicast_per_service: true
   apicast_v2: true
+  billable_contracts:
   duplicate_application_id: true
   duplicate_user_key: true
   instant_bill_plan_change: false
   new_notification_system: true
   plan_changes_wizard: false
   policy_registry: true
+  provider_sso:
   proxy_private_base_path: true
   proxy_pro: false
   published_service_plan_signup: true
   require_cc_on_signup: false
-  service_mesh_integration: true
+  service_mesh_integration: false
   service_permissions: true
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  published_service_plan_signup:
+
+production:
+  <<: *default
+  service_mesh_integration: true

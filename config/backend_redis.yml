@@ -1,6 +1,6 @@
-production:
-  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://backend-redis:6379') %>"
-  timeout: <%= ENV.fetch('REDIS_BACKEND_TIMEOUT', 1) %>
+base: &default
+  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/6') %>"
+  timeout: <%= ENV.fetch('BACKEND_REDIS_TIMEOUT', 1) %>
   pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
@@ -17,3 +17,13 @@ production:
     cert: <%= ENV['BACKEND_REDIS_CLIENT_CERT'] %>
     key: <%= ENV['BACKEND_REDIS_PRIVATE_KEY'] %>
 
+development:
+  <<: *default
+
+test:
+  <<: *default
+  db: <%= 2 + ENV['TEST_ENV_NUMBER'].to_i %>
+
+production:
+  <<: *default
+  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://backend-redis:6379') %>"

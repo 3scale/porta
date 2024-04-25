@@ -1,4 +1,4 @@
-production:
+base: &default
   'USD - American Dollar': 'USD'
   'EUR - Euro': 'EUR'
   'GBP - British Pound': 'GBP'
@@ -9,3 +9,12 @@ production:
   'JPY - Japanese Yen': 'JPY'
   'CHF - Swiss Franc': 'CHF'
   'SAR - Saudi Riyal': 'SAR'
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
