@@ -22,7 +22,7 @@ module HtmlSelectorsHelper
       'nav.pf-c-nav.pf-m-horizontal'
 
     when /the modal/
-      '#cboxContent' # '#fancybox-content'
+      '#cboxContent, .pf-c-modal-box' # '#fancybox-content'
 
     #
     # Dashboard

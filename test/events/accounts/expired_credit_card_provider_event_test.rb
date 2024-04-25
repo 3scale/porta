@@ -3,8 +3,8 @@ require 'test_helper'
 class Accounts::ExpiredCreditCardProviderEventTest < ActiveSupport::TestCase
 
   def test_create
-    buyer = FactoryBot.build_stubbed(:buyer_account, id: 1,
-                                        provider_account_id: 2)
+    provider = FactoryBot.build(:simple_provider)
+    buyer = FactoryBot.build_stubbed(:buyer_account, id: 1, provider: provider)
     event = Accounts::ExpiredCreditCardProviderEvent.create(buyer)
 
     assert event

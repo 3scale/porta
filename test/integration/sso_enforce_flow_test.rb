@@ -21,11 +21,6 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_match 'Signed in successfully', flash[:notice]
     assert_not_nil User.current
 
-    # there's no auth providers, no enforce sso info error message yet
-    get provider_admin_account_authentication_providers_path
-    assert_response :success
-    assert_no_match enforce_error_message, response.body
-
     # new auth provider has been created, not published yet
     get new_provider_admin_account_authentication_provider_path
     assert_response :success
@@ -38,11 +33,6 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     end
     auth_provider = @provider.reload.self_authentication_providers.first
     assert auth_provider
-
-    # there's one auth provider, enforce sso info error message is visible
-    get provider_admin_account_authentication_providers_path
-    assert_response :success
-    assert_match enforce_error_message, response.body
 
     # auth provider has not been tested yet, error message visible
     get provider_admin_account_authentication_provider_path(auth_provider)
@@ -76,11 +66,6 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_match 'SSO Integration successfully published', flash[:notice]
     assert auth_provider.reload.published?
 
-    # current user is not sso logged in
-    get provider_admin_account_authentication_providers_path
-    assert_response :success
-    assert_match enforce_error_message, response.body
-
     # current user logs out
     delete provider_sessions_path
     assert_response :redirect
@@ -90,16 +75,8 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     get provider_sso_path(system_name: auth_provider.system_name)
     assert_match 'Signed in successfully', flash[:notice]
 
-    # there's no enforce sso info error message
-    get provider_admin_account_authentication_providers_path
-    assert_response :success
-    assert_no_match enforce_error_message, response.body
-
     # enforce sso feature has been successfully enabled
-    assert_not @provider.settings.enforce_sso?
-    post provider_admin_account_enforce_sso_path
-    assert_match 'SSO successfully enforced', flash[:notice]
-    assert @provider.reload.settings.enforce_sso?
+    @provider.settings.update!(enforce_sso: true)
 
     # current user logs out
     delete provider_sessions_path
@@ -121,11 +98,5 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
 
   def needs_to_be_testet_error
     'The SSO Integration needs to be tested'
-  end
-
-  def enforce_error_message
-    'In order to be able to enforce SSO, at least 1 SSO Integration ' \
-    'needs to be published, all published SSO Integrations need to have ' \
-    'been tested within the last hour and you need to be signed in through SSO yourself.'
   end
 end

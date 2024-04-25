@@ -98,7 +98,7 @@ class ImportCountriesServiceTest < ActiveSupport::TestCase
       Country.expects(:find_by).with(code: 'JP').returns(japan)
 
       country_data.select(&:valid?).reject { |country| country.code == 'JP' }.each { |country| Country.expects(:create!).with(country.attributes) }
-      japan.expects(:update!).with(name: 'Japan', currency: 'JPY', updated_at: now)
+      japan.expects(:update!).with({ name: 'Japan', currency: 'JPY', updated_at: now })
 
       service.call!
     end

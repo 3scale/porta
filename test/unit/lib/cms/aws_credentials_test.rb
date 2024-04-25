@@ -56,7 +56,7 @@ class Aws::AwsCredentialsTest < ActiveSupport::TestCase
     use_sts
     File.stubs(:exist?).with(full_params[:web_identity_token_file]).returns(true)
 
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(sts_credentials)
+    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(**sts_auth_params).returns(sts_credentials)
     assert_equal sts_credentials, CMS::AwsCredentials.instance.send(:sts_credentials)
   end
 

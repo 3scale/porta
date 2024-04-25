@@ -1,5 +1,5 @@
 class ReverseProviderKeyWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   # @param [Account,Provider] provider
   def self.enqueue(provider)

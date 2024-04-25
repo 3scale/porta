@@ -47,7 +47,7 @@ class WebHookWorkerTest < ActiveSupport::TestCase
   end
 
   test 'perform sends the webhook' do
-    @worker.expects(:push).with(url: 'url', xml: 'xml', content_type: 'content_type')
+    @worker.expects(:push).with({ url: 'url', xml: 'xml', content_type: 'content_type' })
     @worker.perform('uuid', { 'provider_id' => 'provider', 'url' => 'url', 'xml' => 'xml', 'content_type' => 'content_type' })
   end
 

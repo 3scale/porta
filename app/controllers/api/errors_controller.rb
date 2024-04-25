@@ -15,9 +15,8 @@ class Api::ErrorsController < Api::BaseController
 
     errors_service.delete_all(@service.id)
 
-    respond_to do |format|
-      format.js
-    end
+    flash[:notice] = t('.success')
+    redirect_to admin_service_errors_path(@service)
   end
 
   private

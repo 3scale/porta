@@ -153,8 +153,9 @@ World(Module.new do
     when 'search',
          'the search page'
       search_path
+
     #
-    # Account management
+    # Account settings (Admin portal)
     #
     when 'the account page',
           'settings'
@@ -221,6 +222,8 @@ World(Module.new do
       provider_admin_account_email_configurations_path
     when 'the new email configurations page'
       new_provider_admin_account_email_configurations_path
+    when 'the users sso integrations page'
+      provider_admin_account_authentication_providers_path
 
     #
     # API Management
@@ -282,6 +285,10 @@ World(Module.new do
                       .includes(:backend_api)
                       .find_by!("backend_apis.name" => $1)
       edit_admin_service_backend_usage_path(product, config)
+
+    when /^the integration errors page of product "([^"]+)"$/
+      service = Service.find_by!(name: $1)
+      admin_service_errors_path(service)
 
     #
     # Plans (Admin portal)

@@ -3,8 +3,9 @@ require 'test_helper'
 class Messages::MessageReceivedEventTest < ActiveSupport::TestCase
 
   def test_create
+    provider  = FactoryBot.build(:simple_provider, id: 1)
     message   = FactoryBot.build_stubbed(:message)
-    recipient = FactoryBot.build_stubbed(:received_message, message: message, receiver_id: 1)
+    recipient = FactoryBot.build_stubbed(:received_message, message: message, receiver: provider)
     event     = Messages::MessageReceivedEvent.create(message, recipient)
 
     assert event

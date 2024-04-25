@@ -121,11 +121,12 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
       ThreeScale::Analytics.expects(:track_account)
         .with(account,
-              'Credit Card Changed',
-              valid_previously: false,
-              valid_now: true,
-              expired_on: nil,
-              expires_on: Date.new(2017, 11, 1)
+              'Credit Card Changed', {
+                valid_previously: false,
+                valid_now: true,
+                expired_on: nil,
+                expires_on: Date.new(2017, 11, 1)
+              }
         )
 
       assert account.save!
@@ -140,11 +141,12 @@ class Account::CreditCardTest < ActiveSupport::TestCase
 
       ThreeScale::Analytics.expects(:track_account)
         .with(account,
-              'Credit Card Changed',
-              valid_previously: true,
-              valid_now: false,
-              expires_on: nil,
-              expired_on: Date.new(2017, 11, 1)
+              'Credit Card Changed', {
+                valid_previously: true,
+                valid_now: false,
+                expires_on: nil,
+                expired_on: Date.new(2017, 11, 1)
+              }
         )
 
       account.save!
