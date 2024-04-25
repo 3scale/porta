@@ -43,41 +43,6 @@ export default function (): void { /* eslint-disable */
     return false
   })
 
-  // Show panel on click.
-  $('a.show-panel').click(function () {
-    findPanel($(this)).fadeIn('fast')
-    return false
-  })
-
-  // Hide panel on click.
-  $('a.hide-panel').click(function () {
-    findPanel($(this)).fadeOut('fast')
-    return false
-  })
-
-  // Toggle panel on click.
-  $('a.toggle-panel').click(function () {
-    const panel = findPanel($(this))
-
-    if (panel.is(':visible')) {
-      panel.fadeOut('fast')
-    } else {
-      panel.fadeIn('fast')
-    }
-
-    return false
-  })
-
-  const findPanel = function (link) {
-    const id = link.attr('data-panel')
-
-    if (id) {
-      return $('#' + id)
-    } else {
-      return $(link.attr('href'))
-    }
-  }
-
   // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed. Also jquery-ujs has been replaced with rails-ujs.
   // Added #colorbox selector to target only non-React forms
   // show errors from ajax in formtastic
