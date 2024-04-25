@@ -28,7 +28,6 @@ doc/*
 *.md
 config/application.yml
 config/cassandra.yml
-config/database.yml
 config/initializers/before_filter_debug.rb
 config/master.key
 config/payments.yml
