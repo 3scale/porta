@@ -714,6 +714,9 @@ en:
       destroy:
         success: The Backend was removed from the Product
         error: The Backend cannot be removed from the Product
+    errors:
+      purge:
+        success: All errors were purged.
     services:
       forms:
         definition_settings:

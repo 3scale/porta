@@ -6,6 +6,11 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_integration_errors_table(table)
+    parameterize_headers(table)
+    table.map_column!(:timestamp) { |timestamp| timestamp.to_time.utc.to_s }
+  end
+
   def transform_backend_apis_table(table)
     parameterize_headers(table, 'System name' => 'system_name',
                                 'Private Base URL' => 'private_endpoint')
