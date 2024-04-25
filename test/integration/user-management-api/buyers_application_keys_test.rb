@@ -83,7 +83,25 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
                        method: '_destroy',
                        format: :xml })
 
-      assert_response :success
+      assert_response :success, "response #{@response.response_code} for key #{rm_key}"
+    end
+  end
+
+  # FYI this is the only way to delete keys ending in .xml or .json
+  test 'destroy key with appended format to the path' do
+    %w[foo-key foo.key foo.key.xml foo.key.json].each do |rm_key|
+
+      application = @buyer.bought_cinstances.last
+      expect_backend_create_key(application, rm_key)
+      expect_backend_delete_key(application, rm_key)
+
+      application.application_keys.add(rm_key)
+
+      delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key + ".json"),
+             params: { provider_key: @provider.api_key,
+                       method: '_destroy' })
+
+      assert_response :success, "response #{@response.response_code} for key #{rm_key}"
     end
   end
 
