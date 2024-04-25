@@ -58,8 +58,4 @@ export default function (): void { /* eslint-disable */
       return false
     }
   })
-
-  $(document).on('change', '#search_deleted_accounts', function () {
-    $(this.form).submit()
-  })
 }
