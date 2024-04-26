@@ -59,22 +59,13 @@ And "monthly charging can be disabled" do
   end
 end
 
-Given "a master admin is reviewing the provider's account" do
-  Capybara.app_host = Capybara.default_host = "http://#{Account.master.external_domain}"
-  Capybara.always_include_port = true
-
-  try_provider_login(Account.master.admins.first!.username, 'supersecret')
-
-  visit admin_buyers_account_path(@provider)
-end
-
-Then "{string} should be {word}" do |switch, state|
+Then "setting {string} should be {word}" do |switch, state|
   within_plan_settings_card do
     find('td', text: switch).sibling('td', text: state.camelize)
   end
 end
 
-Then "{string} can be enabled" do |switch|
+Then "setting {string} can be enabled" do |switch|
   within_plan_settings_card do
     accept_confirm do
       find('td', text: switch).sibling('td:last-of-type')
@@ -87,14 +78,8 @@ Then "{string} can be enabled" do |switch|
   end
 end
 
-And "the provider should be able to access billing" do
-  visit '/p/logout'
-  set_current_domain @provider.external_admin_domain
-  visit 'p/login'
-  try_provider_login(@provider.admins.first.username, 'supersecret')
-  click_on 'Billing'
-  assert_text 'Earnings by Month'
-  assert_equal admin_finance_root_path, current_path
+And "{provider} {is} able to access billing" do |provider, enabled|
+  assert_equal enabled, Ability.new(provider.admins.first).can?(:manage, :finance)
 end
 
 def within_billing_status_card(&block)
