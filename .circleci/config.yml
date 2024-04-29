@@ -71,11 +71,6 @@ generate-assets-checksums: &generate-assets-checksums
     name: Generate assets precompilation checksum data
     command: git ls-tree -r HEAD $(<.circleci/asset_paths) > tmp/assets_related_checksums
 
-use-example-config-files: &use-example-config-files
-  run:
-    name: Copy example config files into place to be used by tests
-    command: cp config/examples/*.yml config/
-
 disable-internet-access: &disable-internet-access
   run:
     name: Disable internet access
@@ -270,7 +265,6 @@ commands: # reusable commands with parameters
     steps:
       - checkout
       - *attach-to-workspace
-      - *use-example-config-files
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
@@ -324,7 +318,6 @@ commands: # reusable commands with parameters
     steps:
       - checkout
       - *attach-to-workspace
-      - *use-example-config-files
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
@@ -507,7 +500,6 @@ jobs:
       - *attach-to-workspace
       - *generate-assets-checksums
       - *restore-assets-cache
-      - *use-example-config-files
       - run:
           name: Precompile assets
           command: bundle exec rake assets:precompile:test
@@ -548,7 +540,6 @@ jobs:
     steps:
       - checkout
       - *attach-to-workspace
-      - *use-example-config-files
       - run:
           name: Licenses check
           command: bundle exec rake licenses:compliance

@@ -195,11 +195,3 @@ Then install all required packages:
 ```
 yarn install
 ```
-
-### Config files
-
-Copy all the default config files to your project's config folder:
-
-```
-cp config/examples/* config/
-```
