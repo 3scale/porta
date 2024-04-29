@@ -45,15 +45,8 @@ C:\\nppdf32Log\\debuglog.txt
 /junit/
 /coverage/
 
-/config/application.yml
-/config/cassandra.yml
-/config/initializers/before_filter_debug.rb
 /config/master.key
 /config/payments.yml
-/config/prometheus.yml
-/config/resque.yml
-/config/slave_redis.yml
-/config/tinny_tim.yml
 /config/unicorn.rb
 /config/*.sphinx.conf
 /db/*.sql
@@ -65,7 +58,6 @@ C:\\nppdf32Log\\debuglog.txt
 /public/.DS_Store
 /public/stylesheets/compiled/*
 /public/stylesheets/templates/
-/public/active_docs/application-*
 /public/active_docs/application-*
 /public/active_docs/manifest.yml
 /public/active_docs/*-*.png

@@ -26,15 +26,8 @@ doc/*
 !doc/dependency_decisions.yml
 !doc/licenses
 *.md
-config/application.yml
-config/cassandra.yml
-config/initializers/before_filter_debug.rb
 config/master.key
 config/payments.yml
-config/prometheus.yml
-config/resque.yml
-config/slave_redis.yml
-config/tinny_tim.yml
 config/unicorn.rb
 config/*.sphinx.conf
 public/assets
@@ -46,7 +39,6 @@ openshift/system/Dockerfile*
 openshift/system/*.yml
 openshift/system/*.md
 log/*
-**/.idea
 **/*.sql
 **/*.swp
 **/.*
