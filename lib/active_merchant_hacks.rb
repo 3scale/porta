@@ -18,6 +18,12 @@ class ActiveMerchant::Billing::Gateway
 
 end
 
+::ActiveMerchant::Billing::AuthorizeNetGateway.class_eval do
+  def cim_gateway
+    @cim_gateway ||= ::ActiveMerchant::Billing::AuthorizeNetCimGateway.new(options)
+  end
+end
+
 module BraintreeData
   attr_reader :data
   def initialize(gateway, data)

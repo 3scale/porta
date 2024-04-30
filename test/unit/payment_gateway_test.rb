@@ -12,7 +12,7 @@ class PaymentGatewayTest < ActiveSupport::TestCase
   class ClassMethodsTest < ActiveSupport::TestCase
     test '#all contain only supported gateways' do
       PaymentGateway.stubs(:bogus_enabled?).returns(false)
-      assert_equal %i[braintree_blue stripe], PaymentGateway.all.map(&:type).sort
+      assert_equal %i[authorize_net braintree_blue stripe], PaymentGateway.all.map(&:type).sort
     end
 
     test '#all include bogus when enabled' do
@@ -24,6 +24,27 @@ class PaymentGatewayTest < ActiveSupport::TestCase
       payment_gateway = PaymentGateway.new(:feature, name: 'Name of the feature', opt_in: 'Opt in', boolean: %i[opt_in])
       assert_equal %i[opt_in], payment_gateway.boolean_field_keys
       assert_equal ({ name: 'Name of the feature' }), payment_gateway.non_boolean_fields
+    end
+  end
+
+  class AuthorizeNetTest < PaymentGatewayTest
+    def type
+      :authorize_net
+    end
+
+    test 'have display_name' do
+      assert_equal 'Authorize.Net', gateway.display_name
+    end
+
+    test 'have homepage_url' do
+      assert_equal 'http://www.authorize.net/', gateway.homepage_url
+    end
+
+    test ':login and :password order in #fields' do
+      fields = gateway.fields.keys
+
+      assert_equal 0, fields.index(:login), ":login must be the first field declared in Gateway[#{type}]"
+      assert_equal 1, fields.index(:password), ":password must be the second field declared in Gateway[#{type}]"
     end
   end
 
