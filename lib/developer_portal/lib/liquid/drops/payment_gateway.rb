@@ -6,7 +6,7 @@ module Liquid
         @account = account
       end
 
-      desc "Returns whether current payment gateway is authorize.Net."
+      desc "Returns whether current payment gateway is Braintree."
       def braintree_blue?
         @account.payment_gateway_type == :braintree_blue
       end
