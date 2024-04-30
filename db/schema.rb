@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.text "vat_zero_text"
     t.bigint "default_account_plan_id"
     t.bigint "default_service_id"
+    t.string "credit_card_authorize_net_payment_profile_token"
     t.bigint "tenant_id"
     t.string "self_domain"
     t.string "s3_prefix"
