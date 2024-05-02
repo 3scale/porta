@@ -1,21 +1,4 @@
 (function($){
-    $.partial_paths = function(paths){
-        $(function(){
-            $('.cms-section-picker').change(function(){
-                var section_id = parseInt($(this).val(), 10);
-                $('.cms-path-autocomplete').attr('placeholder', paths[section_id]);
-            }).trigger('change');
-            $('.cms-path-autocomplete').focus(function(){
-                var path = $(this);
-                if(path.val() === ""){
-                    path.val(path.attr('placeholder'));
-                    this.select();
-                }
-            });
-
-        });
-    };
-
     $(function(){
         // Open/Close 'Advanced Options' on load
         $(document).on('cms-template:init', function(event){

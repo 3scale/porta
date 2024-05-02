@@ -83,5 +83,7 @@ declare global {
     class Sidebar {
       public constructor (selector: string)
     }
+
+    function partialPaths (paths: string[]): void
   }
 }
