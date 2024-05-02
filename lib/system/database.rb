@@ -166,7 +166,7 @@ ActiveSupport.on_load(:active_record) do
         protected
 
         def username
-          @config['username']
+          @config[:username]
         end
       end)
     end
