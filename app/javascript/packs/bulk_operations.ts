@@ -1,19 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-invalid-this */
+const jquery1 = window.$
 
 document.addEventListener('DOMContentLoaded', () => {
   const dataSelectedTotal = 'data-selected-total-entries'
   const dataDefaultText = 'data-default-text'
   const dataSelectedTotalEntries = 'data-selected-total-entries'
-
-  const colorboxOpts = {
-    autoDimensions: true,
-    overlayShow: true, // cannot use modal, because its setting cannot be overridden
-    hideOnOverlayClick: false,
-    hideOnContentClick: false,
-    enableEscapeButton: false,
-    showCloseButton: true
-  }
 
   const findSelectAllCheckbox = () => document.querySelector<HTMLInputElement>('table thead .select .select-all')
   const findSelectTotalEntries = () => document.querySelector<HTMLAnchorElement>('#bulk-operations a.select-total-entries')
@@ -22,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function hrefFor (url: string) {
     // url address might already include some parameters
     const connector = url.includes('?') ? '&' : '?'
-    let href = url.concat(connector, $('table tbody .select :checked').serialize())
+    let href = url.concat(connector, jquery1('table tbody .select :checked').serialize())
 
     const selectTotalEntries = findSelectTotalEntries()
     if (selectTotalEntries?.hasAttribute(dataSelectedTotal)) {
@@ -78,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateBulkOperationsCard () {
-    const bulk = $('#bulk-operations')
+    const bulk = jquery1('#bulk-operations')
     const selected = selectedRows()
 
     if (selected > 0) {
@@ -106,10 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .forEach(dt => {
         dt.querySelector('button')!
           .addEventListener('click', () => {
-            // @ts-expect-error -- Missing types for colorbox
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            $.colorbox({
-              ...colorboxOpts,
+            jquery1.colorbox({
               title: dt.nextElementSibling!.textContent,
               href: hrefFor(dt.dataset.url!)
             })

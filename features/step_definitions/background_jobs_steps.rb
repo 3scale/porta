@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 Given 'there are no enqueued jobs' do
-  Sidekiq::Worker.clear_all
+  Sidekiq::Job.clear_all
 end

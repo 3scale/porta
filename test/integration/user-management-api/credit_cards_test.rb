@@ -141,9 +141,9 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     assert_not @buyer.credit_card_stored?
   end
 
-  test 'store_credit_card_info without needed params for deprecated payment gateway fails' do
+  test 'store_credit_card_info without needed params for auth.net fails' do
     assert_not @buyer.credit_card_stored?
-    @provider.update(payment_gateway_type: :banana)
+    @provider.update(payment_gateway_type: :authorize_net) # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     @provider.reload
     put admin_api_account_credit_card_path(@buyer, format: :xml), params: { credit_card_token: 'fdsa', provider_key: @provider.api_key }
 
@@ -172,6 +172,35 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
 
     assert @buyer.credit_card_stored?
     assert_equal 'secret', @buyer.credit_card_auth_code
+    assert_equal '1234', @buyer.credit_card_partial_number
+    assert_equal 'foo', @buyer.billing_address_name
+    assert_equal 'elm street', @buyer.billing_address_address1
+    assert_equal 'sin city', @buyer.billing_address_city
+    assert_equal 'spain', @buyer.billing_address_country
+    assert_equal Date.parse('2013/12'), @buyer.credit_card_expires_on_with_default
+  end
+
+  test 'ok store_credit_card_info for authorize_net' do
+    assert_not @buyer.credit_card_stored?
+    @provider.update(payment_gateway_type: :authorize_net) # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
+    @provider.reload
+
+    put admin_api_account_credit_card_path(@buyer, format: :xml), params: {
+      credit_card_token: 'secret',
+      credit_card_authorize_net_payment_profile_token: 'cctoken',
+      credit_card_partial_number: '1234',
+      billing_address_name: 'foo',
+      billing_address_address: 'elm street',
+      billing_address_city: 'sin city',
+      billing_address_country: 'spain',
+      credit_card_expiration_year: '2013',
+      credit_card_expiration_month: '12',
+      provider_key: @provider.api_key }
+    @buyer.reload
+
+    assert @buyer.credit_card_stored?
+    assert_equal 'secret', @buyer.credit_card_auth_code
+    assert_equal 'cctoken', @buyer.credit_card_authorize_net_payment_profile_token
     assert_equal '1234', @buyer.credit_card_partial_number
     assert_equal 'foo', @buyer.billing_address_name
     assert_equal 'elm street', @buyer.billing_address_address1

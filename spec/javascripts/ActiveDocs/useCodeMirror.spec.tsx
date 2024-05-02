@@ -7,7 +7,7 @@ import type { Doc, Editor } from 'codemirror'
 
 const setValue = jest.fn()
 
-const on: CodeMirror.Editor['on'] = jest.fn((_event, fn): void => {
+const on: Editor['on'] = jest.fn((_event, fn): void => {
   const instance = { getDoc: () => doc } as Editor
   const doc = { getValue: () => 'value' } as Doc
 

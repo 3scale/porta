@@ -228,7 +228,8 @@ class CMS::EmailTemplate < CMS::Template
                 def mail(headers, &block)
                   if @provider_account
                     headers[:template_path] ||= 'emails'
-                    prepend_view_path Liquid::Template::Resolver.instance(@provider_account)
+                    resolver = Liquid::Template::Resolver.instance(@provider_account)
+                    prepend_view_path resolver
 
                     headers[::Message::APPLY_ENGAGEMENT_FOOTER]= @provider_account.should_apply_email_engagement_footer?
                   else
@@ -236,6 +237,8 @@ class CMS::EmailTemplate < CMS::Template
                   end
 
                   super(headers, &block)
+                ensure
+                  resolver&.clear_cache
                 end
 
                 def render(options)

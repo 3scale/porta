@@ -21,8 +21,8 @@ create_intro_tabs = () ->
   try
     jQueryUI('#cms-intro-tabs').tabs
       active: $("#cms-intro-tabs > ##{tab}").data('ui-tabs-index')
-      activate: (event,ui) -> 
-        currentTab = ui.newPanel.selector.slice(1)
+      activate: (event,ui) ->
+        currentTab = ui.newPanel.selector.slice(1) # FIXME: don't use .selector on jquery objects (jquery 1.9)
         $.cookie('getting-started-tabs', currentTab)
         window.setLocationHash(currentTab)
 

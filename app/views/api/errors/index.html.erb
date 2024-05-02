@@ -10,7 +10,7 @@
 
 <% if @errors.empty? %>
   <div class="pf-c-card" id="transaction_errors_container_<%= @service.id %>">
-    <%= render :partial => 'no_errors' %>
+    <p class="mini_info"><strong>Hooray! No integration errors reported for this service.</strong></p>
   </div>
 <% else %>
   <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Integration errors table">
@@ -19,7 +19,7 @@
         <th role="columnheader" scope="col">Time (UTC)</th>
         <th role="columnheader" scope="col">Error</th>
         <td role="columnheader" scope="col" class="pf-m-fit-content">
-          <%= fancy_button_to 'Purge', admin_service_errors_path(@service), method: :delete, class: 'delete unset-min-height', remote: true %>
+          <%= fancy_button_to 'Purge', admin_service_errors_path(@service), method: :delete, class: 'delete unset-min-height' %>
         </td>
       </tr>
     </thead>

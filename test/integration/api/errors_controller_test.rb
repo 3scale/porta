@@ -22,7 +22,6 @@ class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
   test 'purge with js' do
     IntegrationErrorsService.any_instance.expects(:delete_all).with(@service.id)
     delete purge_admin_service_errors_path(@service, format: :js)
-    assert_response :success
-    assert_template 'api/errors/purge'
+    assert_redirected_to admin_service_errors_path(@service)
   end
 end

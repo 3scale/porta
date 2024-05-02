@@ -45,9 +45,9 @@ const PlansTable: FunctionComponent<Props> = ({
   const [plans, setPlans] = useState<Plan[]>(initialPlans)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleActionCopy = (path: string) => ajax(path, { method: 'POST' })
+  const handleActionCopy = (path: string) => ajax<{ notice: string; plan: string; error: string }>(path, { method: 'POST' })
     .then(data => data.json()
-      .then((res: { notice: string; plan: string; error: string }) => {
+      .then((res) => {
         if (data.status === 201) {
           flash.notice(res.notice)
           const newPlan = JSON.parse(res.plan) as Plan
@@ -66,9 +66,9 @@ const PlansTable: FunctionComponent<Props> = ({
   const handleActionDelete = (path: string) => waitConfirm('Are you sure?')
     .then(confirmed => {
       if (confirmed) {
-        return ajax(path, { method: 'DELETE' })
+        return ajax<{ notice: string; id: number }>(path, { method: 'DELETE' })
           .then(data => data.json()
-            .then((res: { notice: string; id: number }) => {
+            .then((res) => {
               if (data.status === 200) {
                 flash.notice(res.notice)
                 const purgedPlans = plans.filter(p => p.id !== res.id)
@@ -83,9 +83,9 @@ const PlansTable: FunctionComponent<Props> = ({
     })
     .finally(() => { setIsLoading(false) })
 
-  const handleActionPublishHide = (path: string) => ajax(path, { method: 'POST' })
+  const handleActionPublishHide = (path: string) => ajax<{ notice: string; plan: string; error: string }>(path, { method: 'POST' })
     .then(data => data.json()
-      .then((res: { notice: string; plan: string; error: string }) => {
+      .then((res) => {
         if (data.status === 200) {
           flash.notice(res.notice)
           const newPlan = JSON.parse(res.plan) as Plan

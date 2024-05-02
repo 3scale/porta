@@ -9,9 +9,7 @@ module Liquid
 
       example "Using container tag in liquid", %{
         <html>
-          <head>
-           {% essential_assets %}
-          </head>
+          <head></head>
           <body>
            {% container main %}
            <p class="notice">If a CMS page uses this layout you will have a container at your disposal to add content to.</p>

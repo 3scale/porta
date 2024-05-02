@@ -15,7 +15,7 @@ class VerticalNavHelperTest < ActionView::TestCase
     def setup
       super
       @current_account = FactoryBot.create(:simple_provider)
-      @current_user = FactoryBot.create(:simple_user, account: current_account)
+      @current_user = FactoryBot.create(:simple_admin, account: current_account)
     end
 
     test '#backend_api_nav_sections' do
@@ -26,7 +26,7 @@ class VerticalNavHelperTest < ActionView::TestCase
 
       # if not permitted
       stubs(can?: false)
-      assert_equal(["Backend Overview", "Methods and Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
+      assert_equal(["Backend Overview"], backend_api_nav_sections.pluck(:title))
 
       # When backend_api is not persisted
       @backend_api = BackendApi.new

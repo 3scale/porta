@@ -47,6 +47,7 @@ Ability.define do |user|
   if user.has_permission?('monitoring')
     can :manage, :monitoring
     can :manage, :analytics
+    can %i[index show], BackendApi
   end
 
   if user.has_permission?('portal')
