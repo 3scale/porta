@@ -7,7 +7,8 @@ export default function (): void {
   // delegation on body fires before rails.js. FIXME: this is not a valid guard. If "data-disabled"
   // removed manually from the DOM, the request will still go through. The link should be disabled
   // (not clickable) and the server should return a flash error.
-  $('body').on('click', 'a[data-disabled]', ({ currentTarget }) => {
+  $('body').on('click', 'a[data-disabled]', ({ currentTarget, stopImmediatePropagation }) => {
+    stopImmediatePropagation()
     alert((currentTarget as HTMLAnchorElement).dataset.disabled)
     return false
   })
@@ -33,9 +34,9 @@ export default function (): void {
 
   // TODO: replace .fancybox with .colorbox
   // This link will load its content into a colorbox modal
-  $(document).on('click', 'a.fancybox, a.colorbox', ({ currentTarget }) => {
+  $(document).on('click', 'a.fancybox, a.colorbox', ({ currentTarget, preventDefault }) => {
     jQuery1(currentTarget as HTMLAnchorElement).colorbox({ open: true })
-    return false
+    preventDefault()
   })
 
   // TODO: replace .fancybox with .colorbox
@@ -53,10 +54,10 @@ export default function (): void {
    * DEPRECATED: replace jquery/colorbox modals with Patternfly modals.
    * TODO: add a colorbox specific selector to separate this with non-legacy implementations.
    */
-  jQuery1(document).on('ajax:error', 'form:not(.pf-c-form)', (_event, xhr: JQueryXHR, status) => {
+  jQuery1(document).on('ajax:error', 'form:not(.pf-c-form)', (event, xhr: JQueryXHR, status) => {
     if (status === 'error') {
       jQuery1.colorbox({ html: xhr.responseText })
-      return false
+      event.stopPropagation()
     }
   })
 }
