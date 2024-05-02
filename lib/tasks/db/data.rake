@@ -13,11 +13,13 @@ namespace :db do
       if ENV['EXCLUDE_USAGE']
         usage_tables = %w[service_transactions reports]
         usage_tables.each do |table|
-          options << " --ignore-table=#{config['database']}.#{table}"
+          options << " --ignore-table=#{config[:database]}.#{table}"
         end
       end
 
-      system "mysqldump #{mysql_params(config)}#{options} #{config['database']} > #{Rails.root}/db/data.sql"
+      command =  "mysqldump #{mysql_params(config)}#{options} #{config[:database]} > #{Rails.root}/db/data.sql"
+      puts command
+      system "mysqldump #{mysql_params(config)}#{options} #{config[:database]} > #{Rails.root}/db/data.sql"
     end
 
     desc "Load data from db/data.sql into current database, erasing any previous content"
@@ -32,8 +34,8 @@ namespace :db do
 
       config = ActiveRecord::Base.configurations[Rails.env]
 
-      puts "Loading data from #{dump} into #{config['database']} database..."
-      system "mysql #{mysql_params(config)} -D #{config['database']} < #{dump}"
+      puts "Loading data from #{dump} into #{config[:database]} database..."
+      system "mysql #{mysql_params(config)} -D #{config[:database]} < #{dump}"
 
       puts "Running migrations (if any)..."
       Rake::Task['db:migrate'].execute({})
@@ -60,10 +62,10 @@ namespace :db do
 
     def mysql_params(config)
       params = ""
-      params << " --host=#{config["host"]}" if config["host"]
-      params << " --socket=#{config["socket"]}" if config["socket"]
-      params << " --user=#{config["username"]}" if config["username"]
-      params << " --password=#{config["password"]}" if config["password"]
+      params << " --host=#{config[:host]}" if config[:host]
+      params << " --socket=#{config[:socket]}" if config[:socket]
+      params << " --user=#{config[:username]}" if config[:username]
+      params << " --password=#{config[:password]}" if config[:password]
       params
     end
 
