@@ -1,10 +1,5 @@
 (function($){
     $(function(){
-        // Open/Close 'Advanced Options' on load
-        $(document).on('cms-template:init', function(event){
-            toggledInputsInit();
-        });
-
         // init change detection
         $(window).on('beforeunload', function(e){
             var textareas = $(".codemirror textarea[name]"),

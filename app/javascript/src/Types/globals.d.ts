@@ -30,14 +30,11 @@ declare global {
     setLocationHash: (value: string) => void; // Defined in app/assets/javascripts/provider/utils.js.coffee
   }
 
-  // Declared as global function in app/assets/javascripts/provider/toggled_inputs.js FIXME 😭
-  function toggledInputsInit (): void
-
   // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
   // This should be de default jQuery available, only TS files loaded by webpack have v3.7.0
   interface JQueryStaticV1Plugins {
     colorbox: ColorboxStatic;
-    cookie: (name: string, value?: string) => string;
+    cookie: (name: string, value?: string, opts?: unknown) => string | undefined;
     flash: ((message: string) => void) & {
       notice: (message: string) => void;
       error: (message: string) => void;
