@@ -948,7 +948,7 @@ DEPENDENCIES
   activejob-uniqueness
   activemerchant (~> 1.107.4)
   activemodel-serializers-xml
-  activerecord-oracle_enhanced-adapter (~> 6.0)
+  activerecord-oracle_enhanced-adapter (~> 6.1.6)
   acts-as-taggable-on (~> 8.0)
   acts_as_list (~> 0.9.17)
   acts_as_tree
