@@ -2,8 +2,8 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.text "vat_zero_text"
     t.bigint "default_account_plan_id"
     t.bigint "default_service_id"
+    t.string "credit_card_authorize_net_payment_profile_token", limit: 255
     t.bigint "tenant_id"
     t.string "self_domain", limit: 255
     t.string "s3_prefix", limit: 255

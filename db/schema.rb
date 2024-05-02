@@ -2,8 +2,8 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2024_03_02_090207) do
 
-  create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
     t.text "scopes"
     t.string "value", null: false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["value", "owner_id"], name: "idx_value_auth_tokens_of_user", unique: true
   end
 
-  create_table "accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "accounts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "org_name", default: "", null: false
     t.string "org_legaladdress", default: ""
     t.datetime "created_at", null: false
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.text "vat_zero_text"
     t.bigint "default_account_plan_id"
     t.bigint "default_service_id"
+    t.string "credit_card_authorize_net_payment_profile_token"
     t.bigint "tenant_id"
     t.string "self_domain"
     t.string "s3_prefix"
@@ -103,7 +104,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at"
   end
 
-  create_table "alerts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "alerts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.datetime "timestamp", null: false
     t.string "state", null: false
@@ -120,7 +121,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
 
-  create_table "api_docs_services", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "api_docs_services", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.string "name"
@@ -139,7 +140,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["service_id"], name: "fk_rails_e4d18239f1"
   end
 
-  create_table "application_keys", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "application_keys", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", null: false
     t.datetime "created_at"
@@ -148,7 +149,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["application_id", "value"], name: "index_application_keys_on_application_id_and_value", unique: true
   end
 
-  create_table "audits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "audits", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "auditable_id"
     t.string "auditable_type"
     t.bigint "user_id"
@@ -178,7 +179,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["version"], name: "index_audits_on_version"
   end
 
-  create_table "authentication_providers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "authentication_providers", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "system_name"
     t.string "client_id"
@@ -205,7 +206,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_authentication_providers_on_account_id"
   end
 
-  create_table "backend_api_configs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "backend_api_configs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "path", default: ""
     t.bigint "service_id"
     t.bigint "backend_api_id"
@@ -217,7 +218,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["service_id"], name: "index_backend_api_configs_on_service_id"
   end
 
-  create_table "backend_apis", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "backend_apis", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name", limit: 511, null: false
     t.string "system_name", null: false
     t.text "description", size: :medium
@@ -231,13 +232,13 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "backend_events", id: :bigint, default: nil, charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "billing_strategies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "billing_strategies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.boolean "prepaid", default: false
     t.boolean "charging_enabled", default: false
@@ -252,7 +253,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_billing_strategies_on_account_id"
   end
 
-  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "category_type_id"
     t.bigint "parent_id"
     t.string "name"
@@ -263,7 +264,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_categories_on_account_id"
   end
 
-  create_table "category_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "category_types", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -272,7 +273,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_category_types_on_account_id"
   end
 
-  create_table "cinstances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cinstances", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "user_account_id"
     t.string "user_key", limit: 256
@@ -306,7 +307,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_key"], name: "index_cinstances_on_user_key", length: 255
   end
 
-  create_table "cms_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_files", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "section_id"
     t.bigint "tenant_id"
@@ -324,14 +325,14 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["section_id"], name: "index_cms_files_on_section_id"
   end
 
-  create_table "cms_group_sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_group_sections", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "group_id"
     t.bigint "section_id"
     t.bigint "tenant_id"
     t.index ["group_id"], name: "index_cms_group_sections_on_group_id"
   end
 
-  create_table "cms_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_groups", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id", null: false
     t.string "name"
@@ -340,7 +341,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_id"], name: "index_cms_groups_on_provider_id"
   end
 
-  create_table "cms_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_permissions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "account_id"
     t.string "name"
@@ -350,7 +351,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_cms_permissions_on_account_id"
   end
 
-  create_table "cms_redirects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_redirects", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.string "source", null: false
     t.string "target", null: false
@@ -361,7 +362,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_id"], name: "index_cms_redirects_on_provider_id"
   end
 
-  create_table "cms_sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_sections", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "parent_id"
@@ -376,7 +377,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_id"], name: "index_cms_sections_on_provider_id"
   end
 
-  create_table "cms_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_templates", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "section_id"
@@ -404,7 +405,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["type"], name: "index_cms_templates_on_type"
   end
 
-  create_table "cms_templates_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "cms_templates_versions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "section_id"
@@ -429,7 +430,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["template_id", "template_type"], name: "by_template"
   end
 
-  create_table "configuration_values", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "configuration_values", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "configurable_id"
     t.string "configurable_type", limit: 50
     t.string "name"
@@ -441,7 +442,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["configurable_id", "configurable_type"], name: "index_on_configurable"
   end
 
-  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "countries", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "code"
     t.string "name"
     t.string "currency"
@@ -453,7 +454,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["code"], name: "index_countries_on_code"
   end
 
-  create_table "deleted_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "deleted_objects", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id"
     t.string "owner_type"
     t.bigint "object_id"
@@ -464,7 +465,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
   end
 
-  create_table "email_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "email_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "account_id"
     t.string "email", null: false, collation: "utf8mb3_general_ci"
     t.string "domain", collation: "utf8mb3_general_ci"
@@ -482,7 +483,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["email"], name: "index_email_configurations_on_email", unique: true
   end
 
-  create_table "event_store_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "event_store_events", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "stream", null: false
     t.string "event_type", null: false
     t.string "event_id", null: false
@@ -497,7 +498,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["stream"], name: "index_event_store_events_on_stream"
   end
 
-  create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "features", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "featurable_id"
     t.string "name"
     t.text "description"
@@ -514,14 +515,14 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", primary_key: ["plan_id", "feature_id"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", null: false
     t.bigint "tenant_id"
   end
 
-  create_table "fields_definitions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "fields_definitions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -538,7 +539,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_fields_definitions_on_account_id"
   end
 
-  create_table "forums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "forums", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.integer "topics_count", default: 0
@@ -553,7 +554,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["position"], name: "index_forums_on_position_and_site_id"
   end
 
-  create_table "gateway_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "gateway_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "settings"
     t.bigint "proxy_id"
     t.bigint "tenant_id"
@@ -562,7 +563,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["proxy_id"], name: "index_gateway_configurations_on_proxy_id", unique: true
   end
 
-  create_table "go_live_states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "go_live_states", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -573,7 +574,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_go_live_states_on_account_id"
   end
 
-  create_table "invitations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "invitations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "token"
     t.string "email"
     t.datetime "sent_at"
@@ -585,7 +586,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "user_id"
   end
 
-  create_table "invoice_counters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "invoice_counters", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_account_id", null: false
     t.string "invoice_prefix", null: false
     t.integer "invoice_count", default: 0
@@ -594,7 +595,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_account_id", "invoice_prefix"], name: "index_invoice_counters_provider_prefix", unique: true
   end
 
-  create_table "invoices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "invoices", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_account_id"
     t.bigint "buyer_account_id"
     t.datetime "paid_at"
@@ -641,7 +642,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_account_id", "buyer_account_id"], name: "index_invoices_on_provider_account_id_and_buyer_account_id"
   end
 
-  create_table "legal_term_acceptances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "legal_term_acceptances", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "legal_term_version"
     t.string "resource_type"
@@ -653,7 +654,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_legal_term_acceptances_on_account_id"
   end
 
-  create_table "legal_term_bindings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "legal_term_bindings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "legal_term_version"
     t.string "resource_type"
@@ -664,7 +665,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "tenant_id"
   end
 
-  create_table "legal_term_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "legal_term_versions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "version"
     t.string "name"
@@ -681,7 +682,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "tenant_id"
   end
 
-  create_table "legal_terms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "legal_terms", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "version"
     t.integer "lock_version", default: 0
     t.string "name"
@@ -699,7 +700,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_legal_terms_on_account_id"
   end
 
-  create_table "line_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "line_items", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "invoice_id"
     t.string "name"
     t.string "description"
@@ -719,7 +720,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["invoice_id"], name: "index_line_items_on_invoice_id"
   end
 
-  create_table "log_entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "log_entries", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.bigint "buyer_id"
@@ -730,7 +731,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_id"], name: "index_log_entries_on_provider_id"
   end
 
-  create_table "mail_dispatch_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "mail_dispatch_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "system_operation_id"
     t.text "emails"
@@ -741,7 +742,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
-  create_table "member_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "member_permissions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "admin_section"
     t.datetime "created_at"
@@ -751,7 +752,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
-  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "message_recipients", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "receiver_id", null: false
     t.string "receiver_type", default: "", null: false
@@ -765,7 +766,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["receiver_id"], name: "idx_receiver_id"
   end
 
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.text "subject"
     t.text "body"
@@ -781,7 +782,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["sender_id", "hidden_at"], name: "index_messages_on_sender_id_and_hidden_at"
   end
 
-  create_table "metrics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "metrics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "system_name"
     t.text "description"
     t.string "unit"
@@ -800,7 +801,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["service_id"], name: "index_metrics_on_service_id"
   end
 
-  create_table "moderatorships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "moderatorships", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "forum_id"
     t.bigint "user_id"
     t.datetime "created_at"
@@ -808,7 +809,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "tenant_id"
   end
 
-  create_table "notification_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "notification_preferences", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.binary "preferences"
     t.datetime "created_at"
@@ -817,7 +818,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
   end
 
-  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "event_id", null: false
     t.string "system_name", limit: 1000
@@ -829,7 +830,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "oidc_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "oidc_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "config"
     t.string "oidc_configurable_type", null: false
     t.bigint "oidc_configurable_id", null: false
@@ -839,7 +840,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["oidc_configurable_type", "oidc_configurable_id"], name: "oidc_configurable", unique: true
   end
 
-  create_table "onboardings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "onboardings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "wizard_state"
     t.string "bubble_api_state"
@@ -853,7 +854,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_onboardings_on_account_id"
   end
 
-  create_table "partners", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "partners", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "api_key"
     t.datetime "created_at", null: false
@@ -862,7 +863,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.string "logout_url"
   end
 
-  create_table "payment_details", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "payment_details", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "buyer_reference"
     t.string "payment_service_reference"
@@ -877,7 +878,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_payment_details_on_account_id"
   end
 
-  create_table "payment_gateway_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "payment_gateway_settings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.binary "gateway_settings"
     t.string "gateway_type"
     t.bigint "account_id"
@@ -887,7 +888,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
-  create_table "payment_intents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "payment_intents", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.string "state"
     t.bigint "tenant_id"
@@ -899,7 +900,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["state"], name: "index_payment_intents_on_state"
   end
 
-  create_table "payment_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "payment_transactions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "invoice_id"
     t.boolean "success", default: false, null: false
@@ -916,7 +917,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["invoice_id"], name: "index_payment_transactions_on_invoice_id"
   end
 
-  create_table "plan_metrics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "plan_metrics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id"
     t.bigint "metric_id"
     t.boolean "visible", default: true
@@ -929,7 +930,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["plan_id"], name: "idx_plan_metrics_plan_id"
   end
 
-  create_table "plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "plans", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "issuer_id", null: false
     t.string "name"
     t.string "rights"
@@ -958,7 +959,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["issuer_id"], name: "fk_contracts_service_id"
   end
 
-  create_table "policies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "policies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "version", null: false
     t.binary "schema", size: :long, null: false
@@ -971,7 +972,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_policies_on_account_id"
   end
 
-  create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "posts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "topic_id"
     t.text "body"
@@ -989,7 +990,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["created_at", "user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "pricing_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "pricing_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "metric_id"
     t.bigint "min", default: 1, null: false
     t.bigint "max"
@@ -1001,7 +1002,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["plan_id"], name: "index_pricing_rules_on_plan_id_and_plan_type"
   end
 
-  create_table "profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "profiles", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "oneline_description"
     t.text "description"
@@ -1025,7 +1026,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "fk_account_id"
   end
 
-  create_table "provided_access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "provided_access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "value"
     t.bigint "user_id"
     t.bigint "tenant_id"
@@ -1035,7 +1036,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "fk_rails_260e99b630"
   end
 
-  create_table "provider_constraints", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "provider_constraints", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.integer "max_users"
@@ -1045,7 +1046,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["provider_id"], name: "index_provider_constraints_on_provider_id", unique: true
   end
 
-  create_table "proxies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "proxies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.string "endpoint"
@@ -1086,14 +1087,14 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["staging_domain", "production_domain"], name: "index_proxies_on_staging_domain_and_production_domain"
   end
 
-  create_table "proxy_config_affecting_changes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "proxy_config_affecting_changes", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "proxy_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["proxy_id"], name: "index_proxy_config_affecting_changes_on_proxy_id", unique: true
   end
 
-  create_table "proxy_configs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "proxy_configs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "proxy_id", null: false
     t.bigint "user_id"
     t.integer "version", default: 0, null: false
@@ -1108,7 +1109,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "index_proxy_configs_on_user_id"
   end
 
-  create_table "proxy_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "proxy_logs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id"
     t.bigint "tenant_id"
     t.text "lua_file", size: :medium
@@ -1117,7 +1118,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.datetime "updated_at"
   end
 
-  create_table "proxy_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "proxy_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "proxy_id"
     t.string "http_method"
     t.string "pattern"
@@ -1136,7 +1137,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["proxy_id"], name: "index_proxy_rules_on_proxy_id"
   end
 
-  create_table "referrer_filters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "referrer_filters", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", null: false
     t.datetime "created_at"
@@ -1145,7 +1146,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["application_id"], name: "index_referrer_filters_on_application_id"
   end
 
-  create_table "service_cubert_infos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "service_cubert_infos", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "bucket_id"
     t.bigint "service_id"
     t.datetime "created_at", null: false
@@ -1153,7 +1154,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "tenant_id"
   end
 
-  create_table "service_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "service_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "service_id"
     t.string "value"
     t.datetime "created_at"
@@ -1162,7 +1163,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["service_id"], name: "index_service_tokens_on_service_id"
   end
 
-  create_table "services", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "services", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "name", default: ""
     t.text "description"
@@ -1197,7 +1198,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true
   end
 
-  create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "settings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "bg_colour"
     t.string "link_colour"
@@ -1270,7 +1271,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["account_id"], name: "index_settings_on_account_id", unique: true
   end
 
-  create_table "slugs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "slugs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "sluggable_type", limit: 50
     t.bigint "sluggable_id"
@@ -1281,7 +1282,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["sluggable_id"], name: "index_slugs_on_sluggable_id"
   end
 
-  create_table "sso_authorizations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "sso_authorizations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "uid"
     t.bigint "authentication_provider_id"
     t.bigint "user_id"
@@ -1293,7 +1294,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "index_sso_authorizations_on_user_id"
   end
 
-  create_table "system_operations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "system_operations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "ref"
     t.string "name"
     t.text "description"
@@ -1303,7 +1304,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.integer "tenant_id"
   end
 
-  create_table "taggings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tag_id"
     t.bigint "taggable_id"
     t.string "taggable_type"
@@ -1317,7 +1318,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
   end
 
-  create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "tags", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -1328,7 +1329,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["name", "tenant_id"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "topic_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "topic_categories", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -1337,7 +1338,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["forum_id"], name: "index_topic_categories_on_forum_id"
   end
 
-  create_table "topics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "topics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "forum_id"
     t.bigint "user_id"
     t.string "title"
@@ -1359,7 +1360,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["sticky", "last_updated_at", "forum_id"], name: "index_topics_on_sticky_and_last_updated_at"
   end
 
-  create_table "usage_limits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "usage_limits", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "metric_id"
     t.string "period"
     t.bigint "value"
@@ -1373,7 +1374,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["plan_id"], name: "idx_usage_limits_plan_id"
   end
 
-  create_table "user_sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "user_sessions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "key"
     t.string "ip"
@@ -1389,7 +1390,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["user_id"], name: "idx_user_id"
   end
 
-  create_table "user_topics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "user_topics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "topic_id"
     t.datetime "created_at"
@@ -1397,7 +1398,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.bigint "tenant_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "users", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "username", limit: 40
     t.string "email"
     t.string "crypted_password", limit: 40
@@ -1435,7 +1436,7 @@ ActiveRecord::Schema.define(version: 2024_03_02_090207) do
     t.index ["username"], name: "index_users_on_login"
   end
 
-  create_table "web_hooks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin", force: :cascade do |t|
+  create_table "web_hooks", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "url"
     t.boolean "account_created_on", default: false
