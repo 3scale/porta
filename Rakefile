@@ -1,10 +1,6 @@
-require_relative "config/application"
+# frozen_string_literal: true
 
-# Workaround for https://github.com/ruby/rake/issues/116
-# until we upgrade rspec
-Rake::TaskManager.module_eval do
-  alias_method :last_comment, :last_description
-end
+require_relative "config/application"
 
 System::Application.load_tasks
 

@@ -28,7 +28,7 @@ module Arel
       # Oracle can't compare CLOB columns with standard SQL operators for comparison.
       # We need to replace standard equality for text/binary columns to use DBMS_LOB.COMPARE function.
       # Fixes ORA-00932: inconsistent datatypes: expected - got CLOB
-      # remove if https://github.com/rsim/oracle-enhanced/issues/2239 is fixed
+      # remove if https://github.com/rsim/oracle-enhanced/issues/2239 is fixed (in Rails 7.0.1)
       def visit_Arel_Nodes_Equality(o, collector)
         case (left = o.left)
         when Arel::Attributes::Attribute
