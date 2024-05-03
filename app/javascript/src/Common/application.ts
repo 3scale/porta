@@ -7,10 +7,11 @@ export default function (): void {
   // delegation on body fires before rails.js. FIXME: this is not a valid guard. If "data-disabled"
   // removed manually from the DOM, the request will still go through. The link should be disabled
   // (not clickable) and the server should return a flash error.
-  $('body').on('click', 'a[data-disabled]', ({ currentTarget, stopImmediatePropagation }) => {
-    stopImmediatePropagation()
-    alert((currentTarget as HTMLAnchorElement).dataset.disabled)
-    return false
+  $('body').on('click', 'a[data-disabled]', (event) => {
+    event.stopPropagation()
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    alert((event.currentTarget as HTMLAnchorElement).dataset.disabled)
   })
 
   /**
@@ -41,9 +42,10 @@ export default function (): void {
 
   // TODO: replace .fancybox with .colorbox
   // This is used in some modals with a "Cancel" button.
-  $(document).on('click', '.fancybox-close', () => {
+  $(document).on('click', '.fancybox-close', ({ preventDefault, stopPropagation }) => {
     jQuery1.colorbox.close()
-    return false
+    preventDefault()
+    stopPropagation()
   })
 
   /**
