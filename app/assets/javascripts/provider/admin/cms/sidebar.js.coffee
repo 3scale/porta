@@ -1,28 +1,3 @@
-## We are defining :like(stuff) selector. Usage:
-##
-## $('li a:like(potato)')
-##
-## matches all links that have a word 'potato' somwhere in the
-## data-search attribute.
-##
-## ---------------------------------------------------------------------------------
-##
-## NOTE: (http:##www.malsup.com/jquery/expr/):
-## jQuery provides some very powerful selection expressions using colon (:) syntax.
-## Things like :first, :odd, and :even let you write code like: $('#content a:first')
-## to get the first anchor within #content, or $('tr:odd') to get the odd
-## numbered rows of a table. What's even cooler is that you can extend this
-## behavior to add your own convenience selectors by extending the jQuery.expr[':']
-## object. This page adds these two expressions:
-##
-
-jQuery.expr[':'].like = (el, i, selector) ->
-  return true if !selector[3]
-  content = ($(el).data('search') || '').toLowerCase()
-  text_to_search = selector[3].toLowerCase()
-  return content.indexOf(text_to_search) >= 0
-
-## Sidebar class
 class Sidebar
   FOLDER_ICONS = ['fa-folder', 'fa-folder-open']
   ICON_SETS = [FOLDER_ICONS]
@@ -323,7 +298,7 @@ class SidebarFilter
     matched = items
 
     if query = @status.query
-      matched = matched.filter(":like(#{query})")
+      matched = matched.filter("[data-search*=#{query}]")
 
     types = for type in @status.types || []
       matched.filter("[data-type~=#{type}]").toArray()
