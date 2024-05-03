@@ -50,28 +50,6 @@ Rake::Task['db:test:load'].enhance do
   Rake::Task['db:test:procedures'].invoke
 end
 
-# In Rails 5.2 the `load_config` task was made dependent on `environment`
-# to enable credentials reading, see https://github.com/rails/rails/pull/31135
-# This causes the whole app to initialize before `db:create` and that
-# causes a database connection for observers, sphinx and maybe others.
-# For MySQL where database name is part of connection URL, this causes a
-# connection failure and thus failure to create the database.
-# Since we don't use credentials, we can remove that dependency.
-# And then a whole mess to fix other use cases especally db:reset
-# warn "Removing :environment prerequisite from db:create"
-# Rake::Task['db:load_config'].prerequisites.delete("environment")
-# Rake::Task.tasks.select { |task|
-#   next if task.name == "db:create"
-#   task.name.start_with?("db:") && task.prerequisites.include?("load_config")
-# }.each { |task|
-#   task.prerequisites.insert(task.prerequisites.index("load_config"), "environment")
-# }
-# Rake::Task.tasks.select { |task|
-#     task.prerequisites.include?("db:load_config")
-# }.each { |task|
-#   task.prerequisites.insert(task.prerequisites.index("db:load_config"), "environment")
-# }
-
 namespace :hack do
   desc "Checks whether we need db:drop when running db:reset"
   task reset_needs_drop: "db:load_config" do
