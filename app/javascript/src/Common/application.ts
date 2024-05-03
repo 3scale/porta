@@ -8,7 +8,6 @@ export default function (): void {
   // removed manually from the DOM, the request will still go through. The link should be disabled
   // (not clickable) and the server should return a flash error.
   $('body').on('click', 'a[data-disabled]', (event) => {
-    event.stopPropagation()
     event.preventDefault()
     event.stopImmediatePropagation()
     alert((event.currentTarget as HTMLAnchorElement).dataset.disabled)
