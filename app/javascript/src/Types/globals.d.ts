@@ -75,12 +75,6 @@ declare global {
   type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
 
   namespace ThreeScale {
-    // Made globally available in assets/javascripts/provider/cms/sidebar.js.coffee and available
-    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-    class Sidebar {
-      public constructor (selector: string)
-    }
-
     function partialPaths (paths: string[]): void
   }
 }

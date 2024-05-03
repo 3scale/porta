@@ -48,9 +48,9 @@ class Sidebar
           all_packed = @all_items_packed()
 
           if all_packed
-            sections.filter('.packed').each (_, element) => ThreeScale.Toggle.get(element).unpack()
+            sections.filter('.packed').each (_, element) -> SidebarToggle.get(element).unpack()
           else
-            sections.filter(':not(.packed)').each (_, element) => ThreeScale.Toggle.get(element).pack()
+            sections.filter(':not(.packed)').each (_, element) -> SidebarToggle.get(element).pack()
 
           @update_expand_collapse_button(!all_packed)
 
@@ -59,7 +59,7 @@ class Sidebar
           return unless target.is('.fa')
           ul = target.siblings('ul')
           return unless ul.length
-          ThreeScale.Toggle.get(ul).toggle 300, (el) =>
+          SidebarToggle.get(ul).toggle 300, (el) =>
             @update_expand_collapse_button()
           return false
 
@@ -100,7 +100,7 @@ class Sidebar
     element.tipsy(live: "#{selector} li > a", gravity: $.fn.tipsy.autoWE)
     element
       .on 'cms-sidebar:update', (event) =>
-        ThreeScale.Toggle.loadAndMarkPacked()
+        SidebarToggle.loadAndMarkPacked()
         @filter.filter()
         @tooltips()
 
@@ -120,7 +120,7 @@ class Sidebar
       .on 'pjax:end', (event) ->
         $(event.target).trigger('cms-template:init')
 
-      .on 'click', '#cms-sidebar .cms-sidebar-listing a', (event) =>
+      .on 'click', '#cms-sidebar .cms-sidebar-listing a', (event) ->
         $.pjax.click(event, '#tab-content')
       .on 'mouseenter mouseleave', '.cms-sidebar-listing li > a', (event) ->
         $(this).parent().toggleClass('ui-state-hover')
@@ -172,7 +172,7 @@ class Sidebar
       @element.trigger('cms-sidebar:update')
 
   tooltips: ->
-    @items('[title]').tipsy(gravity: $.fn.tipsy.autoWE);
+    @items('[title]').tipsy(gravity: $.fn.tipsy.autoWE)
 
   group: (json) ->
     {
@@ -311,7 +311,7 @@ class SidebarFilter
       @search(text)
 
     if query = @status.query
-      $ => $(INPUT).val(query)
+      $ -> $(INPUT).val(query)
 
   save: ->
     SidebarFilter.save(@status)
@@ -487,5 +487,70 @@ class SidebarTemplates
   portlets: @template(@portlets)
   partials: @template(@partials)
 
-## Exporting variables
-window.ThreeScale.Sidebar = Sidebar
+class SidebarToggle
+  COOKIE_NAME = 'cms-toggle-ids'
+
+  @loadAndMarkPacked: ->
+    existing = []
+    for id in SidebarToggle.load()
+      element = $('#' + id)
+
+      if element.length > 0
+        existing.push(id)
+        @get(element).pack(0)
+
+  @get: (element) ->
+    el = $(element)
+    el.data('toggle') || new SidebarToggle(el)
+
+  constructor: (@el) ->
+    throw new Error('SidebarToggle needs an element') unless @el
+    @id = @el.attr('id')
+    throw new Error('SidebarToggle needs element with an ID') unless @id
+    @el.data('toggle', this)
+
+  save: ->
+    ids = SidebarToggle.load()
+
+    if @el.hasClass('packed')
+      ids.push(@id) if ids.indexOf(@id) < 0
+      @el.trigger('toggle:pack')
+    else
+      i = ids.indexOf(@id)
+      ids.splice(i, 1) if i >= 0
+      @el.trigger('toggle:unpack')
+
+    unless _(ids).isEqual(SidebarToggle.load())
+      SidebarToggle.save(ids)
+
+  pack: (speed) ->
+    @el.slideUp speed, =>
+      @el.addClass('packed')
+      @save()
+
+  unpack: (speed) ->
+    @el.slideDown speed, =>
+      @el.removeClass('packed')
+      @save()
+
+  toggle: (speed, callback) ->
+    @el.slideToggle speed, =>
+      @el.toggleClass('packed')
+      @save()
+      if 'function' == typeof callback
+        callback.call this, @el
+
+  # private
+
+  @serialized_ids: ->
+    $.cookie(COOKIE_NAME, path: '/') || '[]'
+
+  @save: (ids) ->
+    @cached_ids = ids
+    $.cookie(COOKIE_NAME, JSON.stringify(ids), {expires: 30, path: '/'})
+
+  @load: ->
+    @cached_ids ||= JSON.parse(@serialized_ids())
+    @cached_ids.slice(0)
+
+document.addEventListener 'DOMContentLoaded', () -> new Sidebar('#cms-sidebar')
