@@ -18,14 +18,15 @@ export default function (): void {
    * DEPRECATED: replace jquery/colorbox modals with Patternfly modals.
    * TODO: add a more specific selector to separate this form from all other "remote" ones.
    */
-  $(document).on('submit', 'form.colorbox[data-remote]', ({ currentTarget }) => {
+  $(document).on('submit', 'form.colorbox[data-remote]', (e) => {
     // MUST USE RAILS-JQUERY since ajax:complete is triggered by rails (do not use $ from node_modules).
-    const $form = jQuery1(currentTarget as HTMLFormElement)
+    const $form = jQuery1(e.currentTarget as HTMLFormElement)
+    const width = $form.data('width') as string | undefined
     $form.on('ajax:complete', (_event, xhr: JQueryXHR) => {
       jQuery1.colorbox({
         open: true,
         html: xhr.responseText,
-        width: $form.data('width') as string | undefined,
+        width,
         maxWidth: '85%',
         maxHeight: '90%'
       })
@@ -34,17 +35,17 @@ export default function (): void {
 
   // TODO: replace .fancybox with .colorbox
   // This link will load its content into a colorbox modal
-  $(document).on('click', 'a.fancybox, a.colorbox', ({ currentTarget, preventDefault }) => {
-    jQuery1(currentTarget as HTMLAnchorElement).colorbox({ open: true })
-    preventDefault()
+  $(document).on('click', 'a.fancybox, a.colorbox', (e) => {
+    jQuery1(e.currentTarget as HTMLAnchorElement).colorbox({ open: true })
+    e.preventDefault()
   })
 
   // TODO: replace .fancybox with .colorbox
   // This is used in some modals with a "Cancel" button.
-  $(document).on('click', '.fancybox-close', ({ preventDefault, stopPropagation }) => {
+  $(document).on('click', '.fancybox-close', (e) => {
     jQuery1.colorbox.close()
-    preventDefault()
-    stopPropagation()
+    e.preventDefault()
+    e.stopPropagation()
   })
 
   /**
