@@ -77,13 +77,6 @@ declare global {
 
   type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
 
-  // Defined in app/assets/javascripts/vendor/mousetrap.min.js
-  // imported in app/assets/javascripts/provider/cms.js
-  // used in app/javascript/packs/cms.ts
-  namespace Mousetrap {
-    function bind (arr: unknown[], fun: (event: unknown) => false): void
-  }
-
   namespace ThreeScale {
     // Made globally available in assets/javascripts/provider/cms/sidebar.js.coffee and available
     // eslint-disable-next-line @typescript-eslint/no-extraneous-class
