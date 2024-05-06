@@ -4,14 +4,6 @@ ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
 
-    # in 6.0.6 we probably don't need this as it introduces
-    # #use_shorter_identifier, #supports_longer_identifier? and
-    # #max_identifier_length
-    ActiveRecord::ConnectionAdapters::OracleEnhanced::DatabaseLimits.class_eval do
-      remove_const(:IDENTIFIER_MAX_LENGTH)
-      const_set(:IDENTIFIER_MAX_LENGTH, 128)
-    end
-
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
       # Remove when https://github.com/rsim/oracle-enhanced/issues/2237 is fixed
       self.use_old_oracle_visitor = true
