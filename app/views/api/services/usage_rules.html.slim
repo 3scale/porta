@@ -1,6 +1,7 @@
 - # TODO: When APIAP is default, adjust the old settings cukes to usage rules
 - content_for :page_header_title, 'Usage Rules'
 
+/ TODO: is this ever used? If so, replace with a DefaultPlanSelect (React) and forget about autosubmit
 - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
   = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), :method => :post, :class => 'service autosubmit formtastic', :remote => true do
     fieldset.inputs
