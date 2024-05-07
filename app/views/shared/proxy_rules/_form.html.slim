@@ -1,11 +1,10 @@
-= form.inputs do
-  = form.input :http_method, as: :select, collection: ProxyRule::ALLOWED_HTTP_METHODS, include_blank: false, label: 'Verb'
-  = form.input :pattern
-  = form.input :redirect_url, as: :string if local_assigns[:include_redirect]
-  = form.input :metric_id, as: :select, collection: options_from_collection_for_select(metrics, 'id', 'friendly_name', proxy_rule.metric_id), include_blank: false, label: 'Metric or Method to increment'
-  = form.input :delta, label: 'Increment by'
-  = form.input :last, label: 'Last?'
-  = form.input :position
+= form.input :http_method, as: :patternfly_select, input_html: { style: 'min-width: 3rem; width: auto;' }, collection: ProxyRule::ALLOWED_HTTP_METHODS, include_blank: false, label: 'Verb'
+= form.input :pattern, as: :patternfly_input
+= form.input :redirect_url, as: :patternfly_input if local_assigns[:include_redirect]
+= form.input :metric_id, as: :patternfly_select, collection: options_from_collection_for_select(metrics, 'id', 'friendly_name', proxy_rule.metric_id), include_blank: false, label: 'Metric or Method to increment'
+= form.input :delta, as: :patternfly_input, input_html: { type: 'number', style: 'max-width: 110px' }, label: 'Increment by'
+= form.input :last, as: :patternfly_checkbox, label: 'Last?'
+= form.input :position, as: :patternfly_input, input_html: { type: 'number', style: 'max-width: 110px' }
 
 = form.actions do
-  = form.commit_button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule"
+  button class="pf-c-button pf-m-primary" type="submit" Update mapping rule
