@@ -43,7 +43,7 @@ declare global {
       error: (message: string) => void;
     };
     rails: {
-      handleRemote: (arg: Element) => JQueryXHR | false;
+      handleRemote: (arg: unknown) => JQueryXHR | false;
     };
   }
 

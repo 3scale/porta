@@ -1519,6 +1519,11 @@ export interface JQueryStatic {
 */
 interface JQuery {
   /**
+   * HACK: Added manually. This is specific to porta not jquery.
+   */
+  colorbox: ColorboxStatic;
+
+  /**
    * Register a handler to be called when Ajax requests complete. This is an AjaxEvent.
    *
    * @param handler The function to be invoked.
