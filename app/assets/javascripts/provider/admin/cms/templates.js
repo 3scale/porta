@@ -1,17 +1,5 @@
 (function($){
     $(function(){
-        // DRAG ...
-        $(document).on('sidebar:init', function(event){
-            jQueryUI(event.target).find('li.draggable').draggable({
-                helper: function(e){
-                    var element = $(e.currentTarget);
-
-                    return element.clone().prependTo(element.parent().parent()).addClass('dragged')[0];
-                },
-                revert: 'invalid'
-            });
-        });
-
         // ... & DROP
         $(document).on('cms-template:init', function(event){
             jQueryUI(event.target).find('#subsections-container').droppable({
