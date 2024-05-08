@@ -16,6 +16,25 @@
     <% unless codemirror_disabled?  %>
       var codemirror = CodeMirror.fromTextArea(text_area[0], <%= json(opts).html_safe %>);
 
+      /**
+       * Prevents from exiting the CMS if there are unsaved changes. Alert message is set by browser.
+       * FIXME: it won't stop changing to another CMS section.
+       */
+      const beforeUnloadHandler = (e) => { e.preventDefault() };
+      codemirror.on('change', (editor) => {
+        if (editor.getValue() !== text_area.val()) {
+          window.addEventListener('beforeunload', beforeUnloadHandler);
+        } else {
+          window.removeEventListener('beforeunload', beforeUnloadHandler);
+        }
+      });
+      text_area.closest('form').on('submit', (e) => {
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+      })
+      $(document).on('cms-template:init', () => {
+        window.removeEventListener('beforeunload', beforeUnloadHandler)
+      })
+
       $(codemirror).on('change', {content_type: content_type, liquid_enabled: liquid_enabled}, function(event, content_type, liquid_enabled){
         var liquid = "application/x-liquid-template";
 

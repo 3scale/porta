@@ -1,24 +1,5 @@
 (function($){
     $(function(){
-        // init change detection
-        $(window).on('beforeunload', function(e){
-            var textareas = $(".codemirror textarea[name]"),
-                changed = false;
-
-            textareas.each(function(){
-                var textarea = $(this),
-                    codemirror = textarea.data('codemirror');
-
-                if(codemirror && codemirror.getValue() !== textarea.val()) {
-                    changed = true;
-                }
-            });
-
-            if(changed) {
-                return "You are about to leave unsaved content.";
-            }
-        });
-
         // Preview links should ask if there is unsaved content
         $(document).on('click', 'a[data-preview=draft]', function(event, skip){
             var textarea = $("#cms_template_draft"),
