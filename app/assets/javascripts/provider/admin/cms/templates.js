@@ -22,24 +22,6 @@
             toggledInputsInit();
         });
 
-        // keyboard actions
-        //
-        (function(){
-            var save = function(){
-                $("#cms_template_submit").click();
-            };
-            // this makes mousetrap work inside codemirror
-            // just have to load it in right time (after textarea is created)
-            //
-            // $(".CodeMirror textarea").addClass("mousetrap");
-
-            Mousetrap.bind(['meta+s', 'ctrl+s', 'command+s'], function(e){
-                save();
-                return false;
-            });
-
-        }());
-
         // init change detection
         $(window).on('beforeunload', function(e){
             var textareas = $(".codemirror textarea[name]"),
