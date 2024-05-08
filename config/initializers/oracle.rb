@@ -4,11 +4,6 @@ ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
 
-    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-      # Remove when https://github.com/rsim/oracle-enhanced/issues/2237 is fixed
-      self.use_old_oracle_visitor = true
-    end
-
     ENV['SCHEMA'] = 'db/oracle_schema.rb'
     Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
 
@@ -59,13 +54,6 @@ ActiveSupport.on_load(:active_record) do
         end
       end)
     end
-
-    BabySqueel::Nodes::Attribute.prepend(Module.new do
-      # those relations are used in subqueries and oracle does not support ORDER in subqueries
-      private def sanitize_relation(rel)
-        super rel.unscope(:order)
-      end
-    end)
 
     ThinkingSphinx::ActiveRecord::SQLSource.prepend(Module.new do
       # If the Adapter is Oracle then we forcibly use ODBC client
