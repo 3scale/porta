@@ -3,6 +3,25 @@
 module Arel
   module Visitors
     Oracle12.class_eval do
+      # we need to strip ORDER from subqueries because Oracle does not support it
+      def strip_order_from_select(o)
+        case (node = o.right)
+        when Arel::Nodes::SelectStatement
+          node.orders = []
+        end
+      end
+
+      def visit_Arel_Nodes_In(o, collector)
+        strip_order_from_select(o)
+
+        super
+      end
+
+      def visit_Arel_Nodes_NotIn(o, collector)
+        strip_order_from_select(o)
+
+        super
+      end
 
       # Another wonderful piece.
       # Oracle can't compare CLOB columns with standard SQL operators for comparison.

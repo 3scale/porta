@@ -129,10 +129,13 @@ class Plan < ApplicationRecord
 
   scope :alphabetically, -> { order(name: :asc) }
 
+  # NOTE: `reorder(nil)` resets the order set in the default scope, because ORDER BY in subqueries
+  # fails in Oracle with 'ORA-00907: missing right parenthesis'.
+  # It is not needed anyway for this query
   def self.provided_by(account)
     where.has do
-      id.in(Plan.issued_by(account).select(:id)) |
-        id.in(Plan.issued_by(Service, account.service_ids).select(:id))
+      id.in(Plan.issued_by(account).select(:id).reorder(nil)) |
+        id.in(Plan.issued_by(Service, account.service_ids).select(:id).reorder(nil))
     end
   end
 
