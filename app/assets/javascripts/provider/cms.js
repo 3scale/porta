@@ -1,4 +1,3 @@
-//= require vendor/mousetrap.min.js
 //= require vendor/jquery.tipsy.js
 //= require vendor/jquery/extensions/jquery.cookie.js
 //= require jquery.pjax.js

@@ -43,5 +43,23 @@ module ThreeScale
       assert config.key? :size
       assert_equal 5, config[:size]
     end
+
+    test "it takes given ca_file when provided" do
+      value = 'any_value'
+      raw_config = { url: 'rediss://my-secure-redis/1', ssl_params: {}}
+      raw_config[:ssl_params][:ca_file] = value
+
+      result = RedisConfig.new(raw_config)
+
+      assert result.key? :ssl_params
+      assert result[:ssl_params].key? :ca_file
+      assert_equal value, result[:ssl_params][:ca_file]
+    end
+
+    test "it doesn't set CA if no ca_file is provided in config" do
+      result = RedisConfig.new(url: 'rediss://my-secure-redis/1')
+
+      assert_not result.key? :ssl_params
+    end
   end
 end
