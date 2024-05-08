@@ -1,22 +1,5 @@
 (function($){
     $(function(){
-        $(document).on('cms-template:init', function(event){
-            var toggle = $('<a class="important-button dropdown-toggle" href="#">').append('<i class="fa fa-caret-down">');
-
-            $(event.target).find(".dropdown-buttons ol").each(function(){
-                var list = $(this);
-                list.find('li:first :input').clone().insertBefore(list).addClass('important-button');
-
-                // replace ol with ul because of formtastic
-                list.replaceWith(function(){
-                    return (list = $("<ul>").html($(this).html()).addClass("dropdown"));
-                });
-
-                toggle.clone().insertAfter(list);
-            });
-        });
-
-
         // DRAG ...
         $(document).on('sidebar:init', function(event){
             jQueryUI(event.target).find('li.draggable').draggable({

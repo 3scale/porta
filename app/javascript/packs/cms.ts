@@ -15,6 +15,7 @@ const jQuery1 = window.$
  */
 jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
+  buildSaveDropdownButton()
 })
 
 /**
@@ -97,4 +98,29 @@ window.ThreeScale.partialPaths = (paths) => {
   })
 
   autocompletePath(section) // Initial value, on render
+}
+
+/**
+ * Build "Save" dropdown button. FIXME: Why is this is done dynamically remains a mystery 🤦‍♂️
+ */
+function buildSaveDropdownButton () {
+  const $toggle = $('<a class="important-button dropdown-toggle" href="#">').append('<i class="fa fa-caret-down">')
+
+  document.querySelectorAll('.dropdown-buttons ol')
+    .forEach(el => {
+      let $list = $(el)
+      $list.find('li:first :input')
+        .clone()
+        .insertBefore($list)
+        .addClass('important-button')
+
+      // Replace ol with ul because of formtastic
+      $list.replaceWith(() => {
+        const content = jQuery1(el).html()
+        $list = $('<ul>').html(content).addClass('dropdown')
+        return $list
+      })
+
+      $toggle.clone().insertAfter($list)
+    })
 }
