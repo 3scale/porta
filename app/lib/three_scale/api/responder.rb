@@ -84,7 +84,7 @@ class ThreeScale::Api::Responder < ActionController::Responder
   end
 
   def ordered_relation(relation)
-    if System::Database.postgres? && relation.order_values.empty?
+    if relation.order_values.empty?
       relation.order(:id)
     else
       relation
