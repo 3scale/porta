@@ -15,6 +15,7 @@
 
     <% unless codemirror_disabled?  %>
       var codemirror = CodeMirror.fromTextArea(text_area[0], <%= json(opts).html_safe %>);
+      const form = text_area.closest('form')
 
       /**
        * Prevents from exiting the CMS if there are unsaved changes. Alert message is set by browser.
@@ -28,7 +29,7 @@
           window.removeEventListener('beforeunload', beforeUnloadHandler);
         }
       });
-      text_area.closest('form').on('submit', (e) => {
+      form.on('submit', (e) => {
         window.removeEventListener('beforeunload', beforeUnloadHandler);
       })
       $(document).on('cms-template:init', () => {
@@ -76,6 +77,30 @@
                .on('cms.refresh', function(event){
                  codemirror.refresh();
                });
+
+      /**
+       * If it exists, set up a listener to "Preview" and "Preview draft" buttons that will give the
+       * user a chance to save any unsaved changes before opening the preview.
+       */
+      document.querySelectorAll('a[data-preview="draft"]')
+        .forEach(previewLink => {
+          previewLink.addEventListener('click', (e) => {
+            if (codemirror.getValue() !== text_area.val()) {
+              const save = confirm('You have unsaved draft changes.\nDo you want to save them before previewing?');
+
+              if (save) {
+                e.preventDefault();
+                codemirror.save();
+                document.removeEventListener('beforeunload', beforeUnloadHandler);
+                const ajax = $.rails.handleRemote(form);
+
+                if (ajax) {
+                  ajax.success(() => { window.open(e.target.getAttribute('href')); });
+                }
+              };
+            };
+          });
+        });
     <% end %>
   });
 <% end %>

@@ -1,23 +1,5 @@
 (function($){
     $(function(){
-        // Preview links should ask if there is unsaved content
-        $(document).on('click', 'a[data-preview=draft]', function(event, skip){
-            var textarea = $("#cms_template_draft"),
-                codemirror = textarea.data('codemirror'),
-                link = $(this);
-
-            if(codemirror && codemirror.getValue() !== textarea.val()) { // changed
-                var save = confirm("You have unsaved draft changes.\nDo you want to save them before previewing?");
-
-                if (save) {
-                    codemirror.save();
-                    var ajax = $.rails.handleRemote(link.closest('form'));
-                    ajax.success(function(){ window.open(link.attr('href')); });
-                    event.preventDefault();
-                }
-            }
-        });
-
         $(document).on('cms-template:init', function(event){
             var toggle = $('<a class="important-button dropdown-toggle" href="#">').append('<i class="fa fa-caret-down">');
 

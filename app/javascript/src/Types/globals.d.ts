@@ -2,7 +2,7 @@
 import type CodeMirror from 'codemirror'
 import type SwaggerUI from 'swagger-ui'
 import type { compose } from 'redux'
-import type { JQueryStatic as JQueryStaticV1, JQueryXHR } from 'Types/jquery/v1'
+import type { JQueryStatic as JQueryStaticV1, JQueryXHR, JQuery as JQuery1 } from 'Types/jquery/v1'
 
 declare global {
   interface Window {
@@ -40,7 +40,7 @@ declare global {
       error: (message: string) => void;
     };
     rails: {
-      handleRemote: (arg: unknown) => JQueryXHR | false;
+      handleRemote: (arg: JQuery | JQuery1) => JQueryXHR | false;
     };
   }
 
