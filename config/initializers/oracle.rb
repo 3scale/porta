@@ -55,6 +55,27 @@ ActiveSupport.on_load(:active_record) do
       end)
     end
 
+    ActiveRecord::Relation.prepend(Module.new do
+      # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
+      # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
+      # https://github.com/rails/rails/blob/v6.1.7.7/activerecord/lib/active_record/relation/finder_methods.rb#L465
+      def find_one(id)
+        if ActiveRecord::Base === id
+          raise ArgumentError, <<-MSG.squish
+            You are passing an instance of ActiveRecord::Base to `find`.
+            Please pass the id of the object by calling `.id`.
+          MSG
+        end
+
+        relation = where(primary_key => id)
+        record = relation.to_a.first # this is the only change from the original method
+
+        raise_record_not_found_exception!(id, 0, 1) unless record
+
+        record
+      end
+    end)
+
     ThinkingSphinx::ActiveRecord::SQLSource.prepend(Module.new do
       # If the Adapter is Oracle then we forcibly use ODBC client
       def type
