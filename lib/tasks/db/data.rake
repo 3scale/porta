@@ -17,16 +17,14 @@ namespace :db do
         end
       end
 
-      command =  "mysqldump #{mysql_params(config)}#{options} #{config[:database]} > #{Rails.root}/db/data.sql"
-      puts command
-      system "mysqldump #{mysql_params(config)}#{options} #{config[:database]} > #{Rails.root}/db/data.sql"
+      system "mysqldump #{mysql_params(config)}#{options} #{config[:database]} > #{Rails.root.join('db/data.sql')}"
     end
 
     desc "Load data from db/data.sql into current database, erasing any previous content"
     task :load => :environment do
       confirm_production_kill
 
-      dump = ENV['SOURCE'] || "#{Rails.root}/db/data.sql"
+      dump = ENV['SOURCE'] || Rails.root.join('db/data.sql').to_s
 
       unless File.exist?(dump)
         abort %{No database dump found (#{dump}). Run \"cap db:dump\" first.}
