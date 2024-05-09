@@ -81,14 +81,6 @@ class Sidebar
 
         @update_expand_collapse_button()
 
-        jQueryUI('[data-behavior~=drag]').draggable
-          handle: ":not(.cms-section > i:first-child)"
-          helper: (event) ->
-            el = $(this)
-            list = $('<ul>', class: 'cms-sidebar-listing').appendTo(selector)
-            el.clone().width(el.width()).prependTo(list).addClass('dragged')[0]
-          revert: 'invalid'
-
       .on 'pjax:end cms-sidebar:update', (event) =>
         @highlight(window.location.pathname)
 

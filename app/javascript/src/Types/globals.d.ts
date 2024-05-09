@@ -68,7 +68,7 @@ declare global {
     }) => void;
     draggable?: (opts: {
       handle: string;
-      helper: (event: Event) => unknown;
+      helper: string | ((event: Event) => Element);
       revert: string;
     }) => void;
   }

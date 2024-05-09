@@ -5,7 +5,6 @@ import 'jquery-ui/ui/widgets/tabs'
 
 // Export jQuery 3.7 with jquery-ui widgets to be used in:
 // - app/assets/javascripts/provider/admin/cms/templates.js
-// - app/assets/javascripts/provider/admin/cms/sidebar.js.coffee
 window.jQueryUI = jQueryUI
 
 const jQuery1 = window.$
@@ -17,6 +16,10 @@ jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
   buildSaveDropdownButton()
   setUpSectionDrop()
+})
+
+jQuery1(document).on('cms-sidebar:update', () => {
+  setUpSidebarDrag()
 })
 
 /**
@@ -124,6 +127,25 @@ function buildSaveDropdownButton () {
 
       $toggle.clone().insertAfter($list)
     })
+}
+
+/**
+ * Set up CMS sidebar draggable items. It is set up every time the sidebar is updated.
+ */
+function setUpSidebarDrag () {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
+  jQueryUI('[data-behavior~=drag]').draggable!({
+    handle: ':not(.cms-section > i:first-child)',
+    helper: (event) => { // TODO: might be better to use built-in helper "clone".)
+      const li = $(event.currentTarget as HTMLLIElement)
+      const list = $('<ul>', { class: 'cms-sidebar-listing' }).appendTo('#cms-sidebar')
+
+      return li.clone()
+        .prependTo(list)
+        .addClass('dragged')[0]
+    },
+    revert: 'invalid'
+  })
 }
 
 /**
