@@ -42,8 +42,8 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
   private
 
   class LiquidPartialRenderer < ActionView::PartialRenderer
-    def initialize(lookup_context, options = {})
-      super(lookup_context, options)
+    def initialize(*)
+      super
       @details = { formats: [:html], handlers: [:liquid] }
     end
 
