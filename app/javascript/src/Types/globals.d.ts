@@ -67,6 +67,7 @@ declare global {
       drop: (event: Event, ui: { helper: JQuery }) => void;
     }) => void;
     draggable?: (opts: {
+      handle: string;
       helper: (event: Event) => unknown;
       revert: string;
     }) => void;

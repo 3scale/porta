@@ -1,26 +1,5 @@
 (function($){
     $(function(){
-        // ... & DROP
-        $(document).on('cms-template:init', function(event){
-            jQueryUI(event.target).find('#subsections-container').droppable({
-                hoverClass: 'subsection-hover',
-                drop: function(event, ui) {
-                    var el = $(ui.helper);
-                    var id = el.data('type').toLowerCase() + "-" +el.data('id');
-
-                    $('#subsections-container thead').remove();
-                    $('#subsections-container tbody').append(
-                        '<tr id="' + id + '">' +
-                        '<td>' +  el.children('a').text() + '</td>' +
-                        '<td>' + el.data('type') + '</td>' +
-                        '<td><a href="#" onclick="$(\'#'+ id + '\').remove()">Remove</a></td>' +
-                        '<input type="hidden" name="cms_section['+ el.data('param').toLowerCase() +'_ids][]" ' +
-                        'value="'+ el.data('id') + '" />' +
-                        '</tr>');
-                }
-            });
-        });
-
         $(document).on('change', '#cms_template_content_type, #cms_template_liquid_enabled', function(event){
             var content_type = $('#cms_template_content_type').val();
             var liquid_enabled = $('#cms_template_liquid_enabled:checked').length == 1;

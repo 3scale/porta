@@ -16,6 +16,7 @@ const jQuery1 = window.$
 jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
   buildSaveDropdownButton()
+  setUpSectionDrop()
 })
 
 /**
@@ -123,4 +124,32 @@ function buildSaveDropdownButton () {
 
       $toggle.clone().insertAfter($list)
     })
+}
+
+/**
+ * Set up sections' Contents drop. It is set up every time a new section is selected.
+ */
+function setUpSectionDrop () {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
+  jQueryUI('#subsections-container').droppable!({
+    hoverClass: 'subsection-hover',
+    drop: (_event, ui) => {
+      const { type, id: value, param } = ui.helper[0].dataset as { type: string; id: string; param: string }
+      const id = `${type.toLowerCase()}-${value}`
+
+      $('#subsections-container thead').remove()
+      $('#subsections-container tbody').append(`
+        <tr id="${id}">
+          <td>${ui.helper.children('a').text()}</td>
+          <td>${type}</td>
+          <td><a href="#" onclick="$('#${id}').remove()">Remove</a></td>
+          <input
+            type="hidden"
+            name="cms_section[${param.toLowerCase()}_ids][]"
+            value="${value}"
+          />
+        </tr>
+      `)
+    }
+  })
 }
