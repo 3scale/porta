@@ -1,5 +1,4 @@
 //= require vendor/jquery
-//= require vendor/jquery/extensions/jquery.cookie.js
 //= require highlight/highlight.pack.js
 //= require remote
 //= require switch
