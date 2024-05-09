@@ -236,7 +236,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
     end
 
-    def tracks_changes_on_update
+    def test_tracks_changes_on_update
       proxy_rule = create_proxy_rule
       tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)
 
@@ -247,7 +247,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
     end
 
-    def tracks_changes_on_destroy
+    def test_tracks_changes_on_destroy
       proxy_rule = create_proxy_rule
       tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)
 
