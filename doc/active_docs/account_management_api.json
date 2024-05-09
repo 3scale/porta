@@ -266,6 +266,290 @@
         }
       }
     },
+    "/admin/api/accounts/{account_id}/service_subscriptions.json": {
+      "get": {
+        "summary": "Service Subscription List",
+        "description": "List all the service subscriptions of an account.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "summary": "Service Subscription Create",
+        "description": "Subscribe an account to a service through the specified service plan.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the Service plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}.json": {
+      "get": {
+        "summary": "Service Subscription Show",
+        "description": "Retrieve details of a specific service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "summary": "Service Subscription Delete",
+        "description": "Unsubscribe from a service. This endpoint will delete all the applications under the subscribed service.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/approve.json": {
+      "put": {
+        "summary": "Service Subscription Approve",
+        "description": "Approve a pending service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service subscription.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/change_plan.json": {
+      "put": {
+        "summary": "Service Subscription Change Plan",
+        "description": "Update the plan of a service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service subscription.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the target account plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
     "/admin/api/accounts/{account_id}/applications.xml": {
       "get": {
         "summary": "Application List",
@@ -1229,8 +1513,8 @@
     },
     "/admin/api/accounts/{account_id}/service_contracts.xml": {
       "get": {
-        "summary": "Service Subscription List",
-        "description": "List all the service_contracts of an account",
+        "summary": "[DEPRECATED] Service Subscription List",
+        "description": "This endpoint is deprecated, use `GET /admin/api/accounts/{account_id}/service_subscriptions.xml` instead.",
         "tags": [
           "Accounts"
         ],
@@ -1265,8 +1549,8 @@
     },
     "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
       "delete": {
-        "summary": "Service Subscription Delete",
-        "description": "Unsubscribe from a service. This endpoint will delete all the applications that are under the subscribed service.",
+        "summary": "[DEPRECATED] Service Subscription Delete",
+        "description": "This endpoint is deprecated, use `DELETE /admin/api/accounts/{account_id}/service_subscriptions/{id}.xml` instead.",
         "tags": [
           "Accounts"
         ],
