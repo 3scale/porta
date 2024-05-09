@@ -53,12 +53,16 @@ class Contract < ApplicationRecord
   # TODO: unit test this scope
   def self.provided_by(account)
     where.has do
-      plan_id.in(Plan.provided_by(account).select(:id))
+      # NOTE: `reorder(nil)` resets the order set in the Plan's default scope,
+      # because ORDER BY in subqueries fails in Oracle with 'ORA-00907: missing right parenthesis'.
+      plan_id.in(Plan.provided_by(account).select(:id).reorder(nil))
     end
   end
 
   def self.issued_by(issuer, *ids)
-    scope = Plan.issued_by(issuer, *ids).select(:id)
+    # NOTE: `reorder(nil)` resets the order set in the Plan's default scope,
+    # because ORDER BY in subqueries fails in Oracle with 'ORA-00907: missing right parenthesis'.
+    scope = Plan.issued_by(issuer, *ids).select(:id).reorder(nil)
     where.has { plan_id.in( scope ) }
   end
 
