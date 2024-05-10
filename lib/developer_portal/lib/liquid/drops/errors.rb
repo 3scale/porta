@@ -45,8 +45,8 @@ module Liquid
       def each
         return enum_for unless block_given?
 
-        @errors.each do |attribute, message|
-          yield field(attribute, message)
+        @errors.each do |error|
+          yield field(error.attribute, error.message)
         end
       end
 
