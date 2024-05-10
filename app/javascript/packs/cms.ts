@@ -1,4 +1,4 @@
-import jQueryUI from 'jquery'
+import $ from 'jquery'
 import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
@@ -145,7 +145,7 @@ function buildSaveDropdownButton () {
  */
 function setUpSidebarDrag () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
-  jQueryUI('[data-behavior~=drag]').draggable!({
+  $('[data-behavior~=drag]').draggable!({
     handle: ':not(.cms-section > i:first-child)',
     helper: (event) => { // TODO: might be better to use built-in helper "clone".)
       const li = $(event.currentTarget as HTMLLIElement)
@@ -164,7 +164,7 @@ function setUpSidebarDrag () {
  */
 function setUpSectionDrop () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
-  jQueryUI('#subsections-container').droppable!({
+  $('#subsections-container').droppable!({
     hoverClass: 'subsection-hover',
     drop: (_event, ui) => {
       const { type, id: value, param } = ui.helper[0].dataset as { type: string; id: string; param: string }
@@ -192,7 +192,7 @@ function setUpSectionDrop () {
  */
 function setUpEditorTabs () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
-  jQueryUI('div#cms-template-editor').tabs!()
+  $('div#cms-template-editor').tabs!()
 }
 
 /**
@@ -243,7 +243,7 @@ function setUpRevertButton () {
         draft.setValue(published.getValue())
         flash.notice('Reverted draft to a currently published version.')
 
-        const lines = jQueryUI('.CodeMirror-lines')
+        const lines = $('.CodeMirror-lines')
         lines.animate({ opacity: 0.2 }, 500, () => { lines.animate({ opacity: 1.0 }) })
 
         const save = confirm('Your draft is now reset to latest published version.\nDo you want to save your changes?')
@@ -257,11 +257,11 @@ function setUpRevertButton () {
 }
 
 function setUpRemoveFromSectionAction () {
-  jQueryUI(document).on('click', '.remove-from-section', (event) => {
+  $(document).on('click', '.remove-from-section', (event) => {
     event.stopImmediatePropagation()
     event.preventDefault()
 
-    const row = jQueryUI(event.target).closest('tr[id]')
+    const row = $(event.target).closest('tr[id]')
     row.fadeOut(() => { row.remove() })
   })
 }
