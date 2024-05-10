@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
 # We don't want to load any Rails component we don't use
 # See https://github.com/rails/rails/blob/v6.1.7.3/railties/lib/rails/all.rb for the list
@@ -58,9 +58,15 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
+
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
+
+    # Support for inversing belongs_to -> has_many Active Record associations.
+    # Overriding Rails 6.1 default, because it causes various issues
+    config.active_record.has_many_inversing = false
+
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
@@ -96,9 +102,10 @@ module System
 
     config.boot_time = Time.now
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
 
     # Include developer_portal into the autoload and eager load path
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
