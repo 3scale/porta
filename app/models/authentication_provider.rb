@@ -128,7 +128,7 @@ class AuthenticationProvider < ApplicationRecord
   delegate :human_kind, to: :class
 
   def self.branded_available?
-    config = ThreeScale::OAuth2.config.fetch(kind, {})
+    config = ThreeScale::OAuth2.config.fetch(kind.to_sym, {})
 
     return unless config[:enabled]
 

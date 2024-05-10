@@ -79,8 +79,9 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
     ["config/examples"].each do |config_dir|
       rails_envs = %w[development test production]
       rails_envs.each do |rails_env|
-        stub_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))[rails_env].merge({"enabled" => true})
-        assert_not_empty stub_config["exclude"]
+        cors_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))[rails_env].deep_symbolize_keys
+        stub_config = cors_config.merge({ enabled: true})
+        assert_not_empty stub_config[:exclude]
 
         Rails.configuration.three_scale.cors.stubs(stub_config)
 

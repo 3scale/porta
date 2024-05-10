@@ -77,25 +77,13 @@ module System
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
 
-
-    # The old config_for gem returns HashWithIndifferentAccess
-    # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
-    def config_for(*args)
-      config = super
-      config.is_a?(Hash) ? config.with_indifferent_access : config
-    end
-
     config.active_job.queue_adapter = :sidekiq
 
-    def simple_try_config_for(*args)
+    def try_config_for(*args)
       config_for(*args)
     rescue => exception # rubocop:disable Style/RescueStandardError
       warn "[Warning][ConfigFor] Failed to load config with: #{exception}" if $VERBOSE
       nil
-    end
-
-    def try_config_for(*args)
-      simple_try_config_for(*args)&.symbolize_keys
     end
 
     config.before_eager_load do
@@ -191,7 +179,7 @@ module System
     config.encoding = "utf-8"
 
     config.web_hooks = ActiveSupport::OrderedOptions.new
-    config.web_hooks.merge!(config_for(:web_hooks).symbolize_keys)
+    config.web_hooks.merge!(config_for(:web_hooks))
 
     config.liquid = ActiveSupport::OrderedOptions.new
     config.liquid.resolver_caching = false
@@ -206,13 +194,13 @@ module System
     config.three_scale.rolling_updates = ActiveSupport::OrderedOptions.new
     config.three_scale.email_sanitizer = ActiveSupport::OrderedOptions.new
     config.three_scale.sandbox_proxy = ActiveSupport::OrderedOptions.new
-    config.three_scale.sandbox_proxy.merge!(config_for(:sandbox_proxy).symbolize_keys)
+    config.three_scale.sandbox_proxy.merge!(config_for(:sandbox_proxy))
 
     config.three_scale.tracking = ActiveSupport::OrderedOptions.new
-    config.three_scale.core.merge!(config_for(:core).symbolize_keys)
+    config.three_scale.core.merge!(config_for(:core))
 
     config.three_scale.segment = ActiveSupport::OrderedOptions.new
-    config.three_scale.segment.merge!(config_for(:segment).symbolize_keys)
+    config.three_scale.segment.merge!(config_for(:segment))
 
     config.three_scale.redhat_customer_portal = ActiveSupport::OrderedOptions.new
     config.three_scale.redhat_customer_portal.enabled = false
@@ -240,7 +228,8 @@ module System
     config.three_scale.cors.enabled = false
     config.three_scale.cors.merge!(try_config_for(:cors) || {})
 
-    three_scale = config_for(:settings).symbolize_keys
+    three_scale = config_for(:settings)
+
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
     payment_settings = three_scale.extract!(:active_merchant_mode, :active_merchant_logging, :billing_canaries)
@@ -250,7 +239,7 @@ module System
     config.three_scale.payments.merge!(try_config_for(:payments) || {})
     config.three_scale.payments.active_merchant_mode ||= Rails.env.production? ? :production : :test
 
-    email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {}).symbolize_keys
+    email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {})
     config.three_scale.email_sanitizer.merge!(email_sanitizer_configs)
 
     config.three_scale.merge!(three_scale.slice!(:force_ssl, :access_code))
@@ -280,7 +269,7 @@ module System
     config.action_dispatch.cookies_serializer = :hybrid
 
     initializer :load_configs, before: :load_config_initializers do
-      config.backend_client = { max_tries: 5 }.merge(config_for(:backend).symbolize_keys)
+      config.backend_client = { max_tries: 5 }.merge(config_for(:backend))
       config.redis = config_for(:redis)
       config.s3 = config_for(:amazon_s3)
       config.three_scale.oauth2 = config_for(:oauth2)
