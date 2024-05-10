@@ -7,10 +7,6 @@ import * as flash from 'utilities/flash'
 
 import type { EditorFromTextArea } from 'codemirror'
 
-// Export jQuery 3.7 with jquery-ui widgets to be used in:
-// - app/assets/javascripts/provider/admin/cms/templates.js
-window.jQueryUI = jQueryUI
-
 const jQuery1 = window.$
 
 /**
@@ -34,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setUpRevertButton()
   setUpRemoveFromSectionAction()
 
-  jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
+  jQuery1('#tab-content').trigger('cms-template:init')
 })
 
 /**
