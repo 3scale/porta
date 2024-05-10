@@ -14,7 +14,7 @@ class Liquid::Tags::DisableClientCacheTest < ActiveSupport::TestCase
     @disable_client_cache.render(@context)
     response = @context.registers[:controller].response
 
-    assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+    assert_equal 'no-store', response.headers['Cache-Control']
     assert_equal 'no-cache', response.headers['Pragma']
     assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
   end
