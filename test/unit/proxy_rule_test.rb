@@ -217,7 +217,6 @@ class ProxyRuleTest < ActiveSupport::TestCase
       setup do
         service = FactoryBot.create(:simple_service)
         @backend_api = FactoryBot.create(:backend_api, account: service.account)
-        FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service)
       end
 
       attr_reader :backend_api

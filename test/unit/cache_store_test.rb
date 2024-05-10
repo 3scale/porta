@@ -20,7 +20,8 @@ class CacheStoreTest < ActionView::TestCase
     # test:
     #   - :memory_store
     #   - :size: 5000
-    options = { size: 5000 }
+    #   - :compress: true
+    options = { size: 5000, compress: true }
     System::Application.any_instance.expects(:config_for).with(:cache_store).returns([:memory_store, options])
 
     cache = ActiveSupport::Cache.lookup_store(*System::Application.cache_store_config)

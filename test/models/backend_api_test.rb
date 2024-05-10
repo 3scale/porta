@@ -3,7 +3,7 @@ require 'test_helper'
 class BackendApiTest < ActiveSupport::TestCase
   def setup
     @account = FactoryBot.build(:simple_provider)
-    @backend_api = BackendApi.new(account: @account, name: 'My Backend')
+    @backend_api = BackendApi.new(account: @account, name: 'My Backend', private_endpoint: 'http://example.com')
   end
 
   def test_oldest_first
