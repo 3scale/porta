@@ -59,6 +59,10 @@
         codemirror.setOption("mode", mode);
       });
 
+      /**
+       * When a new CMS page is rendered, trigger change for codemirror. FIXME: This is wrong,
+       * codemirror should be rendered with the initial state instead of doing it dynamically.
+       */
       $(codemirror).trigger('change', [content_type, liquid_enabled]);
 
       var wrapper = codemirror.getWrapperElement();

@@ -3,6 +3,8 @@ import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
 
+import type { EditorFromTextArea } from 'codemirror'
+
 // Export jQuery 3.7 with jquery-ui widgets to be used in:
 // - app/assets/javascripts/provider/admin/cms/templates.js
 window.jQueryUI = jQueryUI
@@ -17,10 +19,18 @@ jQuery1(document).on('cms-template:init', () => {
   buildSaveDropdownButton()
   setUpSectionDrop()
   setUpEditorTabs()
+
+  jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
 
 jQuery1(document).on('cms-sidebar:update', () => {
   setUpSidebarDrag()
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  setUpContentTypeLiquidEnabledListener()
+
+  jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
 
 /**
@@ -183,4 +193,39 @@ function setUpSectionDrop () {
 function setUpEditorTabs () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
   jQueryUI('div#cms-template-editor').tabs!()
+}
+
+/**
+ * Content type input and Liquid Enabled checkbox affects the editor's theme.
+ * Listen for changes in this inputs and fire change event that will update Codemirror mode
+ * accordingly. Codemirror's own listener here: app/views/provider/admin/cms/_codemirror.html.erb
+ */
+function setUpContentTypeLiquidEnabledListener () {
+  jQuery1(document).on('change', '#cms_template_content_type, #cms_template_liquid_enabled', () => {
+    const contentTypeInput = document.querySelector<HTMLInputElement>('#cms_template_content_type')
+    const liquidEnabledInput = document.querySelector<HTMLInputElement>('#cms_template_liquid_enabled')
+
+    if (!contentTypeInput || !liquidEnabledInput) {
+      throw new Error('change event was somehow triggered before Advanced options was ready')
+    }
+
+    const contentType = contentTypeInput.value
+    const liquidEnabled = liquidEnabledInput.checked
+
+    const codemirror = jQuery1('#cms_template_draft').data('codemirror') as EditorFromTextArea
+
+    jQuery1(codemirror).trigger('change', [contentType, liquidEnabled])
+  })
+
+  jQuery1(document).on('click', 'a[href^="#cms-set-content-type-"]', (event) => {
+    event.stopImmediatePropagation()
+    event.preventDefault()
+
+    const { mimeType } = (event.target as HTMLAnchorElement).dataset as { mimeType: string }
+    const input = jQuery1('#cms_template_content_type')
+
+    if (input.val() !== mimeType) {
+      input.val(mimeType).trigger('change')
+    }
+  })
 }
