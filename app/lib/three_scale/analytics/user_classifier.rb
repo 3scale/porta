@@ -5,7 +5,7 @@ require 'ostruct'
 module ThreeScale
   module Analytics
     class UserClassifier
-      internal_domains_config = (Rails.application.simple_try_config_for(:internal_domains) || []).freeze
+      internal_domains_config = (Rails.application.try_config_for(:internal_domains) || []).freeze
       domains = Regexp.union(internal_domains_config).source
       THREESCALE_EMAIL_REGEX = /@(#{domains})$/xi
 

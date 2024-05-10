@@ -12,7 +12,7 @@ module Tasks
           buyer_not_to_update = FactoryBot.create(:simple_buyer, provider_account: provider, tenant_id: nil)
           [buyers_to_update, buyer_not_to_update].flatten.each { |account| account.update_column(:tenant_id, -1) }
 
-          Rails.application.expects(:simple_try_config_for).with('corrupted_accounts').returns(YAML.load(buyers_to_update.map(&:id).to_yaml))
+          Rails.application.expects(:try_config_for).with('corrupted_accounts').returns(YAML.load(buyers_to_update.map(&:id).to_yaml))
 
           ENV['FILE'] = 'corrupted_accounts'
           execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:fix_corrupted_tenant_id_accounts', '1', '1'
@@ -26,7 +26,7 @@ module Tasks
           provider_not_to_update = FactoryBot.create(:simple_provider, provider_account: master_account)
           [providers_to_update, provider_not_to_update].flatten.each { |account| account.update_column(:tenant_id, -1) }
 
-          Rails.application.expects(:simple_try_config_for).with('corrupted_accounts').returns(YAML.load(providers_to_update.map(&:id).to_yaml))
+          Rails.application.expects(:try_config_for).with('corrupted_accounts').returns(YAML.load(providers_to_update.map(&:id).to_yaml))
 
           ENV['FILE'] = 'corrupted_accounts'
           execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:fix_corrupted_tenant_id_accounts', '1', '1'
