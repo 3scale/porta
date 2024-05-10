@@ -66,6 +66,40 @@ module EventStore
 
     scope :stale, -> { where.has { created_at <= TTL.ago } }
 
+    class EventRollbackError < StandardError
+      include Bugsnag::MetaData
+
+      def initialize(error:, event:)
+        event_details = event.to_h.as_json
+        self.bugsnag_meta_data = { event: event_details }
+
+        super "Error raised trying to roll back #{event}: #{error}, event details: #{event_details}"
+      end
+    end
+
+    # Since Rails 6.1 the EventStore::Event records (among others) are added to the
+    # list of the objects, belonging to a current transaction, and #rolledback! is called on them
+    # if the transaction is rolled back on the DB.
+    # see https://github.com/rails/rails/commit/77f7b2df#diff-8dd03b7fb9b72a3bd338955c1de75652d60453230c6544f3851c0d0b3746a675L345-R349
+    # The problem is that this triggers the Event's `load` and `deserialize` (to restore the original state), and if
+    # the object referenced in the event via GlobalID does not exist, the deserialization of the event will fail.
+    # Prevent an exception during rollback but try to report when that's unsafe.
+    def rolledback!(*)
+      super
+    rescue StandardError => exception
+      # Set the cause of the EventRollbackError exception to the original error
+      ere = begin
+        raise EventRollbackError.new(error: exception, event: self)
+      rescue EventRollbackError => ere
+        ere
+      end
+      System::ErrorReporting.report_error ere if has_transactional_callbacks?
+    end
+
+    def to_h
+      %i[id event_type event_id metadata created_at provider_id tenant_id metadata].index_with { |key| send(key) }
+    end
+
     private
 
     def provider_id_from_metadata

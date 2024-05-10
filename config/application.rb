@@ -64,7 +64,9 @@ module System
     config.active_record.include_root_in_json = true
 
     # Support for inversing belongs_to -> has_many Active Record associations.
-    # Overriding Rails 6.1 default, because it causes various issues
+    # Overriding Rails 6.1 default, because it causes various issues.
+    # Likely we need to keep it forever as we can't override it for individual use cases.
+    # Also the feature has outstanding bugs: rails/rails#47559 rails/rails#50258.
     config.active_record.has_many_inversing = false
 
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
