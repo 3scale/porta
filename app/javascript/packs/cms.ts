@@ -3,6 +3,8 @@ import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
 
+import * as flash from 'utilities/flash'
+
 import type { EditorFromTextArea } from 'codemirror'
 
 // Export jQuery 3.7 with jquery-ui widgets to be used in:
@@ -29,6 +31,7 @@ jQuery1(document).on('cms-sidebar:update', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   setUpContentTypeLiquidEnabledListener()
+  setUpRevertButton()
 
   jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
@@ -228,4 +231,30 @@ function setUpContentTypeLiquidEnabledListener () {
       input.val(mimeType).trigger('change')
     }
   })
+}
+
+function setUpRevertButton () {
+  document.querySelectorAll<HTMLAnchorElement>('a[href="#cms-template-revert"]')
+    .forEach((revertLink) => {
+      revertLink.addEventListener('click', (event) => {
+        event.stopImmediatePropagation()
+        event.preventDefault()
+
+        const draft = jQuery1('#cms_template_draft').data('codemirror') as EditorFromTextArea
+        const published = jQuery1('#cms_template_published').data('codemirror') as EditorFromTextArea
+
+        draft.setValue(published.getValue())
+        flash.notice('Reverted draft to a currently published version.')
+
+        const lines = jQueryUI('.CodeMirror-lines')
+        lines.animate({ opacity: 0.2 }, 500, () => { lines.animate({ opacity: 1.0 }) })
+
+        const save = confirm('Your draft is now reset to latest published version.\nDo you want to save your changes?')
+
+        if (save) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Where there's a revert there's a save
+          document.getElementById('codemirror_save_button')!.click()
+        }
+      })
+    })
 }
