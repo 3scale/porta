@@ -16,6 +16,7 @@ jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
   buildSaveDropdownButton()
   setUpSectionDrop()
+  setUpEditorTabs()
 })
 
 jQuery1(document).on('cms-sidebar:update', () => {
@@ -174,4 +175,12 @@ function setUpSectionDrop () {
       `)
     }
   })
+}
+
+/**
+ * Set up CMS template editor's tabs: Draft and Published.
+ */
+function setUpEditorTabs () {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
+  jQueryUI('div#cms-template-editor').tabs!()
 }

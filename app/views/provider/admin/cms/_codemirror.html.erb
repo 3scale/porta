@@ -72,11 +72,7 @@
         });
       }
 
-      text_area.data('codemirror', codemirror)
-               .closest('.ui-tabs-panel')
-               .on('cms.refresh', function(event){
-                 codemirror.refresh();
-               });
+      text_area.data('codemirror', codemirror) // Data stored in jQuery 1.x
 
       /**
        * If it exists, set up a listener to "Preview" and "Preview draft" buttons that will give the

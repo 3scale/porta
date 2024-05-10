@@ -57,10 +57,9 @@ declare global {
     sortable?: (opts: string | {
       update: (event: Event, ui: { item: JQuery }) => void;
     }) => string | undefined;
-    tabs?: (opts: Partial<{
+    tabs?: (opts?: Partial<{
       active: boolean | number;
       activate: (event: Event, ui: { newPanel: JQuery }) => void;
-      show: (event: Event, ui: { panel: JQuery }) => void;
     }>) => void;
     droppable?: (opts: {
       hoverClass: string;

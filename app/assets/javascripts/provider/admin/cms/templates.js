@@ -36,14 +36,6 @@
             return false;
         });
 
-        $(document).on('cms-template:init', function(event){
-            jQueryUI(event.target).find('#cms-template-editor-tabs').parent().tabs({
-                show: function(event, ui){
-                    $(ui.panel).trigger('cms.refresh');
-                }
-            });
-        });
-
         $(document).on('click', '.remove-from-section', function(event){
             $(this).closest("tr[id]").fadeOut(function(){ $(this).remove(); });
             return false;
