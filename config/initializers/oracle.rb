@@ -154,7 +154,7 @@ ActiveSupport.on_load(:active_record) do
       # For now it is only particular to our project, later we could extract it and make a PR to the upstream project
       def set_database_settings(settings)
         super
-        conf = System::Database.configuration_specification.config
+        conf = System::Database.database_config.configuration_hash
         if type == 'odbc'
           @odbc_dsn ||= "DSN=oracle;Driver={Oracle-Driver};Dbq=#{conf[:host]}:#{conf[:port] || 1521}/#{conf[:database]};Uid=#{conf[:username]};Pwd=#{conf[:password]}"
         end
