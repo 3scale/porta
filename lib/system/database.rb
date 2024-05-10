@@ -144,6 +144,11 @@ end
 
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
+
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.permissions = ['unlimited tablespace', 'create session',
+                                                                           'create table', 'create view', 'create sequence',
+                                                                           'create trigger', 'create procedure']
+
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
       prepend(Module.new do
         # If ORACLE_SYSTEM_PASSWORD is provided, Porta impersonates Oracle's SYSTEM user to create/update a non-SYSTEM
@@ -155,18 +160,10 @@ ActiveSupport.on_load(:active_record) do
           if ENV['ORACLE_SYSTEM_PASSWORD'].present?
             Logger.new($stderr).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
             super
-            connection.execute "GRANT create trigger TO #{username}"
-            connection.execute "GRANT create procedure TO #{username}"
           else
             # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
             establish_connection(@config)
           end
-        end
-
-        protected
-
-        def username
-          @config['username']
         end
       end)
     end
