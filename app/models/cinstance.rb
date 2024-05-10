@@ -172,7 +172,9 @@ class Cinstance < Contract
     if service == :all || service.blank?
       all
     else
-      where{ plan_id.in( my{Plan.issued_by(service).select(:id)} ) }
+      # NOTE: `reorder(nil)` resets the order set in the Plan's default scope,
+      # because ORDER BY in subqueries fails in Oracle with 'ORA-00907: missing right parenthesis'.
+      where { plan_id.in( my { Plan.issued_by(service).select(:id).reorder(nil)} ) }
     end
   end
 
