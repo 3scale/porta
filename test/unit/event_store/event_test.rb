@@ -86,4 +86,42 @@ class EventStore::EventTest < ActiveSupport::TestCase
     expected_stale_events_count = EventStore::Event.where('created_at <= ?', EventStore::Event::TTL.ago).count
     assert_equal expected_stale_events_count, EventStore::Event.stale.count
   end
+
+  class EventRollbacksTest < ActiveSupport::TestCase
+
+    class EventWithCallbacks < EventStore::Event
+      after_rollback :after_rollback_method
+
+      def after_rollback_method; end
+    end
+
+    test 'rolledback harmless exceptions not reported' do
+      System::ErrorReporting.expects(:report_error).with(instance_of(EventStore::Event::EventRollbackError)).never
+
+      ActiveRecord::Base.transaction do
+        EventStore::Event.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        ActiveJob::Arguments.expects(:deserialize).raises(ActiveRecord::RecordNotFound).at_least_once
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    test 'failed rolledback with transactional callbacks' do
+      System::ErrorReporting.expects(:report_error).with(instance_of(EventStore::Event::EventRollbackError))
+
+      ActiveRecord::Base.transaction do
+        EventWithCallbacks.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        ActiveJob::Arguments.stubs(:deserialize).raises(ActiveRecord::RecordNotFound)
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    test 'successful rolledback with transactional callbacks' do
+      EventWithCallbacks.any_instance.expects(:after_rollback_method)
+
+      ActiveRecord::Base.transaction do
+        EventWithCallbacks.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
 end
