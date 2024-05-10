@@ -32,6 +32,7 @@ jQuery1(document).on('cms-sidebar:update', () => {
 document.addEventListener('DOMContentLoaded', () => {
   setUpContentTypeLiquidEnabledListener()
   setUpRevertButton()
+  setUpRemoveFromSectionAction()
 
   jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
@@ -257,4 +258,14 @@ function setUpRevertButton () {
         }
       })
     })
+}
+
+function setUpRemoveFromSectionAction () {
+  jQueryUI(document).on('click', '.remove-from-section', (event) => {
+    event.stopImmediatePropagation()
+    event.preventDefault()
+
+    const row = jQueryUI(event.target).closest('tr[id]')
+    row.fadeOut(() => { row.remove() })
+  })
 }
