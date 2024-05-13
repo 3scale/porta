@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SuspendInactiveAccountsWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def perform
     AutoAccountDeletionQueries.should_be_suspended.find_each(&:suspend!)

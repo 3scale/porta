@@ -1,5 +1,5 @@
 class BackendRandomDataGeneratorWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def self.generate(options)
     perform_async(options)

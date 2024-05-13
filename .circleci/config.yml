@@ -134,7 +134,7 @@ memcached-container: &memcached-container
   image: memcached:1.5-alpine
 
 redis-container: &redis-container
-  image: redis:6.2-alpine
+  image: redis:4.0-alpine
 
 dnsmasq-container: &dnsmasq-container
   image: quay.io/3scale/dnsmasq

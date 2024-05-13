@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WebHookWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   include ThreeScale::SidekiqRetrySupport::Worker
   HANDLED_ERRORS = [
     SocketError, RestClient::Exception,

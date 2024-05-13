@@ -3,7 +3,7 @@
 require 'httpclient/include_client'
 
 class ZyncWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   include ThreeScale::SidekiqRetrySupport::Worker
 
   extend ::HTTPClient::IncludeClient

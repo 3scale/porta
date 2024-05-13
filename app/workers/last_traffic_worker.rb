@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LastTrafficWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   sidekiq_options queue: :low
 
   delegate :logger, to: Rails

@@ -15,6 +15,6 @@ end
 World(EmailSupport)
 
 Before do
-  Sidekiq::Job.clear_all
+  Sidekiq::Worker.clear_all
   ActionMailer::Base.deliveries.clear
 end

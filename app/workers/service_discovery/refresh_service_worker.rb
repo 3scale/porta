@@ -2,7 +2,7 @@
 
 module ServiceDiscovery
   class RefreshServiceWorker
-    include Sidekiq::Job
+    include Sidekiq::Worker
 
     def perform(service_id, user_id=nil)
       user = User.where(id: user_id).first

@@ -1,5 +1,5 @@
 class PersistEventWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def self.enqueue(event_attrs)
     perform_async(event_attrs.as_json)

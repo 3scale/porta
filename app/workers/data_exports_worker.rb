@@ -3,7 +3,7 @@
 require 'zip'
 
 class DataExportsWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   sidekiq_options queue: :priority
 
   def perform(provider_id, recipient_id, type, period)

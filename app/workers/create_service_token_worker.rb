@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CreateServiceTokenWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   # @param [Services::ServiceCreatedEvent] event
   def self.enqueue(event)
