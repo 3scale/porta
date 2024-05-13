@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BackendMetricWorker < ApplicationJob
-  include Sidekiq::Throttled::Job
+  include Sidekiq::Throttled::Worker
 
   queue_as :backend_sync
 

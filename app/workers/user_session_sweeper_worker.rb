@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserSessionSweeperWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   sidekiq_options queue: :low
 
   def perform(id)

@@ -5,7 +5,7 @@ require 'test_helper'
 class ThreeScale::SidekiqRetrySupportTest < ActiveSupport::TestCase
   class WorkerTest < ActiveSupport::TestCase
     TestWorker = Class.new do
-      include Sidekiq::Job
+      include Sidekiq::Worker
       include ThreeScale::SidekiqRetrySupport::Worker
     end
 
@@ -23,7 +23,7 @@ class ThreeScale::SidekiqRetrySupportTest < ActiveSupport::TestCase
       assert_equal 25, worker.retry_limit
 
       other_class = Class.new do
-        include Sidekiq::Job
+        include Sidekiq::Worker
         include ThreeScale::SidekiqRetrySupport::Worker
 
         sidekiq_options retry: 10

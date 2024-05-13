@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EventsFetchWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   sidekiq_options queue: :events
 

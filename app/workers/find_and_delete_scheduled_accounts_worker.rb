@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FindAndDeleteScheduledAccountsWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def perform
     return unless ThreeScale.config.onpremises

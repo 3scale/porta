@@ -2,6 +2,9 @@
 
 require 'three_scale/sidekiq_retry_support'
 require 'three_scale/sidekiq_logging_middleware'
+require 'sidekiq/throttled'
+
+Sidekiq::Throttled.setup!
 
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
@@ -10,6 +13,7 @@ Rails.application.config.to_prepare do
     config.try(:reliable!)
 
     config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
+    config.error_handlers << System::ErrorReporting.method(:report_error)
 
     config.logger.formatter = Sidekiq::Logger::Formatters::Pretty.new
 
@@ -33,7 +37,7 @@ Rails.application.config.to_prepare do
     # Use PROMETHEUS_EXPORTER_BIND and PROMETHEUS_EXPORTER_PORT
     # if no PROMETHEUS_EXPORT_PORT given, it will start the server with default port 9394 + index
     port = ENV.fetch('PROMETHEUS_EXPORTER_PORT', 9394).to_i
-    port += Sidekiq.default_configuration[:index].to_i
+    port += Sidekiq.options[:index].to_i
     ENV['PROMETHEUS_EXPORTER_PORT'] ||= port.to_s
 
     require 'yabeda/prometheus/mmap'

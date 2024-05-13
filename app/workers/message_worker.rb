@@ -1,5 +1,5 @@
 class MessageWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def self.enqueue(recipients, attributes)
     perform_async(recipients.as_json, attributes.as_json)

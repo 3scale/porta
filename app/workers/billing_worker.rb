@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BillingWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   sidekiq_options queue: :billing, retry: 3
 

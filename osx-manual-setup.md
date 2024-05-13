@@ -112,7 +112,7 @@ brew services start postgresql@13
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 redis:6.2-alpine
+podman run -d -p 6379:6379 redis
 ```
 
 Alternatively, Redis can be run directly on your machine with Homebrew:

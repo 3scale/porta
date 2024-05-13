@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BackendStorageRewriteWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
   sidekiq_options queue: :low
 
   def perform(class_name, ids)

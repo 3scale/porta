@@ -1,5 +1,5 @@
 class ActivationReminderWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   THREE_DAYS = 72.hours.freeze
 

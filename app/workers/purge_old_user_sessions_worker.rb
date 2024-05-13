@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PurgeOldUserSessionsWorker
-  include Sidekiq::Job
+  include Sidekiq::Worker
 
   def perform
     return unless stale_sessions.exists?
