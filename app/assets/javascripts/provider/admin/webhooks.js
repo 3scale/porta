@@ -9,12 +9,3 @@ $(document)
     form.submit();
     return false;
   })
-  .on('click', "button[data-ping-url]", function() {
-    $.flash.notice('Pinging...');
-    $.ajax({ url: $(this).data('ping-url')});
-
-    // jump to top
-    window.location.hash = 'flashWrapper';
-
-    return false;
-  });

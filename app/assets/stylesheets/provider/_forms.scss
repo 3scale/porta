@@ -353,14 +353,6 @@ form.formtastic:not(.pf-c-form) {
   }
 }
 
-form.web_hook fieldset > ol > li.boolean label {
-  font-weight: $font-weight-normal;
-}
-
-form.web_hook table > tbody > tr > td > fieldset > ol > li.boolean label {
-  font-size: $font-size-sm;
-}
-
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
   padding: 0 0 0 0;
 }
