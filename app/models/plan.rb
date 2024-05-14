@@ -125,6 +125,7 @@ class Plan < ApplicationRecord
   scope :stock, -> { where(original_id: [0, nil]) }
   scope :not_custom, -> { where(original_id: 0)}
 
+  scope :ordered, -> { order(:id) }
   scope :alphabetically, -> { order(name: :asc) }
 
   def self.provided_by(account)
