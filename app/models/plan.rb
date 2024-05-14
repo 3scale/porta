@@ -4,8 +4,8 @@ class Plan < ApplicationRecord
   class PeriodRangeCalculationError < StandardError; end
   include Symbolize
 
-  self.allowed_sort_columns = %w[position name state contracts_count]
-  self.default_sort_column = :position
+  self.allowed_sort_columns = %w[name state contracts_count]
+  self.default_sort_column = :name
   self.default_sort_direction = :asc
 
 
@@ -111,8 +111,6 @@ class Plan < ApplicationRecord
 
   belongs_to :original, :class_name => self.name
 
-  default_scope -> { order(:position) }
-
   scope :latest, -> { limit(5).order(created_at: :desc) }
 
   scope :by_state, ->(state) {  where({:state => state.to_s})}
@@ -166,24 +164,6 @@ class Plan < ApplicationRecord
     end
 
     alias by_issuer issued_by
-
-
-    # Reorder plans according to list of ids.
-    #
-    # == Example
-    #
-    # Plan.reorder!([3, 2, 1]) # will reorder plans so the one with
-    # id=3 will be first, the one with id=2 second and the one with id=1
-    # last.
-    #
-    # TODO: should be a method on issuer
-    #
-    def reorder!(account, ids)
-      ids.each_with_index do |id, position|
-        account.service.application_plans.find_by_id(id).update_attribute(:position, position)
-      end
-    end
-
   end
 
   def reset_contracts_counter
