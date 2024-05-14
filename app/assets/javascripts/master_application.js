@@ -1,8 +1,4 @@
 (function($) {
-  // Object for holding various timers users in proceeding code.
-  var timers = {
-    checkDomain: 0
-  };
 
   $(document).ready(function() {
     // For parsing code blocks with highlighter.
@@ -11,60 +7,7 @@
     // target 'pre code' elements in the quick starts drawer
     $('.pf-c-drawer__content pre code').each(function(i, block) {
       hljs.highlightBlock(block)
-    })
-
-     // *** Plan reordering ***
-
-     // Check sortable method exists; only included in plans
-     // index view.
-     if(typeof $().sortable == 'function'){
-       $("#plans-list ul").sortable({
-         handle: "span.plan-drag",
-         stop: function(event, ui) {
-           var order = [];
-           ui.item.parent().find('li').each(function(){
-             order.push($(this).attr('data-plan-id'));
-           });
-
-          $.ajax({
-            url: "/admin/plans/reorder.json",
-            type: "POST",
-            dataType: "json",
-            data: $.param({positions:order}),
-            success: function(data) {
-              Messenger.notice("Plans successfully reordered.");
-            }
-          });
-         }
-       });
-     }
-
-
-     // Marking plan as default
-     $('#plans-list input.master-select').change(function(){
-
-       // get ID of plan selected/de-selected
-       var value = this.value;
-       var loading = true;
-
-       // update plan in the db.
-       $.ajax({
-         complete: function(){
-           loading = false;
-         },
-
-         url: "/admin/plans/"+value+"/update_master",
-         type: "PUT",
-         dataType: "script"
-       });
-
-       // uncheck ALL plans
-       jQuery('input.master-select').attr('checked', false);
-
-       // check selected plans
-       jQuery(this).attr('checked', 'checked')
-     });
-
+    });
 
     (function(){
 
@@ -77,7 +20,6 @@
       var currentPanel = (function(){
         return $(".liquid-index[data-section='"+section+"']");
       })();
-
 
       if(currentPanel.length > 0){
         currentPanel.show();
@@ -98,26 +40,6 @@
         return false;
       });
     })();
-
-    $('a.wiki_preview_trigger').click(function() {
-      var params = $('form.wiki_page:first').serialize();
-      params = params.replace('_method=put&','');
-      $.fancybox.showActivity();
-      $.ajax({
-        type:     "POST",
-        cache:    false,
-        url:      this.href,
-        data:     params,
-        dataType: 'html',
-        success:  function(data) {
-        	$.fancybox(data);
-          $("pre code").each(function(i,element) {
-            window.hljs.highlightBlock(element, window.hljs.tabReplace);
-          });
-        }
-      });
-	    return false;
-    });
 
     $(document).on('click', '.metric_slot_close_button', function () {
       $('.metrics-subtable-toggle').removeClass('selected');
@@ -152,39 +74,6 @@
 
       return false;
     });
-
-
-
-    // 3scale front: 'Domain Name' suggestion functionality. Currently used on signup form, and generates
-    // suggestion by pinging server with value for account organisation name
-
-
-    // Admin: see admin/liquid_pages/(id)
-    // Automatically jump to selected version.
-    (function(){
-      $('select#rollback-selectbox').change(function(){
-        var vr  = this.options[this.selectedIndex].value,
-           loc  = window.location.pathname + "?v=" + vr;
-
-        location.href = loc;
-      });
-    })();
-
-
-
-    // Admin
-    // Behaviour stuff for plans management
-    (function(){
-      var $img = $('#infinity_image');
-      $(document).on('keypress', 'input.watch_infinity', function () {
-        this.value == '' ? $('#infinity_image').show() : $('#infinity_image').hide();
-      });
-
-      // $('form#new_pricing_rule').live('submit', function(){
-      //   checkRule(this);
-      // });
-
-    })();
 
     (function(){
         var fieldPending = false;
