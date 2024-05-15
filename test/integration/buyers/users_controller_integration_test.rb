@@ -57,7 +57,9 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
         role: 'admin',
         username: 'updatedusername',
         email: 'newemail@example.org',
-        country: 'Japan'
+        extra_fields: {
+          country: 'Japan'
+        }
       }
     }
 
