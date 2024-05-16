@@ -1,13 +1,18 @@
-# frozen_string_literal: true
-
 module Liquid
   module Tags
     class EssentialAssets < Liquid::Tags::Base
-      deprecated 'This is outdated and should not be use anymore.'
+      include Liquid::Tags::ContentFor::ContentFor
+      nodoc!
 
-      # This exists for backwards compatibility. Some very old dev portals may still be using tag
-      # {% essential_assets %} and thus loading old libraries and overriding our updates.
-      def render(context); end
+      # this makes versioning harder, delete it
+
+      def render(context)
+        [
+            stylesheets.render(context),
+            render_erb(context, "shared/essential_assets"),
+            javascripts.render(context)
+        ].join.html_safe
+      end
     end
   end
 end
