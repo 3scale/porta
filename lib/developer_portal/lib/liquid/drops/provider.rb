@@ -171,7 +171,7 @@ module Liquid
         </ul>
       )
       def account_plans
-        Drops::AccountPlan.wrap(@model.account_plans.published)
+        Drops::AccountPlan.wrap(@model.account_plans.published.ordered)
       end
 
       desc "Returns all defined services."

@@ -99,7 +99,7 @@ module Liquid
         {% endfor %}
       }
       def application_plans
-        Drops::ApplicationPlan.wrap(@service.application_plans.published)
+        Drops::ApplicationPlan.wrap(@service.application_plans.published.ordered)
       end
 
       desc "Returns the *published* service plans of the service."
@@ -115,7 +115,7 @@ module Liquid
         </dl>
       }
       def service_plans
-        Drops::ServicePlan.wrap(@service.service_plans.published)
+        Drops::ServicePlan.wrap(@service.service_plans.published.ordered)
       end
 
       desc "Returns the application plans of the service."
