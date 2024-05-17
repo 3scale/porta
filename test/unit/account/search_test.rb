@@ -160,7 +160,7 @@ class Account::SearchTest < ActiveSupport::TestCase
     setup do
       ThinkingSphinx::Test.clear
       ThinkingSphinx::Test.init
-      ThinkingSphinx::Test.start index: false
+      ThinkingSphinx::Test.wait_start
       ThinkingSphinx::Test.enable_search_jobs!
       perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
         @provider = FactoryBot.create(:simple_provider)
