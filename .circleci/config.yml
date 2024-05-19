@@ -116,7 +116,6 @@ postgres-container: &postgres-container
   image: cimg/postgres:13.15
   environment:
     POSTGRES_USER: postgres
-    POSTGRES_DB: systemdb
 
 oracle-db-container: &oracle-db-container
   image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
