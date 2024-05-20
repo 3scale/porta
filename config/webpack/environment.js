@@ -1,5 +1,6 @@
 const { environment } = require('@rails/webpacker')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 // Add global webpack configs here
 
@@ -42,6 +43,13 @@ environment.loaders.append('yaml', {
   include: path.resolve(__dirname, '../../app/javascript/src/QuickStarts/templates'),
   type: 'json'
 })
+
+// Handle images coming from the assets folder
+environment.plugins.append('Copy', new CopyWebpackPlugin({
+  patterns: [
+    { from: 'app/assets/images', to: 'images' }
+  ]
+}))
 
 /* The CDN url must be hardcoded at settings.yml:asset_host during assets compilation in order to get static assets
  * like CSS files point to the CDN. Otherwise, the assets are generated with relative paths and are not loaded from
