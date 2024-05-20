@@ -7,6 +7,9 @@ Feature: Buyer users management
   Background:
     Given a provider is logged in
     And the provider has multiple applications enabled
+    And the provider has the following fields defined for users:
+      | Name            | Choices | Label | Required | Read Only | Hidden |
+      | custom_field    |         |       |          |           |        |
     And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
     And an active user "alice" of account "SpaceWidgets"
     And an active user "bob" of account "SpaceWidgets"
@@ -44,9 +47,11 @@ Feature: Buyer users management
     When I go to the buyer user page for "bob"
     And I follow "Edit"
     And I fill in "Email" with "smith@example.net"
+    And I fill in "Custom field" with "custom value"
     And I press "Update User"
     Then I should be on the buyer user page for "bob"
     And I should see "smith@example.net"
+    And I should see "custom value"
 
   Scenario: Delete buyer user
     When I go to the buyer user page for "bob"

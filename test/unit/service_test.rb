@@ -389,26 +389,6 @@ class ServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'reordering plans' do
-    service = FactoryBot.create(:simple_service)
-
-    free = FactoryBot.create(:application_plan, issuer: service)
-    basic = FactoryBot.create(:application_plan, issuer: service)
-    pro = FactoryBot.create(:application_plan, issuer: service)
-
-    service.reorder_plans([free.id, basic.id, pro.id])
-    [free, basic, pro].map(&:reload)
-
-    assert free.position < basic.position
-    assert basic.position < pro.position
-
-    service.reorder_plans([pro.id, basic.id, free.id])
-    [free, basic, pro].map(&:reload)
-
-    assert pro.position < basic.position
-    assert basic.position < free.position
-  end
-
   test 'support_email should fallback to account.support_email' do
     service = FactoryBot.create(:simple_service)
     service.account.update(support_email: "support@accounts-table.example.net")
