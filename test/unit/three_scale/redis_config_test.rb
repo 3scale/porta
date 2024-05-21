@@ -37,6 +37,13 @@ module ThreeScale
       assert_equal expected_sentinels, config.sentinels
     end
 
+    test 'extracts the Redis logical DB from the URL' do
+      config = RedisConfig.new(url: 'redis://localhost:6379/6')
+
+      assert config.key? :db
+      assert_equal '6', config[:db]
+    end
+
     test ':pool_size is renamed to :size' do
       config = RedisConfig.new(pool_size: 5)
 
