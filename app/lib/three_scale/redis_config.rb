@@ -7,6 +7,7 @@ module ThreeScale
       sentinels = raw_config.delete(:sentinels).presence
       raw_config.delete_if { |key, value| value.blank? }
       raw_config[:size] ||= raw_config.delete(:pool_size) if raw_config.key?(:pool_size)
+      raw_config[:db] ||= URI.parse(raw_config[:url].to_s).path[1..]
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels
@@ -15,11 +16,7 @@ module ThreeScale
     attr_reader :config
 
     def db
-      value = config.db.presence
-      return value.to_i if value
-      url = config.url.presence
-      return unless url
-      URI.parse(url).path[1..-1].to_s.to_i
+      config.db.to_i
     end
 
     def reverse_merge(other)
