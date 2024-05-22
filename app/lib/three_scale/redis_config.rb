@@ -15,10 +15,6 @@ module ThreeScale
 
     attr_reader :config
 
-    def db
-      config.db.to_i
-    end
-
     def reverse_merge(other)
       other.merge(config)
     end

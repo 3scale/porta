@@ -4,12 +4,6 @@ require 'test_helper'
 
 module ThreeScale
   class RedisConfigTest < ActiveSupport::TestCase
-    test '#db' do
-      assert_equal 4, RedisConfig.new(db: 4).db
-      assert_equal 3, RedisConfig.new(url: 'redis://my-redis/3').db
-      assert_equal 0, RedisConfig.new(url: 'redis://my-redis').db
-    end
-
     test '#reverse_merge' do
       config_1 = RedisConfig.new(host: 'localhost', db: 1)
       config_2 = RedisConfig.new(db: 2, password: 'passwd')
@@ -42,6 +36,7 @@ module ThreeScale
 
       assert config.key? :db
       assert_equal '6', config[:db]
+      assert_equal '6', config.db
     end
 
     test ':pool_size is renamed to :size' do
