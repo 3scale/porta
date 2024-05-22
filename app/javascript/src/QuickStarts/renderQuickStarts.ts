@@ -11,7 +11,7 @@ const renderQuickStarts = (): void => {
     return
   }
 
-  const { links, renderCatalog } = container.dataset
+  const { images, links, renderCatalog } = container.dataset
   const parsedRenderCatalog = safeFromJsonString<boolean>(renderCatalog)
   const willRenderQuickStartContainer = getActiveQuickstart() ?? parsedRenderCatalog
 
@@ -21,6 +21,7 @@ const renderQuickStarts = (): void => {
   }
 
   QuickStartContainer({
+    images: safeFromJsonString<Record<string, string>>(images) ?? {},
     links: safeFromJsonString<[string, string, string][]>(links) ?? [],
     renderCatalog: parsedRenderCatalog
   }, containerId)

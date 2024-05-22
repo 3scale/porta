@@ -20,4 +20,11 @@ class QuickstartsPresenter
       ['create-a-method-link-in-create-mapping-rules', new_admin_service_metric_child_path(current_api, current_api.metrics.hits), 'Create a method']
     ].to_json
   end
+
+  def images
+    Dir.glob('app/assets/images/quickstarts/*').map do |full_path|
+      file_name = "quickstarts/#{File.basename(full_path)}"
+      [file_name, ActionController::Base.helpers.asset_path(file_name)]
+    end.to_h.to_json
+  end
 end

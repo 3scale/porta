@@ -26,8 +26,8 @@ spec:
       description: |-
         You will complete 1 task:
 
-        A product is an API package to control one or more API endpoints. In the Admin Portal, you can package one or more API endpoints into a product. Use **Products** to manage customer-facing API packages.
-        ![Path /A of the Product is mapped to Endpoint a through Backend A, while Path /B of the same product is mapped to Endpoint b through Backend B.](/assets/quickstarts/learn-about-products.png "API endpoints in a product")
+        A product is an API package to control one or more API endpoints. In the Admin Portal, you can package one or more API endpoints into a product. Use **Products** to manage customer-facing BLABLA API packages.
+        ![Path /A of the Product is mapped to Endpoint a through Backend A, while Path /B of the same product is mapped to Endpoint b through Backend B.](quickstarts/learn-about-products.png "API endpoints in a product")
       # optional - the task's Check your work module
       review:
         instructions: |-

@@ -19,4 +19,19 @@ const replaceLinksExtension = (links: string[][]): IMarkdownExtension => ({
   }
 })
 
-export default replaceLinksExtension
+const imageAssetPathExtension = (images: Record<string, string>): IMarkdownExtension => ({
+  type: 'output',
+  filter: (html) => {
+    const matches = html.matchAll(/<img src="([^"]*)"/g)
+    for (const match of matches) {
+      const imageSource = match[1]
+      const assetPath = images[imageSource]
+      if (assetPath) {
+        html = html.replace(imageSource, assetPath)
+      }
+    }
+    return html
+  }
+})
+
+export { replaceLinksExtension, imageAssetPathExtension }

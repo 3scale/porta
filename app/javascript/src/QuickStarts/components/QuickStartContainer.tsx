@@ -4,12 +4,13 @@ import { QuickStartContainer as PF4QuickStartContainer, useLocalStorage } from '
 import { PageSection } from '@patternfly/react-core'
 
 import quickStarts from 'QuickStarts/templates'
-import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
+import { replaceLinksExtension, imageAssetPathExtension } from 'QuickStarts/utils/markdownExtensions'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import { CustomCatalog } from './CustomCatalog'
 
 interface Props {
+  images: Record<string, string>;
   links: [string, string, string][];
   renderCatalog?: boolean;
 }
@@ -17,6 +18,7 @@ interface Props {
 const CATALOG_CONTAINER_ID = 'quick-start-catalog-page-wrapper'
 
 const QuickStartContainer: React.FunctionComponent<Props> = ({
+  images,
   links,
   renderCatalog = false
 }) => {
@@ -26,7 +28,7 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
   const markdown = {
     // eslint-disable-next-line react/no-multi-comp, react/jsx-no-useless-fragment -- TODO: remove this when bug is fixed
     renderExtension: () => <></>,
-    extensions: [replaceLinksExtension(links)]
+    extensions: [replaceLinksExtension(links), imageAssetPathExtension(images)]
   }
 
   return (

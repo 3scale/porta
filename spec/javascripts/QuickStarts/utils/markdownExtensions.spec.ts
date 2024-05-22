@@ -1,4 +1,4 @@
-import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
+import { replaceLinksExtension } from 'QuickStarts/utils/markdownExtensions'
 
 const links = [
   ['[create-mapping-rule]', '/the/url', 'this page'],
