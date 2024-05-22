@@ -8,10 +8,6 @@
     $(function () {
         $('form input').tipsy({trigger: 'focus', gravity: 'w'});
 
-        $('.signup_form :input').each(function () {
-            $(this).placeholder();
-        });
-
         var first_name = $("#account_user_first_name");
         var first_name_val = first_name.val();
         var last_name_list_item = $("#account_user_last_name_input");

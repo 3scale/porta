@@ -7,14 +7,11 @@ end
 
 Before('@search') do
   Sidekiq::Job.clear_all
+  ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
-  ::ThinkingSphinx::Test.stop
-  ::ThinkingSphinx::Test.autostop
-  output = ::ThinkingSphinx::Test.start index: false
-
-  3.times { ::ThinkingSphinx::Test.config.controller.running? && break || sleep(1) }
-  raise "thinking sphinx should be running:\n#{output.output}" unless ::ThinkingSphinx::Test.config.controller.running?
+  $searchd_autostop_installed ||= ::ThinkingSphinx::Test.autostop
+  ::ThinkingSphinx::Test.wait_start
 end
 
 After '@search' do

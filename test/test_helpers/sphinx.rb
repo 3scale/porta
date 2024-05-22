@@ -4,24 +4,39 @@ module ThinkingSphinx
   class Test
 
     JOB_CLASSES = [SphinxIndexationWorker, SphinxAccountIndexationWorker].freeze
+    private_constant :JOB_CLASSES
 
     class << self
 
       def real_time_run
         clear
         init
-        start index: false
+        wait_start
 
-        disabled = Mocha::Mockery.instance.stubba.stubba_methods.any? {|m| m.stubbee == SphinxIndexationWorker && m.method_name == :perform}
-        enable_search_jobs! if disabled
+        enable_search_jobs!
 
         yield
       ensure
         stop
-        disable_search_jobs! if disabled
+        disable_search_jobs!
       end
 
       alias_method :rt_run, :real_time_run
+
+      def wait_start
+        output = start index: false
+
+        5.times { config.controller.running? && break || sleep(1) }
+        raise "thinking sphinx should be running:\n#{output.output}" unless ::ThinkingSphinx::Test.config.controller.running?
+
+        10.times do |i|
+          Connection.take { _1.execute "SELECT * FROM account_core LIMIT 1" }
+          break
+        rescue
+          raise "thinking sphinx should be accessible:\n#{output.output}" if i >=9
+          sleep 1
+        end
+      end
 
       def indexed_base_models
         ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model)
@@ -36,14 +51,27 @@ module ThinkingSphinx
       end
 
       def disable_search_jobs!
-        ThinkingSphinx::Test::JOB_CLASSES.each do |clazz|
-          clazz.any_instance.stubs(:perform)
+        unless JOB_CLASSES.first.respond_to? :_disable_actual_indexing
+          JOB_CLASSES.each do |clazz|
+            clazz.class_attribute :_disable_actual_indexing
+            clazz.prepend(Module.new do
+              def perform(...)
+                super unless _disable_actual_indexing
+              end
+            end)
+          end
+        end
+
+        JOB_CLASSES.each do |clazz|
+          clazz._disable_actual_indexing = true
         end
       end
 
       def enable_search_jobs!
-        ThinkingSphinx::Test::JOB_CLASSES.each do |clazz|
-          clazz.any_instance.unstub(:perform)
+        return unless JOB_CLASSES.first.respond_to? :_disable_actual_indexing
+
+        JOB_CLASSES.each do |clazz|
+          clazz._disable_actual_indexing = false
         end
       end
     end

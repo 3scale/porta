@@ -6,7 +6,7 @@ class IndexingTest < ActiveSupport::TestCase
   setup do
     ThinkingSphinx::Test.clear
     ThinkingSphinx::Test.init
-    ThinkingSphinx::Test.start index: false
+    ThinkingSphinx::Test.wait_start
     ThinkingSphinx::Test.enable_search_jobs!
   end
 

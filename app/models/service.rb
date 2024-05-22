@@ -386,20 +386,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     xml.to_xml
   end
 
-  # Reorder plans according to list of ids.
-  #
-  # == Example
-  #
-  # reorder_plans([3, 2, 1]) # will reorder plans so the one with
-  # id=3 will be first, the one with id=2 second and the one with id=1
-  # last.
-  #
-  def reorder_plans(ids)
-    ids.each_with_index do |id, position|
-      application_plans.find_by_id(id).update_attribute(:position, position)
-    end
-  end
-
   # Notification settings cleanup before assign
   # calling with nil removes all settings
   def notification_settings=(settings)
