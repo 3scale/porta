@@ -39,6 +39,20 @@ module ThreeScale
       assert_equal '6', config.db
     end
 
+    test 'extracts the sentinels group name from the URL' do
+      config = RedisConfig.new({ url: 'redis://redis-master/6', sentinels: 'redis://localhost,redis://localhost:1234' })
+
+      assert config.key? :name
+      assert_equal 'redis-master', config[:name]
+      assert_equal 'redis-master', config.name
+    end
+
+    test "doesn't extract the name when no sentinels are provided" do
+      config = RedisConfig.new(url: 'redis://redis-master/6')
+
+      assert_not config.key? :name
+    end
+
     test ':pool_size is renamed to :size' do
       config = RedisConfig.new(pool_size: 5)
 

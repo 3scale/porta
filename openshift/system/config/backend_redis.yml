@@ -6,7 +6,6 @@ production:
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
   sentinel_username: <%= ENV['BACKEND_REDIS_SENTINEL_USERNAME'].to_json %>
   sentinel_password: <%= ENV['BACKEND_REDIS_SENTINEL_PASSWORD'].to_json %>
-  name: <%= ENV['BACKEND_REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
   # == ACL Params ==
   username: <%= ENV['BACKEND_REDIS_USERNAME'].to_json %>

@@ -5,7 +5,6 @@ base: &default
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
   sentinel_username: <%= ENV['REDIS_SENTINEL_USERNAME'].to_json %>
   sentinel_password: <%= ENV['REDIS_SENTINEL_PASSWORD'].to_json %>
-  name: <%= ENV['REDIS_SENTINEL_NAME'] %>
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
   # == ACL Params ==
   username: <%= ENV['REDIS_USERNAME'].to_json %>
