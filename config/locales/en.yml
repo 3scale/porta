@@ -511,6 +511,7 @@ en:
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
+        quick_starts_html: "You can use quick starts to learn about 3scale features step by step. <a href='%{link}'>Take tour</a>"
       webhooks:
         edit:
           form:
