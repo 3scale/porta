@@ -1,0 +1,8 @@
+input#web_hook_url {
+  flex: 7;
+
+  & + button {
+    flex: 1;
+    margin-left: 1rem;
+  }
+}

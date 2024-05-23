@@ -658,6 +658,9 @@ World(Module.new do
     when 'the provider site page'
       admin_site_settings_path
 
+    when 'the new webhook page'
+      new_provider_admin_webhooks_path
+
     when 'the edit webhooks page'
       edit_provider_admin_webhooks_path
 

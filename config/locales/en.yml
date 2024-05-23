@@ -514,8 +514,13 @@ en:
         quick_starts_html: "You can use quick starts to learn about 3scale features step by step. <a href='%{link}'>Take tour</a>"
       webhooks:
         edit:
+          header:
+            title: Webhooks
+            body:
+              Webhooks let you define a URL to be called with a notification when events in the
+              3scale management system happen.
           form:
-            submit_button_label: 'Update webhooks settings'
+            submit_button_label: Update webhooks settings
 
   buyers:
     accounts:
@@ -1468,6 +1473,8 @@ en:
         hidden: "Developers won't be able to see this field."
 
       web_hook:
+        active: On/off switch for triggering webhooks
+        provider_actions: If unchecked, only actions in the developer portal trigger webhooks.
         url: URL that will be notified about all the events selected below.
 
       cinstance:
@@ -1598,6 +1605,26 @@ en:
         status: 'Response Code'
         headers: 'Content-type'
         message: 'Response Body'
+
+      web_hook:
+        active: Webhooks enabled
+        provider_actions: Actions in the admin portal also trigger webhooks
+        account_created_on: Account created
+        account_updated_on: Account updated
+        account_plan_changed_on: Account Plan changed
+        account_deleted_on: Account deleted
+        user_created_on: User created
+        user_updated_on: User updated
+        user_deleted_on: User deleted
+        application_created_on: Application created
+        application_updated_on: Application updated
+        application_suspended_on: Application suspended
+        application_plan_changed_on: Application Plan changed
+        application_user_key_updated_on: API Key changed
+        application_deleted_on: Application deleted
+        application_key_created_on: Application Key created
+        application_key_deleted_on: Application Key deleted
+        application_key_updated_on: Application Key updated
 
   action_controller:
     errors:
