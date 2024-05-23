@@ -77,9 +77,6 @@ div id="cms-toolbar"
               style: "border: 0; height: 100%; border-collapse: collapse") do
                 Your browser does not support iframes which is needed to use the 3scale CMS toolbar.
 
-
-= javascript_include_tag 'srcdoc-polyfill.min.js'
-
 - if site_account.cms_toolbar_intro_visible?
   javascript:
     (function(){
