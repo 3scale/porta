@@ -33,7 +33,6 @@ class SimpleLayoutTest < ActiveSupport::TestCase
     assert SimpleLayout.new(@provider).import_js_and_css!
 
     [ [ '/javascripts/3scale.js', 'text/javascript', 'javascripts' ],
-      [ '/javascripts/jquery.js', 'text/javascript', 'javascripts' ],
       [ '/javascripts/excanvas.compiled.js', 'text/javascript', 'javascripts' ],
       [ '/css/bootstrap.css', 'text/css', 'css' ],
       [ '/css/default.css', 'text/css', 'css']
