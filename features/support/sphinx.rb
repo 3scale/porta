@@ -1,7 +1,11 @@
 require 'thinking_sphinx'
 require 'thinking_sphinx/test'
 
-Before('@search') do
+BeforeAll do
+  ::ThinkingSphinx::Test.disable_search_jobs!
+end
+
+Before '@search' do
   Sidekiq::Job.clear_all
   ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.clear
@@ -16,5 +20,3 @@ After '@search' do
   ::ThinkingSphinx::Test.disable_search_jobs!
   ::ThinkingSphinx::Test.stop
 end
-
-::ThinkingSphinx::Test.disable_search_jobs!
