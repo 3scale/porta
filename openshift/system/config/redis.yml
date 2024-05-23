@@ -10,6 +10,7 @@ production:
   username: <%= ENV['REDIS_USERNAME'].to_json %>
   password: <%= ENV['REDIS_PASSWORD'].to_json %>
   # == TLS Params ==
+  ssl: <%= ENV.fetch('REDIS_SSL', '0') == '1' %>
   ssl_params:
     ca_file: <%= ENV['REDIS_CA_FILE'] %>
     cert: <%= ENV['REDIS_CLIENT_CERT'] %>

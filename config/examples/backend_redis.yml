@@ -11,6 +11,7 @@ base: &default
   username: <%= ENV['BACKEND_REDIS_USERNAME'].to_json %>
   password: <%= ENV['BACKEND_REDIS_PASSWORD'].to_json %>
   # == TLS Params ==
+  ssl: <%= ENV.fetch('BACKEND_REDIS_SSL', '0') == '1' %>
   ssl_params:
     ca_file: <%= ENV['BACKEND_REDIS_CA_FILE'] %>
     cert: <%= ENV['BACKEND_REDIS_CLIENT_CERT'] %>
