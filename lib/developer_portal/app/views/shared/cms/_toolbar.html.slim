@@ -3,7 +3,9 @@ div id="cms-toolbar"
   // font-awesome blows QT browser in test mode
   = stylesheet_link_tag "font-awesome" unless Rails.env.test?
   = stylesheet_link_tag 'cms_toolbar.css'
-  = javascript_include_tag 'provider/cms_toolbar_v2'
+  = javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar'
+  - if site_account.cms_toolbar_intro_visible?
+    = javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar_intro_visible'
 
   form id="cms-toolbar-mode"
     ul id="cms-toolbar-menu-middle" class="horizontal"
@@ -76,45 +78,3 @@ div id="cms-toolbar"
               frameborder: 0,
               style: "border: 0; height: 100%; border-collapse: collapse") do
                 Your browser does not support iframes which is needed to use the 3scale CMS toolbar.
-
-- if site_account.cms_toolbar_intro_visible?
-  javascript:
-    (function(){
-      var added_style = $();
-
-      var add_style_to_iframe = function () {
-        var style = $(this).find('option:selected').data('snippet');
-        var frame = frames['developer-portal'];
-        var doc;
-
-        if (frame.document == undefined)
-          doc = (frame.contentWindow || frame.contentDocument);
-        else
-          doc = frame;
-
-        added_style.remove();
-
-        if(!style) return;
-
-        added_style = $('<style>' + style + '</style>');
-
-        $('body', doc.document || doc).append(added_style);
-      };
-
-      $('iframe#developer-portal').on('load', add_style_to_iframe);
-      $('#theme-picker')
-              .on('change', add_style_to_iframe)
-              .on('change', function () {
-                var picker = $(this);
-
-                var snippet = picker.find('option:selected').data('snippet');
-                var style = "<style>" + snippet + '\n' + "</style>";
-                var explain = '<!-- Copy & paste this snippet into your template called main layout to make this change permanent -->';
-                var text = snippet ? explain + '\n\n' + style : '';
-
-                $('#theme-snippet')
-                        .toggle(text.length > 0)
-                        .find('textarea').val(text);
-
-              });
-    }());

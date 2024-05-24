@@ -1,5 +1,8 @@
-// = require 'vendor/jquery-3.5.0.min.js'
-// = require 'vendor/jquery/extensions/jquery.cookie.js'
+/* eslint-disable */
+// @ts-nocheck
+import $ from 'jquery'
+
+// This is missing $.cookie, but it's been broken since cms_toolbar_v2 so it's not worth it anymore.
 
 $(function () {
   const toolbar = $('#cms-toolbar')
@@ -21,11 +24,13 @@ $(function () {
     iframe.toggleClass('not-full')
   }
   const storedToolbarState = () => {
+    return
     $.cookie('cms-toolbar-state', {
       path: '/'
     })
   }
   const saveToolbarState = state => {
+    return
     $.cookie('cms-toolbar-state', state, {
       expires: 30,
       path: '/'
