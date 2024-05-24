@@ -1,56 +1,71 @@
-/* eslint-disable */
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import $ from 'jquery'
+import Cookies from 'js-cookie'
 
-// This is missing $.cookie, but it's been broken since cms_toolbar_v2 so it's not worth it anymore.
+document.addEventListener('DOMContentLoaded', () => {
+  const toolbar = document.querySelector<HTMLDivElement>('#cms-toolbar')
+  const iframe = document.querySelector<HTMLIFrameElement>('#developer-portal')
 
-$(function () {
-  const toolbar = $('#cms-toolbar')
-  const iframe = $('#developer-portal')
-  const toolbarMode = $('form#cms-toolbar-mode')
-  toolbarMode.find('li').on('click', function () {
-    $(this).closest('li').find('input').attr('checked', true)
-    $(toolbarMode).trigger('change')
-  })
-  toolbarMode.on('change', () => {
-    window.location = $(this).find('input:checked').val()
-  })
-  const enableAnimation = () => {
-    toolbar.addClass('animate')
-    iframe.addClass('animate')
-  }
-  const toggleValues = () => {
-    toolbar.toggleClass('not-hidden')
-    iframe.toggleClass('not-full')
-  }
-  const storedToolbarState = () => {
+  const toolbarState = Cookies.get('cms-toolbar-state') ?? 'visible' as 'hidden' | 'visible'
+
+  if (!toolbar || !iframe) {
     return
-    $.cookie('cms-toolbar-state', {
-      path: '/'
-    })
   }
-  const saveToolbarState = state => {
-    return
-    $.cookie('cms-toolbar-state', state, {
-      expires: 30,
-      path: '/'
-    })
-  }
-  iframe.on('load', () => {
-    if (storedToolbarState() !== 'hidden') {
+
+  document.querySelector<HTMLLinkElement>('#cms-toolbar-menu-middle li.active a')!
+    .addEventListener('click', (event) => { event.preventDefault() })
+
+  document.querySelector<HTMLHtmlElement>('#hide-side-bar')
+    ?.addEventListener('click', () => {
       toggleValues()
-      return (window.requestAnimationFrame || window.setTimeout)(enableAnimation)
+
+      const newState = toolbarState === 'hidden' ? 'visible' : 'hidden'
+      Cookies.set('cms-toolbar-state', newState, { expires: 30 })
+    })
+
+  $(iframe).on('load', () => {
+    if (toolbarState !== 'hidden') {
+      toggleValues()
+      window.requestAnimationFrame(enableAnimation)
     } else {
-      return enableAnimation()
+      enableAnimation()
     }
   })
-  $('#hide-side-bar').on('click', event => {
-    event.preventDefault()
-    toggleValues()
-    if (storedToolbarState() === 'hidden') {
-      saveToolbarState('visible')
-    } else {
-      saveToolbarState('hidden')
-    }
-  })
+
+  const toggleValues = () => {
+    toolbar.classList.toggle('not-hidden')
+    iframe.classList.toggle('not-full')
+  }
+
+  const enableAnimation = () => {
+    toolbar.classList.add('animate')
+    iframe.classList.add('animate')
+  }
+
+  const themePicker = document.querySelector<HTMLSelectElement>('#theme-picker')
+
+  if (themePicker) {
+    let selectedTheme: JQuery | undefined = undefined
+
+    themePicker.addEventListener('change', () => {
+      const textareaWrapper = document.querySelector<HTMLDivElement>('#theme-snippet')!
+      const textarea = document.querySelector<HTMLTextAreaElement>('#theme-snippet textarea')!
+
+      const option = themePicker.querySelector<HTMLOptionElement>('option:checked')!
+      const { snippet } = option.dataset
+
+      if (snippet) {
+        selectedTheme = $(`<style>${snippet}</style>`)
+        $('body', frames[0].document).append(selectedTheme)
+
+        const text = `<!-- Copy & paste this snippet into your template called main layout to make this change permanent -->\n\n<style>\n${snippet}</style>`
+        textareaWrapper.style.removeProperty('display')
+        textarea.value = text
+      } else {
+        selectedTheme?.remove()
+        textareaWrapper.style.display = 'none'
+        textarea.value = ''
+      }
+    })
+  }
 })
