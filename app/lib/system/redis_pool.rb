@@ -8,8 +8,8 @@ module System
 
     def initialize(config = {})
       cfg = config.to_h
-      pool_config = cfg.extract!(:size, :pool_timeout)
-      @pool = ConnectionPool.new(size: pool_config[:size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
+      pool_config = cfg.extract!(:pool_size, :pool_timeout)
+      @pool = ConnectionPool.new(size: pool_config[:pool_size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
         Redis.new(cfg)
       end
     end
