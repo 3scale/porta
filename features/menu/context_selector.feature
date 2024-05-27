@@ -13,7 +13,7 @@ Feature: Context selector
       And the user logs in
 
     Scenario: Admin sees all contexts
-      Given the current page is the provider dashboard
+      Given they go to the provider dashboard
       Then the current context should be "Dashboard"
       And they should be able to navigate to the following contexts:
         | Dashboard        |
@@ -27,8 +27,76 @@ Feature: Context selector
       Given a member user "Member" of the provider
       And the user logs in
 
-    Scenario: Member can't see Audience, Services and Backends
-      And the current page is the provider dashboard
+    Scenario: Member with no permissions can't see Audience, Services and Backends
+      Given the user has no permissions
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Account Settings |
+
+    Scenario: Member with portal permission can see Audience
+      Given the user has portal permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Audience         |
+        | Account Settings |
+
+    @wip
+    Scenario: Member with finance permission can see Audience
+      Given the user has finance permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Audience         |
+        | Account Settings |
+
+    Scenario: Member with settings permission can see Audience
+      Given the user has settings permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Audience         |
+        | Account Settings |
+
+    Scenario: Member with partners permission can see everything
+      Given the user has partners permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Audience         |
+        | Products         |
+        | Backends         |
+        | Account Settings |
+
+    Scenario: Member with monitoring permission can see Products and Backends
+      Given the user has monitoring permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Products         |
+        | Backends         |
+        | Account Settings |
+
+    Scenario: Member with plans permission can see Products and Backends
+      Given the user has plans permission
+      When they go to the provider dashboard
+      Then the current context should be "Dashboard"
+      And they should be able to navigate to the following contexts:
+        | Dashboard        |
+        | Products         |
+        | Backends         |
+        | Account Settings |
+
+    Scenario: Member with policy registry permission can see Products and Backends
+      Given the user has policy_registry permission
+      When they go to the provider dashboard
       Then the current context should be "Dashboard"
       And they should be able to navigate to the following contexts:
         | Dashboard        |

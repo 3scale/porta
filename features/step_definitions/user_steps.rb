@@ -12,6 +12,12 @@ Given "a member user {string} of {provider}" do |username, provider|
                                           role: :member)
 end
 
+Given "{user} has {word} permission(s)" do |user, permission|
+  user.admin_sections = permission == 'no' ? [] : [permission]
+
+  user.save!(validate: false)
+end
+
 Given "an user {string} of {account}" do |username, account|
   FactoryBot.create(:user, :account => account, :username => username)
 end
