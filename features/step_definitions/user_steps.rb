@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+Given "an admin user {string} of {provider}" do |username, provider|
+  @user = FactoryBot.create(:active_user, account: provider,
+                                          username: username,
+                                          role: :admin)
+end
+
+Given "a member user {string} of {provider}" do |username, provider|
+  @user = FactoryBot.create(:active_user, account: provider,
+                                          username: username,
+                                          role: :member)
+end
+
 Given "an user {string} of {account}" do |username, account|
   FactoryBot.create(:user, :account => account, :username => username)
 end
