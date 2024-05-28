@@ -387,7 +387,6 @@ GEM
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
-    github-markdown (0.6.9)
     globalid (1.1.0)
       activesupport (>= 5.0)
     has_scope (0.8.1)
@@ -988,7 +987,6 @@ DEPENDENCIES
   faraday (~> 2.0, <= 2.9)
   font-awesome-rails (~> 4.7.0.5)
   formtastic (~> 4.0)
-  github-markdown
   hashie
   hiredis-client
   html-pipeline
