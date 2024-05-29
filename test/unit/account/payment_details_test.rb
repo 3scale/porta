@@ -7,6 +7,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
       credit_card_auth_code: 'auth_code',
       credit_card_partial_number: '1111',
       credit_card_expires_on: Date.parse('2020-08-01'),
+      credit_card_authorize_net_payment_profile_token: 'auth_net_token'
     }
 
     @account = FactoryBot.create(:simple_account)
@@ -25,12 +26,14 @@ class PaymentDetailsTest < ActiveSupport::TestCase
     assert_equal @account.credit_card_auth_code, @account.payment_detail.buyer_reference
     assert_equal @account.credit_card_partial_number, @account.payment_detail.credit_card_partial_number
     assert_equal @account.credit_card_expires_on, @account.payment_detail.credit_card_expires_on
+    assert_equal @account.credit_card_authorize_net_payment_profile_token, @account.payment_detail.payment_service_reference
   end
 
   test 'delegate writers to payment_details' do
     @account.credit_card_auth_code = 'buyer-123'
     @account.credit_card_partial_number = '2222'
     @account.credit_card_expires_on = Date.parse('2018-02-01')
+    @account.credit_card_authorize_net_payment_profile_token = nil
 
     assert_equal 'buyer-123', @account.payment_detail.buyer_reference
     assert_equal '2222', @account.payment_detail.credit_card_partial_number
@@ -42,6 +45,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
     @account.credit_card_auth_code = 'buyer-123'
     @account.credit_card_partial_number = '2222'
     @account.credit_card_expires_on = Date.parse('2018-02-01')
+    @account.credit_card_authorize_net_payment_profile_token = nil
 
     assert_equal 'buyer-123', @account.payment_detail.buyer_reference
     assert_equal '2222', @account.payment_detail.credit_card_partial_number
@@ -51,6 +55,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
     assert_nil @account.read_attribute(:credit_card_auth_code)
     assert_nil @account.read_attribute(:credit_card_partial_number)
     assert_nil @account.read_attribute(:credit_card_expires_on)
+    assert_nil @account.read_attribute(:credit_card_authorize_net_payment_profile_token)
   end
 
   test 'saves payment_detail together with account' do

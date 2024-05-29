@@ -23,11 +23,16 @@ class Provider::Admin::WebhooksController < Sites::BaseController
 
   def show
     respond_to do |format|
-      format.js do
+      format.json do
         if @webhook
           @ping_response = @webhook.ping
+          if @ping_response.respond_to?(:status)
+            render json: { notice: "#{@webhook.url} responded with #{@ping_response.status}" }
+          else
+            render json: { error: "Ping failed: #{@ping_response.message.to_json.html_safe}" }
+          end
         else
-          render :status => :forbidden, :plain => 'Nowhere to ping'
+          render json: { error: 'Nowhere to ping' }
         end
       end
     end

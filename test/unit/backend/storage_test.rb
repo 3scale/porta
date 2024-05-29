@@ -3,7 +3,7 @@ require 'test_helper'
 class Backend::StorageTest < ActiveSupport::TestCase
 
   def given_redis_config(yaml)
-    FakeFS do
+    FakeFS.with_fresh do
       config = Rails.root.join('config', 'backend_redis.yml')
       FakeFS::FileSystem.clone(config.dirname, '/tmp/config')
       config.open('w') { |f| f.puts(yaml) }

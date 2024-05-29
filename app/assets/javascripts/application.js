@@ -1,3 +1,10 @@
+/**
+ * TODO: delete this!!!
+ *
+ * All this was cleaned up and moved to Typescript in https://github.com/3scale/porta/pull/3754 but
+ * it was good for the admin portal only. Unfortunately, some old dev portals will break because it
+ * is still used by {% essential_assets %} and we must maintain this file here for backwards compatibility
+ */
 (function($) {
   $(document).on('click', '.show-trace-lr', function(e){
     e.preventDefault();

@@ -4,11 +4,9 @@
 //= require remote
 //= require switch
 //= require ajax_events
-//= require autosubmit
 //= require extra_fields
 //= require vendor/underscore.min.js
 //= require provider
-//= require application
 //= require vendor/jquery.iframe-post-form.js
 //= require vendor/colorbox/jquery.colorbox.js
 //= require threescale

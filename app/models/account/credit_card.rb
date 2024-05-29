@@ -35,12 +35,23 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
                      end
   end
 
+
+  def credit_card_authorize_net_profile_stored?
+    if provider_account && provider_account.payment_gateway_type == :authorize_net
+      credit_card_auth_code.present?
+    else
+      credit_card_stored?
+    end
+  end
+
   def credit_card_stored?
     public_send(credit_card_stored_attribute).present?
   end
 
   def credit_card_stored_attribute
     case provider_account.try(:payment_gateway_type)
+    when :authorize_net
+      :credit_card_authorize_net_payment_profile_token
     when :stripe
       :credit_card_partial_number
     else
@@ -48,6 +59,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     end
   end
 
+  # FIXME : Authorize.net does not provide expiration dates
   def credit_card_expired?
     if credit_card_expires_on
       credit_card_expires_on_with_default.end_of_month < Time.zone.today
@@ -88,6 +100,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     self.credit_card_auth_code = nil
     self.credit_card_expires_on = nil
     self.credit_card_partial_number = nil
+    self.credit_card_authorize_net_payment_profile_token = nil
   end
 
   def unstore_credit_card!

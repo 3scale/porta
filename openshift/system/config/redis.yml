@@ -1,7 +1,18 @@
 production:
   url: "<%= ENV.fetch('REDIS_URL', 'redis://system-redis/1') %>"
-  size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
-  name: <%= ENV['REDIS_SENTINEL_NAME'] %>
+  sentinel_username: <%= ENV['REDIS_SENTINEL_USERNAME'].to_json %>
+  sentinel_password: <%= ENV['REDIS_SENTINEL_PASSWORD'].to_json %>
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
+  # == ACL Params ==
+  username: <%= ENV['REDIS_USERNAME'].to_json %>
+  password: <%= ENV['REDIS_PASSWORD'].to_json %>
+  # == TLS Params ==
+  ssl: <%= ENV.fetch('REDIS_SSL', '0') == '1' %>
+  ssl_params:
+    ca_file: <%= ENV['REDIS_CA_FILE'] %>
+    cert: <%= ENV['REDIS_CLIENT_CERT'] %>
+    key: <%= ENV['REDIS_PRIVATE_KEY'] %>
+

@@ -22,6 +22,7 @@ class Provider::SessionsController < FrontendController
 
     if @user
       self.current_user = @user
+      flash[:first_login] = current_user.user_sessions.empty?
       create_user_session!(strategy.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
 

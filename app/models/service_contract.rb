@@ -1,6 +1,8 @@
 class ServiceContract < Contract
   include Logic::Contracting::ServiceContract
 
+  validate :same_service_plan_update, on: :update, if: :plan_id_changed?
+
   before_create :accept_on_create, :unless => :live?
 
   before_create :set_service_id
@@ -57,4 +59,9 @@ class ServiceContract < Contract
     @legal_terms_acceptance
   end
 
+  def same_service_plan_update
+    return if plan.blank?
+
+    errors.add(:plan, :service_conflict) if Plan.find_by(id: plan_id_was)&.issuer_id != plan.issuer_id
+  end
 end

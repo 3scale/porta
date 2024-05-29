@@ -18,9 +18,10 @@ class PaymentDetail < ApplicationRecord
                                                    :allow_blank => true,
                                                    :message => "must be the final 4 digits only" }
   validates :buyer_reference, :payment_service_reference, :credit_card_partial_number, :credit_card_auth_code,
-            :payment_method_id, length: {maximum: 255}
+            :credit_card_authorize_net_payment_profile_token, :payment_method_id, length: {maximum: 255}
 
   alias_attribute :credit_card_auth_code, :buyer_reference
+  alias_attribute :credit_card_authorize_net_payment_profile_token, :payment_service_reference
 
   after_commit :notify_credit_card_changes, if: :notify_changes?
 

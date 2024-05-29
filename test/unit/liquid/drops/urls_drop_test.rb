@@ -14,6 +14,9 @@ class Liquid::Drops::UrlsDropTest < ActiveSupport::TestCase
 
     @provider.update_attribute(:payment_gateway_type, 'stripe')
     assert_equal '/admin/account/stripe',  @drop.payment_details.to_str
+
+    @provider.update_attribute(:payment_gateway_type, 'authorize_net')
+    assert_equal '/admin/account/authorize_net',  @drop.payment_details.to_str
     assert_equal 'Credit Card Details', @drop.payment_details.title
   end
 

@@ -1,11 +1,21 @@
 base: &default
   url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/6') %>"
   timeout: <%= ENV.fetch('BACKEND_REDIS_TIMEOUT', 1) %>
-  size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
-  name: <%= ENV['BACKEND_REDIS_SENTINEL_NAME'] %>
+  sentinel_username: <%= ENV['BACKEND_REDIS_SENTINEL_USERNAME'].to_json %>
+  sentinel_password: <%= ENV['BACKEND_REDIS_SENTINEL_PASSWORD'].to_json %>
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
+  # == ACL Params ==
+  username: <%= ENV['BACKEND_REDIS_USERNAME'].to_json %>
+  password: <%= ENV['BACKEND_REDIS_PASSWORD'].to_json %>
+  # == TLS Params ==
+  ssl: <%= ENV.fetch('BACKEND_REDIS_SSL', '0') == '1' %>
+  ssl_params:
+    ca_file: <%= ENV['BACKEND_REDIS_CA_FILE'] %>
+    cert: <%= ENV['BACKEND_REDIS_CLIENT_CERT'] %>
+    key: <%= ENV['BACKEND_REDIS_PRIVATE_KEY'] %>
 
 development:
   <<: *default

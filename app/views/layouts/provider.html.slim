@@ -8,9 +8,9 @@ html[lang="en" class="pf-m-redhat-font"]
     = csrf_meta_tag
     = rails_asset_url_tag
     = render 'provider/theme'
-    = javascript_packs_with_chunks_tag 'provider'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
+    = javascript_packs_with_chunks_tag 'provider'
     = yield :javascripts
 
   body

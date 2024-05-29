@@ -33,12 +33,12 @@ class MessageObserverTest < ActiveSupport::TestCase
     end
 
     test 'plan changed' do
-      contract = FactoryBot.create(:service_contract)
+      contract = FactoryBot.create(:service_contract, plan: FactoryBot.create(:simple_service_plan, issuer: @service))
 
       ServiceContracts::ServiceContractPlanChangedEvent.expects(:create).once
       ContractMessenger.expects(:plan_change).never
 
-      contract.change_plan! FactoryBot.create(:simple_service_plan)
+      contract.change_plan! FactoryBot.create(:simple_service_plan, issuer: @service)
 
       cinstance = FactoryBot.create(:cinstance, service: @service)
 
