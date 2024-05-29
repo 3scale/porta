@@ -87,7 +87,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # FYI this is the only way to delete keys ending in .xml or .json
+  # to delete keys ending in .xml or .json via API, format has to be added to the url path
   test 'destroy key with appended format to the path' do
     %w[foo-key foo.key foo.key.xml foo.key.json].each do |rm_key|
 
