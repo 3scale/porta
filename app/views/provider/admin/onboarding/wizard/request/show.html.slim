@@ -26,12 +26,14 @@ ol.explain.fa-ul
     i.icon.fa-li.fa.fa-puzzle-piece.icon--success
     .text
       strong> = link_to @request.api_name, edit_provider_admin_onboarding_wizard_api_path
-      ' returned <a class="toggle" href="#response">a response</a> to the customer through the gateway.
+      ' returned <a id="response-toggle" href="#response">a response</a> to the customer through the gateway.
 
 = link_to "Cool, what's next?", provider_admin_onboarding_wizard_outro_path, class: "button"
 
 javascript:
-  $(document).on("click", ".toggle", function () {
-    const target = $(this).attr("href");
-    return $(target).toggleClass("is-hidden");
-  });
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('response-toggle')
+    toggle.addEventListener('click', () => {
+      document.getElementById('response').classList.toggle('is-hidden')
+    })
+  })
