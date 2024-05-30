@@ -281,7 +281,7 @@ module System
 
     initializer :load_configs, before: :load_config_initializers do
       config.backend_client = { max_tries: 5 }.merge(config_for(:backend).symbolize_keys)
-      config.redis = config.sidekiq = config_for(:redis)
+      config.redis = config_for(:redis)
       config.s3 = config_for(:amazon_s3)
       config.three_scale.oauth2 = config_for(:oauth2)
     end

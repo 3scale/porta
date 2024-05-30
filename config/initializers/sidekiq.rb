@@ -3,13 +3,22 @@
 require 'three_scale/sidekiq_retry_support'
 require 'three_scale/sidekiq_logging_middleware'
 
+REDIS_PARAMS_WHITELIST = %i[username password db id timeout read_timeout write_timeout connect_timeout ssl
+                            custom ssl_params driver protocol client_implementation command_builder inherit_socket
+                            reconnect_attempts middlewares circuit_breaker sentinels sentinel_password
+                            sentinel_username role name url].freeze
+
+def sanitize_redis_config(cfg)
+  cfg.slice(*REDIS_PARAMS_WHITELIST)
+end
+
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
 Rails.application.config.to_prepare do
   Sidekiq.configure_server do |config|
     config.try(:reliable!)
 
-    config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
+    config.redis = sanitize_redis_config(ThreeScale::RedisConfig.new(System::Application.config.redis).config)
 
     config.logger.formatter = Sidekiq::Logger::Formatters::Pretty.new
 
@@ -44,7 +53,7 @@ end
 
 Rails.application.config.to_prepare do
   Sidekiq.configure_client do |config|
-    config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
+    config.redis = sanitize_redis_config(ThreeScale::RedisConfig.new(System::Application.config.redis).config)
 
     config.client_middleware do |chain|
       chain.add ThreeScale::SidekiqLoggingMiddleware

@@ -66,13 +66,6 @@ module ThreeScale
       assert_not config.key? :ssl
     end
 
-    test ':pool_size is renamed to :size' do
-      config = RedisConfig.new(pool_size: 5)
-
-      assert config.key? :size
-      assert_equal 5, config[:size]
-    end
-
     test "it takes given ca_file when provided" do
       value = 'any_value'
       raw_config = { url: 'rediss://my-secure-redis/1', ssl_params: {}}
