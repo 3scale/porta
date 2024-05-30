@@ -590,13 +590,6 @@ World(Module.new do
     when /^the CMS Files page$/
       provider_admin_cms_files_path
 
-
-    #
-    # Simple CMS
-    #
-    when 'the CMS page templates page'
-      admin_cms_page_templates_path
-
     #
     # Advanced CMS (BrowserCMS)
     #
