@@ -41,11 +41,10 @@ div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
             ul class="pf-c-list pf-m-plain" id="templates-list"
               - @templates.each do |template|
                 li class="pf-c-list__item"
-                  = link_to template_url(template), target: '_blank' do
-                    span class="pf-c-list__item-icon"
+                  a class="pf-c-button pf-m-link" href=template_url(template) target="_blank"
+                    | #{template.class.model_name.human} #{template.name}
+                    span class="pf-c-button__icon pf-m-end"
                       i class="fa fa-external-link fa-fw" aria-hidden="true"
-                    span class="pf-c-list__item-text"
-                      | #{template.class.model_name.human} #{template.name}
 
         - if site_account.john_doe_still_here?
           div class="pf-c-drawer__body"
