@@ -33,6 +33,10 @@ module CMS::Toolbar
     end
   end
 
+  def draft?
+    session[:cms] == 'draft'
+  end
+
   private
 
   def cms_toolbar_enabled?
@@ -52,11 +56,11 @@ module CMS::Toolbar
   # TODO: do not overwrite existing <base>
   def inject_cms_toolbar
     response.body = %(
-     <html>
+     <html class="pf-theme-dark">
        <head>
        </head>
        <body style="margin: 0">
-         #{cms_toolbar_with_iframe_html}
+        #{cms_toolbar_with_iframe_html}
        </body>
      </html>
      )
@@ -77,6 +81,8 @@ module CMS::Toolbar
     view = CMS::Toolbar::View.new(lookup_context, cms_toolbar.assigns, controller)
     view._routes = _routes
     view.render 'shared/cms/toolbar',
+                :hidden => draft? && cookies['cms-toolbar-state'] == 'hidden',
+                :draft => draft?,
                 :site_account => site_account,
                 :original_page_source => new_source
   end

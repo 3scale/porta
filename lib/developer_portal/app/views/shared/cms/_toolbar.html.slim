@@ -1,53 +1,73 @@
-// font-awesome blows QT browser in test mode
-= stylesheet_link_tag "font-awesome" unless Rails.env.test?
-= stylesheet_link_tag 'cms_toolbar.css'
 = javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar'
+= stylesheet_link_tag "font-awesome" unless Rails.env.test?
 
-div id="cms-toolbar"
-  ul id="cms-toolbar-menu-middle" class="horizontal"
-    - if @page.respond_to?(:draft)
-      li class=('active' if cms_mode.draft?)
-        = link_to 'Draft', url_for(request.query_parameters.merge(cms: :draft))
-      li.slash
-        span |
-      li class=('active' if cms_mode.published?)
-        = link_to 'Published', url_for(request.query_parameters.merge(cms: :published))
-    - else
-      li Static Built-in Page
+div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
+  div class='pf-c-drawer__main'
 
-  ul id="cms-toolbar-menu-right" class="horizontal"
-    li
-      - if cms_mode.draft?
-        i class='fa fa-caret-square-o-right' title='Hide the CMS toolbar' id='hide-side-bar'
-      - else
-        = link_to icon('times-circle'), url_for(request.query_parameters.merge(cms_token: "")),
-                                        title: 'Close the CMS toolbar'
+    div class="pf-c-drawer__content"
+      div class="pf-c-drawer__body"
+        iframe id="developer-portal" srcdoc=original_page_source
 
-  div id="help"
-    h2 Templates used on this page
-    ul id="templates-list"
-      - @templates.each do |template|
-        li
-          = link_to( template_url(template), target: '_blank') do
-            | #{template.class.model_name.human} #{template.name} #{icon('external-link')}
+    - if @page.respond_to?(:draft) && draft
+      button class="pf-c-button pf-m-plain" type="button" title="Toggle toolbar" id='cms-toolbar-toggle'
+        i class="fa fa-caret-square-o-right" aria-hidden="true"
 
-      - if site_account.john_doe_still_here?
-        h2 Sign In
+    div class="pf-c-drawer__panel" id="cms-toolbar"
+      div class="pf-c-drawer__panel-main"
+        div class="pf-c-drawer__body"
+          div class="pf-c-drawer__head"
+            nav class="pf-c-nav pf-m-tertiary"
+              ul class="pf-c-nav__list"
+                - if @page.respond_to?(:draft)
+                  li class="pf-c-nav__item"
+                    = link_to 'Draft', url_for(request.query_parameters.merge(cms: :draft)),
+                                       class: "pf-c-nav__link #{'pf-m-current' if draft}"
+                  li class="pf-c-nav__item"
+                    = link_to 'Published', url_for(request.query_parameters.merge(cms: :published)),
+                                           class: "pf-c-nav__link #{'pf-m-current' unless draft}"
+                - else
+                  li class="pf-c-nav__item"
+                    a href="#" class="pf-c-nav__link pf-m-current" aria-current="page"
+                      'Static Built-in Page
+            div class="pf-c-drawer__actions" id="cms-toolbar-menu-right"
+              div class="pf-c-drawer__close"
+                - unless draft
+                  a class="pf-c-button pf-m-plain" type="button" href=url_for(request.query_parameters.merge(cms_token: "")) title="Close the CMS toolbar"
+                    i class="fa fa-times-circle" aria-hidden="true"
 
-        p Testdrive a developer account with:
-        dl
-          dt Username:
-          dd john
-          dt Password:
-          dd 123456
+        div class="pf-c-drawer__body"
+          div class="pf-c-content"
+            h2 Templates used on this page
+            ul class="pf-c-list pf-m-plain" id="templates-list"
+              - @templates.each do |template|
+                li class="pf-c-list__item"
+                  = link_to template_url(template), target: '_blank' do
+                    span class="pf-c-list__item-icon"
+                      i class="fa fa-external-link fa-fw" aria-hidden="true"
+                    span class="pf-c-list__item-text"
+                      | #{template.class.model_name.human} #{template.name}
 
-      - if site_account.cms_toolbar_intro_visible?
-        div id="theme-picker-wrap"
-          h2 Color Theme
+        - if site_account.john_doe_still_here?
+          div class="pf-c-drawer__body"
+            div class="pf-c-content"
+              h2 Sign In
+              p Testdrive a developer account with:
+              dl
+                dt Username:
+                dd john
+                dt Password:
+                dd 123456
 
-          = select_tag "theme-picker", theme_options
-
-          div id="theme-snippet" style="display:none"
-            textarea readonly="readonly"
-
-iframe id='developer-portal' srcdoc=original_page_source
+        - if site_account.cms_toolbar_intro_visible?
+          div class="pf-c-drawer__body"
+            div class="pf-c-content"
+              h2 Color Theme
+              p
+                select class="pf-c-form-control" id="theme-picker"
+                  = theme_options
+              div style="display:none" id="theme-snippet"
+                p Copy & paste this snippet into your template called main layout to make this change permanent:
+                div class="pf-c-code-block"
+                  div class="pf-c-code-block__content"
+                    pre class="pf-c-code-block__pre"
+                      code class="pf-c-code-block__code"

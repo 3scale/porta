@@ -1,70 +1,55 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import $ from 'jquery'
 import Cookies from 'js-cookie'
 
 document.addEventListener('DOMContentLoaded', () => {
+  const drawer = document.querySelector<HTMLDivElement>('.pf-c-drawer')
   const toolbar = document.querySelector<HTMLDivElement>('#cms-toolbar')
   const iframe = document.querySelector<HTMLIFrameElement>('#developer-portal')
 
-  const toolbarState = Cookies.get('cms-toolbar-state') ?? 'visible' as 'hidden' | 'visible'
-
-  if (!toolbar || !iframe) {
-    return
+  if (!drawer || !toolbar || !iframe) {
+    throw new Error('CMS toolbar with iframe not found!!')
   }
 
-  document.querySelector<HTMLLinkElement>('#cms-toolbar-menu-middle li.active a')!
+  const COOKIE_NAME = 'cms-toolbar-state'
+
+  document.querySelector<HTMLLinkElement>('.pf-c-nav__list a.pf-m-current')!
     .addEventListener('click', (event) => { event.preventDefault() })
 
-  document.querySelector<HTMLHtmlElement>('#hide-side-bar')
+  document.querySelector<HTMLButtonElement>('#cms-toolbar-toggle')
     ?.addEventListener('click', () => {
-      toggleValues()
+      drawer.classList.toggle('pf-m-expanded')
 
-      const newState = toolbarState === 'hidden' ? 'visible' : 'hidden'
-      Cookies.set('cms-toolbar-state', newState, { expires: 30 })
+      const currentState = (Cookies.get(COOKIE_NAME) ?? 'visible') as 'hidden' | 'visible'
+      if (currentState === 'hidden') {
+        Cookies.set(COOKIE_NAME, 'visible', { expires: 30 })
+      } else {
+        Cookies.set(COOKIE_NAME, 'hidden', { expires: 30 })
+      }
     })
-
-  $(iframe).on('load', () => {
-    if (toolbarState !== 'hidden') {
-      toggleValues()
-      window.requestAnimationFrame(enableAnimation)
-    } else {
-      enableAnimation()
-    }
-  })
-
-  const toggleValues = () => {
-    toolbar.classList.toggle('not-hidden')
-    iframe.classList.toggle('not-full')
-  }
-
-  const enableAnimation = () => {
-    toolbar.classList.add('animate')
-    iframe.classList.add('animate')
-  }
 
   const themePicker = document.querySelector<HTMLSelectElement>('#theme-picker')
 
   if (themePicker) {
-    let selectedTheme: JQuery | undefined = undefined
+    let style: Element | undefined = undefined
+
+    const code = document.querySelector<HTMLElement>('#theme-snippet code')!
+    const codeWrapper = document.querySelector<HTMLDivElement>('#theme-snippet')!
 
     themePicker.addEventListener('change', () => {
-      const textareaWrapper = document.querySelector<HTMLDivElement>('#theme-snippet')!
-      const textarea = document.querySelector<HTMLTextAreaElement>('#theme-snippet textarea')!
-
       const option = themePicker.querySelector<HTMLOptionElement>('option:checked')!
-      const { snippet } = option.dataset
+      const { snippet } = option.dataset as { snippet?: string }
+      style?.remove()
 
       if (snippet) {
-        selectedTheme = $(`<style>${snippet}</style>`)
-        $('body', frames[0].document).append(selectedTheme)
+        style = document.createElement('style')
+        style.innerHTML = snippet
+        frames[0].document.querySelector('body')?.appendChild(style)
 
-        const text = `<!-- Copy & paste this snippet into your template called main layout to make this change permanent -->\n\n<style>\n${snippet}</style>`
-        textareaWrapper.style.removeProperty('display')
-        textarea.value = text
+        codeWrapper.style.removeProperty('display')
+        code.innerText = `<style>\n${snippet}</style>`
       } else {
-        selectedTheme?.remove()
-        textareaWrapper.style.display = 'none'
-        textarea.value = ''
+        codeWrapper.style.display = 'none'
+        code.innerText = ''
       }
     })
   }
