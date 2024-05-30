@@ -30,8 +30,8 @@ ol.explain.fa-ul
 
 = link_to "Cool, what's next?", provider_admin_onboarding_wizard_outro_path, class: "button"
 
-coffee:
-  $(".toggle").live "click", ->
-    target = $(this).attr("href")
-    $(target).toggleClass("is-hidden");
-
+javascript:
+  $(document).on("click", ".toggle", function () {
+    const target = $(this).attr("href");
+    return $(target).toggleClass("is-hidden");
+  });
