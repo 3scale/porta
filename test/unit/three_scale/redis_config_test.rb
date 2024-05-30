@@ -66,6 +66,20 @@ module ThreeScale
       assert_not config.key? :ssl
     end
 
+    test 'the URL scheme takes precedence over the :ssl param' do
+      config = RedisConfig.new({ url: 'rediss://localhost:6379/6', ssl: false })
+
+      assert config.key? :ssl
+      assert_equal true, config[:ssl]
+    end
+
+    test 'takes the :ssl param when the scheme is `redis://`' do
+      config = RedisConfig.new({ url: 'redis://localhost:6379/6', ssl: true })
+
+      assert config.key? :ssl
+      assert_equal true, config[:ssl]
+    end
+
     test "it takes given ca_file when provided" do
       value = 'any_value'
       raw_config = { url: 'rediss://my-secure-redis/1', ssl_params: {}}
