@@ -1,6 +1,6 @@
 base: &default
   url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost:6379/1') %>"
-  size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
   sentinel_username: <%= ENV['REDIS_SENTINEL_USERNAME'].to_json %>

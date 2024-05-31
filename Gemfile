@@ -152,7 +152,6 @@ gem 'state_machines-activerecord', '~> 0.8'
 # for liquid docs on-fly generation
 gem 'commonmarker', '~> 0.23.10'
 gem 'escape_utils'
-gem 'github-markdown'
 gem 'html-pipeline'
 
 # templating
