@@ -30,6 +30,7 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
 
   test '#show needs member permission' do
     User.any_instance.expects(:has_access_to_all_services?).returns(false)
+    User.any_instance.expects(:access_to_service_admin_sections?).returns(false)
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success
