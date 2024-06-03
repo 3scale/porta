@@ -1,43 +1,7 @@
-//
-// Mailgun Address Validation Plugin
-//
-// Attaching to a form:
-//
-//    $('jquery_selector').mailgun_validator({
-//        api_key: 'api-key',
-//        in_progress: in_progress_callback, // called when request is made to validator
-//        success: success_callback,         // called when validator has returned
-//        error: validation_error,           // called when an error reaching the validator has occured
-//    });
-//
-//
-// Sample JSON in success callback:
-//
-//  {
-//      "is_valid": true,
-//      "parts": {
-//          "local_part": "john.smith@example.com",
-//          "domain": "example.com",
-//          "display_name": ""
-//      },
-//      "address": "john.smith@example.com",
-//      "did_you_mean": null
-//  }
-//
 // More API details: https://api.mailgun.net/v2/address
-//
+// TODO: replace this with npm package mailgun.js
 
-
-$.fn.mailgun_validator = function(options) {
-    return this.each(function() {
-        $(this).focusout(function() {
-            run_validator($(this).val(), options);
-        });
-    });
-};
-
-
-function run_validator(address_text, options) {
+function mailgun_validator(address_text, options) {
     // don't run validator without input
     if (!address_text) {
         return;

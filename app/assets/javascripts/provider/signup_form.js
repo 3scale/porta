@@ -3,9 +3,7 @@
 
 //= require vendor/jquery.tipsy
 
-(function ($) {
-
-    $(function () {
+document.addEventListener('DOMContentLoaded', () => {
         $('form input').tipsy({trigger: 'focus', gravity: 'w'});
 
         var first_name = $("#account_user_first_name");
@@ -18,8 +16,8 @@
             last_name_errors.find(".first-name").html(first_name_val);
         }
 
-        first_name.change(function (e) {
-            var first_name_val = first_name.val();
+        first_name.on('change', function (e) {
+            var first_name_val = e.target.value
             var last_name_list_item = $("#account_user_last_name_input");
             var last_name_hints = last_name_list_item.find(".inline-hints");
             var last_name_errors = last_name_list_item.find(".inline-errors");
@@ -34,7 +32,7 @@
         var domain = $("#account_subdomain");
         var self_domain = $("#account_self_subdomain");
 
-        domain.keyup(function () {
+        domain.on('keyup', function (e) {
             var val = domain.val();
             if (val !== "") {
                 val += "-admin";
@@ -46,7 +44,7 @@
             domain.data('autoupdate', true);
         }
 
-        domain.change(function (e) {
+        domain.on('change', function (e) {
             if (domain.val() === "") {
                 domain.data('autoupdate', true);
             } else {
@@ -74,7 +72,8 @@
         var email_parent = user_email.parent('li');
         var previous_email_error = user_email.next(".inline-errors");
 
-        user_email.mailgun_validator({
+        user_email.on('focusout', function (e) {
+          mailgun_validator(e.target.value, {
             api_key: 'pubkey-889234583a41faa6d99b50ae152b2a3f',
             success: function (response) {
                 var error_message = '';
@@ -102,4 +101,4 @@
             }
         })
     });
-})(jQuery);
+});
