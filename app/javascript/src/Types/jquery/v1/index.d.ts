@@ -1522,6 +1522,7 @@ interface JQuery {
    * HACK: Added manually. This is specific to porta not jquery.
    */
   colorbox: ColorboxStatic;
+  tipsy?: (args: unknown) => unknown;
 
   /**
    * Register a handler to be called when Ajax requests complete. This is an AjaxEvent.
