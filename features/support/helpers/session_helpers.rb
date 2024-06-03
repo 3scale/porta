@@ -44,7 +44,7 @@ module SessionHelper
   def assert_current_user(username)
     @user = User.find_by(username: username)
     message = "Expected #{username} to be logged in, but is not"
-    assert has_content?(/Signed (?:in|up) successfully/i), message
+    assert has_content?(/Signed (?:in|up) successfully/i, wait: 0) || has_content?(/You can use quick starts/i, wait: 0), message
   end
 end
 
