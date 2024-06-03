@@ -89,15 +89,15 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def audience_link
-    if can?(:manage, :partners)
-      admin_buyers_accounts_path
-    elsif can?(:manage, :finance)
-      admin_finance_root_path
-    elsif can?(:manage, :portal)
-      provider_admin_cms_templates_path
-    elsif can?(:manage, :settings)
-      edit_admin_site_usage_rules_path
-    end
+    @audience_link ||= if can?(:manage, :partners)
+                         admin_buyers_accounts_path
+                       elsif can?(:manage, :finance)
+                         admin_finance_root_path
+                       elsif can?(:manage, :portal)
+                         provider_admin_cms_templates_path
+                       elsif can?(:manage, :settings)
+                         edit_admin_site_usage_rules_path
+                       end
   end
 
   def settings_link
@@ -127,15 +127,17 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
 
   def context_selector_props
     title, icon = active_title_and_icon
+    access_to_service_admin_sections = current_user.access_to_service_admin_sections?
+
+    menu_items = [{ title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: false }]
+    menu_items << { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: false } if audience_link.present?
+    menu_items << { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: false } if access_to_service_admin_sections
+    menu_items << { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: false } if access_to_service_admin_sections
+    menu_items << { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: false }
+
     {
       toggle: { title: title, icon: icon },
-      menuItems: [
-        { title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: false }, #active_menu == :dashboard },
-        { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: false },
-        { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: false }, #active_menu == :products },
-        { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: false }, #active_menu == :backend_apis },
-        { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: false }
-      ],
+      menuItems: menu_items
     }
   end
 
