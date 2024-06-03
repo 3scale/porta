@@ -9,6 +9,7 @@ module ThreeScale
       uri = URI.parse(raw_config[:url].to_s)
       raw_config[:db] ||= uri.path[1..]
       raw_config[:name] ||= uri.host if sentinels
+      raw_config[:ssl] ||= true if uri.scheme == 'rediss'
       raw_config.compact!
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
