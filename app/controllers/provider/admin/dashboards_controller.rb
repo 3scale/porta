@@ -2,6 +2,7 @@
 
 class Provider::Admin::DashboardsController < FrontendController
   before_action :ensure_provider_domain
+  before_action :quickstarts_flash, only: :show
 
   activate_menu :dashboard
   layout 'provider'
@@ -16,10 +17,6 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
-    first_login = flash.delete(:first_login)
-    return unless first_login
-
-    flash[:quick_starts_notice] = t('provider.admin.dashboards.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 
   include DashboardTimeRange
@@ -53,5 +50,12 @@ class Provider::Admin::DashboardsController < FrontendController
 
   def products_presenter
     Api::ServicesIndexPresenter.new(current_user: current_user, params: { per_page: 5 })
+  end
+
+  def quickstarts_flash
+    return unless flash[:first_login]
+
+    flash.delete(:first_login)
+    flash[:notice] = t('provider.admin.dashboards.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 end
