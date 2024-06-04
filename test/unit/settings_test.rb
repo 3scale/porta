@@ -7,6 +7,8 @@ class SettingsTest < ActiveSupport::TestCase
     @settings = @provider.settings
   end
 
+  attr_reader :settings
+
   def test_hide_basic_switches
     Rails.configuration.three_scale.stubs(:hide_basic_switches).returns(true)
     assert Settings.hide_basic_switches?
@@ -103,6 +105,14 @@ class SettingsTest < ActiveSupport::TestCase
     refute @provider.account_plans.first.approval_required
   end
 
+  test "account_approval_required defaults to 'false' on empty values" do
+    settings.update(account_approval_required: true)
+    assert settings.account_approval_required
+
+    settings.update(account_approval_required: "")
+    assert_not settings.account_approval_required
+  end
+
   def test_service_plans_visible_ui_switch
    assert @settings.has_attribute?(:service_plans_switch)
    assert @settings.has_attribute?(:service_plans_ui_visible)
@@ -167,6 +177,17 @@ class SettingsTest < ActiveSupport::TestCase
     @provider.save!
     settings.reload
     assert settings.monthly_billing_enabled
+  end
+
+  test 'empty values sanitized for non-null columns' do
+    settings.update(public_search: true)
+    assert settings.reload.public_search
+
+    settings.update(public_search: "")
+    assert settings.reload.public_search
+
+    settings.update(public_search: nil)
+    assert settings.reload.public_search
   end
 
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase

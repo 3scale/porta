@@ -27,6 +27,10 @@ class Settings < ApplicationRecord
     super.reject {|column| /\Aheroku_(id|name)|log_requests_switch\Z/ =~ column.name }
   end
 
+  def self.non_null_columns_names
+    columns.select { |column| column.null == false }.map(&:name)
+  end
+
   def approval_required_editable?
     not_custom_account_plans.size == 1
   end
@@ -38,7 +42,7 @@ class Settings < ApplicationRecord
   def update(attrs)
     update_approval_required(attrs) if approval_required_editable?
 
-    super(attrs)
+    super(sanitize_attributes(attrs))
   end
 
   def set_forum_enabled
@@ -106,7 +110,12 @@ class Settings < ApplicationRecord
   end
 
   def update_approval_required(attrs)
-    value = attrs.delete(:account_approval_required) || false
+    value = attrs.delete(:account_approval_required).presence || false
     default_account_plan.update_attribute(:approval_required, value)
+  end
+
+  # Remove attributes with empty strings and nil for non-null columns
+  def sanitize_attributes(attrs)
+    attrs.reject { |key, value| self.class.non_null_columns_names.include?(key.to_s) && value.to_s.empty? }
   end
 end
