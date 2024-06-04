@@ -178,9 +178,9 @@ class Contract < ApplicationRecord
       # no validation because our DB has broken data
       # TODO: cleanup DB and add validations?
       self.save(:validate => false) if invoice.used?
-
-      return invoice.used?
     end
+
+    invoice.used?
   end
 
   # this is remaining now here for service_contracts as of now

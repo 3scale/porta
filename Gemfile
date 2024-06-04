@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 6.1'
 
 # Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
 # https://github.com/mikel/mail/blob/2-8-stable/CHANGELOG.rdoc#version-281-unreleased-
@@ -93,7 +93,7 @@ gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 8.0'
-gem 'baby_squeel', '~> 1.4.3'
+gem 'baby_squeel', '~> 2.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis-client'
@@ -205,7 +205,7 @@ group :test do
 
   gem 'equivalent-xml', require: false
 
-  gem 'rspec-rails', '~> 4.1', require: false # version 5.x is needed for Rails 6
+  gem 'rspec-rails', '~> 6.1', require: false # version 6.x is needed for for Rails 6.1 or 7.x
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec_api_documentation'
@@ -262,10 +262,10 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 6.0', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 6.1.6', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 
 gem 'kubeclient'
 
-gem 'pg', '~> 0.21.0'
+gem 'pg', '~> 1.3.5'

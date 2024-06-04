@@ -18,12 +18,13 @@ class MonthlyRevenueQuery
   end
 
   module CastValues
-    def cast_values(klass=Hash)
-      hash_rows.map { |row|
-        row.each_with_object(klass.new) { |(key, value), memo|
-          memo[key] = column_types.present? ? column_types[key].cast(value) : value
-        }
-      }
+    def cast_values(klass = Hash)
+      hash_rows.map do |row|
+        row.each_with_object(klass.new) do |(key, value), memo|
+          column_type = column_types[key]
+          memo[key] = column_type.present? ? column_type.cast(value) : value
+        end
+      end
     end
   end
   # Returns an array of Hash of costs by months.

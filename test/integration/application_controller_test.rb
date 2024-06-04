@@ -155,7 +155,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
         get '/client_caching'
       end
 
-      assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+      assert_equal 'no-store', response.headers['Cache-Control']
       assert_equal 'no-cache', response.headers['Pragma']
       assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
     end
