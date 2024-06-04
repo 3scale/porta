@@ -35,14 +35,10 @@ class Settings < ApplicationRecord
     not_custom_account_plans.size > 1 && account_plans_ui_visible?
   end
 
-  def update(attributes)
-    if approval_required_editable?
-      value = attributes.delete(:account_approval_required) || false
-      account_plan = provider.account_plans.default || not_custom_account_plans.first!
-      account_plan.update_attribute(:approval_required, value)
-    end
+  def update(attrs)
+    update_approval_required(attrs) if approval_required_editable?
 
-    super(attributes)
+    super(attrs)
   end
 
   def set_forum_enabled
@@ -52,8 +48,7 @@ class Settings < ApplicationRecord
   end
 
   def account_approval_required
-    account_plan = provider.account_plans.default || not_custom_account_plans.first!
-    @account_approval_required = account_plan.approval_required
+    @account_approval_required = default_account_plan.approval_required
   end
 
   def account_approval_required=(value)
@@ -98,13 +93,20 @@ class Settings < ApplicationRecord
     level == :auto ? :captcha : level
   end
 
-  protected
-
   delegate :provider_id_for_audits, :to => :account, :allow_nil => true
 
   private
 
   def not_custom_account_plans
     @not_custom_account_plans ||= provider.account_plans.not_custom
+  end
+
+  def default_account_plan
+    provider.account_plans.default || not_custom_account_plans.first!
+  end
+
+  def update_approval_required(attrs)
+    value = attrs.delete(:account_approval_required) || false
+    default_account_plan.update_attribute(:approval_required, value)
   end
 end
