@@ -6,8 +6,8 @@ class Settings < ApplicationRecord
 
   attr_protected :account_id, :tenant_id, :product, :audit_ids, :sso_key
 
-  validates :product, inclusion: { in: %w(connect enterprise).freeze }
-  validates :change_account_plan_permission, inclusion: { in: %w(request none credit_card request_credit_card direct).freeze }
+  validates :product, inclusion: { in: %w[connect enterprise].freeze }
+  validates :change_account_plan_permission, :change_service_plan_permission, inclusion: { in: %w[request none credit_card request_credit_card direct].freeze }
   validates :bg_colour, :link_colour, :text_colour, :menu_bg_colour, :link_label, :link_url, :menu_link_colour, :token_api,
             :content_bg_colour, :tracker_code, :favicon, :plans_tab_bg_colour, :plans_bg_colour, :content_border_colour,
             :cc_privacy_path, :cc_terms_path, :cc_refunds_path, :change_service_plan_permission, :spam_protection_level,

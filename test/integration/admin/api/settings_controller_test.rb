@@ -32,19 +32,26 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    params = { access_token: token, signups_enabled: false, change_account_plan_permission: 'invalid' }
+    params = { access_token: token, signups_enabled: false, change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid'}
     assert 'request', settings.change_account_plan_permission
     assert settings.signups_enabled
 
     put admin_api_settings_path(format: :json), params: params
     assert_response 422
 
+    errors = JSON.parse(response.body)['errors']
+    assert_equal ['is not included in the list'], errors['change_account_plan_permission']
+    assert_equal ['is not included in the list'], errors['change_service_plan_permission']
+
     params['change_account_plan_permission'] = 'direct'
+    params['change_service_plan_permission'] = 'none'
 
     put admin_api_settings_path(format: :json), params: params
     assert_response :success
 
-    assert 'direct', settings.reload.change_account_plan_permission
+    settings.reload
+    assert 'direct', settings.change_account_plan_permission
+    assert 'none', settings.change_service_plan_permission
     assert_not settings.signups_enabled
   end
 

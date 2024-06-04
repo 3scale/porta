@@ -190,6 +190,15 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.reload.public_search
   end
 
+  test "validate change plan permission values" do
+    assert_equal 'request', settings.change_account_plan_permission
+    assert_equal 'request', settings.change_service_plan_permission
+
+    settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
+    assert settings.errors.of_kind? :change_account_plan_permission, "is not included in the list"
+    assert settings.errors.of_kind? :change_service_plan_permission, "is not included in the list"
+  end
+
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.build_stubbed(:simple_provider)
