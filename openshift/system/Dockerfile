@@ -7,7 +7,9 @@ ENV RUBY_MAJOR_VERSION=2 \
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 ADD . ./
 ADD openshift/system/config/* ./config/
-RUN dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
+    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
+    && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
     && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' podman-catatonit \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
@@ -47,7 +49,9 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 
 WORKDIR $HOME
 
-RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
+    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
+    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
     && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt \
     && dnf -y clean all
 
