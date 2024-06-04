@@ -2,9 +2,10 @@ base: &default
   endpoint: <%= ENV['ZYNC_ENDPOINT'] %>
   authentication:
     token: <%= ENV['ZYNC_AUTHENTICATION_TOKEN'] %>
-  connect_timeout: 2
-  send_timeout: 2
+  connect_timeout: 5
+  send_timeout: 5
   receive_timeout: 10
+  root_url:
   skip_non_oidc_applications: false
 
 development:
