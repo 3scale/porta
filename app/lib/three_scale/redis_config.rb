@@ -6,10 +6,10 @@ module ThreeScale
       raw_config = (redis_config || {}).deep_symbolize_keys
       sentinels = raw_config.delete(:sentinels).presence
       raw_config.delete_if { |key, value| value.blank? }
-      raw_config[:size] ||= raw_config.delete(:pool_size) if raw_config.key?(:pool_size)
       uri = URI.parse(raw_config[:url].to_s)
       raw_config[:db] ||= uri.path[1..]
       raw_config[:name] ||= uri.host if sentinels
+      raw_config[:ssl] ||= true if uri.scheme == 'rediss'
       raw_config.compact!
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)

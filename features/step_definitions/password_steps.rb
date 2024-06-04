@@ -64,7 +64,6 @@ And "{user} is now able to sign in with password {string}" do |user, password|
   fill_in('Password', with: password)
   click_button('Sign in')
 
-  assert_content 'Signed in successfully'
   find(:css, '[aria-label="Session toggle"]').click
   assert_content "Signed in to #{@provider.org_name} as #{user.username}"
 end

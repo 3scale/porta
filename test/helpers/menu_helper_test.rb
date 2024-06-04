@@ -73,6 +73,7 @@ class MenuHelperTest < ActionView::TestCase
 
   test '#context_selector_props' do
     expects(:active_menu).returns(:dashboard).at_least_once
+    expects(:current_user).returns(FactoryBot.create(:simple_user))
     data = context_selector_props.as_json
 
     # Assert app/javascript/src/Navigation/components/ContextSelector.tsx#Props

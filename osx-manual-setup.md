@@ -156,7 +156,6 @@ Then add the necessary configs:
 
 ```sh
 bundle config --local build.thin --with-cflags=-Wno-error="implicit-function-declaration"
-bundle config --local build.github-markdown --with-cflags=-Wno-error="implicit-function-declaration"
 bundle config --local build.mysql2 --with-opt-dir="$(brew --prefix openssl)"
 bundle config --local build.local-fastimage_resize --with-opt-dir="$(brew --prefix gd)"
 ```

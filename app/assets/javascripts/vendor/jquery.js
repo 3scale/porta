@@ -1,2 +1,2 @@
-//= require vendor/jquery-1.9.1.min
+//= require vendor/jquery-1.11.3.min
 //= require jquery_ujs

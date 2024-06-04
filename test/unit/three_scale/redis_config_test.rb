@@ -53,11 +53,31 @@ module ThreeScale
       assert_not config.key? :name
     end
 
-    test ':pool_size is renamed to :size' do
-      config = RedisConfig.new(pool_size: 5)
+    test 'sets :ssl when the scheme is "rediss"' do
+      config = RedisConfig.new(url: 'rediss://localhost:6379/6')
 
-      assert config.key? :size
-      assert_equal 5, config[:size]
+      assert config.key? :ssl
+      assert_equal true, config[:ssl]
+    end
+
+    test "doesn't set :ssl when the scheme is 'redis'" do
+      config = RedisConfig.new(url: 'redis://localhost:6379/6')
+
+      assert_not config.key? :ssl
+    end
+
+    test 'the URL scheme takes precedence over the :ssl param' do
+      config = RedisConfig.new({ url: 'rediss://localhost:6379/6', ssl: false })
+
+      assert config.key? :ssl
+      assert_equal true, config[:ssl]
+    end
+
+    test 'takes the :ssl param when the scheme is `redis://`' do
+      config = RedisConfig.new({ url: 'redis://localhost:6379/6', ssl: true })
+
+      assert config.key? :ssl
+      assert_equal true, config[:ssl]
     end
 
     test "it takes given ca_file when provided" do
