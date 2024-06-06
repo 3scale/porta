@@ -33,7 +33,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test 'update' do
     params = { access_token: token, signups_enabled: false, change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid'}
-    assert 'request', settings.change_account_plan_permission
+    assert_equal 'request', settings.change_account_plan_permission
     assert settings.signups_enabled
 
     put admin_api_settings_path(format: :json), params: params
@@ -50,8 +50,8 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     settings.reload
-    assert 'direct', settings.change_account_plan_permission
-    assert 'none', settings.change_service_plan_permission
+    assert_equal 'direct', settings.change_account_plan_permission
+    assert_equal 'none', settings.change_service_plan_permission
     assert_not settings.signups_enabled
   end
 

@@ -28,7 +28,7 @@ class Settings < ApplicationRecord
   end
 
   def self.non_null_columns_names
-    columns.select { |column| column.null == false }.map(&:name)
+    columns.select { |column| !column.null }.map(&:name)
   end
 
   def approval_required_editable?
@@ -39,10 +39,14 @@ class Settings < ApplicationRecord
     not_custom_account_plans.size > 1 && account_plans_ui_visible?
   end
 
+  def assign_attributes(attrs, options = {})
+    super(sanitize_attributes(attrs), options)
+  end
+
   def update(attrs)
     update_approval_required(attrs) if approval_required_editable?
 
-    super(sanitize_attributes(attrs))
+    super(attrs)
   end
 
   def set_forum_enabled

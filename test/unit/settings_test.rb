@@ -179,15 +179,21 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.monthly_billing_enabled
   end
 
-  test 'empty values sanitized for non-null columns' do
+  test 'empty values are skipped for non-null columns' do
     settings.update(public_search: true)
     assert settings.reload.public_search
 
     settings.update(public_search: "")
+    assert_not settings.previous_changes[:public_search]
     assert settings.reload.public_search
 
     settings.update(public_search: nil)
+    assert_not settings.previous_changes[:public_search]
     assert settings.reload.public_search
+
+    settings.update(public_search: "false")
+    assert settings.previous_changes[:public_search]
+    assert_not settings.reload.public_search
   end
 
   test "validate change plan permission values" do
