@@ -2,8 +2,8 @@
  * Note for future 3scale
  *
  * jQuery 1.x is loaded by rails and it's available in window.$ and window.jQuery throughout the
- * application, both admin and developer portals. Therefore, all jQuery plugins (tipsy, cookie,
- * pjax, ujs) are injected into it.
+ * application, both admin and developer portals. Therefore, all jQuery plugins (cookie, pjax, ujs)
+ * are injected into it.
  *
  * In webpacker though we get jQuery from our node_modules (3.5.x) which lacks all plugins excepts
  * the ones installed via webpack which is jquery-ui from now on.
@@ -1522,7 +1522,6 @@ interface JQuery {
    * HACK: Added manually. This is specific to porta not jquery.
    */
   colorbox: ColorboxStatic;
-  tipsy?: (args: unknown) => unknown;
 
   /**
    * Register a handler to be called when Ajax requests complete. This is an AjaxEvent.
