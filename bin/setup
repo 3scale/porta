@@ -20,6 +20,9 @@ FileUtils.chdir APP_ROOT do
   # Install JavaScript dependencies if using Yarn
   # system('bin/yarn')
 
+  puts "\n== Copying sample files =="
+  cp_r 'config/examples/.', 'config/', preserve: true, dereference_root: true
+
   puts "\n== Preparing database =="
   system! 'bin/rails db:prepare'
 

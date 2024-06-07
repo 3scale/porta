@@ -6,6 +6,7 @@ ENV RUBY_MAJOR_VERSION=2 \
     NODE_ENV=production
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 ADD . ./
+ADD config/examples/*.yml ./config/
 ADD openshift/system/config/* ./config/
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
     && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \

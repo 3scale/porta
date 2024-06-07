@@ -26,6 +26,37 @@ launch_dnsmasq()
                     --user=$(whoami)
 }
 
+mysql_config()
+{
+    cp "$1/config/examples/database.yml" "$1/config"
+}
+
+backend_config()
+{
+    cp "$1/config/examples/backend.yml" "$1/config"
+    cp "$1/config/examples/backend_redis.yml" "$1/config"
+}
+
+redis_config()
+{
+    cp "$1/config/examples/redis.yml" "$1/config"
+}
+
+s3_config()
+{
+    cp "$1/config/examples/amazon_s3.yml" "$1/config"
+}
+
+
+# higher level functions
+docker_config()
+{
+    mysql_config "$1"
+    backend_config "$1"
+    s3_config "$1"
+    redis_config "$1"
+}
+
 docker_launch_servers()
 {
     launch_redis
