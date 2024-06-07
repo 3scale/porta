@@ -205,6 +205,25 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.errors.of_kind? :change_service_plan_permission, "is not included in the list"
   end
 
+  test 'validate enforce_sso' do
+    assert_not settings.enforce_sso
+
+    # validate when set to `true`
+    settings.update(enforce_sso: true)
+    assert_equal ["Password-based authentication could not be disabled. No published authentication providers."], settings.errors.messages_for(:enforce_sso)
+
+    # no validation when set to false
+    settings.update_column(:enforce_sso, true)
+    settings.update(enforce_sso: false)
+    assert_empty settings.errors
+
+    # set to `true` when validation passes
+    FactoryBot.create(:self_authentication_provider, account: settings.provider, kind: 'base', published: true)
+    settings.update(enforce_sso: true)
+    assert_empty settings.errors
+    assert settings.reload.enforce_sso
+  end
+
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.build_stubbed(:simple_provider)

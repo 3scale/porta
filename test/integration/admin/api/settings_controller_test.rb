@@ -61,6 +61,14 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
     put admin_api_settings_path(format: :json), params: { access_token: token, enforce_sso: true }
 
+    assert_response :unprocessable_entity
+    error = JSON.parse(response.body)['errors']['enforce_sso']
+    assert_equal ["Password-based authentication could not be disabled. No published authentication providers."], error
+
+    FactoryBot.create(:self_authentication_provider, account: settings.provider, kind: 'base', published: true)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, enforce_sso: true }
+
     assert_response :success
     assert JSON.parse(response.body)['settings']['enforce_sso']
     assert settings.reload.enforce_sso
