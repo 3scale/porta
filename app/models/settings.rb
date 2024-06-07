@@ -14,8 +14,7 @@ class Settings < ApplicationRecord
             :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cms_token, :cas_server_url, :sso_key,
             :sso_login_url, length: { maximum: 255 }
 
-  # Only validate if the value changes to `true`
-  validate :enforce_sso_allowed?, on: :update, if: -> { changes[:enforce_sso]&.last }
+  validate :enforce_sso_allowed?, on: :update, if: -> { enforce_sso_changed? to: true }
 
   symbolize :spam_protection_level
 

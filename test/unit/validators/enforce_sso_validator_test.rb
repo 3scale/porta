@@ -8,19 +8,24 @@ class EnforceSSOValidatorTest < ActiveSupport::TestCase
     @user_session = @user.user_sessions.create
   end
 
-  def test_valid?
+  test 'strict validation with user session' do
     service = EnforceSSOValidator.new(user_session: @user_session)
-    refute service.valid?
+    assert_not service.valid?
     assert_match 'No published authentication providers', service.error_message
 
-    auth_provider = FactoryBot.create(:self_authentication_provider, account: @account, kind: 'base', published: true)
+    auth_provider = FactoryBot.create(:self_authentication_provider, account: @account, kind: 'base', published: false)
     service = EnforceSSOValidator.new(user_session: @user_session)
-    refute service.valid?
+    assert_not service.valid?
+    assert_match 'No published authentication providers', service.error_message
+
+    auth_provider.update(published: true)
+    service = EnforceSSOValidator.new(user_session: @user_session)
+    assert_not service.valid?
     assert_match 'Authentication flow has to be checked', service.error_message
 
     sso_authorization = @user.sso_authorizations.create(authentication_provider: auth_provider, uid: 'alaska')
     service = EnforceSSOValidator.new(user_session: @user_session)
-    refute service.valid?
+    assert_not service.valid?
     assert_match 'You need to be logged in by SSO', service.error_message
 
     @user_session.update(sso_authorization_id: sso_authorization.id)
@@ -30,7 +35,7 @@ class EnforceSSOValidatorTest < ActiveSupport::TestCase
 
     sso_authorization.update_column(:updated_at, 0.5.hour.ago)
     service = EnforceSSOValidator.new(user_session: @user_session)
-    refute service.valid?
+    assert_not service.valid?
     assert_match 'Authentication flow has to be checked', service.error_message
 
     auth_provider.update_column(:updated_at, 1.hour.ago)
