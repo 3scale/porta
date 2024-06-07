@@ -28,7 +28,7 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   end
 
   def enforce_sso_allowed?
-    sso_validator = EnforceSSOValidator.new(user_session)
+    sso_validator = EnforceSSOValidator.new(user_session: user_session)
 
     return if sso_validator.valid?
 
