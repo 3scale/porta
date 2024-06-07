@@ -72,12 +72,10 @@ class Sidebar
   hook: (element) ->
     selector = @selector
     element = $(element)
-    element.tipsy(live: "#{selector} li > a", gravity: $.fn.tipsy.autoWE)
     element
       .on 'cms-sidebar:update', (event) =>
         SidebarToggle.loadAndMarkPacked()
         @filter.filter()
-        @tooltips()
 
         @update_expand_collapse_button()
 
@@ -137,9 +135,6 @@ class Sidebar
       @portlets().html(portlets)
 
       @element.trigger('cms-sidebar:update')
-
-  tooltips: ->
-    @items('[title]').tipsy(gravity: $.fn.tipsy.autoWE)
 
   group: (json) ->
     {
