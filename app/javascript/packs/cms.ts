@@ -2,7 +2,6 @@ import $ from 'jquery'
 import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
-import 'jquery-ui/ui/widgets/tooltip'
 
 import * as flash from 'utilities/flash'
 
