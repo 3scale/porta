@@ -14,8 +14,6 @@ class Settings < ApplicationRecord
             :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cms_token, :cas_server_url, :sso_key,
             :sso_login_url, length: { maximum: 255 }
 
-  validate :enforce_sso_allowed?, on: :update, if: -> { enforce_sso_changed? to: true }
-
   symbolize :spam_protection_level
 
   include Switches
@@ -123,12 +121,5 @@ class Settings < ApplicationRecord
   # Remove attributes with empty strings and nil for non-null columns
   def sanitize_attributes(attrs)
     attrs.reject { |key, value| self.class.non_null_columns_names.include?(key.to_s) && value.to_s.empty? }
-  end
-
-  def enforce_sso_allowed?
-    enforce_sso = EnforceSSOValidator.new(account: account)
-    return if enforce_sso.valid?
-
-    errors.add(:enforce_sso, enforce_sso.error_message)
   end
 end

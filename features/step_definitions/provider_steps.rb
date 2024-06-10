@@ -133,7 +133,7 @@ And /^the sso integration is (published|hidden)$/ do |state|
 end
 
 And /^the sso integration is tested$/ do
-  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true).at_most(3)
+  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true)
 end
 
 When "{provider} creates sample data" do |provider|
