@@ -114,8 +114,8 @@ class Settings < ApplicationRecord
   end
 
   def update_approval_required(attrs)
-    value = attrs.delete(:account_approval_required).presence || false
-    default_account_plan.update_attribute(:approval_required, value)
+    value = attrs.delete(:account_approval_required)
+    default_account_plan.update_attribute(:approval_required, value) unless value.to_s.empty?
   end
 
   # Remove attributes with empty strings and nil for non-null columns
