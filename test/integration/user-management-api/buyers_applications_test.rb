@@ -30,6 +30,8 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
     ReferrerFilter.enable_backend!
     stub_backend_get_keys
+
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
   end
 
   test 'index' do
@@ -253,6 +255,21 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     assert_equal created_app.name, "chucky"
     assert_equal created_app.application_id, "superawesomeid"
   end
+
+  test 'special characters in application fields' do
+    @service.update(backend_version: '2')
+    generic_params = { plan_id: @app_plan.id, access_token: @token }
+
+    %w[9999_ {}*~KEY "%<>\[\\\]^`{|} ;=?@ !#$&\'(].each do |id|
+      post admin_api_account_applications_path(account_id: @buyer.id, format: :json), params: { **generic_params, application_id: id }
+      assert_response :success
+      assert_equal id, JSON.parse(response.body)['application']['application_id']
+    end
+
+    post admin_api_account_applications_path(account_id: @buyer.id), params: { **generic_params, description: '99_'}
+    assert_response :success
+  end
+
 
   pending_test 'create errors'
 
