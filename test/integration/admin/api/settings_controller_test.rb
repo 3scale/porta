@@ -62,7 +62,11 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert JSON.parse(response.body)['settings']['account_approval_required']
+    assert settings.reload.account_approval_required
 
+    put admin_api_settings_path(format: :json), params: { access_token: token, public_search: true }
+
+    assert_response :success
     assert settings.reload.account_approval_required
   end
 end

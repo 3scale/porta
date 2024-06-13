@@ -86,9 +86,6 @@ class SettingsTest < ActiveSupport::TestCase
     @settings.update(account_approval_required: true)
     assert plan.reload.approval_required
 
-    @settings.update(welcome_text: :bar)
-    assert_equal false, plan.reload.approval_required
-
     @settings.update(account_approval_required: false)
     refute plan.reload.approval_required
   end
@@ -105,12 +102,18 @@ class SettingsTest < ActiveSupport::TestCase
     refute @provider.account_plans.first.approval_required
   end
 
-  test "account_approval_required defaults to 'false' on empty values" do
+  test "account_approval_required ignores empty values" do
     settings.update(account_approval_required: true)
     assert settings.account_approval_required
 
     settings.update(account_approval_required: "")
-    assert_not settings.account_approval_required
+    assert settings.account_approval_required
+  end
+
+  test "not including account_approval_required doesn't disable it" do
+    settings.update(account_approval_required: true)
+    settings.update({})
+    assert settings.account_approval_required
   end
 
   def test_service_plans_visible_ui_switch
