@@ -5,9 +5,11 @@ ENV RUBY_MAJOR_VERSION=2 \
     RAILS_ENV=production \
     NODE_ENV=production
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
+
 ADD . ./
-ADD config/examples/*.yml ./config/
-ADD openshift/system/config/* ./config/
+RUN cp config/examples/*.yml config/ \
+    && cp openshift/system/config/* config/
+
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
     && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
     && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
