@@ -200,6 +200,20 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         assert_response :redirect
         assert_equal subscribed_service_plan, buyer.bought_service_contracts.first.service_plan
       end
+
+      test 'crate application with special characters and numeric values' do
+        provider.settings.allow_multiple_applications!
+        subscribed_service_plan = FactoryBot.create(:service_plan, service: service)
+        buyer.bought_service_contracts.create(plan: subscribed_service_plan)
+
+        %w[9999_ {}*~KEY "%<>\[\\\]^`{|} ;=?@ !#$&\'(].each do |name|
+          post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                           cinstance: { plan_id: application_plan.id, name: name } }
+
+          assert_response :redirect
+          assert_equal 'Application was successfully created.', flash[:notice], "Failed creating application with name #{name}"
+        end
+      end
     end
 
     class Edit < ProviderLoggedInTest
