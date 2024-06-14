@@ -75,7 +75,6 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   end
 
   def update_billing_address
-    current_account.updating_payment_detail = true
     current_account.transaction do
       raise ActiveRecord::Rollback unless current_account.update(account_params) && update_address_on_payment_gateway
 
@@ -83,6 +82,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
     end
   end
 
+  # To be overridden by specific gateway controllers
   def update_address_on_payment_gateway
     true
   end

@@ -5,10 +5,6 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :updating_payment_detail
-
-    validates :payment_detail_conditions, acceptance: { :if => :should_validate_payment_detail_conditions? }
-
     before_destroy :unstore_credit_card!
 
     scope :expired_credit_card, ->(time) {
@@ -20,10 +16,6 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     }
 
     after_commit :notify_credit_card_change
-  end
-
-  def should_validate_payment_detail_conditions?
-    updating_payment_detail and !new_record?
   end
 
   def credit_card
