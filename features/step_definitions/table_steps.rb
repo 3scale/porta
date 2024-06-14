@@ -130,3 +130,7 @@ Then "the inverted table has the following row(s)(:)" do |table|
   expected = table.raw.first
   assert_includes actual, expected
 end
+
+Then "the table {should} have a column {string}" do |should, column|
+  assert_equal should, has_css?('table thead th', text: column, wait: 0)
+end

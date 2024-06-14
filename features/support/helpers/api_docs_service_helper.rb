@@ -12,6 +12,14 @@ module ApiDocsServiceHelper
     find('.pf-c-page__main-section').click # HACK: need to click outside to lose focus
   end
 
+  def numbered_swagger_version(version)
+    {
+      'Swagger 1.2' => '1.2',
+      'Swagger 2' => '2.0',
+      'OAS 3.0' => '3.0'
+    }[version]
+  end
+
 end
 
 World(ApiDocsServiceHelper)

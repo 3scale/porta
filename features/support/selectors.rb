@@ -3,7 +3,7 @@
 
 module HtmlSelectorsHelper
   # :reek:TooManyStatements
-  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     case scope
 
     #

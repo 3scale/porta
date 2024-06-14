@@ -172,7 +172,7 @@ When /^(.*) that belongs to ([^:]+):$/ do |lstep, scope, table|
   end
 end
 
-When /^I visit "(.+?)"$/ do |path|
+When /^(?:|I |they )visit "(.+?)"$/ do |path|
   visit path
 end
 

@@ -15,17 +15,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       @api_docs_service = FactoryBot.create(:api_docs_service, account: @provider, service: nil)
     end
 
-    test 'index gets the api_docs of an account independently of the service' do
-      service_2 = FactoryBot.create(:simple_service, account: provider)
-      FactoryBot.create(:api_docs_service, service: service, account: provider)
-      FactoryBot.create(:api_docs_service, service: service_2, account: provider)
-
-      get admin_api_docs_services_path
-      assert_account_active_docs_menus
-
-      assert_same_elements provider.api_docs_services.pluck(:id), assigns(:api_docs_services).map(&:id)
-    end
-
     test 'preview under the service scope when there is a service' do
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_account_active_docs_menus
@@ -102,11 +91,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
       logout! && login!(provider, user: member)
 
-      get admin_api_docs_services_path
-      api_docs_service_ids = assigns(:api_docs_services).map(&:id)
-      assert_includes api_docs_service_ids, api_docs_service.id
-      assert_not_includes api_docs_service_ids, forbidden_api_docs_service.id
-
       get new_admin_api_docs_service_path
       page = Nokogiri::HTML4::Document.parse(response.body)
       collection = JSON.parse(page.xpath(".//div[@id='api-docs-container']").attr("data-service").value)["collection"]
@@ -169,9 +153,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
         post admin_api_docs_services_path(create_params)
         assert_response :redirect
       end
-
-      get admin_api_docs_service_path(id: api_docs_service.id, format: :json)
-      assert_response :ok
 
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_response :ok

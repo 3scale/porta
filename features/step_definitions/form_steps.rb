@@ -42,7 +42,7 @@ end
 
 Then /^there is (a|no) (required )?(readonly )?field "(.*)"$/ do |presence, required, readonly, field|
   present = presence == 'a'
-  assert_equal present, has_field?(field, readonly: readonly.present?)
+  assert_equal present, has_field?(field, readonly: readonly.present?, wait: present)
 
   if present && required.present?
     assert find('label', text: field).has_css?('.required, .pf-c-form__label-required'),
