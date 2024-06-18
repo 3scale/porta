@@ -1445,7 +1445,6 @@ en:
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
-        signups_enabled: ''
         strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
           Allow anyone to search on your Developer Portal.
