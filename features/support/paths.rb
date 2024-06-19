@@ -226,21 +226,33 @@ World(Module.new do
       provider_admin_account_authentication_providers_path
 
     #
+    # ActiveDocs (Admin portal)
+    #
+    when /the ActiveDocs page/
+      admin_api_docs_services_path
+    when /the new ActiveDocs spec page/
+      new_admin_api_docs_service_path
+    when /the spec's preview page from Audience context/
+      spec = @api_docs_service
+      preview_admin_api_docs_service_path(spec)
+    when /(?:the spec's|spec "(.*)") edit page from Audience context/
+      spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
+      edit_admin_api_docs_service_path(spec)
+
+    when /the product's ActiveDocs page/
+      admin_service_api_docs_path(@product)
+    when /the product's new ActiveDocs spec page/
+      new_admin_service_api_doc_path(@product)
+    when /the spec's preview page from Product context/
+      spec = @api_docs_service
+      preview_admin_service_api_doc_path(spec.service, spec)
+    when /(?:the spec's|spec "(.*)") edit page from Product context/
+      spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
+      edit_admin_service_api_doc_path(service_id: spec.service, id: spec)
+
+    #
     # API Management
     #
-    when 'the new active docs page'
-      new_admin_api_docs_service_path
-    when 'the preview active docs page'
-      preview_admin_api_docs_service_path(@provider.api_docs_services.first!)
-
-    when 'the service active docs page'
-      admin_service_api_docs_path(@provider.default_service)
-    when 'the new active docs page for a service'
-      new_admin_service_api_doc_path(@provider.default_service)
-    when 'the preview active docs page for a service'
-      service = @provider.default_service
-      preview_admin_service_api_doc_path(service, service.api_docs_services.first!)
-
     when /(the )?API dashboard( page)?/
       admin_service_path provider_first_service!
     when /^the overview page of product "([^"]+)"$/

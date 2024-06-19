@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  Checkbox,
   Form,
   PageSection,
   PageSectionVariants,
@@ -19,6 +18,8 @@ import { ServiceSelect } from 'ActiveDocs/components/ServiceSelect'
 import { ApiJsonSpecInput } from 'ActiveDocs/components/ApiJsonSpecInput'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import { PublishedCheckbox } from 'ActiveDocs/components/PublishedCheckbox'
+import { SkipValidationsCheckbox } from 'ActiveDocs/components/SkipValidationsCheckbox'
 
 import type { FunctionComponent } from 'react'
 import type { IRecord as Service } from 'Types'
@@ -95,14 +96,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
                 systemName={systemName}
               />
 
-              <input name="api_docs_service[published]" type="hidden" value="0" />
-              <Checkbox
-                id="api_docs_service_published_input"
-                isChecked={published}
-                label="Publish?"
-                name="api_docs_service[published]"
-                onChange={setPublished}
-              />
+              <PublishedCheckbox published={published} setPublished={setPublished} />
 
               <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
@@ -110,14 +104,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
               <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
-              <input name="api_docs_service[skip_swagger_validations]" type="hidden" value="0" />
-              <Checkbox
-                id="api_docs_service_skip_swagger_validations"
-                isChecked={skipSwaggerValidations}
-                label="Skip swagger validations"
-                name="api_docs_service[skip_swagger_validations]"
-                onChange={setSkipSwaggerValidations}
-              />
+              <SkipValidationsCheckbox setSkipSwaggerValidations={setSkipSwaggerValidations} skipSwaggerValidations={skipSwaggerValidations} />
 
               <ActionGroup>
                 <Button isDisabled={isDisabled} type="submit" variant="primary">

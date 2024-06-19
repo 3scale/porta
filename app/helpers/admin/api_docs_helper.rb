@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 module Admin::ApiDocsHelper
-  def new_api_docs_service_path(service = nil)
-    service.present? ? new_admin_service_api_doc_path(service) : new_admin_api_docs_service_path
-  end
-
-  def create_api_docs_service_path(service = nil)
-    service.present? ? admin_service_api_docs_path(service) : admin_api_docs_services_path
+  def create_api_docs_service_path
+    current_scope.is_a?(Service) ? admin_service_api_docs_path(current_scope) : admin_api_docs_services_path
   end
 
   def update_api_docs_service_path(api_doc)
-    service = api_doc.service
-    service.present? ? admin_service_api_doc_path(service, api_doc) : admin_api_docs_service_path(api_doc)
+    current_scope.is_a?(Service) ? admin_service_api_doc_path(current_scope, api_doc) : admin_api_docs_service_path(api_doc)
   end
 
   def spec_url(api_docs_service)
@@ -32,7 +27,7 @@ module Admin::ApiDocsHelper
       action: data_url(api_docs_service)
     }
 
-    if requires_service(current_scope, api_docs_service)
+    if requires_service(api_docs_service)
       data[:collection] = current_user.accessible_services.as_json(only: %i[id name], root: false)
       data[:serviceId] = api_docs_service.service_id
     end
@@ -43,10 +38,10 @@ module Admin::ApiDocsHelper
   protected
 
   def data_url(api_docs_service)
-    api_docs_service.new_record? ? create_api_docs_service_path(api_docs_service.service) : update_api_docs_service_path(api_docs_service)
+    api_docs_service.new_record? ? create_api_docs_service_path : update_api_docs_service_path(api_docs_service)
   end
 
-  def requires_service(current_scope, api_docs_service)
+  def requires_service(api_docs_service)
     !current_scope.is_a?(Service) || !api_docs_service.new_record?
   end
 end

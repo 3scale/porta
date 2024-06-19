@@ -1,7 +1,10 @@
 - content_for :page_header_title, 'ActiveDocs'
 
-- if @api_docs_services.any?
-  = render partial: 'active_docs_table', locals: {service: @service, api_docs_services: @api_docs_services}
+- if @presenter.any_api_docs?
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'active_docs_table'
+
+  div class="pf-c-card" id="active-docs-table-container" data-props=@presenter.props.to_json
 - else
   - if current_account.api_docs_services.without_service.any? && can?(:manage, :portal)
     - content_for :page_header_alert do
@@ -24,5 +27,4 @@
                                                     body: t('.empty_state.body'),
                                                     icon: 'plus-circle',
                                                     primary: { title: t('.empty_state.primary'),
-                                                               href: new_api_docs_service_path(@service) } }
-= will_paginate(@api_docs_services)
+                                                               href: @presenter.new_api_docs_service_path } }

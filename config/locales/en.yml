@@ -147,13 +147,16 @@ en:
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
-          # start documentation links
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
-          # end documentation links
           empty_state:
             title: No ActiveDocs specs yet
             body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
             primary: Create your first spec
+        destroy:
+          success: ActiveDocs Spec was successfully deleted.
+        toggle_visible:
+          visible: "Spec %{name} is now visible"
+          hidden: "Spec %{name} is now hidden"
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
