@@ -61,7 +61,7 @@ Feature: Email templates management
      And I follow "Sign up notification for provider"
      And I fill the form with following:
       | Bcc          | From |
-      | test@bcc.com | "Some Really Long String" <api@example.net> |
+      | test@bcc.com | "Some Really Long String" <api@example.com> |
      And I fill in the draft with:
       """
       Email: {{user.email}}
@@ -98,4 +98,4 @@ Feature: Email templates management
       Email: steve@mail.com
       Org: steve
       """
-    Then I should see the email delivered from "Some Really Long String <api@example.net>"
+    Then I should see the email delivered from "Some Really Long String <api@example.com>"

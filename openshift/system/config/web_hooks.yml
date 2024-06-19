@@ -1,2 +1,0 @@
-production:
-  perform_deliveries: <%= ENV.fetch('WEBHOOK_PERFORM_DELIVERIES', '1') == '1' %>

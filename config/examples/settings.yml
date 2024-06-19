@@ -37,15 +37,14 @@ base: &default
   # apicast_internal_host_regexp:
 
   # System Emails
-  noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', 'no-reply@example.net') %>
-  notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', '3scale Notification <no-reply@example.com>') %>
-  sales_email: <%= ENV.fetch('SALES_EMAIL', 'sales@example.com') %>
-  support_email: <%= ENV.fetch('SUPPORT_EMAIL', '3scale Notifier <no-reply@example.com>') %>
-  sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', 'sysadmin@example.com') %>
+  noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
+  notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
+  sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
+  support_email: <%= ENV.fetch('SUPPORT_EMAIL', "#{superdomain} Support <support@#{superdomain}>") %>
+  sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
 
   # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
-  active_merchant_mode: :test
   billing_canaries:
 
 development:
@@ -65,5 +64,17 @@ test:
 
 production:
   <<: *default
-  active_merchant_mode:
-  report_traffic: true
+  active_docs_proxy_disabled: true
+  active_merchant_logging: false
+  apicast_custom_url: true
+  apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
+  daily_weekly_reports_pref: false
+  db_secret:
+  force_ssl: true
+  hide_basic_switches: true
+  janitor_worker_enabled: true ## same
+  onpremises: true
+  onpremises_api_docs_version: true
+  readonly_custom_domains_settings: false
+  secure_cookie: true
+  tenant_mode: <%= ENV['TENANT_MODE'] %>

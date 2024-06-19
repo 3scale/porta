@@ -1,4 +1,4 @@
-production:
+base: &default
   address: <%= ENV['SMTP_ADDRESS'] %>
   port: <%= ENV.fetch('SMTP_PORT', '25').to_i %>
   domain: <%= ENV['THREESCALE_SUPERDOMAIN'] || 'localhost' %>
@@ -8,3 +8,9 @@ production:
   openssl_verify_mode: <%= ENV['SMTP_OPENSSL_VERIFY_MODE'] || 'none' %>
   user_name: <%= ENV['SMTP_USER_NAME'] %>
   password: <%= ENV['SMTP_PASSWORD'] %>
+
+development:
+  <<: *default
+
+production:
+  <<: *default
