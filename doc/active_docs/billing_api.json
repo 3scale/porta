@@ -232,13 +232,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -326,13 +319,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -391,13 +377,6 @@
                   "access_token",
                   "state"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -443,13 +422,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -593,13 +565,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
