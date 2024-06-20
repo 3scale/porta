@@ -67,7 +67,7 @@ end
 #   And they should not be able to see the feature "Max. Speed"
 #
 Then "they {should} be able to see {css_selector}" do |visible, selector|
-  assert_equal visible, has_selector?(:css, selector, wait: 0)
+  assert_equal visible, has_selector?(:css, selector, wait: visible)
 end
 
 Then /^(?:|I |they )should not see "([^"]*)"$/ do |text|

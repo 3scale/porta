@@ -35,11 +35,11 @@ Then /^I should not see (?:the )?link "([^"]*)"$/ do |label|
 end
 
 Then "there {should} be a button to {string}" do |visible, label|
-  assert_equal visible, has_button?(label)
+  assert_equal visible, has_button?(label, wait: visible)
 end
 
 Then "there {should} be a link to {string}" do |visible, label|
-  assert_equal visible, has_link?(label)
+  assert_equal visible, has_link?(label, wait: visible)
 end
 
 Then(/^I should see button "([^"]*)"( disabled)?$/) do |label, disabled|
@@ -76,7 +76,7 @@ Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" column and "([^"]*)" row$/ do |text, column, row|
-  if has_css?('table.pf-c-table')
+  if has_css?('table.pf-c-table', wait: 0)
     column_values = find_all("td[data-label='#{column}'").map(&:text)
     rows = find_all('tbody tr td[data-label="Group/Org."]')
     index = rows.find_index{ |r| r.text == row }
