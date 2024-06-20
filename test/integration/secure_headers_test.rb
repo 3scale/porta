@@ -15,6 +15,7 @@ class SecureHeadersTest < ActionDispatch::IntegrationTest
     assert_equal 'DENY', response.headers['X-Frame-Options']
     assert_equal 'nosniff', response.headers['X-Content-Type-Options']
     assert_equal '1; mode=block', response.headers['X-XSS-Protection']
+    assert_equal "default-src 'self'; font-src 'self' ; img-src 'self' data: ; script-src 'self' 'unsafe-inline' 'unsafe-eval' ; style-src 'self' 'unsafe-inline' ; connect-src *", response.headers['Content-Security-Policy']
   end
 
   test 'do not add non used secure headers in the response' do
@@ -22,7 +23,6 @@ class SecureHeadersTest < ActionDispatch::IntegrationTest
 
     get provider_admin_dashboard_path
 
-    refute_includes response.headers, 'Content-Security-Policy'
     refute_includes response.headers, 'X-Download-Options'
     refute_includes response.headers, 'Strict-Transport-Security'
     refute_includes response.headers, 'X-Permitted-Cross-Domain-Policies'

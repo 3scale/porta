@@ -7,3 +7,7 @@ if defined?(Rails.root)
   World(TestHelpers::Country)
   World(TestHelpers::Backend)
 end
+
+asset_host = 'cdn.3scale.localhost:*'
+ContentSecurityPolicy.setup_policy(asset_host)
+
