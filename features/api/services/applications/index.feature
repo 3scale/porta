@@ -32,7 +32,7 @@ Feature: Product > Applications
     When they select "Products" from the context selector
     And follow "My API"
     And press "Applications" within the main menu
-    And follow "Listing" within the main manu's section Applications
+    And follow "Listing" within the main menu's section Applications
     Then the current page is product "My API" applications page
 
   Scenario: Empty state

@@ -73,7 +73,7 @@ Feature: Audience > Applications
   Scenario: Navigation via Context selector
     When they select "Audience" from the context selector
     And press "Applications" within the main menu
-    And follow "Listing" within the main manu's section Applications
+    And follow "Listing" within the main menu's section Applications
     Then the current page is the admin portal applications page
 
   Scenario: Searching by multiple criteria

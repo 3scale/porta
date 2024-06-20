@@ -9,11 +9,11 @@ module HtmlSelectorsHelper
     #
     # Page sections
     #
-    when /the main menu/
+    when /^the main menu$/
       '#mainmenu'
 
-    when /^the main manu's section (.*)$/
-      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav')
+    when /^the main menu's section (.*)$/
+      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
 
     when /the apis dashboard widget/
       '.DashboardSection--services'
