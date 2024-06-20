@@ -18,7 +18,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :ok
       expected_cinstances_ids = service.cinstances.where.has { user_account_id != Account.master.id }.pluck(:id)
-      assert_same_elements expected_cinstances_ids, assigns(:cinstances).map(&:id)
+      assert_same_elements expected_cinstances_ids, assigns(:presenter).applications.map(&:id)
     end
   end
 
@@ -44,7 +44,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
         get admin_service_applications_path(service)
 
         assert_response :ok
-        assert_same_elements service.cinstances.pluck(:id), assigns(:cinstances).map(&:id)
+        assert_same_elements service.cinstances.pluck(:id), assigns(:presenter).applications.map(&:id)
       end
 
       test 'index can retrieve the cinstances of an application plan belonging to a service' do
@@ -52,7 +52,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
         get admin_service_applications_path(service, {application_plan_id: plan.id})
 
         assert_response :ok
-        assert_same_elements plan.cinstances.pluck(:id), assigns(:cinstances).map(&:id)
+        assert_same_elements plan.cinstances.pluck(:id), assigns(:presenter).applications.map(&:id)
       end
 
       test 'index can retrieve the cinstances of a buyer account' do
@@ -60,7 +60,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
         get admin_service_applications_path(service, {account_id: buyer.id})
 
         assert_response :ok
-        assert_same_elements buyer.bought_cinstances.pluck(:id), assigns(:cinstances).map(&:id)
+        assert_same_elements buyer.bought_cinstances.pluck(:id), assigns(:presenter).applications.map(&:id)
       end
 
       test 'index does not show the services column regardless of provider being multiservice' do
