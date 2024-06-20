@@ -125,7 +125,7 @@ Given "{provider} has an sso integration for the admin portal" do |provider|
 end
 
 Given "{provider} has sso {enabled} for all users" do |provider, enabled|
-  provider.settings.update!(enforce_sso: enabled)
+  provider.settings.update_column(:enforce_sso, enabled)
 end
 
 And /^the sso integration is (published|hidden)$/ do |state|
@@ -133,7 +133,7 @@ And /^the sso integration is (published|hidden)$/ do |state|
 end
 
 And /^the sso integration is tested$/ do
-  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true).at_most(2)
+  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true)
 end
 
 When "{provider} creates sample data" do |provider|

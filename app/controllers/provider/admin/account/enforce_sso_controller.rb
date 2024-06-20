@@ -28,11 +28,11 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   end
 
   def enforce_sso_allowed?
-    enforce_sso = EnforceSSOValidator.new(user_session)
+    sso_validator = EnforceSSOValidator.new(user_session: user_session)
 
-    return if enforce_sso.valid?
+    return if sso_validator.valid?
 
-    render json: { error: enforce_sso.error_message }
+    render json: { error: sso_validator.error_message }
   end
 
   def index_path

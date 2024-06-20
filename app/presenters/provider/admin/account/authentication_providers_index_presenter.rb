@@ -9,7 +9,7 @@ class Provider::Admin::Account::AuthenticationProvidersIndexPresenter
   def initialize(user:, authentication_providers:, session:, params:)
     @user = user
     @raw_authentication_providers = authentication_providers
-    @enforce_sso_service = EnforceSSOValidator.new(session)
+    @enforce_sso_service = EnforceSSOValidator.new(user_session: session)
 
     @sorting_params = "#{params[:sort].presence || 'updated_at'} #{params[:direction].presence || 'desc'}"
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
