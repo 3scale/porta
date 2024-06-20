@@ -4,12 +4,18 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-Rails.application.config.content_security_policy do |policy|
-  policy.default_src :self
-  policy.font_src    :self, Rails.configuration.asset_host.to_s.strip
-  policy.img_src     :self, Rails.configuration.asset_host.to_s.strip, :data
-  policy.script_src  :self, Rails.configuration.asset_host.to_s.strip, :unsafe_inline, :unsafe_eval
-  policy.style_src   :self, Rails.configuration.asset_host.to_s.strip, :unsafe_inline
+Rails.application.config.to_prepare do
+  asset_host = Rails.configuration.asset_host.to_s.strip
+  backend_host = Rails.configuration.backend_client[:url].to_s.strip
+
+  Rails.application.config.content_security_policy do |policy|
+    policy.default_src :self
+    policy.font_src    :self, asset_host
+    policy.img_src     :self, asset_host, :data
+    policy.script_src  :self, asset_host, :unsafe_inline, :unsafe_eval
+    policy.style_src   :self, asset_host, :unsafe_inline
+    policy.connect_src :self, backend_host
+  end
 end
 
 # If you are using UJS then enable automatic nonce generation
