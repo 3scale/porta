@@ -5,7 +5,7 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 Rails.application.config.to_prepare do
-  asset_host = Rails.configuration.asset_host.to_s.strip
+  asset_host = Rails.configuration.three_scale.asset_host.to_s.strip
   backend_host = Rails.configuration.backend_client[:url].to_s.strip
 
   Rails.application.config.content_security_policy do |policy|
