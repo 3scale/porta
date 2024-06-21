@@ -85,18 +85,6 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     refute master_account.credit_card_editable?
   end
 
-  test "only validates payment_detail_conditions when updating payment detail" do
-    account = Account.new(:org_name => 'ACME', :payment_detail_conditions => false)
-    assert account.save!, "Account should save when account is new"
-
-    account = Account.create!(:org_name => 'ACME')
-    assert account.update(:org_name => 'New ACME', :payment_detail_conditions => false), "Account should update when not updating credit card details"
-
-    account = Account.create!(:org_name => 'ACME')
-    account.updating_payment_detail = true
-    assert !account.update(:org_name => 'New ACME', :payment_detail_conditions => false), "Account shouldn't update when updating credit card details without accepting conditions"
-  end
-
   test '#credit_card_exires_on_with_default' do
     travel_to(Time.utc(2017,8,30)) do
       account = FactoryBot.create(:simple_provider)

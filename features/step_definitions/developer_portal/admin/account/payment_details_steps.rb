@@ -102,7 +102,7 @@ Then "the buyer can't add an incomplete billing address for stripe" do
   click_on 'Save'
 
   assert_flash 'Failed to update your billing address data. Check the required fields'
-  assert_equal admin_account_payment_details_path, current_path
+  assert_equal admin_account_stripe_path, current_path
   assert_buyer_stripe_form_errors
 end
 
