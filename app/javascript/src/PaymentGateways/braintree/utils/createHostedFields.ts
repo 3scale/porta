@@ -1,7 +1,7 @@
 import { client, hostedFields } from 'braintree-web'
 
 import type { HostedFields } from 'braintree-web'
-import type { HostedFieldFieldOptions } from 'braintree-web/modules/hosted-fields'
+import type { HostedFieldFieldOptions } from 'braintree-web/hosted-fields'
 
 /* eslint-disable @typescript-eslint/naming-convention */
 const styles = {

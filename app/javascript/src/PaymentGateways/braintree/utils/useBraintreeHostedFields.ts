@@ -8,11 +8,10 @@ import { useEffect, useState } from 'react'
 
 import { createHostedFields } from 'PaymentGateways/braintree/utils/createHostedFields'
 import { createThreeDSecure } from 'PaymentGateways/braintree/utils/createThreeDSecure'
-import { verifyCard } from 'PaymentGateways/braintree/utils/verifyCard'
 
 import type { BraintreeError } from 'braintree-web'
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
-import type { HostedFields, HostedFieldsFieldDataFields } from 'braintree-web/modules/hosted-fields'
+import type { HostedFields, HostedFieldsFieldDataFields } from 'braintree-web/hosted-fields'
 
 type CustomHostedFields = HostedFields & {
   getNonce: (BillingAddress: BillingAddress) => Promise<string>;
@@ -71,10 +70,9 @@ const useBraintreeHostedFields = (
             return hostedFieldsTokenizePayload.nonce
           }
 
-          const threeDSecureVerifyPayload = await verifyCard(threeDSecureInstance, {
+          const threeDSecureVerifyPayload = await threeDSecureInstance.verifyCard({
             nonce: hostedFieldsTokenizePayload.nonce,
             bin: hostedFieldsTokenizePayload.details.bin,
-            // @ts-expect-error Outdated types. {amount} is a string: https://braintree.github.io/braintree-web/current/ThreeDSecure.html#verifyCard
             amount: '0.00',
             billingAddress: {
               givenName: billingAddress.firstName,
