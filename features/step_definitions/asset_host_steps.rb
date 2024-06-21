@@ -2,11 +2,15 @@
 
 Given /^the asset host is unset$/ do
   Rails.configuration.three_scale.asset_host = nil
+  Rails.configuration.asset_host = nil
+  Rails.application.config.content_security_policy { _1.default_src :self, :data, :unsafe_inline, :unsafe_eval }
 end
 
 Given /^the asset host is set to "(.*)"$/ do |asset_host|
   cdn_url = "#{asset_host}:#{Capybara.current_session.server.port}"
   Rails.configuration.three_scale.asset_host = cdn_url
+  Rails.configuration.asset_host = cdn_url
+  Rails.application.config.content_security_policy { _1.default_src :self, :data, :unsafe_inline, :unsafe_eval, cdn_url }
 end
 
 Then /^(?:javascript\s)?assets should be loaded from the asset host$/ do
