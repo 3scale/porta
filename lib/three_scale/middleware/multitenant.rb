@@ -61,20 +61,24 @@ module ThreeScale
 
           return if current == original
 
-          # we still need to check if it wasn't master before raising a tenant leak
+          return if master?
+
+          raise TenantLeak.new(object, attribute, original)
+        end
+
+        def master?
+          return @is_master if defined?(@is_master)
+
           @master ||= ::Account.unscoped.master
 
           # this is supposed to match how we get the user_session in app/lib/authenticated_system/request.rb
           # on API calls cookies are not present though, so we need to use safe navigation
           @user_session ||= UserSession.authenticate(@env['action_dispatch.cookies']&.signed&.public_send(:[], :user_session))
-          return if @user_session&.user&.account == @master
 
-          return if @env["action_dispatch.request.query_parameters"]["provider_key"] == @master.api_key
-
-          # must match how we check access token in app/lib/api_authentication/by_access_token.rb
-          return if @master.access_tokens.find_from_value(@env["action_dispatch.request.query_parameters"]["access_token"])
-
-          raise TenantLeak.new(object, attribute, original)
+          @is_master = @user_session&.user&.account == @master ||
+            @env["action_dispatch.request.query_parameters"]["provider_key"] == @master.api_key ||
+            # must match how we check access token in app/lib/api_authentication/by_access_token.rb
+            @master.access_tokens.find_from_value(@env["action_dispatch.request.query_parameters"]["access_token"])
         end
       end
 
