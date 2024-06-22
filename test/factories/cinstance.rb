@@ -2,7 +2,9 @@
 
 FactoryBot.define do
   factory(:contract) do
-    association :user_account, :factory => :pending_buyer_account
+    user_account {
+      @overrides[:plan]&.provider_account&.buyer_accounts&.first || association(:buyer_account)
+    }
 
     after(:stub) do |cinstance|
       cinstance.created_at = 2.months.ago

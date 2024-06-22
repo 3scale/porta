@@ -20,7 +20,7 @@ class Account::BuyerTest < ActiveSupport::TestCase
   should have_many(:bought_service_plans).through(:bought_service_contracts)
 
   test '#has_bought_cinstance?' do
-    buyer = FactoryBot.create(:simple_buyer)
+    buyer = FactoryBot.create(:buyer_account)
 
     assert_not buyer.has_bought_cinstance?
 

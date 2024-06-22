@@ -89,10 +89,6 @@ FactoryBot.define do
     association :provider_account
   end
 
-  factory(:pending_buyer_account_with_provider, :parent => :pending_buyer_account) do
-    buyer { true }
-  end
-
 #TODO: rename this, it is actually buying plans!
   factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
@@ -145,6 +141,15 @@ FactoryBot.define do
         account_plans_ui_visible: true,
         service_plans_ui_visible: true
       )
+    end
+
+    trait :with_a_buyer do
+      after(:build) do |account|
+        account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
+      end
+      # looks nicer but doesn't work well
+      # :buyer_account is generated before current factory so extra provider is created and tenant_id doesn't match
+      # buyer_accounts { [association(:buyer_account)] }
     end
   end
 
