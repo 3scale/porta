@@ -19,7 +19,6 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
     policy.img_src     '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
     policy.script_src  '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
     policy.style_src   '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-    policy.connect_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
   end
 
   protected

@@ -6,7 +6,6 @@
 
 Rails.application.config.to_prepare do
   asset_host = Rails.configuration.three_scale.asset_host.to_s.strip
-  backend_host = Rails.configuration.backend_client[:url].to_s.strip
 
   Rails.application.config.content_security_policy do |policy|
     policy.default_src :self
@@ -14,7 +13,7 @@ Rails.application.config.to_prepare do
     policy.img_src     :self, asset_host, :data
     policy.script_src  :self, asset_host, :unsafe_inline, :unsafe_eval
     policy.style_src   :self, asset_host, :unsafe_inline
-    policy.connect_src :self, backend_host
+    policy.connect_src '*'
   end
 end
 
