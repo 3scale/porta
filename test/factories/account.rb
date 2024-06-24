@@ -73,8 +73,6 @@ FactoryBot.define do
   end
 
   factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
-    association :provider_account
-
     after(:create) do |account|
       account.billing_address_name = nil
       account.billing_address_address1 = nil
@@ -83,10 +81,6 @@ FactoryBot.define do
       account.billing_address_country = nil
       account.save!
     end
-  end
-
-  factory(:buyer_account_with_provider, :parent => :buyer_account) do
-    association :provider_account
   end
 
 #TODO: rename this, it is actually buying plans!

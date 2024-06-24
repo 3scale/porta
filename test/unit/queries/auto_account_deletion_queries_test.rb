@@ -36,7 +36,7 @@ class AutoAccountDeletionQueriesTest < ActiveSupport::TestCase
       FactoryBot.create(:cinstance, user_account: old_tenant_with_old_traffic_but_paid, first_daily_traffic_at: (account_inactivity + 1).days.ago, paid_until: (contract_unpaid_time - 1).days.ago)
       @accounts[:not_to_suspend] << old_tenant_with_old_traffic_but_paid.id
 
-      old_buyer_with_old_traffic = FactoryBot.create(:simple_buyer)
+      old_buyer_with_old_traffic = FactoryBot.create(:buyer_account)
       old_buyer_with_old_traffic.update_attribute(:created_at, (account_inactivity + 1).days.ago)
       FactoryBot.create(:cinstance, user_account: old_buyer_with_old_traffic, first_daily_traffic_at: (account_inactivity + 1).days.ago)
       @accounts[:not_to_suspend] << old_buyer_with_old_traffic.id

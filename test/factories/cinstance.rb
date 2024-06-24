@@ -3,7 +3,12 @@
 FactoryBot.define do
   factory(:contract) do
     user_account {
-      @overrides[:plan]&.provider_account&.buyer_accounts&.first || association(:buyer_account)
+      provider_account = @overrides[:plan]&.provider_account
+      if provider_account
+        provider_account&.buyer_accounts&.first || association(:buyer_account, provider_account: provider_account)
+      else
+        association(:buyer_account)
+      end
     }
 
     after(:stub) do |cinstance|
@@ -30,6 +35,13 @@ FactoryBot.define do
 
     trait :as_pending do
       plan { FactoryBot.create(:application_plan, approval_required: true) }
+    end
+
+    after(:build) do |cinstance|
+      unless cinstance.plan.issuer_id
+        # provider#create_first_service is called only in after_create so we may end up with a nil issuer for the plan
+        cinstance.plan.issuer = FactoryBot.build(:service, account: cinstance.user_account.provider_account)
+      end
     end
   end
 
