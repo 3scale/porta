@@ -34,7 +34,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_valid_params_json
-      application_plan = FactoryBot.create(:application_plan, name: 'firstname', state: 'hidden', service: service)
+      application_plan = FactoryBot.create(:application_plan, name: 'firstname', state: 'hidden', issuer: service)
       refute_equal 50.0, application_plan.cost_per_month.to_f
       refute_equal 20.0, application_plan.setup_fee.to_f
       refute_equal 30, application_plan.trial_period_days.to_i
@@ -49,7 +49,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_update_invalid_params_json
-      original_values = {name: 'firstname', state: 'hidden', service: service}
+      original_values = {name: 'firstname', state: 'hidden', issuer: service}
       application_plan = FactoryBot.create(:application_plan, original_values)
       put admin_api_service_application_plan_path(application_plan, application_plan_params(state_event: 'fakestate'))
       assert_response :unprocessable_entity
@@ -59,7 +59,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_destroy_json
-      plan = FactoryBot.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, issuer: service)
       assert_difference(service.application_plans.method(:count), -1) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json, access_token: @token)
         assert_response :success
@@ -71,7 +71,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_index_json
-      FactoryBot.create_list(:application_plan, 2, service: service)
+      FactoryBot.create_list(:application_plan, 2, issuer: service)
       get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: @token)
       assert_response :success
       assert_equal 2, JSON.parse(response.body)['plans'].length

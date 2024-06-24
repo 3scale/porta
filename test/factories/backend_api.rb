@@ -11,7 +11,13 @@ FactoryBot.define do
 
   factory :backend_api_config do
     sequence(:path) { |n| "/path#{n}" }
-    association :service
-    association :backend_api
+    service {
+      opts = { account: @overrides[:backend_api]&.account }.compact
+      association :service, **opts
+    }
+    backend_api {
+      opts = { account: @overrides[:service]&.account }.compact
+      association :backend_api, **opts
+    }
   end
 end

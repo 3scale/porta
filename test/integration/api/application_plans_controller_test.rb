@@ -180,8 +180,8 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'plan cannot be deleted because of customizations' do
-      customization = FactoryBot.create(:application_plan, original_id: plan.id)
-      customization.create_contract_with(FactoryBot.create(:buyer_account))
+      customization = FactoryBot.create(:application_plan, issuer: @service, original_id: plan.id)
+      customization.create_contract_with(FactoryBot.create(:buyer_account, provider_account: current_account))
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
       assert_equal error_message(:customizations_has_contracts), flash[:error]

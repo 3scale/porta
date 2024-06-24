@@ -81,7 +81,7 @@ FactoryBot.define do
 
     trait :with_default_backend_api do
       after(:create) do |record|
-        backend_api = FactoryBot.create(:backend_api, private_endpoint: 'https://echo-api.3scale.net')
+        backend_api = FactoryBot.create(:backend_api, account: record.account, private_endpoint: 'https://echo-api.3scale.net')
         FactoryBot.create(:backend_api_config, path: '', service: record, backend_api: backend_api)
       end
     end
