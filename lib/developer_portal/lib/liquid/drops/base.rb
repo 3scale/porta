@@ -34,12 +34,6 @@ module Liquid
           end
         end
 
-        def publicize(*defined_methods)
-          defined_methods.each do |method|
-            @base.send(:public, method)
-          end
-        end
-
         def proxy(&block)
           instance_eval(&block)
         end
@@ -97,11 +91,7 @@ module Liquid
         end
       end
 
-      privately_include  do
-        include System::UrlHelpers.cms_url_helpers
-        publicize :_routes
-      end
-
+      include System::UrlHelpers.cms_url_helpers
 
       def url_options
         default_url_options
