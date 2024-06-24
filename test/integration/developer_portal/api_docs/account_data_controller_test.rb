@@ -9,7 +9,7 @@ class DeveloperPortal::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     service = provider.default_service
-    @application = FactoryBot.create(:cinstance, user_account: buyer, name: 'MyAppName', plan: FactoryBot.create(:application_plan, service: service, name: 'MyPlanName'))
+    @application = FactoryBot.create(:cinstance, user_account: buyer, name: 'MyAppName', plan: FactoryBot.create(:application_plan, issuer: service, name: 'MyPlanName'))
     service.update!(backend_version: 2)
   end
 

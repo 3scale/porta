@@ -26,7 +26,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contract_count normal behavior' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
@@ -39,7 +39,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contracts_count account being deleted' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
@@ -53,7 +53,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contracts_count service being deleted' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service, issuer: service)
+    plan = FactoryBot.create(:application_plan, issuer: service, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)

@@ -269,7 +269,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     end
 
     test '#plan_upgrade successful upgrade' do
-      new_plan = FactoryBot.create(:application_plan, service: master_account.default_service)
+      new_plan = FactoryBot.create(:application_plan, issuer: master_account.default_service)
 
       put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
 
@@ -289,7 +289,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
     test '#plan_upgrade no stock plan' do
       new_plan_name = 'invalid-plan'
-      new_plan = FactoryBot.create(:application_plan_without_rules, service: master_account.default_service, name: new_plan_name)
+      new_plan = FactoryBot.create(:application_plan_without_rules, issuer: master_account.default_service, name: new_plan_name)
       current_plan_id = provider.reload.bought_application_plans.first.id
 
       put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)

@@ -113,7 +113,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_destroy_json_saas
-      plan = FactoryBot.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, issuer: service)
       assert_difference(service.application_plans.method(:count), -1) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json, access_token: @token)
         assert_response :success
@@ -126,7 +126,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
 
     def test_destroy_json_on_premises
       ThreeScale.stubs(master_on_premises?: true)
-      plan = FactoryBot.create(:application_plan, service: service)
+      plan = FactoryBot.create(:application_plan, issuer: service)
       assert_no_difference service.application_plans.method(:count) do
         delete admin_api_service_application_plan_path(plan.id, service_id: service.id, format: :json, access_token: @token)
         assert_response :forbidden
@@ -136,7 +136,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
     end
 
     def test_index_json_saas
-      FactoryBot.create_list(:application_plan, 2, service: service)
+      FactoryBot.create_list(:application_plan, 2, issuer: service)
       get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: @token)
       assert_response :success
       assert_equal service.application_plans.count, JSON.parse(response.body)['plans'].length

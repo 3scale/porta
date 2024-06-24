@@ -10,7 +10,7 @@ class DeveloperPortal::DashboardsControllerTest < DeveloperPortal::ActionControl
   end
 
   test 'trial' do
-    @plan = FactoryBot.create(:application_plan, service: @provider.first_service!, trial_period_days: 10)
+    @plan = FactoryBot.create(:application_plan, issuer: @provider.first_service!, trial_period_days: 10)
     @app = FactoryBot.create(:cinstance, plan: @plan, user_account: @buyer)
 
     get :show

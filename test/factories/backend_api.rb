@@ -15,9 +15,6 @@ FactoryBot.define do
       opts = { account: @overrides[:backend_api]&.account }.compact
       association :service, **opts
     }
-    backend_api {
-      opts = { account: @overrides[:service]&.account }.compact
-      association :backend_api, **opts
-    }
+    backend_api { association :backend_api, account: service.account }
   end
 end
