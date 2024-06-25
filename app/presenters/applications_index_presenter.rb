@@ -5,34 +5,41 @@ class ApplicationsIndexPresenter
   include ApplicationsHelper
 
   delegate :can?, to: :ability
+  delegate :total_entries, to: :applications
 
-  def initialize(application_plans:, accessible_services:, cinstances:, search:, service:, current_account:, accessible_plans:, account:, user:)
+  def initialize(application_plans:, accessible_services:, service:, provider:, accessible_plans:, buyer:, user:, params:)
     @accessible_services = accessible_services
     @application_plans = application_plans
-    @cinstances = cinstances
-    @search = search
     @service = service
-    @current_account = current_account
+    @provider = provider
     @accessible_plans = accessible_plans
-    @account = account
+    @buyer = buyer
+    @user = user
     @ability = Ability.new(user)
+    @sorting_params = [params[:sort], params[:direction]]
+    @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
+
+    @search = ThreeScale::Search.new(params[:search] || params)
+    @search.account = params['account_id'] if params.key?('account_id')
+    @search.plan_id = params['application_plan_id'] if params.key?('application_plan_id')
   end
 
-  attr_reader :application_plans, :accessible_services, :cinstances, :search, :service, :current_account, :accessible_plans, :account, :ability
+  attr_reader :ability, :accessible_plans, :accessible_services, :application_plans, :buyer,
+              :pagination_params, :provider, :search, :service, :sorting_params, :user
 
-  def toolbar_props
-    show_application_plans = !application_plans.empty? && !current_account.master_on_premises?
-    service_column_visible = service.nil? && current_account.multiservice?
+  def toolbar_props # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    show_application_plans = !application_plans.empty? && !provider.master_on_premises?
+    service_column_visible = service.nil? && provider.multiservice?
     new_application_path = if service.present?
                              new_admin_service_application_path(service)
-                           elsif account.present?
-                             create_application_link_href(account)
+                           elsif buyer.present?
+                             create_application_link_href
                            else
                              new_provider_admin_application_path
                            end
 
     props = {
-      totalEntries: cinstances.total_entries,
+      totalEntries: total_entries,
       actions: [{
         label: 'Create an application',
         href: new_application_path,
@@ -52,7 +59,7 @@ class ApplicationsIndexPresenter
       }]
     }
 
-    if account.nil? # Probably use other variable like current_account
+    if buyer.nil?
       props[:attributeFilters].append({ title: 'Account',
                                         name: 'search[account_query]',
                                         placeholder: 'Search by account',
@@ -97,7 +104,7 @@ class ApplicationsIndexPresenter
       end
     end
 
-    if current_account.settings.finance.allowed?
+    if provider.settings.finance.allowed?
       props[:attributeFilters].append({ name: 'search[plan_type]',
                                         title: 'Plan type',
                                         collection: [{ id: :free, title: 'Free' },
@@ -107,6 +114,44 @@ class ApplicationsIndexPresenter
     end
 
     props
+  end
+
+  def raw_applications
+    return @raw_applications if @raw_applications.present?
+
+    raw = user.accessible_cinstances.not_bought_by(provider)
+    @raw_applications = if service.present?
+                          raw.where(service: service)
+                        elsif buyer.present?
+                          raw.bought_by(buyer)
+                        else
+                          raw
+                        end
+  end
+
+  def applications
+    @applications ||= raw_applications.scope_search(search)
+                                      .order_by(*sorting_params)
+                                      .preload(:service, user_account: %i[admin_user], plan: %i[pricing_rules])
+                                      .paginate(pagination_params)
+                                      .decorate
+  end
+
+  def empty_state?
+    raw_applications.empty?
+  end
+
+  # TODO: need to refactor this method, there is no default return value
+  def create_application_link_href
+    if buyer.bought_cinstances.size.zero?
+      new_admin_buyers_account_application_path(buyer)
+    elsif can?(:admin, :multiple_applications)
+      if can?(:see, :multiple_applications)
+        new_admin_buyers_account_application_path(buyer)
+      else
+        admin_upgrade_notice_path(:multiple_applications)
+      end
+    end
   end
 
   private

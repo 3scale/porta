@@ -440,6 +440,12 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      applications:
+        index:
+          empty_state:
+            title: No applications yet
+            body: There are no applications subscribed to any of your products.
+            primary: Add an application
       backend_apis:
         edit:
           delete_link: I understand the consequences, proceed to delete '%{name}' backend
@@ -566,6 +572,11 @@ en:
         success: Account successfully updated
 
     applications:
+      index:
+        empty_state:
+          title: No applications yet
+          body: This account doesn't have applications subscribed to any product.
+          primary: Add an application
       bulk:
         send_emails:
           success:
@@ -703,6 +714,11 @@ en:
           all: Alerts for all services
         delete_alert_confirmation: Do you really want to delete this alert?
     applications:
+      index:
+        empty_state:
+          title: No applications yet
+          body: There are no applications subscribed to %{name}.
+          primary: Add an application
       edit:
         delete_confirmation: Are you sure you want to delete this application?
     backend_usages:

@@ -68,7 +68,7 @@ module CapybaraHelpers
 
   def fill_attribute_filter(value)
     within '[data-ouia-component-id="attribute-search"] .pf-c-toolbar__item:last-child' do
-      if has_css?('input')
+      if has_css?('input', wait: 0)
         find('input').set(value)
         find('button.pf-m-control').click
       else

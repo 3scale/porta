@@ -1,19 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationsHelper
-  # TODO: need to refactor this method, there is no default return value
-  def create_application_link_href(account)
-    if account.bought_cinstances.size.zero?
-      new_admin_buyers_account_application_path(account)
-    elsif can?(:admin, :multiple_applications)
-      if can?(:see, :multiple_applications)
-        new_admin_buyers_account_application_path(account)
-      else
-        admin_upgrade_notice_path(:multiple_applications)
-      end
-    end
-  end
-
   def last_traffic(cinstance)
     return unless cinstance.first_daily_traffic_at?
 

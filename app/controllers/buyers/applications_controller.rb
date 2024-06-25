@@ -7,8 +7,7 @@ class Buyers::ApplicationsController < FrontendController
   before_action :authorize_partners
   before_action :find_plans
   before_action :find_buyer
-  before_action :find_states, only: :index
-  before_action :find_applications, only: :index
+  before_action :find_states, only: :index # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :authorize_multiple_applications, only: :create
   before_action :find_application_plan, only: :create
   before_action :find_service, only: :create
@@ -36,15 +35,10 @@ class Buyers::ApplicationsController < FrontendController
 
   protected
 
-  def define_search_scope(opts = {})
-    super opts.reverse_merge(account: @account.id)
-  end
-
   def initialize_new_presenter
     @presenter = Buyers::ApplicationsNewPresenter.new(provider: current_account,
                                                       buyer: @account,
                                                       user: current_user,
                                                       cinstance: @cinstance)
   end
-
 end

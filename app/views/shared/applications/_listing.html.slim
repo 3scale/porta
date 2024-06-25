@@ -39,41 +39,38 @@ div class="pf-c-card"
             | Paid?
         = th_sortable('cinstances.created_at', 'Created on')
         = th_sortable('cinstances.first_daily_traffic_at', 'Traffic on')
-        td
 
     tbody role="rowgroup" class="cinstances"
-      - applications.each do |cinstance|
-        tr role="row" id=dom_id(cinstance)
-          td class="pf-c-table__check select" role="cell" id=cinstance.id
-            label
-              = bulk_select_one cinstance
-          td role="cell" data-label="Name"
-            = link_to cinstance.display_name, provider_admin_application_path(cinstance)
-          td role="cell" data-label="State" class="state"
-            => cinstance.state
-            - if cinstance.trial?
-              = remaining_trial_days(cinstance)
-          - unless account
-            td role="cell" data-label="Account"
-              = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
-          - if service_column_visible
-            td role="cell" data-label="Service"
-              = link_to_service cinstance.service
-          - if show_application_plans
-            td role="cell" data-label="Plan" class="plan"
-              = link_to_plan_edit cinstance.plan
-          - if current_account.settings.finance.allowed?
-            td role="cell" data-label="Paid?" class="free_or_paid"
-              = plan_free_or_paid cinstance.plan
-          td role="cell" data-label="Created on"
-            = time_tag_with_title cinstance.created_at
-          td role="cell" data-label="Traffic on"
-            = last_traffic(cinstance)
-          td
       - if applications.empty?
-        tr class="no_results"
-          td colspan=(service_column_visible ? 10 : 9)
-            | No applications
+        = render partial: 'shared/empty_search_state'
+      - else
+        - applications.each do |cinstance|
+          tr role="row" id=dom_id(cinstance)
+            td class="pf-c-table__check select" role="cell" id=cinstance.id
+              label
+                = bulk_select_one cinstance
+            td role="cell" data-label="Name"
+              = link_to cinstance.display_name, provider_admin_application_path(cinstance)
+            td role="cell" data-label="State" class="state"
+              => cinstance.state
+              - if cinstance.trial?
+                = remaining_trial_days(cinstance)
+            - unless account
+              td role="cell" data-label="Account"
+                = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
+            - if service_column_visible
+              td role="cell" data-label="Service"
+                = link_to_service cinstance.service
+            - if show_application_plans
+              td role="cell" data-label="Plan" class="plan"
+                = link_to_plan_edit cinstance.plan
+            - if current_account.settings.finance.allowed?
+              td role="cell" data-label="Paid?" class="free_or_paid"
+                = plan_free_or_paid cinstance.plan
+            td role="cell" data-label="Created on"
+              = time_tag_with_title cinstance.created_at
+            td role="cell" data-label="Traffic on"
+              = last_traffic(cinstance)
 
 = will_paginate applications
 

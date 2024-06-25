@@ -7,7 +7,6 @@ class Provider::Admin::ApplicationsController < FrontendController
   before_action :authorize_partners
   before_action :find_plans
   before_action :find_states, only: :index
-  before_action :find_applications, only: :index
   before_action :find_buyer, only: :create
   before_action :authorize_multiple_applications, only: :create
   before_action :find_application_plan, only: :create
