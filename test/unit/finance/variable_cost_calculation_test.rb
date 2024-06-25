@@ -7,7 +7,7 @@ class Finance::VariableCostCalculationTest < ActiveSupport::TestCase
   def setup
     @cinstance  = FactoryBot.create(:cinstance)
     @metric_one = @cinstance.service.metrics.hits
-    @metric_two = FactoryBot.create(:metric, :service => @cinstance.service)
+    @metric_two = FactoryBot.create(:metric, owner: @cinstance.service)
 
     @stats = stub('stats')
     Stats::Client.stubs(:new).with(@cinstance).returns(@stats)

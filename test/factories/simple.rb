@@ -1,5 +1,7 @@
 FactoryBot.define do
-# TODO: dry up with account_without_users
+
+  # Note: tenant_id discrepancies when using simple factories, not good for request testing
+
   factory(:simple_account, :class => Account) do
     association(:country)
 

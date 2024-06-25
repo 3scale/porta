@@ -424,7 +424,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'credentials names should allow good params' do
-    m = FactoryBot.create(:metric, service: @service)
+    m = FactoryBot.create(:metric, owner: @service)
 
     %W[ foo bar-baz bar_baz].each do |w|
       @proxy.auth_app_id = w
@@ -441,7 +441,7 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'credentials names cannot have strange params' do
-    m = FactoryBot.create(:metric, service: @service)
+    m = FactoryBot.create(:metric, owner: @service)
 
     %W|foo/bar {fdsa} fda [fdsa]|.each do |w|
       @proxy.auth_app_id = w

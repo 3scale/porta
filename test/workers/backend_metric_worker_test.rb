@@ -7,7 +7,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
 
   def setup
     @service = FactoryBot.create(:simple_service)
-    @metric = FactoryBot.create(:metric, service: service, system_name: 'some_system_name')
+    @metric = FactoryBot.create(:metric, owner: service, system_name: 'some_system_name')
   end
 
   attr_reader :service, :metric
