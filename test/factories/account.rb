@@ -141,6 +141,11 @@ FactoryBot.define do
       after(:build) do |account|
         account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
       end
+      after(:stub) do |account|
+        buyer_accounts = []
+        account.stubs(:buyer_accounts).returns(buyer_accounts)
+        account.buyer_accounts << FactoryBot.build_stubbed(:buyer_account, provider_account: account)
+      end
       # looks nicer but doesn't work well
       # :buyer_account is generated before current factory so extra provider is created and tenant_id doesn't match
       # buyer_accounts { [association(:buyer_account)] }
