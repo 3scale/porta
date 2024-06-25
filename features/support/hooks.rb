@@ -242,11 +242,11 @@ end
 Before '@asset-host' do
   @orig_3scale_asset_host = Rails.configuration.three_scale.asset_host
   @orig_asset_host = Rails.configuration.asset_host
-  @orig_csp = Rails.application.config.content_security_policy
+  @orig_csp_directives = Rails.application.config.content_security_policy.directives.deep_dup
 end
 
 After '@asset-host' do
   Rails.configuration.three_scale.asset_host = @orig_3scale_asset_host
   Rails.configuration.asset_host = @orig_asset_host
-  Rails.application.config.content_security_policy = @orig_csp
+  Rails.configuration.content_security_policy.instance_variable_set(:@directives, @orig_csp_directives)
 end
