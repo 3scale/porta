@@ -84,6 +84,7 @@ const useBraintreeHostedFields = (
               postalCode: billingAddress.zip,
               countryCodeAlpha2: billingAddress.countryCode
             },
+            collectDeviceData: true,
             challengeRequested: true
           }).catch((verifyCardError: BraintreeError) => {
             console.error({ verifyCardError })
