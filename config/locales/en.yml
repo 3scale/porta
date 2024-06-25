@@ -724,6 +724,20 @@ en:
         success: The Backend was removed from the Product
         error: The Backend cannot be removed from the Product
     errors:
+      index:
+        title: Integration Errors for %{service}
+        body_html:
+          Here you can see errors related to your API's integration with 3scale, in particular in
+          calls made to methods of 3scale's Service Management API.
+          Please refer to the <a href=%{href} target="_blank">API ActiveDocs</a> documentation
+          section on using 3scale's Service Management API.
+        empty_state:
+          title: Hooray!
+          body: No integration errors reported for this service.
+        toolbar:
+          purge:
+            title: Purge
+            confirm: All errors will be permanently deleted.
       purge:
         success: All errors were purged.
     services:

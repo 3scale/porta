@@ -16,7 +16,7 @@ Feature: Integration errors of a product
 
   Scenario: No errors
     Given they go to the integration errors page of product "Pepe API"
-    Then they should see "Hooray! No integration errors reported for this service."
+    Then they should see "No integration errors reported for this service."
 
   Rule: There are errors
     Background:
@@ -39,6 +39,7 @@ Feature: Integration errors of a product
         | Time (UTC)              | Error   |
         | 2024-03-03 12:00:00 UTC | Error 1 |
         | 2024-01-01 13:00:00 UTC | Error 2 |
-      When press "Purge"
+      When they select toolbar action "Purge"
+      And confirm the dialog
       Then they should see the flash message "All errors were purged."
-      And they should see "Hooray! No integration errors reported for this service."
+      And they should see "No integration errors reported for this service."
