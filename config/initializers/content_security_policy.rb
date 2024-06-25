@@ -7,13 +7,19 @@
 Rails.application.config.to_prepare do
   asset_host = Rails.configuration.three_scale.asset_host.to_s.strip
 
-  Rails.application.config.content_security_policy do |policy|
-    policy.default_src :self
-    policy.font_src    :self, asset_host
-    policy.img_src     :self, asset_host, :data
-    policy.script_src  :self, asset_host, :unsafe_inline, :unsafe_eval
-    policy.style_src   :self, asset_host, :unsafe_inline
-    policy.connect_src '*'
+  if Rails.env.test?
+    Rails.application.config.content_security_policy do |policy|
+      policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+    end
+  else
+    Rails.application.config.content_security_policy do |policy|
+      policy.default_src :self
+      policy.font_src    :self, asset_host
+      policy.img_src     :self, :data, asset_host
+      policy.script_src  :self, :unsafe_inline, :unsafe_eval, asset_host
+      policy.style_src   :self, :unsafe_inline, asset_host
+      policy.connect_src '*'
+    end
   end
 end
 

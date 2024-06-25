@@ -1,5 +1,4 @@
 @javascript
-@asset-host
 Feature: Asset host
   In order to reduce the network traffic from the web server
   As master, provider or developer
