@@ -6,7 +6,7 @@ import * as createHostedFields from 'PaymentGateways/braintree/utils/createHoste
 
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
 import type { CustomHostedFields } from 'PaymentGateways/braintree/utils/useBraintreeHostedFields'
-import type { HostedFields } from 'braintree-web/modules/hosted-fields'
+import type { HostedFields } from 'braintree-web/hosted-fields'
 import type { FunctionComponent } from 'react'
 
 interface Props {
