@@ -934,7 +934,8 @@ end
 
 class KeysTest < ActiveSupport::TestCase
   test 'creating keys in backend is fired only when app is created' do
-    app = FactoryBot.build(:cinstance)
+    buyer = FactoryBot.create(:buyer_account)
+    app = FactoryBot.build(:cinstance, user_account: buyer)
 
     app.expects(:create_key_after_create?).returns(true)
 
@@ -945,7 +946,7 @@ class KeysTest < ActiveSupport::TestCase
 
     BackendClient::ToggleBackend.enable_all!
 
-    assert app.save!
+    app.save!
     assert app.application_keys.presence
 
     app.expects(:create_key_after_create?).never

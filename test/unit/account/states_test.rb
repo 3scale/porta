@@ -236,7 +236,7 @@ class Account::StatesTest < ActiveSupport::TestCase
     account_without_traffic = FactoryBot.create(:simple_account)
 
     account_with_old_traffic = FactoryBot.create(:buyer_account)
-    FactoryBot.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago)
+    FactoryBot.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago - 1)
 
     account_with_recent_traffic = FactoryBot.create(:buyer_account)
     FactoryBot.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
