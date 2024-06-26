@@ -4,17 +4,24 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-# Rails.application.config.content_security_policy do |policy|
-#   policy.default_src :self, :https
-#   policy.font_src    :self, :https, :data
-#   policy.img_src     :self, :https, :data
-#   policy.object_src  :none
-#   policy.script_src  :self, :https
-#   policy.style_src   :self, :https
+Rails.application.config.to_prepare do
+  asset_host = Rails.configuration.three_scale.asset_host.to_s.strip
 
-#   # Specify URI for violation reports
-#   # policy.report_uri "/csp-violation-report-endpoint"
-# end
+  if Rails.env.test?
+    Rails.application.config.content_security_policy do |policy|
+      policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+    end
+  else
+    Rails.application.config.content_security_policy do |policy|
+      policy.default_src :self
+      policy.font_src    :self, asset_host
+      policy.img_src     :self, :data, asset_host
+      policy.script_src  :self, :unsafe_inline, :unsafe_eval, asset_host
+      policy.style_src   :self, :unsafe_inline, asset_host
+      policy.connect_src '*'
+    end
+  end
+end
 
 # If you are using UJS then enable automatic nonce generation
 # Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
