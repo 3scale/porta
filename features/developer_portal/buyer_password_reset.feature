@@ -12,14 +12,14 @@ Feature: Buyer signup
 
   @recaptcha
   Scenario: Bot protection doesn't detect the client as a bot
-    And the client will be marked as a bot
+    Given the client will be marked as a bot
     When the buyer wants to reset their password
     And the buyer fills in the form
     Then the page should contain "Bot protection failed."
 
   @recaptcha
   Scenario: Bot protection doesn't detect the client as a bot
-    And the client won't be marked as a bot
+    Given the client won't be marked as a bot
     When the buyer wants to reset their password
     And the buyer fills in the form
-    Then the page should contain "Email not found."
+    Then the page should contain "A password reset link will be sent"

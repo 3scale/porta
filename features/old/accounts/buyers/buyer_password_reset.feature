@@ -14,7 +14,7 @@ Feature: Buyer password reset
     Given I follow "Forgot password?"
     And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
-    Then I should see "A password reset link has been emailed to: zed@3scale.localhost."
+    Then I should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email."
     When I follow the link found in the password reset email send to "zed@3scale.localhost"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "monkey"
@@ -32,7 +32,7 @@ Feature: Buyer password reset
     And I follow "Forgot password?"
     And I fill in "Email" with "bob@3scale.localhost"
     And I press "Send instructions"
-    Then I should see "A password reset link has been emailed to: bob@3scale.localhost."
+    Then I should see "A password reset link will be sent to bob@3scale.localhost if a user exists with this email."
     And "bob@3scale.localhost" should receive no emails
 
   Scenario: Wrong confirmation
@@ -66,4 +66,4 @@ Feature: Buyer password reset
     When I follow "Forgot password?"
     And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
-    Then I should see "A password reset link has been emailed to: zed@3scale.localhost."
+    Then I should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email."

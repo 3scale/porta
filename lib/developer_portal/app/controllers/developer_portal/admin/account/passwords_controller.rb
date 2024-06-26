@@ -16,7 +16,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
     user = @provider.buyer_users.find_by(email: email)
     user&.generate_lost_password_token!
 
-    flash[:notice] = "A password reset link has been emailed to: #{email}."
+    flash[:notice] = "A password reset link will be sent to #{email} if a user exists with this email."
     redirect_to login_url
   end
 

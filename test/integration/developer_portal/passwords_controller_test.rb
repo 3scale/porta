@@ -78,13 +78,13 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
       post developer_portal.admin_account_password_path(email: user.email)
     end
     assert_in_delta Time.now, user.reload.lost_password_token_generated_at, 2.seconds
-    assert_equal "A password reset link has been emailed to: #{user.email}.", flash[:notice]
+    assert_equal "A password reset link will be sent to #{user.email} if a user exists with this email.", flash[:notice]
     assert_redirected_to developer_portal.login_path
   end
 
   test 'create renders the right error message when the email is not found' do
     post developer_portal.admin_account_password_path(email: 'fake@example.com')
-    assert_equal "A password reset link has been emailed to: fake@example.com.", flash[:notice]
+    assert_equal "A password reset link will be sent to fake@example.com if a user exists with this email.", flash[:notice]
     assert_redirected_to developer_portal.login_path
   end
 
