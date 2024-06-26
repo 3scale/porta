@@ -225,10 +225,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resource :potential_upgrades, only: [:show]
 
         namespace :service, path: 'service/:service_id', as: :service do
-          resource :hits, only: [:show]
           resource :integration_errors, only: [:show]
-          resource :navigations, only: [:show]
-          resource :top_traffic, only: [:show], controller: :top_traffic
         end
       end
 
