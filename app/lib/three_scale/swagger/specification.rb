@@ -41,21 +41,23 @@ module ThreeScale
         end
       end
 
-      class V30 < VBase
+      class V3x < VBase
         def base_path
           servers.first
         end
 
-        JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.0/schema/2019-04-02'}.freeze
-
         def validate!
+          raise "JSON_SCHEMA must be defined" if JSON_SCHEMA.nil?
+
           @validator.fully_validate(JSON_SCHEMA).each do |error|
             @errors.add(:base, error)
           end
         end
 
+        # NOTE: it's technically OpenAPI, and not Swagger,
+        # but it is rendered by swagger-ui
         def swagger?
-          true # FIXME: Is it really!?
+          true
         end
 
         def servers
@@ -65,6 +67,14 @@ module ThreeScale
         def as_json
           Autocomplete.fix!(@doc)
         end
+      end
+
+      class V31 < V3x
+        JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.1/schema/2022-10-07'}.freeze
+      end
+
+      class V30 < V3x
+        JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.0/schema/2021-09-28'}.freeze
       end
 
       class V20 < VBase
