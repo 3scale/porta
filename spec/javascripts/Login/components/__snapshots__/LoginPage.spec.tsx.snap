@@ -7,6 +7,13 @@ exports[`should not render reset password button when disablePasswordReset is tr
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -107,6 +114,13 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -485,6 +499,13 @@ exports[`should render Login form and Authentication providers when available 1`
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -594,6 +615,13 @@ exports[`should render Login form and Authentication providers when available 1`
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -1197,6 +1225,13 @@ exports[`should render itself 1`] = `
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -1306,6 +1341,13 @@ exports[`should render itself 1`] = `
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -1708,6 +1750,13 @@ exports[`should render reset password button when disablePasswordReset is false 
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -1817,6 +1866,13 @@ exports[`should render reset password button when disablePasswordReset is false 
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
