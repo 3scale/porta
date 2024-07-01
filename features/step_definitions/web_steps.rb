@@ -154,8 +154,9 @@ Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
 end
 
 Then "(they )should see the following details(:)" do |table|
-  assert table.rows_hash.all? do |key, value|
-    find('dl dt', text: key).has_sibling?('dd', text: value)
+  table.rows_hash.all? do |key, value|
+    dt = find('dl dt', text: key)
+    assert dt.has_sibling?('dd', text: value)
   end
 end
 

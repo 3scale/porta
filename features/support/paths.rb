@@ -222,8 +222,15 @@ World(Module.new do
       provider_admin_account_email_configurations_path
     when 'the new email configurations page'
       new_provider_admin_account_email_configurations_path
+
+    #
+    # SSO Integrations (Admin portal)
+    #
     when 'the users sso integrations page'
       provider_admin_account_authentication_providers_path
+    when 'the sso integration page'
+      auth_provider = AuthenticationProvider.last
+      provider_admin_account_authentication_provider_path(auth_provider)
 
     #
     # ActiveDocs (Admin portal)
