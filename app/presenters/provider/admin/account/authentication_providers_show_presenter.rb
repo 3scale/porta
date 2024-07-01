@@ -38,4 +38,8 @@ class Provider::Admin::Account::AuthenticationProvidersShowPresenter
   def publishing_method
     @authentication_provider.published? ? :delete : :create
   end
+
+  def masked_client_secret
+    @authentication_provider.client_secret.gsub(/./, '*')
+  end
 end
