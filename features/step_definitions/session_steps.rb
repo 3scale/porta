@@ -92,7 +92,7 @@ When "I log in as {string} on the admin domain of {provider}" do |username, prov
   try_provider_login(username, 'supersecret')
 end
 
-When "I try to log in as {string}" do |username|
+When "(I )(they )try to log in as (buyer ){string}" do |username|
   try_buyer_login_internal(username, 'supersecret')
 end
 
@@ -100,7 +100,7 @@ When "I try to log in as {string} with password {string}" do |username, password
   try_buyer_login_internal(username, password)
 end
 
-When "I try to log in as provider {string}" do |username|
+When "(I )(they )try to log in as provider {string}" do |username|
   try_provider_login(username, 'supersecret')
 end
 
@@ -145,7 +145,7 @@ Then /^I should not be logged in as "([^"]*)"$/ do |username|
   assert has_no_css?('#user_widget .username', :text => username)
 end
 
-Then /^I should not be logged in$/ do
+Then "(I )(they )should not be logged in" do
   assert_includes [provider_sessions_path, session_path], current_path
 end
 

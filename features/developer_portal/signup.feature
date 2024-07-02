@@ -85,6 +85,6 @@ Feature: Buyer signup
 
   @recaptcha
   Scenario: Captcha is enabled
-    Given the provider has bot protection enabled
+    Given the provider has bot protection enabled for its buyers
     When the buyer wants to sign up
     Then the captcha is present

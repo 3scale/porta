@@ -262,14 +262,6 @@ Given(/^master admin( is logged in)?/) do |login|
   try_provider_login(admin.username, 'supersecret') if login
 end
 
-Given "the provider has bot protection enabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :captcha)
-end
-
-Given "the provider has bot protection disabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :none)
-end
-
 When(/^I have opened edit page for the active member$/) do
   visit provider_admin_account_users_path
   user = User.find_by!(username: 'alex')
