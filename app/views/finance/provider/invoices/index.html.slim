@@ -1,0 +1,40 @@
+- content_for :page_header_title, t('.page_header_title')
+
+- if presenter.empty_state?
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body') }
+- else
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'table_toolbar'
+
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table" data-toolbar-props=presenter.toolbar_props.to_json
+    thead
+      tr role="row"
+        = th_sortable('friendly_id', 'Number', :admin_finance_invoices_path)
+        = th_sortable('accounts.org_name', 'Account', :admin_finance_invoices_path)
+        = th_sortable('period', 'Month', :admin_finance_invoices_path)
+        th role="columnheader" scope="col" Cost
+        = th_sortable('state', 'State', :admin_finance_invoices_path)
+        td
+
+    tbody role="rowgroup" class="invoices"
+      - if presenter.empty_search?
+        = render partial: 'shared/empty_search_state', locals: { title: t('.empty_search.title'),
+                                                                 body: t('.empty_search.body') }
+      - else
+        - presenter.invoices.each do |invoice|
+          = content_tag_for(:tr, invoice, role: "row") do
+            td role="cell" data-label="Number"
+              = link_to(invoice.friendly_id, admin_finance_invoice_path(invoice))
+            td role="cell" data-label="Account"
+              = link_to_buyer_or_deleted(invoice.buyer, :admin_buyers_account_invoices_path)
+            td role="cell" data-label="Month"
+              = invoice.name
+            td role="cell" data-label="Cost"
+              = price_tag(invoice.cost)
+            td role="cell" data-label="State"
+              = invoice.state.capitalize
+            - if invoice.pdf.file?
+              td role="cell" data-label="Download"
+                = invoice_pdf_link(invoice)
+

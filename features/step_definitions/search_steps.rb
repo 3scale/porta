@@ -4,6 +4,13 @@ Given "the search server is offline" do
   ThinkingSphinx::Test.stop
 end
 
+# Use a table toolbar attribute filters.
+#
+# When the table is filtered with:
+#   | filter | value |
+#   | Name   | Bob   |
+#   | Plan   | Cheap |
+#   | State  | Live  |
 When "the table is filtered with:" do |table|
   within '.pf-c-page__main-section .pf-c-toolbar' do
     if has_css?('[data-ouia-component-id="attribute-search"]', wait: 0)

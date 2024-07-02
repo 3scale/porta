@@ -281,6 +281,7 @@ class Invoice < ApplicationRecord
     LogEntry.log( :info, "Invoice created for #{buyer_account.org_name} for period #{period}", provider_account, buyer_account)
   end
 
+  # TODO: move to decorator
   def name
     self.period.begin.strftime('%B, %Y')
   end

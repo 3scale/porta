@@ -653,6 +653,7 @@ en:
     provider:
       invoices:
         index:
+          page_header_title: Invoices
           empty_state:
             title: Nothing to see here
             body: There are no invoices yet
