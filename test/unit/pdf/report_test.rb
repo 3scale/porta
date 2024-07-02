@@ -120,7 +120,7 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     buyer = FactoryBot.create(:buyer_account, org_name: company_name)
     provider = buyer.provider_account
     service = provider.services.first
-    plan = FactoryBot.create(:application_plan, service: service, name: plan_name, state: 'published')
+    plan = FactoryBot.create(:application_plan, issuer: service, name: plan_name, state: 'published')
 
     cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: plan)
     custom_metric = FactoryBot.create(:metric, friendly_name: metric_name, owner: service)

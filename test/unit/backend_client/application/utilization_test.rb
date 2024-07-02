@@ -38,7 +38,7 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
   end
 
   def test_output_order
-    metrics = FactoryBot.create_list(:metric, 3, service: @application_plan.issuer)
+    metrics = FactoryBot.create_list(:metric, 3, owner: @application_plan.issuer)
 
     utilization_records = ThreeScale::Core::APIClient::Collection.new([
       { period: 'day', metric_name: metrics.first.name, max_value: 5000, current_value: 2500 },
@@ -87,7 +87,7 @@ class BackendClient::Application::UtilizationTest < ActiveSupport::TestCase
   end
 
   test 'metrics not requested should be ignored' do
-    metrics = FactoryBot.create_list(:metric, 3, service: @application_plan.issuer)
+    metrics = FactoryBot.create_list(:metric, 3, owner: @application_plan.issuer)
 
     utilization_records = ThreeScale::Core::APIClient::Collection.new([
       { period: 'day', metric_name: metrics.first.name, max_value: 5000, current_value: 2500 },

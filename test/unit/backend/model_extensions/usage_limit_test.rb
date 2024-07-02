@@ -44,7 +44,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
 
   test 'stores usage_limit backend data when usage_limit is created' do
     plan   = FactoryBot.create(:application_plan)
-    metric = FactoryBot.create(:metric, :service => plan.service)
+    metric = FactoryBot.create(:metric, owner: plan.service)
 
     usage_limit = metric.usage_limits.new(:period => :week, :value => 7000)
     usage_limit.plan = plan

@@ -8,13 +8,13 @@ module Tasks
 
       # Metric Object destroyed with Service owner persisted
       service = FactoryBot.create(:simple_service)
-      metric = FactoryBot.create(:metric, service: service)
+      metric = FactoryBot.create(:metric, owner: service)
       DeletedObject.create!(object: metric, owner: service)
       metric.delete
 
       # Metric Object destroyed with Service owner destroyed (without its own DeletedObject)
       service = FactoryBot.create(:simple_service)
-      metric = FactoryBot.create(:metric, service: service)
+      metric = FactoryBot.create(:metric, owner: service)
       object_with_service_owner_destroyed = DeletedObject.create!(object: metric, owner: service)
       metric.delete
       service.delete
@@ -33,7 +33,7 @@ module Tasks
 
     test 'destroy_objects_with_service_owner_or_service_objects' do
       service = FactoryBot.create(:simple_service)
-      metric = FactoryBot.create(:metric, service: service)
+      metric = FactoryBot.create(:metric, owner: service)
       delete_object_with_service_owner = DeletedObject.create!(object: metric, owner: service)
 
       service = FactoryBot.create(:simple_service)

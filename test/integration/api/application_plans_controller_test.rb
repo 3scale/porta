@@ -56,7 +56,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'destroy' do
-      plan = FactoryBot.create(:application_plan, service: @service)
+      plan = FactoryBot.create(:application_plan, issuer: @service)
       assert_difference( @service.application_plans.method(:count), -1 ) do
         delete polymorphic_path([:admin, plan], format: :json)
         assert_response :success
@@ -67,7 +67,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       end
 
       ThreeScale.stubs(master_on_premises?: true)
-      plan = FactoryBot.create(:application_plan, service: @service)
+      plan = FactoryBot.create(:application_plan, issuer: @service)
       assert_no_difference @service.application_plans.method(:count) do
         delete polymorphic_path([:admin, plan])
         assert_response :forbidden
@@ -180,8 +180,8 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'plan cannot be deleted because of customizations' do
-      customization = FactoryBot.create(:application_plan, original_id: plan.id)
-      customization.create_contract_with(FactoryBot.create(:buyer_account))
+      customization = FactoryBot.create(:application_plan, issuer: @service, original_id: plan.id)
+      customization.create_contract_with(FactoryBot.create(:buyer_account, provider_account: current_account))
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
       assert_equal error_message(:customizations_has_contracts), flash[:error]

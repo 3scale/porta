@@ -264,7 +264,7 @@ class MetricTest < ActiveSupport::TestCase
   class PlanVisibilityOptions < ActiveSupport::TestCase
     setup do
       @plan =  FactoryBot.create(:application_plan)
-      @metric = FactoryBot.create(:metric, :service => @plan.service)
+      @metric = FactoryBot.create(:metric, owner: @plan.service)
     end
 
     test 'be visible by default' do
@@ -300,8 +300,8 @@ class MetricTest < ActiveSupport::TestCase
   class PlanAvailability < ActiveSupport::TestCase
     setup do
       @plan =  FactoryBot.create(:application_plan)
-      @metric1 = FactoryBot.create(:metric,  :service => @plan.service)
-      @metric2 = FactoryBot.create(:metric,  :service => @plan.service)
+      @metric1 = FactoryBot.create(:metric,  owner: @plan.service)
+      @metric2 = FactoryBot.create(:metric,  owner: @plan.service)
 
       FactoryBot.create :usage_limit, :plan => @plan, :metric => @metric1, :period => :day, :value => 1
       FactoryBot.create :usage_limit, :plan => @plan, :metric => @metric2, :period => :day, :value => 1

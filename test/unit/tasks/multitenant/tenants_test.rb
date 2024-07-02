@@ -71,7 +71,7 @@ module Tasks
         end
 
         test 'restore_existing_tenant_id_alerts' do
-          account = FactoryBot.create(:simple_provider)
+          account = FactoryBot.create(:provider_account, :with_a_buyer)
           alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
           alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
           account.update_column(:tenant_id, account.id)
@@ -85,7 +85,7 @@ module Tasks
         end
 
         test 'restore_empty_tenant_id_alerts' do
-          account = FactoryBot.create(:simple_provider)
+          account = FactoryBot.create(:provider_account, :with_a_buyer)
           alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
           alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
           account.update_column(:tenant_id, account.id)
@@ -138,7 +138,7 @@ module Tasks
 
           @tenant_without_any_cinstance = FactoryBot.create(:simple_provider, state: 'scheduled_for_deletion')
 
-          @developer_with_enterprise = FactoryBot.create(:simple_buyer, state: 'scheduled_for_deletion')
+          @developer_with_enterprise = FactoryBot.create(:buyer_account, state: 'scheduled_for_deletion')
           cinstance = FactoryBot.create(:cinstance, user_account: @developer_with_enterprise)
           cinstance.plan.update_column(:system_name, 'enterprise')
         end

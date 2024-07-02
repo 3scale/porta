@@ -6,7 +6,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionDispat
   def setup
     provider = FactoryBot.create(:provider_account)
     service  = FactoryBot.create(:service, account: provider)
-    @plan    = FactoryBot.create(:application_plan, service: service)
+    @plan    = FactoryBot.create(:application_plan, issuer: service)
     @metric  = FactoryBot.create(:metric, owner: service)
     @access_token_value = FactoryBot.create(:access_token, owner: provider.admin_user, scopes: %w[account_management]).value
 

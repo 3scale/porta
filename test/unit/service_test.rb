@@ -257,7 +257,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     assert_equal 'foos', method1.system_name
 
-    FactoryBot.create(:metric, service: service)
+    FactoryBot.create(:metric, owner: service)
 
     assert_same_elements [method1, method2], service.method_metrics
   end

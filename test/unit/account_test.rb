@@ -510,7 +510,7 @@ class AccountTest < ActiveSupport::TestCase
 
     account = FactoryBot.create(:provider_account)
     service = account.default_service
-    metric = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, owner: service)
     feature = FactoryBot.create(:feature, featurable: service)
 
     assert_not account.destroy

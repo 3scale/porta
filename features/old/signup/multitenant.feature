@@ -20,7 +20,7 @@ Feature: Sign Up of enterprise buyers
     Given a provider "foo2.3scale.localhost"
     And the following account plan:
       | Issuer               | Name   |
-      | foo.3scale.localhost | Tier-2 |
+      | foo2.3scale.localhost | Tier-2 |
       And a default service of provider "foo2.3scale.localhost" has name "api2"
     And the following service plan:
       | Product | Name    |

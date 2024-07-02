@@ -24,7 +24,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'top_applications' do
-    metric = FactoryBot.create(:metric, :service => @service,
+    metric = FactoryBot.create(:metric, :owner => @service,
                      :parent_id => @service.metrics.hits.id)
     login_as(@provider.admins.first)
     get :top_applications, params: { service_id: @service.id }
@@ -34,7 +34,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'hours' do
-    metric = FactoryBot.build_stubbed(:metric, :service => @service)
+    metric = FactoryBot.build_stubbed(:metric, :owner => @service)
 
     data = (0..23).inject(ActiveSupport::OrderedHash.new) do |memo, hour|
       memo["#{hour}:00"] = rand(1000)

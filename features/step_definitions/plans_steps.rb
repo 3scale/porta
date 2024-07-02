@@ -9,7 +9,7 @@
 #   | My API  | Premium |                |        10 |                   | Hidden    | True    |
 Given "the following {plan_type} plan(s):" do |plan_type, table|
   transform_plans_table(plan_type, table).hashes.each do |row|
-    FactoryBot.create(plan_type, row)
+    FactoryBot.create(plan_type, **row)
   end
 end
 

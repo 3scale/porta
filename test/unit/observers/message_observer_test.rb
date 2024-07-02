@@ -16,7 +16,7 @@ class MessageObserverTest < ActiveSupport::TestCase
   class OtherTest < MessageObserverTest
     test 'after_create after_destroy' do
       app_plan = FactoryBot.create(:application_plan, issuer: @service)
-      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan))
+      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan, issuer: @service))
       cinstance = contract(app_plan)
 
       Applications::ApplicationCreatedEvent.expects(:create).once

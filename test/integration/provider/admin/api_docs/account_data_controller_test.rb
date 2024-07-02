@@ -11,7 +11,7 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-    plan = FactoryBot.create(:application_plan, service: service, name: 'MyPlanName')
+    plan = FactoryBot.create(:application_plan, issuer: service, name: 'MyPlanName')
     @application = FactoryBot.create(:cinstance, user_account: buyer, plan: plan, name: 'MyAppName')
 
     service.update!(backend_version: 1)

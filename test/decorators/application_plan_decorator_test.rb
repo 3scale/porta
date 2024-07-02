@@ -45,7 +45,7 @@ class ApplicationPlanDecoratorTest < Draper::TestCase
   end
 
   test '#index_table_data' do
-    plan = FactoryBot.create(:application_plan, service: FactoryBot.create(:service))
+    plan = FactoryBot.create(:application_plan, issuer: FactoryBot.create(:service))
     data = plan.decorate.index_table_data
 
     assert data.assert_valid_keys(:id, :name, :editPath, :contracts, :contractsPath, :state, :actions)

@@ -65,7 +65,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#index returns contract plan_id' do
-    plan = FactoryBot.create(:simple_application_plan)
+    plan = FactoryBot.create(:application_plan, issuer: @provider.services.first!)
     line_item = @invoice.line_items.first
     contract = @buyer.buy! plan
     line_item.update_attribute(:contract, contract)
@@ -197,7 +197,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'does not accept adding metric_id to line_item' do
-    metric = FactoryBot.create(:metric, service: master_account.services.first!)
+    metric = FactoryBot.create(:metric, owner: master_account.services.first!)
     assert_no_difference '@invoice.line_items.count' do
       post api_invoice_line_items_path(@invoice.id), params: line_item_params.merge(metric_id: metric.id), headers: { accept: Mime[:json] }
       assert_response :not_found

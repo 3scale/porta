@@ -33,7 +33,7 @@ class Api::ApplicationsControllerTest < ActionDispatch::IntegrationTest
     class Index < TenantLoggedInTest
       setup do
         @service = provider.services.first!
-        plans = FactoryBot.create_list(:application_plan, 2, service: @service)
+        plans = FactoryBot.create_list(:application_plan, 2, issuer: @service)
         buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
         plans.each_with_index { |plan, index| buyers[index].buy! plan }
       end

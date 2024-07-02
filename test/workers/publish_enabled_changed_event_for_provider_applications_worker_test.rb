@@ -4,7 +4,7 @@ class PublishEnabledChangedEventForProviderApplicationsWorkerTest < ActiveSuppor
     @provider = FactoryBot.create(:provider_account)
     service = provider.services.first!
     service.service_tokens.create!(value: 'token')
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
     buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     buyer.buy! plan
     provider.reload

@@ -107,11 +107,11 @@ module TestHelpers
     def create_master_account_metrics
       master_service = ::Account.master.default_service
       hits = master_service.metrics.find_by_name('hits')
-      FactoryBot.create(:metric, :parent => hits, :service => master_service, :name => 'transactions/create_single')
-      FactoryBot.create(:metric, :parent => hits, :service => master_service, :name => 'transactions/create_multiple')
-      FactoryBot.create(:metric, :parent => hits, :service => master_service, :name => 'transactions/confirm')
-      FactoryBot.create(:metric, :parent => hits, :service => master_service, :name => 'transactions/destroy')
-      FactoryBot.create(:metric, :parent => hits, :service => master_service, :name => 'transactions/authorize')
+      FactoryBot.create(:metric, :parent => hits, :owner => master_service, :name => 'transactions/create_single')
+      FactoryBot.create(:metric, :parent => hits, :owner => master_service, :name => 'transactions/create_multiple')
+      FactoryBot.create(:metric, :parent => hits, :owner => master_service, :name => 'transactions/confirm')
+      FactoryBot.create(:metric, :parent => hits, :owner => master_service, :name => 'transactions/destroy')
+      FactoryBot.create(:metric, :parent => hits, :owner => master_service, :name => 'transactions/authorize')
     end
 
     def make_transaction_at(time, options)

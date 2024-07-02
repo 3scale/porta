@@ -4,11 +4,12 @@ require 'test_helper'
 
 class ContractTest < ActiveSupport::TestCase
   test '#by_account' do
-    accounts = [FactoryBot.create(:simple_buyer), FactoryBot.create(:simple_provider)]
-    accounts.each { |account| FactoryBot.create_list(:application, 2, user_account: account) }
+    buyer = FactoryBot.create(:buyer_account)
+    provider = buyer.provider_account
+    [buyer, provider].each { |account| FactoryBot.create_list(:application, 2, user_account: account) }
 
-    assert_same_elements Contract.where(user_account: accounts[0].id).pluck(:id), Contract.by_account(accounts[0].id).pluck(:id)
-    assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1].id).pluck(:id)
+    assert_same_elements Contract.where(user_account: buyer.id).pluck(:id), Contract.by_account(buyer.id).pluck(:id)
+    assert_same_elements Contract.where(user_account: provider.id).pluck(:id), Contract.by_account(provider.id).pluck(:id)
   end
 
   test '#have_paid_on' do

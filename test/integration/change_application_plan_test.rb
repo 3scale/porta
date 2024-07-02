@@ -12,8 +12,8 @@ class ChangeApplicationPlanTest < ActionDispatch::IntegrationTest
 
   def test_change_plan
     service = FactoryBot.create(:service, account: @provider)
-    plan_1  = FactoryBot.create(:application_plan, service: service)
-    plan_2  = FactoryBot.create(:application_plan, service: service)
+    plan_1  = FactoryBot.create(:application_plan, issuer: service)
+    plan_2  = FactoryBot.create(:application_plan, issuer: service)
     app     = FactoryBot.create(:cinstance, service: service, plan: plan_1)
 
     assert_equal plan_1.id, app.plan_id

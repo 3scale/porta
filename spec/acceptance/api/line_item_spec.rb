@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 resource "LineItem", transactions: false do
-  let(:provider) { FactoryBot.create(:simple_provider) }
-  let(:buyer) { FactoryBot.create(:simple_buyer, provider_account: provider) }
-  let(:application) { FactoryBot.create(:simple_cinstance, user_account: buyer) }
+  let(:provider) { FactoryBot.create(:provider_account) }
+  let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
+  let(:application) { FactoryBot.create(:cinstance, user_account: buyer) }
 
   let(:invoice) { FactoryBot.create(:invoice, buyer_account: buyer, provider_account: provider) }
 
