@@ -7,6 +7,13 @@ exports[`should not render reset password button when disablePasswordReset is tr
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -107,6 +114,13 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -398,6 +412,13 @@ exports[`should not render reset password button when disablePasswordReset is tr
                             </div>
                           </GenerateId>
                         </FormGroup>
+                        <ReCaptchaV3
+                          action=""
+                          enabled={false}
+                          siteKey=""
+                        >
+                          <div />
+                        </ReCaptchaV3>
                         <ActionGroup>
                           <div
                             className="pf-c-form__group pf-m-action"
@@ -485,6 +506,13 @@ exports[`should render Login form and Authentication providers when available 1`
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -594,6 +622,13 @@ exports[`should render Login form and Authentication providers when available 1`
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -885,6 +920,13 @@ exports[`should render Login form and Authentication providers when available 1`
                             </div>
                           </GenerateId>
                         </FormGroup>
+                        <ReCaptchaV3
+                          action=""
+                          enabled={false}
+                          siteKey=""
+                        >
+                          <div />
+                        </ReCaptchaV3>
                         <ActionGroup>
                           <div
                             className="pf-c-form__group pf-m-action"
@@ -1197,6 +1239,13 @@ exports[`should render itself 1`] = `
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -1306,6 +1355,13 @@ exports[`should render itself 1`] = `
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -1597,6 +1653,13 @@ exports[`should render itself 1`] = `
                             </div>
                           </GenerateId>
                         </FormGroup>
+                        <ReCaptchaV3
+                          action=""
+                          enabled={false}
+                          siteKey=""
+                        >
+                          <div />
+                        </ReCaptchaV3>
                         <ActionGroup>
                           <div
                             className="pf-c-form__group pf-m-action"
@@ -1708,6 +1771,13 @@ exports[`should render reset password button when disablePasswordReset is false 
   flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
+  recaptcha={
+    {
+      "action": "",
+      "enabled": false,
+      "siteKey": "",
+    }
+  }
   session={
     {
       "username": "",
@@ -1817,6 +1887,13 @@ exports[`should render reset password button when disablePasswordReset is false 
                 <LoginForm
                   flashMessages={[]}
                   providerSessionsPath="sessions-path"
+                  recaptcha={
+                    {
+                      "action": "",
+                      "enabled": false,
+                      "siteKey": "",
+                    }
+                  }
                   session={
                     {
                       "username": "",
@@ -2108,6 +2185,13 @@ exports[`should render reset password button when disablePasswordReset is false 
                             </div>
                           </GenerateId>
                         </FormGroup>
+                        <ReCaptchaV3
+                          action=""
+                          enabled={false}
+                          siteKey=""
+                        >
+                          <div />
+                        </ReCaptchaV3>
                         <ActionGroup>
                           <div
                             className="pf-c-form__group pf-m-action"

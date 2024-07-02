@@ -39,6 +39,27 @@ Given(/^there is no provider with domain "([^"]*)"$/) do |domain|
   Account.find_by_domain(domain).try!(&:destroy)
 end
 
+When "{provider} wants to log in" do |provider|
+  set_current_domain provider.external_admin_domain
+  visit provider_login_path
+end
+
+Given "{provider} tries to log in" do |provider|
+  username = provider.admins.first.username
+  set_current_domain provider.external_admin_domain
+  visit provider_login_path
+  fill_in 'Email or Username', with:  username
+  fill_in 'Password', with: "supersecret"
+  click_button 'Sign in'
+end
+
+Then "the provider login attempt fails" do
+  assert_current_path "/p/sessions"
+  assert find_field('Email or Username')
+  assert find_field('Password')
+  assert find_button('Sign in', disabled: true)
+end
+
 Given "{provider} has the following fields defined for {field_definition_target}:" do |provider, target, table|
   provider.fields_definitions.by_target(target).each(&:destroy)
 
@@ -258,12 +279,9 @@ Given(/^master admin( is logged in)?/) do |login|
   try_provider_login(admin.username, 'supersecret') if login
 end
 
-Given "the provider has bot protection enabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :captcha)
-end
-
-Given "the provider has bot protection disabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :none)
+Given "{provider} has bot protection {enabled}" do |provider, enabled|
+  level = enabled ? :captcha : :none
+  provider.settings.update_attribute(:spam_protection_level, level)
 end
 
 When(/^I have opened edit page for the active member$/) do

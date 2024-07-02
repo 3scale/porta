@@ -10,6 +10,11 @@ import type { Props } from 'Login/components/LoginForm'
 const defaultProps: Props = {
   flashMessages: [],
   providerSessionsPath: 'sessions-path',
+  recaptcha: {
+    enabled: false,
+    siteKey: '',
+    action: ''
+  },
   session: { username: null }
 }
 

@@ -7,3 +7,9 @@
 .pf-c-alert.invisible {
   visibility: hidden;
 }
+
+.login-layout {
+  .grecaptcha-badge {
+    visibility: hidden;
+  }
+}
