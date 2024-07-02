@@ -128,7 +128,7 @@ const TableToolbar: FunctionComponent<Props> = ({
               ))}
             </ToolbarGroup>
           )}
-          {overflow && (
+          {overflow && overflow.length > 0 && (
             <ToolbarItem variant="overflow-menu">
               <OverflowMenu breakpoint="xl" breakpointReference={toolbarRef}>
                 <OverflowMenuContent>

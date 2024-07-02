@@ -1,18 +1,23 @@
+# frozen_string_literal: true
+
 class Finance::Provider::InvoicesController < Finance::Provider::BaseController
+  include ThreeScale::Search::Helpers
+
   activate_menu :audience, :finance, :invoices
 
   helper Finance::InvoicesHelper
   helper ColumnSortingHelper
-  include ThreeScale::Search::Helpers
-  helper_method :allow_edit?, :empty_state?
+  helper_method :allow_edit?, :presenter
 
   before_action :find_buyer, only: [ :create ]
   before_action :find_invoice, except: [ :index, :create ]
 
+  attr_reader :presenter
+
   def index
-    @search = ThreeScale::Search.new(params[:search] || params)
-    @invoices = collection.scope_search(@search).order_by(params[:sort], params[:direction]).paginate(paginate_params).decorate
-    @years = Invoice.years_by_provider(current_account.id).presence || [(ActiveSupport::TimeZone.new(current_account.timezone) || Time.zone).now.year]
+    @presenter = Finance::Provider::InvoicesIndexPresenter.new(provider: current_account,
+                                                               params: params,
+                                                               user: current_user)
   end
 
   def create
@@ -106,10 +111,6 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     !@invoice.buyer_account.nil?
   end
 
-  def paginate_params
-    { :page => params[:page] || 1, :per_page => 20 }
-  end
-
   def collection
      @collection ||= if params[:account_id]
                         find_buyer.invoices
@@ -124,9 +125,5 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   def find_invoice
     @invoice = collection.find(params[:id])
-  end
-
-  def empty_state?
-    collection.empty?
   end
 end

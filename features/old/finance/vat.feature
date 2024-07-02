@@ -64,6 +64,6 @@ Background:
      | Liberation | started in Normandy |  100 |
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
-    And I go to the invoices by months page
+    And I go to the earnings by month page
     Then I should have an invoice of "105.0 EUR"
     # TODO: Then should see the following table:

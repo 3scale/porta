@@ -15,7 +15,7 @@ Feature: Provider finance authorization
     When I go to the provider dashboard
     Then I should see "Billing" within the audience dashboard widget
     And they should be able to go to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |
 
   Scenario: Members per default cannot access finance
@@ -26,7 +26,7 @@ Feature: Provider finance authorization
     And I go to the provider dashboard
     Then I should not see "Billing" within the audience dashboard widget
     And they should see an error when going to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |
 
   Scenario: Members of finance group can access finance
@@ -37,5 +37,5 @@ Feature: Provider finance authorization
     And I go to the provider dashboard
     Then I should see "Billing" within the audience dashboard widget
     And they should be able to go to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |

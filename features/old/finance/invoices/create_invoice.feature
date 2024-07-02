@@ -14,7 +14,7 @@ Feature: Create invoice
 
   @javascript
   Scenario: Create and view the invoice
-    And go to the invoices of account "zoidberg" page
+    And go to the invoices page of account "zoidberg"
     Then I should not see "open"
     When the date is 1st January 2009
     And I follow "Create invoice"

@@ -12,7 +12,7 @@ Feature: Group earnings by month
   Scenario: In process invoice
     Given an invoice of the buyer with a total cost of 42.00 EUR
     And an invoice of the buyer with a total cost of 48.00 EUR
-    When I go to my earnings
+    When I go to the earnings by month page
     Then I should see in the invoice period for the column "in process" a cost of 90.00 EUR
     Then I should see in the invoice period for the column "overdue" a cost of 0.00 EUR
     Then I should see in the invoice period for the column "paid" a cost of 0.00 EUR
@@ -21,7 +21,7 @@ Feature: Group earnings by month
   Scenario: Paid invoice
     Given an invoice of the buyer with a total cost of 42.00 EUR
     And the buyer pays the invoice
-    When I go to my earnings
+    When I go to the earnings by month page
     Then I should see in the invoice period for the column "in process" a cost of 0.00 EUR
     Then I should see in the invoice period for the column "overdue" a cost of 0.00 EUR
     And I should see in the invoice period for the column "paid" a cost of 42.00 EUR
@@ -31,7 +31,7 @@ Feature: Group earnings by month
   Scenario: Overdue invoice
     Given an invoice of the buyer with a total cost of 42.00 EUR
     And the buyer pays the invoice but failed
-    When I go to my earnings
+    When I go to the earnings by month page
     Then I should see in the invoice period for the column "in process" a cost of 0.00 EUR
     Then I should see in the invoice period for the column "overdue" a cost of 42.00 EUR
     Then I should see in the invoice period for the column "paid" a cost of 0.00 EUR

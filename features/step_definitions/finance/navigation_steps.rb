@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: Legacy, replace with path_to: when /^the 3scale invoices for "(\w+, \d{4})"$/
 When /^I navigate to (?:(\d)(?:nd|st|rd|th) )?invoice issued (?:for|FOR) me (?:for month|in) "([^\"]+)"$/ do |order,date|
   order ||= '1'
 
@@ -24,10 +25,4 @@ When /^I navigate to [Ii]?nvoices issued (?:FOR|for) me$/ do
    else
      visit admin_account_invoices_path
    end
-end
-
-When /^I navigate to invoice (.*) issued by me for "([^"]*)"$/ do |invoice_number, buyer_name|
-  visit admin_buyers_account_invoices_path(Account.find_by(org_name: buyer_name))
-
-  find('tr.invoice', text: invoice_number).click_link('Show')
 end

@@ -623,42 +623,46 @@ World(Module.new do
     when 'the buyer access details page'
       buyer_access_details_path
 
-    # Provider - Finance
-    when 'the finance page',
-         'the invoices by months page',
-         /my (?:earnings|revenue)/
+    #
+    # Finance (Admin portal)
+    #
+    when 'the earnings by month page'
       admin_finance_root_path
 
-    when /(the )?finance settings( page)?/
+    when 'the finance settings page'
       admin_finance_settings_path
 
-    when 'my invoices',
-         /^the invoices page$/
-      admin_account_invoices_path
+    when /^the invoice "(.*)" admin portal page$/
+      invoice = Invoice.find_by!(friendly_id: $1)
+      admin_finance_invoice_path(invoice)
 
-    when /^the invoices of account "(.+?)" page$/,
-         /^invoices issued by me for "([^"]*)"$/
+    when /^the invoices page of account "(.+?)"$/
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^all provider's invoices page$/,
-         /invoices issued by me/
+    when /^the admin portal invoices page$/
       admin_finance_invoices_path
-
-    when /^the invoice "(.+?)" page$/
-      invoice = Invoice.find_by(id: $1) || Invoice.find_by(friendly_id: $1)
-      raise "Couldn't find Invoice with id #{$1}" unless invoice
-
-      admin_finance_account_invoice_path(invoice.buyer_account, invoice)
-
-    when 'the credit card gateway page'
-      admin_account_payment_gateway_path
-
-    when 'my invoices from 3scale page'
-      provider_admin_account_invoices_path
 
     when 'the log entries page'
       admin_finance_log_entries_path
+
+    when 'the 3scale invoices page'
+      provider_admin_account_invoices_path
+
+    when /^the 3scale invoice for "(\w+, \d{4})"$/
+      # WATCH OUT: different accounts could have different invoices for the same period.
+      invoice = Invoice.find { |i| i.name == $1 }
+      provider_admin_account_invoice_path(invoice)
+
+    #
+    # Finance (Developer portal)
+    #
+    when 'the dev portal invoices page'
+      admin_account_invoices_path
+
+    when /^the invoice "(.*)" dev portal page$/
+      invoice = Invoice.find_by!(friendly_id: $1)
+      admin_account_invoice_path(invoice)
 
     when 'the provider site page'
       admin_site_settings_path

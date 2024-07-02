@@ -6,6 +6,10 @@ def import_simple_layout(provider)
   simple_layout.import_js_and_css! if @javascript
 end
 
+Given "a provider signed up to {plan}" do |plan|
+  create_provider_with_plan('foo.3scale.localhost', plan)
+end
+
 Given "a provider {string} signed up to {plan}" do |name, plan|
   create_provider_with_plan(name, plan)
 end
@@ -349,10 +353,6 @@ Given(/^master is the provider$/) do
                                        issuer: @service,
                                        state: :published,
                                        default: true)
-end
-
-When "the provider is at {}" do |page_name|
-  visit path_to(page_name)
 end
 
 When "{provider} is suspended" do |provider|

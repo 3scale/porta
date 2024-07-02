@@ -80,7 +80,7 @@ Feature: Change plan
       When time flies to 16th May 2009
        And current domain is the admin domain of provider "foo.3scale.localhost"
        And I log in as provider "foo.3scale.localhost"
-       And I go to my earnings
+       And I go to the earnings by month page
        And follow "May, 2009"
       Then I should see "EUR 1.00"
       Then buyer "stallman" makes 1 service transactions with:

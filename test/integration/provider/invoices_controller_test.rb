@@ -21,7 +21,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     get admin_finance_account_invoices_path @buyer
     assert_response :success
     assert_template 'finance/provider/invoices/index'
-    assert_not_nil assigns(:invoices)
+    assert_not_nil assigns(:presenter).invoices
     assert_active_menus({main_menu: :audience, submenu: :finance, sidebar: :invoices, topmenu: :dashboard})
   end
 
@@ -32,8 +32,8 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     travel_to(Time.utc(2023, 1, 1))
     get admin_finance_account_invoices_path @buyer
 
-    assert_empty assigns(:invoices)
-    assert_equal [2022], assigns(:years)
+    assert_empty assigns(:presenter).invoices
+    assert_equal [2022], assigns(:presenter).years
   end
 
   test 'list invoices by month' do

@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory(:invoice) do
     association :buyer_account,  :factory => :simple_buyer
     association :provider_account,  :factory => :simple_provider
     period { Month.new(Time.zone.now) }
+
+    after(:create) do |invoice|
+      invoice.generate_pdf! if %w[finalized paid].include?(invoice.state)
+    end
   end
 
   factory(:line_item)
