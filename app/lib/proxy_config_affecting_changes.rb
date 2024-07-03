@@ -73,6 +73,19 @@ module ProxyConfigAffectingChanges
       @tracked_objects.clear
     end
 
+    def reported_clear
+      return if @tracked_objects.empty?
+
+      # This error is normal to appear in integration/e2e tests because thread tracker is never removed
+      #   and AR objects are accessed (thus added to track) outside controller actions.
+      list = @tracked_objects.map(&:object).map { "#{_1.class}:#{_1.send(_1.class.primary_key)}" }.join(" ")
+      Rails.logger.error("Proxy config tracked objects for changes non-empty before action: #{list}")
+    rescue StandardError => exception
+      System::ErrorReporting.report_error(exception)
+    ensure
+      @tracked_objects.clear
+    end
+
     # FIXME: This is only so ProxyConfigs::AffectingObjectChangedEvent does not crash
     def id
       Thread.current.name
@@ -160,7 +173,7 @@ module ProxyConfigAffectingChanges
       protected
 
       def track_proxy_affecting_changes
-        Thread.current[TRACKER_NAME] ||= Tracker.new
+        (Thread.current[TRACKER_NAME] ||= Tracker.new).reported_clear
       end
 
       def flush_proxy_affecting_changes

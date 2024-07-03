@@ -131,6 +131,22 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
       tracker.flush
     end
 
+    test "reports tracked objects on #reported_clear" do
+      tracker.track(proxy)
+      Rails.logger.expects(:error).with("Proxy config tracked objects for changes non-empty before action: Proxy:#{proxy.id}")
+      tracker.reported_clear
+      assert_empty tracker.instance_variable_get(:@tracked_objects)
+    end
+
+    test "handles gracefully any errors during #reported_clear" do
+      tracker.track(proxy)
+      error = StandardError.new
+      proxy.expects(:id).raises(error)
+      System::ErrorReporting.expects(:report_error).with(error)
+      tracker.reported_clear
+      assert_empty tracker.instance_variable_get(:@tracked_objects)
+    end
+
     test 'does not track the same object twice' do
       tracker.track(proxy)
       assert_equal 1, tracker.instance_variable_get(:@tracked_objects).count
