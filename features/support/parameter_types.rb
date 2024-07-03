@@ -26,7 +26,7 @@ ParameterType(
   transformer: ->(type, name) {
     case type
     when 'provider'
-      name.present? ? provider_by_name(name) : @provider
+      name.present? ? provider_by_name(name) : @provider.reload
     when 'buyer'
       name.present? ? Account.buyers.find_by!(name: name) : @buyer || @account
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Given "{provider} logs in" do |provider|
+  set_current_domain(provider.external_admin_domain)
   try_provider_login(provider.admins.first.username, 'supersecret')
 end
 
