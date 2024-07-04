@@ -98,6 +98,18 @@ describe('when hosted fields are created', () => {
     expect(nonce).toEqual('This is non-cense')
   })
 
+  it('should pass cardholder name to tokenize', async () => {
+    let hostedFields: CustomHostedFields | undefined
+
+    mountWrapper({ setHostedFields: (hf) => { hostedFields = hf }, threeDSecureEnabled: false })
+
+    await waitForPromises()
+
+    const nonce = await hostedFields!.getNonce({ firstName: 'First', lastName: 'Last' } as BillingAddress)
+    expect(hostedFields!.tokenize).toHaveBeenCalledWith({ cardholderName: 'First Last' })
+    expect(nonce).toEqual('This is non-cense')
+  })
+
   it('should get nonce with 3DS', async () => {
     let hostedFields: CustomHostedFields | undefined
 

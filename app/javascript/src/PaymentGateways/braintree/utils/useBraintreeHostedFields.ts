@@ -64,7 +64,9 @@ const useBraintreeHostedFields = (
       const customHostedFields = {
         ...hostedFieldsInstance,
         getNonce: async (billingAddress: BillingAddress): Promise<string> => {
-          const hostedFieldsTokenizePayload = await hostedFieldsInstance.tokenize()
+          const { firstName, lastName } = billingAddress
+          const cardholderName = [firstName, lastName].join(' ')
+          const hostedFieldsTokenizePayload = await hostedFieldsInstance.tokenize({ cardholderName })
 
           if (!threeDSecureEnabled) {
             return hostedFieldsTokenizePayload.nonce
