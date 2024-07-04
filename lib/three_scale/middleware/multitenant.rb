@@ -9,6 +9,12 @@ module ThreeScale
       end
 
       class TenantChecker
+        SKIPPED_CONTROLLERS = {
+          "admin/api/objects".freeze => true, # this checks objects' tenant_id so we have to skip it
+          "provider/domains".freeze => true,
+        }.freeze
+        private_constant :SKIPPED_CONTROLLERS
+
         attr_reader :original, :attribute
 
         class TenantLeak < StandardError
@@ -31,9 +37,7 @@ module ThreeScale
         end
 
         def verify!(object)
-
-          # this controller shouldn't be checked
-          return true if @env["action_dispatch.request.path_parameters"]["controller"] == "provider/domains"
+          return if SKIPPED_CONTROLLERS[@env["action_dispatch.request.path_parameters"][:controller]]
 
           # when the ActiveRecord object doesn't have tenant_id attribute at all
           unless object.respond_to?(attribute)

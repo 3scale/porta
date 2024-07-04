@@ -11,7 +11,7 @@ class Admin::Api::ObjectsController < Admin::Api::BaseController
   # Object deletion status for objects that are deleted asynchronously
   # GET /admin/api/objects/status.json
   def status
-    status_object = status_object_type.classify.constantize.unscoped.find(status_object_id)
+    status_object = status_object_type.classify.constantize.select(:tenant_id).unscoped.find(status_object_id)
 
     authorize_tenant!(status_object)
 
