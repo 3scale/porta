@@ -17,6 +17,7 @@
     "node": "16"
   },
   "devDependencies": {
+    "@types/swagger-ui": "^3.52.4",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",

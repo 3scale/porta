@@ -2943,6 +2943,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/swagger-ui@^3.52.4":
+  version "3.52.4"
+  resolved "https://registry.yarnpkg.com/@types/swagger-ui/-/swagger-ui-3.52.4.tgz#96c4886e8f86ae392f8d940bf7029cf490a51c72"
+  integrity sha512-7NV7q8BfupqdQxr26OkM0g0YEPB9uXnKGzXadgcearvI9MoCHt3F72lPTX3fZZIlrr21DC0IK26wcDMZ37oFDA==
+
 "@types/tern@*":
   version "0.23.4"
   resolved "https://registry.yarnpkg.com/@types/tern/-/tern-0.23.4.tgz#03926eb13dbeaf3ae0d390caf706b2643a0127fb"

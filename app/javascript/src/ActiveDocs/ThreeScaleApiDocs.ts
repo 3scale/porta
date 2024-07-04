@@ -102,7 +102,7 @@ export const transformReportRequestBody = (body: BackendApiReportBody): FormData
   return objectToFormData(body)
 }
 
-const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {
+const requestBodyTransformerPlugin: SwaggerUIPlugin = () => {
   return {
     fn: {
       execute: (req: ExecuteData): unknown => {
@@ -134,7 +134,7 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin
+        requestBodyTransformerPlugin
       ]
     })
   })
