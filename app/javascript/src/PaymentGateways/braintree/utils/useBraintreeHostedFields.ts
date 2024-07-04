@@ -13,8 +13,13 @@ import type { BraintreeError } from 'braintree-web'
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
 import type { HostedFields, HostedFieldsFieldDataFields } from 'braintree-web/hosted-fields'
 
+interface GetNonceParams {
+  billingAddress: BillingAddress;
+  ipAddress: string | undefined;
+}
+
 type CustomHostedFields = HostedFields & {
-  getNonce: (BillingAddress: BillingAddress) => Promise<string>;
+  getNonce: (getNonceParams: GetNonceParams) => Promise<string>;
 }
 
 const CC_ERROR_MESSAGE = 'An error occurred, please review your CC details or try later.'
@@ -63,7 +68,7 @@ const useBraintreeHostedFields = (
 
       const customHostedFields = {
         ...hostedFieldsInstance,
-        getNonce: async (billingAddress: BillingAddress): Promise<string> => {
+        getNonce: async ({ billingAddress, ipAddress }: GetNonceParams): Promise<string> => {
           const { firstName, lastName } = billingAddress
           const cardholderName = [firstName, lastName].join(' ')
           const hostedFieldsTokenizePayload = await hostedFieldsInstance.tokenize({ cardholderName })
@@ -87,7 +92,10 @@ const useBraintreeHostedFields = (
               countryCodeAlpha2: billingAddress.countryCode
             },
             collectDeviceData: true,
-            challengeRequested: true
+            challengeRequested: true,
+            additionalInformation: {
+              ipAddress
+            }
           }).catch((verifyCardError: BraintreeError) => {
             console.error({ verifyCardError })
             throw { message: CC_ERROR_MESSAGE }

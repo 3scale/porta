@@ -18,13 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('Braintree data was not provided')
   }
 
-  const { billingAddress, clientToken, countriesList, formActionPath, threeDSecureEnabled } = data
+  const { billingAddress, clientToken, countriesList, formActionPath, threeDSecureEnabled, ipAddress } = data
 
   BraintreeFormWrapper({
     billingAddress,
     clientToken,
     countriesList,
     formActionPath,
-    threeDSecureEnabled
+    threeDSecureEnabled,
+    ipAddress
   }, CONTAINER_ID)
 })

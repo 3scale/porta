@@ -73,7 +73,8 @@ module PaymentDetailsHelper
       threeDSecureEnabled: site_account.payment_gateway_options[:three_ds_enabled],
       clientToken: braintree_authorization,
       countriesList: merchant_countries,
-      billingAddress: billing_address_data
+      billingAddress: billing_address_data,
+      ipAddress: ip_address
     }
   end
 
@@ -97,5 +98,9 @@ module PaymentDetailsHelper
     return nil unless country_name
 
     merchant_countries.find { |country| country[0] == country_name }&.dig(1)
+  end
+
+  def ip_address
+    request&.remote_ip
   end
 end
