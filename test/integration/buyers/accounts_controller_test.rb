@@ -228,9 +228,11 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'checks if link under number of applications is correct as member' do
       @provider.settings.allow_multiple_applications!
       service = FactoryBot.create(:service, account: @provider)
+      plan  = FactoryBot.create(:application_plan, issuer: service)
+      plan.publish!
 
       FactoryBot.create_list(:application, 2, user_account: @buyer)
-      FactoryBot.create_list(:application, 3, service: service, user_account: @buyer)
+      FactoryBot.create_list(:application, 3, plan: plan, user_account: @buyer)
 
       # Testing member permissions
       member = FactoryBot.create(:member, account: @provider)

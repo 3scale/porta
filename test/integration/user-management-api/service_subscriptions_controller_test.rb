@@ -23,7 +23,7 @@ class Admin::Api::ServiceSubscriptionsControllerTest < ActionDispatch::Integrati
 
   class ProviderAccountTest < Admin::Api::ServiceSubscriptionsControllerTest
     test 'index' do
-      another_plan = FactoryBot.create(:service_plan)
+      another_plan = FactoryBot.create(:service_plan, issuer: FactoryBot.create(:simple_service, account: current_account))
       another_service_contract = FactoryBot.create(:simple_service_contract, plan: another_plan, user_account: buyer)
       get admin_api_account_service_subscriptions_path(account_id: buyer.id, format: :json, access_token: token)
       assert_response :ok
@@ -112,7 +112,8 @@ class Admin::Api::ServiceSubscriptionsControllerTest < ActionDispatch::Integrati
     end
 
     test 'approve pending subscription' do
-      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true)
+      another_service = FactoryBot.create(:simple_service, account: current_account)
+      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true, issuer: another_service)
       subscription = FactoryBot.create(:simple_service_contract, plan: plan_with_approval, user_account: buyer)
 
       assert 'pending', subscription.state
@@ -125,7 +126,8 @@ class Admin::Api::ServiceSubscriptionsControllerTest < ActionDispatch::Integrati
     end
 
     test 'approval fails if incorrect state' do
-      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true)
+      another_service = FactoryBot.create(:simple_service, account: current_account)
+      plan_with_approval = FactoryBot.create(:service_plan, approval_required: true, issuer: another_service)
       subscription = FactoryBot.create(:simple_service_contract, plan: plan_with_approval, user_account: buyer)
 
       assert 'pending', subscription.state

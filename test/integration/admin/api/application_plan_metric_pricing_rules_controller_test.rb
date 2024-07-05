@@ -4,16 +4,16 @@ require 'test_helper'
 
 class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    provider = FactoryBot.create(:provider_account)
-    service  = FactoryBot.create(:service, account: provider)
+    @provider = FactoryBot.create(:provider_account)
+    service  = FactoryBot.create(:service, account: @provider)
     @plan    = FactoryBot.create(:application_plan, issuer: service)
     @metric  = FactoryBot.create(:metric, owner: service)
-    @access_token_value = FactoryBot.create(:access_token, owner: provider.admin_user, scopes: %w[account_management]).value
+    @access_token_value = FactoryBot.create(:access_token, owner: @provider.admin_user, scopes: %w[account_management]).value
 
     host! provider.external_admin_domain
   end
 
-  attr_reader :plan, :metric, :access_token_value
+  attr_reader :provider, :plan, :metric, :access_token_value
 
   def test_index_json
     index_test(format: :json) do
@@ -28,7 +28,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesControllerTest < ActionDispat
   end
 
   def test_returns_success_if_backend_is_used_by_the_product
-    backend = FactoryBot.create(:backend_api)
+    backend = FactoryBot.create(:backend_api, account: provider)
     metric.update!(owner: backend)
     FactoryBot.create(:backend_api_config, backend_api: backend, service: plan.service)
 
