@@ -43,6 +43,9 @@ base: &default
   encoding: utf8
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   collation: utf8_bin
+  sslca: <%= ENV['DATABASE_SSL_CA'] %>
+  sslcert: <%= ENV['DATABASE_SSL_CERT'] %>
+  sslkey: <%= ENV['DATABASE_SSL_KEY'] %>
 
 development:
   <<: *default
