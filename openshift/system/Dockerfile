@@ -1,10 +1,16 @@
-FROM quay.io/centos/centos:stream8 as builder
-WORKDIR /opt/system
+FROM quay.io/centos/centos:stream8 as base
+
 ENV RUBY_MAJOR_VERSION=2 \
     RUBY_MINOR_VERSION=7 \
     RAILS_ENV=production \
-    NODE_ENV=production
+    NODE_ENV=production \
+    SAFETY_ASSURED=1 \
+    TZ=:/etc/localtime \
+    HOME=/opt/system
+
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
+
+WORKDIR $HOME
 
 ADD . ./
 RUN cp config/examples/*.yml config/ \
@@ -12,13 +18,20 @@ RUN cp config/examples/*.yml config/ \
 
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
     && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' podman-catatonit \
+    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
-    && bundle config build.nokogiri --use-system-libraries \
+    && bundle config set --local deployment true
+
+
+FROM base as builder
+
+RUN dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs make automake gcc gcc-c++ redhat-rpm-config ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel 'dnf-command(download)' podman-catatonit \
+    && dnf -y clean all
+
+RUN bundle config build.nokogiri --use-system-libraries \
     && bundle config set --local without development:test:licenses \
-    && bundle config set --local deployment true \
     && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
@@ -35,28 +48,7 @@ RUN cd /tmp \
     && cd memkind-*/jemalloc/ \
     && ./autogen.sh && ./configure --libdir=/usr/local/lib64/ && make
 
-
-FROM quay.io/centos/centos:stream8 AS base
-
-USER root
-
-ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=7 \
-    RAILS_ENV=production \
-    SAFETY_ASSURED=1 \
-    TZ=:/etc/localtime \
-    HOME=/opt/system \
-    prometheus_multiproc_dir=/opt/system/tmp/prometheus-client-mmap-dir
-
-ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
-
-WORKDIR $HOME
-
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
-    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt \
-    && dnf -y clean all
+FROM base AS porta-prod
 
 COPY --from=builder /opt/system/ .
 COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
@@ -97,7 +89,7 @@ ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--", "/opt/system/entrypoint.sh
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
 
-FROM base AS sphinx-config
+FROM builder AS sphinx-config
 ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
     THINKING_SPHINX_INDICES_LOCATION=/var/lib/searchd \
@@ -117,5 +109,5 @@ RUN dnf install -y mysql-server mysql-test \
     && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
     && kill $(</run/mysqld/mysqld.pid)
 
-FROM base AS porta-prod
+FROM porta-prod AS porta-prod-with-sphinx-config
 COPY --from=sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
