@@ -147,8 +147,9 @@ class Cinstance < Contract
     where(['cinstances.created_at <= ?', period.end])
   }
 
-  def self.provided_by(account)
-    joins(:service).references(:service).merge(Service.of_account(account)).readonly(false)
+  def self.provided_by(account, service_filter: nil)
+    service_filter ||= -> { _1 }
+    where(plan_id: ApplicationPlan.unscoped.where(issuer_type: "Service", issuer_id: service_filter[Service.unscoped.select(:id).of_account(account)]))
   end
 
   scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
@@ -200,7 +201,7 @@ class Cinstance < Contract
   # maybe move both limit methods to their models?
 
   def self.serialization_preloading
-    includes(:application_keys, :plan, :user_account,
+    includes(:plan, :user_account,
              service: [:account, :default_application_plan])
   end
 

@@ -24,13 +24,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   end
 
   def applications
-    @applications ||= begin
-      cinstances = current_account.provided_cinstances.where(service: accessible_services)
-      if (service_id = params[:service_id])
-        cinstances = cinstances.where(service_id: service_id)
-      end
-      cinstances
-    end
+    @applications ||= Cinstance.provided_by(current_account, service_filter: -> { _1.merge accessible_services })
   end
 
   def application
