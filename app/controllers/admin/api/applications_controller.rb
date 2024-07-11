@@ -23,8 +23,8 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
     params.permit(:active_since, :inactive_since)
   end
 
-  def applications
-    @applications ||= Cinstance.provided_by(current_account, service_filter: -> { _1.merge accessible_services })
+  def applications(services_association: Service.unscoped)
+    @applications ||= Cinstance.provided_by(current_account, services_association: services_association.merge(accessible_services))
   end
 
   def application
@@ -33,10 +33,10 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
                      when user_key = params[:user_key]
       # TODO: these scopes should be in model layer
       # but there is scope named by_user_key already
-      applications.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?)", user_key).first!
+      applications(services_association: Service.unscoped.where(backend_version: '1')).where(user_key: user_key).first!
 
                      when app_id = params[:app_id]
-      applications.joins(:service).where("(services.backend_version <> '1' AND cinstances.application_id = ?)", app_id).first!
+      applications(services_association: Service.unscoped.where.not(backend_version: '1')).where(application_id: app_id).first!
 
                      else
       applications.find(params[:application_id] || params[:id])
