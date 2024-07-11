@@ -205,29 +205,28 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.inactive_since' do
-    inactive_since_days = 5.days
+    inactive_period_start = 5.days.ago
     provider = FactoryBot.create(:provider_account)
 
     old_account_without_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
-    old_account_without_traffic.update_attribute(:created_at, inactive_since_days.ago)
+    old_account_without_traffic.update_attribute(:created_at, inactive_period_start)
 
     old_account_with_old_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
-    old_account_with_old_traffic.update_attribute(:created_at, inactive_since_days.ago)
-    FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago - 1)
+    old_account_with_old_traffic.update_attribute(:created_at, inactive_period_start)
+    FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: inactive_period_start - 1)
 
     recent_account_without_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
-    recent_account_without_traffic.update_attribute(:created_at, (inactive_since_days - 1.day).ago)
-
-    recent_account_with_recent_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
-    recent_account_with_recent_traffic.update_attribute(:created_at, inactive_since_days.ago)
-    FactoryBot.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: inactive_since_days.ago)
+    recent_account_without_traffic.update_attribute(:created_at, inactive_period_start + 1)
+    old_account_with_recent_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
+    old_account_with_recent_traffic.update_attribute(:created_at, inactive_period_start)
+    FactoryBot.create(:cinstance, user_account: old_account_with_recent_traffic, first_daily_traffic_at: inactive_period_start)
 
     assert_raise(ArgumentError) { Account.inactive_since.pluck(:id) }
-    results = Account.inactive_since(inactive_since_days.ago).pluck(:id)
+    results = Account.inactive_since(inactive_period_start).pluck(:id)
     assert_includes results, old_account_without_traffic.id
     assert_includes results, old_account_with_old_traffic.id
     assert_not_includes results, recent_account_without_traffic.id
-    assert_not_includes results, recent_account_with_recent_traffic.id
+    assert_not_includes results, old_account_with_recent_traffic.id
   end
 
   test '.without_traffic_since' do
