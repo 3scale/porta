@@ -236,6 +236,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :api_docs, :only => [:show]
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
+      resource :bot_protection, :only => [ :edit, :update ]
 
       namespace :registry do
         constraints(id: /((?!\.json\Z)[^\/])+/) do
