@@ -114,7 +114,7 @@ When /^I fill in the "([^"]*)" login data$/ do |username|
   click_button('Sign in')
 end
 
-Then /^I should be logged in as "([^"]*)"$/ do |username|
+Then /^(?:|I |they )should be logged in as "([^"]*)"$/ do |username|
   assert_current_user(username)
 end
 

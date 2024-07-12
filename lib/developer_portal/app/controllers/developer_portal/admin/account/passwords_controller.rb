@@ -12,11 +12,11 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   def create
     return redirect_to_request_password('Bot protection failed.') unless bot_check({ flash: false })
 
-    user = @provider.buyer_users.find_by_email(params[:email])
-    return redirect_to_request_password('Email not found.') unless user
+    email = params[:email]
+    user = @provider.buyer_users.find_by(email: email)
+    user&.generate_lost_password_token!
 
-    user.generate_lost_password_token!
-    flash[:notice] = 'A password reset link has been emailed to you.'
+    flash[:notice] = "A password reset link will be sent to #{email} if a user exists with this email."
     redirect_to login_url
   end
 
