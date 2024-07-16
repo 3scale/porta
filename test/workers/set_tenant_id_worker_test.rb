@@ -8,7 +8,7 @@ class SetTenantIdWorkerTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 
     test "perform with a single relation" do
-      accounts = FactoryBot.create_list(:simple_provider, 2)
+      accounts = FactoryBot.create_list(:provider_account, 2, :with_a_buyer)
       backend_api = FactoryBot.create(:backend_api, account: accounts.first)
       backend_api2 = FactoryBot.create(:backend_api, account: accounts.last)
       alert = FactoryBot.create(:limit_alert, account: accounts.first)
@@ -32,8 +32,8 @@ class SetTenantIdWorkerTest < ActiveSupport::TestCase
     end
 
     test "account relations are also fixed for buyer accounts" do
-      provider = FactoryBot.create(:simple_provider)
-      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      buyer = FactoryBot.create(:buyer_account)
+      provider = buyer.provider_account
 
       assert_equal provider.id, buyer.reload.tenant_id
 

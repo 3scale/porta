@@ -30,7 +30,7 @@ end
 
 Given "{application} has {amount} key(s)" do |application, amount|
   if amount.positive?
-    application.update!(application_keys: FactoryBot.create_list(:application_key, amount))
+    FactoryBot.create_list(:application_key, amount, application: application)
   else
     application.application_keys.destroy_all
   end

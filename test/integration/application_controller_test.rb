@@ -44,6 +44,17 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get admin_buyers_accounts_path
   end
 
+  test "proxy config objects tracked for changes are cleared" do
+    provider = FactoryBot.create(:provider_account)
+    login! provider
+
+    ProxyConfigAffectingChanges::Tracker.any_instance.expects(:reported_clear)
+    # make sure #reported_clear is not called by #flush_proxy_affecting_changes
+    ApplicationController.any_instance.expects(:flush_proxy_affecting_changes)
+
+    get admin_buyers_accounts_path
+  end
+
   test "forgery protection will force a 403 and revoke the session when no CSRF token provided" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first

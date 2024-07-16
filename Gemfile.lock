@@ -760,7 +760,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 0.87.0)
     ruby-next-core (0.15.3)
-    ruby-oci8 (2.2.6.1)
+    ruby-oci8 (2.2.12)
     ruby-openid (2.9.2)
     ruby-plsql (0.8.0)
     ruby-prof (0.17.0)

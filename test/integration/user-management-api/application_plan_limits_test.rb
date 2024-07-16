@@ -7,7 +7,7 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
     @app_plan = FactoryBot.create(:application_plan, issuer: @service)
-    @metric = FactoryBot.create(:metric, service: @service)
+    @metric = FactoryBot.create(:metric, owner: @service)
     @limit = FactoryBot.create(:usage_limit, plan: @app_plan, metric: @metric)
 
     host! @provider.external_admin_domain

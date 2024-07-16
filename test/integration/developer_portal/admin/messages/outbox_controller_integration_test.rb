@@ -4,8 +4,8 @@ class DeveloperPortal::Admin::Messages::OutboxControllerIntegrationTest < Action
   include System::UrlHelpers.cms_url_helpers
 
   def setup
-    @provider = FactoryBot.create(:simple_provider)
-    @buyer    = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @buyer    = FactoryBot.create(:buyer_account)
+    @provider = @buyer.provider_account
 
     login_buyer @buyer
 

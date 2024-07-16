@@ -57,6 +57,7 @@ ActionDispatch::IntegrationTest.class_eval do
   def provider_login_with(username, password)
     post provider_sessions_path, params: {username: username, password: password}
     follow_redirect! while redirect?
+    assert_response :success
   end
 
   def login_with(username, password)
@@ -65,7 +66,7 @@ ActionDispatch::IntegrationTest.class_eval do
   end
 
   def logout!
-    get '/p/logout'
+    get provider_logout_path
   end
 
   def with_forgery_protection(enabled: true)

@@ -195,8 +195,9 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     # generate random key with all chars of RFC 6749 except space
     random_key = -> { [*"\x21".."\x7E"].shuffle.join }
     app_key = FactoryBot.build(:application_key, value: (value = random_key.call))
+    app_key.application.user_account.save!
 
-    assert app_key.save
+    app_key.save!
     assert value, app_key.reload.value
   end
 
@@ -209,6 +210,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
 
   test 'is audited' do
     app_key = FactoryBot.build(:application_key)
+    app_key.application.user_account.save!
 
     assert_difference(Audited.audit_class.method(:count)) do
       ApplicationKey.with_synchronous_auditing do

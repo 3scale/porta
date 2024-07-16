@@ -481,7 +481,9 @@ System::Database::Oracle.define do
 
   trigger 'event_store_events' do
     <<~SQL
-      :new.tenant_id := :new.provider_id;
+      IF :new.provider_id <> master_id THEN
+        :new.tenant_id := :new.provider_id;
+      END IF;
     SQL
   end
 

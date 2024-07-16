@@ -228,16 +228,20 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'checks if link under number of applications is correct as member' do
       @provider.settings.allow_multiple_applications!
       service = FactoryBot.create(:service, account: @provider)
+      plan  = FactoryBot.create(:published_application_plan, issuer: service)
 
       FactoryBot.create_list(:application, 2, user_account: @buyer)
-      FactoryBot.create_list(:application, 3, service: service, user_account: @buyer)
+      FactoryBot.create_list(:application, 3, service: service, plan: plan, user_account: @buyer)
 
       # Testing member permissions
       member = FactoryBot.create(:member, account: @provider)
+      member.activate!
+      member.member_permissions.create(admin_section: :partners)
       member.member_permission_service_ids = [service.id]
       member.save!
       login! @provider, user: member
       get admin_buyers_accounts_path
+      assert_response :success
 
       assert_select %(td a[href="#{admin_buyers_account_applications_path(@buyer)}"]), text: '3'
     end
