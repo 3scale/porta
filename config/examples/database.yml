@@ -25,7 +25,7 @@ base: &default
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   variables:
     timezone: 'UTC'
-  sslmode: <%= ENV.fetch('DATABASE_SSL_CA', nil) ? 'verify-full' : 'disable' %>
+  sslmode: <%= ENV.fetch('DATABASE_SSL_MODE', ENV.fetch('DATABASE_SSL_CA', nil) ? 'verify-full' : 'disable') %>
   sslrootcert: <%= ENV['DATABASE_SSL_CA'] %>
   sslcert: <%= ENV['DATABASE_SSL_CERT'] %>
   sslkey: <%= ENV['DATABASE_SSL_KEY'] %>
