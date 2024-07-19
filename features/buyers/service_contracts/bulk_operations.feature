@@ -1,5 +1,5 @@
 @javascript
-Feature: Service subscriptions bulk operations
+Feature: Audience > Accounts > Service subscriptions bulk operations
 
   Background:
     Given a provider is logged in
@@ -11,13 +11,13 @@ Feature: Service subscriptions bulk operations
       | Fancy API   | Fancy Plan B |         |
       | Another API | Another Plan | true    |
     And the following buyers with service subscriptions signed up to the provider:
-      | name  | plans                      |
+      | Buyer | Plans                      |
       | Alice | Fancy Plan A, Another Plan |
       | Bob   | Fancy Plan A               |
       | Jane  | Another Plan               |
     And admin of account "Jane" has email "jane@example.com"
     And admin of account "Bob" has email "bob@example.com"
-    And they go to the service contracts admin page
+    And they go to the provider service subscriptions page
 
   Scenario: Available bulk operations
     When item "Alice" is selected

@@ -5,6 +5,9 @@ import {
   SelectOption
 } from '@patternfly/react-core'
 
+import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
+import { toSelectOptionObject } from 'utilities/patternfly-utils'
+
 import type { SelectProps } from '@patternfly/react-core'
 
 interface Item {
@@ -19,7 +22,7 @@ interface Props {
   }[];
   name: string;
   placeholder: string;
-  selected?: string;
+  selected?: IRecord;
 }
 
 const INPUT_NAME_UTF8 = 'utf8'
@@ -38,14 +41,16 @@ const ToolbarGroupedSelect: React.FunctionComponent<Props> = ({
     window.location.search = search.toString()
   }
 
-  const handleOnSelect: SelectProps['onSelect'] = (_e, value) => {
-    if (value === selected) {
+  const handleOnSelect: SelectProps['onSelect'] = (_e, rawValue: unknown) => {
+    const value = rawValue as SelectOptionObject
+
+    if (value.id === selected?.id) {
       setIsOpen(false)
       return
     }
 
     collection.some(group => {
-      const found = group.groupCollection.find(item => item.title === value)
+      const found = group.groupCollection.find(item => item.id === value.id)
 
       if (found) {
         const search = new URLSearchParams(window.location.search)
@@ -66,7 +71,7 @@ const ToolbarGroupedSelect: React.FunctionComponent<Props> = ({
       isOpen={isOpen}
       ouiaId={placeholder}
       placeholderText={placeholder}
-      selections={selected}
+      selections={selected && toSelectOptionObject(selected)}
       onClear={clearSelection}
       onSelect={handleOnSelect}
       onToggle={setIsOpen}
@@ -74,7 +79,10 @@ const ToolbarGroupedSelect: React.FunctionComponent<Props> = ({
       {collection.map(group => (
         <SelectGroup key={group.groupName} label={group.groupName}>
           {group.groupCollection.map(({ id, title }) => (
-            <SelectOption key={id} value={title} />
+            <SelectOption
+              key={id}
+              value={toSelectOptionObject({ id, name: title })}
+            />
           ))}
         </SelectGroup>
       ))}

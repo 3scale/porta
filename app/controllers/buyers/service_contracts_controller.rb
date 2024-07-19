@@ -12,37 +12,17 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   activate_menu :buyers, :accounts, :subscriptions
 
+  helper_method :presenter
+
+  attr_reader :presenter
+
   def index
-    @states = ServiceContract.allowed_states.collect(&:to_s).sort
-    @services = accessible_services.includes(:service_plans)
-    @search = ThreeScale::Search.new(params[:search] || params)
-    @plans = current_account.service_plans
-    @multiservice = current_account.multiservice?
+    @presenter = Buyers::ServiceContractsIndexPresenter.new(user: current_user,
+                                                            params: params,
+                                                            provider: current_account)
 
-    if (service_id = params[:service_id] || @search.service_id)
-      @service = @services.find service_id
-      @search.service_id = @service.id
-    end
-
-    if (service_plan_id = params[:service_plan_id] || @search.service_plan_id)
-      @plan = current_account.service_plans.find(service_plan_id)
-      @search.plan_id = @plan.id
-      @service ||= @plan.service
-    end
-
-    if params[:account_id]
-      @account = current_account.buyers.find params[:account_id]
-      @search.account = @account.id
-      activate_menu :audience, :accounts, :listing
-    end
-
-    @service_contracts = current_user.accessible_service_contracts
-              .scope_search(@search).order_by(*sorting_params)
-              .includes(plan: %i[pricing_rules], user_account: [:admin_user])
-              .paginate(pagination_params)
-              .decorate
-
-    activate_menu :serviceadmin, :subscriptions if @service
+    activate_menu(*presenter.menu_context)
+    @service = presenter.service # For vertical nav...
   end
 
   def new
@@ -107,12 +87,6 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   private
-
-  def sorting_params
-    column = params[:sort] || 'cinstances.id'
-    direction =  params[:direction] || 'DESC'
-    [ column, direction ]
-  end
 
   def collection
     @account.bought_service_contracts.permitted_for(current_user)

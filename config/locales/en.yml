@@ -189,10 +189,10 @@ en:
 
   service_contracts:
     unsubscribe_forbidden:
-      one: 'There is 1 unsuspended application subscribed to the service'
+      one: There is 1 unsuspended application subscribed to the service
       other: 'There are %{count} unsuspended applications subscribed to the service'
-    unsubscribe_confirmation: 'Successfully unsubscribed from the service'
-    unsubscribe_failure: 'Cannot unsubscribe from the service'
+    unsubscribe_confirmation: Successfully unsubscribed from the service
+    unsubscribe_failure: Cannot unsubscribe from the service
 
   forbidden_on_premises: 'You are not allowed to perform this action'
   account_messenger_expired_credit_card_notification_for_buyer: "Expired Credit Card"

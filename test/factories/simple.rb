@@ -130,6 +130,12 @@ FactoryBot.define do
 
   factory(:simple_service_plan, :parent => :simple_plan, :class => ServicePlan) do
     association(:issuer, :factory => :simple_service)
+
+    trait :default do
+      after(:build) do |plan|
+        plan.issuer.default_service_plan = plan
+      end
+    end
   end
 
   factory(:simple_proxy, class: Proxy) do

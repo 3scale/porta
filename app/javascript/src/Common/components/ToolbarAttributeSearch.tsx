@@ -102,7 +102,7 @@ const ToolbarAttributeSearch: FunctionComponent<Props> = ({ filters }) => {
             {collection !== undefined ? (
               <ToolbarSelect collection={collection} {...attr} />
             ) : groupedCollection !== undefined ? (
-              <ToolbarGroupedSelect collection={groupedCollection} selected={chip} {...attr} />
+              <ToolbarGroupedSelect collection={groupedCollection} {...attr} />
             ) : (
               <ToolbarSearch {...attr} />
             )}
