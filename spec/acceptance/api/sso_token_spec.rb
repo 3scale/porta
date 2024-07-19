@@ -15,7 +15,7 @@ resource "SSOToken" do
 
   api 'sso token' do
     before do
-      expect(SSOToken).to receive(:new).with('user_id' => user_id.to_s, 'expires_in' => expires_in.to_s)
+      expect(SSOToken).to receive(:new).with(user_id: user_id.to_s, expires_in: expires_in.to_s)
                               .and_return(sso_token)
 
     end

@@ -69,7 +69,7 @@ module DeveloperPortal
 
     def signup_user!(account_params, user_params)
       Account.transaction do
-        SignupService.create(signup_service_params(account_params, user_params)) do |signup_result|
+        SignupService.create(**signup_service_params(account_params, user_params)) do |signup_result|
           @signup_result = signup_result
           @user  = signup_result.user
           @buyer = signup_result.account

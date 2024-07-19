@@ -9,7 +9,7 @@ class Api::ErrorsController < Api::BaseController
   activate_menu :serviceadmin, :monitoring, :errors
 
   def index
-    errors = errors_service.list(@service.id, pagination_params)
+    errors = errors_service.list(@service.id, **pagination_params)
     @presenter = Api::ErrorsIndexPresenter.new(errors: errors, service: @service)
   end
 

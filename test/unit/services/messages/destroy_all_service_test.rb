@@ -14,11 +14,11 @@ class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
   def test_run!
     assert_nil @message.deleted_at
 
-    Messages::DestroyAllService.run!({
+    Messages::DestroyAllService.run!(
       account: @account,
       association_class: MessageRecipient,
       scope: :hidden
-    })
+    )
     @message.reload
 
     assert_not_equal nil, @message.reload.deleted_at
@@ -27,11 +27,11 @@ class Messages::DestroyAllServiceTest < ActiveSupport::TestCase
   def test_run_with_sidekiq_job
     perform_enqueued_jobs do
       assert @message.present?
-      Messages::DestroyAllService.run!({
+      Messages::DestroyAllService.run!(
         account: @account,
         association_class: MessageRecipient,
         scope: :hidden
-      })
+      )
 
       assert_raise(ActiveRecord::RecordNotFound) { @message.reload }
     end

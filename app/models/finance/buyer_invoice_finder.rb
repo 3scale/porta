@@ -14,8 +14,8 @@ class Finance::BuyerInvoiceFinder
     @invoice ||= find_invoice || create_invoice
   end
 
-  def self.find(*args)
-    new(*args).find
+  def self.find(...)
+    new(...).find
   end
 
   def find_invoice

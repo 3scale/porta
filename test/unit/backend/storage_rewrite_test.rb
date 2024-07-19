@@ -13,13 +13,13 @@ module Backend
 
       test 'passes the class_name and ids to rewriter (used in async processing)' do
         ids = [1,2,3,4,5]
-        StorageRewrite::MetricRewriter.expects(:rewrite).with({ ids: ids, log_progress: false })
+        StorageRewrite::MetricRewriter.expects(:rewrite).with(ids: ids, log_progress: false)
         StorageRewrite::Processor.new.rewrite(class_name: 'Metric', ids: ids)
       end
 
       test 'passes the scope to rewriter (used in sync processing)' do
         provider = FactoryBot.create(:simple_provider)
-        StorageRewrite::ServiceRewriter.expects(:rewrite).with({ scope: provider.services, log_progress: false })
+        StorageRewrite::ServiceRewriter.expects(:rewrite).with(scope: provider.services, log_progress: false)
         StorageRewrite::Processor.new.rewrite(scope: provider.services)
       end
 
@@ -29,7 +29,7 @@ module Backend
 
       test 'enables log progress for rewriter if specified explicitly' do
         ids = [1,2,3,4,5]
-        StorageRewrite::UsageLimitRewriter.expects(:rewrite).with({ ids: ids, log_progress: true })
+        StorageRewrite::UsageLimitRewriter.expects(:rewrite).with(ids: ids, log_progress: true)
         StorageRewrite::Processor.new(log_progress: true).rewrite(class_name: 'UsageLimit', ids: ids)
       end
     end

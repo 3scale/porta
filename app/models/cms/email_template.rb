@@ -109,7 +109,7 @@ class CMS::EmailTemplate < CMS::Template
     super or file&.read
   end
 
-  def save(*)
+  def save(...)
     publish if draft?
     super
   end

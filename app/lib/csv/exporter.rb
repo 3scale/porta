@@ -44,10 +44,8 @@ class Csv::Exporter
     [ to_csv, send_options ]
   end
 
-  def generate
-    ::CSV.generate(csv_options) do |csv|
-      yield csv
-    end
+  def generate(&block)
+    ::CSV.generate(**csv_options, &block)
   end
 
   def filename

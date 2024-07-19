@@ -443,7 +443,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Ridiculously hacking Rails to skip lock increment on touch
-  def touch(*)
+  def touch(...)
     @instance_locking_enabled = false
     super
   ensure

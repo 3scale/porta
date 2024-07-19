@@ -31,7 +31,7 @@ module EventStore
       def dump(obj)
         YAML.dump serialize([obj]).first
       rescue URI::InvalidURIError, URI::GID::MissingModelIdError => error
-        raise SerializationEventError, object: obj, error: error
+        raise SerializationEventError.new(object: obj, error: error)
       end
 
       def load(str)
@@ -84,7 +84,7 @@ module EventStore
     # The problem is that this triggers the Event's `load` and `deserialize` (to restore the original state), and if
     # the object referenced in the event via GlobalID does not exist, the deserialization of the event will fail.
     # Prevent an exception during rollback but try to report when that's unsafe.
-    def rolledback!(*)
+    def rolledback!(...)
       super
     rescue StandardError => exception
       # Set the cause of the EventRollbackError exception to the original error

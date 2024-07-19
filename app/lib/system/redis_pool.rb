@@ -21,9 +21,9 @@ module System
       end
     end
 
-    def method_missing(method_sym, *args, &block)
+    def method_missing(...)
       @pool.with do |conn|
-        conn.public_send(method_sym, *args, &block)
+        conn.public_send(...)
       end
     end
   end

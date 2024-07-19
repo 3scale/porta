@@ -29,7 +29,7 @@ class Provider::Admin::SudoController < FrontendController
   end
 
   def sudo
-    @sudo ||= ::Sudo.new(sudo_params.to_h.symbolize_keys)
+    @sudo ||= ::Sudo.new(**sudo_params.to_h.symbolize_keys)
   end
 
 end

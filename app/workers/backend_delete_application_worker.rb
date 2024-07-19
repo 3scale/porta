@@ -19,7 +19,7 @@ class BackendDeleteApplicationWorker < ApplicationJob
 
   def delete_associations
     delete_params = { application_id: event.application.id, service_backend_id: event.service_backend_id, application_backend_id: event.application_id }
-    [ApplicationKeyBackendService, ReferrerFilterBackendService].each { |klass| klass.delete_all(delete_params) }
+    [ApplicationKeyBackendService, ReferrerFilterBackendService].each { |klass| klass.delete_all(**delete_params) }
   end
 
 end
