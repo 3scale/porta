@@ -51,7 +51,7 @@ module Authentication
       end
 
       def login_url_with_service
-        login_url + "?service=" + URI.escape(service)
+        "#{login_url}?#{{service: service}.to_param}"
       end
 
       # /validate path is standard for CAS servers
@@ -60,7 +60,7 @@ module Authentication
       end
 
       def validate_url_with_query ticket
-        validate_url + "?" + {:service => service, :ticket => ticket}.to_param
+        "#{validate_url}?#{{:service => service, :ticket => ticket}.to_param}"
       end
 
       def service
