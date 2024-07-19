@@ -10,7 +10,7 @@ end
 
 Given "{provider} has the following settings:" do |account, table|
   attributes = table.rows_hash
-  attributes.map_keys! { |key| underscore_spaces(key) }
+  attributes.transform_keys! { |key| underscore_spaces(key) }
 
   account.settings.update!(attributes)
 end
