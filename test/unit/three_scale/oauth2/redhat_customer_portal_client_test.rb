@@ -120,7 +120,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
     end
 
     test '#authorize_url' do
-      redirect_uri = URI.encode('http://master-admin.com/auth/redhat/callback?self_domain=alaska-admin.com', Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      redirect_uri = ERB::Util.url_encode 'http://master-admin.com/auth/redhat/callback?self_domain=alaska-admin.com'
 
       expected_url  = "http://example.com/protocol/openid-connect/auth"
       expected_url += "?client_id=#{@authentication.client_id}"
