@@ -21,7 +21,7 @@ module DeveloperPortal
 
     test '#show' do
       client_secret = 'seti_fake_client_secret'
-      setup_intent = Stripe::SetupIntent.new(id: 'seti_fake_setup_intent_id').tap { |si| si.update_attributes(client_secret: client_secret) }
+      setup_intent = Stripe::SetupIntent.new(id: 'seti_fake_setup_intent_id').tap { |si| si.update_attributes({ client_secret: client_secret }) }
       PaymentGateways::StripeCrypt.any_instance.expects(:create_stripe_setup_intent).returns(setup_intent)
 
       get admin_account_stripe_path

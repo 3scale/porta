@@ -85,7 +85,7 @@ class Api::AlertsIndexPresenter
     search
   end
 
-  def t(string, opts = {})
-    I18n.t(string, opts.merge(scope: 'api.alerts.index'))
+  def t(string, **opts)
+    I18n.t(string, **opts.merge(scope: 'api.alerts.index'))
   end
 end
