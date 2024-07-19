@@ -51,7 +51,7 @@ module Authentication
       end
 
       def login_url_with_service
-        login_url + "?service=" + URI.escape(service)
+        login_url + "?service=" + CGI.escape(service)
       end
 
       # /validate path is standard for CAS servers
