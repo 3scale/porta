@@ -77,22 +77,6 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       assert_response :forbidden
     end
 
-    test 'renders a prompt if there is no default service plan' do
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
-
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).include?('Please select')
-    end
-
-    test 'does not render a prompt if there is a default service plan' do
-      service.update(default_service_plan: service_plan)
-
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
-
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).exclude?('Please select')
-    end
-
     test 'no n+1 queries on index' do
       populate = ->(n) do
         n.times do

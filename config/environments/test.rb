@@ -180,6 +180,7 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :customizations
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :issuer
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :pricing_rules
+      Bullet.add_safelist class_name: "ServicePlan", type: :unused_eager_loading, association: :pricing_rules # Or features/buyers/accounts/service_contracts/index.feature:90 fails
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post

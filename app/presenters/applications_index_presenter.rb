@@ -79,20 +79,13 @@ class ApplicationsIndexPresenter
 
     if show_application_plans
       if service_column_visible
-        collection = accessible_services.reject { |service| service.application_plans.empty? }
-                                        .map do |service|
-                                          {
-                                            groupName: service.name,
-                                            groupCollection: service.application_plans.map { |plan| plan_to_select_item(plan) }
-                                          }
-                                        end
+        plan = (plan_id = search.plan_id) ? accessible_plans.find(plan_id) : nil
         props[:attributeFilters].append({ name: 'search[plan_id]',
                                           title: 'Plan',
-                                          groupedCollection: collection,
+                                          groupedCollection: plans_for_filter,
                                           placeholder: 'Plan',
-                                          chip: if (plan_id = search.plan_id)
-                                                  accessible_plans.find(plan_id).name
-                                                end })
+                                          selected: ({ id: plan.id, name: plan.name } if plan),
+                                          chip: plan&.name })
       else
         props[:attributeFilters].append({ name: 'search[plan_id]',
                                           title: 'Plan',
@@ -155,6 +148,16 @@ class ApplicationsIndexPresenter
   end
 
   private
+
+  def plans_for_filter
+    accessible_services.reject { |service| service.application_plans.empty? }
+                        .map do |service|
+                          {
+                            groupName: service.name,
+                            groupCollection: service.application_plans.map { |plan| plan_to_select_item(plan) }
+                          }
+                        end
+  end
 
   def states_for_filter
     Cinstance.allowed_states.collect(&:to_s).sort.map do |state|

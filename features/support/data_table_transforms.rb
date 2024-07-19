@@ -14,6 +14,16 @@ module DataTableTransforms
     table.map_column!(:state, false) { |state| state.downcase.to_sym }
   end
 
+  def transform_service_contract_table(table, provider)
+    parameterize_headers(table)
+    table.map_column!(:plans) { |plans| plans.from_sentence.map { |plan| Plan.find_by!(name: plan) } }
+    table.map_column!(:buyer) do |name|
+      provider.buyers.find_by(org_name: name) ||
+        FactoryBot.create(:buyer_account, provider_account: provider, org_name: name)
+    end
+    table
+  end
+
   def transform_integration_errors_table(table)
     parameterize_headers(table)
     table.map_column!(:timestamp) { |timestamp| timestamp.to_time.utc.to_s }
