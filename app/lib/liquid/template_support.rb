@@ -97,8 +97,7 @@ module Liquid
     public :assigns_for_liquify
 
     def self.fetch_drop(name)
-      # TODO: in Ruby 1.9 use get_const(name, false) so it really looks only in drop module scope
-      [Liquid::Drops, name.camelize].join("::").constantize
+      Liquid::Drops.const_get(name.camelize, false)
     end
 
     private

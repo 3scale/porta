@@ -53,21 +53,6 @@ class HashKeysCaseConversionsTest < ActiveSupport::TestCase
     assert_equal({'foo' => 2, 'bar' => 3}, hash)
   end
 
-  test 'map_keys' do
-    hash_one = {'foo' => 1, 'bar' => 2}
-    hash_two = hash_one.map_keys { |value| value + '!' }
-
-    assert_equal({'foo' => 1, 'bar' => 2}, hash_one)
-    assert_equal({'foo!' => 1, 'bar!' => 2}, hash_two)
-  end
-
-  test 'map_keys!' do
-    hash = {'foo' => 1, 'bar' => 2}
-    hash.map_keys! { |key| key + '!' }
-
-    assert_equal({'foo!' => 1, 'bar!' => 2}, hash)
-  end
-
   test 'sort_keys' do
     hash = ActiveSupport::OrderedHash.new
     hash[42] = 'foo'
