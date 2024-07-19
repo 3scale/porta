@@ -3,7 +3,7 @@
 class AccountDecorator < ApplicationDecorator
   delegate :display_name, :email, to: :admin_user, prefix: true
 
-  private
+  protected
 
   def admin_user
     @admin_user ||= (super || User.new).decorate
