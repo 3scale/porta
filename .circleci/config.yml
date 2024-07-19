@@ -89,7 +89,7 @@ attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
-system-builder-ruby31: &system-builder-ruby31
+system-builder-ruby33: &system-builder-ruby33
   image: quay.io/3scale/system-builder:5207de2
   environment:
     BUNDLE_FROZEN: true
@@ -394,69 +394,69 @@ commands: # reusable commands with parameters
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
-  builder-ruby31: &builder-ruby31
+  builder-ruby33: &builder-ruby33
     parameters:
       database:
         type: string
         default: mysql
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
     environment:
       DB: << parameters.database >>
     working_directory: /opt/ci/workdir
 
-  builder-with-mysql-ruby31: &builder-with-mysql-ruby31
+  builder-with-mysql-ruby33: &builder-with-mysql-ruby33
     resource_class: small
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *mysql-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/ci/workdir
     <<: *build-envs-mysql
 
-  builder-with-postgres-ruby31: &builder-with-postgres-ruby31
+  builder-with-postgres-ruby33: &builder-with-postgres-ruby33
     resource_class: small
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *postgres-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/ci/workdir
     <<: *build-envs-postgresql
 
-  builder-with-oracle-ruby31: &builder-with-oracle-ruby31
+  builder-with-oracle-ruby33: &builder-with-oracle-ruby33
     resource_class: large
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *oracle-db-container
       - *memcached-container
       - *redis-container
     working_directory: /opt/ci/workdir
     <<: *build-envs-oracle
 
-  cucumber-with-mysql-ruby31: &cucumber-with-mysql-ruby31
+  cucumber-with-mysql-ruby33: &cucumber-with-mysql-ruby33
     resource_class: small
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-postgres-ruby31: &cucumber-with-postgres-ruby31
+  cucumber-with-postgres-ruby33: &cucumber-with-postgres-ruby33
     resource_class: small
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *dnsmasq-container
       - *postgres-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-oracle-ruby31: &cucumber-with-oracle-ruby31
+  cucumber-with-oracle-ruby33: &cucumber-with-oracle-ruby33
     resource_class: large
     docker:
-      - *system-builder-ruby31
+      - *system-builder-ruby33
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
@@ -469,7 +469,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -481,7 +481,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
       database: postgresql
@@ -493,7 +493,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
       database: oracle
@@ -507,7 +507,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -530,7 +530,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -557,7 +557,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -577,7 +577,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby31
+        default: builder-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -594,7 +594,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby31
+        default: builder-with-mysql-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -606,7 +606,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby31
+        default: builder-with-postgres-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -618,7 +618,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby31
+        default: builder-with-oracle-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -632,7 +632,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby31
+        default: builder-with-mysql-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -644,7 +644,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby31
+        default: builder-with-postgres-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -656,7 +656,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby31
+        default: builder-with-oracle-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -670,7 +670,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby31
+        default: builder-with-mysql-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -682,7 +682,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby31
+        default: builder-with-postgres-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -694,7 +694,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby31
+        default: builder-with-oracle-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -708,7 +708,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby31
+        default: builder-with-mysql-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -720,7 +720,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby31
+        default: builder-with-postgres-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -732,7 +732,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby31
+        default: builder-with-oracle-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -747,7 +747,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-mysql-ruby31
+        default: cucumber-with-mysql-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -760,7 +760,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-postgres-ruby31
+        default: cucumber-with-postgres-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -773,7 +773,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-oracle-ruby31
+        default: cucumber-with-oracle-ruby33
     executor:
       name: << parameters.executor >>
     steps:
@@ -1027,37 +1027,37 @@ workflows:
   ######## Nightly workflows
 
 
-  mysql_nightly_build_ruby31:
+  mysql_nightly_build_ruby33:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - dependencies_npm:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - assets_precompile:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
-          executor: builder-with-mysql-ruby31
+          executor: builder-with-mysql-ruby33
           requires:
             - dependencies_bundler
       - functional:
-          executor: builder-with-mysql-ruby31
+          executor: builder-with-mysql-ruby33
           requires:
             - assets_precompile
       - integration:
-          executor: builder-with-mysql-ruby31
+          executor: builder-with-mysql-ruby33
           requires:
             - assets_precompile
       - rspec:
-          executor: builder-with-mysql-ruby31
+          executor: builder-with-mysql-ruby33
           requires:
             - dependencies_bundler
       - cucumber:
-          executor: cucumber-with-mysql-ruby31
+          executor: cucumber-with-mysql-ruby33
           requires:
             - assets_precompile
       - notify_success:
@@ -1070,37 +1070,37 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_nightly_build_ruby31:
+  postgres_nightly_build_ruby33:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_postgres:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - dependencies_npm:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - assets_precompile:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - deps_bundler_postgres
             - dependencies_npm
       - unit-postgres:
-          executor: builder-with-postgres-ruby31
+          executor: builder-with-postgres-ruby33
           requires:
             - deps_bundler_postgres
       - functional-postgres:
-          executor: builder-with-postgres-ruby31
+          executor: builder-with-postgres-ruby33
           requires:
             - assets_precompile
       - integration-postgres:
-          executor: builder-with-postgres-ruby31
+          executor: builder-with-postgres-ruby33
           requires:
             - assets_precompile
       - rspec-postgres:
-          executor: builder-with-postgres-ruby31
+          executor: builder-with-postgres-ruby33
           requires:
             - deps_bundler_postgres
       - cucumber-postgres:
-          executor: cucumber-with-postgres-ruby31
+          executor: cucumber-with-postgres-ruby33
           requires:
             - assets_precompile
       - notify_success:
@@ -1113,45 +1113,45 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_nightly_build_ruby31:
+  oracle_nightly_build_ruby33:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_oracle:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - dependencies_npm:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - assets_precompile:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - deps_bundler_oracle
             - dependencies_npm
       - unit-oracle:
-          executor: builder-with-oracle-ruby31
+          executor: builder-with-oracle-ruby33
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - functional-oracle:
-          executor: builder-with-oracle-ruby31
+          executor: builder-with-oracle-ruby33
           context:
             - quay
           requires:
             - assets_precompile
       - integration-oracle:
-          executor: builder-with-oracle-ruby31
+          executor: builder-with-oracle-ruby33
           context:
             - quay
           requires:
             - assets_precompile
       - rspec-oracle:
-          executor: builder-with-oracle-ruby31
+          executor: builder-with-oracle-ruby33
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - cucumber-oracle:
-          executor: cucumber-with-oracle-ruby31
+          executor: cucumber-with-oracle-ruby33
           context:
             - quay
           requires:
@@ -1166,25 +1166,25 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_nightly_build_ruby31:
+  javascript_nightly_build_ruby33:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - dependencies_npm:
-          executor: builder-ruby31
+          executor: builder-ruby33
       - assets_precompile:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - dependencies_bundler
             - dependencies_npm
       - licenses:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - dependencies_bundler
       - jest:
-          executor: builder-ruby31
+          executor: builder-ruby33
           requires:
             - dependencies_npm
       - notify_success:
