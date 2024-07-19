@@ -31,7 +31,9 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
 
   def test_handles_errors
     SendUserInvitationWorker::RETRY_ERRORS.each do |error_class|
-      ProviderInvitationMailer.any_instance.expects(:invitation).raises(error_class)
+      # NOTE: NET::SMTP errors can't be initialized with empty arguments
+      exception = error_class.include?(Net::SMTPError) ? error_class.new(nil, message: 'error') : error_class.new
+      ProviderInvitationMailer.any_instance.expects(:invitation).raises(exception)
 
       invitation = FactoryBot.create(:invitation)
 

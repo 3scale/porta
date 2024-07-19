@@ -15,7 +15,7 @@ class SSOToken
   validate :one_of_user_id_or_username_is_required
   validate :account_is_provider_and_user_of_provider, :if => Proc.new {|o| o.account && o.user_id || o.username }
 
-  def initialize attributes = {}
+  def initialize(**attributes)
     assign_attributes({:expires_in => 10.minutes, :protocol => 'https'}.merge(attributes))
     @new_record= true
   end

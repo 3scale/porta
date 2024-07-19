@@ -136,7 +136,7 @@ module PaymentGateways
 
     def mock_customer(**attrs)
       id = attrs.delete(:id) || 'new-customer-id'
-      Stripe::Customer.new(id: id).tap { |stripe_customer| stripe_customer.update_attributes(**attrs) }
+      Stripe::Customer.new(id: id).tap { |stripe_customer| stripe_customer.update_attributes(attrs) }
     end
 
     def update_credit_card_auth_code

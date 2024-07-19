@@ -12,7 +12,7 @@ class NestedAssociationValidator < ActiveModel::EachValidator
       errors = value.errors.where(alternate)
       record_attr = attr || alternate
       errors.each do |error|
-        record.errors.add(record_attr, error.type, error.options)
+        record.errors.add(record_attr, error.type, **error.options)
       end
     end
   end
