@@ -509,9 +509,7 @@ System::Database::Oracle.define do
 
   trigger 'onboardings' do
     <<~SQL
-      IF :new.account_id <> master_id THEN
-        :new.tenant_id := :new.account_id;
-      END IF;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
     SQL
   end
 

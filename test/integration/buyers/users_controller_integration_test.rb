@@ -68,4 +68,15 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal 'newemail@example.org', user.email
     assert_equal 'Japan', user.field_value('country')
   end
+
+  test "#activate" do
+    user = FactoryBot.create(:pending_user, account: buyer)
+    assert_not user.active?
+
+    post activate_admin_buyers_account_user_path(account_id: buyer.id, id: user.id)
+    follow_redirect!
+
+    assert_response :ok
+    assert user.reload.active?
+  end
 end

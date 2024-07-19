@@ -493,9 +493,7 @@ System::Database::MySQL.define do
 
   trigger 'onboardings' do
     <<~SQL
-      IF NEW.account_id <> master_id THEN
-        SET NEW.tenant_id = NEW.account_id;
-      END IF;
+      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id);
     SQL
   end
 
