@@ -53,21 +53,21 @@ class ApplicationRecord < ActiveRecord::Base
     func(name, value, quoted(DatabaseUtilities.convert_to_oracle_date_format(format)))
   end
 
-  sifter :in_timezone do |column, zone = Time.zone, name: zone.tzinfo.name, offset: zone.formatted_offset|
+  sifter :in_timezone do |column, timezone_name = Time.zone.tzinfo.name, timezone_offset: Time.zone.formatted_offset|
     case System::Database.adapter.to_sym
     when :mysql
       coalesce(
-        convert_tz(column, quoted('UTC'),    quoted(name)),
-          convert_tz(column, quoted('+00:00'), quoted(offset))
+        convert_tz(column, quoted('UTC'),    quoted(timezone_name)),
+          convert_tz(column, quoted('+00:00'), quoted(timezone_offset))
       )
     when :postgres
-      column.op('AT TIME ZONE', quoted('UTC')).op('AT TIME ZONE', quoted(name))
+      column.op('AT TIME ZONE', quoted('UTC')).op('AT TIME ZONE', quoted(timezone_name))
     when :oracle
       to_date(
         to_char(
           from_tz(
             cast(column.as('TIMESTAMP')), quoted('UTC') # First cast as timestamp
-          ).op('AT TIME ZONE', quoted(name)), # Then use the timezone
+          ).op('AT TIME ZONE', quoted(timezone_name)), # Then use the timezone
             quoted('YYYY-MM-DD') # Remove the minutes and seconds
         ),
           quoted('YYYY-MM-DD HH24:MI:SS') # Reformat to be a valid date to compare with IN
