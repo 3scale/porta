@@ -10,11 +10,11 @@ class Messages::DestroyServiceTest < ActiveSupport::TestCase
   def test_run_with_ids
     assert_equal false, @message.hidden?
 
-    Messages::DeleteService.run!({
+    Messages::DeleteService.run!(
       account:           @message.receiver,
       association_class: MessageRecipient,
       ids:               [@message.id]
-    })
+    )
 
     @message.reload
 
@@ -24,11 +24,11 @@ class Messages::DestroyServiceTest < ActiveSupport::TestCase
   def test_run_delete_all
     assert_equal false, @message.hidden?
 
-    Messages::DeleteService.run!({
+    Messages::DeleteService.run!(
       account:           @message.receiver,
       association_class: MessageRecipient,
       delete_all:        true
-    })
+    )
 
     @message.reload
 
@@ -38,10 +38,10 @@ class Messages::DestroyServiceTest < ActiveSupport::TestCase
   def test_run_no_params
     assert_equal false, @message.hidden?
 
-    Messages::DeleteService.run!({
+    Messages::DeleteService.run!(
       account:           @message.receiver,
       association_class: MessageRecipient,
-    })
+    )
 
     @message.reload
 

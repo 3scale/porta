@@ -3,9 +3,11 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
   SIGNUP_SYSTEM_NAME = 'signup_licence'
   SUBSCRIPTION_SYSTEM_NAME = 'service_subscription_licence'
   NEW_APPLICATION_SYSTEM_NAME = 'new_application_licence'
-  
+
   validates :published, presence: true
   validates :title, uniqueness: { :scope => [:provider_id], case_sensitive: true }
+
+  before_validation :publish_draft
 
   def title
     I18n.t("builtin_legal_terms.#{system_name}.title")
@@ -29,13 +31,13 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
       end
   end
 
-  def save(*)
-    self.published = self.draft
-    super
-  end
-
   def content_type
     "text/html"
   end
 
+  private
+
+  def publish_draft
+    self.published = draft unless published
+  end
 end

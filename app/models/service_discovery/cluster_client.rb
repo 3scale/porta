@@ -98,14 +98,16 @@ module ServiceDiscovery
       [
         build_api_endpoint(options),
         'v1',
-        ssl_options: { verify_ssl: OpenSSL::SSL::VERIFY_NONE },
-        auth_options: { bearer_token: options[:bearer_token] }
+        {
+          ssl_options: { verify_ssl: OpenSSL::SSL::VERIFY_NONE },
+          auth_options: { bearer_token: options[:bearer_token] }
+        }
       ]
     end
 
     def self.build_client(options = {})
-      client_options = build_client_options(options.reverse_merge(api_path: 'api'))
-      Kubeclient::Client.new(*client_options)
+      uri, version, client_options = build_client_options(options.reverse_merge(api_path: 'api'))
+      Kubeclient::Client.new(uri, version, **client_options)
     end
 
     def self.build_client_for_projects(options = {})

@@ -94,7 +94,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def flash_message(key, opts = {})
-    translate(key, opts.reverse_merge(scope: :api_integrations_controller, raise: Rails.env.test?))
+    translate(key, **opts.reverse_merge(scope: :api_integrations_controller, raise: Rails.env.test?))
   end
 
   def proxy_pro_update
