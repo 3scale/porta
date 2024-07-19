@@ -39,12 +39,12 @@ end
 if ENV['CI']
   require 'simplecov'
   require "simplecov_json_formatter"
-  require 'codecov'
+  require 'simplecov-cobertura'
   formatters = [
     SimpleCov::Formatter::SimpleFormatter,
     SimpleCov::Formatter::JSONFormatter,
     SimpleCov::Formatter::HTMLFormatter,
-    Codecov::SimpleCov::Formatter
+    SimpleCov::Formatter::CoberturaFormatter
   ]
   SimpleCov.start do
     formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
@@ -74,6 +74,7 @@ RSpec.configure do |config|
   config.include RSpecHtmlMatchers
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/test/fixtures"
+  config.file_fixture_path = config.fixture_path
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
