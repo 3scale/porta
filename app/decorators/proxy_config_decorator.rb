@@ -3,7 +3,7 @@
 class ProxyConfigDecorator < ApplicationDecorator
   delegate :display_name, to: :user, prefix: true
 
-  private
+  protected
 
   def user
     @user ||= (super || User.new).decorate
