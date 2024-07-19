@@ -8,7 +8,7 @@ class Admin::Api::SSOTokensController < Admin::Api::BaseController
   #   * provider_key
   #   * protocol
   def create
-    sso_token = SSOToken.new sso_token_params.to_h
+    sso_token = SSOToken.new **sso_token_params.to_h
     sso_token.account = domain_account
     sso_token.save
 
