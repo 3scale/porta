@@ -5,7 +5,11 @@ version: 2.1
 upload-coverage: &upload-coverage
   run:
     name: Upload test coverage to Codecov
-    command: bash <(curl --retry 10 --retry-delay 5 --retry-max-time 60 -s https://codecov.io/bash) -Z || echo "Codecov is not working again..."
+    command: |
+      echo "Skipping coverage upload for now"
+#      curl -Os https://cli.codecov.io/v0.7.2/linux/codecov
+#      sudo chmod +x codecov
+#      ./codecov --verbose upload-process --fail-on-error -n 'service'-${CIRCLE_BUILD_NUM} -F service -f ./coverage/coverage.xml
 
 persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
   persist_to_workspace:
