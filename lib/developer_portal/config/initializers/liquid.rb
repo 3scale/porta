@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 require 'liquid'
-require 'liquid/url_helper_hacks'
-
 
 # allow calling present? in {% if %}
 Liquid::Expression::LITERALS['present'] = :present?
 
 Rails.application.config.to_prepare do
   # Hacks
-  ActionView::Helpers.send(:include, Liquid::UrlHelperHacks)
 
   [
     Liquid::Filters::GoogleAnalytics,
