@@ -33,14 +33,14 @@ class NewAccountsQuery
     # TODO: Cache the time zones known by the database
     timezone = connection.select_value(sql).to_s == '1' ? time_zone_name : time_zone.formatted_offset
 
-    mysql_subquery range, date_format, timezone: timezone
+    mysql_subquery range, date_format, timezone_name: timezone
   end
 
   def oracle_query(range, date_format)
-    oracle_subquery range, date_format, timezone: time_zone_name
+    oracle_subquery range, date_format, timezone_name: time_zone_name
   # FIXME: Rescuing from ActiveRecord::StatementInvalid is not recommended. See https://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html (Exception handling and rolling back)
   rescue ActiveRecord::StatementInvalid
-    oracle_subquery range, date_format, timezone: time_zone.formatted_offset
+    oracle_subquery range, date_format, timezone_name: time_zone.formatted_offset
   end
 
   private
@@ -60,22 +60,22 @@ class NewAccountsQuery
     end
   end
 
-  def mysql_subquery(range, date_format, timezone: Time.zone.tzinfo.name)
+  def mysql_subquery(range, date_format, timezone_name: Time.zone.tzinfo.name)
     account.buyer_accounts
-        .where.has { sift(:date, sift(:in_timezone, created_at, name: timezone)).in(range) }
-        .grouping { sift(:date_format, sift(:in_timezone, created_at, name: timezone), date_format).to_sql }
+        .where.has { sift(:date, sift(:in_timezone, created_at, timezone_name)).in(range) }
+        .grouping { sift(:date_format, sift(:in_timezone, created_at, timezone_name), date_format).to_sql }
         .count(:id)
   end
 
-  def oracle_subquery(range, date_format, timezone: Time.zone.tzinfo.name)
+  def oracle_subquery(range, date_format, timezone_name: Time.zone.tzinfo.name)
     query = account.buyer_accounts.where.has do
-      sift(:date, sift(:in_timezone, created_at, name: timezone)).in(range)
+      sift(:date, sift(:in_timezone, created_at, timezone_name)).in(range)
     end
 
     query = query.selecting do
       [
         id,
-        sift(:date_format, sift(:in_timezone, created_at, name: timezone), date_format).as('dategrouping')
+        sift(:date_format, sift(:in_timezone, created_at, timezone_name), date_format).as('dategrouping')
       ]
     end
 
