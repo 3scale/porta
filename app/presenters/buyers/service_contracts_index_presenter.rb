@@ -21,7 +21,7 @@ class Buyers::ServiceContractsIndexPresenter
     end
 
     if (buyer_id = params[:account_id]) # rubocop:disable Style/GuardClause
-      @buyer = provider.buyers.find(params[:account_id])
+      @buyer = provider.buyers.find(buyer_id)
       search.account = buyer_id
     end
   end
@@ -44,8 +44,11 @@ class Buyers::ServiceContractsIndexPresenter
                                                 .decorate
   end
 
-  def toolbar_props # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
-    plan = search.plan_id ? ServicePlan.find(search.plan_id) : nil
+  def toolbar_props # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    if (plan_id = search.plan_id) && (plan = ServicePlan.find(plan_id))
+      plan_name = plan.name
+      plan_service = plan.service.name
+    end
 
     props = {
       totalEntries: service_contracts.total_entries,
@@ -60,10 +63,10 @@ class Buyers::ServiceContractsIndexPresenter
       }, {
         name: 'search[plan_id]',
         title: 'Plan',
-        groupedCollection: plans_for_filter,
+        groupedCollection: plans_for_filter, # TODO: remove plans without contracts
         placeholder: 'Filter by plan',
-        selected: ({ id: plan.id.to_s, name: plan.name } if plan),
-        chip: ("#{plan.name} (#{plan.service.name})" if plan),
+        selected: ({ id: plan_id.to_s, name: plan_name } if plan),
+        chip: ("#{plan_name} (#{plan_service})" if plan),
       }, {
         name: 'search[state]',
         title: 'State',
