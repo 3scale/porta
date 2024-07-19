@@ -78,7 +78,7 @@ module PaymentGateways
           user_id: user.id,
           email: user.email
         }
-        notify_exception CustomerIdMismatchError.new(data), data
+        notify_exception CustomerIdMismatchError.new(**data), data
         false
       else
         self.account_billing_address = result

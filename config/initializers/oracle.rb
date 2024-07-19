@@ -8,12 +8,12 @@ ActiveSupport.on_load(:active_record) do
     Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
 
     ActiveRecord::ConnectionAdapters::TableDefinition.prepend(Module.new do
-      def column(name, type, options = {})
+      def column(name, type, **options)
         # length parameter is not compatible with rails mysql/pg adapters:
         # rails expects it is limit in bytes, but oracle adapter expects it in number of characters
         # TODO: probably would be better to convert the byte limit to character limit
         if type == :integer
-          super(name, type, options.except(:limit))
+          super(name, type, **options.except(:limit))
         else
           super
         end
@@ -26,9 +26,9 @@ ActiveSupport.on_load(:active_record) do
       prepend(Module.new do
         # TODO: is this needed after
         # https://github.com/rsim/oracle-enhanced/commit/f76b6ef4edda72bddabab252177cb7f28d4418e2
-        def add_column(table_name, column_name, type, options = {})
+        def add_column(table_name, column_name, type, **options)
           if type == :integer
-            super(table_name, column_name, type, options.except(:limit))
+            super(table_name, column_name, type, **options.except(:limit))
           else
             super
           end
@@ -170,11 +170,11 @@ ActiveSupport.on_load(:active_record) do
     end)
 
     ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaStatements.module_eval do
-      def add_index(table_name, column_name, options = {}) #:nodoc:
+      def add_index(table_name, column_name, **options) #:nodoc:
         # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
         # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
         # upstreamed: https://github.com/rsim/oracle-enhanced/pull/2293
-        index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, options)
+        index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, **options)
         quoted_table_name = quote_table_name(table_name)
         quoted_column_name = quote_column_name(index_name)
         execute "CREATE #{index_type} INDEX #{quoted_column_name} ON #{quoted_table_name} (#{quoted_column_names})#{tablespace} #{index_options}"

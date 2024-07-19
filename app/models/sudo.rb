@@ -2,13 +2,11 @@ class Sudo
   extend ActiveModel::Naming
   include ActiveModel::Conversion
 
-  attr_reader :errors
-
-  attr_reader :return_path, :user_session, :xhr
+  attr_reader :return_path, :user_session, :xhr, :errors
 
   # @param [String] return_path
   # @param [UserSession] user_session
-  def initialize(return_path: , user_session: UserSession.null, xhr: false)
+  def initialize(return_path:, user_session: UserSession.null, xhr: false)
     @return_path = return_path.freeze
     @xhr = !!xhr
     @errors = ActiveModel::Errors.new(self)

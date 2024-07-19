@@ -8,8 +8,8 @@ module ThreeScale
       attr_reader :result
 
       class << self
-        def call(*args, &block)
-          new(*args, &block).tap do |service|
+        def call(...)
+          new(...).tap do |service|
             service.instance_variable_set(
               "@result",
               service.call

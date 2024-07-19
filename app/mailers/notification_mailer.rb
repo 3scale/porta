@@ -411,8 +411,8 @@ class NotificationMailer < ActionMailer::Base
     super.merge(host: provider_account&.external_admin_domain)
   end
 
-  def t_subject(key, options = {})
-    I18n.t(key, { scope: 'mailers.notification_mailer.subject', raise: true }.merge(options))
+  def t_subject(key, **options)
+    I18n.t(key, **{ scope: 'mailers.notification_mailer.subject', raise: true }.merge(options))
   end
 
   private

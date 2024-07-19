@@ -10,6 +10,10 @@ class BaseEventStoreEvent < RailsEventStore::Event
     end
   end
 
+  def initialize(args = {})
+    super(**args)
+  end
+
   def publish
     PUBLISHER.call(self)
   end

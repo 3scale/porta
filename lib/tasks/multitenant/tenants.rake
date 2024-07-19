@@ -45,27 +45,27 @@ namespace :multitenant do
 
     desc 'Fix empty or corrupted tenant_id for a table associated to account'
     task :fix_corrupted_tenant_id_for_table_associated_to_account, %i[table_name time_start time_end batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, condition_update_tenant_id(args[:time_start], args[:time_end]), args.to_hash)
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, condition_update_tenant_id(args[:time_start], args[:time_end]), **args.to_hash)
     end
 
     desc 'Fix empty or corrupted tenant_id for a table associated to user'
     task :fix_corrupted_tenant_id_for_table_associated_to_user, %i[table_name time_start time_end batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.user.tenant_id }, proc { user }, condition_update_tenant_id(args[:time_start], args[:time_end]), args.to_hash)
+      update_tenant_ids(proc { |object| object.user.tenant_id }, proc { user }, condition_update_tenant_id(args[:time_start], args[:time_end]), **args.to_hash)
     end
 
     desc 'Fix empty tenant_id in access_tokens'
     task :fix_empty_tenant_id_access_tokens, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'AccessToken' }))
+      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, **args.to_hash.merge({ table_name: 'AccessToken' }))
     end
 
     desc 'Restore existing tenant_id in alerts'
     task :restore_existing_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({ table_name: 'Alert' }))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, **args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     desc 'Restore empty tenant_id in alerts'
     task :restore_empty_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'Alert' }))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, **args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
