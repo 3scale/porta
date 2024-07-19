@@ -9,8 +9,8 @@ Feature: Developer portal application credentials
       | My API  | Free |
     And a buyer "Jane"
     And the following application:
-      | Buyer | Name       | Product |
-      | Jane  | Jane's App | My API  |
+      | Buyer | Name       | Product | Application Id | User key               |
+      | Jane  | Jane's App | My API  | jane123        | qwerty-12345-banana123 |
     And the buyer logs in
 
   Scenario: Regenerate user key
@@ -51,23 +51,25 @@ Feature: Developer portal application credentials
       Given the product uses backend v1
 
     Scenario: Backend v1 uses a single user key
-      Given the application has user key "qwerty-12345-banana"
       When they go to the dev portal API access details page
       Then they should see the following details:
         | Name     | Jane's App          |
-        | User key | qwerty-12345-banana |
+        | User Key | qwerty-12345-banana |
       But there should not be a button to "Create new key"
 
   Rule: Oauth
     Background:
       Given the product uses backend oauth
-      And the application has 3 keys
+      And the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
 
     Scenario: Oauth uses client secret and ID
       When they go to the dev portal API access details page
       Then they should see the following details:
-        | Client ID     | 123                                 |
-        | Client Secret | app-key                             |
+        | Client ID     | jane123                             |
+        | Client Secret | key-one                             |
         | Redirect URL  | This is your Redirect URL for OAuth |
       And there should be a button to "Regenerate"
 

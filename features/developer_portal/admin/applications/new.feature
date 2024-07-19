@@ -72,7 +72,7 @@ Feature: Developer portal new application page
         | Name        | My App                        |
         | Description | Awesome ultimate super widget |
         | Plan        | Gold                          |
-        | Status      | live                          |
+        | Status      | Live                          |
 
     Scenario: Can't choose application plan on app creating
       Given the product has no default application plan
@@ -99,7 +99,7 @@ Feature: Developer portal new application page
         | Name        | MegaWidget  |
         | Description | Bla bla bla |
       Then they should see the following details:
-        | Status | pending |
+        | Status | Pending |
       And they should see "Your application is awaiting approval"
 
     Scenario: Create an application with extra fields
