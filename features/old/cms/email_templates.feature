@@ -27,7 +27,7 @@ Feature: Email templates management
       | Subject | Bcc            | Cc                            | From       |
       | subj3ct | some@email.com | "Example" <other@3scale.localhost> | My Company |
     And I press "Create Email Template"
-    Then I should see "Email Template overrided"
+    Then I should see "Email Template overridden"
     And the content of the email template "account_approved" should be
       """
       new content for account approved
