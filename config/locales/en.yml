@@ -450,6 +450,10 @@ en:
         edit:
           delete_link: I understand the consequences, proceed to delete '%{name}' backend
           delete_confirmation: Are you sure you want to delete the backend '%{name}'?
+      bot_protections:
+        edit:
+          selector_label: Protection against bots on the admin portal
+          description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the admin portal.
       keys:
         create:
           success: A new key has been added.
@@ -609,6 +613,8 @@ en:
   sites:
     spam_protections:
       edit:
+        selector_label: Protection against bots on the developer portal
+        description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the developer portal.
         captcha_hint_false: 'reCAPTCHA has not been configured correctly, bot protection cannot be enabled.'
         captcha_hint_true: "reCAPTCHA v3 will invisibly verify interactions to detect bots."
     usage_rules:

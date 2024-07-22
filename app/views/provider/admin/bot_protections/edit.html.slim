@@ -1,14 +1,5 @@
 - content_for :title, 'Bot Protection'
 - content_for :page_header_title, 'Bot Protection'
+- content_for :page_header_body, t('.description')
 
-= semantic_form_for @settings, url: provider_admin_bot_protection_path, html: {:id => 'bot-protection-settings' } do |form|
-  = form.inputs 'Protection against bots' do
-    = form.input  :admin_bot_protection_level,
-      label: false,
-      hint: t("sites.spam_protections.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
-        as: :radio,
-        collection: ThreeScale::BotProtection::LEVELS,
-        input_html: { disabled: !Recaptcha.captcha_configured? }
-
-    = form.actions do
-      = form.commit_button 'Update Settings'
+= render partial: 'form', locals: { url: provider_admin_bot_protection_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label') }
