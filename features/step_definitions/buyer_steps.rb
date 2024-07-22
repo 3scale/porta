@@ -1,25 +1,21 @@
 # frozen_string_literal: true
 
 Given "a buyer {string}" do |name|
-  @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: name)
+  @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider,
+                                                        org_name: name)
   @account.buy! @provider.account_plans.default
 end
 
 Given "a buyer {string} of {provider}" do |org_name, provider|
-  @account = FactoryBot.create(:buyer_account, provider_account: provider, org_name: org_name)
+  @account = FactoryBot.create(:buyer_account, provider_account: provider,
+                                               org_name: org_name)
   @account.buy! provider.account_plans.default
 end
 
-Given "{buyer} has {int} application(s)" do |buyer, number|
-  buyer.bought_cinstances.destroy_all
-
-  plan = @plan || @product.plans.first
-  FactoryBot.create_list(:cinstance, number, user_account: buyer, plan: plan)
-end
-
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
-  buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
-                        :org_name => name, :state => :created)
+  buyer = FactoryBot.build(:buyer_account, provider_account: provider,
+                                           org_name: name,
+                                           state: :created)
   buyer.users.each do |user|
     user.email = email
     user.signup_type = :new_signup
@@ -31,11 +27,6 @@ When "(a )buyer {string} with email {string} signs up to {provider}" do |name, e
   buyer.buy! provider.account_plans.default
 end
 
-Given "{buyer} is signed up to {plan}" do |buyer, plan|
-  buyer.buy!(plan.provider_account.account_plans.default) unless plan.is_a? AccountPlan
-  buyer.buy!(plan)
-end
-
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   @buyer = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
                                              org_name: org_name)
@@ -43,17 +34,22 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   @buyer.buy!(plan)
 end
 
-Given "a buyer {string} signed up to {provider}" do |account_name, provider|
-  @buyer = pending_buyer(provider, account_name)
-  @buyer.approve! unless @buyer.approved?
+Given "a(n approved) buyer {string} signed up to {provider}" do |account_name, provider|
+  @buyer = FactoryBot.create(:buyer_account, provider_account: provider,
+                                             org_name: account_name)
 end
 
 Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|
   pending_buyer(provider, account_name)
 end
 
-# Create a group of buyer accounts subscribed to one or more service plans
+Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
+  @buyer = FactoryBot.create(:rejected_buyer_account, provider_account: provider,
+                                                      org_name: account_name)
+end
 
+# Create a group of buyer accounts subscribed to one or more service plans
+#
 # Given the following buyers with service subscriptions signed up to the provider:
 #   | Buyer  | Plans      | State   |
 #   | Ben    | Basic, Pro | Pending |
@@ -70,26 +66,20 @@ Given "the following buyers with service subscriptions signed up to {provider}:"
 end
 
 def pending_buyer(provider, account_name)
-  # TODO: Refactor this method into a factory
-  buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
-                  :org_name => account_name,
-                  :buyer => true)
-  buyer.buy! provider.account_plans.default
-
-  buyer.make_pending!
-  assert buyer.pending?
-
-  buyer
+  FactoryBot.create(:pending_buyer_account, provider_account: provider,
+                                            org_name: account_name)
 end
 
-Given "an approved buyer {string} signed up to {provider}" do |account_name, provider|
-  @buyer = pending_buyer(provider, account_name)
-  @buyer.approve! unless @buyer.approved?
+Given "{buyer} has {int} application(s)" do |buyer, number|
+  buyer.bought_cinstances.destroy_all
+
+  plan = @plan || @product.plans.first
+  FactoryBot.create_list(:cinstance, number, user_account: buyer, plan: plan)
 end
 
-Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
-  account = pending_buyer(provider, account_name)
-  account.reject!
+Given "{buyer} is signed up to {plan}" do |buyer, plan|
+  buyer.buy!(plan.provider_account.account_plans.default) unless plan.is_a? AccountPlan
+  buyer.buy!(plan)
 end
 
 Given "{buyer} has extra fields:" do |buyer, table|
@@ -136,7 +126,7 @@ end
 Given "{buyer} uses a custom plan {string}" do |account, name|
   contract = account.provider_account
                     .provided_contracts
-                    .find_by(user_account_id: account.id)
+                    .find_by!(user_account_id: account.id)
   contract.plan.update!(name: name)
   contract.customize_plan!
 end
@@ -150,7 +140,7 @@ Given "{buyer} has email {string}" do |buyer, email|
 end
 
 Given "{buyer} has no live applications" do |buyer|
-  buyer.bought_cinstances.each &:suspend!
+  buyer.bought_cinstances.each(&:suspend!)
 end
 
 When "{buyer} is approved" do |buyer|
@@ -235,8 +225,8 @@ When "the buyer wants to sign up" do
 end
 
 Given "a buyer {string} signed up to {service}" do |name, service|
-  @buyer = pending_buyer(service.account, name)
-  @buyer.approve! unless @buyer.approved?
+  @buyer = FactoryBot.create(:buyer_account, provider_account: service.account,
+                                             org_name: name)
 
   plans = service.service_plans
   plan = plans.default_or_first || plans.first

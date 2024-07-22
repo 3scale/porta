@@ -1,8 +1,9 @@
-# TODO: supress deprecation warning
-FactoryBot.define do
+# frozen_string_literal: true
+
+FactoryBot.define do # rubocop:disable Metrics/BlockLength
   factory(:account_without_users, :class => Account) do
     country_id do
-      (Country.find_by_code('ES') ||
+      (Country.find_by(code: 'ES') ||
         Country.create!(:code => 'ES', :name => 'Spain', :currency => 'EUR')).id
     end
 
@@ -24,7 +25,7 @@ FactoryBot.define do
   factory(:account, :parent => :account_without_users) do
     after(:create) do |account|
       if account.users.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
+        username = account.org_name.gsub(/[^a-zA-Z0-9_.]+/, '_')
 
         admin = FactoryBot.create(:admin, :username => username, :account_id => account.id)
         admin.activate!
@@ -45,46 +46,14 @@ FactoryBot.define do
     end
   end
 
-#FIXME: buyer accounts without provider accounts??? is that ok?
-  factory(:buyer_account_with_pending_user, :parent => :account) do
-    buyer { true }
-  end
-
-  factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
+  factory(:rejected_account, parent: :account) do
     after(:create) do |account|
-      account.users.each do |user|
-        user.activate! unless user.active? # horrible horrible factories
-      end
+      account.reject!
     end
   end
 
-  factory(:buyer_account, :parent => :pending_buyer_account) do
-    association :provider_account
-    after(:create) do |account|
-      account.approve! if account.can_approve?
-    end
-
-    after(:build) do |account|
-      if account.users.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.build(:admin, :account => account, :username => username)
-      end
-    end
-  end
-
-  factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
-    after(:create) do |account|
-      account.billing_address_name = nil
-      account.billing_address_address1 = nil
-      account.billing_address_address2 = nil
-      account.billing_address_city = nil
-      account.billing_address_country = nil
-      account.save!
-    end
-  end
-
-#TODO: rename this, it is actually buying plans!
-  factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do
+  #TODO: rename this, it is actually buying plans!
+  factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do # rubocop:disable Metrics/BlockLength
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
     site_access_code { '' }
     payment_gateway_type { :bogus }
@@ -97,7 +66,6 @@ FactoryBot.define do
                                      FactoryBot.create(:master_account)
                                    end
     end
-
 
     after(:stub) do |account|
       # [multiservices] This might not be right
@@ -141,6 +109,7 @@ FactoryBot.define do
       after(:build) do |account|
         account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
       end
+
       after(:stub) do |account|
         buyer_accounts = []
         account.stubs(:buyer_accounts).returns(buyer_accounts)
@@ -163,8 +132,8 @@ FactoryBot.define do
       end
 
       bought_cinstance = FactoryBot.build_stubbed(:cinstance,
-                                         :plan => master_account.default_service.application_plans.published.first,
-                                         :user_account => account)
+                                                  :plan => master_account.default_service.application_plans.published.first,
+                                                  :user_account => account)
 
       account.stubs(:bought_cinstance).returns(bought_cinstance)
       account.stubs(:provider_account).returns(master_account)
@@ -177,7 +146,7 @@ FactoryBot.define do
 
     after(:create) do |account|
       if account.users.reload.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
+        username = account.org_name.gsub(/[^a-zA-Z0-9_.]+/, '_')
         account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
       end
     end
@@ -185,12 +154,12 @@ FactoryBot.define do
 
   factory(:provider_with_billing, :parent => :provider_account) do
     after(:create) do |a|
-      a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
+      a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly')
       a.save
     end
   end
 
-  factory(:master_account, :parent => :account) do
+  factory(:master_account, :parent => :account) do # rubocop:disable Metrics/BlockLength
     master { true }
     org_name { 'Master account' }
     payment_gateway_type { :bogus }
@@ -198,18 +167,14 @@ FactoryBot.define do
 
     after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
-      if account.users.empty?
-        account.users << FactoryBot.build(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
-      end
+      account.users << FactoryBot.build(:admin, :account_id => account.id, :username => "superadmin", state: 'active') if account.users.empty?
       account.admins.each { |user| user.activate! if user.can_activate? }
     end
 
     after(:create) do |account|
       account.provider_account = account
 
-      if account.users.empty?
-        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
-      end
+      account.users << FactoryBot.create(:admin, :account_id => account.id, :username => "superadmin", state: 'active') if account.users.empty?
       account.admins.each { |user| user.activate! if user.can_activate? }
       account.approve! if account.can_approve?
 

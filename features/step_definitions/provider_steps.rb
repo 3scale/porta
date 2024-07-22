@@ -28,19 +28,17 @@ Given(/^a provider "([^"]*)" with default plans$/) do |name|
 end
 
 Given(/^the current provider is (.+?)$/) do |name|
-  @provider = Account.providers.find_by_org_name!(name)
+  @provider = Account.providers.find_by!(org_name: name)
 end
 
 Given(/^a provider "(.*?)" with impersonation_admin admin$/) do |provider_name|
   create_provider_with_plan(provider_name, ApplicationPlan.first)
   provider = @provider
-  if provider.admins.impersonation_admins.empty?
-    FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], account: provider
-  end
+  FactoryBot.create :active_admin, username: ThreeScale.config.impersonation_admin[:username], account: provider if provider.admins.impersonation_admins.empty?
 end
 
 Given(/^there is no provider with domain "([^"]*)"$/) do |domain|
-  Account.find_by_domain(domain).try!(&:destroy)
+  Account.find_by(domain: domain).try!(&:destroy)
 end
 
 Given "{provider} has the following fields defined for {field_definition_target}:" do |provider, target, table|
@@ -60,7 +58,7 @@ Given "{provider} has the following fields defined for {field_definition_target}
 end
 
 Given "{provider} has the field {string} for {string} in the position {int}" do |provider, name, klass, pos|
-  a = provider.fields_definitions.by_target(klass.underscore).find{ |fd| fd.name == name }
+  a = provider.fields_definitions.by_target(klass.underscore).find { |fd| fd.name == name }
   a.pos = pos
   a.save!
 end
@@ -178,7 +176,7 @@ Given(/^a provider signs up and activates his account$/) do
 
   page.should have_content('Signed in successfully')
 
-  @provider = Account.find_by_self_domain!(@domain)
+  @provider = Account.find_by!(self_domain: @domain)
 end
 
 Then(/^the provider should not have any notifications$/) do
@@ -316,7 +314,7 @@ When(/^the provider has credit card on signup feature in (automatic|manual) mode
 end
 
 When(/^the provider upgrades to plan "(.+?)"$/) do |name|
-  plan = Plan.find_by_system_name(name)
+  plan = Plan.find_by(system_name: name)
   @provider.reload
   @provider.force_upgrade_to_provider_plan!(plan)
 end
@@ -333,9 +331,9 @@ When "the buyer authenticates by SSO Token" do
   try_buyer_login_sso_token
 end
 
-And(/^the provider has one buyer$/) do
-  @buyer = pending_buyer(@provider, 'bob')
-  @buyer.approve! unless @buyer.approved?
+And "{provider} has one buyer" do |provider|
+  @buyer = FactoryBot.create(:buyer_account, provider_account: provider,
+                                             org_name: 'bob')
 end
 
 And(/^the provider enables credit card on signup feature manually/) do

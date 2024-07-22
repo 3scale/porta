@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-When "I fill in the draft with:" do |text|
+When "(I )fill in the draft with:" do |text|
   fill_draft(text)
 end
 
@@ -20,6 +20,6 @@ Given "the template {string} of {provider} is" do |name, provider, html|
   if (layout = provider.layouts.find_by(system_name: name))
     layout.update_attribute(:body, html)
   else
-    provider.layouts.create!(system_name: name){ |l| l.body = html }
+    provider.layouts.create!(system_name: name) { |l| l.body = html }
   end
 end
