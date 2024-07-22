@@ -1033,6 +1033,7 @@ DEPENDENCIES
   local-fastimage_resize (~> 3.4.0)
   mail (~> 2.8.1)
   mail_view (~> 2.0.4)
+  matrix (~> 0.4.2)
   mechanize
   mimemagic (~> 0.3.10)
   minitest (= 5.10.3)
