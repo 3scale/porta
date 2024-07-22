@@ -21,7 +21,6 @@ listen ENV.fetch('PORT', 3000).to_i
 
 prometheus_port = PrometheusExporterPort.call
 $stdout.puts "=> Unicorn Prometheus endpoint http://localhost:#{prometheus_port}/metrics"
-$stdout.puts "=> Unicorn Prometheus endpoint http://localhost:#{prometheus_port}/yabeda-metrics"
 listen prometheus_port
 
 pid app_dir.join('tmp/pids/unicorn.pid').to_s

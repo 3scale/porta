@@ -1,17 +1,8 @@
 //= require vendor/urlify
-//= require vendor/jquery/mailgun_validator
-
-//= require vendor/jquery.tipsy
 
 (function ($) {
 
     $(function () {
-        $('form input').tipsy({trigger: 'focus', gravity: 'w'});
-
-        $('.signup_form :input').each(function () {
-            $(this).placeholder();
-        });
-
         var first_name = $("#account_user_first_name");
         var first_name_val = first_name.val();
         var last_name_list_item = $("#account_user_last_name_input");
@@ -69,41 +60,5 @@
                 domain.trigger('keyup');
             }
         });
-
-
-        //var org_name = $('#account_org_name');
-
-        var user_email = $('#account_user_email');
-        var user_email_error = $('<p class="inline-errors"></p>');
-        var email_parent = user_email.parent('li');
-        var previous_email_error = user_email.next(".inline-errors");
-
-        user_email.mailgun_validator({
-            api_key: 'pubkey-889234583a41faa6d99b50ae152b2a3f',
-            success: function (response) {
-                var error_message = '';
-
-                user_email_error.remove();
-
-                if (response.is_valid) {
-                    email_parent.removeClass('error');
-                    user_email_error.remove();
-                } else {
-                    email_parent.addClass('error');
-
-                    if (response.did_you_mean) {
-                        error_message = "Did you mean: " + response.did_you_mean + "?";
-                    }
-                    else {
-                        error_message = "The email address should exist.";
-                    }
-                }
-                previous_email_error.hide();
-                user_email_error.appendTo(email_parent).text(error_message);
-            },
-            error: function () {
-                user_email_error.remove();
-            }
-        })
     });
 })(jQuery);

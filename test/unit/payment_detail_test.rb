@@ -12,6 +12,10 @@ class PaymentDetailTest < ActiveSupport::TestCase
     assert_equal @payment_detail.buyer_reference, @payment_detail.credit_card_auth_code
   end
 
+  test 'aliases credit_card_authorize_net_payment_profile_token' do
+    assert_equal @payment_detail.payment_service_reference, @payment_detail.credit_card_authorize_net_payment_profile_token
+  end
+
   test '#any_values?' do
     assert @payment_detail.any_values?
 
@@ -72,6 +76,7 @@ class PaymentDetailTest < ActiveSupport::TestCase
         credit_card_auth_code: 'auth_code',
         credit_card_partial_number: '1111',
         credit_card_expires_on: Date.parse('2020-08-01'),
+        credit_card_authorize_net_payment_profile_token: 'auth_net_token'
       }
     end
 

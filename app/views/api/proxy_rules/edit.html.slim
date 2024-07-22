@@ -1,7 +1,9 @@
-- content_for :page_header_title, 'Edit Mapping Rule'
+- content_for :page_header_title, 'Edit mapping rule'
 
-= semantic_form_for @proxy_rule, url: admin_service_proxy_rule_path(@service, @proxy_rule) do |form|
-  = render 'shared/proxy_rules/form', form: form,
-                                      proxy_rule: @proxy_rule,
-                                      metrics: @service.metrics,
-                                      include_redirect: @service.using_proxy_pro?
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @proxy_rule, url: admin_service_proxy_rule_path(@service, @proxy_rule), html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+      = render 'shared/proxy_rules/edit_form', form: form,
+                                          proxy_rule: @proxy_rule,
+                                          metrics: @service.metrics,
+                                          include_redirect: @service.using_proxy_pro?

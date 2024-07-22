@@ -26,7 +26,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contract_count normal behavior' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
@@ -39,7 +39,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contracts_count account being deleted' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
@@ -53,7 +53,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
   test '#contracts_count service being deleted' do
     account = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: account)
-    plan = FactoryBot.create(:application_plan, service: service, issuer: service)
+    plan = FactoryBot.create(:application_plan, issuer: service, issuer: service)
 
     assert_equal 0, plan.reload.contracts_count
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
@@ -132,7 +132,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     feature = stock.issuer.features.create!(name: "feature enabled", scope: 'ApplicationPlan')
     stock.features_plans.create!(feature: feature)
 
-    metric = FactoryBot.create(:metric, service: stock.service, system_name: 'frags')
+    metric = FactoryBot.create(:metric, owner: stock.service, system_name: 'frags')
     stock.pricing_rules.create!(metric: metric, min: 1, max: 5, cost_per_unit: 1)
     ul1 = stock.usage_limits.new(period: :day, value: 10)
     ul1.metric = metric

@@ -66,7 +66,7 @@ class User::StatesTest < ActiveSupport::TestCase
   end
 
   test 'when user is activated, and his buyer account is created, it becomes pending' do
-    account = FactoryBot.create(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account)
 
     account.update_attribute(:state, 'created')
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)

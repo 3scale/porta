@@ -50,10 +50,10 @@ class AuthenticationProvider::GitHub < AuthenticationProvider
   def credentials
     case branding_state.to_sym
     when :threescale_branded
-        config = ThreeScale::OAuth2.config.fetch(kind, {}).symbolize_keys
+      config = ThreeScale::OAuth2.config.fetch(kind.to_sym, {})
 
-        AuthenticationProvider::Credentials.new(config.fetch(:client_id) { client_id.presence },
-                                                config.fetch(:client_secret) { client_secret.presence })
+      AuthenticationProvider::Credentials.new(config.fetch(:client_id) { client_id.presence },
+                                              config.fetch(:client_secret) { client_secret.presence })
     else super
     end
   end

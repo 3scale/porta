@@ -16,7 +16,7 @@ class MessageObserverTest < ActiveSupport::TestCase
   class OtherTest < MessageObserverTest
     test 'after_create after_destroy' do
       app_plan = FactoryBot.create(:application_plan, issuer: @service)
-      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan))
+      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan, issuer: @service))
       cinstance = contract(app_plan)
 
       Applications::ApplicationCreatedEvent.expects(:create).once
@@ -33,12 +33,12 @@ class MessageObserverTest < ActiveSupport::TestCase
     end
 
     test 'plan changed' do
-      contract = FactoryBot.create(:service_contract)
+      contract = FactoryBot.create(:service_contract, plan: FactoryBot.create(:simple_service_plan, issuer: @service))
 
       ServiceContracts::ServiceContractPlanChangedEvent.expects(:create).once
       ContractMessenger.expects(:plan_change).never
 
-      contract.change_plan! FactoryBot.create(:simple_service_plan)
+      contract.change_plan! FactoryBot.create(:simple_service_plan, issuer: @service)
 
       cinstance = FactoryBot.create(:cinstance, service: @service)
 

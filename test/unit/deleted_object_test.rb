@@ -31,11 +31,11 @@ class DeletedObjectTest < ActiveSupport::TestCase
 
   test 'deleted_owner' do
     service = FactoryBot.create(:simple_service)
-    metric = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, owner: service)
     deleted_child_but_owner_persisted = DeletedObject.create(object: metric, owner: service).id
 
     service = FactoryBot.create(:simple_service)
-    metric = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, owner: service)
     deleted_child_and_owner_deleted = DeletedObject.create(object: metric, owner: service).id
     deleted_object_with_deleted_children_but_its_owner_persisted = DeletedObject.create(object: service, owner: service.account).id
 

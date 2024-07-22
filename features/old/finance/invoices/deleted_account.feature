@@ -21,7 +21,7 @@ Feature: Invoices of deleted account
       | Custom | 42   |
     And I issue the invoice number "2011-01-00000001"
     And account "bob" is deleted
-    And I go to all provider's invoices page
+    And I go to the admin portal invoices page
     Then I should see 1 invoice
     When I follow "2011-01-00000001"
     Then I should see "2011-01-00000001"

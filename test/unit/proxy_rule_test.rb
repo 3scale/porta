@@ -217,7 +217,6 @@ class ProxyRuleTest < ActiveSupport::TestCase
       setup do
         service = FactoryBot.create(:simple_service)
         @backend_api = FactoryBot.create(:backend_api, account: service.account)
-        FactoryBot.create(:backend_api_config, backend_api: backend_api, service: service)
       end
 
       attr_reader :backend_api
@@ -236,7 +235,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
     end
 
-    def tracks_changes_on_update
+    def test_tracks_changes_on_update
       proxy_rule = create_proxy_rule
       tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)
 
@@ -247,7 +246,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
     end
 
-    def tracks_changes_on_destroy
+    def test_tracks_changes_on_destroy
       proxy_rule = create_proxy_rule
       tracked_object = ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)
 

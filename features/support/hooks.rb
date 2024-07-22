@@ -200,7 +200,7 @@ end
 # Before '@stripe' do
 
 Before '@webhook' do
-  stub_request(:any, %r{google.com}).to_return(status: 200, body: '')
+  stub_request(:any, %r{3scale-test.org}).to_return(status: 200, body: '')
 end
 
 current_step = ->(scenario) do

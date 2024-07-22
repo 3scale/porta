@@ -3,17 +3,17 @@
 
 module HtmlSelectorsHelper
   # :reek:TooManyStatements
-  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     case scope
 
     #
     # Page sections
     #
-    when /the main menu/
+    when /^the main menu$/
       '#mainmenu'
 
-    when /^the main manu's section (.*)$/
-      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav')
+    when /^the main menu's section (.*)$/
+      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
 
     when /the apis dashboard widget/
       '.DashboardSection--services'
@@ -22,7 +22,7 @@ module HtmlSelectorsHelper
       'nav.pf-c-nav.pf-m-horizontal'
 
     when /the modal/
-      '#cboxContent' # '#fancybox-content'
+      '#cboxContent, .pf-c-modal-box' # '#fancybox-content'
 
     #
     # Dashboard

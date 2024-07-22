@@ -6,6 +6,10 @@ def import_simple_layout(provider)
   simple_layout.import_js_and_css! if @javascript
 end
 
+Given "a provider signed up to {plan}" do |plan|
+  create_provider_with_plan('foo.3scale.localhost', plan)
+end
+
 Given "a provider {string} signed up to {plan}" do |name, plan|
   create_provider_with_plan(name, plan)
 end
@@ -118,6 +122,22 @@ end
 
 Given "{provider} has no account plans" do |provider|
   provider.account_plans.delete_all
+end
+
+Given "{provider} has an sso integration for the admin portal" do |provider|
+  @authentication_provider = FactoryBot.create(:self_authentication_provider, account: provider)
+end
+
+Given "{provider} has sso {enabled} for all users" do |provider, enabled|
+  provider.settings.update_column(:enforce_sso, enabled)
+end
+
+And /^the sso integration is (published|hidden)$/ do |state|
+  @authentication_provider.update!(published: state == 'published')
+end
+
+And /^the sso integration is tested$/ do
+  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true)
 end
 
 When "{provider} creates sample data" do |provider|
@@ -333,10 +353,6 @@ Given(/^master is the provider$/) do
                                        issuer: @service,
                                        state: :published,
                                        default: true)
-end
-
-When "the provider is at {}" do |page_name|
-  visit path_to(page_name)
 end
 
 When "{provider} is suspended" do |provider|

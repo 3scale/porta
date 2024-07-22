@@ -2,20 +2,28 @@
 
 class EnforceSSOValidator < ApplicationValidator
 
-  SSO_NOT_TESTED_ERROR = 'SSO could not be enforced. Authentication flow has to be checked.'
+  SSO_NOT_TESTED_ERROR = I18n.t('provider.admin.account.enforce_sso.error_test')
 
-  attr_reader :account, :user, :user_session
+  attr_reader :account, :user, :user_session, :strict
 
-  def initialize(user_session)
-    @account = user_session.account
-    @user = user_session.user
-    @user_session = user_session
+  def initialize(user_session: nil, account: nil, **options)
+    options ||= {}
+    if user_session
+      @account = user_session.account
+      @user = user_session.user
+      @user_session = user_session
+      @strict = options.fetch(:strict, true)
+    else
+      @account = account
+      @strict = false
+    end
+    super()
   end
 
   validate :authentication_providers_exist
-  validate :auth_tested, if: -> { no_errors? }
-  validate :auth_recently_updated, if: -> { no_errors? }
-  validate :user_logged_in_by_password, if: -> { no_errors? }
+  validate :auth_tested, if: -> { no_errors? && strict }
+  validate :auth_recently_updated, if: -> { no_errors? && strict }
+  validate :user_logged_in_by_password, if: -> { no_errors? && strict }
 
   def error_message
     errors.full_messages.to_sentence
@@ -29,13 +37,13 @@ class EnforceSSOValidator < ApplicationValidator
 
   def user_logged_in_by_password
     user_session.sso_login?.tap do |by_sso|
-      errors.add(:base, 'SSO could not be enforced. You need to be logged in by SSO.') unless by_sso
+      errors.add(:base, I18n.t('provider.admin.account.enforce_sso.error_by_sso')) unless by_sso
     end
   end
 
   def authentication_providers_exist
     authentication_providers.present?.tap do |exist|
-      errors.add(:base, 'SSO could not be enforced. No published authentication providers.') unless exist
+      errors.add(:base, I18n.t('provider.admin.account.enforce_sso.error_exist')) unless exist
     end
   end
 

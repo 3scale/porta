@@ -40,24 +40,24 @@ it('should enable the submit button when all required inputs are filled', () => 
   const wrapper = mountWrapper()
   expect(isSubmitDisabled(wrapper)).toEqual(true)
 
-  act(() => { 
+  act(() => {
     wrapper.find(ApiJsonSpecInput).props().setApiJsonSpec('{}')
     wrapper.find(NameInput).props().setName('')
   })
-  
+
   expect(isSubmitDisabled(wrapper)).toEqual(true)
 
-  act(() => { 
+  act(() => {
     wrapper.find(ApiJsonSpecInput).props().setApiJsonSpec('')
     wrapper.find(NameInput).props().setName('Banana')
   })
-  
+
   expect(isSubmitDisabled(wrapper)).toEqual(true)
-  act(() => { 
+  act(() => {
     wrapper.find(ApiJsonSpecInput).props().setApiJsonSpec('{}')
     wrapper.find(NameInput).props().setName('Banana')
   })
-  
+
   expect(isSubmitDisabled(wrapper)).toEqual(false)
 })
 
@@ -92,10 +92,10 @@ describe('When is new record', () => {
 
   it('ServiceSelect should be hidden in product context', () => {
     const wrapper = mountWrapper({ ...props, collection: undefined })
-    
+
     expect(wrapper.exists('input[name="api_docs_service[service_id]"]')).toEqual(false)
   })
-  
+
   it('ServiceSelect should be displayed in audience context', () => {
     const wrapper = mountWrapper({ ...props, collection: [{ id: 1, name: 'myAPI' }] })
 
@@ -112,7 +112,7 @@ describe('When is update', () => {
       { id: 6, name: 'Test' }
     ],
     isUpdate: true,
-    name: 'Echo', 
+    name: 'Echo',
     published: true,
     serviceId: 2,
     systemName: 'echo'
@@ -131,10 +131,10 @@ describe('When is update', () => {
     expect(wrapper.exists('input[name="_method"][type="hidden"][value="put"]')).toEqual(true)
   })
 
-  it('should have SystemNameInput disabled', () => {
+  it('should have SystemNameInput readonly', () => {
     const wrapper = mountWrapper(updateProps)
 
-    expect(wrapper.find('input[id="api_docs_service_system_name"]').props().disabled).toBe(true)
+    expect(wrapper.find('input[id="api_docs_service_system_name"]').props().readOnly).toBe(true)
   })
 
   it('should have the proper button', () => {

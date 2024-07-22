@@ -26,7 +26,7 @@ ParameterType(
   transformer: ->(type, name) {
     case type
     when 'provider'
-      name.present? ? provider_by_name(name) : @provider
+      name.present? ? provider_by_name(name) : @provider.reload
     when 'buyer'
       name.present? ? Account.buyers.find_by!(name: name) : @buyer || @account
     end
@@ -393,15 +393,20 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'api_docs_service',
+  class: ApiDocs::Service,
+  regexp: /the spec|spec "(.*)"/,
+  transformer: ->(name) do
+    return ApiDocs::Service.find_by!(name: name) if name.present?
+
+    @api_docs_service
+  end
+)
+
+ParameterType(
   name: 'spec_version',
   regexp: /Swagger 1.2|Swagger 2|OAS 3.0/,
-  transformer: ->(version) do
-    {
-      'Swagger 1.2' => '1.2',
-      'Swagger 2' => '2.0',
-      'OAS 3.0' => '3.0'
-    }[version]
-  end
+  transformer: ->(version) { numbered_swagger_version(version) }
 )
 
 ParameterType(

@@ -6,7 +6,7 @@ class IndexingTest < ActiveSupport::TestCase
   setup do
     ThinkingSphinx::Test.clear
     ThinkingSphinx::Test.init
-    ThinkingSphinx::Test.start index: false
+    ThinkingSphinx::Test.wait_start
     ThinkingSphinx::Test.enable_search_jobs!
   end
 
@@ -89,6 +89,7 @@ class IndexingTest < ActiveSupport::TestCase
   def factory_for(model)
     overrides = {
       account: :simple_provider,
+      cms_page: :cms_published_page,
     }
 
     factory = model.name.gsub(/:+/, "_").underscore.to_sym

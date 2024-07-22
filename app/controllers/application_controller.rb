@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
 
   def disable_client_cache
     response.headers.merge!(
-      'Cache-Control' => 'no-cache, no-store',
+      'Cache-Control' => 'no-store',
       'Pragma' => 'no-cache',
       'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
     )

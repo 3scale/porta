@@ -27,7 +27,9 @@ class Buyers::ServiceContracts::Bulk::ChangePlansControllerTest < ActionDispatch
   end
 
   test '#new renders with the display_name in the title of the contract' do
-    another_service_contract = FactoryBot.create(:service_contract, plan: FactoryBot.create(:simple_service_plan, issuer: tenant.default_service))
+    another_plan = FactoryBot.create(:service_plan, issuer: tenant.default_service)
+    buyer = FactoryBot.create(:buyer_account, provider_account: tenant)
+    another_service_contract = FactoryBot.create(:service_contract, plan: another_plan, user_account: buyer)
     contracts = [service_contract, another_service_contract]
 
     tenant.settings.service_plans_ui_visible = true

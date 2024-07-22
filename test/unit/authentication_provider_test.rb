@@ -39,12 +39,10 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
     refute authentication_provider.valid?
 
-    assert authentication_provider.errors[:site].present?
-    assert authentication_provider.errors[:token_url].present?
-    assert authentication_provider.errors[:authorize_url].present?
-    assert authentication_provider.errors[:user_info_url].present?
+    errors = authentication_provider.errors
 
-    assert_equal ["Invalid URL format"], authentication_provider.errors.values.flat_map{|x| x[0]}.uniq
+    assert_equal %i[authorize_url site token_url user_info_url], errors.map(&:attribute).sort
+    assert_equal ['Invalid URL format'], errors.map(&:message).uniq
 
     authentication_provider.site = 'https://example.org'
     authentication_provider.token_url = 'http://example.org'
@@ -55,17 +53,18 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   end
 
   test 'callback_account' do
-      auth_provider = FactoryBot.build_stubbed(:authentication_provider)
-          .becomes(AuthenticationProvider::GitHub)
-      master = FactoryBot.build_stubbed(:master_account)
+    account = FactoryBot.create(:simple_provider)
+    auth_provider = FactoryBot.build_stubbed(:authentication_provider, account: account)
+                              .becomes(AuthenticationProvider::GitHub)
+    master = FactoryBot.build_stubbed(:master_account)
 
-      auth_provider.branding_state = 'threescale_branded'
-      assert auth_provider.threescale_branded?, 'should be 3scale branded'
-      assert_equal master, auth_provider.callback_account
+    auth_provider.branding_state = 'threescale_branded'
+    assert auth_provider.threescale_branded?, 'should be 3scale branded'
+    assert_equal master, auth_provider.callback_account
 
-      auth_provider.branding_state = 'custom_branded'
-      assert auth_provider.custom_branded?, 'should have custom branding'
-      assert_equal auth_provider.account, auth_provider.callback_account
+    auth_provider.branding_state = 'custom_branded'
+    assert auth_provider.custom_branded?, 'should have custom branding'
+    assert_equal auth_provider.account, auth_provider.callback_account
   end
 
   test 'find_kind' do
@@ -88,7 +87,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'branded_available?' do
     config = { client_id: 'id', client_secret: 'secret' }
-    ThreeScale::OAuth2.stubs(config: { 'authentication_provider' => config })
+    ThreeScale::OAuth2.stubs(config: { authentication_provider: config })
 
     refute_predicate AuthenticationProvider, :branded_available?
 

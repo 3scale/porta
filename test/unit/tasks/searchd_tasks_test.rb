@@ -29,6 +29,7 @@ class SearchdTasksTest < ActiveSupport::TestCase
     overrides = {
       account: :simple_provider,
       plan: :application_plan,
+      cms_page: :cms_published_page,
     }
 
     factory = model.name.gsub(/:+/, "_").underscore.to_sym

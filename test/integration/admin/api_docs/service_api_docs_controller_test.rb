@@ -12,26 +12,8 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
 
   attr_reader :provider, :service, :api_docs_service
 
-  test 'index works under the service scope' do
-    other_service = FactoryBot.create(:simple_service, account: provider)
-    other_api_docs_service = FactoryBot.create(:api_docs_service, account: provider, service: other_service, name: 'Other spec')
-
-    get admin_service_api_docs_path(service)
-    assert_service_active_docs_menus
-
-    page = Nokogiri::HTML4::Document.parse(response.body)
-    assert_equal 1, page.xpath(".//table/tbody//tr").count
-    assert_match api_docs_service.name, page.xpath(".//table/tbody").text
-    assert_not_match other_api_docs_service.name, page.xpath(".//table/tbody").text
-  end
-
   test 'new works under the service scope' do
     get new_admin_service_api_doc_path(service)
-    assert_service_active_docs_menus
-  end
-
-  test 'preview works under the service scope' do
-    get preview_admin_service_api_doc_path(service, api_docs_service)
     assert_service_active_docs_menus
   end
 

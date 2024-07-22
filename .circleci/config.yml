@@ -113,10 +113,9 @@ mysql-container: &mysql-container
     MYSQL_DATABASE: circleci
 
 postgres-container: &postgres-container
-  image: cimg/postgres:10.20
+  image: cimg/postgres:14.12
   environment:
     POSTGRES_USER: postgres
-    POSTGRES_DB: systemdb
 
 oracle-db-container: &oracle-db-container
   image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
@@ -134,12 +133,10 @@ memcached-container: &memcached-container
   image: memcached:1.5-alpine
 
 redis-container: &redis-container
-  image: redis:4.0-alpine
+  image: redis:6.2-alpine
 
-# https://github.com/poseidon/dnsmasq
-# TODO: create our own image like https://www.redhat.com/en/blog/build-ubi-containers-github-actions-buildah-and-podman
 dnsmasq-container: &dnsmasq-container
-  image: quay.io/poseidon/dnsmasq
+  image: quay.io/3scale/dnsmasq
   command:
     - --user=root
     - --keep-in-foreground

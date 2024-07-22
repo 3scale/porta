@@ -153,8 +153,9 @@ World(Module.new do
     when 'search',
          'the search page'
       search_path
+
     #
-    # Account management
+    # Account settings (Admin portal)
     #
     when 'the account page',
           'settings'
@@ -223,21 +224,42 @@ World(Module.new do
       new_provider_admin_account_email_configurations_path
 
     #
+    # SSO Integrations (Admin portal)
+    #
+    when 'the users sso integrations page'
+      provider_admin_account_authentication_providers_path
+    when 'the sso integration page'
+      auth_provider = AuthenticationProvider.last
+      provider_admin_account_authentication_provider_path(auth_provider)
+
+    #
+    # ActiveDocs (Admin portal)
+    #
+    when /the ActiveDocs page/
+      admin_api_docs_services_path
+    when /the new ActiveDocs spec page/
+      new_admin_api_docs_service_path
+    when /the spec's preview page from Audience context/
+      spec = @api_docs_service
+      preview_admin_api_docs_service_path(spec)
+    when /(?:the spec's|spec "(.*)") edit page from Audience context/
+      spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
+      edit_admin_api_docs_service_path(spec)
+
+    when /the product's ActiveDocs page/
+      admin_service_api_docs_path(@product)
+    when /the product's new ActiveDocs spec page/
+      new_admin_service_api_doc_path(@product)
+    when /the spec's preview page from Product context/
+      spec = @api_docs_service
+      preview_admin_service_api_doc_path(spec.service, spec)
+    when /(?:the spec's|spec "(.*)") edit page from Product context/
+      spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
+      edit_admin_service_api_doc_path(service_id: spec.service, id: spec)
+
+    #
     # API Management
     #
-    when 'the new active docs page'
-      new_admin_api_docs_service_path
-    when 'the preview active docs page'
-      preview_admin_api_docs_service_path(@provider.api_docs_services.first!)
-
-    when 'the service active docs page'
-      admin_service_api_docs_path(@provider.default_service)
-    when 'the new active docs page for a service'
-      new_admin_service_api_doc_path(@provider.default_service)
-    when 'the preview active docs page for a service'
-      service = @provider.default_service
-      preview_admin_service_api_doc_path(service, service.api_docs_services.first!)
-
     when /(the )?API dashboard( page)?/
       admin_service_path provider_first_service!
     when /^the overview page of product "([^"]+)"$/
@@ -282,6 +304,10 @@ World(Module.new do
                       .includes(:backend_api)
                       .find_by!("backend_apis.name" => $1)
       edit_admin_service_backend_usage_path(product, config)
+
+    when /^the integration errors page of product "([^"]+)"$/
+      service = Service.find_by!(name: $1)
+      admin_service_errors_path(service)
 
     #
     # Plans (Admin portal)
@@ -330,16 +356,17 @@ World(Module.new do
       new_admin_account_plan_path
 
     #
-    # Service contracts (subscriptions)
+    # Service contracts (Admin portal)
     #
     when 'the service subscription page'
       new_admin_service_contract_path
 
-    when 'the service subscriptions list for provider',
-         'the service contracts admin page',
-         'the subscriptions admin page',
-         /^the subscriptions admin page with (\d+) records? per page$/
-      admin_buyers_service_contracts_path(:per_page => $1)
+    when 'the provider service subscriptions page'
+      admin_buyers_service_contracts_path
+
+    when /^(?:buyer "(.*)"|the buyer's) service subscriptions page$/
+      buyer = $1.present? ? Account.buyers.find_by!(org_name: $1) : @buyer
+      admin_buyers_account_service_contracts_path(buyer)
 
     #
     # Applications (Admin portal)
@@ -469,13 +496,6 @@ World(Module.new do
     when /^the data exports page$/
       new_admin_data_exports_path
 
-    when /^the buyer account config page for "([^"]*)"$/
-      admin_buyers_account_configs_path(Account.find_by_org_name!($1))
-
-    when /^the buyer account service contracts page for "([^"]*)"$/
-      admin_buyers_account_service_contracts_path Account.find_by_org_name!($1)
-
-
     #
     # Forum admin
     #
@@ -583,13 +603,6 @@ World(Module.new do
     when /^the CMS Files page$/
       provider_admin_cms_files_path
 
-
-    #
-    # Simple CMS
-    #
-    when 'the CMS page templates page'
-      admin_cms_page_templates_path
-
     #
     # Advanced CMS (BrowserCMS)
     #
@@ -611,45 +624,52 @@ World(Module.new do
     when 'the buyer access details page'
       buyer_access_details_path
 
-    # Provider - Finance
-    when 'the finance page',
-         'the invoices by months page',
-         /my (?:earnings|revenue)/
+    #
+    # Finance (Admin portal)
+    #
+    when 'the earnings by month page'
       admin_finance_root_path
 
-    when /(the )?finance settings( page)?/
+    when 'the finance settings page'
       admin_finance_settings_path
 
-    when 'my invoices',
-         /^the invoices page$/
-      admin_account_invoices_path
+    when /^the invoice "(.*)" admin portal page$/
+      invoice = Invoice.find_by!(friendly_id: $1)
+      admin_finance_invoice_path(invoice)
 
-    when /^the invoices of account "(.+?)" page$/,
-         /^invoices issued by me for "([^"]*)"$/
+    when /^the invoices page of account "(.+?)"$/
       account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
-    when /^all provider's invoices page$/,
-         /invoices issued by me/
+    when /^the admin portal invoices page$/
       admin_finance_invoices_path
-
-    when /^the invoice "(.+?)" page$/
-      invoice = Invoice.find_by(id: $1) || Invoice.find_by(friendly_id: $1)
-      raise "Couldn't find Invoice with id #{$1}" unless invoice
-
-      admin_finance_account_invoice_path(invoice.buyer_account, invoice)
-
-    when 'the credit card gateway page'
-      admin_account_payment_gateway_path
-
-    when 'my invoices from 3scale page'
-      provider_admin_account_invoices_path
 
     when 'the log entries page'
       admin_finance_log_entries_path
 
+    when 'the 3scale invoices page'
+      provider_admin_account_invoices_path
+
+    when /^the 3scale invoice for "(\w+, \d{4})"$/
+      # WATCH OUT: different accounts could have different invoices for the same period.
+      invoice = Invoice.find { |i| i.name == $1 }
+      provider_admin_account_invoice_path(invoice)
+
+    #
+    # Finance (Developer portal)
+    #
+    when 'the dev portal invoices page'
+      admin_account_invoices_path
+
+    when /^the invoice "(.*)" dev portal page$/
+      invoice = Invoice.find_by!(friendly_id: $1)
+      admin_account_invoice_path(invoice)
+
     when 'the provider site page'
       admin_site_settings_path
+
+    when 'the new webhook page'
+      new_provider_admin_webhooks_path
 
     when 'the edit webhooks page'
       edit_provider_admin_webhooks_path

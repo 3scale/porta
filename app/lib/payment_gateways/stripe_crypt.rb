@@ -12,7 +12,7 @@ module PaymentGateways
       @errors = ActiveModel::Errors.new(self)
     end
 
-    def update!(payment_method_id)
+    def update_payment_detail(payment_method_id)
       payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
       card = payment_method.card
 
@@ -36,6 +36,27 @@ module PaymentGateways
       @customer ||= find_or_create_customer
     end
 
+    def update_billing_address(billing_address)
+      current_payment_method_id = account.payment_detail&.payment_method_id
+      return true unless current_payment_method_id
+
+      payment_method = Stripe::PaymentMethod.retrieve(current_payment_method_id, api_key)
+
+      payment_method.billing_details = {
+        address: {
+          line1: billing_address[:address1],
+          line2: billing_address[:address2],
+          city: billing_address[:city],
+          state: billing_address[:state],
+          postal_code: billing_address[:zip],
+          country: billing_address[:country]
+        }
+      }
+      payment_method.save
+    rescue Stripe::StripeError => exception
+      report_error("Failed to update billing address on Stripe: #{exception.message}")
+    end
+
     private
 
     delegate :payment_detail, to: :account
@@ -47,6 +68,7 @@ module PaymentGateways
       begin
         customer = Stripe::Customer.retrieve(customer_id, api_key)
         return create_customer if customer.deleted?
+
         customer
       rescue Stripe::InvalidRequestError
         create_customer

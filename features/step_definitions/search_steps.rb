@@ -4,9 +4,19 @@ Given "the search server is offline" do
   ThinkingSphinx::Test.stop
 end
 
+# Filter elements from a table using a Patternfly Toolbar attribute filters
+#
+# When the table is filtered with:
+#   | filter | value |
+#   | Name   | Bob   |
+#   | Plan   | Cheap |
+#   | State  | Live  |
 When "the table is filtered with:" do |table|
   within '.pf-c-page__main-section .pf-c-toolbar' do
     if has_css?('[data-ouia-component-id="attribute-search"]', wait: 0)
+      raise InvalidParameterError('No filters found') if table.hashes.empty?
+
+      parameterize_headers(table)
       table.hashes.each do |search|
         select_attribute_filter(search[:filter])
         fill_attribute_filter(search[:value])
@@ -110,7 +120,7 @@ When "(they )search {string} using the toolbar" do |text|
   perform_toolbar_search(text)
 end
 
-And "can able to reset the toolbar filter {string}" do |filter|
+And "can reset the toolbar filter {string}" do |filter|
   within '.pf-m-filter-group' do
     find_pf_select(filter.capitalize)
       .find('.pf-c-select__toggle-clear')

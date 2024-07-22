@@ -7,16 +7,11 @@ module System
     class ConnectionError < ActiveRecord::NoDatabaseError; end
     module_function
 
-    def configuration_specification
-      @configuration_specification ||= read_configuration_specification
-    end
-
-    def read_configuration_specification
-      configurations = Rails.application.config.database_configuration
-      resolver = ActiveRecord::ConnectionAdapters::ConnectionSpecification::Resolver.new(configurations)
-      spec = ActiveRecord::ConnectionHandling::DEFAULT_ENV.call
-
-      resolver.spec(resolver.configurations[spec])
+    def database_config
+      @database_config ||= begin
+        configurations = Rails.application.config.database_configuration
+        ActiveRecord::DatabaseConfigurations.new(configurations).configs_for(env_name: Rails.env).first
+      end
     end
 
     def adapter
@@ -24,19 +19,19 @@ module System
     end
 
     def adapter_method
-      ActiveSupport::StringInquirer.new(configuration_specification.adapter_method)
+      @adapter_method ||= ActiveSupport::StringInquirer.new(database_config.adapter)
     end
 
     def oracle?
-      adapter_method.oracle_enhanced_connection?
+      adapter_method.oracle_enhanced?
     end
 
     def mysql?
-      adapter_method.mysql2_connection?
+      adapter_method.mysql2?
     end
 
     def postgres?
-      adapter_method.postgresql_connection?
+      adapter_method.postgresql?
     end
 
     def execute_procedure(name, *params)
@@ -149,6 +144,11 @@ end
 
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
+
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.permissions = ['unlimited tablespace', 'create session',
+                                                                           'create table', 'create view', 'create sequence',
+                                                                           'create trigger', 'create procedure']
+
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
       prepend(Module.new do
         # If ORACLE_SYSTEM_PASSWORD is provided, Porta impersonates Oracle's SYSTEM user to create/update a non-SYSTEM
@@ -160,18 +160,10 @@ ActiveSupport.on_load(:active_record) do
           if ENV['ORACLE_SYSTEM_PASSWORD'].present?
             Logger.new($stderr).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
             super
-            connection.execute "GRANT create trigger TO #{username}"
-            connection.execute "GRANT create procedure TO #{username}"
           else
             # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
             establish_connection(@config)
           end
-        end
-
-        protected
-
-        def username
-          @config['username']
         end
       end)
     end

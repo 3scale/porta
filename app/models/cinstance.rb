@@ -172,7 +172,7 @@ class Cinstance < Contract
     if service == :all || service.blank?
       all
     else
-      where{ plan_id.in( my{Plan.issued_by(service).select(:id)} ) }
+      where { plan_id.in( my { Plan.issued_by(service).select(:id)} ) }
     end
   end
 

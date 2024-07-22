@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_27_012615) do
+ActiveRecord::Schema.define(version: 2024_07_04_135614) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -97,7 +97,6 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["master"], name: "index_accounts_on_master", unique: true
     t.index ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at"
     t.index ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state"
-    t.index ["provider_account_id"], name: "index_accounts_on_provider_account_id"
     t.index ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at"
     t.index ["self_domain"], name: "index_accounts_on_self_domain", unique: true
     t.index ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at"
@@ -639,7 +638,6 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["buyer_account_id", "state"], name: "index_invoices_on_buyer_account_id_and_state"
     t.index ["buyer_account_id"], name: "index_invoices_on_buyer_account_id"
     t.index ["provider_account_id", "buyer_account_id"], name: "index_invoices_on_provider_account_id_and_buyer_account_id"
-    t.index ["provider_account_id"], name: "index_invoices_on_provider_account_id"
   end
 
   create_table "legal_term_acceptances", force: :cascade do |t|

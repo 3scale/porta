@@ -12,7 +12,7 @@ module Tasks
           buyer_not_to_update = FactoryBot.create(:simple_buyer, provider_account: provider, tenant_id: nil)
           [buyers_to_update, buyer_not_to_update].flatten.each { |account| account.update_column(:tenant_id, -1) }
 
-          Rails.application.expects(:simple_try_config_for).with('corrupted_accounts').returns(YAML.load(buyers_to_update.map(&:id).to_yaml))
+          Rails.application.expects(:try_config_for).with('corrupted_accounts').returns(YAML.load(buyers_to_update.map(&:id).to_yaml))
 
           ENV['FILE'] = 'corrupted_accounts'
           execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:fix_corrupted_tenant_id_accounts', '1', '1'
@@ -26,7 +26,7 @@ module Tasks
           provider_not_to_update = FactoryBot.create(:simple_provider, provider_account: master_account)
           [providers_to_update, provider_not_to_update].flatten.each { |account| account.update_column(:tenant_id, -1) }
 
-          Rails.application.expects(:simple_try_config_for).with('corrupted_accounts').returns(YAML.load(providers_to_update.map(&:id).to_yaml))
+          Rails.application.expects(:try_config_for).with('corrupted_accounts').returns(YAML.load(providers_to_update.map(&:id).to_yaml))
 
           ENV['FILE'] = 'corrupted_accounts'
           execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:fix_corrupted_tenant_id_accounts', '1', '1'
@@ -71,7 +71,7 @@ module Tasks
         end
 
         test 'restore_existing_tenant_id_alerts' do
-          account = FactoryBot.create(:simple_provider)
+          account = FactoryBot.create(:provider_account, :with_a_buyer)
           alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
           alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
           account.update_column(:tenant_id, account.id)
@@ -85,7 +85,7 @@ module Tasks
         end
 
         test 'restore_empty_tenant_id_alerts' do
-          account = FactoryBot.create(:simple_provider)
+          account = FactoryBot.create(:provider_account, :with_a_buyer)
           alerts_empty = FactoryBot.create_list(:limit_alert, 2, account: account)
           alerts_with_tenant_id = FactoryBot.create_list(:limit_alert, 2, account: account)
           account.update_column(:tenant_id, account.id)
@@ -138,7 +138,7 @@ module Tasks
 
           @tenant_without_any_cinstance = FactoryBot.create(:simple_provider, state: 'scheduled_for_deletion')
 
-          @developer_with_enterprise = FactoryBot.create(:simple_buyer, state: 'scheduled_for_deletion')
+          @developer_with_enterprise = FactoryBot.create(:buyer_account, state: 'scheduled_for_deletion')
           cinstance = FactoryBot.create(:cinstance, user_account: @developer_with_enterprise)
           cinstance.plan.update_column(:system_name, 'enterprise')
         end

@@ -13,7 +13,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
       provider.validates_presence_of :self_domain, :unless => :signup?
 
       # special banned domains
-      BANNED_DOMAINS = (Rails.application.simple_try_config_for(:banned_domains) || []).freeze
+      BANNED_DOMAINS = (Rails.application.try_config_for(:banned_domains) || []).freeze
       provider.validates_exclusion_of :domain, :in => BANNED_DOMAINS, :allow_blank => true, :message => "has already been taken"
       provider.validates_exclusion_of :self_domain, :in => BANNED_DOMAINS, :allow_blank => true, :message => "has already been taken"
 

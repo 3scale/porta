@@ -10,7 +10,6 @@
 
 // vendored styles
 @import 'vendor/jquery.ui';
-@import 'vendor/jquery.tipsy';
 @import 'font-awesome';
 
 @import 'highlight/styles/github';
@@ -50,7 +49,6 @@
 @import 'provider/invoices';
 @import 'provider/finance';
 @import 'provider/groups';
-@import 'provider/webhooks';
 @import 'provider/metrics';
 @import 'provider/authentication_providers';
 @import 'provider/section';

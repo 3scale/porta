@@ -15,6 +15,26 @@
 
     <% unless codemirror_disabled?  %>
       var codemirror = CodeMirror.fromTextArea(text_area[0], <%= json(opts).html_safe %>);
+      const form = text_area.closest('form')
+
+      /**
+       * Prevents from exiting the CMS if there are unsaved changes. Alert message is set by browser.
+       * FIXME: it won't stop changing to another CMS section.
+       */
+      const beforeUnloadHandler = (e) => { e.preventDefault() };
+      codemirror.on('change', (editor) => {
+        if (editor.getValue() !== text_area.val()) {
+          window.addEventListener('beforeunload', beforeUnloadHandler);
+        } else {
+          window.removeEventListener('beforeunload', beforeUnloadHandler);
+        }
+      });
+      form.on('submit', (e) => {
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+      })
+      $(document).on('cms-template:init', () => {
+        window.removeEventListener('beforeunload', beforeUnloadHandler)
+      })
 
       $(codemirror).on('change', {content_type: content_type, liquid_enabled: liquid_enabled}, function(event, content_type, liquid_enabled){
         var liquid = "application/x-liquid-template";
@@ -39,6 +59,10 @@
         codemirror.setOption("mode", mode);
       });
 
+      /**
+       * When a new CMS page is rendered, trigger change for codemirror. FIXME: This is wrong,
+       * codemirror should be rendered with the initial state instead of doing it dynamically.
+       */
       $(codemirror).trigger('change', [content_type, liquid_enabled]);
 
       var wrapper = codemirror.getWrapperElement();
@@ -52,11 +76,31 @@
         });
       }
 
-      text_area.data('codemirror', codemirror)
-               .closest('.ui-tabs-panel')
-               .on('cms.refresh', function(event){
-                 codemirror.refresh();
-               });
+      text_area.data('codemirror', codemirror) // Data stored in jQuery 1.x
+
+      /**
+       * If it exists, set up a listener to "Preview" and "Preview draft" buttons that will give the
+       * user a chance to save any unsaved changes before opening the preview.
+       */
+      document.querySelectorAll('a[data-preview="draft"]')
+        .forEach(previewLink => {
+          previewLink.addEventListener('click', (e) => {
+            if (codemirror.getValue() !== text_area.val()) {
+              const save = confirm('You have unsaved draft changes.\nDo you want to save them before previewing?');
+
+              if (save) {
+                e.preventDefault();
+                codemirror.save();
+                document.removeEventListener('beforeunload', beforeUnloadHandler);
+                const ajax = $.rails.handleRemote(form);
+
+                if (ajax) {
+                  ajax.success(() => { window.open(e.target.getAttribute('href')); });
+                }
+              };
+            };
+          });
+        });
     <% end %>
   });
 <% end %>

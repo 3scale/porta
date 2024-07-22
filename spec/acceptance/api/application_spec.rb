@@ -3,10 +3,10 @@ require 'rails_helper'
 resource "Cinstance" do
 
   let(:service) { provider.services.default }
-  let(:plan) { FactoryBot.create(:application_plan, service: service) }
+  let(:plan) { FactoryBot.create(:application_plan, issuer: service) }
   let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
   let(:resource) { FactoryBot.create(:cinstance, user_account: buyer, plan: plan) }
-  let(:other_plan) { FactoryBot.create(:application_plan, service: service) }
+  let(:other_plan) { FactoryBot.create(:application_plan, issuer: service) }
 
   shared_examples "find application" do
     context 'with app id', action: :show do

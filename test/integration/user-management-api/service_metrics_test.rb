@@ -13,7 +13,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    FactoryBot.create(:metric, service: @service)
+    FactoryBot.create(:metric, owner: @service)
 
     get admin_api_service_metrics_path(@service, format: :xml), params: { provider_key: @provider.api_key }
 
@@ -46,7 +46,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
 
   test 'show with wrong id' do
     # a metric of another service
-    metric = FactoryBot.create(:metric, service: FactoryBot.create(:service, account: @provider))
+    metric = FactoryBot.create(:metric, owner: FactoryBot.create(:service, account: @provider))
 
     get admin_api_service_metric_path(@service, metric, format: :xml), params: { provider_key: @provider.api_key }
 

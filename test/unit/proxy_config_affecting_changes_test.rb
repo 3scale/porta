@@ -13,6 +13,8 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     include ProxyConfigAffectingChanges::ModelExtension
   end
 
+  CheapTrick = Class.new(Model)
+
   def self.build_tracker
     Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = ProxyConfigAffectingChanges::Tracker.new
   end
@@ -46,14 +48,12 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
   test 'tracks proxy config affecting changes on attribute write' do
     within_thread do
       tracker = ProxyConfigAffectingChangesTest.build_tracker
-      CheapTrick = Class.new(Model)
       tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
       CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
     end
   end
 
   test 'tracks proxy config affecting changes on attribute update' do
-    CheapTrick = Class.new(Model)
     object = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
     with_proxy_config_affecting_changes_tracker do |tracker|
       tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
@@ -62,7 +62,6 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
   end
 
   test 'tracks proxy config affecting changes on column update' do
-    CheapTrick = Class.new(Model)
     object = CheapTrick.create(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
     with_proxy_config_affecting_changes_tracker do |tracker|
       tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
@@ -71,7 +70,6 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
   end
 
   test 'does no track proxy config affecting changes on untracked attributes' do
-    CheapTrick = Class.new(Model)
     object = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
     with_proxy_config_affecting_changes_tracker do |tracker|
       tracker.expects(:track).with(instance_of(CheapTrick)).never
@@ -82,7 +80,6 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
   test 'tracks proxy config affecting changes on destroy' do
     within_thread do
       tracker = ProxyConfigAffectingChangesTest.build_tracker
-      CheapTrick = Class.new(Model)
       model = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
       tracker.expects(:track).with(instance_of(CheapTrick))
       model.destroy
@@ -98,21 +95,21 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
       store :settings, accessors: %i[jwt_claim_with_client_id jwt_claim_with_client_id_type], coder: JSON
     end
 
+    StoredClass = Class.new(StoredModel)
+
     test 'tracks proxy config affecting changes on attribute write' do
       within_thread do
         tracker = ProxyConfigAffectingChangesTest.build_tracker
-        CheapTrick = Class.new(StoredModel)
-        tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
-        CheapTrick.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
+        tracker.expects(:track).with(instance_of(StoredClass)).at_least_once
+        StoredClass.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
       end
     end
 
     test 'tracks proxy config affecting changes on destroy' do
       within_thread do
         tracker = ProxyConfigAffectingChangesTest.build_tracker
-        CheapTrick = Class.new(StoredModel)
-        model = CheapTrick.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
-        tracker.expects(:track).with(instance_of(CheapTrick))
+        model = StoredClass.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
+        tracker.expects(:track).with(instance_of(StoredClass))
         model.destroy
       end
     end
@@ -132,6 +129,22 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
       proxy.update_attribute(:endpoint, 'http://new-endpoint.test')
       tracker.expects(:issue_proxy_affecting_change_event).with(proxy)
       tracker.flush
+    end
+
+    test "reports tracked objects on #reported_clear" do
+      tracker.track(proxy)
+      Rails.logger.expects(:error).with("Proxy config tracked objects for changes non-empty before action: Proxy:#{proxy.id}")
+      tracker.reported_clear
+      assert_empty tracker.instance_variable_get(:@tracked_objects)
+    end
+
+    test "handles gracefully any errors during #reported_clear" do
+      tracker.track(proxy)
+      error = StandardError.new
+      proxy.expects(:id).raises(error)
+      System::ErrorReporting.expects(:report_error).with(error)
+      tracker.reported_clear
+      assert_empty tracker.instance_variable_get(:@tracked_objects)
     end
 
     test 'does not track the same object twice' do

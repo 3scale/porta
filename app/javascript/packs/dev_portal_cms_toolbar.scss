@@ -1,0 +1,47 @@
+@import '~@patternfly/patternfly/patternfly-addons.css';
+@import '~@patternfly/patternfly/patternfly-base.css';
+
+@import '~@patternfly/patternfly/components/Button/button.css';
+@import '~@patternfly/patternfly/components/CodeBlock/code-block.css';
+@import '~@patternfly/patternfly/components/Content/content.css';
+@import '~@patternfly/patternfly/components/Drawer/drawer.css';
+@import '~@patternfly/patternfly/components/FormControl/form-control.css';
+@import '~@patternfly/patternfly/components/List/list.css';
+@import '~@patternfly/patternfly/components/Nav/nav.css';
+
+.pf-c-drawer__body {
+  iframe#developer-portal {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+#cms-toolbar.pf-c-drawer__panel {
+  .pf-c-nav {
+    --pf-c-nav--m-tertiary__link--Left: 0;
+
+    .pf-c-nav__link {
+      --pf-c-nav__link--PaddingLeft: 0;
+
+      &.pf-m-current {
+        cursor: default;
+      }
+    }
+  }
+}
+
+button#cms-toolbar-toggle {
+  color: #fafafa;
+  font-size: 1.5rem;
+  margin: 0.75rem;
+  padding: 0.75rem;
+  position: absolute;
+  right: 0;
+  text-shadow: var(--pf-global--BackgroundColor--dark-200) -1px 1px 2px;
+  top: 0;
+  z-index: 1000;
+
+  &:hover {
+    color: var(--pf-global--link--Color);
+  }
+}

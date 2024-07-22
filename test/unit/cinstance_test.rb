@@ -421,12 +421,12 @@ class CinstanceTest < ActiveSupport::TestCase
     cinstance = FactoryBot.create(:cinstance)
 
     other_service = FactoryBot.create(:service, account: cinstance.provider_account)
-    other_plan_diff_service = FactoryBot.create(:application_plan, service: other_service, name: "other plan of different service")
+    other_plan_diff_service = FactoryBot.create(:application_plan, issuer: other_service, name: "other plan of different service")
     cinstance.plan = other_plan_diff_service
     assert cinstance.invalid?
     assert_includes cinstance.errors['plan'], 'not allowed in this context'
 
-    other_plan_same_service = FactoryBot.build_stubbed(:application_plan, service: cinstance.service, name: "other plan of same service")
+    other_plan_same_service = FactoryBot.build_stubbed(:application_plan, issuer: cinstance.service, name: "other plan of same service")
     cinstance.plan = other_plan_same_service
     assert cinstance.valid?
   end
@@ -814,7 +814,7 @@ class ChangePlanTest < ActiveSupport::TestCase
 
   test 'cannot change to a plan of different service' do
     other_service = FactoryBot.create(:service, account: @cinstance.provider_account)
-    other_plan = FactoryBot.create(:application_plan, service: other_service, name: "other plan")
+    other_plan = FactoryBot.create(:application_plan, issuer: other_service, name: "other plan")
     assert_not @cinstance.change_plan other_plan
     assert_includes @cinstance.errors['plan'], 'not allowed in this context'
   end
@@ -934,7 +934,8 @@ end
 
 class KeysTest < ActiveSupport::TestCase
   test 'creating keys in backend is fired only when app is created' do
-    app = FactoryBot.build(:cinstance)
+    buyer = FactoryBot.create(:buyer_account)
+    app = FactoryBot.build(:cinstance, user_account: buyer)
 
     app.expects(:create_key_after_create?).returns(true)
 
@@ -945,7 +946,7 @@ class KeysTest < ActiveSupport::TestCase
 
     BackendClient::ToggleBackend.enable_all!
 
-    assert app.save!
+    app.save!
     assert app.application_keys.presence
 
     app.expects(:create_key_after_create?).never

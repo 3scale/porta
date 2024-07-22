@@ -62,7 +62,7 @@ en:
     stats: 'Analytics API'
     account_management: 'Account Management API'
     policy_registry: 'Policy Registry API'
-    cms: 'Developer Portal API (Tech Preview)'
+    cms: 'Developer Portal API'
     ro: 'Read Only'
     rw: 'Read & Write'
   notification_category_titles:
@@ -143,17 +143,20 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
-          cms_api: 'Developer Portal API (Tech Preview)'
+          cms_api: 'Developer Portal API'
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
-          # start documentation links
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
-          # end documentation links
           empty_state:
             title: No ActiveDocs specs yet
             body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
             primary: Create your first spec
+        destroy:
+          success: ActiveDocs Spec was successfully deleted.
+        toggle_visible:
+          visible: "Spec %{name} is now visible"
+          hidden: "Spec %{name} is now hidden"
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
@@ -186,10 +189,10 @@ en:
 
   service_contracts:
     unsubscribe_forbidden:
-      one: 'There is 1 unsuspended application subscribed to the service'
+      one: There is 1 unsuspended application subscribed to the service
       other: 'There are %{count} unsuspended applications subscribed to the service'
-    unsubscribe_confirmation: 'Successfully unsubscribed from the service'
-    unsubscribe_failure: 'Cannot unsubscribe from the service'
+    unsubscribe_confirmation: Successfully unsubscribed from the service
+    unsubscribe_failure: Cannot unsubscribe from the service
 
   forbidden_on_premises: 'You are not allowed to perform this action'
   account_messenger_expired_credit_card_notification_for_buyer: "Expired Credit Card"
@@ -403,6 +406,32 @@ en:
         users:
           form:
             submit_button_label: 'Update User'
+        authentication_providers:
+          index:
+            header:
+              title: Single Sign-On Integrations
+              body:
+                Access the Admin Portal using your chosen authentication provider’s single sign-on
+                (SSO).
+          create:
+            error:
+              SSO integration could not be created
+          destroy:
+            success: SSO integration deleted
+          authorize_changes:
+            error: You cannot edit active SSO Providers when SSO is enforced
+          update:
+            error: SSO integration could not be updated
+        enforce_sso:
+          error_test: Password-based authentication could not be disabled. Authentication flow has to be checked.
+          error_by_sso: Password-based authentication could not be disabled. You need to be logged in by SSO.
+          error_exist: Password-based authentication could not be disabled. No published authentication providers.
+          create:
+            success: Password-based authentication disabled
+            error: Password-based authentication could not be disabled
+          destroy:
+            success: Password-based authentication enabled
+            error: Password-based authentication could not be enabled
       accounts:
         create:
           success: Tenant account was successfully created.
@@ -411,6 +440,12 @@ en:
         form:
           submit_button_label: 'Update Account'
           submit_button_next_step_label: 'Save and continue with payment details'
+      applications:
+        index:
+          empty_state:
+            title: No applications yet
+            body: There are no applications subscribed to any of your products.
+            primary: Add an application
       backend_apis:
         edit:
           delete_link: I understand the consequences, proceed to delete '%{name}' backend
@@ -485,10 +520,16 @@ en:
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
+        quick_starts_html: "You can use quick starts to learn about 3scale features step by step. <a href='%{link}'>Take tour</a>"
       webhooks:
         edit:
+          header:
+            title: Webhooks
+            body:
+              Webhooks let you define a URL to be called with a notification when events in the
+              3scale management system happen.
           form:
-            submit_button_label: 'Update webhooks settings'
+            submit_button_label: Update webhooks settings
 
   buyers:
     accounts:
@@ -531,6 +572,11 @@ en:
         success: Account successfully updated
 
     applications:
+      index:
+        empty_state:
+          title: No applications yet
+          body: This account doesn't have applications subscribed to any product.
+          primary: Add an application
       bulk:
         send_emails:
           success:
@@ -607,6 +653,7 @@ en:
     provider:
       invoices:
         index:
+          page_header_title: Invoices
           empty_state:
             title: Nothing to see here
             body: There are no invoices yet
@@ -668,6 +715,11 @@ en:
           all: Alerts for all services
         delete_alert_confirmation: Do you really want to delete this alert?
     applications:
+      index:
+        empty_state:
+          title: No applications yet
+          body: There are no applications subscribed to %{name}.
+          primary: Add an application
       edit:
         delete_confirmation: Are you sure you want to delete this application?
     backend_usages:
@@ -688,6 +740,23 @@ en:
       destroy:
         success: The Backend was removed from the Product
         error: The Backend cannot be removed from the Product
+    errors:
+      index:
+        title: Integration Errors for %{service}
+        body_html:
+          Here you can see errors related to your API's integration with 3scale, in particular in
+          calls made to methods of 3scale's Service Management API.
+          Please refer to the <a href=%{href} target="_blank">API ActiveDocs</a> documentation
+          section on using 3scale's Service Management API.
+        empty_state:
+          title: Hooray!
+          body: No integration errors reported for this service.
+        toolbar:
+          purge:
+            title: Purge
+            confirm: All errors will be permanently deleted.
+      purge:
+        success: All errors were purged.
     services:
       forms:
         definition_settings:
@@ -1188,6 +1257,9 @@ en:
               unsuspended_applications:
                 one: 'There is 1 unsuspended application subscribed to the service'
                 other: 'There are %{count} unsuspended applications subscribed to the service'
+            plan:
+              service_conflict: 'must belong to the same product'
+
         invoice:
           attributes:
             state:
@@ -1407,7 +1479,6 @@ en:
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
-        signups_enabled: ''
         strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
           Allow anyone to search on your Developer Portal.
@@ -1435,6 +1506,8 @@ en:
         hidden: "Developers won't be able to see this field."
 
       web_hook:
+        active: On/off switch for triggering webhooks
+        provider_actions: If unchecked, only actions in the developer portal trigger webhooks.
         url: URL that will be notified about all the events selected below.
 
       cinstance:
@@ -1565,6 +1638,26 @@ en:
         status: 'Response Code'
         headers: 'Content-type'
         message: 'Response Body'
+
+      web_hook:
+        active: Webhooks enabled
+        provider_actions: Actions in the admin portal also trigger webhooks
+        account_created_on: Account created
+        account_updated_on: Account updated
+        account_plan_changed_on: Account Plan changed
+        account_deleted_on: Account deleted
+        user_created_on: User created
+        user_updated_on: User updated
+        user_deleted_on: User deleted
+        application_created_on: Application created
+        application_updated_on: Application updated
+        application_suspended_on: Application suspended
+        application_plan_changed_on: Application Plan changed
+        application_user_key_updated_on: API Key changed
+        application_deleted_on: Application deleted
+        application_key_created_on: Application Key created
+        application_key_deleted_on: Application Key deleted
+        application_key_updated_on: Application Key updated
 
   action_controller:
     errors:

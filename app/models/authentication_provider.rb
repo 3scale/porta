@@ -43,13 +43,13 @@ class AuthenticationProvider < ApplicationRecord
   scope(:published, -> { where(published: true) })
 
   AVAILABLE = {
-    account_types[:developer] => %w[Keycloak Auth0 GitHub],
-    account_types[:provider]  => %w[Keycloak Auth0]
+    account_types[:developer] => [self::Keycloak, self::Auth0, self::GitHub],
+    account_types[:provider]  => [self::Keycloak, self::Auth0]
   }.with_indifferent_access.freeze
   private_constant :AVAILABLE
 
   def self.available(account_type = account_types[:developer])
-    AVAILABLE[account_type].map(&method(:const_get)) # Done this way because otherwise it understands GitHub as the module in github-markdown gem
+    AVAILABLE[account_type]
   end
 
   def self.find_kind(kind, available_kinds = available)
@@ -128,7 +128,7 @@ class AuthenticationProvider < ApplicationRecord
   delegate :human_kind, to: :class
 
   def self.branded_available?
-    config = ThreeScale::OAuth2.config.fetch(kind, {})
+    config = ThreeScale::OAuth2.config.fetch(kind.to_sym, {})
 
     return unless config[:enabled]
 

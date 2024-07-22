@@ -26,7 +26,7 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     test 'index' do
       FactoryBot.create(:metric, owner: backend_api, parent: backend_api.metrics.hits, service_id: nil) # a method metric
       FactoryBot.create(:metric, owner: FactoryBot.create(:backend_api, account: provider), service_id: nil) # other backend api
-      FactoryBot.create(:metric, service: FactoryBot.create(:service, account: provider)) # owned by a service, not a backend api
+      FactoryBot.create(:metric, owner: FactoryBot.create(:service, account: provider)) # owned by a service, not a backend api
 
       get admin_api_backend_api_metrics_path(backend_api), params: { access_token: access_token_value }
 

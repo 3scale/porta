@@ -11,7 +11,7 @@ class DeveloperPortal::Admin::Account::AccountPlansController < ::DeveloperPorta
     liquify prefix: 'account_plans', only: :index
 
     def index
-      account_plans = Liquid::Drops::AccountPlan.wrap(site_account.account_plans.published)
+      account_plans = Liquid::Drops::AccountPlan.wrap(site_account.account_plans.published.ordered)
       assign_drops account_plans: account_plans
     end
 

@@ -344,7 +344,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return false unless saved
 
     success = ProxyDeploymentService.call(self)
-    analytics.track('Sandbox Proxy Deploy', success: success)
+    analytics.track('Sandbox Proxy Deploy', { success: success })
     success
   end
 
@@ -602,8 +602,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def policies_config_structure
     return if policies_config.valid?
 
-    policies_config.errors.each do |_attribute, message|
-      errors.add(:policies_config, message)
+    policies_config.errors.each do |error|
+      errors.add(:policies_config, error.message)
     end
   end
 

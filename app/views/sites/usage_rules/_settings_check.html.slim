@@ -1,6 +1,6 @@
 - disabled = local_assigns[:disabled]
 - label = local_assigns[:label] || t("formtastic.labels.settings.#{setting}")
-- hint = local_assigns[:hint] || t("formtastic.hints.settings.#{setting}")
+- hint = local_assigns[:hint] || t("formtastic.hints.settings.#{setting}", default: '')
 
 div class="pf-c-check"
   input type="hidden" name="settings[#{setting}]" value="0"

@@ -45,7 +45,19 @@ When "they select {string} from the context selector" do |context|
   select_context context
 end
 
-private
+Then "they should be able to navigate to the following contexts:" do |list|
+  context_selector.click
+  within(context_selector) do
+    items = find_all('.pf-c-dropdown__menu-item').map(&:text)
+    assert_same_elements(list.raw.flatten, items)
+  end
+end
+
+Then "the current context {should} be {string}" do |should, context|
+  within context_selector do
+    assert_equal should, has_css?('.pf-c-dropdown__toggle', text: context, wait: 0)
+  end
+end
 
 def context_selector
   @context_selector ||= find('[data-ouia-component-id="context-selector"]')

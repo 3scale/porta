@@ -471,7 +471,9 @@ System::Database::MySQL.define do
 
   trigger 'event_store_events' do
     <<~SQL
-      SET NEW.tenant_id = NEW.provider_id;
+      IF NEW.provider_id <> master_id THEN
+        SET NEW.tenant_id = NEW.provider_id;
+      END IF;
     SQL
   end
 

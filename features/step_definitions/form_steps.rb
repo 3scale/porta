@@ -22,20 +22,27 @@ INLINE_ERROR_SELECTORS = [
   'p.inline-errors'
 ].join(', ')
 
+FORM_GROUP_SELECTORS = [
+  '.pf-c-form__group',
+  'li',
+  '.form-group'
+].join(', ')
+
 Then "field {string} has inline error {string}" do |field, error|
+  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
+
   text = Regexp.new(Regexp.escape(error), Regexp::IGNORECASE)
-  find_field(field)
-    .assert_sibling(INLINE_ERROR_SELECTORS, text: text, wait: 0)
+  assert form_group.has_css?(INLINE_ERROR_SELECTORS, text: text, wait: 0)
 end
 
 Then "field {string} has no inline error" do |field|
-  find_field(field)
-    .assert_no_sibling(INLINE_ERROR_SELECTORS, wait: 0)
+  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
+  assert form_group.has_no_css?(INLINE_ERROR_SELECTORS, wait: 0)
 end
 
-Then /^there is (a|no)? (required )?(readonly )?field "(.*)"$/ do |presence, required, readonly, field|
+Then /^there is (a|no) (required )?(readonly )?field "(.*)"$/ do |presence, required, readonly, field|
   present = presence == 'a'
-  assert_equal present, has_field?(field, readonly: readonly.present?)
+  assert_equal present, has_field?(field, readonly: readonly.present?, wait: present)
 
   if present && required.present?
     assert find('label', text: field).has_css?('.required, .pf-c-form__label-required'),

@@ -93,21 +93,21 @@ class Account::StatesTest < ActiveSupport::TestCase
   # end
 
   test 'enqueues notification email when account is made pending' do
-    account = FactoryBot.create(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account)
     assert_enqueued_email_with(AccountMailer, :confirmed, args: [account]) do
       account.make_pending!
     end
   end
 
   test 'enqueues notification email when account is rejected' do
-    account = FactoryBot.create(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account)
     assert_enqueued_email_with(AccountMailer, :rejected, args: [account]) do
       account.reject!
     end
   end
 
   test 'enqueues notification email when buyer account is approved' do
-    account = FactoryBot.create(:buyer_account_with_provider)
+    account = FactoryBot.create(:buyer_account)
 
     account.update_attribute(:state, 'pending')
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)
@@ -205,29 +205,28 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test '.inactive_since' do
-    inactive_since_days = 5.days
+    inactive_period_start = 5.days.ago
+    provider = FactoryBot.create(:provider_account)
 
-    old_account_without_traffic = FactoryBot.create(:simple_account)
-    old_account_without_traffic.update_attribute(:created_at, inactive_since_days.ago)
+    old_account_without_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
+    old_account_without_traffic.update_attribute(:created_at, inactive_period_start)
 
-    old_account_with_old_traffic = FactoryBot.create(:simple_account)
-    old_account_with_old_traffic.update_attribute(:created_at, inactive_since_days.ago)
-    FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago)
+    old_account_with_old_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
+    old_account_with_old_traffic.update_attribute(:created_at, inactive_period_start)
+    FactoryBot.create(:cinstance, user_account: old_account_with_old_traffic, first_daily_traffic_at: inactive_period_start - 1)
 
-    recent_account_without_traffic = FactoryBot.create(:simple_account)
-    recent_account_without_traffic.update_attribute(:created_at, (inactive_since_days - 1.day).ago)
-    FactoryBot.create(:cinstance, user_account: recent_account_without_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
-
-    recent_account_with_recent_traffic = FactoryBot.create(:simple_account)
-    recent_account_with_recent_traffic.update_attribute(:created_at, inactive_since_days.ago)
-    FactoryBot.create(:cinstance, user_account: recent_account_with_recent_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
+    recent_account_without_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
+    recent_account_without_traffic.update_attribute(:created_at, inactive_period_start + 1)
+    old_account_with_recent_traffic = FactoryBot.create(:buyer_account, provider_account: provider)
+    old_account_with_recent_traffic.update_attribute(:created_at, inactive_period_start)
+    FactoryBot.create(:cinstance, user_account: old_account_with_recent_traffic, first_daily_traffic_at: inactive_period_start)
 
     assert_raise(ArgumentError) { Account.inactive_since.pluck(:id) }
-    results = Account.inactive_since(inactive_since_days.ago).pluck(:id)
+    results = Account.inactive_since(inactive_period_start).pluck(:id)
     assert_includes results, old_account_without_traffic.id
     assert_includes results, old_account_with_old_traffic.id
     assert_not_includes results, recent_account_without_traffic.id
-    assert_not_includes results, recent_account_with_recent_traffic.id
+    assert_not_includes results, old_account_with_recent_traffic.id
   end
 
   test '.without_traffic_since' do
@@ -235,10 +234,10 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     account_without_traffic = FactoryBot.create(:simple_account)
 
-    account_with_old_traffic = FactoryBot.create(:simple_account)
-    FactoryBot.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago)
+    account_with_old_traffic = FactoryBot.create(:buyer_account)
+    FactoryBot.create(:cinstance, user_account: account_with_old_traffic, first_daily_traffic_at: inactive_since_days.ago - 1)
 
-    account_with_recent_traffic = FactoryBot.create(:simple_account)
+    account_with_recent_traffic = FactoryBot.create(:buyer_account)
     FactoryBot.create(:cinstance, user_account: account_with_recent_traffic, first_daily_traffic_at: (inactive_since_days - 1.day).ago)
 
     assert_raise(ArgumentError) { Account.without_traffic_since.pluck(:id) }

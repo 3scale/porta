@@ -88,7 +88,7 @@ class Buyers::UsersController < Buyers::BaseController
   DEFAULT_PARAMS = %i[username email password password_confirmation role].freeze
 
   def user_params
-    @user_params ||= params.require(:user).permit(DEFAULT_PARAMS | user.defined_extra_fields_names)
+    @user_params ||= params.require(:user).permit(*DEFAULT_PARAMS, extra_fields: [*user.defined_extra_fields_names])
   end
 
   def redirect_back_or_show_detail

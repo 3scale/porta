@@ -11,16 +11,11 @@ class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
       issuer: service
     )
 
-    @application = FactoryBot.create(
-      :cinstance,
-      plan: plan,
-      application_keys: FactoryBot.create_list(
-        :application_key,
-        2
-      )
-    )
+    @application = FactoryBot.create(:cinstance, plan: plan)
 
-    @key = @application.application_keys.first!
+    FactoryBot.create_list(:application_key, 2, application: @application)
+
+    @key = @application.reload.application_keys.first!
 
     @member_user = FactoryBot.create(
       :member,

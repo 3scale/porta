@@ -7,13 +7,13 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
 
   def setup
     @service = FactoryBot.create(:simple_service)
-    @metric = FactoryBot.create(:metric, service: service, system_name: 'some_system_name')
+    @metric = FactoryBot.create(:metric, owner: service, system_name: 'some_system_name')
   end
 
   attr_reader :service, :metric
 
   test '#perform for update metric' do
-    ThreeScale::Core::Metric.expects(:save).with(id: metric.id, service_id: service.backend_id, name: metric.system_name, parent_id: nil)
+    ThreeScale::Core::Metric.expects(:save).with({ id: metric.id, service_id: service.backend_id, name: metric.system_name, parent_id: nil })
 
     perform_enqueued_jobs(only: BackendMetricWorker) do
       BackendMetricWorker.perform_later(service.backend_id, metric.id)

@@ -30,9 +30,9 @@ Then "charging can be enabled" do
 end
 
 Then "payment gateway {can} be set" do |visible|
-  assert_equal visible, has_checked_field?('Charging enabled')
-  assert_equal visible, has_text?('Credit card gateway')
-  assert_equal visible, has_css?(credit_card_gateway_card_selector)
+  assert_equal visible, has_checked_field?('Charging enabled', wait: 0)
+  assert_equal visible, has_text?('Credit card gateway', wait: 0)
+  assert_equal visible, has_css?(credit_card_gateway_card_selector, wait: 0)
 end
 
 Then "they can set a different currency to be charged" do
@@ -98,7 +98,7 @@ Given /^the provider is charging its buyers with a (supported|deprecated) paymen
 end
 
 Then "they {should} be warned about the payment gateway being deprecated" do |deprecated|
-  assert_equal deprecated, has_text?(/^The .+ gateway has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another gateway.$/)
+  assert_equal deprecated, has_text?(/^The .+ gateway has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another gateway.$/, wait: 0)
 end
 
 Then "Stripe can be set as a payment gateway" do

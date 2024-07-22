@@ -25,7 +25,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
   test 'does not sync backend metric when validation fails creating a nested metric (method)' do
     service = FactoryBot.create(:simple_service)
-    metric  = FactoryBot.create(:metric, :service => service, :friendly_name => 'Foos')
+    metric  = FactoryBot.create(:metric, :owner => service, :friendly_name => 'Foos')
 
     Metric.any_instance.expects(:sync_backend).never
     BackendMetricWorker.expects(:perform_later).never
@@ -37,7 +37,7 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
   test 'does not sync backend metric data when validation fails' do
     service = FactoryBot.create(:simple_service)
-    metric  = FactoryBot.create(:metric, :service => service, :friendly_name => 'Foos')
+    metric  = FactoryBot.create(:metric, :owner => service, :friendly_name => 'Foos')
 
     BackendMetricWorker.expects(:perform_later).never
 

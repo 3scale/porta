@@ -42,12 +42,12 @@ const NewBackendModal: FunctionComponent<Props> = ({
   }
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any -- FIXME: jQuery used here is 1.8.2 but in our node_modules is 3.5
-    ($ as any)('form#new_backend_api_config')
-      // TODO: jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
-      .live('ajax:send', () => { setIsLoading(true) })
-      .live('ajax:complete', handleOnAjaxComplete)
-    // No need for cleanup
+    // This events are triggered with rails-jquery, which is different from the one from node_modules
+    window.$(document)
+      .on('ajax:send', 'form#new_backend_api_config', () => { setIsLoading(true) })
+      .on('ajax:complete', 'form#new_backend_api_config', handleOnAjaxComplete)
+
+    // No need for useEffect cleanup
   }, [])
 
   const header = (

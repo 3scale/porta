@@ -28,7 +28,7 @@ spec:
         Mapping rules specify details about the usage data that you want to capture of method or metrics. With mapping rules, you can decide which API or API packages you want to assign to which method or metric and check the counting in the analytics section.
 
         Adding mapping rules to a method enables setting usage limits and pricing rules in each product’s application plan and an individual API endpoint connects to that API package.
-        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](/assets/quickstarts/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
+        ![Mapping rules specify details about the usage data that you want to capture of method or metrics.](/quickstarts/images/learn-about-mapping-rules.png "Learn about capturing usage of API endpoints or API packages.")
       # optional - the task's Check your work module
       review:
         instructions: |-

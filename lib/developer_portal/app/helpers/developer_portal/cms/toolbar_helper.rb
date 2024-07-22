@@ -13,10 +13,6 @@ module DeveloperPortal::CMS::ToolbarHelper
     controller.send(:site_account)
   end
 
-  def cms_mode
-    @_cms_mode ||= ActiveSupport::StringInquirer.new(session[:cms] || CMS::Settings::DEFAULT_MODE)
-  end
-
   def theme_options
     THEMES.map do |name, bgcolor_solid, bgcolor, img_url|
       snippet = <<-STYLE.strip_heredoc if bgcolor.present?

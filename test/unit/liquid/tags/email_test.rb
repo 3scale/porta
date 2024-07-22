@@ -61,7 +61,7 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
     mail.expects(:[]=).with(:cc, ['just@me.com'])
     mail.expects(:[]=).with(:from, 'secret@mail.com')
     mail.expects(:[]=).with(:reply_to, 'over@lord.com')
-    mail.expects(:headers).with('MyHeader' => 'Value')
+    mail.expects(:headers).with({ 'MyHeader' => 'Value' })
 
     context = stub(:registers => registers)
 
@@ -70,7 +70,7 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
 
   test "assign do_not_send header to mailer" do
     mail = subject.parse('email', '', ['{% do_not_send %}', @end], {})
-    mail.expects(:headers).with(::Message::DO_NOT_SEND_HEADER => true)
+    mail.expects(:headers).with({ ::Message::DO_NOT_SEND_HEADER => true })
 
     context = stub(:registers => {mail: mail})
     mail.render(context)

@@ -73,8 +73,6 @@ FactoryBot.define do
   end
 
   factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
-    association :provider_account
-
     after(:create) do |account|
       account.billing_address_name = nil
       account.billing_address_address1 = nil
@@ -83,14 +81,6 @@ FactoryBot.define do
       account.billing_address_country = nil
       account.save!
     end
-  end
-
-  factory(:buyer_account_with_provider, :parent => :buyer_account) do
-    association :provider_account
-  end
-
-  factory(:pending_buyer_account_with_provider, :parent => :pending_buyer_account) do
-    buyer { true }
   end
 
 #TODO: rename this, it is actually buying plans!
@@ -145,6 +135,20 @@ FactoryBot.define do
         account_plans_ui_visible: true,
         service_plans_ui_visible: true
       )
+    end
+
+    trait :with_a_buyer do
+      after(:build) do |account|
+        account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
+      end
+      after(:stub) do |account|
+        buyer_accounts = []
+        account.stubs(:buyer_accounts).returns(buyer_accounts)
+        account.buyer_accounts << FactoryBot.build_stubbed(:buyer_account, provider_account: account)
+      end
+      # looks nicer but doesn't work well
+      # :buyer_account is generated before current factory so extra provider is created and tenant_id doesn't match
+      # buyer_accounts { [association(:buyer_account)] }
     end
   end
 

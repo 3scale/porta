@@ -7,6 +7,8 @@ class SettingsTest < ActiveSupport::TestCase
     @settings = @provider.settings
   end
 
+  attr_reader :settings
+
   def test_hide_basic_switches
     Rails.configuration.three_scale.stubs(:hide_basic_switches).returns(true)
     assert Settings.hide_basic_switches?
@@ -84,9 +86,6 @@ class SettingsTest < ActiveSupport::TestCase
     @settings.update(account_approval_required: true)
     assert plan.reload.approval_required
 
-    @settings.update(welcome_text: :bar)
-    assert_equal false, plan.reload.approval_required
-
     @settings.update(account_approval_required: false)
     refute plan.reload.approval_required
   end
@@ -101,6 +100,20 @@ class SettingsTest < ActiveSupport::TestCase
 
     @settings.update(account_approval_required: false)
     refute @provider.account_plans.first.approval_required
+  end
+
+  test "account_approval_required ignores empty values" do
+    settings.update(account_approval_required: true)
+    assert settings.account_approval_required
+
+    settings.update(account_approval_required: "")
+    assert settings.account_approval_required
+  end
+
+  test "not including account_approval_required doesn't disable it" do
+    settings.update(account_approval_required: true)
+    settings.update({})
+    assert settings.account_approval_required
   end
 
   def test_service_plans_visible_ui_switch
@@ -167,6 +180,32 @@ class SettingsTest < ActiveSupport::TestCase
     @provider.save!
     settings.reload
     assert settings.monthly_billing_enabled
+  end
+
+  test 'empty values are skipped for non-null columns' do
+    settings.update(public_search: true)
+    assert settings.reload.public_search
+
+    settings.update(public_search: "")
+    assert_not settings.previous_changes[:public_search]
+    assert settings.reload.public_search
+
+    settings.update(public_search: nil)
+    assert_not settings.previous_changes[:public_search]
+    assert settings.reload.public_search
+
+    settings.update(public_search: "false")
+    assert settings.previous_changes[:public_search]
+    assert_not settings.reload.public_search
+  end
+
+  test "validate change plan permission values" do
+    assert_equal 'request', settings.change_account_plan_permission
+    assert_equal 'request', settings.change_service_plan_permission
+
+    settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
+    assert settings.errors.of_kind? :change_account_plan_permission, "is not included in the list"
+    assert settings.errors.of_kind? :change_service_plan_permission, "is not included in the list"
   end
 
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase

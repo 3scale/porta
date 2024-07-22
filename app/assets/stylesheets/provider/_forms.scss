@@ -138,8 +138,8 @@ select:not(.pf-c-form-control) {
   float: right;
 }
 
-input[type='checkbox']:not(.pf-c-check__input),
-input[type='checkbox']:not(.pf-c-check__input):active,
+input[type='checkbox']:not(.pf-c-check__input, .pf-c-switch__input),
+input[type='checkbox']:not(.pf-c-check__input, .pf-c-switch__input):active,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label input,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li label input[type='radio'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox'],
@@ -353,14 +353,6 @@ form.formtastic:not(.pf-c-form) {
   }
 }
 
-form.web_hook fieldset > ol > li.boolean label {
-  font-weight: $font-weight-normal;
-}
-
-form.web_hook table > tbody > tr > td > fieldset > ol > li.boolean label {
-  font-size: $font-size-sm;
-}
-
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
   padding: 0 0 0 0;
 }
@@ -428,15 +420,6 @@ form.formtastic:not(.pf-c-form) .radio fieldset {
 
 .dashboard_card form.formtastic:not(.pf-c-form) fieldset>ol>li.boolean label {
   padding-left:0;
-}
-
-.Hint {
-  color: $hint-color;
-  margin: line-height-times(1/4) 0 0;
-}
-
-.Label {
-  font-weight: $font-weight-bold;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints,

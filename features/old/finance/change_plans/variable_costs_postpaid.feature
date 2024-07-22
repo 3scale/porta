@@ -56,7 +56,7 @@ Feature: Change plan
       | Metric | Value |
       | hits   |     1 |
       And time flies to 3rd June 2009
-      And I go to my earnings
+      And I go to the earnings by month page
       Then I should have an invoice of "11.0 EUR"
 
   @javascript

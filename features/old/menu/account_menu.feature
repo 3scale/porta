@@ -46,8 +46,8 @@ Feature: Menu of the Account screen
     Then I should see menu items under "Billing"
       | 3scale Invoices |
       | Payment Details |
-    And I go to my invoices from 3scale page
-    Then I should be on my invoices from 3scale page
+    And I go to the 3scale invoices page
+    Then I should be on the 3scale invoices page
 
   Scenario: Account menu when master is billing
     Given master is billing tenants

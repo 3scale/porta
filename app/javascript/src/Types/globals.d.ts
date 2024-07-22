@@ -2,10 +2,11 @@
 import type CodeMirror from 'codemirror'
 import type SwaggerUI from 'swagger-ui'
 import type { compose } from 'redux'
+import type { JQueryStatic as JQueryStaticV1, JQueryXHR, JQuery as JQuery1 } from 'Types/jquery/v1'
 
 declare global {
   interface Window {
-    $: JQueryStatic;
+    $: JQueryStaticV1 & JQueryStaticV1Plugins;
     jQueryUI: JQueryStatic;
     CodeMirror: typeof CodeMirror;
     statsUsage: unknown;
@@ -26,6 +27,21 @@ declare global {
       loadAudienceWidget: (widgetPath: string) => void;
     };
     renderChartWidget: (widget: string, data: unknown) => void;
+    setLocationHash: (value: string) => void; // Defined in app/assets/javascripts/provider/utils.js.coffee
+  }
+
+  // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
+  // This should be de default jQuery available, only TS files loaded by webpack have v3.7.0
+  interface JQueryStaticV1Plugins {
+    colorbox: ColorboxStatic;
+    cookie: (name: string, value?: string, opts?: unknown) => string | undefined;
+    flash: ((message: string) => void) & {
+      notice: (message: string) => void;
+      error: (message: string) => void;
+    };
+    rails: {
+      handleRemote: (arg: JQuery | JQuery1) => JQueryXHR | false;
+    };
   }
 
   // jQueryUI static props injected into jQuery 3.7 when imported from webpack
@@ -41,20 +57,24 @@ declare global {
     sortable?: (opts: string | {
       update: (event: Event, ui: { item: JQuery }) => void;
     }) => string | undefined;
-    tabs?: (opts: Partial<{
+    tabs?: (opts?: Partial<{
       active: boolean | number;
       activate: (event: Event, ui: { newPanel: JQuery }) => void;
-      show: (event: Event, ui: { panel: JQuery }) => void;
     }>) => void;
     droppable?: (opts: {
       hoverClass: string;
       drop: (event: Event, ui: { helper: JQuery }) => void;
     }) => void;
     draggable?: (opts: {
-      helper: (event: Event) => unknown;
+      handle: string;
+      helper: string | ((event: Event) => Element);
       revert: string;
     }) => void;
   }
 
   type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
+
+  namespace ThreeScale {
+    function partialPaths (paths: string[]): void
+  }
 }

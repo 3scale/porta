@@ -47,7 +47,7 @@ class PolicyTest < ActiveSupport::TestCase
     refute policy.valid?
     assert_equal ['must be a tenant'], policy.errors[:account]
 
-    policy = policy.account = FactoryBot.build(:simple_provider)
+    policy.account = FactoryBot.create(:simple_provider)
     assert policy.valid?
     assert_empty policy.errors[:account]
   end
@@ -137,9 +137,9 @@ class PolicyTest < ActiveSupport::TestCase
     assert policy.idle?
 
     FactoryBot.create(:service, account: policy.account)
-    Proxy.any_instance.expects(:find_policy_config_by).at_least_once.
-                       with({ name: policy.name, version: policy.version }).
-                       returns(policy.schema.slice('name', 'version', 'configuration'))
+    Proxy.any_instance.expects(:find_policy_config_by).at_least_once
+         .with(name: policy.name, version: policy.version)
+         .returns(policy.schema.slice('name', 'version', 'configuration'))
 
     assert policy.reload.in_use?
     refute policy.idle?

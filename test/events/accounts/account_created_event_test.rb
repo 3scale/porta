@@ -3,8 +3,8 @@ require 'test_helper'
 class Accounts::AccountCreatedEventTest < ActiveSupport::TestCase
 
   def test_create
-    account = FactoryBot.build_stubbed(:simple_buyer, id: 1,
-                                          provider_account_id: 2)
+    provider = FactoryBot.build_stubbed(:simple_provider, id: 2)
+    account = FactoryBot.build_stubbed(:simple_buyer, id: 1, provider_account: provider)
     event   = Accounts::AccountCreatedEvent.create(account, user)
 
     assert event

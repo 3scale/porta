@@ -7,17 +7,17 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   def create
     if current_account.settings.update(enforce_sso: true)
       logout_all_password_users
-      redirect_to index_path, notice: 'SSO successfully enforced'
+      render json: { notice: t('.success') }
     else
-      redirect_to index_path, flash: {error: 'SSO could not be enforced'}
+      render json: { error: t('.error') }
     end
   end
 
   def destroy
     if current_account.settings.update(enforce_sso: false)
-      redirect_to index_path, notice: 'SSO enforcement successfully disabled'
+      render json: { notice: t('.success') }
     else
-      redirect_to index_path, flash: {error: 'SSO enforcement could not be disabled'}
+      render json: { error: t('.error') }
     end
   end
 
@@ -28,10 +28,11 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   end
 
   def enforce_sso_allowed?
-    enforce_sso = EnforceSSOValidator.new(user_session)
+    sso_validator = EnforceSSOValidator.new(user_session: user_session)
 
-    return if enforce_sso.valid?
-    redirect_to index_path, flash: {error: enforce_sso.error_message}
+    return if sso_validator.valid?
+
+    render json: { error: sso_validator.error_message }
   end
 
   def index_path

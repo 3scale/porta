@@ -1,3 +1,5 @@
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -41,8 +43,18 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
   # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
+  # Annotate rendered view with file names.
+  # WARNING: we can't enable it because it breaks some views that use `render_to_js_string`
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
   config.active_support.test_order = :random
 
@@ -168,6 +180,7 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :customizations
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :issuer
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :pricing_rules
+      Bullet.add_safelist class_name: "ServicePlan", type: :unused_eager_loading, association: :pricing_rules # Or features/buyers/accounts/service_contracts/index.feature:90 fails
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post

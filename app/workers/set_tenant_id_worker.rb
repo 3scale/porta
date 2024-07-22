@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SetTenantIdWorker < ApplicationJob
-  include Sidekiq::Throttled::Worker
+  include Sidekiq::Throttled::Job
 
   queue_as :low
   sidekiq_throttle({ concurrency: { limit: 10 } })
@@ -55,7 +55,7 @@ class SetTenantIdWorker < ApplicationJob
   end
 
   class ModelTenantIdWorker < ApplicationJob
-    include Sidekiq::Throttled::Worker
+    include Sidekiq::Throttled::Job
 
     queue_as :low
     sidekiq_throttle({ concurrency: { limit: 10 } })

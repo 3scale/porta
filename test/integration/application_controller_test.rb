@@ -44,6 +44,17 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get admin_buyers_accounts_path
   end
 
+  test "proxy config objects tracked for changes are cleared" do
+    provider = FactoryBot.create(:provider_account)
+    login! provider
+
+    ProxyConfigAffectingChanges::Tracker.any_instance.expects(:reported_clear)
+    # make sure #reported_clear is not called by #flush_proxy_affecting_changes
+    ApplicationController.any_instance.expects(:flush_proxy_affecting_changes)
+
+    get admin_buyers_accounts_path
+  end
+
   test "forgery protection will force a 403 and revoke the session when no CSRF token provided" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
@@ -155,7 +166,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
         get '/client_caching'
       end
 
-      assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+      assert_equal 'no-store', response.headers['Cache-Control']
       assert_equal 'no-cache', response.headers['Pragma']
       assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
     end

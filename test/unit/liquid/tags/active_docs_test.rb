@@ -14,7 +14,11 @@ class Liquid::Tags::ActiveDocsTest < ActiveSupport::TestCase
       match = params.match Liquid::Tags::ActiveDocs::Syntax
       assert match
       assert_equal match[1], expected[0]
-      assert_equal match[2], expected[1]
+      if expected[1]
+        assert_equal match[2], expected[1]
+      else
+        assert_nil match[2]
+      end
     end
   end
 end

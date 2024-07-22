@@ -9,7 +9,7 @@ class Stats::StorageTest < ActiveSupport::TestCase
     storage.flushdb
 
     service = FactoryBot.create(:service)
-    metric  = FactoryBot.create(:metric, :service => service)
+    metric  = FactoryBot.create(:metric, owner: service)
 
     # some fake data
     storage.set("stats/{service:#{service.backend_id}}/metric:#{metric.id}/day:20091210", 12)

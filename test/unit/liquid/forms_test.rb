@@ -88,6 +88,24 @@ class Liquid::FormsTest < ActiveSupport::TestCase
     assert_match '/buyer/account_contract', content
   end
 
+  test 'account.billing_address form' do
+    account = FactoryBot.create(:account, payment_gateway_type: :stripe)
+    registers = {
+      site_account: account,
+      controller: controller
+    }
+    context = Liquid::Context.new({}, {}, registers)
+
+    form = Liquid::Forms.find_class_by_name('account.billing_address').new(context, 'object', {})
+
+    assert_equal '/admin/account/stripe', form.path
+
+    account.update(payment_gateway_type: :authorize_net)
+    form = Liquid::Forms.find_class_by_name('account.billing_address').new(context, 'object', {})
+
+    assert_equal '/admin/account/authorize_net', form.path
+  end
+
   private
 
   def get(form, name = 'object', html_attributes={})
