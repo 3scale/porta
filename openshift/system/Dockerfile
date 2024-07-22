@@ -1,7 +1,7 @@
 FROM quay.io/centos/centos:stream8 as builder
 WORKDIR /opt/system
-ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=7 \
+ENV RUBY_MAJOR_VERSION=3 \
+    RUBY_MINOR_VERSION=1 \
     RAILS_ENV=production \
     NODE_ENV=production
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
@@ -12,7 +12,7 @@ RUN cp config/examples/*.yml config/ \
 
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
     && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+    && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:18 mysql:8.0 \
     && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' podman-catatonit \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
@@ -40,8 +40,8 @@ FROM quay.io/centos/centos:stream8 AS base
 
 USER root
 
-ENV RUBY_MAJOR_VERSION=2 \
-    RUBY_MINOR_VERSION=7 \
+ENV RUBY_MAJOR_VERSION=3 \
+    RUBY_MINOR_VERSION=1 \
     RAILS_ENV=production \
     SAFETY_ASSURED=1 \
     TZ=:/etc/localtime \
@@ -54,7 +54,7 @@ WORKDIR $HOME
 
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
     && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:16 mysql:8.0 \
+    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:18 mysql:8.0 \
     && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt \
     && dnf -y clean all
 
