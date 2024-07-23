@@ -10,7 +10,7 @@ Feature: Instant biling plan change feature
     And the default product of the provider has name "My API"
     Given all the rolling updates features are off
     And I have instant_bill_plan_change feature enabled
-    And the provider has one buyer
+    And a buyer "Bob Buyer"
 
   Scenario: Charging variable cost on plan change
     Given the following application plans:
