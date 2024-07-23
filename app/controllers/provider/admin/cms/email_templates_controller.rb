@@ -29,7 +29,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
     @page ||= templates.build(cms_templates_params)
 
     if @page.save
-      flash[:info] = 'Email Template overrided.'
+      flash[:info] = 'Email Template overridden.'
       redirect_to action: :index
     else
       render :new
