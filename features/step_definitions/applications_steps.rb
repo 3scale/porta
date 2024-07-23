@@ -85,10 +85,6 @@ Given "the backend will create key {string} for {application}" do |key, applicat
   fake_application_keys(application, [key])
 end
 
-Given "{application} has user key {string}" do |application, key|
-  application.update!(user_key: key)
-end
-
 Then "there are/is {int} key(s)" do |keys|
   assert_equal keys, find_all('tr.key').size
 end

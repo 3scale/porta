@@ -14,15 +14,6 @@ Feature: CMS Toolbar
     And go to the homepage
     Then there should not be a CMS toolbar
 
-  Scenario: An admin visist de dev portal
-    When they visit the developer portal in CMS mode
-    Then the cms toolbar should be visible
-    And should see "Templates used on this page"
-    And should see the following details:
-      | Username | john   |
-      | Password | 123456 |
-    And should see "Color Theme"
-
   Scenario: Hide the toolbar
     When they visit the developer portal in CMS mode
     And follow "Draft"
@@ -41,3 +32,16 @@ Feature: CMS Toolbar
     And follow "Published"
     And follow "Close the CMS toolbar"
     Then there should not be a CMS toolbar
+
+  Rule: There is a John Doe admin user
+    Background:
+      When the admin user is John Doe
+
+    Scenario: An admin visist de dev portal
+      When they visit the developer portal in CMS mode
+      Then the cms toolbar should be visible
+      And should see "Templates used on this page"
+      And should see the following details:
+        | Username | john   |
+        | Password | 123456 |
+      And should see "Color Theme"

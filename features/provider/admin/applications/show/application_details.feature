@@ -55,12 +55,9 @@ Feature: Application details card
     And the application has the following extra fields:
       | Recovery email    | This is a required field |
       | Verification code |                          |
-      | hidde_field       | Hidden content           |
+      | Hidden field      | Hidden content           |
     When they go to the application's admin page
     Then they should see the following details within the application details:
-      | Recovery email    | This is a required field |
-      | User extra hidden | Hidden content           |
-    Then they should see the following details within the application details:
-      | Recovery email    | This is a required field |
-      | User extra hidden | Hidden content           |
+      | Recovery email | This is a required field |
+      | Hidden field   | Hidden content           |
     But should not see "User extra read only" within the application details

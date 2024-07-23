@@ -76,8 +76,8 @@ Feature: Developer portal edit application page
       And there is a field "Phone number"
       And the form is submitted with:
         | Phone number | 999-888-777 |
-      Then they should see the following details:
         | Email        |             |
+      Then they should see the following details:
         | Phone number | 999-888-777 |
         | UUID         | 123         |
-        | Secret sauce | Ketchup     |
+      And should not see "Secret sauce"

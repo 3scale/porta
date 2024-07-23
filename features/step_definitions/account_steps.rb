@@ -73,3 +73,7 @@ end
 When "the account will return an error when changing its plan" do
   Contract.any_instance.stubs(:change_plan).returns(false).once
 end
+
+When "the admin user is John Doe" do
+  Account.any_instance.expects(:john_doe_still_here?).returns(true)
+end
