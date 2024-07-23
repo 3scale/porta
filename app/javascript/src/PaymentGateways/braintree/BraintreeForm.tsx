@@ -15,6 +15,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
   clientToken,
   countriesList,
   formActionPath,
+  ipAddress,
   threeDSecureEnabled = false
 }) => {
   const [billingAddress, setBillingAddress] = useState<BillingAddress>(defaultBillingAddress)
@@ -45,7 +46,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
     setSubmitting(true)
     setSubmitError(undefined)
 
-    hostedFields.getNonce(billingAddress)
+    hostedFields.getNonce({ billingAddress, ipAddress })
       .then(nonce => {
         const input = form.elements.namedItem('braintree[nonce]') as HTMLInputElement
         input.value = nonce

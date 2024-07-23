@@ -8,14 +8,18 @@ import { useEffect, useState } from 'react'
 
 import { createHostedFields } from 'PaymentGateways/braintree/utils/createHostedFields'
 import { createThreeDSecure } from 'PaymentGateways/braintree/utils/createThreeDSecure'
-import { verifyCard } from 'PaymentGateways/braintree/utils/verifyCard'
 
 import type { BraintreeError } from 'braintree-web'
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
-import type { HostedFields, HostedFieldsFieldDataFields } from 'braintree-web/modules/hosted-fields'
+import type { HostedFields, HostedFieldsFieldDataFields } from 'braintree-web/hosted-fields'
+
+interface GetNonceParams {
+  billingAddress: BillingAddress;
+  ipAddress: string | undefined;
+}
 
 type CustomHostedFields = HostedFields & {
-  getNonce: (BillingAddress: BillingAddress) => Promise<string>;
+  getNonce: (getNonceParams: GetNonceParams) => Promise<string>;
 }
 
 const CC_ERROR_MESSAGE = 'An error occurred, please review your CC details or try later.'
@@ -64,17 +68,18 @@ const useBraintreeHostedFields = (
 
       const customHostedFields = {
         ...hostedFieldsInstance,
-        getNonce: async (billingAddress: BillingAddress): Promise<string> => {
-          const hostedFieldsTokenizePayload = await hostedFieldsInstance.tokenize()
+        getNonce: async ({ billingAddress, ipAddress }: GetNonceParams): Promise<string> => {
+          const { firstName, lastName } = billingAddress
+          const cardholderName = [firstName, lastName].join(' ')
+          const hostedFieldsTokenizePayload = await hostedFieldsInstance.tokenize({ cardholderName })
 
           if (!threeDSecureEnabled) {
             return hostedFieldsTokenizePayload.nonce
           }
 
-          const threeDSecureVerifyPayload = await verifyCard(threeDSecureInstance, {
+          const threeDSecureVerifyPayload = await threeDSecureInstance.verifyCard({
             nonce: hostedFieldsTokenizePayload.nonce,
             bin: hostedFieldsTokenizePayload.details.bin,
-            // @ts-expect-error Outdated types. {amount} is a string: https://braintree.github.io/braintree-web/current/ThreeDSecure.html#verifyCard
             amount: '0.00',
             billingAddress: {
               givenName: billingAddress.firstName,
@@ -86,7 +91,11 @@ const useBraintreeHostedFields = (
               postalCode: billingAddress.zip,
               countryCodeAlpha2: billingAddress.countryCode
             },
-            challengeRequested: true
+            collectDeviceData: true,
+            challengeRequested: true,
+            additionalInformation: {
+              ipAddress
+            }
           }).catch((verifyCardError: BraintreeError) => {
             console.error({ verifyCardError })
             throw { message: CC_ERROR_MESSAGE }

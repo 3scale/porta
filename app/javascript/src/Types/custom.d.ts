@@ -30,7 +30,4 @@ declare module '*.yaml' {
   export default data
 }
 
-// We don't care about missing types from this package. Used only in spec/javascripts/PaymentGateways/braintree/BraintreeForm.spec.tsx
-declare module 'braintree-web/hosted-fields';
-
 declare let __webpack_public_path__: string

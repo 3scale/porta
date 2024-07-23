@@ -9,28 +9,25 @@ module.exports = {
         if (event === 'validityChange') { cb() }
         if (event === 'lookup-complete') { /* do nothing? */ }
       },
-      tokenize: () => Promise.resolve({
+      tokenize: jest.fn(() => Promise.resolve({
         details: {
           bin: 'bin'
         },
         nonce: 'This is non-cense'
-      })
+      }))
     })
   },
   threeDSecure: {
     create: () => Promise.resolve({
       on: jest.fn(),
-      verifyCard: (_options, cb) => {
-        const payload = {
-          nonce: 'This is a 3DS verified transaction',
-          threeDSecureInfo: {
-            liabilityShifted: true,
-            liabilityShiftPossible: true,
-            status: 'authenticate_successful'
-          }
+      verifyCard: jest.fn((_options) => Promise.resolve({
+        nonce: 'This is a 3DS verified transaction',
+        threeDSecureInfo: {
+          liabilityShifted: true,
+          liabilityShiftPossible: true,
+          status: 'authenticate_successful'
         }
-        cb(undefined, payload)
-      }
+      }))
     })
   },
 }

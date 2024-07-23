@@ -17,4 +17,5 @@ export interface BraintreeFormDataset {
   countriesList: [string, string][];
   formActionPath: string;
   threeDSecureEnabled: boolean;
+  ipAddress?: string;
 }
