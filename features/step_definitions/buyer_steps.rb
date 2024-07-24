@@ -6,12 +6,6 @@ Given "a buyer {string}" do |name|
   @account.buy! @provider.account_plans.default
 end
 
-Given "a buyer {string} of {provider}" do |org_name, provider|
-  @account = FactoryBot.create(:buyer_account, provider_account: provider,
-                                               org_name: org_name)
-  @account.buy! provider.account_plans.default
-end
-
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
   buyer = FactoryBot.build(:buyer_account, provider_account: provider,
                                            org_name: name,

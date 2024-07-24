@@ -3,7 +3,7 @@ Feature: Audience > Accounts > Edit
 
   Background:
     Given a provider is logged in
-    And a buyer "Pepe" of the provider
+    And a buyer "Pepe"
 
   Scenario: Navigation
     Given they go to the provider dashboard
@@ -26,7 +26,7 @@ Feature: Audience > Accounts > Edit
     Then field "Organization/Group Name" has inline error "can't be blank"
 
   Scenario: Deleting an account
-    Given a buyer "Deleteme" of the provider
+    Given a buyer "Deleteme"
     When they go to the buyer account edit page for "Deleteme"
     And follow "Delete" and confirm the dialog
     Then the current page is the buyer accounts page

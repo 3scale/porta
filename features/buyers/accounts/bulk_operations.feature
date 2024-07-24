@@ -6,7 +6,7 @@ Feature: Buyer accounts bulk operations
 
   Rule: Single account plan
     Background:
-      Given a buyer "Alice" of the provider
+      Given a buyer "Alice"
 
     Scenario: Bulk operations does not include "Change account plan"
       Given the provider has "account_plans" switch allowed
