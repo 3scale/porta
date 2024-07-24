@@ -45,12 +45,11 @@ FactoryBot.define do
     end
   end
 
-#FIXME: buyer accounts without provider accounts??? is that ok?
-  factory(:buyer_account_with_pending_user, :parent => :account) do
+  factory(:buyer, :parent => :account) do
     buyer { true }
   end
 
-  factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
+  factory(:pending_buyer_account, :parent => :buyer) do
     after(:create) do |account|
       account.users.each do |user|
         user.activate! unless user.active? # horrible horrible factories
