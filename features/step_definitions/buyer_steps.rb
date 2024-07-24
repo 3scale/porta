@@ -33,6 +33,26 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   @buyer.buy!(plan)
 end
 
+Given "a(n approved) buyer {string}" do |account_name|
+  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider,
+                                             org_name: account_name)
+  @buyer.buy! @provider.account_plans.default
+end
+
+Given "a pending buyer {string}" do |account_name|
+  @buyer = FactoryBot.create(:pending_buyer_account, provider_account: @provider,
+                                                     org_name: account_name)
+  @buyer.buy! @provider.account_plans.default
+  assert @buyer.pending?
+end
+
+Given "a buyer {string} signed up to {plan}" do |org_name, plan|
+  @buyer = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
+                                             org_name: org_name)
+  @buyer.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
+  @buyer.buy!(plan)
+end
+
 Given "a(n approved) buyer {string} signed up to {provider}" do |account_name, provider|
   @buyer = FactoryBot.create(:buyer_account, provider_account: provider,
                                              org_name: account_name)

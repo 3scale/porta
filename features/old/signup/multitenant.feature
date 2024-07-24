@@ -29,7 +29,7 @@ Feature: Sign Up of enterprise buyers
       | Product | Name    |
       | api2    | iPhone2 |
 
-    Given an approved buyer "bar" signed up to provider "foo.3scale.localhost"
+    Given an approved buyer "bar"
 
   Scenario: try to signup with existent email in other provider
     When the current domain is foo2.3scale.localhost

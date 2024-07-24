@@ -24,7 +24,7 @@ Feature: Provider stats
     Then I should see "Traffic"
 
   Scenario: Top applications (multiple applications mode)
-    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given a buyer "bob"
     And I follow "API"
     And I follow "Analytics"
     And I go to the provider stats apps page
@@ -90,7 +90,7 @@ Feature: Provider stats
   Scenario: Signups (multiple application mode)
     Given provider "foo.3scale.localhost" has multiple applications enabled
     And a default application plan of provider "foo.3scale.localhost"
-    And a buyer "alice" signed up to provider "foo.3scale.localhost"
+    And a buyer "alice"
     And buyer "alice" has the following applications:
       | Name            | Created at    |
       | AwesomeWidget   | Oct 1st 2010  |
