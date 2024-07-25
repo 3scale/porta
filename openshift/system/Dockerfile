@@ -14,7 +14,7 @@ RUN cp config/examples/*.yml config/ \
     && cp openshift/system/config/* config/
 
 RUN dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:18 mariadb:10.11 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb ruby-devel nodejs libpq-devel mariadb-devel mysql gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' podman-catatonit cpio \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb ruby-devel nodejs libpq-devel mariadb-devel mysql gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' cpio \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
     && bundle config build.nokogiri --use-system-libraries \
@@ -30,7 +30,7 @@ RUN dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION}
 # can just install memkind once it is fixed, see
 # https://issues.redhat.com/browse/RHEL-14497
 RUN cd /tmp \
-    && dnf download http://mirror.stream.centos.org/9-stream/AppStream/source/tree/Packages/memkind-1.11.0-2.el9.src.rpm \
+    && dnf download --source memkind \
     && rpm2cpio memkind-*.src.rpm | cpio -idmv "memkind-*.tar.gz" \
     && tar xvfz memkind-*.tar.gz \
     && cd memkind-*/jemalloc/ \
@@ -55,14 +55,13 @@ WORKDIR $HOME
 
 RUN dnf -y module enable ruby:${RUBY_VERSION} nodejs:18 \
     && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mariadb-connector-c gd git liberation-sans-fonts file libxml2 libxslt \
+    && dnf install -y catatonit --nobest \
     && dnf -y clean all
 
 COPY --from=builder /opt/system/ .
 COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
 COPY --from=builder /usr/local/share/gems /usr/local/share/
 COPY --from=builder /usr/local/bin/bundle* /usr/local/bin
-# in RHEL 8 podman-catatonit pulls in too many useless deps so we don't install the RPM directly, on RHEL 9 simply use package `catatonit`
-COPY --from=builder /usr/libexec/podman/catatonit /usr/libexec/podman/catatonit
 
 RUN echo /usr/local/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
@@ -92,7 +91,7 @@ RUN rm -rf vendor/oracle/ test/ spec/ features/ lib/proxy \
 
 USER 1001
 EXPOSE 3000 9306
-ENTRYPOINT ["/usr/libexec/podman/catatonit", "--", "/opt/system/entrypoint.sh"]
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--", "/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
 
