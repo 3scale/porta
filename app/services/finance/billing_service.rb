@@ -75,8 +75,7 @@ module Finance
       message = "Failed to perform billing job: #{error.message}"
       Rails.logger.error(message)
       System::ErrorReporting.report_error(error, error_message: message,
-                                                 error_class: error.class.name,
-                                                 exception: error)
+                                                 error_class: error.class.name)
     end
   end
 end
