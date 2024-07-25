@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "a buyer {string}" do |name|
+Given "a(n approved) buyer {string}" do |name|
   @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider,
                                                         org_name: name)
   @account.buy! @provider.account_plans.default
@@ -31,12 +31,6 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
                                              org_name: org_name)
   @buyer.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
   @buyer.buy!(plan)
-end
-
-Given "a(n approved) buyer {string}" do |account_name|
-  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider,
-                                             org_name: account_name)
-  @buyer.buy! @provider.account_plans.default
 end
 
 Given "a pending buyer {string}" do |account_name|
