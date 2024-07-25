@@ -24,6 +24,14 @@ namespace :assets do # rubocop:disable Metrics/BlockLength
     end
   end
 
+  # This is to fix 'error:0308010C:digital envelope routines::unsupported' in Node 18 when used with OpenSSL v3
+  # the proper fix should be upgrading webpack and babel-loader
+  task :openssl_legacy_provider do
+    node_options = ENV.fetch('NODE_OPTIONS', nil).to_s
+    ENV['NODE_OPTIONS'] = "#{node_options} --openssl-legacy-provider" unless node_options.include? "--openssl-legacy-provider"
+  end
+  Rake::Task['webpacker:compile'].enhance ['assets:openssl_legacy_provider']
+
   namespace :precompile do
     desc 'Compile assets for tests'
     task :test do
