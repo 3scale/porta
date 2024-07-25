@@ -40,9 +40,7 @@ FactoryBot.define do
   end
 
   factory(:pending_account, :parent => :account) do
-    after(:create) do |account|
-      account.make_pending!
-    end
+    state { :pending }
   end
 
   factory(:buyer, :parent => :account) do
@@ -50,6 +48,8 @@ FactoryBot.define do
   end
 
   factory(:pending_buyer_account, :parent => :buyer) do
+    state { :pending }
+
     after(:create) do |account|
       account.users.each do |user|
         user.activate! unless user.active? # horrible horrible factories
@@ -68,6 +68,10 @@ FactoryBot.define do
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.build(:admin, :account => account, :username => username)
       end
+    end
+
+    trait :rejected do
+      state { :rejected }
     end
   end
 

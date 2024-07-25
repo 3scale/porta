@@ -34,8 +34,8 @@ Given "a pending buyer {string}" do |account_name|
 end
 
 Given "a rejected buyer {string}" do |account_name|
-  @buyer = FactoryBot.create(:rejected_buyer_account, provider_account: @provider,
-                                                      org_name: account_name)
+  @buyer = FactoryBot.create(:buyer_account, :rejected, provider_account: @provider,
+                                                        org_name: account_name)
 end
 
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
