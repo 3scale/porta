@@ -4,16 +4,14 @@ module ThreeScale
   class RedisConfig
     def initialize(redis_config = {})
       raw_config = (redis_config || {}).deep_symbolize_keys
-      sentinels = raw_config.delete(:sentinels).presence
       raw_config.delete_if { |key, value| value.blank? }
       uri = URI.parse(raw_config[:url].to_s)
       raw_config[:db] ||= uri.path[1..]
-      raw_config[:name] ||= uri.host if sentinels
       raw_config[:ssl] ||= true if uri.scheme == 'rediss'
+      parse_sentinels(raw_config)
       raw_config.compact!
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
-      config.sentinels = parse_sentinels(sentinels) if sentinels
     end
 
     attr_reader :config
@@ -42,15 +40,24 @@ module ThreeScale
 
     DEFAULT_SENTINEL_PORT = 26379
 
-    def parse_sentinels(sentinels)
+    def parse_sentinels(config)
+      sentinels = config.delete(:sentinels).presence
       return unless sentinels
-      sentinels.to_s.split(',').map do |sentinel_url|
+
+      sentinel_user = nil
+      sentinel_password = nil
+      config[:sentinels] = sentinels.to_s.split(',').map do |sentinel_url|
         uri = URI.parse((sentinel_url =~ %r{^(redis(s)?|unix):\/\/.+} ? '' : 'redis://') + sentinel_url)
-        parsed_sentinel = { host: uri.host, port: (uri.port || DEFAULT_SENTINEL_PORT) }
-        password = uri.password
-        parsed_sentinel[:password] = password if password
-        parsed_sentinel
+        sentinel_user ||= uri.user
+        sentinel_password ||= uri.password
+        { host: uri.host, port: (uri.port || DEFAULT_SENTINEL_PORT) }
       end
+
+      config[:name] ||= URI.parse(config[:url].to_s).host
+      config[:sentinel_username] = sentinel_user if sentinel_user.present?
+      config[:sentinel_password] = sentinel_password if sentinel_password.present?
+
+      config
     end
   end
 end

@@ -21,14 +21,18 @@ module ThreeScale
     end
 
     test 'sentinels' do
-      config = RedisConfig.new(url: 'redis://my-redis/1', sentinels: 'redis://:abc@127.0.0.1,localhost,redis://:passwd@external-redis,redis://localhost:1234')
+      username = 'user'
+      password = 'abc'
+      config = RedisConfig.new(url: 'redis://my-redis/1', sentinels: "redis://#{username}:#{password}@127.0.0.1,localhost,redis://external-redis,redis://localhost:1234")
       expected_sentinels = [
-        { host: '127.0.0.1', port: 26379, password: 'abc' },
+        { host: '127.0.0.1', port: 26379},
         { host: 'localhost', port: 26379 },
-        { host: 'external-redis', port: 26379, password: 'passwd' },
+        { host: 'external-redis', port: 26379},
         { host: 'localhost', port: 1234 },
       ]
       assert_equal expected_sentinels, config.sentinels
+      assert_equal username, config.sentinel_username
+      assert_equal password, config.sentinel_password
     end
 
     test 'extracts the Redis logical DB from the URL' do
