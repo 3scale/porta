@@ -33,6 +33,11 @@ Given "a pending buyer {string}" do |account_name|
   assert @buyer.pending?
 end
 
+Given "a rejected buyer {string}" do |account_name|
+  @buyer = FactoryBot.create(:rejected_buyer_account, provider_account: @provider,
+                                                      org_name: account_name)
+end
+
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   @buyer = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
                                              org_name: org_name)
@@ -47,11 +52,6 @@ end
 
 Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|
   pending_buyer(provider, account_name)
-end
-
-Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
-  @buyer = FactoryBot.create(:rejected_buyer_account, provider_account: provider,
-                                                      org_name: account_name)
 end
 
 # Create a group of buyer accounts subscribed to one or more service plans
