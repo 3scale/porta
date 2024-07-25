@@ -31,6 +31,7 @@ namespace :assets do # rubocop:disable Metrics/BlockLength
     ENV['NODE_OPTIONS'] = "#{node_options} --openssl-legacy-provider" unless node_options.include? "--openssl-legacy-provider"
   end
   Rake::Task['webpacker:compile'].enhance ['assets:openssl_legacy_provider']
+  Rake::Task['assets:precompile'].enhance ['assets:openssl_legacy_provider']
 
   namespace :precompile do
     desc 'Compile assets for tests'
