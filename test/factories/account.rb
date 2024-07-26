@@ -47,7 +47,7 @@ FactoryBot.define do
     end
 
     trait :pending do
-      state { :rejected }
+      state { :pending }
     end
 
     factory :pending_account, traits: [:pending]
@@ -67,9 +67,6 @@ FactoryBot.define do
 
   factory(:buyer_account, traits: [:approved], parent: :pending_buyer_account) do
     association :provider_account
-    # after(:create) do |account|
-    #   account.approve! if account.can_approve?
-    # end
 
     after(:build) do |account|
       if account.users.empty?
