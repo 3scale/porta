@@ -37,19 +37,27 @@ FactoryBot.define do
       account.stubs(:admins).returns([admin])
       admin.stubs(:account).returns(account)
     end
+
+    trait :approved do
+      state { :approved }
+    end
+
+    trait :rejected do
+      state { :rejected }
+    end
+
+    trait :pending do
+      state { :rejected }
+    end
+
+    factory :pending_account, traits: [:pending]
+
+    factory :buyer do
+      buyer { true }
+    end
   end
 
-  factory(:pending_account, :parent => :account) do
-    state { :pending }
-  end
-
-  factory(:buyer, :parent => :account) do
-    buyer { true }
-  end
-
-  factory(:pending_buyer_account, :parent => :buyer) do
-    state { :pending }
-
+  factory(:pending_buyer_account, traits: [:pending], parent: :buyer) do
     after(:create) do |account|
       account.users.each do |user|
         user.activate! unless user.active? # horrible horrible factories
@@ -57,21 +65,17 @@ FactoryBot.define do
     end
   end
 
-  factory(:buyer_account, :parent => :pending_buyer_account) do
+  factory(:buyer_account, traits: [:approved], parent: :pending_buyer_account) do
     association :provider_account
-    after(:create) do |account|
-      account.approve! if account.can_approve?
-    end
+    # after(:create) do |account|
+    #   account.approve! if account.can_approve?
+    # end
 
     after(:build) do |account|
       if account.users.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
         account.users << FactoryBot.build(:admin, :account => account, :username => username)
       end
-    end
-
-    trait :rejected do
-      state { :rejected }
     end
   end
 
