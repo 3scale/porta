@@ -4,7 +4,7 @@ module ThreeScale
   class RedisConfig
     def initialize(redis_config = {})
       raw_config = (redis_config || {}).deep_symbolize_keys
-      raw_config.delete_if { |key, value| value.blank? }
+      raw_config.delete_if { |_key, value| value.blank? }
       uri = URI.parse(raw_config[:url].to_s)
       raw_config[:db] ||= uri.path[1..]
       raw_config[:ssl] ||= true if uri.scheme == 'rediss'
