@@ -4,6 +4,7 @@ Given "a(n approved) buyer {string}" do |name|
   @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider,
                                                         org_name: name)
   @account.buy! @provider.account_plans.default
+  assert @buyer.approved?
 end
 
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
@@ -36,6 +37,7 @@ end
 Given "a rejected buyer {string}" do |account_name|
   @buyer = FactoryBot.create(:buyer_account, :rejected, provider_account: @provider,
                                                         org_name: account_name)
+  assert @buyer.rejected?
 end
 
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|

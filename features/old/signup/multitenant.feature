@@ -41,7 +41,7 @@ Feature: Sign Up of enterprise buyers
      And I go to the sign up page
      And I fill in the following:
       | Email                   | foobar@example.net |
-      | Username                | bar           |
+      | Username                | baz           |
       | Password                | supersecret      |
       | Password confirmation   | supersecret      |
       | Organization/Group Name | Planet eXpress   |
