@@ -64,7 +64,7 @@ resource "Account" do
     # and appropriate callbacks and values will be set in place
     put '/admin/api/accounts/:id/make_pending.:format' do
       include_context "resource"
-      let(:resource) { FactoryBot.create(:buyer_account, provider_account: provider) }
+      let(:resource) { FactoryBot.create(:buyer_account, :approved, provider_account: provider) }
 
       # the response code and body are checked automatically
       # you can adjust it by setting:
