@@ -8,7 +8,7 @@ module ThreeScale
       uri = URI.parse(raw_config[:url].to_s)
       raw_config[:db] ||= uri.path[1..]
       raw_config[:ssl] ||= true if uri.scheme == 'rediss'
-      parse_sentinels(raw_config)
+      apply_sentinels_config!(raw_config)
       raw_config.compact!
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
@@ -40,7 +40,7 @@ module ThreeScale
 
     DEFAULT_SENTINEL_PORT = 26379
 
-    def parse_sentinels(config)
+    def apply_sentinels_config!(config)
       sentinels = config.delete(:sentinels).presence
       return unless sentinels
 
