@@ -21,6 +21,7 @@ FactoryBot.define do
 
   factory(:admin, :parent => :user) do
     role { :admin }
+    username { account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_') }
   end
 
   factory(:active_admin, :parent => :admin) do

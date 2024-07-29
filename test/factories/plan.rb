@@ -32,6 +32,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     after(:build) do |plan, evaluator|
       plan.issuer.update(default_account_plan: plan) if evaluator.default
     end
+
+    trait :published do
+      state { :published }
+    end
   end
 
   factory(:service_plan, parent: :plan, class: ServicePlan) do
