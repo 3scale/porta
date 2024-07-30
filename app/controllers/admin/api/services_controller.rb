@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
-  wrap_parameters Service, include: Service.attribute_names | %w[state_event]
+  wrap_parameters Service, include: Service.attribute_names | %w[state_event managed_by]
   representer Service
 
   before_action :deny_on_premises_for_master
@@ -61,7 +61,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
                         :intentions_required, :buyers_manage_apps, :referrer_filters_required,
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
-                        :txt_support, :terms,
+                        :txt_support, :terms, :managed_by,
                         {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
     params.require(:service).permit(*permitted_params)
   end

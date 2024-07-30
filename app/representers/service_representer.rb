@@ -25,6 +25,7 @@ module ServiceRepresenter
   property :buyer_can_select_plan
   property :buyer_plan_change_permission
   property :notification_settings
+  property :managed_by
 
   property :created_at
   property :updated_at
