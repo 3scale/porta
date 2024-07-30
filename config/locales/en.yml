@@ -464,12 +464,14 @@ en:
           success: User key has been updated.
 
       authentication_providers:
+        edit:
+          automatically_approve_accounts_hint_html: "Even if the <a href=%{link}>account approval settings</a> say otherwise"
+          submit_button_label: Update
         index:
           header:
             title: Single Sign-On Integrations
-        form:
-          automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
-          submit_button_label: 'Create Authentication provider'
+        new:
+          submit_button_label: Create
       messages:
         bulk:
           trash:
