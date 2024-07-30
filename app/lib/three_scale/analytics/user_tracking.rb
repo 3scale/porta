@@ -6,10 +6,19 @@ end
 
 module ThreeScale
   module Analytics
+
+    class UserTrackingError < StandardError
+      def initialize(status, error)
+        msg = "User tracking report failed with status: #{status}"
+        msg << ", message: #{error}" if error
+        super(msg)
+      end
+    end
+
     class UserTracking
 
       error_handler = ->(status, error) do
-        System::ErrorReporting.report_error(error_message: error, parameters: { status: status })
+        System::ErrorReporting.report_error(UserTrackingError.new(status, error))
       end
 
       class TrackingAdapter
