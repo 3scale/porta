@@ -16,11 +16,11 @@ module Events
     rescue ActiveRecord::RecordNotFound => not_found
       # ignore deleted objects
       Rails.logger.error("exception raised: #{not_found} when importing #{event}")
-      System::ErrorReporting.report_error not_found, :parameters => {:event => event}
+      System::ErrorReporting.report_error not_found, event: event
 
     rescue StandardError => error
       Rails.logger.error("unknown error raised: #{error} when importing #{event}")
-      System::ErrorReporting.report_error error, :parameters => { :event => event }
+      System::ErrorReporting.report_error error, event: event
     end
 
     def self.for(event)

@@ -163,9 +163,9 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
 
     System::ErrorReporting.report_error(exception,
                     error_message: 'Event tracking failed',
-                    parameters: { request_params: params,
-                                  controller_action: controller_action_method,
-                                  payload: payload })
+                    request_params: params,
+                    controller_action: controller_action_method,
+                    payload: payload)
     Rails.logger.error "--> Event tracking error (but rescued)"
     Rails.logger.error exception
     Rails.logger.error exception.backtrace.join("\n\t")

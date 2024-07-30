@@ -74,5 +74,5 @@ begin
   puts "Stats CSV successful. #{count} providers processed."
 
 rescue Exception => e
-  System::ErrorReporting.report_error(e, parameters: { human_explanation: "Stats for marketing failed CSV failed!", provider: p })
+  System::ErrorReporting.report_error(e, human_explanation: "Stats for marketing failed CSV failed!", provider: p)
 end

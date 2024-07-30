@@ -106,7 +106,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
   def ensure_master_with_plans
     return if current_account.signup_provider_possible?
-    System::ErrorReporting.report_error('Provider signup not enabled. Check all master\'s plans are in place.')
+    System::ErrorReporting.report_error(StandardError.new("Provider signup not enabled. Check all master's plans are in place."))
     render_error 'Provider signup not enabled.', :status => :unprocessable_entity
   end
 

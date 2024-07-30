@@ -60,7 +60,7 @@ module Liquid
           exception.set_backtrace = ::Kernel.caller(1)
 
           if notify?
-            System::ErrorReporting.report_error(exception, :parameters => {:drop => @drop})
+            System::ErrorReporting.report_error(exception, drop: @drop)
           else
             ::Kernel.raise exception
           end

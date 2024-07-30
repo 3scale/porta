@@ -6,6 +6,12 @@ module ThreeScale
       include Base
       include Recaptcha::Adapters::ControllerMethods
 
+      class UnknownBotProtectionLevelError < StandardError
+        def initialize(level)
+          super("Unknown bot protection level: #{level}")
+        end
+      end
+
       private
 
       def bot_check(options = { flash: true })
@@ -13,7 +19,7 @@ module ThreeScale
 
         return verify_captcha(options) if bot_protection_level == :captcha
 
-        System::ErrorReporting.report_error "Unknown spam_protection level: #{bot_protection_level}"
+        System::ErrorReporting.report_error UnknownBotProtectionLevelError.new(bot_protection_level)
       end
 
       def verify_captcha(options)
