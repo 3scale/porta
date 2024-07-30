@@ -8,7 +8,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   clear_respond_to
   respond_to :json
 
-  wrap_parameters BackendApi
+  wrap_parameters BackendApi, include: BackendApi.attribute_names | %w[managed_by]
   representer BackendApi
 
   paginate only: :index
@@ -48,7 +48,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[name description private_endpoint].freeze
+  DEFAULT_PARAMS = %i[name description private_endpoint managed_by].freeze
   private_constant :DEFAULT_PARAMS
 
   def authorize

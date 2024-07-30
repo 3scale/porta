@@ -10,6 +10,7 @@ module BackendApiRepresenter
   property :system_name
   property :description
   property :private_endpoint
+  property :managed_by
   property :account_id
   property :created_at
   property :updated_at
