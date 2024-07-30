@@ -51,6 +51,7 @@ module AccountRepresenter
       property :credit_card_partial_number
       property :credit_card_expires_on
     end
+    property :managed_by
   end
 
   property :state

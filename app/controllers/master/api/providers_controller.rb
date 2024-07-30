@@ -82,7 +82,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     end
   end
 
-  UPDATE_PARAMS = %i[from_email support_email finance_support_email site_access_code state_event].freeze
+  UPDATE_PARAMS = %i[from_email support_email finance_support_email site_access_code state_event managed_by].freeze
   private_constant :UPDATE_PARAMS
 
   private
