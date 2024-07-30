@@ -231,6 +231,11 @@ World(Module.new do
     when 'the sso integration page'
       auth_provider = AuthenticationProvider.last
       provider_admin_account_authentication_provider_path(auth_provider)
+    when 'the new sso integration page'
+      new_provider_admin_account_authentication_provider_path
+    when 'the edit sso integration page'
+      auth_provider = AuthenticationProvider.last
+      edit_provider_admin_account_authentication_provider_path(auth_provider)
 
     #
     # ActiveDocs (Admin portal)
