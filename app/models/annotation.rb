@@ -6,4 +6,5 @@ class Annotation < ApplicationRecord
   belongs_to :annotated, polymorphic: true
 
   validates :name, presence: true, inclusion: { in: SUPPORTED_ANNOTATIONS }
+  validates :name, :value, :annotated_type, length: { maximum: 255 }
 end
