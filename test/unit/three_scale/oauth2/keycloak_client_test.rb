@@ -25,13 +25,14 @@ class ThreeScale::OAuth2::KeycloakClientTest < ActiveSupport::TestCase
   end
 
   test '#authenticate_options' do
+    query_string = 'foo=bar&code=123456&iss=http%3A%2F%2Fkeycloak.example.com%2Frealms%2Ftest'
     env = {
       'HTTP_HOST' => 'example.net',
-      'QUERY_STRING' => 'foo=bar&code=123456',
+      'QUERY_STRING' => query_string,
       'PATH_INFO' => '/path'
     }
     request = ActionDispatch::TestRequest.create env
-    request.request_uri = 'http://example.net/path?foo=bar&code=123456'
+    request.request_uri = "http://example.net/path?#{query_string}"
 
     options = @oauth2.authenticate_options(request)
 
