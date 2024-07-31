@@ -75,14 +75,26 @@ module ThreeScale
 
           @master ||= ::Account.unscoped.master
 
+          @is_master = session_of_master? || provider_key_of_master? || token_of_master?
+        end
+
+        def session_of_master?
           # this is supposed to match how we get the user_session in app/lib/authenticated_system/request.rb
           # on API calls cookies are not present though, so we need to use safe navigation
-          @user_session ||= UserSession.authenticate(@env['action_dispatch.cookies']&.signed&.public_send(:[], :user_session))
+          user_session ||= UserSession.authenticate(@env['action_dispatch.cookies']&.signed&.public_send(:[], :user_session))
+          user_session&.user&.account == @master
+        end
 
-          @is_master = @user_session&.user&.account == @master ||
-            @env["action_dispatch.request.query_parameters"]["provider_key"] == @master.api_key ||
-            # must match how we check access token in app/lib/api_authentication/by_access_token.rb
-            @master.access_tokens.find_from_value(@env["action_dispatch.request.query_parameters"]["access_token"])
+        def provider_key_of_master?
+          param_places = %w[action_dispatch.request.query_parameters action_dispatch.request.request_parameters]
+          possible_keys = %w[provider_key api_key]
+          param_places.product(possible_keys).any? { |params, key| @env[params][key] == @master.api_key }
+        end
+
+        def token_of_master?
+          token = @env["action_dispatch.request.query_parameters"]["access_token"] ||
+            @env["action_dispatch.request.request_parameters"]["access_token"]
+          @master.access_tokens.find_from_value(token)
         end
       end
 
