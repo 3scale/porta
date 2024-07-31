@@ -51,7 +51,7 @@ module ThreeScale
 
       class RedirectUri
 
-        NOT_ALLOWED_PARAMS = %w[code].freeze
+        NOT_ALLOWED_PARAMS = %w[code iss].freeze
 
         def self.call(request)
           new(request).call
