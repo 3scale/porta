@@ -324,7 +324,7 @@ class Account < ApplicationRecord
   end
 
   def special_fields
-    [:country]
+    %i[country annotations]
   end
 
   # Returns the id corresponding to an account with given api key. This function avoids
