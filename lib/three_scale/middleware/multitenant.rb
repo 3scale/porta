@@ -88,7 +88,7 @@ module ThreeScale
         def provider_key_of_master?
           param_places = %w[action_dispatch.request.query_parameters action_dispatch.request.request_parameters]
           possible_keys = %w[provider_key api_key]
-          param_places.product(possible_keys).any? { |params, key| @env[params][key] == @master.api_key }
+          param_places.product(possible_keys).any? { |params, key| @env[params][key] == @master.provider_key }
         end
 
         def token_of_master?
