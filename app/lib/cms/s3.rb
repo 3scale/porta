@@ -6,6 +6,8 @@ module CMS
 
     FIPS_FILE_PATH = "/proc/sys/crypto/fips_enabled"
 
+    DEFAULT_EXPIRES_IN = 3600
+
     class NoConfigError < StandardError; end
 
     def enabled?
