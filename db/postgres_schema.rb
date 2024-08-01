@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_19_174715) do
+ActiveRecord::Schema.define(version: 2024_07_26_111800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,18 @@ ActiveRecord::Schema.define(version: 2024_07_19_174715) do
     t.index ["alert_id", "account_id"], name: "index_alerts_on_alert_id_and_account_id", unique: true
     t.index ["cinstance_id"], name: "index_alerts_on_cinstance_id"
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
+  end
+
+  create_table "annotations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "value"
+    t.string "annotated_type", null: false
+    t.bigint "annotated_id", null: false
+    t.integer "tenant_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["annotated_type", "annotated_id"], name: "index_annotations_on_annotated"
+    t.index ["name"], name: "index_annotations_on_name"
   end
 
   create_table "api_docs_services", force: :cascade do |t|
