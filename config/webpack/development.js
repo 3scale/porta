@@ -1,30 +1,51 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+const path = require("path");
+const {
+  devServerPort,
+  publicRootPath,
+  publicOutputPath,
+  devServerManifestPublicPath
+} = require("./config");
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const environment = require('./environment')
+module.exports = (webpackConfig) => {
+  webpackConfig.devtool = "cheap-module-source-map";
 
-// Add Webpack custom configs here
-environment.loaders.append('eslint', {
-  test: /\.tsx?$/,
-  exclude: /(node_modules)/,
-  enforce: 'pre',
-  loader: 'eslint-loader',
-  options: {
-    eslintPath: 'eslint',
-    configFile: '.eslintrc'
-  }
-})
+  webpackConfig.stats = {
+    colors: true,
+    entrypoints: false,
+    errorDetails: true,
+    modules: false,
+    moduleTrace: false
+  };
 
-// HACK: this removes transpilation errors in tests during development. tsconfig includes them so
-// that VS Code can work with imports. Ideally we should have a specific config for VS Code but
-// the plugin automatically picks `tsconfig.json` and doesn't support a custom filename.
-const tsLoader = environment.loaders.get('ts')
-tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
+  webpackConfig.devServer = {
+    https: false,
+    host: 'localhost',
+    port: devServerPort,
+    hot: false,
+    client: {
+      overlay: false,
+    },
+    compress: true,
+    allowedHosts: "all",
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
+    static: {
+      publicPath: path.resolve(process.cwd(), `${publicRootPath}/${publicOutputPath}`),
+      watch: {
+        ignored: "**/node_modules/**"
+      }
+    },
+    devMiddleware: {
+      publicPath: `/${publicOutputPath}/`
+    },
+    liveReload: true,
+    historyApiFallback: {
+      disableDotRule: true
+    }
+  };
 
-environment.plugins.append('BundleAnalyzerPlugin',
-  new BundleAnalyzerPlugin({
-    openAnalyzer: false
-  })
-)
+  webpackConfig.output.publicPath = devServerManifestPublicPath;
 
-module.exports = environment.toWebpackConfig()
+  return webpackConfig;
+};

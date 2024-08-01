@@ -1,11 +1,31 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+const { EsbuildPlugin } = require('esbuild-loader');
+const CompressionPlugin = require('compression-webpack-plugin');
+const { esbuildTarget } = require('./config')
 
-const environment = require('./environment')
-const path = require('path')
+module.exports = (webpackConfig) => {
+  webpackConfig.devtool = 'source-map';
+  webpackConfig.stats = 'normal';
+  webpackConfig.bail = true;
 
-// Add Webpack custom configs here
+  webpackConfig.plugins.push(
+    new CompressionPlugin({
+      filename: '[path][base].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf|map)$/
+    })
+  );
 
-const tsLoader = environment.loaders.get('ts')
-tsLoader.options.configFile = path.resolve(__dirname, '../../tsconfig.prod.json')
+  const prodOptimization = {
+    minimize: true,
+    minimizer: [
+      new EsbuildPlugin({
+        target: esbuildTarget,
+        css: true
+      })
+    ]
+  };
 
-module.exports = environment.toWebpackConfig()
+  Object.assign(webpackConfig.optimization, prodOptimization);
+
+  return webpackConfig;
+};

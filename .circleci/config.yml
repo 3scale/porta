@@ -62,9 +62,8 @@ save-assets-cache: &save-assets-cache
     key: *assets-cache-key
     paths:
       - public/assets
-      - public/packs-test
+      - public/packs
       - tmp/cache/assets
-      - tmp/cache/webpacker
 
 restore-assets-cache: &restore-assets-cache
   restore_cache:
@@ -522,7 +521,6 @@ jobs:
           root: .
           paths:
             - ./public/packs
-            - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
       - notify_failure
