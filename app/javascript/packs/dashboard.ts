@@ -10,6 +10,8 @@ import type { Props as BackendsWidgetProps } from 'Dashboard/components/Backends
 const productsContainerId = 'products-widget'
 const backendsContainerId = 'backends-widget'
 
+import './dashboard.scss'
+
 document.addEventListener('DOMContentLoaded', () => {
   window.dashboardWidget = dashboardWidget
   window.renderChartWidget = renderChartWidget

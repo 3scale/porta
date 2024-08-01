@@ -1,3 +1,6 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'usage_rules'
+
 = form.inputs current_account.multiple_applications_allowed? ? 'Application Requirements' : 'Signup & Use' do
 
   - unless current_account.multiple_applications_allowed?

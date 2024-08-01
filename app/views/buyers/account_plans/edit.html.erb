@@ -1,5 +1,9 @@
 <% content_for :page_header_title, "Edit Account Plan #{@plan.name}" %>
 
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'plans_edit' %>
+<% end %>
+
 <% if @plan.customized? %>
   <% content_for :page_header_body do %>
     <%= render :partial => 'api/plans/menu' %>

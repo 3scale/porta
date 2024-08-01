@@ -1,4 +1,5 @@
-= javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar'
+/ Orden matters! Base must go before any other pack:
+= javascript_packs_with_chunks_tag 'patternfly_base', 'dev_portal_cms_toolbar'
 = stylesheet_link_tag "font-awesome" unless Rails.env.test?
 
 div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"

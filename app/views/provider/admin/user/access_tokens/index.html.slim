@@ -1,3 +1,6 @@
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'access_tokens'
+
 - if flash[:token]
   - token = @access_tokens.last
   - content_for :page_header_title, 'Copy the new token and store it somewhere safe'
