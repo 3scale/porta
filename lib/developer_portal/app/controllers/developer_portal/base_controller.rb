@@ -13,14 +13,6 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
 
   before_action :verify_requested_format!
 
-  content_security_policy do |policy|
-    policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-    policy.font_src    '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-    policy.img_src     '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-    policy.script_src  '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-    policy.style_src   '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
-  end
-
   protected
 
   def require_credit_card_on_signup?

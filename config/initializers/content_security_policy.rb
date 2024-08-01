@@ -5,8 +5,9 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 Rails.application.config.to_prepare do
-  asset_host = Rails.configuration.three_scale.asset_host.to_s.strip
-  ContentSecurityPolicy.setup_policy(asset_host)
+  Rails.application.config.content_security_policy do |policy|
+    policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+  end
 end
 
 # If you are using UJS then enable automatic nonce generation
