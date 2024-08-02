@@ -106,7 +106,7 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
 
-    stub_request(:get, %r{\Ahttps.*/profiles/logos/invoice/wide.jpg\z})
+    stub_request(:get, %r{\Ahttps.*/profiles/logos/invoice/wide.jpg?.*X-Amz-Expires=#{CMS::S3::DEFAULT_EXPIRES_IN}.*\z})
         .to_return(status: 200, body: File.open(file_fixture('wide.jpg')))
 
     logo_file = nil
