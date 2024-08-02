@@ -19,8 +19,6 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   end
 
   test '#create' do
-    AccessToken.stubs(:random_id).returns('randomValue')
-
     # sends activation email
     ProviderUserMailer.expects(:activation).returns(mock(deliver_later: true))
 

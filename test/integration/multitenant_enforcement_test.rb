@@ -57,9 +57,11 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     AccessToken.new.value
     get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: token)
     assert_response :success
+    put admin_api_service_application_plan_path(service_id: service.id, id: plan.id, format: :json), params: {access_token: token, description: "desc1"}
+    assert_response :success
   end
 
-  test "multitenant account can retrieve from multiple tenants by master key" do
+  test "multitenant master can retrieve from multiple tenants by provider key" do
     host! master_account.external_admin_domain
     service = master_account.first_service!
     plan = FactoryBot.create(:application_plan, issuer: service)
@@ -67,6 +69,39 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
     get admin_api_service_application_plans_path(service_id: service.id, format: :json, provider_key: master_account.provider_key)
     assert_response :success
+    put admin_api_service_application_plan_path(service_id: service.id, id: plan.id, format: :json), params: {provider_key: master_account.provider_key, description: "desc1"}
+    assert_response :success
+  end
+
+  test "multitenant master retrieve from multiple tenants in master API by api_key in query" do
+    proxies = FactoryBot.create_list(:proxy, 2)
+    proxies.each do |proxy|
+      FactoryBot.create_list(:proxy_config, 1, proxy: proxy, environment: 'sandbox')
+      FactoryBot.create_list(:proxy_config, 1, proxy: proxy, environment: 'production')
+    end
+    proxies[1].update(tenant_id: proxies[0].reload.tenant_id + 1)
+
+    host! master_account.internal_admin_domain
+    get master_api_proxy_configs_path(environment: 'production', api_key: master_account.provider_key)
+    assert_response :success
+  end
+
+  test "multitenant master retrieve from multiple tenants in master API by api_key in request" do
+    User.any_instance.expects(:tenant_id).at_least(2).returns(@provider.reload.tenant_id)
+
+    signup_params = {
+      api_key: master_account.api_key,
+      org_name: 'Alaska',
+      username: 'person',
+      email: 'person@example.com',
+      password: '123456',
+      user_extra_field: 'hi-user',
+      account_extra_field: 'hi-account'
+    }
+
+    host! master_account.internal_admin_domain
+    post master_api_providers_path, params: signup_params
+    assert_response :created
   end
 
   test "multitenant account can retrieve from multiple tenants by user" do
