@@ -200,8 +200,7 @@ class Cinstance < Contract
   # maybe move both limit methods to their models?
 
   def self.serialization_preloading
-    includes(:plan, :user_account,
-             service: [:account, :default_application_plan])
+    includes(:plan, :user_account, service: [:account])
   end
 
 
