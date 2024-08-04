@@ -78,7 +78,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
     ThreeScale.config.payments.expects(:billing_canaries).at_least_once.returns(canaries)
 
-    Finance::BillingStrategy.expects(:daily_async).with { |scope| scope.pluck(:account_id) == canaries }.returns(true)
+    Finance::BillingStrategy.expects(:daily_async).with { |scope| assert_equal canaries, scope.pluck(:account_id) }.returns(true)
     assert Finance::BillingStrategy.daily_canaries
   end
 
