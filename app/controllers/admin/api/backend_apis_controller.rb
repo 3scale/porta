@@ -48,7 +48,7 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[name description private_endpoint annotations].freeze
+  DEFAULT_PARAMS = [:name, :description, :private_endpoint, {annotations: %i[name value]}].freeze
   private_constant :DEFAULT_PARAMS
 
   def authorize
