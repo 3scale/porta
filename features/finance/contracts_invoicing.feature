@@ -9,7 +9,7 @@ Feature: All kind of contracts are billed
     And the default product of the provider has name "My API"
     And the provider is charging its buyers
     And the provider has "finance" visible
-    And the provider has one buyer
+    And a buyer "Bob Buyer"
     And the following application plan:
       | Product | Name             | Cost per month |
       | My API  | Application Plan | 100            |

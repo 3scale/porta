@@ -215,7 +215,7 @@ module System
     config.three_scale.redhat_customer_portal.enabled = false
     config.three_scale.redhat_customer_portal.merge!(try_config_for(:redhat_customer_portal) || {})
 
-    config.three_scale.rolling_updates.features = try_config_for(:rolling_updates).deep_merge(try_config_for(:"extra-rolling_updates") || {})
+    config.three_scale.rolling_updates.features = try_config_for(:rolling_updates)&.deep_merge(try_config_for(:"extra-rolling_updates") || {})
 
     config.three_scale.service_discovery = ActiveSupport::OrderedOptions.new
     config.three_scale.service_discovery.enabled = false

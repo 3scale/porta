@@ -202,7 +202,7 @@ module Liquid
       )
       def logo_url
         if logo = @model.try(:profile).try(:logo)
-          logo.url(:large)
+          logo.expiring_url(CMS::S3::DEFAULT_EXPIRES_IN, :large)
         end
       end
 

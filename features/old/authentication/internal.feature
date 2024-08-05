@@ -62,7 +62,7 @@ Feature: Internal authentication
     And I should be on the homepage
 
   Scenario: Successful sign in as a buyer
-    Given a buyer "alice" signed up to provider "foo.3scale.localhost"
+    Given a buyer "alice"
 
     When the current domain is foo.3scale.localhost
     And I go to the login page
@@ -95,7 +95,7 @@ Feature: Internal authentication
 
   @security
   Scenario: Failed attempt to sign in without being activated
-    Given a buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    Given a buyer "wickedwidgets"
     And a pending user "bob" of account "wickedwidgets"
     When the current domain is foo.3scale.localhost
     And I try to log in as "bob"
@@ -103,14 +103,14 @@ Feature: Internal authentication
 
   @security
   Scenario: Failed attempt to sign in as user with pending account
-    Given a pending buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    Given a pending buyer "wickedwidgets"
     When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with rejected account
-    Given a rejected buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    Given a rejected buyer "wickedwidgets"
     When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in

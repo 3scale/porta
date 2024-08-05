@@ -5,7 +5,7 @@ Feature: Login feature
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has multiple applications enabled
-      And a buyer "bob" signed up to provider "foo.3scale.localhost"
+      And a buyer "bob"
 
   @security
   Scenario: Buyer can log in with csrf protection enabled

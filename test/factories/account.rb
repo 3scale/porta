@@ -23,12 +23,7 @@ FactoryBot.define do
 
   factory(:account, :parent => :account_without_users) do
     after(:create) do |account|
-      if account.users.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-
-        admin = FactoryBot.create(:admin, :username => username, :account_id => account.id)
-        admin.activate!
-      end
+      FactoryBot.create(:active_admin, account: account) if account.users.empty?
     end
 
     after(:stub) do |account|
@@ -37,20 +32,73 @@ FactoryBot.define do
       account.stubs(:admins).returns([admin])
       admin.stubs(:account).returns(account)
     end
-  end
 
-  factory(:pending_account, :parent => :account) do
-    after(:create) do |account|
-      account.make_pending!
+    trait :approved do
+      state { :approved }
+    end
+
+    trait :rejected do
+      state { :rejected }
+    end
+
+    trait :pending do
+      state { :pending }
+    end
+
+    factory :pending_account, traits: [:pending]
+
+    factory :buyer do
+      buyer { true }
+    end
+
+    factory :master_account, traits: [:approved] do
+      master { true }
+      org_name { 'Master account' }
+      payment_gateway_type { :bogus }
+      association :settings
+      billing_strategy factory: :postpaid_with_charging
+
+      after(:build) do |account|
+        if account.users.empty?
+          account.users << FactoryBot.build(:active_admin, account_id: account.id, username: "superadmin")
+        else
+          account.admins.each { |user| user.activate! if user.can_activate? }
+        end
+      end
+
+      after(:create) do |account|
+        account.provider_account = account
+
+        if account.users.empty?
+          account.users << FactoryBot.create(:active_admin, account_id: account.id, username: "superadmin")
+        else
+          account.admins.each { |user| user.activate! if user.can_activate? }
+        end
+
+        service = FactoryBot.create(:service, account: account)
+
+        # Defaults
+        app_plan = FactoryBot.create(:published_application_plan, issuer: service, default: true)
+        account_plan = FactoryBot.create(:account_plan, :published, issuer: account, default: true)
+        account.update_attribute :default_account_plan, account_plan
+
+        service.update_attribute(:default_service_plan, service.service_plans.first) # rubocop:disable Rails/SkipsModelValidations
+
+        %w[prepaid_billing postpaid_billing anonymous_clients liquid].each do |feature|
+          service.features.create!(system_name: feature, name: feature.humanize)
+        end
+
+        FactoryBot.create(:cinstance, plan: app_plan, user_account: account)
+      end
+
+      after(:stub) do |account|
+        Account.stubs(:master).returns(account)
+        Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
+      end
     end
   end
 
-#FIXME: buyer accounts without provider accounts??? is that ok?
-  factory(:buyer_account_with_pending_user, :parent => :account) do
-    buyer { true }
-  end
-
-  factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
+  factory(:pending_buyer_account, traits: [:pending], parent: :buyer) do
     after(:create) do |account|
       account.users.each do |user|
         user.activate! unless user.active? # horrible horrible factories
@@ -58,11 +106,8 @@ FactoryBot.define do
     end
   end
 
-  factory(:buyer_account, :parent => :pending_buyer_account) do
+  factory(:buyer_account, traits: [:approved], parent: :pending_buyer_account) do
     association :provider_account
-    after(:create) do |account|
-      account.approve! if account.can_approve?
-    end
 
     after(:build) do |account|
       if account.users.empty?
@@ -128,7 +173,7 @@ FactoryBot.define do
       # assign tenant id manualy, because we cannot do it by trigger
       account.tenant_id = account.id
 
-      account.approve!
+      account.approve! if account.pending?
 
       account.services.first.update_attribute :mandatory_app_key, false
       account.settings.update!(
@@ -187,58 +232,6 @@ FactoryBot.define do
     after(:create) do |a|
       a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
       a.save
-    end
-  end
-
-  factory(:master_account, :parent => :account) do
-    master { true }
-    org_name { 'Master account' }
-    payment_gateway_type { :bogus }
-    association :settings
-
-    after(:build) do |account|
-      account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
-      if account.users.empty?
-        account.users << FactoryBot.build(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
-      end
-      account.admins.each { |user| user.activate! if user.can_activate? }
-    end
-
-    after(:create) do |account|
-      account.provider_account = account
-
-      if account.users.empty?
-        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
-      end
-      account.admins.each { |user| user.activate! if user.can_activate? }
-      account.approve! if account.can_approve?
-
-      #[multiservice] First service is the default
-      service = FactoryBot.create(:service, :account => account)
-
-      # Defaults
-      application_plan = FactoryBot.create(:application_plan, issuer: service, state: 'published')
-      account_plan = FactoryBot.create(:account_plan, issuer: account, state: 'published')
-
-      service.update_attribute :default_application_plan, application_plan
-      service.update_attribute :default_service_plan, service.service_plans.first
-      account.update_attribute :default_account_plan, account_plan
-
-      # TODO: add more master features here, if needed
-      %w[prepaid_billing postpaid_billing anonymous_clients liquid].each do |feature|
-        account.default_service.features.create!(:system_name => feature, :name => feature.humanize)
-      end
-
-      FactoryBot.create(:cinstance, :plan => account.default_service.application_plans.published.first,
-                        :user_account => account)
-
-      account.reload
-    end
-
-
-    after(:stub) do |account|
-      Account.stubs(:master).returns(account)
-      Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
     end
   end
 end

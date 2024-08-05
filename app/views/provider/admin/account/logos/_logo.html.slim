@@ -1,2 +1,2 @@
-= image_tag @profile.logo.url(:medium)
+= image_tag @profile.logo.expiring_url(CMS::S3::DEFAULT_EXPIRES_IN, :medium)
 = delete_link_for provider_admin_account_logo_path

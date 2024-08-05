@@ -20,7 +20,7 @@ Feature: Invitations
     When I request the url of the provider new invitation page then I should see an exception
 
   Scenario: When switch is denied as buyer
-    Given a buyer "apininja" signed up to provider "foo.3scale.localhost"
+    Given a buyer "apininja"
      And provider "foo.3scale.localhost" has "multiple_users" switch denied
     When I log in as "apininja" on foo.3scale.localhost
      And I follow "Settings"
@@ -28,7 +28,7 @@ Feature: Invitations
     Then I should not see "Invite new user"
 
   Scenario: Sending an invitation as buyer
-    Given a buyer "apininja" signed up to provider "foo.3scale.localhost"
+    Given a buyer "apininja"
       And provider "foo.3scale.localhost" has "multiple_users" switch visible
     When I log in as "apininja" on foo.3scale.localhost
     And I follow "Settings"

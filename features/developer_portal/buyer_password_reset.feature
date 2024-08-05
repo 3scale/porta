@@ -24,7 +24,7 @@ Feature: Buyer password reset
 
   Rule: Reset password flow for different scenarios
     Background:
-      Given a buyer "bob" signed up to the provider
+      Given a buyer "bob"
       And an active user "zed" of account "bob" with email "zed@3scale.localhost"
       And the current domain is foo.3scale.localhost
       And they go to the login page
@@ -39,13 +39,13 @@ Feature: Buyer password reset
       And they fill in "Password confirmation" with "monkey"
       And they press "Change Password"
       Then they should see "The password has been changed"
-  
+
       When they go to the login page
       And they fill in "Username" with "zed@3scale.localhost"
       And they fill in "Password" with "monkey"
       And they press "Sign in"
       Then they should be logged in as "zed"
-  
+
     Scenario: Invalid email
       Given no user exists with an email of "bob@3scale.localhost"
       And they follow "Forgot password?"
@@ -53,7 +53,7 @@ Feature: Buyer password reset
       And they press "Send instructions"
       Then they should see "A password reset link will be sent to bob@3scale.localhost if a user exists with this email."
       And "bob@3scale.localhost" should receive no emails
-  
+
     Scenario: Wrong confirmation
       Given they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
@@ -64,7 +64,7 @@ Feature: Buyer password reset
       And they press "Change Password"
       Then they should see the password confirmation error
       And the password of user "zed" should not be "monkey"
-  
+
     Scenario: Blank passwords
       When they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
@@ -72,11 +72,11 @@ Feature: Buyer password reset
       And they follow the link found in the password reset email send to "zed@3scale.localhost"
       And they press "Change Password"
       Then they should see "The password is invalid"
-  
+
     Scenario: Invalid token
       When they go to the password page with invalid password reset token
       Then they should see "The password reset token is invalid"
-  
+
     Scenario: Attempt to login with invalid credentials, then reset password
       Given they fill in "Username" with "zed@3scale.localhost"
       And they fill in "Password" with "ihavenoclue"

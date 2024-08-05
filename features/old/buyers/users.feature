@@ -10,7 +10,7 @@ Feature: Buyer users management
     And the provider has the following fields defined for users:
       | Name            | Choices | Label | Required | Read Only | Hidden |
       | custom_field    |         |       |          |           |        |
-    And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
+    And a buyer "SpaceWidgets"
     And an active user "alice" of account "SpaceWidgets"
     And an active user "bob" of account "SpaceWidgets"
 

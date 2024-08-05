@@ -8,8 +8,7 @@ Given "{provider} has the following buyers:" do |provider, table|
     travel_to(Time.zone.now - index.day) # Prevent all buyer from having same sign up date
 
     buyer = FactoryBot.create(:buyer_account, provider_account: provider,
-                                              org_name: hash[:name],
-                                              buyer: true)
+                                              org_name: hash[:name])
 
     buyer.update!(state: hash[:state]) if hash[:state]
     buyer.update!(created_at: Chronic.parse(hash[:created_at])) if hash[:created_at]
@@ -19,6 +18,8 @@ Given "{provider} has the following buyers:" do |provider, table|
 
     plan = provider.account_plans.find_by(name: plan_name) ||
            create_plan(:account, name: plan_name, issuer: provider)
+
+    buyer.contracts.delete_all
     buyer.buy! plan
   end
 end

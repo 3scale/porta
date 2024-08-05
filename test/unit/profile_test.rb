@@ -114,7 +114,7 @@ class ProfileTest < ActiveSupport::TestCase
 
       profile.logo = hypnotoad
       profile.logo.s3_interface.client.stub_responses(:put_object, ->(request) {
-        assert_equal 'public-read', request.params[:acl]
+        assert_equal 'private', request.params[:acl]
       })
       profile.save!
 
