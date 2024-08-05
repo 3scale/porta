@@ -5,12 +5,13 @@ class CreateAnnotationReferences < ActiveRecord::Migration[6.1]
     options = "CHARSET=utf8mb4 COLLATE=utf8mb4_bin" if System::Database.mysql?
 
     create_table :annotations, options: options do |t|
-      t.string :name, index: true, null: false
+      t.string :name, null: false
       t.string :value
-      t.references :annotated, polymorphic: true, index: true, null: false
+      t.references :annotated, polymorphic: true, index: false, null: false
       t.integer :tenant_id
-
       t.timestamps
+
+      t.index %i[annotated_type annotated_id name], unique: true
     end
 
     reversible do |direction|

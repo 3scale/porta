@@ -129,8 +129,7 @@ ActiveRecord::Schema.define(version: 2024_07_26_111800) do
     t.integer "tenant_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["annotated_type", "annotated_id"], name: "index_annotations_on_annotated"
-    t.index ["name"], name: "index_annotations_on_name"
+    t.index ["annotated_type", "annotated_id", "name"], name: "index_annotations_on_annotated_type_and_annotated_id_and_name", unique: true
   end
 
   create_table "api_docs_services", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
