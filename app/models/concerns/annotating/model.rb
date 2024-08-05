@@ -5,7 +5,7 @@ module Annotating
     extend ActiveSupport::Concern
 
     included do
-      has_many :annotations, as: :annotated, dependent: :destroy, autosave: true
+      has_many :annotations, as: :annotated, dependent: :destroy, autosave: true, inverse_of: :annotated
     end
 
     def annotations=(list)
