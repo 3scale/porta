@@ -43,4 +43,6 @@ namespace :assets do # rubocop:disable Metrics/BlockLength
   Rake::Task['assets:clobber'].enhance do
     FileUtils.rm 'public/packs/manifest.json', force: true
   end
+
+  Rake::Task['assets:environment'].enhance(%w[assets:environment:factory_bot assets:environment:observers])
 end
