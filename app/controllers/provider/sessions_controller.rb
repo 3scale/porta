@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Provider::SessionsController < FrontendController
+  include ThreeScale::BotProtection::Controller
 
   layout 'provider/login'
   skip_before_action :login_required
@@ -12,27 +13,27 @@ class Provider::SessionsController < FrontendController
   def new
     @session = Session.new
     @authentication_providers = published_authentication_providers
+    @bot_protection_enabled = bot_protection_enabled?
   end
 
   def create
     session_return_to
     logout_keeping_session!
 
-    @user, strategy = authenticate_user
+    @user, strategy = authenticate_user if bot_check
 
     if @user
       self.current_user = @user
       flash[:first_login] = true if current_user.user_sessions.empty?
-      create_user_session!(strategy.authentication_provider_id)
+      create_user_session!(strategy&.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
 
       AuditLogService.call("Signed in: #{current_user.id}/#{current_user.username} #{current_user.first_name} #{current_user.last_name}")
 
       redirect_back_or_default provider_admin_path
     else
-      @session = Session.new
-      flash.now[:error] = strategy.error_message
-      @authentication_providers = published_authentication_providers
+      new
+      flash.now[:error] ||= strategy&.error_message
       render :action => :new
     end
   end
@@ -106,5 +107,9 @@ class Provider::SessionsController < FrontendController
 
   def instantiate_sessions_presenter
     @presenter = Provider::SessionsPresenter.new(domain_account)
+  end
+
+  def bot_protection_level
+    domain_account.settings.admin_bot_protection_level
   end
 end

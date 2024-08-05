@@ -77,6 +77,7 @@ module VerticalNavHelper
     items = []
     items << {id: :webhooks,  title: 'Webhooks',        path: edit_provider_admin_webhooks_path} if can? :manage, :web_hooks
     items << {id: :apidocs,   title: '3scale API Docs', path: provider_admin_api_docs_path}
+    items << {id: :bot_protection,  title: 'Bot Protection',  path: edit_provider_admin_bot_protection_path}
   end
 
   # Audience

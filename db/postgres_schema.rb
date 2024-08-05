@@ -1268,6 +1268,7 @@ ActiveRecord::Schema.define(version: 2024_07_19_174715) do
     t.string "iam_tools_switch", limit: 255, default: "denied", null: false
     t.string "require_cc_on_signup_switch", limit: 255, default: "denied", null: false
     t.boolean "enforce_sso", default: false, null: false
+    t.string "admin_bot_protection_level", default: "none"
     t.index ["account_id"], name: "index_settings_on_account_id", unique: true
   end
 

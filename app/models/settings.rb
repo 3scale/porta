@@ -12,9 +12,9 @@ class Settings < ApplicationRecord
             :content_bg_colour, :tracker_code, :favicon, :plans_tab_bg_colour, :plans_bg_colour, :content_border_colour,
             :cc_privacy_path, :cc_terms_path, :cc_refunds_path, :change_service_plan_permission, :spam_protection_level,
             :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cms_token, :cas_server_url, :sso_key,
-            :sso_login_url, length: { maximum: 255 }
+            :admin_bot_protection_level, :sso_login_url, length: { maximum: 255 }
 
-  symbolize :spam_protection_level
+  symbolize :spam_protection_level, :admin_bot_protection_level
 
   include Switches
 
@@ -99,6 +99,11 @@ class Settings < ApplicationRecord
     # We accept it only for backwards compatibility with clients still having 'auto' in the DB
     level = super.to_sym
     level == :auto ? :captcha : level
+  end
+
+  # To avoid a dangerous DB migration, we allow empty values in the column and assume empty means `:none`
+  def admin_bot_protection_level
+    super&.to_sym || :none
   end
 
   delegate :provider_id_for_audits, :to => :account, :allow_nil => true

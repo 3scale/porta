@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Sites::SpamProtectionTest < ActionDispatch::IntegrationTest
+class Sites::AdminBotProtectionTest < ActionDispatch::IntegrationTest
 
   setup do
     provider = FactoryBot.create(:provider_account)
@@ -12,14 +12,14 @@ class Sites::SpamProtectionTest < ActionDispatch::IntegrationTest
 
   test 'edit without captcha' do
     Recaptcha.expects(:captcha_configured?).returns(false).twice
-    get edit_admin_site_spam_protection_path
+    get edit_provider_admin_bot_protection_path
     assert_response :success
     assert_match 'reCAPTCHA has not been configured correctly', response.body
   end
 
   test 'edit with captcha' do
     Recaptcha.expects(:captcha_configured?).returns(true).twice
-    get edit_admin_site_spam_protection_path
+    get edit_provider_admin_bot_protection_path
     assert_response :success
     assert_not_match 'reCAPTCHA has not been configured correctly', response.body
   end

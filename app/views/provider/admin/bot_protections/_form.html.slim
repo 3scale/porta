@@ -1,0 +1,11 @@
+= semantic_form_for settings, url: url, html: {:id => 'bot-protection-settings' } do |form|
+  = form.inputs selector_label do
+    = form.input field,
+            label: false,
+            hint: t("sites.spam_protections.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
+            as: :radio,
+            collection: ThreeScale::BotProtection::LEVELS,
+            input_html: { disabled: !Recaptcha.captcha_configured? }
+
+    = form.actions do
+      = form.commit_button 'Update Settings'

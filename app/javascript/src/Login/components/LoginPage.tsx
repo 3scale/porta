@@ -17,6 +17,11 @@ interface Props {
   providerRequestPasswordResetPath: string;
   show3scaleLoginForm: boolean;
   disablePasswordReset: boolean;
+  recaptcha: {
+    enabled: boolean;
+    siteKey: string;
+    action: string;
+  };
   session: {
     username: string | null;
   };
@@ -28,6 +33,7 @@ const LoginPage: FunctionComponent<Props> = ({
   flashMessages,
   providerRequestPasswordResetPath,
   providerSessionsPath,
+  recaptcha,
   session,
   show3scaleLoginForm
 }) => (
@@ -53,6 +59,7 @@ const LoginPage: FunctionComponent<Props> = ({
       <LoginForm
         flashMessages={flashMessages}
         providerSessionsPath={providerSessionsPath}
+        recaptcha={recaptcha}
         session={session}
       />
     )}
