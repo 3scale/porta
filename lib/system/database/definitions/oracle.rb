@@ -581,7 +581,7 @@ System::Database::Oracle.define do
     end
 
     <<~SQL
-      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSEIF ")}
+      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSIF ")}
       END IF;
     SQL
   end
