@@ -40,6 +40,8 @@ namespace :assets do # rubocop:disable Metrics/BlockLength
     Rails.root.join('tmp/cache/assets').rmtree
   end
 
+  Rake::Task['assets:environment'].enhance(%w[assets:environment:factory_bot assets:environment:observers])
+
   Rake::Task['assets:clobber'].enhance do
     FileUtils.rm 'public/packs/manifest.json', force: true
   end
