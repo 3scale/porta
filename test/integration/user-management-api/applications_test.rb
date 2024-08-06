@@ -32,14 +32,39 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    service_2 = FactoryBot.create(:service, account: @provider)
+    service_3 = FactoryBot.create(:service, account: @provider)
+    application_plan_2 = FactoryBot.create(:application_plan, issuer: service_2)
+    application_plan_3 = FactoryBot.create(:application_plan, issuer: service_3)
+    application_2 = FactoryBot.create(:cinstance, plan: application_plan_2, user_account: @buyer)
+    FactoryBot.create(:cinstance, plan: application_plan_3, user_account: @buyer)
 
     get(admin_api_applications_path)
     assert_response :forbidden
     get admin_api_applications_path, params: { access_token: token.value }
     assert_response :success
+    assert_select "applications/application", false
+
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+    get admin_api_applications_path, params: { access_token: token.value, service_id: @service.id + 1 }
+    assert_response :success
+    assert_select "applications/application", false
+
+    User.any_instance.expects(:member_permission_service_ids).returns([@service.id, service_2.id]).at_least_once
+    get admin_api_applications_path, params: { access_token: token.value }
+    assert_response :success
+    assert_select "applications/application", 2
+    assert_select "applications/application/id", @application.id.to_s
+    assert_select "applications/application/service_id", @service.id.to_s
+    assert_select "applications/application/id", application_2.id.to_s
+    assert_select "applications/application/service_id", service_2.id.to_s
+
+    User.any_instance.expects(:member_permission_service_ids).returns([@service.id, service_2.id]).at_least_once
     get admin_api_applications_path, params: { access_token: token.value, service_id: @service.id }
     assert_response :success
+    assert_select "applications/application", 1
+    assert_select "applications/application/id", @application.id.to_s
+    assert_select "applications/application/service_id", @service.id.to_s
   end
 
   # Provider key
