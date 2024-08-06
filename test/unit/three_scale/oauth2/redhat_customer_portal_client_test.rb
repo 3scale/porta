@@ -4,6 +4,7 @@ require 'test_helper'
 
 class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCase
   setup do
+    @master_account = FactoryBot.create(:master_account)
     @authentication_provider = FactoryBot.build_stubbed(:authentication_provider)
     @authentication = ThreeScale::OAuth2::Client.build_authentication(@authentication_provider)
     @oauth2 = ThreeScale::OAuth2::RedhatCustomerPortalClient.new(@authentication)
@@ -25,9 +26,19 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
   end
 
   test '#authenticate_options' do
-    request = ActionDispatch::TestRequest.create
-    ThreeScale::OAuth2::RedhatCustomerPortalClient::RedirectUri.expects(:call).with(@oauth2, request)
-    @oauth2.authenticate_options(request)
+    domain = 'example.net'
+    query_string = 'session_state=foobar&code=123456&iss=http%3A%2F%2Fkeycloak.example.com%2Frealms%2Ftest'
+    env = {
+      'HTTP_HOST' => domain,
+      'QUERY_STRING' => query_string,
+      'PATH_INFO' => '/path'
+    }
+    request = ActionDispatch::TestRequest.create env
+    request.request_uri = "http://example.net/path?#{query_string}"
+
+    options = @oauth2.authenticate_options(request)
+
+    assert_equal({ redirect_uri: "http://#{@master_account.self_domain}/auth/#{@authentication_provider.system_name}/callback?self_domain=#{domain}&session_state=foobar" }, options)
   end
 
   test '#user_data' do

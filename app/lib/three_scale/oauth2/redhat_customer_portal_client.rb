@@ -66,7 +66,7 @@ module ThreeScale
 
       class RedirectUri < ThreeScale::OAuth2::ClientBase::CallbackUrl
 
-        PARAMS_NOT_ALLOWED = %i[code action controller].freeze
+        PARAMS_NOT_ALLOWED = %i[code action controller iss].freeze
 
         def self.call(client, request)
           new(client, request).call
