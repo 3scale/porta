@@ -21,11 +21,29 @@ class AnnotationTest < ActiveSupport::TestCase
     assert subject.errors[:name].include? "can't be blank"
   end
 
-  test 'a valid name is accepted' do
+  test 'a valid :name is accepted' do
     subject = Annotation.new
 
     subject.name = 'managed'
+    subject.valid?
 
-    assert subject.valid?
+    assert_not subject.errors[:name].present?
+  end
+
+  test ':annotated is mandatory' do
+    subject = Annotation.new
+
+    assert_not subject.valid?
+    assert subject.errors[:annotated].present?
+    assert subject.errors[:annotated].include? "must exist"
+  end
+
+  test 'a valid :annotated is accepted' do
+    subject = Annotation.new
+
+    subject.annotated = Account.new
+    subject.valid?
+
+    assert_not subject.errors[:annotated].present?
   end
 end
