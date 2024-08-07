@@ -30,6 +30,23 @@ class AnnotationTest < ActiveSupport::TestCase
     assert_not subject.errors[:name].present?
   end
 
+  test ':value is mandatory' do
+    subject = Annotation.new
+
+    assert_not subject.valid?
+    assert subject.errors[:value].present?
+    assert subject.errors[:value].include? "can't be blank"
+  end
+
+  test 'a valid :value is accepted' do
+    subject = Annotation.new
+
+    subject.value = 'operator'
+    subject.valid?
+
+    assert_not subject.errors[:value].present?
+  end
+
   test ':annotated is mandatory' do
     subject = Annotation.new
 
