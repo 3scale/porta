@@ -16,8 +16,9 @@ module Annotating
     def models
       return @models if @models
 
-      # this is to see all models in dev env, otherwise some may not be yet loaded
-      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models") unless Rails.env.production?
+      # This is to see all models when creating the DB trigger, otherwise the resulting trigger could be incorrect
+      # https://github.com/3scale/porta/pull/3857#discussion_r1707235658
+      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
 
       @models = ActiveRecord::Base.descendants.select { |model| model.include?(Model) }
     end
