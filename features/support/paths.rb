@@ -23,9 +23,6 @@ World(Module.new do
     when /the home\s?page/
       '/'
 
-    when 'the authentication providers page'
-      provider_admin_authentication_providers_path
-
     when /^the sign up page for the "([^"]*)" plan$/
       plan = Plan.find_by_name!($1)
       signup_path(:'plan_ids[]' => plan.id)
@@ -233,9 +230,26 @@ World(Module.new do
       provider_admin_account_authentication_provider_path(auth_provider)
     when 'the new sso integration page'
       new_provider_admin_account_authentication_provider_path
-    when 'the edit sso integration page'
+    when 'the edit rh sso integration page'
+      edit_provider_admin_account_authentication_provider_path(@rhsso_integration)
+
+      #
+      # SSO Integrations (Dev portal)
+      #
+    when 'the developer portal users sso integrations page'
+      provider_admin_authentication_providers_path
+    when 'the developer portal sso integration page'
       auth_provider = AuthenticationProvider.last
-      edit_provider_admin_account_authentication_provider_path(auth_provider)
+      provider_admin_authentication_provider_path(auth_provider)
+    when /^the developer portal new sso integration page for "([^"]*)"$/
+      new_provider_admin_authentication_provider_path(kind: $1)
+    when 'the developer portal edit integration page'
+      auth_provider = AuthenticationProvider.last
+      edit_provider_admin_authentication_provider_path(auth_provider)
+    when 'the developer portal edit rh sso integration page'
+      edit_provider_admin_authentication_provider_path(@rhsso_dev_portal_integration)
+    when 'the developer portal edit auth0 integration page'
+      edit_provider_admin_authentication_provider_path(@auth0_dev_portal_integration)
 
     #
     # ActiveDocs (Admin portal)

@@ -1,5 +1,5 @@
 @javascript
-Feature: Account Settings > Users > SSO Integrations > Show
+Feature: Account Settings > Users > SSO Integrations > Edit
 
   Background:
     Given a provider is logged in
@@ -11,10 +11,10 @@ Feature: Account Settings > Users > SSO Integrations > Show
     And the current page is the sso integration page
     And should see "Red Hat Single Sign-On"
     And they follow "edit"
-    Then the current page is the edit sso integration page
+    Then the current page is the edit rh sso integration page
 
   Scenario: Update a RH SSO integration
-    When they go to the edit sso integration page
+    When they go to the edit rh sso integration page
     And the form is submitted with:
       | Client                            | Rose Tyler                                     |
       | Client Secret                     | outdated-tardis                                |
@@ -23,7 +23,7 @@ Feature: Account Settings > Users > SSO Integrations > Show
     Then they should see the flash message "SSO integration updated"
 
   Scenario: Missing field
-    When they go to the edit sso integration page
+    When they go to the edit rh sso integration page
     And the form is submitted with:
       | Client                            |                                                |
       | Client Secret                     | outdated-tardis                                |
