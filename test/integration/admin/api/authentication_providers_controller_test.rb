@@ -74,7 +74,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
 
   test '#create keycloak without site returns the right error' do
     post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: ''}))
-    assert_equal ['can\'t be blank'], JSON.parse(response.body).dig('errors', 'realm')
+    assert_equal ['can\'t be blank', 'Invalid URL format'], JSON.parse(response.body).dig('errors', 'realm')
   end
 
   test '#update saves the new attributes values' do

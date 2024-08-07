@@ -3,7 +3,6 @@ class AuthenticationProvider::Keycloak < AuthenticationProvider
   self.oauth_config_required = true
 
   validates :realm, presence: true
-  validates :realm, format: { without: /\s/ }
-
+  validates :realm, format: { with: URI.regexp(%w(http https)), message: :invalid_url }
   alias_attribute :realm, :site
 end
