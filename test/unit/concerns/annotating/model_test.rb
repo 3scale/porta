@@ -94,7 +94,7 @@ module Annotating
         subject = AnnotatedFeature.new
         subject.annotate('managed', 'operator')
 
-        result = subject.annotation('test')
+        result = subject.value_of_annotation('test')
 
         assert_nil result
       end
