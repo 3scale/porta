@@ -36,6 +36,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
     if @authentication_provider.save
       redirect_to edit_provider_admin_authentication_provider_path(@authentication_provider), notice: 'Authentication provider created'
     else
+      flash[:error] = 'Authentication provider has not been updated'
       render 'new'
     end
   end
@@ -46,7 +47,11 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
     authorize_authentication_provider('update')
     published = params.require(:authentication_provider).require(:published)
     persisted = @authentication_provider.update({published: published})
-    flash[:notice] = persisted ? 'Authentication provider updated' : 'Authentication provider has not been updated'
+    if persisted
+      flash[:notice] = 'Authentication provider updated'
+    else
+      flash[:error] = 'Authentication provider has not been updated'
+    end
     @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
     render :show
   end
@@ -59,7 +64,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
       @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
       render :show
     else
-      flash[:notice] = 'Authentication provider has not been updated'
+      flash[:error] = 'Authentication provider has not been updated'
       render :edit
     end
   end
