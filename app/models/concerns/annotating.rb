@@ -17,7 +17,7 @@ module Annotating
       return @models if @models
 
       # this is to see all models in dev env, otherwise some may not be yet loaded
-      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models") if Rails.env.development?
+      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models") unless Rails.env.production?
 
       @models = ActiveRecord::Base.descendants.select { |model| model.include?(Model) }
     end

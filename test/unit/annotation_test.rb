@@ -63,4 +63,13 @@ class AnnotationTest < ActiveSupport::TestCase
 
     assert_not subject.errors[:annotated].present?
   end
+
+  %i[simple_provider backend_api simple_service].each do |factory|
+    test "tenant_id trigger for #{factory}" do
+      annotated = FactoryBot.create(factory)
+      annotation = FactoryBot.create(:annotation, annotated: annotated)
+      assert annotation.reload.tenant_id
+      assert_equal annotated.reload.tenant_id, annotation.tenant_id
+    end
+  end
 end
