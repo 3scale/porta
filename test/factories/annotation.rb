@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory(:annotation, class: Annotation) do
     association :annotated, factory: :provider_account
-    name { Annotation::SUPPORTED_ANNOTATIONS.first }
+    name { Annotation::SUPPORTED_ANNOTATIONS.sample }
     value { 'operator' }
   end
 end
