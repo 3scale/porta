@@ -159,7 +159,9 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   serialize :notification_settings
 
-  audited allow_mass_assignment: true
+  annotated
+  audited
+
   state_machine initial: :incomplete do
     state :incomplete
     state :hidden
