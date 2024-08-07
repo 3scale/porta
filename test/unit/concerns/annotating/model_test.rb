@@ -117,7 +117,7 @@ module Annotating
 
         subject.expects(:annotate).times(3)
 
-        subject.annotations=([annotation, annotation ,annotation])
+        subject.annotations=([annotation, annotation, annotation])
       end
     end
   end
