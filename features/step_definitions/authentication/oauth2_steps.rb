@@ -50,7 +50,7 @@ Given(/^the Oauth2 user does not have all the required fields$/) do
 end
 
 When(/^I visit the "([^"]*)" authentication provider (edit )?page$/) do |name, edit|
-  visit path_to('the authentication providers page')
+  visit path_to('the developer portal users sso integrations page')
   click_on name
 
   click_on 'Edit' if edit
