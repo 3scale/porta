@@ -16,11 +16,9 @@ import {
   TextContent
 } from '@patternfly/react-core'
 
-import type {
-  QuickStart,
-  QuickStartContextValues } from '@patternfly/quickstarts'
+import type { QuickStart, QuickStartContextValues } from '@patternfly/quickstarts'
 
-import './QuickStartContainer.scss'
+import './CustomCatalog.scss'
 
 type CustomQuickStart = (QuickStart & {
   metadata: QuickStart['metadata'] & {

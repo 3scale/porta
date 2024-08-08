@@ -1,6 +1,9 @@
 - content_for :title, t('.header.title')
 - content_for :page_header_title, t('.header.title')
 
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'authentication_providers'
+
 table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Authentication providers table"
   thead
     tr role="row"
@@ -34,21 +37,3 @@ table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Authentication pro
                   ul class="pf-c-dropdown__menu pf-m-align-right" hidden="hidden"
                     li
                       a class="pf-c-dropdown__menu-item" href=edit_provider_admin_authentication_provider_path(authentication_provider) Edit
-
-/ Basic snippet to open/close menu actions. Will be handled by React.
-javascript:
-  document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('mouseup', () => {
-      document.querySelectorAll('.pf-c-overflow-menu ul.pf-c-dropdown__menu')
-        .forEach((toggle) => {
-          toggle.hidden = true
-        })
-    })
-
-    document.querySelectorAll('.pf-c-overflow-menu button.pf-c-dropdown__toggle')
-      .forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          toggle.nextElementSibling.hidden = !toggle.nextElementSibling.hidden
-        })
-      })
-  })

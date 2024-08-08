@@ -2,6 +2,7 @@
 
 import { QuickStartContainer as PF4QuickStartContainer, useLocalStorage } from '@patternfly/quickstarts'
 import { PageSection } from '@patternfly/react-core'
+import '@patternfly/quickstarts/dist/quickstarts.min.css'
 
 import quickStarts from 'QuickStarts/templates'
 import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'

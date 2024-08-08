@@ -9,6 +9,9 @@
         = link_to 'Edit', edit_provider_admin_application_path(@cinstance),
                              class: 'action edit'
 
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'applications_show'
+
 div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
   / Left column
   div class="pf-l-grid__item"

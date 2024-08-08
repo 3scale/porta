@@ -1,4 +1,5 @@
-= javascript_packs_with_chunks_tag 'sign_up_page'
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'sign_up_page'
 
 - flash_messages = flash ? flash.map { |f| {type: f[0], message: f[1]}} : @user.errors.map { |key, value| {type: 'error', message: "#{key} #{value}"}}
 

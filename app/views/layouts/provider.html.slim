@@ -10,6 +10,8 @@ html[lang="en" class="pf-m-redhat-font"]
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
+    / Orden matters! Base must go before any other pack:
+    = javascript_packs_with_chunks_tag 'patternfly_base'
     = javascript_packs_with_chunks_tag 'provider'
     = yield :javascripts
 

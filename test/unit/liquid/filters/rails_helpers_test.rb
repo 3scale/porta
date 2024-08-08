@@ -10,7 +10,7 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
   test 'javascript_include_tag' do
     @context.registers[:controller] = ApplicationController.new
-    Webpacker.manifest.stubs(:lookup_pack_with_chunks!).with('stats', type: :javascript).returns('/packs/stats.js')
+    WebpackHelper.expects(:javascript_packs_with_chunks_tag).returns('/packs/stats.js') # TODO: FIXME!!!
     assert_equal "<script src=\"/packs/stats.js\"></script>", javascript_include_tag('stats.js')
   end
 

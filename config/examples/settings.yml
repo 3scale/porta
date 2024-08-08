@@ -49,6 +49,7 @@ base: &default
 
 development:
   <<: *default
+  webpack_asset_host: http://localhost:3035
   active_merchant_logging: true
   force_ssl: false
   report_traffic: false
