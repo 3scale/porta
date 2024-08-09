@@ -100,7 +100,7 @@ gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'kt-paperclip', '~> 7.2'
-gem 'matrix', '~> 0.4.2' # needed only until we upgrade capybara and prawn that list it as a dependency
+gem 'matrix', '~> 0.4.2' # needed only until we upgrade prawn that list it as a dependency
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
 gem 'prawn-svg'
@@ -188,7 +188,7 @@ group :test do
   gem 'simplecov', '~> 0.22.0', require: false
   gem 'simplecov-cobertura', '~> 2.1'
 
-  gem 'capybara', '~>3.35.3'
+  gem 'capybara', '~> 3.40.0'
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
@@ -198,7 +198,7 @@ group :test do
   gem 'fakefs', require: 'fakefs/safe'
   gem 'launchy'
   gem 'mechanize'
-  gem 'selenium-webdriver', '~> 3.142', require: false
+  gem 'selenium-webdriver', '~> 4.22.0', require: false
   gem 'webmock', '~> 3.8.0'
 
   gem 'childprocess'
