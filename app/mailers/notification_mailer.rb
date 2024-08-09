@@ -412,7 +412,7 @@ class NotificationMailer < ActionMailer::Base
   end
 
   def t_subject(key, **options)
-    I18n.t(key, **{ scope: 'mailers.notification_mailer.subject', raise: true }.merge(options))
+    I18n.t(key, scope: 'mailers.notification_mailer.subject', raise: true, **options)
   end
 
   private
