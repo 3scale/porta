@@ -180,11 +180,10 @@ gem 'dynamic_form'
 gem 'record_tag_helper', '~> 1.0'
 
 group :test do
-  # To remove once migrated all functional tests
-  gem 'codecov', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'rails-controller-testing', '~> 1.0.4'
-  gem 'simplecov', '~> 0.21.2', require: false
+  gem 'simplecov', '~> 0.22.0', require: false
+  gem 'simplecov-cobertura', '~> 2.1'
 
   gem 'capybara', '~>3.35.3'
   gem 'xpath', '~>3.2.0'
