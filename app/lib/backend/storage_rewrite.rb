@@ -86,7 +86,7 @@ module Backend
         raise ArgumentError, ':class_name or :scope arguments must be provided' if klass.blank?
 
         rewriter = Backend::StorageRewrite.const_get("#{klass}Rewriter")
-        rewriter.rewrite({ **kwargs, log_progress: log_progress})
+        rewriter.rewrite(**kwargs, log_progress: log_progress)
       end
 
       # Schedule all objects for all providers, or execute inline

@@ -56,7 +56,7 @@ module Signup
     private
 
     def signup_params
-      @signup_params ||= Signup::SignupParams.new({ user_attributes: user_params, account_attributes: account_params, plans: [], defaults: {} })
+      @signup_params ||= Signup::SignupParams.new(user_attributes: user_params, account_attributes: account_params, plans: [], defaults: {})
     end
 
     def signup_params_hash

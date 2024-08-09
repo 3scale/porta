@@ -28,7 +28,7 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
   end
 
   test '#call! updates both when they are valid' do
-    assert settings_result.call!(attributes)
+    assert settings_result.call!(**attributes)
     service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
   end
@@ -38,7 +38,7 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
     old_proxy_attributes   = proxy.attributes.slice(proxy_attributes.keys)
 
     proxy_attributes[:error_headers_auth_failed] = ''
-    assert_raises(ActiveRecord::RecordInvalid) { settings_result.call!(attributes) }
+    assert_raises(ActiveRecord::RecordInvalid) { settings_result.call!(**attributes) }
     old_service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     old_proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
   end
@@ -48,13 +48,13 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
     old_proxy_attributes   = proxy.attributes.slice(proxy_attributes.keys)
 
     service_attributes[:name] = ''
-    assert_raises(ActiveRecord::RecordInvalid) { settings_result.call!(attributes) }
+    assert_raises(ActiveRecord::RecordInvalid) { settings_result.call!(**attributes) }
     old_service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     old_proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
   end
 
   test '#call updates both when they are valid' do
-    assert settings_result.call(attributes)
+    assert settings_result.call(**attributes)
     service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
   end
@@ -64,7 +64,7 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
     old_proxy_attributes   = proxy.attributes.slice(proxy_attributes.keys)
 
     proxy_attributes[:error_headers_auth_failed] = ''
-    refute settings_result.call(attributes)
+    refute settings_result.call(**attributes)
     old_service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     old_proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
 
@@ -77,7 +77,7 @@ class ApiIntegration::SettingsUpdaterServiceTest < ActiveSupport::TestCase
     old_proxy_attributes   = proxy.attributes.slice(proxy_attributes.keys)
 
     service_attributes[:name] = ''
-    refute settings_result.call(attributes)
+    refute settings_result.call(**attributes)
     old_service_attributes.each { |field_name, value| assert_equal value, service.public_send(field_name) }
     old_proxy_attributes.each   { |field_name, value| assert_equal value, proxy.public_send(field_name)   }
 
