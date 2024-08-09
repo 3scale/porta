@@ -7,12 +7,12 @@ junit_reporter_path = 'tmp/junit/unit'
 if ENV['CI']
   require 'simplecov'
   require "simplecov_json_formatter"
-  require 'codecov'
+  require 'simplecov-cobertura'
   formatters = [
     SimpleCov::Formatter::SimpleFormatter,
     SimpleCov::Formatter::JSONFormatter,
     SimpleCov::Formatter::HTMLFormatter,
-    Codecov::SimpleCov::Formatter
+    SimpleCov::Formatter::CoberturaFormatter
   ]
   SimpleCov.start do
     formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
