@@ -188,7 +188,7 @@ group :test do
   gem 'simplecov', '~> 0.22.0', require: false
   gem 'simplecov-cobertura', '~> 2.1'
 
-  gem 'capybara', '~>3.35.3'
+  gem 'capybara', '~> 3.40.0'
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
@@ -198,7 +198,7 @@ group :test do
   gem 'fakefs', require: 'fakefs/safe'
   gem 'launchy'
   gem 'mechanize'
-  gem 'selenium-webdriver', '~> 3.142', require: false
+  gem 'selenium-webdriver', '~> 4.22.0', require: false
   gem 'webmock', '~> 3.8.0'
 
   gem 'childprocess'
