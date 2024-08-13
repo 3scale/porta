@@ -20,6 +20,7 @@ html[lang="en" class="pf-m-redhat-font"]
       = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
       .pf-c-page__main role="main"
         = render 'shared/provider/flash', flash: flash
+        = yield :annotation
         = yield :menu
         - if content_for(:main_section_with_react).present?
           = yield :main_section_with_react

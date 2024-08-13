@@ -1,0 +1,5 @@
+- if defined?(description) && description
+  - body = t('.managed_description')
+
+- if resource.respond_to?(:managed_by) && resource.managed_by.present?
+  = pf_inline_alert t('.managed_title', value: resource.managed_by), body, variant: :warning
