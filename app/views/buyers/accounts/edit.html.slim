@@ -1,3 +1,6 @@
+-content_for :annotation do
+  = render partial: 'shared/annotations', locals: { resource: @account, description: true }
+
 - content_for :menu do
   = render 'menu'
 
