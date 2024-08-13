@@ -1,3 +1,6 @@
+-content_for :annotation do
+  = render partial: 'shared/annotations', locals: { resource: @service, description: true }
+
 - content_for :page_header_title, 'Naming'
 
 = semantic_form_for @service, url: admin_service_path(@service) do |form|
