@@ -1,3 +1,6 @@
+-content_for :annotation do
+  = render partial: 'shared/annotations', locals: { resource: @backend_api }
+
 - content_for :page_header_title, 'Backend Overview'
 
 section.Section

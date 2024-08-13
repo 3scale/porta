@@ -1,3 +1,6 @@
+-content_for :annotation do
+  = render partial: 'shared/annotations', locals: { resource: @backend_api, description: true }
+
 - content_for :page_header_title, 'Edit Backend'
 
 div class="pf-l-flex pf-m-column"
