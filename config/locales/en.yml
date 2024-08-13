@@ -1672,6 +1672,9 @@ en:
       unknown_format: 'The server does not understand "%{request_format}" request.'
 
   shared:
+    annotations:
+      managed_title: Managed by %{value}
+      managed_description: This resource is managed externally and any modifications may be overwritten.
     empty_search_state:
       title: No results
       body: There are no items matching your search criteria.

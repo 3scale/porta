@@ -4,6 +4,8 @@
       h1 = title
       - if (subtitle = content_for(:page_header_body).presence)
         p = subtitle
+      - if (annotation = content_for(:page_header_annotation).presence)
+        = annotation
     - if (alert = content_for(:page_header_alert).presence)
       = alert
 
