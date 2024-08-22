@@ -55,10 +55,7 @@ gem 'statsd-ruby', require: false
 
 # Sidekiq
 gem 'sidekiq', '~> 7', require: %w[sidekiq sidekiq/web]
-# Use a forked sidekiq-batch with support for Sidekiq 7
-# The next upstream version will add support Sidekiq 7 as well
-# Remove this fork when they release the new version
-gem 'sidekiq-batch', github: '3scale/sidekiq-batch', branch: 'redis-client'
+gem 'sidekiq-batch', '~> 0.2.0'
 gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-throttled', '~> 1.4.0'
 
