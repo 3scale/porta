@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ActiveModel
+module ThreeScale
   module ErrorsToXml
     # This was deprecated with no replacement in rails 6. Because allegedly
     # nobody uses it. So we have to keep a copy until we completely stop
