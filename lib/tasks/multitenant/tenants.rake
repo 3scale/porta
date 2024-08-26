@@ -68,6 +68,15 @@ namespace :multitenant do
       update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'Alert' }))
     end
 
+    desc 'validate tenant_id integrity'
+    task :integrity => :environment do
+      require "three_scale/tenant_id_integrity_checker"
+
+      inconsistent = ThreeScale::TenantIDIntegrityChecker.new.check
+
+      Rails.logger.error "Inconsistent tenant_ids for:\n#{inconsistent.map {_1.join(" ")}.join("\n")}"
+    end
+
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
       query = args[:table_name].constantize.joining(&association_block).where.has(&condition)
       puts "------ Updating #{args[:table_name]} ------"

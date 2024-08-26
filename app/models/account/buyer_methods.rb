@@ -25,7 +25,7 @@ module Account::BuyerMethods
 
     alias_method :application_contracts, :bought_cinstances
 
-    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy
+    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy, inverse_of: :user_account
 
     module UniqueAssociation
       # Oracle can't do DISTINCT when there are TEXT columns

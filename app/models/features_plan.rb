@@ -1,6 +1,4 @@
 class FeaturesPlan < ApplicationRecord
-  self.primary_key = nil # this column does not exist, but rails needs to have something
-
   belongs_to :feature
   belongs_to :plan, :polymorphic => true
 
