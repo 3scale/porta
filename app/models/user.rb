@@ -318,6 +318,10 @@ class User < ApplicationRecord
     current.try!(:tenant_id)
   end
 
+  def self.account_id
+    current.try!(:account_id)
+  end
+
   def self.current=(user)
     Thread.current[:cms_user] = user
   end

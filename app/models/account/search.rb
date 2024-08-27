@@ -60,7 +60,9 @@ class Account
                                  per_page: ThreeScale::Search::Helpers::SPHINX_PAGE_SIZE_INFINITE,
                                  ignore_scopes: true, with: { })
 
-        options.deep_merge!(with: { provider_account_id: User.current.account_id })
+        if (account_id = User.account_id)
+          options.deep_merge!(with: { provider_account_id: account_id })
+        end
 
         search(ThinkingSphinx::Query.escape(query), options)
       end
