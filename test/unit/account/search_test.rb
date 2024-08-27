@@ -76,12 +76,12 @@ class Account::SearchTest < ActiveSupport::TestCase
                    with: { }
                  }, Account.buyers.search_ids('foo').options)
 
-    User.expects(:tenant_id).returns(42)
+    User.expects(:account_id).returns(42)
 
     assert_equal({
                    ids_only: true, per_page: 1_000_000, star: true,
                    ignore_scopes: true, classes: [Account],
-                   with: { tenant_id: 42 }
+                   with: { provider_account_id: 42 }
                  }, Account.providers.search_ids('foo').options)
   end
 
