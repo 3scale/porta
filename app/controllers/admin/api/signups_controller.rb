@@ -25,8 +25,8 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
     # and not respond with pathetic error
     raise ActiveRecord::RecordNotFound if @signup_result.errors[:plans].present?
 
-    @signup_result.user.errors.each do |attr, error|
-      @signup_result.account.errors.add(attr, error)
+    @signup_result.user.errors.each do |error|
+      @signup_result.account.errors.add(error.attribute, error.message)
     end
   end
 
