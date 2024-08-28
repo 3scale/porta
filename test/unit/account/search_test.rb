@@ -76,7 +76,8 @@ class Account::SearchTest < ActiveSupport::TestCase
                    with: { }
                  }, Account.buyers.search_ids('foo').options)
 
-    User.expects(:account_id).returns(42)
+    user = FactoryBot.build(:user, account_id: 42)
+    User.expects(:current).returns(user)
 
     assert_equal({
                    ids_only: true, per_page: 1_000_000, star: true,
