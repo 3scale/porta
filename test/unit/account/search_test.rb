@@ -146,9 +146,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   test 'search from master account only returns providers and not buyers' do
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs only: SphinxAccountIndexationWorker do
-        3.times { FactoryBot.create(:provider_account, :with_a_buyer) }
+        FactoryBot.create_list(:provider_account, 3, :with_a_buyer)
       end
-      user = FactoryBot.build(:user, account_id: Account.master.id)
+      user = Account.master.first_admin!
       User.expects(:current).returns(user)
 
       results = Account.scope_search({query: 'company'})
