@@ -484,6 +484,7 @@ class Account < ApplicationRecord
       end
 
       xml.state state
+      annotations_xml(:builder => xml)
       xml.deletion_date deletion_date.xmlschema if scheduled_for_deletion? && deletion_date
 
       if provider?
