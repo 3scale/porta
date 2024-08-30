@@ -143,7 +143,7 @@ class Account::SearchTest < ActiveSupport::TestCase
     Account.scope_search(:query => '')
   end
 
-  test 'search from master account only returns providers and not buyers' do
+  test 'search as master user only returns providers and not buyers' do
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs only: SphinxAccountIndexationWorker do
         FactoryBot.create_list(:provider_account, 3, :with_a_buyer)
@@ -154,6 +154,18 @@ class Account::SearchTest < ActiveSupport::TestCase
       results = Account.scope_search({query: 'company'})
 
       assert_equal 3, results.size
+    end
+  end
+
+  test 'search as no user returns providers and buyers' do
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs only: SphinxAccountIndexationWorker do
+        FactoryBot.create_list(:provider_account, 3, :with_a_buyer)
+      end
+
+      results = Account.scope_search({query: 'company'})
+
+      assert_equal 6, results.size
     end
   end
 
