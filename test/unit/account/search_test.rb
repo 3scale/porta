@@ -76,12 +76,13 @@ class Account::SearchTest < ActiveSupport::TestCase
                    with: { }
                  }, Account.buyers.search_ids('foo').options)
 
-    User.expects(:tenant_id).returns(42)
+    user = FactoryBot.build(:user, account_id: 42)
+    User.expects(:current).returns(user)
 
     assert_equal({
                    ids_only: true, per_page: 1_000_000, star: true,
                    ignore_scopes: true, classes: [Account],
-                   with: { tenant_id: 42 }
+                   with: { provider_account_id: 42 }
                  }, Account.providers.search_ids('foo').options)
   end
 
@@ -140,6 +141,32 @@ class Account::SearchTest < ActiveSupport::TestCase
   test 'search with blank query does not use sphinx' do
     ThinkingSphinx::Search.expects(:new).never
     Account.scope_search(:query => '')
+  end
+
+  test 'search as master user only returns providers and not buyers' do
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs only: SphinxAccountIndexationWorker do
+        FactoryBot.create_list(:provider_account, 3, :with_a_buyer)
+      end
+      user = Account.master.first_admin!
+      User.expects(:current).returns(user)
+
+      results = Account.scope_search({query: 'company'})
+
+      assert_equal 3, results.size
+    end
+  end
+
+  test 'search as no user returns providers and buyers' do
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs only: SphinxAccountIndexationWorker do
+        FactoryBot.create_list(:provider_account, 3, :with_a_buyer)
+      end
+
+      results = Account.scope_search({query: 'company'})
+
+      assert_equal 6, results.size
+    end
   end
 
   test 'by_created_within' do
