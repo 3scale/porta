@@ -84,6 +84,7 @@ class Account < ApplicationRecord
 
   scope :searchable, -> { not_master.without_to_be_deleted.includes(:users, :bought_cinstances) }
 
+  annotated
   audited
 
   # this is done in a callback because we want to do this AFTER the account is deleted
@@ -323,7 +324,7 @@ class Account < ApplicationRecord
   end
 
   def special_fields
-    [:country]
+    %i[country annotations]
   end
 
   # Returns the id corresponding to an account with given api key. This function avoids
@@ -483,6 +484,7 @@ class Account < ApplicationRecord
       end
 
       xml.state state
+      annotations_xml(:builder => xml)
       xml.deletion_date deletion_date.xmlschema if scheduled_for_deletion? && deletion_date
 
       if provider?

@@ -54,6 +54,7 @@ module AccountRepresenter
   end
 
   property :state
+  property :annotations_hash, as: :annotations
 
   link :self do
     admin_api_account_url(self) unless provider?

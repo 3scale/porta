@@ -159,7 +159,9 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   serialize :notification_settings
 
-  audited allow_mass_assignment: true
+  annotated
+  audited
+
   state_machine initial: :incomplete do
     state :incomplete
     state :hidden
@@ -370,6 +372,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
       xml.mandatory_app_key mandatory_app_key
       xml.buyer_can_select_plan buyer_can_select_plan
       xml.buyer_plan_change_permission buyer_plan_change_permission
+      annotations_xml(:builder => xml)
 
       if notification_settings
         xml.notification_settings do |xml|

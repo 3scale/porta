@@ -6,7 +6,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   # Account List
   # GET /admin/api/accounts.xml
   def index
-    accounts = buyer_accounts.includes(:users, :settings, :payment_detail, :country, bought_plans: [:original]) # :issuer is polymorphic
+    accounts = buyer_accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) # :issuer is polymorphic
 
     if state = params[:state].presence
       accounts = accounts.where(:state => state.to_s)
