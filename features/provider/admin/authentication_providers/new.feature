@@ -63,16 +63,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
 
   Scenario: Realm is required
     Given they go to the developer portal new sso integration page for "keycloak"
-    And there is a required field "Client Secret"
-    When the form is submitted with:
-      | Client        | Doctor                 |
-      | Client Secret | tardis                 |
-      | Realm         |                        |
-    Then they should see the flash message "Authentication provider has not been updated"
-    And field "Realm" has inline error "can't be blank"
-
-  Scenario: Realm is required
-    Given they go to the developer portal new sso integration page for "keycloak"
+    And there is a required field "Realm"
     When the form is submitted with:
       | Client        | Doctor |
       | Client Secret | tardis |
@@ -80,9 +71,8 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
     Then they should see the flash message "Authentication provider has not been updated"
     And field "Realm" has inline error "can't be blank"
 
-  Scenario: Realm or Site validation
+  Scenario: Realm validation
     Given they go to the developer portal new sso integration page for "keycloak"
-    And there is a required field "Client Secret"
     When the form is submitted with:
       | Client        | Doctor     |
       | Client Secret | tardis     |
