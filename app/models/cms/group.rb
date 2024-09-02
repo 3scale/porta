@@ -4,7 +4,6 @@ class CMS::Group < ApplicationRecord
   # This is BuyerGroup
   self.table_name = :cms_groups
 
-  belongs_to :tenant
   belongs_to :provider, :class_name => "Account"
 
   validates :name, :provider, presence: true, length: { maximum: 255 }

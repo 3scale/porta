@@ -12,7 +12,7 @@ class Plan < ApplicationRecord
   include SystemName
   include Logic::MetricVisibility::Plan
 
-  self.background_deletion = [:cinstances, :contracts, :plan_metrics, :pricing_rules,
+  self.background_deletion = [:contracts, :plan_metrics, :pricing_rules,
                               :usage_limits, [:customizations, { action: :destroy, class_name: 'Plan' }]]
 
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
@@ -72,8 +72,6 @@ class Plan < ApplicationRecord
   # Especially there is a bug with *acts_as_list* that will call `#lock!` on the record before destroy
   # But calling `#lock!` will call `#reload` so some instance variables are reset
   before_destroy :avoid_destruction, prepend: true
-
-  has_many :cinstances, :dependent => :destroy
 
   has_many :contracts, dependent: :destroy
 
