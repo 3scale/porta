@@ -56,7 +56,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   test '#create keycloak without site returns the right error' do
     post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: ''}))
-    assert_equal ['can\'t be blank'], JSON.parse(response.body).dig('errors', 'realm')
+    assert_equal ['can\'t be blank', 'Invalid URL format'], JSON.parse(response.body).dig('errors', 'realm')
   end
 
   test '#create ensures provider can use provider_sso' do

@@ -27,7 +27,7 @@ Feature: Manage Authentication Providers
   Scenario: With iam_tools allowed add auth0
     Given the provider has "iam_tools" switch allowed
     When I visit the "Auth0" authentication provider page
-    Then I press "Create Auth0"
+    Then I press "Create"
 
   Scenario: With iam_tools allowed add github
     Given the provider has "iam_tools" switch allowed

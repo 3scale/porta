@@ -1,3 +1,36 @@
 - content_for :page_header_title, 'New SSO Integration'
 
-= render partial: 'provider/admin/account/authentication_providers/form/form', locals: {authentication_provider: @authentication_provider}
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @authentication_provider,
+            url: [:provider, :admin, :account, @authentication_provider.becomes(AuthenticationProvider)],
+            builder: Fields::PatternflyFormBuilder,
+            as: :authentication_provider,
+            html: { class: 'pf-c-form pf-m-limit-width' } do |f|
+
+      - account_type = AuthenticationProvider.account_types[:provider]
+      = f.input :kind, as: :patternfly_select,
+                collection: AuthenticationProvider.available(account_type).map {|auth| [ auth.human_kind, auth.kind ] },
+                label: 'SSO Provider',
+                include_blank: false
+
+      = render partial: 'provider/admin/account/authentication_providers/form/form', locals: {f: f}
+
+      = f.input :site, as: :patternfly_input, required: true, label: 'Realm or Site', hint: 'Ex: https://rh-sso.example.com/auth/realms/demo'
+
+      = f.actions do
+        = f.commit_button I18n.t('provider.admin.authentication_providers.new.submit_button_label')
+
+javascript:
+  document.addEventListener('DOMContentLoaded', () => {
+    const ssoSelector = document.querySelector('#authentication_provider_kind')
+    const realmOrSiteHint = document.querySelector('.pf-c-form__helper-text')
+
+    ssoSelector.addEventListener('change', (e) => {
+      let hintText = 'Ex: https://rh-sso.example.com/auth/realms/demo'
+      if (e.target.value === 'auth0') {
+        hintText = 'Ex: https://XXXXX.auth0.com'
+      }
+      realmOrSiteHint.textContent = hintText
+    })
+  })
