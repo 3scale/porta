@@ -25,10 +25,8 @@ module Tasks
 
         expected_lines = ["Inconsistent tenant_ids for:"]
         wrong_cinstances.each do |cinstance|
-          expected_lines << "Account[#{cinstance.user_account.id}] bought_cinstances Cinstance[#{cinstance.id}]"
           expected_lines << "Account[#{cinstance.user_account.id}] contracts Contract[#{cinstance.id}]"
           expected_lines << "Contract[#{cinstance.id}] plan Plan[#{cinstance.plan.id}]"
-          expected_lines << "Cinstance[#{cinstance.id}] plan ApplicationPlan[#{cinstance.plan.id}]"
           expected_lines << "Cinstance[#{cinstance.id}] service Service[#{cinstance.service.id}]"
         end
 

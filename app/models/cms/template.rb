@@ -18,7 +18,7 @@ class CMS::Template < ApplicationRecord
 
   self.table_name = :cms_templates
 
-  belongs_to :provider, class_name: 'Account'
+  belongs_to :provider, class_name: 'Account', inverse_of: :templates
   has_many :versions, as: :template
 
   validates :provider, presence: true
