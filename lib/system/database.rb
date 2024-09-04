@@ -160,6 +160,11 @@ ActiveSupport.on_load(:active_record) do
           if ENV['ORACLE_SYSTEM_PASSWORD'].present?
             Logger.new($stderr).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
             super
+
+            if ["1", "true"].include?(ENV["ORACLE_DO_NOT_EXPIRE_SYSTEM"])
+              profile = connection.execute("select profile from DBA_USERS where username = 'SYSTEM'").fetch.first
+              connection.execute "alter profile #{profile} limit password_life_time UNLIMITED"
+            end
           else
             # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
             establish_connection(@config)
