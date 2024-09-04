@@ -4,7 +4,8 @@ html[lang="en" class="pf-m-redhat-font"]
     meta http-equiv="Content-Type" content="text/html; charset=utf-8"
     title 3scale Login
     = csrf_meta_tag
-    = rails_asset_url_tag
+    / Order matters! Base must go before any other pack:
+    = stylesheet_packs_chunks_tag 'patternfly_base'
     = javascript_packs_with_chunks_tag 'login'
 
   body class="login-layout"

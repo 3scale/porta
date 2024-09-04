@@ -69,11 +69,20 @@ bundle exec rake ts:configure ts:start
 
 ## Asset compilation
 
-In development, assets are compiled automatically on demand when a Rails page loads. If you want to use [live code reloading](https://guides.rubyonrails.org/webpacker.html#running-webpacker-in-development) you'll need to run:
+Before running the application, all assets need to be compiled and a manifest generated. To do that run:
 
 ```sh
-bundle exec rake webpack:dev
+bundle exec rails assets:precompile
 ```
+
+This will include both the rails assets pipeline and webpack and it's intended for production and tests.
+For development, if you're gonna change anything under app/javascript like React or Typescript, it's more convenient to use live code reloading:
+
+```sh
+bundle exec rails webpack:dev
+```
+
+This will re-compile webpack and reload the browser whenever a file under app/javascript is updated.
 
 #### Environment variables
 

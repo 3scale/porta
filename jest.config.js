@@ -184,6 +184,7 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
+    '\\.jsx?$': ['babel-jest', { configFile: './spec/javascripts/babel.config.js' }],
     // Png and svg imports fails in jest, workaround found in:
     // https://github.com/facebook/jest/issues/2663#issuecomment-369040789
     '.+\\.(png|svg)$': 'jest-transform-stub'

@@ -1,6 +1,0 @@
-# At least what's included in https://access.redhat.com/articles/2798521
-
-chrome >= 107
-firefox >= 105
-edge >= 107
-defaults

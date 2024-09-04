@@ -58,9 +58,8 @@ save-assets-cache: &save-assets-cache
     key: *assets-cache-key
     paths:
       - public/assets
-      - public/packs-test
+      - public/packs
       - tmp/cache/assets
-      - tmp/cache/webpacker
 
 restore-assets-cache: &restore-assets-cache
   restore_cache:
@@ -510,7 +509,7 @@ jobs:
       - *use-example-config-files
       - run:
           name: Precompile assets
-          command: bundle exec rake assets:precompile:test
+          command: bundle exec rake assets:precompile
           environment:
             RAILS_GROUPS: assets
       - *save-assets-cache
@@ -518,7 +517,6 @@ jobs:
           root: .
           paths:
             - ./public/packs
-            - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
       - notify_failure

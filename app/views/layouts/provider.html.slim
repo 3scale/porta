@@ -6,10 +6,11 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    = rails_asset_url_tag
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
+    / Order matters! Base must go before any other pack:
+    = stylesheet_packs_chunks_tag 'patternfly_base'
     = javascript_packs_with_chunks_tag 'provider'
     = yield :javascripts
 
