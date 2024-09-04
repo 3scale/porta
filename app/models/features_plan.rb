@@ -2,6 +2,11 @@ class FeaturesPlan < ApplicationRecord
   belongs_to :feature
   belongs_to :plan, :polymorphic => true
 
+  # TODO: set composite primary key when on Rails 7.1
+  # see https://discuss.rubyonrails.org/t/rfc-finally-support-composite-primary-keys/81368/20
+  # see https://guides.rubyonrails.org/active_record_composite_primary_keys.html
+  # self.primary_key = [:plan_id, :feature_id]
+
   validate :feature_scope_matches_plan_class?
 
   attr_protected :plan_id, :feature_id, :plan_type, :tenant_id

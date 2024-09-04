@@ -54,7 +54,12 @@ module ThreeScale
       # we can ignore these as they can't be automatically excluded but are redundant for the check anyway
       ignored = {
         Service => %i[all_metrics], # all metrics of service and APIs used by service so is redundant
-        Account => %i[provider_accounts], # only master has this and it is normal that all will mismatch
+        # only master has provider_accounts and it is normal that all will mismatch
+        # bought_* are redundant with contracts
+        # email_templates is redundant with templates
+        Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates],
+        Cinstance => %i[plan], # this is redundant with Contract.plan but overrides it so is not auto-detected
+        ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered by Plan.contracts
       }
       model = association.active_record
 

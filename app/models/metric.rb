@@ -19,7 +19,7 @@ class Metric < ApplicationRecord
   has_many :usage_limits, :dependent => :destroy
   has_many :plan_metrics, :dependent => :destroy
 
-  has_many :proxy_rules, :dependent => :destroy
+  has_many :proxy_rules, :dependent => :destroy, inverse_of: :metric
 
   audited :allow_mass_assignment => true
   has_system_name uniqueness_scope: %i[owner_type owner_id], human_name: :friendly_name
