@@ -14,6 +14,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
     get admin_service_application_plans_path(service)
   rescue => exception
+    assert_predicate exception, :cause
     assert_instance_of ThreeScale::Middleware::Multitenant::TenantChecker::TenantLeak, exception.cause
   end
 
@@ -60,7 +61,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "multitenant master can retrieve from multiple tenants by provider key" do
+  test "multitenant master can retrieve from multiple tenants by http basic auth" do
     host! master_account.external_admin_domain
     service = master_account.first_service!
     plan = FactoryBot.create(:application_plan, issuer: service)
@@ -81,7 +82,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "multitenant master can retrieve from multiple tenants by http basic auth" do
+  test "multitenant master can retrieve from multiple tenants by provider key" do
     host! master_account.external_admin_domain
     service = master_account.first_service!
     plan = FactoryBot.create(:application_plan, issuer: service)
