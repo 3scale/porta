@@ -1,5 +1,5 @@
 class MailDispatchRule < ApplicationRecord
-  belongs_to :account
+  belongs_to :account, inverse_of: :mail_dispatch_rules
   belongs_to :system_operation
 
   validates :account_id, :system_operation_id, presence: true
