@@ -24,8 +24,7 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
       div class="pf-l-flex__item" id="application_keys" data-object="cinstance" data-url=(provider_admin_application_path(@cinstance, format: :json))
         div class="pf-c-card"
           div class="pf-c-card__title" API Credentials
-          div class="pf-c-card__body"
-            = render partial: 'provider/admin/keys/widget', locals: { cinstance: @cinstance }
+          = render partial: 'provider/admin/keys/widget', locals: { cinstance: @cinstance }
 
       - if @cinstance.service.referrer_filters_required?
         div class="pf-l-flex__item"
