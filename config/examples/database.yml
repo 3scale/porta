@@ -35,7 +35,7 @@ development:
 
 test:
   <<: *default
-  url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
+  url: <%= "#{ENV['DATABASE_URL'].delete_suffix("_development")}test#{ENV['TEST_ENV_NUMBER']}" %>
 
 production:
   <<: *default
