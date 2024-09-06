@@ -154,7 +154,7 @@ class Account < ApplicationRecord
   has_many :messages, -> { visible }, foreign_key: :sender_id, class_name: 'Message'
   has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message'
 
-  has_many :mail_dispatch_rules, dependent: :destroy
+  has_many :mail_dispatch_rules, dependent: :destroy, inverse_of: :account
   has_many :system_operations, through: :mail_dispatch_rules
 
   # Deleted received messages

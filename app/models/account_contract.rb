@@ -2,8 +2,6 @@ class AccountContract < Contract
   alias account_plan plan
   attr_reader :old_plan
 
-  belongs_to :user_account, class_name: 'Account', inverse_of: :bought_account_contract, autosave: false
-
   # TODO: remove this when also Account states (pending, aproved ...) are handled on an
   # account contract.
   #
