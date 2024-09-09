@@ -18,6 +18,8 @@ class UserSession < ApplicationRecord
 
   delegate :account, to: :user
 
+  audited except: [:accessed_at]
+
   def self.authenticate(key)
     return nil if key.nil?
     self.active.find_by_key(key)
