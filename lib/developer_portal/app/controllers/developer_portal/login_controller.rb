@@ -31,11 +31,16 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
       self.current_user = @user
       create_user_session!
       flash[:notice] = @strategy.new_user_created? ? 'Signed up successfully' : 'Signed in successfully'
+
       redirect_back_or_default(@strategy.redirect_to_on_successful_login)
     elsif @strategy.redirects_to_signup?
       @strategy.on_signup(session)
+
       redirect_to @strategy.signup_path(params), notice: 'Successfully authenticated, please complete the signup form'
     else
+      attempted_cred = params.fetch(:username, 'SSO')
+      AuditLogService.call("Login attempt failed: #{request.internal_host} - #{attempted_cred}")
+
       render_login_error(@strategy.error_message)
     end
   end

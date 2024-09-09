@@ -28,12 +28,12 @@ class Provider::SessionsController < FrontendController
       create_user_session!(strategy&.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
 
-      AuditLogService.call("Signed in: #{current_user.id}/#{current_user.username} #{current_user.first_name} #{current_user.last_name}")
-
       redirect_back_or_default provider_admin_path
     else
       new
       flash.now[:error] ||= strategy&.error_message
+      attempted_cred = auth_params.fetch(:username, 'SSO')
+      AuditLogService.call("Login attempt failed from #{request.remote_ip}: #{domain_account.external_admin_domain} - #{attempted_cred}. ERROR: #{strategy&.error_message}")
       render :action => :new
     end
   end
@@ -47,8 +47,6 @@ class Provider::SessionsController < FrontendController
     user = current_user
     logout_killing_session!
     destroy_user_session!
-
-    AuditLogService.call("Signed out: #{user.id}/#{user.username} #{user.first_name} #{user.last_name}")
 
     if @provider.partner? && (logout_url = @provider.partner.logout_url)
       redirect_to logout_url + {user_id: user.id, provider_id: @provider.id}.to_query
