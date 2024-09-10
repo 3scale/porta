@@ -122,6 +122,19 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     assert_equal error, flash[:error]
   end
 
+  test 'login fail generates an audit log' do
+    buyer_account = FactoryBot.create :buyer_account
+    buyer_settings = buyer_account.settings
+    buyer_settings.authentication_strategy = 'internal'
+    buyer_settings.save!
+    user = buyer_account.admins.first
+
+    AuditLogService.expects(:call).with { |msg| msg.start_with? "Login attempt failed" }
+
+    host! buyer_account.provider_account.external_domain
+    post :create, params: { username: user.username, password: 'wrong_pass' }
+  end
+
   def user
     @user ||= create_user_and_account
   end
