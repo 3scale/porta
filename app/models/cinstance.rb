@@ -147,8 +147,10 @@ class Cinstance < Contract
     where(['cinstances.created_at <= ?', period.end])
   }
 
-  def self.provided_by(account, services_association: Service.unscoped)
-    where(plan_id: ApplicationPlan.unscoped.where(issuer_type: "Service", issuer_id: Service.unscoped.select(:id).of_account(account).merge(services_association)))
+  def self.provided_by(account)
+    # we can access service through plan but also keep service.id in sync with plan.service.id
+    # this is a simpler way to do the query used historically
+    joins(:service).where.has { service.sift(:of_account, account) }
   end
 
   scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
