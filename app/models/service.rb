@@ -24,7 +24,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     :backend_api_configs,
     :metrics,
     [:proxy, { action: :destroy, has_many: false }]
-  ].freeze
+  ]
 
   DELETE_STATE = 'deleted'
 
