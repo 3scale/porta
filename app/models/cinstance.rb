@@ -201,8 +201,17 @@ class Cinstance < Contract
 
   # maybe move both limit methods to their models?
 
-  def self.serialization_preloading
-    includes(:plan, :user_account, service: [:account])
+  def self.serialization_preloading(format = nil)
+    # With Rails 6.1 trying to include plan->issuer without service results in
+    #   > Cannot eagerly load the polymorphic association :issuer
+    # When both have the same sub-includes, cache takes care of the duplicate queries.
+    service_includes = %i[proxy account]
+    plan_includes = [{issuer: service_includes}]
+    if format == "xml"
+      service_includes << :default_application_plan
+      plan_includes << :original
+    end
+    includes(:user_account, service: service_includes, plan: plan_includes)
   end
 
 

@@ -12,8 +12,7 @@ class DeveloperPortal::Admin::PlansWidgetController < DeveloperPortal::BaseContr
     end
 
     @wizard = params[:wizard].to_s == 'true'
-    @plans = @service.application_plans.not_custom.published.to_a
+    @plans = @service.application_plans.not_custom.published.includes(:issuer).to_a
     @plans.delete @plan
   end
-
 end
