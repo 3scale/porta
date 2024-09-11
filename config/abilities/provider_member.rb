@@ -26,9 +26,8 @@ Ability.define do |user|
     can :create, Account
     can :update, Account if account.provider_can_use?(:service_permissions)
 
-    # Using historical optimized way and leave canonical way commented out below
+    # Using historical optimized way and leave canonical way (through plan) commented out below
     # The resulting hash presently is something like {"type"=>"Cinstance", "service_id"=>[ids..]}
-    # Seems like canonically though that we are moving towards accessing service through plan
     can %i[read show edit update], Cinstance, Cinstance.permitted_for(user).where_values_hash
     # can %i[read show edit update], Cinstance, user.accessible_cinstances do |cinstance|
     #   cinstance.plan&.issuer_type == "Service" && cinstance.plan.issuer.account == user.account &&

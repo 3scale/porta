@@ -60,7 +60,11 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
 
-  scope :of_account, ->(account) { where.has { account_id == account.id } }
+  sifter :of_account do |account|
+    account_id == account.id
+  end
+
+  scope :of_account, ->(account) { where.has { sift(:of_account, account) } }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 
