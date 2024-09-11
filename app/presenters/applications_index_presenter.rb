@@ -125,7 +125,7 @@ class ApplicationsIndexPresenter
   def applications
     @applications ||= raw_applications.scope_search(search)
                                       .order_by(*sorting_params)
-                                      .preload(:service, user_account: %i[admin_user], plan: %i[pricing_rules])
+                                      .includes(plan: %i[pricing_rules])
                                       .paginate(pagination_params)
                                       .decorate
   end

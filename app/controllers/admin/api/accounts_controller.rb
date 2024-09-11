@@ -22,7 +22,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def find
     buyer_account = find_buyer_account
     authorize! :read, buyer_account
-    respond_with(buyer_account)
+    respond_with(to_present(buyer_account))
   end
 
   # Account Read
@@ -30,13 +30,15 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def show
     authorize! :read, buyer_account
 
-    respond_with(buyer_account)
+    respond_with(to_present(buyer_account))
   end
 
   # Account Update
   # PUT /admin/api/accounts/{id}.xml
   def update
     authorize! :update, buyer_account
+
+    to_present(buyer_account)
 
     buyer_account.vat_rate = params[:vat_rate].to_f if params[:vat_rate]
     buyer_account.settings.attributes = billing_params
@@ -71,6 +73,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def approve
     authorize! :approve, buyer_account
 
+    to_present buyer_account
     buyer_account.approve
 
     respond_with(buyer_account)
@@ -81,6 +84,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def reject
     authorize! :reject, buyer_account
 
+    to_present buyer_account
     buyer_account.reject
 
     respond_with(buyer_account)
@@ -91,6 +95,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def make_pending
     authorize! :update, buyer_account
 
+    to_present buyer_account
     buyer_account.make_pending
 
     respond_with(buyer_account)
@@ -108,6 +113,12 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
   def buyer_account
     @buyer_account ||= buyer_accounts.find(params[:id])
+  end
+
+  def to_present(accounts)
+    # ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, {bought_plans: %i[original]}]).call # Rails 7.x
+    ActiveRecord::Associations::Preloader.new.preload(Array(accounts), [:annotations, {bought_plans: %i[original]}])
+    accounts
   end
 
   def buyer_users

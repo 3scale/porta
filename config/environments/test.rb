@@ -120,8 +120,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Alert", type: :n_plus_one_query, association: :cinstance
       Bullet.add_safelist class_name: "ApiDocs::Service", type: :unused_eager_loading, association: :service
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :customizations
-      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :issuer
-      Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :original
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :usage_limits
       Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :issuer
@@ -170,10 +168,8 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :backend_api_configs
       Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :cinstances
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :account
-      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :default_application_plan
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :default_service_plan
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :metrics
-      Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :proxy
       Bullet.add_safelist class_name: "Service", type: :unused_eager_loading, association: :application_plans
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :user_account

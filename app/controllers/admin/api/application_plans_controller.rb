@@ -13,7 +13,7 @@ class Admin::Api::ApplicationPlansController < Admin::Api::ServiceBaseController
   # Application Plan List
   # GET /admin/api/services/{service_id}/application_plans.xml
   def index
-    respond_with(application_plans)
+    respond_with(application_plans.includes(:original, :issuer))
   end
 
   # Application Plan Create

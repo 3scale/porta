@@ -7,7 +7,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   # GET /admin/api/applications.xml
   def index
     apps = applications.scope_search(search)
-           .serialization_preloading.paginate(:page => current_page, :per_page => per_page)
+           .serialization_preloading(request.format).paginate(:page => current_page, :per_page => per_page)
     respond_with(apps)
   end
 
