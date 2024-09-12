@@ -36,6 +36,10 @@ class BackendApiConfig < ApplicationRecord
 
   delegate :proxy, to: :service, allow_nil: true
 
+  def with_subpath?
+    path != ConfigPath::EMPTY_PATH
+  end
+
   def path=(value)
     super(ConfigPath.new(value).path)
   end
