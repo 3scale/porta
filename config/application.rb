@@ -268,7 +268,7 @@ module System
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/cors'
 
-    config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
+    config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
