@@ -8,6 +8,7 @@
         ' Account: #{@account.org_name}
         - if can? :update, @account
           = link_to 'Edit', edit_admin_buyers_account_path(@account), class: 'action edit'
+      = render partial: 'shared/annotations', locals: { resource: @account, plain: true }
 
 div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
   / Left column

@@ -1,4 +1,6 @@
 - content_for :page_header_title, 'Product Overview'
+- content_for :page_header_annotation do
+  = render partial: 'shared/annotations', locals: { resource: @service, plain: true }
 
 section.Section
   .SettingsBox

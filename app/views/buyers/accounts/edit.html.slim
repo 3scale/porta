@@ -2,6 +2,8 @@
   = render 'menu'
 
 - content_for :page_header_title, "Edit account #{@account.org_name} details"
+- content_for :page_header_annotation do
+  = render partial: 'shared/annotations', locals: { resource: @account, description: true, variant: :warning }
 
 div class="pf-c-card"
   div class="pf-c-card__body"
