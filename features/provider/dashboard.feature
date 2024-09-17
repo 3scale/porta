@@ -24,3 +24,8 @@ Feature: Dashboard
     When they go to the dashboard
     And they follow "Quick starts"
     Then the current page is the quick start catalog page
+
+  Scenario: Quick start button is not displayed on narrow screens
+    When they go to the dashboard
+    And they set the screen width to "1190" pixels
+    Then they should not see "Quick starts"
