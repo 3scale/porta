@@ -82,6 +82,6 @@ FactoryBot.define do
   factory :cms_builtin_legal_term, :parent => :cms_builtin_partial, :class => CMS::Builtin::LegalTerm do
     system_name { 'signup_licence' }
     sequence(:title) { |n| "Legal Term ##{n}" }
-    published { "some text" }
+    draft { "some text" }
   end
 end

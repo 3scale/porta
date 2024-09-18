@@ -5,7 +5,7 @@ module EventStore
     def build_event_entity(record)
       return nil unless record
 
-      data = (record.data || {}).merge(
+      data = record.data.merge(
         event_id: record.event_id,
         metadata: record.metadata
       )

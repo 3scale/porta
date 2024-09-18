@@ -24,22 +24,22 @@ module ThreeScale
 
     # Convert all keys to lowercase.
     def downcase_keys
-      transform_keys { |key| key.downcase }
+      transform_keys(&:downcase)
     end
 
     # In place version of +downcase_keys+
     def downcase_keys!
-      transform_keys! {|key| key.downcase}
+      transform_keys!(&:downcase)
     end
 
     # Convert all keys to uppercase.
     def upcase_keys
-      transform_keys { |key| key.upcase }
+      transform_keys(&:upcase)
     end
 
     # In place version of +upcase_keys+
     def upcase_keys!
-      transform_keys! { |key| key.upcase }
+      transform_keys!(&:upcase)
     end
   end
 end
