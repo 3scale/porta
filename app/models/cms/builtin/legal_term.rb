@@ -38,6 +38,6 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
   private
 
   def publish_draft
-    self.published = draft unless published
+    self.published = draft
   end
 end
