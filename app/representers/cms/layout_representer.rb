@@ -11,7 +11,7 @@ module CMS::LayoutRepresenter
   property :system_name
   property :liquid_enabled
 
-  with_options(if: ->(options) { !options[:user_options]&.dig(:short) }) do
+  with_options(if: ->(options) { !options.dig(:user_options, :short) }) do
     property :draft, render_nil: true
     property :published, render_nil: true
   end

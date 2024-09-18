@@ -38,15 +38,15 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
 
   wraps_resource :permissions
 
-  property :user_id, getter: ->(options) { options[:user_options]&.[](:user)&.id }
-  property :role, getter: ->(options) { options[:user_options]&.[](:user)&.role }
+  property :user_id, getter: ->(options) { options.dig(:user_options, :user)&.id }
+  property :role, getter: ->(options) { options.dig(:user_options, :user)&.role }
 
   class JSON < MemberPermissionsRepresenter
     include Roar::JSON
 
     # NOTE: The list of allowed sections is sorted to facilitate acceptance testing, this is not part of the API specification
-    property :allowed_sections, getter: ->(options) { options[:user_options]&.[](:user)&.allowed_sections&.sort }
-    property :allowed_service_ids, getter: ->(options) { options[:user_options]&.[](:user)&.allowed_service_ids }, render_nil: true
+    property :allowed_sections, getter: ->(options) { options.dig(:user_options, :user)&.allowed_sections&.sort }
+    property :allowed_service_ids, getter: ->(options) { options.dig(:user_options, :user)&.allowed_service_ids }, render_nil: true
 
     link :user do |opts|
       user = opts[:user]
@@ -59,8 +59,8 @@ class MemberPermissionsRepresenter < ThreeScale::Representer
     wraps_resource :permissions
 
     # NOTE: The list of allowed sections is sorted to facilitate acceptance testing, this is not part of the API specification
-    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(options) { options[:user_options]&.[](:user)&.allowed_sections&.sort }
-    collection :allowed_service_ids, as: :allowed_service_id, wrap: :allowed_service_ids, getter: ->(options) { options[:user_options]&.[](:user)&.allowed_service_ids }
+    collection :allowed_sections, as: :allowed_section, wrap: :allowed_sections, getter: ->(options) { options.dig(:user_options, :user)&.allowed_sections&.sort }
+    collection :allowed_service_ids, as: :allowed_service_id, wrap: :allowed_service_ids, getter: ->(options) { options.dig(:user_options, :user)&.allowed_service_ids }
   end
 
 end
