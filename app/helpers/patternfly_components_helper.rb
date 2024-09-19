@@ -23,21 +23,20 @@ module PatternflyComponentsHelper
     end
   end
 
-  def body_tag(body)
+  def description_tag(description)
+    return unless description
+
     tag.div class: 'pf-c-alert__description' do
-      tag.p body
+      tag.p description
     end
   end
 
-  def pf_inline_alert(title, body, variant: nil)
-    tag.div class: "pf-c-alert pf-m-#{variant} pf-m-inline" do
-      icon_tag(variant) + title_tag(title) + body_tag(body)
-    end
-  end
-
-  def pf_inline_alert_plain(title, variant: nil)
-    tag.div class: "pf-c-alert pf-m-#{variant} pf-m-inline pf-m-plain" do
-      icon_tag(variant) + title_tag(title)
+  def pf_inline_alert(title, variant: nil, description: nil, plain: false)
+    plain_class = plain ? 'pf-m-plain' : ''
+    variant_class = variant ? "pf-m-#{variant}" : ''
+    classes = "pf-c-alert pf-m-inline #{plain_class} #{variant_class}"
+    tag.div class: classes do
+      icon_tag(variant) + title_tag(title) + description_tag(description)
     end
   end
 end
