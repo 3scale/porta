@@ -31,12 +31,13 @@ module PatternflyComponentsHelper
     end
   end
 
-  def pf_inline_alert(title, variant: nil, description: nil, plain: false)
-    plain_class = plain ? 'pf-m-plain' : ''
+  def pf_inline_alert(title, **options)
+    plain_class = options[:plain] ? 'pf-m-plain' : ''
+    variant = options[:variant]
     variant_class = variant ? "pf-m-#{variant}" : ''
     classes = "pf-c-alert pf-m-inline #{plain_class} #{variant_class}"
     tag.div class: classes do
-      icon_tag(variant) + title_tag(title) + description_tag(description)
+      icon_tag(variant) + title_tag(title) + description_tag(options[:description])
     end
   end
 end
