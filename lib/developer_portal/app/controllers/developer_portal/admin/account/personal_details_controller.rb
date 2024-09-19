@@ -40,9 +40,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def deny_unless_can_update
-    unless can?(:update, current_user)
-      render :plain => 'Action disabled', :status => :forbidden
-    end
+    render :plain => 'Action disabled', :status => :forbidden unless can?(:update, current_user)
   end
 
   def user_params
@@ -56,6 +54,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     return if current_user.authenticated?(user_params[:current_password])
 
     resource.errors.add(:current_password, t('activerecord.errors.models.user.current_password_incorrect'))
+    AuditLogService.call("User tried to change password, but failed due to incorrect current password: #{resource.id}/#{resource.username}") if user_params[:password].present?
     flash.now[:error] = resource.errors.full_messages.to_sentence
   end
 end
