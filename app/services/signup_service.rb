@@ -29,8 +29,8 @@ class SignupService
     signup_result
   end
 
-  def self.create(attributes, &block)
-    new(attributes).create(&block)
+  def self.create(**attributes, &block)
+    new(**attributes).create(&block)
   end
 
   private

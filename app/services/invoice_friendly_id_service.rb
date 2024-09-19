@@ -68,6 +68,6 @@ class InvoiceFriendlyIdService
 
   def report_error(tagged_exception)
     details = { invoice_id: invoice.id, provider_account_id: provider_account_id, buyer_account_id: buyer_account_id, error: tagged_exception.error }
-    System::ErrorReporting.report_error(tagged_exception, details)
+    System::ErrorReporting.report_error(tagged_exception, **details)
   end
 end

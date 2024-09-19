@@ -14,10 +14,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 6.1'
 
-# Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
-# https://github.com/mikel/mail/blob/2-8-stable/CHANGELOG.rdoc#version-281-unreleased-
-# Also, upgrading makes this test fail: SendUserInvitationWorkerTest#test_handles_errors
-gem 'mail', '~> 2.7.1'
+gem 'mail', '~> 2.8.1'
 
 gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
@@ -43,6 +40,8 @@ gem 'sass-rails', '~> 5.0.8'
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 2.0'
 gem 'open_id_authentication'
+
+gem 'sorted_set', '~> 1.0'
 
 gem 'i18n'
 
@@ -70,7 +69,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.26'
-gem 'cancancan', '~> 3.0.0'
+gem 'cancancan', '~> 3.6.0'
 gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
@@ -98,6 +97,7 @@ gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'kt-paperclip', '~> 7.2'
+gem 'matrix', '~> 0.4.2' # needed only until we upgrade capybara and prawn that list it as a dependency
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
 gem 'prawn-svg'
@@ -117,7 +117,8 @@ gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.3'
 gem 'zip-zip', require: false
 
-gem 'acts_as_tree'
+# TODO: this gem seems a bit abandoned, consider getting rid of it
+gem 'acts_as_tree', '~> 2.9.1'
 gem 'addressable', require: false
 gem 'hashie', require: false
 gem 'rack-x_served_by', '~> 0.1.1'
@@ -155,7 +156,7 @@ gem 'html-pipeline'
 gem 'ruby-openid'
 gem 'slim-rails', '~> 3.2'
 
-gem 'draper', '~> 3.1'
+gem 'draper', '~> 4.0.2'
 
 group :development do
   gem 'listen'
@@ -179,13 +180,12 @@ gem 'dynamic_form'
 gem 'record_tag_helper', '~> 1.0'
 
 group :test do
-  # To remove once migrated all functional tests
-  gem 'codecov', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'rails-controller-testing', '~> 1.0.4'
-  gem 'simplecov', '~> 0.21.2', require: false
+  gem 'simplecov', '~> 0.22.0', require: false
+  gem 'simplecov-cobertura', '~> 2.1'
 
-  gem 'capybara', '~>3.35.3', source: 'https://rubygems.org'
+  gem 'capybara', '~>3.35.3'
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'

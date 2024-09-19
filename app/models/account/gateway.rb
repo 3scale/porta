@@ -17,7 +17,7 @@ module Account::Gateway
   def payment_gateway(**options)
     return if payment_gateway_type.blank?
 
-    PaymentGateway.implementation(payment_gateway_type, options).new(payment_gateway_options || {})
+    PaymentGateway.implementation(payment_gateway_type, **options).new(payment_gateway_options || {})
   end
 
   def payment_gateway_configured?

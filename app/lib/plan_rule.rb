@@ -7,7 +7,7 @@ class PlanRule
     @system_name = system_name.to_sym
     @metadata = metadata.deep_symbolize_keys
     @rank = rank
-    @limits = Limit.new(limits)
+    @limits = Limit.new(**limits)
     @switches = switches.map(&:to_sym)
   end
 

@@ -23,7 +23,7 @@ class DeletePlainObjectWorker < ApplicationJob
 
   queue_as :default
 
-  sidekiq_throttle({ concurrency: { limit: 10 } })
+  sidekiq_throttle concurrency: { limit: 10 }
 
   before_perform do |job|
     @object, workers_hierarchy, @destroy_method = job.arguments

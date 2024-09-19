@@ -63,7 +63,7 @@ module ThreeScale::Warnings
       options[:parameters] = { :object => exception.object }
     end
 
-    System::ErrorReporting.report_error(exception, options)
+    System::ErrorReporting.report_error(exception, **options)
   end
 
 end

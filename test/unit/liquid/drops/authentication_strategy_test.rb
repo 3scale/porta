@@ -4,17 +4,13 @@ class Liquid::Drops::AuthenticationStrategyTest < ActiveSupport::TestCase
   include Liquid
 
   def setup
-    @buyer = FactoryBot.create(:buyer_account)
-    FieldsDefinition.create(account: @buyer.provider_account, target: 'Account',
-                            name: 'country', label: 'Country')
-    @buyer.reload
+    provider = FactoryBot.create(:provider_account, domain: 'company-domain.com')
+    provider.settings.update(cas_server_url: 'https://cas.example.com')
+    strategy = Authentication::Strategy::Cas.new provider
+    @drop = Drops::AuthenticationStrategy::Cas.new strategy
   end
 
-  test 'country#choices' do
-    drop = Drops::CountryField.new(@buyer, :country)
-    country = drop.choices.first
-    assert country.id.is_a?(Integer)
-    assert country.label.is_a?(String)
+  test '#login_url' do
+    assert_equal "https://cas.example.com/login?service=http%3A%2F%2Fcompany-domain.com%2Fsession%2Fcreate", @drop.login_url
   end
-
 end

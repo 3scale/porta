@@ -105,11 +105,11 @@ module ApiHelper
   end
 
   def json(context, **options, &block)
-    format_context(:json, context, options, &block)
+    format_context(:json, context, **options, &block)
   end
 
   def xml(context, **options, &block)
-    format_context(:xml, context, options, &block)
+    format_context(:xml, context, **options, &block)
   end
 end
 

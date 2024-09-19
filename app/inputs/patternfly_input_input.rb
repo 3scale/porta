@@ -46,7 +46,7 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
     action_title = action_html_options.delete(:title)
     action_html_options.reverse_merge!(class: 'pf-c-button pf-m-primary')
-    tag.button(action_title, action_html_options)
+    tag.button(action_title, **action_html_options)
   end
 
   def helper_text
