@@ -6,6 +6,17 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_access_tokens_table(table)
+    parameterize_headers(table)
+
+    codes = I18n.t('.access_token_options')
+
+    table.map_column!(:scopes) do |scopes|
+      scopes.split(',').map(&:strip).map { |scope| codes.key(scope).to_s }
+    end
+    table.map_column!(:permission) { |permission| codes.key(permission) }
+  end
+
   def transform_invoices_table(table)
     parameterize_headers(table, 'Buyer' => 'buyer_account',
                                 'Month' => 'period')
