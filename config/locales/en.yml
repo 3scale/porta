@@ -504,6 +504,13 @@ en:
               these settings will no longer have any effect.
               </p>
       user:
+        access_tokens:
+          edit:
+            page_header_title: Edit Access Token
+            submit_button_label: Update Access Token
+          new:
+            page_header_title: New Access Token
+            submit_button_label: Create Access Token
         notification_preferences:
           show:
             no_notification_preferences_html: |
@@ -1087,7 +1094,11 @@ en:
         invalid_transition: 'cannot transition via "%{event}"'
         not_path_format: 'must be a path separated by "/". E.g. "" or "my/path"'
       models:
-        authentication/by_access_token/access_token:
+        access_token:
+          attributes:
+            scopes:
+              too_short: select at least one scope
+        authentication/by_access_token:
           attributes:
             scopes:
               too_short: "Select at least %{count} scope"

@@ -53,6 +53,9 @@ module HtmlSelectorsHelper
     when /the bulk operations/ # Legacy bulk operations card, not the toolbar dropdown
       '.pf-c-card#bulk-operations'
 
+    when /the access tokens table/
+      '.pf-c-table[aria-label="Access tokens table"]'
+
     #
     # Product
     #

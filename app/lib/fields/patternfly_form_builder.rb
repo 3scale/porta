@@ -17,6 +17,11 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
     tag.button(title, type: :submit, class: 'pf-c-button pf-m-primary', **opts)
   end
 
+  def delete_button(title, href, opts = {})
+    opts.reverse_merge!(method: :delete, class: 'pf-c-button pf-m-danger')
+    template.link_to(title, href, **opts)
+  end
+
   def collection_select(*opts)
     super(*opts.first(4), {}, { class: 'pf-c-form-control' })
   end
