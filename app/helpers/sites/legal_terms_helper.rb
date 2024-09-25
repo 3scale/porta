@@ -21,16 +21,16 @@ module Sites::LegalTermsHelper
 
      <script type="text/javascript">
      //<![CDATA[
-         $('#legal-terms-trigger').toggle(
-           function() {
-             $('#legal-terms').fadeIn();
-             $('#legal-terms-trigger').text('hide');
-           },
-           function() {
-             $('#legal-terms').fadeOut();
-             $('#legal-terms-trigger').text('show');
-           }
-          );
+          $(document).on('click', '#legal-terms-trigger', function (event) {
+            event.preventDefault();
+            if ($('#legal-terms').is(':visible')) {
+              $('#legal-terms').hide();
+              $('#legal-terms-trigger').text('show');
+            } else {
+              $('#legal-terms').show();
+              $('#legal-terms-trigger').text('hide');
+            }
+          });
      //]]>
      </script>
     SNIPPET
