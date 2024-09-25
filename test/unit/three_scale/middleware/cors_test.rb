@@ -76,7 +76,7 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
   end
 
   test 'provider signup path excluded in default configs' do
-    cors_config = YAML.load_file(Rails.root.join("config/cors.yml")).deep_symbolize_keys
+    cors_config = YAML.load_file(Rails.root.join("config/cors.yml"), aliases: true, permitted_classes: [Symbol, Regexp]).deep_symbolize_keys
     rails_envs = %i[development test production]
     rails_envs.each do |rails_env|
       stub_config = cors_config[rails_env]

@@ -6,7 +6,7 @@ module Backend
     def self.parse_config
       config = File.read("#{Rails.root}/config/backend_redis.yml")
       config = ERB.new(config).result(binding)
-      config = YAML.load(config)
+      config = YAML.load(config, aliases: true)
       config.fetch(Rails.env).deep_symbolize_keys
     end
 
