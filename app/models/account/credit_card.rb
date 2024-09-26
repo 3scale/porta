@@ -96,8 +96,12 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   end
 
   def unstore_credit_card!
-    response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
-    log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+    begin
+      response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
+      log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+    rescue Account::Gateway::InvalidSettingsError => error
+      Rails.logger.warn("Couldn't unstore credit card details from the payment gateway: #{error.message}")
+    end
 
     return if payment_detail.destroyed?
 
