@@ -26,14 +26,14 @@ class ThreeScale::JobsTest < ActiveSupport::TestCase
   end
 
   def test_task_serialize
-    task = ThreeScale::Jobs::Task.new(Account, :new, org_name: 'Company')
-    serialized = YAML.dump([Account, :new, {org_name: 'Company'}])
+    task = ThreeScale::Jobs::Task.new(DestroyAllDeletedObjectsWorker, :perform_later, 'Service')
+    serialized = YAML.dump([DestroyAllDeletedObjectsWorker, :perform_later, 'Service'])
     assert_equal({klass: "ThreeScale::Jobs::Task", init_args: serialized}, task.serialize)
   end
 
   def test_task_deserialize
-    task = ThreeScale::Jobs::Task.new(Account, :new, org_name: 'Company')
-    serialized = YAML.dump([Account, :new, [{org_name: 'Company'}]])
+    task = ThreeScale::Jobs::Task.new(DestroyAllDeletedObjectsWorker, :perform_later, 'Service')
+    serialized = YAML.dump([DestroyAllDeletedObjectsWorker, :perform_later, ['Service']])
     assert_equal(task, ThreeScale::Jobs::Task.deserialize(klass: 'ThreeScale::Jobs::Task', init_args: serialized))
   end
 
