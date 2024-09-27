@@ -1,7 +1,6 @@
 - content_for :page_header_title, 'Applications'
 - content_for :page_header_body do
-  ' Applications are a representation of an API consumer. They include credentials obtained through the API's authentication method,
-  ' along with usage metrics and other metadata. The application plan sets the limits for each application.
+  = t('api.applications.index.description')
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'

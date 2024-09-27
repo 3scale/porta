@@ -724,6 +724,9 @@ en:
         delete_alert_confirmation: Do you really want to delete this alert?
     applications:
       index:
+        description: |
+          Applications represent pieces of software consuming the API. They contain a set of credentials used to access the API,
+          along with usage metrics and other metadata. The application plan sets the limits for each application.
         empty_state:
           title: No applications yet
           body: There are no applications subscribed to %{name}.
