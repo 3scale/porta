@@ -100,12 +100,13 @@ Capybara.register_driver :headless_chrome do |app|
     perf_logging_prefs: { enableNetwork: true }
   )
 
-  options.add_argument('--headless')
+  options.add_argument('--headless=new')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
   options.add_argument('--window-size=1280,2048')
   options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*')
   options.add_argument('--disable-search-engine-choice-screen')
+  options.add_argument('--disable-gpu')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
