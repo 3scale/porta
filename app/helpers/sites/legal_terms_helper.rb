@@ -7,7 +7,7 @@ module Sites::LegalTermsHelper
        (<a id="legal-terms-trigger" href="" >show</a>)
      </p>
 
-     <div id="legal-terms" style="display:none; overflow-y: scroll; height: 30em;">
+     <div id="legal-terms" style="display:none; overflow-y: auto; max-height: 30em;">
         <!--
            -
            -
