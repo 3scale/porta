@@ -95,7 +95,7 @@ namespace :multitenant do
             puts "Processing batch #{index+1} of model #{model.name}..."
             batch.each do |object|
               puts "- ID: #{object.id}, Tenant ID: #{object.tenant_id}"
-              object.destroy if destroy
+              DeletePlainObjectWorker.perform_later(object) if destroy
             end
           end
           orphaned_objects.find_each { |obj|  }
