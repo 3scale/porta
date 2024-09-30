@@ -7,6 +7,8 @@ module ThreeScale
   module Jobs
 
     class Task
+      attr_reader :object
+
       def initialize(object, method, *args)
         @object = object
         @method = method
@@ -43,7 +45,8 @@ module ThreeScale
 
         def deserialize(args)
           hash = normalize_task_args(args)
-          klass, method, arguments = YAML.load(hash[:init_args]) # rubocop:disable Security/YAMLLoad
+          permitted_classes = ActiveRecord::Base.yaml_column_permitted_classes + ThreeScale::Jobs::JOB_CLASSES
+          klass, method, arguments = YAML.load(hash[:init_args], permitted_classes: permitted_classes)
           hash[:klass].constantize.new(klass, method, *arguments)
         end
 
@@ -130,5 +133,9 @@ module ThreeScale
     HOUR = Task.map([
                       [Rails, :env]
                     ]).freeze # just a fake job to ensure cron works
+
+    PERIODS = [HOUR, DAILY, WEEK, MONTH, BILLING]
+    
+    JOB_CLASSES = ThreeScale::Jobs::PERIODS.flatten.map(&:object)
   end
 end
