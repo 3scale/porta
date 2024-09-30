@@ -84,23 +84,21 @@ namespace :multitenant do
       puts "Checking orphaned objects..."
       puts "WARNING: the found orphan objects will be destroyed" if destroy
 
-      provider_account_ids = Account.where(provider: true).pluck(:id) + [Account.master.id]
-
       base_models.each do |model|
-        orphaned_objects = model.where.not(tenant_id: provider_account_ids)
+        orphaned_objects = model.where.not(tenant_id: Account.unscoped.providers_with_master.select(:id))
 
         if orphaned_objects.exists?
           puts "Found #{orphaned_objects.size} orphaned objects for model #{model.name}:"
+          seconds_between_batches = 15
+
           orphaned_objects.find_in_batches(batch_size: 100).with_index do |batch, index|
             puts "Processing batch #{index+1} of model #{model.name}..."
+            wait_time = (index * seconds_between_batches).seconds
             batch.each do |object|
               puts "- ID: #{object.id}, Tenant ID: #{object.tenant_id}"
-              object.destroy if destroy
+              DeletePlainObjectWorker.set(wait: wait_time).perform_later(object) if destroy
             end
           end
-          orphaned_objects.find_each { |obj|  }
-
-
         else
           puts "No orphaned objects found for model #{model.name}."
         end
