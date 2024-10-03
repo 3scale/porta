@@ -3,6 +3,9 @@
   = link_to "#{icon(@authentication_provider.kind)} #{@authentication_provider.human_kind}".html_safe,
       provider_admin_authentication_provider_path(@authentication_provider)
 
+- content_for :javascripts
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for @authentication_provider,

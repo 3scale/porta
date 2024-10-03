@@ -1,5 +1,9 @@
 <% content_for :page_header_title, @metric.child? ? "New Method" : "New Metric" %>
 
+<% content_for :javascripts do %>
+  <%= stylesheet_packs_chunks_tag 'pf_form' %>
+<% end %>
+
 <% url = if @metric.child?
             provider_admin_backend_api_metric_children_path(@backend_api, @metric.parent)
           else

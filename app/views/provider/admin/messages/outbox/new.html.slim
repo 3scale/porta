@@ -1,6 +1,9 @@
 - content_for :title, 'Compose'
 - content_for :page_header_title, 'Compose'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 - is_modal = request.xhr?
 - formClass = "pf-c-form pf-m-limit-width #{is_modal ? 'remote' : ''}"
 

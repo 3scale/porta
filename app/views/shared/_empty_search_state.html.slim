@@ -1,6 +1,9 @@
 - title = local_assigns[:title] || t('.title')
 - body = local_assigns[:body] || t('.body')
 
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'empty_state'
+
 tr role="row"
   td role="cell" colspan="100"
     div class="pf-c-empty-state"

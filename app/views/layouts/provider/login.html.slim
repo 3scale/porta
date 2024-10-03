@@ -7,6 +7,7 @@ html[lang="en" class="pf-m-redhat-font"]
     / Order matters! Base must go before any other pack:
     = stylesheet_packs_chunks_tag 'patternfly_base'
     = javascript_packs_with_chunks_tag 'login'
+    = yield :javascripts
 
   body class="login-layout"
     = yield

@@ -4,6 +4,9 @@
 
 - content_for :page_header_title, t("api.metrics.#{scope}.page_header_title", type: type)
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for metric, url: url,

@@ -1,0 +1,7 @@
+// Each PatternFly component already contains the CSS related to the component. In order to have
+// consistent styles throughout the application, PatternFly Base CSS should be used in the project,
+// or some components may diverge in appearance. This import statement should be placed before your
+// main application component is imported.
+// https://github.com/patternfly/patternfly-react/blob/main/packages/react-core/README.md
+
+@import '@patternfly/patternfly/patternfly-base.css';

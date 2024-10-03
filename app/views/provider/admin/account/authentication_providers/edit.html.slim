@@ -4,6 +4,9 @@
   => @authentication_provider.name
   | Integration
 
+- content_for :javascripts
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for @authentication_provider,

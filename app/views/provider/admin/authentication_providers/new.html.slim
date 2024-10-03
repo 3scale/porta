@@ -1,12 +1,14 @@
 - content_for :page_header_title, "New #{@authentication_provider.human_kind} Authentication Provider"
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
-    = semantic_form_for @authentication_provider,
-            url: provider_admin_authentication_providers_path,
-            as: :authentication_provider,
-            builder: Fields::PatternflyFormBuilder,
-            html: { class: 'pf-c-form pf-m-limit-width' } do |f|
+    = semantic_form_for @authentication_provider, url: provider_admin_authentication_providers_path,
+                                                  as: :authentication_provider,
+                                                  builder: Fields::PatternflyFormBuilder,
+                                                  html: { class: 'pf-c-form pf-m-limit-width' } do |f|
 
       = f.input :kind, as: :hidden
 

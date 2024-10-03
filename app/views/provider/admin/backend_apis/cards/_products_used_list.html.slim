@@ -1,3 +1,5 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'products_used_list'
+
 h2 Products using this backend
 div id='products-used-list-container' data-products=backend_api.decorate.products_table_data
-  = javascript_packs_with_chunks_tag 'products_used_list'
