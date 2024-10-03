@@ -270,7 +270,7 @@ module System
 
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
-    config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
+    config.middleware.insert_before(Rack::Runtime, Rack::XServedBy) if ENV["DEBUG_X_SERVED_BY"] == "1"
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
