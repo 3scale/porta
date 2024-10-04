@@ -1,6 +1,9 @@
 - icon = local_assigns[:icon] || :search
 - title = local_assigns[:title] || t('.title')
 
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'empty_state'
+
 div class="pf-c-empty-state"
   div class="pf-c-empty-state__content"
     i class="fas fa-#{icon} pf-c-empty-state__icon" aria-hidden="true"

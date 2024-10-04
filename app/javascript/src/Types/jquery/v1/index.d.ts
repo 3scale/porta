@@ -5,11 +5,11 @@
  * application, both admin and developer portals. Therefore, all jQuery plugins (cookie, pjax, ujs)
  * are injected into it.
  *
- * In webpacker though we get jQuery from our node_modules (3.5.x) which lacks all plugins excepts
+ * In webpack though we get jQuery from our node_modules (3.5.x) which lacks all plugins excepts
  * the ones installed via webpack which is jquery-ui from now on.
  *
  * This is absolutely insane for maintainability and we need to get rid of all jQuery packages that
- * don't come from webpacker. In the meantime, we need to maintain backwards-compatibility and that
+ * don't come from webpack. In the meantime, we need to maintain backwards-compatibility and that
  * means we need to differentiate between v1 and v3 so that we are certain what plugins are
  * available. This types definition file was downloaded from:
  *   https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/jquery/v1/index.d.ts

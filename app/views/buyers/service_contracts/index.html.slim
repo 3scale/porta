@@ -25,6 +25,11 @@
     = bulk_action 'Change state', new_admin_buyers_service_contracts_bulk_change_state_path,
                                   'Accept, suspend or resume selected subscriptions'
 
+- content_for :javascripts do
+  / HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
+    import the whole pack with "javascript_packs_with_chunks_tag"
+  = stylesheet_packs_chunks_tag 'table_toolbar'
+
 div class="pf-l-flex pf-m-column"
   div class="pf-l-flex__item"
     - content_for :javascripts do

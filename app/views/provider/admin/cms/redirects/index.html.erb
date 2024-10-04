@@ -1,5 +1,11 @@
 <% content_for :page_header_title, 'Redirects' %>
 
+<% content_for :javascripts do %>
+  <%# HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
+      import the whole pack with "javascript_packs_with_chunks_tag" %>
+  <%= stylesheet_packs_chunks_tag 'table_toolbar' %>
+<% end %>
+
 <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Redirects table">
   <thead>
     <tr role="row">

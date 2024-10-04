@@ -3,6 +3,9 @@
 
 - content_for :page_header_title, "Edit application: #{@cinstance.name}"
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 = semantic_form_for @cinstance, url: provider_admin_application_path(@cinstance),
                                 builder: Fields::FormBuilder do |form|
   = form.inputs do

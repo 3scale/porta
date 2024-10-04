@@ -2,6 +2,9 @@
 - content_for :page_header_annotation do
   = render partial: 'shared/annotations', locals: { resource: @backend_api, description: true, variant: :warning }
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-l-flex pf-m-column"
   div class="pf-l-flex__item"
     div class="pf-c-card"

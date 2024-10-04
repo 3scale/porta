@@ -90,7 +90,6 @@ C:\\nppdf32Log\\debuglog.txt
 /tmp/*
 !.gitkeep
 !.eslint*
-!.babelrc
 .eslintcache
 Session.vim
 /TAGS
@@ -128,9 +127,8 @@ Gemfile.local
 package-lock.json
 *.orig
 
-# Webpacker
+# Webpack
 /public/packs
-/public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*

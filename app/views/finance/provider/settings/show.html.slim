@@ -1,6 +1,9 @@
 - content_for :title, 'Charging & Gateway'
 - content_for :page_header_title, 'Charging & Gateway'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 - if @current_gateway&.deprecated?
   - content_for :page_header_alert do
     br

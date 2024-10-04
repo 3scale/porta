@@ -1,12 +1,14 @@
 - content_for :page_header_title, 'New SSO Integration'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
-    = semantic_form_for @authentication_provider,
-            url: [:provider, :admin, :account, @authentication_provider.becomes(AuthenticationProvider)],
-            builder: Fields::PatternflyFormBuilder,
-            as: :authentication_provider,
-            html: { class: 'pf-c-form pf-m-limit-width' } do |f|
+    = semantic_form_for @authentication_provider, url: [:provider, :admin, :account, @authentication_provider.becomes(AuthenticationProvider)],
+                                                  builder: Fields::PatternflyFormBuilder,
+                                                  as: :authentication_provider,
+                                                  html: { class: 'pf-c-form pf-m-limit-width' } do |f|
 
       - account_type = AuthenticationProvider.account_types[:provider]
       = f.input :kind, as: :patternfly_select,

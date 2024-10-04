@@ -1,4 +1,9 @@
 <% content_for :page_header_title, "Edit Service Plan #{h @plan.name}"  %>
+
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'plans_edit' %>
+<% end %>
+
 <div>
   <%= semantic_form_for @plan, :url => admin_service_plan_path(@plan) do |form| %>
     <%= render :partial => 'form', :object => form %>
