@@ -26,13 +26,16 @@ module WebpackHelper
   #
   # A RuntimeError is raised if one pack is not found in the manifest, possibly pointing out a typo.
   #
+  # ⚠️ This method smells of :reek:NestedIterators and :reek:TooManyStatements
+  #
   def javascript_packs_with_chunks_tag(*packs) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
     @packs ||= []
     tags = ''
+    entrypoints = webpack_manifest['entrypoints']
 
     packs.each do |pack|
-      entrypoint_with_extension = webpack_manifest['entrypoints']["#{pack}.ts"] || {}
-      entrypoint_without_extension = webpack_manifest['entrypoints'][pack] || {}
+      entrypoint_with_extension = entrypoints["#{pack}.ts"] || {}
+      entrypoint_without_extension = entrypoints[pack] || {}
 
       entrypoint = entrypoint_with_extension.deep_merge(entrypoint_without_extension) do |key, this_val, other_val|
         (this_val + other_val).uniq
@@ -65,12 +68,15 @@ module WebpackHelper
   #
   # A RuntimeError is raised if one pack is not found in the manifest, possibly pointing out a typo.
   #
+  # ⚠️ This method smells of :reek:TooManyStatements
+  #
   def stylesheet_packs_chunks_tag(*packs) # rubocop:disable, Metrics/MethodLength, Metrics/CyclomaticComplexity
     @packs ||= []
     tags = ''
+    entrypoints = webpack_manifest['entrypoints']
 
     packs.each do |pack|
-      entrypoint = webpack_manifest['entrypoints'][pack] || {}
+      entrypoint = entrypoints[pack] || {}
       raise "No entrypoint '#{pack}' in manifest" if entrypoint.empty?
 
       assets = entrypoint['assets']

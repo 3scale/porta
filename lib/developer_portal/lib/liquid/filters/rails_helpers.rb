@@ -47,7 +47,7 @@ module Liquid
       end
 
       desc "Javascript includes tag."
-      def javascript_include_tag(name, **options)
+      def javascript_include_tag(name)
         js = RailsHelpers.replace_googleapis(name)
         case
         when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
