@@ -39,12 +39,17 @@
   grid-template-columns: 1fr 1fr;
 }
 
+button.pf-c-button.pf-m-primary.pf-c-button__float-button {
+  display: none;
+}
+
 @media screen and (min-width: 1200px) {
   button.pf-c-button.pf-m-primary.pf-c-button__float-button {
+    display: block;
     background-color: #b1b1e6;
     top: 0;
     color:black;
-    margin: 400px -50px 0 0;
+    margin: 470px -50px 0 0;
     position: absolute;
     right: 0;
     transform: rotate(-90deg);
