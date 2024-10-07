@@ -208,6 +208,7 @@ GEM
       ransack (~> 2.3)
     base64 (0.2.0)
     bcrypt (3.1.13)
+    bigdecimal (3.1.8)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
     bootsnap (1.16.0)
@@ -223,10 +224,11 @@ GEM
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
     cancancan (3.6.1)
-    capybara (3.35.3)
+    capybara (3.40.0)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
-      nokogiri (~> 1.8)
+      nokogiri (~> 1.11)
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
@@ -265,7 +267,8 @@ GEM
       sprockets (< 4.0)
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
-    crack (0.4.5)
+    crack (1.0.0)
+      bigdecimal
       rexml
     crass (1.0.6)
     css_parser (1.12.0)
@@ -296,14 +299,10 @@ GEM
     cucumber-html-formatter (17.0.0)
       cucumber-messages (~> 17.1, >= 17.1.0)
     cucumber-messages (17.1.1)
-    cucumber-rails (2.4.0)
-      capybara (>= 2.18, < 4)
-      cucumber (>= 3.2, < 8)
-      mime-types (~> 3.3)
-      nokogiri (~> 1.10)
-      railties (>= 5.0, < 7)
-      rexml (~> 3.0)
-      webrick (~> 1.7)
+    cucumber-rails (3.0.0)
+      capybara (>= 3.11, < 4)
+      cucumber (>= 5, < 10)
+      railties (>= 5.2, < 8)
     cucumber-tag-expressions (4.1.0)
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
@@ -390,7 +389,7 @@ GEM
     has_scope (0.8.1)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
-    hashdiff (1.0.1)
+    hashdiff (1.1.1)
     hashery (2.1.2)
     hashie (3.6.0)
     hiredis-client (0.22.2)
@@ -781,9 +780,12 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
     secure_headers (6.3.0)
-    selenium-webdriver (3.142.7)
-      childprocess (>= 0.5, < 4.0)
-      rubyzip (>= 1.2.2)
+    selenium-webdriver (4.25.0)
+      base64 (~> 0.2)
+      logger (~> 1.4)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     set (1.1.0)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
@@ -915,12 +917,13 @@ GEM
       unicorn
     uniform_notifier (1.14.2)
     version_gem (1.1.3)
-    webmock (3.8.3)
-      addressable (>= 2.3.6)
+    webmock (3.24.0)
+      addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.2)
     webrobots (0.1.2)
+    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -976,7 +979,7 @@ DEPENDENCIES
   bugsnag (~> 6.26)
   bullet (~> 6.1.5)
   cancancan (~> 3.6.0)
-  capybara (~> 3.35.3)
+  capybara (~> 3.40.0)
   childprocess
   chronic
   ci_reporter_shell!
@@ -985,7 +988,7 @@ DEPENDENCIES
   commonmarker (~> 0.23.10)
   compass-rails (~> 3.0.2)
   cucumber (~> 7.0)
-  cucumber-rails (~> 2.4.0)
+  cucumber-rails (~> 3.0.0)
   dalli
   database_cleaner
   developer_portal!
@@ -1080,7 +1083,7 @@ DEPENDENCIES
   rubyzip (~> 1.3.0)
   sass-rails (~> 5.0.8)
   secure_headers (~> 6.3.0)
-  selenium-webdriver (~> 3.142)
+  selenium-webdriver (~> 4.25)
   shoulda (~> 4.0)
   sidekiq (~> 7)
   sidekiq-batch (~> 0.2.0)
@@ -1105,7 +1108,7 @@ DEPENDENCIES
   uglifier
   unicorn
   unicorn-rails
-  webmock (~> 3.8.0)
+  webmock (~> 3.24.0)
   will_paginate (~> 3.3)
   with_env
   xpath (~> 3.2.0)

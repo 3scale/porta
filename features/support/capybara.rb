@@ -95,29 +95,23 @@ Capybara.register_driver :chrome do |app|
 end
 
 Capybara.register_driver :headless_chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
+  options = Selenium::WebDriver::Options.chrome(
+    logging_prefs: { performance: 'ALL', browser: 'ALL' },
+    perf_logging_prefs: { enableNetwork: true }
+  )
 
-  options.add_argument('--headless')
+  options.add_argument('--headless=new')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
   options.add_argument('--window-size=1280,2048')
   options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*')
   options.add_argument('--disable-search-engine-choice-screen')
+  options.add_argument('--disable-gpu')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
-  options.add_option(:w3c, false)
-  options.add_option(:perfLoggingPrefs, { enableNetwork: true })
-  caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-    loggingPrefs: { performance: 'ALL', browser: 'ALL' }
-  )
 
-  client = Selenium::WebDriver::Remote::Http::Default.new
-  client.read_timeout = client.open_timeout = 120 # default 60
+  timeout = 120 # default 60
+  client = Selenium::WebDriver::Remote::Http::Default.new(open_timeout: timeout, read_timeout: timeout)
 
-  driver = Capybara::Selenium::Driver.new(app, browser: :chrome,
-                                               options: options,
-                                               http_client: client,
-                                               desired_capabilities: caps)
-
-  driver
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, http_client: client)
 end
