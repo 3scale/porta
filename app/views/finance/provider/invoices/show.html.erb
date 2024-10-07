@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'invoices_show' %>
+<% end %>
+
 <%= render '/finance/provider/shared/invoice_title', invoice: @invoice %>
 
 <div class="pf-l-grid pf-m-gutter">
