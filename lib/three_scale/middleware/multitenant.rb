@@ -57,44 +57,22 @@ module ThreeScale
           # this is when tenant_id is not set because of a bug or in older installations the master account has it nil
           return if current.nil?
 
-          # in newer installations master account has a tenant_id same as its id, like other providers
-          return if object.is_a?(::Account) && object.master
+          return if object.is_a?(::Account) && object.master? # some controllers refer to the master account
 
           # once initialized a legitimate AR object with a tenant_id, all others in the request should have the same
           @original ||= current
 
           return if current == original
 
-          return if master?
+          Thread.current[:multitenant] = nil # disable this checker as we either raise or user is master
 
-          raise TenantLeak.new(object, attribute, original)
+          master? || raise(TenantLeak.new(object, attribute, original))
         end
 
         def master?
           return @is_master if defined?(@is_master)
 
-          @master ||= ::Account.unscoped.master
-
-          @is_master = session_of_master? || provider_key_of_master? || token_of_master?
-        end
-
-        def session_of_master?
-          # this is supposed to match how we get the user_session in app/lib/authenticated_system/request.rb
-          # on API calls cookies are not present though, so we need to use safe navigation
-          user_session ||= UserSession.authenticate(@env['action_dispatch.cookies']&.signed&.public_send(:[], :user_session))
-          user_session&.user&.account == @master
-        end
-
-        def provider_key_of_master?
-          param_places = %w[action_dispatch.request.query_parameters action_dispatch.request.request_parameters]
-          possible_keys = %w[provider_key api_key]
-          param_places.product(possible_keys).any? { |params, key| @env[params][key] == @master.provider_key }
-        end
-
-        def token_of_master?
-          token = @env["action_dispatch.request.query_parameters"]["access_token"] ||
-            @env["action_dispatch.request.request_parameters"]["access_token"]
-          @master.access_tokens.find_from_value(token)
+          @is_master ||= @env["action_controller.instance"].send(:current_account)&.master?
         end
       end
 
