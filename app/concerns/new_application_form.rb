@@ -45,6 +45,6 @@ module NewApplicationForm
   end
 
   def products_presenter
-    @products_presenter ||= Api::ServicesIndexPresenter.new(current_user: user)
+    @products_presenter ||= Api::ServicesIndexPresenter.new(user: user)
   end
 end
