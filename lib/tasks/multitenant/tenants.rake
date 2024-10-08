@@ -77,6 +77,49 @@ namespace :multitenant do
       Rails.logger.error "Inconsistent tenant_ids for:\n#{inconsistent.map {_1.join(" ")}.join("\n")}"
     end
 
+    desc 'Check and remove orphaned objects (whose tenant is missing), pass "destroy" argument to delete'
+    task :cleanup_orphans, [:mode] => :environment do |_task, args|
+      destroy = args[:mode] == "destroy"
+
+      puts "Checking orphaned objects..."
+      puts "WARNING: the found orphan objects will be destroyed" if destroy
+
+      provider_account_ids = Account.where(provider: true).pluck(:id) + [Account.master.id]
+
+      base_models.each do |model|
+        orphaned_objects = model.where.not(tenant_id: provider_account_ids)
+
+        if orphaned_objects.exists?
+          puts "Found #{orphaned_objects.size} orphaned objects for model #{model.name}:"
+          orphaned_objects.find_in_batches(batch_size: 100).with_index do |batch, index|
+            puts "Processing batch #{index+1} of model #{model.name}..."
+            batch.each do |object|
+              puts "- ID: #{object.id}, Tenant ID: #{object.tenant_id}"
+              DeletePlainObjectWorker.perform_later(object) if destroy
+            end
+          end
+          orphaned_objects.find_each { |obj|  }
+
+
+        else
+          puts "No orphaned objects found for model #{model.name}."
+        end
+      end
+
+      puts 'Orphaned objects check completed.'
+    end
+
+    def base_models
+      all_models = ApplicationRecord.descendants.select(&:arel_table).reject(&:abstract_class?)
+      all_models.select! { _1.attribute_names.include? "tenant_id"}
+      # we only want base STI classes, not the children
+      all_models.select do |model|
+        base_class = model.base_class
+        # either current model is the base_class or we can't find a base class amongst the discovered models (which would be very weird)
+        base_class == model || all_models.none? { |potential_parent| potential_parent == base_class }
+      end
+    end
+
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
       query = args[:table_name].constantize.joining(&association_block).where.has(&condition)
       puts "------ Updating #{args[:table_name]} ------"
