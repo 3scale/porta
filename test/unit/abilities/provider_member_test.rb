@@ -121,9 +121,9 @@ module Abilities
       service_2 = FactoryBot.create(:simple_service, account: @account)
       service_3 = FactoryBot.create(:simple_service, account: @account)
 
-      plan_1 = FactoryBot.create(:simple_application_plan, service: service_1)
-      plan_2 = FactoryBot.create(:simple_application_plan, service: service_2)
-      plan_3 = FactoryBot.create(:simple_application_plan, service: service_3)
+      plan_1 = FactoryBot.create(:simple_application_plan, issuer: service_1)
+      plan_2 = FactoryBot.create(:simple_application_plan, issuer: service_2)
+      plan_3 = FactoryBot.create(:simple_application_plan, issuer: service_3)
 
       app_1 = FactoryBot.create(:simple_cinstance, plan: plan_1)
       app_2 = FactoryBot.create(:simple_cinstance, plan: plan_2)

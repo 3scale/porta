@@ -18,7 +18,7 @@ module BackendApiLogic
     end
 
     def with_subpaths?
-      backend_api_configs.with_subpath.any?
+      backend_api_configs.any?(&:with_subpath?)
     end
 
     class Builder

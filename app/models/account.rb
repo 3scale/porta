@@ -544,7 +544,7 @@ class Account < ApplicationRecord
   # Grabs the support_email if defined, otherwise falls back to the email of first admin. Dog.
   def support_email
     se = self[:support_email]
-    se.presence || admins.first&.email
+    se.presence || first_admin&.email
   end
 
   def finance_support_email

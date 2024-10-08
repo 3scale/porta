@@ -110,6 +110,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_query_trace (1.8.2)
+      activerecord (>= 6.0.0)
     activejob (6.1.7.8)
       activesupport (= 6.1.7.8)
       globalid (>= 0.3.6)
@@ -958,6 +960,7 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
+  active_record_query_trace
   activejob-uniqueness
   activemerchant (~> 1.107.4)
   activemodel-serializers-xml
