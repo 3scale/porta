@@ -141,6 +141,18 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       @backend_api_config = FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
     end
 
+    test "delete without stubs" do
+      service = FactoryBot.create(:service)
+      plan = FactoryBot.create(:application_plan, :issuer => service)
+      cinstance = FactoryBot.create(:cinstance, plan:)
+      FactoryBot.create_list(:limit_alert, 4, cinstance:, account: cinstance.user_account)
+      # perform_enqueued_jobs(except: [SphinxAccountIndexationWorker, SphinxIndexationWorker, BackendMetricWorker, BackendDeleteApplicationWorker]) do
+      perform_enqueued_jobs(queue: "deletion") do
+        service.mark_as_deleted!
+      end
+      assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+    end
+
     private
 
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
