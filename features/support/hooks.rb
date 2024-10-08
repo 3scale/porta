@@ -118,11 +118,12 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   line_number = scenario.location.line.to_s
 
   # Network logs
-  if page.driver.browser.respond_to?(:manage)
+  if page.driver.browser.respond_to?(:logs)
     # performance logs may fail if this logging type is not configured or not supported by driver
-    if page.driver.browser.manage.logs.available_types.include? :performance
-      logs = page.driver.browser.manage.logs.get(:performance)
-      array = logs.each_with_object([]) do |entry, messages|
+    logs = page.driver.browser.logs
+    if logs.available_types.include? :performance
+      perf_logs = logs.get(:performance)
+      array = perf_logs.each_with_object([]) do |entry, messages|
         message = JSON.parse(entry.message)
         # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
         messages << message
@@ -139,11 +140,11 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
 
     console_log = folder.join("#{line_number}.log")
 
-    if (logs = page.driver.browser.manage.logs.get(:browser)).present?
-      entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
+    if (browser_logs = logs.get(:browser)).present?
+      entries = browser_logs.map { |entry| "[#{entry.level}] #{entry.message}" }
 
       console_log.open('w') do |f|
-        f.puts *entries
+        f.puts(*entries)
       end
 
       print "Saved console log to #{console_log}\n"

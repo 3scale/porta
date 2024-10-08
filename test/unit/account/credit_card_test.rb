@@ -81,6 +81,24 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert_nil provider.credit_card_partial_number
   end
 
+  test 'unstore credit card succeeds if gateway settings are invalid' do
+    provider = FactoryBot.create(:simple_account, payment_gateway_type: :bogus)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider,
+                              credit_card_auth_code: "fdsa",
+                              credit_card_expires_on: Date.new(2020, 4, 2),
+                              credit_card_partial_number: "0989")
+
+    ActiveMerchant::Billing::BogusGateway.expects(:new).raises(ArgumentError.new("Missing required parameter: whatever"))
+
+    assert_nothing_raised do
+      buyer.unstore_credit_card!
+    end
+
+    assert_nil buyer.credit_card_auth_code
+    assert_equal Time.zone.today.change(:day => 1), buyer.credit_card_expires_on_with_default
+    assert_nil buyer.credit_card_partial_number
+  end
+
   test '#credit_card_editable? returns false for master account' do
     refute master_account.credit_card_editable?
   end

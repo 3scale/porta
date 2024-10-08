@@ -182,18 +182,18 @@ group :test do
   gem 'simplecov', '~> 0.22.0', require: false
   gem 'simplecov-cobertura', '~> 2.1'
 
-  gem 'capybara', '~>3.35.3'
+  gem 'capybara', '~>3.40.0'
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
   gem 'cucumber', '~> 7.0'
-  gem 'cucumber-rails', '~> 2.4.0', require: false
+  gem 'cucumber-rails', '~> 3.0.0', require: false
   gem 'email_spec', require: false
   gem 'fakefs', require: 'fakefs/safe'
   gem 'launchy'
   gem 'mechanize'
-  gem 'selenium-webdriver', '~> 3.142', require: false
-  gem 'webmock', '~> 3.8.0'
+  gem 'selenium-webdriver', '~> 4.25', require: false
+  gem 'webmock', '~> 3.24.0'
 
   gem 'childprocess'
 
