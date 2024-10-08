@@ -8,6 +8,8 @@ module Annotating
       class_eval do
         include Model
         include ManagedBy
+
+        background_deletion << :annotations
       end
     end
   end
