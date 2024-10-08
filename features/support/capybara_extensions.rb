@@ -57,10 +57,15 @@ module CapybaraExtensions
 
   # Capybara::Node::Matchers#has_field?
   def has_field?(locator = nil, **options, &optional_filter_block)
-    if (form_group = find_all('.pf-c-form__group', text: locator, wait: 0).first) && form_group.has_css?('.CodeMirror', wait: 0)
+    form_group = find_all('.pf-c-form__group', text: locator, wait: 0).first
+
+    if form_group&.has_css?('.CodeMirror', wait: 0)
       # If the field is enhanced by CodeMirror, the textarea will be hidden.
       options[:visible] = :hidden
     end
+
+    # Matches patternfly_check_boxes_input
+    return true if form_group&.has_css?('.pf-c-form__group-control .pf-c-check', wait: 0)
 
     super
   end
