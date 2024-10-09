@@ -28,18 +28,22 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   end
 
   def application
-    @application ||= case
+    return @application if defined?(@application)
+
+    scope = params[:service_id] ? applications.where(service_id: params[:service_id]) : applications
+
+    @application = case
 
                      when param_key = params[:user_key]
       # TODO: these scopes should be in model layer
       # but there is scope named by_user_key already
-      applications.where.has { (service.backend_version == '1') & (user_key == param_key) }.first!
+      scope.where.has { (service.backend_version == '1') & (user_key == param_key) }.first!
 
-                     when app_id = params[:app_id]
-      applications.where.has { (service.backend_version != '1') & (application_id == app_id) }.first!
+                   when app_id = params[:app_id]
+      scope.where.has { (service.backend_version != '1') & (application_id == app_id) }.first!
 
                      else
-      applications.find(params[:application_id] || params[:id])
+      scope.find(params[:application_id] || params[:id])
     end
   end
 
