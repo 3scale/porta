@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'three_scale/patterns/service'
+
 class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
   # @param str_resource [String] a lock key
   # @param timeout [Integer] milliseconds lock timeout

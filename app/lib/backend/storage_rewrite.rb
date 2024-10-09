@@ -130,14 +130,8 @@ module Backend
         rewrite(scope: collection)
       end
 
-      # This logger just prints out a message to STDOUT, with new line before and after.
-      # New line before is to make progress log look better
       def logger
-        @logger ||= begin
-          log = ActiveSupport::Logger.new($stdout)
-          log.formatter = ->(_, _, _, msg) { "\n#{msg.is_a?(String) ? msg : msg.inspect}\n" }
-          log
-        end
+        @logger ||= ProgressCounter.stdout_logger
       end
 
       # All accounts eligible for backend sync
