@@ -9,6 +9,6 @@ namespace :sidekiq do
 
     Rails.logger.info "Cleaning up BID-* keys older than #{max_age_seconds.seconds.in_hours} hours from sidekiq-batch..."
 
-    ThreeScale::SidekiqBatchCleanupService.new(max_age_seconds: max_age_seconds).call
+    ThreeScale::SidekiqBatchCleanupService.call(max_age_seconds: max_age_seconds)
   end
 end

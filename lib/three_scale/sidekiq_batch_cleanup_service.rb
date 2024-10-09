@@ -1,7 +1,9 @@
 require 'progress_counter'
 
+require Rails.root.join('app/lib/three_scale/patterns/service')
+
 module ThreeScale
-  class SidekiqBatchCleanupService
+  class SidekiqBatchCleanupService < ThreeScale::Patterns::Service
     MAX_FETCH_COUNT = 1000
   
     BID_EXPIRE_TTL = 2_592_000 # 30 days, default expiration for sidekiq batch keys
