@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
+require 'three_scale/sidekiq_batch_cleanup_service'
+
 namespace :sidekiq do
-  desc 'cleanup BID-* keys from sidekiq-batch'
-  task cleanup_batches: :environment do
-    Rails.logger.info "Cleaning up BID-* keys from sidekiq-batch..."
-    SidekiqBatchCleanupService.new.call
+  desc 'cleanup BID-* keys from sidekiq-batch, specify the max age in seconds as an argument'
+  task :cleanup_batches, [:max_age_seconds] => :environment do |task, args|
+    max_age_seconds = args[:max_age_seconds].to_i
+
+    Rails.logger.info "Cleaning up BID-* keys older than #{max_age_seconds.seconds.in_hours} hours from sidekiq-batch..."
+
+    ThreeScale::SidekiqBatchCleanupService.new(max_age_seconds: max_age_seconds).call
   end
 end
