@@ -32,22 +32,19 @@ Capybara.register_driver :chrome do |app|
 end
 
 Capybara.register_driver :headless_chrome do |app|
-  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS.merge(
-    args: [
-      '--disable-gpu',
-      '--disable-popup-blocking',
-      '--headless=new',
-      '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*',
-      '--no-sandbox',
-    ],
-    logging_prefs: { performance: 'ALL', browser: 'ALL' },
-    perf_logging_prefs: { enableNetwork: true },
-    prefs: {
-      browser: {
-        set_download_behavior: { behavior: 'allow' }
-      }
-    }
-  ))
+  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS)
+
+  options.logging_prefs = { performance: 'ALL', browser: 'ALL' }
+
+  options.add_argument('--disable-gpu')
+  options.add_argument('--disable-popup-blocking')
+  options.add_argument('--headless=new')
+  options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*')
+  options.add_argument('--no-sandbox')
+
+  options.add_option(:perf_logging_prefs, enableNetwork: true)
+
+  options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, timeout: 120)
 end
