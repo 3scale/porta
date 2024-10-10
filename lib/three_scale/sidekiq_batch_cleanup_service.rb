@@ -1,6 +1,6 @@
 require 'progress_counter'
 
-require Rails.root.join('app/lib/three_scale/patterns/service')
+require 'three_scale/patterns/service'
 
 module ThreeScale
   class SidekiqBatchCleanupService < ThreeScale::Patterns::Service
@@ -22,7 +22,7 @@ module ThreeScale
   
     def call
       total = redis.dbsize
-      Rails.logger.info "Total number of keys: #{total}, will delete keys with TTL less than #{bid_max_ttl.seconds.in_hours} hours"
+      logger.info "Total number of keys: #{total}, will delete BID-* keys with TTL less than #{bid_max_ttl.seconds.in_hours} hours"
   
       scan_enum = System.redis.scan_each(match: 'BID-*', type: 'hash', count: MAX_FETCH_COUNT)
   
@@ -49,6 +49,16 @@ module ThreeScale
         yield element
         progress.call
       end
+    end
+
+    # This logger just prints out a message to STDOUT, with new line before and after.
+    # New line before is to make progress log look better
+    def logger
+      @logger ||= begin
+                    log = ActiveSupport::Logger.new($stdout)
+                    log.formatter = ->(_, _, _, msg) { "\n#{msg.is_a?(String) ? msg : msg.inspect}\n" }
+                    log
+                  end
     end
   end
 end
