@@ -27,7 +27,7 @@ module NewApplicationForm
   end
 
   def products
-    paginated_products.map { |p| ServicePresenter.new(p).new_application_data.as_json }
+    paginated_products.includes(:default_application_plan).map { |p| ServicePresenter.new(p).new_application_data.as_json }
   end
 
   def application_defined_fields_data(provider)

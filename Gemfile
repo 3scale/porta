@@ -230,6 +230,8 @@ group :test do
 end
 
 group :development, :test do
+  gem 'active_record_query_trace'
+
   gem 'bootsnap', '~> 1.16'
   gem 'bullet', '~> 6.1.5'
   gem 'colorize'
