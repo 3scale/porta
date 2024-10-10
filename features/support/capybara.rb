@@ -26,13 +26,13 @@ BASE_DRIVER_OPTIONS = {
 
 # Use this driver to debug scenarios locally by using hook @chrome
 Capybara.register_driver :chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new(BASE_DRIVER_OPTIONS)
+  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS)
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :headless_chrome do |app|
-  options = Selenium::WebDriver::Chrome::Options.new(**BASE_DRIVER_OPTIONS.merge(
+  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS.merge(
     args: [
       '--disable-gpu',
       '--disable-popup-blocking',
