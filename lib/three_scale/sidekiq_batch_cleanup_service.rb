@@ -6,8 +6,8 @@ module ThreeScale
   class SidekiqBatchCleanupService < ThreeScale::Patterns::Service
     MAX_FETCH_COUNT = 1000
   
-    BID_EXPIRE_TTL = 2_592_000 # 30 days, default expiration for sidekiq batch keys
-    DEFAULT_MAX_AGE_SECONDS = 10_800 # 3 hours
+    BID_EXPIRE_TTL = 30.days.seconds
+    DEFAULT_MAX_AGE_SECONDS = 3.hours.seconds
   
     # `max_age_seconds` specifies the maximum age of the keys (in seconds)
     # all keys that are older will be deleted, calculated by the TTL that is still left, compared with the default expire value
@@ -38,9 +38,7 @@ module ThreeScale
       batch_key = "BID-#{bid}"
       ttl = redis.ttl(batch_key)
   
-      if ttl <= bid_max_ttl
-        Sidekiq::Batch.cleanup_redis(bid)
-      end
+      Sidekiq::Batch.cleanup_redis(bid) if ttl <= bid_max_ttl
     end
   
     private
