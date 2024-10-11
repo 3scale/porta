@@ -8,15 +8,7 @@ div class="pf-c-card"
     = semantic_form_for @access_token, builder: Fields::PatternflyFormBuilder,
                                        url: [:provider, :admin, :user, @access_token],
                                        html: { class: 'pf-c-form pf-m-limit-width' } do |f|
-      = f.input :name, as: :patternfly_input,
-                       input_html: { autofocus: true }
-
-      = f.input :scopes, as: :patternfly_check_boxes,
-                         collection: @access_token.available_scopes.to_collection_for_check_boxes
-
-      = f.input :permission, as: :patternfly_select,
-                             collection: @access_token.available_permissions,
-                             include_blank: false
+      = render 'form', form: f
 
       = f.actions do
         = f.commit_button t('.submit_button_label')
