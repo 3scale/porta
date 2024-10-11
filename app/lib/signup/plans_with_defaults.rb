@@ -113,6 +113,7 @@ module Signup
     end
 
     def any_plan_for?(issuer:, plan_type:)
+      ActiveRecord::Associations::Preloader.new.preload(plans[plan_type], [:issuer])
       plans[plan_type].any? { |plan| plan.issuer == issuer }
     end
   end
