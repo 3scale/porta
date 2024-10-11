@@ -55,7 +55,7 @@ class AccessToken < ApplicationRecord
       scopes.map(&:value)
     end
 
-    def to_a
+    def to_collection_for_check_boxes
       map { |scope| [scope.key, scope.value] }
     end
 

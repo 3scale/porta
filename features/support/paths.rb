@@ -220,6 +220,16 @@ World(Module.new do
     when 'the new email configurations page'
       new_provider_admin_account_email_configurations_path
 
+    when 'the personal tokens page'
+      provider_admin_user_access_tokens_path
+
+    when 'the new access token page'
+      new_provider_admin_user_access_token_path
+
+    when /^(access token "(.*)"|the access token's) edit page$/
+      access_token = AccessToken.find_by(name: $2) || @access_token
+      edit_provider_admin_user_access_token_path(access_token)
+
     #
     # SSO Integrations (Admin portal)
     #
