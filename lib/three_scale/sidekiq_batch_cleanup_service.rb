@@ -1,6 +1,6 @@
-require 'progress_counter'
+# frozen_string_literal: true
 
-require 'three_scale/patterns/service'
+require 'progress_counter'
 
 module ThreeScale
   class SidekiqBatchCleanupService < ThreeScale::Patterns::Service
@@ -16,6 +16,7 @@ module ThreeScale
       @redis = System.redis
 
       @bid_max_ttl = BID_EXPIRE_TTL - max_age_seconds
+      super()
     end
 
     attr_reader :now, :redis, :bid_max_ttl
@@ -27,7 +28,8 @@ module ThreeScale
       scan_enum = System.redis.scan_each(match: 'BID-*', type: 'hash', count: MAX_FETCH_COUNT)
 
       each_with_progress_counter(scan_enum, total) do |key|
-        next if key =~ /-(success|complete|failed|jids)$/
+        next if /-(success|complete|failed|jids)$/.match?(key)
+
         bid = key.remove(/^BID-/)
         perform(bid)
       end
