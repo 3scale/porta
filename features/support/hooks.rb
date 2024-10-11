@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Around '@security' do |scenario, block|
+  with_forgery_protection(&block)
+end
+
 Before '@onpremises' do
   ThreeScale.config.stubs(onpremises: true)
   ThreeScale.config.stubs(saas?: false)
@@ -28,7 +32,6 @@ end
 
 Before '@javascript' do
   stub_core_reset!
-  @javascript = true
 end
 
 AfterStep('@javascript') do

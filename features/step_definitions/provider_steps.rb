@@ -3,7 +3,7 @@
 def import_simple_layout(provider)
   simple_layout = SimpleLayout.new(provider)
   simple_layout.import_pages!
-  simple_layout.import_js_and_css! if @javascript
+  simple_layout.import_js_and_css! if javascript_test?
 end
 
 Given "a provider signed up to {plan}" do |plan|
@@ -236,6 +236,8 @@ def setup_provider(login)
   create_provider_with_plan("foo.3scale.localhost", ApplicationPlan.first)
   set_current_domain(@provider.external_admin_domain)
   stub_integration_errors_dashboard
+
+  @provider.users.first.user_sessions.create! # Prevents welcome flash from showing up
 
   return unless login
 

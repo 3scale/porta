@@ -5,8 +5,6 @@ When /^(.*) in the CMS sidebar$/ do |step|
 end
 
 When /^I switch to (builtin|3scale) content$/ do |group|
-  ensure_javascript
-
   within "#cms-sidebar-filter-origin" do
     li = page.find("li[data-filter-origin='builtin']")
     li.click
