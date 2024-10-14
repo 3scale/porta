@@ -513,11 +513,19 @@ en:
             submit_button_label: Create Access Token
         notification_preferences:
           show:
-            no_notification_preferences_html: |
-              You don't have access to any notifications on the %{account_name} account.
-              Please contact <a href="mailto:%{email}">%{username}</a> to request access.
-          form:
-            submit_button_label: 'Update Notification Preferences'
+            header_title: Notification Preferences
+            header_body:
+              Events originate from interactions with the 3scale interface & the 3scale API. They
+              can be triggered by developers, you, your team & 3scale. You will only receive
+              API-related notifications for those APIs that you have access to.
+            empty_state:
+              title: Access denied
+              body_html:
+                You don't have access to any notifications on the %{account} account.
+                Please contact <a href="mailto:%{email}">%{username}</a> to request access.
+            submit_button_label: Update Notification Preferences
+          update:
+            success: Notification preferences successfully updated.
         personal_details:
           edit:
             form:

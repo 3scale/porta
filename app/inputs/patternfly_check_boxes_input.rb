@@ -5,11 +5,13 @@ class PatternflyCheckBoxesInput < Formtastic::Inputs::CheckBoxesInput
 
   def to_html
     tag.div(class: 'pf-c-form__group') do
-      label + control
+      label_html + control
     end
   end
 
-  def label
+  def label_html
+    return ''.html_safe if options[:label] == false
+
     tag.div(class: 'pf-c-form__group-label') do
       tag.label(class: 'pf-c-form__label', for: input_html_options[:id]) do
         tag.span(label_text, class: 'pf-c-form__label-text')
@@ -25,8 +27,8 @@ class PatternflyCheckBoxesInput < Formtastic::Inputs::CheckBoxesInput
   end
 
   def choice_html(choice)
-    tag.div(class: 'pf-c-check') do
-      checkbox_input(choice) + choice_label(choice)
+    tag.div(class: 'pf-c-check pf-c-check__check_boxes-custom_spacing') do
+      checkbox_input(choice) + choice_label(choice) + choice_description(choice)
     end
   end
 
@@ -43,14 +45,21 @@ class PatternflyCheckBoxesInput < Formtastic::Inputs::CheckBoxesInput
   end
 
   def choice_label(choice)
-    label_text = choice[0]
-    tag.label(label_text, class: 'pf-c-check__label',
-                          for: choice_input_dom_id(choice))
+    choice_label_text = choice[0]
+    tag.label(choice_label_text, class: 'pf-c-check__label',
+                                 for: choice_input_dom_id(choice))
   end
 
   def helper_text_invalid
     return if errors.empty?
 
     template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
+  end
+
+  def choice_description(choice)
+    return unless (member_hint = options[:member_hint])
+
+    description_text = member_hint.call(choice.is_a?(Array) ? choice.last : choice)
+    tag.span(description_text, class: 'pf-c-check__description')
   end
 end

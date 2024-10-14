@@ -25,4 +25,13 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
   def collection_select(*opts)
     super(*opts.first(4), {}, { class: 'pf-c-form-control' })
   end
+
+  def inputs(*args, &block)
+    tag.section(class: 'pf-c-form__section', role: 'group') do
+      tag.div(args.first, class: 'pf-c-form__section-title') +
+        tag.div do # TODO: remove this div, ideally concat title + block
+          yield block
+        end
+    end
+  end
 end
