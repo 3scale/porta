@@ -6,16 +6,18 @@ module ThreeScale
   class SidekiqBatchCleanupService < ThreeScale::Patterns::Service
     MAX_FETCH_COUNT = 1000
 
-    BID_EXPIRE_TTL = 30.days.seconds
     DEFAULT_MAX_AGE_SECONDS = 3.hours.seconds
 
     # `max_age_seconds` specifies the maximum age of the keys (in seconds)
     # all keys that are older will be deleted, calculated by the TTL that is still left, compared with the default expire value
     def initialize(max_age_seconds: DEFAULT_MAX_AGE_SECONDS)
+      raise ArgumentError, "max_age_seconds must be greater than zero" if max_age_seconds.negative?
+      raise ArgumentError, "max_age_seconds must be less than #{Sidekiq::Batch::BID_EXPIRE_TTL} seconds" if max_age_seconds >= Sidekiq::Batch::BID_EXPIRE_TTL
+
+      @bid_max_ttl = Sidekiq::Batch::BID_EXPIRE_TTL - max_age_seconds
+
       @now = Time.zone.now
       @redis = System.redis
-
-      @bid_max_ttl = BID_EXPIRE_TTL - max_age_seconds
       super()
     end
 
@@ -23,7 +25,7 @@ module ThreeScale
 
     def call
       total = redis.dbsize
-      logger.info "Total number of keys: #{total}, will delete BID-* keys with TTL less than #{bid_max_ttl.seconds.in_hours} hours"
+      logger.info "Total number of keys: #{total}, will delete BID-* keys with TTL less than #{bid_max_ttl_to_s}"
 
       scan_enum = System.redis.scan_each(match: 'BID-*', type: 'hash', count: MAX_FETCH_COUNT)
 
@@ -51,6 +53,11 @@ module ThreeScale
         yield element
         progress.call
       end
+    end
+
+    # print bid_max_ttl in format "1 hours 30 minutes 10 seconds"
+    def bid_max_ttl_to_s
+      ActiveSupport::Duration.build(bid_max_ttl).parts.reduce("") { |str, (period,value) | "#{str} #{value} #{period}" }
     end
 
     def logger
