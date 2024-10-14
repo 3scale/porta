@@ -56,6 +56,7 @@ gem 'sidekiq-cron', require: %w[sidekiq/cron sidekiq/cron/web]
 gem 'sidekiq-throttled', '~> 1.4.0'
 
 # Yabeda metrics
+gem 'webrick', '~> 1.8.2'
 gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'
 
