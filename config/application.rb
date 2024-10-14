@@ -71,6 +71,11 @@ module System
 
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
+
+    # Disable generating Link header with URLs from javascript_include_tag and stylesheet_link_tag
+    # Reconsider whether to enable again after upgrading to Rails 7.1, where the size of the header is limited to 1KB
+    config.action_view.preload_links_header = false
+
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
 
