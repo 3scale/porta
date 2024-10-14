@@ -27,7 +27,7 @@ class PatternflyCheckBoxesInput < Formtastic::Inputs::CheckBoxesInput
   end
 
   def choice_html(choice)
-    tag.div(class: 'pf-c-check') do
+    tag.div(class: 'pf-c-check pf-c-check__check_boxes-custom_spacing') do
       checkbox_input(choice) + choice_label(choice) + choice_description(choice)
     end
   end

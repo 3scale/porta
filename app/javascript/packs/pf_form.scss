@@ -2,3 +2,9 @@
 @import '~@patternfly/patternfly/components/Check/check.css';
 @import '~@patternfly/patternfly/components/Form/form.css';
 @import '~@patternfly/patternfly/components/FormControl/form-control.css';
+
+.pf-c-form__group-control {
+  .pf-c-check + .pf-c-check__check_boxes-custom_spacing {
+    margin-top: var(--pf-c-check__body--MarginTop);
+  }
+}
