@@ -267,6 +267,7 @@ module System
     require 'three_scale/domain_substitution'
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/cors'
+    require 'three_scale/patterns/service'
 
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
