@@ -565,7 +565,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Jest specs
-          command: yarn jest --maxWorkers=3
+          command: yarn jest --maxWorkers=3 --coverage
       - codecov/upload
       - notify_failure
 
