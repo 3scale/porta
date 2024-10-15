@@ -69,7 +69,7 @@ Feature: Account management
     When I log in as provider "foo.3scale.localhost"
     And I navigate to the Account Settings
     And I go to the provider personal details page
-    When I fill in "Email" with ""
+    When I fill in "Email" with "invalid"
      And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should see "should look like an email address"
