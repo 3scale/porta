@@ -403,6 +403,11 @@ en:
 
     admin:
       account:
+        invitations:
+          index:
+            empty_state_title: No invitations
+            empty_state_body: To add new members to your team, send them an invitation to join.
+            empty_state_primary_title: Invite a team member
         users:
           form:
             submit_button_label: 'Update User'

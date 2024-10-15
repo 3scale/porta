@@ -6,49 +6,57 @@
   <%= stylesheet_packs_chunks_tag 'table_toolbar' %>
 <% end %>
 
-<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invitations table" id="invitations">
-  <thead>
-    <tr role="row">
-      <th role="columnheader" scope="col">Recipient</th>
-      <th role="columnheader" scope="col">Sent</th>
-      <th role="columnheader" scope="col">Accepted?</th>
-      <th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
-        <% if can?(:create, Invitation) and can?(:see, :multiple_users) %>
-          <%= link_to_unless_current 'Invite a New Team Member', new_provider_admin_account_invitation_path, :class => 'action add' %>
-        <% end %>
-      </th>
-    </tr>
-  </thead>
+<% if @invitations.total_entries.zero? %>
+  <%= render partial: 'shared/empty_state', locals: { icon: 'plus-circle',
+                                                      title: t('.empty_state_title'),
+                                                      body: t('.empty_state_body'),
+                                                      primary: { title: t('.empty_state_primary_title'),
+                                                                 href: new_provider_admin_account_invitation_path } } %>
+<% else %>
+  <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invitations table" id="invitations">
+    <thead>
+      <tr role="row">
+        <th role="columnheader" scope="col">Recipient</th>
+        <th role="columnheader" scope="col">Sent</th>
+        <th role="columnheader" scope="col">Accepted?</th>
+        <th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
+          <% if can?(:create, Invitation) and can?(:see, :multiple_users) %>
+            <%= link_to_unless_current 'Invite a New Team Member', new_provider_admin_account_invitation_path, :class => 'action add' %>
+          <% end %>
+        </th>
+      </tr>
+    </thead>
 
-  <tbody role="rowgroup">
-    <% @invitations.each do |invitation| %>
-      <tr role="row" id="<%= dom_id(invitation) %>">
-        <td role="cell" data-label="Recipient"><%= h invitation.email %></td>
-        <td role="cell" data-label="Sent"><%= invitation_sent_date(invitation) %></td>
-        <td role="cell" data-label="Accepted?"><%= invitation_status(invitation) %></td>
-        <td role="cell" class="pf-c-table__action">
-          <div class="pf-c-overflow-menu">
-            <div class="pf-c-overflow-menu__content">
-              <div class="pf-c-overflow-menu__group pf-m-button-group">
-                <% if can? :manage, invitation %>
-                  <div class="pf-c-overflow-menu__item">
-                    <% unless invitation.accepted? -%>
-                      <%= fancy_link_to("Resend", resend_provider_admin_account_invitation_path(invitation), {:method => :put, :class => 'refresh', "data-id" => invitation.id}) %>
-                    <% end -%>
-                  </div>
-                <% end -%>
-                <% if can? :manage, invitation %>
-                  <div class="pf-c-overflow-menu__item">
-                    <%= delete_link_for provider_admin_account_invitation_path(invitation), data: { confirm: 'Are you sure you want to delete this invitation?' } %>
-                  </div>
-                <% end %>
+    <tbody role="rowgroup">
+      <% @invitations.each do |invitation| %>
+        <tr role="row" id="<%= dom_id(invitation) %>">
+          <td role="cell" data-label="Recipient"><%= h invitation.email %></td>
+          <td role="cell" data-label="Sent"><%= invitation_sent_date(invitation) %></td>
+          <td role="cell" data-label="Accepted?"><%= invitation_status(invitation) %></td>
+          <td role="cell" class="pf-c-table__action">
+            <div class="pf-c-overflow-menu">
+              <div class="pf-c-overflow-menu__content">
+                <div class="pf-c-overflow-menu__group pf-m-button-group">
+                  <% if can? :manage, invitation %>
+                    <div class="pf-c-overflow-menu__item">
+                      <% unless invitation.accepted? -%>
+                        <%= fancy_link_to("Resend", resend_provider_admin_account_invitation_path(invitation), {:method => :put, :class => 'refresh', "data-id" => invitation.id}) %>
+                      <% end -%>
+                    </div>
+                  <% end -%>
+                  <% if can? :manage, invitation %>
+                    <div class="pf-c-overflow-menu__item">
+                      <%= delete_link_for provider_admin_account_invitation_path(invitation), data: { confirm: 'Are you sure you want to delete this invitation?' } %>
+                    </div>
+                  <% end %>
+                </div>
               </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= will_paginate @invitations %>
+  <%= will_paginate @invitations %>
+<% end %>
