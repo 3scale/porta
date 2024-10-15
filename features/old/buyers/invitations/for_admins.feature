@@ -1,7 +1,7 @@
 @javascript
-Feature: Invitations on partner accounts for admins
-  In order to allow provider account admins to administer their partner accounts
-  As an admin I want to manage the invitations of users to the partner accounts
+Feature: Buyer Account Invitations
+
+  TODO: update as part of THREESCALE-9876 in the same way as features/provider/admin/account/invitations.feature
 
   Background:
     Given the default product of provider "master" has name "Master API"
@@ -41,12 +41,14 @@ Feature: Invitations on partner accounts for admins
     Given an invitation sent to "alice@lolcats.com" to join account "lol cats" was accepted
     And an invitation sent to "bob@lolcats.com" to join account "lol cats"
     When I navigate to the page of the invitations of the partner "lol cats"
-    Then I should see accepted invitation for "alice@lolcats.com"
-    And I should see pending invitation for "bob@lolcats.com"
+    Then the table should contain an accepted invitation from "alice@lolcats.com"
+    And the table should contain a pending invitation from "bob@lolcats.com"
 
   Scenario: Destroying invitations
     Given an invitation sent to "alice@lolcats.com" to join account "lol cats"
     When I navigate to the page of the invitations of the partner "lol cats"
+    # And select action "Delete" of "alice@example.org"
+    # And confirm the dialog
     And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com" and confirm the dialog
     Then I should not see invitation for "alice@lolcats.com"
 

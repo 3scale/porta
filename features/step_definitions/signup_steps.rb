@@ -4,19 +4,7 @@ Given "{provider} has plans (already )ready for signups" do |provider|
   create_plan(:application, name: 'application_plan', issuer: provider, published: true, default: true)
 end
 
-When /^I fill in the invitation signup with email "([^"]*)"$/ do | email |
-  fill_in("Email", :with => email)
-  fill_in_invitation_signup(email)
-end
-
 When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
-  fill_in("Username", :with => username)
-  fill_in("Password", :with => "supersecret")
-  fill_in("Password confirmation", :with => "supersecret")
-  click_button "Sign up"
-end
-
-def fill_in_invitation_signup(username)
   fill_in("Username", :with => username)
   fill_in("Password", :with => "supersecret")
   fill_in("Password confirmation", :with => "supersecret")
