@@ -533,8 +533,10 @@ en:
             success: Notification preferences successfully updated.
         personal_details:
           edit:
-            form:
-              submit_button_label: 'Update Details'
+            header_title: Personal Details
+            submit_button_label: Update Details
+            set_password_html: You have no password set. If you'd like to set one use the <a href="%{href}">password reset form</a>.
+            new_password_label: New password
 
       dashboards:
         show:

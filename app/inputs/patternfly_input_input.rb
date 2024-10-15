@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: when input is required, add input_html: required prop instead of doing it manually in every form.
+
 class PatternflyInputInput < Formtastic::Inputs::StringInput
   delegate :tag, to: :template
 
