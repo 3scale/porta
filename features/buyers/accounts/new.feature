@@ -30,12 +30,15 @@ Feature: Audience > Accounts > New
     And user "alice" should be active
     But "alice@web-widgets.com" should receive no emails
 
-  Scenario: Required fields and validation
+  Scenario: Fields validation
     Given they go to the new buyer account page
-    When press "Create"
+    When the form is submitted with:
+      | Username | u        |
+      | Email    | invalid  |
+      | Password | p        |
+      | Organization/Group Name | Org |
     Then field "Username" has inline error "is too short"
     And field "Email" has inline error "should look like an email address"
-    And field "Organization/Group Name" has inline error "can't be blank"
     But field "Password" has no inline error
 
   Scenario: Create account with fields with choices

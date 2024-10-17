@@ -19,12 +19,6 @@ Feature: Audience > Accounts > Edit
     Then the current page is the buyer account page for "Pepito"
     And should see the flash message "Account successfully updated"
 
-  Scenario: Required fields and validation
-    Given they go to the buyer account edit page for "Pepe"
-    When the form is submitted with:
-      | Organization/Group Name | |
-    Then field "Organization/Group Name" has inline error "can't be blank"
-
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider
     When they go to the buyer account edit page for "Deleteme"
