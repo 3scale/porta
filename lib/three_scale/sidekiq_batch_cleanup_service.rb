@@ -50,8 +50,8 @@ module ThreeScale
     def each_with_progress_counter(enumerable, count)
       progress = ProgressCounter.new(count)
       enumerable.each do |element|
-        yield element
         progress.call
+        yield element
       end
     end
 
