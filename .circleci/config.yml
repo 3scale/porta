@@ -1,11 +1,8 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@3.3.0
 
 ##################################### YAML ANCHORS  ############################################
-
-upload-coverage: &upload-coverage
-  run:
-    name: Upload test coverage to Codecov
-    command: bash <(curl --retry 10 --retry-delay 5 --retry-max-time 60 -s https://codecov.io/bash) -Z || echo "Codecov is not working again..."
 
 persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
   persist_to_workspace:
@@ -357,7 +354,7 @@ commands: # reusable commands with parameters
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - *upload-coverage
+      - codecov/upload
 
 ##################################### CIRCLECI EXECUTORS ############################################
 
@@ -568,8 +565,8 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Jest specs
-          command: yarn jest --maxWorkers=3
-      - *upload-coverage
+          command: yarn jest --maxWorkers=3 --coverage
+      - codecov/upload
       - notify_failure
 
   unit:
