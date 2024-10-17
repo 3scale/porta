@@ -39,6 +39,15 @@ AfterStep('@javascript') do
   end
 end
 
+Before '@narrow-screen' do
+  @browser_width, @browser_height = page.driver.browser.manage.window.size.to_a
+  page.driver.browser.manage.window.resize_to(1190, @browser_height)
+end
+
+After '@narrow-screen' do
+  page.driver.browser.manage.window.resize_to(@browser_width, @browser_height)
+end
+
 Before do
   begin
     Backend::Storage.instance.flushdb
