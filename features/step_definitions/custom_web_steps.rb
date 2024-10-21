@@ -67,6 +67,7 @@ Then "I/they should see the fields in order:" do |table|
   page.html.should match /#{table.rows.map(&:first).map(&:downcase).join(".*")}/mi
 end
 
+# DEPRECATED: replace with field {string} has inline error {string}
 Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
   # This assumes the error is in a <p> element next to (sibling of) the input field.
   # Not sure if this will work in the general case.
