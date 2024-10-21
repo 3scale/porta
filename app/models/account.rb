@@ -68,7 +68,7 @@ class Account < ApplicationRecord
     [:files, { action: :delete, class_name: 'CMS::File' }],
     [:builtin_pages, { action: :delete, class_name: 'CMS::BuiltinPage' }],
     [:provided_groups, { action: :delete, class_name: 'CMS::Group' }]
-  ].freeze
+  ]
 
   #TODO: this needs testing?
   scope :providers, -> { where(provider: true) }
