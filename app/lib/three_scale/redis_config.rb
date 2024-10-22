@@ -5,9 +5,7 @@ module ThreeScale
     def initialize(redis_config = {})
       raw_config = (redis_config || {}).deep_symbolize_keys
       raw_config.delete_if { |_key, value| value.blank? }
-      uri = URI.parse(raw_config[:url].to_s)
-      raw_config[:db] ||= uri.path[1..]
-      raw_config[:ssl] ||= true if uri.scheme == 'rediss'
+      parse_uri(raw_config)
       apply_sentinels_config!(raw_config)
       raw_config.compact!
 
@@ -39,6 +37,17 @@ module ThreeScale
     protected
 
     DEFAULT_SENTINEL_PORT = 26379
+
+    def parse_uri(raw_config)
+      uri = URI.parse(raw_config[:url].to_s)
+      if uri.scheme == 'unix'
+        raw_config[:path] ||= uri.path
+        raw_config[:url] = nil
+      else
+        raw_config[:db] ||= uri.path[1..]
+        raw_config[:ssl] ||= true if uri.scheme == 'rediss'
+      end
+    end
 
     def apply_sentinels_config!(config)
       sentinels = config.delete(:sentinels).presence
