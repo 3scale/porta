@@ -6,7 +6,7 @@ require 'three_scale/sidekiq_logging_middleware'
 REDIS_PARAMS_WHITELIST = %i[username password db id timeout read_timeout write_timeout connect_timeout ssl
                             custom ssl_params driver protocol client_implementation command_builder inherit_socket
                             reconnect_attempts middlewares circuit_breaker sentinels sentinel_password
-                            sentinel_username role name url path].freeze
+                            sentinel_username role name url].freeze
 
 def sanitize_redis_config(cfg)
   cfg.slice(*REDIS_PARAMS_WHITELIST)
