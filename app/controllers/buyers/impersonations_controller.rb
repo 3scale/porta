@@ -8,7 +8,7 @@ class Buyers::ImpersonationsController < Buyers::BaseController
 
     user= provider.users.impersonation_admin!
 
-    sso_token = SSOToken.new user_id: user.id
+    sso_token = SSOToken.new user_id: user.id, expires_in: 1.minute
 
     sso_token.protocol     = 'http'                unless request.ssl?
     sso_token.redirect_url = params[:redirect_url] if params[:redirect_url] && params[:redirect_url] != "null"
