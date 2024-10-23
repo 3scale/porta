@@ -45,6 +45,10 @@ module CMS::Toolbar
 
     encryptor = ThreeScale::SSO::Encryptor.new(site_account.settings.sso_key)
     encryptor.extract!(encrypted_token).first
+  rescue StandardError
+    # When the token is invalid, I don't think we have to bother the client and BugSnag with an exception
+    # Better return an empty token which means "Disable CMS edit mode (hide toolbar)"
+    ''
   end
 
   def cms_toolbar_enabled?
