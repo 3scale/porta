@@ -2,6 +2,7 @@
 
 module DeveloperPortal
   class ApplicationController < ::FrontendController
+    include ::CMS::Toolbar
 
     before_action :disable_for_suspended_provider_account
 

@@ -17,7 +17,8 @@ module CMS::Toolbar
   protected
 
   def handle_cms_token
-    token = params.delete(:cms_token)
+    encrypted_token = params.delete(:cms_token)
+    token = extract_cms_token(encrypted_token)
 
     if cms.valid_token?(token)
       session[:cms_token] = token
@@ -38,6 +39,13 @@ module CMS::Toolbar
   end
 
   private
+
+  def extract_cms_token(encrypted_token)
+    return encrypted_token if encrypted_token.blank?
+
+    encryptor = ThreeScale::SSO::Encryptor.new(site_account.settings.sso_key)
+    encryptor.extract!(encrypted_token).first
+  end
 
   def cms_toolbar_enabled?
     return false if @_exception_handled
