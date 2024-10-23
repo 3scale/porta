@@ -11,6 +11,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
     @app_plan = FactoryBot.create(:application_plan, issuer: @service)
     @metric = FactoryBot.create(:metric, owner: @service)
     @pricing_rule = FactoryBot.create(:pricing_rule, plan: @app_plan, metric: @metric)
+    @another_service = FactoryBot.create(:service, account: @provider)
 
     host! @provider.external_admin_domain
   end
@@ -36,14 +37,13 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
     end
 
     test 'index with access to some service' do
-      User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+      User.any_instance.stubs(:accessible_services).returns([@service])
       get admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), params: params
       assert_response :success
     end
 
     test 'index with access to all services' do
-      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      User.any_instance.expects(:member_permission_service_ids).never
+      User.any_instance.stubs(:accessible_services).returns([@service, @another_service])
       get admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), params: params
       assert_response :success
     end

@@ -67,6 +67,14 @@ module User::Permissions
     else
       self.member_permissions = member_permissions - [services_member_permission].compact
     end
+    # FIXME: I think the following code is more correct
+    # if service_ids.is_a? Array
+    #   service_ids = service_ids.compact_blank.map(&:to_i)
+    #   member_permission = services_member_permission || member_permissions.build(admin_section: :services)
+    #   member_permission.service_ids = service_ids & existing_service_ids
+    # elsif service_ids.blank?
+    #   self.member_permissions = member_permissions - [services_member_permission].compact
+    # end
   ensure
     @_admin_sections = nil
   end
@@ -79,18 +87,16 @@ module User::Permissions
   # but then it is much harder to test MemberPermission#service_ids=
   # returns [] if no services are enabled, and nil if all (current and future) services are enabled
   def member_permission_service_ids
-    return @member_permission_service_ids if defined?(@member_permission_service_ids)
-
     if admin? || !services_member_permission
-      @member_permission_service_ids = nil
+      nil
     else
       permitted_service_ids = services_member_permission.try(:service_ids) || []
-      @member_permission_service_ids = permitted_service_ids & existing_service_ids
+      permitted_service_ids & existing_service_ids
     end
   end
 
   def services_member_permission
-    @services_member_permission ||= member_permissions.find { |permission| permission.admin_section == :services }
+    member_permissions.find { |permission| permission.admin_section == :services }
   end
 
   def has_access_to_service?(service)

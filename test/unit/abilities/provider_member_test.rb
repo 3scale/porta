@@ -81,35 +81,28 @@ module Abilities
       service_1 = FactoryBot.create(:simple_service)
       service_2 = FactoryBot.create(:simple_service, account: @account)
       service_3 = FactoryBot.create(:simple_service, account: @account)
+      @account.reload
+
+      assert_cannot ability, :show, service_1, 'foreign service'
+      assert_cannot ability, :show, service_2, 'no services allowed'
+      assert_cannot ability, :show, service_3, 'no services allowed'
+
+      @member.update(allowed_sections: ['plans'])
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'all services allowed by default'
       assert_can ability, :show, service_3, 'all services allowed by default'
 
-      @member.admin_sections = [ :services ]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_cannot ability, :show, service_2, 'none services allowed'
-      assert_cannot ability, :show, service_3, 'none services allowed'
-
-      @member.member_permission_service_ids = [service_1.id, service_2.id]
-      @member.save
+      @member.update(allowed_service_ids: [service_1.id, service_2.id])
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'allowed service'
       assert_cannot ability, :show, service_3, 'not allowed service'
 
-      @member.admin_sections += [:plans]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_can ability, :show, service_2, 'all services allowed'
-      assert_cannot ability, :show, service_3, 'not allowed service'
-
       # this is migration path for existing customers that don't have service permissions yet
       Logic::RollingUpdates.stubs(skipped?: true)
 
-      @member.member_permission_ids = [:analytics]
-      @member.member_permission_service_ids = nil
+      @member.member_permissions.delete_all
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'allowed service'

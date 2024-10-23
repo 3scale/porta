@@ -7,7 +7,7 @@ class MyForm
 
   def initialize(provider:, service_plans_management_visible:)
     @provider = provider
-    @user = FactoryBot.create(:simple_user, account: @provider)
+    @user = FactoryBot.create(:simple_user, account: @provider, role: :admin)
     @service_plans_management_visible = service_plans_management_visible
   end
 

@@ -109,15 +109,15 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     get admin_service_backend_usages_path(service)
     assert_response :success
 
-    member.member_permission_service_ids = []
-    member.save!
+    # no allowed services
+    member.update(allowed_service_ids: [""]) # FIXME []
 
     get admin_service_backend_usages_path(service)
-    assert_response :success
+    assert_response :not_found # TODO: :forbidden?
 
+    # a different servcie allowed
     other_service = FactoryBot.create(:simple_service, account: provider)
-    member.member_permission_service_ids = [other_service.id]
-    member.save!
+    member.update(allowed_service_ids: [other_service.id])
 
     get admin_service_backend_usages_path(service)
     assert_response :not_found

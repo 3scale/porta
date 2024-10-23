@@ -559,14 +559,15 @@ class ServiceTest < ActiveSupport::TestCase
     account = FactoryBot.create(:simple_provider)
     FactoryBot.create_list(:simple_service, 2, account: account)
     user = FactoryBot.create(:member, account: account)
-    member_permission_service_ids = [Service.last.id]
-    user.stubs(member_permission_service_ids: member_permission_service_ids)
 
-    user.stubs(forbidden_some_services?: false)
+    user.update(allowed_sections: ['plans'])
     assert_same_elements account.services.pluck(:id), Service.permitted_for(user).pluck(:id)
 
-    user.stubs(forbidden_some_services?: true)
+    member_permission_service_ids = [Service.last.id]
+
+    user.update(allowed_service_ids: member_permission_service_ids)
     assert_same_elements member_permission_service_ids, Service.permitted_for(user).pluck(:id)
+
     assert_same_elements Service.pluck(:id), Service.permitted_for.pluck(:id)
   end
 
