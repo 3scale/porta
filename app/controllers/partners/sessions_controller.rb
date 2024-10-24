@@ -10,7 +10,7 @@ class Partners::SessionsController < Partners::BaseController
         sso_token = SSOToken.new user_id: @user.id
         sso_token.protocol = 'http' unless request.ssl?
         sso_token.account = @account
-        sso_url = sso_token.sso_url!(@account.external_admin_domain)
+        sso_url = sso_token.sso_url!(host: @account.external_admin_domain, port: request.port)
         sso_url << "&return_to=#{params[:return_to]}" if params[:return_to].present?
         redirect_to sso_url
       end

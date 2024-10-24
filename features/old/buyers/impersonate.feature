@@ -14,7 +14,5 @@ Feature: Impersonate
     And I navigate to the accounts page
     Then I should not see link "Act as" for provider "bar.3scale.localhost"
     When I follow "Act as" for account "foo.3scale.localhost"
-    # FIXME: after enabling javascript, the impersonation redirect does not work
-    # Then I should see "Signed in successfully"
-    # And I should be logged in as "impersonation_admin"
-    # And the current domain should be the admin domain of provider "foo.3scale.localhost"
+    Then the current domain in a new window should be admin.foo.3scale.localhost
+    And I should be logged in as "impersonation_admin"
