@@ -33,6 +33,10 @@ Feature: CMS Toolbar
     And follow "Close the CMS toolbar"
     Then there should not be a CMS toolbar
 
+  Scenario: Hide the toolbar when providing an expired token
+    When they visit the developer portal in CMS mode with an expired token
+    Then there should not be a CMS toolbar
+
   Rule: There is a John Doe admin user
     Background:
       When the admin user is John Doe
