@@ -110,7 +110,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     # no allowed services
-    member.update(allowed_service_ids: [""]) # FIXME []
+    member.update(allowed_service_ids: [])
 
     get admin_service_backend_usages_path(service)
     assert_response :not_found # TODO: :forbidden?

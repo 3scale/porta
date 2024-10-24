@@ -32,7 +32,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
     get admin_api_account_application_plans_path(@buyer)
     assert_response :forbidden
 
-    user.update(allowed_sections: ['partners'], allowed_service_ids: [""]) # FIXME!!!
+    user.update(allowed_sections: ['partners'], allowed_service_ids: [])
 
     get admin_api_account_application_plans_path(@buyer, access_token: token.value, format: :json)
     assert_response :success

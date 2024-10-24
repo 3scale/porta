@@ -14,7 +14,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   class AccessTokenTest < Admin::Api::ApplicationPlanFeaturesTest
     def setup
       super
-      @user = FactoryBot.create(:member, account: @provider, allowed_sections: %w[partners plans], allowed_service_ids: [""]) # FIXME []
+      @user = FactoryBot.create(:member, account: @provider, allowed_sections: %w[partners plans], allowed_service_ids: [])
       @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
     end
 

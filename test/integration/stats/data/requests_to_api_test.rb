@@ -43,7 +43,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
 
     member.admin_sections = ['monitoring']
     # the service is not accessible for the member
-    member.member_permission_service_ids = [""] # FIXME: []
+    member.member_permission_service_ids = []
     member.save!
 
     get usage_stats_data_applications_path(@application, format: :json), params: params

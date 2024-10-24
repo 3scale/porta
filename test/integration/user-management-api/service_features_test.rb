@@ -14,7 +14,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     feature = FactoryBot.create(:feature, featurable: @service)
-    user    = FactoryBot.create(:member, account: @provider, allowed_sections: ['partners'], allowed_service_ids: [""]) # FIXME []
+    user    = FactoryBot.create(:member, account: @provider, allowed_sections: ['partners'], allowed_service_ids: [])
     token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_service_feature_path(@service, feature)

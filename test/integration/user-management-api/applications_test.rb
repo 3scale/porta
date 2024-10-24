@@ -29,7 +29,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, allowed_sections: ['partners'], allowed_service_ids: [""]) # FIXME: []
+    user  = FactoryBot.create(:member, account: @provider, allowed_sections: ['partners'], allowed_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service_2 = FactoryBot.create(:service, account: @provider)
     service_3 = FactoryBot.create(:service, account: @provider)

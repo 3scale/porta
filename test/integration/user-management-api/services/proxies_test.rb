@@ -11,7 +11,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
   end
 
   def test_crud_access_token
-    user  = FactoryBot.create(:member, account: @account, admin_sections: ['partners'], allowed_service_ids: [""]) # FIXME: []
+    user  = FactoryBot.create(:member, account: @account, admin_sections: ['partners'], allowed_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # show

@@ -60,21 +60,13 @@ module User::Permissions
   end
 
   def member_permission_service_ids=(service_ids)
-    if service_ids.present?
-      service_ids = Array(service_ids).compact.map(&:to_i)
+    if service_ids.is_a? Array
+      service_ids = service_ids.compact_blank.map(&:to_i)
       member_permission = services_member_permission || member_permissions.build(admin_section: :services)
       member_permission.service_ids = service_ids & existing_service_ids
-    else
+    elsif service_ids.blank?
       self.member_permissions = member_permissions - [services_member_permission].compact
     end
-    # FIXME: I think the following code is more correct
-    # if service_ids.is_a? Array
-    #   service_ids = service_ids.compact_blank.map(&:to_i)
-    #   member_permission = services_member_permission || member_permissions.build(admin_section: :services)
-    #   member_permission.service_ids = service_ids & existing_service_ids
-    # elsif service_ids.blank?
-    #   self.member_permissions = member_permissions - [services_member_permission].compact
-    # end
   ensure
     @_admin_sections = nil
   end

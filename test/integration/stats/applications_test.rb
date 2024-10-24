@@ -34,7 +34,7 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test '#show is forbidden without member permission' do
-    @member.update(allowed_service_ids: [""]) # FIXME
+    @member.update(allowed_service_ids: [])
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :forbidden
   end

@@ -22,7 +22,7 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
   end
 
   test 'index (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'], allowed_service_ids: [""]) # FIXME []
+    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'], allowed_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
