@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
-Given "they visit the developer portal in CMS mode" do
+Given /^they visit the developer portal in CMS mode(\swith an expired token)?/ do |token_is_expired|
+  cms_token = @provider.settings.cms_token!
+  expires_at = Time.now.utc
+  expires_at += 1.minute.to_i unless token_is_expired
+  encrypted_token = ThreeScale::SSO::Encryptor.new(current_account.settings.sso_key, expires_at.to_i).encrypt_token cms_token
+
   visit access_code_url(host: @provider.external_domain,
                         cms: 'draft',
-                        cms_token: @provider.settings.cms_token!,
+                        cms_token: encrypted_token,
                         access_code: @provider.site_access_code)
 end
 
