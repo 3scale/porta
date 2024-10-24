@@ -7,6 +7,14 @@ class Provider::Admin::CMS::VisitPortalController < Provider::Admin::CMS::BaseCo
     expires_at = Time.now.utc + 1.minute.to_i
     encrypted_token = ThreeScale::SSO::Encryptor.new(current_account.settings.sso_key, expires_at.to_i).encrypt_token cms_token
 
-    redirect_to access_code_url(host: current_account.external_domain, cms_token: encrypted_token, access_code: current_account.site_access_code)
+    redirect_to access_code_url(
+      host: current_account.external_domain,
+      cms_token: encrypted_token,
+      access_code: current_account.site_access_code,
+      return_to: return_to)
+  end
+
+  def return_to
+    params.permit(:return_to)[:return_to]
   end
 end
