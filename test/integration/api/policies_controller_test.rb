@@ -7,7 +7,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
     login! @provider
-    Policies::PoliciesListService.expects(:call!).returns({})
+    Policies::PoliciesListService.stubs(:call!).returns({})
   end
 
 
@@ -54,5 +54,15 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     Policies::PoliciesListService.expects(:call!).raises(HTTP::TimeoutError.new)
     get edit_admin_service_policies_path(@service)
     assert_response :service_unavailable
+  end
+
+  test 'policies edit for members with no permissions' do
+    member = FactoryBot.create(:member, account: @provider, state: 'active')
+    logout! && login!(@provider, user: member)
+
+    get edit_admin_service_policies_path(@service)
+
+    # TODO: maybe this should be be a :forbidden
+    assert_response :not_found
   end
 end

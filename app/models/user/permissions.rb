@@ -60,11 +60,11 @@ module User::Permissions
   end
 
   def member_permission_service_ids=(service_ids)
-    if service_ids.present?
-      service_ids = Array(service_ids).compact.map(&:to_i)
+    if service_ids.is_a? Array
+      service_ids = service_ids.compact_blank.map(&:to_i)
       member_permission = services_member_permission || member_permissions.build(admin_section: :services)
       member_permission.service_ids = service_ids & existing_service_ids
-    else
+    elsif service_ids.blank?
       self.member_permissions = member_permissions - [services_member_permission].compact
     end
   ensure
@@ -79,9 +79,12 @@ module User::Permissions
   # but then it is much harder to test MemberPermission#service_ids=
   # returns [] if no services are enabled, and nil if all (current and future) services are enabled
   def member_permission_service_ids
-    return nil if admin? || !services_member_permission
-    permitted_service_ids = services_member_permission.try(:service_ids) || []
-    permitted_service_ids & existing_service_ids
+    if admin? || !services_member_permission
+      nil
+    else
+      permitted_service_ids = services_member_permission.try(:service_ids) || []
+      permitted_service_ids & existing_service_ids
+    end
   end
 
   def services_member_permission
@@ -95,16 +98,49 @@ module User::Permissions
 
   # Lack of the services section means it is the old permission system where everyone had access
   # to every service. So to limit the scope only for new users, we start adding this permission.
+  # TODO: check if it can be replaced with other methods
   def has_access_to_all_services?
     !admin_sections.include?(:services) || admin?
   end
 
+  # Returns:
+  #   :none - if no services are allowed
+  #   :all - if all services are allowed for the selected service-related permissions
+  #   :selected - if a subset of services are allowed for the selected service-related permissions
+  def permitted_services_status
+    if admin? || (service_permissions_selected? && member_permission_service_ids.nil?)
+      :all
+    elsif service_permissions_selected? && member_permission_service_ids&.any?
+      :selected
+    else
+      :none
+    end
+  end
+
+  def no_services_allowed?
+    permitted_services_status == :none
+  end
+
+  def all_services_allowed?
+    permitted_services_status == :all
+  end
+
+  def selected_services_allowed?
+    permitted_services_status == :selected
+  end
+
+  # TODO: check if it can be replaced with other methods
   def forbidden_some_services?
     !has_access_to_all_services? && account.provider_can_use?(:service_permissions)
   end
 
+  def service_permissions_selected?
+    @service_permissions_selected ||= (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any?
+  end
+
+  # TODO: check if it can be replaced with other methods
   def access_to_service_admin_sections?
-    (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any? && accessible_services?
+    service_permissions_selected? && accessible_services?
   end
 
   def reload(*)

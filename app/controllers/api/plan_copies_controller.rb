@@ -2,9 +2,9 @@
 
 class Api::PlanCopiesController < FrontendController
   before_action :find_plan
-  before_action :find_service
   before_action :authorize_section, only: %i[new create]
   before_action :authorize_action, only: %i[new create]
+  before_action :find_service
 
   def create
     @plan = @original.copy(params[@type] || {})
