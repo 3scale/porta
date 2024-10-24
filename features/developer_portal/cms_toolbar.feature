@@ -14,7 +14,7 @@ Feature: CMS Toolbar
     And go to the homepage
     Then there should not be a CMS toolbar
 
-  Scenario: Hide the toolbar
+  Scenario: Hide the toolbar when seeing drafts
     When they visit the developer portal in CMS mode
     And follow "Draft"
     And press "Toggle toolbar"
@@ -27,7 +27,7 @@ Feature: CMS Toolbar
     But they press "Toggle toolbar"
     And the cms toolbar should be visible
 
-  Scenario:
+  Scenario: Hide the toolbar when seeing published pages
     When they visit the developer portal in CMS mode
     And follow "Published"
     And follow "Close the CMS toolbar"
@@ -37,7 +37,7 @@ Feature: CMS Toolbar
     Background:
       When the admin user is John Doe
 
-    Scenario: An admin visist de dev portal
+    Scenario: An admin visits the dev portal
       When they visit the developer portal in CMS mode
       Then the cms toolbar should be visible
       And should see "Templates used on this page"

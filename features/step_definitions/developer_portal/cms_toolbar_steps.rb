@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 Given "they visit the developer portal in CMS mode" do
+  cms_token = @provider.settings.cms_token!
+  expires_at = Time.now.utc + 1.minute.to_i
+  encrypted_token = ThreeScale::SSO::Encryptor.new(current_account.settings.sso_key, expires_at.to_i).encrypt_token cms_token
+
   visit access_code_url(host: @provider.external_domain,
                         cms: 'draft',
-                        cms_token: @provider.settings.cms_token!,
+                        cms_token: encrypted_token,
                         access_code: @provider.site_access_code)
 end
 
