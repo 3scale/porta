@@ -14,7 +14,7 @@ class Buyers::ImpersonationsController < Buyers::BaseController
     sso_token.redirect_url = params[:redirect_url] if params[:redirect_url] && params[:redirect_url] != "null"
     sso_token.account      = provider
 
-    sso_url = sso_token.sso_url!(provider.external_admin_domain)
+    sso_url = sso_token.sso_url!(host: provider.external_admin_domain, port: request.port)
 
     respond_to do | format |
       format.json { render json: {url: sso_url}, status: :created }
