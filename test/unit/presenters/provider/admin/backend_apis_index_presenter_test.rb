@@ -7,20 +7,21 @@ class Provider::Admin::BackendApisIndexPresenterTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
+    @user = FactoryBot.create(:admin, account: provider)
   end
 
   attr_reader :provider, :user
 
   test "20 backend apis per page by default" do
     FactoryBot.create_list(:backend_api, 30, account: provider)
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(user: user, params: {})
 
     assert_equal 20, presenter.backend_apis.size
   end
 
   test "deleted backend apis should not be shown" do
     FactoryBot.create(:backend_api, account: provider)
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(user: user, params: {})
     backend_api = provider.backend_apis.first
 
     assert_includes provider.backend_apis, backend_api
@@ -28,7 +29,7 @@ class Provider::Admin::BackendApisIndexPresenterTest < ActiveSupport::TestCase
 
     backend_api.mark_as_deleted
 
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(user: user, params: {})
 
     assert_includes provider.backend_apis, backend_api
     assert_not_includes presenter.backend_apis, backend_api
@@ -41,34 +42,25 @@ class Provider::Admin::BackendApisIndexPresenterTest < ActiveSupport::TestCase
         FactoryBot.create(:backend_api, name: 'Pepa API', account: provider)
       end
 
-      assert_equal 2, Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: { search: {} }).backend_apis.size
-      assert_equal 2, Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: { search: { query: 'api' } }).backend_apis.size
-      assert_equal 1, Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: { search: { query: 'pepe' } }).backend_apis.size
-      assert_equal 0, Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: { search: { query: 'asdf' } }).backend_apis.size
+      assert_equal 2, Provider::Admin::BackendApisIndexPresenter.new(user: user, params: { search: {} }).backend_apis.size
+      assert_equal 2, Provider::Admin::BackendApisIndexPresenter.new(user: user, params: { search: { query: 'api' } }).backend_apis.size
+      assert_equal 1, Provider::Admin::BackendApisIndexPresenter.new(user: user, params: { search: { query: 'pepe' } }).backend_apis.size
+      assert_equal 0, Provider::Admin::BackendApisIndexPresenter.new(user: user, params: { search: { query: 'asdf' } }).backend_apis.size
     end
   end
 
   test "paginate backend_apis" do
     FactoryBot.create_list(:backend_api, 10, account: provider)
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: { page: 1, per_page: 5 })
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(user: user, params: { page: 1, per_page: 5 })
     assert_equal 5, presenter.backend_apis.size
   end
 
   test '#data includes the data for the index page' do
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(user: user, params: {})
 
     data = presenter.data
     assert data.key? :'new-backend-path'
     assert data.key? :backends
     assert data.key? :'backends-count'
-  end
-
-  test '#dashboard_widget_data includes the data for the Dashboard widget' do
-    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
-
-    data = presenter.dashboard_widget_data
-    assert data.key? :backends
-    assert data.key? :newBackendPath
-    assert data.key? :backendsPath
   end
 end

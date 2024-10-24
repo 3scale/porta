@@ -19,12 +19,11 @@ button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
           | Audience
         - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)
           = render 'developers_navigation', buyers: current_account.buyer_accounts.not_master,
-                                          pending_buyers: current_account.buyers.pending,
-                                          account_plans: current_account.account_plans.not_custom,
-                                          unread_messages_presenter: @unread_messages_presenter,
-                                          applications: current_user.accessible_cinstances.not_bought_by(current_account),
-                                          alerts: current_account.buyer_alerts.unread
-
+                                            pending_buyers: current_account.buyers.pending,
+                                            account_plans: current_account.account_plans.not_custom,
+                                            unread_messages_presenter: @unread_messages_presenter,
+                                            applications: current_user.accessible_cinstances.not_bought_by(current_account),
+                                            alerts: current_account.buyer_alerts.unread
 
       // Account Level Widgets
       = dashboard_widget :new_accounts if can?(:manage, :partners)
@@ -37,8 +36,9 @@ button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
         div.pf-c-content
           h1 APIs
         div.apiContainer
-          div#products-widget data-products-widget=products_presenter.dashboard_widget_data.to_json
-          div#backends-widget data-backends-widget=backend_apis_presenter.dashboard_widget_data.to_json
+          div id="products-widget" data-products-widget=presenter.products_widget_data.to_json
+          - if can?(:read, BackendApiConfig) || can?(:manage, :monitoring)
+            div id="backends-widget" data-backends-widget=presenter.backends_widget_data.to_json
 
   div.Dashboard-events
     section.DashboardStream

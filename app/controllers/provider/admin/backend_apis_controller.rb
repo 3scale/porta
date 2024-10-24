@@ -71,6 +71,6 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   alias update_params backend_api_params
 
   def presenter
-    @presenter ||= Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account, params: params)
+    @presenter ||= Provider::Admin::BackendApisIndexPresenter.new(user: current_user, params: params)
   end
 end
