@@ -115,9 +115,11 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :permitted_for, ->(user = nil) {
     next all unless user
 
+    next none if user.no_services_allowed?
+
     account = user.account
     account_services = (account.provider? ? account : account.provider_account).services
-    self.merge(
+    merge(
       account_services.merge(user.forbidden_some_services? ? where(id: user.member_permission_service_ids) : {})
     )
   }

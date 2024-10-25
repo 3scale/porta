@@ -56,4 +56,14 @@ class Api::ProxyConfigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '{"foo":"bar"}', response.body
   end
+
+  test 'proxy configs index for members with no permissions' do
+    member = FactoryBot.create(:member, account: @provider, state: 'active')
+    logout! && login!(@provider, user: member)
+
+    get admin_service_proxy_configs_path(service_id: service, environment: 'sandbox')
+
+    # TODO: maybe this should be be a :forbidden
+    assert_response :not_found
+  end
 end

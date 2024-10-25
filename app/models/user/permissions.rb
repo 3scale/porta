@@ -80,6 +80,7 @@ module User::Permissions
   # returns [] if no services are enabled, and nil if all (current and future) services are enabled
   def member_permission_service_ids
     return nil if admin? || !services_member_permission
+
     permitted_service_ids = services_member_permission.try(:service_ids) || []
     permitted_service_ids & existing_service_ids
   end
@@ -96,15 +97,23 @@ module User::Permissions
   # Lack of the services section means it is the old permission system where everyone had access
   # to every service. So to limit the scope only for new users, we start adding this permission.
   def has_access_to_all_services?
-    !admin_sections.include?(:services) || admin?
+    admin? || (service_permissions_selected? && member_permission_service_ids.nil?)
+  end
+
+  def no_services_allowed?
+    !service_permissions_selected? || member_permission_service_ids == []
   end
 
   def forbidden_some_services?
     !has_access_to_all_services? && account.provider_can_use?(:service_permissions)
   end
 
+  def service_permissions_selected?
+    (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any?
+  end
+
   def access_to_service_admin_sections?
-    (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any? && accessible_services?
+    service_permissions_selected? && accessible_services?
   end
 
   def reload(*)
