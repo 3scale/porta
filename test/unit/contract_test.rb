@@ -102,11 +102,11 @@ class ContractTest < ActiveSupport::TestCase
     cinstances = FactoryBot.create_list(:simple_cinstance, 2)
     user = FactoryBot.build(:member)
 
-    user.stubs(forbidden_some_services?: false)
+    user.stubs(permitted_services_status: :all)
     permitted_contract_ids = Contract.permitted_for(user).pluck(:id)
     cinstances.each { |contract| assert_includes(permitted_contract_ids, contract.id) }
 
-    user.stubs(forbidden_some_services?: true)
+    user.stubs(permitted_services_status: :selected)
     user.stubs(member_permission_service_ids: [cinstances.first.service_id])
     assert_equal [cinstances.first.id], Contract.permitted_for(user).pluck(:id)
   end

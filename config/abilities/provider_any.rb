@@ -21,7 +21,8 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
     cannot %i[destroy update_role], user
 
     # Services
-    can %i[read show edit update], Service, user.accessible_services.where_values_hash
+    user_accessible_services = user.accessible_services
+    can %i[read show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.is_a? ActiveRecord::NullRelation
 
     #
     # Events

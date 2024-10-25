@@ -46,22 +46,31 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
     assert_equal [], @user.admin_sections.to_a
   end
 
-  # Test for https://app.bugsnag.com/3scale-networks-sl/system/errors/623154afea8d6b0008c052c5
   test '#update member_permission_service_ids' do
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).with(:service_permissions).returns(false)
+    User.any_instance.stubs(:existing_service_ids).returns([1,2,3])
 
     put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: '' } }
     assert_response :redirect
+    assert_nil @user.reload.member_permission_service_ids
 
+    # old way of setting empty services list
+    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: ['[]'] } }
+    assert_response :redirect
+    assert_equal [], @user.reload.member_permission_service_ids
+
+    # this parameter value doesn't change the service ids
+    @user.update(member_permission_service_ids: [1])
     put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: '[]' } }
     assert_response :redirect
+    assert_equal [1], @user.reload.member_permission_service_ids
 
     put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: [''] } }
     assert_response :redirect
+    assert_equal [], @user.reload.member_permission_service_ids
 
     put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: %w[1 2] } }
     assert_response :redirect
+    assert_equal [1, 2], @user.reload.member_permission_service_ids
   end
 
   test '#update with empty user' do
