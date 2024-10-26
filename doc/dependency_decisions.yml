@@ -237,3 +237,9 @@
     :why: License approved by Red Hat
     :versions: []
     :when: 2023-04-14 08:25:18.115879534 Z
+- - :approve
+  - jsonify
+  - :who: Daria Mayorova
+    :why: Public domain license
+    :versions: []
+    :when: 2024-11-12 19:29:30.296279869 Z
