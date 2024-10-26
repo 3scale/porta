@@ -1507,7 +1507,7 @@ en:
       liquid_enabled: "Process Liquid tags and drops?"
 
       api_docs/service:
-        body: 'Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a>, <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a>'
+        body: 'Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a>, <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a>, <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md">3.1</a>.'
         system_name: "Only ASCII letters, numbers, dashes and underscores are allowed.<br/><span style='font-size:90%;color:red'>Warning: With ActiveDocs 1.2 the API will be described in your developer portal as <i>System name: Description</i></span>"
 
       settings:

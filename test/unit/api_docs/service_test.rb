@@ -16,11 +16,11 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   test 'save and skip_swagger_validations' do
     service = account.api_docs_services.new(name: 'this is a random name', body: '{}', skip_swagger_validations: '0')
-    service.specification.expects(:validate!).once
+    service.specification.expects(:validate).once
     service.save
 
     service = account.api_docs_services.new(name: 'and another random name', body: '{}', skip_swagger_validations: '1')
-    service.specification.expects(:validate!).never
+    service.specification.expects(:validate).never
     service.save
   end
 

@@ -93,6 +93,7 @@ gem 'diff-lcs', '~> 1.2'
 gem 'hiredis-client'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'json_schemer'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'kt-paperclip', '~> 7.2'
 gem 'matrix', '~> 0.4.2' # needed only until we upgrade capybara and prawn that list it as a dependency
