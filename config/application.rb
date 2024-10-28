@@ -270,11 +270,13 @@ module System
 
     require 'three_scale/deprecation'
     require 'three_scale/domain_substitution'
+    require 'three_scale/middleware/presigned_downloads'
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/cors'
     require 'three_scale/patterns/service'
 
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
+    config.middleware.insert_before ActionDispatch::Static, ThreeScale::Middleware::PresignedDownloads
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before(Rack::Runtime, Rack::XServedBy) if ENV["DEBUG_X_SERVED_BY"] == "1"
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
