@@ -21,7 +21,7 @@ class Finance::Api::InvoicesController < Finance::Api::BaseController
   # GET /api/invoices/{id}.xml
   def show
     respond_with(invoice) do |format|
-      format.pdf { redirect_to invoice.pdf.url }
+      format.pdf { redirect_to invoice.pdf.expiring_url }
     end
   end
 
