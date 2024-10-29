@@ -2,7 +2,7 @@
 
 Given /^they visit the developer portal in CMS mode(\swith an expired token)?/ do |token_is_expired|
   cms_token = @provider.settings.cms_token!
-  expires_at = Time.now.utc
+  expires_at = Time.now.utc - 30.seconds.to_i
   expires_at += 1.minute.to_i unless token_is_expired
   encrypted_token = ThreeScale::SSO::Encryptor.new(current_account.settings.sso_key, expires_at.to_i).encrypt_token cms_token
 
