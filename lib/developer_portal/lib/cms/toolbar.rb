@@ -48,6 +48,7 @@ module CMS::Toolbar
   rescue StandardError
     # When the token is invalid, I don't think we have to bother the client and BugSnag with an exception
     # Better return an empty token which means "Disable CMS edit mode (hide toolbar)"
+    flash[:error] = 'Disabling CMS edit mode due to an invalid or expired token'
     ''
   end
 
