@@ -2,7 +2,7 @@
 
 class Provider::Admin::CMS::VisitPortalController < Provider::Admin::CMS::BaseController
   # Encrypt the CMS token under a temporary SSO token and redirect to the Developer Portal
-  def create
+  def with_token
     cms_token = current_account.settings.cms_token!
     expires_at = Time.now.utc + 1.minute.to_i
     encrypted_token = ThreeScale::SSO::Encryptor.new(current_account.settings.sso_key, expires_at.to_i).encrypt_token cms_token
