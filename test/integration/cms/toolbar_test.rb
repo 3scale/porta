@@ -9,7 +9,7 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
 
   test 'CMS toolbar rendering' do
     cms_token = @provider.settings.cms_token!
-    expires_at = Time.now.utc + 1.minute.to_i
+    expires_at = Time.now + 1.minute.to_i
     encrypted_token = ThreeScale::SSO::Encryptor.new(@provider.settings.sso_key, expires_at.to_i).encrypt_token cms_token
     host! @provider.internal_domain
 
