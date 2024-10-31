@@ -1,3 +1,6 @@
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 = form.input :http_method, as: :patternfly_select, input_html: { style: 'min-width: 3rem; width: auto;' }, collection: ProxyRule::ALLOWED_HTTP_METHODS, include_blank: false, label: 'Verb'
 = form.input :pattern, as: :patternfly_input
 = form.input :redirect_url, as: :patternfly_input if local_assigns[:include_redirect]
