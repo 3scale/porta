@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Service Management API",
     "description": "API for authorizing and reporting the API traffic, used by the API gateway.",
