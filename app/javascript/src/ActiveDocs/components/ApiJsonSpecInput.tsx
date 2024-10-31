@@ -31,7 +31,7 @@ const ApiJsonSpecInput: FunctionComponent<Props> = ({
       fieldId="api_docs_service_body"
       helperText={(
         <>
-        Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a>, <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a>, <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md">3.1</a>
+        Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a>, or OpenAPI specification <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md">3.1</a>
         </>
       )}
       helperTextInvalid={errors.join(', ')}
