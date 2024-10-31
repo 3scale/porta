@@ -31,13 +31,13 @@ Then "{spec_version} should escape properly the curl string" do |swagger_version
   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
-  assert curl_commmand.has_text?(swagger_version == '1.2' ? 'Authorization: Oauth:\"test\"' : 'Authorization: Oauth:"test"')
+  assert curl_commmand.has_text?(swagger_version[:version] == '1.2' ? 'Authorization: Oauth:\"test\"' : 'Authorization: Oauth:"test"')
 end
 
 When "the ActiveDocs form is submitted with:" do |table|
   if (api_json_spec = table.rows_hash.delete('API JSON Spec'))
-    version = numbered_swagger_version(api_json_spec)
-    fill_in_api_docs_service_body(spec_body_builder(version))
+    swagger_version = transform_swagger_version(api_json_spec)
+    fill_in_api_docs_service_body(spec_body_builder(swagger_version))
   end
   submit_form_with(table)
   @api_docs_service = ApiDocs::Service.last

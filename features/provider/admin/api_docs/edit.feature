@@ -17,6 +17,7 @@ Feature: Audience edit ActiveDocs page
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+      | OAS 3.1         |
 
   Scenario Outline: Navigation from preview
     Given the provider has a <swagger version> spec "Echo API"
@@ -29,6 +30,7 @@ Feature: Audience edit ActiveDocs page
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+      | OAS 3.1         |
 
   Scenario Outline: Update a spec
     Given the provider has a <swagger version> spec "Echo API"
@@ -48,6 +50,7 @@ Feature: Audience edit ActiveDocs page
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+      | OAS 3.1         |
 
   Scenario Outline: Required fields
     Given the provider has a <swagger version> spec "Echo API"
@@ -61,6 +64,7 @@ Feature: Audience edit ActiveDocs page
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+      | OAS 3.1         |
 
   Scenario Outline: API JSON Spec validation
     Given the provider has a <swagger version> spec "Echo API"
@@ -80,3 +84,18 @@ Feature: Audience edit ActiveDocs page
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+      | OAS 3.1         |
+
+  Scenario Outline: API JSON Spec validation with invalid spec
+    Given the provider has a <swagger version> spec "Echo API"
+    When they go to the spec's edit page from Audience context
+    And the ActiveDocs form is submitted with:
+      | API JSON Spec | <invalid swagger version> |
+    Then field "API JSON Spec" has inline error "<error>"
+
+    Examples:
+      | swagger version | invalid swagger version | error |
+      | Swagger 1.2     | invalid Swagger 1.2     | did not contain a required property |
+      | Swagger 2       | invalid Swagger 2       | did not contain a required property |
+      | OAS 3.0         | invalid OAS 3.0         | is missing required properties |
+      | OAS 3.1         | invalid OAS 3.1         | is missing required properties |
