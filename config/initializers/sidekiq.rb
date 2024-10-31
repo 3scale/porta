@@ -12,6 +12,12 @@ def sanitize_redis_config(cfg)
   cfg.slice(*REDIS_PARAMS_WHITELIST)
 end
 
+class Sidekiq::Batch
+  # Override the default value of 30 days with 6 hours
+  remove_const(:BID_EXPIRE_TTL) if defined?(BID_EXPIRE_TTL)
+  const_set(:BID_EXPIRE_TTL, 21_600)
+end
+
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
 Rails.application.config.to_prepare do
