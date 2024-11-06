@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
-Given "they visit the developer portal in CMS mode" do
+Given /^they visit the developer portal in CMS mode(\swith an expired signature)?/ do |token_is_expired|
+  cms_token = @provider.settings.cms_token!
+  expires_at = Time.now.utc.round - 30.seconds
+  expires_at += 1.minute unless token_is_expired
+  signature = CMS::Signature.generate(cms_token, expires_at)
+
   visit access_code_url(host: @provider.external_domain,
                         cms: 'draft',
-                        cms_token: @provider.settings.cms_token!,
+                        expires_at: expires_at.to_i,
+                        signature:,
                         access_code: @provider.site_access_code)
 end
 
