@@ -562,10 +562,10 @@ class ServiceTest < ActiveSupport::TestCase
     member_permission_service_ids = [Service.last.id]
     user.stubs(member_permission_service_ids: member_permission_service_ids)
 
-    user.stubs(forbidden_some_services?: false)
+    user.stubs(permitted_services_status: :all)
     assert_same_elements account.services.pluck(:id), Service.permitted_for(user).pluck(:id)
 
-    user.stubs(forbidden_some_services?: true)
+    user.stubs(permitted_services_status: :selected)
     assert_same_elements member_permission_service_ids, Service.permitted_for(user).pluck(:id)
     assert_same_elements Service.pluck(:id), Service.permitted_for.pluck(:id)
   end

@@ -5,7 +5,7 @@ require 'admin_section'
 module User::Permissions
   extend ActiveSupport::Concern
 
-  ATTRIBUTES = %I[ role member_permission_ids member_permission_service_ids ]
+  ATTRIBUTES = %I[role member_permission_ids member_permission_service_ids].freeze
 
   included do
     has_many :member_permissions, dependent: :destroy, autosave: true
@@ -16,15 +16,12 @@ module User::Permissions
     alias_attribute :allowed_service_ids, :member_permission_service_ids
   end
 
-  #TODO: this is repeated from bcms_hacks plugins because of some loading problem
   def has_permission?(permission)
-    return true  if account.provider? && admin?
+    return true if account.provider? && admin?
     return false if account.buyer?
 
-    # check = Permission.count(:include => {:groups => :users}, :conditions => ["users.id = ? and permissions.name=?", id, permission]) > 0
-
     admin_sections.include?(permission.to_sym).tap do |check|
-      logger.info "~> #{username} has_permission?(#{permission}) => #{check}"
+      logger.debug "~> #{username} has_permission?(#{permission}) => #{check}"
     end
   end
 
@@ -90,24 +87,28 @@ module User::Permissions
   end
 
   def has_access_to_service?(service)
-    services_permission = services_member_permission
-    services_permission && services_permission.has_service?(service) || has_access_to_all_services?
+    services_member_permission&.has_service?(service) || has_access_to_all_services?
   end
 
-  # Lack of the services section means it is the old permission system where everyone had access
-  # to every service. So to limit the scope only for new users, we start adding this permission.
+  # Returns:
+  #   :none - if no services are allowed
+  #   :all - if all services are allowed for the selected service-related permissions
+  #   :selected - if a subset of services is allowed for the selected service-related permissions
+  def permitted_services_status
+    if admin? || (service_permissions_selected? && member_permission_service_ids.nil?)
+      :all
+    elsif service_permissions_selected? && member_permission_service_ids&.any?
+      :selected
+    else
+      :none
+    end
+  end
+
   def has_access_to_all_services?
-    admin? || (service_permissions_selected? && member_permission_service_ids.nil?)
+    permitted_services_status == :all
   end
 
-  def no_services_allowed?
-    !service_permissions_selected? || member_permission_service_ids == []
-  end
-
-  def forbidden_some_services?
-    !has_access_to_all_services? && account.provider_can_use?(:service_permissions)
-  end
-
+  # Returns whether the user has access to any service-related permissions (partners, plans or monitoring)
   def service_permissions_selected?
     (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any?
   end

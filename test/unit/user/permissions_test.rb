@@ -68,19 +68,19 @@ class User::PermissionsTest < ActiveSupport::TestCase
   end
 
   test 'member_permission_service_ids=' do
-    user = FactoryBot.build_stubbed(:simple_user, admin_sections: [:services])
+    user = FactoryBot.create(:simple_user, admin_sections: [:partners])
     user.stubs(:existing_service_ids).returns([42])
 
-    refute user.has_access_to_service?(42)
+    assert user.has_access_to_service?(42)
     assert_equal 1, user.admin_sections.size
 
-    user.member_permission_service_ids = [42]
-    assert user.has_access_to_service?(42)
-    assert_equal Set[:services], user.admin_sections
+    user.update(member_permission_service_ids: [""]) # FIXME: []
+    assert_not user.has_access_to_service?(42)
+    assert_equal Set[:partners, :services], user.admin_sections
 
-    user.member_permission_service_ids = nil
+    user.update(member_permission_service_ids: nil)
     assert user.has_access_to_service?(42)
-    assert_equal 0, user.admin_sections.size
+    assert_equal Set[:partners], user.admin_sections
   end
 
   test 'member_permission_service_ids= filters the services list before saving' do
@@ -118,38 +118,19 @@ class User::PermissionsTest < ActiveSupport::TestCase
 
   test 'has_access_to_all_services?' do
     user = FactoryBot.build_stubbed(:simple_user)
+    assert_not user.has_access_to_all_services?
+
+    user.member_permission_ids = [:portal]
+    assert_not user.has_access_to_all_services?
+
+    user.member_permission_ids = [:plans]
     assert user.has_access_to_all_services?
 
-    user.admin_sections = [:services]
-    refute user.has_access_to_all_services?
+    user.member_permission_service_ids = [''] # FIXME: []
+    assert_not user.has_access_to_all_services?
 
-    # updating admin section doesn't remove service permissions
-    user.admin_sections = [:plans]
-    refute user.has_access_to_all_services?
-
-    user.admin_sections = []
     user.stubs(:admin?).returns(true)
     assert user.has_access_to_all_services?
-  end
-
-  test '#forbidden_some_services?' do
-    user = FactoryBot.build(:simple_user)
-
-    user.stubs(has_access_to_all_services?: true)
-    user.account.stubs(provider_can_use?: true)
-    refute user.forbidden_some_services?
-
-    user.stubs(has_access_to_all_services?: true)
-    user.account.stubs(provider_can_use?: false)
-    refute user.forbidden_some_services?
-
-    user.stubs(has_access_to_all_services?: false)
-    user.account.stubs(provider_can_use?: false)
-    refute user.forbidden_some_services?
-
-    user.stubs(has_access_to_all_services?: false)
-    user.account.stubs(provider_can_use?: true)
-    assert user.forbidden_some_services?
   end
 
   test '#access_to_service_admin_sections? when no accessible services' do
