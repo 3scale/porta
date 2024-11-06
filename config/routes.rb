@@ -354,6 +354,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
 
         end
+        get 'visit_portal' => 'visit_portal#with_token'
       end
 
       namespace :user do
