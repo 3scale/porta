@@ -59,11 +59,12 @@ class SSOToken
   # however, if the provider is also master, host needs to be the provider's admin domain for which we create the URL
   #
   #
-  def sso_url! host = nil
+  def sso_url!(host: nil, port: nil)
     save if new_record?
 
     params= {
       host: host || account.external_domain,
+      port: port,
       protocol: protocol,
       token: encrypted_token,
       expires_at: expires_at.to_i,

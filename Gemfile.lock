@@ -705,8 +705,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.3.6)
-      strscan
+    rexml (3.3.9)
     riddle (2.4.3)
     roar (1.1.1)
       representable (~> 3.0)
@@ -856,7 +855,6 @@ GEM
     stripe (5.28.0)
     strong_migrations (0.6.8)
       activerecord (>= 5)
-    strscan (3.1.0)
     svg-graph (2.2.1)
     sys-uname (1.2.3)
       ffi (~> 1.1)
