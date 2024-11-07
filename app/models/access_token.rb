@@ -159,4 +159,8 @@ class AccessToken < ApplicationRecord
   def self.random_id
     SecureRandom.hex(32)
   end
+
+  def expired?
+    expires_at.present? && expires_at < Time.now.utc
+  end
 end
