@@ -19,8 +19,8 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
   class AccessTokenTest < Admin::Api::ApplicationPlansTest
     def setup
       super
-      user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
-      @token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+      @user = FactoryBot.create(:member, account: @provider, member_permissions_ids: %i[partners plans], member_permission_service_ids: [])
+      @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
 
       User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     end
@@ -31,20 +31,18 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     end
 
     test 'index with access to no services' do
-      User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
       get admin_api_service_application_plans_path(@service), params: params
       assert_response :not_found
     end
 
     test 'index with access to some service' do
-      User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+      @user.member_permission_service_ids = [@service.id]
       get admin_api_service_application_plans_path(@service), params: params
       assert_response :success
     end
 
     test 'index' do
-      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      User.any_instance.expects(:member_permission_service_ids).never
+      @user.member_permission_service_ids = nil
       get admin_api_service_application_plans_path(@service), params: params
       assert_response :success
     end
