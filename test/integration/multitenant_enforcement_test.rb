@@ -14,6 +14,7 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
     get admin_service_application_plans_path(service)
   rescue => exception
+    assert_predicate exception, :cause
     assert_instance_of ThreeScale::Middleware::Multitenant::TenantChecker::TenantLeak, exception.cause
   end
 
@@ -54,11 +55,31 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
     service.update_column(:tenant_id, @provider.tenant_id)
     plan.update_column(:tenant_id, @provider.tenant_id + 1)
     token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
-    AccessToken.new.value
     get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: token)
     assert_response :success
     put admin_api_service_application_plan_path(service_id: service.id, id: plan.id, format: :json), params: {access_token: token, description: "desc1"}
     assert_response :success
+  end
+
+  test "multitenant master can retrieve from multiple tenants by http basic auth" do
+    host! master_account.external_admin_domain
+    service = master_account.first_service!
+    plan = FactoryBot.create(:application_plan, issuer: service)
+    service.update_column(:tenant_id, @provider.tenant_id)
+    plan.update_column(:tenant_id, @provider.tenant_id + 1)
+
+    token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+    auth_pair = []
+    auth_pair << ["", token]
+    auth_pair << [token, ""]
+    auth_pair << ["", master_account.provider_key]
+    auth_pair << [master_account.provider_key, ""]
+
+    auth_pair.each do |pair|
+      basic_auth_str = ActionController::HttpAuthentication::Basic.encode_credentials(*pair)
+      get admin_api_service_application_plans_path(service_id: service.id, format: :json), headers: { 'HTTP_AUTHORIZATION' => basic_auth_str }
+      assert_response :success
+    end
   end
 
   test "multitenant master can retrieve from multiple tenants by provider key" do
