@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_26_111800) do
+ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2024_07_26_111800) do
     t.integer "tenant_id", precision: 38
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
+    t.datetime "expires_at", precision: 6
   end
 
   create_table "accounts", force: :cascade do |t|
