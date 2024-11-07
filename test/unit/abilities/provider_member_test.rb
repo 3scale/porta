@@ -39,7 +39,7 @@ module Abilities
       @member.member_permission_ids = ['partners']
       assert_can ability, :show, event
 
-      @member.member_permission_service_ids = [''] # FIXME: []
+      @member.member_permission_service_ids = []
       assert_cannot ability, :show, event
 
       @member.member_permission_service_ids = [service.id]

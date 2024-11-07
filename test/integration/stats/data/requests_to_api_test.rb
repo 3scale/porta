@@ -42,7 +42,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
 
     # the service is not accessible for the member
-    member.update(member_permission_ids: [:monitoring], member_permission_service_ids: [""]) # FIXME: []
+    member.update(member_permission_ids: [:monitoring], member_permission_service_ids: [])
     get usage_stats_data_applications_path(@application, format: :json), params: params
     assert_response :forbidden
 

@@ -119,7 +119,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal [service.id], member.accessible_services.map(&:id)
 
-    member.member_permission_service_ids = [''] # FIXME: []
+    member.member_permission_service_ids = []
 
     assert_equal [], member.accessible_services.map(&:id)
   end

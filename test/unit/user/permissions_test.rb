@@ -74,7 +74,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.has_access_to_service?(42)
     assert_equal 1, user.admin_sections.size
 
-    user.update(member_permission_service_ids: [""]) # FIXME: []
+    user.update(member_permission_service_ids: [])
     assert_not user.has_access_to_service?(42)
     assert_equal Set[:partners, :services], user.admin_sections
 
@@ -126,7 +126,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
     user.member_permission_ids = [:plans]
     assert user.has_access_to_all_services?
 
-    user.member_permission_service_ids = [''] # FIXME: []
+    user.member_permission_service_ids = []
     assert_not user.has_access_to_all_services?
 
     user.stubs(:admin?).returns(true)

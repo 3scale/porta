@@ -109,15 +109,13 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     get admin_service_backend_usages_path(service)
     assert_response :success
 
-    member.member_permission_service_ids = []
-    member.save!
+    member.update(member_permission_service_ids: [])
 
     get admin_service_backend_usages_path(service)
     assert_response :success
 
     other_service = FactoryBot.create(:simple_service, account: provider)
-    member.member_permission_service_ids = [other_service.id]
-    member.save!
+    member.update(member_permission_service_ids: [other_service.id])
 
     get admin_service_backend_usages_path(service)
     assert_response :not_found

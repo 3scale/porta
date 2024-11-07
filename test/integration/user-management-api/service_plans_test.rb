@@ -18,7 +18,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'show (access_token)' do
-    user    = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [""]) # FIXME: []
+    user    = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [])
     token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service = @provider.default_service
     plan    = service.service_plans.first

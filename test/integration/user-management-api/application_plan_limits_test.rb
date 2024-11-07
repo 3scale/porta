@@ -16,7 +16,7 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
   class AccessTokenTest < Admin::Api::ApplicationPlanLimitsTest
     def setup
       super
-      @user = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [""]) # FIXME: []
+      @user = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [])
       @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
 
       User.any_instance.stubs(:has_access_to_all_services?).returns(false)

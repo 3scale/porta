@@ -25,7 +25,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [""]) # FIXME: []
+    user  = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 

@@ -84,7 +84,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_match 'Alaska Application App', response.body
 
-      user.update(member_permission_service_ids: [""]) # FIXME: [])
+      user.update(member_permission_service_ids: [])
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_not_match 'Alaska Application App', response.body

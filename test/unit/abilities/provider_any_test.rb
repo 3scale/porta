@@ -41,7 +41,7 @@ module Abilities
 
       cinstance_events.each do |cinstance_event|
         user.member_permission_ids = [:partners]
-        user.member_permission_service_ids = [""] # FIXME: []
+        user.member_permission_service_ids = []
 
         assert_cannot ability, :show, cinstance_event
 
@@ -92,7 +92,7 @@ module Abilities
 
       test 'cannot show AlertRelatedEvent when user has :monitoring and does not have access to the service' do
         user.member_permission_ids = [:monitoring]
-        user.member_permission_service_ids = [""] # FIXME: []
+        user.member_permission_service_ids = []
 
         assert_cannot ability, :show, limit_violation_reached_provider_event
       end

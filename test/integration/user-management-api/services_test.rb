@@ -14,7 +14,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [""]) # FIXME: []
+    user = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_service_path(@service)

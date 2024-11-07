@@ -26,7 +26,7 @@ class Admin::Api::ApplicationPlanPricingRulesTest < ActionDispatch::IntegrationT
     end
 
     test 'index with access to no services' do
-      @user.update(member_permission_service_ids: [""])
+      @user.update(member_permission_service_ids: [])
       get admin_api_application_plan_pricing_rules_path(@app_plan), params: params
       assert_response :not_found
     end

@@ -26,7 +26,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     end
 
     test 'index with access to no services' do
-      @user.update(member_permission_service_ids: [""]) # FIXME: []
+      @user.update(member_permission_service_ids: [])
       get admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: params
       assert_response :not_found
     end
