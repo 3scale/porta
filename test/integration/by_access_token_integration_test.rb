@@ -59,4 +59,27 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     get admin_api_registry_policies_path(format: :json), headers: auth_headers
     assert_response :forbidden
   end
+
+  test 'the token has no expiration date' do
+      get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+
+      assert_response :success
+    end
+
+  test 'the token has a future expiration date' do
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management', expires_at: 1.day.from_now.utc.iso8601)
+
+    get admin_api_accounts_path(format: :xml), params: { access_token: token.value }
+
+    assert_response :success
+  end
+
+  test 'the token has a past expiration date' do
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
+    token.update_columns(expires_at: 1.minute.ago)
+
+    get admin_api_accounts_path(format: :xml), params: { access_token: token.value }
+
+    assert_response :forbidden
+  end
 end

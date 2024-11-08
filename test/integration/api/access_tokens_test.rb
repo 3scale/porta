@@ -50,6 +50,18 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'create accepts an expiration time' do
+    access_token = FactoryBot.create(:access_token, owner: @admin, scopes: %w[account_management])
+
+    user_id = @admin.id
+    expires_at = 1.day.from_now.utc.iso8601
+    assert_difference(AccessToken.method(:count), 1) do
+      post_request(user_id, {access_token: access_token.value}, { expires_at: })
+      assert_response :created, "Not created with response body #{response.body}"
+    end
+    assert_equal expires_at, AccessToken.last!.expires_at.iso8601
+  end
+
   test 'create with provider_key can create for any user of that account' do
     FactoryBot.create(:cinstance, service: master_account.default_service, user_account: @provider)
 
