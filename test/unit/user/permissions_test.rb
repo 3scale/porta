@@ -74,13 +74,25 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.has_access_to_service?(42)
     assert_equal 1, user.admin_sections.size
 
-    user.update(member_permission_service_ids: [])
-    assert_not user.has_access_to_service?(42)
-    assert_equal Set[:partners, :services], user.admin_sections
+    # all values have the same effect
+    [[], [""], ["[]"]].each do |service_ids_empty_value|
+      user.update(member_permission_service_ids: service_ids_empty_value)
+      assert_not user.has_access_to_service?(42)
+      assert_equal Set[:partners, :services], user.admin_sections
+      assert_equal [], user.member_permission_service_ids
+    end
 
     user.update(member_permission_service_ids: nil)
     assert user.has_access_to_service?(42)
     assert_equal Set[:partners], user.admin_sections
+
+    # when setting numeric values and empty value, empty values are ignored
+    [[42, ''], [42, "[]"]].each do |service_ids|
+      user.update(member_permission_service_ids: service_ids)
+      assert user.has_access_to_service?(42)
+      assert_equal Set[:partners, :services], user.admin_sections
+      assert_equal [42], user.member_permission_service_ids
+    end
   end
 
   test 'member_permission_service_ids= filters the services list before saving' do
@@ -131,6 +143,44 @@ class User::PermissionsTest < ActiveSupport::TestCase
 
     user.stubs(:admin?).returns(true)
     assert user.has_access_to_all_services?
+  end
+
+  test '#permitted_services_status' do
+    user = FactoryBot.build_stubbed(:simple_user)
+    user.stubs(:existing_service_ids).returns([42])
+
+    assert_equal :none, user.permitted_services_status
+
+    user.member_permission_ids = [:portal]
+    assert_equal :none, user.permitted_services_status
+
+    user.member_permission_ids = [:plans]
+    assert_equal :all, user.permitted_services_status
+
+    user.member_permission_service_ids = [24]
+    assert_equal :none, user.permitted_services_status
+
+    user.member_permission_service_ids = [42]
+    assert_equal :selected, user.permitted_services_status
+
+    user.member_permission_service_ids = []
+    assert_equal :none, user.permitted_services_status
+
+    user.stubs(:admin?).returns(true)
+    assert_equal :all, user.permitted_services_status
+  end
+
+  test '#service_permissions_selected?' do
+    user = FactoryBot.build_stubbed(:simple_user)
+    %i[partners plans monitoring].each do |section|
+      user.stubs(:member_permission_ids).returns([section])
+      assert user.service_permissions_selected?
+    end
+
+    %i[portal finance settings policy_registry].each do |section|
+      user.stubs(:member_permission_ids).returns([section])
+      assert_not user.service_permissions_selected?
+    end
   end
 
   test '#access_to_service_admin_sections? when no accessible services' do
