@@ -6,8 +6,19 @@ Feature: Account Settings > Users > SSO Integrations > New
 
   Scenario: Navigation
     Given they go to the users sso integrations page
-    When they follow "Create a new SSO integration"
+    When they follow "Add a SSO integration"
     Then the current page is the new sso integration page
+
+  Scenario: Navigation when there is an integration
+    Given a red hat single sign-on integration
+    And they go to the users sso integrations page
+    Then they should not see "Add a SSO integration"
+    And there should be a link to "Create a new SSO integration"
+
+  Scenario: Empty state
+    Given they go to the users sso integrations page
+    Then they should see "No SSO integrations"
+    And there should be a link to "Add a SSO integration"
 
   Scenario: Create RH SSO new integration
     Given they go to the new sso integration page
