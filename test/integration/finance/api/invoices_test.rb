@@ -144,7 +144,7 @@ module Finance::Api
 
         assert_includes redirect_url, "/system/#{@provider.name}/invoices/#{@invoice.id}/pdfs/original/invoice-"
 
-        uri = URI.parse(response.header["Location"])
+        uri = URI.parse(redirect_url)
         get "#{uri.path}?#{uri.query}"
 
         assert_response :ok
