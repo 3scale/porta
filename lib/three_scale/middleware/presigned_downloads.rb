@@ -16,7 +16,7 @@ module ThreeScale
         def requires_signing?(path)
           # for the used separator see https://github.com/rack/rack/pull/2257
           # question mark on first separator is paranoia of getting a relative path somehow
-          invoices_re = %r{#{RE_SEPARATOR}?system#{RE_SEPARATOR}.*#{RE_SEPARATOR}invoices#{RE_SEPARATOR}}
+          invoices_re = /#{RE_SEPARATOR}?system#{RE_SEPARATOR}.*#{RE_SEPARATOR}invoices#{RE_SEPARATOR}/
           path.start_with? invoices_re
         end
 
