@@ -26,7 +26,11 @@ module BackgroundDeletion
     end
 
     def class_name
-      options[:class_name].presence || name.to_s.singularize.classify
+      @class_name ||= options[:class_name].presence || name.to_s.singularize.classify
+    end
+
+    def klass
+      @klass ||= class_name.constantize
     end
 
     def background_destroy_method
