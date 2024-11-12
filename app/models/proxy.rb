@@ -13,6 +13,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
+  self.background_deletion_method = :delete
+  self.background_deletion_scope = :non_deleted
+
+  scope :non_deleted, -> { where.not(state: :deleted) }
 
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
