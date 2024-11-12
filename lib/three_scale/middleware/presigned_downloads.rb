@@ -5,6 +5,9 @@ module ThreeScale
     class PresignedDownloads
       RE_SEPARATOR = ::File::SEPARATOR == "/" ? "/" : "[#{Regexp.escape(::File::SEPARATOR)}/]"
       TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S%Z"
+      PAST_TIME = Time.new(1970)
+
+      private_constant :PAST_TIME
 
       delegate *%i[requires_signing? good_signature? signature_at to_time], to: :class, private: true
 
@@ -42,7 +45,7 @@ module ThreeScale
         end
 
         def to_time(timestamp)
-          Time.strptime(timestamp, TIMESTAMP_FORMAT) rescue Time.new(1970)
+          Time.strptime(timestamp, TIMESTAMP_FORMAT) rescue PAST_TIME
         end
       end
 
