@@ -4,6 +4,7 @@ module ThreeScale
   module Middleware
     class PresignedDownloads
       RE_SEPARATOR = ::File::SEPARATOR == "/" ? "/" : "[#{Regexp.escape(::File::SEPARATOR)}/]"
+      TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S%Z"
 
       delegate *%i[requires_signing? good_signature? signature_at to_time], to: :class, private: true
 
@@ -28,7 +29,7 @@ module ThreeScale
         end
 
         def sign_at(path, expires_at)
-          expires_timestamp = to_timestamp(expires_at)
+          expires_timestamp = expires_at.strftime(TIMESTAMP_FORMAT)
           signature = signature_at(path, expires_at)
           params = { "3scale-Expires" => expires_timestamp, "3scale-Signature" => signature }.to_param
 
@@ -40,12 +41,8 @@ module ThreeScale
           verifier.generate(path.b, **signing_options).split("--").last
         end
 
-        def to_timestamp(time)
-          time.iso8601.gsub(/[-:]/, "")
-        end
-
         def to_time(timestamp)
-          Time.strptime(timestamp, "%Y%m%dT%H%M%S%Z") rescue Time.new(1970)
+          Time.strptime(timestamp, TIMESTAMP_FORMAT) rescue Time.new(1970)
         end
       end
 
