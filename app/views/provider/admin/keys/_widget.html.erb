@@ -12,26 +12,28 @@
 
   <% if cinstance.backend_version.app_keys_allowed? %>
     <%- can_add_keys = cinstance.application_keys.can_add? %>
-    <table class="list">
-      <tr>
-        <td colspan="2" id="app-keys-operations" <%= "style=display:none;" unless can_add_keys %>>
-          <% if cinstance.custom_keys_enabled? %>
-            <%= link_to 'Add Custom key', new_provider_admin_application_key_path(cinstance),
-                                          class: 'fancybox action add',
-                                          'data-autodimensions' => 'true',
-                                          title: 'Add Custom key' %>
-          <% end %>
-          <%= link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
-                                        method: :post,
-                                        remote: true,
-                                        class: 'create_key add action' %>
-        </td>
-
-        <td colspan="2" id="app-keys-limit-warning" <%= "style=display:none;" if can_add_keys %>>
-          Keys limit reached.
-        </td>
-      </tr>
-    </table>
+    <div class="pf-c-card__body">
+      <table class="list no-border">
+        <tr>
+          <td colspan="2" id="app-keys-operations" <%= "style=display:none;" unless can_add_keys %>>
+            <% if cinstance.custom_keys_enabled? %>
+              <%= link_to 'Add Custom key', new_provider_admin_application_key_path(cinstance),
+                                            class: 'fancybox action add',
+                                            'data-autodimensions' => 'true',
+                                            title: 'Add Custom key' %>
+            <% end %>
+            <%= link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
+                                          method: :post,
+                                          remote: true,
+                                          class: 'create_key add action' %>
+          </td>
+  
+          <td colspan="2" id="app-keys-limit-warning" <%= "style=display:none;" if can_add_keys %>>
+            Keys limit reached.
+          </td>
+        </tr>
+      </table>
+    </div>
   <% end %>
 
 <% elsif cinstance.backend_version.oauth? %>
