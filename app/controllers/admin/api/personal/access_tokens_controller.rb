@@ -39,6 +39,6 @@ class Admin::Api::Personal::AccessTokensController < Admin::Api::Personal::BaseC
   end
 
   def access_token_params
-    params.require(:token).permit(:name, :permission, scopes: [])
+    params.require(:token).permit(:name, :permission, :expires_at, scopes: [])
   end
 end
