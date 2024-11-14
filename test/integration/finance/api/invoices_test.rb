@@ -136,8 +136,19 @@ module Finance::Api
       end
 
       test 'redirect when asked for PDF' do
+        @invoice.generate_pdf!
         get "/api/#{@context}invoices/#{@invoice.id}.pdf?provider_key=#{@key}"
         assert_response :found
+
+        redirect_url = response.header["Location"]
+
+        assert_includes redirect_url, "/system/#{@provider.name}/invoices/#{@invoice.id}/pdfs/original/invoice-"
+
+        uri = URI.parse(redirect_url)
+        get "#{uri.path}?#{uri.query}"
+
+        assert_response :ok
+        assert_equal @invoice.pdf.size, response.body.size
       end
 
       test 'filter by month' do
