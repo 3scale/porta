@@ -6,8 +6,6 @@ module User::Permissions
   extend ActiveSupport::Concern
 
   ATTRIBUTES = %I[role member_permission_ids member_permission_service_ids].freeze
-  # The value that can be used for setting the member permission service ids to empty array
-  EMPTY_VALUE = "[]"
 
   included do
     has_many :member_permissions, dependent: :destroy, autosave: true
@@ -60,7 +58,8 @@ module User::Permissions
 
   def member_permission_service_ids=(service_ids)
     if service_ids.is_a? Array
-      service_ids = (service_ids.compact_blank - [EMPTY_VALUE]).map(&:to_i)
+      # remove all non-integer values
+      service_ids = service_ids.map { Integer(_1, exception: false) }.compact_blank
       member_permission = services_member_permission || member_permissions.build(admin_section: :services)
       member_permission.service_ids = service_ids & existing_service_ids
     elsif service_ids.blank?

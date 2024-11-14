@@ -75,7 +75,7 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert_equal 1, user.admin_sections.size
 
     # all values have the same effect
-    [[], [""], ["[]"]].each do |service_ids_empty_value|
+    [[], [""], ["[]"], ["xyz"]].each do |service_ids_empty_value|
       user.update(member_permission_service_ids: service_ids_empty_value)
       assert_not user.has_access_to_service?(42)
       assert_equal Set[:partners, :services], user.admin_sections
@@ -93,6 +93,12 @@ class User::PermissionsTest < ActiveSupport::TestCase
       assert_equal Set[:partners, :services], user.admin_sections
       assert_equal [42], user.member_permission_service_ids
     end
+
+    # if 0 is a valid service_id, it can be set as an allowed service
+    user.stubs(:existing_service_ids).returns([0, 42])
+    user.update(member_permission_service_ids: ['0'])
+    assert user.has_access_to_service?(0)
+    assert_equal [0], user.member_permission_service_ids
   end
 
   test 'member_permission_service_ids= filters the services list before saving' do
