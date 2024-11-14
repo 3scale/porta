@@ -118,6 +118,17 @@ const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {
   }
 }
 
+const UncheckSendEmptyValuePlugin: SwaggerUIPlugin = () => {
+  return {
+    wrapComponents: {
+      ParameterIncludeEmpty: (Original: any, {React}: any) => (props: { isIncludedOptions: { defaultValue: boolean } }) => {
+        props.isIncludedOptions.defaultValue = false;
+        return React.createElement(Original, props)
+      }
+    }
+  }
+}
+
 export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, accountDataUrl: string): Promise<void> => {
   const apiSpecs: ApiDocsServices = await fetchData<ApiDocsServices>(apiDocsPath)
 
@@ -134,7 +145,7 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
       ]
     })
   })
