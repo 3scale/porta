@@ -34,7 +34,7 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
     assert_same_elements [
       "<script src=\"/packs/stats.js\"></script>",
-      "<link rel=\"stylesheet\" media=\"screen\" href=\"/packs/stats.css\" />"
+      "<link rel=\"stylesheet\" href=\"/packs/stats.css\" />"
     ], javascript_include_tag('stats.js').split(/\n/)
 
     assert_same_elements [

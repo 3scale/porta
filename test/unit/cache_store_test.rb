@@ -27,7 +27,8 @@ class CacheStoreTest < ActionView::TestCase
     cache = ActiveSupport::Cache.lookup_store(*System::Application.cache_store_config)
 
     assert_equal ActiveSupport::Cache::MemoryStore, cache.class
-    assert_equal options, cache.options
+    assert cache.options[:compress]
+    assert_equal 5000, cache.options[:size]
   end
 
   test ':file_store can be set as cache store' do
@@ -102,7 +103,7 @@ class CacheStoreTest < ActionView::TestCase
     cache = ActiveSupport::Cache.lookup_store(*System::Application.cache_store_config)
 
     assert_equal ActiveSupport::Cache::MemCacheStore, cache.class
-    assert_equal({ digest_class: Digest::SHA256 }, cache.options)
+    assert_equal Digest::SHA256, cache.options[:digest_class]
   end
 
   test ':mem_cache_store allows overwriting the default digest algorithm' do
@@ -117,7 +118,7 @@ class CacheStoreTest < ActionView::TestCase
     cache = ActiveSupport::Cache.lookup_store(*System::Application.cache_store_config)
 
     assert_equal ActiveSupport::Cache::MemCacheStore, cache.class
-    assert_equal options, cache.options
+    assert_equal Digest::SHA1, cache.options[:digest_class]
   end
 
   test ':redis_cache_store can be set as cache store' do
