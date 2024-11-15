@@ -8,9 +8,9 @@ class ModelsTest < ActiveSupport::TestCase
   test 'validate length of strings for all models to do not raise an error reaching DB' do
     exceptions = {
       'FieldsDefinition' => %w[target], 'AuthenticationProvider' => %w[account_type], 'Feature' => %w[featurable_type scope], 'Message' => %w[state],
-      'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name], 'ProxyConfig' => %w[hosts],
+      'UsageLimit' => %w[period plan_type], 'Policy' => %w[identifier], 'ProxyRule' => %w[metric_system_name owner_type], 'ProxyConfig' => %w[hosts],
       'Proxy' => %w[endpoint sandbox_endpoint], 'OIDCConfiguration' => %w[oidc_configurable_type], 'Invitation' => %w[token],
-      'Settings' => Switches::SWITCHES.map { |switch| "#{switch}_switch" },
+      'Settings' => Switches::SWITCHES.map { |switch| "#{switch}_switch" }, 'Metric' => %w[owner_type],
       'Invoice' => %w[pdf_file_name pdf_content_type state friendly_id fiscal_code vat_code currency creation_type], 'DeletedObject' => %w[owner_type object_type],
       'Onboarding' => %w[wizard_state bubble_api_state bubble_metric_state bubble_deployment_state bubble_mapping_state bubble_limit_state],
       'FeaturesPlan' => %w[plan_type], 'LogEntry' => %w[description], 'Notification' => %w[event_id], 'PlanMetric' => %w[plan_type],
@@ -21,7 +21,8 @@ class ModelsTest < ActiveSupport::TestCase
       'LatestForumPostsPortlet' => %w[content_type], 'TableOfContentsPortlet' => %w[content_type], 'AuthenticationProvider::GitHub' => %w[branding_state account_type],
       'AuthenticationProvider::Keycloak' => %w[account_type], 'AuthenticationProvider::Auth0' => %w[account_type], 'AuthenticationProvider::Custom' => %w[account_type],
       'AuthenticationProvider::ServiceDiscoveryProvider' => %w[account_type], 'AuthenticationProvider::RedhatCustomerPortal' => %w[account_type],
-      'Account' => %w[credit_card_auth_code credit_card_authorize_net_payment_profile_token credit_card_partial_number]
+      'Account' => %w[credit_card_auth_code credit_card_authorize_net_payment_profile_token credit_card_partial_number],
+      'Annotation' => %w[annotated_type], 'Plan' => %w[issuer_type], 'ApplicationPlan' => %w[issuer_type], 'ServicePlan' => %w[issuer_type], 'AccountPlan' => %w[issuer_type]
     }
 
     Rails.application.eager_load!

@@ -135,6 +135,11 @@ module ProxyConfigAffectingChanges
         super
       end
 
+      def update_columns(attributes)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.intersect?(attributes.keys.map(&:to_s))
+        super
+      end
+
       def write_attribute(attr_name, value)
         track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
         super
@@ -146,11 +151,6 @@ module ProxyConfigAffectingChanges
       end
 
       protected
-
-      def write_attribute_without_type_cast(attr_name, value)
-        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
-        super
-      end
 
       def write_store_attribute(store_attribute, key, value)
         track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(store_attribute.to_s)
