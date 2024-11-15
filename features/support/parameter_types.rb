@@ -405,8 +405,8 @@ ParameterType(
 
 ParameterType(
   name: 'spec_version',
-  regexp: /Swagger 1.2|Swagger 2|OAS 3.0/,
-  transformer: ->(version) { numbered_swagger_version(version) }
+  regexp: /(invalid)?\s?(Swagger 1.2|Swagger 2|OAS 3.0|OAS 3.1)/,
+  transformer: ->(invalid, version_name) { { version: numbered_swagger_version(version_name), invalid: invalid.present? } }
 )
 
 ParameterType(

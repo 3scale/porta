@@ -33,7 +33,7 @@ namespace :swagger do
     scope.find_each do |swagger|
       next if swagger.specification.valid?
       invalids += 1
-      p "#{swagger.id}, #{swagger.account.id}, #{swagger.specification.validate!.count}"
+      p "#{swagger.id}, #{swagger.account.id}, #{swagger.specification.validate.count}"
     end
 
     puts "Invalids #{invalids} from #{scope.count}"

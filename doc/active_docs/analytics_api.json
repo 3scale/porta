@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Analytics API",
     "description": "API for getting the API traffic data.",
