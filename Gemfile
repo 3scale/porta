@@ -24,7 +24,7 @@ gem 'protected_attributes_continued', '~> 1.8.2'
 
 gem 'rails-observers'
 
-gem 'strong_migrations', '~> 0.6.8'
+gem 'strong_migrations', '~> 2.1.0'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'

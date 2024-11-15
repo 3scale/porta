@@ -869,8 +869,8 @@ GEM
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
     stripe (5.28.0)
-    strong_migrations (0.6.8)
-      activerecord (>= 5)
+    strong_migrations (2.1.0)
+      activerecord (>= 6.1)
     svg-graph (2.2.1)
     sys-uname (1.2.3)
       ffi (~> 1.1)
@@ -1116,7 +1116,7 @@ DEPENDENCIES
   state_machines-activerecord (~> 0.8)
   statsd-ruby
   stripe (~> 5.28.0)
-  strong_migrations (~> 0.6.8)
+  strong_migrations (~> 2.1.0)
   svg-graph
   swagger-ui_rails!
   swagger-ui_rails2!
