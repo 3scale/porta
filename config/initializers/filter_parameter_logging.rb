@@ -1,7 +1,8 @@
-# frozen_string_literal: true
 # Be sure to restart your server when you modify this file.
 
-# Configure sensitive parameters which will be filtered from the log file.
+# Configure parameters to be filtered from the log file. Use this to limit dissemination of
+# sensitive information. See the ActiveSupport::ParameterFilter documentation for supported
+# notations and behaviors.
 Rails.application.config.filter_parameters += %i[activation_code cms_token credit_card credit_card_auth_code
                                                  credit_card_authorize_net_payment_profile_token credit_card_expires_on
                                                  credit_card_partial_number crypted_password janrain_api_key lost_password_token

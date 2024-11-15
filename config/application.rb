@@ -3,7 +3,7 @@
 require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v6.1.7.3/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
