@@ -46,7 +46,7 @@ module Apicast
         ]
       }
 
-      ActiveRecord::Associations::Preloader.new.preload(provider,  {services: [:service_tokens, {backend_api_configs: :backend_api, proxy: [:gateway_configuration, {proxy_rules: :metric}]}]})
+      ActiveRecord::Associations::Preloader.new(records: Array(provider), associations: {services: [:service_tokens, {backend_api_configs: :backend_api, proxy: [:gateway_configuration, {proxy_rules: :metric}]}]}).call
       provider.as_json(hash).merge(timestamp: Time.now.utc.iso8601)
     end
 
