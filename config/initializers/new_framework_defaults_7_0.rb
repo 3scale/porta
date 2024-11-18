@@ -11,7 +11,7 @@
 
 # `button_to` view helper will render `<button>` element, regardless of whether
 # or not the content is passed as the first argument or as a block.
-Rails.application.config.action_view.button_to_generates_button_tag = true
+Rails.application.config.action_view.button_to_generates_button_tag = false # TODO: Review whether we only need to fix the tests, or also fix the views/styles to enable this
 
 # `stylesheet_link_tag` view helper will not render the media attribute by default.
 Rails.application.config.action_view.apply_stylesheet_media_default = false
