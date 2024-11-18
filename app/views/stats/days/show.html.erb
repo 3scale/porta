@@ -6,7 +6,7 @@
 <span class="stats_close_button" title="Close"></span>
 
 <% @data.each do |date, data| %>
-  <h4><%= date.to_date.to_s(:long) %></h4>
+  <h4><%= date.to_date.to_fs(:long) %></h4>
 
   <%= area_line_chart(data, :class => 'small_chart',
                       :line_color => '4477aa',
