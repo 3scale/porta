@@ -9,7 +9,7 @@ class DeveloperPortal::Admin::Applications::UserKeysController < ::DeveloperPort
     @cinstance.change_user_key!
 
     flash[:notice] = 'The user key was regenerated.'
-    redirect_back(fallback_location: admin_application_user_key_path(@cinstance.id))
+    redirect_back_or_to(admin_application_user_key_path(@cinstance.id))
   end
 
   private

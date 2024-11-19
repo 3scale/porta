@@ -68,7 +68,7 @@ class Api::ServicesController < Api::BaseController
   def update
     if integration_settings_updater_service.call(service_attributes: service_params.to_h, proxy_attributes: proxy_params.to_h)
       flash[:notice] =  t('flash.services.update.notice')
-      redirect_back_or_to :action => :settings
+      redirect_back_or_to({ action: "settings" })
     else
       flash.now[:error] = t('flash.services.update.error')
       render action: params[:update_settings].present? ? :settings : :edit # edit page is only page with free form fields. other forms are less probable to have errors
