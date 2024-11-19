@@ -7,14 +7,12 @@ module Master
 
       def update
         status = @switch.allow ? :found : :not_modified
-        # Switch to `redirect_back_or_to` in Rails 7
-        redirect_back(fallback_location: back_url, status: status)
+        redirect_back_or_to(back_url, status: status)
       end
 
       def destroy
         status = @switch.deny ? :found : :not_modified
-        # Switch to `redirect_back_or_to` in Rails 7
-        redirect_back(fallback_location: back_url, status: status)
+        redirect_back_or_to(back_url, status: status)
       end
 
       protected

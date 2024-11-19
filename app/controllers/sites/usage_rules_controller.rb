@@ -9,7 +9,7 @@ class Sites::UsageRulesController < Sites::BaseController
   def update
     if @settings.update(params[:settings])
       flash[:notice] = 'Settings updated.'
-      redirect_back(fallback_location: admin_site_settings_url)
+      redirect_back_or_to(admin_site_settings_url)
     else
       render :edit
     end
