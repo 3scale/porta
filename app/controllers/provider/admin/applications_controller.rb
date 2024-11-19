@@ -101,7 +101,7 @@ class Provider::Admin::ApplicationsController < FrontendController
       redirect_to provider_admin_applications_path
     else
       flash[:notice] = 'Not possible to delete application'
-      redirect_back(fallback_location: provider_admin_applications_path)
+      redirect_back_or_to(provider_admin_applications_path)
     end
   end
 

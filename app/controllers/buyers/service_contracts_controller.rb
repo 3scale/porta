@@ -73,7 +73,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       flash[:error] = t('service_contracts.unsubscribe_failure')
     end
 
-    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))
   end
 
   def approve
@@ -83,7 +83,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       flash[:error] = 'Cannot approve service contract.'
     end
 
-    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))
   end
 
   private
