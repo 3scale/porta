@@ -25,3 +25,22 @@ declare module 'swagger-client/es/execute' {
   function execute (req: ExecuteData): unknown
   export { execute }
 }
+
+declare module 'swagger-ui-utils' {
+  import type { Component } from 'react'
+
+  export interface ReactType {
+    createElement: (Original: Component, props: ParameterIncludeEmptyProperties) => Component;
+  }
+
+  export interface SwaggerUIContext {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    React: ReactType;
+  }
+
+  export interface ParameterIncludeEmptyProperties {
+    isIncludedOptions: {
+      defaultValue: boolean;
+    };
+  }
+}
