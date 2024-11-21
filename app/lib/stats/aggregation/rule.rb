@@ -81,7 +81,7 @@ module Stats
           "eternity"
         else
           cycle = data[:created_at].beginning_of_cycle(granularity)
-          key_for(granularity => cycle.to_s(:compact))
+          key_for(granularity => cycle.to_fs(:compact))
         end
       end
 
