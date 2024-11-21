@@ -11,7 +11,7 @@ Given(/^the provider has response codes stats data$/) do
   service = @provider.first_service!
 
   keys = RESPONSE_CODES.flat_map do |code|
-    [["stats/{service:#{service.id}}/response_code:#{code}/hour:#{now.at_beginning_of_day.to_s(:compact)}", RESPONSE_CODE_VALUE]]
+    [["stats/{service:#{service.id}}/response_code:#{code}/hour:#{now.at_beginning_of_day.to_fs(:compact)}", RESPONSE_CODE_VALUE]]
   end.to_h
 
   storage.mapped_mset(keys)

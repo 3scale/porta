@@ -44,17 +44,17 @@ class Month < Range
   end
 
   def to_param
-    self.begin.to_s(:db_month)
+    self.begin.to_fs(:db_month)
   end
 
   delegate :to_json, :to => :to_param
 
   def to_s(format = :long)
-    begin_formatted = self.begin.to_s(format)
+    begin_formatted = self.begin.to_fs(format)
     if format == :db
       begin_formatted
     else
-      "#{begin_formatted} - #{self.end.to_s(format)}"
+      "#{begin_formatted} - #{self.end.to_fs(format)}"
     end
   end
 
