@@ -28,7 +28,7 @@ class Provider::Admin::DashboardPresenter
         {
           id: product.id,
           name: product.name,
-          updated_at: product.updated_at.to_s(:long),
+          updated_at: product.updated_at.to_fs(:long),
           link: product.decorate.link,
           links: service_actions_presenter.actions(product)
         }
@@ -45,7 +45,7 @@ class Provider::Admin::DashboardPresenter
         {
           id: backend.id,
           name: backend.name,
-          updated_at: backend.updated_at.to_s(:long),
+          updated_at: backend.updated_at.to_fs(:long),
           link: backend.decorate.link,
           links: service_actions_presenter.backend_actions(backend)
         }
