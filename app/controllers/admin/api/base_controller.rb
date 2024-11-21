@@ -20,6 +20,8 @@ class Admin::Api::BaseController < ApplicationController
   include ::ThreeScale::Warnings::ControllerExtension
   include Logic::RollingUpdates::Controller
 
+  include Stale
+
   extend ::Filters::ProviderRequired
   provider_required
 
