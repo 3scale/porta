@@ -40,7 +40,7 @@ module AccountHelper
   def account_states_info(account)
     state_info = account.state.humanize
     if account.scheduled_for_deletion?
-      "#{state_info} (#{account.deletion_date.to_date.to_s(:long)})"
+      "#{state_info} (#{account.deletion_date.to_date.to_fs(:long)})"
     else
       state_info
     end
@@ -69,7 +69,7 @@ module AccountHelper
     msg = t("buyers.accounts.edit.#{account.provider? ? 'schedule_for_deletion_confirmation' : 'delete_confirmation'}",
             deletion_time_left: distance_of_time_in_words(Account::States::PERIOD_BEFORE_DELETION),
             name: h(account.name),
-            deletion_date: Account::States::PERIOD_BEFORE_DELETION.from_now.to_date.to_s(:long))
+            deletion_date: Account::States::PERIOD_BEFORE_DELETION.from_now.to_date.to_fs(:long))
     alert = t('buyers.accounts.edit.delete.admin_restricted', admin: current_account.first_admin.try(:email))
 
     url = can?(:destroy, account) ? admin_buyers_account_path(account) : javascript_alert_url(alert)

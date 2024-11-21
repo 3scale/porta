@@ -23,7 +23,7 @@ class Csv::BuyersExporter < ::Csv::Exporter
       account.org_name,
       account.country.try!(:name),
       account.bought_account_plan.try!(:name),
-      account.created_at.to_s(:db),
+      account.created_at.to_fs(:db),
       account.bought_cinstances.count,
       account.decorate.admin_user_display_name,
       user&.email,
