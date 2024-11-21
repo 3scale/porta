@@ -12,7 +12,7 @@ class ServicePresenter < SimpleDelegator
       id: id,
       name: name,
       systemName: system_name,
-      updatedAt: updated_at.to_s(:long),
+      updatedAt: updated_at.to_fs(:long),
       links: links,
       appsCount: cinstances.size,
       backendsCount: backend_api_configs.size,
@@ -25,7 +25,7 @@ class ServicePresenter < SimpleDelegator
       id: id,
       name: name,
       systemName: system_name,
-      updatedAt: updated_at.to_s(:long),
+      updatedAt: updated_at.to_fs(:long),
       appPlans: plans.reorder(:name).stock.select(:id, :name).as_json(root: false),
       servicePlans: service_plans.reorder(:name).select(:id, :name).as_json(root: false),
       defaultServicePlan: default_service_plan.as_json(root: false, only: %i[id name]),
@@ -37,7 +37,7 @@ class ServicePresenter < SimpleDelegator
     {
       id: id,
       name: name,
-      updated_at: updated_at.to_s(:long),
+      updated_at: updated_at.to_fs(:long),
       link: decorate.link,
       links: links
     }

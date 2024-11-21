@@ -8,7 +8,7 @@ class BackendApiPresenter < SimpleDelegator
       id: id,
       name: name,
       systemName: system_name,
-      updatedAt: updated_at.to_s(:long),
+      updatedAt: updated_at.to_fs(:long),
       privateEndpoint: private_endpoint,
       links: links,
       productsCount: decorate.products_count
@@ -19,7 +19,7 @@ class BackendApiPresenter < SimpleDelegator
     {
       id: id,
       name: name,
-      updated_at: updated_at.to_s(:long),
+      updated_at: updated_at.to_fs(:long),
       link: decorate.link,
       links: links
     }

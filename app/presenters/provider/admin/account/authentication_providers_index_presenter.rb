@@ -76,7 +76,7 @@ class Provider::Admin::Account::AuthenticationProvidersIndexPresenter
 
     {
       id: auth_provider.id,
-      createdOn: auth_provider.created_at.to_date.to_s(:long),
+      createdOn: auth_provider.created_at.to_date.to_fs(:long),
       name: auth_provider.human_kind,
       editPath: edit_provider_admin_account_authentication_provider_path(auth_provider),
       path: provider_admin_account_authentication_provider_path(auth_provider),

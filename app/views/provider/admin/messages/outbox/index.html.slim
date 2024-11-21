@@ -30,7 +30,7 @@
           td role="cell" data-label="To"
             = message_receiver(message)
           td role="cell" data-label="Data Sent"
-            = message.created_at.to_s(:long)
+            = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
               div class="pf-c-overflow-menu__content"

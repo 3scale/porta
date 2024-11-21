@@ -136,7 +136,7 @@ module Stats
     end
 
     def self.date_labels(period, format)
-      period.to_time_range.each(:day).map { |time| time.to_date.to_s(format) }
+      period.to_time_range.each(:day).map { |time| time.to_date.to_fs(format) }
     end
 
     def self.weekday_name(number)
