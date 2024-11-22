@@ -14,6 +14,6 @@ class Buyers::ServiceContracts::Bulk::SendEmailsController < Buyers::ServiceCont
   end
 
   def errors_template
-    'buyers/accounts/bulk/shared/errors.html'
+    'buyers/accounts/bulk/shared/errors'
   end
 end
