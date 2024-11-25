@@ -13,37 +13,17 @@ DEFAULT_JS_DRIVER = :headless_chrome
 # in case firefox is needed!
 # DEFAULT_JS_DRIVER = :headless_firefox
 
-Capybara.default_driver = :rack_test
-Capybara.javascript_driver = DEFAULT_JS_DRIVER
-Capybara.default_selector    = :css
-Capybara.disable_animation = true
-
-# Capybara 3 changes the default server to Puma. It can be reverted to the previous default of WEBRick by specifying:
-Capybara.server = :webrick
-
-# see http://www.elabs.se/blog/60-introducing-capybara-2-1
 Capybara.configure do |config|
   config.default_driver = :rack_test
   config.javascript_driver = DEFAULT_JS_DRIVER
+  config.default_selector = :css
   config.raise_server_errors = true
   config.match = :prefer_exact
   config.always_include_port = true
   config.default_max_wait_time = 10
-end
-
-# Needed because cucumber-rails requires capybara/cucumber
-# https://github.com/cucumber/cucumber-rails/blob/7b47bf1dda3368247bf2d45bcb17a224e80ec6fd/lib/cucumber/rails/capybara.rb#L3
-# https://github.com/teamcapybara/capybara/blob/2.18.0/lib/capybara/cucumber.rb#L17-L19
-Before '@javascript' do
-  Capybara.current_driver = DEFAULT_JS_DRIVER
-end
-
-Before '@chrome' do
-  Capybara.current_driver = :chrome
-end
-
-Before '@firefox' do
-  Capybara.current_driver = :firefox
+  # Capybara 3 changes the default server to Puma. It can be reverted to the previous default of WEBRick by specifying:
+  config.server = :webrick
+  config.disable_animation = true
 end
 
 Around '@security' do |scenario, block|
