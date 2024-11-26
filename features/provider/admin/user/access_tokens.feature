@@ -42,6 +42,7 @@ Feature: Provider Admin Access tokens
       Then there is a required field "Name"
       And there is a required field "Scopes"
       And there is a required field "Permission"
+      And there is a required field "Expires in"
       And the submit button is enabled
 
     Scenario: Create access tokens without required fields
@@ -49,26 +50,29 @@ Feature: Provider Admin Access tokens
       Then field "Name" has inline error "can't be blank"
       And field "Scopes" has inline error "select at least one scope"
       And field "Permission" has no inline error
+      And field "Expires in" has no inline error
 
     Scenario: Create access token
       When they press "Create Access Token"
       And the form is submitted with:
-        | Name          | LeToken      |
-        | Analytics API | Yes          |
-        | Permission    | Read & Write |
+        | Name          | LeToken       |
+        | Analytics API | Yes           |
+        | Permission    | Read & Write  |
+        | Expires in    | No expiration |
       Then the current page is the personal tokens page
       And they should see the flash message "Access token was successfully created"
       And should see the following details:
-        | Name       | LeToken       |
-        | Scopes     | Analytics API |
-        | Permission | Read & Write  |
+        | Name       | LeToken        |
+        | Scopes     | Analytics API  |
+        | Permission | Read & Write   |
+        | Expires at | Never expires  |
       And there should be a link to "I have copied the token"
 
   Rule: Edit page
     Background:
       Given the provider has the following access tokens:
-        | Name    | Scopes                     | Permission |
-        | LeToken | Billing API, Analytics API | Read Only  |
+        | Name    | Scopes                     | Permission | Expires at            |
+        | LeToken | Billing API, Analytics API | Read Only  | 2030-01-01T00:00:00Z  |
       And they go to the access token's edit page
 
     Scenario: Navigation to edit page
