@@ -1,4 +1,8 @@
 class AccessToken < ApplicationRecord
+  TIMESTAMP_FORMAT = '%FT%T%:z'.freeze
+  PAST_TIME = Time.at(0).utc.freeze
+  private_constant :PAST_TIME
+
   belongs_to :owner, class_name: 'User', inverse_of: :access_tokens
 
   validates :name, length: { maximum: 255 }
@@ -92,10 +96,11 @@ class AccessToken < ApplicationRecord
   validates :permission, inclusion: { in: PERMISSIONS.values }, length: { maximum: 255 }
   validates :scopes, length: { minimum: 1, maximum: 65535 }
   validate :validate_scope_exists
+  validate :validate_expiration_date, on: %i[create]
 
   after_initialize :generate_value
 
-  attr_accessible :owner, :name, :scopes, :permission
+  attr_accessible :owner, :name, :scopes, :permission, :expires_at
 
   attr_readonly :value
 
@@ -132,6 +137,24 @@ class AccessToken < ApplicationRecord
     errors.add :scopes, :invalid
   end
 
+  def expires_at=(value)
+    return if value.blank?
+
+    DateTime.strptime(value)
+
+    super value
+  rescue StandardError
+    super PAST_TIME
+  end
+
+  def validate_expiration_date
+    return true if expires_at.blank?
+
+    return true if expires_at > Time.now.utc
+
+    errors.add :expires_at, :invalid, message: "Date must follow ISO8601 format and be future. Example: #{1.week.from_now.utc.iso8601}"
+  end
+
   def generate_value
     self.value ||= self.class.random_id
   end
@@ -158,5 +181,9 @@ class AccessToken < ApplicationRecord
 
   def self.random_id
     SecureRandom.hex(32)
+  end
+
+  def expired?
+    expires_at.present? && expires_at < Time.now.utc
   end
 end

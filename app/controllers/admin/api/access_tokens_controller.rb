@@ -22,7 +22,7 @@ class Admin::Api::AccessTokensController < Admin::Api::BaseController
   protected
 
   def access_token_params
-    params.require(:token).permit(:name, :permission, scopes: [])
+    params.require(:token).permit(:name, :permission, :expires_at, scopes: [])
   end
 
   def authorize_access_tokens

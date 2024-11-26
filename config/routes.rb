@@ -516,7 +516,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       get 'objects/status' => 'objects#status', as: :objects_status, controller: :objects, defaults: { format: :json }
 
       namespace :personal, defaults: { format: :json } do
-        resources :access_tokens, except: %i[new edit]
+        resources :access_tokens, except: %i[new edit update]
       end
 
       # /admin/api/provider

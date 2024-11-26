@@ -3006,6 +3006,12 @@
                         "policy_registry"
                       ]
                     }
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Expiration time of the access token. In ISO 8601 format",
+                    "example": "2030-01-01T12:00:00Z"
                   }
                 },
                 "required": [
@@ -7149,6 +7155,12 @@
                         "policy_registry"
                       ]
                     }
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Expiration time of the access token. In ISO 8601 format",
+                    "example": "2030-01-01T12:00:00Z"
                   }
                 },
                 "required": [
