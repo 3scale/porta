@@ -8,7 +8,7 @@ div class="pf-c-card"
     = semantic_form_for @access_token, builder: Fields::PatternflyFormBuilder,
                                        url: [:provider, :admin, :user, @access_token],
                                        html: { class: 'pf-c-form pf-m-limit-width' } do |f|
-      = render 'form', form: f
+      = render partial: 'form', locals: { form: f, access_token: @access_token }
 
       = f.actions do
         = f.commit_button t('.submit_button_label')

@@ -65,6 +65,9 @@ en:
     cms: 'Developer Portal API'
     ro: 'Read Only'
     rw: 'Read & Write'
+    no_expiration: 'Never expires'
+    expires_at: 'Expires at'
+    expires_in: 'Expires in'
   notification_category_titles:
     account: 'Accounts'
     application: 'Applications'
