@@ -34,6 +34,13 @@
         div class="pf-c-description-list__group"
           dt class="pf-c-description-list__term"
             span class="pf-c-description-list__text"
+              | Expires at
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text"
+              = token.expires_at.present? ? l(token.expires_at) : t('provider.admin.user.access_tokens.no_expiration')
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text"
               | Token
           dd class="pf-c-description-list__description"
             div class="pf-c-description-list__text"

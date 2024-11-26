@@ -510,6 +510,10 @@ en:
               </p>
       user:
         access_tokens:
+          no_expiration: Never expires
+          form:
+            expires_at: Expires at
+            expires_in: Expires in
           edit:
             page_header_title: Edit Access Token
             submit_button_label: Update Access Token
