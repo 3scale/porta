@@ -30,7 +30,7 @@ class DeveloperPortal::AccessCodesController < ApplicationController
   private
 
   def cms_params
-    params.permit(:cms_token, :cms)
+    params.permit(:signature, :expires_at, :cms)
   end
 
   def return_url

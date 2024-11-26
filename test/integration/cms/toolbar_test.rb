@@ -8,9 +8,12 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
   end
 
   test 'CMS toolbar rendering' do
+    cms_token = @provider.settings.cms_token!
+    expires_at = Time.now.utc.round + 1.minute
+    signature = CMS::Signature.generate(cms_token, expires_at)
     host! @provider.internal_domain
 
-    get "/?cms_token=#{@provider.settings.cms_token!}"
+    get "/", params: { expires_at: expires_at.to_i, signature: }
     assert_response :success
 
     get '/api_docs/login'

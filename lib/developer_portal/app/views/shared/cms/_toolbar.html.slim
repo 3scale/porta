@@ -34,7 +34,7 @@ div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
             div class="pf-c-drawer__actions" id="cms-toolbar-menu-right"
               div class="pf-c-drawer__close"
                 - unless draft
-                  a class="pf-c-button pf-m-plain" type="button" href=url_for(request.query_parameters.merge(cms_token: "")) title="Close the CMS toolbar"
+                  a class="pf-c-button pf-m-plain" type="button" href=url_for(request.query_parameters.merge(signature: "")) title="Close the CMS toolbar"
                     i class="fa fa-times-circle" aria-hidden="true"
 
         div class="pf-c-drawer__body"
