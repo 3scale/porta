@@ -105,13 +105,6 @@ table.list {
   }
 }
 
-table.no-border {
-  td,
-  th {
-    border: 0;
-  }
-}
-
 table.mini {
   border: line-height-times(1) solid $white;
 }
