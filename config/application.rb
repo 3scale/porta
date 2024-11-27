@@ -58,13 +58,68 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
+
+    ################# NEW CONFIGS ###############
+
+    # `button_to` view helper will render `<button>` element, regardless of whether
+    # or not the content is passed as the first argument or as a block.
+    config.action_view.button_to_generates_button_tag = false # TODO: Review whether we only need to fix the tests, or also fix the views/styles to enable this
+
+    # Automatically infer `inverse_of` for associations with a scope.
+    config.active_record.automatic_scope_inversing = false # TODO: figure out if this can be enabled
+
+    # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
+    # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
+    config.action_controller.raise_on_open_redirects = false
+
+    # Enable parameter wrapping for JSON.
+    # Previously this was set in an initializer. It's fine to keep using that initializer if you've customized it.
+    # To disable parameter wrapping entirely, set this config to `false`.
+    config.action_controller.wrap_parameters_by_default = false # OVERRIDEN
+
+
+    # ** Please read carefully, this must be configured in config/application.rb **
+    # Change the format of the cache entry.
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 6.1 applications.
+    # Only change this value after your application is fully deployed to Rails 7.0
+    # and you have no plans to rollback.
+    # When you're ready to change format, add this to `config/application.rb` (NOT this file):
+    #  config.active_support.cache_format_version = 7.0 # TODO
+
+
+    # Cookie serializer: 2 options
+    #
+    # If you're upgrading and haven't set `cookies_serializer` previously, your cookie serializer
+    # is `:marshal`. The default for new apps is `:json`.
+    #
+    # Rails.application.config.action_dispatch.cookies_serializer = :json
+    #
+    #
+    # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
+    #
+    # Rails transparently deserializes existing (Marshal-serialized) cookies on read and
+    # re-writes them in the JSON format.
+    #
+    # It is fine to use `:hybrid` long term; you should do that until you're confident *all* your cookies
+    # have been converted to JSON. To keep using `:hybrid` long term, move this config to its own
+    # initializer or to `config/application.rb`.
+    #
+    config.action_dispatch.cookies_serializer = :hybrid
+
+    # ** Please read carefully, this must be configured in config/application.rb (NOT this file) **
+    # Disables the deprecated #to_s override in some Ruby core classes
+    # See https://guides.rubyonrails.org/configuring.html#config-active-support-disable-to-s-conversion for more information.
+    config.active_support.disable_to_s_conversion = false # TODO
+
+    #############################################
 
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
 
     # Support for inversing belongs_to -> has_many Active Record associations.
-    # Overriding Rails 6.1 default, because it causes various issues.
+    # Overriding the default (since Rails 6.1) default, because it causes various issues.
     # Likely we need to keep it forever as we can't override it for individual use cases.
     # Also the feature has outstanding bugs: rails/rails#47559 rails/rails#50258.
     config.active_record.has_many_inversing = false
