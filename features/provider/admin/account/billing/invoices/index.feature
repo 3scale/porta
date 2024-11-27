@@ -14,12 +14,13 @@ Feature: Account Settings > Billing > 3scale Invoices
       | Master API | Basic   | 31             |
       | Master API | Premium | 3100           |
 
-  Scenario: Empty view
+  Scenario: Empty state
     Given a provider signed up to plan "Premium"
     And the provider has no invoices
     When the provider logs in
     And they go to the 3scale invoices page
-    Then they should see "You have no invoices"
+    Then they should see "Nothing to see here"
+    And they should see "There are no invoices yet"
 
   Scenario: First invoice is generated after 1 day
     Given a provider signed up to plan "Premium"
@@ -45,7 +46,8 @@ Feature: Account Settings > Billing > 3scale Invoices
     And the provider logs in
     When time flies to 1st June 2009
     And they go to the 3scale invoices page
-    Then they should see "you have no invoices"
+    Then they should see "Nothing to see here"
+    And they should see "There are no invoices yet"
 
   Scenario: Invoices are correct when provider changes from Basic to Premium
     Given the time is 5th May 2009
