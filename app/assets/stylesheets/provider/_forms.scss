@@ -391,6 +391,8 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
   color: $disabled-color;
 }
 
+
+//
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type="submit"] {
   width: auto;
 }

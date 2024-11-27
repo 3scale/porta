@@ -114,6 +114,6 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
     html = create_button('Title', '/path', 'disable_with' => 'deleting...', 'confirm' => 'sure?', 'class' => 'foo')
 
-    assert_equal '<form class="button_to" method="post" action="/path"><input class="foo" data-confirm="sure?" data-disable-with="deleting..." type="submit" value="Title" /></form>', html
+    assert_equal '<form class="button_to" method="post" action="/path"><button class="foo" data-confirm="sure?" data-disable-with="deleting..." type="submit">Title</button></form>', html
   end
 end
