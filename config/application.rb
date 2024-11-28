@@ -62,10 +62,6 @@ module System
 
     ################# NEW CONFIGS ###############
 
-    # `button_to` view helper will render `<button>` element, regardless of whether
-    # or not the content is passed as the first argument or as a block.
-    config.action_view.button_to_generates_button_tag = false # TODO: Review whether we only need to fix the tests, or also fix the views/styles to enable this
-
     # Automatically infer `inverse_of` for associations with a scope.
     config.active_record.automatic_scope_inversing = false # TODO: figure out if this can be enabled
 
