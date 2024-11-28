@@ -93,13 +93,10 @@ class Plan < ApplicationRecord
     plan.has_many :plan_metrics, foreign_key: :plan_id, &Logic::MetricVisibility::OfMetricAssociationProxy
   end
 
-  has_many :features_plans, :as => :plan
-
-  # FIXME: this should be a simple HABTM
-  # No it can't, because it is POLYMORPHIC
-  has_many :features, :through => :features_plans do
-    # returns all features owned by issuer, not only enabled by plan
-    def of_service
+  has_many :features_plans, as: :plan, dependent: :delete_all
+  has_many :features, through: :features_plans do # Only enabled features
+    # returns all features available for this plan, not only enabled ones
+    def all_available
       owner = proxy_association.owner
       owner.issuer.features.with_object_scope(owner)
     end
