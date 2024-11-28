@@ -1186,7 +1186,7 @@
                   },
                   "key": {
                     "type": "string",
-                    "description": "app_key to be added.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
+                    "description": "app_key to be added.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters."
                   }
                 },
                 "required": [
@@ -10047,15 +10047,15 @@
           },
           "user_key": {
             "type": "string",
-            "description": "User Key (API Key) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 - _ .], or Base64 format without forward slash (/), no spaces and up to 256 characters.",
+            "description": "User Key (API Key) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 - _ . or Base64 format without forward slash (/), no spaces and up to 256 characters.",
             "x-data-threescale-name": "user_keys"
           },
           "application_id": {
             "type": "string",
-            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
+            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters."
           },
           "application_key": {
-            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters.",
+            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters.",
             "type": "string"
           },
           "redirect_url": {
