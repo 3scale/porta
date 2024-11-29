@@ -3121,7 +3121,7 @@
     "/admin/api/account_plans/{account_plan_id}/features.xml": {
       "get": {
         "summary": "Account Plan Features List",
-        "description": "Returns the list of the features associated to an account plan.",
+        "description": "Returns the list of the features enabled for an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3152,12 +3152,10 @@
             "content": {}
           }
         }
-      }
-    },
-    "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
+      },
       "post": {
-        "summary": "Account Plan Features Create",
-        "description": "Associate an account feature to an account plan.",
+        "summary": "Account Plan Feature Enable",
+        "description": "Enables an account feature on an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3167,15 +3165,6 @@
             "in": "path",
             "description": "ID of the account plan.",
             "x-data-threescale-name": "account_plan_ids",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the feature.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -3192,10 +3181,15 @@
                   "access_token": {
                     "type": "string",
                     "description": "A personal Access Token."
+                  },
+                  "feature_id": {
+                    "type": "integer",
+                    "description": "ID of the feature."
                   }
                 },
                 "required": [
-                  "access_token"
+                  "access_token",
+                  "feature_id"
                 ]
               }
             }
@@ -3207,10 +3201,12 @@
             "content": {}
           }
         }
-      },
+      }
+    },
+    "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Account Plan Features Delete",
-        "description": "Deletes the association of an account feature to an account plan.",
+        "summary": "Account Plan Feature Disable",
+        "description": "Disables an account feature on an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3680,7 +3676,7 @@
     "/admin/api/application_plans/{application_plan_id}/features.xml": {
       "get": {
         "summary": "Application Plan Feature List",
-        "description": "Returns the list of features of the application plan.",
+        "description": "Returns the list of features enabled on the application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3713,8 +3709,8 @@
         }
       },
       "post": {
-        "summary": "Application Plan Feature Create",
-        "description": "Associates a feature to an application plan.",
+        "summary": "Application Plan Feature Enable",
+        "description": "Enables a feature on an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3764,8 +3760,8 @@
     },
     "/admin/api/application_plans/{application_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Application Plan Feature Delete",
-        "description": "Removes the association of a feature to an application plan.",
+        "summary": "Application Plan Feature Disable",
+        "description": "Disable a feature on an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -7384,7 +7380,7 @@
     "/admin/api/service_plans/{service_plan_id}/features.xml": {
       "get": {
         "summary": "Service Plan Feature List",
-        "description": "Returns the list of features of a service plan.",
+        "description": "Returns the list of features enabled on a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7417,8 +7413,8 @@
         }
       },
       "post": {
-        "summary": "Service Plan Feature Add",
-        "description": "Associates an existing feature to a service plan.",
+        "summary": "Service Plan Feature Enable",
+        "description": "Enables an existing feature on a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7468,8 +7464,8 @@
     },
     "/admin/api/service_plans/{service_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Service Plan Features Delete",
-        "description": "Removes the association of a feature to a service plan.",
+        "summary": "Service Plan Feature Disable",
+        "description": "Disables a feature on a service plan.",
         "tags": [
           "Service Plans"
         ],
