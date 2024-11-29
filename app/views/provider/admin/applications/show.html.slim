@@ -1,6 +1,9 @@
 - content_for :menu do
   = render 'menu'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 - content_for :custom_page_header do
   section class="pf-c-page__main-section pf-m-light"
     div class="pf-c-content"
