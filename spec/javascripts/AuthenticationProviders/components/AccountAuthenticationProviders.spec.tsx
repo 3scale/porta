@@ -8,6 +8,7 @@ import { AccountAuthenticationProviders } from 'AuthenticationProviders/componen
 import { mockLocation, waitForPromises } from 'utilities/test-utils'
 import { EnforceSSOSwitch } from 'AuthenticationProviders/components/EnforceSSOSwitch'
 import { AuthenticationProvidersTable } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
+import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/components/AuthenticationProvidersEmptyState'
 
 import type { Props } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 
@@ -43,15 +44,15 @@ afterAll(() => {
 describe('when SSO toggle is hidden', () => {
   const props = { showToggle: false }
 
-  it('should only render a table', () => {
+  it('should render empty state', () => {
     const wrapper = shallowWrapper(props)
     expect(wrapper.exists(EnforceSSOSwitch)).toEqual(false)
-    expect(wrapper.exists(AuthenticationProvidersTable)).toEqual(true)
+    expect(wrapper.exists(AuthenticationProvidersEmptyState)).toEqual(true)
   })
 })
 
 describe('when SSO toggle is visible', () => {
-  const props = { showToggle: true }
+  const props = { showToggle: true, table: { ...defaultProps.table, count: 1 } }
 
   it('should render both a switch and a table', () => {
     const wrapper = shallowWrapper(props)

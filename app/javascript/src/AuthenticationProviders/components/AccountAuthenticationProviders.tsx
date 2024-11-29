@@ -10,6 +10,7 @@ import { useState } from 'react'
 
 import { EnforceSSOSwitch } from 'AuthenticationProviders/components/EnforceSSOSwitch'
 import { AuthenticationProvidersTable } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
+import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/components/AuthenticationProvidersEmptyState'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { ajaxJSON } from 'utilities/ajax'
 import * as flash from 'utilities/flash'
@@ -110,10 +111,12 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
         </FlexItem>
       )}
       <FlexItem>
-        <Card>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <AuthenticationProvidersTable {...table} />
-        </Card>
+        {!table.count ? <AuthenticationProvidersEmptyState newHref={table.newHref} /> : (
+          <Card>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <AuthenticationProvidersTable {...table} />
+          </Card>
+        )}
       </FlexItem>
 
       {openModal === 'enable' && (
