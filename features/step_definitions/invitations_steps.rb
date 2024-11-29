@@ -9,10 +9,25 @@ Given "an invitation sent to {string} to join {account}" do |address, account|
   FactoryBot.create(:invitation, account: account, email: address)
 end
 
-Given "the following invitations from {account} exist:" do |account, table|
+#  Given the following invitations from the provider exists:
+#    | Email             | State    |
+#    | alice@example.org | pending  |
+#    | bob@example.org   | accepted |
+#
+Given "the following invitation(s) from {provider_or_buyer}:" do |account, table|
+  parameterize_headers(table)
   table.hashes.each do |row|
-    invitation = FactoryBot.create(:invitation, account: account, email: row['Email'])
-    invitation.accept! if row['State'] == 'accepted'
+    email = row.delete('email')
+    accepted = case state = row.delete('state')
+               when 'accepted' then true
+               when 'pending' then false
+               else
+                 raise ArgumentError, "Invitations are either 'accepted' or 'pending', not #{state}"
+               end
+
+    FactoryBot.create(:invitation, account: account,
+                                   email: email,
+                                   accepted: accepted)
   end
 end
 
@@ -27,9 +42,9 @@ When(/^I follow the link to signup in the invitation sent to "([^\"]*)"$/) do |a
   click_first_link_in_email
 end
 
-When(/^I follow the link to signup provider "(.*?)" in the invitation sent to "(.*?)"$/) do |provider, address|
+When "the invitee follows the link to sign up to {provider} in the invitation sent to {string}" do |provider, address|
   open_email(address)
-  set_current_domain(Account.find_by(org_name: provider).external_admin_domain)
+  set_current_domain(provider.external_admin_domain)
   click_first_link_in_email
 end
 
@@ -108,7 +123,7 @@ Then(/^I should see the invitations page of the partner "([^\"]*)"$/) do |org_na
   assert has_content?("Sent invitations for #{org_name}")
 end
 
-Then(/^I should see (accepted|pending) invitation for "([^\"]*)"$/) do |state, email|
+Then /^the table should contain an? (accepted|pending) invitation from "(.*)"$/ do |state, email|
   accepted = state == 'accepted'
 
   assert(all('tr').any? do |tr|
