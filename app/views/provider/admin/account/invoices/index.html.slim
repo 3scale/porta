@@ -1,0 +1,35 @@
+= content_for :page_header_title, 'Invoices'
+
+- content_for :javascripts do
+  / HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
+  / import the whole pack with "javascript_packs_with_chunks_tag"
+  = stylesheet_packs_chunks_tag 'table_toolbar'
+
+- if empty_invoices?
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body') }
+- else
+  table.pf-c-table.pf-m-grid-lg role="grid" aria-label="Invoices table"
+    thead
+      tr role="row"
+        th role="columnheader" scope="col" ID
+        th role="columnheader" scope="col" Month
+        th role="columnheader" scope="col" State
+        th role="columnheader" scope="col" Amount
+        th role="columnheader" scope="col" Download
+    tbody role="rowgroup"
+      - @invoices.each do |invoice|
+        = content_tag_for :tr, invoice, role: 'row' do
+          td role="cell" data-label="ID"
+            = link_to invoice.friendly_id, provider_admin_account_invoice_path(invoice), title: "Show #{invoice.friendly_id}"
+          td role="cell" data-label="Month"
+            = invoice.name
+            - if invoice.current?
+              |  (current)
+          td role="cell" data-label="State"
+            = h invoice.state
+          td role="cell" data-label="Amount"
+            = price_tag(invoice.cost)
+          td role="cell" data-label="Download"
+            - if invoice.pdf.file?
+              = link_to "PDF", invoice.pdf.expiring_url
