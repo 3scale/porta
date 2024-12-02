@@ -5,7 +5,7 @@ ActiveSupport.on_load(:active_record) do
     require 'arel/visitors/oracle12_hack'
 
     ENV['SCHEMA'] = 'db/oracle_schema.rb'
-    Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
+    Rails.configuration.active_record.schema_format = ActiveRecord.schema_format = :ruby
 
     ActiveRecord::ConnectionAdapters::TableDefinition.prepend(Module.new do
       def column(name, type, **options)
