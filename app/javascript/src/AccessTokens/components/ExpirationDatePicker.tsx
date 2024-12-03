@@ -32,8 +32,11 @@ interface Props {
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
+  const today: Date = new Date()
+  const tomorrow: Date = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
   const [selectedItem, setSelectedItem] = useState(collection[0])
-  const [pickedDate, setPickedDate] = useState(new Date())
+  const [pickedDate, setPickedDate] = useState(tomorrow)
   const fieldName = `human_${id}`
   const fieldLabel = label ?? 'Expires in'
 
@@ -42,15 +45,6 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
 
     return new Date(new Date().getTime() + selectedItem.period * dayMs)
   }, [selectedItem])
-
-  const fieldHint = useMemo(() => {
-    if (!fieldDate) return
-
-    const date = new Date(fieldDate)
-    date.setHours(0, 0, 0, 0)
-
-    return `The token will expire on ${date.toLocaleDateString()}`
-  }, [fieldDate])
 
   const dateValue = useMemo(() => {
     let value = ''
@@ -64,6 +58,14 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     return value
   }, [fieldDate, selectedItem, pickedDate])
 
+  const fieldHint = useMemo(() => {
+    if (!dateValue) return
+
+    const date = new Date(dateValue)
+
+    return `The token will expire on ${date.toString()}`
+  }, [dateValue])
+
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
     const selected = collection.find(i => i.id.toString() === value) ?? null
@@ -71,7 +73,11 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     if (selected === null) return
 
     setSelectedItem(selected)
-    setPickedDate(new Date())
+    setPickedDate(tomorrow)
+  }
+
+  const dateValidator = (date: Date): boolean => {
+    return date >= new Date()
   }
 
   return (
@@ -80,6 +86,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
         isRequired
         fieldId={fieldName}
         label={fieldLabel}
+        helperText={fieldHint}
       >
         <FormSelect
           className="pf-c-form-control-expiration"
@@ -97,16 +104,11 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
             )
           })}
         </FormSelect>
-        <span className="pf-c-form-control-expiration-hint">{fieldHint}</span>
       </FormGroup>
       <input id={id} name={id} type="hidden" value={dateValue} />
-      {selectedItem.id === 5 && (
-        <>
-          <br />
-          <CalendarMonth date={pickedDate} onChange={setPickedDate} />
-          <br />
-        </>
-      )}
+      {selectedItem.id === 5 &&
+        <CalendarMonth date={pickedDate} onChange={setPickedDate} validators={[dateValidator]}/>
+      }
       {dateValue === '' && (
         <>
           <br />
