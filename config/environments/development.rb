@@ -20,6 +20,9 @@ Rails.application.configure do
 
   config.asset_host = config.three_scale.asset_host.presence
 
+  # Enable server timing
+  config.server_timing = true
+
   # Match custom domains on development
   config.hosts << /.+\.localhost/
 
@@ -33,11 +36,8 @@ Rails.application.configure do
   # when we don't set this, the default from application config is used
   # config.cache_store = :memory_store
   config.public_file_server.headers = {
-    'Cache-Control' => "public, max-age=#{2.days.to_i}"
+    "Cache-Control" => "public, max-age=#{2.days.to_i}"
   }
-
-  # Store uploaded files on the local file system (see config/storage.yml for options)
-  # config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
@@ -78,7 +78,7 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # Raises error for missing translations
+  # Raises error for missing translations.
   config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.

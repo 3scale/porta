@@ -459,7 +459,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   APPLY_I18N = ->(args) do
     args.map do |opt|
       [
-        I18n.t(opt, scope: :deployment_options, raise: ActionView::Base.raise_on_missing_translations),
+        I18n.t(opt, scope: :deployment_options, raise: Rails.application.config.i18n.raise_on_missing_translations),
         opt
       ]
     end.to_h.freeze

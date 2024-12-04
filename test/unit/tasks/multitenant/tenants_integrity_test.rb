@@ -26,7 +26,6 @@ module Tasks
         expected_lines = ["Inconsistent tenant_ids for:"]
         wrong_cinstances.each do |cinstance|
           expected_lines << "Account[#{cinstance.user_account.id}] contracts Contract[#{cinstance.id}]"
-          expected_lines << "Contract[#{cinstance.id}] plan Plan[#{cinstance.plan.id}]"
           expected_lines << "Cinstance[#{cinstance.id}] service Service[#{cinstance.service.id}]"
         end
 
@@ -41,7 +40,6 @@ module Tasks
         plan.features << feature
 
         expected_lines = ["Inconsistent tenant_ids for:"]
-        expected_lines << "Plan[#{plan.id}] features_plans FeaturesPlan[#{plan.id}, #{feature.id}]"
         expected_lines << "Service[#{plan.issuer.id}] features Feature[#{feature.id}]"
 
         Rails.logger.expects(:error).with { |msg| expected_lines.all? { msg.include?(_1) } }

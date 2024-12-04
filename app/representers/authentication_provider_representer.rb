@@ -47,7 +47,7 @@ class AuthenticationProviderRepresenter < ThreeScale::Representer
 
   class TimeDelegator < SimpleDelegator
     def to_s
-      super(:iso8601)
+      to_fs(:iso8601)
     end
   end
 end

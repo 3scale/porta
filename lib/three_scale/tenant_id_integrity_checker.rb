@@ -57,7 +57,7 @@ module ThreeScale
         # only master has provider_accounts and it is normal that all will mismatch
         # bought_* are redundant with contracts
         # email_templates is redundant with templates
-        Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates],
+        Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates web_hook alerts],
         Cinstance => %i[plan], # this is redundant with Contract.plan but overrides it so is not auto-detected
         ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered by Plan.contracts
       }
@@ -92,7 +92,7 @@ module ThreeScale
     def models_with_tenant_id
       Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
       all_models = ApplicationRecord.descendants.select(&:arel_table).reject(&:abstract_class?)
-      all_models.select! { _1.attribute_names.include? "tenant_id" }
+      all_models.select! { _1.attribute_names.include? "tenant_id" }.sort_by(&:name) || []
     end
   end
 end
