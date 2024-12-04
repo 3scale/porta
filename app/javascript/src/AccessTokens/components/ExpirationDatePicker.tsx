@@ -43,7 +43,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
   const fieldDate = useMemo(() => {
     if (selectedItem.period === 0) return null
 
-    return new Date(new Date().getTime() + selectedItem.period * dayMs)
+    return new Date(today.getTime() + selectedItem.period * dayMs)
   }, [selectedItem])
 
   const dateValue = useMemo(() => {
@@ -77,7 +77,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
   }
 
   const dateValidator = (date: Date): boolean => {
-    return date >= new Date()
+    return date >= today
   }
 
   return (

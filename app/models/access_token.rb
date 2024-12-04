@@ -9,7 +9,7 @@ class AccessToken < ApplicationRecord
 
   serialize :scopes, Array
 
-  audited only: %i[owner_id scopes name permission created_at updated_at]
+  audited only: %i[owner_id scopes name permission crfeated_at updated_at]
 
   delegate :provider_id_for_audits, to: :owner
 
