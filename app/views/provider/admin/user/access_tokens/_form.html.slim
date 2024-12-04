@@ -13,8 +13,8 @@
     .pf-c-form__group-label
       label.pf-c-form__label
         span.pf-c-form__label-text
-          = t('.expires_at')
+          = t('access_token_options.expires_at')
     .pf-c-form__group-control
-      = @access_token.expires_at.present? ? l(@access_token.expires_at) : t('provider.admin.user.access_tokens.no_expiration')
+      = @access_token.expires_at.present? ? l(@access_token.expires_at) : t('access_token_options.no_expiration')
 - else
-  div id='expiration-date-picker-container' data-props={ id: 'access_token[expires_at]', label: t('.expires_in') }.to_json
+  div id='expiration-date-picker-container' data-props={ id: 'access_token[expires_at]', label: t('access_token_options.expires_in') }.to_json
