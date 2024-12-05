@@ -24,7 +24,6 @@ const collection: ExpirationItem[] = [
 ]
 
 const dayMs = 60 * 60 * 24 * 1000
-const msExp = /\.\d{3}Z$/
 
 interface Props {
   id: string;
@@ -56,9 +55,9 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     let value = ''
 
     if (fieldDate) {
-      value = fieldDate.toISOString().replace(msExp, 'Z')
+      value = fieldDate.toISOString()
     } else if (selectedItem.id === 5 ) {
-      value = pickedDate.toISOString().replace(msExp, 'Z')
+      value = pickedDate.toISOString()
     }
 
     return value
