@@ -25,7 +25,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user  = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
@@ -33,7 +33,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([app.issuer.id]).at_least_once
+    user.update(member_permission_service_ids: [app.issuer.id])
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :success
   end

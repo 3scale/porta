@@ -78,8 +78,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
       @forbidden_service = FactoryBot.create(:simple_service, account: provider)
       @forbidden_service_plan = FactoryBot.create(:service_plan, name: 'Forbidden Plan', state: 'published', service: forbidden_service)
 
-      @member = FactoryBot.create(:member, account: provider, member_permission_ids: ['partners'])
-      member.member_permission_service_ids = [service.id]
+      @member = FactoryBot.create(:member, account: provider, member_permission_ids: ['partners'], member_permission_service_ids: [service.id])
       member.activate!
 
       login!(provider, user: member)

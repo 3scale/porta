@@ -14,10 +14,8 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   class AccessTokenTest < Admin::Api::ApplicationPlanFeaturesTest
     def setup
       super
-      user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
-      @token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-
-      User.any_instance.stubs(:has_access_to_all_services?).returns(false)
+      @user = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [])
+      @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
     end
 
     test 'index with no token' do
@@ -32,14 +30,13 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     end
 
     test 'index with access to some service' do
-      User.any_instance.expects(:member_permission_service_ids).returns([@provider.default_service.id]).at_least_once
+      @user.update(member_permission_service_ids: [@provider.default_service.id])
       get admin_api_application_plan_features_path(@app_plan), params: params
       assert_response :success
     end
 
-    test 'index' do
-      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      User.any_instance.expects(:member_permission_service_ids).never
+    test 'index with access to all services' do
+      @user.update(member_permission_service_ids: nil)
       get admin_api_application_plan_features_path(@app_plan), params: params
       assert_response :success
     end

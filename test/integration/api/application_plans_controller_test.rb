@@ -239,13 +239,13 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       get new_admin_service_application_plan_path(service)
       assert_response :forbidden
 
-      post admin_service_application_plans_path(service), params: { application_plan:{ name: 'planName' } }
+      post admin_service_application_plans_path(service), params: { application_plan: { name: 'planName' } }
       assert_response :forbidden
 
       get edit_admin_application_plan_path(plan)
       assert_response :forbidden
 
-      put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
+      put admin_application_plan_path(plan), params: { application_plan: { name: 'New plan name' } }
       assert_response :forbidden
 
       post masterize_admin_service_application_plans_path(service)
@@ -274,13 +274,13 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       get new_admin_service_application_plan_path(service)
       assert_response :success
 
-      post admin_service_application_plans_path(service), params: { application_plan:{ name: 'planName' } }
+      post admin_service_application_plans_path(service), params: { application_plan: { name: 'planName' } }
       assert_response :redirect
 
       get edit_admin_application_plan_path(plan)
       assert_response :success
 
-      put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
+      put admin_application_plan_path(plan), params: { application_plan: { name: 'New plan name' } }
       assert_response :redirect
 
       post masterize_admin_service_application_plans_path(service)

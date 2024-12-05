@@ -26,16 +26,20 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index (access_token)' do
-    User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user = FactoryBot.create(:member, account: @provider)
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_account_application_plans_path(@buyer)
     assert_response :forbidden
+
+    user.update(member_permission_ids: [:partners], member_permission_service_ids: [])
+
     get admin_api_account_application_plans_path(@buyer, access_token: token.value, format: :json)
     assert_response :success
     assert_equal 0, JSON.parse(response.body)['plans'].count
-    User.any_instance.expects(:member_permission_service_ids).returns([@provider.default_service.id]).at_least_once
+
+    user.update(member_permission_service_ids: [@provider.default_service.id])
+
     get admin_api_account_application_plans_path(@buyer, access_token: token.value, format: :json)
     assert_response :success
     assert_equal 1, JSON.parse(response.body)['plans'].count
