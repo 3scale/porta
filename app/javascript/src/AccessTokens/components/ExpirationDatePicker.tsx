@@ -2,25 +2,24 @@ import { useState, useMemo } from 'react'
 import { Alert, CalendarMonth, FormGroup, FormSelect, FormSelectOption } from '@patternfly/react-core'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import type { IRecord } from 'utilities/patternfly-utils'
 
 import type { FunctionComponent, FormEvent } from 'react'
 
 import './ExpirationDatePicker.scss'
 
-interface ExpirationItem extends IRecord {
+interface ExpirationItem {
   id: number;
-  name: string;
+  label: string;
   period: number; // In seconds
 }
 
 const collection: ExpirationItem[] = [
-  { id: 1, name: '7 days', period: 7 },
-  { id: 2, name: '30 days', period: 30 },
-  { id: 3, name: '60 days', period: 60 },
-  { id: 4, name: '90 days', period: 90 },
-  { id: 5, name: 'Custom...', period: 0 },
-  { id: 6, name: 'No expiration', period: 0 }
+  { id: 1, label: '7 days', period: 7 },
+  { id: 2, label: '30 days', period: 30 },
+  { id: 3, label: '60 days', period: 60 },
+  { id: 4, label: '90 days', period: 90 },
+  { id: 5, label: 'Custom...', period: 0 },
+  { id: 6, label: 'No expiration', period: 0 }
 ]
 
 const dayMs = 60 * 60 * 24 * 1000
@@ -90,7 +89,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
             return (
               <FormSelectOption
                 key={item.id}
-                label={item.name}
+                label={item.label}
                 value={item.id}
               />
             )
