@@ -99,11 +99,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
       </FormGroup>
       <input id={id} name={id} type="hidden" value={dateValue} />
       {selectedItem.id === 'custom' && (
-        <>
-          <br />
-          <CalendarMonth date={pickedDate} onChange={setPickedDate} />
-          <br />
-        </>
+        <CalendarMonth className="pf-u-mt-md" date={pickedDate} onChange={setPickedDate} />
       )}
       {dateValue === '' && (
         <>
