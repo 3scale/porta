@@ -41,15 +41,6 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     return new Date(new Date().getTime() + selectedItem.period * dayMs)
   }, [selectedItem])
 
-  const fieldHint = useMemo(() => {
-    if (!fieldDate) return
-
-    const date = new Date(fieldDate)
-    date.setHours(0, 0, 0, 0)
-
-    return `The token will expire on ${date.toLocaleDateString()}`
-  }, [fieldDate])
-
   const dateValue = useMemo(() => {
     let value = ''
 
@@ -61,6 +52,14 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
 
     return value
   }, [fieldDate, selectedItem, pickedDate])
+
+  const fieldHint = useMemo(() => {
+    if (!dateValue) return
+
+    const date = new Date(dateValue)
+
+    return `The token will expire on ${date.toLocaleDateString()}`
+  }, [dateValue])
 
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
