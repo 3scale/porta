@@ -5,10 +5,6 @@ require 'selenium/webdriver'
 DEFAULT_JS_DRIVER = :headless_chrome
 
 Capybara.configure do |config|
-  config.default_driver = :rack_test
-  config.default_selector = :css
-  config.raise_server_errors = true
-
   config.match = :prefer_exact
   config.javascript_driver = DEFAULT_JS_DRIVER
   config.always_include_port = true
@@ -16,13 +12,10 @@ Capybara.configure do |config|
   config.server = :webrick # default is `:default` (which uses puma)
 end
 
+# --window-size=1200,2048: When width < 1200px, vertical navigation overlaps the page's main content,
+# and that will make some cucumbers fail
 BASE_DRIVER_OPTIONS = {
-  args: [
-    # When width < 1200px, vertical navigation overlaps the page's main content and that will make
-    # some cucumbers fail
-    '--window-size=1200,2048',
-    '--disable-search-engine-choice-screen'
-  ]
+  args: %w[--window-size=1200,2048 --disable-search-engine-choice-screen]
 }.freeze
 
 Capybara.register_driver :chrome do |app|

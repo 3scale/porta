@@ -6,10 +6,6 @@ module JsHelpers
     page.evaluate_script('window.confirm = function() { return true; }')
   end
 
-  def ensure_javascript
-    raise 'This step requires JS enabled' unless @javascript
-  end
-
   def local_storage(key)
     Capybara.current_session.driver.browser.local_storage.[](key)
   end
