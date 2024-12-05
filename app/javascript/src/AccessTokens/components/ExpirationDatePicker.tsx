@@ -8,18 +8,18 @@ import type { FunctionComponent, FormEvent } from 'react'
 import './ExpirationDatePicker.scss'
 
 interface ExpirationItem {
-  id: number;
+  id: string;
   label: string;
   period: number; // In seconds
 }
 
 const collection: ExpirationItem[] = [
-  { id: 1, label: '7 days', period: 7 },
-  { id: 2, label: '30 days', period: 30 },
-  { id: 3, label: '60 days', period: 60 },
-  { id: 4, label: '90 days', period: 90 },
-  { id: 5, label: 'Custom...', period: 0 },
-  { id: 6, label: 'No expiration', period: 0 }
+  { id: '7', label: '7 days', period: 7 },
+  { id: '30', label: '30 days', period: 30 },
+  { id: '60', label: '60 days', period: 60 },
+  { id: '90', label: '90 days', period: 90 },
+  { id: 'custom', label: 'Custom...', period: 0 },
+  { id: 'no-exp', label: 'No expiration', period: 0 }
 ]
 
 const dayMs = 60 * 60 * 24 * 1000
@@ -55,7 +55,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
 
     if (fieldDate) {
       value = fieldDate.toISOString()
-    } else if (selectedItem.id === 5 ) {
+    } else if (selectedItem.id === 'custom' ) {
       value = pickedDate.toISOString()
     }
 
@@ -64,7 +64,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
 
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
-    const selected = collection.find(i => i.id.toString() === value) ?? null
+    const selected = collection.find(i => i.id === value) ?? null
 
     if (selected === null) return
 
@@ -98,7 +98,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
         <span className="pf-c-form-control-expiration-hint">{fieldHint}</span>
       </FormGroup>
       <input id={id} name={id} type="hidden" value={dateValue} />
-      {selectedItem.id === 5 && (
+      {selectedItem.id === 'custom' && (
         <>
           <br />
           <CalendarMonth date={pickedDate} onChange={setPickedDate} />
