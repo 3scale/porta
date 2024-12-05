@@ -61,7 +61,7 @@ describe('select a period', () => {
     const expectedHint = `The token will expire on ${targetDate.toLocaleDateString()}`
 
     selectItem(wrapper, targetItem)
-    const hint = wrapper.find('.pf-c-form-control-expiration-hint').text()
+    const hint = wrapper.find('.pf-c-form__helper-text').text()
 
     expect(hint).toBe(expectedHint)
   })
@@ -91,6 +91,17 @@ describe('select "Custom"', () => {
   })
 
   describe('pick a date from the calendar', () => {
+    it('should update hint to the correct date', () => {
+      const wrapper = mountWrapper()
+
+      selectItem(wrapper, targetItem)
+      const targetDate = pickDate(wrapper)
+      const expectedHint = `The token will expire on ${targetDate.toLocaleDateString()}`
+      const hint = wrapper.find('.pf-c-form__helper-text').text()
+
+      expect(hint).toBe(expectedHint)
+    })
+
     it('should update hidden input value to the correct timestamp', () => {
       const wrapper = mountWrapper()
 
