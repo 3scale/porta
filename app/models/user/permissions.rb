@@ -88,7 +88,7 @@ module User::Permissions
   end
 
   def has_access_to_service?(service)
-    services_member_permission&.has_service?(service) || has_access_to_all_services?
+    has_access_to_all_services? || services_member_permission&.has_service?(service)
   end
 
   # Returns:
@@ -98,7 +98,7 @@ module User::Permissions
   def permitted_services_status
     if admin? || (service_permissions_selected? && member_permission_service_ids.nil?)
       :all
-    elsif service_permissions_selected? && member_permission_service_ids&.any?
+    elsif service_permissions_selected? && member_permission_service_ids.present?
       :selected
     else
       :none

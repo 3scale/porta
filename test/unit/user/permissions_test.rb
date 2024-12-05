@@ -82,9 +82,17 @@ class User::PermissionsTest < ActiveSupport::TestCase
       assert_equal [], user.member_permission_service_ids
     end
 
-    user.update(member_permission_service_ids: nil)
-    assert user.has_access_to_service?(42)
-    assert_equal Set[:partners], user.admin_sections
+    [nil, ""].each do |enable_all_value|
+      user.update(member_permission_service_ids: enable_all_value)
+      assert user.has_access_to_service?(42)
+      assert_equal Set[:partners], user.admin_sections
+    end
+
+    previous_permissions = user.member_permissions
+    ["abc", 123].each do |invalid_value|
+      user.update(member_permission_service_ids: invalid_value)
+      assert_equal previous_permissions, user.reload.member_permissions
+    end
 
     # when setting numeric values and empty value, empty values are ignored
     [[42, ''], [42, "[]"]].each do |service_ids|
