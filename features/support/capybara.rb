@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 require 'selenium/webdriver'
-require 'capybara/minitest'
-include Capybara::Minitest::Assertions
-
-# in case firefox is needed!
-#Capybara.register_driver :selenium do |app|
-#  Capybara::Selenium::Driver.new(app, :browser => :firefox)
-#end
 
 DEFAULT_JS_DRIVER = :headless_chrome
 # in case firefox is needed!
@@ -15,19 +8,15 @@ DEFAULT_JS_DRIVER = :headless_chrome
 
 Capybara.configure do |config|
   config.default_driver = :rack_test
-  config.javascript_driver = DEFAULT_JS_DRIVER
   config.default_selector = :css
   config.raise_server_errors = true
-  config.match = :prefer_exact
+  config.match = :smart
+
+  config.javascript_driver = DEFAULT_JS_DRIVER
   config.always_include_port = true
   config.default_max_wait_time = 10
-  # Capybara 3 changes the default server to Puma. It can be reverted to the previous default of WEBRick by specifying:
-  config.server = :webrick
+  config.server = :webrick # default is `:default` (which uses puma)
   config.disable_animation = true
-end
-
-Around '@security' do |scenario, block|
-  with_forgery_protection(&block)
 end
 
 # monkeypatch to fix
