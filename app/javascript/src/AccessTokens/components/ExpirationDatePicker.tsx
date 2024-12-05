@@ -77,6 +77,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
       <FormGroup
         isRequired
         fieldId={fieldName}
+        helperText={fieldHint}
         label={fieldLabel}
       >
         <FormSelect
@@ -95,7 +96,6 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
             )
           })}
         </FormSelect>
-        <span className="pf-c-form-control-expiration-hint">{fieldHint}</span>
       </FormGroup>
       <input id={id} name={id} type="hidden" value={dateValue} />
       {selectedItem.id === 'custom' && (
