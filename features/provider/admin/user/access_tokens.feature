@@ -24,9 +24,9 @@ Feature: Provider Admin Access tokens
 
     Scenario: Tokens are listed in a table
       Then the table should contain the following:
-        | Name   | Scopes        | Permission   |
-        | Potato | Analytics API | Read Only    |
-        | Banana | Billing API   | Read & Write |
+        | Name   | Scopes        | Expiration     | Permission   |
+        | Potato | Analytics API | Never expires  | Read Only    |
+        | Banana | Billing API   | Never expires  | Read & Write |
 
   Rule: New page
     Background:
