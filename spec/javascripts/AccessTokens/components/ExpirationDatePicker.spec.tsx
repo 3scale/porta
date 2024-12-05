@@ -5,6 +5,8 @@ import { ExpirationDatePicker } from 'AccessTokens/components/ExpirationDatePick
 import type { ExpirationItem, Props } from 'AccessTokens/components/ExpirationDatePicker'
 import type { ReactWrapper } from 'enzyme'
 
+const msExp = /\.\d{3}Z$/
+
 const defaultProps: Props = {
   id: 'expires_at',
   label: 'Expires in'
@@ -51,7 +53,7 @@ it('should render itself', () => {
 })
 
 describe('select a period', () => {
-  const targetItem: ExpirationItem = { id: 4, name: '90 days', period: 90 }
+  const targetItem: ExpirationItem = { id: '90', label: '90 days', period: 90 }
 
   it('should update hint to the correct date', () => {
     const wrapper = mountWrapper()
@@ -67,17 +69,17 @@ describe('select a period', () => {
   it('should update hidden input value to the correct timestamp', () => {
     const wrapper = mountWrapper()
     const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
-    const expectedValue = targetDate.toISOString().replace(/\.\d{3}Z$/, 'Z')
+    const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
 
     selectItem(wrapper, targetItem)
-    const value = wrapper.find(`input#${defaultProps.id}`).prop('value')
+    const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
 
     expect(value).toBe(expectedValue)
   })
 })
 
 describe('select "Custom"', () => {
-  const targetItem: ExpirationItem = { id: 5, name: 'Custom...', period: 0 }
+  const targetItem: ExpirationItem = { id: 'custom', label: 'Custom...', period: 0 }
 
   it('should show a calendar', () => {
     const wrapper = mountWrapper()
@@ -94,8 +96,8 @@ describe('select "Custom"', () => {
 
       selectItem(wrapper, targetItem)
       const targetDate = pickDate(wrapper)
-      const expectedValue = targetDate.toISOString().replace(/\.\d{3}Z$/, 'Z')
-      const value = wrapper.find(`input#${defaultProps.id}`).prop('value')
+      const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
+      const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
 
       expect(value).toBe(expectedValue)
     })
@@ -103,7 +105,7 @@ describe('select "Custom"', () => {
 })
 
 describe('select "No expiration"', () => {
-  const targetItem: ExpirationItem = { id: 6, name: 'No expiration', period: 0 }
+  const targetItem: ExpirationItem = { id: 'no-exp', label: 'No expiration', period: 0 }
 
   it('should show a warning', () => {
     const wrapper = mountWrapper()
