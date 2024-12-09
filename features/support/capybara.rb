@@ -14,7 +14,6 @@ Capybara.configure do |config|
   config.always_include_port = true
   config.default_max_wait_time = 10
   config.server = :webrick # default is `:default` (which uses puma)
-  config.disable_animation = true
 end
 
 BASE_DRIVER_OPTIONS = {
