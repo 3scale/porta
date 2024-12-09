@@ -8,8 +8,8 @@ Capybara.configure do |config|
   config.default_driver = :rack_test
   config.default_selector = :css
   config.raise_server_errors = true
-  config.match = :smart
 
+  config.match = :prefer_exact
   config.javascript_driver = DEFAULT_JS_DRIVER
   config.always_include_port = true
   config.default_max_wait_time = 10
