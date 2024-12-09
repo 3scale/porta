@@ -237,8 +237,6 @@ def setup_provider(login)
   set_current_domain(@provider.external_admin_domain)
   stub_integration_errors_dashboard
 
-  @provider.users.first.user_sessions.create! # Prevents welcome flash from showing up
-
   return unless login
 
   try_provider_login('foo.3scale.localhost', 'supersecret')
