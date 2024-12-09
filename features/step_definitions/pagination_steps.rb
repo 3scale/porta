@@ -22,7 +22,8 @@ When "they look at the {ordinal} page" do |page|
       click_link page
     end
   else
-    input = find('input[aria-label="Current page"]')
+    # Pagination controls are rendered twice: at the top and at the bottom of the data table
+    input = find('input[aria-label="Current page"]', match: :first)
     input.set(page)
     input.native.send_keys(:return)
   end

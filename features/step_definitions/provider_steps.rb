@@ -3,7 +3,7 @@
 def import_simple_layout(provider)
   simple_layout = SimpleLayout.new(provider)
   simple_layout.import_pages!
-  simple_layout.import_js_and_css! if @javascript
+  simple_layout.import_js_and_css! if javascript_test?
 end
 
 Given "a provider signed up to {plan}" do |plan|
