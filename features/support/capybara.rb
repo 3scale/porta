@@ -2,11 +2,9 @@
 
 require 'selenium/webdriver'
 
-DEFAULT_JS_DRIVER = :headless_chrome
-
 Capybara.configure do |config|
   config.match = :prefer_exact
-  config.javascript_driver = DEFAULT_JS_DRIVER
+  config.javascript_driver = :headless_chrome
   config.always_include_port = true
   config.default_max_wait_time = 10
   config.server = :webrick # default is `:default` (which uses puma)

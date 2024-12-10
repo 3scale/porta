@@ -19,6 +19,10 @@ module CapybaraHelpers
     raise 'Please mark this scenario with @javascript.' unless javascript_test?
   end
 
+  def local_storage(key)
+    Capybara.current_session.driver.browser.local_storage.[](key)
+  end
+
   def assert_flash(message)
     assert_match Regexp.new(message, true),
                  find(FLASH_SELECTOR).text
