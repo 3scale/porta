@@ -57,7 +57,7 @@ module ThreeScale
         # only master has provider_accounts and it is normal that all will mismatch
         # bought_* are redundant with contracts
         # email_templates is redundant with templates
-        Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates web_hook alerts],
+        Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates],
         Cinstance => %i[plan], # this is redundant with Contract.plan but overrides it so is not auto-detected
         ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered by Plan.contracts
       }
