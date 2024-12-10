@@ -1,14 +1,26 @@
 # frozen_string_literal: true
 
+require 'capybara/minitest'
+
 module CapybaraHelpers
+  include Capybara::Minitest::Assertions
+
   FLASH_SELECTOR = [
     '#flash-messages',
     '#flashWrapper span',
     '#flashWrapper p'
   ].join(', ').freeze
 
-  def rack_test?
-    %I[webkit selenium webkit_debug headless_chrome chrome headless_firefox firefox].exclude? Capybara.current_driver
+  def javascript_test?
+    Capybara.current_driver == Capybara.javascript_driver
+  end
+
+  def ensure_javascript
+    raise 'Please mark this scenario with @javascript.' unless javascript_test?
+  end
+
+  def local_storage(key)
+    Capybara.current_session.driver.browser.local_storage.[](key)
   end
 
   def assert_flash(message)
