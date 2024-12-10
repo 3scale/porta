@@ -183,5 +183,17 @@ ActiveSupport.on_load(:active_record) do
         end
       end
     end
+
+    # see https://github.com/rsim/oracle-enhanced/issues/2276
+    module OracleEnhancedAdapterSchemaIssue2276
+      def column_definitions(table_name)
+        deleted_object_id = prepared_statements_disabled_cache.delete(object_id)
+        super
+      ensure
+        prepared_statements_disabled_cache.add(deleted_object_id) if deleted_object_id
+      end
+    end
+
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend OracleEnhancedAdapterSchemaIssue2276
   end
 end
