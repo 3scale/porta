@@ -143,6 +143,7 @@ end
 
 Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
   ActiveSupport::Deprecation.warn "🥒 Replace with step 'And confirm the dialog'"
+  ensure_javascript
   accept_confirm(text) do
     step original
   end

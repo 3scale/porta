@@ -15,6 +15,10 @@ module CapybaraHelpers
     Capybara.current_driver == Capybara.javascript_driver
   end
 
+  def ensure_javascript
+    raise 'Please mark this scenario with @javascript.' unless javascript_test?
+  end
+
   def assert_flash(message)
     assert_match Regexp.new(message, true),
                  find(FLASH_SELECTOR).text
