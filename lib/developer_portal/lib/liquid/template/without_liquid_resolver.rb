@@ -1,6 +1,6 @@
 module Liquid
   class Template
-    class WithoutLiquidResolver < ActionView::OptimizedFileSystemResolver
+    class WithoutLiquidResolver < ActionView::FileSystemResolver
 
       def initialize(path = Rails.root.join('app', 'views'))
         super

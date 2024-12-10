@@ -41,7 +41,7 @@ module Stats
       raise InvalidParameterError, "Missing parameter :by"   unless options.key?(:by)
 
       source_key = key_for(options[:from])
-      value_key  = key_for(options[:by].push(period => since.to_s(:compact)))
+      value_key  = key_for(options[:by].push(period => since.to_fs(:compact)))
       value_key_without_period = value_key.match(/(.*)\/.*/)[1]
 
       begin
@@ -83,10 +83,10 @@ module Stats
       prefix = key_for(prefix) + '/hour:'
 
       range.each(g).map do |from|
-        # day_prefix = from.beginning_of(:day).to_s(:compact)
+        # day_prefix = from.beginning_of(:day).to_fs(:compact)
         to = from + (g - 3600)
         keys = (from..to).to_time_range.each(:hour).map do |time|
-          prefix + time.to_s(:compact)
+          prefix + time.to_fs(:compact)
         end
 
         mget(*keys).inject(0) { |sum,v| sum + v.to_i }
@@ -189,7 +189,7 @@ module Stats
 
       keys = benchmark :shifted_range, level: :debug do
         shifted_range.each(granularity_for_iteration).flat_map do |date|
-          prefix_with_day = prefix + date.beginning_of(:day).to_s(:compact)
+          prefix_with_day = prefix + date.beginning_of(:day).to_fs(:compact)
 
           margin.map do |hour|
             prefix_with_day + HOURS_STRINGS[hour]
@@ -212,7 +212,7 @@ module Stats
     def keys_for_range(range, granularity, key_prefix)
       key = key_for(key_prefix)
       prefix = key + '/' + granularity.to_s + ':'
-      transform = ->(time) { prefix + time.to_s(:compact) }
+      transform = ->(time) { prefix + time.to_fs(:compact) }
 
       case granularity
       when :day

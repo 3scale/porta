@@ -92,7 +92,7 @@ module ThreeScale
     def models_with_tenant_id
       Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
       all_models = ApplicationRecord.descendants.select(&:arel_table).reject(&:abstract_class?)
-      all_models.select! { _1.attribute_names.include? "tenant_id" }
+      all_models.select! { _1.attribute_names.include? "tenant_id" }.sort_by(&:name) || []
     end
   end
 end

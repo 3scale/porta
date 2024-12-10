@@ -117,6 +117,10 @@ class CMS::Builtin < CMS::BasePage
       'text/html'
     end
 
+    def liquid_enabled
+      true
+    end
+
     protected
 
     def set_rails_view_path
