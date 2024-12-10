@@ -2,6 +2,10 @@
 
 require 'selenium/webdriver'
 
+# When width < 1200px, vertical navigation overlaps the page's main content,
+# and that will make some cucumbers fail
+WINDOW_SIZE_ARG = '--window-size=1280,2048'
+
 Capybara.configure do |config|
   config.match = :prefer_exact
   config.javascript_driver = :headless_chrome
@@ -10,20 +14,17 @@ Capybara.configure do |config|
   config.server = :webrick # default is `:default` (which uses puma)
 end
 
-# --window-size=1200,2048: When width < 1200px, vertical navigation overlaps the page's main content,
-# and that will make some cucumbers fail
-BASE_DRIVER_OPTIONS = {
-  args: %w[--window-size=1200,2048 --disable-search-engine-choice-screen]
-}.freeze
-
 Capybara.register_driver :chrome do |app|
-  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS)
+  options = Selenium::WebDriver::Options.chrome
+  options.add_argument(WINDOW_SIZE_ARG)
+  options.add_argument('--disable-search-engine-choice-screen')
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :headless_chrome do |app|
-  options = Selenium::WebDriver::Options.chrome(**BASE_DRIVER_OPTIONS)
-
+  options = Selenium::WebDriver::Options.chrome
+  options.add_argument(WINDOW_SIZE_ARG)
+  options.add_argument('--disable-search-engine-choice-screen')
   options.add_argument('--headless=new')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
@@ -36,4 +37,23 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, timeout: 120)
+end
+
+# NOTE: depending on the scenario you will need to add both
+# @firefox/@headless_firefox AND @javascript tags
+Before '@firefox', '@headless_firefox' do
+  Capybara.javascript_driver = :headless_firefox
+end
+
+Capybara.register_driver :firefox do |app|
+  options = Selenium::WebDriver::Options.firefox
+  options.add_argument(WINDOW_SIZE_ARG)
+  Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
+end
+
+Capybara.register_driver :headless_firefox do |app|
+  options = Selenium::WebDriver::Options.firefox
+  options.add_argument(WINDOW_SIZE_ARG)
+  options.add_argument('-headless')
+  Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
 end
