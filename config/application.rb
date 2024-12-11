@@ -70,8 +70,8 @@ module System
     # will have a different format that is not supported by Rails 6.1 applications.
     # Only change this value after your application is fully deployed to Rails 7.0
     # and you have no plans to rollback.
-    # When you're ready to change format, add this to `config/application.rb` (NOT this file):
-    #  config.active_support.cache_format_version = 7.0 # TODO
+    # When you're ready to change format, change the value to 7.0
+    config.active_support.cache_format_version = 6.1 # TODO: update to 7.0
 
     # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
     #
