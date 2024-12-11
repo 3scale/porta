@@ -135,8 +135,8 @@ module ProxyConfigAffectingChanges
         super
       end
 
-      def update_column(name, value)
-        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(name.to_s)
+      def update_columns(attributes)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.intersect?(attributes.keys.map(&:to_s))
         super
       end
 
