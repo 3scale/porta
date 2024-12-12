@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { Alert, CalendarMonth, FormGroup, FormSelect, FormSelectOption, Popover } from '@patternfly/react-core'
 import OutlinedQuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon'
 
-
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent, FormEvent } from 'react'
