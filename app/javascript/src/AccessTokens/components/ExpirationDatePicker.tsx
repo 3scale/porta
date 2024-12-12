@@ -53,13 +53,22 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     return value
   }, [fieldDate, selectedItem, pickedDate])
 
-  const fieldHint = useMemo(() => {
+  const formattedDateValue = useMemo(() => {
     if (!dateValue) return
 
+    const formatter = Intl.DateTimeFormat('en-US', {
+      month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
+    })
     const date = new Date(dateValue)
 
-    return `The token will expire on ${date.toLocaleDateString()}`
+    return formatter.format(date)
   }, [dateValue])
+
+  const fieldHint = useMemo(() => {
+    if (!formattedDateValue) return
+
+    return `The token will expire on ${formattedDateValue}`
+  }, [formattedDateValue])
 
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
