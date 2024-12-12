@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { Alert, CalendarMonth, FormGroup, FormSelect, FormSelectOption } from '@patternfly/react-core'
+import { Alert, CalendarMonth, FormGroup, FormSelect, FormSelectOption, Popover } from '@patternfly/react-core'
+import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -27,9 +28,10 @@ const dayMs = 60 * 60 * 24 * 1000
 interface Props {
   id: string;
   label: string | null;
+  tzOffset?: number;
 }
 
-const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
+const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
   const [selectedItem, setSelectedItem] = useState(collection[0])
   const [pickedDate, setPickedDate] = useState(new Date())
   const fieldName = `human_${id}`
@@ -70,6 +72,42 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
     return `The token will expire on ${formattedDateValue}`
   }, [formattedDateValue])
 
+  const tzMismatch = useMemo(() => {
+    if (tzOffset === undefined) return
+
+    // Timezone offset in the same format as ActiveSupport
+    const jsTzOffset = new Date().getTimezoneOffset() * -60
+
+    return jsTzOffset !== tzOffset
+  }, [tzOffset])
+
+  const labelIcon = useMemo(() => {
+    if (!tzMismatch) return
+
+    return (
+      <Popover
+        bodyContent={(
+          <p>
+            Your local time zone differs from the provider default.
+            The token will expire at the time you selected in your local time zone.
+          </p>
+        )}
+        headerContent={(
+          <span>Time zone mismatch</span>
+        )}
+      >
+        <button
+          aria-describedby="form-group-label-info"
+          aria-label="Time zone mismatch warning"
+          className="pf-c-form__group-label-help"
+          type="button"
+        >
+          <HelpIcon noVerticalAlign />
+        </button>
+      </Popover>
+    )
+  }, [tzMismatch])
+
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
     const selected = collection.find(i => i.id === value) ?? null
@@ -87,6 +125,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
         fieldId={fieldName}
         helperText={fieldHint}
         label={fieldLabel}
+        labelIcon={labelIcon}
       >
         <FormSelect
           className="pf-c-form-control-expiration"
@@ -122,7 +161,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label }) => {
   )
 }
 
-const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker id={props.id} label={props.label} />, containerId) }
+const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker id={props.id} label={props.label} tzOffset={props.tzOffset} />, containerId) }
 
 export type { ExpirationItem, Props }
 export { ExpirationDatePicker, ExpirationDatePickerWrapper }
