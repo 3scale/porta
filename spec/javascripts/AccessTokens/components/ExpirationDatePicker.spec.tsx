@@ -9,7 +9,8 @@ const msExp = /\.\d{3}Z$/
 
 const defaultProps: Props = {
   id: 'expires_at',
-  label: 'Expires in'
+  label: 'Expires in',
+  tzOffset: 0
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ExpirationDatePicker {...{ ...defaultProps, ...props }} />)
@@ -47,6 +48,10 @@ const pickDate = (wrapper: ReactWrapper<any, Readonly<object>>) => {
   return targetDate
 }
 
+const dateFormatter = Intl.DateTimeFormat('en-US', {
+  month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
+})
+
 it('should render itself', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toEqual(true)
@@ -58,7 +63,7 @@ describe('select a period', () => {
   it('should update hint to the correct date', () => {
     const wrapper = mountWrapper()
     const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
-    const expectedHint = `The token will expire on ${targetDate.toLocaleDateString()}`
+    const expectedHint = `The token will expire on ${dateFormatter.format(targetDate)}`
 
     selectItem(wrapper, targetItem)
     const hint = wrapper.find('.pf-c-form__helper-text').text()
@@ -96,7 +101,7 @@ describe('select "Custom"', () => {
 
       selectItem(wrapper, targetItem)
       const targetDate = pickDate(wrapper)
-      const expectedHint = `The token will expire on ${targetDate.toLocaleDateString()}`
+      const expectedHint = `The token will expire on ${dateFormatter.format(targetDate)}`
       const hint = wrapper.find('.pf-c-form__helper-text').text()
 
       expect(hint).toBe(expectedHint)
@@ -138,3 +143,20 @@ describe('select "No expiration"', () => {
   })
 })
 
+describe('time zone matches', () => {
+  it('should not show a warning', ()=> {
+    jest.spyOn(Date.prototype, 'getTimezoneOffset').mockImplementation(() => (0))
+    const wrapper = mountWrapper()
+
+    expect(wrapper.exists('.pf-c-form__group-label-help')).toEqual(false)
+  })
+})
+
+describe('time zone mismatches', () => {
+  it('should show a warning', ()=> {
+    jest.spyOn(Date.prototype, 'getTimezoneOffset').mockImplementation(() => (-120))
+    const wrapper = mountWrapper()
+
+    expect(wrapper.exists('.pf-c-form__group-label-help')).toEqual(true)
+  })
+})
