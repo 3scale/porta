@@ -62,15 +62,15 @@ class Contract < ApplicationRecord
     where.has { plan_id.in( scope ) }
   end
 
-  # FIXME: this probably shouldn't return `all`, it's dangerous if it is accidentally
-  # used as a separate scope, and not merged with other scopes that filters by account previously
   scope :permitted_for, ->(user) {
-    permitted_services_status = user.permitted_services_status
-    next none if permitted_services_status == :none
-
-    next all if permitted_services_status == :all
-
-    merge(permitted_services_status == :selected ? where(service_id: user.member_permission_service_ids) : {})
+    case user.permitted_services_status
+    when :none
+      none
+    when :all
+      merge(provided_by(user.account))
+    else
+      merge(where(service_id: user.member_permission_service_ids))
+    end
   }
 
   # Return contracts bought by given account.

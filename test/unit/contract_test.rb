@@ -100,16 +100,28 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   test '.permitted_for' do
-    cinstances = FactoryBot.create_list(:simple_cinstance, 2)
-    user = FactoryBot.build(:member)
+    provider = FactoryBot.create(:simple_provider)
+    service1 = FactoryBot.create(:simple_service, account: provider)
+    service2 = FactoryBot.create(:simple_service, account: provider)
+    cinstances1 = FactoryBot.create_list(:simple_cinstance, 2, plan: FactoryBot.create(:simple_application_plan, issuer: service1))
+    cinstances2 = FactoryBot.create_list(:simple_cinstance, 2, plan: FactoryBot.create(:simple_application_plan, issuer: service2))
+    another_provider = FactoryBot.create(:simple_provider)
+    another_service = FactoryBot.create(:simple_service, account: another_provider)
+    FactoryBot.create_list(:simple_cinstance, 2, plan: FactoryBot.create(:simple_application_plan, issuer: another_service))
 
-    user.stubs(permitted_services_status: :all)
-    permitted_contract_ids = Contract.permitted_for(user).pluck(:id)
-    cinstances.each { |contract| assert_includes(permitted_contract_ids, contract.id) }
+    user = FactoryBot.build(:member, account: provider)
 
-    user.stubs(permitted_services_status: :selected)
-    user.stubs(member_permission_service_ids: [cinstances.first.service_id])
-    assert_equal [cinstances.first.id], Contract.permitted_for(user).pluck(:id)
+    user.update(allowed_service_ids: nil, allowed_sections: ['plans'])
+    permitted_contract_ids = Cinstance.permitted_for(user).pluck(:id)
+    all_cinstances_of_provider = cinstances1.pluck(:id) + cinstances2.pluck(:id)
+
+    assert_same_elements all_cinstances_of_provider, permitted_contract_ids
+
+    user.update(allowed_service_ids: [service1.id])
+    assert_equal cinstances1.pluck(:id), Contract.permitted_for(user).pluck(:id)
+
+    user.update(allowed_service_ids: [])
+    assert_empty Contract.permitted_for(user)
   end
 
   test '#bill_for' do
