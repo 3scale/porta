@@ -77,7 +77,7 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     end
 
     test 'system_name can be created but not updated' do
-      post admin_api_backend_api_metrics_path(backend_api), params: { access_token: access_token_value, friendly_name: 'metric friendly name', unit: 'hit', system_name: 'edited', system_name: 'first-system-name' }
+      post admin_api_backend_api_metrics_path(backend_api), params: { access_token: access_token_value, friendly_name: 'metric friendly name', unit: 'hit', system_name: 'first-system-name' }
       metric = backend_api.metrics.find(JSON.parse(response.body).dig('metric', 'id'))
       assert_equal "first-system-name.#{backend_api.id}", metric.attributes['system_name']
 
