@@ -94,7 +94,7 @@ Rails.application.configure do
     if defined?(Bullet)
       Bullet.enable = true
       Bullet.bullet_logger = true
-      Bullet.raise = false # FIXME: disable
+      Bullet.raise = true
 
       # We ignore these items because they are broken at the time commit them but we should fix them, see
       # https://issues.redhat.com/browse/THREESCALE-9973
