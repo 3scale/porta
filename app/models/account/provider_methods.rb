@@ -154,7 +154,7 @@ module Account::ProviderMethods
 
   def provider_key
     ensure_provider
-    bought_cinstances.reset.first!.user_key
+    bought_cinstances.first!.user_key
   end
 
   def api_key?

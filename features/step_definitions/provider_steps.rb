@@ -247,9 +247,11 @@ def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
   @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan, org_name: name,
                                                                                            domain: name,
                                                                                            self_domain: "admin.#{name}")
-  @provider.application_contracts.delete_all
-
-  @provider.buy!(plan, name: 'Default', description: 'Default') unless @provider.bought?(plan)
+  unless @provider.bought?(plan)
+    @provider.application_contracts.delete_all
+    @provider.buy!(plan, name: 'Default', description: 'Default')
+    @provider.bought_cinstances.reset
+  end
 
   import_simple_layout(@provider)
 end
@@ -338,7 +340,7 @@ end
 
 Given(/^master is the provider$/) do
   @provider = Account.master
-  @service ||= @provider.default_service
+  @service = @provider.default_service
   @provider.settings.allow_multiple_applications!
   @provider.settings.show_multiple_applications!
   FactoryBot.create(:application_plan, name: 'The Plan',
