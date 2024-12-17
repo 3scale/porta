@@ -32,45 +32,50 @@ interface Props {
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
-  const [selectedItem, setSelectedItem] = useState(collection[0])
-  const [pickedDate, setPickedDate] = useState(new Date())
+  const [dropdownSelectedItem, setDropdownSelectedItem] = useState(collection[0])
+  const [calendarPickedDate, setCalendarPickedDate] = useState(new Date())
   const fieldName = `human_${id}`
   const fieldLabel = label ?? 'Expires in'
 
-  const fieldDate = useMemo(() => {
-    if (selectedItem.period === 0) return null
+  const dropdownDate = useMemo(() => {
+    if (dropdownSelectedItem.period === 0) return null
 
-    return new Date(new Date().getTime() + selectedItem.period * dayMs)
-  }, [selectedItem])
+    return new Date(new Date().getTime() + dropdownSelectedItem.period * dayMs)
+  }, [dropdownSelectedItem])
 
-  const dateValue = useMemo(() => {
-    let value = ''
+  const selectedDate = useMemo(() => {
+    let value = null
 
-    if (fieldDate) {
-      value = fieldDate.toISOString()
-    } else if (selectedItem.id === 'custom' ) {
-      value = pickedDate.toISOString()
+    if (dropdownDate) {
+      value = dropdownDate
+    } else if (dropdownSelectedItem.id === 'custom' ) {
+      value = calendarPickedDate
     }
 
     return value
-  }, [fieldDate, selectedItem, pickedDate])
+  }, [dropdownDate, dropdownSelectedItem, calendarPickedDate])
 
   const formattedDateValue = useMemo(() => {
-    if (!dateValue) return
+    if (!selectedDate) return
 
     const formatter = Intl.DateTimeFormat('en-US', {
       month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
     })
-    const date = new Date(dateValue)
 
-    return formatter.format(date)
-  }, [dateValue])
+    return formatter.format(selectedDate)
+  }, [selectedDate])
 
   const fieldHint = useMemo(() => {
     if (!formattedDateValue) return
 
     return `The token will expire on ${formattedDateValue}`
   }, [formattedDateValue])
+
+  const inputDateValue = useMemo(() => {
+    if (!selectedDate) return
+
+    return selectedDate.toISOString()
+  }, [selectedDate])
 
   const tzMismatch = useMemo(() => {
     if (tzOffset === undefined) return
@@ -114,8 +119,8 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
 
     if (selected === null) return
 
-    setSelectedItem(selected)
-    setPickedDate(new Date())
+    setDropdownSelectedItem(selected)
+    setCalendarPickedDate(new Date())
   }
 
   return (
@@ -130,7 +135,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
         <FormSelect
           className="pf-c-form-control-expiration"
           id={fieldName}
-          value={selectedItem.id}
+          value={dropdownSelectedItem.id}
           onChange={handleOnChange}
         >
           {collection.map((item: ExpirationItem) => {
@@ -144,11 +149,11 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
           })}
         </FormSelect>
       </FormGroup>
-      <input id={id} name={id} type="hidden" value={dateValue} />
-      {selectedItem.id === 'custom' && (
-        <CalendarMonth className="pf-u-mt-md" date={pickedDate} onChange={setPickedDate} />
+      <input id={id} name={id} type="hidden" value={inputDateValue} />
+      {dropdownSelectedItem.id === 'custom' && (
+        <CalendarMonth className="pf-u-mt-md" date={calendarPickedDate} onChange={setCalendarPickedDate} />
       )}
-      {dateValue === '' && (
+      {!selectedDate && (
         <>
           <br />
           <Alert title="Expiration is recommended" variant="warning">
