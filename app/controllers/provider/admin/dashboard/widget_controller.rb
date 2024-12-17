@@ -28,7 +28,7 @@ class Provider::Admin::Dashboard::WidgetController < Provider::Admin::BaseContro
         previous:   previous_data
       },
       value:             current_sum,
-      current:           incomplete_slice.values.sum,
+      current:           incomplete_slice.values.first,
       previous_value:    previous_sum,
       percentual_change: percentual_change,
       has_history:       previous_sum > 0
