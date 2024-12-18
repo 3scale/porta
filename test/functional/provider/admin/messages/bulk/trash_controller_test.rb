@@ -10,7 +10,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @sent_message     = FactoryBot.create(:message, sender: @provider)
 
     host! @provider.external_admin_domain
-    request.env['HTTP_REFERER'] = redirect_url
+    request.env['HTTP_REFERER'] = @redirect_url = provider_admin_messages_inbox_url
 
     login_provider @provider
   end
@@ -40,7 +40,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @received_message.reload
 
     assert_response :found
-    assert_redirected_to redirect_url
+    assert_redirected_to @redirect_url
     assert_equal true, @received_message.hidden?
     assert_equal 1, assigns(:message_ids).count
   end
@@ -53,7 +53,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @received_message.reload
 
     assert_response :found
-    assert_redirected_to redirect_url
+    assert_redirected_to @redirect_url
     assert_equal true, @received_message.hidden?
     assert_equal true, assigns(:no_more_messages)
   end
@@ -66,7 +66,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @sent_message.reload
 
     assert_response :found
-    assert_redirected_to redirect_url
+    assert_redirected_to @redirect_url
     assert_equal true, @sent_message.hidden?
     assert_equal 1, assigns(:message_ids).count
   end
@@ -79,7 +79,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @sent_message.reload
 
     assert_response :found
-    assert_redirected_to redirect_url
+    assert_redirected_to @redirect_url
     assert_equal true, @sent_message.hidden?
     assert_equal true, assigns(:no_more_messages)
   end
@@ -133,9 +133,5 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
       selected:               [],
       selected_total_entries: true
     }
-  end
-
-  def redirect_url
-    'example.com'
   end
 end

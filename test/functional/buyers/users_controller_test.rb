@@ -51,11 +51,10 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
   test 'redirect back to the index page' do
     user      = FactoryBot.create :pending_user, account: @buyer, email: 'john@doe.example.net'
-    index_url = 'http://multitenant-admin.3scale.net.dev:3000/buyers/accounts'
 
     login_provider @provider
 
-    request.env['HTTP_REFERER'] = index_url
+    request.env['HTTP_REFERER'] = index_url = admin_buyers_accounts_url
 
     post :activate, params: { id: user.id, account_id: @buyer.id }
 

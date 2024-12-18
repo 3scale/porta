@@ -12,12 +12,13 @@ class DeveloperPortal::Admin::ContractsController < DeveloperPortal::BaseControl
 
   protected
 
+  # TODO: investigate whether we need to allow other hosts
   def redirect_on_plan_changes(application)
     if plan_changes?
       unstore_plan_change!(application.id)
-      redirect_to(admin_application_path(application))
+      redirect_to(admin_application_path(application), allow_other_host: true)
     else
-      redirect_back_or_to(admin_application_path(application))
+      redirect_back_or_to(admin_application_path(application), allow_other_host: true)
     end
   end
 end

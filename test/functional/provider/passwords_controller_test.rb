@@ -36,7 +36,7 @@ class Provider::PasswordsControllerTest < ActionController::TestCase
   test 'refuse to generate new token' do
     login_as(@user)
 
-    request.env['HTTP_REFERER'] = back = 'http://example.com'
+    request.env['HTTP_REFERER'] = back = root_url
 
     get :new
 

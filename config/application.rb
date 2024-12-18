@@ -60,10 +60,6 @@ module System
     # before initializers and causes configuration not to be respected.
     config.load_defaults 7.0
 
-    # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
-    # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
-    config.action_controller.raise_on_open_redirects = false
-
     # ** Please read carefully, this must be configured in config/application.rb **
     # Change the format of the cache entry.
     # Changing this default means that all new cache entries added to the cache

@@ -18,7 +18,7 @@ class Buyers::ImpersonationsController < Buyers::BaseController
 
     respond_to do | format |
       format.json { render json: {url: sso_url}, status: :created }
-      format.html { redirect_to sso_url }
+      format.html { redirect_to sso_url, allow_other_host: true }
     end
   end
 
