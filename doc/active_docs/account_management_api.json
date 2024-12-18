@@ -3154,7 +3154,7 @@
         }
       },
       "post": {
-        "summary": "Account Plan Features Enable",
+        "summary": "Account Plan Feature Enable",
         "description": "Enables an account feature on an account plan.",
         "tags": [
           "Account Plans"
@@ -3205,7 +3205,7 @@
     },
     "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Account Plan Features Disable",
+        "summary": "Account Plan Feature Disable",
         "description": "Disables an account feature on an account plan.",
         "tags": [
           "Account Plans"
@@ -7464,7 +7464,7 @@
     },
     "/admin/api/service_plans/{service_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Service Plan Features Disable",
+        "summary": "Service Plan Feature Disable",
         "description": "Disables a feature on a service plan.",
         "tags": [
           "Service Plans"
