@@ -103,8 +103,7 @@ class ProxyConfig < ApplicationRecord
     config.update_all("version = 1 + (#{Arel.sql max_version.to_sql})")
 
     # Read the value
-    version = config.connection.select_value(config.select(:version)).to_i
-    _write_attribute 'version', version
+    self.version = config.connection.select_value(config.select(:version)).to_i
   end
 
   def clone_to(environment:)
