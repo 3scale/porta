@@ -64,11 +64,6 @@ module System
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
     config.action_controller.raise_on_open_redirects = false
 
-    # Enable parameter wrapping for JSON.
-    # Previously this was set in an initializer. It's fine to keep using that initializer if you've customized it.
-    # To disable parameter wrapping entirely, set this config to `false`.
-    config.action_controller.wrap_parameters_by_default = false
-
     # ** Please read carefully, this must be configured in config/application.rb **
     # Change the format of the cache entry.
     # Changing this default means that all new cache entries added to the cache
