@@ -201,7 +201,7 @@ group :test do
 
   gem 'equivalent-xml', require: false
 
-  gem 'rspec-rails', '~> 7.1', require: false # version 6.x is needed for for Rails 6.1 or 7.x
+  gem 'rspec-rails', '~> 7.1', require: false
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec_api_documentation'
