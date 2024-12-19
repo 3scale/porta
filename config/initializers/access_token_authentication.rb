@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.config.after_initialize do
+Rails.application.config.to_prepare do
   ActiveSupport.on_load(:active_record) do
     if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
       ActiveRecord::ConnectionAdapters::Mysql2Adapter.class_eval do

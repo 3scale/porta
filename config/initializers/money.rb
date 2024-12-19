@@ -1,6 +1,6 @@
 require 'three_scale/money_conversions'
 
-Rails.application.config.after_initialize do
+Rails.application.config.to_prepare do
   ActionController::Base.helper(ThreeScale::MoneyHelper)
 
   ActiveSupport.on_load(:active_record) do
