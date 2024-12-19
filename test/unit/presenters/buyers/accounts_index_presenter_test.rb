@@ -32,6 +32,23 @@ class Buyers::AccountsIndexPresenterTest < ActiveSupport::TestCase
     end
   end
 
+  test "filter buyers by state" do
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
+        FactoryBot.create(:simple_buyer, name: '11th Doctor', provider_account: provider, state: :created)
+        FactoryBot.create(:simple_buyer, name: '10th Doctor', provider_account: provider, state: :approved)
+        FactoryBot.create(:simple_buyer, name: '12th Doctor', provider_account: provider, state: :pending)
+        FactoryBot.create(:simple_buyer, name: '9th Doctor', provider_account: provider, state: :rejected)
+      end
+
+      assert_equal 4, Buyers::AccountsIndexPresenter.new(provider: provider, params: { search: {} }).buyers.size
+      assert_equal 1, Buyers::AccountsIndexPresenter.new(provider: provider, params: { search: { state: 'created' } }).buyers.size
+      assert_equal 1, Buyers::AccountsIndexPresenter.new(provider: provider, params: { search: { state: 'approved' } }).buyers.size
+      assert_equal 1, Buyers::AccountsIndexPresenter.new(provider: provider, params: { search: { state: 'pending' } }).buyers.size
+      assert_equal 1, Buyers::AccountsIndexPresenter.new(provider: provider, params: { search: { state: 'rejected' } }).buyers.size
+    end
+  end
+
   test "paginate buyers" do
     FactoryBot.create_list(:simple_buyer, 10, provider_account: provider)
     presenter = Buyers::AccountsIndexPresenter.new(provider: provider, params: { page: 1, per_page: 5 })

@@ -106,6 +106,7 @@ class Buyers::AccountsIndexPresenter
   def account_states_for_select
     states = [
       { id: :approved, title: 'Approved' },
+      { id: :created, title: 'Created'},
       { id: :pending, title: 'Pending' },
       { id: :rejected, title: 'Rejected' }
     ]
