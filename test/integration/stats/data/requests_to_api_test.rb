@@ -35,21 +35,19 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
 
     token.scopes = ['stats']
     token.save!
-    member.admin_sections = []
-    member.save!
+
     # member does not have the right permission
+    member.update(member_permission_ids: [])
     get usage_stats_data_applications_path(@application, format: :json), params: params
     assert_response :forbidden
 
-    member.admin_sections = ['monitoring']
-    member.save!
-    User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
     # the service is not accessible for the member
+    member.update(member_permission_ids: [:monitoring], member_permission_service_ids: [])
     get usage_stats_data_applications_path(@application, format: :json), params: params
     assert_response :forbidden
 
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
     # the service is accessible for the member
+    member.update(member_permission_service_ids: [@service.id])
     get usage_stats_data_applications_path(@application, format: :json), params: params
     assert_response :success
   end

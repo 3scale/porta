@@ -7,7 +7,7 @@ class Api::ServicesIndexPresenterTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
-    @user = FactoryBot.create(:simple_user, account: @provider)
+    @user = FactoryBot.create(:simple_user, account: @provider, role: :admin)
   end
 
   attr_reader :provider, :user

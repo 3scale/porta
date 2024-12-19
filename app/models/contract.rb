@@ -63,9 +63,14 @@ class Contract < ApplicationRecord
   end
 
   scope :permitted_for, ->(user) {
-    next all unless user.forbidden_some_services?
-
-    where(service_id: user.member_permission_service_ids)
+    case user.permitted_services_status
+    when :none
+      none
+    when :all
+      merge(provided_by(user.account))
+    else
+      merge(where(service_id: user.member_permission_service_ids))
+    end
   }
 
   # Return contracts bought by given account.

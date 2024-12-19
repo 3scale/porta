@@ -2812,7 +2812,7 @@
                   },
                   "allowed_service_ids[]": {
                     "type": "array",
-                    "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
+                    "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, send `allowed_service_ids[]` with an empty value, e.g. `allowed_service_ids%5B%5D=` (can't be done in ActiveDocs). `<allowed_service_ids/>` or `\"allowed_service_ids\":[]` in the response indicate that no services are allowed. To enable all services, send 'allowed_service_ids' with no value to the 'curl' command, e.g. `allowed_service_ids=` (can't be done in ActiveDocs). Missing `<allowed_service_ids>` or `\"allowed_service_ids\":null` indicate that all services are allowed.",
                     "items": {
                       "type": "integer"
                     }

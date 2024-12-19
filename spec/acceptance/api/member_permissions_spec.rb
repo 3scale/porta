@@ -28,7 +28,7 @@ resource "MemberPermission" do
 
   shared_context "all services disabled" do
     before do
-      user.member_permission_service_ids = "[]"
+      user.member_permission_service_ids = []
     end
   end
 

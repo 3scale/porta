@@ -11,8 +11,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
   end
 
   def test_crud_access_token
-    User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @account, admin_sections: ['partners'])
+    user = FactoryBot.create(:member, account: @account, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # show
@@ -20,7 +19,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     get(admin_api_service_proxy_path(access_token_params(token.value)))
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+    user.update(member_permission_service_ids: [@service.id])
     get(admin_api_service_proxy_path(access_token_params(token.value)))
     assert_response :success
 

@@ -106,20 +106,26 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     logout!
     login! provider, user: member
 
+    # a specific service allowed
     get admin_service_backend_usages_path(service)
     assert_response :success
 
-    member.member_permission_service_ids = []
-    member.save!
-
-    get admin_service_backend_usages_path(service)
-    assert_response :success
-
-    other_service = FactoryBot.create(:simple_service, account: provider)
-    member.member_permission_service_ids = [other_service.id]
-    member.save!
+    # no services allowed
+    member.update(member_permission_service_ids: [])
 
     get admin_service_backend_usages_path(service)
     assert_response :not_found
+
+    # a different service allowed
+    other_service = FactoryBot.create(:simple_service, account: provider)
+    member.update(member_permission_service_ids: [other_service.id])
+
+    get admin_service_backend_usages_path(service)
+    assert_response :not_found
+
+    # all services allowed
+    member.update(member_permission_service_ids: nil)
+    get admin_service_backend_usages_path(service)
+    assert_response :success
   end
 end
