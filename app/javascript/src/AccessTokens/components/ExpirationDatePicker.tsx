@@ -148,15 +148,12 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
       {selectedItem.id === 'custom' && (
         <CalendarMonth className="pf-u-mt-md" date={pickedDate} onChange={setPickedDate} />
       )}
-      {dateValue === '' && (
-        <>
-          <br />
-          <Alert title="Expiration is recommended" variant="warning">
-            It is strongly recommended that you set an expiration date for your token to help keep your information
-            secure
-          </Alert>
-        </>
-      )}
+      {dateValue === '' &&
+        <Alert className="pf-u-mt-md" title="Expiration is recommended" variant="warning">
+          It is strongly recommended that you set an expiration date for your token to help keep your information
+          secure
+        </Alert>
+      }
     </>
   )
 }
