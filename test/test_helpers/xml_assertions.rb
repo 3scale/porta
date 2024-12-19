@@ -183,7 +183,7 @@ module TestHelpers
       assert xml.xpath('.//plan/cancellation_period').presence
     end
 
-    def assert_all_features_of_service(xml, service)
+    def assert_all_features_available(xml, service)
       assert xml.xpath('.//features/feature/service_id').presence
       assert xml.xpath('.//features/feature/service_id')
         .all? { |service_id| service_id.text == service.id.to_s }
