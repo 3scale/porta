@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-Rails.application.config.to_prepare do
-  ActiveSupport.on_load(:active_record) do
-    if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
-      ActiveRecord::ConnectionAdapters::Mysql2Adapter.class_eval do
-        include ApiAuthentication::ByAccessToken::ConnectionExtension
-      end
-    end
+ActiveSupport.on_load(:active_record) do
+  require "api_authentication.rb"
 
-    if defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter)
-      ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-        include ApiAuthentication::ByAccessToken::OracleEnhancedConnectionExtension
-      end
+  if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
+    ActiveRecord::ConnectionAdapters::Mysql2Adapter.class_eval do
+      include ApiAuthentication::ConnectorExtensions::ConnectionExtension
     end
+  end
 
-    if defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
-      ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
-        include ApiAuthentication::ByAccessToken::ConnectionExtension
-      end
+  if defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter)
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      include ApiAuthentication::ConnectorExtensions::OracleEnhancedConnectionExtension
+    end
+  end
+
+  if defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+    ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
+      include ApiAuthentication::ConnectorExtensions::ConnectionExtension
     end
   end
 end

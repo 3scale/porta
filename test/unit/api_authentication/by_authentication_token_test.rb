@@ -44,7 +44,7 @@ class ApiAuthentication::ByAuthenticationTokenTest < SimpleMiniTest
 
   def test_rescue_handlers
     handlers = {
-        'ApiAuthentication::ByAccessToken::Error' => :show_access_key_permission_error
+        'ApiAuthentication::Error' => :show_access_key_permission_error
     }
     assert_equal handlers, rescue_handlers.to_h
   end
