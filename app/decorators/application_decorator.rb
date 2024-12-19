@@ -14,6 +14,6 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def updated_at
-    object.updated_at.to_s :long if object.updated_at?
+    object.updated_at.to_fs(:long) if object.updated_at?
   end
 end

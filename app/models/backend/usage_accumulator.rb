@@ -77,7 +77,7 @@ module Backend
       key_for(:stats, {:service   => cinstance_data[:service_id]},
                       {:cinstance => cinstance_data[:application_id]},
                       {:metric    => metric_id},
-                      {period     => Time.zone.now.beginning_of(period).to_s(:compact)})
+                      {period     => Time.zone.now.beginning_of(period).to_fs(:compact)})
     end
 
     def validate_limits!(options)

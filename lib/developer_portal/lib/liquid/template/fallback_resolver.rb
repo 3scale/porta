@@ -8,19 +8,8 @@ module Liquid
       end
 
       def _find_all(name, prefix, partial, details, key = nil, locals = [])
-        path = build_path(name, prefix, partial)
-
         # force just liquid format
-        details = details.merge(handlers: [:liquid])
-
-        query(path, details, details[:formats], locals, cache: !!key)
-      end
-
-      def build_path(name, prefix, partial)
-        prefix = prefix ? [prefix] : []
-        prefix = ::File.join(*prefix)
-        ::Rails.logger.debug { "FallbackResolver: path: #{[name, prefix, partial].inspect}" }
-        Path.build(name, prefix, partial)
+        super(name, prefix, partial, details.merge(handlers: [:liquid]), key, locals)
       end
 
       public :_find_all

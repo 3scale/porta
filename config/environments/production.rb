@@ -22,10 +22,10 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  # config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}",
+    "Cache-Control" => "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}",
   }
 
   # Compress JavaScripts and CSS.
@@ -40,19 +40,11 @@ Rails.application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = 'http://assets.example.com'
+  # config.asset_host = "http://assets.example.com"
 
   # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-
-  # Store uploaded files on the local file system (see config/storage.yml for options)
-  # config.active_storage.service = :local
-
-  # Mount Action Cable outside main process or domain
-  # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://example.com/cable'
-  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
+  # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -67,9 +59,10 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment)
+  # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "system_#{Rails.env}"
+  # config.active_job.queue_name_prefix = "system_production"
+
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -79,6 +72,9 @@ Rails.application.configure do
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
+
+  # Don't log any deprecations.
+  # config.active_support.report_deprecations = false
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
@@ -94,7 +90,7 @@ Rails.application.configure do
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
@@ -115,8 +111,7 @@ Rails.application.configure do
 
   config.asset_host = config.three_scale.asset_host.presence
 
-  # do not change the tags withotu updating logstash rules
-  # https://github.com/3scale/puppet/blob/ac161671aee2019eefa87b51b150cb78fcb417e9/modules/logstash/templates/config/system-mt/filter.erb
+  # do not change the tags without updating logstash rules
   config.log_tags = [ :uuid, :host, :remote_ip ]
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater

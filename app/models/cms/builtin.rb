@@ -55,14 +55,8 @@ class CMS::Builtin < CMS::BasePage
   validates :system_name, presence: true
 
   # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
-  # in rails 4.2 use the attribute api
-  def read_attribute(name)
-    case name
-    when 'liquid_enabled'.freeze
-        true
-    else
-        super
-    end
+  def liquid_enabled?
+    true
   end
 
   # TODO: create url for draft/published link
