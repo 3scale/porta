@@ -140,7 +140,7 @@ class AccessToken < ApplicationRecord
   def expires_at=(value)
     return if value.blank?
 
-    DateTime.strptime(value)
+    DateTime.parse(value)
 
     super value
   rescue StandardError
