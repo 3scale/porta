@@ -22,7 +22,7 @@ class Contract < ApplicationRecord
   after_destroy :destroy_customized_plan
   after_commit :notify_plan_changed, if: :saved_change_to_plan_id?
 
-  belongs_to :plan
+  belongs_to :plan, inverse_of: :contracts
   validate   :correct_plan_subclass?
   # this breaks nested saving of records, when validating there is no user_account yet, its new record
   # validates_presence_of :user_account

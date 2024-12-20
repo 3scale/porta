@@ -25,7 +25,7 @@
               = bulk_select_one message
           td role="cell" data-label="Subject" = link_to message_subject(message), provider_admin_messages_inbox_path(message)
           td role="cell" data-label="From" = message_sender(message)
-          td role="cell" data-label="Date Sent" = message.created_at.to_s(:long)
+          td role="cell" data-label="Date Sent" = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
               div class="pf-c-overflow-menu__content"

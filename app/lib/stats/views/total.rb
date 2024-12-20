@@ -59,7 +59,7 @@ module Stats
       private
 
       def total_in_fixed_period(period, since, metric)
-        storage.get(key_for(:stats, source_key, metric, period => since.to_s(:compact))).to_i
+        storage.get(key_for(:stats, source_key, metric, period => since.to_fs(:compact))).to_i
       end
 
       def total_in_eternity(metric)

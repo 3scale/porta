@@ -12,7 +12,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   # Service List
   # GET /admin/api/services.xml
   def index
-    services = accessible_services.includes(:proxy, :account, :annotations).order(:id).paginate(pagination_params)
+    services = accessible_services.includes(:proxy, :annotations).order(:id).paginate(pagination_params)
     respond_with(services)
   end
 
