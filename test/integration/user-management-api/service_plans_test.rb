@@ -18,8 +18,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'show (access_token)' do
-    User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user    = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
+    user    = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [])
     token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     service = @provider.default_service
     plan    = service.service_plans.first
@@ -28,7 +27,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     get admin_api_service_service_plan_path(service, plan), params: { access_token: token.value }
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([service.id]).at_least_once
+    user.update(member_permission_service_ids: [service.id])
     get admin_api_service_service_plan_path(service, plan), params: { access_token: token.value }
     assert_response :success
   end

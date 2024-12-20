@@ -133,12 +133,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
 
       test 'show renders application for the permitted services ids when there is no access to all services' do
+        member = FactoryBot.create(:member, account: provider, member_permission_ids: [:partners], member_permission_service_ids: [application.issuer.id])
+        member.activate!
+        logout! && login!(provider, user: member)
+
         second_service = FactoryBot.create(:simple_service, account: provider)
         second_plan = FactoryBot.create(:application_plan, issuer: second_service)
         second_app = FactoryBot.create(:cinstance, plan: second_plan)
 
-        User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
-        User.any_instance.expects(:member_permission_service_ids).returns([application.issuer.id]).at_least_once
         get provider_admin_application_path(application)
         assert_response :success
         get provider_admin_application_path(second_app)

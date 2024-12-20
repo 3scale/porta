@@ -55,4 +55,15 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     get edit_admin_service_policies_path(@service)
     assert_response :service_unavailable
   end
+
+  test 'policies edit for members with no permissions' do
+    Policies::PoliciesListService.unstub(:call!)
+    Policies::PoliciesListService.expects(:call!).never
+    member = FactoryBot.create(:member, account: @provider, state: 'active')
+    logout! && login!(@provider, user: member)
+
+    get edit_admin_service_policies_path(@service)
+
+    assert_response :not_found
+  end
 end

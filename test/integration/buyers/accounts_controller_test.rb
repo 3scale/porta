@@ -79,17 +79,17 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       cinstance = service.cinstances.last
       cinstance.update(name: 'Alaska Application App')
 
-      User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
+      assert_nil user.member_permission_service_ids
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_match 'Alaska Application App', response.body
 
-      User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
+      user.update(member_permission_service_ids: [])
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_not_match 'Alaska Application App', response.body
 
-      User.any_instance.expects(:member_permission_service_ids).returns([service.id]).at_least_once
+      user.update(member_permission_service_ids: [service.id])
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_match 'Alaska Application App', response.body
