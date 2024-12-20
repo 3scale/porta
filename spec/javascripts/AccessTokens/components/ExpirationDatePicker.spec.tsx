@@ -31,17 +31,7 @@ const pickDate = (wrapper: ReactWrapper<any, Readonly<object>>) => {
   targetDate.setSeconds(0)
   targetDate.setMilliseconds(0)
 
-  const tomorrowButton = wrapper.find('.pf-m-selected + td > button')
-
-  if (tomorrowButton.length === 0) {
-    // No tomorrow, pick yesterday
-    const dayButtons = wrapper.find('button.pf-c-calendar-month__date')
-    const yesterdayButton = dayButtons.at(dayButtons.length - 2)
-
-    yesterdayButton.simulate('click')
-    targetDate.setDate(targetDate.getDate() - 1)
-    return targetDate
-  }
+  const tomorrowButton = wrapper.find('.pf-m-selected > button')
 
   tomorrowButton.simulate('click')
   targetDate.setDate(targetDate.getDate() + 1)
