@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_07_134140) do
-
+ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,16 +21,16 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255, null: false
     t.string "permission", limit: 255, null: false
     t.bigint "tenant_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "expires_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "expires_at", precision: nil
   end
 
   create_table "accounts", force: :cascade do |t|
     t.string "org_name", limit: 255, default: "", null: false
     t.string "org_legaladdress", limit: 255, default: ""
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.boolean "provider", default: false
     t.boolean "buyer", default: false
     t.bigint "country_id"
@@ -56,7 +55,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "state_region", limit: 255
     t.string "state", limit: 255
     t.boolean "paid", default: false
-    t.datetime "paid_at"
+    t.datetime "paid_at", precision: nil
     t.boolean "signs_legal_terms", default: true
     t.string "timezone", limit: 255
     t.boolean "delta", default: true, null: false
@@ -79,7 +78,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.integer "prepared_assets_version"
     t.boolean "sample_data"
     t.integer "proxy_configs_file_size"
-    t.datetime "proxy_configs_updated_at"
+    t.datetime "proxy_configs_updated_at", precision: nil
     t.string "proxy_configs_content_type", limit: 255
     t.string "proxy_configs_file_name", limit: 255
     t.string "support_email", limit: 255
@@ -91,10 +90,10 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "proxy_configs_conf_file_name", limit: 255
     t.string "proxy_configs_conf_content_type", limit: 255
     t.integer "proxy_configs_conf_file_size"
-    t.datetime "proxy_configs_conf_updated_at"
-    t.datetime "hosted_proxy_deployed_at"
+    t.datetime "proxy_configs_conf_updated_at", precision: nil
+    t.datetime "hosted_proxy_deployed_at", precision: nil
     t.string "po_number", limit: 255
-    t.datetime "state_changed_at"
+    t.datetime "state_changed_at", precision: nil
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id"
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at"
     t.index ["domain"], name: "index_accounts_on_domain", unique: true
@@ -108,7 +107,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "alerts", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.datetime "timestamp", null: false
+    t.datetime "timestamp", precision: nil, null: false
     t.string "state", limit: 255, null: false
     t.bigint "cinstance_id", null: false
     t.decimal "utilization", precision: 6, scale: 2, null: false
@@ -129,8 +128,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "annotated_type", null: false
     t.bigint "annotated_id", null: false
     t.integer "tenant_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["annotated_type", "annotated_id", "name"], name: "index_annotations_on_annotated_type_and_annotated_id_and_name", unique: true
   end
 
@@ -141,8 +140,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "body"
     t.text "description"
     t.boolean "published", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "system_name", limit: 255
     t.string "base_path", limit: 255
     t.string "swagger_version", limit: 255
@@ -156,8 +155,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "application_keys", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["application_id", "value"], name: "index_application_keys_on_application_id_and_value", unique: true
   end
@@ -170,7 +169,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "username", limit: 255
     t.string "action", limit: 255
     t.integer "version", default: 0
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.string "kind", limit: 255
@@ -202,8 +201,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "authorize_url", limit: 255
     t.string "site", limit: 255
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.string "identifier_key", limit: 255, default: "id"
     t.string "username_key", limit: 255, default: "login"
@@ -223,8 +222,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "path", default: ""
     t.bigint "service_id"
     t.bigint "backend_api_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.index ["backend_api_id", "service_id"], name: "index_backend_api_configs_on_backend_api_id_and_service_id", unique: true
     t.index ["path", "service_id"], name: "index_backend_api_configs_on_path_and_service_id", unique: true
@@ -237,8 +236,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "description"
     t.string "private_endpoint"
     t.bigint "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.string "state", default: "published", null: false
     t.index ["account_id", "system_name"], name: "index_backend_apis_on_account_id_and_system_name", unique: true
@@ -247,8 +246,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "backend_events", id: :bigint, default: nil, force: :cascade do |t|
     t.text "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "billing_strategies", force: :cascade do |t|
@@ -257,8 +256,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.boolean "charging_enabled", default: false
     t.integer "charging_retry_delay", default: 3
     t.integer "charging_retry_times", default: 3
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "numbering_period", limit: 255, default: "monthly"
     t.string "currency", limit: 255, default: "USD"
     t.bigint "tenant_id"
@@ -270,8 +269,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "category_type_id"
     t.bigint "parent_id"
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_categories_on_account_id"
@@ -279,8 +278,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "category_types", force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_category_types_on_account_id"
@@ -291,25 +290,25 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "user_account_id"
     t.string "user_key", limit: 256
     t.string "provider_public_key", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.string "state", limit: 255, null: false
     t.text "description"
-    t.datetime "paid_until"
+    t.datetime "paid_until", precision: nil
     t.string "application_id", limit: 255
     t.string "name", limit: 255
-    t.datetime "trial_period_expires_at"
+    t.datetime "trial_period_expires_at", precision: nil
     t.decimal "setup_fee", precision: 20, scale: 2, default: "0.0"
     t.string "type", limit: 255, default: "Cinstance", null: false
     t.text "redirect_url"
-    t.datetime "variable_cost_paid_until"
+    t.datetime "variable_cost_paid_until", precision: nil
     t.text "extra_fields"
     t.bigint "tenant_id"
     t.string "create_origin", limit: 255
-    t.datetime "first_traffic_at"
-    t.datetime "first_daily_traffic_at"
+    t.datetime "first_traffic_at", precision: nil
+    t.datetime "first_daily_traffic_at", precision: nil
     t.bigint "service_id"
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.index ["application_id"], name: "index_cinstances_on_application_id"
     t.index ["plan_id"], name: "fk_ct_contract_id"
     t.index ["type", "plan_id", "service_id", "state"], name: "index_cinstances_on_type_and_plan_id_and_service_id_and_state"
@@ -324,15 +323,15 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "provider_id", null: false
     t.bigint "section_id"
     t.bigint "tenant_id"
-    t.datetime "attachment_updated_at"
+    t.datetime "attachment_updated_at", precision: nil
     t.string "attachment_content_type", limit: 255
     t.bigint "attachment_file_size"
     t.string "attachment_file_name", limit: 255
     t.string "random_secret", limit: 255
     t.string "path", limit: 255
     t.boolean "downloadable"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id", "path"], name: "index_cms_files_on_provider_id_and_path"
     t.index ["provider_id"], name: "index_cms_files_on_provider_id"
     t.index ["section_id"], name: "index_cms_files_on_section_id"
@@ -349,8 +348,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tenant_id"
     t.bigint "provider_id", null: false
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id"], name: "index_cms_groups_on_provider_id"
   end
 
@@ -358,8 +357,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tenant_id"
     t.bigint "account_id"
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "group_id"
     t.index ["account_id"], name: "index_cms_permissions_on_account_id"
   end
@@ -368,8 +367,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "provider_id", null: false
     t.string "source", limit: 255, null: false
     t.string "target", limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["provider_id", "source"], name: "index_cms_redirects_on_provider_id_and_source"
     t.index ["provider_id"], name: "index_cms_redirects_on_provider_id"
@@ -382,8 +381,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "partial_path", limit: 255
     t.string "title", limit: 255
     t.string "system_name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "public", default: true
     t.string "type", limit: 255, default: "CMS::Section"
     t.index ["parent_id"], name: "index_cms_sections_on_parent_id"
@@ -402,8 +401,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "draft"
     t.boolean "liquid_enabled"
     t.string "content_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "layout_id"
     t.text "options"
     t.string "updated_by", limit: 255
@@ -430,8 +429,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "draft"
     t.boolean "liquid_enabled"
     t.string "content_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "layout_id"
     t.bigint "template_id"
     t.string "template_type", limit: 255
@@ -448,8 +447,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "configurable_type", limit: 50
     t.string "name", limit: 255
     t.string "value", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["configurable_id", "configurable_type", "name"], name: "index_on_configurable_and_name", unique: true
     t.index ["configurable_id", "configurable_type"], name: "index_on_configurable"
@@ -460,8 +459,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255
     t.string "currency", limit: 255
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "tenant_id"
     t.boolean "enabled", default: true
     t.index ["code"], name: "index_countries_on_code"
@@ -472,7 +471,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "owner_type"
     t.bigint "object_id"
     t.string "object_type"
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.text "metadata"
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
@@ -490,8 +489,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "address"
     t.integer "port"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["account_id"], name: "index_email_configurations_on_account_id"
     t.index ["email"], name: "index_email_configurations_on_email", unique: true
   end
@@ -502,7 +501,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "event_id", limit: 255, null: false
     t.text "metadata"
     t.text "data"
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.bigint "provider_id"
     t.bigint "tenant_id"
     t.index ["created_at"], name: "index_event_store_events_on_created_at"
@@ -515,8 +514,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "featurable_id"
     t.string "name", limit: 255
     t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "system_name", limit: 255
     t.boolean "visible", default: true, null: false
     t.string "featurable_type", limit: 255, default: "Service", null: false
@@ -537,8 +536,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "fields_definitions", force: :cascade do |t|
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "target", limit: 255
     t.boolean "hidden", default: false
     t.boolean "required", default: false
@@ -571,15 +570,15 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "settings"
     t.bigint "proxy_id"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["proxy_id"], name: "index_gateway_configurations_on_proxy_id", unique: true
   end
 
   create_table "go_live_states", force: :cascade do |t|
     t.bigint "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "steps"
     t.string "recent", limit: 255
     t.boolean "finished", default: false
@@ -590,11 +589,11 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "invitations", force: :cascade do |t|
     t.string "token", limit: 255
     t.string "email", limit: 255
-    t.datetime "sent_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "user_id"
   end
@@ -603,28 +602,28 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "provider_account_id", null: false
     t.string "invoice_prefix", limit: 255, null: false
     t.integer "invoice_count", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_account_id", "invoice_prefix"], name: "index_invoice_counters_provider_prefix", unique: true
   end
 
   create_table "invoices", force: :cascade do |t|
     t.bigint "provider_account_id"
     t.bigint "buyer_account_id"
-    t.datetime "paid_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "paid_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.date "due_on"
     t.string "pdf_file_name", limit: 255
     t.string "pdf_content_type", limit: 255
     t.integer "pdf_file_size"
-    t.datetime "pdf_updated_at"
+    t.datetime "pdf_updated_at", precision: nil
     t.date "period"
     t.date "issued_on"
     t.string "state", limit: 255, default: "open", null: false
     t.string "friendly_id", limit: 255, default: "fix", null: false
     t.bigint "tenant_id"
-    t.datetime "finalized_at"
+    t.datetime "finalized_at", precision: nil
     t.string "fiscal_code", limit: 255
     t.string "vat_code", limit: 255
     t.decimal "vat_rate", precision: 20, scale: 2
@@ -660,8 +659,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.integer "legal_term_version"
     t.string "resource_type", limit: 255
     t.bigint "resource_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "account_id"
     t.index ["account_id"], name: "index_legal_term_acceptances_on_account_id"
@@ -672,8 +671,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.integer "legal_term_version"
     t.string "resource_type", limit: 255
     t.bigint "resource_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "scope", limit: 255
     t.bigint "tenant_id"
   end
@@ -684,8 +683,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255
     t.string "slug", limit: 255
     t.text "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "published", default: false
     t.boolean "deleted", default: false
     t.boolean "archived", default: false
@@ -701,8 +700,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255
     t.string "slug", limit: 255
     t.text "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "published", default: false
     t.boolean "deleted", default: false
     t.boolean "archived", default: false
@@ -718,11 +717,11 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255
     t.string "description", limit: 255
     t.decimal "cost", precision: 20, scale: 4, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "type", limit: 255, default: ""
     t.bigint "metric_id"
-    t.datetime "finished_at"
+    t.datetime "finished_at", precision: nil
     t.integer "quantity"
     t.time "started_at"
     t.bigint "tenant_id"
@@ -739,8 +738,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "buyer_id"
     t.integer "level", default: 10
     t.string "description", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id"], name: "index_log_entries_on_provider_id"
   end
 
@@ -749,8 +748,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "system_operation_id"
     t.text "emails"
     t.boolean "dispatch", default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
@@ -758,8 +757,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "member_permissions", force: :cascade do |t|
     t.bigint "user_id"
     t.string "admin_section", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.binary "service_ids"
     t.index ["user_id"], name: "index_member_permissions_on_user_id"
@@ -772,9 +771,9 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "kind", limit: 255, default: "", null: false
     t.integer "position"
     t.string "state", limit: 255, null: false
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.bigint "tenant_id"
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.index ["message_id", "kind"], name: "index_message_recipients_on_message_id_and_kind"
     t.index ["receiver_id"], name: "idx_receiver_id"
   end
@@ -784,10 +783,10 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "subject"
     t.text "body"
     t.string "state", limit: 255, null: false
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.string "type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "system_operation_id"
     t.text "headers"
     t.bigint "tenant_id"
@@ -799,8 +798,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "system_name", limit: 255
     t.text "description"
     t.string "unit", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.bigint "service_id"
     t.string "friendly_name", limit: 255
     t.bigint "parent_id"
@@ -817,16 +816,16 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "moderatorships", force: :cascade do |t|
     t.bigint "forum_id"
     t.bigint "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
   end
 
   create_table "notification_preferences", force: :cascade do |t|
     t.bigint "user_id"
     t.binary "preferences"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
   end
@@ -836,8 +835,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "event_id", limit: 255, null: false
     t.string "system_name", limit: 1000
     t.string "state", limit: 20
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "title", limit: 1000
     t.index ["event_id"], name: "index_notifications_on_event_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
@@ -848,8 +847,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "oidc_configurable_type", null: false
     t.bigint "oidc_configurable_id", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["oidc_configurable_type", "oidc_configurable_id"], name: "oidc_configurable", unique: true
   end
 
@@ -859,8 +858,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "bubble_api_state", limit: 255
     t.string "bubble_metric_state", limit: 255
     t.string "bubble_deployment_state", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "bubble_mapping_state", limit: 255
     t.string "bubble_limit_state", limit: 255
     t.bigint "tenant_id"
@@ -870,8 +869,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "partners", force: :cascade do |t|
     t.string "name", limit: 255
     t.string "api_key", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "system_name", limit: 255
     t.string "logout_url", limit: 255
   end
@@ -882,8 +881,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "payment_service_reference", limit: 255
     t.string "credit_card_partial_number", limit: 255
     t.date "credit_card_expires_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.string "payment_method_id"
     t.index ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference"
@@ -895,8 +894,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.binary "gateway_settings"
     t.string "gateway_type", limit: 255
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
@@ -905,8 +904,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.integer "invoice_id", null: false
     t.string "state"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "reference"
     t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id"
     t.index ["reference"], name: "index_payment_intents_on_reference", unique: true
@@ -924,8 +923,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "action", limit: 255
     t.text "params"
     t.boolean "test", default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["invoice_id"], name: "index_payment_transactions_on_invoice_id"
   end
@@ -935,8 +934,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "metric_id"
     t.boolean "visible", default: true
     t.boolean "limits_only_text", default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "plan_type", limit: 255, null: false
     t.bigint "tenant_id"
     t.index ["metric_id"], name: "idx_plan_metrics_metric_id"
@@ -950,8 +949,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "full_legal"
     t.decimal "cost_per_month", precision: 20, scale: 4, default: "0.0", null: false
     t.integer "trial_period_days"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "position", default: 0
     t.string "state", limit: 255, null: false
     t.integer "cancellation_period", default: 0, null: false
@@ -978,8 +977,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.binary "schema", null: false
     t.bigint "account_id", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "identifier"
     t.index ["account_id", "identifier"], name: "index_policies_on_account_id_and_identifier", unique: true
     t.index ["account_id"], name: "index_policies_on_account_id"
@@ -989,8 +988,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "user_id"
     t.bigint "topic_id"
     t.text "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "forum_id"
     t.text "body_html"
     t.string "email", limit: 255
@@ -1008,8 +1007,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "min", default: 1, null: false
     t.bigint "max"
     t.decimal "cost_per_unit", precision: 20, scale: 4, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "plan_id"
     t.bigint "tenant_id"
   end
@@ -1024,8 +1023,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "email_sales", limit: 255
     t.string "email_techsupport", limit: 255
     t.string "email_press", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "logo_file_name", limit: 255
     t.string "logo_content_type", limit: 255
     t.integer "logo_file_size"
@@ -1042,9 +1041,9 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.text "value"
     t.bigint "user_id"
     t.bigint "tenant_id"
-    t.datetime "expires_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "expires_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["user_id"], name: "fk_rails_260e99b630"
   end
 
@@ -1053,8 +1052,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "provider_id"
     t.integer "max_users"
     t.integer "max_services"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["provider_id"], name: "index_provider_constraints_on_provider_id", unique: true
   end
 
@@ -1062,15 +1061,15 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.string "endpoint", limit: 255
-    t.datetime "deployed_at"
+    t.datetime "deployed_at", precision: nil
     t.string "auth_app_key", limit: 255, default: "app_key"
     t.string "auth_app_id", limit: 255, default: "app_id"
     t.string "auth_user_key", limit: 255, default: "user_key"
     t.string "credentials_location", limit: 255, default: "query", null: false
     t.string "error_auth_failed", limit: 255, default: "Authentication failed"
     t.string "error_auth_missing", limit: 255, default: "Authentication parameters missing"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "error_status_auth_failed", default: 403, null: false
     t.string "error_headers_auth_failed", limit: 255, default: "text/plain; charset=us-ascii", null: false
     t.integer "error_status_auth_missing", default: 403, null: false
@@ -1101,8 +1100,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "proxy_config_affecting_changes", force: :cascade do |t|
     t.integer "proxy_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["proxy_id"], name: "index_proxy_config_affecting_changes_on_proxy_id", unique: true
   end
 
@@ -1113,8 +1112,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tenant_id"
     t.string "environment", limit: 255, null: false
     t.text "content", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "hosts", limit: 8192
     t.index ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version"
     t.index ["proxy_id"], name: "index_proxy_configs_on_proxy_id"
@@ -1126,8 +1125,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tenant_id"
     t.text "lua_file"
     t.string "status", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "proxy_rules", force: :cascade do |t|
@@ -1138,8 +1137,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "metric_system_name", limit: 255
     t.integer "delta"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.text "redirect_url"
     t.integer "position"
     t.boolean "last", default: false
@@ -1152,8 +1151,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "referrer_filters", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["application_id"], name: "index_referrer_filters_on_application_id"
   end
@@ -1161,16 +1160,16 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "service_cubert_infos", force: :cascade do |t|
     t.string "bucket_id", limit: 255
     t.bigint "service_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
   end
 
   create_table "service_tokens", force: :cascade do |t|
     t.bigint "service_id"
     t.string "value", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["service_id"], name: "index_service_tokens_on_service_id"
   end
@@ -1180,8 +1179,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255, default: ""
     t.text "description"
     t.text "txt_support"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "logo_file_name", limit: 255
     t.string "logo_content_type", limit: 255
     t.integer "logo_file_size"
@@ -1215,8 +1214,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "bg_colour", limit: 255
     t.string "link_colour", limit: 255
     t.string "text_colour", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "menu_bg_colour", limit: 255
     t.string "link_label", limit: 255
     t.string "link_url", limit: 255
@@ -1288,7 +1287,7 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "name", limit: 255
     t.string "sluggable_type", limit: 50
     t.bigint "sluggable_id"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.integer "sequence", default: 1, null: false
     t.bigint "tenant_id"
     t.index ["name", "sluggable_type", "sequence"], name: "index_slugs_on_n_s_and_s"
@@ -1299,8 +1298,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "uid", limit: 255
     t.bigint "authentication_provider_id"
     t.bigint "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.text "id_token"
     t.index ["authentication_provider_id"], name: "index_sso_authorizations_on_authentication_provider_id"
@@ -1311,8 +1310,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "ref", limit: 255
     t.string "name", limit: 255
     t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "pos"
     t.integer "tenant_id"
   end
@@ -1321,8 +1320,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "tag_id"
     t.bigint "taggable_id"
     t.string "taggable_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.integer "tagger_id"
     t.string "tagger_type", limit: 255
@@ -1333,8 +1332,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "tags", force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.integer "taggings_count", default: 0
@@ -1344,8 +1343,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
 
   create_table "topic_categories", force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "forum_id"
     t.bigint "tenant_id"
     t.index ["forum_id"], name: "index_topic_categories_on_forum_id"
@@ -1355,14 +1354,14 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "forum_id"
     t.bigint "user_id"
     t.string "title", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "hits", default: 0
     t.boolean "sticky", default: false, null: false
     t.integer "posts_count", default: 0
     t.boolean "locked", default: false
     t.bigint "last_post_id"
-    t.datetime "last_updated_at"
+    t.datetime "last_updated_at", precision: nil
     t.bigint "last_user_id"
     t.string "permalink", limit: 255
     t.bigint "category_id"
@@ -1377,8 +1376,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.bigint "metric_id"
     t.string "period", limit: 255
     t.bigint "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "plan_id"
     t.string "plan_type", limit: 255, null: false
     t.bigint "tenant_id"
@@ -1392,11 +1391,11 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "key", limit: 255
     t.string "ip", limit: 255
     t.string "user_agent", limit: 255
-    t.datetime "accessed_at"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "secured_until"
+    t.datetime "accessed_at", precision: nil
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "secured_until", precision: nil
     t.bigint "sso_authorization_id"
     t.index ["key"], name: "idx_key"
     t.index ["sso_authorization_id"], name: "index_user_sessions_on_sso_authorization_id"
@@ -1406,8 +1405,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
   create_table "user_topics", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "topic_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
   end
 
@@ -1416,12 +1415,12 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "email", limit: 255
     t.string "crypted_password", limit: 40
     t.string "salt", limit: 40
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.string "remember_token", limit: 40
-    t.datetime "remember_token_expires_at"
+    t.datetime "remember_token_expires_at", precision: nil
     t.string "activation_code", limit: 40
-    t.datetime "activated_at"
+    t.datetime "activated_at", precision: nil
     t.string "state", limit: 255
     t.string "role", limit: 255, default: ""
     t.string "lost_password_token", limit: 255
@@ -1431,14 +1430,14 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.string "last_name", limit: 255
     t.string "signup_type", limit: 255
     t.string "job_role", limit: 255
-    t.datetime "last_login_at"
+    t.datetime "last_login_at", precision: nil
     t.string "last_login_ip", limit: 255
     t.string "email_verification_code", limit: 255
     t.string "title", limit: 255
     t.text "extra_fields"
     t.bigint "tenant_id"
     t.string "cas_identifier", limit: 255
-    t.datetime "lost_password_token_generated_at"
+    t.datetime "lost_password_token_generated_at", precision: nil
     t.string "authentication_id", limit: 255
     t.string "open_id", limit: 255
     t.string "password_digest", limit: 255
@@ -1461,8 +1460,8 @@ ActiveRecord::Schema.define(version: 2024_11_07_134140) do
     t.boolean "application_created_on", default: false
     t.boolean "application_updated_on", default: false
     t.boolean "application_deleted_on", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "provider_actions", default: false
     t.boolean "account_plan_changed_on", default: false
     t.boolean "application_plan_changed_on", default: false
