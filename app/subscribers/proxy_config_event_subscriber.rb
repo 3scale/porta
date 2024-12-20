@@ -3,8 +3,11 @@
 class ProxyConfigEventSubscriber
   def call(event)
     case event
-    when ProxyConfigs::AffectingObjectChangedEvent then ProxyConfigAffectingChangeWorker.perform_later(event.event_id)
-    else raise "Unknown event type #{event.class}"
+    when ProxyConfigs::AffectingObjectChangedEvent
+      proxy = Proxy.find(event.proxy_id)
+      proxy.affecting_change_history.touch
+    else
+      raise "Unknown event type #{event.class}"
     end
   end
 end

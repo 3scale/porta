@@ -8,7 +8,9 @@ class ProxyConfigEventSubscriberTest < ActiveSupport::TestCase
     proxy_rule = FactoryBot.build_stubbed(:proxy_rule, proxy: proxy)
     event = ProxyConfigs::AffectingObjectChangedEvent.create(proxy, proxy_rule)
 
-    ProxyConfigAffectingChangeWorker.expects(:perform_later).with(event.event_id)
+    Proxy.stubs(:find).with(event.proxy_id).returns(proxy)
+
+    proxy.affecting_change_history.expects(:touch)
 
     ProxyConfigEventSubscriber.new.call(event)
   end
