@@ -32,15 +32,18 @@ interface Props {
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
+  const today: Date = new Date()
+  const tomorrow: Date = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(collection[0])
-  const [calendarPickedDate, setCalendarPickedDate] = useState(new Date())
+  const [calendarPickedDate, setCalendarPickedDate] = useState(tomorrow)
   const fieldName = `human_${id}`
   const fieldLabel = label ?? 'Expires in'
 
   const dropdownDate = useMemo(() => {
     if (dropdownSelectedItem.period === 0) return null
 
-    return new Date(new Date().getTime() + dropdownSelectedItem.period * dayMs)
+    return new Date(today.getTime() + dropdownSelectedItem.period * dayMs)
   }, [dropdownSelectedItem])
 
   const selectedDate = useMemo(() => {
@@ -120,7 +123,11 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
     if (selected === null) return
 
     setDropdownSelectedItem(selected)
-    setCalendarPickedDate(new Date())
+    setCalendarPickedDate(tomorrow)
+  }
+
+  const dateValidator = (date: Date): boolean => {
+    return date >= today
   }
 
   return (
@@ -151,7 +158,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
       </FormGroup>
       <input id={id} name={id} type="hidden" value={inputDateValue} />
       {dropdownSelectedItem.id === 'custom' && (
-        <CalendarMonth className="pf-u-mt-md" date={calendarPickedDate} onChange={setCalendarPickedDate} />
+        <CalendarMonth className="pf-u-mt-md" date={calendarPickedDate} validators={[dateValidator]} onChange={setCalendarPickedDate} />
       )}
       {!selectedDate && (
         <Alert className="pf-u-mt-md" title="Expiration is recommended" variant="warning">
