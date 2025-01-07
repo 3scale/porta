@@ -14,7 +14,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
   self.background_deletion_method = :delete
-  self.background_deletion_scope = :non_deleted
+  self.background_deletion_scope_name = :non_deleted
 
   scope :non_deleted, -> { where.not(state: :deleted) }
 
