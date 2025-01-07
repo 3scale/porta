@@ -404,10 +404,16 @@ en:
     admin:
       account:
         invitations:
+          create:
+            success: Invitation will be sent soon.
           index:
+            delete_confirm: Are you sure you want to delete this invitation?
             empty_state_title: No invitations
             empty_state_body: To add new members to your team, send them an invitation to join.
-            empty_state_primary_title: Invite a team member
+            empty_state_primary_title: Invite a new team member
+            send_invitation_title: Invite a new team member
+          resend:
+            success: Invitation will be resent soon.
         invoices:
           index:
             empty_state:

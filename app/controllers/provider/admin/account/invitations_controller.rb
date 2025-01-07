@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Account::InvitationsController < Provider::Admin::Account::BaseController
   before_action :authorize_multiple_users
   before_action :set_resource
@@ -6,12 +8,8 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   inherit_resources
   belongs_to :account
 
-
   create! do |success, failure|
-    success.html do
-      redirect_to provider_admin_account_invitations_path,
-                  notice: 'Invitation will be sent soon.'
-    end
+    success.html { redirect_to provider_admin_account_invitations_path, notice: t('.success') }
   end
 
   destroy! do |success, failure|
@@ -23,11 +21,8 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
     @invitation.resend
 
     respond_to do |format|
-      format.html do
-        flash[:success] = 'Invitation will be resent soon.'
-        redirect_to provider_admin_account_invitations_path
-      end
-      format.xml  { head :ok }
+      format.html { redirect_to provider_admin_account_invitations_path, notice: t('.success') }
+      format.xml  { head :ok } # TODO: figure out if this is still used or it needs to be cleaned up
     end
   end
 
@@ -38,7 +33,7 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   end
 
   def collection
-    @invitations ||= end_of_association_chain.paginate(:page => params[:page])
+    @collection ||= end_of_association_chain
   end
 
   def set_resource

@@ -59,15 +59,27 @@ module CapybaraHelpers
 
   def find_inline_actions_of_row(row)
     if has_css?('td', text: row, wait: 0)
-      dropdown = find('tr', text: row).find('.pf-c-table__action .pf-c-dropdown')
+      overflow_menu = find('tr', text: row).find('.pf-c-table__action')
+
+      if overflow_menu.has_css?('.pf-c-dropdown', wait: 0) # collapsed overflow menu
+        dropdown = overflow_menu.find('.pf-c-dropdown')
+      elsif overflow_menu.has_css?('.pf-c-overflow-menu', wait: 0) # desktop overflow menu
+        desktop = overflow_menu.find('.pf-c-overflow-menu__content')
+      end
     elsif has_css?('.pf-c-data-list__cell', text: row, wait: 0)
       dropdown = find('.pf-c-data-list__item-row', text: row).find('.pf-c-data-list__item-action .pf-c-dropdown')
     else
       raise "No table or datalist row found with text: #{row}"
     end
 
-    dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
-    dropdown.all('.pf-c-dropdown__menu-item')
+    if dropdown
+      dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
+      dropdown.all('.pf-c-dropdown__menu-item')
+    elsif desktop
+      desktop.all('.pf-c-overflow-menu__item')
+    else
+      raise "Can't find table actions"
+    end
   end
 
   def select_attribute_filter(label)
