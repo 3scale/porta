@@ -33,7 +33,12 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def perform(*hierarchy)
     return compatibility(hierarchy) unless hierarchy.first.is_a?(String)
 
-    hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
+    started = now
+    while now - started < 5
+      Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
+      hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
+    end
+
     self.class.perform_later(*hierarchy)
   end
 
@@ -42,10 +47,10 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def handle_hierarchy_entry(entry)
     case entry
     when /Plain-(\w+)-(\d+)/
-      delete_plain($1.constantize.find($2.to_i))
+      $1.constantize.find($2.to_i).background_deletion_method_call
       []
     when /Association-(\w+)-(\d+):(\w+)/
-      handle_one_associated($1.constantize.find($2.to_i), $3, entry)
+      handle_association($1.constantize.find($2.to_i), $3, entry)
     else
       raise ArgumentError, "Invalid entry specification: #{entry}"
     end
@@ -56,21 +61,29 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   end
 
   # @return a single associated object for deletion or nil if non in the association
-  def handle_one_associated(ar_object, association, original_entry)
+  def handle_association(ar_object, association, hierarchy_association_string)
     reflection = ar_object.class.reflect_on_association(association)
     case reflection.macro
     when :has_many
-      TODO
+      # here we keep original hierarchy entry if we still find an associated object
+      dependent = ar_object.public_send(association).public_send(:background_deletion_scope).take
+      dependent ? [hierarchy_association_string, *hierarchy_entries_for(dependent)] : []
     when :has_one
-      TODO
+      # maximum of one associated so we never keep the original hierarchy entry
+      hierarchy_entries_for ar_object.public_send(association)
     else
       raise ArgumentError, "Cannot handle association #{ar_object}:#{association} type #{reflection.macro}"
     end
   end
 
   # @return the hierarchy entries to handle deletion of an object
-  def entries_for(ar_object)
-    TODO
+  def hierarchy_entries_for(ar_object)
+    ar_object_str = "#{ar_object.class}-#{ar_object.id}"
+
+    [
+      "Plain-#{ar_object_str}",
+      *ar_object.background_deletion.map { "Association-#{ar_object_str}:#{_1}" },
+    ]
   end
 
   def compatibility(_object, _caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
@@ -89,6 +102,10 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def lock_key
     first_argument = job.arguments.first
     first_argument.is_a?(String) ? first_argument : Random.uuid
+  end
+
+  def now
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
   ############# ORIG ################
