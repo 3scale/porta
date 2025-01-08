@@ -207,8 +207,6 @@ World(Module.new do
       edit_admin_account_user_path(user)
     when 'the new invitation page'
       new_admin_account_invitation_path
-    when 'the sent invitations page'
-      admin_account_invitations_path
     when 'the provider new invitation page'
       new_provider_admin_account_invitation_path
     when 'the provider sent invitations page'
@@ -229,6 +227,12 @@ World(Module.new do
     when /^(access token "(.*)"|the access token's) edit page$/
       access_token = AccessToken.find_by(name: $2) || @access_token
       edit_provider_admin_user_access_token_path(access_token)
+
+    #
+    # Account management (Dev portal)
+    #
+    when 'the sent invitations page'
+      admin_account_invitations_path
 
     #
     # SSO Integrations (Admin portal)

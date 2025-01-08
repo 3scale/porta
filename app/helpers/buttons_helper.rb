@@ -145,7 +145,8 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def pf_link_to(label, url, options = {})
-    options[:class] = join_dom_classes('pf-c-button pf-m-link', options[:class])
+    variant = options.delete(:variant) || :link
+    options[:class] = join_dom_classes("pf-c-button pf-m-#{variant}", options[:class])
     link_to label, url, options
   end
 
