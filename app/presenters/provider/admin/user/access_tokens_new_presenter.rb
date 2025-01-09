@@ -3,7 +3,6 @@
 class Provider::Admin::User::AccessTokensNewPresenter
 
   def initialize(provider)
-    @provider = provider
     @timezone = ActiveSupport::TimeZone.new(provider.timezone)
   end
 
