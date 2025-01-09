@@ -18,7 +18,7 @@ import './ExpirationDatePicker.scss'
 interface ExpirationItem {
   id: string;
   label: string;
-  period: number; // In seconds
+  period: number; // In days
 }
 
 const collection: ExpirationItem[] = [
