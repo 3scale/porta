@@ -30,6 +30,8 @@ const collection: ExpirationItem[] = [
   { id: 'no-exp', label: 'No expiration', period: 0 }
 ]
 
+const today: Date = new Date()
+const tomorrow: Date = new Date(today)
 const dayMs = 60 * 60 * 24 * 1000
 
 interface Props {
@@ -39,8 +41,6 @@ interface Props {
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
-  const today: Date = new Date()
-  const tomorrow: Date = new Date(today)
   tomorrow.setDate(today.getDate() + 1)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(collection[0])
   const [calendarPickedDate, setCalendarPickedDate] = useState(tomorrow)
