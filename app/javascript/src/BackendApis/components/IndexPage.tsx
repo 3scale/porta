@@ -20,7 +20,7 @@ import type { IActions } from '@patternfly/react-table'
 import type { Backend } from 'BackendApis/types'
 
 interface Props {
-  newBackendPath: string;
+  newBackendPath?: string;
   backends: Backend[];
   backendsCount: number;
 }
@@ -75,11 +75,13 @@ const IndexPage: FunctionComponent<Props> = ({
             <ToolbarItem spacer={{ default: 'spacerMd' }} variant="search-filter">
               <ToolbarSearch placeholder="Find a backend" />
             </ToolbarItem>
-            <ToolbarItem>
-              <Button component="a" href={newBackendPath} variant="primary">
-                Create a backend
-              </Button>
-            </ToolbarItem>
+            {newBackendPath && (
+              <ToolbarItem>
+                <Button component="a" href={newBackendPath} variant="primary">
+                  Create a backend
+                </Button>
+              </ToolbarItem>
+            )}
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={backendsCount} />
             </ToolbarItem>

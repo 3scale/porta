@@ -163,6 +163,6 @@ class Api::ServicesController < Api::BaseController
   end
 
   def presenter
-    @presenter ||= Api::ServicesIndexPresenter.new(current_user: current_user, params: params)
+    @presenter ||= Api::ServicesIndexPresenter.new(user: current_user, params: params)
   end
 end

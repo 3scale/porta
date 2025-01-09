@@ -132,7 +132,7 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
     menu_items = [{ title: 'Dashboard',        href: provider_admin_dashboard_path,    icon: :home,     disabled: false }]
     menu_items << { title: 'Audience',         href: audience_link,                    icon: :bullseye, disabled: false } if audience_link.present?
     menu_items << { title: 'Products',         href: admin_services_path,              icon: :cubes,    disabled: false } if access_to_service_admin_sections
-    menu_items << { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: false } if access_to_service_admin_sections
+    menu_items << { title: 'Backends',         href: provider_admin_backend_apis_path, icon: :cube,     disabled: false } if can?(:read, BackendApiConfig) || can?(:manage, :monitoring)
     menu_items << { title: 'Account Settings', href: settings_link,                    icon: :cog,      disabled: false }
 
     {

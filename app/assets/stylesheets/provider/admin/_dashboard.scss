@@ -12,9 +12,12 @@
     margin-top: line-height-times(1);
   }
 
+  & + .DashboardSection {
+    margin-top: line-height-times(1.4);
+  }
+
   &--services {
     border-top: 0;
-    margin-top: line-height-times(1.4);
 
     .DashboardSection--service.hidden {
       display: none;

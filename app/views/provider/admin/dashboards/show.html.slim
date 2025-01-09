@@ -12,12 +12,12 @@ button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
 .Dashboard
   div.Dashboard-widgets
     // account level
-    section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
-      header.DashboardSection-header
-        h1.DashboardSection-title title="Audience"
-          i.fa.fa-bullseye>
-          | Audience
-        - if can?(:manage, :partners) || can?(:manage, :finance) || can?(:manage, :portal) || can?(:manage, :settings)
+    - if presenter.can_see_audience_section?
+      section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
+        header.DashboardSection-header
+          h1.DashboardSection-title title="Audience"
+            i.fa.fa-bullseye>
+            | Audience
           = render 'developers_navigation', buyers: current_account.buyer_accounts.not_master,
                                           pending_buyers: current_account.buyers.pending,
                                           account_plans: current_account.account_plans.not_custom,
@@ -26,19 +26,25 @@ button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
                                           alerts: current_account.buyer_alerts.unread
 
 
-      // Account Level Widgets
-      = dashboard_widget :new_accounts if can?(:manage, :partners)
-      = dashboard_widget :potential_upgrades if can?(:manage, :plans)
+        // Account Level Widgets
+        = dashboard_widget :new_accounts if can?(:manage, :partners)
+        = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      - unless current_user.access_to_service_admin_sections?
-        = render 'shared/service_access'
-      - else
-        div.pf-c-content
-          h1 APIs
+      div.pf-c-content
+        h1 APIs
+      - if presenter.access_to_products? || presenter.access_to_backends?
         div.apiContainer
-          div#products-widget data-products-widget=products_presenter.dashboard_widget_data.to_json
-          div#backends-widget data-backends-widget=backend_apis_presenter.dashboard_widget_data.to_json
+          - if presenter.access_to_products?
+            div id="products-widget" data-products-widget=presenter.products_widget_data.to_json
+          - if presenter.access_to_backends?
+            div id="backends-widget" data-backends-widget=presenter.backends_widget_data.to_json
+      - else
+        div.pf-c-card
+          - link = mail_to(current_account.admin_user_email, "contact #{current_account.admin_user_display_name}")
+          = render 'shared/empty_state', icon: :lock,
+                                         title: t('shared.service_access.title'),
+                                         body: t('shared.service_access.body_html', org_name: current_account.org_name, mail_to_admin: link )
 
   div.Dashboard-events
     section.DashboardStream

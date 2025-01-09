@@ -1715,3 +1715,8 @@ en:
       primary: Clear all filters
     empty_state:
       title: This page is empty
+    service_access:
+      title: Access permissions needed
+      body_html:
+        You don't have access to any API on the %{org_name} account. Please %{mail_to_admin}
+        to request access.
