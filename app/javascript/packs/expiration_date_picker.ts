@@ -1,8 +1,7 @@
 import { ExpirationDatePickerWrapper } from 'AccessTokens/components/ExpirationDatePicker'
+import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { Props } from 'AccessTokens/components/ExpirationDatePicker'
-
-import { safeFromJsonString } from '../src/utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'expiration-date-picker-container'
