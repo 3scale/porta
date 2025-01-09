@@ -2,7 +2,9 @@
 
 class DeleteObjectHierarchyWorker < ApplicationJob
 
-  # attr_reader :hierarchy
+  WORK_TIME_LIMIT_SECONDS = 5
+
+  class DoNotRetryError < RuntimeError; end
 
   rescue_from(DoNotRetryError) do |exception|
     # report error and skip retries
@@ -11,30 +13,30 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   # we need this only for compatibility to process already enqueued jobs after upgrade
   rescue_from(ActiveJob::DeserializationError) do |exception|
-    Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
+    System::ErrorReporting.report_error(exception)
   end
 
   queue_as :deletion
   unique :until_executed, lock_ttl: 10.minutes
 
+  # better limit by available  `delete` executors
+  # sidekiq_throttle concurrency: { limit: 10 }
+
   before_perform do |job|
-    # @object, workers_hierarchy, @background_destroy_method = job.arguments
-    # id = "Hierarchy-#{object.class.name}-#{object.id}"
-    # @caller_worker_hierarchy = Array(workers_hierarchy) + [id]
-    info "Starting #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
+    info "Starting #{job.class}#perform with the hierarchy of workers: #{job.arguments}"
   end
 
   after_perform do |job|
-    info "Finished #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
+    info "Finished #{job.class}#perform with the hierarchy of workers: #{job.arguments}"
   end
 
   # @param hierarchy [Array<String>] something like ["Plain-Service-1234", "Association-Service-1234:plans" ...]
-  # @note processes the last entry for deletion from hierarchy and re-schedules itself with updated hierarchy
+  # @note processes deleting a hierarchy of objects and reschedules itself at current progress after a time limit
   def perform(*hierarchy)
     return compatibility(hierarchy) unless hierarchy.first.is_a?(String)
 
     started = now
-    while now - started < 5
+    while now - started < WORK_TIME_LIMIT_SECONDS
       Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
       hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
     end
@@ -47,7 +49,10 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def handle_hierarchy_entry(entry)
     case entry
     when /Plain-(\w+)-(\d+)/
-      $1.constantize.find($2.to_i).background_deletion_method_call
+      ar_object = $1.constantize.find($2.to_i)
+      # callbacks logic differs between object destroyed by association, it is standalone if first job arg is itself
+      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(entry) if arguments.first == entry
+      ar_object.background_deletion_method_call
       []
     when /Association-(\w+)-(\d+):(\w+)/
       handle_association($1.constantize.find($2.to_i), $3, entry)
@@ -78,6 +83,10 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   # @return the hierarchy entries to handle deletion of an object
   def hierarchy_entries_for(ar_object)
+    if ar_object.is_a?(Account) && !ar_object.should_be_deleted?
+      raise DoNotRetryError, "background deleting account #{ar_object.id} which is not scheduled for deletion"
+    end
+
     ar_object_str = "#{ar_object.class}-#{ar_object.id}"
 
     [
@@ -86,9 +95,17 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     ]
   end
 
-  def compatibility(_object, _caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
+  def compatibility(_object, caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
     # maybe requeue first object from hierarchy would be adequate and uniqueness should deduplicate jobs
-    TODO
+    hierarchy_root = Array(caller_worker_hierarchy).first
+    return unless hierarchy_root
+
+    object_class, id = hierarchy_root.match(/Hierarchy-([a-zA-Z0-9_]+)-([\d*]+)/).captures
+
+    raise DoNotRetryError, "background deletion cannot handle #{hierarchy_root}" unless object_class && id
+
+    root_object = object_class.constantize.find(id.to_i)
+    self.class.perform_later hierarchy_entries_for(root_object)
   end
 
   def associations_strings(ar_object, *associations)
@@ -104,136 +121,20 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     first_argument.is_a?(String) ? first_argument : Random.uuid
   end
 
+  private
+
+  delegate :info, to: 'Rails.logger'
+
   def now
     Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
-  ############# ORIG ################
-  def x_perform(_object, _caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
-    build_batch
-  end
-
-  def on_success(_, options)
-    on_finish('on_success', options)
-  end
-
-  def on_complete(_, options)
-    on_finish('on_complete', options)
-  end
-
-  def on_finish(method_name, options)
-    workers_hierarchy = options['caller_worker_hierarchy']
-    info "Starting DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
-    object = GlobalID::Locator.locate(options['object_global_id'])
-    background_destroy_method = @background_destroy_method.presence || 'destroy'
-    DeletePlainObjectWorker.perform_later(object, workers_hierarchy, background_destroy_method)
-    info "Finished DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
-  rescue ActiveRecord::RecordNotFound => exception
-    info "DeleteObjectHierarchyWorker##{method_name} raised #{exception.class} with message #{exception.message}"
-  end
-
-  protected
-
-  delegate :info, to: 'Rails.logger'
-
-  attr_reader :object, :caller_worker_hierarchy
-
-  def build_batch
-    batch = Sidekiq::Batch.new
-    batch.description = batch_description
-    batch_callbacks(batch) { batch.jobs { destroy_and_delete_associations } }
-    batch
-  end
-
-  def batch_description
-    "Deleting #{object.class.name} [##{object.id}]"
-  end
-
-  def batch_callbacks(batch)
-    %i[success complete].each { |name| batch.on(name, self.class, callback_options) }
-    yield
-    bid = batch.bid
-
-    if Sidekiq::Batch::Status.new(bid).total.zero?
-      on_complete(bid, callback_options)
-    else
-      info("DeleteObjectHierarchyWorker#batch_success_callback retry job with the hierarchy of workers: #{caller_worker_hierarchy}")
-      retry_job wait: 5.minutes
+  class DummyDestroyedByAssociationReflection
+    def initialize(foreign_key)
+      @foreign_key = foreign_key
     end
+    attr_reader :foreign_key
   end
 
-  def destroy_and_delete_associations
-    Array(object.background_deletion).each do |association_config|
-      reflection = BackgroundDeletion::Reflection.new(association_config)
-      next unless destroyable_association?(reflection.name)
-
-      ReflectionDestroyer.new(object, reflection, caller_worker_hierarchy).destroy_later
-    end
-  end
-
-  def destroyable_association?(_association)
-    true
-  end
-
-  private
-
-  def called_from_provider_hierarchy?
-    return unless (tenant_id = object.tenant_id)
-    caller_worker_hierarchy.include?("Hierarchy-Account-#{tenant_id}")
-  end
-
-  def callback_options
-    { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
-  end
-
-  class ReflectionDestroyer
-
-    def initialize(main_object, reflection, caller_worker_hierarchy)
-      @main_object = main_object
-      @reflection = reflection
-      @caller_worker_hierarchy = caller_worker_hierarchy
-    end
-
-    def destroy_later
-      reflection.many? ? destroy_has_many_association : destroy_has_one_association
-    end
-
-    attr_reader :main_object, :reflection, :caller_worker_hierarchy
-
-    private
-
-    def destroy_has_many_association
-      main_object.public_send("#{reflection.name.to_s.singularize}_ids").each do |associated_object_id|
-        associated_object = reflection.class_name.constantize.new
-        associated_object.id = associated_object_id
-        delete_associated_object_later(associated_object)
-      end
-    rescue ActiveRecord::UnknownPrimaryKey => exception
-      Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
-    end
-
-    def destroy_has_one_association
-      associated_object = main_object.public_send(reflection.name)
-      delete_associated_object_later(associated_object)
-    end
-
-    def delete_associated_object_later(associated_object)
-      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy, reflection.background_destroy_method) if associated_object.try(:id)
-    end
-
-    def association_delete_worker
-      case reflection.class_name
-      when Account.name
-        DeleteAccountHierarchyWorker
-      when PaymentGatewaySetting.name
-        DeletePaymentSettingHierarchyWorker
-      else
-        DeleteObjectHierarchyWorker
-      end
-    end
-  end
-
-  class DoNotRetryError < RuntimeError; end
-
-  private_constant :ReflectionDestroyer, :DoNotRetryError
+  private_constant :DoNotRetryError, :DummyDestroyedByAssociationReflection
 end
