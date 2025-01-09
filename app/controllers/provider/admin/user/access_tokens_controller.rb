@@ -12,13 +12,16 @@ module Provider
         activate_menu :account, :personal, :tokens
         before_action :authorize_access_tokens
         before_action :disable_client_cache
-        before_action :load_presenter, only: %i[new create]
 
-        def new; end
+        def new
+          @presenter = AccessTokensNewPresenter.new(current_account)
+        end
 
         def create
           create! do |success, _failure|
             success.html do
+              @presenter = AccessTokensNewPresenter.new(current_account)
+
               flash[:token] = @access_token.id
               flash[:notice] = 'Access Token was successfully created.'
               redirect_to(collection_url)
@@ -41,10 +44,6 @@ module Provider
         end
 
         private
-
-        def load_presenter
-          @presenter = AccessTokensNewPresenter.new(current_account)
-        end
 
         def authorize_access_tokens
           authorize! :manage, :access_tokens, current_user
