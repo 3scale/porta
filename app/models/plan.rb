@@ -12,8 +12,7 @@ class Plan < ApplicationRecord
   include SystemName
   include Logic::MetricVisibility::Plan
 
-  self.background_deletion = [:contracts, :plan_metrics, :pricing_rules,
-                              :usage_limits, [:customizations, { action: :destroy, class_name: 'Plan' }]]
+  self.background_deletion = %i[contracts plan_metrics pricing_rules usage_limits customizations]
 
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
 
