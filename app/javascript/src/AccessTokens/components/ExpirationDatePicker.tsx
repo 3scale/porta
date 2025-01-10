@@ -69,16 +69,14 @@ const computeFieldHint = (formattedDateValue: string | undefined) => {
   return `The token will expire on ${formattedDateValue}`
 }
 
-const computeTzMismatch = (tzOffset: number | undefined) => {
-  if (tzOffset === undefined) return
-
+const computeTzMismatch = (tzOffset: number) => {
   // Timezone offset in the same format as ActiveSupport
   const jsTzOffset = new Date().getTimezoneOffset() * -60
 
   return jsTzOffset !== tzOffset
 }
 
-const computeLabelIcon = (tzMismatch: boolean | undefined) => {
+const computeLabelIcon = (tzMismatch: boolean) => {
   if (!tzMismatch) return
 
   return (
@@ -108,7 +106,7 @@ const computeLabelIcon = (tzMismatch: boolean | undefined) => {
 interface Props {
   id: string;
   label: string | null;
-  tzOffset?: number;
+  tzOffset: number;
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
