@@ -54,7 +54,7 @@ const computeSelectedDate = (dropdownDate: Date | null, dropdownSelectedItem: Ex
 }
 
 const computeFormattedDateValue = (selectedDate: Date | null) => {
-  if (!selectedDate) return
+  if (!selectedDate) return ''
 
   const formatter = Intl.DateTimeFormat('en-US', {
     month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
@@ -63,7 +63,7 @@ const computeFormattedDateValue = (selectedDate: Date | null) => {
   return formatter.format(selectedDate)
 }
 
-const computeFieldHint = (formattedDateValue: string | undefined) => {
+const computeFieldHint = (formattedDateValue: string) => {
   if (!formattedDateValue) return
 
   return `The token will expire on ${formattedDateValue}`
