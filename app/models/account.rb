@@ -49,25 +49,25 @@ class Account < ApplicationRecord
   include ProviderDomains
   include Indices::AccountIndex::ForAccount
 
-  self.background_deletion = [
-    :users,
-    :mail_dispatch_rules,
-    [:api_docs_services, { class_name: 'ApiDocs::Service' }],
-    :services,
-    :contracts,
-    :account_plans,
-    [:settings, { action: :destroy, class_name: 'Settings', has_many: false }],
-    [:payment_detail, { action: :destroy, has_many: false }],
-    [:payment_gateway_setting, { action: :destroy, has_many: false }],
-    [:buyer_accounts, { action: :destroy, class_name: 'Account' }],
-    [:profile, { action: :delete, has_many: false }],
-    [:templates, { action: :delete, class_name: 'CMS::Template' }],
-    [:sections, { action: :delete, class_name: 'CMS::Section' }],
-    [:provided_sections, { action: :delete, class_name: 'CMS::Section' }],
-    [:redirects, { action: :delete, class_name: 'CMS::Redirect' }],
-    [:files, { action: :delete, class_name: 'CMS::File' }],
-    [:builtin_pages, { action: :delete, class_name: 'CMS::BuiltinPage' }],
-    [:provided_groups, { action: :delete, class_name: 'CMS::Group' }]
+  self.background_deletion = %i[
+    users
+    mail_dispatch_rules
+    api_docs_services
+    services
+    contracts
+    account_plans
+    settings
+    buyer_accounts
+    payment_detail
+    payment_gateway_setting
+    profile
+    templates
+    sections
+    provided_sections
+    redirects
+    files
+    builtin_pages
+    provided_groups
   ].freeze
 
   #TODO: this needs testing?
