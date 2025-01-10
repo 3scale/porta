@@ -5,6 +5,8 @@ class CMS::Template < ApplicationRecord
   include ThreeScale::Search::Scopes
   include CMS::Filtering
 
+  self.background_deletion_method = :delete
+
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
   scope :for_rails_view, ->(path) { where(rails_view_path: path.to_s) }
 

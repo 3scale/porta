@@ -4,6 +4,8 @@ class CMS::Group < ApplicationRecord
   # This is BuyerGroup
   self.table_name = :cms_groups
 
+  self.background_deletion_method = :delete
+
   belongs_to :provider, :class_name => "Account"
 
   validates :name, :provider, presence: true, length: { maximum: 255 }

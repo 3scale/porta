@@ -30,6 +30,31 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     info "Finished #{job.class}#perform with the hierarchy of workers: #{job.arguments}"
   end
 
+  class << self
+    # convenience method to schedule deleting an active record object
+    def delete_later(ar_object)
+      perform_later *hierarchy_entries_for(ar_object)
+    end
+
+    private
+
+    # @return the hierarchy entries to handle deletion of an object
+    def hierarchy_entries_for(ar_object)
+      return [] unless ar_object.persisted? # e.g. when calling Proxy#oidc_configuration a new object can be generated
+
+      if ar_object.is_a?(Account) && !ar_object.should_be_deleted?
+        raise DoNotRetryError, "background deleting account #{ar_object.id} which is not scheduled for deletion"
+      end
+
+      ar_object_str = "#{ar_object.class}-#{ar_object.id}"
+
+      [
+        "Plain-#{ar_object_str}",
+        *ar_object.background_deletion.map { "Association-#{ar_object_str}:#{_1}" },
+      ]
+    end
+  end
+
   # @param hierarchy [Array<String>] something like ["Plain-Service-1234", "Association-Service-1234:plans" ...]
   # @note processes deleting a hierarchy of objects and reschedules itself at current progress after a time limit
   def perform(*hierarchy)
@@ -37,24 +62,39 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
     started = now
     while now - started < WORK_TIME_LIMIT_SECONDS
+      last_entry = hierarchy.pop
+      return unless last_entry
+
       Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
-      hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
+      hierarchy.concat handle_hierarchy_entry(last_entry)
     end
 
-    self.class.perform_later(*hierarchy)
+    self.class.perform_later(*hierarchy) # TODO: assure lock does not affect this scheduling, maybe as a callback
+  end
+
+  # we can just use job.arguments.first but for compatibility mode we want it not to lock
+  def lock_key
+    first_argument = arguments.first
+    first_argument.is_a?(String) ? first_argument : Random.uuid
+  end
+
+  private
+
+  def hierarchy_entries_for(...)
+    self.class.send(:hierarchy_entries_for, ...)
   end
 
   # handles a single hierarchy entry
   # @return [Array<String>] hierarchy for a newly discovered object from association to delete or empty array otherwise
   def handle_hierarchy_entry(entry)
     case entry
-    when /Plain-(\w+)-(\d+)/
+    when /Plain-([:\w]+)-(\d+)/
       ar_object = $1.constantize.find($2.to_i)
       # callbacks logic differs between object destroyed by association, it is standalone if first job arg is itself
-      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(entry) if arguments.first == entry
+      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(entry) if arguments.first != entry
       ar_object.background_deletion_method_call
       []
-    when /Association-(\w+)-(\d+):(\w+)/
+    when /Association-([:\w]+)-(\d+):(\w+)/
       handle_association($1.constantize.find($2.to_i), $3, entry)
     else
       raise ArgumentError, "Invalid entry specification: #{entry}"
@@ -81,20 +121,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     end
   end
 
-  # @return the hierarchy entries to handle deletion of an object
-  def hierarchy_entries_for(ar_object)
-    if ar_object.is_a?(Account) && !ar_object.should_be_deleted?
-      raise DoNotRetryError, "background deleting account #{ar_object.id} which is not scheduled for deletion"
-    end
-
-    ar_object_str = "#{ar_object.class}-#{ar_object.id}"
-
-    [
-      "Plain-#{ar_object_str}",
-      *ar_object.background_deletion.map { "Association-#{ar_object_str}:#{_1}" },
-    ]
-  end
-
   def compatibility(_object, caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
     # maybe requeue first object from hierarchy would be adequate and uniqueness should deduplicate jobs
     hierarchy_root = Array(caller_worker_hierarchy).first
@@ -104,8 +130,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
     raise DoNotRetryError, "background deletion cannot handle #{hierarchy_root}" unless object_class && id
 
-    root_object = object_class.constantize.find(id.to_i)
-    self.class.perform_later hierarchy_entries_for(root_object)
+    self.class.delete_later object_class.constantize.find(id.to_i)
   end
 
   def associations_strings(ar_object, *associations)
@@ -114,14 +139,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
       "Association-#{ar_object.class}-#{ar_object.id}:#{association}"
     end
   end
-
-  # we can just use job.arguments.first but for compatibility mode we want it not to lock
-  def lock_key
-    first_argument = job.arguments.first
-    first_argument.is_a?(String) ? first_argument : Random.uuid
-  end
-
-  private
 
   delegate :info, to: 'Rails.logger'
 
@@ -133,6 +150,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     def initialize(foreign_key)
       @foreign_key = foreign_key
     end
+
     attr_reader :foreign_key
   end
 
