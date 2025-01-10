@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import {
   Alert,
   CalendarMonth,
@@ -35,6 +35,76 @@ const tomorrow: Date = new Date(today)
 tomorrow.setDate(today.getDate() + 1)
 const dayMs = 60 * 60 * 24 * 1000
 
+const computeDropdownDate = (dropdownSelectedItem: ExpirationItem) => {
+  if (dropdownSelectedItem.period === 0) return null
+
+  return new Date(today.getTime() + dropdownSelectedItem.period * dayMs)
+}
+
+const computeSelectedDate = (dropdownDate: Date | null, dropdownSelectedItem: ExpirationItem, calendarPickedDate: Date) => {
+  let value = null
+
+  if (dropdownDate) {
+    value = dropdownDate
+  } else if (dropdownSelectedItem.id === 'custom' ) {
+    value = calendarPickedDate
+  }
+
+  return value
+}
+
+const computeFormattedDateValue = (selectedDate: Date | null) => {
+  if (!selectedDate) return
+
+  const formatter = Intl.DateTimeFormat('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
+  })
+
+  return formatter.format(selectedDate)
+}
+
+const computeFieldHint = (formattedDateValue: string | undefined) => {
+  if (!formattedDateValue) return
+
+  return `The token will expire on ${formattedDateValue}`
+}
+
+const computeTzMismatch = (tzOffset: number | undefined) => {
+  if (tzOffset === undefined) return
+
+  // Timezone offset in the same format as ActiveSupport
+  const jsTzOffset = new Date().getTimezoneOffset() * -60
+
+  return jsTzOffset !== tzOffset
+}
+
+const computeLabelIcon = (tzMismatch: boolean | undefined) => {
+  if (!tzMismatch) return
+
+  return (
+    <Popover
+      bodyContent={(
+        <p>
+            Your local time zone differs from the provider default.
+            The token will expire at the time you selected in your local time zone.
+        </p>
+      )}
+      headerContent={(
+        <span>Time zone mismatch</span>
+      )}
+    >
+      <button
+        aria-describedby="form-group-label-info"
+        aria-label="Time zone mismatch warning"
+        className="pf-c-form__group-label-help"
+        type="button"
+      >
+        <ExclamationTriangleIcon noVerticalAlign />
+      </button>
+    </Popover>
+  )
+}
+
 interface Props {
   id: string;
   label: string | null;
@@ -44,84 +114,16 @@ interface Props {
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(collection[0])
   const [calendarPickedDate, setCalendarPickedDate] = useState(tomorrow)
+
+  const dropdownDate = computeDropdownDate(dropdownSelectedItem)
+  const selectedDate = computeSelectedDate(dropdownDate, dropdownSelectedItem, calendarPickedDate)
+  const formattedDateValue = computeFormattedDateValue(selectedDate)
+  const fieldHint = computeFieldHint(formattedDateValue)
+  const tzMismatch = computeTzMismatch(tzOffset)
+  const labelIcon = computeLabelIcon(tzMismatch)
+  const inputDateValue = selectedDate ? selectedDate.toISOString() : ''
   const fieldName = `human_${id}`
   const fieldLabel = label ?? 'Expires in'
-
-  const dropdownDate = useMemo(() => {
-    if (dropdownSelectedItem.period === 0) return null
-
-    return new Date(today.getTime() + dropdownSelectedItem.period * dayMs)
-  }, [dropdownSelectedItem])
-
-  const selectedDate = useMemo(() => {
-    let value = null
-
-    if (dropdownDate) {
-      value = dropdownDate
-    } else if (dropdownSelectedItem.id === 'custom' ) {
-      value = calendarPickedDate
-    }
-
-    return value
-  }, [dropdownDate, dropdownSelectedItem, calendarPickedDate])
-
-  const formattedDateValue = useMemo(() => {
-    if (!selectedDate) return
-
-    const formatter = Intl.DateTimeFormat('en-US', {
-      month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
-    })
-
-    return formatter.format(selectedDate)
-  }, [selectedDate])
-
-  const fieldHint = useMemo(() => {
-    if (!formattedDateValue) return
-
-    return `The token will expire on ${formattedDateValue}`
-  }, [formattedDateValue])
-
-  const inputDateValue = useMemo(() => {
-    if (!selectedDate) return ''
-
-    return selectedDate.toISOString()
-  }, [selectedDate])
-
-  const tzMismatch = useMemo(() => {
-    if (tzOffset === undefined) return
-
-    // Timezone offset in the same format as ActiveSupport
-    const jsTzOffset = new Date().getTimezoneOffset() * -60
-
-    return jsTzOffset !== tzOffset
-  }, [tzOffset])
-
-  const labelIcon = useMemo(() => {
-    if (!tzMismatch) return
-
-    return (
-      <Popover
-        bodyContent={(
-          <p>
-            Your local time zone differs from the provider default.
-            The token will expire at the time you selected in your local time zone.
-          </p>
-        )}
-        headerContent={(
-          <span>Time zone mismatch</span>
-        )}
-      >
-        <button
-          aria-describedby="form-group-label-info"
-          aria-label="Time zone mismatch warning"
-          className="pf-c-form__group-label-help"
-          type="button"
-        >
-          <ExclamationTriangleIcon noVerticalAlign />
-        </button>
-      </Popover>
-    )
-  }, [tzMismatch])
 
   const handleOnChange = (_value: string, event: FormEvent<HTMLSelectElement>) => {
     const value = (event.target as HTMLSelectElement).value
