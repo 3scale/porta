@@ -32,6 +32,7 @@ const collection: ExpirationItem[] = [
 
 const today: Date = new Date()
 const tomorrow: Date = new Date(today)
+tomorrow.setDate(today.getDate() + 1)
 const dayMs = 60 * 60 * 24 * 1000
 
 interface Props {
@@ -41,7 +42,6 @@ interface Props {
 }
 
 const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset }) => {
-  tomorrow.setDate(today.getDate() + 1)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(collection[0])
   const [calendarPickedDate, setCalendarPickedDate] = useState(tomorrow)
   const fieldName = `human_${id}`
@@ -177,7 +177,8 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
   )
 }
 
-const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker id={props.id} label={props.label} tzOffset={props.tzOffset} />, containerId) }
+// eslint-disable-next-line react/jsx-props-no-spreading
+const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker {...props} />, containerId) }
 
 export type { ExpirationItem, Props }
 export { ExpirationDatePicker, ExpirationDatePickerWrapper }
