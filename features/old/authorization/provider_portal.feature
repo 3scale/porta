@@ -12,7 +12,7 @@ Feature: Provider portal section authorization
   Scenario: Provider admin can access portal
     When I log in as provider "foo.3scale.localhost"
     When I go to the provider dashboard
-    Then I should see the link "PORTAL" within the audience dashboard widget
+    Then there should be a link to "Developer Portal"
     Then they should be able to go to the following pages:
       | the CMS Templates page |
       | the CMS Sections page  |
@@ -29,7 +29,7 @@ Feature: Provider portal section authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should not see "Portal" within the audience dashboard widget
+    And there should not be a link to "Developer Portal"
     And they should see an error when going to the following pages:
       | the CMS Templates page |
       | the CMS Sections page  |
@@ -47,7 +47,7 @@ Feature: Provider portal section authorization
     And user "member" has access to the admin section "portal"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should see "Portal" within the audience dashboard widget
+    And there should be a link to "Developer Portal" within the audience dashboard widget
     Then they should be able to go to the following pages:
       | the CMS Templates page |
       | the CMS Sections page  |
