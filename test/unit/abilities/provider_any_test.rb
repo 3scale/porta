@@ -32,6 +32,7 @@ module Abilities
 
     test 'Cinstance/Application events can show if has :partners and access to the service if there is a service' do
       service = FactoryBot.create(:simple_service, account: @account)
+      another_service = FactoryBot.create(:simple_service, account: @account)
       plan = FactoryBot.create(:simple_application_plan, issuer: service)
       cinstance = FactoryBot.create(:cinstance, plan: plan)
       cinstance_events = [
@@ -45,7 +46,7 @@ module Abilities
 
         assert_cannot ability, :show, cinstance_event
 
-        user.member_permission_service_ids = [FactoryBot.create(:cinstance).id]
+        user.member_permission_service_ids = [another_service.id]
 
         assert_cannot ability, :show, cinstance_event
 
