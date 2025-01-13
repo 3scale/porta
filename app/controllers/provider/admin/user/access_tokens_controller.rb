@@ -18,10 +18,9 @@ module Provider
         end
 
         def create
+          @presenter = AccessTokensNewPresenter.new(current_account)
           create! do |success, _failure|
             success.html do
-              @presenter = AccessTokensNewPresenter.new(current_account)
-
               flash[:token] = @access_token.id
               flash[:notice] = 'Access Token was successfully created.'
               redirect_to(collection_url)
