@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream8 as builder
+FROM quay.io/centos/centos:stream9 as builder
 WORKDIR /opt/system
 ENV RUBY_MAJOR_VERSION=3 \
     RUBY_MINOR_VERSION=1 \
@@ -10,10 +10,8 @@ ADD . ./
 RUN cp config/examples/*.yml config/ \
     && cp openshift/system/config/* config/
 
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
-    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:18 mysql:8.0 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' podman-catatonit \
+RUN dnf -y --enablerepo=crb --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:18 \
+    && dnf install -y --enablerepo=crb --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' cpio \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
     && bundle config build.nokogiri --use-system-libraries \
@@ -36,7 +34,7 @@ RUN cd /tmp \
     && ./autogen.sh && ./configure --libdir=/usr/local/lib64/ && make
 
 
-FROM quay.io/centos/centos:stream8 AS base
+FROM quay.io/centos/centos:stream9 AS base
 
 USER root
 
@@ -52,18 +50,14 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
 
 WORKDIR $HOME
 
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
-    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
-    && dnf -y module enable ruby:${RUBY_VERSION} nodejs:18 mysql:8.0 \
-    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt \
+RUN dnf -y --enablerepo=crb module enable ruby:${RUBY_VERSION} nodejs:18 \
+    && dnf install -y --enablerepo=crb --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info postgresql rubygem-irb rubygem-rdoc ruby libpq mysql mysql-libs gd git liberation-sans-fonts file libxml2 libxslt catatonit \
     && dnf -y clean all
 
 COPY --from=builder /opt/system/ .
 COPY --from=builder /tmp/memkind-*/jemalloc/lib/libjemalloc.so* /usr/local/lib64
 COPY --from=builder /usr/local/share/gems /usr/local/share/
 COPY --from=builder /usr/local/bin/bundle* /usr/local/bin
-# in RHEL 8 podman-catatonit pulls in too many useless deps so we don't install the RPM directly, on RHEL 9 simply use package `catatonit`
-COPY --from=builder /usr/libexec/catatonit/catatonit /usr/libexec/catatonit/catatonit
 
 RUN echo /usr/local/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
@@ -109,7 +103,7 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     SECRET_KEY_BASE=dummy \
     DATABASE_URL='mysql2://root:@localhost/porta'
 USER 0
-RUN dnf install -y mysql-server mysql-test \
+RUN dnf install --enablerepo=crb -y mysql-server mysql-test \
     && setcap -r /usr/libexec/mysqld \
     && setpriv --reuid 27 --regid 27 --clear-groups mysqld --initialize-insecure \
     && (mysqld_safe &) \
