@@ -168,6 +168,7 @@ build-envs:
     environment:
       DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
+      CAPYBARA_MAX_WAIT_TIME: 20
 
 ##################################### CIRCLECI COMMANDS ############################################
 
