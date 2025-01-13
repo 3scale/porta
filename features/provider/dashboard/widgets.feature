@@ -33,7 +33,7 @@ Feature: Dashboard Widgets
       Given a member user "Dude" of the provider
       And the user logs in
 
-    Scenario: User have no permissions
+    Scenario: User with no permissions doesn't see widgets
       Given the user has no permissions
       When they go to the provider dashboard
       Then they should see "Access permissions needed"
@@ -41,29 +41,32 @@ Feature: Dashboard Widgets
       But they should not be able to see the products widget
       And they should not be able to see the backends widget
 
-    Scenario: User has partners permission
+    Scenario: User with partner permission sees products
       Given the user has partners permission
       When they go to the provider dashboard
       Then they should not see "Access permissions needed"
       And they should be able to see the products widget
+      And they should not be able to see the backends widget
 
-    Scenario: User does not have access to service admin sections
+    Scenario: User with monitoring permission sees both widgets
       Given the user has monitoring permission
       When they go to the provider dashboard
       Then they should not see "Access permissions needed"
       And they should be able to see the products widget
       And they should be able to see the backends widget
 
-    Scenario: User does not have access to service admin sections
+    Scenario: User with plans permission sees both widgets
       Given the user has plans permission
       When they go to the provider dashboard
       Then they should not see "Access permissions needed"
       And they should be able to see the products widget
       And they should be able to see the backends widget
 
-    Scenario: User does not have access to service admin sections
+    Scenario: User with policy registry permission doesn't see widgets
       Given the user has policy_registry permission
       When they go to the provider dashboard
       Then they should see "Access permissions needed"
       And there should be a link to "contact foo.3scale.localhost"
       But they should not see "Banana API"
+      And they should not be able to see the products widget
+      And they should not be able to see the backends widget
