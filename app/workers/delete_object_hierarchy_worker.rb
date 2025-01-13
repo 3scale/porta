@@ -17,7 +17,11 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   end
 
   queue_as :deletion
-  unique :until_executed, lock_ttl: 10.minutes
+
+  # until_executed seems to rely on #after_perform which is skipped on failure so not sure whether retries will work.
+  # additionally if we want to reschedule ourselves in #after_perform, it is not nice to rely on flaky order
+  # see https://github.com/3scale/activejob-uniqueness/blob/main/lib/active_job/uniqueness/strategies/until_executed.rb
+  unique :until_and_while_executing, lock_ttl: 6.hours
 
   # better limit by available  `delete` executors
   # sidekiq_throttle concurrency: { limit: 10 }
@@ -27,7 +31,11 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   end
 
   after_perform do |job|
-    info "Finished #{job.class}#perform with the hierarchy of workers: #{job.arguments}"
+    if @remaining_hierarchy.present?
+      self.class.perform_later(*@remaining_hierarchy)
+      msg = " iteration of"
+    end
+    info "Finished#{msg} #{job.class}#perform with the hierarchy of workers: #{job.arguments}"
   end
 
   class << self
@@ -61,15 +69,18 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     return compatibility(hierarchy) unless hierarchy.first.is_a?(String)
 
     started = now
-    while now - started < WORK_TIME_LIMIT_SECONDS
-      last_entry = hierarchy.pop
-      return unless last_entry
-
+    while hierarchy.present? && now - started < WORK_TIME_LIMIT_SECONDS
       Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
-      hierarchy.concat handle_hierarchy_entry(last_entry)
+      hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
     end
 
-    self.class.perform_later(*hierarchy) # TODO: assure lock does not affect this scheduling, maybe as a callback
+    @remaining_hierarchy = hierarchy
+    # can be like this instead of in `after_perform`, the benefit is that we don't use undocumented order of callbacks
+    # return unless hierarchy.present?
+    #
+    # # depending on
+    # unlock(resource: lock_key)
+    # self.class.perform_later(*hierarchy)
   end
 
   # we can just use job.arguments.first but for compatibility mode we want it not to lock
