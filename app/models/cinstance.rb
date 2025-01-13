@@ -3,7 +3,7 @@ class Cinstance < Contract
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 
-  self.background_deletion = [:referrer_filters, :application_keys, [:alerts, { action: :delete }]]
+  self.background_deletion = [:referrer_filters, :application_keys, [:alerts, { action: :delete_truly }]]
 
   delegate :backend_version, to: :service, allow_nil: true
 

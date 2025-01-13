@@ -7,6 +7,8 @@ class Alert < ApplicationRecord
   self.default_sort_direction = :desc
   self.allowed_search_scopes = %w[cinstance_id account_id timestamp level]
 
+  alias delete_truly delete # keep reference to the original AR #delete method to use for background deletion
+
   ALERT_LEVELS = [ 50, 80, 90, 100, 120, 150, 200, 300 ]
   VIOLATION_LEVEL = 100
 
