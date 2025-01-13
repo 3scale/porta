@@ -42,15 +42,9 @@ const computeDropdownDate = (dropdownSelectedItem: ExpirationItem) => {
 }
 
 const computeSelectedDate = (dropdownDate: Date | null, dropdownSelectedItem: ExpirationItem, calendarPickedDate: Date) => {
-  let value = null
+  if (dropdownDate) return dropdownDate
 
-  if (dropdownDate) {
-    value = dropdownDate
-  } else if (dropdownSelectedItem.id === 'custom' ) {
-    value = calendarPickedDate
-  }
-
-  return value
+  return dropdownSelectedItem.id === 'custom' ? calendarPickedDate : null
 }
 
 const computeFormattedDateValue = (selectedDate: Date | null) => {
