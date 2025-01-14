@@ -10,7 +10,7 @@ Capybara.configure do |config|
   config.match = :prefer_exact
   config.javascript_driver = :headless_chrome
   config.always_include_port = true
-  config.default_max_wait_time = 10
+  config.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 10).to_i
   config.server = :webrick # default is `:default` (which uses puma)
 end
 
