@@ -8,13 +8,6 @@ Given "{provider} has signup {enabled}" do |provider, enabled|
   end
 end
 
-# TODO: remove this nonsense
-Given /^provider "([^"]*)" has Browser CMS (activated|deactivated)$/ do |provider, value|
-  if value == 'deactivated'
-    raise 'BCMS cannot be deactivated!'
-  end
-end
-
 # TODO: too generic. Replace it with "{product} uses backend {backend_version}"
 Given "{provider} uses backend {backend_version} in his default service" do |provider, backend_version|
   service = provider.default_service

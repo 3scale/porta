@@ -6,9 +6,8 @@ Feature: Email templates management
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has Browser CMS activated
-      And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
-    Given I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
+    And I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Creating template
     When I go to the email templates page

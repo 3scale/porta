@@ -6,8 +6,7 @@ Feature: Provider portal section authorization
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has Browser CMS activated
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Provider admin can access portal
     When I log in as provider "foo.3scale.localhost"

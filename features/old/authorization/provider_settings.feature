@@ -7,7 +7,6 @@ Feature: Provider settings authorization
   Background:
     Given a provider exists
     And the provider is charging its buyers
-    And provider "foo.3scale.localhost" has Browser CMS activated
 
   Scenario: Provider admin can access settings
     Given current domain is the admin domain of provider "foo.3scale.localhost"
