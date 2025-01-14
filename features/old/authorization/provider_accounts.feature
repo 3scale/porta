@@ -46,7 +46,7 @@ Feature: Provider accounts authorization
     When I log in as provider "member"
 
     And I go to the provider dashboard
-    Then I should not see the link "ACCOUNTS" within the audience dashboard widget
+    And there should not be a link to "ACCOUNTS"
 
     Then they should see an error when going to the following pages:
       | the buyer accounts page                       |

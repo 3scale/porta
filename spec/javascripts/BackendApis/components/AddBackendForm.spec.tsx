@@ -14,6 +14,7 @@ const backendsPath = '/backends'
 const defaultProps = {
   backend: null,
   backends: [backend],
+  canCreateBackend: true,
   inlineErrors: null,
   url: '',
   backendsPath

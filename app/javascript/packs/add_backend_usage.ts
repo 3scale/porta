@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const { dataset } = container
   const { url = '', backendsPath = '', backendApiId } = dataset
 
+  const canCreateBackend = safeFromJsonString<boolean>(dataset.canCreateBackend) ?? false
   const backends = safeFromJsonString<Backend[]>(dataset.backends) ?? []
   const backend = backends.find(b => String(b.id) === backendApiId) ?? null
   const inlineErrors = safeFromJsonString(dataset.inlineErrors) || null
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   AddBackendFormWrapper({
     backends,
     backend,
+    canCreateBackend,
     inlineErrors,
     url,
     backendsPath

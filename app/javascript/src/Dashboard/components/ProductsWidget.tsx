@@ -16,7 +16,7 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  newProductPath: string;
+  newProductPath: string | null;
   productsPath: string;
   products: {
     id: number;
@@ -45,14 +45,16 @@ const ProductsWidget: FunctionComponent<Props> = ({
           Products
         </Title>
         <CardActions>
-          <Button
-            component="a"
-            data-testid="dashboardCreateProduct-buttonLink"
-            href={newProductPath}
-            variant="primary"
-          >
-            Create Product
-          </Button>
+          {newProductPath && (
+            <Button
+              component="a"
+              data-testid="dashboardCreateProduct-buttonLink"
+              href={newProductPath}
+              variant="primary"
+            >
+              Create Product
+            </Button>
+          )}
         </CardActions>
       </div>
       <div className="dashboard-list-subtitle">

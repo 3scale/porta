@@ -7,14 +7,12 @@
   width: 100%;
   clear: both;
 
-  &--audience + .DashboardSection--service,
-  &--audience + .DashboardSection--service.is-closed {
-    margin-top: line-height-times(1);
+  &--audience + .DashboardSection--service {
+    margin-top: line-height-times(1.4);
   }
 
   &--services {
     border-top: 0;
-    margin-top: line-height-times(1.4);
 
     .DashboardSection--service.hidden {
       display: none;

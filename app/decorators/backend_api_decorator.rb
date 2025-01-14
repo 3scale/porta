@@ -17,8 +17,11 @@ class BackendApiDecorator < ApplicationDecorator
     }
   end
 
-  def products_table_data
-    ServiceDecorator.decorate_collection(services.accessible.sort_by(&:name))
+  def products_table_data(user)
+    ability = Ability.new(user)
+    ServiceDecorator.decorate_collection(services.accessible
+                                                 .accessible_by(ability)
+                                                 .sort_by(&:name))
                     .map(&:table_data)
                     .to_json
   end

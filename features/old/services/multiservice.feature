@@ -6,6 +6,7 @@ Feature: Multiservice feature
 
   Background:
     Given a provider is logged in
+    And the provider has "multiple_services" visible
     And a default service of provider "foo.3scale.localhost" has name "Fancy API"
 
   Scenario: Can create new service setting

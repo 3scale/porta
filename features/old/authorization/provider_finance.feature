@@ -13,7 +13,7 @@ Feature: Provider finance authorization
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost"
     When I go to the provider dashboard
-    Then I should see "Billing" within the audience dashboard widget
+    Then there should be a link to "Billing"
     And they should be able to go to the following pages:
       | the earnings by month page          |
       | the finance settings page |
@@ -24,7 +24,7 @@ Feature: Provider finance authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should not see "Billing" within the audience dashboard widget
+    Then there should not be a link to "Billing"
     And they should see an error when going to the following pages:
       | the earnings by month page          |
       | the finance settings page |
@@ -35,7 +35,7 @@ Feature: Provider finance authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should see "Billing" within the audience dashboard widget
+    Then there should be a link to "Billing"
     And they should be able to go to the following pages:
       | the earnings by month page          |
       | the finance settings page |

@@ -35,37 +35,17 @@ Then "the most recently updated products and backends can be found in the dashbo
   products = @provider.services.order(updated_at: :desc)
   backend_apis = @provider.backend_apis.order(updated_at: :desc)
 
-  within products_widget do
+  within selector_for('the products widget') do
     products.first(5).each do |p|
       assert_selector('.pf-c-data-list__item', text: p.name)
     end
     assert_no_selector('.pf-c-data-list__item', text: products.last.name)
   end
 
-  within backend_apis_widget do
+  within selector_for('the backends widget') do
     backend_apis.first(5).each do |b|
       assert_selector('.pf-c-data-list__item', text: b.name)
     end
     assert_no_selector('.pf-c-data-list__item', text: backend_apis.last.name)
   end
-end
-
-When "an admin is at the dashboard" do
-  visit admin_dashboard_path
-end
-
-Then "products can be created from the dashboard" do
-  assert_selector("a[href='#{new_admin_service_path}']", text: 'Create Product')
-end
-
-And "backends can be created from the dashboard" do
-  assert_selector("a[href='#{new_provider_admin_backend_api_path}']", text: 'Create Backend')
-end
-
-def products_widget
-  find('#products-widget')
-end
-
-def backend_apis_widget
-  find('#backends-widget')
 end
