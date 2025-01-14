@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-Given "{provider} has plans (already )ready for signups" do |provider|
-  create_plan(:application, name: 'application_plan', issuer: provider, published: true, default: true)
+Given "{provider} has plans ready for signups" do |provider|
+  FactoryBot.create(:published_application_plan, name: 'application_plan', issuer: provider.first_service!, default: true)
 end
 
 When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
