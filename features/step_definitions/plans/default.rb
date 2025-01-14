@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-Given "a default {word} plan of {provider}" do |type, provider|
-  create_plan(type, name: 'The Plan', issuer: provider, published: true, default: true)
-end
-
-Given "a default {word} {string} plan of {provider}" do |type, name, provider|
-  create_plan(type, name: name, issuer: provider, published: true, default: true)
+Given "a default application plan of {provider}" do |provider|
+  FactoryBot.create(:published_application_plan, name: 'The Plan',
+                    issuer: provider.first_service!,
+                    default: true)
 end
 
 Given "{provider} has no default application plan" do |provider|
