@@ -5,7 +5,7 @@ Feature: Content access in liquid
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     Given provider "foo.3scale.localhost" has Browser CMS activated
       And the template "main_layout" of provider "foo.3scale.localhost" is
         """

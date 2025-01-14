@@ -5,7 +5,7 @@ Feature: Signup
   I want to sign up
 
 Background:
-  Given provider "master" has multiple applications disabled
+  Given provider "master" has "multiple_applications" denied
     And provider "master" has default service and account plan
 
 @ignore-backend @allow-rescue

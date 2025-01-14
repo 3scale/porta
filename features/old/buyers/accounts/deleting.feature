@@ -6,7 +6,7 @@ Feature: Deleting buyer account
 
   Background:
     Given a provider is logged in on 1st January 2011
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
   Scenario: Deleting buyer account from the account summary page

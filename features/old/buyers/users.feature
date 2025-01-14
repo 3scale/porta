@@ -6,7 +6,7 @@ Feature: Buyer users management
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And the provider has the following fields defined for users:
       | Name            | Choices | Label | Required | Read Only | Hidden |
       | custom_field    |         |       |          |           |        |

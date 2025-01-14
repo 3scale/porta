@@ -8,7 +8,7 @@ Feature: Site settings
 
   @security
   Scenario: Settings is not available for buyers
-    Given provider "foo.3scale.localhost" has multiple applications enabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" visible
       And a buyer "bob" signed up to provider "foo.3scale.localhost"
     When I log in as "bob" on foo.3scale.localhost
     When I request the url of the site settings page then I should see 404

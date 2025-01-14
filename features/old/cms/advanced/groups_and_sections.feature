@@ -5,7 +5,7 @@ Feature: Groups and Sections
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "groups" switch allowed
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
       And an approved buyer "alice" signed up to provider "foo.3scale.localhost"
 
       And provider "foo.3scale.localhost" has a public section "Docs" with path "/docs"
