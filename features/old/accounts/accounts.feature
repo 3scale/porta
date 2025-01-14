@@ -76,8 +76,7 @@ Feature: Account management
 
   @regression-test @javascript
   Scenario: Edit account information even with advanced CMS enabled
-    When provider "foo.3scale.localhost" has Browser CMS activated
-    And current domain is the admin domain of provider "foo.3scale.localhost"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
      And I go to the provider edit account page
     Then I should see "Edit Account Details"
