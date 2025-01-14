@@ -56,7 +56,8 @@ Feature: Buyer users management
   Scenario: Delete buyer user
     When I go to the buyer user page for "bob"
     And I follow "Edit"
-    Then I follow "Delete" and confirm the dialog
+    Then I follow "Delete"
+    And confirm the dialog
     # TODO: confirm step here
     Then I should be on the buyer users page for "SpaceWidgets"
     And I should not see buyer user "bob"

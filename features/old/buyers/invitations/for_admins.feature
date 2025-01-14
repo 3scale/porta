@@ -49,7 +49,8 @@ Feature: Buyer Account Invitations
     When I navigate to the page of the invitations of the partner "lol cats"
     # And select action "Delete" of "alice@example.org"
     # And confirm the dialog
-    And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com" and confirm the dialog
+    And I press "Delete" for an invitation from account "lol cats" for "alice@lolcats.com"
+    And confirm the dialog
     Then I should not see invitation for "alice@lolcats.com"
 
   Scenario: Resending invitations

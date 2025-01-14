@@ -12,7 +12,8 @@ Feature: Deleting buyer account
   Scenario: Deleting buyer account from the account summary page
     When I go to the buyer account page for "bob"
     And I follow "Edit"
-    And I follow "Delete" and confirm the dialog
+    And I follow "Delete"
+    And confirm the dialog
     Then I should be on the buyer accounts page
     And I should see "The account was successfully deleted."
     And I should not see "bob"
@@ -24,5 +25,6 @@ Feature: Deleting buyer account
       | Custom | 42   |
     When I go to the buyer account page for "bob"
     And I follow "Edit"
-    And I follow "Delete" and confirm the dialog
+    And I follow "Delete"
+    And confirm the dialog
     Then I should see "Invoices need to be settled before"
