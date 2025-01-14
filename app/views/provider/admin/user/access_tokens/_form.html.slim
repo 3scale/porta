@@ -2,8 +2,19 @@
                     input_html: { autofocus: true }
 
 = form.input :scopes, as: :patternfly_check_boxes,
-                      collection: @access_token.available_scopes.to_collection_for_check_boxes
+                      collection: access_token.available_scopes.to_collection_for_check_boxes
 
 = form.input :permission, as: :patternfly_select,
-                          collection: @access_token.available_permissions,
+                          collection: access_token.available_permissions,
                           include_blank: false
+
+- if access_token.persisted?
+  .pf-c-form__group
+    .pf-c-form__group-label
+      label.pf-c-form__label
+        span.pf-c-form__label-text
+          = t('access_token_options.expires_at')
+    .pf-c-form__group-control
+      = access_token.expires_at.present? ? l(access_token.expires_at) : t('access_token_options.no_expiration')
+- else
+  div id='expiration-date-picker-container' data-props=date_picker_props.to_json
