@@ -17,5 +17,6 @@ Feature: CMS Redirects
     And I fill in "Source" with "/from/Past"
     And I press "Update Redirect"
     Then I should see "Redirect updated"
-    When I follow "Delete" and confirm the dialog
+    When I follow "Delete"
+    And confirm the dialog
     Then I should see "Redirect deleted"

@@ -6,7 +6,7 @@ Feature: Security constraints to invite partners
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has the following buyers:
       | Name     |
       | lol cats |

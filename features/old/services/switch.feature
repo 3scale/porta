@@ -6,7 +6,7 @@ Feature: Services switch
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     Given the default product of provider "master" has name "Master API"
     Given the following application plan:
       | Product    | Name  |

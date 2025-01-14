@@ -7,7 +7,7 @@ Feature: Buyer stats
 
   Scenario: No access to stats if no app plan subscription
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
       And a buyer "alice" signed up to provider "foo.3scale.localhost"
     When I log in as "alice" on foo.3scale.localhost
       And I go to the dashboard

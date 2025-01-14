@@ -4,7 +4,7 @@ Feature: SSO Token
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And the current domain is foo.3scale.localhost
 

@@ -6,7 +6,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" requires cinstances to be approved before use
     And provider "foo.3scale.localhost" requires accounts to be approved
     # TODO: add scenario without default app plan

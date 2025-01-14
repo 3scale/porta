@@ -7,7 +7,7 @@ Feature: Top applications stats
   Background:
     Given a provider is logged in
     And the provider uses backend v1 in his default service
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And the default product of the provider has name "My API"
     And the following application plan:
       | Product | Name    | State     | Default |

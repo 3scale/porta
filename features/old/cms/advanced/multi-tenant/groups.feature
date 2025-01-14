@@ -9,10 +9,10 @@ Feature: Groups
     And provider "withgroups.3scale.localhost" has groups for buyers:
       | name        |
       | BuyerGroup1 |
-    And provider "withgroups.3scale.localhost" has multiple applications enabled
+    And provider "withgroups.3scale.localhost" has "multiple_applications" visible
     And provider "withgroups.3scale.localhost" has "groups" switch allowed
     Given a provider "nogroups.3scale.localhost"
-    And provider "nogroups.3scale.localhost" has multiple applications enabled
+    And provider "nogroups.3scale.localhost" has "multiple_applications" visible
     And an approved buyer "userfornogroups.3scale.localhost" signed up to provider "nogroups.3scale.localhost"
     And provider "nogroups.3scale.localhost" has "groups" switch allowed
 

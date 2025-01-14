@@ -88,7 +88,8 @@ Feature: Buyer accounts bulk operations
       And select bulk action "Send email"
       And fill in "Subject" with "This is the subject"
       And fill in "Body" with "This is the body"
-      And press "Send" and confirm the dialog
+      And press "Send"
+      And confirm the dialog
       Then I should see "Successfully sent 2 emails."
       Then "alice@example.com" should receive 1 email
       Then "bob@example.com" should receive 1 email
@@ -106,7 +107,8 @@ Feature: Buyer accounts bulk operations
       And item "Bob" is selected
       And select bulk action "Change account plan"
       And select "Awesome" from "Plan"
-      And press "Change plan" and confirm the dialog
+      And press "Change plan"
+      And confirm the dialog
       Then should see "Successfully changed the plan of 2 accounts"
       And the table should contain the following:
         | Group/Org.    | Plan    |
@@ -127,7 +129,8 @@ Feature: Buyer accounts bulk operations
       And item "Bob" is selected
       And select bulk action "Change state"
       And select "Make pending" from "Action"
-      And press "Change state" and confirm the dialog within the modal
+      And press "Change state" within the modal
+      And confirm the dialog
       Then should see "Successfully changed the state of 2 accounts"
       And the table should contain the following:
         | Group/Org.    | State    |
@@ -143,7 +146,8 @@ Feature: Buyer accounts bulk operations
       And select bulk action "Send email"
       And fill in "Subject" with "Error"
       And fill in "Body" with "This will fail"
-      And press "Send" and confirm the dialog
+      And press "Send"
+      And confirm the dialog
       Then the bulk operation has failed for "Alice"
       And "alice@example.com" should receive no emails
 
@@ -154,7 +158,8 @@ Feature: Buyer accounts bulk operations
       When item "Alice" is selected
       And select bulk action "Change account plan"
       And select "Awesome" from "Plan"
-      And press "Change plan" and confirm the dialog
+      And press "Change plan"
+      And confirm the dialog
       Then the bulk operation has failed for "Alice"
 
     Scenario: Changing state throws an error
@@ -163,7 +168,8 @@ Feature: Buyer accounts bulk operations
       And item "Pending buyer" is selected
       And select bulk action "Change state"
       When select "Approve" from "Action"
-      And press "Change state" and confirm the dialog within the modal
+      And press "Change state" within the modal
+      And confirm the dialog
       Then the bulk operation has failed for "Pending buyer"
 
     Scenario: Rejecting buyer accounts in bulk
@@ -180,7 +186,8 @@ Feature: Buyer accounts bulk operations
       And item "Alice" is selected
       And select bulk action "Change state"
       And select "Reject" from "Action"
-      And press "Change state" and confirm the dialog within the modal
+      And press "Change state" within the modal
+      And confirm the dialog
       Then should see "Successfully changed the state of 4 accounts"
       And the table should contain the following:
         | Group/Org.    | State    |

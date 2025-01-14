@@ -6,7 +6,7 @@ Feature: User management
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     Given an user "alice" of account "foo.3scale.localhost"
     And an user "bob" of account "foo.3scale.localhost"
 
@@ -67,7 +67,8 @@ Feature: User management
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider users page
-    Then I press "Delete" for user "alice" and confirm the dialog
+    Then I press "Delete" for user "alice"
+    And confirm the dialog
     Then I should see "User was successfully deleted"
     And there should be no user with username "alice" of account "foo.3scale.localhost"
 

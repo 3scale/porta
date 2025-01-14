@@ -45,7 +45,8 @@ Feature: Application edit page
 
   Scenario: Delete application
     Given they go to the application's admin edit page
-    When follow "Delete" and confirm the dialog
+    When follow "Delete"
+    And confirm the dialog
     Then they should see the flash message "The application was successfully deleted."
     And there should be 1 application cancelled event
     # FIXME: And all the events should be valid

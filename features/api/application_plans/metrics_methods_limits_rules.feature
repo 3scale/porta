@@ -9,7 +9,6 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     And the following application plan:
       | Product    | Name | Default |
       | Dice rolls | Free | true    |
-    # And the provider has plans ready for signups
     And the product has the following metrics:
       | Friendly name    |
       | Single rolls     |

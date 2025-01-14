@@ -5,7 +5,7 @@ Feature: Sign Up of enterprise buyers
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     And the following account plan:
       | Issuer               | Name   |
       | foo.3scale.localhost | Tier-1 |

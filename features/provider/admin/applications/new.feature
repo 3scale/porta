@@ -3,7 +3,7 @@ Feature: Audience's new application page
 
   Background:
     Given a provider
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a product "My API"
     And the following application plan:
       | Product | Name  |
@@ -106,7 +106,7 @@ Feature: Audience's new application page
 
   Rule: Multiple applications denied
     Background:
-      Given the provider has multiple applications disabled
+      Given the provider has "multiple_applications" denied
 
     Scenario: Manual navigation
       Given they go to the admin portal applications page

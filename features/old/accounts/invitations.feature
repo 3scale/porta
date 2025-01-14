@@ -6,7 +6,7 @@ Feature: Invitations
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has "multiple_users" switch allowed
 
   Scenario: When switch is denied as buyer

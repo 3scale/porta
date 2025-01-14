@@ -141,15 +141,6 @@ And "confirm the dialog" do
   accept_confirm
 end
 
-Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
-  ActiveSupport::Deprecation.warn "🥒 Replace with step 'And confirm the dialog'"
-  ensure_javascript
-  accept_confirm(text) do
-    step original
-  end
-  wait_for_requests
-end
-
 Then "(they )should see the following details(:)" do |table|
   table.rows_hash.all? do |key, value|
     dt = find('dl dt', text: key)

@@ -22,7 +22,8 @@ Feature: Audience > Accounts > Edit
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider
     When they go to the buyer account edit page for "Deleteme"
-    And follow "Delete" and confirm the dialog
+    And follow "Delete"
+    And confirm the dialog
     Then the current page is the buyer accounts page
     And they should see the flash message "The account was successfully deleted."
     And should see the following table:

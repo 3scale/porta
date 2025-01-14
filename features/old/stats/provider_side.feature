@@ -8,7 +8,7 @@ Feature: Provider stats
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And all the rolling updates features are off
     And All Dashboard widgets are loaded
 
@@ -32,7 +32,7 @@ Feature: Provider stats
     And I should see a chart called "chart"
 
   Scenario: Top users (single application mode)
-    Given the provider has multiple applications disabled
+    Given the provider has "multiple_applications" denied
     And the following application plan:
       | Product | Name    | Default |
       | API     | Default | true    |
@@ -64,7 +64,7 @@ Feature: Provider stats
 
   @wip
   Scenario: Signups (single application mode)
-    Given provider "foo.3scale.localhost" has multiple applications disabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" denied
     And an application plan "Basic" of provider "foo.3scale.localhost"
     Given these buyers signed up to plan "Basic"
       | Name     | Signed on      |
@@ -88,7 +88,7 @@ Feature: Provider stats
 
   @wip
   Scenario: Signups (multiple application mode)
-    Given provider "foo.3scale.localhost" has multiple applications enabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" visible
     And a default application plan of provider "foo.3scale.localhost"
     And a buyer "alice" signed up to provider "foo.3scale.localhost"
     And buyer "alice" has the following applications:

@@ -12,11 +12,13 @@ Feature: Application Keys management
   @ignore-backend
   Scenario: Regenerate provider key
     Given they are reviewing the provider's application details
-    When follow "Regenerate" and confirm the dialog
+    When follow "Regenerate"
+    And confirm the dialog
     And fill in "Current password" with "supersecret"
     And press "Confirm Password"
     And should see "You are now in super-user mode! Retry the action, please."
-    And follow "Regenerate" and confirm the dialog
+    And follow "Regenerate"
+    And confirm the dialog
     Then should see "The key was successfully changed"
 
   Scenario: Set a custom app key

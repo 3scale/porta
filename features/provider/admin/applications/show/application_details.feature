@@ -35,7 +35,8 @@ Feature: Application details card
 
   Scenario: Suspending the application
     Given they go to the application's admin page
-    When they follow "Suspend" and confirm the dialog within the application details
+    When they follow "Suspend" within the application details
+    And confirm the dialog
     Then they should see the flash message "The application has been suspended"
     And should see "Suspended" within the application details
 

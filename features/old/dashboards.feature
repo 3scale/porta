@@ -17,7 +17,7 @@ Feature: Dashboards
   #FIXME this buyer sees a provider submenu, which is not what happens in the app
   # CHECK THIS OUT!
   Scenario: Buyer dashboard in multiple application mode
-    Given provider "foo.3scale.localhost" has multiple applications enabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" visible
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     When I log in as "bob" on foo.3scale.localhost
     And I go to the dashboard
@@ -25,7 +25,7 @@ Feature: Dashboards
   # TODO: And I should see stuff
 
   Scenario: '/admin' on buyer domain sees buyer dashboard
-    Given provider "foo.3scale.localhost" has multiple applications enabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" visible
     When the current domain is foo.3scale.localhost
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And I log in as "bob" on foo.3scale.localhost

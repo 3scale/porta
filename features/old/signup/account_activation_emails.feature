@@ -6,15 +6,15 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
-      And provider "foo.3scale.localhost" has plans already ready for signups
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
+      And provider "foo.3scale.localhost" has plans ready for signups
       And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch denied
 
   Scenario: Default account activation email
     Given the current domain is foo.3scale.localhost
 
       When someone signs up with the email "user@3scale.localhost"
-      Then "user@3scale.localhost" should receive the default account activation email with viral footer applyed
+      Then "user@3scale.localhost" should receive the default account activation email with viral footer applied
 
     Given provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
       When someone signs up with the email "anotheruser@3scale.localhost"

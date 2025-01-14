@@ -5,9 +5,7 @@ Feature: Multitenanted liquid
 
   Background:
     Given a provider "liquid.3scale.localhost"
-      And provider "liquid.3scale.localhost" has Browser CMS activated
-    Given a provider "another-liquid.3scale.localhost"
-      And provider "another-liquid.3scale.localhost" has Browser CMS activated
+    And a provider "another-liquid.3scale.localhost"
 
   Scenario: Liquid layouts are multitenant
     Given the template "main_layout" of provider "liquid.3scale.localhost" is

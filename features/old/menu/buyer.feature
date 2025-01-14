@@ -6,7 +6,7 @@ Feature: Menu of the buyers
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And the default product of the provider has name "My API"
     And the following application plan:
       | Product | Name    | State     |

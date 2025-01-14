@@ -4,7 +4,7 @@ Feature: Users enter email unverified state
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     Given a buyer "alice" signed up to provider "foo.3scale.localhost"
 
 

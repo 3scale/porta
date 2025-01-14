@@ -3,7 +3,7 @@ Feature: Product > Applications > New
 
   Background:
     Given a provider
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a product "My API"
     And the following application plan:
       | Product | Name  |
@@ -97,7 +97,7 @@ Feature: Product > Applications > New
 
   Rule: Multiple applications denied
     Background:
-      Given the provider has multiple applications disabled
+      Given the provider has "multiple_applications" denied
 
     Scenario: Manual navigation
       Given they go to product "My API" applications page
