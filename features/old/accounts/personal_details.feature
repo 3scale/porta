@@ -6,7 +6,7 @@ Feature: Personal Details
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
 
   Scenario: Edit personal details as provider
     When I navigate to the Account Settings

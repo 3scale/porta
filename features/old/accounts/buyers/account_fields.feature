@@ -6,7 +6,7 @@ Feature: Buyer side, account fields
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name            | choices | required | read_only | hidden |

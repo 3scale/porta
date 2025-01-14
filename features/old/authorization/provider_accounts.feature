@@ -7,7 +7,7 @@ Feature: Provider accounts authorization
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has Browser CMS activated
-    Given provider "foo.3scale.localhost" has multiple applications enabled
+    Given provider "foo.3scale.localhost" has "multiple_applications" visible
     And a buyer "buyer" signed up to provider "foo.3scale.localhost"
 
   Scenario: Provider admin can access accounts

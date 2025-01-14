@@ -7,10 +7,10 @@ Feature: Groups and permissions
   Background:
     # Given we have 2 enterprise providers
     Given a provider "one.3scale.localhost"
-      And provider "one.3scale.localhost" has multiple applications enabled
+      And provider "one.3scale.localhost" has "multiple_applications" visible
     #
     Given a provider "two.3scale.localhost"
-      And provider "two.3scale.localhost" has multiple applications enabled
+      And provider "two.3scale.localhost" has "multiple_applications" visible
 
     # Given both providers have a page with path "/docs", but one is restricted, while the other is not
     Given provider "one.3scale.localhost" has a private section "Docs" with path "/docs"

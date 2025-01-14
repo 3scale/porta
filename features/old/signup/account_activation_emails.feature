@@ -6,7 +6,7 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
       And provider "foo.3scale.localhost" has plans ready for signups
       And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch denied
 

@@ -6,7 +6,7 @@ Feature: User management
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     Given an user "alice" of account "foo.3scale.localhost"
     And an user "bob" of account "foo.3scale.localhost"
 

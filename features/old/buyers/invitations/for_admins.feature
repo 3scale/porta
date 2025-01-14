@@ -9,7 +9,7 @@ Feature: Buyer Account Invitations
       | Product    | Name    |
       | Master API | power1M |
     And a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And the provider has "multiple_users" switch allowed
     And a buyer "lol cats"
 
