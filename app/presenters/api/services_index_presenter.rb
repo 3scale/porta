@@ -32,6 +32,7 @@ class Api::ServicesIndexPresenter
           name: product.name,
           systemName: product.system_name,
           updatedAt: product.updated_at.to_s(:long),
+          link: product.decorate.link,
           links: ServiceActionsPresenter.new(user).actions(product),
           appsCount: product.cinstances.size,
           backendsCount: product.backend_api_configs.size,

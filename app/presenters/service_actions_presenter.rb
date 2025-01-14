@@ -29,9 +29,9 @@ class ServiceActionsPresenter
   def backend_actions(backend)
     actions = []
     can_edit_backend = can?(:edit, backend)
-    actions << { name: 'Overview', path: provider_admin_backend_api_path(backend) } if can?(:read, backend)
+    actions << { name: 'Overview', path: provider_admin_backend_api_path(backend) } if can?(:show, backend)
     actions << { name: 'Edit', path: edit_provider_admin_backend_api_path(backend) } if can_edit_backend
-    actions << { name: 'Analytics', path: provider_admin_backend_api_stats_usage_path(backend) } if can?(:manage, :monitoring) || can?(:manage, :monitoring)
+    actions << { name: 'Analytics', path: provider_admin_backend_api_stats_usage_path(backend) } if can?(:manage, :monitoring) || can?(:manage, :analytics)
     actions << { name: 'Methods and Metrics', path: provider_admin_backend_api_metrics_path(backend) } if can_edit_backend
     actions << { name: 'Mapping Rules', path: provider_admin_backend_api_mapping_rules_path(backend) } if can_edit_backend
 

@@ -31,6 +31,7 @@ class Provider::Admin::BackendApisIndexPresenter
           systemName: backend.system_name,
           updatedAt: backend.updated_at.to_s(:long),
           privateEndpoint: backend.private_endpoint,
+          link: backend.decorate.link,
           links: ServiceActionsPresenter.new(user).backend_actions(backend),
           productsCount: backend.decorate.products_count
         }

@@ -9,7 +9,12 @@ import {
   ToolbarContent,
   ToolbarItem
 } from '@patternfly/react-core'
-import { Table, TableBody, TableHeader } from '@patternfly/react-table'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  wrappable
+} from '@patternfly/react-table'
 
 import { Pagination } from 'Common/components/Pagination'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
@@ -36,13 +41,13 @@ const IndexPage: React.FunctionComponent<Props> = ({
     'System name',
     'Last updated',
     'Applications',
-    'Backends contained',
+    { title: 'Backends contained', transforms: [wrappable] },
     'Unread alerts'
   ]
 
   const tableRows = products.map(p => ({
     cells: [
-      { title: <Button isInline component="a" href={p.links[0].path} variant="link">{p.name}</Button> },
+      { title: <Button isInline component="a" href={p.link} variant="link">{p.name}</Button> },
       p.systemName,
       <span key={p.systemName} className="api-table-timestamp">{p.updatedAt}</span>,
       p.appsCount,
@@ -51,8 +56,9 @@ const IndexPage: React.FunctionComponent<Props> = ({
     ]
   }))
 
-  const actionResolver: IActionsResolver = (rowData, { rowIndex = 0 }) => {
-    const product = products[rowIndex]
+  const actionResolver: IActionsResolver = (_rowData, { rowIndex }) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const product = products[rowIndex!]
 
     return product.links.map(link => ({
       title: link.name,
