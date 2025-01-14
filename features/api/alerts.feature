@@ -51,7 +51,8 @@ Feature: Audience > Applications > Alerts
 
   Scenario: Deleting alerts
     Given they go to the alerts page
-    When they press "Delete" in the 1st row and confirm the dialog
+    When they press "Delete" in the 1st row
+    And confirm the dialog
     Then they should see the following table:
       | Account | Application   | Message        | Level   | Time (UTC)               |              |
       | Jane    | Application 1 | foos: 18 of 20 | ≥ 90 %  | 14 Oct 2010 11:11:00 UTC | Delete\nRead |
@@ -60,7 +61,8 @@ Feature: Audience > Applications > Alerts
 
   Scenario: Marking all alerts as read
     Given they go to the alerts page
-    When they select toolbar action "Mark all as read" and confirm the dialog
+    When they select toolbar action "Mark all as read"
+    And confirm the dialog
     Then they should see the following table:
       | Account | Application   | Message        | Level   | Time (UTC)               |        |
       | Jane    | Application 1 | foos: 30 of 20 | ≥ 150 % | 15 Oct 2010 14:14:00 UTC | Delete |
@@ -70,5 +72,6 @@ Feature: Audience > Applications > Alerts
 
   Scenario: Deleting all alerts
     Given they go to the alerts page
-    When they select toolbar action "Delete all" and confirm the dialog
+    When they select toolbar action "Delete all"
+    And confirm the dialog
     Then they should see "All clear"

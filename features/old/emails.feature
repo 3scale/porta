@@ -19,7 +19,8 @@ Feature: Emails
       | bob   | other |
     And they go to application "other" admin page
     Then they should see "Live" within the application details
-    When I follow "Suspend" and confirm the dialog
+    When I follow "Suspend"
+    And confirm the dialog
     Then they should see "Suspended" within the application details
     And I act as "bob"
     Then I should receive no email with subject "Application has been suspended"
