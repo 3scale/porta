@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.0.0'
 
 gem 'mail', '~> 2.8.1'
 
@@ -24,7 +24,7 @@ gem 'protected_attributes_continued', '~> 1.8.2'
 
 gem 'rails-observers'
 
-gem 'strong_migrations', '~> 0.6.8'
+gem 'strong_migrations', '~> 2.1.0'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'
@@ -71,7 +71,7 @@ gem 'cancancan', '~> 3.6.0'
 gem 'formtastic', '~> 4.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
-gem 'inherited_resources', '~> 1.12.0'
+gem 'inherited_resources', '~> 1.14.0'
 gem 'json', '~> 2.7', '>= 2.7.1'
 
 gem 'mysql2', '~> 0.5.3'
@@ -86,7 +86,7 @@ gem 'nokogiri', '~> 1.15.5'
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
-gem 'acts-as-taggable-on', '~> 8.0'
+gem 'acts-as-taggable-on', '~> 11.0'
 gem 'baby_squeel', '~> 2.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
@@ -149,7 +149,7 @@ gem 'state_machines-activerecord', '~> 0.8'
 # for liquid docs on-fly generation
 gem 'commonmarker', '~> 0.23.10'
 gem 'escape_utils'
-gem 'html-pipeline'
+gem 'html-pipeline', '~> 2.14.3'
 
 # templating
 gem 'ruby-openid'
@@ -201,7 +201,7 @@ group :test do
 
   gem 'equivalent-xml', require: false
 
-  gem 'rspec-rails', '~> 6.1', require: false # version 6.x is needed for for Rails 6.1 or 7.x
+  gem 'rspec-rails', '~> 7.1', require: false
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec_api_documentation'
@@ -235,7 +235,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 6.1.5'
+  gem 'bullet', '~> 7.0.7'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
@@ -259,7 +259,7 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 6.1.6', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 7.0.3', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 

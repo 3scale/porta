@@ -16,13 +16,13 @@
 
   <tr>
     <th>Created on</th>
-    <td><%= h @user.created_at.to_s(:long) %></td>
+    <td><%= h @user.created_at.to_fs(:long) %></td>
   </tr>
 
   <% if @user.last_login_at.present? -%>
     <tr>
       <th>Last logged in on</th>
-      <td><%= h @user.last_login_at.to_s(:long) %></td>
+      <td><%= h @user.last_login_at.to_fs(:long) %></td>
     </tr>
   <% end -%>
 

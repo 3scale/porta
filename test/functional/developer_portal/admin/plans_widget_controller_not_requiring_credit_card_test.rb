@@ -32,8 +32,8 @@ class DeveloperPortal::Admin::PlansWidgetControllerNotRequiringCreditCardTest < 
   test 'show allow direct plan change for paid plans' do
     get :index, params: { :service_id => @service.id, :application_id => @application.id }
 
-    assert_select('input[id=?]', "change-plan-#{@paid_plan.id}", :value => 'Change Plan')
-    assert_select('input[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@paid_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
   end
 
 end

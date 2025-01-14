@@ -1,7 +1,7 @@
 # Be sure to restart your server when you modify this file.
 
 # Version of your assets, change this if you want to expire all your assets.
-Rails.application.config.assets.version = '1.0'
+Rails.application.config.assets.version = "1.0"
 
 # We do not add to asset paths because or a webpacker compatibility
 # https://github.com/rails/webpacker/issues/1285#issuecomment-539553734
