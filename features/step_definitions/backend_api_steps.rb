@@ -2,7 +2,7 @@
 
 Given "{provider} has the following backend( api):" do |provider, table|
   opts = transform_backend_apis_table(table).rows_hash
-  @backend = FactoryBot.create(:backend_api, account: @provider, **opts)
+  @backend = FactoryBot.create(:backend_api, account: provider, **opts)
 end
 
 When "an admin is reviewing backend apis index page" do

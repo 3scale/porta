@@ -7,6 +7,10 @@ class Provider::Admin::DashboardsController < FrontendController
   activate_menu :dashboard
   layout 'provider'
 
+  helper_method :presenter
+
+  attr_reader :presenter
+
   def show
     @service    = find_service
     # Would be cool to
@@ -17,6 +21,7 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
+    @presenter = Provider::Admin::DashboardPresenter.new(user: current_user)
   end
 
   include DashboardTimeRange
@@ -42,14 +47,6 @@ class Provider::Admin::DashboardsController < FrontendController
 
   def unread_messages_presenter
     ::Dashboard::UnreadMessagesPresenter.new(current_account.received_messages.not_system)
-  end
-
-  def backend_apis_presenter
-    Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account, params: { per_page: 5 })
-  end
-
-  def products_presenter
-    Api::ServicesIndexPresenter.new(current_user: current_user, params: { per_page: 5 })
   end
 
   def quickstarts_flash

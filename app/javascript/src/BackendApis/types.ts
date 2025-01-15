@@ -1,4 +1,4 @@
-interface ProductLink {
+export interface ProductLink {
   name: 'Analytics' | 'Edit' | 'Mapping Rules' | 'Methods and Metrics' | 'Overview';
   path: string;
 }
@@ -9,6 +9,7 @@ export interface Backend {
   systemName: string;
   privateEndpoint: string;
   updatedAt: string;
+  link?: string;
   links: ProductLink[];
   productsCount: number;
 }

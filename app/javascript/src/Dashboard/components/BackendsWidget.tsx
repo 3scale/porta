@@ -16,7 +16,7 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  newBackendPath: string;
+  newBackendPath: string | null;
   backendsPath: string;
   backends: {
     id: number;
@@ -45,14 +45,16 @@ const BackendsWidget: FunctionComponent<Props> = ({
           Backends
         </Title>
         <CardActions>
-          <Button
-            component="a"
-            data-testid="dashboardCreateBackend-buttonLink"
-            href={newBackendPath}
-            variant="primary"
-          >
-            Create Backend
-          </Button>
+          {newBackendPath && (
+            <Button
+              component="a"
+              data-testid="dashboardCreateBackend-buttonLink"
+              href={newBackendPath}
+              variant="primary"
+            >
+              Create Backend
+            </Button>
+          )}
         </CardActions>
       </div>
       <div className="dashboard-list-subtitle">

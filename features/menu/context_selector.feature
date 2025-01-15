@@ -63,7 +63,7 @@ Feature: Context selector
         | Audience         |
         | Account Settings |
 
-    Scenario: Member with partners permission can see everything
+    Scenario: Member with partners permission can't see backends
       Given the user has partners permission
       When they go to the provider dashboard
       Then the current context should be "Dashboard"
@@ -71,7 +71,6 @@ Feature: Context selector
         | Dashboard        |
         | Audience         |
         | Products         |
-        | Backends         |
         | Account Settings |
 
     Scenario: Member with monitoring permission can see Products and Backends

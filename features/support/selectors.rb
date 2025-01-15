@@ -31,6 +31,8 @@ module HtmlSelectorsHelper
       '#audience'
     when /the products widget/
       '#products-widget'
+    when /the backends widget/
+      '#backends-widget'
 
     #
     # Tables
