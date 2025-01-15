@@ -46,7 +46,6 @@ class DeveloperPortal::CMS::NewContentController < DeveloperPortal::BaseControll
       append_view_path Liquid::Template::FallbackResolver.new
       append_view_path Liquid::Template::FallbackResolverNoPrefix.new
 
-
       page = find_page!
 
       assign_drops :page => Liquid::Drops::Page.new(page),

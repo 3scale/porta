@@ -21,7 +21,7 @@ module ThreeScale
 
     def associated_inconsistent_pairs(model, processed: [])
       model.reflect_on_all_associations.inject([]) do |inconsistent_found, association|
-        next inconsistent_found if can_skip_asociation?(association, processed: processed)
+        next inconsistent_found if can_skip_asociation?(model, association, processed: processed)
 
         processed << association
 
@@ -50,7 +50,7 @@ module ThreeScale
       model.primary_key ? Array(model.primary_key) : model.connection.primary_keys(model.table_name)
     end
 
-    def can_skip_asociation?(association, processed: [])
+    def can_skip_asociation?(model, association, processed: [])
       # we can ignore these as they can't be automatically excluded but are redundant for the check anyway
       ignored = {
         Service => %i[all_metrics], # all metrics of service and APIs used by service so is redundant
@@ -58,10 +58,13 @@ module ThreeScale
         # bought_* are redundant with contracts
         # email_templates is redundant with templates
         Account => %i[provider_accounts bought_account_contract bought_cinstances bought_service_contracts email_templates],
-        Cinstance => %i[plan], # this is redundant with Contract.plan but overrides it so is not auto-detected
-        ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered by Plan.contracts
+        # Cinstance.plan is redundant with Contract.plan but overrides it so is not auto-detected
+        # Cinstance.service is inverse of Service.cinstances but is not autodetected so disabling it here
+        Cinstance => %i[plan service],
+        ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered also by Plan.contracts
       }
-      model = association.active_record
+
+      return true if model != association.active_record # we want only association of base STI model instead of a sub-model
 
       return true if ignored[model]&.include?(association.name)
 

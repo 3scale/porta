@@ -29,7 +29,7 @@ class Provider::Admin::BackendApisIndexPresenter
           id: backend.id,
           name: backend.name,
           systemName: backend.system_name,
-          updatedAt: backend.updated_at.to_s(:long),
+          updatedAt: backend.updated_at.to_fs(:long),
           privateEndpoint: backend.private_endpoint,
           link: backend.decorate.link,
           links: ServiceActionsPresenter.new(user).backend_actions(backend),

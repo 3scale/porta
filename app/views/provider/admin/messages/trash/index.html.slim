@@ -26,7 +26,7 @@
           td role="cell" data-label="Subject" = link_to message.subject, provider_admin_messages_trash_path(message)
           td role="cell" data-label="From" = link_to message_sender(message), provider_admin_messages_trash_path(message)
           td role="cell" data-label="To" = link_to message_receiver(message), provider_admin_messages_trash_path(message)
-          td role="cell" data-label="Data sent" = message.created_at.to_s(:long)
+          td role="cell" data-label="Data sent" = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
               div class="pf-c-overflow-menu__content"

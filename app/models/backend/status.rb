@@ -56,8 +56,8 @@ module Backend
 
         records.each do |record|
           xml.usage(:metric => record.metric_name, :period => record.period) do |xml|
-            xml.period_start(record.period_as_range.begin.to_s(:db)) unless record.period == :eternity
-            xml.period_end(record.period_as_range.end.to_s(:db)) unless record.period == :eternity
+            xml.period_start(record.period_as_range.begin.to_fs(:db)) unless record.period == :eternity
+            xml.period_end(record.period_as_range.end.to_fs(:db)) unless record.period == :eternity
             xml.current_value(record.current_value)
             xml.max_value(record.max_value)
           end

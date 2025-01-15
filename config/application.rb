@@ -3,7 +3,7 @@
 require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v6.1.7.3/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
@@ -58,13 +58,38 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
+
+    # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
+    # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
+    config.action_controller.raise_on_open_redirects = false
+
+    # ** Please read carefully, this must be configured in config/application.rb **
+    # Change the format of the cache entry.
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 6.1 applications.
+    # Only change this value after your application is fully deployed to Rails 7.0
+    # and you have no plans to rollback.
+    # When you're ready to change format, change the value to 7.0
+    # TODO: update to 7.0 - THREESCALE-11544
+    config.active_support.cache_format_version = 6.1
+
+    # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
+    #
+    # Rails transparently deserializes existing (Marshal-serialized) cookies on read and
+    # re-writes them in the JSON format.
+    #
+    # It is fine to use `:hybrid` long term; you should do that until you're confident *all* your cookies
+    # have been converted to JSON. To keep using `:hybrid` long term, move this config to its own
+    # initializer or to `config/application.rb`.
+    # TODO: use the new default - THREESCALE-11545
+    config.action_dispatch.cookies_serializer = :hybrid
 
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
 
     # Support for inversing belongs_to -> has_many Active Record associations.
-    # Overriding Rails 6.1 default, because it causes various issues.
+    # Overriding the default (since Rails 6.1) default, because it causes various issues.
     # Likely we need to keep it forever as we can't override it for individual use cases.
     # Also the feature has outstanding bugs: rails/rails#47559 rails/rails#50258.
     config.active_record.has_many_inversing = false
@@ -78,10 +103,6 @@ module System
 
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
-
-    # Use a modern approved hashing function.
-    # This is the default in Rails 7.0, so can be removed when we upgrade.
-    config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,

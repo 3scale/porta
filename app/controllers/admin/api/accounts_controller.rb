@@ -116,8 +116,7 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def preload_to_present(accounts)
-    # ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, {bought_plans: %i[original]}]).call # Rails 7.x
-    ActiveRecord::Associations::Preloader.new.preload(Array(accounts), [:annotations, {bought_plans: %i[original]}])
+    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, {bought_plans: %i[original]}]).call
     accounts
   end
 

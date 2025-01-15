@@ -40,7 +40,7 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
 
     selector = format('a[id="%s"][href="%s"]', "change-plan-#{@paid_plan.id}", url)
     assert_select(selector, text: 'enter your Credit Card details')
-    assert_select('input[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
   end
 
   test 'show link to enter CC details for paid plans when buyer CC details are missing and buyer is charged without wizard' do
@@ -54,7 +54,7 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
 
     selector = format('a[id="%s"][href="%s"]', "change-plan-#{@paid_plan.id}", url)
     assert_select(selector, text: 'enter your Credit Card details')
-    assert_select('input[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
   end
 
   test 'show button to change plan when buyer is not charged' do
@@ -64,8 +64,8 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
 
     get :index, params: { :service_id => @service.id, :application_id => @application.id }
 
-    assert_select('input[id=?]', "change-plan-#{@paid_plan.id}", value: 'Change Plan')
-    assert_select('input[id=?]', "change-plan-#{@free_plan.id}", value: 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@paid_plan.id}", value: 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@free_plan.id}", value: 'Change Plan')
   end
 
   test 'show button to change plan when buyer CC details are stored' do
@@ -77,8 +77,8 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
 
     get :index, params: { :service_id => @service.id, :application_id => @application.id }
 
-    assert_select('input[id=?]', "change-plan-#{@paid_plan.id}", :value => 'Change Plan')
-    assert_select('input[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@paid_plan.id}", :value => 'Change Plan')
+    assert_select('button[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')
   end
 
 end

@@ -20,7 +20,7 @@ RUN dnf -y --enablerepo=crb --setopt=module_stream_switch=True module enable rub
     && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.1
     && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm -rf node_modules /usr/local/share/gems/cache /usr/local/share/gems/doc
 
@@ -99,7 +99,7 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_QUERY_LOG=/dev/stdout \
     THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
-    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.0
+    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.1
     SECRET_KEY_BASE=dummy \
     DATABASE_URL='mysql2://root:@localhost/porta'
 USER 0
