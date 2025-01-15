@@ -10,6 +10,9 @@ resource 'Proxy' do
     get '/admin/api/services/:service_id/proxy.:format', action: :show
 
     put '/admin/api/services/:service_id/proxy.:format', action: :update do
+      # stubbing the subscriber to avoid changing the 'updated_at' timestamp on Proxy
+      before { allow_any_instance_of(ProxyConfigEventSubscriber).to receive(:call) }
+
       parameter :credentials_location, 'Credentials Location'
       parameter :api_backend, 'Private endpoint'
       parameter :jwt_claim_with_client_id, 'JWT Claim with ClientID Location'

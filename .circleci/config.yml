@@ -25,9 +25,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key stream8-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key stream8-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
-assets-cache-key: &assets-cache-key stream8-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key stream9-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key stream9-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key stream9-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
 oracle-libs-cache-key: &oracle-libs-cache-key ora1-{{ .Environment.CACHE_VERSION }}-oracle-libs-cache-{{ checksum "script/oracle/install-instantclient-packages.sh" }}
 
 restore-npm-cache: &restore-npm-cache
@@ -88,7 +88,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby31: &system-builder-ruby31
-  image: quay.io/3scale/system-builder:stream8-ruby3.1
+  image: quay.io/3scale/system-builder:stream9
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -168,6 +168,7 @@ build-envs:
     environment:
       DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
+      CAPYBARA_MAX_WAIT_TIME: 20
 
 ##################################### CIRCLECI COMMANDS ############################################
 

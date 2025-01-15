@@ -38,7 +38,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
     xml = Nokogiri::XML::Document.parse(@response.body)
 
-    assert_all_features_of_service xml, service
+    assert_all_features_available xml, service
   end
 
   test 'show' do

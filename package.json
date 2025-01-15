@@ -110,6 +110,9 @@
     "yaml-loader": "^0.6.0"
   },
   "resolutions": {
+    "body-parser": "1.20.3",
+    "express": "4.21.2",
+    "http-proxy-middleware": "2.0.7",
     "jquery-ui/jquery": "3.7.0"
   }
 }

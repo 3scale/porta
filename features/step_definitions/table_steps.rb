@@ -10,6 +10,11 @@ When "{} in the {ordinal} row" do |lstep, n|
   end
 end
 
+# Select an action for a given row in a Patternfly table.
+#
+#   When they select action "Hide" of "Public Plan"
+#   And select action "Delete" of "alice@example.org"
+#
 When "(they )select action {string} of (row ){string}" do |action, row|
   find_inline_actions_of_row(row).find { |node| node.text == action }
                                  .click
