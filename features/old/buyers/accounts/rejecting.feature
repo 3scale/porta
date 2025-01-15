@@ -6,7 +6,7 @@ Feature: Rejecting buyer account
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And the provider requires cinstances to be approved before use
     And the provider requires accounts to be approved
 

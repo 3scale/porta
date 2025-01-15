@@ -6,7 +6,7 @@ Feature: Buyer users management
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And the provider has the following fields defined for users:
       | Name            | Choices | Label | Required | Read Only | Hidden |
       | custom_field    |         |       |          |           |        |
@@ -56,7 +56,8 @@ Feature: Buyer users management
   Scenario: Delete buyer user
     When I go to the buyer user page for "bob"
     And I follow "Edit"
-    Then I follow "Delete" and confirm the dialog
+    Then I follow "Delete"
+    And confirm the dialog
     # TODO: confirm step here
     Then I should be on the buyer users page for "SpaceWidgets"
     And I should not see buyer user "bob"

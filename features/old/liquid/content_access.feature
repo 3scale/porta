@@ -5,8 +5,7 @@ Feature: Content access in liquid
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
-    Given provider "foo.3scale.localhost" has Browser CMS activated
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
       And the template "main_layout" of provider "foo.3scale.localhost" is
         """
         {% if current_user.sections contains "/protected-section" %}

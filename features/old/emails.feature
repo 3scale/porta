@@ -7,7 +7,7 @@ Feature: Emails
     Given a provider "foo.3scale.localhost" with default plans
 
   Scenario: Disable 'Suspend Application' notification
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "cinstance_messenger_suspended"
       """
       {% email %}{% do_not_send %}{% endemail %}
@@ -19,14 +19,15 @@ Feature: Emails
       | bob   | other |
     And they go to application "other" admin page
     Then they should see "Live" within the application details
-    When I follow "Suspend" and confirm the dialog
+    When I follow "Suspend"
+    And confirm the dialog
     Then they should see "Suspended" within the application details
     And I act as "bob"
     Then I should receive no email with subject "Application has been suspended"
 
   Scenario: Disable 'Waiting list confirmation' notification
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% email %}{% do_not_send %}{% endemail %}
@@ -45,7 +46,7 @@ Feature: Emails
 
   Scenario: Disable 'Waiting list confirmation' notification with truthy condition
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% if true %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
@@ -64,7 +65,7 @@ Feature: Emails
 
   Scenario: Disable 'Waiting list confirmation' notification with falsy condition
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% if false %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
@@ -83,7 +84,7 @@ Feature: Emails
 
   Scenario: Custom email subject with truthy condition
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% if true %}
@@ -112,7 +113,7 @@ Feature: Emails
 
   Scenario: Custom email subject with falsy condition
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% if false %}
@@ -141,7 +142,7 @@ Feature: Emails
 
   Scenario: Do not disable 'Waiting list confirmation' notification due to falsy condition but still change the subject
     And provider "foo.3scale.localhost" requires accounts to be approved
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" has email template "account_confirmed"
       """
       {% if false %}

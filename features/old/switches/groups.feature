@@ -5,8 +5,7 @@ Feature: Groups switch
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
-    Given provider "foo.3scale.localhost" has Browser CMS activated
+    And the provider has "multiple_applications" visible
 
   Scenario: Groups not accessible if not enabled
     Given the provider has "groups" switch denied

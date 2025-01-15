@@ -6,7 +6,6 @@ Feature: Provider finance authorization
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has Browser CMS activated
     And provider "foo.3scale.localhost" has "finance" allowed
 
   Scenario: Provider admin can access finance

@@ -2,7 +2,7 @@ Feature: Developer portal application credentials
 
   Background:
     Given a provider
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a product "My API"
     And the following application plan:
       | Product | Name |

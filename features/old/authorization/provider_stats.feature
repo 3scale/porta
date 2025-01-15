@@ -6,7 +6,6 @@ Feature: Provider stats section authorization
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-    And provider "foo.3scale.localhost" has Browser CMS activated
     And all the rolling updates features are off
 
   Scenario: Provider admin can access stats
