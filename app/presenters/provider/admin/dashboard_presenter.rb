@@ -38,7 +38,6 @@ class Provider::Admin::DashboardPresenter
     }
   end
 
-  # TODO: for some reason, accessible_backend_apis is not empty even though can?(:see, BackendApi) is false
   def backends_widget_data
     {
       accessToBackends: true,
