@@ -89,7 +89,9 @@ Feature: Provider stats
   @wip
   Scenario: Signups (multiple application mode)
     Given provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a default application plan of provider "foo.3scale.localhost"
+    And the following application plan:
+      | Product | Name     | State     | Default |
+      | API     | The Plan | Published | true    |
     And a buyer "alice" signed up to provider "foo.3scale.localhost"
     And buyer "alice" has the following applications:
       | Name            | Created at    |
