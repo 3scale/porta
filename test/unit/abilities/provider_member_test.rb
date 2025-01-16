@@ -34,19 +34,15 @@ module Abilities
       contract = FactoryBot.build_stubbed(:simple_service_contract, plan: plan)
       event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, @member)
 
-      @member.stubs(:has_permission?).with(anything)
-      @member.expects(:has_permission?).with(:partners).returns(false).at_least_once
-
       assert_cannot ability, :show, event
 
-      @member.expects(:has_permission?).with(:partners).returns(true).at_least_once
+      @member.member_permission_ids = ['partners']
       assert_can ability, :show, event
 
-      @member.admin_sections = [:services]
+      @member.member_permission_service_ids = []
       assert_cannot ability, :show, event
 
       @member.member_permission_service_ids = [service.id]
-
       assert_can ability, :show, event
     end
 
@@ -56,24 +52,18 @@ module Abilities
       limit_alert   = FactoryBot.build_stubbed(:limit_alert)
       alert_event   = Alerts::LimitAlertReachedProviderEvent.create(limit_alert)
 
-      @member.stubs(:has_permission?).with(anything)
-
-      @member.expects(:has_permission?).with(:finance).returns(false)
       assert_cannot ability, :show, billing_event
-
-      @member.expects(:has_permission?).with(:finance).returns(true)
-      assert_can ability, :show, billing_event
-
-      @member.expects(:has_permission?).with(:partners).returns(false)
       assert_cannot ability, :show, account_event
-
-      @member.expects(:has_permission?).with(:partners).returns(true)
-      assert_can ability, :show, account_event
-
-      @member.expects(:has_permission?).with(:monitoring).returns(false)
+      assert_cannot ability, :show, alert_event
       assert_cannot ability, :show, alert_event
 
-      @member.expects(:has_permission?).with(:monitoring).returns(true)
+      @member.member_permission_ids = ['finance']
+      assert_can ability, :show, billing_event
+
+      @member.member_permission_ids = ['partners']
+      assert_can ability, :show, account_event
+
+      @member.member_permission_ids = ['monitoring']
       assert_can ability, :show, alert_event
     end
 
@@ -83,37 +73,36 @@ module Abilities
       service_3 = FactoryBot.create(:simple_service, account: @account)
 
       assert_cannot ability, :show, service_1, 'foreign service'
+      assert_cannot ability, :show, service_2, 'no services allowed'
+      assert_cannot ability, :show, service_3, 'no services allowed'
+
+      @member.update(allowed_sections: ['plans'])
+
+      assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'all services allowed by default'
       assert_can ability, :show, service_3, 'all services allowed by default'
 
-      @member.admin_sections = [ :services ]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_cannot ability, :show, service_2, 'none services allowed'
-      assert_cannot ability, :show, service_3, 'none services allowed'
-
-      @member.member_permission_service_ids = [service_1.id, service_2.id]
-      @member.save
+      @member.update(allowed_service_ids: [service_1.id, service_2.id])
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'allowed service'
-      assert_cannot ability, :show, service_3, 'not allowed service'
-
-      @member.admin_sections += [:plans]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_can ability, :show, service_2, 'all services allowed'
       assert_cannot ability, :show, service_3, 'not allowed service'
 
       # this is migration path for existing customers that don't have service permissions yet
       Logic::RollingUpdates.stubs(skipped?: true)
 
-      @member.member_permission_ids = [:analytics]
-      @member.member_permission_service_ids = nil
+      @member.update(allowed_service_ids: nil)
 
       assert_cannot ability, :show, service_1, 'foreign service'
-      assert_can ability, :show, service_2, 'allowed service'
-      assert_can ability, :show, service_3, 'allowed service'
+      assert_can ability, :show, service_2, 'all services allowed by default'
+      assert_can ability, :show, service_3, 'all services allowed by default'
+
+      @member.member_permissions.delete_all
+      @member.reload
+
+      assert_cannot ability, :show, service_1, 'foreign service'
+      assert_cannot ability, :show, service_2, 'no services allowed'
+      assert_cannot ability, :show, service_3, 'no services allowed'
     end
 
     def test_cinstances

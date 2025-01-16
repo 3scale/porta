@@ -5,24 +5,21 @@ require 'test_helper'
 module Abilities
   class ProviderAnyTest < ActiveSupport::TestCase
     setup do
-      @account = Account.new
-      @account.stubs(provider?: true)
+      @account = FactoryBot.create(:simple_provider)
       @account.stubs(:provider_can_use?).with(any_parameters).returns(false)
-      @user = User.new({account: @account}, without_protection: true)
+      @user  = FactoryBot.create(:simple_user, account: @account)
     end
 
     attr_reader :user, :account
 
     def test_policies_allowed
       account.expects(:provider_can_use?).with(:policy_registry).returns(true)
-      account.stubs(tenant?: true)
 
       assert_can ability, :manage, :policy_registry
     end
 
     def test_policies_no_rolling_update
       account.expects(:provider_can_use?).with(:policy_registry).returns(false)
-      account.stubs(tenant?: true)
 
       assert_cannot ability, :manage, :policy_registry
     end
@@ -34,79 +31,76 @@ module Abilities
     end
 
     test 'Cinstance/Application events can show if has :partners and access to the service if there is a service' do
-      cinstance = FactoryBot.create(:cinstance)
-      service = cinstance.service
+      service = FactoryBot.create(:simple_service, account: @account)
+      another_service = FactoryBot.create(:simple_service, account: @account)
+      plan = FactoryBot.create(:simple_application_plan, issuer: service)
+      cinstance = FactoryBot.create(:cinstance, plan: plan)
       cinstance_events = [
         Cinstances::CinstanceExpiredTrialEvent.create(cinstance), Cinstances::CinstanceCancellationEvent.create(cinstance),
         Cinstances::CinstancePlanChangedEvent.create(cinstance, user), Applications::ApplicationCreatedEvent.create(cinstance, user)
       ]
 
-      user.stubs(:has_permission?)
-      user.stubs(:has_access_to_service?)
-
       cinstance_events.each do |cinstance_event|
-        user.expects(:has_permission?).with(:partners).returns(true)
-        user.expects(:has_access_to_service?).with(service.id).returns(false)
+        user.member_permission_ids = [:partners]
+        user.member_permission_service_ids = []
+
         assert_cannot ability, :show, cinstance_event
 
-        user.expects(:has_permission?).with(:partners).returns(false)
-        user.stubs(:has_access_to_service?).returns(true)
+        user.member_permission_service_ids = [another_service.id]
+
         assert_cannot ability, :show, cinstance_event
 
-        user.expects(:has_permission?).with(:partners).returns(true)
-        user.expects(:has_access_to_service?).with(service.id).returns(true)
+        user.member_permission_service_ids = [service.id]
+
         assert_can ability, :show, cinstance_event
+
+        user.member_permission_ids = []
+
+        assert_cannot ability, :show, cinstance_event
       end
     end
 
     test 'AccountRelatedEvent can show if has :partners and does not have a service' do
-      user.stubs(:has_permission?)
-
-      user.expects(:has_permission?).with(:partners).returns(true)
-      assert_can ability, :show, Accounts::AccountCreatedEvent.create(account, user)
-
-      user.expects(:has_permission?).with(:partners).returns(false)
       assert_cannot ability, :show, Accounts::AccountCreatedEvent.create(account, user)
+
+      user.member_permission_ids = [:partners]
+      assert_can ability, :show, Accounts::AccountCreatedEvent.create(account, user)
     end
 
     class ShowAlertRelatedEventTest < ProviderAnyTest
       setup do
-        user.stubs(:has_permission?)
-
-        cinstance = FactoryBot.build_stubbed(:simple_cinstance)
-        alert = FactoryBot.build_stubbed(:limit_violation, cinstance: cinstance)
+        service = FactoryBot.create(:simple_service, account: @account)
+        plan = FactoryBot.create(:simple_application_plan, issuer: service)
+        cinstance = FactoryBot.create(:cinstance, plan: plan)
+        alert = FactoryBot.create(:limit_violation, cinstance: cinstance)
         @limit_violation_reached_provider_event = Alerts::LimitViolationReachedProviderEvent.create(alert)
       end
 
       attr_reader :limit_violation_reached_provider_event
 
       test 'cannot show AlertRelatedEvent when user does not have :monitoring' do
-        user.expects(:has_permission?).with(:monitoring).returns(false)
-
+        assert_not user.has_permission? :monitoring
         assert_cannot ability, :show, limit_violation_reached_provider_event
       end
 
-      # This is related to the :service_permissions rolling update. Users created before it do not have the :services
-      # section included in their member permissions, which grants them access to all services.
-      test 'can show AlertRelatedEvent when user has :monitoring and the user has access to all services through the old permission system' do
-        user.expects(:has_permission?).with(:monitoring).returns(true)
+      # If the user has service-related permission, and no :services permission, it means it has access to all services
+      test 'can show AlertRelatedEvent when user has :monitoring and the user has access to all services' do
+        user.member_permission_ids = [:monitoring]
+        assert user.has_permission? :monitoring
 
         assert_can ability, :show, limit_violation_reached_provider_event
       end
 
       test 'cannot show AlertRelatedEvent when user has :monitoring and does not have access to the service' do
-        user.stubs(:has_permission?).with(:monitoring).returns(true)
-        user.member_permissions.build(admin_section: :services, service_ids: [])
+        user.member_permission_ids = [:monitoring]
+        user.member_permission_service_ids = []
 
         assert_cannot ability, :show, limit_violation_reached_provider_event
       end
 
       test 'can show AlertRelatedEvent when user has :monitoring and has access to the service' do
-        user.stubs(:has_permission?).with(:monitoring).returns(true)
-        user.member_permissions.build(
-          admin_section: :services,
-          service_ids: [limit_violation_reached_provider_event.service.id]
-        )
+        user.member_permission_ids = [:monitoring]
+        user.member_permission_service_ids = [limit_violation_reached_provider_event.service.id]
 
         assert_can ability, :show, limit_violation_reached_provider_event
       end

@@ -14,14 +14,14 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
   test 'show (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_service_path(@service)
     assert_response :forbidden
     get admin_api_service_path(@service), params: { access_token: token.value }
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+    user.update(member_permission_service_ids: [@service.id])
     get admin_api_service_path(@service), params: { access_token: token.value }
     assert_response :success
   end
