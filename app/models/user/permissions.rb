@@ -59,7 +59,7 @@ module User::Permissions
   def member_permission_service_ids=(service_ids)
     if service_ids.is_a? Array
       # remove all non-integer values
-      service_ids = service_ids.map { Integer(_1, exception: false) }.compact_blank
+      service_ids = service_ids.map { Integer(_1, exception: false) }.reject(&:blank?)
       member_permission = services_member_permission || member_permissions.build(admin_section: :services)
       member_permission.service_ids = service_ids & existing_service_ids
     elsif service_ids.blank?
