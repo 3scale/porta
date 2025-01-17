@@ -3,7 +3,7 @@
 module Signup
   class ResultWithAccessToken < Signup::Result
     def local_initialize
-      token_params = { name: 'account management rw', scopes: ['account_management'], 'permission': 'rw' }
+      token_params = { name: 'Administration', scopes: %w[account_management policy_registry], 'permission': 'rw' }
       @access_token = user.access_tokens.new(token_params)
     end
 
