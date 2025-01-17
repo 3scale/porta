@@ -87,7 +87,7 @@ gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
 gem 'acts-as-taggable-on', '~> 11.0'
-gem 'baby_squeel', '~> 2.0'
+gem 'baby_squeel', '~> 3.0', '>= 3.0.0'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis-client'
