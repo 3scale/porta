@@ -1,7 +1,11 @@
-import Form from 'react-jsonschema-form'
+import Form from '@rjsf/core'
+import { customizeValidator } from '@rjsf/validator-ajv6'
 
 import { isNotApicastPolicy } from 'Policies/util'
 
+import type { JSONSchema7 } from 'json-schema'
+import type { RJSFSchema } from '@rjsf/utils'
+import type { IChangeEvent } from '@rjsf/core'
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
@@ -15,6 +19,8 @@ interface Props {
   };
 }
 
+const policyValidator = customizeValidator<JSONSchema7, RJSFSchema, never>()
+
 const PolicyConfig: React.FunctionComponent<Props> = ({
   policy,
   actions
@@ -23,8 +29,8 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
   const { version, summary, description, enabled, configuration, data } = policy
 
   const onSubmit = (chainPolicy: ChainPolicy) => {
-    return ({ formData, schema }: { formData: ChainPolicy['data']; schema: ChainPolicy['configuration'] }) => {
-      submitPolicyConfig({ ...chainPolicy, configuration: schema, data: formData })
+    return (formData: IChangeEvent<JSONSchema7, JSONSchema7, never>) => {
+      submitPolicyConfig({ ...chainPolicy, configuration: formData.schema, data: formData.formData })
     }
   }
   const togglePolicy = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +62,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
           formData={data}
           id="edit-policy-form"
           schema={configuration}
+          validator={policyValidator}
           onSubmit={onSubmit(policy)}
         >
           <span /> { /* Prevents rendering default submit button */ }
