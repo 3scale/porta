@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "4.224.2",
-    "@patternfly/quickstarts": "^2.4.1",
+    "@patternfly/quickstarts": "^2.4.3",
     "@patternfly/react-core": "4.276.8",
     "@patternfly/react-table": "4.113.0",
     "@stripe/react-stripe-js": "1.16.5",
