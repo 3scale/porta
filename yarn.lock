@@ -1328,17 +1328,20 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@braintree/asset-loader@0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@braintree/asset-loader/-/asset-loader-0.4.4.tgz#9a5eda24c3627bfd5c7f7483cd48f0e411dd2f09"
-  integrity sha512-uVhXC5dydmngmNVuDiKgfXSlz4kv4x5ytIJodI8N5SY16mRh13m/UmbQ7yH+o8DQqp50qPZ45MUHIZkXKPg85w==
-  dependencies:
-    promise-polyfill "^8.1.3"
+"@braintree/asset-loader@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@braintree/asset-loader/-/asset-loader-2.0.0.tgz#4e25ed06379d0bbda101c2157611651157a4df35"
+  integrity sha512-7Zs3/g3lPTfkdtWr7cKh3tk1pDruXR++TXwGKkx7BPuTjjLNFul2JSfI+ScHzNU4u/gZNPNQagsSTlYxIhBgMA==
 
-"@braintree/browser-detection@1.17.1":
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/@braintree/browser-detection/-/browser-detection-1.17.1.tgz#d151c409dc7245e9307b05f3a06ede254e0f5d1e"
-  integrity sha512-Mk7jauyp9pD14BTRS7otoy9dqIJGb3Oy0XtxKM/adGD9i9MAuCjH5uRZMyW2iVmJQTaA/PLlWdG7eSDyMWMc8Q==
+"@braintree/asset-loader@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@braintree/asset-loader/-/asset-loader-2.0.1.tgz#7069b5d54e2827b6c1fb4155c4cdc8dc68e00a33"
+  integrity sha512-OGAoBA5MRVsr5qg0sXM6NMJbqHnYZhBudtM6WGgpQnoX42fjUYbE6Y6qFuuerD5z3lsOAjnu80DooBs1VBuh5Q==
+
+"@braintree/browser-detection@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@braintree/browser-detection/-/browser-detection-2.0.1.tgz#11bc5e1d173c55cd25bda6ad22c6b3ee14ed87a2"
+  integrity sha512-wpRI7AXEUh6o3ILrJbpNOYE7ItfjX/S8JZP7Z5FF66ULngBGYOqE8SeLlLKXG69Nc07HtlL/6nk/h539iz9hcQ==
 
 "@braintree/browser-detection@^1.12.1":
   version "1.16.0"
@@ -1350,22 +1353,32 @@
   resolved "https://registry.yarnpkg.com/@braintree/event-emitter/-/event-emitter-0.4.1.tgz#204eaad8cf84eb7bf81fb288a359d34eda85a396"
   integrity sha512-X41357O3OXUDlnwMvS1m0GQEn3zB3s3flOBeg2J5OBvLvdJEIAVpPkblABPtsPrlciDSvfv1aSG5ixHPgFH0Zg==
 
-"@braintree/extended-promise@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@braintree/extended-promise/-/extended-promise-0.4.1.tgz#b44f8e6236ddb43434be11924f00fa69f8782a36"
-  integrity sha512-00n7m4z+swWHoFQLHLvrIBIEoxnGUBsl3ogvX79ITpcn8CHczDwtxYy5+RhMoAraRdfN3oB+8QIpN3KOxs2Q7w==
+"@braintree/extended-promise@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@braintree/extended-promise/-/extended-promise-1.0.0.tgz#b9c52cf93b4935c429053b16e1152549df0696a7"
+  integrity sha512-E9529FJNG4OgeeLJ00vNs3TW67+AeSQobJg0hwfsQk29hgK4bVBsvQHVD4nwDuDD1Czon90K88gfQIFadAMs0w==
 
-"@braintree/iframer@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@braintree/iframer/-/iframer-1.1.0.tgz#7e59b975c2a48bd92616f653367a5214fc2ddd4b"
-  integrity sha512-tVpr7U6u6bqeQlHreEjYMNtnHX62vLnNWziY2kQLqkWhvusPuY5DfuGEIPpWqsd+V/a1slyTQaxK6HWTlH6A/Q==
+"@braintree/iframer@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@braintree/iframer/-/iframer-2.0.0.tgz#bbba9cfd62b701b8cb1f779dffcad6295aed9d23"
+  integrity sha512-x1kHOyIJNDvi4P1s6pVBZhqhBa1hqDG9+yzcsCR1oNVC0LxH9CAP8bKxioT8/auY1sUyy+D8T4Vp/jv7QqSqLQ==
 
-"@braintree/sanitize-url@7.0.1", "@braintree/sanitize-url@=7.0.1":
+"@braintree/sanitize-url@7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-7.0.4.tgz#a7ddd6d55dfb89e341f5684c9717ee24fef62301"
+  integrity sha512-hPYRrKFoI+nuckPgDJfyYAkybFvheo4usS0Vw0HNAe+fmGBQA5Az37b/yStO284atBoqqdOUhKJ3d9Zw3PQkcQ==
+
+"@braintree/sanitize-url@=7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-7.0.1.tgz#457233b0a18741b7711855044102b82bae7a070b"
   integrity sha512-URg8UM6lfC9ZYqFipItRSxYJdgpU5d2Z4KnjsJ+rj6tgAmGme7E+PQNCiud8g0HDaZKMovu2qjfa0f5Ge0Vlsg==
 
-"@braintree/uuid@0.1.0", "@braintree/uuid@^0.1.0":
+"@braintree/uuid@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@braintree/uuid/-/uuid-1.0.0.tgz#4fda394ceae803a8129e673c29ccf6c5e2014360"
+  integrity sha512-AtI5hfttWSuWAgcwLUZdcZ7Fp/8jCCUf9JTs7+Xow9ditU28zuoBovqq083yph2m3SxPYb84lGjOq+cXlXBvJg==
+
+"@braintree/uuid@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@braintree/uuid/-/uuid-0.1.0.tgz#ab9355015a7fb0e25cf3c2ff9cd32ece8ea304b0"
   integrity sha512-YvZJdlNcK5EnR+7M8AjgEAf4Qx696+FOSYlPfy5ePn80vODtVAUU0FxHnzKZC0og1VbDNQDDiwhthR65D4Na0g==
@@ -1932,6 +1945,15 @@
   version "4.94.7"
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.94.7.tgz#4453b9abe91a4ffa38e3ebec28927d9b91e3320c"
   integrity sha512-h+ducOLDMSxcuec3+YY3x+stM5ZUSnrl/lC/eVmjypil2El08NuE2MNEPMQWdhrod6VRRZFMNqZw/m82iv6U1A==
+
+"@paypal/accelerated-checkout-loader@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@paypal/accelerated-checkout-loader/-/accelerated-checkout-loader-1.1.0.tgz#8e0e939d4b04dfbd2c8a7a22287eb753eedcaf5a"
+  integrity sha512-S2KkIpq15VnxYyI0tycvfYiNsqdsg2a92El2huYUVLsWnBbubl8toYK8khaP5nnxZ0MGl9mEB9Y9axmfOw2Yvg==
+  dependencies:
+    "@braintree/asset-loader" "2.0.0"
+    envify "^4.1.0"
+    typescript "^4.6.4"
 
 "@scarf/scarf@=1.4.0":
   version "1.4.0"
@@ -4156,23 +4178,24 @@ braces@^3.0.3, braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-braintree-web@3.102.0:
-  version "3.102.0"
-  resolved "https://registry.yarnpkg.com/braintree-web/-/braintree-web-3.102.0.tgz#f0d65f80b3d0c7aa12380a51292790768278f926"
-  integrity sha512-zQzYi1O8+ovLKKpjjaIl5lXg8+cL9u5sYDQucGrTPntqBeGi86psCcymdJPmUn4ASwYN6GKWmHg7e8tZ80aYOg==
+braintree-web@3.113.0:
+  version "3.113.0"
+  resolved "https://registry.yarnpkg.com/braintree-web/-/braintree-web-3.113.0.tgz#55a28f68fe89baa79b911690175433dcc1ff08a5"
+  integrity sha512-qykYxZyld4X1tRNgXZQ3ZGzmhDGTBTRQ6Q24KaG9PuYqo+P2TVDEDOVC6tRbkx2RUIdXLv2M6WpkG7oLqEia9Q==
   dependencies:
-    "@braintree/asset-loader" "0.4.4"
-    "@braintree/browser-detection" "1.17.1"
+    "@braintree/asset-loader" "2.0.1"
+    "@braintree/browser-detection" "2.0.1"
     "@braintree/event-emitter" "0.4.1"
-    "@braintree/extended-promise" "0.4.1"
-    "@braintree/iframer" "1.1.0"
-    "@braintree/sanitize-url" "7.0.1"
-    "@braintree/uuid" "0.1.0"
+    "@braintree/extended-promise" "1.0.0"
+    "@braintree/iframer" "2.0.0"
+    "@braintree/sanitize-url" "7.0.4"
+    "@braintree/uuid" "1.0.0"
     "@braintree/wrap-promise" "2.1.0"
-    card-validator "8.1.1"
-    credit-card-type "9.1.0"
-    framebus "5.2.1"
-    inject-stylesheet "5.0.0"
+    "@paypal/accelerated-checkout-loader" "1.1.0"
+    card-validator "10.0.0"
+    credit-card-type "10.0.1"
+    framebus "6.0.0"
+    inject-stylesheet "6.0.1"
     promise-polyfill "8.2.3"
     restricted-input "3.0.5"
 
@@ -4338,10 +4361,10 @@ caniuse-lite@^1.0.30001640:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001642.tgz#6aa6610eb24067c246d30c57f055a9d0a7f8d05f"
   integrity sha512-3XQ0DoRgLijXJErLSl+bLnJ+Et4KqV1PY6JJBGAFlsNsz31zeAIncyeZfLCabHK/jtSh+671RM9YMldxjUPZtA==
 
-card-validator@8.1.1:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/card-validator/-/card-validator-8.1.1.tgz#418f5f32435553fb9ca2a02634ad413bb38697a9"
-  integrity sha512-cN4FsKwoTfTFnqPwVc7TQLSsH/QMDB3n/gWm0XelcApz4sKipnOQ6k33sa3bWsNnnIpgs7eXOF+mUV2UQAX2Sw==
+card-validator@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/card-validator/-/card-validator-10.0.0.tgz#288a5525cae765566c4ff7d6e841d8e1ae63cd4c"
+  integrity sha512-2fLyCBOxO7/b56sxoYav8FeJqv9bWpZSyKq8sXKxnpxTGXHnM/0c8WEKG+ZJ+OXFcabnl98pD0EKBtTn+Tql0g==
   dependencies:
     credit-card-type "^9.1.0"
 
@@ -4731,7 +4754,12 @@ core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
 
-credit-card-type@9.1.0, credit-card-type@^9.1.0:
+credit-card-type@10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-10.0.1.tgz#3464309395a9942f0f9768481645b696f9f7c58a"
+  integrity sha512-vQOuWmBgsgG1ovGeDi8m6Zeu1JaqH/JncrxKmaqMbv/LunyOQdLiQhPHtOsNlbUI05TocR5nod/Mbs3HYtr6sQ==
+
+credit-card-type@^9.1.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-9.1.0.tgz#54dd96c93b6579623e9c8656e6798fc2b93f5f05"
   integrity sha512-CpNFuLxiPFxuZqhSKml3M+t0K/484pMAnfYWH14JoD7OZMnmC0Lmo+P7JX9SobqFpRoo7ifA18kOHdxJywYPEA==
@@ -5216,6 +5244,14 @@ envify@^3.4.0:
   integrity sha512-XLiBFsLtNF0MOZl+vWU59yPb3C2JtrQY2CNJn22KH75zPlHWY5ChcAQuf4knJeWT/lLkrx3sqvhP/J349bt4Bw==
   dependencies:
     jstransform "^11.0.3"
+    through "~2.3.4"
+
+envify@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/envify/-/envify-4.1.0.tgz#f39ad3db9d6801b4e6b478b61028d3f0b6819f7e"
+  integrity sha512-IKRVVoAYr4pIx4yIWNsz9mOsboxlNXiu7TNBnem/K/uTHdkyzXWDzHCK7UTolqBbgaBz0tQHsD3YNls0uIIjiw==
+  dependencies:
+    esprima "^4.0.0"
     through "~2.3.4"
 
 envinfo@^7.7.3:
@@ -6084,10 +6120,10 @@ forwarded@0.2.0:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
 
-framebus@5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/framebus/-/framebus-5.2.1.tgz#6b7468191c020e28ee339c15561d4bd12864c636"
-  integrity sha512-K6pw+M2wNBuOhEoFrmMbf1O+fm7PnNDIfA9y0KpAyQzXRIJ420szGgJ/dI2Ikz0XG+5VfspLqA72M6bXhuyKIQ==
+framebus@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/framebus/-/framebus-6.0.0.tgz#4ebafaf4d78441fdb1f6c55cb9a6ea9f72c55cff"
+  integrity sha512-bL9V68hVaVBCY9rveoWbPFFI9hAXIJtESs51B+9XmzvMt38+wP8b4VdiJsavjMS6NfPZ/afQ/jc2qaHmSGI1kQ==
   dependencies:
     "@braintree/uuid" "^0.1.0"
 
@@ -6718,10 +6754,10 @@ ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-inject-stylesheet@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/inject-stylesheet/-/inject-stylesheet-5.0.0.tgz#bb34acf05ca6ed86e5763d886cd6c9b19f360ab1"
-  integrity sha512-GzncrJP8E/pavMQzoO93CXoYCfTttwVm2cX2TyXJdgtVE0cCvWSFCn1/uMsM6ZkEg7LUsOcKuamcLiGWlv2p9A==
+inject-stylesheet@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/inject-stylesheet/-/inject-stylesheet-6.0.1.tgz#ab724474ac300684875e8980d1285cb4e99b33ae"
+  integrity sha512-2fvune1D4+8mvJoLVo95ncY4HrDkIaYIReRzXv8tkWFgdG9iuc5QuX57gtSDPWTWQI/f5BGwwtH85wxHouzucg==
 
 internal-slot@^1.0.3, internal-slot@^1.0.5:
   version "1.0.5"
@@ -9033,11 +9069,6 @@ promise-polyfill@8.2.3:
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.3.tgz#2edc7e4b81aff781c88a0d577e5fe9da822107c6"
   integrity sha512-Og0+jCRQetV84U8wVjMNccfGCnMQ9mGs9Hv78QFe+pSDD3gWTpz0y+1QCuxy5d/vBFuZ3iwP2eycAkvqIMPmWg==
 
-promise-polyfill@^8.1.3:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.3.0.tgz#9284810268138d103807b11f4e23d5e945a4db63"
-  integrity sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==
-
 prompts@^2.0.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.4.2.tgz#7b57e73b3a48029ad10ebd44f74b01722a4cb069"
@@ -10885,6 +10916,11 @@ typescript@5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
   integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
+
+typescript@^4.6.4:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

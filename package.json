@@ -73,7 +73,7 @@
     "@types/swagger-ui": "^3.52.0",
     "@types/virtual-dom": "^2.1.1",
     "bootstrap-sass": "3.4.3",
-    "braintree-web": "3.102.0",
+    "braintree-web": "3.113.0",
     "c3": "^0.4.11",
     "classnames": "^2.2.6",
     "codemirror": "5.65.9",
