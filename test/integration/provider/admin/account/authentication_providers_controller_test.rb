@@ -68,6 +68,17 @@ class Provider::Admin::Account::AuthenticationProvidersControllerTest < ActionDi
     assert authentication_provider.reload.skip_ssl_certificate_verification
   end
 
+  test 'PATCH update invalid URL' do
+    authentication_provider = FactoryBot.create(:keycloak_self_authentication_provider, account: @provider)
+
+    patch provider_admin_account_authentication_provider_path(authentication_provider), params: { authentication_provider: { site: '  http://example.com  ' } }
+
+    assert_response :success
+    assert_template :edit
+    assert_match 'SSO integration could not be updated', flash[:error]
+    assert_match "contain whitespaces", response.body
+  end
+
   test 'DELETE destroy' do
     authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider)
 

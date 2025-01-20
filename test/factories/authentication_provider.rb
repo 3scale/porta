@@ -28,6 +28,11 @@ FactoryBot.define do
     account_type { AuthenticationProvider.account_types[:provider] }
   end
 
+  factory(:keycloak_self_authentication_provider,
+          parent: :keycloak_authentication_provider) do
+    account_type { AuthenticationProvider.account_types[:provider] }
+  end
+
   factory(:auth0_authentication_provider,
                     parent: :authentication_provider,
                     class: AuthenticationProvider::Auth0)
