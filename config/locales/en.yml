@@ -1140,9 +1140,7 @@ en:
         authentication_provider:
           attributes:
             site:
-              invalid: "Please, remove any white space."
-            realm:
-              invalid: "Please, remove any white space."
+              contains_whitespace: "can't contain whitespaces"
             kind:
               not_found: "unavailable for this account type"
 
