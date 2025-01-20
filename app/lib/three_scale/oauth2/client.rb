@@ -72,7 +72,7 @@ module ThreeScale
       # @return [::ThreeScale::OAuth::Client::Options]
       def build_authentication_options(authentication_provider)
         Options.new(
-          authentication_provider.site.presence,
+          authentication_provider.site.presence&.strip,
           authentication_provider.token_url.presence,
           authentication_provider.authorize_url.presence,
           { ssl: { verify_mode: authentication_provider.ssl_verify_mode } })

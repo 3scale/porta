@@ -28,6 +28,16 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
         presenter.sso_integration_callback_url
   end
 
+  # this is to prevent Internal Server Error for any potential
+  # existing SSO integrations with whitespaces in site/realm param
+  test 'ignore whitespaces in site param' do
+    auth_provider = FactoryBot.build_stubbed(:keycloak_authentication_provider, kind: 'keycloak')
+    auth_provider.site = '  http://whitespace-test.com  '
+
+    presenter = OAuthFlowPresenter.new(auth_provider, @request)
+    assert presenter.authorize_url.start_with?('http://whitespace-test.com')
+  end
+
   test 'callback_endpoint' do
     expected_url = "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback?plan_id=42"
     assert_equal expected_url, @presenter.callback_url
