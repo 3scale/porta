@@ -92,7 +92,8 @@ module.exports = {
   moduleNameMapper: {
     'c3': '<rootDir>/__mocks__/c3.js',
     '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascripts/__mocks__/styleMock.js',
-    '\\.(gif|ttf|eot)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js'
+    '\\.(gif|ttf|eot)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js',
+    'nanoid': '<rootDir>/node_modules/nanoid/index.browser.cjs'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
