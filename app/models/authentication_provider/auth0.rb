@@ -3,6 +3,6 @@ class AuthenticationProvider::Auth0 < AuthenticationProvider
   self.oauth_config_required = true
 
   validates :site, presence: true
-  validates :site, format: { without: /\s/ }
+  validates :site, format: { without: /\s/, message: :contains_whitespace }
 
 end

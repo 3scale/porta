@@ -89,7 +89,7 @@ class ProxyRule < ApplicationRecord
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
-  validates :redirect_url, format: URI.regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
+  validates :redirect_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
 
   def parameters
     Addressable::Template.new(path_pattern).variables
