@@ -17,7 +17,7 @@ features: &default
   logging:
     audits_to_stdout: true
   quickstarts:
-    enabled: true
+    enabled: false
   email_configuration:
     enabled: false
 
