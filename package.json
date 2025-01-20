@@ -101,6 +101,7 @@
     "redux-thunk": "^2.3.0",
     "sass": "1.77.6",
     "sass-loader": "13.3.3",
+    "showdown": ">=2.1.0",
     "swagger-client": "^3.17.0",
     "swagger-ui": "~5.12.3",
     "validate.js": "^0.13.1",
