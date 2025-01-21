@@ -18,7 +18,7 @@ div class="pf-c-card"
 
       = render partial: 'provider/admin/account/authentication_providers/form/form', locals: {f: f}
 
-      = f.input :site, as: :patternfly_input, required: true, label: 'Realm or Site', hint: 'Ex: https://rh-sso.example.com/auth/realms/demo'
+      = f.input :site, as: :patternfly_input, required: true, label: 'Realm or Site', hint: 'e.g. https://rh-sso.example.com/auth/realms/demo'
 
       = f.actions do
         = f.commit_button I18n.t('provider.admin.authentication_providers.new.submit_button_label')
@@ -29,9 +29,9 @@ javascript:
     const realmOrSiteHint = document.querySelector('.pf-c-form__helper-text')
 
     ssoSelector.addEventListener('change', (e) => {
-      let hintText = 'Ex: https://rh-sso.example.com/auth/realms/demo'
+      let hintText = 'e.g. https://rh-sso.example.com/auth/realms/demo'
       if (e.target.value === 'auth0') {
-        hintText = 'Ex: https://XXXXX.auth0.com'
+        hintText = 'e.g. https://XXXXX.auth0.com'
       }
       realmOrSiteHint.textContent = hintText
     })

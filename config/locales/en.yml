@@ -1656,13 +1656,9 @@ en:
         client_secret: Client Secret
         automatically_approve_accounts: 'Always approve accounts that sign up through this SSO Integration'
         published_admin_portal: Display this SSO Integration on the sign-in page of the admin portal.
-      authentication_provider/github:
-        <<: *authentication_provider
-      authentication_provider/auth0:
-        <<: *authentication_provider
+        skip_ssl_certificate_verification: Skip SSL certificate verification
       authentication_provider/keycloak:
-        <<: *authentication_provider
-        skip_ssl_certificate_verification: Do not verify SSL certificate
+        site: Realm
 
       settings:
         account_approval_required: Account approval required
