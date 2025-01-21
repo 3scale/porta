@@ -9,6 +9,7 @@ class Provider::Admin::Account::UsersIndexPresenter
     pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
 
     @users = users.paginate(pagination_params)
+                  .decorate
   end
 
   attr_reader :users

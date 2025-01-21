@@ -17,7 +17,6 @@ table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" data-
 
   tbody role="rowgroup"
     - presenter.users.each do |user|
-      - user = user.decorate
       tr role="row" id=(dom_id(user))
         td role="cell" data-label="Name"
           - if current_user == user
