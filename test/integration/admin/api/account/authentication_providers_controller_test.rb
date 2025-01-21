@@ -19,8 +19,9 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#create saves the attributes' do
-    post admin_api_account_authentication_providers_path(authentication_provider_params)
-    attributes_params = authentication_provider_params[:authentication_provider]
+    params = authentication_provider_params
+    post admin_api_account_authentication_providers_path(params)
+    attributes_params = params[:authentication_provider]
     authentication_provider = @provider.self_authentication_providers.find_by!(kind: attributes_params[:kind])
     assert_equal AuthenticationProvider.account_types[:provider], authentication_provider.account_type
     assert_equal attributes_params[:client_id], authentication_provider.client_id
@@ -31,9 +32,10 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#create creates 2 times with the same data' do
+    params = authentication_provider_params
     assert_difference @provider.self_authentication_providers.method(:count), 2 do
       2.times do
-        post admin_api_account_authentication_providers_path(authentication_provider_params)
+        post admin_api_account_authentication_providers_path(params)
         assert_response :created
       end
     end
@@ -54,9 +56,15 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     end
   end
 
-  test '#create keycloak without site returns the right error' do
+  test '#create keycloak without blank or invalid site returns the right error' do
     post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: ''}))
-    assert_equal ['can\'t be blank', 'Invalid URL format'], JSON.parse(response.body).dig('errors', 'realm')
+    assert_equal ["can't be blank"], JSON.parse(response.body).dig('errors', 'site')
+
+    post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: 'invalid'}))
+    assert_equal ['Invalid URL format'], JSON.parse(response.body).dig('errors', 'site')
+
+    post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: '  http://example.com  '}))
+    assert_equal ["can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
   end
 
   test '#create ensures provider can use provider_sso' do
@@ -68,9 +76,10 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   test '#update saves the new attributes values' do
     authentication_provider = create_authentication_provider
-    put admin_api_account_authentication_provider_path(authentication_provider, authentication_provider_params)
+    params = authentication_provider_params
+    put admin_api_account_authentication_provider_path(authentication_provider, params)
     assert_response :ok
-    attributes_params = authentication_provider_params[:authentication_provider]
+    attributes_params = params[:authentication_provider]
     authentication_provider.reload
     assert_equal attributes_params[:client_id], authentication_provider.client_id
     assert_equal attributes_params[:client_secret], authentication_provider.client_secret
@@ -148,12 +157,10 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   def authentication_provider_params(different_attributes: {})
-    @authentication_provider_params ||= begin
-      attributes = {
-        client_id: 'cid', client_secret: 'csecret', site: 'http://example',
-        kind: 'auth0', skip_ssl_certificate_verification: true, published: true
-      }.merge(different_attributes)
-      { authentication_provider: attributes, format: :json, access_token: @access_token.value }
-    end
+    attributes = {
+      client_id: 'cid', client_secret: 'csecret', site: 'http://example',
+      kind: 'auth0', skip_ssl_certificate_verification: true, published: true
+    }.merge(different_attributes)
+    { authentication_provider: attributes, format: :json, access_token: @access_token.value }
   end
 end
