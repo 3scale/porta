@@ -59,7 +59,7 @@
     "@types/c3": "^0.7.8",
     "@types/codemirror": "^5.60.5",
     "@types/enzyme": "^3.10.13",
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.14",
     "@types/lodash.escaperegexp": "^4.1.7",
     "@types/numeral": "^2.0.2",
