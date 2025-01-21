@@ -129,7 +129,7 @@ When /^(?:I|they) log ?out$/ do
 end
 
 # TODO: merge those 3 assertion steps
-When /^I am not logged in$/ do
+When /^(?:I am not|user is not) logged in$/ do
   if Account.exists?(domain: @domain)
     visit '/admin'
   else
@@ -149,7 +149,7 @@ Then "(I )(they )should not be logged in" do
   assert_includes [provider_sessions_path, session_path], current_path
 end
 
-When "the user logs in" do
+When "{user} logs in" do |user|
   log_out
-  try_provider_login(@user.username, 'supersecret')
+  try_provider_login(user.username, 'supersecret')
 end

@@ -14,7 +14,7 @@ Given "a provider {string} signed up to {plan}" do |name, plan|
   create_provider_with_plan(name, plan)
 end
 
-Given(/^a provider "([^"]*)"$/) do |account_name|
+Given "a(nother) provider {string}" do |account_name|
   create_provider_with_plan(account_name, ApplicationPlan.first)
 end
 
@@ -355,4 +355,8 @@ end
 
 Then "I see the support email of {provider}" do |provider|
   assert_text ThreeScale.config.support_email
+end
+
+Given "{provider} has no users" do |provider|
+  provider.users.each(&:delete)
 end
