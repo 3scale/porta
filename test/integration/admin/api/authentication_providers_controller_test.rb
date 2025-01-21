@@ -22,8 +22,9 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   end
 
   test '#create saves the attributes' do
-    post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {name: 'Rhsso', system_name: 'rhsso'}))
-    attributes_params = authentication_provider_params[:authentication_provider]
+    params = authentication_provider_params(different_attributes: {name: 'Rhsso', system_name: 'rhsso'})
+    post admin_api_authentication_providers_path(params)
+    attributes_params = params[:authentication_provider]
     authentication_provider = provider.authentication_providers.find_by!(kind: attributes_params[:kind])
     assert_equal AuthenticationProvider.account_types[:developer], authentication_provider.account_type
     assert_equal 'Rhsso', authentication_provider.name
@@ -54,10 +55,11 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   end
 
   test '#create does not create 2 times with the same kind' do
+    params = authentication_provider_params
     assert_difference provider.authentication_providers.method(:count) do
-      post admin_api_authentication_providers_path(authentication_provider_params)
+      post admin_api_authentication_providers_path(params)
       assert_response :created
-      post admin_api_authentication_providers_path(authentication_provider_params)
+      post admin_api_authentication_providers_path(params)
       assert_response :unprocessable_entity
       assert_equal ['has already been taken'], JSON.parse(response.body).dig('errors', 'kind')
     end
@@ -74,7 +76,13 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
 
   test '#create keycloak without site returns the right error' do
     post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: ''}))
-    assert_equal ['can\'t be blank', 'Invalid URL format'], JSON.parse(response.body).dig('errors', 'realm')
+    assert_equal ["can't be blank"], JSON.parse(response.body).dig('errors', 'site')
+
+    post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: 'invalid'}))
+    assert_equal ['Invalid URL format'], JSON.parse(response.body).dig('errors', 'site')
+
+    post admin_api_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: '  http://example.com  '}))
+    assert_equal ["can't contain whitespaces"], JSON.parse(response.body).dig('errors', 'site')
   end
 
   test '#update saves the new attributes values' do
@@ -131,13 +139,11 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
   attr_reader :provider, :access_token
 
   def authentication_provider_params(different_attributes: {}, format: :json)
-    @authentication_provider_params ||= begin
-      attributes = {
-        name: 'my-name', system_name: 'system_name', client_id: 'cid', client_secret: 'csecret', site: 'http://site',
-        token_url: 'http://token_url', user_info_url: 'http://user_info_url', authorize_url: 'http://authorize_url',
-        kind: 'github', skip_ssl_certificate_verification: true, automatically_approve_accounts: true
-      }.merge(different_attributes)
-      { authentication_provider: attributes, format: format, access_token: access_token.value }
-    end
+    attributes = {
+      name: 'my-name', system_name: 'system_name', client_id: 'cid', client_secret: 'csecret', site: 'http://site',
+      token_url: 'http://token_url', user_info_url: 'http://user_info_url', authorize_url: 'http://authorize_url',
+      kind: 'github', skip_ssl_certificate_verification: true, automatically_approve_accounts: true
+    }.merge(different_attributes)
+    { authentication_provider: attributes, format: format, access_token: access_token.value }
   end
 end
