@@ -1847,7 +1847,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.224.2.tgz#9d1b000c3c43457ae47c3556a334412d164fad90"
   integrity sha512-HGNV26uyHSIECuhjPg/WGn0mXbAotcs6ODfhAOkfYjIgGylddgiwElxUe1rpEHV5mQJJ2rMn4OdeJIIpzRX61g==
 
-"@patternfly/quickstarts@^2.4.3":
+"@patternfly/quickstarts@2.4.3":
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/@patternfly/quickstarts/-/quickstarts-2.4.3.tgz#5fe102469b8a247f245cdad317d1b3b1bd8f0363"
   integrity sha512-X5V99QG27JG/ycp/ktQhI+MQcFGH55VO8aZj2eS/cMbNUFobJadjQLvrkdI2OTbi2vPJnpqybKN3oyeMcoeobw==
@@ -9816,7 +9816,7 @@ shortid@^2.2.14:
   dependencies:
     nanoid "^2.1.0"
 
-showdown@>=2.1.0:
+showdown@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
   integrity sha512-/6NVYu4U819R2pUIk79n67SYgJHWCce0a5xTP979WbNp0FL9MN1I1QK662IDU1b6JzKTvmhgI7T7JYIxBi3kMQ==
