@@ -14,6 +14,10 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 7.0.0'
 
+# Fixing "uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger"
+# that fails after upgrading to 1.3.5. Can be removed after upgrading to Rails 7.1
+gem 'concurrent-ruby', '1.3.4'
+
 gem 'mail', '~> 2.8.1'
 
 gem "activejob-uniqueness"
