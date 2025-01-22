@@ -56,7 +56,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     end
   end
 
-  test '#create keycloak without blank or invalid site returns the right error' do
+  test '#create keycloak with blank or invalid site returns the right error' do
     post admin_api_account_authentication_providers_path(authentication_provider_params(different_attributes: {kind: 'keycloak', site: ''}))
     assert_equal ["can't be blank"], JSON.parse(response.body).dig('errors', 'site')
 
