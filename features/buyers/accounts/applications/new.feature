@@ -105,7 +105,7 @@ Feature: Audience > Accounts > Listing > Account > Applications > New
       When they follow "Create an application"
       Then the current page is the upgrade notice for multiple applications
 
-    Scenario: Navigation via url
+    Scenario: Can't create multiple applications
       Given they go to buyer "Jane" new application page
       When the form is submitted with:
         | Product          | My API        |

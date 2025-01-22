@@ -200,14 +200,4 @@ module UsersHelper
   def strong_password_definition
     User::STRONG_PASSWORD_FAIL_MSG
   end
-
-  def show_provider_sso_status_for_user?
-    current_account.provider_can_use?(:provider_sso) && current_account.self_authentication_providers.published.any?
-  end
-
-  def permission_groups_summary(user = current_user)
-    member_permission_ids = user.member_permission_ids
-    return '-' if member_permission_ids.blank?
-    I18n.t('admin_sections.permission_groups_summary').values_at(*member_permission_ids).join(', ')
-  end
 end

@@ -1,5 +1,22 @@
 # frozen_string_literal: true
 
+# Create a set of active users.
+# If role is not specified, they will be created as members.
+# Example:
+#
+#   Given a provider "Umbrella"
+#   And the following users:
+#     | Username | First name | Last name | Role  |
+#     | wesker   | Albert     | Wesker    | admin |
+#
+Given "the following user(s):" do |table|
+  parameterize_headers(table)
+
+  table.hashes.each do |row|
+    FactoryBot.create(:active_user, account: @provider, **row)
+  end
+end
+
 Given "an admin user {string} of {provider}" do |username, provider|
   @user = FactoryBot.create(:active_user, account: provider,
                                           username: username,

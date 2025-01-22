@@ -54,7 +54,7 @@ Feature: Provider Account Settings User Invitations
 
     Scenario: Inviting new users is possible
       When they go to the provider users page
-      And follow "Invite a New User"
+      And follow "Invite a new user"
       Then the current page is the provider new invitation page
 
     Scenario: Inviting an existing user

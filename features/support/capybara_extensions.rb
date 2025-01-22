@@ -27,8 +27,12 @@ module CapybaraExtensions
         if has_css?('select.pf-c-form-control', wait: 0)
           super
         else
-          find('.pf-c-select').click
+          select = find('.pf-c-select')
+          select.click unless select.has_css?('.pf-m-expanded', wait: 0)
           find('.pf-c-select__menu button', text: value).click
+
+          # Wait for the select to close
+          assert select.has_no_css?('.pf-m-expanded', wait: 1)
         end
       end
     else
