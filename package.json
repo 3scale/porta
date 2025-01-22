@@ -102,7 +102,7 @@
     "sass": "1.77.6",
     "sass-loader": "13.3.3",
     "showdown": "2.1.0",
-    "swagger-client": "^3.17.0",
+    "swagger-client": "^3.32.4",
     "swagger-ui": "~5.12.3",
     "validate.js": "^0.13.1",
     "virtual-dom": "^2.1.1",
