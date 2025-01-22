@@ -19,9 +19,11 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
   end
 
   def label
-    tag.div(class: 'pf-c-form__group-label') do
-      tag.label(class: 'pf-c-form__label', for: input_html_options[:id]) do
-        tag.span(label_text, class: 'pf-c-form__label-text')
+    with_original_model do
+      tag.div(class: 'pf-c-form__group-label') do
+        tag.label(class: 'pf-c-form__label', for: input_html_options[:id]) do
+          tag.span(label_text, class: 'pf-c-form__label-text')
+        end
       end
     end
   end
@@ -56,8 +58,18 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
       return template.render partial: 'shared/pf_error_helper_text', locals: { error: errors.first }
     end
 
-    if hint? # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
-      tag.p(hint_text, class: 'pf-c-form__helper-text')
+    with_original_model do
+      tag.p(hint_text, class: 'pf-c-form__helper-text') if hint?
     end
+  end
+
+  def with_original_model
+    if builder.respond_to?(:options) && builder.options.key?(:as)
+      as = builder.options[:as]
+      builder.options.delete(:as)
+    end
+    yield
+  ensure
+    builder.options[:as] = as if as
   end
 end
