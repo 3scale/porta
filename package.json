@@ -76,7 +76,7 @@
     "braintree-web": "3.102.0",
     "c3": "^0.4.11",
     "classnames": "^2.2.6",
-    "codemirror": "5.65.9",
+    "codemirror": "5.65.18",
     "compression-webpack-plugin": "10.0.0",
     "css-loader": "6.11.0",
     "esbuild-loader": "4.2.0",
