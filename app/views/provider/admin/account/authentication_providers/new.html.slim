@@ -18,10 +18,13 @@ div class="pf-c-card"
 
       = render partial: 'provider/admin/account/authentication_providers/form/form', locals: {f: f}
 
-      = f.input :site, as: :patternfly_input, required: true, label: 'Realm or Site', hint: 'e.g. https://rh-sso.example.com/auth/realms/demo'
+      = f.input :site, as: :patternfly_input, required: true, label: 'Realm or Site', hint: Formtastic::I18n.t('authentication_provider/keycloak.site', scope: :hints)
 
       = f.actions do
         = f.commit_button I18n.t('provider.admin.authentication_providers.new.submit_button_label')
+
+p id="keycloak_hint_text" style="display:none" = Formtastic::I18n.t('authentication_provider/keycloak.site', scope: :hints)
+p id="auth0_hint_text" style="display:none" = Formtastic::I18n.t('authentication_provider/auth0.site', scope: :hints)
 
 javascript:
   document.addEventListener('DOMContentLoaded', () => {
@@ -29,10 +32,7 @@ javascript:
     const realmOrSiteHint = document.querySelector('.pf-c-form__helper-text')
 
     ssoSelector.addEventListener('change', (e) => {
-      let hintText = 'e.g. https://rh-sso.example.com/auth/realms/demo'
-      if (e.target.value === 'auth0') {
-        hintText = 'e.g. https://XXXXX.auth0.com'
-      }
-      realmOrSiteHint.textContent = hintText
+      const type = e.target.value
+      realmOrSiteHint.textContent = document.querySelector(`#${type}_hint_text`).textContent
     })
   })

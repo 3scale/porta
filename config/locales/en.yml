@@ -1494,6 +1494,10 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      authentication_provider/keycloak:
+        site: e.g. https://rh-sso.example.com/auth/realms/demo
+      authentication_provider/auth0:
+        site: e.g. https://XXXXX.auth0.com
       backend_api:
         system_name: Only ASCII letters, numbers, dashes and underscores are allowed.
         private_endpoint_html:
@@ -1658,6 +1662,7 @@ en:
         published_admin_portal: Display this SSO Integration on the sign-in page of the admin portal.
         skip_ssl_certificate_verification: Skip SSL certificate verification
       authentication_provider/keycloak:
+        <<: *authentication_provider
         site: Realm
 
       settings:
