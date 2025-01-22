@@ -420,6 +420,15 @@ en:
               title: Nothing to see here
               body: There are no invoices yet
         users:
+          index:
+            authorization_exists: yes
+            authorization_exists_not: not yet
+            delete_user_confirm: Are you sure you want to delete this user?
+            edit: Edit
+            invite_new_user: Invite a new user
+            page_header_title: Users
+            personal_details: Personal details
+            unlimited_access: Unlimited access
           form:
             submit_button_label: 'Update User'
         authentication_providers:
