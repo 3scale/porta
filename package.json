@@ -101,7 +101,7 @@
     "redux-api-middleware": "^3.0.1",
     "redux-immutable-state-invariant": "^2.1.0",
     "redux-thunk": "^2.3.0",
-    "sass": "1.77.6",
+    "sass": "1.83.0",
     "sass-loader": "13.3.3",
     "showdown": "2.1.0",
     "swagger-client": "^3.32.4",
