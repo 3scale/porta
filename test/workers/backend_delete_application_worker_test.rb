@@ -8,8 +8,8 @@ class BackendDeleteApplicationWorkerTest < ActiveSupport::TestCase
     service = application.service
 
     seq = sequence('destroy sequence')
-    ApplicationKeyBackendService.expects(:delete_all).with({ application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id }).in_sequence(seq)
-    ReferrerFilterBackendService.expects(:delete_all).with({ application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id }).in_sequence(seq)
+    ApplicationKeyBackendService.expects(:delete_all).with(application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id).in_sequence(seq)
+    ReferrerFilterBackendService.expects(:delete_all).with(application_id: application.id, service_backend_id: service.backend_id, application_backend_id: application.application_id).in_sequence(seq)
     ThreeScale::Core::Application.expects(:delete).with(service.backend_id, application.application_id).in_sequence(seq)
 
     event = Applications::ApplicationDeletedEvent.create_and_publish!(application)
