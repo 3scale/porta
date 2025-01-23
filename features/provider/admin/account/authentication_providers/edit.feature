@@ -19,7 +19,7 @@ Feature: Account Settings > Users > SSO Integrations > Edit
       | Client                            | Rose Tyler                                     |
       | Client Secret                     | outdated-tardis                                |
       | Realm                             | https://rh-sso.rose-tyler.com/auth/realms/demo |
-      | Skip ssl certificate verification | Yes                                           |
+      | Skip SSL certificate verification | Yes                                           |
     Then they should see the flash message "SSO integration updated"
 
   Scenario: Missing field

@@ -45,9 +45,9 @@ Feature: Account Settings > Users > SSO Integrations > New
   Scenario: Realm or Site hint is accurate
     Given they go to the new sso integration page
     When they select "Red Hat Single Sign-On" from "SSO Provider"
-    Then they should see "Ex: https://rh-sso.example.com/auth/realms/demo"
+    Then they should see "e.g. https://rh-sso.example.com/auth/realms/demo"
     When they select "Auth0" from "SSO Provider"
-    Then they should see "Ex: https://XXXXX.auth0.com"
+    Then they should see "e.g. https://XXXXX.auth0.com"
 
   Scenario: Client Secret is required
     Given they go to the new sso integration page

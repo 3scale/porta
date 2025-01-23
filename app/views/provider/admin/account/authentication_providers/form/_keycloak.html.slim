@@ -1,2 +1,4 @@
-= f.input :realm, as: :patternfly_input, required: true, hint: 'Ex: https://rh-sso.example.com/auth/realms/demo'
+= f.input :site, as: :patternfly_input, required: true, label: Formtastic::I18n.t('authentication_provider/keycloak.site', scope: :labels),
+                                                        hint: Formtastic::I18n.t('authentication_provider/keycloak.site', scope: :hints)
+
 = f.input :skip_ssl_certificate_verification, as: :patternfly_checkbox
