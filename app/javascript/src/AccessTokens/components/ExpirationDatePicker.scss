@@ -1,0 +1,15 @@
+@import '~@patternfly/patternfly/patternfly-addons.css';
+
+.pf-c-calendar-month,
+.pf-c-form-control-expiration {
+  width: 50%;
+}
+
+.pf-c-form-control-expiration {
+  margin-right: 1em;
+}
+
+button.pf-c-form__group-label-help {
+  min-width: auto;
+  width: auto;
+}
