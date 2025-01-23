@@ -50,9 +50,11 @@ class Provider::Admin::DashboardsController < FrontendController
   end
 
   def quickstarts_flash
-    return unless flash[:first_login]
-
+    first_login = flash[:first_login]
     flash.delete(:first_login)
+
+    return unless Features::QuickstartsConfig.enabled? && first_login.present?
+
     flash[:notice] = t('provider.admin.dashboards.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 end

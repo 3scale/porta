@@ -4,10 +4,11 @@
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'dashboard'
 
-button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
-  span class="pf-c-button__icon pf-m-start"
-    i class="fas fa-info-circle" aria-hidden="true"
-  a href=provider_admin_quickstarts_path Quick starts
+- if Features::QuickstartsConfig.enabled?
+  button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
+    span class="pf-c-button__icon pf-m-start"
+      i class="fas fa-info-circle" aria-hidden="true"
+    a href=provider_admin_quickstarts_path Quick starts
 
 .Dashboard
   div.Dashboard-widgets
