@@ -168,7 +168,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       collection do
         get :success
-        get :test, as: :iframe
       end
     end
 
