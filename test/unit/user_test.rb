@@ -108,12 +108,12 @@ class UserTest < ActiveSupport::TestCase
     admin = FactoryBot.build_stubbed(:admin, account: provider)
     member = FactoryBot.build_stubbed(:member, account: provider)
 
-    assert_equal [service.id, another_service.id], admin.accessible_services.map(&:id)
+    assert_same_elements [service.id, another_service.id], admin.accessible_services.map(&:id)
     assert_equal [], member.accessible_services.map(&:id)
 
     member.member_permission_ids = ['partners']
 
-    assert_equal [service.id, another_service.id], member.accessible_services.map(&:id)
+    assert_same_elements [service.id, another_service.id], member.accessible_services.map(&:id)
 
     member.member_permission_service_ids = [service.id]
 

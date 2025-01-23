@@ -1,4 +1,4 @@
 ignore:
-  - "features/**/*"
-  - "test/**/*"
-  - "spec/**/*"
+  - "features"
+  - "test"
+  - "spec"
