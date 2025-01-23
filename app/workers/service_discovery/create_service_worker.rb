@@ -12,7 +12,7 @@ module ServiceDiscovery
       return unless oauth_manager.service_usable?
       account = Account.providers.find account_id
       options = { cluster_namespace: cluster_namespace, cluster_service_name: cluster_service_name }
-      ImportClusterDefinitionsService.new(user).create_service(account, options)
+      ImportClusterDefinitionsService.new(user).create_service(account, **options)
     end
   end
 end

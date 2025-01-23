@@ -48,6 +48,14 @@ WebMock.enable!
 
 WebMock.disable_net_connect!
 
+require 'mocha/minitest'
+Mocha.configure do |c|
+  c.strict_keyword_argument_matching = true
+  # TODO: enable the following two configs to improve the tests eventually
+  # c.stubbing_non_existent_method = :prevent
+  # c.stubbing_method_unnecessarily = :prevent
+end
+
 class ActiveSupport::TestCase
   self.use_transactional_tests = true
   self.use_instantiated_fixtures  = false
