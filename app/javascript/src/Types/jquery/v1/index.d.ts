@@ -1519,9 +1519,10 @@ export interface JQueryStatic {
 */
 interface JQuery {
   /**
-   * HACK: Added manually. This is specific to porta not jquery.
+   * HACK: jQuery v1 plugins added manually. This is specific to porta not jquery.
    */
   colorbox: ColorboxStatic;
+  pjax: (selector: string, container: string, options: unknown) => void;
 
   /**
    * Register a handler to be called when Ajax requests complete. This is an AjaxEvent.

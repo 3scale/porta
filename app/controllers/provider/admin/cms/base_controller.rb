@@ -11,4 +11,8 @@ class Provider::Admin::CMS::BaseController < FrontendController
     authorize! :manage, :portal
   end
 
+  def layoutless?
+    request.headers['X-PJAX']
+  end
+
 end
