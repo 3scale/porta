@@ -82,11 +82,6 @@ class Sidebar
       .on 'pjax:end cms-sidebar:update', (event) =>
         @highlight(window.location.pathname)
 
-      .on 'pjax:end', (event) ->
-        $(event.target).trigger('cms-template:init')
-
-      .on 'click', '#cms-sidebar .cms-sidebar-listing a', (event) ->
-        $.pjax.click(event, '#tab-content')
       .on 'mouseenter mouseleave', '.cms-sidebar-listing li > a', (event) ->
         $(this).parent().toggleClass('ui-state-hover')
 
@@ -515,4 +510,5 @@ class SidebarToggle
     @cached_ids ||= JSON.parse(@serialized_ids())
     @cached_ids.slice(0)
 
-document.addEventListener 'DOMContentLoaded', () -> new Sidebar('#cms-sidebar')
+document.addEventListener 'DOMContentLoaded', () ->
+  window.ThreeScale.CMS.sidebar = new Sidebar('#cms-sidebar')

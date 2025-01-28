@@ -2,6 +2,7 @@ import $ from 'jquery'
 import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
+import 'jquery-pjax'
 
 import * as flash from 'utilities/flash'
 
@@ -17,6 +18,7 @@ jQuery1(document).on('cms-template:init', () => {
   buildSaveDropdownButton()
   setUpSectionDrop()
   setUpEditorTabs()
+  setUpPjax()
 
   jQuery1('#cms_template_content_type, #cms_template_liquid_enabled').trigger('change')
 })
@@ -264,4 +266,37 @@ function setUpRemoveFromSectionAction () {
     const row = $(event.target).closest('tr[id]')
     row.fadeOut(() => { row.remove() })
   })
+}
+
+/**
+ * PJAX is a jQuery plugin that allows rails to render HTML into the current page, without loading
+ * the whole page. It is used only by Sidebar class, to give the CMS a page-less experience. It's
+ * definitely tech debt and modern rails applications will use turbolinks, but right now we stick
+ * to it for convenience.
+ * PJAX automatically extends window.$, that is 1.11.3 (JQueryStaticV1Plugins)
+ */
+function setUpPjax () {
+  jQuery1(document).pjax('#cms-sidebar .cms-sidebar-listing a', '#tab-content', { timeout: 3000 })
+
+  const spinnerId = 'ajax-in-progress'
+
+  jQuery1(document)
+    .on('pjax:send', () => {
+      const spinner = document.createElement('img')
+      spinner.src = '/assets/ajax-loader.gif'
+
+      const div = document.createElement('div')
+      div.id = spinnerId
+      div.appendChild(spinner)
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      document.querySelector('body')!.appendChild(div)
+    })
+    .on('pjax:complete', () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      document.getElementById(spinnerId)!.remove()
+    })
+    .on('pjax:end', (event) => {
+      jQuery1(event.target).trigger('cms-template:init')
+    })
 }
