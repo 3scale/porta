@@ -6,8 +6,8 @@ Feature: Product > Applications
 
   Background:
     Given a provider
-    And a product "My API"
-    And another product "Another API"
+    And a product "My API" with no plans
+    And another product "Another API" with no plans
     And the following application plans:
       | Product     | Name      | Cost per month | Setup fee |
       | My API      | Cheap     | 0              | 0         |
@@ -42,13 +42,30 @@ Feature: Product > Applications
     And there should be a link to "Add an application"
 
   Scenario: Only the current service applications are listed
-  When they go to product "My API" applications page
-    Then they should see the following table:
-      | Name            | State | Account | Created on        | Traffic on |
-      | Jane's Full App | live  | Jane    | December 13, 2023 |            |
-      | Jane's Lite App | live  | Jane    | December 12, 2023 |            |
-      | Bob's App       | live  | Bob     | December 11, 2023 |            |
+    When they go to product "My API" applications page
+    Then they should see the following table with exact columns:
+      # Plan column is visible because this service has multiple plans
+      | Name            | State | Account | Plan      | Created on        | Traffic on |
+      | Jane's Full App | live  | Jane    | Expensive | December 13, 2023 |            |
+      | Jane's Lite App | live  | Jane    | Cheap     | December 12, 2023 |            |
+      | Bob's App       | live  | Bob     | Cheap     | December 11, 2023 |            |
     When they go to product "Another API" applications page
-    Then they should see the following table:
+    Then they should see the following table with exact columns:
+      # Plan column is not visible because this service has just one plan
       | Name            | State | Account | Created on        | Traffic on |
       | Another API App | live  | Bob     | December 10, 2023 |            |
+
+  Scenario: Paid? column is shown when finance is enabled
+    When the provider is charging its buyers
+    And they go to product "My API" applications page
+    Then they should see the following table with exact columns:
+      # Plan column is visible because this service has multiple plans
+      | Name            | State | Account | Plan      | Paid? | Created on        | Traffic on |
+      | Jane's Full App | live  | Jane    | Expensive | paid  | December 13, 2023 |            |
+      | Jane's Lite App | live  | Jane    | Cheap     | free  | December 12, 2023 |            |
+      | Bob's App       | live  | Bob     | Cheap     | free  | December 11, 2023 |            |
+    When they go to product "Another API" applications page
+    Then they should see the following table with exact columns:
+      # Plan column is not visible because this service has just one plan
+      | Name            | State | Account | Paid? | Created on        | Traffic on |
+      | Another API App | live  | Bob     | paid  | December 10, 2023 |            |
