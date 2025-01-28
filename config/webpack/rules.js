@@ -44,6 +44,12 @@ module.exports = () => [
         options: {
           sassOptions: {
             includePaths: additionalPaths,
+            silenceDeprecations: [
+                'legacy-js-api',
+                'import',
+                'global-builtin',
+                'color-functions',
+            ],
           },
         },
       },
