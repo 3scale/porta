@@ -25,4 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       })
     })
+
+  /**
+   * Set up ajax event listeners. Origin: app/assets/javascripts/ajax_events.js
+   */
+  const ajaxSpinnerId = 'ajax-in-progress'
+  jQuery1(document)
+    .on('ajax:before', () => {
+      $('body').append(`<div id="${ajaxSpinnerId}"><img src="/assets/ajax-loader.gif"></div>`)
+    })
+    .on('ajaxComplete ajax:complete', () => {
+      $(`#${ajaxSpinnerId}`).remove()
+    })
+    .on('ajax:error', (_event, _xhr, status: string, error) => {
+      alert(`Request failed - ${status}`)
+      console.error(error)
+    })
 })
