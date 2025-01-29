@@ -1,4 +1,5 @@
-//= require vendor/jquery
+//= require vendor/jquery-1.12.4.min
+//= require jquery_ujs
 //= require highlight/highlight.pack.js
 //= require remote
 //= require switch
