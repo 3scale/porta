@@ -44,28 +44,25 @@ Feature: Product > Applications
   Scenario: Only the current service applications are listed
     When they go to product "My API" applications page
     Then they should see the following table with exact columns:
-      # Plan column is visible because this service has multiple plans
       | Name            | State | Account | Plan      | Created on        | Traffic on |
       | Jane's Full App | live  | Jane    | Expensive | December 13, 2023 |            |
       | Jane's Lite App | live  | Jane    | Cheap     | December 12, 2023 |            |
       | Bob's App       | live  | Bob     | Cheap     | December 11, 2023 |            |
     When they go to product "Another API" applications page
     Then they should see the following table with exact columns:
-      # Plan column is not visible because this service has just one plan
       | Name            | State | Account | Created on        | Traffic on |
       | Another API App | live  | Bob     | December 10, 2023 |            |
 
-  Scenario: Paid? column is shown when finance is enabled
-    When the provider is charging its buyers
-    And they go to product "My API" applications page
-    Then they should see the following table with exact columns:
-      # Plan column is visible because this service has multiple plans
-      | Name            | State | Account | Plan      | Paid? | Created on        | Traffic on |
-      | Jane's Full App | live  | Jane    | Expensive | paid  | December 13, 2023 |            |
-      | Jane's Lite App | live  | Jane    | Cheap     | free  | December 12, 2023 |            |
-      | Bob's App       | live  | Bob     | Cheap     | free  | December 11, 2023 |            |
+  Scenario: Plan column is hidden when the API has a single plan
+    When they go to product "My API" applications page
+    Then the table has a column "Plan"
     When they go to product "Another API" applications page
-    Then they should see the following table with exact columns:
-      # Plan column is not visible because this service has just one plan
-      | Name            | State | Account | Paid? | Created on        | Traffic on |
-      | Another API App | live  | Bob     | paid  | December 10, 2023 |            |
+    Then the table does not have a column "Plan"
+
+  Scenario: Paid? column is shown when finance is enabled
+    When the provider has "finance" denied
+    And they go to product "My API" applications page
+    Then the table does not have a column "Paid?"
+    When the provider has "finance" allowed
+    And they go to product "My API" applications page
+    Then the table has a column "Paid?"
