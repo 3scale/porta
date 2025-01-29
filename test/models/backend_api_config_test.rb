@@ -128,6 +128,32 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     assert_not_includes accessible_backend_api_config_ids, backend_api_configs[0].id
   end
 
+  test 'deleting backend usage destroys all related usage limits' do
+    service = FactoryBot.create(:simple_service)
+    service_metric = service.metrics.first
+    plan = FactoryBot.create(:application_plan_without_rules, issuer: service)
+
+    backend_api = FactoryBot.create(:backend_api, account: service.account)
+    backend_usage = FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
+    backend_metric = FactoryBot.create(:metric, owner: backend_api)
+    backend_usage_limit = FactoryBot.create(:usage_limit, metric: backend_metric, plan: plan)
+
+    another_service = FactoryBot.create(:simple_service, account: service.account)
+    another_plan = FactoryBot.create(:application_plan_without_rules, issuer: another_service)
+    FactoryBot.create(:backend_api_config, service: another_service, backend_api: backend_api)
+    another_backend_usage_limit = FactoryBot.create(:usage_limit, metric: backend_metric, plan: another_plan)
+
+    service_usage_limit = FactoryBot.create(:usage_limit, metric: service_metric, plan: plan)
+
+    backend_usage.destroy
+    usage_limits_ids = plan.usage_limits.pluck(:id)
+    assert usage_limits_ids.include?(service_usage_limit.id)
+    assert_not usage_limits_ids.include?(backend_usage_limit.id)
+
+    # other services using the same backend are not affected
+    assert another_plan.usage_limits.pluck(:id).include?(another_backend_usage_limit.id)
+  end
+
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
