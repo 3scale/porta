@@ -22,11 +22,6 @@ class ProviderUserMailer < ActionMailer::Base
     prepare_email(subject: 'Password Recovery', headers: {'X-SMTPAPI' => '{"category": "Lost password"}'}, to: user.email, template: 'provider_lost_password')
   end
 
-  def lost_domain(email, domains)
-    @domains = domains
-    prepare_email(subject: 'Domain Recovery', headers: {'X-SMTPAPI' => '{"category": "Domain Recovery"}'}, to: email)
-  end
-
   private
 
   def activation_email(user:, subject:)
