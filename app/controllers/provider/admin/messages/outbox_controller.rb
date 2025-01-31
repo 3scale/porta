@@ -5,9 +5,12 @@ class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::B
 
   delegate :messages, to: :current_account
 
+  helper_method :modal?
+
   def new
-    activate_menu :buyers, :messages, :inbox
     @message = build_message({})
+
+    render partial: 'form' if modal?
   end
 
   def destroy
@@ -43,6 +46,10 @@ class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::B
   end
 
   private
+
+  def modal?
+    @modal ||= request.xhr?
+  end
 
   def build_message(params)
     message = messages.build(params)
