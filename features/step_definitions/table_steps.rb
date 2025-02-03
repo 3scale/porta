@@ -21,7 +21,7 @@ When "(they )select action {string} of (row ){string}" do |action, row|
 end
 
 # TODO: can we use "has_table?" instead of this complex step?
-Then "(I )(they )should see (the )following table(:)" do |expected|
+Then /^(?:I |they )?should see (?:the )?following table( with exact columns)?:?$/ do |exact_columns, expected|
   table = extract_table('table', 'tr:not(.search, .table_title)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
@@ -40,7 +40,8 @@ Then "(I )(they )should see (the )following table(:)" do |expected|
 
   retries ||= 1
 
-  expected.diff! table
+  options = exact_columns.present? ? { surplus_col: true } : {}
+  expected.diff! table, options
 rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
   if retries > 0
     retries -= 1

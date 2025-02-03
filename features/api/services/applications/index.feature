@@ -6,8 +6,8 @@ Feature: Product > Applications
 
   Background:
     Given a provider
-    And a product "My API"
-    And another product "Another API"
+    And a product "My API" with no plans
+    And another product "Another API" with no plans
     And the following application plans:
       | Product     | Name      | Cost per month | Setup fee |
       | My API      | Cheap     | 0              | 0         |
@@ -42,13 +42,27 @@ Feature: Product > Applications
     And there should be a link to "Add an application"
 
   Scenario: Only the current service applications are listed
-  When they go to product "My API" applications page
-    Then they should see the following table:
-      | Name            | State | Account | Created on        | Traffic on |
-      | Jane's Full App | live  | Jane    | December 13, 2023 |            |
-      | Jane's Lite App | live  | Jane    | December 12, 2023 |            |
-      | Bob's App       | live  | Bob     | December 11, 2023 |            |
+    When they go to product "My API" applications page
+    Then they should see the following table with exact columns:
+      | Name            | State | Account | Plan      | Created on        | Traffic on |
+      | Jane's Full App | live  | Jane    | Expensive | December 13, 2023 |            |
+      | Jane's Lite App | live  | Jane    | Cheap     | December 12, 2023 |            |
+      | Bob's App       | live  | Bob     | Cheap     | December 11, 2023 |            |
     When they go to product "Another API" applications page
-    Then they should see the following table:
+    Then they should see the following table with exact columns:
       | Name            | State | Account | Created on        | Traffic on |
       | Another API App | live  | Bob     | December 10, 2023 |            |
+
+  Scenario: Plan column is hidden when the API has a single plan
+    When they go to product "My API" applications page
+    Then the table has a column "Plan"
+    When they go to product "Another API" applications page
+    Then the table does not have a column "Plan"
+
+  Scenario: Paid? column is shown when finance is enabled
+    When the provider has "finance" denied
+    And they go to product "My API" applications page
+    Then the table does not have a column "Paid?"
+    When the provider has "finance" allowed
+    And they go to product "My API" applications page
+    Then the table has a column "Paid?"

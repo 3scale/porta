@@ -5,8 +5,8 @@ class Api::ApplicationsController < FrontendController
   include ApplicationsControllerMethods
 
   before_action :authorize_partners
-  before_action :find_plans
   before_action :find_service
+  before_action :find_plans
   before_action :find_states, only: :index # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :find_buyer, only: :create
   before_action :authorize_multiple_applications, only: :create
@@ -42,8 +42,8 @@ class Api::ApplicationsController < FrontendController
     @service = accessible_services.find params[:service_id]
   end
 
-  def accessible_plans
-    super.where(issuer: @service)
+  def find_plans
+    @application_plans = accessible_plans.where(issuer: @service)
   end
 
   def initialize_new_presenter
