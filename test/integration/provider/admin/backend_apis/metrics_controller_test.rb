@@ -74,7 +74,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
     put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
     assert_equal 'Metric could not be updated', flash[:error]
-    assert_select '#metric_friendly_name_input.required.error'
+    assert_select '#metric_friendly_name[aria-invalid="true"]'
   end
 
   test 'cannot update system_name' do

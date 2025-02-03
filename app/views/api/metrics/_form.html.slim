@@ -24,7 +24,7 @@ div class="pf-c-card"
       = form.actions do
         button type="submit" class="pf-c-button pf-m-primary" = t("api.metrics.#{scope}.submit", type: type)
         - if deleteable
-          = link_to 'Delete', admin_service_metric_path(service_id: metric.owner_id, id: metric.id),
+          = link_to 'Delete', url,
                               class: 'pf-c-button pf-m-danger',
                               data: { confirm: t('api.metrics.edit.delete_confirmation', type: metric.type) },
                               method: :delete
