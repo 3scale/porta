@@ -4,6 +4,8 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   wrap_parameters ::Proxy
   representer Proxy::PoliciesConfig
 
+  self.access_token_scopes = :policy_registry
+
   # Proxy Policies Chain Show
   # GET /admin/api/services/{service_id}/proxy/policies.json
   def show
