@@ -122,13 +122,6 @@ form.formtastic {
             color: #555555;
             @include transition(border-color 0.1s linear);
           }
-          &.recovery {
-            @extend .big-button;
-            margin-top: 1px;
-            padding-left: 1em;
-            padding-right: 1em;
-            width: auto;
-          }
         }
         &.domain input {
           width: 164px;
@@ -170,21 +163,13 @@ form.formtastic {
   margin-top: -7px !important; //need to override formtastic stylesheet
 }
 
-.signup_form, #domain-recovery {
+.signup_form {
   height: 100%;
   fieldset, ol {
     padding: 0;
   }
   li:last-child {
     margin-bottom: 0;
-  }
-}
-
-#domain-recovery {
-  input[type=text] {
-    width: 200px;
-    float: left;
-    margin-right: 5px;
   }
 }
 

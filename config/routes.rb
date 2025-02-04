@@ -155,13 +155,6 @@ without fake Core server your after commit callbacks will crash and you might ge
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
     get 'activate/:activation_code' => 'activations#create', :as => :activate
 
-    resource :domains, :only => [:show] do
-      collection do
-        post :recover
-      end
-    end
-
-
     resource :signup, :only => [:show, :create] do
       match '', action: :cors, via: 'OPTIONS'
       match '*path', action: :cors, via: 'OPTIONS'
