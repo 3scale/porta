@@ -8,7 +8,7 @@ class Api::ServicesController < Api::BaseController
   activate_menu :serviceadmin, :overview
 
   before_action :deny_on_premises_for_master
-  before_action :authorize_section
+  before_action :authorize_section, except: :index
   before_action :authorize_action, only: %i[new create]
   before_action :disable_client_cache, only: :settings
 
@@ -155,6 +155,7 @@ class Api::ServicesController < Api::BaseController
 
   def authorize_action
     return if current_user.admin? # We want to postpone for admins so we can use #can_create? and provide better error messages
+
     authorize! action_name.to_sym, Service
   end
 

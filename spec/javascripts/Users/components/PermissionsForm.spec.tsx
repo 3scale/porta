@@ -55,8 +55,8 @@ describe('when role is "admin"', () => {
 })
 
 describe('when role is "member"', () => {
-  const FEATURES: Feature[] = ['portal', 'finance', 'settings', 'policy_registry']
-  const FEATURES_FOR_SERVICES: Feature[] = ['partners', 'monitoring', 'plans']
+  const FEATURES: Feature[] = ['portal', 'finance', 'settings']
+  const FEATURES_FOR_SERVICES: Feature[] = ['partners', 'monitoring', 'plans', 'policy_registry']
   const allFeatures: Feature[] = [...FEATURES, ...FEATURES_FOR_SERVICES]
 
   const props = {

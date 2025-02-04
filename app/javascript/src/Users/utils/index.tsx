@@ -32,7 +32,7 @@ export const FEATURE_NAMES_DESCRIPTION_ITEMS: Record<Feature, React.ReactNode[] 
   ]
 }
 
-const FEATURES_GRANTING_SERVICE_ACCESS = ['partners', 'monitoring', 'plans']
+const FEATURES_GRANTING_SERVICE_ACCESS = ['partners', 'monitoring', 'plans', 'policy_registry']
 
 export function getFeatureName (feature: Feature): React.ReactNode {
   if (feature in FEATURE_NAMES) {
