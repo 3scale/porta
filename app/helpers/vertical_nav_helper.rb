@@ -197,14 +197,19 @@ module VerticalNavHelper
     sections = []
     return sections unless @service
 
-    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can? :manage, :plans
+    can_manage_plans = can? :manage, :plans
+
+    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can_manage_plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
-    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
+    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if can_manage_plans || can?(:manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
 
-    if can? :manage, :plans
-      sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)}
-      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: has_out_of_date_configuration?(@service)}
+    sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)} if can_manage_plans
+
+    if can_manage_plans || can?(:manage, :policy_registry)
+      # do not show out of date icon if the user can't promote (i.e. can't manage plans)
+      out_of_date = can_manage_plans ? has_out_of_date_configuration?(@service) : nil
+      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: out_of_date }
     end
 
     sections
@@ -242,12 +247,19 @@ module VerticalNavHelper
 
   def service_integration_items
     items = []
-    items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
-    items << {id: :methods_metrics,     title: 'Methods and Metrics', path: admin_service_metrics_path(@service)}
-    items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
-    items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
-    items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
-    items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
+    if can?(:manage, :plans)
+      items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
+      items << {id: :methods_metrics,     title: 'Methods and Metrics', path: admin_service_metrics_path(@service)}
+      items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
+    end
+    if @service.can_use_policies? && (can?(:manage, :plans) || can?(:manage, :policy_registry))
+      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
+    end
+    if can?(:manage, :plans)
+      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
+      items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
+    end
+    items
   end
 
   # Backend APIs

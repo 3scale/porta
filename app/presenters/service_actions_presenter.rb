@@ -20,8 +20,12 @@ class ServiceActionsPresenter
       actions << { name: 'Applications', path: admin_service_application_plans_path(product) }
     end
 
-    actions << { name: 'ActiveDocs', path: admin_service_api_docs_path(product) } if can?(:manage, :plans)
-    actions << { name: 'Integration', path: admin_service_integration_path(product) } if can?(:manage, :plans)
+    if can?(:manage, :plans)
+      actions << { name: 'ActiveDocs', path: admin_service_api_docs_path(product) }
+      actions << { name: 'Integration', path: admin_service_integration_path(product) }
+    elsif can?(:manage, :policy_registry)
+      actions << { name: 'Policies', path: edit_admin_service_policies_path(product) }
+    end
 
     actions
   end
