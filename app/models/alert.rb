@@ -51,7 +51,7 @@ class Alert < ApplicationRecord
       transition :unread => :read
     end
 
-    event :delete do
+    event :mark_as_deleted do
       transition [:unread, :read] => :deleted
     end
   end
