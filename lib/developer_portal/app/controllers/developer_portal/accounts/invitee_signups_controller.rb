@@ -119,7 +119,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   end
 
   def build_user
-    @user = @invitation.make_user(params[:user] || {})
+    @user = @invitation.make_user(filter_readonly_params(params[:user], User))
   end
 
   def invitation_token

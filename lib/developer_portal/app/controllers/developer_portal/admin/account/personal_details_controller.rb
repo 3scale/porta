@@ -46,7 +46,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def user_params
-    params.require(:user).permit([:current_password] +
+    filter_readonly_params(params.require(:user), User).permit([:current_password] +
                                    resource.special_fields +
                                    resource.defined_fields.map(&:name))
   end
