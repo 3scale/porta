@@ -23,10 +23,11 @@ module CMS
       not_found_page.layout = error_layout
       not_found_page.save!
 
-      get '/i_am_not_there'
-
-      assert_match /FROM_DB/, response.body
-      # assert_match %r|<title>PAGE TITLE</title>|, response.body
+      %i[get post put delete].each do |method|
+        public_send(method, '/i_am_not_there')
+        assert_match /FROM_DB/, response.body
+        # assert_match %r|<title>PAGE TITLE</title>|, response.body
+      end
     end
 
     test 'not_found with different layout' do
