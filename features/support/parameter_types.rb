@@ -469,3 +469,14 @@ ParameterType(
   regexp: /(.*)/,
   transformer: ->(selector) { selector_for(selector) }
 )
+
+ParameterType(
+  name: 'read_only_status',
+  regexp: /(editable|read only)/,
+  transformer: ->(value) do
+    {
+      'editable' => false,
+      'read only' => true,
+    }[value]
+  end
+)
