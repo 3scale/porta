@@ -24,6 +24,7 @@ class FieldsDefinition < ApplicationRecord
   scope :by_target, ->(class_name) { where(['target = ?', class_name])}
   scope :by_name, ->(name) { where(['name = ?', name])}
   scope :required, -> { where({ :required => true })}
+  scope :read_only, ->(read_only = true) { where(read_only: read_only) }
 
   def self.editable_by(user)
     select{ |fd| fd.editable_by?(user) }
