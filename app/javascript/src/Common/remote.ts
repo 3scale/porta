@@ -4,6 +4,8 @@ import $ from 'jquery'
  * Set up remote forms and links with ajax. Origin: app/assets/javascripts/remote.js
  */
 export default function remote (): void {
+  window.ThreeScale.ajax_active = () => $.active + window.$.active
+
   const addAcceptHeader = function (xhr: JQuery.jqXHR) {
     xhr.setRequestHeader('Accept', 'text/javascript, text/html, application/xml, text/xml, */*')
   }
