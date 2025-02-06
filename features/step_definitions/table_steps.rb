@@ -98,8 +98,8 @@ end
 #   | Name            | State     |
 #   | Jane's Full App | suspended |
 #   | Jane's Lite App | live      |
-Then "the table should contain the following:" do |table|
-  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+Then "the table should contain the following(:)" do |table|
+  actual = extract_table('table', 'thead tr:not(.search), tbody tr', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   expected = table.raw
 
   headers = actual.first

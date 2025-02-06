@@ -666,8 +666,12 @@ World(Module.new do
     when 'the finance settings page'
       admin_finance_settings_path
 
-    when /^the invoice "(.*)" admin portal page$/
-      invoice = Invoice.find_by!(friendly_id: $1)
+    when /^(?:the invoice|invoice "(.*)") admin portal page$/
+      invoice = if $1.present?
+                  Invoice.find_by!(friendly_id: $1)
+                else
+                  @invoice
+                end
       admin_finance_invoice_path(invoice)
 
     when /^the invoices page of account "(.+?)"$/

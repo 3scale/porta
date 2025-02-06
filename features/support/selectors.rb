@@ -126,6 +126,12 @@ module HtmlSelectorsHelper
       "#user_#{User.find_by(username: $1).id}"
 
     #
+    # Finance
+    #
+    when 'the line items card'
+      '.pf-c-card#line_items'
+
+    #
     # Dev portal
     #
     when 'the pagination'
