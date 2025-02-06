@@ -7,8 +7,10 @@ class Provider::Admin::Account::UsersIndexPresenter
     @ability = Ability.new(current_user)
 
     pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
+    sorting_params = "id asc"
 
-    @users = users.paginate(pagination_params)
+    @users = users.order(sorting_params)
+                  .paginate(pagination_params)
                   .decorate
   end
 
