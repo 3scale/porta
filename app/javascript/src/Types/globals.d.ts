@@ -48,6 +48,7 @@ declare global {
     ui?: {
       version: string;
     };
+    active: number; // This is the global ajax counter, undocumented for some reason
   }
 
   // jQueryUI widgets injected into jQuery 3.7 when imported from webpack. Only the ones imported
@@ -74,6 +75,7 @@ declare global {
   type WithRequiredProp<T, Key extends keyof T> = Required<Pick<T, Key>> & T
 
   namespace ThreeScale {
+    function ajax_active (): number
     function partialPaths (paths: string[]): void
   }
 }
