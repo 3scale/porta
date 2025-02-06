@@ -12,6 +12,7 @@ Capybara.configure do |config|
   config.always_include_port = true
   config.default_max_wait_time = ENV.fetch('CAPYBARA_MAX_WAIT_TIME', 10).to_i
   config.server = :webrick # default is `:default` (which uses puma)
+  config.default_set_options = { clear: :backspace }
 end
 
 Capybara.register_driver :chrome do |app|
