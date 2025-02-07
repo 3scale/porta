@@ -48,7 +48,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
     # @return the hierarchy entries to handle deletion of an object
     def hierarchy_entries_for(ar_object)
-      return [] unless ar_object.persisted? # e.g. when calling Proxy#oidc_configuration a new object can be generated
+      return [] unless ar_object&.persisted? # e.g. when calling Proxy#oidc_configuration a new object can be generated
 
       if ar_object.is_a?(Account) && !ar_object.should_be_deleted?
         raise DoNotRetryError, "background deleting account #{ar_object.id} which is not scheduled for deletion"
@@ -102,7 +102,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     when /Plain-([:\w]+)-(\d+)/
       ar_object = $1.constantize.find($2.to_i)
       # callbacks logic differs between object destroyed by association, it is standalone if first job arg is itself
-      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(entry) if arguments.first != entry
+      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(arguments.first) if arguments.first != entry
       ar_object.background_deletion_method_call
       []
     when /Association-([:\w]+)-(\d+):(\w+)/
