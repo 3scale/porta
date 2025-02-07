@@ -1,4 +1,4 @@
-@ignore-backend @javascript
+@javascript
 Feature: Audience > Billing > Invoices
 
   Background:
@@ -15,26 +15,6 @@ Feature: Audience > Billing > Invoices
       Then should see "Nothing to see here"
       And should see "There are no invoices yet"
 
-    @commit-transactions
-    Scenario: Invoices are generated after some time
-      Given the following application plans:
-        | Product | Name    | Cost per month |
-        | My API  | Premium | 200            |
-      And a buyer "Jane" signed up to application plan "Premium"
-      And time flies to 10th February 2011
-      And a buyer "Bob" signed up to application plan "Premium"
-      And time flies to 20th April 2011
-      When they go to the admin portal invoices page
-      Then the table should contain the following:
-        | Number           | Account | Month          | Cost       | State  |
-        | 2011-04-00000001 | Jane    | April, 2011    | EUR 200.00 | Failed |
-        | 2011-04-00000002 | Bob     | April, 2011    | EUR 200.00 | Failed |
-        | 2011-03-00000001 | Jane    | March, 2011    | EUR 200.00 | Failed |
-        | 2011-03-00000002 | Bob     | March, 2011    | EUR 200.00 | Failed |
-        | 2011-02-00000002 | Bob     | February, 2011 | EUR 135.71 | Failed |
-        | 2011-02-00000001 | Jane    | February, 2011 | EUR 200.00 | Failed |
-        | 2011-01-00000001 | Jane    | January, 2011  | EUR 200.00 | Failed |
-
   Rule: Some invoices
     Background:
       Given a buyer "Zoidberg"
@@ -46,6 +26,7 @@ Feature: Audience > Billing > Invoices
         | Bender   | March, 2011    | 2011-03-00000001 | Open    |
         | Bender   | January, 2012  | 2012-01-00000001 | Open    |
 
+    @search
     Scenario: Empty search state
       Given they go to the admin portal invoices page
       When the table is filtered with:

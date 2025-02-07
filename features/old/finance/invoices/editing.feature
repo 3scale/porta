@@ -10,7 +10,7 @@ Feature: Edit Invoice
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And an invoice of buyer "bob" for January, 2011
     And an invoice of buyer "bob" for February, 2011
-    And they go to the invoice "2011-01-00000001" admin portal page
+    And they go to invoice "2011-01-00000001" admin portal page
 
   Scenario: Edit of invoice billing period fails
     And I follow "Edit"

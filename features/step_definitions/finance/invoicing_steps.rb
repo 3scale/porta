@@ -2,10 +2,12 @@
 
 # Create a list of invoices.
 #
-# Given the following invoices:
-#   | Buyer | Month         |
-#   | Jane  | January, 2011 |
-Given "the following invoices:" do |table|
+#   And the following invoices:
+#     | Buyer | Month          | Friendly ID | State |
+#     | Jane  | December, 2010 | paid        | Paid  |
+#     | Jane  | January, 2011  | open        | Open  |
+#
+Given "the following invoice(s):" do |table|
   transform_invoices_table(table)
   table.hashes.each do |options|
     options[:provider_account] = options[:buyer_account].provider_account

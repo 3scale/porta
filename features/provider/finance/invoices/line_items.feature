@@ -1,5 +1,5 @@
 @javascript
-Feature: Provider manages line items
+Feature: Invoice line items
 
   As a provider I want to be able to add, edit and delete items from my customers' invoices
 
