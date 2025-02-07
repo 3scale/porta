@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 # Create a list of invoices.
-
-# Given the following invoices:
-#   | Buyer | Month         |
-#   | Jane  | January, 2011 |
-Given "the following invoices:" do |table|
+#
+#   And the following invoices:
+#     | Buyer | Month          | Friendly ID | State |
+#     | Jane  | December, 2010 | paid        | Paid  |
+#     | Jane  | January, 2011  | open        | Open  |
+#
+Given "the following invoice(s):" do |table|
   transform_invoices_table(table)
   table.hashes.each do |options|
     options[:provider_account] = options[:buyer_account].provider_account
@@ -30,7 +32,23 @@ Given "an issued invoice of {buyer} for {date}" do |buyer, month|
   invoice.issue_and_pay_if_free!
 end
 
+# Creates an invoice for a given account at a given time, with line items.
+#
+#   Given the buyer has an invoice for February, 2009 with the following items:
+#     | Name    | Description     | Quantity | Cost |
+#     | Bananas | A bunch of them | 1        | 42   |
+#
+Given "{buyer} has an invoice for {date} with the following item(s):" do |buyer, month, items|
+  @invoice = FactoryBot.create(:invoice, provider_account: buyer.provider_account,
+                                         buyer_account: buyer)
+  line_items = @invoice.line_items
+
+  parameterize_headers(items)
+  items.hashes.each { |item| line_items.create!(item) }
+end
+
 Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Use the newer step.'
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
@@ -77,6 +95,7 @@ Then /^the buyer should have (\d+) invoices?$/ do |number|
 end
 
 Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
   set_current_domain @provider.external_domain
   try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
   visit admin_account_invoices_path
@@ -100,6 +119,7 @@ end
 
 # TODO: change to accept REGEXPs! (use page.body and assert)
 Then(/^I should see line items$/) do |items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
   assert_line_items(items)
 end
 
@@ -207,4 +227,8 @@ end
 
 Given "{provider} has no invoices" do |provider|
   assert_empty provider.buyer_invoices
+end
+
+Then "the total cost is/should( be) {string}" do |cost_with_currency|
+  assert_equal cost_with_currency, find('table.invoice tfoot tr td#invoice_cost').text
 end

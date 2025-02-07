@@ -1,5 +1,5 @@
 @javascript
-Feature: Audience > Finance > Invoices PDF
+Feature: Audience > Billing > Invoices > Generate PDF
 
   As a provider or buyer, I want to have the PDF version of the invoices
 
@@ -7,17 +7,24 @@ Feature: Audience > Finance > Invoices PDF
     Given a provider is logged in on 1st January 2011
     And the provider is charging its buyers in prepaid mode
     And a buyer "Jane"
-    And the following invoices:
-      | Buyer | Month         | Friendly ID      | State |
-      | Jane  | January, 2011 | 2011-01-00000002 | Paid  |
 
-  Scenario: Download PDF from the index table
+  Scenario: Open invoices don't have generated a PDF
+    Given the following invoices:
+      | Buyer | Month         | Friendly ID      | State     |
+      | Jane  | January, 2011 | 2011-01-00000001 | Open      |
     When they go to the admin portal invoices page
-    And the table is filtered with:
-      | filter | value            |
-      | Number | 2011-01-00000002 |
-    Then there should be a link to "Download PDF"
+    And there should not be a link to "Download PDF"
+    When they follow "2011-01-00000001"
+    Then there should not be a link to "Download PDF"
+    But there should be a button to "Generate PDF"
 
-  Scenario: Download PDF from the invoice detail
-    When they go to the invoice "2011-01-00000002" admin portal page
+  Scenario: Paid invoices do have generated a PDF
+    Given the following invoices:
+      | Buyer | Month         | Friendly ID      | State     |
+      | Jane  | January, 2011 | 2011-01-00000001 | Paid      |
+    When they go to the admin portal invoices page
+    And there should be a link to "Download PDF"
+    When they follow "2011-01-00000001"
     Then there should be a link to "Download PDF"
+    And there should be a button to "Regenerate PDF"
+    But there should not be a button to "Generate PDF"
