@@ -307,6 +307,7 @@ commands: # reusable commands with parameters
             # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
             bundle exec ruby .circleci/features.rb | circleci tests run --command="xargs bundle exec cucumber --profile ci" --verbose --split-by=timings
       - *enable-internet-access
+      - print-oom-process-count
       - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
@@ -356,6 +357,16 @@ commands: # reusable commands with parameters
       - *store-test-artifacts
       - *store-log-artifacts
       - codecov/upload
+
+  print-oom-process-count:
+    steps:
+      - run:
+          name: Number of OOM killed processes
+          command: |
+            # see https://support.circleci.com/hc/en-us/articles/19306469418139-How-to-detect-when-a-process-is-killed-by-the-OOM-killer
+            printf "OOM Control: "
+            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p
+          when: always
 
 ##################################### CIRCLECI EXECUTORS ############################################
 
