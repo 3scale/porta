@@ -56,7 +56,7 @@ class Api::AlertsController < FrontendController
   def destroy
     @alert = resource
 
-    @alert.delete!
+    @alert.mark_as_deleted!
 
     respond_to do |format|
       format.html { redirect_to url_for(:action => :index) }

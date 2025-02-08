@@ -49,7 +49,7 @@ class DeveloperPortal::Admin::Applications::AlertsController <  ::DeveloperPorta
   def destroy
     @alert = resource
 
-    @alert.delete!
+    @alert.mark_as_deleted!
 
     redirect_to url_for(:action => :index)
   end
