@@ -135,7 +135,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def compatibility(_object, caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
     # maybe requeue first object from hierarchy would be adequate and uniqueness should deduplicate jobs
     hierarchy_root = Array(caller_worker_hierarchy).first
-    return unless hierarchy_root
+    return _object && self.class.delete_later(_object) unless hierarchy_root
 
     object_class, id = hierarchy_root.match(/Hierarchy-([a-zA-Z0-9_]+)-([\d*]+)/).captures
 
