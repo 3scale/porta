@@ -27,7 +27,6 @@ declare global {
       loadAudienceWidget: (widgetPath: string) => void;
     };
     renderChartWidget: (widget: string, data: unknown) => void;
-    setLocationHash: (value: string) => void; // Defined in app/assets/javascripts/provider/utils.js.coffee
   }
 
   // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
