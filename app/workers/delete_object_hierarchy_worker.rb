@@ -122,7 +122,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     case reflection.macro
     when :has_many
       # here we keep original hierarchy entry if we still find an associated object
-      dependent = ar_object.public_send(association).public_send(:background_deletion_scope).take
+      dependent = ar_object.public_send(association).take
       dependent ? [hierarchy_association_string, *hierarchy_entries_for(dependent)] : []
     when :has_one
       # maximum of one associated so we never keep the original hierarchy entry
