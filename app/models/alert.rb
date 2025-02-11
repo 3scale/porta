@@ -7,13 +7,7 @@ class Alert < ApplicationRecord
   self.default_sort_direction = :desc
   self.allowed_search_scopes = %w[cinstance_id account_id timestamp level]
 
-  self.background_deletion_method = :delete_truly
-  # commenting out this here just to make a note that to me it seems like state machine overrides
-  #   the #delete AR method but what background deletion actually expects is indeed the AR #delete method
-  # self.background_deletion_scope_name = :non_deleted
-  #
-  # scope :non_deleted, -> { where.not(state: :deleted) }
-  alias delete_truly delete # keep reference to the original AR #delete method to use for background deletion
+  self.background_deletion_method = :delete
 
   ALERT_LEVELS = [ 50, 80, 90, 100, 120, 150, 200, 300 ]
   VIOLATION_LEVEL = 100
