@@ -65,6 +65,12 @@ Given "{provider} has the field {string} for {string} in the position {int}" do 
   a.save!
 end
 
+Given "{provider} has the field {string} for {field_definition_target} as {read_only_status}" do |provider, name, target, read_only|
+  a = provider.fields_definitions.by_target(target).find { |fd| fd.name == name }
+  a.read_only = read_only
+  a.save!
+end
+
 Given "{provider} allows to change account plan {change_plan_permission}" do |provider, plan_permission|
   provider.set_change_account_plan_permission! plan_permission
 end

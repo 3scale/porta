@@ -53,7 +53,7 @@ class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::Base
 
   def update_resource(user, attributes)
     attributes.each do |attrs|
-      user.attributes = attrs
+      user.attributes = filter_readonly_params(attrs, User)
       user.role = attrs[:role] if can? :update_role, user
     end
     user.save

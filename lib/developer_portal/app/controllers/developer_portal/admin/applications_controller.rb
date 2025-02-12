@@ -172,11 +172,12 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
     # cinstance[*] naming is present for legacy reasons
     application_attributes = params[:application] || params[:cinstance]
     return {} unless application_attributes
+
     permitted_params = fields_definitions + %i[plan_id redirect_url]
     application_attributes.permit(*permitted_params)
   end
 
   def fields_definitions
-    FieldsDefinition.by_provider(site_account).by_target('Cinstance').pluck(:name)
+    FieldsDefinition.by_provider(site_account).by_target('Cinstance').read_only(false).pluck(:name)
   end
 end
