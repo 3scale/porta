@@ -22,6 +22,9 @@ resource "Service" do
   end
 
   api 'service' do
+    # stubbing the subscriber to avoid changing the 'updated_at' timestamp on Proxy, and hence on Service
+    before { allow_any_instance_of(ProxyConfigEventSubscriber).to receive(:call) }
+
     parameter :name, 'Service Name'
 
     get "/admin/api/services.:format", action: :index do
