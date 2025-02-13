@@ -378,7 +378,8 @@ commands: # reusable commands with parameters
           command: |
             # see https://support.circleci.com/hc/en-us/articles/19306469418139-How-to-detect-when-a-process-is-killed-by-the-OOM-killer
             printf "OOM Control: "
-            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p
+            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p | tee tmp/oom_num
+            [ 0 = "$(<tmp/oom_num)" ] # fails when a proc was killed by OOM
           when: always
 
 ##################################### CIRCLECI EXECUTORS ############################################
