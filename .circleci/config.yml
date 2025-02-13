@@ -300,6 +300,7 @@ commands: # reusable commands with parameters
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
           environment: *malloc_preload
+      - log-memory-usage-periodic
       - run:
           name: Run cucumber tests
           command: |
@@ -356,7 +357,26 @@ commands: # reusable commands with parameters
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
+      - store-memory-usage-log
       - codecov/upload
+
+  log-memory-usage-periodic:
+    steps:
+      - run:
+          name: Log process memory usage
+          command: |
+            while sleep 2; do
+              date
+              ps -eo pid,user,%mem,rss,command --sort rss
+              echo
+            done >> tmp/memory_usage.log
+          background: true
+
+  store-memory-usage-log:
+    steps:
+      store_artifacts:
+        path: tmp/memory_usage.log
+        destination: log
 
   print-oom-process-count:
     steps:
