@@ -25,12 +25,14 @@ jQuery1(document).on('cms-template:init', () => {
 
 jQuery1(document).on('cms-sidebar:update', () => {
   setUpSidebarDrag()
+  setUpDropdownButtonOpen()
 })
 
 document.addEventListener('DOMContentLoaded', () => {
   setUpContentTypeLiquidEnabledListener()
   setUpRevertButton()
   setUpRemoveFromSectionAction()
+  setUpDropdownButtonClose()
 
   jQuery1('#tab-content').trigger('cms-template:init')
 })
@@ -298,5 +300,46 @@ function setUpPjax () {
     })
     .on('pjax:end', (event) => {
       jQuery1(event.target).trigger('cms-template:init')
+    })
+}
+
+/**
+ * The CMS features 3 dropdown buttons: New button, preview button and save button. Html is rendered
+ * by CMS::DropdownHelper and its functionality is given by this method everytime a new template is
+ * selected (cms-sidebar:update event).
+ *
+ * The event handler has to be defined with jQuery because at the time this method is called, the
+ * CMS content is not yet rendered and document.querySelector would find nothing.
+ */
+function setUpDropdownButtonOpen () {
+  $(document).on('click', '.dropdown-toggle', (event) => {
+    closeAllDropdowns(event.target as HTMLButtonElement)
+
+    $(event.currentTarget).siblings('.dropdown').addClass('expanded')
+
+    return false
+  })
+}
+
+/**
+ * Complementary to setUpDropdownButtonClick, this listener will close any expanded dropdown when
+ * clicking anywhere.
+ */
+function setUpDropdownButtonClose () {
+  document.addEventListener('mousedown', (event) => {
+    closeAllDropdowns(event.target as HTMLElement)
+  })
+}
+
+function closeAllDropdowns (exception?: HTMLElement) {
+  document.querySelectorAll('.dropdown.expanded')
+    .forEach(dropdown => {
+      const buttonGroup = dropdown.parentElement as HTMLDivElement
+
+      if (exception && buttonGroup.contains(exception)) {
+        return
+      }
+
+      dropdown.classList.remove('expanded')
     })
 }

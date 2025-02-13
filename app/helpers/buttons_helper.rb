@@ -110,24 +110,6 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def dropdown_button( title, url = nil, opts = {}, &block)
-    css_class = opts.delete(:important) ? 'important-button' : 'less-important-button'
-
-    main_item = if url.nil?
-      title
-                else
-      link_to(title, url, opts.slice!(:id).merge(:class => css_class))
-                end
-
-    list = content_tag(:ul, capture(&block), :class => 'dropdown')
-
-    caret = %{<a class="#{css_class} dropdown-toggle" href="#">
-                 <i class="fa fa-caret-down"></i>
-              </a>}.html_safe
-
-    content_tag(:div, main_item + list + caret, opts.merge(:class => 'button-group'))
-  end
-
   # Usage:
   #
   # dropdown_link 'Preview published', cms_published_url(@page), :target => "_blank", 'data-preview' => :published
