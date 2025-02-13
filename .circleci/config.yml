@@ -357,7 +357,6 @@ commands: # reusable commands with parameters
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - store-memory-usage-log
       - codecov/upload
 
   log-memory-usage-periodic:
@@ -369,14 +368,8 @@ commands: # reusable commands with parameters
               date
               ps -eo pid,user,%mem,rss,command --sort rss
               echo
-            done >> tmp/memory_usage.log
+            done
           background: true
-
-  store-memory-usage-log:
-    steps:
-      store_artifacts:
-        path: tmp/memory_usage.log
-        destination: log
 
   print-oom-process-count:
     steps:
