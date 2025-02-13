@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 When(/^I follow "([^"]*)" from the CMS dropdown$/) do |link|
   within '#cms-new-content-button' do
-    find('.dropdown-toggle').click
+    find('.dropdown-toggle').click unless has_css?('ul.dropdown.expanded')
     click_on link
   end
 end
