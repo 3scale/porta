@@ -25,8 +25,9 @@ const selectItem = (wrapper: ReactWrapper<any, Readonly<object>>, item: Expirati
 
 const pickDate = (wrapper: ReactWrapper<any, Readonly<object>>) => {
   /*
-   * Pick tomorrow, to do so, we get the date selected by default which is today and click the next one.
-   * It could happen that today is the last day in the calendar, in that case we pick the previous day, yesterday.
+   * Pick tomorrow, to do so, we click on the date in the calendar that is already selected (tomorrow is set by default).
+   * The difference between the date loaded by default and the manually selected one is on manual selection the time is 
+   * reset to 00:00:00, while on initial load the current time is set.
    * In any case, we return the picked date to the caller.
    */
   const targetDate = new Date()
