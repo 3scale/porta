@@ -103,6 +103,7 @@ system-builder-ruby31: &system-builder-ruby31
 
 mysql-container: &mysql-container
   image: cimg/mysql:8.0
+  command: mysqld --performance_schema=0 --table_definition_cache=400 --innodb_buffer_pool_size=16M --innodb_log_buffer_size=4M --tmp_table_size=1M --key_buffer_size=4M --sort_buffer_size=128K --skip-log-bin
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
