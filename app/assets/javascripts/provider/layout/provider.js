@@ -1,6 +1,5 @@
 //= require vendor/jquery-1.12.4.min
 //= require jquery_ujs
-//= require highlight/highlight.pack.js
 //= require switch
 //= require extra_fields
 //= require vendor/underscore.min.js
