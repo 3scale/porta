@@ -200,6 +200,10 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   end
 end
 
+After("@javascript") do
+  Capybara.page&.driver&.quit
+end
+
 After do |scenario|
   if ENV['FAIL_FAST']
     Cucumber.wants_to_quit = true if scenario.failed?
