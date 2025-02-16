@@ -12,11 +12,11 @@ module CapybaraHelpers
   ].join(', ').freeze
 
   def javascript_test?
-    Capybara.current_driver == Capybara.javascript_driver
+    Capybara.current_driver != Capybara.default_driver
   end
 
   def ensure_javascript
-    raise 'Please mark this scenario with @javascript.' unless javascript_test?
+    raise 'Please mark this scenario with @javascript or another driver with JavaScript support' unless javascript_test?
   end
 
   def local_storage(key)
