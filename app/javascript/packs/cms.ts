@@ -315,7 +315,7 @@ function setUpDropdownButtonOpen () {
   $(document).on('click', '.dropdown-toggle', (event) => {
     closeAllDropdowns(event.target as HTMLButtonElement)
 
-    $(event.currentTarget).siblings('.dropdown').addClass('expanded')
+    $(event.currentTarget).siblings('.dropdown').toggleClass('expanded')
 
     return false
   })
