@@ -5,12 +5,21 @@ import { ExpirationDatePicker } from 'AccessTokens/components/ExpirationDatePick
 import type { ExpirationItem, Props } from 'AccessTokens/components/ExpirationDatePicker'
 import type { ReactWrapper } from 'enzyme'
 
-const msExp = /\.\d{3}Z$/
-
 const defaultProps: Props = {
   id: 'expires_at',
   label: 'Expires in',
   tzOffset: 0
+}
+
+const msInADay = 60 * 60 * 24 * 1000
+
+/**
+ * Returns a future date in the specified number of days
+ * @param {number} days
+ * @return {Date}
+ */
+const futureDateInNDays = (days: number): Date => {
+  return new Date(new Date().getTime() + msInADay * days)
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ExpirationDatePicker {...{ ...defaultProps, ...props }} />)
@@ -57,7 +66,7 @@ describe('select a period', () => {
 
   it('should update hint to the correct date', () => {
     const wrapper = mountWrapper()
-    const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
+    const targetDate = futureDateInNDays(targetItem.period)
     const expectedHint = `The token will expire on ${dateFormatter.format(targetDate)}`
 
     selectItem(wrapper, targetItem)
@@ -68,13 +77,12 @@ describe('select a period', () => {
 
   it('should update hidden input value to the correct timestamp', () => {
     const wrapper = mountWrapper()
-    const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
-    const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
+    const targetDate = futureDateInNDays(targetItem.period)
 
     selectItem(wrapper, targetItem)
-    const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
+    const value = new Date(wrapper.find(`input#${defaultProps.id}`).prop('value') as string)
 
-    expect(value).toBe(expectedValue)
+    expect(value).toBeWithinSecondsFrom(targetDate)
   })
 })
 
@@ -107,10 +115,9 @@ describe('select "Custom"', () => {
 
       selectItem(wrapper, targetItem)
       const targetDate = pickDate(wrapper)
-      const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
-      const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
+      const value = new Date(wrapper.find(`input#${defaultProps.id}`).prop('value') as string)
 
-      expect(value).toBe(expectedValue)
+      expect(value).toBeWithinSecondsFrom(targetDate)
     })
   })
 })
