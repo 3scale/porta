@@ -81,6 +81,7 @@ module Pdf::Styles
           expected_locations = %w[
             /usr/share/fonts/liberation
             /usr/share/fonts/liberation-sans
+            /usr/share/fonts/liberation-sans-fonts
             ~/Library/Fonts
             /Library/Fonts
           ]
