@@ -4,6 +4,7 @@ import { renderVerticalNav } from 'Navigation/renderVerticalNav'
 import { renderQuickStarts } from 'QuickStarts/renderQuickStarts'
 import application from 'Common/application'
 import remote from 'Common/remote'
+import 'Common/switch'
 
 const jQuery1 = window.$
 
