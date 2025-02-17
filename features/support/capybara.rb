@@ -7,6 +7,7 @@ require 'selenium/webdriver'
 WINDOW_SIZE_ARG = '--window-size=1280,2048'
 
 Capybara.configure do |config|
+  config.default_driver = :rack_test
   config.match = :prefer_exact
   config.javascript_driver = :headless_chrome
   config.always_include_port = true
