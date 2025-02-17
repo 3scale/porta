@@ -166,5 +166,5 @@ DeveloperPortal::Engine.routes.draw do
   get '/search(.:format)' => 'search#index', :as => :search
 
   root :to => 'cms/new_content#show'
-  get '*path' => 'cms/new_content#show'
+  match '*path', to: 'cms/new_content#show', via: :all
 end
