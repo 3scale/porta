@@ -14,7 +14,7 @@ namespace :usage_limits do
     puts "Found #{count} orphan usage limits in the database"
 
     if count.positive?
-      orphan_usage_limits.destroy_all if count.positive?
+      orphan_usage_limits.destroy_all
 
       puts "Deleted #{count} instances of FeaturesPlan from the database."
     end
