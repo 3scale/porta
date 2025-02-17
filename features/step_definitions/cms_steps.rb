@@ -4,7 +4,7 @@ When(/^I follow "([^"]*)" from the CMS dropdown$/) do |link|
   # the 'cms-sidebar:update' event that triggers the event handlers for the dropdown button depends on AJAX response
   wait_for_requests
   within '#cms-new-content-button' do
-    find('.dropdown-toggle').click
+    find('.dropdown-toggle').click unless has_css?('ul.dropdown.expanded', wait: 0)
     click_on link
   end
 end
