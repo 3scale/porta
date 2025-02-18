@@ -80,9 +80,11 @@ describe('select a period', () => {
     const targetDate = futureDateInNDays(targetItem.period)
 
     selectItem(wrapper, targetItem)
-    const value = new Date(wrapper.find(`input#${defaultProps.id}`).prop('value') as string)
+    const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
+    const inputDate = new Date(inputValue)
 
-    expect(value).toBeWithinSecondsFrom(targetDate)
+    expect(inputValue).toEqual(inputDate.toISOString())
+    expect(inputDate).toBeWithinSecondsFrom(targetDate)
   })
 })
 
@@ -115,9 +117,11 @@ describe('select "Custom"', () => {
 
       selectItem(wrapper, targetItem)
       const targetDate = pickDate(wrapper)
-      const value = new Date(wrapper.find(`input#${defaultProps.id}`).prop('value') as string)
+      const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
+      const inputDate = new Date(inputValue)
 
-      expect(value).toBeWithinSecondsFrom(targetDate)
+      expect(inputValue).toEqual(inputDate.toISOString())
+      expect(inputDate).toBeWithinSecondsFrom(targetDate)
     })
   })
 })
