@@ -88,7 +88,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby31: &system-builder-ruby31
-  image: quay.io/3scale/system-builder:stream9
+  image: quay.io/3scale/system-builder:ps
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -103,6 +103,7 @@ system-builder-ruby31: &system-builder-ruby31
 
 mysql-container: &mysql-container
   image: cimg/mysql:8.0
+  command: mysqld --performance_schema=0 --table_definition_cache=400 --innodb_buffer_pool_size=16M --innodb_log_buffer_size=4M --tmp_table_size=1M --key_buffer_size=4M --sort_buffer_size=128K --skip-log-bin
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
@@ -300,6 +301,7 @@ commands: # reusable commands with parameters
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
           environment: *malloc_preload
+      - log-memory-usage-periodic
       - run:
           name: Run cucumber tests
           command: |
@@ -358,6 +360,18 @@ commands: # reusable commands with parameters
       - *store-log-artifacts
       - codecov/upload
 
+  log-memory-usage-periodic:
+    steps:
+      - run:
+          name: Log process memory usage
+          command: |
+            while sleep 2; do
+              date
+              ps -eo pid,user,%mem,rss,command ww --sort rss
+              echo
+            done
+          background: true
+
   print-oom-process-count:
     steps:
       - run:
@@ -365,7 +379,8 @@ commands: # reusable commands with parameters
           command: |
             # see https://support.circleci.com/hc/en-us/articles/19306469418139-How-to-detect-when-a-process-is-killed-by-the-OOM-killer
             printf "OOM Control: "
-            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p
+            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p | tee tmp/oom_num
+            [ "oom_kill 0" = "$(<tmp/oom_num)" ] # fails when a proc was killed by OOM
           when: always
 
 ##################################### CIRCLECI EXECUTORS ############################################
