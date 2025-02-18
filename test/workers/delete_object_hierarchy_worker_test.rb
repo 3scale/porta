@@ -173,6 +173,58 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  class DeleteAccountTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    setup do
+      @provider = FactoryBot.create(:provider_account, :with_a_buyer)
+    end
+
+    test "delete succeeds" do
+      provider2 = FactoryBot.create(:provider_account, :with_a_buyer)
+
+      buyer1 = @provider.buyers.first
+      buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @provider.schedule_for_deletion!
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later buyer1
+      end
+      assert_raise(ActiveRecord::RecordNotFound) { buyer1.reload }
+      buyer2.reload
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later @provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { @provider.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { buyer2.reload }
+
+      provider2.reload
+      assert_equal 1, provider2.buyers.count
+    end
+
+    test "delete with a payment_gateway_setting" do
+      pgs = FactoryBot.create(:payment_gateway_setting, account: @provider)
+      @provider.schedule_for_deletion!
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later @provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { @provider.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { pgs.reload }
+    end
+
+    test "account is not deleted when not scheduled" do
+      buyer = @provider.buyers.first
+      perform_enqueued_jobs(queue: "deletion") do
+        assert_raises { DeleteObjectHierarchyWorker.delete_later buyer }
+        assert_raises { DeleteObjectHierarchyWorker.delete_later @provider }
+      end
+      assert @provider.reload
+      assert buyer.reload
+    end
+  end
+
   class DeleteMemberPermissionThroughUserTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 
