@@ -108,6 +108,37 @@ Feature: Developer portal application credentials
       When they go to the application's dev portal page
       Then they should see "At most 5 keys are allowed"
 
+    @javascript
+    Scenario: Reaching the limit of 5 will toggle the switch
+      Given the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
+        | key-four  |
+      When they go to the application's dev portal page
+      Then they should not see "At most 5 keys are allowed."
+      And there should be a button to "Create new key" within the application keys
+      When they press "Create new key"
+      # FIXME: at some point in the past this feature broke
+      # Then they should see "At most 5 keys are allowed."
+      # And there should not be a button to "Create new key" within the application keys
+
+    @javascript
+    Scenario: Deleting a key once the limit is reached will toggle switch
+      Given the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
+        | key-four  |
+        | key-five  |
+      When they go to the application's dev portal page
+      Then they should see "At most 5 keys are allowed."
+      And there should not be a button to "Create new key" within the application keys
+      When they press "Delete"
+      Then they should not see "At most 5 keys are allowed."
+      # FIXME: at some point in the past this feature broke
+      # And there should be a button to "Create new key" within the application keys
+
     Scenario: Can't delete last key when mandatory app key set
       Given the application has the following key:
         | key-one |

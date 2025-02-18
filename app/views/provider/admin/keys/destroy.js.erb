@@ -14,13 +14,13 @@
     $('#app-keys-limit-warning').hide();     // provider side
     $('#app-keys-operations').show();
 
-    container.find('.operations').enableSwitch(); // buyer side
+    ThreeScale.enableSwitch('#application_keys .operations');
 
   <%- else -%> // hide operations and show warning
     $('#app-keys-limit-warning').show(); // provider side
     $('#app-keys-operations').hide();
 
-    container.find('.operations').disableSwitch(); // buyer side
+    ThreeScale.disableSwitch('#application_keys .operations')
   <%- end -%>
 
   container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();

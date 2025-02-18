@@ -1,8 +1,5 @@
-//= require vendor/jquery
-//= require highlight/highlight.pack.js
-//= require remote
-//= require switch
-//= require ajax_events
+//= require vendor/jquery-1.12.4.min
+//= require jquery_ujs
 //= require extra_fields
 //= require vendor/underscore.min.js
 //= require vendor/colorbox/jquery.colorbox.js
