@@ -75,5 +75,7 @@ declare global {
 
   namespace ThreeScale {
     function partialPaths (paths: string[]): void
+    function enableSwitch (selector: string): void
+    function disableSwitch (selector: string): void
   }
 }
