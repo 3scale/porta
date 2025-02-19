@@ -9,6 +9,6 @@ ThinkingSphinx::Index.define(:proxy_rule, with: :real_time) do
   has owner_type, type: :string
 
   set_property min_infix_len: 1
-  #                                                    %     -     .     _     ~
-  set_property charset_table: "0..9, A..Z->a..z, a..z, U+25, U+2D, U+2E, U+5F, U+7E"
+  #                                                    -     .     _     ~
+  set_property charset_table: "0..9, A..Z->a..z, a..z, U+2D, U+2E, U+5F, U+7E"
 end
