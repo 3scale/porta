@@ -1,7 +1,6 @@
 //= require vendor/jquery
 //= require highlight/highlight.pack.js
 //= require remote
-//= require switch
 //= require ajax_events
 //= require extra_fields
 //= require vendor/underscore.min.js

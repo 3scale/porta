@@ -1,4 +1,3 @@
-@allow-rescue
 Feature: Dev portal backwards compatibility
 
   As a long time 3scale user, I don't want any new updates in 3scale to break my developer portal.

@@ -19,6 +19,6 @@
 
   // Hide form is limit reached.
   if (table.find("tr").size() >= <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
-    container.disableSwitch();
+    ThreeScale.disableSwitch('#referrer_filters')
   }
 })(jQuery);
