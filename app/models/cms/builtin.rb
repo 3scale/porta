@@ -107,6 +107,8 @@ class CMS::Builtin < CMS::BasePage
   # CMS::Builtin::Page
   class Page < CMS::Builtin
 
+    validates :user_id, :forum_id, presence: true
+
     def content_type
       'text/html'
     end

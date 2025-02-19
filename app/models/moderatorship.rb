@@ -6,6 +6,8 @@ class Moderatorship < ApplicationRecord
 
   attr_protected :forum_id, :user_id, :tenant_id
 
+  self.background_deletion_method = :delete
+
   protected
 
   def uniqueness_of_relationship
