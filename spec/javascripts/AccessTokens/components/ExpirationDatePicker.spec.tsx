@@ -5,12 +5,21 @@ import { ExpirationDatePicker } from 'AccessTokens/components/ExpirationDatePick
 import type { ExpirationItem, Props } from 'AccessTokens/components/ExpirationDatePicker'
 import type { ReactWrapper } from 'enzyme'
 
-const msExp = /\.\d{3}Z$/
-
 const defaultProps: Props = {
   id: 'expires_at',
   label: 'Expires in',
   tzOffset: 0
+}
+
+const msInADay = 60 * 60 * 24 * 1000
+
+/**
+ * Returns a future date in the specified number of days
+ * @param {number} days
+ * @return {Date}
+ */
+const futureDateInNDays = (days: number): Date => {
+  return new Date(new Date().getTime() + msInADay * days)
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ExpirationDatePicker {...{ ...defaultProps, ...props }} />)
@@ -25,8 +34,9 @@ const selectItem = (wrapper: ReactWrapper<any, Readonly<object>>, item: Expirati
 
 const pickDate = (wrapper: ReactWrapper<any, Readonly<object>>) => {
   /*
-   * Pick tomorrow, to do so, we get the date selected by default which is today and click the next one.
-   * It could happen that today is the last day in the calendar, in that case we pick the previous day, yesterday.
+   * Pick tomorrow, to do so, we click on the date in the calendar that is already selected (tomorrow is set by default).
+   * The difference between the date loaded by default and the manually selected one is on manual selection the time is 
+   * reset to 00:00:00, while on initial load the current time is set.
    * In any case, we return the picked date to the caller.
    */
   const targetDate = new Date()
@@ -56,7 +66,7 @@ describe('select a period', () => {
 
   it('should update hint to the correct date', () => {
     const wrapper = mountWrapper()
-    const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
+    const targetDate = futureDateInNDays(targetItem.period)
     const expectedHint = `The token will expire on ${dateFormatter.format(targetDate)}`
 
     selectItem(wrapper, targetItem)
@@ -67,13 +77,14 @@ describe('select a period', () => {
 
   it('should update hidden input value to the correct timestamp', () => {
     const wrapper = mountWrapper()
-    const targetDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * targetItem.period)
-    const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
+    const targetDate = futureDateInNDays(targetItem.period)
 
     selectItem(wrapper, targetItem)
-    const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
+    const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
+    const inputDate = new Date(inputValue)
 
-    expect(value).toBe(expectedValue)
+    expect(inputValue).toEqual(inputDate.toISOString())
+    expect(inputDate).toBeWithinSecondsFrom(targetDate)
   })
 })
 
@@ -106,10 +117,11 @@ describe('select "Custom"', () => {
 
       selectItem(wrapper, targetItem)
       const targetDate = pickDate(wrapper)
-      const expectedValue = targetDate.toISOString().replace(msExp, 'Z')
-      const value = (wrapper.find(`input#${defaultProps.id}`).prop('value') as string).replace(msExp, 'Z')
+      const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
+      const inputDate = new Date(inputValue)
 
-      expect(value).toBe(expectedValue)
+      expect(inputValue).toEqual(inputDate.toISOString())
+      expect(inputDate).toBeWithinSecondsFrom(targetDate)
     })
   })
 })
