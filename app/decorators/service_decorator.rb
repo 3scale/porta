@@ -42,6 +42,8 @@ class ServiceDecorator < ApplicationDecorator
       h.admin_service_stats_usage_path(object)
     elsif h.can?(:manage, :partners)
       h.admin_service_applications_path(object)
+    elsif h.can?(:manage, :policy_registry)
+      h.edit_admin_service_policies_path(object)
     end
   end
 
