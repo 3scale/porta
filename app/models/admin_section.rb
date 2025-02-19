@@ -2,7 +2,7 @@
 
 class AdminSection
   PERMISSIONS = %i[portal finance settings partners monitoring plans policy_registry].freeze
-  SERVICE_PERMISSIONS = %i[partners plans monitoring].freeze
+  SERVICE_PERMISSIONS = %i[partners plans monitoring policy_registry].freeze
   NO_SERVICE_PERMISSIONS = PERMISSIONS - SERVICE_PERMISSIONS
   SECTIONS = PERMISSIONS + %i[services]
 
