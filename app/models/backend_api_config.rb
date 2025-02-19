@@ -21,6 +21,8 @@ class BackendApiConfig < ApplicationRecord
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false, message: "This path is already taken. Specify a different path." }
   validates :path, length: { in: 1..255, allow_nil: false }, path: true
 
+  before_destroy :destroy_usage_limits
+
   scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }
   scope :by_backend_api, ->(backend_api_id) { where.has { self.backend_api_id == backend_api_id } }
 
@@ -42,5 +44,14 @@ class BackendApiConfig < ApplicationRecord
 
   def path=(value)
     super(ConfigPath.new(value).path)
+  end
+
+  private
+
+  def destroy_usage_limits
+    usage_limits = UsageLimit
+                     .of_metric(backend_api_metrics.pluck(:id))
+                     .of_plan(service.application_plans.pluck(:id))
+    usage_limits.destroy_all unless usage_limits.empty?
   end
 end
