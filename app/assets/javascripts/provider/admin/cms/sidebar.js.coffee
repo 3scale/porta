@@ -510,5 +510,4 @@ class SidebarToggle
     @cached_ids ||= JSON.parse(@serialized_ids())
     @cached_ids.slice(0)
 
-document.addEventListener 'DOMContentLoaded', () ->
-  window.ThreeScale.CMS.sidebar = new Sidebar('#cms-sidebar')
+document.addEventListener 'DOMContentLoaded', () -> new Sidebar('#cms-sidebar')

@@ -5,6 +5,8 @@ import 'Common/ajaxEvents'
 
 const jQuery1 = window.$
 
+window.ThreeScale = {}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderVerticalNav()
   renderQuickStarts()
