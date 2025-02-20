@@ -62,6 +62,7 @@ module ThreeScale
         # Cinstance.service is inverse of Service.cinstances but is not autodetected so disabling it here
         Cinstance => %i[plan service],
         ApplicationPlan => %i[cinstances], # same as Cinstance.plan, this is covered also by Plan.contracts
+        BackendApiConfig => %i[usage_limits], # this should be covered by other non-deeply nested associations
       }
 
       return true if model != association.active_record # we want only association of base STI model instead of a sub-model
