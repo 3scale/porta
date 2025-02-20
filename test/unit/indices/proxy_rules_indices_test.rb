@@ -7,132 +7,25 @@ class ProxyRulesIndicesTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.create(:backend_api)
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/abc/123')
+        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/to/abc123')
         query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
 
-        assert_equal [proxy_rule], query.search_for('/abc/123')
+        assert_equal [proxy_rule], query.search_for('abc123')
       end
     end
   end
 
-  test 'character `/` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
+  %w[- . _ ~].each do |char|
+    test "character `#{char}` is indexed" do
+      ThinkingSphinx::Test.rt_run do
+        backend_api = FactoryBot.create(:backend_api)
+        perform_enqueued_jobs(only: SphinxIndexationWorker) do
+          proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: "/path/to/prefix#{char}suffix")
+          query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
 
-        assert_equal [proxy_rule], query.search_for('/')
+          assert_equal [proxy_rule], query.search_for("prefix#{char}suffix")
+        end
       end
     end
   end
-
-  test 'character `!` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/!/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/!/')
-      end
-    end
-  end
-
-  test "character `'` is indexed" do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: "/'/")
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for("/'/")
-      end
-    end
-  end
-
-  test 'characters `()` are indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/()/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/()/')
-      end
-    end
-  end
-
-  test 'character `*` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/*/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/*/')
-      end
-    end
-  end
-
-  test 'character `+` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/+/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/+/')
-      end
-    end
-  end
-
-  test 'character `,` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/,/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/,/')
-      end
-    end
-  end
-
-  test 'character `-` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/-/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/-/')
-      end
-    end
-  end
-
-  test 'character `.` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/./')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/./')
-      end
-    end
-  end
-
-  test 'character `_` is indexed' do
-    ThinkingSphinx::Test.rt_run do
-      backend_api = FactoryBot.create(:backend_api)
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/_/')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-
-        assert_equal [proxy_rule], query.search_for('/_/')
-      end
-    end
-  end
-
 end
