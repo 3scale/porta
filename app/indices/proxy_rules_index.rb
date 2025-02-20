@@ -8,6 +8,9 @@ ThinkingSphinx::Index.define(:proxy_rule, with: :real_time) do
   has owner_id,   type: :bigint
   has owner_type, type: :string
 
+  # Options
+  set_property expand_keywords: 1
+
   #                                                    -     .     _     ~
   set_property charset_table: "0..9, A..Z->a..z, a..z, U+2D, U+2E, U+5F, U+7E"
 end
