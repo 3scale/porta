@@ -29,9 +29,6 @@ declare global {
     renderChartWidget: (widget: string, data: unknown) => void;
     ThreeScale: {
       partialPaths?: (paths: string[]) => void;
-      CMS?: {
-        sidebar?: unknown;
-      };
     };
   }
 
