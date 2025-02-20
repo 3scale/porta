@@ -1,3 +1,8 @@
+<%# This file only exists to support very old portals that don't use 3scale.js OR 3scale_v2.js
+    Packages included in this file are not guaranteed to support jQuery > 2, so unfortunately we
+    have to keep them.
+%>
+
 <%= csrf_meta_tag %>
 
 <%= javascript_include_tag "vendor/jquery-#{defined?(jquery) ? jquery : '2.1.4'}.min.js" %>
@@ -8,7 +13,7 @@
 <%= stylesheet_link_tag 'colorbox/colorbox.css' %>
 
 <%= javascript_include_tag 'highlight/highlight.pack.js' %>
-<%= javascript_include_tag 'flash', 'remote', 'switch', 'extra_fields' %>
+<%= javascript_include_tag 'flash', 'remote', 'essential_assets/switch', 'extra_fields' %>
 <%= javascript_include_tag 'application' %>
 
 <%= yield :javascripts %>
