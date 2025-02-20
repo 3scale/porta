@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-
+#TODO
 class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
   class DestroyableObjectsTest < DeletePlainObjectWorkerTest
     def setup
@@ -55,35 +55,6 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
 
       object_1.expects(:delete).once
       DeletePlainObjectWorker.perform_now(object_1, [], 'delete')
-    end
-  end
-
-  class UndestroyableObjectsTest < DeletePlainObjectWorkerTest
-    def setup
-      @object = FactoryBot.create(:service)
-      @object.stubs(:destroyable?).returns(false)
-    end
-
-    attr_reader :object
-
-    def test_perform_destroy_by_association
-      DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123])
-      System::ErrorReporting.expects(:report_error).never
-      # shouldn't raise anything
-      DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123])
-      refute object.destroyed?
-    end
-
-    def test_perform_destroy_without_association
-      System::ErrorReporting.expects(:report_error).once.with do |exception, options|
-        exception.is_a?(ActiveRecord::RecordNotDestroyed) \
-          && (parameters = options[:parameters]) \
-          && parameters[:caller_worker_hierarchy] == ['Hierarchy-TestClass-123', "Plain-#{object.class}-#{object.id}"] \
-          && parameters[:error_messages] == ['This product cannot be removed']
-      end
-      # shouldn't raise anything
-      DeletePlainObjectWorker.perform_now(object, %w[Hierarchy-TestClass-123])
-      refute object.destroyed?
     end
   end
 

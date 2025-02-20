@@ -10,11 +10,11 @@ class FindAndDeleteScheduledAccountsWorkerTest < ActiveSupport::TestCase
 
   def test_perform
     ThreeScale.config.stubs(onpremises: false)
-    DeleteAccountHierarchyWorker.expects(:perform_later).never
+    DeleteObjectHierarchyWorker.expects(:delete_later).never
     FindAndDeleteScheduledAccountsWorker.new.perform
 
     ThreeScale.config.stubs(onpremises: true)
-    DeleteAccountHierarchyWorker.expects(:perform_later).times(7)
+    DeleteObjectHierarchyWorker.expects(:delete_later).times(7)
     FindAndDeleteScheduledAccountsWorker.new.perform
   end
 end

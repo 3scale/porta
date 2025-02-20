@@ -13,20 +13,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     perform_enqueued_jobs do
       perform_expectations
 
-      hierarchy_worker.perform_now(object)
+      DeleteObjectHierarchyWorker.delete_later(object)
     end
-  end
-
-  def test_success_callback_method
-    caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
-    hierarchy_worker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
-  end
-
-  def test_complete_callback_method
-    caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
-    hierarchy_worker.new.on_complete(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
   private
@@ -35,8 +23,46 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   def perform_expectations; end
 
-  def hierarchy_worker
-    DeleteObjectHierarchyWorker
+  class DeletingOrderCheck < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    class TracingDeleteObjectHierarchyWorker < DeleteObjectHierarchyWorker
+      def self.trace
+        @trace ||= []
+      end
+
+      private def handle_hierarchy_entry(entry)
+        self.class.trace << entry
+        super
+      end
+    end
+
+    test "basic order test" do
+      metric = FactoryBot.create(:metric)
+      pricing_rule = FactoryBot.create(:pricing_rule, metric: metric)
+
+      perform_enqueued_jobs do
+        TracingDeleteObjectHierarchyWorker.delete_later(metric)
+      end
+
+      exp = %W[
+        Association-Metric-#{metric.id}:proxy_rules
+        Association-Metric-#{metric.id}:plan_metrics
+        Association-Metric-#{metric.id}:usage_limits
+        Association-Metric-#{metric.id}:pricing_rules
+        Plain-PricingRule-#{pricing_rule.id}
+        Association-Metric-#{metric.id}:pricing_rules
+        Plain-Metric-#{metric.id}
+        ]
+
+      assert_equal exp, TracingDeleteObjectHierarchyWorker.trace
+    end
+  end
+
+  class ReschedulingTest < ActiveSupport::TestCase
+    test "will reschedule if timeout is reached" do
+      TODO
+    end
   end
 
   class AssociationUnknownPrimaryKeyTest < ActiveSupport::TestCase
@@ -48,7 +74,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       features_plan = plan.features_plans.create!(feature: feature)
 
       assert_difference(plan.features_plans.method(:count), -1) do
-        perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(feature) }
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(feature) }
       end
 
       assert_raises(ActiveRecord::RecordNotFound) { feature.reload }
@@ -126,7 +152,9 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeleteServiceTest < DeleteObjectHierarchyWorkerTest
+  class DeleteServiceTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
       @object = @service = FactoryBot.create(:simple_service)
 
@@ -141,36 +169,42 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       @backend_api_config = FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
     end
 
-    test "delete without stubs" do
-      service = FactoryBot.create(:service)
-      plan = FactoryBot.create(:application_plan, :issuer => service)
-      cinstance = FactoryBot.create(:cinstance, plan:)
-      FactoryBot.create_list(:limit_alert, 4, cinstance:, account: cinstance.user_account)
-      # perform_enqueued_jobs(except: [SphinxAccountIndexationWorker, SphinxIndexationWorker, BackendMetricWorker, BackendDeleteApplicationWorker]) do
+    test "delete when destroyable" do
+      FactoryBot.create(:service, account: service.account) # just a second service to make first destroyable
+      cinstance = FactoryBot.create(:cinstance, plan: application_plan)
+      limit_alerts = FactoryBot.create_list(:limit_alert, 4, cinstance:, account: cinstance.user_account)
       perform_enqueued_jobs(queue: "deletion") do
         service.mark_as_deleted!
       end
+
+      [service, service_plan, application_plan, *metrics.to_a, api_docs_service, service.proxy, backend_api_config, *limit_alerts].each do |object|
+        assert_raise(ActiveRecord::RecordNotFound) { object.reload }
+      end
+
+      assert backend_api.reload
+    end
+
+    test "delete non-destroyable fails" do
+      assert_raise(ActiveRecord::RecordNotDestroyed) do
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.perform_later("Plain-Service-#{service.id}")
+        end
+      end
+
+      assert service.reload
+    end
+
+    test "delete default service as association" do
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.perform_later("Plain-Account-#{service.account_id}", "Plain-Service-#{service.id}")
+      end
+
       assert_raise(ActiveRecord::RecordNotFound) { service.reload }
     end
 
     private
 
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
-
-    def perform_expectations
-      DeletePlainObjectWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
-
-      [service_plan, application_plan].each do |association|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
-      end
-      metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything, 'destroy') }
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(service.proxy, anything, 'destroy')
-
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api_config, anything, 'destroy').once
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').never
-    end
   end
 
   class DeleteAccountTest < ActiveSupport::TestCase
@@ -222,6 +256,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
       assert @provider.reload
       assert buyer.reload
+    end
+  end
+
+  class WorkerCompatibilityTest < ActiveSupport::TestCase
+    test "perform with hierarchy" do
+      TODO
+    end
+
+    test "perform without hierarchy" do
+      TODO
+    end
+
+    test "perform without hierarchy and without object" do
+      TODO
     end
   end
 
