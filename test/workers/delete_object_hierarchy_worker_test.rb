@@ -98,21 +98,48 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     setup do
       @object = FactoryBot.create(:simple_account)
-      Rails.logger.stubs(:info)
+      System::ErrorReporting.stubs(:report_error)
     end
 
     attr_reader :object
 
-    def test_perform_deserialization_error
+    test "compatibility perform deserialization error" do
       object.destroy!
-      Rails.logger.expects(:info).with { |message| message.match(/DeleteObjectHierarchyWorker#perform raised ActiveJob::DeserializationError/) }
+      System::ErrorReporting.expects(:report_error).with { _1.is_a? ActiveJob::DeserializationError }
       perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(object) }
     end
 
-    def test_success_record_not_found
+    test "compatibility perform error with hierarchy" do
       object.destroy!
-      Rails.logger.expects(:info).with("DeleteObjectHierarchyWorker#on_success raised ActiveRecord::RecordNotFound with message Couldn't find #{object.class} with 'id'=#{object.id}")
-      DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later({}, ["Hierarchy-Account-#{object.id}"]) }
+    end
+
+    test "success when record not found" do
+      object.destroy!
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later("Plain-#{object.class}-#{object.id}") }
+    end
+
+    test "deleting records that mixed do not exist" do
+      account = object
+      service, other_service = FactoryBot.create_list(:simple_service, 2, account:)
+      service.destroy!
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }.twice
+      perform_enqueued_jobs {
+        DeleteObjectHierarchyWorker.perform_later(
+          "Plain-#{object.class}-#{object.id}",
+          "Plain-Service-#{service.id}",
+          "Association-Service-#{service.id}:metrics",
+          "Plain-Service-#{other_service.id}",
+        )
+      }
+
+      assert_raises(ActiveRecord::RecordNotFound) { other_service.reload }
+      assert_raises(ActiveRecord::RecordNotFound) { account.reload }
     end
   end
 

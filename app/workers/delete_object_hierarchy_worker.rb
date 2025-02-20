@@ -72,7 +72,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   # @param hierarchy [Array<String>] something like ["Plain-Service-1234", "Association-Service-1234:plans" ...]
   # @note processes deleting a hierarchy of objects and reschedules itself at current progress after a time limit
   def perform(*hierarchy)
-    return compatibility(hierarchy) unless hierarchy.first.is_a?(String)
+    return compatibility(*hierarchy) unless hierarchy.first.is_a?(String)
 
     started = now
     while hierarchy.present? && now - started < WORK_TIME_LIMIT_SECONDS
@@ -118,6 +118,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     end
   rescue ActiveRecord::RecordNotFound => exception
     Rails.logger.warn "#{self.class} skipping object, maybe something else already deleted it: #{exception.message}"
+    []
   rescue NameError
     raise DoNotRetryError, "seems like unexpectedly broken delete hierarchy entry: #{entry}"
   end
@@ -148,6 +149,8 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     raise DoNotRetryError, "background deletion cannot handle #{hierarchy_root}" unless object_class && id
 
     self.class.delete_later object_class.constantize.find(id.to_i)
+  rescue ActiveRecord::RecordNotFound => exception
+    Rails.logger.warn "#{self.class} skipping object, maybe something else already deleted it: #{exception.message}"
   end
 
   def associations_strings(ar_object, *associations)
