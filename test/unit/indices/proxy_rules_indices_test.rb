@@ -47,6 +47,21 @@ class ProxyRulesIndicesTest < ActiveSupport::TestCase
     end
   end
 
+  test 'search for exact word' do
+    ThinkingSphinx::Test.rt_run do
+      backend_api = FactoryBot.create(:backend_api)
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/foo/to')
+        FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/dont/match/at/all')
+        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/to/bar')
+
+        results = search_for('bar', owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
+
+        assert_equal [proxy_rule.id], results
+      end
+    end
+  end
+
   private
 
   def search_for(pattern, **options)
