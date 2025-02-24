@@ -16,10 +16,14 @@ class BackendApiConfig < ApplicationRecord
 
   has_many :backend_api_metrics, through: :backend_api, source: :metrics
 
+  has_many :usage_limits, ->(backend_usage) { of_metric(Metric.unscoped.where(owner_type: "BackendApi", owner_id: backend_usage.backend_api_id)) }, through: :service
+
   validates :service_id, :backend_api_id, presence: true
   validates :backend_api_id, uniqueness: { scope: :service_id, case_sensitive: true }
   validates :path, uniqueness: { scope: :service_id, case_sensitive: false, message: "This path is already taken. Specify a different path." }
   validates :path, length: { in: 1..255, allow_nil: false }, path: true
+
+  before_destroy :destroy_usage_limits
 
   scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }
   scope :by_backend_api, ->(backend_api_id) { where.has { self.backend_api_id == backend_api_id } }
@@ -42,5 +46,11 @@ class BackendApiConfig < ApplicationRecord
 
   def path=(value)
     super(ConfigPath.new(value).path)
+  end
+
+  private
+
+  def destroy_usage_limits
+    usage_limits.find_each(&:destroy!)
   end
 end

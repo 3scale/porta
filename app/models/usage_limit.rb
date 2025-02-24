@@ -35,8 +35,8 @@ class UsageLimit < ApplicationRecord
 
   delegate :service, :to => :plan, :allow_nil => true
 
-  scope :of_plan, ->(plan) { where(:plan_id => plan.to_param) }
-  scope :of_metric, ->(metric) { where(:metric_id => metric.to_param) }
+  scope :of_plan, ->(plan) { where(:plan_id => plan) }
+  scope :of_metric, ->(metric) { where(:metric_id => metric) }
   scope :zero, -> { where(value: 0) }
 
   def period_as_range(from = Time.zone.now)
