@@ -4,4 +4,5 @@
  */
 declare module 'highlight.js' {
   function highlightBlock (block: HTMLElement): void
+  function configure (options: unknown): void
 }

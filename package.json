@@ -83,7 +83,7 @@
     "compression-webpack-plugin": "10.0.0",
     "css-loader": "6.11.0",
     "esbuild-loader": "4.2.0",
-    "highlight.js": "7.5.0",
+    "highlight.js": "8.9.1",
     "jquery": "3.7.0",
     "jquery-pjax": "2.0.1",
     "jquery-ui": "1.12.1",
