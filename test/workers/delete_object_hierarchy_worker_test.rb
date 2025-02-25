@@ -60,8 +60,19 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   class ReschedulingTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+
     test "will reschedule if timeout is reached" do
-      TODO
+      now = DeleteObjectHierarchyWorker.new.send :now
+      DeleteObjectHierarchyWorker.any_instance.expects(:now).times(5).returns(now, now, now + DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS)
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.perform_later("Plain-Alert-123456", "Plain-Alert-654321")
+      end
+
+      assert_equal ["Plain-Alert-123456", "Plain-Alert-654321"], performed_jobs[0]["arguments"]
+      assert_equal ["Plain-Alert-123456"], performed_jobs[1]["arguments"]
     end
   end
 
@@ -71,7 +82,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     test 'the error is not raised and the object is removed' do
       plan = FactoryBot.create(:application_plan)
       feature = FactoryBot.create(:feature)
-      features_plan = plan.features_plans.create!(feature: feature)
+      plan.features_plans.create!(feature: feature)
 
       assert_difference(plan.features_plans.method(:count), -1) do
         perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(feature) }
@@ -81,15 +92,15 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeleteObjectHierarchyWorkerWhenDoesNotHaveAssociationsTest < ActiveSupport::TestCase
-    def test_execute_success_when_empty_batch
-      object = FactoryBot.create(:metric)
-      worker = DeleteObjectHierarchyWorker.new
-      worker.instance_variable_set(:@object, object)
-      caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-      worker.instance_variable_set(:@caller_worker_hierarchy, caller_worker_hierarchy)
-      worker.expects(:on_complete).with(anything, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
-      worker.perform(object: object)
+  class BadHierarchyEntryTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test "call with bad hierarchy entry" do
+      System::ErrorReporting.expects(:report_error).with do |exception|
+        exception.is_a? DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+      end
+
+      DeleteObjectHierarchyWorker.perform_now("Plain-BadClass-1234")
     end
   end
 
@@ -110,10 +121,11 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
 
     test "compatibility perform error with hierarchy" do
+      fake_object = {}
       object.destroy!
       Rails.logger.stubs(:warn)
       Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }
-      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later({}, ["Hierarchy-Account-#{object.id}"]) }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(fake_object, ["Hierarchy-Account-#{object.id}"]) }
     end
 
     test "success when record not found" do
@@ -143,12 +155,24 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class DeletePlanTest < DeleteObjectHierarchyWorkerTest
+  class DeletePlanTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
       # ApplicationPlan setup
-      @object = @plan = FactoryBot.create(:application_plan)
+      @plan = FactoryBot.create(:application_plan)
       @contract = FactoryBot.create(:application_contract, plan: @plan)
       @customized_plan = FactoryBot.create(:application_plan, original_id: @plan.id)
+    end
+
+    test "delete plan" do
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later(plan)
+      end
+
+      [plan, contract, customized_plan].each do |object|
+        assert_raise(ActiveRecord::RecordNotFound) { object.reload }
+      end
     end
 
     private
@@ -156,7 +180,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :plan, :contract, :customized_plan
 
     def perform_expectations
-      DeletePlainObjectWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
       DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything, 'destroy')
@@ -164,7 +187,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     class AccountPlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryBot.create(:account_plan)
+        @plan = FactoryBot.create(:account_plan)
         @contract = FactoryBot.create(:account_contract, plan: @plan)
         @customized_plan = FactoryBot.create(:account_plan, original_id: @plan.id)
       end
@@ -172,7 +195,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     class ServicePlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryBot.create(:service_plan)
+        @plan = FactoryBot.create(:service_plan)
         @contract = FactoryBot.create(:service_contract, plan: @plan)
         @customized_plan = FactoryBot.create(:service_plan, original_id: @plan.id)
       end
@@ -287,16 +310,37 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   class WorkerCompatibilityTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    setup do
+      @service = FactoryBot.create(:service)
+    end
+
     test "perform with hierarchy" do
-      TODO
+      fake_ar_object = {}
+      @service = FactoryBot.create(:service)
+      DeleteObjectHierarchyWorker.perform_later(fake_ar_object, ["Hierarchy-Service-#{@service.id}", "Hierarchy-Proxy-392685", "Hierarchy-ProxyRule-124893"], "fake_method")
+
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(*DeleteObjectHierarchyWorker.send(:hierarchy_entries_for, @service))
+
+      perform_enqueued_jobs queue: "deletion"
     end
 
     test "perform without hierarchy" do
-      TODO
+      @service = FactoryBot.create(:service)
+      DeleteObjectHierarchyWorker.perform_later(@service)
+
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(*DeleteObjectHierarchyWorker.send(:hierarchy_entries_for, @service))
+
+      perform_enqueued_jobs queue: "deletion"
     end
 
-    test "perform without hierarchy and without object" do
-      TODO
+    test "perform with bad hierarchy" do
+      fake_object = {}
+      System::ErrorReporting.expects(:report_error).with do |exception|
+        exception.is_a? DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+      end
+      DeleteObjectHierarchyWorker.perform_now(fake_object, ["Some-crap-1324"])
     end
   end
 
@@ -316,48 +360,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
       assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }
       assert_raises(ActiveRecord::RecordNotFound) { member.reload }
-    end
-  end
-
-  class BackgroundAssociationListsTest < ActiveSupport::TestCase
-
-    class DoubleObject
-
-      def id
-        1
-      end
-
-      def to_global_id
-        'double/1'
-      end
-
-      def service
-        Service.new({ id: 1}, without_protection: true)
-      end
-    end
-
-    class DoubleWithBackgroundDestroyAssociation < DoubleObject
-
-      include BackgroundDeletion
-      self.background_deletion = { service: { action: :destroy, has_many: false } }
-    end
-
-    class DoubleWithBackgroundDeleteAssociation < DoubleObject
-
-      include BackgroundDeletion
-      self.background_deletion = { service: { action: :delete, has_many: false } }
-    end
-
-    def test_defined_background_destroy_associations
-      double_object = DoubleWithBackgroundDestroyAssociation.new
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'destroy').once
-      DeleteObjectHierarchyWorker.perform_now(double_object)
-    end
-
-    def test_defined_background_delete_associations
-      double_object = DoubleWithBackgroundDeleteAssociation.new
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'delete').once
-      DeleteObjectHierarchyWorker.perform_now(double_object)
     end
   end
 end

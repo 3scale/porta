@@ -139,12 +139,22 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     end
   end
 
+  # previously an example invocation could be with
+  # {"_aj_globalid": "gid://system/ProxyRule/1248934"},
+  # [
+  #   "Hierarchy-Service-2555418046474"
+  #   "Hierarchy-Proxy-392685"
+  #   "Hierarchy-ProxyRule-1248934"
+  # ],
+  # "destroy"
+  #
+  # While it could be called only with the first argument for the root object to be removed.
   def compatibility(object, caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
     # maybe requeue first object from hierarchy would be adequate and uniqueness should deduplicate jobs
     hierarchy_root = Array(caller_worker_hierarchy).first
     return object && self.class.delete_later(object) unless hierarchy_root
 
-    object_class, id = hierarchy_root.match(/Hierarchy-([a-zA-Z0-9_]+)-([\d*]+)/).captures
+    object_class, id = hierarchy_root.match(/Hierarchy-([a-zA-Z0-9_]+)-([\d*]+)/)&.captures
 
     raise DoNotRetryError, "background deletion cannot handle #{hierarchy_root}" unless object_class && id
 
