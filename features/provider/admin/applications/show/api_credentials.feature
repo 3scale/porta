@@ -78,6 +78,23 @@ Feature: Application API credentials
       And they go to the application's admin page
       Then should see "Keys limit reached." within the API Credentials card
 
+    Scenario: Reaching the limit should toggle the switch
+      Given the application has 4 keys
+      And they go to the application's admin page
+      And should not see "Keys limit reached." within the API Credentials card
+      When they follow "Add Random key" within the API Credentials card
+      Then they should see "Keys limit reached." within the API Credentials card
+      And there should not be a link to "Add Random key" within the API Credentials card
+
+    Scenario: Deleting a key once the limit is reached should toggle the switch
+      Given the application has 5 keys
+      And they go to the application's admin page
+      And should see "Keys limit reached." within the API Credentials card
+      And there should not be a link to "Add Random key" within the API Credentials card
+      When they follow any "Delete" within the API Credentials card
+      Then they should not see "Keys limit reached." within the API Credentials card
+      And there should be a link to "Add Random key" within the API Credentials card
+
     Scenario: Field "Key" is required
       Given the application has 1 key
       And they go to the application's admin page

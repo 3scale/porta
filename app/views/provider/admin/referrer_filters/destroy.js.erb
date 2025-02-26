@@ -11,9 +11,10 @@
       $(this).addClass((index + 1) % 2 ? "odd" : "even");
     });
 
-    // Show form again, if it was hidden because of reached limit.
-    if (table.find("tr").size() < <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
-      container.enableSwitch();
-    }
+    <%# Show form if hidden because of reached limit. %>
+    <% if @cinstance.referrer_filters.size < ReferrerFilter::REFERRER_FILTERS_LIMIT %>
+      $(".enabled_block").fadeIn()
+      $(".disabled_block").fadeOut()
+    <% end %>
   });
 })(jQuery);
