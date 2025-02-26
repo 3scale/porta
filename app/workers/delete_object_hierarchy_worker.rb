@@ -3,6 +3,7 @@
 class DeleteObjectHierarchyWorker < ApplicationJob
 
   WORK_TIME_LIMIT_SECONDS = 5
+  ASSOCIATION_RE = /Association-(?<klass>[:\w]+)-(?<id>\d+):(?<association>\w+)/
 
   class DoNotRetryError < RuntimeError; end
 
@@ -77,7 +78,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     started = now
     while hierarchy.present? && now - started < WORK_TIME_LIMIT_SECONDS
       Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
-      hierarchy.concat handle_hierarchy_entry(hierarchy.pop)
+      handle_one_hierarchy_entry!(hierarchy)
     end
 
     @remaining_hierarchy = hierarchy
@@ -103,19 +104,37 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   # handles a single hierarchy entry
   # @return [Array<String>] hierarchy for a newly discovered object from association to delete or empty array otherwise
-  def handle_hierarchy_entry(entry)
+  def handle_one_hierarchy_entry!(hierarchy)
+    entry = hierarchy.pop
     case entry
     when /Plain-([:\w]+)-(\d+)/
       ar_object = $1.constantize.find($2.to_i)
-      # callbacks logic differs between object destroyed by association, it is standalone if first job arg is itself
-      ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(arguments.first) if arguments.first != entry
+      unless hierarchy.empty?
+        # callbacks logic differs between object destroyed by association, so set it here
+        match = ASSOCIATION_RE.match(hierarchy.last)
+        if match
+          # for Plans, to prevent acts_as_list to update position of each plan on deletion
+          # we want to have here a reflection with a foreign key that is part of the list scope array.
+          # see acts_as_list/active_record/acts/scope_method_definer.rb
+          # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreighn key,
+          # e.g. you delete an ApplicationPlan but association is Account:account_plans or
+          # e.g. the association is for an unrelated parent object id
+          ar_object.destroyed_by_association = match[:klass].constantize.reflect_on_association(match[:association])
+        else
+          # in normal conditions we may never be here, except for:
+          #  * some unit tests
+          #  * manual enqueueing
+          #  * in case background_deletion array for the class contains the name of a method (not association)
+          ar_object.destroyed_by_association = ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(hierarchy)
+        end
+      end
       ar_object.background_deletion_method_call
-      []
-    when /Association-([:\w]+)-(\d+):(\w+)/
-      handle_association($1.constantize.find($2.to_i), $3, entry)
+    when ASSOCIATION_RE
+      hierarchy.concat handle_association($1.constantize.find($2.to_i), $3, entry)
     else
       raise ArgumentError, "Invalid entry specification: #{entry}"
     end
+    hierarchy
   rescue ActiveRecord::RecordNotFound => exception
     Rails.logger.warn "#{self.class} skipping object, maybe something else already deleted it: #{exception.message}"
     []
@@ -177,12 +196,14 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   end
 
   class DummyDestroyedByAssociationReflection
-    def initialize(foreign_key)
-      @foreign_key = foreign_key
+    def initialize(hierarchy)
+      # If we are here, hierarchy was not really sound (e.g. because of manual crafting or in unit tests),
+      # so just default to whatever is at the top of the hierarchy, e.g. "service_id"
+      @foreign_key = "#{hierarchy.first[/-(.*?)-/, 1].tableize.singularize}_id"
     end
 
     attr_reader :foreign_key
   end
 
-  private_constant :DoNotRetryError, :DummyDestroyedByAssociationReflection
+  private_constant :DoNotRetryError, :ASSOCIATION_RE, :DummyDestroyedByAssociationReflection
 end

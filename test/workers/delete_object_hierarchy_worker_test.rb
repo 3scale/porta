@@ -31,8 +31,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         @trace ||= []
       end
 
-      private def handle_hierarchy_entry(entry)
-        self.class.trace << entry
+      private def handle_one_hierarchy_entry!(hierarchy)
+        self.class.trace << hierarchy.last
         super
       end
     end
@@ -360,6 +360,89 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
       assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }
       assert_raises(ActiveRecord::RecordNotFound) { member.reload }
+    end
+  end
+
+  class DeletePlanUpdatePosition < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test 'destroy account plan updates position when it is not destroyed by account association' do
+      account = FactoryBot.create(:simple_account)
+      FactoryBot.create_list(:simple_account_plan, 2, issuer: account)
+      plans = account.account_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.perform_later(*%W[Association-Service-42:cinstances Plain-AccountPlan-#{plans.first.id}])
+
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        perform_enqueued_jobs(queue: "deletion")
+      end
+    end
+
+    test 'destroy account plan does not update position when it is destroyed by account association' do
+      account = FactoryBot.create(:simple_account)
+      FactoryBot.create_list(:simple_account_plan, 2, issuer: account)
+      plans = account.account_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Account-#{account.id} Association-Account-#{account.id}:account_plans Plain-AccountPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+
+    test 'destroy application plan updates position when it is not destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
+      plans = service.application_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Account-#{Random.random_number(1000000)}:servies Plain-ApplicationPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+
+    test 'destroy application plan does not update position when it is destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
+      plans = service.application_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ApplicationPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+
+    test 'destroy service plan updates position when it is not destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
+      plans = service.service_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{Random.random_number(1000000)}:account_plans Plain-ServicePlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+
+    test 'destroy service plan does not update position when it is destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
+      plans = service.service_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ServicePlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
     end
   end
 end
