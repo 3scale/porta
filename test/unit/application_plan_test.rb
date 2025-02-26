@@ -553,4 +553,46 @@ class CustomizedPlanTest < ActiveSupport::TestCase
   test 'a customized plan should return name of original plan on original_name' do
     assert_equal @app_plan.name, @custom_plan.original_name
   end
+
+  test 'destroy plan updates position when the plan is destroyed' do
+    service = @app_plan.issuer
+    FactoryBot.create(:application_plan, issuer: service, position: 1)
+    plans = service.plans.order(position: :asc).to_a
+    assert_change of: -> { plans.last.reload.position }, by: -1 do
+      plans.first.destroy!
+    end
+  end
+
+  test 'destroy plan does not update position when the issuer service has state deleted' do
+    service = @app_plan.issuer
+    service.update_column(:state, :deleted)
+    FactoryBot.create(:application_plan, issuer: service, position: 1)
+    plans = service.plans.order(position: :asc)
+
+    assert_no_change of: -> { plans.last.reload.position } do
+      plans.first.destroy!
+    end
+  end
+
+  test 'destroy plan does not update position when the issuer service is already deleted' do
+    service = @app_plan.issuer
+    FactoryBot.create(:application_plan, issuer: service, position: 1)
+    plans = service.plans.order(position: :asc).to_a
+    service.delete
+
+    assert_no_change of: -> { plans.last.reload.position } do
+      plans.first.destroy!
+    end
+  end
+
+  test 'destroy plan does not update position when the account is scheduled for deletion' do
+    service = @app_plan.issuer
+    FactoryBot.create(:application_plan, issuer: service, position: 1)
+    service.account.update_column(:state, :scheduled_for_deletion)
+    plans = service.plans.order(position: :asc)
+
+    assert_no_change of: -> { plans.last.reload.position } do
+      plans.first.destroy!
+    end
+  end
 end
