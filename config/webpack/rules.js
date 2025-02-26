@@ -23,6 +23,7 @@ module.exports = () => [
   {
     test: /\.css$/,
     include: [
+      /node_modules\/highlight.js\/styles/,
       /node_modules\/@patternfly/,
       /node_modules\/jquery-ui/,
       /node_modules\/swagger-ui/,
