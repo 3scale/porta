@@ -7,7 +7,7 @@ module Tasks
     include ActiveJob::TestHelper
 
     test 'destroy_marked_as_deleted' do
-      DestroyAllDeletedObjectsWorker.expects(:perform_later).once.with('Service')
+      DestroyAllDeletedObjectsWorker.expects(:delete_later).once.with('Service')
 
       execute_rake_task 'services.rake', 'services:destroy_marked_as_deleted'
     end
