@@ -109,24 +109,19 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     case entry
     when /Plain-([:\w]+)-(\d+)/
       ar_object = $1.constantize.find($2.to_i)
-      unless hierarchy.empty?
+      match = hierarchy.last&.match(ASSOCIATION_RE)
+      if match
         # callbacks logic differs between object destroyed by association, so set it here
-        match = ASSOCIATION_RE.match(hierarchy.last)
-        if match
-          # for Plans, to prevent acts_as_list to update position of each plan on deletion
-          # we want to have here a reflection with a foreign key that is part of the list scope array.
-          # see acts_as_list/active_record/acts/scope_method_definer.rb
-          # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreighn key,
-          # e.g. you delete an ApplicationPlan but association is Account:account_plans or
-          # e.g. the association is for an unrelated parent object id
-          ar_object.destroyed_by_association = match[:klass].constantize.reflect_on_association(match[:association])
-        else
-          # in normal conditions we may never be here, except for:
-          #  * some unit tests
-          #  * manual enqueueing
-          #  * in case background_deletion array for the class contains the name of a method (not association)
-          ar_object.destroyed_by_association = ar_object.destroyed_by_association = DummyDestroyedByAssociationReflection.new(hierarchy)
-        end
+        # e.g. for Plans, to prevent acts_as_list to update position of each plan on deletion
+        # we want to have here a reflection with a foreign key that is part of the list scope array.
+        # see acts_as_list/active_record/acts/scope_method_definer.rb
+        # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreighn key,
+        # e.g. you delete an ApplicationPlan but association is Account:account_plans or
+        # e.g. the association is for an unrelated parent object id
+        # FYI if there is no such association (e.g. a method name), nil will be returned.
+        # Another possible confusion with hand-crafter hierarchies may occur when before
+        # a Plain- entry, there is set an unrelated Hierarchy- entry, then incorrect association will be set.
+        ar_object.destroyed_by_association = match[:klass].constantize.reflect_on_association(match[:association])
       end
       ar_object.background_deletion_method_call
     when ASSOCIATION_RE
@@ -195,15 +190,5 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
-  class DummyDestroyedByAssociationReflection
-    def initialize(hierarchy)
-      # If we are here, hierarchy was not really sound (e.g. because of manual crafting or in unit tests),
-      # so just default to whatever is at the top of the hierarchy, e.g. "service_id"
-      @foreign_key = "#{hierarchy.first[/-(.*?)-/, 1].tableize.singularize}_id"
-    end
-
-    attr_reader :foreign_key
-  end
-
-  private_constant :DoNotRetryError, :ASSOCIATION_RE, :DummyDestroyedByAssociationReflection
+  private_constant :DoNotRetryError, :ASSOCIATION_RE
 end
