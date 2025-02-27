@@ -246,7 +246,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test "delete default service as association" do
       perform_enqueued_jobs(queue: "deletion") do
-        DeleteObjectHierarchyWorker.perform_later("Plain-Account-#{service.account_id}", "Plain-Service-#{service.id}")
+        DeleteObjectHierarchyWorker.perform_later("Association-Account-#{service.account_id}:services", "Plain-Service-#{service.id}")
       end
 
       assert_raise(ActiveRecord::RecordNotFound) { service.reload }
