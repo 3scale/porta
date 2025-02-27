@@ -11,8 +11,7 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     can :manage, user
 
-    can(:manage, :policy_registry) if account.tenant? && account.provider_can_use?(:policy_registry)
-    can(:manage, :policy_registry_ui) if account.tenant? && account.provider_can_use?(:policy_registry_ui)
+    can :manage, :policy_registry if account.tenant? && account.provider_can_use?(:policy_registry) && user.has_permission?(:policy_registry)
 
     # Overriding `can :manage, user` and `can :manage, User, :id => user.id`
     cannot :update_permissions, User, &:admin?
@@ -22,7 +21,7 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     # Services
     user_accessible_services = user.accessible_services
-    can %i[read show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.is_a? ActiveRecord::NullRelation
+    can %i[show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.is_a? ActiveRecord::NullRelation
 
     #
     # Events
