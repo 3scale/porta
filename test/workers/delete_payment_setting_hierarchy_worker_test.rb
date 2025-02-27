@@ -22,4 +22,8 @@ class DeletePaymentSettingHierarchyWorkerTest < ActiveSupport::TestCase
     assert_raises(ActiveRecord::RecordNotFound) { payment_gateway_setting.reload }
     buyers.each(&:reload)
   end
+
+  test "compatibility" do
+    assert_equal DeleteObjectHierarchyWorker, DeletePaymentSettingHierarchyWorker
+  end
 end
