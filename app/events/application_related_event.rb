@@ -1,4 +1,4 @@
-class ApplicationRelatedEvent < AccountRelatedEvent
+class ApplicationRelatedEvent < ServiceRelatedEvent
 
   self.category = :application
 end
