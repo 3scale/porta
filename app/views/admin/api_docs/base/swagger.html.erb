@@ -63,7 +63,8 @@
         dom_id: "swagger-ui-container",
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
         onComplete: function(swaggerApi, swaggerUi) {
-          $('#swagger-ui-container pre code').each(function(i, e) {
+          document.querySelectorAll('#swagger-ui-container pre code').forEach((e) => {
+            // hljs is leaked to the global scope from /dev-portal-assets/swagger-ui/2.2.10/swagger-ui.js
             hljs.highlightBlock(e)
           });
         },
