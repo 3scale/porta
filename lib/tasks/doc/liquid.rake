@@ -16,11 +16,7 @@ namespace :doc do
         generator << item.documentation
       end
 
-      text = if ENV['HTML']
-               generator.to_html
-             else
-               generator.to_markdown
-            end
+      text = generator.to_markdown
 
       if file = ENV['FILE']
         File.open(file, 'w'){|f| f << text}
@@ -31,10 +27,8 @@ namespace :doc do
 
     desc 'Re-generate all liquid docs'
     task :generate => :environment do
-      extension = ENV['HTML'] ? 'html' : 'md'
-
       %w( drops tags filters ).each do |type|
-        ENV['FILE'] = "doc/liquid/#{type}.#{extension}"
+        ENV['FILE'] = "doc/liquid/#{type}.md"
         Rake::Task["doc:liquid:#{type}"].invoke
       end
     end
