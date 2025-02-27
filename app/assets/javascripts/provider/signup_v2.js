@@ -1,5 +1,3 @@
-//= require vendor/jquery-1.11.3.min.js
-
 /**
  * How to use this library
  *
