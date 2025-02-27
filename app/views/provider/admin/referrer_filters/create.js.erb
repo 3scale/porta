@@ -19,7 +19,7 @@
 
   <%# Hide form if limit reached. %>
   <% if @cinstance.referrer_filters.size >= ReferrerFilter::REFERRER_FILTERS_LIMIT %>
-    $(".enabled_block").fadeOut()
-    $(".disabled_block").fadeIn()
+    $("#referrer-filters-form").hide()
+    $("#referrer-filters-limit").show()
   <% end %>
 })(jQuery);
