@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require "three_scale/models"
+
 module ThreeScale
   class TenantIDIntegrityChecker
+    include ThreeScale::Models
+
     attr_reader :tenant_id
 
     def initialize(attribute = :tenant_id)
@@ -94,9 +98,7 @@ module ThreeScale
     end
 
     def models_with_tenant_id
-      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
-      all_models = ApplicationRecord.descendants.select(&:arel_table).reject(&:abstract_class?)
-      all_models.select! { _1.attribute_names.include? "tenant_id" }
+      all_models_with_a_table.select! { _1.attribute_names.include? "tenant_id" }
     end
   end
 end
