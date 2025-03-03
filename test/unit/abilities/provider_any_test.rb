@@ -6,7 +6,7 @@ module Abilities
 
   class BaseTest < ActiveSupport::TestCase
     setup do
-      @account = FactoryBot.create(:simple_provider)
+      @account = FactoryBot.create(:provider_account)
       @account.stubs(:provider_can_use?).with(any_parameters).returns(false)
       @user  = FactoryBot.create(:simple_user, account: @account)
     end
@@ -82,9 +82,49 @@ module Abilities
       end
     end
 
-    test "AccountRelatedEvent can't show if has :partners and does not have a service" do
+    test "AccountRelatedEvent member can't show if has :partners and does not have a service" do
       user.member_permission_ids = [:partners]
       assert_cannot ability, :show, Accounts::AccountCreatedEvent.create(account, user)
+    end
+
+    test 'AccountRelatedEvent admin can show if has :partners and does not have a service' do
+      admin = account.first_admin
+      ability = Ability.new(admin)
+      assert_can ability, :show, Accounts::AccountCreatedEvent.create(account, user)
+    end
+
+    test 'AccountRelatedEvent can show if has :partners and access to the service if there is a service' do
+      # @account has a service and a service plan
+      service = FactoryBot.create(:simple_service, account: @account)
+      service_plan = FactoryBot.create(:simple_service_plan, issuer: service)
+
+      # There's a buyer for @account and it's subscribed to the service
+      buyer = FactoryBot.create(:buyer_account, provider_account: @account)
+      buyer_user = FactoryBot.create(:simple_user, account: buyer)
+      FactoryBot.create(:service_contract, plan: service_plan, user_account: buyer)
+
+      # The provider user (not admin) has permissions over the service
+      user.member_permission_service_ids = [service.id]
+      user.member_permission_ids = [:partners]
+
+      assert_can ability, :show, Accounts::AccountCreatedEvent.create(buyer, buyer_user)
+    end
+
+    test "AccountRelatedEvent can't show if has :partners and no access to the service if there is a service" do
+      # @account has a service and a service plan
+      service = FactoryBot.create(:simple_service, account: @account)
+      service_plan = FactoryBot.create(:simple_service_plan, issuer: service)
+
+      # There's a buyer for @account and it's subscribed to the service
+      buyer = FactoryBot.create(:buyer_account, provider_account: @account)
+      buyer_user = FactoryBot.create(:simple_user, account: buyer)
+      FactoryBot.create(:service_contract, plan: service_plan, user_account: buyer)
+
+      # The provider user (not admin) has permissions over the service
+      user.member_permission_service_ids = [service.id]
+      user.member_permission_ids = []
+
+      assert_cannot ability, :show, Accounts::AccountCreatedEvent.create(buyer, buyer_user)
     end
   end
 
