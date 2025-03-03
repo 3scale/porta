@@ -47,14 +47,29 @@ module Abilities
     end
 
     def test_events_according_the_users_permissions
+      # @account has a service and a service plan
+      service  = FactoryBot.create(:simple_service, account: @account)
+      service_plan     = FactoryBot.create(:simple_service_plan, issuer: service)
+
+      # The provider user (not admin) has permissions over the service
+      @member.member_permission_service_ids = [service.id]
+
+      # There's a buyer for @account and it's subscribed to the service
+      buyer = FactoryBot.create(:buyer_account, provider_account: @account)
+      user  = FactoryBot.create(:simple_user, account: buyer)
+      FactoryBot.create(:service_contract, plan: service_plan, user_account: buyer)
+
+      # There's also an application plan and an application
+      app_plan = FactoryBot.create(:simple_application_plan, issuer: service)
+      app = FactoryBot.create(:cinstance, plan: app_plan, user_account: buyer)
+
+      account_event = Accounts::AccountCreatedEvent.create(buyer, user)
       billing_event = Invoices::InvoicesToReviewEvent.create(@account)
-      account_event = Accounts::AccountCreatedEvent.create(@account, @member)
-      limit_alert   = FactoryBot.build_stubbed(:limit_alert)
+      limit_alert   = FactoryBot.create(:limit_alert, cinstance: app)
       alert_event   = Alerts::LimitAlertReachedProviderEvent.create(limit_alert)
 
       assert_cannot ability, :show, billing_event
       assert_cannot ability, :show, account_event
-      assert_cannot ability, :show, alert_event
       assert_cannot ability, :show, alert_event
 
       @member.member_permission_ids = ['finance']
