@@ -108,6 +108,7 @@ module EventStore
       end
     end
 
+    # rubocop:disable Lint/MissingSuper
     def initialize(repository = self.class.repository, event_broker = EventBroker.new)
       @client = ::RailsEventStore::Client.new(repository: repository, event_broker: event_broker)
       @facade = Facade.new(repository, event_broker)
@@ -166,6 +167,7 @@ module EventStore
       subscribe_event(ProxyConfigEventSubscriber.new, ProxyConfigs::AffectingObjectChangedEvent)
       subscribe_event(ZyncSubscriber.new, ZyncEvent)
     end
+    # rubocop:enable Lint/MissingSuper
 
     delegate :publish_event, to: :facade
 
