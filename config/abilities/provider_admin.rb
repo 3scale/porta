@@ -71,6 +71,7 @@ Ability.define do |user|
     category.forum.account = account
   end
 
+  can :index, Service
   can :create, Service if account.can_create_service?
   can :destroy, Service do |service|
     service.account_id == user.account_id && can?(:manage, :multiple_services) && !service.default_or_last?
