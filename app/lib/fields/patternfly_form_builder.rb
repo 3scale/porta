@@ -20,6 +20,8 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
   end
 
   def commit_button(title, opts = {})
+    raise ArgumentError, 'button_html prop will be ignored, use standard html attributes' if opts.key?(:button_html)
+
     tag.button(title, type: :submit, class: 'pf-c-button pf-m-primary', **opts)
   end
 
