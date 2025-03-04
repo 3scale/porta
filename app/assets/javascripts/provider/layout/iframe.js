@@ -1,5 +1,4 @@
 //= require 'vendor/jquery-1.11.3.min.js'
-//= require 'vendor/rails-1.0.3.js'
 //= require 'flash'
 //= require_self
 
