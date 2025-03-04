@@ -9,7 +9,7 @@ namespace :swagger do
   end
 
   task destroy_orphans: :environment do
-    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
+    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeleteObjectHierarchyWorker.method(:delete_later))
   end
 
   task stats_version: :environment do

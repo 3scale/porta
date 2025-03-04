@@ -8,6 +8,8 @@ class CMS::Section < ApplicationRecord
 
   self.table_name = :cms_sections
 
+  self.background_deletion_method = :delete
+
   self.allowed_search_scopes = %i[parent_id]
 
   scope :by_parent_id, ->(parent_id) { where(parent_id: parent_id) }
