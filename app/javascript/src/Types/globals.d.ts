@@ -41,9 +41,14 @@ declare global {
       notice: (message: string) => void;
       error: (message: string) => void;
     };
-    rails: {
-      handleRemote: (arg: JQuery | JQuery1) => JQueryXHR | false;
-    };
+    rails?: RailsUJS;
+  }
+
+  // Included in gem jquery-rails, imported with:
+  //   //= require rails-ujs
+  // It is not documented, see https://github.com/rails/jquery-rails/blob/master/vendor/assets/javascripts/jquery_ujs.js
+  interface RailsUJS {
+    handleRemote: (arg: JQuery1) => JQueryXHR | false;
   }
 
   // jQueryUI static props injected into jQuery 3.7 when imported from webpack
