@@ -10,7 +10,7 @@ namespace :services do
   end
 
   task :destroy_marked_as_deleted => :environment do
-    DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)
+    DestroyAllDeletedObjectsWorker.delete_later(Service.to_s)
   end
 
   desc 'Destroy a service in the Background as long as the provider has at least 1 more service. Whether it is a default one or not'

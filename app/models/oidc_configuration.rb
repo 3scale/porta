@@ -55,6 +55,8 @@ class OIDCConfiguration < ApplicationRecord
     end
   end
 
+  self.background_deletion_method = :delete
+
   belongs_to :oidc_configurable, polymorphic: true, inverse_of: :oidc_configuration
   serialize :config, OIDCConfiguration::Config
 
