@@ -49,12 +49,12 @@ Feature: Developer portal application referrer filters
       Then they should see the flash message "referrer filter can't be blank"
 
     Scenario: Can't create new referrer filters once the limit is reached
-      Given the application can't have more referrer filters
-      And they go to the application's dev portal page
+      Given they go to the application's dev portal page
       When fill in "referrer_filter" with "foo.example.org" within the referrer filters
+      And the application can't have more referrer filters
       And press "Add" within the referrer filters
       And wait a moment
-      Then they should see the flash message "Limit reached"
+      Then they should see "Limit reached"
       And they should not see "foo.example.org" within the referrer filters
 
     Scenario: Deleting a referrer filter
@@ -73,7 +73,7 @@ Feature: Developer portal application referrer filters
         | foo4.example.org |
       And they go to the application's dev portal page
       And there should be a button to "Add" within the referrer filters
-      # And they should not see "At most 5 referrer filters are allowed." within the referrer filters FIXME: at some point, the switch was broken and at first render it doesn't work.
+      And they should not see "At most 5 referrer filters are allowed." within the referrer filters
       When they fill in "referrer_filter" with "foo5.example.org" within the referrer filters
       And press "Add" within the referrer filters
       Then they should see "At most 5 referrer filters are allowed." within the referrer filters
@@ -88,7 +88,7 @@ Feature: Developer portal application referrer filters
         | foo4.example.org |
         | foo5.example.org |
       And they go to the application's dev portal page
-      # And there should not be a button to "Add" within the referrer filters FIXME: at some point, the switch was broken and at first render it doesn't work.
+      And there should not be a button to "Add" within the referrer filters
       And they should see "At most 5 referrer filters are allowed." within the referrer filters
       And they press "Delete" that belongs to the referrer filter "foo5.example.org"
       Then they should not see "At most 5 referrer filters are allowed." within the referrer filters
