@@ -188,6 +188,10 @@ module Abilities
       assert_can ability, :manage, :portal
     end
 
+    def test_index_services
+      assert_can ability, :index, Service
+    end
+
     def ability
       Ability.new(@admin)
     end

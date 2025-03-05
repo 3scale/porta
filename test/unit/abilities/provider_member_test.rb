@@ -199,6 +199,20 @@ module Abilities
       assert_cannot ability, :manage, :portal
     end
 
+    def test_index_services
+      @member.stubs(admin_sections: [:plans])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: [:policy_registry])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: [:monitoring])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: %i[portal settings])
+      assert_cannot ability, :index, Service
+    end
+
     private
 
     def ability

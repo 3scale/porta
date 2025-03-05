@@ -10,11 +10,11 @@ describe('canFeatureSetServicePermissions', () => {
     expect(canFeatureSetServicePermissions('portal')).toEqual(false)
     expect(canFeatureSetServicePermissions('finance')).toEqual(false)
     expect(canFeatureSetServicePermissions('settings')).toEqual(false)
-    expect(canFeatureSetServicePermissions('policy_registry')).toEqual(false)
 
     expect(canFeatureSetServicePermissions('partners')).toEqual(true)
     expect(canFeatureSetServicePermissions('monitoring')).toEqual(true)
     expect(canFeatureSetServicePermissions('plans')).toEqual(true)
+    expect(canFeatureSetServicePermissions('policy_registry')).toEqual(true)
 
     expect(canFeatureSetServicePermissions(['portal', 'finance', 'settings'])).toEqual(false)
 

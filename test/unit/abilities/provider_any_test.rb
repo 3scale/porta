@@ -12,8 +12,20 @@ module Abilities
 
     attr_reader :user, :account
 
-    def test_policies_allowed
+    def test_policies_permissions_for_member
       account.expects(:provider_can_use?).with(:policy_registry).returns(true)
+
+      assert_cannot ability, :manage, :policy_registry
+
+      user.update allowed_sections: [:policy_registry]
+      user.reload
+
+      assert_can ability, :manage, :policy_registry
+    end
+
+    def test_policies_permissions_for_admin
+      account.expects(:provider_can_use?).with(:policy_registry).returns(true)
+      user.make_admin
 
       assert_can ability, :manage, :policy_registry
     end
