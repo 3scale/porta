@@ -140,16 +140,23 @@
                       {% endfor %}
                     </table>
                     <p class='sub'>These are application keys used to authenticate requests.</p>
+
+                    {% if application.can.add_application_keys? %}
+                      {% assign enabled_block_style =  "" %}
+                      {% assign disabled_block_style =  "display: none;" %}
+                    {% else %}
+                      {% assign enabled_block_style =  "display: none;" %}
+                      {% assign disabled_block_style =  "" %}
+                    {% endif %}
+                    
                     <div class="operations">
-                      {% if application.can.add_application_keys? %}
-                        <div class="enabled_block">
-                          {{ 'Create new key' | create_button_ajax: application.application_keys_url, class: 'btn btn-success btn-xs' }}
-                        </div>
-                      {% else %}
-                        <div class="disabled_block">
-                          <p class="mini_info">At most {{ application.keys_limit }} keys are allowed.</p>
-                        </div>
-                      {% endif %}
+                      <div class="enabled_block" style="{{ enabled_block_style }}" >
+                        {{ 'Create new key' | create_button_ajax: application.application_keys_url, class: 'btn btn-success btn-xs' }}
+                      </div>
+                      <div class="disabled_block" style="{{ disabled_block_style }}">
+                      <p class="mini_info">At most {{ application.keys_limit }} keys are allowed.</p>
+                    </div>
+
                     </div>
                   </div>
                 </dd>
