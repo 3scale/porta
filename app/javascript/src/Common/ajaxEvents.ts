@@ -1,14 +1,13 @@
 /**
  * Set up AJAX event listeners. Origin: app/assets/javascripts/ajax_events.js
  * Events are triggered by rails so we rely on jQuery 1 until we upgrade rails-jquery and plugins.
+ * Rails-UJS events: https://guides.rubyonrails.org/v6.1.0/working_with_javascript_in_rails.html#rails-ujs-event-handlers
  */
 
 const jQuery1 = window.$
-const expected = '1.11.3'
-const actual = jQuery1().jquery
 
-if (actual !== expected) {
-  throw new Error(`AJAX events declared in the wrong $. Expected: ${expected}, actual: ${actual}`)
+if (jQuery1.rails === undefined) {
+  throw new Error('Rails UJS not loaded')
 }
 
 const ajaxSpinnerId = 'ajax-in-progress'
