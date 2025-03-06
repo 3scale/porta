@@ -187,9 +187,11 @@
               {% endif %}
 
               <div class="enabled_block" style="{{ enabled_block_style }}">
-                {% form 'referrer_filter.createremote', referrer_filter %}
-                  <input type="text" id="referrer_filter" name="referrer_filter" />
-                  <input type="submit" value="Add" name="commit" />
+                {% form 'referrer_filter.createremote', referrer_filter, class: "form-inline" %}
+                  <div class="form-group">
+                    <input type="text" id="referrer_filter" name="referrer_filter" class="form-control">
+                  </div>
+                  <input type="submit" value="Add" name="commit" class="btn btn-primary" />
                 {% endform %}
               </div>
               <div class="disabled_block" style="{{ disabled_block_style }}">
@@ -201,7 +203,7 @@
                 {% for filter in application.referrer_filters %}
                   <tr class="{% cycle 'applications': 'odd', 'even' %}" id="referrer_filter_{{ filter.id }}">
                     <td>{{ filter.value }}</td>
-                    <td>{{ "Delete" | delete_button_ajax: filter.delete_url }}</td>
+                    <td>{{ "Delete" | delete_button_ajax: filter.delete_url, class: 'btn btn-danger' }}</td>
                   </tr>
                 {% endfor %}
               </table>
