@@ -1,5 +1,5 @@
 @javascript
-Feature: Providers's application referrer filters
+Feature: Provider's application referrer filters
 
   Background:
     Given a provider

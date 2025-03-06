@@ -67,69 +67,6 @@
   color: #333;
 }
 
-button, html input[type="button"], input[type="reset"], input[type="submit"] {
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 4px;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  color: rgb(255, 255, 255);
-  background-color: rgb(92, 184, 92);
-  border-color: rgb(76, 174, 76);
-}.plan-preview-box a:hover {
-  color: #333;
-}
-
-button, html input[type="button"], input[type="reset"], input[type="submit"] {
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 4px;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  color: rgb(255, 255, 255);
-  background-color: rgb(92, 184, 92);
-  border-color: rgb(76, 174, 76);
-}.plan-preview-box a:hover {
-  color: #333;
-}
-
-button, html input[type="button"], input[type="reset"], input[type="submit"] {
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 4px;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  color: rgb(255, 255, 255);
-  background-color: rgb(92, 184, 92);
-  border-color: rgb(76, 174, 76);
-}.plan-preview-box a:hover {
-  color: #333;
-}
-
 .plan-preview-box button, html .plan-preview-box input[type="button"], .plan-preview-box input[type="reset"], .plan-preview-box input[type="submit"] {
   display: inline-block;
   padding: 6px 12px;

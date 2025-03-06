@@ -140,16 +140,23 @@
                       {% endfor %}
                     </table>
                     <p class='sub'>These are application keys used to authenticate requests.</p>
+
+                    {% if application.can.add_application_keys? %}
+                      {% assign enabled_block_style =  "" %}
+                      {% assign disabled_block_style =  "display: none;" %}
+                    {% else %}
+                      {% assign enabled_block_style =  "display: none;" %}
+                      {% assign disabled_block_style =  "" %}
+                    {% endif %}
+                    
                     <div class="operations">
-                      {% if application.can.add_application_keys? %}
-                        <div class="enabled_block">
-                          {{ 'Create new key' | create_button_ajax: application.application_keys_url, class: 'btn btn-success btn-xs' }}
-                        </div>
-                      {% else %}
-                        <div class="disabled_block">
-                          <p class="mini_info">At most {{ application.keys_limit }} keys are allowed.</p>
-                        </div>
-                      {% endif %}
+                      <div class="enabled_block" style="{{ enabled_block_style }}" >
+                        {{ 'Create new key' | create_button_ajax: application.application_keys_url, class: 'btn btn-success btn-xs' }}
+                      </div>
+                      <div class="disabled_block" style="{{ disabled_block_style }}">
+                      <p class="mini_info">At most {{ application.keys_limit }} keys are allowed.</p>
+                    </div>
+
                     </div>
                   </div>
                 </dd>
@@ -171,38 +178,37 @@
             <dt>Referrer Filters</dt>
             <dd>If you are developing a server based application you typically need to add IP addresses, if it is widget based you typically need to add domain names. Specify allowed referrer domains or IP addresses. Wildcards (*.example.org) are also accepted.</dd>
             <dd>
-              <div class="enabled_block">
-                {% form 'referrer_filter.createremote', referrer_filter %}
-                  <input type="text" id="referrer_filter" name="referrer_filter" />
-                  <input type="submit" value="Add" name="commit" />
+              {% if application.can.add_referrer_filters? %}
+                {% assign enabled_block_style =  "" %}
+                {% assign disabled_block_style =  "display: none;" %}
+              {% else %}
+                {% assign enabled_block_style =  "display: none;" %}
+                {% assign disabled_block_style =  "" %}
+              {% endif %}
+
+              <div class="enabled_block" style="{{ enabled_block_style }}">
+                {% form 'referrer_filter.createremote', referrer_filter, class: "form-inline" %}
+                  <div class="form-group">
+                    <input type="text" id="referrer_filter" name="referrer_filter" class="form-control">
+                  </div>
+                  <input type="submit" value="Add" name="commit" class="btn btn-primary" />
                 {% endform %}
               </div>
-              <div class="disabled_block">At most {{ application.filters_limit }} referrer filters are allowed.</div>
+              <div class="disabled_block" style="{{ disabled_block_style }}">
+                  At most {{ application.filters_limit }} referrer filters are allowed.
+              </div>
             </dd>
             <dd>
               <table class="table">
                 {% for filter in application.referrer_filters %}
                   <tr class="{% cycle 'applications': 'odd', 'even' %}" id="referrer_filter_{{ filter.id }}">
                     <td>{{ filter.value }}</td>
-                    <td>{{ "Delete" | delete_button_ajax: filter.delete_url }}</td>
+                    <td>{{ "Delete" | delete_button_ajax: filter.delete_url, class: 'btn btn-danger' }}</td>
                   </tr>
                 {% endfor %}
               </table>
             </dd>
           </dl>
-          {% if application.can.add_referrer_filters? %}
-            <script type="text/javascript">
-              $(function() {
-                $("div#referrer_filters").enableSwitch();
-              });
-            </script>
-          {% else %}
-            <script type="text/javascript">
-              $(function() {
-                $("div#referrer_filters").disableSwitch();
-              });
-            </script>
-          {% endif %}
         {% endif %}
       </div>
     </div>
