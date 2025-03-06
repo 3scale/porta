@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach(form => {
       form.addEventListener('change', () => {
         if (form.dataset.remote) {
-          void jQuery1.rails.handleRemote(jQuery1(form))
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Guarded by ajaxEvents
+          void jQuery1.rails!.handleRemote(jQuery1(form))
         } else {
           form.submit()
         }
