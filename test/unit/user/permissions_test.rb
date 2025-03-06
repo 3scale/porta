@@ -186,12 +186,12 @@ class User::PermissionsTest < ActiveSupport::TestCase
 
   test '#service_permissions_selected?' do
     user = FactoryBot.build_stubbed(:simple_user)
-    %i[partners plans monitoring].each do |section|
+    %i[partners plans monitoring policy_registry].each do |section|
       user.stubs(:member_permission_ids).returns([section])
       assert user.service_permissions_selected?
     end
 
-    %i[portal finance settings policy_registry].each do |section|
+    %i[portal finance settings].each do |section|
       user.stubs(:member_permission_ids).returns([section])
       assert_not user.service_permissions_selected?
     end
