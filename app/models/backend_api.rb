@@ -106,7 +106,7 @@ class BackendApi < ApplicationRecord
   private
 
   def schedule_deletion
-    DeleteObjectHierarchyWorker.perform_later(self)
+    DeleteObjectHierarchyWorker.delete_later(self)
   end
 
   def set_port_private_endpoint

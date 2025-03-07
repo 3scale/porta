@@ -10,7 +10,7 @@ module Tasks
     end
 
     test 'destroy_orphans' do
-      DeleteObjectHierarchyWorker.expects(:perform_later).once.with { |swagger| swagger.account.blank? }
+      DeleteObjectHierarchyWorker.expects(:delete_later).once.with { |swagger| swagger.account.blank? }
       execute_rake_task 'swagger.rake', 'swagger:destroy_orphans'
     end
   end

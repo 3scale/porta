@@ -20,6 +20,8 @@ class NotificationPreferences < ApplicationRecord
   self.enabled_by_default   = (available_notifications - disabled_by_default).freeze
   self.hidden_notifications = NotificationMailer.hidden_notifications.freeze
 
+  self.background_deletion_method = :delete
+
   enabled = preferences_to_hash(enabled_by_default, value: true)
   disabled = preferences_to_hash(disabled_by_default, value: false)
 
