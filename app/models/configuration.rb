@@ -78,7 +78,7 @@ class Configuration
         settings.show_multiple_applications!
       else
         settings.deny_multiple_applications! if settings.can_deny_multiple_applications?
-      end
+         end
     else
       raise "Tried to access deprecated configuration '#{name}'"
     end
