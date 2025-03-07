@@ -1,6 +1,7 @@
 import { renderVerticalNav } from 'Navigation/renderVerticalNav'
 import { renderQuickStarts } from 'QuickStarts/renderQuickStarts'
 import application from 'Common/application'
+import remote from 'Common/remote'
 import 'Common/ajaxEvents'
 
 const jQuery1 = window.$
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuickStarts()
 
   application()
+  remote()
 
   /**
    * This is a legacy functionality that could be replaced with standard PF forms.
