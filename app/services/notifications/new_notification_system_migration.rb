@@ -32,7 +32,7 @@ class Notifications::NewNotificationSystemMigration
   end
 
   def enabled?
-    account.provider? && account.provider_can_use?(:new_notification_system)
+    account.provider?
   end
 
   # @return [Boolean] should dispatch new notification

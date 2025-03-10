@@ -29,7 +29,7 @@ class PdfReportWorker
     end
 
     case
-    when provider.provider_can_use?(:new_notification_system) && notification
+    when notification
       report.generate.send_notification!
     when dispatch
       report.generate.mail_report

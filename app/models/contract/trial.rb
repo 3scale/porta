@@ -64,9 +64,7 @@ module Contract::Trial
 
   # REFACTOR: extract to notifier
   def notify_about_expired_trial_period
-    if paid_and_trial? && !provider_account.provider_can_use?(:new_notification_system)
-      messenger.expired_trial_period_notification(self).deliver
-    end
+    messenger.expired_trial_period_notification(self).deliver if paid_and_trial?
   end
 
   def notify_provider_trial_expired_today
