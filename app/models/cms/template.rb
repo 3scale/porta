@@ -6,6 +6,7 @@ class CMS::Template < ApplicationRecord
   include CMS::Filtering
 
   self.background_deletion_method = :delete
+  self.background_deletion = [:versions]
 
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
   scope :for_rails_view, ->(path) { where(rails_view_path: path.to_s) }
@@ -21,7 +22,7 @@ class CMS::Template < ApplicationRecord
   self.table_name = :cms_templates
 
   belongs_to :provider, class_name: 'Account', inverse_of: :templates
-  has_many :versions, as: :template
+  has_many :versions, as: :template, dependent: :delete_all
 
   validates :provider, presence: true
   validates :system_name, uniqueness: { scope: [:provider_id, :type], allow_blank: true, case_sensitive: true },
