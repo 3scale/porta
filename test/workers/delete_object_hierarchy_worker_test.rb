@@ -347,16 +347,33 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       include ActiveJob::TestHelper
       include TestHelpers::Provider
 
-      NON_PROVIDER_MODELS = [BackendEvent]
+      # DeletedObject might be needed for updating backend, JanitorWorker handles stale ones
+      # the rest are not specific to a provider or should not be deleted with the provider
+      NON_PROVIDER_MODELS = [BackendEvent, LogEntry, Country, DeletedObject]
 
       test 'perform big account destroy in background' do
         provider = create_a_complete_provider
+        assert_equal 1, Account.where(provider: true).count
+        assert_equal 1, Account.where(buyer: true).count
+
         provider.schedule_for_deletion!
         assert_empty models_without_objects.map(&:to_s)
 
         perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(provider) }
+        assert_empty performed_jobs.find { _1["job_class"] == "DeleteObjectHierarchyWorker" }["exception_executions"]
 
-        assert_empty models_with_non_master_objects.map(&:to_s)
+        that = non_master_objects
+        assert_empty that.map { "#{_1.class} #{_1.id}" }
+      end
+
+      test "background destroy does not delete anything from another provider" do
+            skip "TODO"
+
+            # create provider
+            # save objects
+            # create another
+            # delete another
+            # verify original objects still there
       end
 
       private
@@ -365,8 +382,55 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         (leaf_models - NON_PROVIDER_MODELS).select { _1.all.empty? }
       end
 
-      def models_with_non_master_objects
-        leaf_models.reject { _1.all.empty? }.reject { |model| model.all.all? { _1.try(:tenant_id) == master_account.id } }
+      def non_master_objects
+        (leaf_models - NON_PROVIDER_MODELS).inject([]) do |objects, model|
+          objects.concat model.all.reject { object_of_master?(_1) }
+        end
+      end
+
+      def object_of_master?(object)
+        tenant_id = object.try(:tenant_id)
+        return tenant_id == master_account.id if tenant_id.present?
+
+        case object
+        when Account, InvoiceCounter, Invoice
+          object.provider_account_id == master_account.id
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting
+          object_of_master?(Account.find(object.account_id))
+        when Feature
+          object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
+        when Cinstance, FeaturesPlan
+          object_of_master?(object.plan) if object.plan
+        when CMS::Section
+          object_of_master?(object.provider) if object.provider
+        when Configuration::Value
+          object_of_master?(object.configurable_type.constantize.find(object.configurable_id))
+        when UserTopic, Notification, UserSession
+          object_of_master?(User.find(object.user_id))
+        when Metric
+          owner = object.owner
+          object_of_master?(owner) if owner
+        when Message
+          object_of_master?(Account.find(object.sender_id))
+        when MessageRecipient
+          object_of_master?(object.message) if object.message
+        when Plan
+          object_of_master?(object.issuer) if object.issuer
+        when ProxyConfigAffectingChange, ProxyRule
+          object_of_master?(Proxy.find(object.proxy_id))
+        when ServiceToken, Proxy
+          object_of_master?(Service.find(object.service_id))
+        when SystemOperation
+          objects = [object.messages.take, object.mail_dispatch_rules.take].compact
+          object_of_master?(objects.first)
+        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, DeletedObject, PaymentIntent, ProviderConstraints, TopicCategory
+          false # assume the test master has none of these
+        else
+          raise "Object of type #{object}"
+        end
+      rescue ActiveRecord::RecordNotFound
+        # if relation is not found, we consider it part of a deleted provider
+        return false
       end
     end
   end

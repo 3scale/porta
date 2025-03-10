@@ -34,7 +34,7 @@ module TestHelpers
           service = provider.default_service
           FactoryBot.create(:service_token, service:)
           FactoryBot.create(:proxy_config, proxy: service.proxy)
-          invoice = FactoryBot.create(:invoice, provider_account: provider)
+          invoice = FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
           FactoryBot.create(:line_item_plan_cost, invoice:, contract: provider.bought_cinstance, cinstance_id: provider.bought_cinstance.id)
           FactoryBot.create(:line_item, invoice:)
           FactoryBot.create(:line_item_variable_cost, metric: service.metrics.take, invoice:)
