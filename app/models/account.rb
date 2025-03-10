@@ -53,14 +53,15 @@ class Account < ApplicationRecord
     users
     mail_dispatch_rules
     api_docs_services
-    services
     contracts
+    services
     account_plans
     settings
     buyer_accounts
     payment_detail
     payment_gateway_setting
     profile
+    cms_templates_versions
     templates
     sections
     provided_sections
