@@ -24,6 +24,8 @@ module Account::ProviderMethods
     has_one  :web_hook, inverse_of: :account
     has_many :alerts
 
+    has_many :cms_templates_versions, class_name: "CMS::Template::Version", inverse_of: :provider, foreign_key: :provider_id, dependent: :delete_all
+
     has_many :policies, inverse_of: :account
 
     has_many :provider_audits, foreign_key: :provider_id, class_name: Audited.audit_class.name
