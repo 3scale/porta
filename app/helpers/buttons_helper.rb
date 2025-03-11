@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ButtonsHelper # rubocop:disable Metrics/ModuleLength
+module ButtonsHelper
 
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
