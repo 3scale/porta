@@ -177,9 +177,7 @@ class User < ApplicationRecord
   end
 
   def notification_preferences
-    migration = Notifications::NewNotificationSystemMigration.new(account)
-
-    super || build_notification_preferences(preferences: migration.notification_preferences)
+    super || build_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
 
   def accessible_services
