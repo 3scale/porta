@@ -111,14 +111,7 @@ class MessageRecipient < ApplicationRecord
   def notifiable?
     operation = message.system_operation
 
-    default = case receiver
-              when Account
-                !Notifications::NewNotificationSystemMigration.new(receiver).enabled?
-              else
-                true
-              end
-
-    return default unless operation
+    return !receiver.is_a?(Account) unless operation
 
     receiver.dispatch_rule_for(operation).dispatch?
   end

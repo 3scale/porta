@@ -402,26 +402,11 @@ class Account < ApplicationRecord
   end
 
   # @param [SystemOperation] operation
-  def fetch_dispatch_rule(operation)
+  def dispatch_rule_for(operation)
     MailDispatchRule.fetch_with_retry!(system_operation: operation, account: self) do |m|
       m.dispatch = false if %w[weekly_reports daily_reports new_forum_post].include?(operation.ref)
       m.emails = emails.first
     end
-  end
-
-  # @param [SystemOperation] operation
-  def dispatch_rule_for(operation)
-    rule = fetch_dispatch_rule(operation)
-
-    migration = Notifications::NewNotificationSystemMigration.new(self)
-
-    if migration.enabled?
-      dispatch = rule.dispatch
-      overridden = rule.dispatch = migration.dispatch?(operation)
-      logger.info("Overriding dispatch rule for Account #{id} (#{name}) #{dispatch} => #{overridden} for operation #{operation.ref}")
-    end
-
-    rule
   end
 
   # Is the feature allowed for this account?
