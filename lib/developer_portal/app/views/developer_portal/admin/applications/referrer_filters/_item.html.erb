@@ -2,6 +2,6 @@
   style="display:table-row">
   <td><%= h referrer_filter.value %></td>
   <td>
-    <%= delete_button_for admin_application_referrer_filter_path(cinstance, referrer_filter.id), :remote => true %>
+    <%= delete_button_for admin_application_referrer_filter_path(cinstance, referrer_filter.id), remote: true, class: "btn btn-danger" %>
   </td>
 </tr>
