@@ -26,16 +26,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       })
     })
-
-  /**
-   * HACK: Catch potential leftovers of switch.js. Idea is to load a not found page and hopefully
-   * make some cucumbers fail.
-   * /!\ Delete this before commiting to main.
-   */
-  $(document).on('submit', 'form.remote', () => {
-    window.location.replace('/error-class-remote')
-  })
-  $(document).on('click', 'a.remote', () => {
-    window.location.replace('/error-class-remote')
-  })
 })
