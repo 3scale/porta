@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-Then /^I should see menu sections$/ do |items|
+Then /^(?:|I |they )should see menu sections$/ do |items|
   sections = page_sidebar.find_all('.pf-c-nav > .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link')
 
   assert_equal items.raw.flatten, sections.map(&:text)
 end
 
-Then "I should see menu items under {string}" do |section, items|
+Then "(I )(they )should see menu items under {string}" do |section, items|
   button = page_sidebar.find('.pf-c-nav__item.pf-m-expandable button.pf-c-nav__link', text: section)
   button.click if button['aria-expanded'] == 'false'
 

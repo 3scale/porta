@@ -46,7 +46,7 @@ module User::Permissions
     @_admin_sections = nil
   end
 
-  # returns all permissions (:portal, :finance, :settings, :partners, :monitoring, :plans) for admins
+  # returns all permissions (:portal, :finance, :settings, :partners, :monitoring, :plans, :policy_registry) for admins
   # and the allowed ones for member users
   def member_permission_ids
     admin? ? AdminSection.permissions : admin_sections - [:services]
@@ -109,7 +109,7 @@ module User::Permissions
     permitted_services_status == :all
   end
 
-  # Returns whether the user has access to any service-related permissions (partners, plans or monitoring)
+  # Returns whether the user has access to any service-related permissions (partners, plans, monitoring or policy_registry)
   def service_permissions_selected?
     (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any?
   end
