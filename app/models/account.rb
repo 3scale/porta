@@ -401,14 +401,6 @@ class Account < ApplicationRecord
     provider && !master?
   end
 
-  # @param [SystemOperation] operation
-  def dispatch_rule_for(operation)
-    MailDispatchRule.fetch_with_retry!(system_operation: operation, account: self) do |m|
-      m.dispatch = false if %w[weekly_reports daily_reports new_forum_post].include?(operation.ref)
-      m.emails = emails.first
-    end
-  end
-
   # Is the feature allowed for this account?
   def feature_allowed?(feature)
     if master?
