@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setUpRevertButton()
   setUpRemoveFromSectionAction()
   setUpDropdownButtonClose()
+  setUpPreviewButton()
 
   jQuery1('#tab-content').trigger('cms-template:init')
 })
@@ -319,6 +320,25 @@ function setUpDropdownButtonOpen () {
 
     return false
   })
+  $(document).on('click', '.dropdown-toggle2', (event) => {
+    const toggle = $(event.currentTarget)
+    const dropdown = toggle.parents('.pf-c-dropdown')
+    const expandedClass = 'pf-m-expanded'
+    const menu = dropdown.find('.pf-c-dropdown__menu')
+
+    closeAllPFDropdowns(event.target as HTMLButtonElement)
+
+    const expanded = dropdown.hasClass(expandedClass)
+    if (expanded) {
+      dropdown.removeClass(expandedClass)
+      menu.hide()
+    } else {
+      dropdown.addClass(expandedClass)
+      menu.show()
+    }
+
+    return false
+  })
 }
 
 /**
@@ -328,6 +348,7 @@ function setUpDropdownButtonOpen () {
 function setUpDropdownButtonClose () {
   document.addEventListener('mousedown', (event) => {
     closeAllDropdowns(event.target as HTMLElement)
+    closeAllPFDropdowns(event.target as HTMLElement)
   })
 }
 
@@ -342,4 +363,28 @@ function closeAllDropdowns (exception?: HTMLElement) {
 
       dropdown.classList.remove('expanded')
     })
+}
+
+function closeAllPFDropdowns (exception?: HTMLElement) {
+  document.querySelectorAll('.pf-c-dropdown.pf-m-expanded')
+    .forEach(dropdown => {
+      if (exception && dropdown.contains(exception)) {
+        return
+      }
+      dropdown.classList.remove('pf-m-expanded')
+      dropdown.querySelector("ul")!.style.display = 'none'
+    })
+}
+
+/**
+ * Set up CMS Preview button to act as a link
+ */
+function setUpPreviewButton () {
+  $(document).on('click', '#cms-preview-button2 button.pf-c-dropdown__toggle-button:not(.dropdown-toggle2)', (event) => {
+    const url = event.target.dataset.url
+    if (url) {
+      window.open(url)
+    }
+    return false
+  })
 }
