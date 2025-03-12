@@ -5,6 +5,8 @@ require 'test_helper'
 class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
+  DoNotRetryError = DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+
   setup do
     @object = FactoryBot.create(:metric)
   end
@@ -97,7 +99,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test "call with bad hierarchy entry" do
       System::ErrorReporting.expects(:report_error).with do |exception|
-        exception.is_a? DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+        exception.is_a? DoNotRetryError
       end
 
       DeleteObjectHierarchyWorker.perform_now("Plain-BadClass-1234")
@@ -234,7 +236,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert backend_api.reload
     end
 
-    test "delete non-destroyable fails" do
+    test "delete plain non-destroyable fails" do
       assert_raise(ActiveRecord::RecordNotDestroyed) do
         perform_enqueued_jobs(queue: "deletion") do
           DeleteObjectHierarchyWorker.perform_later("Plain-Service-#{service.id}")
@@ -242,6 +244,22 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
 
       assert service.reload
+    end
+
+    test "deleting last service should not delete anything" do
+      before_objects = all_objects
+
+      assert_raise(DoNotRetryError) do
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later(service)
+        end
+      end
+
+      after_objects = all_objects
+
+      # splitting the assertions to more easily see what was deleted from logs in case of an issue
+      assert_empty before_objects - after_objects
+      assert_empty after_objects - before_objects
     end
 
     test "delete default service as association" do
@@ -255,6 +273,12 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     private
 
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
+
+    def all_objects
+      base_models.inject(Set.new) do |acc, model|
+        acc.merge model.all
+      end
+    end
   end
 
   class DeleteAccountTest < ActiveSupport::TestCase
@@ -303,11 +327,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     test "account is not deleted when not scheduled" do
       buyer = provider.buyers.first
       perform_enqueued_jobs(queue: "deletion") do
-        assert_raises { DeleteObjectHierarchyWorker.delete_later buyer }
         assert_raises { DeleteObjectHierarchyWorker.delete_later provider }
       end
       assert provider.reload
       assert buyer.reload
+    end
+
+    test "buyer account can be deleted if provider is not destroyable" do
+      buyer = provider.buyers.first
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later buyer
+        assert_raises { DeleteObjectHierarchyWorker.delete_later provider }
+      end
+      assert provider.reload
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
     end
 
     class DeleteCompleteAccountTest < ActiveSupport::TestCase

@@ -17,5 +17,18 @@ module ThreeScale
         all_models_with_a_table.none? { _1 != model && _1.base_class == model }
       end
     end
+
+    # All actual models base models excluding abstract (no sti models)
+    def base_models
+      return @base_models if defined?(@base_models)
+
+      @base_models = all_models_with_a_table.select do |model|
+        base_class = model.base_class
+        # either current model is the base_class
+        base_class == model ||
+          # or we can't find a base class amongst the discovered models /which would be very weird/
+          all_models_with_a_table.none? { |potential_parent| potential_parent == base_class }
+      end
+    end
   end
 end
