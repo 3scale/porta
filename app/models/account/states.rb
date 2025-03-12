@@ -131,6 +131,10 @@ module Account::States
       suspended? || will_be_deleted?
     end
 
+    def destroyable?
+      !master? && ( buyer? || should_be_deleted?)
+    end
+
     def should_not_be_deleted?
       !should_be_deleted?
     end

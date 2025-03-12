@@ -235,7 +235,7 @@ class Metric < ApplicationRecord
     if backend_api_metric?
       owner.services.map { |service| service.proxy.metric_in_latest_configs?(id) }.any?
     else
-      owner.proxy.metric_in_latest_configs?(id)
+      owner.proxy&.metric_in_latest_configs?(id)
     end
   end
 
