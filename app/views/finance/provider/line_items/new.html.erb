@@ -7,7 +7,7 @@
 <div id="line-item-fancybox">
   <h2>Line Item</h2>
   <%= semantic_form_for @line_item, :url => admin_finance_account_invoice_line_items_path(@buyer, @invoice),
-                                    :remote => request.xhr? ? 'remote' : nil do |form| %>
+                                    :remote => request.xhr? do |form| %>
 
     <%= form.inputs do %>
       <%= form.input :name  %>
