@@ -58,6 +58,9 @@ base: &default
   log: <%= ENV['THINKING_SPHINX_LOG'] %>
   <% end %>
 
+  # This searchd config is deprecated in manticore, see https://github.com/pat/thinking-sphinx/issues/1254
+  workers: null
+
 development:
   <<: *default
 
