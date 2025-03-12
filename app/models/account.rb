@@ -172,7 +172,7 @@ class Account < ApplicationRecord
 
   alias_attribute :name, :org_name
 
-  has_one :onboarding
+  has_one :onboarding, dependent: :delete
 
   def trashed_messages
     Message.where('id IN (:sent) OR id IN (:received)',       sent:     sent_messages.hidden.select(:id),
