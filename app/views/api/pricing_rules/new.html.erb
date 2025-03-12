@@ -2,6 +2,6 @@
 
 <%= semantic_form_for @pricing_rule,
                       :url => polymorphic_path([:admin, @plan, @metric, :pricing_rules]),
-                      :html => {:class => 'remote'} do |form| %>
+                      :remote => true do |form| %>
   <%= render 'form', :form => form %>
 <% end %>

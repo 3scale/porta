@@ -43,11 +43,18 @@ Then /^I should not see (?:the )?link "([^"]*)"$/ do |label|
   assert page.has_no_xpath? ".//a[text()='#{label}']"
 end
 
+# Assert whether a button with a certain label is visible in the current page.
+#
+# Examples:
+#   Then there should be a button to "Plans"
+#   Then there should not be a button to "Create a plan"
+#   Then there shouldn't be a button to "Dashboard"
+#
 Then "there {should} be a button to {string}" do |visible, label|
-  assert_equal visible, has_button?(label, wait: visible)
+  assert public_send(visible ? :has_button? : :has_no_button?, label)
 end
 
-# Assert whether a link to with a certain label is visible in the current page.
+# Assert whether a link with a certain label is visible in the current page.
 #
 # Examples:
 #   Then there should be a link to "Plans"
@@ -55,7 +62,7 @@ end
 #   Then there shouldn't be a link to "Dashboard"
 #
 Then "there {should} be a link to {string}" do |visible, label|
-  assert_equal visible, has_link?(label, wait: visible)
+  assert public_send(visible ? :has_link? : :has_no_link?, label)
 end
 
 # Assert whether a link to a certain href is visible in the current page. The href is looked up from
