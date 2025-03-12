@@ -51,8 +51,8 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     def hierarchy_entries_for(ar_object)
       return [] unless ar_object&.persisted? # e.g. when calling Proxy#oidc_configuration a new object can be generated
 
-      if ar_object.is_a?(Account) && !ar_object.should_be_deleted?
-        raise DoNotRetryError, "background deleting account #{ar_object.id} which is not scheduled for deletion"
+      if ar_object.respond_to?(:destroyable?, true) && !ar_object.send(:destroyable?)
+        raise DoNotRetryError, "Background deleting #{ar_object.class}:#{ar_object.id} which is not destroyable."
       elsif ar_object.is_a?(FeaturesPlan)
         # This is an ugly hack to handle lack of `#id` but we have only FeaturesPlans with a composite primary key.
         # Rails 7.1 supports composite primary keys so we can implement universal handling. See [FeaturesPlan].
@@ -134,20 +134,30 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     Rails.logger.warn "#{self.class} skipping object, maybe something else already deleted it: #{exception.message}"
     []
   rescue NameError
+    # we would be here in case of a bad crafted hierarchy entry or something else unrecoverable
+    # for example NoMethodError on nil class where retrying is pointless but logging the error is needed
     raise DoNotRetryError, "seems like unexpectedly broken delete hierarchy entry: #{entry}"
   end
 
   # @return a single associated object for deletion or nil if non in the association
   def handle_association(ar_object, association, hierarchy_association_string)
     reflection = ar_object.class.reflect_on_association(association)
+
     case reflection.macro
     when :has_many
       # here we keep original hierarchy entry if we still find an associated object
       dependent = ar_object.public_send(association).take
-      dependent ? [hierarchy_association_string, *hierarchy_entries_for(dependent)] : []
+      if dependent
+        dependent.destroyed_by_association = reflection
+        [hierarchy_association_string, *hierarchy_entries_for(dependent)]
+      else
+        []
+      end
     when :has_one
       # maximum of one associated so we never keep the original hierarchy entry
-      hierarchy_entries_for ar_object.public_send(association)
+      dependent = ar_object.public_send(association)
+      dependent.destroyed_by_association = reflection if dependent
+      hierarchy_entries_for dependent
     else
       raise ArgumentError, "Cannot handle association #{ar_object}:#{association} type #{reflection.macro}"
     end
