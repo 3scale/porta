@@ -15,7 +15,6 @@ const jQuery1 = window.$
  */
 jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
-  buildSaveDropdownButton()
   setUpSectionDrop()
   setUpEditorTabs()
   setUpPjax()
@@ -118,31 +117,6 @@ window.ThreeScale.partialPaths = (paths) => {
   })
 
   autocompletePath(section) // Initial value, on render
-}
-
-/**
- * Build "Save" dropdown button. FIXME: Why is this is done dynamically remains a mystery 🤦‍♂️
- */
-function buildSaveDropdownButton () {
-  const $toggle = $('<a class="important-button dropdown-toggle" href="#">').append('<i class="fa fa-caret-down">')
-
-  document.querySelectorAll('.dropdown-buttons ol')
-    .forEach(el => {
-      let $list = $(el)
-      $list.find('li:first :input')
-        .clone()
-        .insertBefore($list)
-        .addClass('important-button')
-
-      // Replace ol with ul because of formtastic
-      $list.replaceWith(() => {
-        const content = jQuery1(el).html()
-        $list = $('<ul>').html(content).addClass('dropdown')
-        return $list
-      })
-
-      $toggle.clone().insertAfter($list)
-    })
 }
 
 /**
@@ -305,8 +279,8 @@ function setUpPjax () {
 }
 
 /**
- * The CMS features 3 dropdown buttons: New button, preview button and save button. Html is rendered
- * by CMS::DropdownHelper and its functionality is given by this method everytime a new template is
+ * The CMS features 4 dropdown buttons: New button, Preview, Publish and Save. Html is rendered
+ * by "/provider/admin/cms/dropdown" partial and its functionality is given by this method everytime a new template is
  * selected (cms-sidebar:update event).
  *
  * The event handler has to be defined with jQuery because at the time this method is called, the
@@ -314,19 +288,12 @@ function setUpPjax () {
  */
 function setUpDropdownButtonOpen () {
   $(document).on('click', '.dropdown-toggle', (event) => {
-    closeAllDropdowns(event.target as HTMLButtonElement)
-
-    $(event.currentTarget).siblings('.dropdown').toggleClass('expanded')
-
-    return false
-  })
-  $(document).on('click', '.dropdown-toggle2', (event) => {
     const toggle = $(event.currentTarget)
     const dropdown = toggle.parents('.pf-c-dropdown')
     const expandedClass = 'pf-m-expanded'
     const menu = dropdown.find('.pf-c-dropdown__menu')
 
-    closeAllPFDropdowns(event.target as HTMLButtonElement)
+    closeAllDropdowns(event.target as HTMLButtonElement)
 
     const expanded = dropdown.hasClass(expandedClass)
     if (expanded) {
@@ -348,24 +315,10 @@ function setUpDropdownButtonOpen () {
 function setUpDropdownButtonClose () {
   document.addEventListener('mousedown', (event) => {
     closeAllDropdowns(event.target as HTMLElement)
-    closeAllPFDropdowns(event.target as HTMLElement)
   })
 }
 
 function closeAllDropdowns (exception?: HTMLElement) {
-  document.querySelectorAll('.dropdown.expanded')
-    .forEach(dropdown => {
-      const buttonGroup = dropdown.parentElement as HTMLDivElement
-
-      if (exception && buttonGroup.contains(exception)) {
-        return
-      }
-
-      dropdown.classList.remove('expanded')
-    })
-}
-
-function closeAllPFDropdowns (exception?: HTMLElement) {
   document.querySelectorAll('.pf-c-dropdown.pf-m-expanded')
     .forEach(dropdown => {
       if (exception && dropdown.contains(exception)) {
@@ -380,7 +333,7 @@ function closeAllPFDropdowns (exception?: HTMLElement) {
  * Set up CMS Preview button to act as a link
  */
 function setUpPreviewButton () {
-  $(document).on('click', '#cms-preview-button2 button.pf-c-dropdown__toggle-button:not(.dropdown-toggle2)', (event) => {
+  $(document).on('click', '#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)', (event) => {
     const url = event.target.dataset.url
     if (url) {
       window.open(url)

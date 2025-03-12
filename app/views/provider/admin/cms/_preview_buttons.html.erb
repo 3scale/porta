@@ -1,16 +1,15 @@
 <li>
   <% if @page.is_a?(CMS::BasePage) -%>
     <%= render partial: "/provider/admin/cms/dropdown", locals: {
-      id: "cms-preview-button2",
-      type: "secondary",
+      id: "cms-preview-button",
       toggle_button: {
         text: "Preview",
         attrs: { type: :button, "data-url" => cms_draft_url(@page) }
       },
       menu_items: [
-        { text: "Preview draft", url: cms_draft_url(@page), attrs: { "data-preview" => :draft } },
-        { text: "Preview published", url: cms_published_url(@page), attrs: { "data-preview" => :published } }
-      ]
+        { text: "Preview draft", url: cms_draft_url(@page), attrs: { "data-preview" => :draft, target: "_blank" } },
+        { text: "Preview published", url: cms_published_url(@page), attrs: { "data-preview" => :published, target: "_blank" } }
+      ] 
     } %>
   <% end %>
 </li>

@@ -110,22 +110,6 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  # Usage:
-  #
-  # dropdown_link 'Preview published', cms_published_url(@page), :target => "_blank", 'data-preview' => :published
-  #
-  #   or
-  #
-  # dropdown_link '<button type="submit" value="Publish"></button>'
-  #
-  def dropdown_link(*args)
-    if args.size > 1
-      content_tag :li, link_to(*args)
-    else
-      content_tag :li, args.first
-    end
-  end
-
   def pf_link_to(label, url, options = {})
     variant = options.delete(:variant) || :link
     options[:class] = join_dom_classes("pf-c-button pf-m-#{variant}", options[:class])
