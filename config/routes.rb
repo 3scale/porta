@@ -363,7 +363,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         get '/callback/:system_name', action: :callback, controller: :authentication_provider_flow_testing, as: :flow_testing_callback
 
         resource :enforce_sso, :controller => 'enforce_sso', :only => [:create, :destroy]
-        resources :notifications, :only => [:index, :update]
         resources :users, :only => [:index, :edit, :update, :destroy] do
           resources :access_tokens, only: [:index, :new, :create, :edit, :update, :destroy]
         end
