@@ -50,6 +50,7 @@ class Account < ApplicationRecord
   include Indices::AccountIndex::ForAccount
 
   self.background_deletion = %i[
+    configuration_values
     users
     mail_dispatch_rules
     api_docs_services
@@ -288,6 +289,8 @@ class Account < ApplicationRecord
   def config
     @config ||= Configuration.new(self)
   end
+
+  has_many :configuration_values, class_name: "Configuration::Value", dependent: :destroy, as: :configurable, inverse_of: :configurable
 
   scope :created_before, ->(date) { where(['created_at <= ?', date]) }
   scope :created_after,  ->(date) { where(['created_at >= ?', date]) }
