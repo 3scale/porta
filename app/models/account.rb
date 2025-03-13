@@ -54,6 +54,7 @@ class Account < ApplicationRecord
     forum
     users
     mail_dispatch_rules
+    sent_messages
     api_docs_services
     contracts
     services
@@ -155,7 +156,7 @@ class Account < ApplicationRecord
   end
 
   has_many :messages, -> { visible }, foreign_key: :sender_id, class_name: 'Message'
-  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message'
+  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message', inverse_of: :sender, dependent: :destroy
 
   has_many :mail_dispatch_rules, dependent: :destroy, inverse_of: :account
   has_many :system_operations, through: :mail_dispatch_rules
