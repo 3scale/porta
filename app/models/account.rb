@@ -233,7 +233,7 @@ class Account < ApplicationRecord
     contracts.map(&:plan).include?(plan)
   end
 
-  has_many :invitations
+  has_many :invitations, inverse_of: :account, dependent: :delete_all
 
   # XXX: This is hax is needed because of current cancan limitation.
   #
