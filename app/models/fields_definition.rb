@@ -43,7 +43,7 @@ class FieldsDefinition < ApplicationRecord
 
   before_create :set_last_position_in_target_scope
 
-  before_destroy :avoid_destroy_required_field_on_target
+  before_destroy :avoid_destroy_required_field_on_target, unless: :destroyed_by_association
 
   default_scope { by_position }
   scope :by_position, -> { order(:pos) }
