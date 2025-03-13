@@ -17,7 +17,7 @@ module Account::ProviderMethods
     validates :self_domain, uniqueness: { allow_nil: true, case_sensitive: false }
     has_one :go_live_state, inverse_of:  :account, dependent: :delete
 
-    has_one :provider_constraints, foreign_key: 'provider_id'
+    has_one :provider_constraints, foreign_key: 'provider_id', dependent: :delete
 
     has_one :forum
 
