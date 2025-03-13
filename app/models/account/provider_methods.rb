@@ -81,8 +81,8 @@ module Account::ProviderMethods
 
     has_one :billing_strategy, class_name: 'Finance::BillingStrategy', inverse_of: :account, dependent: :destroy
 
-    has_many :buyer_invoices, class_name: 'Invoice', foreign_key: :provider_account_id
-    has_many :buyer_invoice_counters, class_name: 'InvoiceCounter', foreign_key: :provider_account_id
+    has_many :buyer_invoices, class_name: 'Invoice', foreign_key: :provider_account_id, dependent: :destroy
+    has_many :buyer_invoice_counters, class_name: 'InvoiceCounter', foreign_key: :provider_account_id, dependent: :delete_all
     has_many :buyer_line_items, through: :buyer_invoices, source: :line_items
     has_many :buyer_invitations, through: :buyer_accounts, source: :invitations
 
