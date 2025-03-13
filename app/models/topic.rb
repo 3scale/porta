@@ -13,8 +13,8 @@ class Topic < ApplicationRecord
   after_create   :create_initial_post
   before_update  :check_for_moved_forum
   after_update   :set_post_forum_id
-  before_destroy :count_user_posts_for_counter_cache
-  after_destroy  :update_cached_forum_and_user_counts
+  before_destroy :count_user_posts_for_counter_cache, unless: :destroyed_by_association
+  after_destroy  :update_cached_forum_and_user_counts, unless: :destroyed_by_association
 
   belongs_to :category, :class_name => 'TopicCategory'
 
@@ -32,7 +32,7 @@ class Topic < ApplicationRecord
 
   has_many :voices, -> { distinct }, :through => :posts, :source => :user
 
-  has_many :user_topics, :dependent => :destroy
+  has_many :user_topics, :dependent => :delete_all
   has_many :subscribers, :through => :user_topics, :source => :user
 
   validates :user_id, presence: { :unless => :anonymous_user }
