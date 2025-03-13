@@ -44,7 +44,8 @@ module TestHelpers
           FactoryBot.create(:invoice_counter, provider_account: provider, invoice_prefix: ::Time.now.year.to_s)
           FactoryBot.create(:webhook, account: provider, account_created_on: true, active: true)
           FactoryBot.create(:policy, account: provider, name: 'my-policy', version: '1.0')
-          FactoryBot.create(:invitation, account: buyer)
+          FactoryBot.create(:invitation, account: buyer) # invitation without an associated user
+          FactoryBot.create(:invitation, account: buyer, user: buyer.users.take)
           FactoryBot.create(:member, account: provider, member_permission_ids: ['plans'])
           FactoryBot.create(:email_configuration, account: provider)
           FactoryBot.create(:application_key, application: service.cinstances.take)
