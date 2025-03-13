@@ -4,7 +4,7 @@ When(/^I follow "([^"]*)" from the CMS dropdown$/) do |link|
   # the 'cms-sidebar:update' event that triggers the event handlers for the dropdown button depends on AJAX response
   wait_for_requests
   within '#cms-new-content-button' do
-    find('.dropdown-toggle').click unless has_css?('ul.dropdown.expanded', wait: 0) # TODO: CMS DROPDOWN
+    find('.dropdown-toggle').click unless has_css?('.pf-c-dropdown.pf-m-expanded', wait: 0)
     click_on link
   end
 end
@@ -14,7 +14,7 @@ When "fill the template draft with {}" do |value|
 end
 
 And "save it as version" do
-  find('input[value=Save]').sibling('.dropdown-toggle').click # TODO: CMS DROPDOWN
+  find('button[value=Save]').sibling('.dropdown-toggle').click
   click_button('Save as Version')
 end
 
