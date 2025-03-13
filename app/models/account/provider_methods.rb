@@ -24,6 +24,8 @@ module Account::ProviderMethods
     has_one  :web_hook, inverse_of: :account
     has_many :alerts
 
+    has_many :email_configurations, inverse_of: :account, dependent: :destroy
+
     has_many :cms_templates_versions, class_name: "CMS::Template::Version", inverse_of: :provider, foreign_key: :provider_id, dependent: :delete_all
 
     has_many :policies, inverse_of: :account
