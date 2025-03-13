@@ -58,6 +58,7 @@ class Account < ApplicationRecord
     contracts
     services
     account_plans
+    features
     settings
     buyer_accounts
     payment_detail
@@ -114,7 +115,7 @@ class Account < ApplicationRecord
 
   has_one :admin_user, -> { admins.but_impersonation_admin }, class_name: 'User', inverse_of: :account
 
-  has_many :features, as: :featurable
+  has_many :features, as: :featurable, dependent: :destroy
 
   composed_of :address,
               mapping: ThreeScale::Address.account_mapping,
