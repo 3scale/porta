@@ -21,7 +21,7 @@ module Account::ProviderMethods
 
     has_one :forum
 
-    has_one  :web_hook, inverse_of: :account
+    has_one  :web_hook, inverse_of: :account, dependent: :delete
     has_many :alerts
 
     has_many :email_configurations, inverse_of: :account, dependent: :destroy
