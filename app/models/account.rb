@@ -157,7 +157,7 @@ class Account < ApplicationRecord
   end
 
   has_many :messages, -> { visible }, foreign_key: :sender_id, class_name: 'Message'
-  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message'
+  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message', inverse_of: :sender
 
   has_many :mail_dispatch_rules, dependent: :destroy, inverse_of: :account
   has_many :system_operations, through: :mail_dispatch_rules
@@ -165,6 +165,7 @@ class Account < ApplicationRecord
   # Deleted received messages
   has_many :hidden_messages, -> { latest_first.received.hidden }, as: :receiver, class_name: 'MessageRecipient'
   has_many :received_messages, -> { latest_first.received.visible }, as: :receiver, class_name: 'MessageRecipient'
+  has_many :all_received_messages, as: :receiver, class_name: 'MessageRecipient', inverse_of: :receiver, dependent: :delete_all
 
   has_many :api_docs_services, class_name: 'ApiDocs::Service', dependent: :destroy
   has_many :log_entries, foreign_key: 'provider_id'

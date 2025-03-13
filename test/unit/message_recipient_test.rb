@@ -59,6 +59,22 @@ class MessageRecipientTest < ActiveSupport::TestCase
     refute recipient.notifiable?
   end
 
+  test "stale are all objects without associated message or a receiver" do
+    account = FactoryBot.create(:simple_account)
+    message = FactoryBot.create(:message, sender: account)
+
+    good_message = FactoryBot.create(:received_message, message:, receiver: account)
+    without_message = FactoryBot.create(:received_message, message:, receiver: account)
+    without_message.update_column(:message_id, message.id + 1)
+    without_receiver = FactoryBot.create(:received_message, message:, receiver: account)
+    without_receiver.update_column(:receiver_id, account.id + 1)
+
+    stale = MessageRecipient.stale.to_a
+    assert_includes stale, without_receiver
+    assert_includes stale, without_message
+    assert_not_includes stale, good_message
+  end
+
   private
 
   def sender
