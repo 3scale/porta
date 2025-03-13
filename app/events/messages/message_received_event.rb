@@ -1,6 +1,6 @@
 class Messages::MessageReceivedEvent < AccountRelatedEvent
   def self.create(message, recipient)
-    services = message.sender.buyer? ? message.sender.bought_service_contracts.accessible_services.to_a : []
+    service_ids = message.sender.buyer? ? message.sender.bought_service_contracts.accessible_services.pluck(:id) : []
 
     new(
       message:   message,
@@ -8,7 +8,7 @@ class Messages::MessageReceivedEvent < AccountRelatedEvent
       recipient: recipient,
       receiver:  recipient.receiver,
       provider:  recipient.receiver,
-      services:,
+      service_ids:,
       metadata: {
         provider_id: recipient.receiver_id
       }

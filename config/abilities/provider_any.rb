@@ -30,8 +30,7 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     if user.has_permission?(:partners)
       can [:show], AccountRelatedEvent do |event|
-        services = event.try(:services) || [event.try(:service)].compact
-        service_ids = services.map(&:id) || [event.try(:service_id)].compact
+        service_ids = event.try(:service_ids) || [event.try(:service)&.id || event.try(:service_id)].compact
 
         next true if service_ids.empty? && user.admin?
 
