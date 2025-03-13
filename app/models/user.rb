@@ -65,7 +65,7 @@ class User < ApplicationRecord
   end
 
   # TODO: this should be called topic_subscriptions
-  has_many :user_topics
+  has_many :user_topics, dependent: :delete_all
 
   has_many :subscribed_topics, :through => :user_topics, :source => :topic
 

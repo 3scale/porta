@@ -51,6 +51,7 @@ class Account < ApplicationRecord
 
   self.background_deletion = %i[
     configuration_values
+    forum
     users
     mail_dispatch_rules
     api_docs_services

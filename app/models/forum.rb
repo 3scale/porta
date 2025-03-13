@@ -10,7 +10,7 @@ class Forum < ApplicationRecord
 
   attr_readonly :posts_count, :topics_count
 
-  has_many :topics, -> { extending Topic::Search }, dependent: :delete_all
+  has_many :topics, -> { extending Topic::Search }, dependent: :destroy
 
   # this is used to see if a forum is "fresh"... we can't use topics because it puts
   # stickies first even if they are not the most recently modified
@@ -23,7 +23,7 @@ class Forum < ApplicationRecord
   has_many :moderatorships, :dependent => :delete_all
   has_many :moderators, :through => :moderatorships, :source => :user
 
-  has_many :categories, :class_name => 'TopicCategory'
+  has_many :categories, :class_name => 'TopicCategory', :dependent => :delete_all
 
   scope :ordered, -> { order('position') }
 
