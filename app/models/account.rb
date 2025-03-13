@@ -62,6 +62,7 @@ class Account < ApplicationRecord
     buyer_accounts
     payment_detail
     payment_gateway_setting
+    buyer_invoices
     profile
     cms_templates_versions
     templates
