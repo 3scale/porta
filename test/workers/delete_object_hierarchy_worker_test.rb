@@ -358,9 +358,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       include ActiveJob::TestHelper
       include TestHelpers::Provider
 
-      # DeletedObject might be needed for updating backend, JanitorWorker handles stale ones
-      # the rest are not specific to a provider or should not be deleted with the provider
-      NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, DeletedObject, Partner, LogEntry, SystemOperation]
+      # not specific to a provider or should not be deleted with the provider
+      NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, Partner, LogEntry, SystemOperation]
 
       test 'perform big account destroy in background' do
         provider = create_a_complete_provider
@@ -444,9 +443,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
 
       def object_of_master?(object)
-        tenant_id = object.try(:tenant_id)
-        return tenant_id == master_account.id if tenant_id.present?
-
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
@@ -465,10 +461,12 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         when Metric
           owner = object.owner
           object_of_master?(owner) if owner
-        when Message
-          object_of_master?(Account.find(object.sender_id))
+        when Message, DeletedObject
+          # DeletedObject might be needed for updating backend, JanitorWorker handles stale ones
+          # Figuring out stale Message is hard during deletion, it is done by JanitorWorker
+          true
         when MessageRecipient
-          object_of_master?(object.message) if object.message
+          object.receiver == master_account
         when Plan
           object_of_master?(object.issuer) if object.issuer
         when ProxyConfigAffectingChange, ProxyRule
@@ -478,7 +476,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         when SystemOperation
           objects = [object.messages.take, object.mail_dispatch_rules.take].compact
           object_of_master?(objects.first)
-        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, DeletedObject, PaymentIntent, ProviderConstraints, TopicCategory
+        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints, TopicCategory
           false # assume the test master has none of these
         else
           raise "Object of type #{object}"
