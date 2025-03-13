@@ -290,19 +290,12 @@ function setUpDropdownButtonOpen () {
   $(document).on('click', '.dropdown-toggle', (event) => {
     const toggle = $(event.currentTarget)
     const dropdown = toggle.parents('.pf-c-dropdown')
-    const expandedClass = 'pf-m-expanded'
     const menu = dropdown.find('.pf-c-dropdown__menu')
 
     closeAllDropdowns(event.target as HTMLButtonElement)
 
-    const expanded = dropdown.hasClass(expandedClass)
-    if (expanded) {
-      dropdown.removeClass(expandedClass)
-      menu.hide()
-    } else {
-      dropdown.addClass(expandedClass)
-      menu.show()
-    }
+    dropdown.toggleClass('pf-m-expanded')
+    menu.toggle()
 
     return false
   })
