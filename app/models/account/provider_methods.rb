@@ -105,7 +105,7 @@ module Account::ProviderMethods
     has_many :default_application_plans, through: :services, class_name: 'ApplicationPlan'
     belongs_to :default_account_plan, class_name: 'AccountPlan'
 
-    has_many :fields_definitions, -> { by_position }, inverse_of: :account do
+    has_many :fields_definitions, -> { by_position }, inverse_of: :account, dependent: :delete_all do
       def by_target(kind)
         grouped_by_target[kind.downcase]
       end
