@@ -34,7 +34,7 @@ end
 
 Then(/^preview draft link should link to "(.*?)"$/) do | path |
   popup = window_opened_by do
-    find("#cms-preview-button").click_link("Preview")
+    find("#cms-preview-button").click_link_or_button("Preview")
   end
 
   page.within_window popup do

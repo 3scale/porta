@@ -15,7 +15,6 @@ const jQuery1 = window.$
  */
 jQuery1(document).on('cms-template:init', () => {
   advanceOptionsToggle()
-  buildSaveDropdownButton()
   setUpSectionDrop()
   setUpEditorTabs()
   setUpPjax()
@@ -25,14 +24,15 @@ jQuery1(document).on('cms-template:init', () => {
 
 jQuery1(document).on('cms-sidebar:update', () => {
   setUpSidebarDrag()
-  setUpDropdownButtonOpen()
 })
 
 document.addEventListener('DOMContentLoaded', () => {
   setUpContentTypeLiquidEnabledListener()
   setUpRevertButton()
   setUpRemoveFromSectionAction()
+  setUpDropdownButtonOpen()
   setUpDropdownButtonClose()
+  setUpPreviewButton()
 
   jQuery1('#tab-content').trigger('cms-template:init')
 })
@@ -117,31 +117,6 @@ window.ThreeScale.partialPaths = (paths) => {
   })
 
   autocompletePath(section) // Initial value, on render
-}
-
-/**
- * Build "Save" dropdown button. FIXME: Why is this is done dynamically remains a mystery 🤦‍♂️
- */
-function buildSaveDropdownButton () {
-  const $toggle = $('<a class="important-button dropdown-toggle" href="#">').append('<i class="fa fa-caret-down">')
-
-  document.querySelectorAll('.dropdown-buttons ol')
-    .forEach(el => {
-      let $list = $(el)
-      $list.find('li:first :input')
-        .clone()
-        .insertBefore($list)
-        .addClass('important-button')
-
-      // Replace ol with ul because of formtastic
-      $list.replaceWith(() => {
-        const content = jQuery1(el).html()
-        $list = $('<ul>').html(content).addClass('dropdown')
-        return $list
-      })
-
-      $toggle.clone().insertAfter($list)
-    })
 }
 
 /**
@@ -304,21 +279,28 @@ function setUpPjax () {
 }
 
 /**
- * The CMS features 3 dropdown buttons: New button, preview button and save button. Html is rendered
- * by CMS::DropdownHelper and its functionality is given by this method everytime a new template is
+ * The CMS features 4 dropdown buttons: New button, Preview, Publish and Save. Html is rendered
+ * by "/provider/admin/cms/dropdown" partial and its functionality is given by this method everytime a new template is
  * selected (cms-sidebar:update event).
  *
  * The event handler has to be defined with jQuery because at the time this method is called, the
  * CMS content is not yet rendered and document.querySelector would find nothing.
  */
 function setUpDropdownButtonOpen () {
-  $(document).on('click', '.dropdown-toggle', (event) => {
-    closeAllDropdowns(event.target as HTMLButtonElement)
+  document.querySelectorAll<HTMLButtonElement>('.dropdown-toggle')
+    .forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        closeAllDropdowns(toggle)
 
-    $(event.currentTarget).siblings('.dropdown').toggleClass('expanded')
+        /* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
+        const dropdown = toggle.closest('.pf-c-dropdown') as HTMLButtonElement
+        dropdown.classList.toggle('pf-m-expanded')
 
-    return false
-  })
+        const menu = dropdown.querySelector('.pf-c-dropdown__menu') as HTMLUListElement
+        menu.hidden = !menu.hidden
+        /* eslint-enable @typescript-eslint/non-nullable-type-assertion-style */
+      })
+    })
 }
 
 /**
@@ -332,14 +314,27 @@ function setUpDropdownButtonClose () {
 }
 
 function closeAllDropdowns (exception?: HTMLElement) {
-  document.querySelectorAll('.dropdown.expanded')
+  document.querySelectorAll('.pf-c-dropdown.pf-m-expanded')
     .forEach(dropdown => {
-      const buttonGroup = dropdown.parentElement as HTMLDivElement
-
-      if (exception && buttonGroup.contains(exception)) {
+      if (exception && dropdown.contains(exception)) {
         return
       }
-
-      dropdown.classList.remove('expanded')
+      dropdown.classList.remove('pf-m-expanded')
+      // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+      const menu = dropdown.querySelector('.pf-c-dropdown__menu') as HTMLUListElement
+      menu.hidden = true
     })
+}
+
+/**
+ * Set up CMS Preview button to act as a link
+ */
+function setUpPreviewButton () {
+  document.querySelector<HTMLButtonElement>('#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)')?.addEventListener('click', (event) => {
+    const previewButton = event.target as HTMLButtonElement
+    const url = previewButton.dataset.url
+    if (url) {
+      window.open(url)
+    }
+  })
 }

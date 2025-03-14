@@ -1,25 +1,53 @@
 <li>
-  <% if @page.is_a?(CMS::BasePage) -%>
-    <%= cms_dropdown_button(f.publish_button) do  %>
-      <%= dropdown_link(f.hide_button) %>
-      <%= dropdown_link(f.publish_button( :button_html => { :class => '' } )) %>
-    <% end %>
+  <% publish_button = {
+    text: "Publish",
+    attrs: {
+      title: "Save and publish the current draft.",
+      type: :submit,
+      name: :publish,
+      value: true
+    }
+  } %>
+  <% if @page.is_a?(CMS::BasePage) %>
+    <% hide_button = {
+      text: "Hide",
+      attrs: {
+        title: "Unpublishes the page. User would receive a 404 when trying to access its path.",
+        type: :submit,
+        name: :hide,
+        value: true
+      }
+    } %>
+    <%= render partial: "/provider/admin/cms/dropdown", locals: {
+      toggle_button: publish_button,
+      menu_items: [ hide_button, publish_button ] } %>
   <% else %>
-    <%= f.publish_button %>
+    <%= content_tag(:button, publish_button[:text], class: "pf-c-button pf-m-secondary", **publish_button[:attrs]) %>
   <% end %>
 </li>
 
 <li>
-  <%= f.actions class: 'button-group dropdown-buttons' do %>
-    <%= f.action :submit, label: 'Save', button_html: { title: 'Save the draft',
-                                                        class: 'important-button update',
-                                                        id: 'codemirror_save_button',
-                                                        value: 'Save',
-                                                        name: 'commit',
-                                                        disable_with: 'Save' } %>
-    <%= f.commit_button 'Save as Version', button_html: { class: 'save_as_version',
-                                                          title: 'Saves current draft in a version history without publishing it.',
-                                                          name: :version,
-                                                          value: true } %>
-  <% end %>
+  <% save_button = {
+    text: "Save",
+    attrs: {
+      title: "Save the draft",
+      class: "update",
+      id: "codemirror_save_button",
+      value: "Save",
+      name: "commit",
+      disable_with: "Save"
+    }
+  } %>
+  <% save_as_version_button = {
+    text: "Save as Version",
+    attrs: {
+      title: "Saves current draft in a version history without publishing it.",
+      name: :version,
+      value: "true"
+    }
+  } %>
+  <%= render partial: "/provider/admin/cms/dropdown", locals: {
+    type: :primary,
+    toggle_button: save_button,
+    menu_items: [ save_button, save_as_version_button ] } %>
 </li>

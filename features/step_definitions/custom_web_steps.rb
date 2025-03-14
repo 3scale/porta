@@ -208,7 +208,7 @@ When /^(?:|I |they )visit "(.+?)"$/ do |path|
 end
 
 And(/^I press "Hide" inside the dropdown$/) do
-  find(:button, text: 'Publish').sibling('a').click
+  find(:button, text: 'Publish').sibling('.dropdown-toggle').click
   find(:button, name: 'hide').click
   wait_for_requests
 end
