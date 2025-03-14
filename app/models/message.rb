@@ -152,9 +152,7 @@ class Message < ApplicationRecord
       if !system_operation? && recipient.receiver.try(:provider?)
         event = Messages::MessageReceivedEvent.create(self, recipient)
         Rails.application.config.event_store.publish_event(event)
-      end
-
-      if recipient.notifiable?
+      else
         report_and_supress_exceptions do
           attempt_to_send_message(recipient) if can_send_message?(recipient)
         end
