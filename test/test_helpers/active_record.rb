@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "three_scale/models"
+
 module TestHelpers
   module ActiveRecord
 
@@ -36,3 +40,4 @@ module TestHelpers
 end
 
 ActiveSupport::TestCase.send(:include, TestHelpers::ActiveRecord)
+ActiveSupport::TestCase.send(:include, ThreeScale::Models)

@@ -23,13 +23,13 @@ class User < ApplicationRecord
   include ProvidedAccessTokens
   include Indices::AccountIndex::ForDependency
 
-  self.background_deletion = [
-    :user_sessions,
-    :access_tokens,
-    [:sso_authorizations, { action: :delete }],
-    [:moderatorships, { action: :delete }],
-    [:notifications, { action: :delete }],
-    [:notification_preferences, { action: :delete, class_name: 'NotificationPreferences', has_many: false }]
+  self.background_deletion = %i[
+    user_sessions
+    access_tokens
+    sso_authorizations
+    moderatorships
+    notifications
+    notification_preferences
   ].freeze
 
   audited except: %i[salt posts_count janrain_identifier cas_identifier
@@ -65,7 +65,7 @@ class User < ApplicationRecord
   end
 
   # TODO: this should be called topic_subscriptions
-  has_many :user_topics
+  has_many :user_topics, dependent: :delete_all
 
   has_many :subscribed_topics, :through => :user_topics, :source => :topic
 
