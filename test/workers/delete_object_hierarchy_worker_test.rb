@@ -571,4 +571,48 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
     end
   end
+
+  class DeleteCMSObjects < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test "deleting CMS::Permissions through User" do
+      provider = FactoryBot.create(:provider_account, :with_a_buyer)
+      buyer = provider.buyers.first
+      cms_group = FactoryBot.create(:cms_group, provider:)
+      permission = buyer.permissions.create(:group => cms_group)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(buyer)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+    end
+
+    test "deleting CMS::Permissions and CMS::GroupSections through group" do
+      provider = FactoryBot.create(:provider_account, :with_a_buyer)
+      buyer = provider.buyers.first
+      cms_group = FactoryBot.create(:cms_group, provider:)
+      group_section = cms_group.group_sections.create(section: provider.provided_sections.first)
+      permission = buyer.permissions.create(:group => cms_group)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(cms_group)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { group_section.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+    end
+
+    test "deleting CMS::GroupSections through sections" do
+      cms_group = FactoryBot.create(:cms_group)
+      section = cms_group.provider.provided_sections.first
+      group_section = cms_group.group_sections.create(section:)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(section)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { group_section.reload }
+    end
+  end
 end
