@@ -349,7 +349,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
       # DeletedObject might be needed for updating backend, JanitorWorker handles stale ones
       # the rest are not specific to a provider or should not be deleted with the provider
-      NON_PROVIDER_MODELS = [BackendEvent, Country, DeletedObject, Partner, LogEntry, SystemOperation]
+      NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, DeletedObject, Partner, LogEntry, SystemOperation]
 
       test 'perform big account destroy in background' do
         provider = create_a_complete_provider
