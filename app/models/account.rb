@@ -49,6 +49,7 @@ class Account < ApplicationRecord
   include ProviderDomains
   include Indices::AccountIndex::ForAccount
 
+  # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
   self.background_deletion = %i[
     configuration_values
     forum
