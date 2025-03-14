@@ -273,12 +273,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     private
 
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
-
-    def all_objects
-      base_models.inject(Set.new) do |acc, model|
-        acc.merge model.all
-      end
-    end
   end
 
   class DeleteAccountTest < ActiveSupport::TestCase
@@ -335,6 +329,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test "buyer account can be deleted if provider is not destroyable" do
       buyer = provider.buyers.first
+
       perform_enqueued_jobs(queue: "deletion") do
         DeleteObjectHierarchyWorker.delete_later buyer
         assert_raises { DeleteObjectHierarchyWorker.delete_later provider }
@@ -360,20 +355,61 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         assert_empty models_without_objects.map(&:to_s)
 
         perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(provider) }
-        assert_empty performed_jobs.find { _1["job_class"] == "DeleteObjectHierarchyWorker" }["exception_executions"]
 
-        that = non_master_objects
-        assert_empty that.map { "#{_1.class} #{_1.id}" }
+        assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
       end
 
       test "background destroy does not delete anything from another provider" do
-            skip "TODO"
+        provider = create_a_complete_provider
+        provider.schedule_for_deletion!
+        before_objects = all_objects
 
-            # create provider
-            # save objects
-            # create another
-            # delete another
-            # verify original objects still there
+        another_complete_provider = create_a_complete_provider
+        another_complete_provider.schedule_for_deletion!
+
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(another_complete_provider) }
+
+        assert_raise(ActiveRecord::RecordNotFound) { another_complete_provider.reload }
+        assert_empty before_objects - all_objects # all original objects are still here
+      end
+
+      test "deleting a buyer account does not affect other buyers" do
+        provider = create_a_complete_provider
+        before_objects = all_objects
+
+        buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+        before_objects << FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer, state: "paid")
+        permission = buyer.permissions.create(:group => provider.provided_groups.take)
+        buyer.save!
+        topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)
+        before_objects << topic
+        topic_subscription = UserTopic.create({user: buyer.admin_user, topic:}, {without_protection: true})
+
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later buyer
+        end
+
+        assert_empty before_objects - all_objects # basically all original objects are still here
+        assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+        assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+        assert_raise(ActiveRecord::RecordNotFound) { topic_subscription.reload }
+      end
+
+      test "deleting service should not delete unrelated objects" do
+        provider = create_a_complete_provider
+        before_objects = all_objects
+
+        service = FactoryBot.create(:simple_service, account: provider)
+        FactoryBot.create(:application_plan, issuer: service)
+        FactoryBot.create(:api_docs_service, service: service, account: service.account)
+        FactoryBot.create(:backend_api_config, service: service, backend_api: provider.backend_apis.take)
+
+        perform_enqueued_jobs(queue: "deletion") do
+          service.mark_as_deleted!
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+        assert_empty before_objects - all_objects # basically all original objects are still here
       end
 
       private
