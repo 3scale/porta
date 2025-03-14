@@ -30,5 +30,11 @@ module ThreeScale
           all_models_with_a_table.none? { |potential_parent| potential_parent == base_class }
       end
     end
+
+    def all_objects
+      base_models.inject(Set.new) do |acc, model|
+        acc.merge model.all
+      end
+    end
   end
 end
