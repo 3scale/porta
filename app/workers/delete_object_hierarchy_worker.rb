@@ -82,12 +82,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     end
 
     @remaining_hierarchy = hierarchy
-    # can be like this instead of in `after_perform`, the benefit is that we don't use undocumented order of callbacks
-    # return unless hierarchy.present?
-    #
-    # # depending on
-    # unlock(resource: lock_key)
-    # self.class.perform_later(*hierarchy)
   end
 
   # we can just use job.arguments.first but for compatibility mode we want it not to lock
