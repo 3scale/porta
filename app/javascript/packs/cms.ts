@@ -288,14 +288,10 @@ function setUpPjax () {
  */
 function setUpDropdownButtonOpen () {
   $(document).on('click', '.dropdown-toggle', (event) => {
-    const toggle = $(event.currentTarget)
-    const dropdown = toggle.parents('.pf-c-dropdown')
-    const menu = dropdown.find('.pf-c-dropdown__menu')
-
     closeAllDropdowns(event.target as HTMLButtonElement)
 
-    dropdown.toggleClass('pf-m-expanded')
-    menu.toggle()
+    const toggle = $(event.currentTarget)
+    toggle.parents('.pf-c-dropdown').toggleClass('pf-m-expanded')
 
     return false
   })
@@ -318,7 +314,6 @@ function closeAllDropdowns (exception?: HTMLElement) {
         return
       }
       dropdown.classList.remove('pf-m-expanded')
-      dropdown.querySelector("ul")!.style.display = 'none'
     })
 }
 
@@ -327,7 +322,8 @@ function closeAllDropdowns (exception?: HTMLElement) {
  */
 function setUpPreviewButton () {
   $(document).on('click', '#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)', (event) => {
-    const url = event.target.dataset.url
+    const previewButton = event.target as HTMLButtonElement
+    const url = previewButton.dataset.url
     if (url) {
       window.open(url)
     }

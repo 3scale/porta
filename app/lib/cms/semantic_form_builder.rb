@@ -25,20 +25,7 @@ module CMS
     def disabled_delete_button
       template.link_to('Delete', '',
                        class: 'delete pf-c-button pf-m-danger pf-m-disabled',
-                       title: "You can not delete this #{@object.class.model_name.human.downcase} because it's being used")
-    end
-
-    def publish_button(*args)
-      options = args.extract_options!
-      button_html = options.delete(:button_html) || {}
-
-      button_html.reverse_merge! :title => 'Save and publish the current draft.',
-                                 :type => :submit,
-                                 :name => :publish,
-                                 :value => true,
-                                 :class => 'less-important-button'
-
-      template.tag.button('Publish', button_html)
+                       title: "You cannot delete this #{@object.class.model_name.human.downcase} because it's being used")
     end
 
     def hide_button(*args)

@@ -1,12 +1,21 @@
 # frozen_string_literal: true
 
-When(/^I follow "([^"]*)" from the CMS dropdown$/) do |link|
+When(/^I follow "([^"]*)" from the CMS "([^"]*)" dropdown$/) do |link, dropdown_title|
   # the 'cms-sidebar:update' event that triggers the event handlers for the dropdown button depends on AJAX response
   wait_for_requests
-  within '#cms-new-content-button' do
+
+  dropdown_title.match? /^New/
+  context = if dropdown_title.match? /^New/
+              find('#cms-new-content-button')
+            else
+              find('button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)', text: dropdown_title).ancestor('.pf-c-dropdown')
+            end
+  within context do
     find('.dropdown-toggle').click unless has_css?('.pf-c-dropdown.pf-m-expanded', wait: 0)
     click_on link
   end
+  # Publish and Save dropdown actions trigger AJAX requests
+  wait_for_requests if %w[Publish Save].include?(link)
 end
 
 When "fill the template draft with {}" do |value|

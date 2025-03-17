@@ -8,7 +8,7 @@ Feature: CMS Partials
     And I go to the CMS page
 
   Scenario: Partial
-    When I follow "New Partial" from the CMS dropdown
+    When I follow "New Partial" from the CMS "New Page" dropdown
     And I fill in the following:
       | System name | potato |
     And I fill in the draft with:

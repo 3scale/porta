@@ -9,7 +9,7 @@ div class="pf-c-dropdown" id=id
       = toggle_button[:text]
     button class="pf-c-dropdown__toggle-button dropdown-toggle" type="button"
       i class="fas fa-caret-down" aria-hidden="true"
-  ul class="pf-c-dropdown__menu" style="display: none;"
+  ul class="pf-c-dropdown__menu"
     - for item in menu_items
       li
         - item[:attrs] ||= {}

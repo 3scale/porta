@@ -49,7 +49,7 @@ Feature: CMS Pages
 
      When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to the CMS Page "/potato" page
-      And I press "Hide" inside the dropdown
+      And I follow "Hide" from the CMS "Publish" dropdown
      Then I should see "Page has been hidden"
 
      When I hit "/potato" on foo.3scale.localhost
@@ -71,7 +71,7 @@ Feature: CMS Pages
      And I press "Publish"
     Then I should see "Built-in page saved and published"
 
-     And I press "Hide" inside the dropdown
+     And I follow "Hide" from the CMS "Publish" dropdown
     Then I should see "Built-in page has been hidden"
 
   @allow-rescue

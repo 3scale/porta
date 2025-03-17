@@ -65,7 +65,7 @@ end
 
 def create_cms_file(path, file_path)
   visit provider_admin_cms_templates_path
-  step 'I follow "New File" from the CMS dropdown'
+  step 'I follow "New File" from the CMS "New Page" dropdown'
   fill_in('Path', with: path)
   attach_file('cms_file_attachment', Rails.root.join("test/fixtures/#{file_path}"))
   click_button 'Create File'

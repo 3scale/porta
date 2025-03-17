@@ -8,7 +8,7 @@ Feature: CMS Portlets
     And I go to the CMS page
 
   Scenario: Portlet
-    When I follow "New Portlet" from the CMS dropdown
+    When I follow "New Portlet" from the CMS "New Page" dropdown
     When I follow "External RSS Feed"
     When I fill in the following:
       | Title       | Patatas Bravas                  |
