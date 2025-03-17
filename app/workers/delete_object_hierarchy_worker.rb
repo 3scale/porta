@@ -57,7 +57,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
         # This is an ugly hack to handle lack of `#id` but we have only FeaturesPlans with a composite primary key.
         # Rails 7.1 supports composite primary keys so we can implement universal handling. See [FeaturesPlan].
         # Now to avoid complications, just sweep it under the rag.
-        FeaturesPlan.where(feature_id: ar_object.feature_id, plan_id: ar_object.plan_id).limit(1).delete_all
+        FeaturesPlan.where(feature_id: ar_object.feature_id, plan_id: ar_object.plan_id).delete_all
         return []
       end
 
