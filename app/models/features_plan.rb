@@ -9,6 +9,15 @@ class FeaturesPlan < ApplicationRecord
 
   validate :feature_scope_matches_plan_class?
 
+  def ==(other)
+    self.class == other.class && feature_id == other.feature_id && plan_id == other.plan_id
+  end
+  alias_method :eql?, :==
+
+  def hash
+    [self.class, feature_id, plan_id].hash
+  end
+
   attr_protected :plan_id, :feature_id, :plan_type, :tenant_id
 
   private
