@@ -59,7 +59,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     app = FactoryBot.create(:cinstance, service: service, plan: plan)
     assert_equal 1, plan.reload.contracts_count
 
-    service.stubs(last_accessible?: false)
+    FactoryBot.create(:service, account: account) # do not delete last service
     service.mark_as_deleted!
     app.destroy!
     assert_equal 1, plan.reload.contracts_count
