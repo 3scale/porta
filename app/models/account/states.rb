@@ -132,7 +132,7 @@ module Account::States
     end
 
     def destroyable?
-      !master? && ( buyer? || should_be_deleted?)
+      !master? && ((buyer? && invoices.unresolved.empty?) || should_be_deleted?)
     end
 
     def should_not_be_deleted?

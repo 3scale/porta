@@ -338,6 +338,22 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
     end
 
+    test "deleting buyer with unresolved invoices will not delete anything" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert buyer.payment_detail.save
+      assert buyer.reload.profile
+
+      before_objects = all_objects
+      perform_enqueued_jobs(queue: "deletion") do
+        assert_raise(DoNotRetryError) do
+          DeleteObjectHierarchyWorker.delete_later buyer
+        end
+      end
+
+      assert_equal before_objects, all_objects
+    end
+
     class DeleteCompleteAccountTest < ActiveSupport::TestCase
       include ActiveJob::TestHelper
       include TestHelpers::Provider
