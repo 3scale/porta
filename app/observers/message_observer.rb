@@ -107,11 +107,7 @@ class MessageObserver < ActiveRecord::Observer
   end
 
   def notify_plan_change_provider(contract)
-    if contract.provider_account.provider_can_use?(:new_notification_system)
-      plan_changed_publish_event!(contract)
-    elsif should_notify?(contract)
-      contract.messenger.plan_change(contract).deliver
-    end
+    plan_changed_publish_event!(contract)
   end
 
   def notify_plan_change_developer(contract)

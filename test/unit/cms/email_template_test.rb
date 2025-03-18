@@ -176,8 +176,6 @@ class EmailTemplateTest < ActiveSupport::TestCase
   test 'all new and overriden' do
     provider = FactoryBot.create(:provider_account)
 
-    assert provider.provider_can_use?(:new_notification_system)
-
     templates = provider.email_templates.all_new_and_overridden.map(&:system_name)
     assert_equal CMS::EmailTemplate::BUYER_BILLING_TEMPLATES.sort, (templates & CMS::EmailTemplate::BUYER_BILLING_TEMPLATES).sort
 
