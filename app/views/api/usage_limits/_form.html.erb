@@ -11,9 +11,10 @@
   <td></td>
   <td>
     <div class="errors"></div>
-    <%= form.submit "#{@usage_limit.new_record? ? 'Create usage limit' : 'Update usage limit'}", id: 'usage_limit_submit' %>
-
-    <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
+    <div class="actions">
+      <%= form.submit "#{@usage_limit.new_record? ? 'Create usage limit' : 'Update usage limit'}", id: 'usage_limit_submit', class: 'pf-c-button pf-m-primary' %>
+      <%= link_to 'Cancel', '', class: 'pf-c-button pf-m-link fancybox-close' %>
+    </div>
   </td>
 </tr>
 </table>

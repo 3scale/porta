@@ -31,12 +31,6 @@
 
 }
 
-table .less-important-button,
-form.formtastic .button-group button.less-important-button,
-.less-important-button {
-  @include internal-potato-button($secondary-button-color, $secondary-button-bg-color, $secondary-button-border-color);
-}
-
 table [type='submit']:not(.action):not(.pf-c-button) {
   float: right;
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
@@ -67,11 +61,6 @@ a.next {
     margin-top: line-height-times(2);
   }
 
-}
-
-
-.dangerous-button, .formtastic .dangerous-button {
-  @include internal-potato-button(white, $delete-color, $delete-color );
 }
 
 form.formtastic .button-bar fieldset {
