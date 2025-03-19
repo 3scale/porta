@@ -207,12 +207,6 @@ When /^(?:|I |they )visit "(.+?)"$/ do |path|
   visit path
 end
 
-And(/^I press "Hide" inside the dropdown$/) do
-  find(:button, text: 'Publish').sibling('a').click
-  find(:button, name: 'hide').click
-  wait_for_requests
-end
-
 toggled_input_selector = '[data-behavior="toggle-inputs"] legend'
 
 And(/^I toggle "([^"]*)"$/) do |name|

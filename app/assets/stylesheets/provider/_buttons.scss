@@ -74,13 +74,6 @@ a.next {
   @include internal-potato-button(white, $delete-color, $delete-color );
 }
 
-
-.formtastic .actions {
-  button, input[type='submit'] {
-     height: line-height-times(1.5);
-  }
-}
-
 form.formtastic .button-bar fieldset {
   margin: 0;
 }

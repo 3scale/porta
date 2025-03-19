@@ -1,0 +1,5 @@
+@import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
+
+.pf-c-dropdown:not(.pf-m-expanded) .pf-c-dropdown__menu {
+  display: none;
+}
