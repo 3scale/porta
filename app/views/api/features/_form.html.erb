@@ -27,9 +27,10 @@ Please check that system name is unique and try submitting again.</p>
 <tr>
   <td></td>
   <td>
-    <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
-    &nbsp;&nbsp;
-    <%= form.submit 'Save', :class => 'important-button' %>
+    <div class="actions">
+      <%= form.submit 'Save', class: 'pf-c-button pf-m-primary' %>
+      <%= link_to 'Cancel', '', class: 'pf-c-button pf-m-link fancybox-close' %>
+    </div>
   </td>
 </tr>
 </table>
