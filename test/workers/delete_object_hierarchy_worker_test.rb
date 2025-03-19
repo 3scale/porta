@@ -394,7 +394,10 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         before_objects = all_objects
 
         buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-        before_objects << FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer, state: "paid")
+        invoice = FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer, state: "paid")
+        before_objects << invoice
+        before_objects << FactoryBot.create(:payment_intent, reference: "ip_some_id", invoice:)
+        before_objects << FactoryBot.create(:payment_transaction, invoice:, account: buyer, reference: "ip_some_id")
         permission = buyer.permissions.create(:group => provider.provided_groups.take)
         buyer.save!
         topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)

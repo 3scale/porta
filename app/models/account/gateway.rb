@@ -4,7 +4,7 @@ module Account::Gateway
   class InvalidSettingsError < StandardError; end
 
   included do
-    has_many :payment_transactions, dependent: :delete_all, inverse_of: :account
+    has_many :payment_transactions, inverse_of: :account
     has_one :payment_gateway_setting, dependent: :destroy, inverse_of: :account
     accepts_nested_attributes_for :payment_gateway_setting
 
