@@ -27,7 +27,7 @@
     <td>
       <div class="errors"></div>
       <div class="actions">
-        <%= form.submit "#{@pricing_rule.new_record? ? 'Create pricing rule' : 'Update pricing rule'}", class: 'pf-c-button pf-m-primary' %>
+        <%= form.button "#{@pricing_rule.new_record? ? 'Create pricing rule' : 'Update pricing rule'}", class: 'pf-c-button pf-m-primary' %>
         <%= link_to 'Cancel', '', class: 'pf-c-button pf-m-link fancybox-close' %>
       </div>
     </td>
