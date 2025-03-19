@@ -1,5 +1,5 @@
-//= require vendor/jquery
-//= require remote
+//= require vendor/jquery-1.12.4.min
+//= require jquery_ujs
 //= require vendor/underscore.min.js
 //= require vendor/colorbox/jquery.colorbox.js
 //= require master_application
