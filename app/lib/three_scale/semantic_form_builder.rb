@@ -64,16 +64,6 @@ module ThreeScale
       action :submit, label: label, as: :button, **opts
     end
 
-    def button(label, *args)
-      options = args.extract_options!
-      button_html = options.delete(:button_html) || {}
-
-      button_html.reverse_merge! :type => :submit, :value => true
-
-      template.content_tag :li, template.content_tag(:button, options[:label] || label, button_html)
-    end
-
-
     # Adds cancel link to a form.
     #
     # Use this inside a buttons block:

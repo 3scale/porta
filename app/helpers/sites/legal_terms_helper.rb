@@ -38,7 +38,7 @@ module Sites::LegalTermsHelper
     escaped_snippet = legal_term_snippet.strip_heredoc.to_json
     js = "$('#cms_template_draft').data('codemirror').setValue(#{escaped_snippet});"
 
-    link_to 'Insert toggling code', '#', onclick: js, class: 'less-important-button'
+    link_to 'Insert toggling code', '#', onclick: js, class: 'pf-c-button pf-m-secondary'
   end
 
   def edit_legal_terms_url(system_name)

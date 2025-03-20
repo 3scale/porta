@@ -32,16 +32,16 @@
       margin-left: 0 !important;
     }
 
-    .fancybox-close {
-      float: left;
-    }
-
     table, tr, td {
       height: auto;
 
       label {
         line-height: 2.4;
       }
+    }
+
+    .actions > * {
+      margin-right: var(--pf-global--spacer--sm);
     }
   }
 }

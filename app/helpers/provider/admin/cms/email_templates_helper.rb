@@ -6,7 +6,7 @@ module Provider::Admin::CMS::EmailTemplatesHelper
 
     link_to "Disable Sending Snippet", '#',
                      onclick: js,
-                     class: 'dangerous-button',
+                     class: 'pf-c-button pf-m-secondary pf-m-danger',
                      title: 'Adds a liquid snippet that prevents the email notification from being send.'
   end
 end

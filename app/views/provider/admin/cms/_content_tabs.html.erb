@@ -27,7 +27,7 @@
 </div>
 
 <div class='button-bar'>
-  <%= f.actions :style => 'position:absolute' do %>
+  <%= f.actions do %>
     <% if f.object.respond_to?(:destroy) %>
       <li id="cms-template-delete-button">
         <%= can_be_destroyed?(f.object) ? f.delete_button : f.disabled_delete_button %>
@@ -43,7 +43,7 @@
     </li>
   <% end %>
 
-  <%= f.actions :style => 'position:absolute' do %>
+  <%= f.actions do %>
     <%= render '/provider/admin/cms/preview_buttons', :f =>f %>
     <%= render '/provider/admin/cms/save_buttons', :f => f %>
   <% end %>
