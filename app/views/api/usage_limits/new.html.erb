@@ -2,6 +2,6 @@
 
 <%= semantic_form_for @usage_limit,
                       :url => polymorphic_path([:admin, @plan, @metric, :usage_limits]),
-                      :html => {:class => 'remote'} do |form| %>
+                      :remote => true do |form| %>
   <%= render 'form', :form => form %>
 <% end %>

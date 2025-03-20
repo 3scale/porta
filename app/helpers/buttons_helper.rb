@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ButtonsHelper # rubocop:disable Metrics/ModuleLength
+module ButtonsHelper
 
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
@@ -27,17 +27,18 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     switch_link label, url, options
   end
 
-  # Mini form with signle <button> element, ready for fancy styling.
+  # Mini form with single <button> element, ready for fancy styling.
   #
   # == Options
   #
   # +method+:: HTTP method
   # +remote+:: if true, the request will be sent asynchronously (AJAXy)
   # +class+:: css class applied to the button element
-  def fancy_button_to(label, url, options = {})
+  def fancy_button_to(label, url, options = {}) # rubocop:disable Metrics/AbcSize
     form_attributes = {:method => (method = options.delete(:method) || :post),
-                       :class  => join_dom_classes('button-to', options.delete(:remote) && 'remote')}
+                       :class  => 'button-to'}
     form_attributes[:style] = 'display:none' if options.delete(:visible) == false
+    form_attributes['data-remote'] = true if options.delete(:remote)
 
     button_class = options.delete(:class)
     button_class ||= 'delete' if method == :delete
