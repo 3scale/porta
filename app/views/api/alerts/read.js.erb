@@ -1,6 +1,9 @@
 <%# frozen_string_literal: true %>
 
-const row = document.getElementById("<%= dom_id(@alert) %>")
-row.classList.replace('unread', 'read')
-row.querySelector('td.pf-c-table__action .pf-c-overflow-menu__item:last-of-type')
-  .remove()
+void function () {
+  const row = document.getElementById("<%= dom_id(@alert) %>");
+  row.classList.replace('unread', 'read');
+  setTimeout(() => {
+    row.querySelector('[title="Mark as read"]').remove();
+  });
+}();

@@ -1,5 +1,0 @@
-var html = "<%= escape_javascript(render(partial: 'api/metrics/metric', locals: { metric: @metric })) %>";
-jQuery('#metric_<%= "#{@metric.id}" %>').replaceWith(html);
-metric= "<%= @metric.method_metric? ? 'Method' : 'Metric' %>";
-metric_option= "<%= escape_javascript (@metric.limits_only_text_in_plan?(@plan) ? 'only text' : 'text and icons') %>";
-jQuery.flash.notice(metric + " has been set to show "+ metric_option + ".");

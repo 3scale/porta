@@ -30,4 +30,4 @@ dl class="pf-c-description-list pf-m-horizontal" aria-label="Application details
           = link_to service.name, admin_service_path(service)
 
   = render 'state'
-  = render 'trial'
+  = render 'trial' if @cinstance.trial?

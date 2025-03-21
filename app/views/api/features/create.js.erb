@@ -1,6 +1,9 @@
-var html = "<%= escape_javascript(render :partial => 'feature', :locals => {:feature => @feature}) %>";
 jQuery.colorbox.close();
-jQuery("table#features tbody").append(html);
-jQuery("table#features tr.notice").hide();
+
+document.querySelector('table#features tbody').innerHTML += '<%= escape_javascript(render partial: 'feature', locals: { feature: @feature }) %>';
+
+<% if @plan.issuer.features.size == 1 %>
+  document.querySelector('table#features tr.notice').style.display = 'none';
+<% end %>
 
 jQuery.flash.notice('Feature has been created.');
