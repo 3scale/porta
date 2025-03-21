@@ -32,12 +32,12 @@
 en:
   # start documentation links
   docs:
-    base_url: 'https://access.redhat.com/documentation/en-us/%{docs_version}/html'
+    base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{docs_version}/html'
     hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
-      email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
+      email_configuration: '%{docs_base_url}/creating_the_developer_portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'
-    terminology: '%{docs_base_url}/terminology'
+    terminology: '%{docs_base_url}/glossary/index'
   # end documentation links
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
@@ -150,7 +150,7 @@ en:
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
-          update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
+          update_link: "%{docs_base_url}/providing_apis_in_the_developer_portal/activedocs-migrate"
           empty_state:
             title: No ActiveDocs specs yet
             body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
@@ -831,12 +831,8 @@ en:
         enabled_html: "Deployed at %{at}. <a href='%{list}'>See the history.</a>"
         disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
 
-        # start documentation links
-        documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
-        documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
-        documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
-        # end documentation links
+
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
         curl:
