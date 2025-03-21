@@ -735,6 +735,36 @@ class AccountTest < ActiveSupport::TestCase
     assert_not account.valid?
     assert_includes account.errors.messages[:org_name], "must contain at least one alphanumeric character"
   end
+
+  class DestroyableTest < ActiveSupport::TestCase
+    attr_reader :provider, :buyer
+
+    setup do
+      @provider = FactoryBot.create(:provider_account, :with_a_buyer)
+      @buyer = provider.buyers.take
+    end
+
+    test "destroyable conditions" do
+      assert_not provider.destroyable? # not marked for deletion
+      assert buyer.destroyable?
+
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer, state: "paid")
+      assert buyer.destroyable?
+
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert_not buyer.destroyable?
+
+      provider.suspend!
+      assert_equal "suspended", provider.state
+      assert provider.destroyable?
+      assert buyer.destroyable?
+
+      provider.schedule_for_deletion!
+      assert_equal "scheduled_for_deletion", provider.state
+      assert provider.destroyable?
+      assert buyer.destroyable?
+    end
+  end
 end
 
 #TODO: test scopes chained, and with nil params

@@ -8,6 +8,9 @@ class CMS::Section < ApplicationRecord
 
   self.table_name = :cms_sections
 
+  self.background_deletion = %w[group_sections]
+  self.background_deletion_method = :delete
+
   self.allowed_search_scopes = %i[parent_id]
 
   scope :by_parent_id, ->(parent_id) { where(parent_id: parent_id) }
@@ -42,7 +45,7 @@ class CMS::Section < ApplicationRecord
   validate :not_own_child
   validate :parent_same_provider, { unless: :root? }
 
-  has_many :group_sections, :class_name => 'CMS::GroupSection'
+  has_many :group_sections, :class_name => 'CMS::GroupSection', inverse_of: :section, :dependent => :destroy
   has_many :groups, :class_name => 'CMS::Group', :through => :group_sections
 
   before_save :strip_trailing_slashes
