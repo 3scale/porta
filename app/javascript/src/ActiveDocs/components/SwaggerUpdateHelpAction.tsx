@@ -12,7 +12,7 @@ const SwaggerUpdateHelpAction: FunctionComponent<Props> = ({ href, title }) => (
   <span className="pf-c-table__column-help-action">
     <Popover
       bodyContent={(
-        <a href={href}>{title}</a>
+        <a href={href} rel="noreferrer" target="_blank">{title}</a>
       )}
     >
       <a className="pf-c-button pf-m-plain">
