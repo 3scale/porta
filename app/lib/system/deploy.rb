@@ -34,7 +34,7 @@ module System
       end
 
       def docs_version
-        @docs_version ||= ThreeScale.saas? || rhoam? ? 'red_hat_3scale/2-saas' : "red_hat_3scale_api_management/#{major_version}.#{minor_version}"
+        @docs_version ||= ThreeScale.saas? || rhoam? ? '2-saas' : "#{major_version}.#{minor_version}"
       end
 
       # RHOAM version has only one segment (release = 'RHOAM')
