@@ -2,7 +2,7 @@
 
 <%- can_add_filters = cinstance.referrer_filters.can_add? %>
 <div id="referrer-filters-form" <%= "style=display:none;" unless can_add_filters %>>
-  <%= form_tag provider_admin_application_referrer_filters_path(cinstance), :class => 'remote' do %>
+  <%= form_tag provider_admin_application_referrer_filters_path(cinstance), remote: true do %>
     <%= text_field_tag :referrer_filter %>
     <button type='submit' class='pf-c-button pf-m-primary action next button add'>Add Filter</button>
   <% end %>

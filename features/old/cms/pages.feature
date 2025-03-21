@@ -9,10 +9,10 @@ Feature: CMS Pages
     And I am logged in as provider "foo.3scale.localhost" on its admin domain
     And I go to the CMS page
 
-  @essential @allow-rescue
+  @allow-rescue
   Scenario: Page
       Given a CMS Layout "new-layout" of provider "foo.3scale.localhost"
-      When I follow "New Page"
+      When I press "New Page"
        And I toggle "Advanced options"
       And I fill in the following:
         | Title        | Potato        |
@@ -49,7 +49,7 @@ Feature: CMS Pages
 
      When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to the CMS Page "/potato" page
-      And I press "Hide" inside the dropdown
+      And I follow "Hide" from the CMS "Publish" dropdown
      Then I should see "Page has been hidden"
 
      When I hit "/potato" on foo.3scale.localhost
@@ -71,10 +71,10 @@ Feature: CMS Pages
      And I press "Publish"
     Then I should see "Built-in page saved and published"
 
-     And I press "Hide" inside the dropdown
+     And I follow "Hide" from the CMS "Publish" dropdown
     Then I should see "Built-in page has been hidden"
 
-  @essential @allow-rescue
+  @allow-rescue
   Scenario: Bug, preview link should be updated
     Given the provider has cms page "/pathbug" with:
     """

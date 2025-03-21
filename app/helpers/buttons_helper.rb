@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ButtonsHelper # rubocop:disable Metrics/ModuleLength
+module ButtonsHelper
 
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
@@ -27,17 +27,18 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     switch_link label, url, options
   end
 
-  # Mini form with signle <button> element, ready for fancy styling.
+  # Mini form with single <button> element, ready for fancy styling.
   #
   # == Options
   #
   # +method+:: HTTP method
   # +remote+:: if true, the request will be sent asynchronously (AJAXy)
   # +class+:: css class applied to the button element
-  def fancy_button_to(label, url, options = {})
+  def fancy_button_to(label, url, options = {}) # rubocop:disable Metrics/AbcSize
     form_attributes = {:method => (method = options.delete(:method) || :post),
-                       :class  => join_dom_classes('button-to', options.delete(:remote) && 'remote')}
+                       :class  => 'button-to'}
     form_attributes[:style] = 'display:none' if options.delete(:visible) == false
+    form_attributes['data-remote'] = true if options.delete(:remote)
 
     button_class = options.delete(:class)
     button_class ||= 'delete' if method == :delete
@@ -107,22 +108,6 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
       fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(account, user), class: 'action ok')
     elsif user.pending? && can?(:activate, user)
       link_to_activate_buyer_user(user)
-    end
-  end
-
-  # Usage:
-  #
-  # dropdown_link 'Preview published', cms_published_url(@page), :target => "_blank", 'data-preview' => :published
-  #
-  #   or
-  #
-  # dropdown_link '<button type="submit" value="Publish"></button>'
-  #
-  def dropdown_link(*args)
-    if args.size > 1
-      content_tag :li, link_to(*args)
-    else
-      content_tag :li, args.first
     end
   end
 

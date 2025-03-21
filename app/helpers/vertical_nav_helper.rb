@@ -231,7 +231,7 @@ module VerticalNavHelper
     items = []
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
-    unless master_on_premises?
+    if can?(:manage, :plans) && !master_on_premises?
       items << { title: 'Settings', subItems: [
         { id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service) }
       ]}

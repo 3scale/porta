@@ -1,0 +1,21 @@
+- id = local_assigns[:id] || ""
+- type = local_assigns[:type] || :secondary
+- toggle_button = local_assigns[:toggle_button]
+- menu_items = local_assigns[:menu_items]
+
+div class="pf-c-dropdown" id=id
+  div class="pf-c-dropdown__toggle pf-m-#{type} pf-m-split-button pf-m-action"
+    button class="pf-c-dropdown__toggle-button" *toggle_button[:attrs]
+      = toggle_button[:text]
+    button class="pf-c-dropdown__toggle-button dropdown-toggle" type="button"
+      i class="fas fa-caret-down" aria-hidden="true"
+  ul class="pf-c-dropdown__menu"
+    - for item in menu_items
+      li
+        - item[:attrs] ||= {}
+        - if item[:url]
+          a class="pf-c-dropdown__menu-item" href=item[:url] *item[:attrs]
+            = item[:text]
+        - else
+          button class="pf-c-dropdown__menu-item" *item[:attrs]
+            = item[:text]
