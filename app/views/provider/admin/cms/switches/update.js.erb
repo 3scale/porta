@@ -1,2 +1,5 @@
-$('#switch-<%= @switch.name %>-toggle').replaceWith(<%= json render('switch_toggle', switch: @switch) %>);
-$('#switch-<%= @switch.name %>-state').replaceWith(<%= json render('switch_state', switch: @switch) %>);
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  $('#switch-<%= @switch.name %>-toggle').replaceWith(<%= json render('switch_toggle', switch: @switch) %>);
+  $('#switch-<%= @switch.name %>-state').replaceWith(<%= json render('switch_state', switch: @switch) %>);
+});
