@@ -1,0 +1,5 @@
+---
+metadata:
+  version: "1.0"
+artifacts:
+  - download_url: "https://rubygems.org/downloads/bundler-2.2.25.gem"
