@@ -27,9 +27,6 @@ declare global {
       loadAudienceWidget: (widgetPath: string) => void;
     };
     renderChartWidget: (widget: string, data: unknown) => void;
-    ThreeScale: {
-      partialPaths?: (paths: string[]) => void;
-    };
   }
 
   // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
