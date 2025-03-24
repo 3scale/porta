@@ -238,7 +238,7 @@ module Liquid
         return url unless Rails.env.test?
 
         if url =~ %r{//ajax.googleapis.com/ajax/libs/jquery/(.+?)/jquery.min.js}
-          "vendor/jquery-#{$1}.min.js"
+          "essential_assets/jquery-#{$1}.min.js"
         else
           url
         end
