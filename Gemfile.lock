@@ -998,6 +998,7 @@ DEPENDENCIES
   browser
   bugsnag (~> 6.26)
   bullet (~> 7.0.7)
+  bundler (= 2.2.25)
   cancancan (~> 3.6.0)
   capybara (~> 3.40.0)
   childprocess

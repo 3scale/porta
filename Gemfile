@@ -271,3 +271,8 @@ end
 gem 'kubeclient'
 
 gem 'pg', '~> 1.3.5'
+
+# This is for OSBS
+group :build do
+  gem 'bundler', '2.2.25'
+end
