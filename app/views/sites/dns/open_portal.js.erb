@@ -1,2 +1,5 @@
-$('#open-portal-to-public').remove();
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  document.getElementById('open-portal-to-public').remove();
+});
 jQuery.flash.notice('<%= flash.now[:notice].html_safe %>');

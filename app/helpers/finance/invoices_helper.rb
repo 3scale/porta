@@ -29,9 +29,11 @@ module Finance::InvoicesHelper
   end
 
   def invoice_action_button(name, action, modifier)
-    url = send("#{action}_admin_finance_invoice_path", @invoice.id, :format => :js)
-    pf_class = "pf-c-button pf-m-#{modifier}"
-    fancy_button_to(name, url, :method => :put, :remote => true, :class => pf_class)
+    fancy_button_to(name, send("#{action}_admin_finance_invoice_path", @invoice.id, format: :js),
+                          method: :put,
+                          remote: true,
+                          class: "pf-c-button pf-m-#{modifier}",
+                          confirm: t('.confirm'))
   end
 
 

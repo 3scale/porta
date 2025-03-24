@@ -1,10 +1,12 @@
-var id    = "#<%= dom_id(@pricing_rule) %>",
-    count = "<%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>",
-    counter_id = "#pricing_rules_counter_<%= @pricing_rule.metric.id %>";
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  document.getElementById('<%= dom_id(@pricing_rule) %>').remove();
+});
 
-jQuery(id).remove();
-
-jQuery(counter_id).html(count);
+void function () {
+  const counter = document.getElementById('#pricing_rules_counter_<%= @pricing_rule.metric.id %>')
+  counter.innerText = <%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>;
+}();
 
 jQuery.flash.notice('Pricing rule has been deleted.');
 

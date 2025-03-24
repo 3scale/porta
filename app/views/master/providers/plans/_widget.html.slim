@@ -1,3 +1,6 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'master_providers_plans_widget'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     - app = provider.bought_cinstance

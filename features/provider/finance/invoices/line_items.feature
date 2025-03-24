@@ -24,7 +24,8 @@ Feature: Invoice line items
       | Description | Very bad service |
       | Cost        | -200             |
     And wait a moment
-    Then the table should contain the following within the line items card:
+    Then they should see the flash message "Line item added."
+    And the table should contain the following within the line items card:
       | Name    | Description      | Quantity | Price         | Charged |
       | Bananas | A bunch of them  | 1        | EUR 42.0000   |         |
       | Refund  | Very bad service | 1        | EUR -200.0000 |         |

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Given /^I have changed CMS page "(.*?)"$/ do |name|
   assert @provider
-  page = FactoryBot.create(:cms_page, :system_name => name, :provider => @provider)
+  page = FactoryBot.create(:cms_page, system_name: name, provider: @provider, title: name)
   page.draft = "some draft content"
   page.save!
 end

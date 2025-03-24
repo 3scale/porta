@@ -53,13 +53,14 @@ Given "{application_plan} has no usage limits for metric {string}" do |plan, met
       .delete_all
 end
 
+# Given application plan "Free" has defined the following usage limit:
+#   | Metric       | Period | Max. value |
+#   | Some metric  | day    | 15         |
+#   | Other metric | hour   | 24         |
 Given "{application_plan} has defined the following usage limit(s):" do |plan, table|
   transform_usage_limits_table(table, plan)
   table.hashes.each do |row|
-    FactoryBot.create(:usage_limit, plan: plan,
-                                    metric: row[:metric],
-                                    period: row[:period],
-                                    value: row[:max_value])
+    FactoryBot.create(:usage_limit, plan: plan, **row)
   end
 end
 
