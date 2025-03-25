@@ -3,7 +3,7 @@ Feature: Audience > Messages > Inbox
 
   Background:
     Given a provider is logged in
-    And a buyer "Alice" of the provider
+    And a buyer "Alice"
 
   Scenario: Navigation from Audience
     When they press "Dashboard"

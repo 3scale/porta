@@ -10,7 +10,7 @@ Feature: Admin Portal Buyer's Billing Status
     And the following application plan:
       | Product | Name | Default | Cost per month |
       | My API  | Gold | true    | 100            |
-    And an approved buyer "John" signed up to the provider
+    And an approved buyer "John"
     And the following application:
       | Buyer | Name   |
       | John  | My App |

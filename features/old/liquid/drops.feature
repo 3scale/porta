@@ -7,7 +7,7 @@ Feature: Liquid drops
     And the current domain is foo.3scale.localhost
 
   Scenario: MenuDrop
-    Given a buyer "bob" of provider "foo.3scale.localhost"
+    Given a buyer "bob"
       And I am logged in as "bob"
 
     When provider "foo.3scale.localhost" has following template

@@ -12,7 +12,7 @@ Feature: Emails
       """
       {% email %}{% do_not_send %}{% endemail %}
       """
-    When a buyer "bob" signed up to provider "foo.3scale.localhost"
+    When a buyer "bob"
     And I am logged in as provider "foo.3scale.localhost" on its admin domain
     And the following application:
       | Buyer | Name  |

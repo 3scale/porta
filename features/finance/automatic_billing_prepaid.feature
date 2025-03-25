@@ -9,7 +9,7 @@ Feature: Automatic billing with plan changes on PREPAID
     And the provider is charging its buyers in prepaid mode
     And the provider has "finance" visible
     Given the provider service allows to change application plan directly
-    And the provider has one buyer
+    And a buyer "Bob Buyer"
     And the following application plans:
       | Product | Name      | Cost per month |
       | My API  | Paid      | 31             |

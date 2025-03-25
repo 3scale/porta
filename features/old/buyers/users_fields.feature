@@ -7,7 +7,7 @@ Feature: Buyer users fields management
   Background:
     Given a provider is logged in
     And the provider has "multiple_applications" visible
-    And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
+    And a buyer "SpaceWidgets"
     And the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |

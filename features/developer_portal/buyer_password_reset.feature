@@ -24,7 +24,7 @@ Feature: Buyer password reset
 
   Rule: Reset password flow for different scenarios
     Background:
-      Given a buyer "bob" signed up to the provider
+      Given a buyer "bob"
       And an active user "zed" of account "bob" with email "zed@3scale.localhost"
       And the current domain is foo.3scale.localhost
       And they go to the login page

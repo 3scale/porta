@@ -2,7 +2,7 @@ Feature: Webhooks
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And a buyer "bob" of provider "foo.3scale.localhost"
+    And a buyer "bob"
     And provider "foo.3scale.localhost" has all webhooks enabled
     And provider "foo.3scale.localhost" has all the templates setup
 

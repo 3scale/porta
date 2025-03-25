@@ -40,14 +40,14 @@ Feature: Content access in liquid
     Then I should see "Protected Content Access DENIED"
 
   Scenario: Buyer without access cannot see protected content
-    Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    Given a buyer "buyer"
       And I am logged in as "buyer"
     When I go to the homepage
     Then I should see "Protected Content Access DENIED"
 
   Scenario: Buyer with access granted can see protected content
       And provider "foo.3scale.localhost" has a private section "protected-section"
-    Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    Given a buyer "buyer"
       And the buyer "buyer" has access to the section "protected-section" of provider "foo.3scale.localhost"
       And I am logged in as "buyer"
     When I go to the homepage

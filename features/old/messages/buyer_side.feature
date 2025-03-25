@@ -6,7 +6,7 @@ Feature: Buyer side messages
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob"
     When I log in as "bob" on foo.3scale.localhost
 
   Scenario: Sending a message

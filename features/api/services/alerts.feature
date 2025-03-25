@@ -7,8 +7,8 @@ Feature: Product > Analytics > Alerts
     And the following published application plan:
       | Product    | Name    |
       | My Product | Default |
-    And a buyer "Jane" of the provider
-    And a buyer "Bob" of the provider
+    And a buyer "Jane"
+    And a buyer "Bob"
     And the following applications:
       | Buyer | Name     | Plan    |
       | Jane  | Jane App | Default |

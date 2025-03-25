@@ -32,7 +32,7 @@ Feature: Fields Definitions
       | car_type         | true     |           |        |
       | head_size        |          | true      |        |
       | hidden           |          |           | true   |
-    And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
+    And a buyer "randomdude"
     And buyer "randomdude" has extra fields:
       | car_type       | head_size      | hidden |
       | extra_required | user_read_only | hidden |

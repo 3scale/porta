@@ -1,13 +1,19 @@
 # frozen_string_literal: true
 
-Given "a buyer {string}" do |name|
-  @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: name)
+Given "a(n approved) buyer {string}" do |name|
+  @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider,
+                                                        org_name: name)
   @account.buy! @provider.account_plans.default
+  assert @buyer.approved? # TODO: for debugging. Remove before merging.
 end
 
-Given "a buyer {string} of {provider}" do |org_name, provider|
-  @account = FactoryBot.create(:buyer_account, provider_account: provider, org_name: org_name)
-  @account.buy! provider.account_plans.default
+Given "a pending buyer {string}" do |name|
+  @buyer = pending_buyer(@provider, name)
+end
+
+Given "a rejected buyer {string}" do |name|
+  @buyer = pending_buyer(@provider, name)
+  @buyer.reject!
 end
 
 Given "{buyer} has {int} application(s)" do |buyer, number|

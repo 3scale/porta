@@ -7,7 +7,7 @@ Feature: Buyer side, user extra fields
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob"
     Given provider "foo.3scale.localhost" has the following fields defined for users:
       | name            | choices | required | read_only | hidden |
       | false_field     |         |          |           |        |

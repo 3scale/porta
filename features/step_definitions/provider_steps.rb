@@ -333,11 +333,6 @@ When "the buyer authenticates by SSO Token" do
   try_buyer_login_sso_token
 end
 
-And(/^the provider has one buyer$/) do
-  @buyer = pending_buyer(@provider, 'bob')
-  @buyer.approve! unless @buyer.approved?
-end
-
 And(/^the provider enables credit card on signup feature manually/) do
   settings = @provider.settings
   settings.allow_require_cc_on_signup! unless settings.require_cc_on_signup.allowed?
