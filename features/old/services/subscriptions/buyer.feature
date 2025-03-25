@@ -9,7 +9,7 @@ Feature: Buyer's service subscription
 
     And provider "foo.3scale.localhost" has "multiple_services" visible
     And a service "Second" of provider "foo.3scale.localhost"
-    And a buyer "bob" of provider "foo.3scale.localhost"
+    And a buyer "bob"
     And the default product of the provider has name "My API"
     And the following service plan:
       | Product | Name       | State     |

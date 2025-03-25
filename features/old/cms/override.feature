@@ -54,7 +54,7 @@ Feature: Render liquid templates from database
 
 
   Scenario Outline: Override public pages
-   Given a buyer "bob" signed up to provider "foo.3scale.localhost"
+   Given a buyer "bob"
    And I log in as "bob" on foo.3scale.localhost
    When I go to the <page> page
    Then I should see markup matching '<original>'

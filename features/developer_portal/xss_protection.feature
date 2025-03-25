@@ -8,7 +8,7 @@ Feature: XSS protection
     And the following application plan:
       | Product | Name    | Default |
       | My API  | Default | true    |
-    And an approved buyer "John" signed up to the provider
+    And an approved buyer "John"
     And the following application:
       | Buyer | Name   |
       | John  | My App |
