@@ -241,9 +241,9 @@ Feature: Audience > Accounts
 
     @security
     Scenario: Buyers from other providers are not listed
-      Given a provider "bar.3scale.localhost"
-      And provider "bar.3scale.localhost" has "multiple_applications" visible
-      And a buyer "claire" signed up to provider "bar.3scale.localhost"
+      Given another provider "bar.3scale.localhost"
+      And the provider has "multiple_applications" visible
+      And a buyer "claire" signed up to the provider
       When they go to the buyer accounts page
       Then they should not see "claire" in the buyer accounts table
 

@@ -103,14 +103,14 @@ Feature: Internal authentication
 
   @security
   Scenario: Failed attempt to sign in as user with pending account
-    Given a pending buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    Given a pending buyer "wickedwidgets"
     When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with rejected account
-  Given a rejected buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    Given a rejected buyer "wickedwidgets"
     When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in
