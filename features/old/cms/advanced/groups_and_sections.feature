@@ -6,7 +6,7 @@ Feature: Groups and Sections
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "groups" switch allowed
       And provider "foo.3scale.localhost" has "multiple_applications" visible
-      And an approved buyer "alice" signed up to provider "foo.3scale.localhost"
+      And an approved buyer "alice"
 
       And provider "foo.3scale.localhost" has a public section "Docs" with path "/docs"
       And provider "foo.3scale.localhost" has a published page with the title "First" of section "Docs"

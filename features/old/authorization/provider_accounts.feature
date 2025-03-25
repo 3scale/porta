@@ -7,7 +7,7 @@ Feature: Provider accounts authorization
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    And a buyer "buyer"
 
   Scenario: Provider admin can access accounts
     Given current domain is the admin domain of provider "foo.3scale.localhost"

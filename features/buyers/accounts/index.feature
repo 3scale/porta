@@ -11,12 +11,12 @@ Feature: Audience > Accounts
     And should see "Add your first account"
 
   Scenario: Provider has one account plan only
-    Given a buyer "Alice" of the provider
+    Given a buyer "Alice"
     When they go to the buyer accounts page
     Then the table does not have a column "Plan"
 
   Scenario: Provider has "multiple_applications" denied
-    Given a buyer "Pepe" of the provider
+    Given a buyer "Pepe"
     And the default product of the provider has name "The API"
     And the following application plan:
       | Product | Name | Default |
@@ -26,7 +26,7 @@ Feature: Audience > Accounts
     Then the table don't have a column "Apps"
 
   Scenario: Provider has "multiple_applications" visible
-    Given a buyer "Pepe" of the provider
+    Given a buyer "Pepe"
     And the default product of the provider has name "The API"
     And the following application plan:
       | Product | Name | Default |
