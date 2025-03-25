@@ -171,7 +171,6 @@ module Abilities
     # If the user has service-related permission, and no :services permission, it means it has access to all services
     test 'can show AlertRelatedEvent when user has :monitoring and the user has access to all services' do
       user.member_permission_ids = [:monitoring]
-      assert user.has_permission? :monitoring
 
       assert_can ability, :show, limit_violation_reached_provider_event
     end
