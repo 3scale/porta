@@ -36,13 +36,13 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     buyer { true }
 
-    # after(:build) do |account|
-    #   # This is already done by :account
-    #   if account.users.empty?
-    #     username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-    #     account.users << FactoryBot.build(:admin, :account => account, :username => username)
-    #   end
-    # end
+    after(:build) do |account|
+      # TODO: figure out why this is necessary if it's done in account :create already
+      if account.users.empty?
+        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
+        account.users << FactoryBot.build(:admin, :account => account, :username => username)
+      end
+    end
 
     # after(:create) do |account|
     #   account.users.each do |user|
