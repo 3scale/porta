@@ -44,10 +44,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    # after(:create) do |account|
-    #   account.users.each do |user|
-    #     user.activate! unless user.active? # horrible horrible factories
-    #   end
-    # end
+    after(:create) do |account|
+      account.users.each do |user|
+        user.activate! unless user.active? # TODO: activate through factory
+      end
+    end
   end
 end
