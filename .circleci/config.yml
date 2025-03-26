@@ -298,6 +298,7 @@ commands: # reusable commands with parameters
       - run:
           name: Check internet access is disabled
           command: |
+            cat /etc/resolv.conf
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
           environment: *malloc_preload
