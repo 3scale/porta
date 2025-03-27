@@ -4,8 +4,8 @@ class NotificationPreferencesFormTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.build_stubbed(:simple_provider)
-    buyer     = FactoryBot.build_stubbed(:simple_buyer, provider_account: @provider)
-    @user     = FactoryBot.build_stubbed(:simple_user, account: buyer) end
+    @user     = FactoryBot.build_stubbed(:simple_user, account: @provider)
+  end
 
   def test_initialize
     form = NotificationPreferencesForm.new(@user, @user.notification_preferences)
@@ -55,7 +55,7 @@ class NotificationPreferencesFormTest < ActiveSupport::TestCase
     # user has permission to partners
     assert_category_present preferences_form.categories, :account
 
-    @user.expects(:has_permission?).with(:partners).returns(false).once
+    @user.expects(:has_permission?).with(:partners).returns(false).at_least_once
 
     # user doesn't have permission to partners
     refute_category_present preferences_form.categories, :account

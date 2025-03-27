@@ -782,8 +782,6 @@ class SuspendTest < ActiveSupport::TestCase
   end
 
   test 'email the buyer if configured so' do
-    FactoryBot.create(:mail_dispatch_rule, system_operation: SystemOperation.for('app_suspended'), account: @cinstance.provider_account)
-
     perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { @cinstance.suspend! }
 
     #TODO: write some email assertion helper?

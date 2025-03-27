@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class Cinstance::TrialTest < ActiveSupport::TestCase
-  test 'notify about expired trial periods' do
+  test 'notify the provider about expired trial periods' do
     plan = nil
 
     travel_to(Date.new(2010, 1, 1)) do
@@ -28,6 +28,26 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
     plan.update(trial_period_days: 0)
     travel_to(Date.new(2010, 1, 21)) do
       Cinstances::CinstanceExpiredTrialEvent.expects(:create).never
+      Cinstance.notify_about_expired_trial_periods
+    end
+  end
+
+  test 'notify the buyer 10 days before trial period expires' do
+    cinstance = nil
+    travel_to(Date.new(2009, 11, 4)) do
+      provider_account = FactoryBot.create(:provider_account)
+      plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service,
+                               :trial_period_days => 30, :cost_per_month => 10)
+      cinstance = FactoryBot.create(:cinstance, :plan => plan)
+    end
+
+    travel_to(Date.new(2009, 11, 15)) do
+      CinstanceMessenger.expects(:expired_trial_period_notification).never
+      Cinstance.notify_about_expired_trial_periods
+    end
+
+    travel_to(Date.new(2009, 11, 24)) do
+      CinstanceMessenger.expects(:expired_trial_period_notification).with(cinstance).returns(stub('mail',:deliver))
       Cinstance.notify_about_expired_trial_periods
     end
   end

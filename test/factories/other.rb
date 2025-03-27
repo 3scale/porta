@@ -95,13 +95,6 @@ FactoryBot.define do
     description { "" }
   end
 
-  factory(:mail_dispatch_rule) do
-    account {|account| account.association(:account)}
-    system_operation {|operation| operation.association(:system_operation)}
-    emails { "email@email.example.net" }
-    dispatch { true }
-  end
-
   factory(:settings)
 
   factory(:webhook, :class => WebHook) do

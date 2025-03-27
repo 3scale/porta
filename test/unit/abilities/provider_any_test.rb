@@ -184,7 +184,7 @@ module Abilities
 
     test 'can show AlertRelatedEvent when user has :monitoring and has access to the service' do
       user.member_permission_ids = [:monitoring]
-      user.member_permission_service_ids = [limit_violation_reached_provider_event.service.id]
+      user.member_permission_service_ids = [limit_violation_reached_provider_event.service_id]
 
       assert_can ability, :show, limit_violation_reached_provider_event
     end
