@@ -22,16 +22,6 @@ class ContractMessenger < Messenger::Base
                      :to      => @user_account
   end
 
-  # TODO: plan_change_for_provider
-  def plan_change(contract, options = {})
-    assign_drops(previous_plan: Liquid::Drops::Plan.new(@contract.old_plan))
-
-    message(options, 'plan_change',
-                     :subject => "API System: #{contract.class.model_name.human} plan change",
-                     :sender  => @user_account,
-                     :to      => @provider_account)
-  end
-
   def plan_change_for_buyer(contract, options = {})
     message options, 'plan_change',
                      :subject => "#{contract.class.model_name.human} plan changed to '#{contract.plan.name}'",
