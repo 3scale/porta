@@ -1000,7 +1000,6 @@ en:
       alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer (>= 100%)'
       alert_messenger_limit_violation_for_provider: 'Alert notification for provider (>= 100%)'
       cinstance_messenger_accept: 'Application accepted for buyer'
-      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
       cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
       cinstance_messenger_key_created: 'Application key created for buyer'
       cinstance_messenger_key_deleted: 'Application key deleted for buyer'
@@ -1018,7 +1017,6 @@ en:
       lost_password_email: 'Password recovery for buyer'
       plans_messenger_plan_change_request_made: "Plan change request for buyer"
       service_contract_messenger_accept: 'Service accepted for buyer'
-      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
       service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
       service_contract_messenger_plan_change: 'Service plan changed for provider'
       service_contract_messenger_reject: 'Service rejected for buyer'
@@ -1039,7 +1037,6 @@ en:
       alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer when over 100% threshold'
       alert_messenger_limit_violation_for_provider: 'Alert notification for provider when over 100% threshold'
       cinstance_messenger_accept: 'After provider approves application, notification for buyer'
-      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
       cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
       cinstance_messenger_key_created: 'Application key created for buyer'
       cinstance_messenger_key_deleted: 'Application key deleted for buyer'
@@ -1057,7 +1054,6 @@ en:
       lost_password_email: 'When buyer requests password recovery, message containing password reset link'
       plans_messenger_plan_change_request_made: "After buyer requests application plan change, notification for buyer"
       service_contract_messenger_accept: 'After provider approves service, notification for buyer'
-      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
       service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
       service_contract_messenger_plan_change: 'After buyer requests/changes service plan, notification for provider'
       service_contract_messenger_reject: 'After provider rejects service, notification for buyer'
