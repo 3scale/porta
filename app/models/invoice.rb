@@ -471,11 +471,6 @@ class Invoice < ApplicationRecord
 
         InvoiceMessenger.unsuccessfully_charged_for_buyer(self).deliver
 
-        # do not send email if provider's using new notification system
-        unless provider_account.provider_can_use?(:new_notification_system)
-          InvoiceMessenger.unsuccessfully_charged_for_provider(self).deliver
-        end
-
         event = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)
       else
@@ -483,11 +478,6 @@ class Invoice < ApplicationRecord
         fail!
         # TODO: Decouple the notification to observer and delete the IF
         InvoiceMessenger.unsuccessfully_charged_for_buyer_final(self).deliver
-
-        # do not send email if provider's using new notification system
-        unless provider_account.provider_can_use?(:new_notification_system)
-          InvoiceMessenger.unsuccessfully_charged_for_provider_final(self).deliver
-        end
 
         event = Invoices::UnsuccessfullyChargedInvoiceFinalProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)

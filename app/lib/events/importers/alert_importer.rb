@@ -15,15 +15,9 @@ module Events
         provider_alert.save! if check_levels?(:web_provider)
         buyer_alert.save!    if check_levels?(:web_buyer)
 
-        if check_levels?(:email_provider) && cinstance.live?
-          send_email(provider_alert)
-          publish_events(provider_alert)
-        end
+        publish_events(provider_alert) if check_levels?(:email_provider) && cinstance.live?
 
-        if check_levels?(:email_buyer) && cinstance.live?
-          send_email(buyer_alert)
-          publish_events(buyer_alert)
-        end
+        send_email(buyer_alert) if check_levels?(:email_buyer) && cinstance.live?
 
         notify_segment if is_master_event? && notify_provider?
       end
@@ -89,7 +83,7 @@ module Events
       end
 
       def publish_events(alert)
-        Alerts::PublishAlertEventService.run!(alert) if alert.persisted?
+        Alerts::PublishAlertEventService.run!(alert)
       end
 
       def check_levels?(level_type)
