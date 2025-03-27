@@ -277,11 +277,6 @@ class Finance::BillingStrategy < ApplicationRecord
     if provider.buyer_line_items.sum_by_invoice_state(:finalized) > 0
       info('Notifying about finalized invoices with non-zero cost')
 
-      # do not send email if provider's using new notification system
-      unless provider.provider_can_use?(:new_notification_system)
-        AccountMessenger.invoices_to_review(provider).deliver
-      end
-
       event = Invoices::InvoicesToReviewEvent.create(provider)
       Rails.application.config.event_store.publish_event(event)
     elsif provider.buyer_invoices.finalized.count > 0

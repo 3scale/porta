@@ -27,7 +27,6 @@ class CMS::EmailTemplate < CMS::Template
     account_messenger_expired_credit_card_notification_for_provider
     alert_messenger_limit_alert_for_provider
     alert_messenger_limit_violation_for_provider
-    account_messenger_invoices_to_review
     account_messenger_new_signup
     account_messenger_plan_change_request
   ].freeze
