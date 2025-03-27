@@ -40,7 +40,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       # TODO: figure out why this is necessary if it's done in account :create already
       if account.users.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.build(:admin, :account => account, :username => username)
+        account.users << FactoryBot.build(:admin, account: account, username: username)
       end
     end
 

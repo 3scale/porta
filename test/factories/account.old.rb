@@ -21,17 +21,6 @@ FactoryBot.define do
     site_access_code { '' }
   end
 
-  factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
-    after(:create) do |account|
-      account.billing_address_name = nil
-      account.billing_address_address1 = nil
-      account.billing_address_address2 = nil
-      account.billing_address_city = nil
-      account.billing_address_country = nil
-      account.save!
-    end
-  end
-
 #TODO: rename this, it is actually buying plans!
   factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
@@ -101,9 +90,7 @@ FactoryBot.define do
     end
   end
 
-  factory(:provider_account_with_pending_users_signed_up_to_default_plan,
-          :parent => :provider_account_with_pending_users_signed_up_to_no_plan) do
-
+  factory(:provider_account, parent: :provider_account_with_pending_users_signed_up_to_no_plan) do
     after(:stub) do |account|
       master_account = begin
         Account.master
@@ -111,18 +98,13 @@ FactoryBot.define do
         FactoryBot.create(:master_account)
       end
 
-      bought_cinstance = FactoryBot.build_stubbed(:cinstance,
-                                         :plan => master_account.default_service.application_plans.published.first,
-                                         :user_account => account)
+      bought_cinstance = FactoryBot.build_stubbed(:cinstance, plan: master_account.default_service.application_plans.published.first,
+                                                              user_account: account)
 
       account.stubs(:bought_cinstance).returns(bought_cinstance)
       account.stubs(:provider_account).returns(master_account)
       Account.stubs(:first_by_provider_key).with(bought_cinstance.user_key).returns(account)
     end
-  end
-
-  factory(:provider_account,
-          :parent => :provider_account_with_pending_users_signed_up_to_default_plan) do
 
     after(:create) do |account|
       if account.users.reload.empty?
