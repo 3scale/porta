@@ -21,39 +21,6 @@ FactoryBot.define do
     site_access_code { '' }
   end
 
-  factory(:pending_account, :parent => :account) do
-    after(:create) do |account|
-      account.make_pending!
-    end
-  end
-
-#FIXME: buyer accounts without provider accounts??? is that ok?
-  factory(:buyer_account_with_pending_user, :parent => :account) do
-    buyer { true }
-  end
-
-  factory(:pending_buyer_account, :parent => :buyer_account_with_pending_user) do
-    after(:create) do |account|
-      account.users.each do |user|
-        user.activate! unless user.active? # horrible horrible factories
-      end
-    end
-  end
-
-  factory(:buyer_account_old, :parent => :pending_buyer_account) do
-    association :provider_account
-    after(:create) do |account|
-      account.approve! if account.can_approve?
-    end
-
-    after(:build) do |account|
-      if account.users.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.build(:admin, :account => account, :username => username)
-      end
-    end
-  end
-
   factory(:buyer_account_without_billing_address, :parent => :buyer_account) do
     after(:create) do |account|
       account.billing_address_name = nil

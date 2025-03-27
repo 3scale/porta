@@ -58,7 +58,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'approve! transitions from pending to approved' do
-    account = FactoryBot.create(:pending_account)
+    account = FactoryBot.create(:account, :pending)
 
     assert_change :of => -> { account.state },
                   :from => "pending",
@@ -68,7 +68,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   end
 
   test 'approve! transitions from rejected to approved' do
-    account = FactoryBot.create(:pending_account)
+    account = FactoryBot.create(:account, :pending)
     account.reject!
 
     assert_change :of => -> { account.state },
@@ -122,7 +122,7 @@ class Account::StatesTest < ActiveSupport::TestCase
   test 'does not enqueue notification email when non buyer account is approved' do
     AccountMailer.any_instance.expects(:approved).never
 
-    account = FactoryBot.create(:pending_account)
+    account = FactoryBot.create(:account, :pending)
     assert_no_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       account.approve!
     end
