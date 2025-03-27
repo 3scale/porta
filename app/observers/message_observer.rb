@@ -32,21 +32,6 @@ class MessageObserver < ActiveRecord::Observer
     # nop
   end
 
-  def after_commit_on_destroy(contract)
-    return unless should_notify?(contract)
-    return if contract.user_account.nil?
-
-    # Do not send if there is no-one to send the message to.
-    return unless contract.provider_account
-    return if     contract.provider_account.admins.empty?
-
-    # Do not send message when contract is pending, because that is handled by
-    # +after_reject+.
-    return if contract.pending?
-
-    contract.messenger.contract_cancellation(contract).deliver
-  end
-
   def plan_changed(contract)
     notify_plan_change_provider(contract)
     notify_plan_change_developer(contract)
