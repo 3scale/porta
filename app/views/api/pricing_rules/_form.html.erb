@@ -23,10 +23,13 @@
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td></td>
+    <td>
       <div class="errors"></div>
-      <%= form.submit "#{@pricing_rule.new_record? ? 'Create pricing rule' : 'Update pricing rule'}" %>
-      <%= link_to 'Cancel', '', :class => 'fancybox-close' %>
+      <div class="actions">
+        <%= form.button "#{@pricing_rule.new_record? ? 'Create pricing rule' : 'Update pricing rule'}", class: 'pf-c-button pf-m-primary' %>
+        <%= link_to 'Cancel', '', class: 'pf-c-button pf-m-link fancybox-close' %>
+      </div>
     </td>
   </tr>
 </table>

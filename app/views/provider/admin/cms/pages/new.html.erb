@@ -6,7 +6,9 @@
   <%= render 'form', :f => f %>
   <%= f.input :draft, :as => :codemirror %>
 
-  <%= f.actions do %>
-    <%= f.commit_button 'Create Page' %>
-  <% end %>
+  <div class='button-bar'>
+    <%= f.actions do %>
+      <%= f.commit_button 'Create Page' %>
+    <% end %>
+  </div>
 <% end %>
