@@ -7,15 +7,15 @@ class PlansMessengerTest < ActiveSupport::TestCase
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
   end
 
-  test '#plan_change_request' do
+  test '#plan_change_request_made' do
     cinstance = FactoryBot.create(:cinstance)
     plan = FactoryBot.create(:account_plan)
     perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
-      PlansMessenger.plan_change_request(cinstance, plan).deliver
+      PlansMessenger.plan_change_request_made(cinstance, plan).deliver
     end
 
     email = ActionMailer::Base.deliveries.last
-    expected_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(cinstance, host: cinstance.account.provider_account.external_admin_domain)
-    assert_includes email.body.to_s, expected_url
+    assert_includes email.body.to_s, cinstance.name
+    assert_includes email.body.to_s, plan.name
   end
 end

@@ -17,60 +17,6 @@ class UserMailerTest < ActionMailer::TestCase
     ActionMailer::Base.deliveries.last
   end
 
-  class AdminTest < UserMailerTest
-    setup do
-      @provider_account = FactoryBot.create(:provider_account, domain: 'api.monkey.com',
-                                                               org_name: "Monkey",
-                                                               from_email: 'api@monkey.com')
-      @user = @provider_account.admins.first
-    end
-
-    class LostPasswordTest < AdminTest
-      setup do
-        @user.lost_password_token = 'abc123'
-        @noreply_email_address = Mail::Address.new(ThreeScale.config.noreply_email).address
-      end
-
-      test "should have specific header" do
-        email = deliver_lost_password
-
-        assert_match "Lost password recovery", email.subject
-        assert_equal [@user.email], email.to
-        assert_equal [@noreply_email_address], email.from
-      end
-
-      test 'should have specific body hello' do
-        with_default_url_options protocol: 'https' do
-          email = deliver_lost_password
-          assert_match "You can reset your password by visiting the following link", email.body.to_s
-          assert_match "https://#{@provider_account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
-        end
-      end
-
-      test "custom template should have specific body when provider has custom templates" do
-        content = <<-MSG
-        Dear {{ user.display_name }},
-
-        CUSTOM MESSAGES
-
-        {{ url }}
-
-        The API Team.
-        MSG
-
-        @user.account.provider_account.email_templates.create!(system_name: "lost_password_email", published: content)
-
-        email = deliver_lost_password
-        # assert_match "CUSTOM SUBJECT", email.subject
-        assert_match "Lost password recovery", email.subject
-        assert_match "Dear #{user_decorator.display_name},", email.body.to_s
-        assert_match "CUSTOM MESSAGE", email.body.to_s
-        assert_match "http://#{@provider_account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
-        assert_match "The API Team", email.body.to_s
-      end
-    end
-  end
-
   class BuyerTest < UserMailerTest
     setup do
       @provider_account = FactoryBot.create(:provider_account, domain: 'api.monkey.com',

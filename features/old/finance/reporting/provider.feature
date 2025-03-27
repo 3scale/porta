@@ -17,6 +17,7 @@ Feature: Billing Reporting for Provider
       | Pepe API | FreeAsInBeer  | 0              |
       | Pepe API | PaidAsInLunch | 31             |
 
+  @commit-transactions
   Scenario: I should be notified about upcoming issue of non-zero invoices
     Given the time is 27th May 2009
     And a buyer "jason" signed up to application plan "PaidAsInLunch"
@@ -24,4 +25,4 @@ Feature: Billing Reporting for Provider
 
     When the time flies to 1st June 2009
     And I act as "foo.3scale.localhost"
-    Then I should receive an email with subject "Invoices to review"
+    Then I should receive an email with subject "Action needed: review invoices"

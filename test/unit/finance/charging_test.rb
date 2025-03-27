@@ -143,12 +143,9 @@ class Finance::ChargingTest < ActiveSupport::TestCase
       test 'should notify buyer and provider accounts about failed first attempt to charge' do
         message = stub(:deliver => nil)
 
-        Logic::RollingUpdates.stubs(skipped?: true)
-
         InvoiceMessenger.expects(:unsuccessfully_charged_for_buyer)
           .with(@invoice).returns(message)
-        InvoiceMessenger.expects(:unsuccessfully_charged_for_provider)
-          .with(@invoice).returns(message)
+        Invoices::UnsuccessfullyChargedInvoiceProviderEvent.expects(:create).with(@invoice)
 
         @invoice.charge!
       end

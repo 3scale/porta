@@ -24,27 +24,4 @@ class AlertMessengerTest < ActiveSupport::TestCase
     assert_equal @provider_account, message.sender
   end
 
-  test 'send right email to provider' do
-    AlertMessenger.limit_message_for(@provider_violation).deliver
-    message = @provider_account.received_messages.last
-
-    assert_equal "Application 'Foo Bar' limit violation - limit usage is above 150%", message.subject
-    assert_match "Dear Foos & Bars", message.body
-    assert_match %{Application Foo Bar of your client Buyer is above 150% limit utilization}, message.body
-    assert_match "http://foosandbars-admin.com/buyers/stats/applications/#{@cinstance.id}", message.body
-    assert_equal @buyer_account, message.sender
-  end
-
-  test 'send right email to provider when he violates the cinstance of master' do
-    AlertMessenger.limit_message_for(@provider_violation_of_master).deliver
-    message = @provider_account.received_messages.last
-
-    assert_equal "Account limit violation - limit usage is above 150%",
-      message.subject
-
-    assert_match "Dear Foos & Bars", message.body
-    assert_match %{is above 150% limit utilization}, message.body
-    assert_equal Account.master, message.sender
-  end
-
 end

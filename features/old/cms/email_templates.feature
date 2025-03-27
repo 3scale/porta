@@ -57,7 +57,7 @@ Feature: Email templates management
       And all the rolling updates features are off
 
     When I go to the email templates page
-     And I follow "Sign up notification for provider"
+     And I follow "Sign up notification for buyer"
      And I fill the form with following:
       | Bcc          | From |
       | test@bcc.com | "Some Really Long String" <api@example.com> |
@@ -69,7 +69,7 @@ Feature: Email templates management
     When I press "Create Email Template"
 
     When buyer "bob" with email "bob@mail.com" signs up to provider "foo.3scale.localhost"
-     And "test@bcc.com" opens the email with subject "API System: New Account Signup"
+     And "test@bcc.com" opens the email with subject "foo.3scale.localhost API account confirmation"
 
     Then I should see following email body
       """
@@ -77,12 +77,12 @@ Feature: Email templates management
       Org: bob
       """
 
-    When I follow "Sign up notification for provider"
+    When I follow "Sign up notification for buyer"
      And I fill in the draft with:
       """
       {% email %}
-      {% bcc 'bcc@mail.com' %}
-      {% subject 'Overriden' %}
+        {% bcc 'bcc@mail.com' %}
+        {% subject 'Overriden' %}
       {% endemail %}
       Email: {{user.email}}
       Org: {{account.name}}
