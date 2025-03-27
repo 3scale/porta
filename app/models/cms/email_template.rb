@@ -38,7 +38,6 @@ class CMS::EmailTemplate < CMS::Template
     service_contract_messenger_contract_cancellation
     service_contract_messenger_new_contract
     service_contract_messenger_plan_change
-    data_export
   ].freeze
 
   reset_templates_path!
