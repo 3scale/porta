@@ -71,8 +71,7 @@ module System
     # Only change this value after your application is fully deployed to Rails 7.0
     # and you have no plans to rollback.
     # When you're ready to change format, change the value to 7.0
-    # TODO: update to 7.0 - THREESCALE-11544
-    config.active_support.cache_format_version = 6.1
+    config.active_support.cache_format_version = 7.0
 
     # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
     #
