@@ -1,22 +1,5 @@
 class AccountMessenger < Messenger::Base
 
-  def new_signup(account)
-    @user_account = account
-    @user = account.admins.first
-    @provider_account = @user_account.provider_account
-    #multiservice
-    @service = @provider_account.accessible_services.default
-
-    assign_basic_drops
-    assign_drops :service => Liquid::Drops::Service.deprecated(@service), # don't use service in signup template
-                 :user    => @user
-
-    message(:sender           => @user_account,
-            :to               => @provider_account,
-            :subject          => 'API System: New Account Signup',
-            :system_operation => SystemOperation.for('user_signup'))
-  end
-
   def expired_credit_card_notification_for_buyer(buyer)
     @user_account = buyer
     @provider_account = @user_account.provider_account
