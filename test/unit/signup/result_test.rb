@@ -212,7 +212,7 @@ module Signup
     end
 
     def account
-      @account ||= FactoryBot.build(:account_without_users)
+      @account ||= FactoryBot.build(:account)
     end
 
     def signup_result

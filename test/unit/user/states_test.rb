@@ -82,8 +82,7 @@ class User::StatesTest < ActiveSupport::TestCase
   end
 
   test 'when user is activated, and his account is approved, it will stay approved' do
-    account = FactoryBot.create(:account_without_users)
-    account.approve!
+    account = FactoryBot.create(:account, :approved)
 
     user = FactoryBot.create(:pending_user, :account => account)
 
