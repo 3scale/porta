@@ -15,12 +15,6 @@ class ContractMessenger < Messenger::Base
                  :plan             => Liquid::Drops::Plan.new(@plan)
   end
 
-  def new_contract(contract, options = {})
-    message options, 'new_contract',
-                     :sender => @user_account,
-                     :to     => @provider_account
-  end
-
   def expired_trial_period_notification(contract, options = {})
     message options, 'plan_change',
                      :subject => "#{@provider_account.org_name} API - Trial period expiry",
