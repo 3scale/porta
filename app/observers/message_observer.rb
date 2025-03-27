@@ -5,14 +5,6 @@ class MessageObserver < ActiveRecord::Observer
 
   include AfterCommitOn
 
-  def after_commit_on_create(contract)
-    return unless should_notify?(contract)
-    return if contract.user_account.nil?
-    return if contract.user_account.admins.empty?
-
-    contract.messenger.new_contract(contract).deliver
-  end
-
   def after_create(contract)
     event = case contract
             when Cinstance
