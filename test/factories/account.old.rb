@@ -21,10 +21,10 @@ FactoryBot.define do
     site_access_code { '' }
   end
 
-#TODO: rename this, it is actually buying plans!
-  factory(:provider_account_with_pending_users_signed_up_to_no_plan, parent: :account) do
+  factory(:provider_account, parent: :account) do # rubocop:disable Metrics/BlockLength
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
     site_access_code { '' }
+
     payment_gateway_type { :bogus }
     provider { true }
 
@@ -36,8 +36,20 @@ FactoryBot.define do
                                    end
     end
 
-
     after(:stub) do |account|
+      master_account = begin
+        Account.master
+      rescue ActiveRecord::RecordNotFound
+        FactoryBot.create(:master_account)
+      end
+
+      bought_cinstance = FactoryBot.build_stubbed(:cinstance, plan: master_account.default_service.application_plans.published.first,
+                                                              user_account: account)
+
+      account.stubs(:bought_cinstance).returns(bought_cinstance)
+      account.stubs(:provider_account).returns(master_account)
+      Account.stubs(:first_by_provider_key).with(bought_cinstance.user_key).returns(account)
+
       # [multiservices] This might not be right
       account.stubs(:service).returns(FactoryBot.build_stubbed(:service, :account => account))
 
@@ -54,6 +66,11 @@ FactoryBot.define do
     end
 
     after(:create) do |account|
+      if account.users.reload.empty?
+        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
+        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
+      end
+
       master = Account.master
 
       # TODO: [multiservice] this is not needed, remove!
@@ -90,30 +107,7 @@ FactoryBot.define do
     end
   end
 
-  factory(:provider_account, parent: :provider_account_with_pending_users_signed_up_to_no_plan) do
-    after(:stub) do |account|
-      master_account = begin
-        Account.master
-      rescue ActiveRecord::RecordNotFound
-        FactoryBot.create(:master_account)
-      end
-
-      bought_cinstance = FactoryBot.build_stubbed(:cinstance, plan: master_account.default_service.application_plans.published.first,
-                                                              user_account: account)
-
-      account.stubs(:bought_cinstance).returns(bought_cinstance)
-      account.stubs(:provider_account).returns(master_account)
-      Account.stubs(:first_by_provider_key).with(bought_cinstance.user_key).returns(account)
-    end
-
-    after(:create) do |account|
-      if account.users.reload.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
-      end
-    end
-  end
-
+  # TODO: transform into a trait
   factory(:provider_with_billing, :parent => :provider_account) do
     after(:create) do |a|
       a.billing_strategy= FactoryBot.create(:postpaid_billing, :numbering_period => 'monthly');
