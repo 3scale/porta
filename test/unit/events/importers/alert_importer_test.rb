@@ -92,14 +92,14 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
       import_events
     end
 
-    assert_equal ActionMailer::Base.deliveries.size, 4
+    assert_equal 2, ActionMailer::Base.deliveries.size
   end
 
   test 'rescues errors when sending emails' do
     @service.update_attribute(:notification_settings, email_buyer: [50], email_provider: [50])
 
-    AlertMessenger.any_instance.expects(:deliver).twice.raises(Liquid::SyntaxError)
-    System::ErrorReporting.expects(:report_error).twice.with {|error| error.bugsnag_meta_data }
+    AlertMessenger.any_instance.expects(:deliver).once.raises(Liquid::SyntaxError)
+    System::ErrorReporting.expects(:report_error).once.with {|error| error.bugsnag_meta_data }
 
     assert_no_difference ActionMailer::Base.deliveries.method(:size) do
       import_events
@@ -112,22 +112,7 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
       email_provider: [50, 100]
     })
 
-    Alert.any_instance.stubs(:persisted?).returns(true)
-
-    Alerts::PublishAlertEventService.expects(:run!).twice
-
-    import_events
-  end
-
-  def test_not_publish_events
-    @service.update_attribute(:notification_settings, {
-      email_buyer:    [50, 100],
-      email_provider: [50, 100]
-    })
-
-    Alert.any_instance.stubs(:persisted?).returns(false)
-
-    Alerts::PublishAlertEventService.expects(:run!).never
+    Alerts::PublishAlertEventService.expects(:run!).once
 
     import_events
   end
@@ -183,8 +168,8 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
       email_provider: [50, 100]
     })
 
-    Alert.any_instance.expects(:valid?).returns(false).twice
-    System::ErrorReporting.expects(:report_error).twice
+    Alert.any_instance.expects(:valid?).returns(false).once
+    System::ErrorReporting.expects(:report_error).once
 
     import_events
   end

@@ -10,7 +10,9 @@ class Alerts::LimitViolationReachedProviderEventTest < ActiveSupport::TestCase
     event     = Alerts::LimitViolationReachedProviderEvent.create(alert)
 
     assert event
-    assert_equal event.alert, alert
+    assert_equal event.application_id, cinstance.application_id
+    assert_equal event.level, alert.level
     assert_equal event.provider, cinstance.provider_account
+    assert_equal event.service_id, cinstance.service.id
   end
 end
