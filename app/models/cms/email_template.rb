@@ -307,10 +307,8 @@ class CMS::EmailTemplate < CMS::Template
       system_names = default_system_names
       provider = try(:proxy_association)&.owner
 
-      if provider&.provider_can_use?(:new_notification_system)
-        system_names -= PROVIDER_TEMPLATES
-        system_names -= BUYER_BILLING_TEMPLATES if provider.master_on_premises?
-      end
+      system_names -= PROVIDER_TEMPLATES
+      system_names -= BUYER_BILLING_TEMPLATES if provider.master_on_premises?
 
       templates = where(system_name: system_names).index_by(&:system_name)
 
