@@ -1012,8 +1012,6 @@ en:
       invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
       invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
       invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
-      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
-      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
       invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
       lost_password_email: 'Password recovery for buyer'
       plans_messenger_plan_change_request_made: "Plan change request for buyer"
@@ -1050,8 +1048,6 @@ en:
       invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
       invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
       invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
-      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
-      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
       invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
       lost_password_email: 'When buyer requests password recovery, message containing password reset link'
       plans_messenger_plan_change_request_made: "After buyer requests application plan change, notification for buyer"
