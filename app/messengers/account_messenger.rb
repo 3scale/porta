@@ -17,19 +17,6 @@ class AccountMessenger < Messenger::Base
             :system_operation => SystemOperation.for('user_signup'))
   end
 
-  # This is call by master, sending notifications to providers.
-  # Those messages are liquid thus using developer_portal, where we don't have access to System::Application. routes
-  def invoices_to_review(provider)
-    finalized_url = app_routes.polymorphic_url([:admin, :finance, :invoices], :state => :finalized, :host => provider.external_admin_domain)
-
-    assign_drops  :provider => Liquid::Drops::Provider.new(provider),
-                  :url => finalized_url
-
-    message(:sender => provider.provider_account,
-            :to => provider,
-            :subject => 'API System: Invoices to review')
-  end
-
   def expired_credit_card_notification_for_buyer(buyer)
     @user_account = buyer
     @provider_account = @user_account.provider_account
