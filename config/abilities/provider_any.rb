@@ -81,10 +81,8 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
       forum.account == account
     end
 
-    if account.provider_can_use?(:new_notification_system)
-      can %i[show edit update], NotificationPreferences, user_id: user.id
-      can %i[show update], NotificationPreferences, &:new_record?
-    end
+    can %i[show edit update], NotificationPreferences, user_id: user.id
+    can %i[show update], NotificationPreferences, &:new_record?
 
     if account.partner?
       cannot :manage, Invoice
