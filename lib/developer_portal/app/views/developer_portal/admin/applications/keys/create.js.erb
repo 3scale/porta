@@ -16,9 +16,6 @@
   <% end -%>
 
   <% unless @cinstance.application_keys.can_add? %>
-    $('#app-keys-limit-warning').show(); // provider side
-    $('#app-keys-operations').hide();
-
     container.find('.operations').disableSwitch(); // buyer side
   <% end -%>
 

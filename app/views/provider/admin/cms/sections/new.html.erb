@@ -3,11 +3,11 @@
 <%= cms_new_button_dropdown(CMS::Section) %>
 
 <%= cms_form_for(@section) do |f| %>
-  <p>
-    <%= render 'form', :f => f %>
+  <%= render 'form', :f => f %>
 
+  <div class='button-bar'>
     <%= f.actions do %>
       <%= f.commit_button 'Create Section' %>
     <% end %>
-  </p>
+  </div>
 <% end %>

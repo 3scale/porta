@@ -62,11 +62,9 @@ Feature: Dashboard Widgets
       And they should be able to see the products widget
       And they should be able to see the backends widget
 
-    Scenario: User with policy registry permission doesn't see widgets
+    Scenario: User with policy registry permission sees products
       Given the user has policy_registry permission
       When they go to the provider dashboard
-      Then they should see "Access permissions needed"
-      And there should be a link to "contact foo.3scale.localhost"
-      But they should not see "Banana API"
-      And they should not be able to see the products widget
+      Then they should not see "Access permissions needed"
+      And they should be able to see the products widget
       And they should not be able to see the backends widget

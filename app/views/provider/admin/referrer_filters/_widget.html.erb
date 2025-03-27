@@ -1,18 +1,16 @@
 <p>Specify allowed referrer domains or IP addresses. Wildcards (*.example.org) are also accepted.</p>
 
-<%= switch cinstance.referrer_filters.can_add? do |context| %>
-  <%= context.enabled do %>
-    <%= form_tag provider_admin_application_referrer_filters_path(cinstance), :class => 'remote' do %>
-      <%= text_field_tag :referrer_filter %>
-      <button type='submit' class='pf-c-button pf-m-primary action next button add'>Add Filter</button>
-    <% end %>
+<%- can_add_filters = cinstance.referrer_filters.can_add? %>
+<div id="referrer-filters-form" <%= "style=display:none;" unless can_add_filters %>>
+  <%= form_tag provider_admin_application_referrer_filters_path(cinstance), remote: true do %>
+    <%= text_field_tag :referrer_filter %>
+    <button type='submit' class='pf-c-button pf-m-primary action next button add'>Add Filter</button>
   <% end %>
-
-  <%= context.disabled do %>
-    <p class="mini_info">At most <%= cinstance.filters_limit %> referrer
-    filters are allowed.</p>
-  <% end %>
-<% end %>
+</div>
+<div id="referrer-filters-limit" <%= "style=display:none;" if can_add_filters %>>
+  <p class="mini_info">At most <%= cinstance.filters_limit %> referrer
+  filters are allowed.</p>
+</div>
 
 <table class="pf-c-table" role="grid">
   <% cinstance.referrer_filters.each do |filter| %>

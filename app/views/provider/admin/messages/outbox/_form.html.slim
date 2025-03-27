@@ -1,7 +1,8 @@
 - sending_to_all = current_account.provider? && params[:to].nil? && @message.to.size == current_account.buyer_accounts.size
-- formClass =  "pf-c-form pf-m-limit-width #{modal? ? 'remote' : ''}"
 
-= semantic_form_for @message, url: provider_admin_messages_outbox_index_path, html: { class: formClass } do |form|
+= semantic_form_for @message, url: provider_admin_messages_outbox_index_path,
+                              remote: modal?,
+                              html: { class: 'pf-c-form pf-m-limit-width' } do |form|
   - if sending_to_all
     div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Inline information alert"
       div class="pf-c-alert__icon"

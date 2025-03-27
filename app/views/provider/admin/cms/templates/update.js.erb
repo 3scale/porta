@@ -14,12 +14,14 @@ $('form .input.error').removeClass('error');
     codemirror.save()
   }
 
-  // update the preview draft link after save
+  // update the preview draft link after save, in case the path has changed
   $('#cms-preview-button a').each(function () {
     if ($(this).data('preview') === 'draft') {
       $(this).attr('href', '<%= cms_draft_url(@page) %>');
     }
   });
+  const previewButton = $('#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)')
+  previewButton.attr('data-url','<%= cms_draft_url(@page) %>')
 
 <% else %>
   var new_form = <%= render('/provider/admin/cms/templates/update').to_json.html_safe %>;

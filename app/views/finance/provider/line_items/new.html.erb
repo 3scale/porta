@@ -7,7 +7,7 @@
 <div id="line-item-fancybox">
   <h2>Line Item</h2>
   <%= semantic_form_for @line_item, :url => admin_finance_account_invoice_line_items_path(@buyer, @invoice),
-                          :html => {:class => request.xhr? ? 'remote' : nil} do |form| %>
+                                    :remote => request.xhr? do |form| %>
 
     <%= form.inputs do %>
       <%= form.input :name  %>
@@ -20,11 +20,11 @@
       <%= form.input :cost, as: :price, currency: current_account.currency %>
     <% end -%>
 
-    <div class="operations">
+    <div class="actions">
+      <%= form.button 'Create Line Item', class: "pf-c-button pf-m-primary" %>
       <%= link_to 'Cancel',
                   admin_finance_account_invoice_path(@buyer, @invoice),
-                  :class => 'fancybox-close' %>
-      <%= form.submit 'Create Line Item', class: "button next important-button" %>
+                  class: 'pf-c-button pf-m-link fancybox-close' %>
     </div>
   <% end %>
 </div>

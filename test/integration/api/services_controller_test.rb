@@ -417,6 +417,22 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :forbidden
     end
 
+    test 'members with certain permissions can see the index page' do
+      %i[plans monitoring policy_registry partners].each do |section|
+        member.update(allowed_sections: [section])
+        get admin_services_path
+        assert_response :success, "'#{section}' permission should allow services index"
+      end
+    end
+
+    test 'members with certain permissions cannot see the index page' do
+      %i[portal finance settings].each do |section|
+        member.update(allowed_sections: [section])
+        get admin_services_path
+        assert_response :forbidden, "'#{section}' permission should not allow services index"
+      end
+    end
+
     test 'member with right permission and restricted access to services' do
       forbidden_service = FactoryBot.create(:simple_service, account: provider)
       member.admin_sections = %w[plans]

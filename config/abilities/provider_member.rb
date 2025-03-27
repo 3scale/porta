@@ -67,4 +67,6 @@ Ability.define do |user|
 
   # Member cannot manage permissions, neither his own, nor other members'
   cannot :update_permissions, User
+
+  can :index, Service if can?(:manage, :plans) || can?(:manage, :policy_registry) || can?(:manage, :monitoring) || can?(:manage, :partners)
 end

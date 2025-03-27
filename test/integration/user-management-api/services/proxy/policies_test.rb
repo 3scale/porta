@@ -82,4 +82,85 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   attr_reader :service
 
   delegate :proxy, to: :service
+
+  class MemberPermissionsTest < ActionDispatch::IntegrationTest
+
+    attr_reader :service, :another_service, :access_token, :member
+
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @service = @provider.default_service
+      @another_service = FactoryBot.create(:simple_service, account: @provider)
+      @member = FactoryBot.create(:active_user, account: @provider, role: :member)
+      @access_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[policy_registry]).value
+
+      host! @provider.external_admin_domain
+    end
+
+    test 'member with no policy registry or plans permission' do
+      permissions = AdminSection.sections - %i[policy_registry plans]
+      member.update(allowed_sections: permissions)
+
+      get admin_api_service_proxy_policies_path(service, access_token: access_token, format: :json)
+
+      assert_forbidden
+    end
+
+    test 'member with no services' do
+      member.update(allowed_sections: :policy_registry, allowed_service_ids: [])
+
+      get admin_api_service_proxy_policies_path(service, access_token: access_token, format: :json)
+
+      assert_not_found
+    end
+
+    test 'member with access to a wrong service' do
+      member.update(allowed_sections: :policy_registry, allowed_service_ids: [another_service.id])
+
+      get admin_api_service_proxy_policies_path(service, access_token: access_token, format: :json)
+
+      assert_not_found
+    end
+
+    test 'correct member permissions but wrong token scope' do
+      member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
+      new_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[stats cms finance]).value
+
+      get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
+
+      assert_forbidden
+    end
+
+    test 'correct member permissions with invalid scope' do
+      member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
+      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[account_management]).value
+
+      get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
+
+      assert_forbidden
+    end
+
+    test 'correct member permissions with correct scope' do
+      member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
+      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[policy_registry]).value
+
+      get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
+
+      assert_response :success
+    end
+
+    private
+
+    def assert_not_found
+      assert_response :not_found
+      expected_body = { "status" => "Not found" }
+      assert_equal expected_body, JSON.parse(response.body)
+    end
+
+    def assert_forbidden
+      assert_response :forbidden
+      expected_body = { "error" => "Your access token does not have the correct permissions" }
+      assert_equal expected_body, JSON.parse(response.body)
+    end
+  end
 end

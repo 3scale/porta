@@ -93,10 +93,11 @@ Feature: Context selector
         | Backends         |
         | Account Settings |
 
-    Scenario: Member with policy registry permission can see Products and Backends
+    Scenario: Member with policy registry permission can see Products
       Given the user has policy_registry permission
       When they go to the provider dashboard
       Then the current context should be "Dashboard"
       And they should be able to navigate to the following contexts:
         | Dashboard        |
+        | Products         |
         | Account Settings |

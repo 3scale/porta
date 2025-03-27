@@ -13,7 +13,7 @@ textarea,
 select,
 form.button-to button:not(.pf-c-button),
 form.formtastic:not(.pf-c-form) button:not(.pf-c-button, .btn-add, .btn-danger,
-  .pf-c-data-list__item-draggable-button),
+  .pf-c-data-list__item-draggable-button, .pf-c-dropdown__toggle-button, .pf-c-dropdown__menu-item),
 form.formtastic:not(.pf-c-form) textarea,
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='text']:not(.pf-c-text-input-group__text-input),
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='number'],
@@ -66,7 +66,7 @@ textarea {
 
 // TODO: where is this applied and why isn't it wrapper around form?
 button:not(.pf-c-button, .pf-c-nav__link, .pf-c-dropdown__menu-item, .pf-c-select__menu-item,
-  .pf-c-data-list__item-draggable-button) {
+  .pf-c-data-list__item-draggable-button, .pf-c-dropdown__toggle-button) {
   min-width: line-height-times(2);
   width: auto;
 }
