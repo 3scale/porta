@@ -26,7 +26,6 @@ class CMS::EmailTemplate < CMS::Template
   PROVIDER_TEMPLATES = %w[
     alert_messenger_limit_alert_for_provider
     alert_messenger_limit_violation_for_provider
-    account_messenger_new_signup
     account_messenger_plan_change_request
   ].freeze
 
