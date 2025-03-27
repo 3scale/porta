@@ -16,22 +16,6 @@ class PlansMessenger < Messenger::Base
                  :credit_card_url  => @credit_card_url
   end
 
-  def plan_change_request(application, new_plan)
-    @buyer = application.user_account
-    @plan = new_plan
-
-    url = app_routes.provider_admin_application_url(application, host: application.account.provider_account.external_admin_domain)
-    # Pending: Create a view for the body.
-    body = %|#{@buyer.org_name} are requesting to have their plan changed to #{@plan.name} for application #{application.name}. You can do this from the application page: #{url}|
-
-    message(:sender           => @buyer,
-            :to               => @plan.issuer.account,
-            :subject          => 'API System: Plan change request',
-            :body             => body,
-            :system_operation => SystemOperation.for('plan_change_request'))
-
-  end
-
   def plan_change_request_made(application, new_plan)
     @_template_name = 'plan_change_request_made'
     # This is a paid plan. You can update your payment details <%= link_to "here", payment_details_path %>.</p>
