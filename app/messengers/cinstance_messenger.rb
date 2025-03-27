@@ -22,11 +22,6 @@ class CinstanceMessenger < ContractMessenger
                      :subject => 'API System: Application has been suspended'
   end
 
-  def contract_cancellation(cinstance)
-    super cinstance, :subject => "API System: Application deletion",
-                     :system_operation => SystemOperation.for('cinstance_cancellation')
-  end
-
   def key_created(cinstance, key)
     assign_drops :key => key
     message(:sender           => @provider_account,

@@ -39,13 +39,6 @@ class ContractMessenger < Messenger::Base
                      :to      => @user_account
   end
 
-  def contract_cancellation(contract, options = {})
-    message options, 'contract_cancellation',
-                     :subject => "API System: #{contract.class.model_name.human} cancelation",
-                     :sender  => @user_account,
-                     :to      => @provider_account
-  end
-
   def accept(contract, options = {})
     message options, 'plan_change',
                      :sender => @provider_account,

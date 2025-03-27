@@ -32,9 +32,7 @@ class CMS::EmailTemplate < CMS::Template
     account_messenger_invoices_to_review
     account_messenger_new_signup
     account_messenger_plan_change_request
-    cinstance_messenger_contract_cancellation
     cinstance_messenger_plan_change
-    service_contract_messenger_contract_cancellation
     service_contract_messenger_plan_change
   ].freeze
 
