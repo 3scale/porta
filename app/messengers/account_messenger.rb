@@ -30,18 +30,6 @@ class AccountMessenger < Messenger::Base
 
   end
 
-  def expired_credit_card_notification_for_provider(buyer)
-    @user_account = buyer
-    @provider_account = @user_account.provider_account
-
-    assign_basic_drops
-
-    message(:sender  => @user_account,
-            :to      => @provider_account,
-            :subject => "API System: User Credit card expiry")
-
-  end
-
   def plan_change_request(buyer, plan)
     @user_account = buyer
     @provider_account = @user_account.provider_account
