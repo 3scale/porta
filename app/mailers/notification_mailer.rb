@@ -55,6 +55,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Applications::ApplicationCreatedEvent
   def application_created(event, receiver)
     @application      = event.application
+    @plan             = event.plan
     @provider_account = event.provider
     @service          = event.service
     @account          = event.account
