@@ -291,11 +291,6 @@ class Finance::BillingStrategy < ApplicationRecord
       ignoring_find_each_scope do
         AccountMessenger.expired_credit_card_notification_for_buyer(buyer).deliver
 
-        # do not send email if provider's using new notification system
-        unless provider.provider_can_use?(:new_notification_system)
-          AccountMessenger.expired_credit_card_notification_for_provider(buyer).deliver
-        end
-
         event = Accounts::ExpiredCreditCardProviderEvent.create(buyer)
         Rails.application.config.event_store.publish_event(event)
 
