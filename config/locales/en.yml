@@ -993,7 +993,6 @@ en:
       account_confirmed: 'Buyer Account confirmed'
       account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
       account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
-      account_messenger_invoices_to_review: "Review invoices prior to charging provider"
       account_messenger_new_signup: 'Sign up notification for provider'
       account_messenger_plan_change_request: 'Plan change request for provider'
       account_rejected: 'Buyer account rejected'
@@ -1029,7 +1028,6 @@ en:
       account_confirmed: 'Buyer Account confirmed'
       account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
       account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
-      account_messenger_invoices_to_review: "After end of monthly billing cycle, and once preliminary invoices have been calculated, notification for provider to review"
       account_messenger_new_signup: 'New sign up notification for provider'
       account_messenger_plan_change_request: 'Plan change request for provider'
       account_rejected: 'Buyer account rejected'
