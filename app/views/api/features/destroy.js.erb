@@ -1,10 +1,6 @@
-<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+<%# If EventTarget is replaced immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
 setTimeout(() => {
   document.getElementById('<%= dom_id(@feature) %>').remove();
 });
-
-<% if @plan.issuer.features.empty? %>
-  document.querySelector('table#features tr.notice').style.display = null;
-<% end %>
 
 jQuery.flash.notice('Feature has been deleted.');

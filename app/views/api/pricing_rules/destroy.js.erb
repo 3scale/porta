@@ -1,17 +1,17 @@
-<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
 setTimeout(() => {
   document.getElementById('<%= dom_id(@pricing_rule) %>').remove();
 });
 
 void function () {
-  const counter = document.getElementById('#pricing_rules_counter_<%= @pricing_rule.metric.id %>')
+  const counter = document.getElementById('#pricing_rules_counter_<%= @pricing_rule.metric.id %>');
   counter.innerText = <%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>;
 }();
 
 jQuery.flash.notice('Pricing rule has been deleted.');
 
-<% # TODO: this should happend when number of metrics falls below 2, not pricing_rules.
-# if @plan.pricing_rules.count < 2
-#   page.hide('total_cost')
-# end
- %>
+<%# TODO: this should happend when number of metrics falls below 2, not pricing_rules.
+  if @plan.pricing_rules.count < 2
+    page.hide('total_cost')
+  end
+%>

@@ -1,5 +1,5 @@
 void function () {
-  <%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+  <%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
   setTimeout(() => {
     document.getElementById('<%= dom_id(@line_item) %>').remove();
   });
