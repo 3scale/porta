@@ -193,8 +193,6 @@ World(Module.new do
       edit_admin_account_stripe_path
     when 'the personal details page'
       admin_account_personal_details_path
-    when 'the notifications page'
-      provider_admin_account_notifications_path
     when 'the provider users page'
       provider_admin_account_users_path
     when 'the users page'

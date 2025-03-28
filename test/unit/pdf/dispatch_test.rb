@@ -10,8 +10,8 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
     end
     first, second = PdfReportWorker.jobs.map { |job| job.fetch('args') }
 
-    assert_equal [master_account.first_service!.id, Account.master.id, 'day', 'daily_reports'], first
-    assert_equal [service.id, account.id, 'day', 'daily_reports'], second
+    assert_equal [master_account.first_service!.id, Account.master.id, 'day'], first
+    assert_equal [service.id, account.id, 'day'], second
   end
 
   test 'not enqueue report for deleted services' do
@@ -24,7 +24,7 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
     end
 
     job = PdfReportWorker.jobs.first.fetch('args')
-    assert_equal [master_account.first_service!.id, Account.master.id, 'day', 'daily_reports'], job
+    assert_equal [master_account.first_service!.id, Account.master.id, 'day'], job
   end
 
   test 'not enqueue report for non approved accounts' do
@@ -38,6 +38,6 @@ class Pdf::DispatchTest < ActiveSupport::TestCase
     end
 
     job = PdfReportWorker.jobs.first.fetch('args')
-    assert_equal [master_account.first_service!.id, Account.master.id, 'day', 'daily_reports'], job
+    assert_equal [master_account.first_service!.id, Account.master.id, 'day'], job
   end
 end

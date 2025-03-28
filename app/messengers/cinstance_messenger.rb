@@ -9,18 +9,6 @@ class CinstanceMessenger < ContractMessenger
                  :service     => @service
   end
 
-  def new_contract(cinstance)
-    @_template_name = 'new_application'
-
-    @url = app_routes.provider_admin_application_url(cinstance, host: cinstance.account.provider_account.external_admin_domain)
-
-    assign_drops :url => @url
-
-    super cinstance, :system_operation => SystemOperation.for('new_app'),
-                     :subject => 'API System: New Application submission'
-  end
-  alias new_application new_contract
-
   def accept(cinstance)
     super cinstance, :subject => 'API System: Application has been accepted'
   end
@@ -32,11 +20,6 @@ class CinstanceMessenger < ContractMessenger
   def suspended(cinstance)
     super cinstance, :system_operation => SystemOperation.for('app_suspended'),
                      :subject => 'API System: Application has been suspended'
-  end
-
-  def contract_cancellation(cinstance)
-    super cinstance, :subject => "API System: Application deletion",
-                     :system_operation => SystemOperation.for('cinstance_cancellation')
   end
 
   def key_created(cinstance, key)
