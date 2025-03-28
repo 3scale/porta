@@ -13,19 +13,6 @@ class AccountMessenger < Messenger::Base
 
   end
 
-  def plan_change_request(buyer, plan)
-    @user_account = buyer
-    @provider_account = @user_account.provider_account
-    @plan = plan
-
-    assign_basic_drops
-    assign_drops :plan => Liquid::Drops::Plan.new(@plan)
-
-    message(:sender  => @user_account,
-            :to      => @provider_account,
-            :subject => "API System: Plan change request")
-  end
-
   private
 
   def payment_url
