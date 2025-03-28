@@ -45,8 +45,8 @@ class DeployTest < ActiveSupport::TestCase
       assert_equal '13', System::Deploy.info.minor_version
     end
 
-    test 'docs url point to onpremises product docs' do
-      assert_equal 'red_hat_3scale_api_management/2.13', System::Deploy.info.docs_version
+    test 'onpremises docs version is the same as full product version' do
+      assert_equal '2.13', System::Deploy.info.docs_version
     end
   end
 
@@ -61,8 +61,8 @@ class DeployTest < ActiveSupport::TestCase
       assert_equal 'x', System::Deploy.info.minor_version
     end
 
-    test 'docs url point to SaaS product docs' do
-      assert_equal 'red_hat_3scale/2-saas', System::Deploy.info.docs_version
+    test 'SaaS docs version' do
+      assert_equal '2-saas', System::Deploy.info.docs_version
     end
   end
 
@@ -77,8 +77,8 @@ class DeployTest < ActiveSupport::TestCase
       assert_nil System::Deploy.info.minor_version
     end
 
-    test 'docs url point to SaaS product docs' do
-      assert_equal 'red_hat_3scale/2-saas', System::Deploy.info.docs_version
+    test 'SaaS docs version' do
+      assert_equal '2-saas', System::Deploy.info.docs_version
     end
   end
 

@@ -74,7 +74,7 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test 'docs base url' do
-      assert_equal 'https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html', docs_base_url
+      assert_equal 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2-saas/html', docs_base_url
     end
   end
 
