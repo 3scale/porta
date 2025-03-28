@@ -1,9 +1,9 @@
-# TODO: supress deprecation warning
-FactoryBot.define do
-  factory(:account_without_users, :class => Account) do
+# frozen_string_literal: true
+
+FactoryBot.define do # rubocop:disable Metrics/BlockLength
+  factory(:account_without_users, class: Account) do
     country_id do
-      (Country.find_by_code('ES') ||
-        Country.create!(:code => 'ES', :name => 'Spain', :currency => 'EUR')).id
+      (Country.find_by(code: 'ES') || Country.create!(code: 'ES', name: 'Spain', currency: 'EUR')).id
     end
 
     sequence(:domain) { |n| "company#{n}.com" }
@@ -115,31 +115,28 @@ FactoryBot.define do
     end
   end
 
-  factory(:master_account, :parent => :account) do
+  factory(:master_account, parent: :account) do # rubocop:disable Metrics/BlockLength
     master { true }
     org_name { 'Master account' }
     payment_gateway_type { :bogus }
     association :settings
+    approved
 
     after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
       if account.users.empty?
-        account.users << FactoryBot.build(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
+        account.users << FactoryBot.build(:admin, account_id: account.id,
+                                                  username: 'superadmin',
+                                                  state: 'active')
       end
-      account.admins.each { |user| user.activate! if user.can_activate? }
+      # account.admins.each { |user| user.activate! if user.can_activate? }
     end
 
     after(:create) do |account|
       account.provider_account = account
 
-      if account.users.empty?
-        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => "superadmin", state: 'active')
-      end
-      account.admins.each { |user| user.activate! if user.can_activate? }
-      account.approve! if account.can_approve?
-
       #[multiservice] First service is the default
-      service = FactoryBot.create(:service, :account => account)
+      service = FactoryBot.create(:service, account: account)
 
       # Defaults
       application_plan = FactoryBot.create(:application_plan, issuer: service, state: 'published')
@@ -151,15 +148,14 @@ FactoryBot.define do
 
       # TODO: add more master features here, if needed
       %w[prepaid_billing postpaid_billing anonymous_clients liquid].each do |feature|
-        account.default_service.features.create!(:system_name => feature, :name => feature.humanize)
+        account.default_service.features.create!(system_name: feature, name: feature.humanize)
       end
 
-      FactoryBot.create(:cinstance, :plan => account.default_service.application_plans.published.first,
-                        :user_account => account)
+      FactoryBot.create(:cinstance, plan: account.default_service.application_plans.published.first,
+                                    user_account: account)
 
       account.reload
     end
-
 
     after(:stub) do |account|
       Account.stubs(:master).returns(account)
