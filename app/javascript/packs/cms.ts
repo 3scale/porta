@@ -95,28 +95,30 @@ function advanceOptionsToggle () {
  *
  * TODO: encapsulate this better in inputs/section_input.rb
  */
-window.ThreeScale.partialPaths = (paths) => {
+window.CMS = {
+  partialPaths: (paths) => {
   /* eslint-disable @typescript-eslint/no-non-null-assertion -- Presence was verified already */
-  const path = document.querySelector<HTMLInputElement>('input.cms-path-autocomplete')!
-  const section = document.querySelector<HTMLSelectElement>('select.cms-section-picker')!
-  /* eslint-enable @typescript-eslint/no-non-null-assertion */
+    const path = document.querySelector<HTMLInputElement>('input.cms-path-autocomplete')!
+    const section = document.querySelector<HTMLSelectElement>('select.cms-section-picker')!
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
-  function autocompletePath (select: HTMLSelectElement) {
-    const currentSectionId = Number(select.value)
-    path.setAttribute('placeholder', paths[currentSectionId])
-  }
-
-  section.addEventListener('change', (event) => {
-    autocompletePath(event.target as HTMLSelectElement)
-  })
-
-  path.addEventListener('focus', () => {
-    if (path.value === '') {
-      path.value = path.getAttribute('placeholder') ?? ''
+    function autocompletePath (select: HTMLSelectElement) {
+      const currentSectionId = Number(select.value)
+      path.setAttribute('placeholder', paths[currentSectionId])
     }
-  })
 
-  autocompletePath(section) // Initial value, on render
+    section.addEventListener('change', (event) => {
+      autocompletePath(event.target as HTMLSelectElement)
+    })
+
+    path.addEventListener('focus', () => {
+      if (path.value === '') {
+        path.value = path.getAttribute('placeholder') ?? ''
+      }
+    })
+
+    autocompletePath(section) // Initial value, on render
+  }
 }
 
 /**
@@ -255,23 +257,15 @@ function setUpRemoveFromSectionAction () {
 function setUpPjax () {
   jQuery1(document).pjax('#cms-sidebar .cms-sidebar-listing a', '#tab-content', { timeout: 3000 })
 
-  const spinnerId = 'ajax-in-progress'
-
   jQuery1(document)
     .on('pjax:send', () => {
       const spinner = document.createElement('img')
       spinner.src = '/assets/ajax-loader.gif'
 
-      const div = document.createElement('div')
-      div.id = spinnerId
-      div.appendChild(spinner)
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      document.querySelector('body')!.appendChild(div)
+      window.ThreeScale.showSpinner()
     })
     .on('pjax:complete', () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      document.getElementById(spinnerId)!.remove()
+      window.ThreeScale.hideSpinner()
     })
     .on('pjax:end', (event) => {
       jQuery1(event.target).trigger('cms-template:init')

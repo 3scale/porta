@@ -2,7 +2,7 @@
 import type CodeMirror from 'codemirror'
 import type SwaggerUI from 'swagger-ui'
 import type { compose } from 'redux'
-import type { JQueryStatic as JQueryStaticV1, JQueryXHR, JQuery as JQuery1 } from 'Types/jquery/v1'
+import type { JQueryStatic as JQueryStaticV1 } from 'Types/jquery/v1'
 
 declare global {
   interface Window {
@@ -27,9 +27,6 @@ declare global {
       loadAudienceWidget: (widgetPath: string) => void;
     };
     renderChartWidget: (widget: string, data: unknown) => void;
-    ThreeScale: {
-      partialPaths?: (paths: string[]) => void;
-    };
   }
 
   // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$
@@ -40,9 +37,6 @@ declare global {
     flash: ((message: string) => void) & {
       notice: (message: string) => void;
       error: (message: string) => void;
-    };
-    rails: {
-      handleRemote: (arg: JQuery | JQuery1) => JQueryXHR | false;
     };
   }
 

@@ -33,6 +33,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     When they go to application plan "Free" admin edit page
     And follow "Make metric Single rolls invisible"
     And wait a moment
+    Then they should see the flash message "Metric has been set to invisible."
     Then application plan "Free" should not have visible usage limits
 
   Scenario: Adding usage limits

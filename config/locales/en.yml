@@ -705,6 +705,8 @@ en:
   finance:
     provider:
       invoices:
+        actions:
+          confirm: Are you sure?
         index:
           page_header_title: Invoices
           empty_state:

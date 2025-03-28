@@ -4,10 +4,16 @@
                 :locals => { :editable => true })
 %>
 
-$('#line_items tbody').append('<%= escape_javascript(html) %>');
-$('#invoice_cost_without_vat').html('<%= price_tag(@invoice.cost(:vat_included => false)) %>');
-$('#invoice_cost_vat_amount').html('<%= price_tag(@invoice.vat_amount) %>');
-$('#invoice_cost').html('<%= price_tag(@invoice.cost) %>');
+void function () {
+  document.querySelector('#line_items tbody').innerHTML += '<%= escape_javascript(html) %>';
+
+  <% unless @invoice.vat_rate.nil? %>
+    document.getElementById('invoice_cost_vat_amount').innerHTML = '<%= price_tag(@invoice.vat_amount) %>';
+    document.getElementById('invoice_cost_without_vat').innerHTML = '<%= price_tag(@invoice.cost(vat_included: false)) %>';
+  <% end %>
+
+  document.getElementById('invoice_cost').innerHTML = '<%= price_tag(@invoice.cost) %>';
+}();
 
 $.flash.notice('Line item added.');
 $.colorbox.close();

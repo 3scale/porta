@@ -139,7 +139,7 @@ gem 'jwt', '~> 1.5.2', require: false
 
 group :assets do
   gem 'font-awesome-rails', '~> 4.7.0.5'
-  gem 'jquery-rails', '~> 4.4'
+  gem 'jquery-rails', '4.6'
   gem 'uglifier'
 
   gem 'active-docs', path: 'vendor/active-docs'

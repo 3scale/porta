@@ -34,27 +34,23 @@ module ButtonsHelper
   # +method+:: HTTP method
   # +remote+:: if true, the request will be sent asynchronously (AJAXy)
   # +class+:: css class applied to the button element
-  def fancy_button_to(label, url, options = {}) # rubocop:disable Metrics/AbcSize
+  # +confirm+:: shows a confirmation dialog
+  def fancy_button_to(label, url, options = {})
     form_attributes = {:method => (method = options.delete(:method) || :post),
                        :class  => 'button-to'}
     form_attributes[:style] = 'display:none' if options.delete(:visible) == false
     form_attributes['data-remote'] = true if options.delete(:remote)
+    form_attributes['data-confirm'] = options.delete(:confirm)
 
     button_class = options.delete(:class)
     button_class ||= 'delete' if method == :delete
     button_class = join_dom_classes('action', button_class)
 
-    confirmation = if (confirm = options.delete(:confirm)).blank?
-                     { }
-                   else
-                     { :onclick => "return confirm('#{confirm}');" }
-                   end
-
-    button_attributes = {:type => 'submit', :class => button_class.strip }.merge(confirmation).merge(options)
+    button_attributes = { type: 'submit', class: button_class.strip }.merge(options)
 
     capture do
       form_tag url, form_attributes do
-        content_tag 'button', label, button_attributes
+        tag.button(label, **button_attributes)
       end
     end
   end

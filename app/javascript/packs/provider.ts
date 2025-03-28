@@ -1,11 +1,10 @@
 import { renderVerticalNav } from 'Navigation/renderVerticalNav'
 import { renderQuickStarts } from 'QuickStarts/renderQuickStarts'
+import 'Common/threescale'
 import application from 'Common/application'
 import 'Common/ajaxEvents'
 
 const jQuery1 = window.$
-
-window.ThreeScale = {}
 
 document.addEventListener('DOMContentLoaded', () => {
   renderVerticalNav()
@@ -20,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach(form => {
       form.addEventListener('change', () => {
         if (form.dataset.remote) {
-          void jQuery1.rails.handleRemote(jQuery1(form))
+          void window.Rails.handleRemote(jQuery1(form))
         } else {
           form.submit()
         }

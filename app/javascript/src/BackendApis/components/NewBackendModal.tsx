@@ -12,6 +12,7 @@ import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 import type { FunctionComponent } from 'react'
 import type { Backend } from 'Types'
 import type { Props as NewBackendFormProps } from 'BackendApis/components/NewBackendForm'
+import type { AJAXSuccessEvent, AJAXErrorEvent, AJAXBeforeEvent } from 'Types/rails-ujs'
 
 import './NewBackendModal.scss'
 
@@ -31,21 +32,31 @@ const NewBackendModal: FunctionComponent<Props> = ({
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<NewBackendFormProps['errors']>()
 
-  const handleOnAjaxComplete = (_event: unknown, xhr: { responseText: string }, status: string) => {
+  const handleAJAXBefore = (event: AJAXBeforeEvent) => {
+    setIsLoading(true)
+
+    event.stopPropagation() // Prevent ajax spinner from showing up
+  }
+
+  const handleAJAXSuccess = (event: AJAXSuccessEvent<Backend>) => {
+    const [response] = event.detail
+
+    onCreateBackend(response)
+    setIsLoading(false)
+  }
+
+  const handleAJAXError = (event: AJAXErrorEvent<NewBackendFormProps['errors']>) => {
+    const [response] = event.detail
+    setErrors(response)
     setIsLoading(false)
 
-    if (status === 'success') {
-      onCreateBackend(JSON.parse(xhr.responseText) as Backend)
-    } else if (status === 'error') {
-      setErrors(JSON.parse(xhr.responseText) as NewBackendFormProps['errors'])
-    }
+    event.stopPropagation() // Prevent from calling error handler in ajaxEvents.ts
   }
 
   useEffect(() => {
-    // This events are triggered with rails-jquery, which is different from the one from node_modules
-    window.$(document)
-      .on('ajax:send', 'form#new_backend_api_config', () => { setIsLoading(true) })
-      .on('ajax:complete', 'form#new_backend_api_config', handleOnAjaxComplete)
+    document.body.addEventListener('ajax:before', handleAJAXBefore)
+    document.body.addEventListener('ajax:success', handleAJAXSuccess)
+    document.body.addEventListener('ajax:error', handleAJAXError)
 
     // No need for useEffect cleanup
   }, [])
