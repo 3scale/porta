@@ -11,17 +11,17 @@ Feature: Approving buyer account
     And the provider requires accounts to be approved
 
   Scenario: Approving a single buyer account
-    Given a pending buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given a pending buyer "bob"
     When I go to the buyer account page for "bob"
     And I press "Approve"
     Then buyer "bob" should be approved
 
   Scenario: Approve button is not shown for already approved accounts
-    Given an approved buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given an approved buyer "bob"
     When I go to the buyer account page for "bob"
     Then I should not see button to approve buyer "bob"
 
   Scenario: Approve button is not shown for rejected accounts
-    Given a rejected buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given a rejected buyer "bob"
     When I go to the buyer account page for "bob"
     Then I should not see button to approve buyer "bob"

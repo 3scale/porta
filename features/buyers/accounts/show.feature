@@ -4,7 +4,7 @@ Feature: Buyer account overview
   Background:
     Given a provider is logged in
     And the provider has "account_plans" allowed
-    And an approved buyer "Bob Buyer" signed up to the provider
+    And an approved buyer "Bob Buyer"
 
   Scenario: Sending a message
     Given buyer "Bob Buyer" has no messages

@@ -250,9 +250,9 @@ def setup_provider(login)
 end
 
 def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
-  @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan, org_name: name,
-                                                                                           domain: name,
-                                                                                           self_domain: "admin.#{name}")
+  @provider = FactoryBot.create(:provider_account, org_name: name,
+                                                   domain: name,
+                                                   self_domain: "admin.#{name}")
   unless @provider.bought?(plan)
     @provider.application_contracts.delete_all
     @provider.buy!(plan, name: 'Default', description: 'Default')
@@ -331,11 +331,6 @@ end
 
 When "the buyer authenticates by SSO Token" do
   try_buyer_login_sso_token
-end
-
-And(/^the provider has one buyer$/) do
-  @buyer = pending_buyer(@provider, 'bob')
-  @buyer.approve! unless @buyer.approved?
 end
 
 And(/^the provider enables credit card on signup feature manually/) do

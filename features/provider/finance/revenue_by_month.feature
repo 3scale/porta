@@ -7,7 +7,7 @@ Feature: Group earnings by month
   Background:
     Given a provider is logged in
     And the provider is charging its buyers
-    And the provider has one buyer
+    And a buyer "Bob Buyer"
 
   Scenario: In process invoice
     Given an invoice of the buyer with a total cost of 42.00 EUR

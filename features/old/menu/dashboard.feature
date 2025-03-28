@@ -22,7 +22,7 @@ Feature: Dashboard
     Then I should see the link "BILLING" within the audience dashboard widget
 
   Scenario: Messages link shows correct count
-    And a buyer "john" signed up to provider "foo.3scale.localhost"
+    And a buyer "john"
     And 5 messages sent from buyer "john" to the provider with subject "any" and body "any"
     And I go to the provider dashboard
     And I should see the link "5 MESSAGES" within the audience dashboard widget

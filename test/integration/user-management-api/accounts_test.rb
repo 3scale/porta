@@ -9,7 +9,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
-    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    @buyer = FactoryBot.create(:buyer_account, :approved, provider_account: @provider)
     @buyer.buy! @provider.default_account_plan
 
     @application_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
@@ -349,12 +349,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'index approved' do
-      #building a pending one to assert it does no go in the search afterward
-      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-      buyer.buy! @provider.default_account_plan
-
-      buyer.make_pending!
-      assert_equal 'pending', buyer.state
+      # building a pending one to assert it does no go in the search afterward
+      buyer = FactoryBot.create(:buyer_account, :pending, provider_account: @provider)
+      assert buyer.pending?
 
       get admin_api_accounts_path(format: :xml), params: params.merge({ state: 'approved' })
 
