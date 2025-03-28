@@ -16,10 +16,9 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     after(:create) do |account|
       if account.users.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-
-        admin = FactoryBot.create(:admin, username: username, account_id: account.id)
-        admin.activate!
+        FactoryBot.create(:admin, username: account.org_name.gsub(/[^a-zA-Z0-9_.]+/, '_'),
+                                  account: account,
+                                  state: 'active')
       end
     end
 
@@ -40,14 +39,14 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       # TODO: figure out why this is necessary if it's done in account :create already
       if account.users.empty?
         username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.build(:admin, account: account, username: username)
+        account.users << FactoryBot.build(:admin, account: account, username: username, state: 'active')
       end
     end
 
-    after(:create) do |account|
-      account.users.each do |user|
-        user.activate! unless user.active? # TODO: activate through factory
-      end
-    end
+    # after(:create) do |account|
+    #   account.users.each do |user|
+    #     user.activate! unless user.active? # TODO: activate through factory
+    #   end
+    # end
   end
 end
