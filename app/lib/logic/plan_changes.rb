@@ -159,7 +159,6 @@ module Logic
       end
 
       def account_plan_change_action(plan)
-        AccountMessenger.plan_change_request(self.user_account, plan).deliver
         event = Accounts::AccountPlanChangeRequestedEvent.create(self.user_account, User.current, plan)
         Rails.application.config.event_store.publish_event(event)
       end
