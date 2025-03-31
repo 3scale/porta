@@ -78,7 +78,7 @@ class MessageObserver < ActiveRecord::Observer
 
   def rejected(contract)
     return unless should_notify?(contract)
-    return if contract.user_account.nil?
+    return unless contract.user_account&.should_not_be_deleted?
     return if contract.user_account.admins.empty?
     return if contract.provider_account.blank?
 

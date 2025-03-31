@@ -108,7 +108,7 @@ module Liquid
         {% endif %}
       )
       def multiple_applications_allowed?
-        @model.settings.multiple_applications.visible?
+        @model.settings&.multiple_applications&.visible?
       end
 
       desc """*True* if your 3scale plan allows you to manage multiple APIs

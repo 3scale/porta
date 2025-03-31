@@ -52,6 +52,7 @@ class Account < ApplicationRecord
   # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
   self.background_deletion = %i[
     configuration_values
+    settings
     forum
     users
     mail_dispatch_rules
@@ -60,7 +61,6 @@ class Account < ApplicationRecord
     services
     account_plans
     features
-    settings
     buyer_accounts
     payment_detail
     payment_gateway_setting
