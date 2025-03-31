@@ -19,6 +19,18 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     billing_address_phone { '+123 456 789' }
     billing_address_country { 'ES' }
     site_access_code { '' }
+
+    trait :approved do
+      state { :approved }
+    end
+
+    trait :rejected do
+      state { :rejected }
+    end
+
+    trait :pending do
+      state { :pending }
+    end
   end
 
   factory(:provider_account, parent: :account) do # rubocop:disable Metrics/BlockLength
@@ -27,6 +39,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     payment_gateway_type { :bogus }
     provider { true }
+
+    approved
 
     after(:build) do |account|
       account.provider_account ||= if Account.exists?(:master => true)
@@ -78,8 +92,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       # assign tenant id manualy, because we cannot do it by trigger
       account.tenant_id = account.id
 
-      account.approve!
-
       account.services.first.update_attribute :mandatory_app_key, false
       account.settings.update!(
         account_plans_ui_visible: true,
@@ -91,11 +103,13 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |account|
         account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
       end
+
       after(:stub) do |account|
         buyer_accounts = []
         account.stubs(:buyer_accounts).returns(buyer_accounts)
         account.buyer_accounts << FactoryBot.build_stubbed(:buyer_account, provider_account: account)
       end
+
       # looks nicer but doesn't work well
       # :buyer_account is generated before current factory so extra provider is created and tenant_id doesn't match
       # buyer_accounts { [association(:buyer_account)] }
