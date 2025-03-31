@@ -245,7 +245,7 @@ def setup_provider(login)
 
   return unless login
 
-  try_provider_login('foo.3scale.localhost', 'supersecret')
+  try_provider_login(@provider.admins.first.username, 'supersecret')
   assert_current_user('foo.3scale.localhost')
 end
 
