@@ -10,7 +10,7 @@ class Api::FeaturingsController < FrontendController
   def create
     @plan.features << @feature
     @plan.save!
-    @notice = 'Feature has been enabled.'
+    flash[:notice] = 'Feature has been enabled.'
     respond_to do |format|
       format.js { render :action => 'change' }
     end
@@ -18,7 +18,7 @@ class Api::FeaturingsController < FrontendController
 
   def destroy
     @plan.features.delete(@feature)
-    @notice = 'Feature has been disabled.'
+    flash[:notice] = 'Feature has been disabled.'
 
     respond_to do |format|
       format.js { render :action => 'change' }

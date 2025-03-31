@@ -20,8 +20,7 @@ $('form .input.error').removeClass('error');
       $(this).attr('href', '<%= cms_draft_url(@page) %>');
     }
   });
-  const previewButton = $('#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)')
-  previewButton.attr('data-url','<%= cms_draft_url(@page) %>')
+  $('#cms-preview-button button.pf-c-dropdown__toggle-button:not(.dropdown-toggle)').attr('data-url', '<%= cms_draft_url(@page) %>')
 
 <% else %>
   var new_form = <%= render('/provider/admin/cms/templates/update').to_json.html_safe %>;

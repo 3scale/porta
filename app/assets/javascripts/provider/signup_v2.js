@@ -1,4 +1,4 @@
-//= require vendor/jquery-1.11.3.min.js
+//= require jquery
 
 /**
  * How to use this library

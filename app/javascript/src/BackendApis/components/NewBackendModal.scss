@@ -1,9 +1,3 @@
-// HACK: this is to prevent app/assets/javascripts/ajax_events.js from adding a spinner.
-// ajax_events and jquery-ujs should be replaced with rails-ujs used directly inside React components
-#ajax-in-progress {
-  display: none;
-}
-
 .pf-c-modal-box {
   .pf-c-title.with-spinner {
     display: inline;

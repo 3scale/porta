@@ -17,7 +17,9 @@ interface Props {
   isLoading?: boolean;
   errors?: {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
-    private_endpoint: string[];
+    private_endpoint?: string[];
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    system_name?: string[];
   };
 }
 
@@ -55,7 +57,7 @@ const NewBackendForm: FunctionComponent<Props> = ({
       <input name="utf8" type="hidden" value="✓" />
 
       <NameInput name={name} setName={setName} />
-      <SystemNameInput setSystemName={setSystemName} systemName={systemName} />
+      <SystemNameInput errors={errors?.system_name} setSystemName={setSystemName} systemName={systemName} />
       <DescriptionInput description={description} setDescription={setDescription} />
       <PrivateEndpointInput errors={errors?.private_endpoint} privateEndpoint={privateEndpoint} setPrivateEndpoint={setPrivateEndpoint} />
 

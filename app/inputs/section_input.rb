@@ -11,7 +11,7 @@ class SectionInput < Formtastic::Inputs::SelectInput
 
     paths = Hash[sections.partial_paths]
     super << template.javascript_tag("
-      const fn = () => { window.ThreeScale.partialPaths(#{paths.to_json}); };
+      const fn = () => { window.CMS.partialPaths(#{paths.to_json}); };
       if (document.readyState === 'complete') {
         fn();
       } else {

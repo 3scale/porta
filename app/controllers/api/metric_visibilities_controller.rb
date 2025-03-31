@@ -10,33 +10,56 @@ class Api::MetricVisibilitiesController < FrontendController
   def toggle_visible
     @metric.toggle_visible_for_plan(@plan)
 
+    errors = @metric.errors.presence
+    if errors
+      flash[:error] = errors.full_messages.to_sentence
+    else
+      metric = @metric.method_metric? ? 'Method' : 'Metric'
+      metric_option = @metric.visible_in_plan?(@plan) ? 'visible' : 'invisible'
+      flash[:notice] = "#{metric} has been set to #{metric_option}."
+    end
+
     respond_to do |format|
       format.html { redirect_to edit_admin_application_plan_path(@plan) }
-      format.js
+      format.js { render action: 'change' }
     end
   end
 
   def toggle_limits_only_text
     @metric.toggle_limits_only_text_for_plan(@plan)
 
+    errors = @metric.errors.presence
+    if errors
+      flash[:error] = errors.full_messages.to_sentence
+    else
+      metric = @metric.method_metric? ? 'Method' : 'Metric'
+      metric_option = @metric.limits_only_text_in_plan?(@plan) ? 'only text' : 'text and icons'
+      flash[:notice] = "#{metric} has been set to show #{metric_option}."
+    end
+
     respond_to do |format|
       format.html { redirect_to edit_admin_application_plan_path(@plan) }
-      format.js
+      format.js { render action: 'change' }
     end
   end
 
-  def toggle_enabled
+  def toggle_enabled # rubocop:disable Metrics/AbcSize
     @metric.toggle_enabled_for_plan(@plan)
 
-    respond_to do |format|
-      format.html do
-        errors = @metric.errors.presence
-        flash[:error] = errors.full_messages.to_sentence if errors
-        redirect_to edit_admin_application_plan_path(@plan)
-      end
+    errors = @metric.errors.presence
+    if errors
+      flash[:error] = errors.full_messages.to_sentence
+    else
+      metric = @metric.method_metric? ? 'Method' : 'Metric'
+      metric_option = @metric.enabled_for_plan?(@plan) ? 'enabled' : 'disabled'
+      flash[:notice] = "#{metric} has been #{metric_option}."
+    end
 
+    respond_to do |format|
+      format.html { redirect_to edit_admin_application_plan_path(@plan) }
       format.js do
         @usage_limits = @plan.usage_limits.where(metric_id: @metric.id)
+        render action: 'change'
       end
     end
   end

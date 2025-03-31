@@ -23,6 +23,12 @@ table.contract_table {
 
   &#features {
     table-layout: fixed;
+
+    tbody {
+      tr.notice:has(+ tr) {
+        display: none;
+      }
+    }
   }
 
   &#metrics,

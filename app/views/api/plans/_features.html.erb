@@ -14,8 +14,7 @@
     </thead>
 
     <tbody>
-
-      <tr class="notice" <%= "style=display:none;" unless @plan.features.all_available.empty? -%>>
+      <tr class="notice"><%# Visibility of .notice is handled by css. %>
         <td colspan="4">
           <span>This plan has no features yet.</span>
         </td>

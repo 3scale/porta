@@ -1,4 +1,8 @@
+<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  const oldRow = document.getElementById('<%= dom_id(@feature) %>');
+  oldRow.insertAdjacentHTML('afterend', '<%= escape_javascript(render('api/features/feature', feature: @feature)) %>');
+  oldRow.remove();
+});
 
-jQuery("#<%= dom_id(@feature) %>").replaceWith(<%= render_to_js_string('api/features/feature', :feature => @feature) %>);
-
-jQuery.flash.notice("<%= escape_javascript(@notice) %>");
+<%= render 'shared/flash_message' %>

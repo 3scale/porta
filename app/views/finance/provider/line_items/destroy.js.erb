@@ -1,7 +1,15 @@
-$('#<%= dom_id(@line_item) %>').remove();
+void function () {
+  <%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+  setTimeout(() => {
+    document.getElementById('<%= dom_id(@line_item) %>').remove();
+  });
 
-$('#invoice_cost').html('<%= price_tag(@invoice.cost) %>');
-$('#invoice_cost_without_vat').html('<%= price_tag(@invoice.cost(vat_included: false)) %>');
+  <% unless @invoice.vat_rate.nil? %>
+    document.getElementById('invoice_cost_without_vat').innerHTML = '<%= price_tag(@invoice.cost(vat_included: false)) %>';
+  <% end %>
+
+  document.getElementById('invoice_cost').innerHTML = '<%= price_tag(@invoice.cost) %>';
+}();
 
 // FIXME: add highlight effect
 // page.visual_effect :highlight, 'invoice_cost'

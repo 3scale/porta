@@ -92,7 +92,7 @@
                 e.preventDefault();
                 codemirror.save();
                 document.removeEventListener('beforeunload', beforeUnloadHandler);
-                const ajax = $.rails.handleRemote(form);
+                const ajax = Rails.handleRemote(form);
 
                 if (ajax) {
                   ajax.success(() => { window.open(e.target.getAttribute('href')); });

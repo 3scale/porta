@@ -1,0 +1,19 @@
+<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  const oldRow = document.getElementById('metric_<%= @metric.id %>');
+  const newRow = '<%= escape_javascript(render(partial: "api/metrics/metric", locals: { metric: @metric })) %>';
+  oldRow.insertAdjacentHTML('afterend', newRow);
+  oldRow.remove();
+});
+
+<% if @usage_limits %>
+  void function () {
+    const slot = document.getElementById('<%= dom_id(@metric) %>_slot');
+
+    if (slot !== null && slot.querySelector('#usage_limits_table')) {
+      slot.innerHTML = '<%= escape_javascript(render 'api/usage_limits/usage_limits').html_safe %>';
+    };
+  }();
+<% end %>
+
+<%= render 'shared/flash_message' %>

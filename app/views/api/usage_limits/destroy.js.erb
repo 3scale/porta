@@ -1,8 +1,11 @@
-var id = "#" + "<%= dom_id(@usage_limit) %>",
-    limit_counter_id = "#limits_counter_" + "<%= @usage_limit.metric.id %>";
-jQuery(id).remove();
+<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  document.getElementById('<%= dom_id(@usage_limit) %>').remove();
+});
 
-var count = "<%= @usage_limit.metric.usage_limits.where(plan_id: @usage_limit.plan.id).size %>";
+void function () {
+  const counter = document.getElementById('limits_counter_<%= @usage_limit.metric.id %>');
+  counter.innerText = <%= @usage_limit.metric.usage_limits.where(plan_id: @usage_limit.plan.id).size %>;
+}();
 
-jQuery(limit_counter_id).html(count);
 jQuery.flash.notice('Limit has been deleted.');

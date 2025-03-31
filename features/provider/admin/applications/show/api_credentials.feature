@@ -65,13 +65,15 @@ Feature: Application API credentials
       And follow "Add Custom key" within the API Credentials card
       When the modal is submitted with:
         | Key | new-valid-key |
-      Then should see "new-valid-key" within the API Credentials card
+      Then they should see the flash message "A new key has been added."
+      And should see "new-valid-key" within the API Credentials card
 
     Scenario: Adding a random key
       Given the application has no keys
       And they go to the application's admin page
       When follow "Add Random key" within the API Credentials card
-      Then there is 1 key within the API Credentials card
+      Then they should see the flash message "A new key has been added."
+      And there is 1 key within the API Credentials card
 
     Scenario: Adding keys beyond the limit
       Given the application has 5 keys
@@ -120,7 +122,8 @@ Feature: Application API credentials
       And they go to the application's admin page
       When follow "Delete" that belongs to application key "key-1"
       And wait a moment
-      Then there is 1 key
+      Then they should see the flash message "The key has been removed."
+      And there is 1 key
 
     Scenario: Deleting last key when not mandatory
       Given the application has 1 key
@@ -128,7 +131,8 @@ Feature: Application API credentials
       When they go to the application's admin page
       And follow "Delete" within the API Credentials card
       And wait a moment
-      Then there are 0 keys
+      Then they should see the flash message "The key has been removed."
+      And there are 0 keys
 
     Scenario: Trying to delete last key but it's mandatory
       Given the application has the following key:

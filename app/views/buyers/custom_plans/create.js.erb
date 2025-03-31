@@ -1,3 +1,6 @@
-$.colorbox.close();
-$('#plan-widget-with-actions').replaceWith(<%= json render('buyers/accounts/account_plan', :contract => @contract, :plan => @plan) %>);
+$.colorbox.close(); <%# FIXME: do we need this? %>
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  $('#plan-widget-with-actions').replaceWith(<%= json render('buyers/accounts/account_plan', :contract => @contract, :plan => @plan) %>);
+});
 $.flash.notice('Plan customized.');
