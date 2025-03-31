@@ -66,11 +66,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     end
 
     after(:create) do |account|
-      if account.users.reload.empty?
-        username = account.org_name.gsub(/[^a-zA-Z0-9_\.]+/, '_')
-        account.users << FactoryBot.create(:admin, :account_id => account.id, :username => username, :tenant_id => account.id)
-      end
-
       master = Account.master
 
       # TODO: [multiservice] this is not needed, remove!
@@ -124,12 +119,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)
-      if account.users.empty?
-        account.users << FactoryBot.build(:admin, account_id: account.id,
-                                                  username: 'superadmin',
-                                                  state: 'active')
-      end
-      # account.admins.each { |user| user.activate! if user.can_activate? }
     end
 
     after(:create) do |account|
