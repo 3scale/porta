@@ -85,9 +85,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       # TODO: [multiservice] this is not needed, remove!
       master.account_plans.first!.create_contract_with(account)
 
-      plan = FactoryBot.create :account_plan, :issuer => account
-      account.default_account_plan = plan
-      plan.publish!
+      FactoryBot.create(:account_plan, issuer: account, default: true)
+                .publish! # TODO: Move it inside factory
 
       # assign tenant id manualy, because we cannot do it by trigger
       account.tenant_id = account.id

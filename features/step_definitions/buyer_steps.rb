@@ -4,14 +4,12 @@ Given "a(n approved) buyer {string}" do |name|
   @buyer = @account = FactoryBot.create(:buyer_account, :approved, provider_account: @provider,
                                                                    org_name: name)
   @account.buy! @provider.account_plans.default
-  assert @buyer.approved? # TODO: for debugging. Remove before merging.
 end
 
 Given "a(n approved) buyer {string} signed up to {provider}" do |name, provider|
   @buyer = @account = FactoryBot.create(:buyer_account, :approved, provider_account: provider,
                                                                    org_name: name)
   @account.buy! @provider.account_plans.default
-  assert @buyer.approved? # TODO: for debugging. Remove before merging.
 end
 
 Given "a(n approved) buyer {string} signed up to {service}" do |name, service|
@@ -27,13 +25,11 @@ Given "a pending buyer {string}" do |name|
   @buyer = FactoryBot.create(:buyer_account, :pending, provider_account: @provider,
                                                        org_name: name)
   @buyer.buy! @provider.account_plans.default
-  assert @buyer.pending? # TODO: for debugging. Remove before merging.
 end
 
 Given "a rejected buyer {string}" do |name|
   @buyer = FactoryBot.create(:buyer_account, :rejected, provider_account: @provider,
                                                         org_name: name)
-  assert @buyer.rejected? # TODO: for debugging. Remove before merging.
 end
 
 Given "{buyer} has {int} application(s)" do |buyer, number|
