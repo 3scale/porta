@@ -113,7 +113,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
         # e.g. you delete an ApplicationPlan but association is Account:account_plans or
         # e.g. the association is for an unrelated parent object id
         # FYI if there is no such association (e.g. a method name), nil will be returned.
-        # Another possible confusion with hand-crafter hierarchies may occur when before
+        # Another possible confusion with hand-crafted hierarchies may occur when before
         # a Plain- entry, there is set an unrelated Hierarchy- entry, then incorrect association will be set.
         ar_object.destroyed_by_association = match[:klass].constantize.reflect_on_association(match[:association])
       end
