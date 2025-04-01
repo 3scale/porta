@@ -23,24 +23,6 @@ class CMS::EmailTemplate < CMS::Template
     service_contract_messenger_expired_trial_period_notification
   ].freeze
 
-  PROVIDER_TEMPLATES = %w[
-    account_messenger_expired_credit_card_notification_for_provider
-    alert_messenger_limit_alert_for_provider
-    alert_messenger_limit_violation_for_provider
-    invoice_messenger_unsuccessfully_charged_for_provider
-    invoice_messenger_unsuccessfully_charged_for_provider_final
-    account_messenger_invoices_to_review
-    account_messenger_new_signup
-    account_messenger_plan_change_request
-    cinstance_messenger_contract_cancellation
-    cinstance_messenger_new_application
-    cinstance_messenger_plan_change
-    service_contract_messenger_contract_cancellation
-    service_contract_messenger_new_contract
-    service_contract_messenger_plan_change
-    data_export
-  ].freeze
-
   reset_templates_path!
 
   EMAIL_ADDRESS_FORMAT = /\s*#{User::RE_EMAIL_NAME}@#{User::RE_DOMAIN_HEAD}#{User::RE_DOMAIN_TLD}/i
@@ -307,10 +289,7 @@ class CMS::EmailTemplate < CMS::Template
       system_names = default_system_names
       provider = try(:proxy_association)&.owner
 
-      if provider&.provider_can_use?(:new_notification_system)
-        system_names -= PROVIDER_TEMPLATES
-        system_names -= BUYER_BILLING_TEMPLATES if provider.master_on_premises?
-      end
+      system_names -= BUYER_BILLING_TEMPLATES if provider.master_on_premises?
 
       templates = where(system_name: system_names).index_by(&:system_name)
 
