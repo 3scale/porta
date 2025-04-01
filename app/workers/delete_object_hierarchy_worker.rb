@@ -21,7 +21,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   # until_executed seems to rely on #after_perform which is skipped on failure so not sure whether retries will work.
   # additionally if we want to reschedule ourselves in #after_perform, it is not nice to rely on flaky order
-  # see https://github.com/3scale/activejob-uniqueness/blob/main/lib/active_job/uniqueness/strategies/until_executed.rb
+  # see https://github.com/veeqo/activejob-uniqueness/blob/v0.2.5/lib/active_job/uniqueness/strategies/until_executed.rb
   unique :until_and_while_executing, lock_ttl: 6.hours
 
   # better limit by available  `delete` executors
