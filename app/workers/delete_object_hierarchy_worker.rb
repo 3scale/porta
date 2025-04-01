@@ -42,7 +42,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   class << self
     # convenience method to schedule deleting an active record object
     def delete_later(ar_object)
-      perform_later *hierarchy_entries_for(ar_object)
+      perform_later(*hierarchy_entries_for(ar_object))
     end
 
     private
