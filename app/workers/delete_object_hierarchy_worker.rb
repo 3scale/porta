@@ -181,13 +181,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     Rails.logger.warn "#{self.class} skipping object, maybe something else already deleted it: #{exception.message}"
   end
 
-  def associations_strings(ar_object, *associations)
-    associations = ar_object.class.background_deletion if associations.blank?
-    associations.map do |association|
-      "Association-#{ar_object.class}-#{ar_object.id}:#{association}"
-    end
-  end
-
   delegate :info, to: 'Rails.logger'
 
   def now
