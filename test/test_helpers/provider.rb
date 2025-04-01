@@ -97,5 +97,3 @@ module TestHelpers
     end
   end
 end
-
-# ActiveSupport::TestCase.include TestHelpers::Master
