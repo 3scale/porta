@@ -109,7 +109,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
         # e.g. for Plans, to prevent acts_as_list to update position of each plan on deletion
         # we want to have here a reflection with a foreign key that is part of the list scope array.
         # see acts_as_list/active_record/acts/scope_method_definer.rb
-        # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreighn key,
+        # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreign key,
         # e.g. you delete an ApplicationPlan but association is Account:account_plans or
         # e.g. the association is for an unrelated parent object id
         # FYI if there is no such association (e.g. a method name), nil will be returned.
