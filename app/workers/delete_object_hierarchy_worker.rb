@@ -53,7 +53,9 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
       if ar_object.respond_to?(:destroyable?, true) && !ar_object.send(:destroyable?)
         raise DoNotRetryError, "Background deleting #{ar_object.class}:#{ar_object.id} which is not destroyable."
-      elsif ar_object.is_a?(FeaturesPlan)
+      end
+
+      if ar_object.is_a?(FeaturesPlan)
         # This is an ugly hack to handle lack of `#id` but we have only FeaturesPlans with a composite primary key.
         # Rails 7.1 supports composite primary keys so we can implement universal handling. See [FeaturesPlan].
         # Now to avoid complications, just sweep it under the rag.
