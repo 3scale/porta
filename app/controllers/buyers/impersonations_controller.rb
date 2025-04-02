@@ -6,19 +6,15 @@ class Buyers::ImpersonationsController < Buyers::BaseController
 
     authorize! :impersonate, provider
 
-    user= provider.users.impersonation_admin!
+    user = provider.users.impersonation_admin!
+    expires_at = Time.now.utc.round + 1.minute
+    signature = Impersonate::Signature.generate(user.id, expires_at)
 
-    sso_token = SSOToken.new user_id: user.id, expires_in: 1.minute
-
-    sso_token.protocol     = 'http'                unless request.ssl?
-    sso_token.redirect_url = params[:redirect_url] if params[:redirect_url] && params[:redirect_url] != "null"
-    sso_token.account      = provider
-
-    sso_url = sso_token.sso_url!(host: provider.external_admin_domain, port: request.port)
+    impersonate_url = provider_impersonate_url(signature:, expires_at: expires_at.to_i, host: provider.external_admin_domain, port: request.port)
 
     respond_to do | format |
-      format.json { render json: {url: sso_url}, status: :created }
-      format.html { redirect_to sso_url }
+      format.json { render json: {url: impersonate_url}, status: :created }
+      format.html { redirect_to impersonate_url }
     end
   end
 
