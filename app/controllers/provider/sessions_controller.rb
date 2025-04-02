@@ -7,7 +7,7 @@ class Provider::SessionsController < FrontendController
 
   before_action :ensure_provider_domain
   before_action :find_provider
-  before_action :instantiate_sessions_presenter, only: [:new, :create]
+  before_action :instantiate_sessions_presenter, only: %i[new create impersonate]
   before_action :redirect_if_logged_in, only: %i[new]
 
   def new
@@ -22,20 +22,24 @@ class Provider::SessionsController < FrontendController
 
     @user, strategy = authenticate_user if bot_check
 
-    if @user
-      self.current_user = @user
-      flash[:first_login] = true if current_user.user_sessions.empty?
-      create_user_session!(strategy&.authentication_provider_id)
-      flash[:notice] = 'Signed in successfully'
+    log_user_in(strategy)
+  end
 
-      redirect_back_or_default provider_admin_path
-    else
-      new
-      flash.now[:error] ||= strategy&.error_message
-      attempted_cred = auth_params.fetch(:username, 'SSO')
-      AuditLogService.call("Login attempt failed from #{request.remote_ip}: #{domain_account.external_admin_domain} - #{attempted_cred}. ERROR: #{strategy&.error_message}")
-      render :action => :new
+  def impersonate
+    session_return_to
+    logout_keeping_session!
+
+    impersonation_admin = domain_account.users.impersonation_admin
+
+    if Impersonate::Signature.validate(impersonate_params, impersonation_admin&.id)
+      @user = impersonation_admin
+
+      # We don't need the signature after processing, better remove it to avoid resending it with future redirections
+      request.query_parameters.delete(:expires_at)
+      request.query_parameters.delete(:signature)
     end
+
+    log_user_in
   end
 
   def bounce
@@ -56,6 +60,23 @@ class Provider::SessionsController < FrontendController
   end
 
   private
+
+  def log_user_in(strategy = Authentication::Strategy.build_provider(@provider))
+    if @user
+      self.current_user = @user
+      flash[:first_login] = true if current_user.user_sessions.empty?
+      create_user_session!(strategy&.authentication_provider_id)
+      flash[:notice] = 'Signed in successfully'
+
+      redirect_back_or_default provider_admin_path
+    else
+      new
+      flash.now[:error] ||= strategy&.error_message
+      attempted_cred = auth_params.fetch(:username, 'SSO')
+      AuditLogService.call("Login attempt failed from #{request.remote_ip}: #{domain_account.external_admin_domain} - #{attempted_cred}. ERROR: #{strategy&.error_message}")
+      render :action => :new
+    end
+  end
 
   def published_authentication_providers
     return [] unless @provider.provider_can_use?(:provider_sso)
@@ -93,6 +114,10 @@ class Provider::SessionsController < FrontendController
 
   def sso_params
     params.permit(%i[token expires_at redirect_url system_name code]).merge(request: request)
+  end
+
+  def impersonate_params
+    params.permit(%i[signature expires_at])
   end
 
   def session_return_to

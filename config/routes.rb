@@ -172,6 +172,7 @@ without fake Core server your after commit callbacks will crash and you might ge
     get 'sso' => 'sessions#create'
     get 'login'  => 'sessions#new',     :as => :login
     get 'logout' => 'sessions#destroy', :as => :logout
+    get 'impersonate' => 'sessions#impersonate'
 
     get 'admin', to: 'admin#show'
 
