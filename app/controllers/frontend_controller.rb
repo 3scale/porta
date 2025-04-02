@@ -19,7 +19,6 @@ class FrontendController < ApplicationController
   # those modules are inter-dependent
   include Liquid::TemplateSupport
   include Liquid::Assigns
-  include CMS::Toolbar
   include CMS::BuiltinPagesSupport
 
   include ThreeScale::Warnings::ControllerExtension
