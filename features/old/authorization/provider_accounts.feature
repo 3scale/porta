@@ -7,7 +7,7 @@ Feature: Provider accounts authorization
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    And a buyer "buyer"
 
   Scenario: Provider admin can access accounts
     Given current domain is the admin domain of provider "foo.3scale.localhost"
@@ -89,7 +89,7 @@ Feature: Provider accounts authorization
     And user "member" has access to the admin section "partners"
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_users" switch allowed
-    Given a pending buyer "pending account" signed up to provider "foo.3scale.localhost"
+    Given a pending buyer "pending account"
 
     When I log in as provider "member"
     And I follow "2 Accounts"

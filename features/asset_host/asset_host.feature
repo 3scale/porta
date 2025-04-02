@@ -34,7 +34,7 @@ Feature: Asset host
   Rule: Developer
     Background:
       Given a provider exists
-      And the provider has one buyer
+      And a buyer "Buyer Bob"
 
     Scenario: Developer portal with asset host not configured
       Given the asset host is unset

@@ -9,7 +9,7 @@ Feature: Audience > Applications > Alerts
       | Product | Name   |
       | API 1   | Plan 1 |
       | API 2   | Plan 2 |
-    And a buyer "Jane" of the provider
+    And a buyer "Jane"
     And the following applications:
       | Buyer | Name          | Plan   |
       | Jane  | Application 1 | Plan 1 |

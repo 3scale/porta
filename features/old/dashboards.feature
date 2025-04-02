@@ -18,7 +18,7 @@ Feature: Dashboards
   # CHECK THIS OUT!
   Scenario: Buyer dashboard in multiple application mode
     Given provider "foo.3scale.localhost" has "multiple_applications" visible
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob"
     When I log in as "bob" on foo.3scale.localhost
     And I go to the dashboard
     Then I should be on the dashboard
@@ -27,7 +27,7 @@ Feature: Dashboards
   Scenario: '/admin' on buyer domain sees buyer dashboard
     Given provider "foo.3scale.localhost" has "multiple_applications" visible
     When the current domain is foo.3scale.localhost
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob"
     And I log in as "bob" on foo.3scale.localhost
     And I request the url "/admin"
     Then I should be on the dashboard

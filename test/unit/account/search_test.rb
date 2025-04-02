@@ -4,9 +4,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test 'search without query returns all accounts by default, not using sphinx' do
-    pending  = FactoryBot.create(:pending_account)
-    approved = FactoryBot.create(:pending_account).tap(&:approve!)
-    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
+    pending = FactoryBot.create(:account, :pending)
+    approved = FactoryBot.create(:account, :approved)
+    rejected = FactoryBot.create(:account, :rejected)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -17,9 +17,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search without query returns all account is state is "all", not using sphinx' do
-    pending  = FactoryBot.create(:pending_account)
-    approved = FactoryBot.create(:pending_account).tap(&:approve!)
-    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
+    pending = FactoryBot.create(:account, :pending)
+    approved = FactoryBot.create(:account, :approved)
+    rejected = FactoryBot.create(:account, :rejected)
 
     ThinkingSphinx::Search.expects(:new).never
 
@@ -30,9 +30,9 @@ class Account::SearchTest < ActiveSupport::TestCase
   end
 
   test 'search without query returns accounts by state if given, not using sphinx' do
-    pending  = FactoryBot.create(:pending_account)
-    approved = FactoryBot.create(:pending_account).tap(&:approve!)
-    rejected = FactoryBot.create(:pending_account).tap(&:reject!)
+    pending = FactoryBot.create(:account, :pending)
+    approved = FactoryBot.create(:account, :approved)
+    rejected = FactoryBot.create(:account, :rejected)
 
     ThinkingSphinx::Search.expects(:new).never
 
