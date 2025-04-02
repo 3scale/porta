@@ -36,6 +36,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
   factory(:provider_account, parent: :account) do # rubocop:disable Metrics/BlockLength
     sequence(:self_domain) { |n| "admin-domain-company#{n}.com" }
     site_access_code { '' }
+    users { [association(:active_admin)] } # FIXME: move to :account but beware of failing tests
 
     payment_gateway_type { :bogus }
     provider { true }
@@ -99,6 +100,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     end
 
     trait :with_a_buyer do
+      # TODO: buyer_accounts { [association(:buyer_account)] }
       after(:build) do |account|
         account.buyer_accounts << FactoryBot.build(:buyer_account, provider_account: account)
       end
@@ -129,6 +131,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     payment_gateway_type { :bogus }
     association :settings
     approved
+    users { [association(:active_admin)] } # FIXME: move to :account but beware of failing tests
 
     after(:build) do |account|
       account.billing_strategy = FactoryBot.build(:postpaid_with_charging)

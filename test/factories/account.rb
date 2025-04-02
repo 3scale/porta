@@ -2,9 +2,13 @@
 
 FactoryBot.define do
   factory(:account, parent: :account_without_users) do
-    after(:build) do |account|
-      account.users << FactoryBot.build(:admin, account: account, state: 'active') if account.users.empty?
-    end
+    # after(:create) do |account|
+    #   if account.users.empty?
+    #     FactoryBot.create(:admin, username: account.org_name.gsub(/[^a-zA-Z0-9_.]+/, '_'),
+    #                               account: account,
+    #                               state: 'active')
+    #   end
+    # end
 
     after(:stub) do |account|
       admin = FactoryBot.build_stubbed(:admin)
@@ -17,6 +21,7 @@ FactoryBot.define do
   factory(:buyer_account, parent: :account) do
     association :provider_account
 
+    users { [association(:active_admin)] } # FIXME: move to :account but beware of failing tests
     buyer { true }
 
     approved

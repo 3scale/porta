@@ -33,9 +33,9 @@ module Tasks
         end
 
         Rails.logger.expects(:error).with do |msg|
-          assert_equal(expected_lines.size + 1, msg.lines.size) &&
-            msg.include?(HEADER) &&
-            expected_lines.all? { msg_includes_pair?(msg, _1) }
+          assert_equal expected_lines.size + 1, msg.lines.size
+          assert msg.include?(HEADER)
+          assert expected_lines.all? { msg_includes_pair?(msg, _1) }
         end
 
         execute_rake_task "multitenant/tenants.rake", "multitenant:tenants:integrity"
@@ -51,9 +51,9 @@ module Tasks
         expected_lines << %W[Service[#{plan.issuer.id}] Feature[#{feature.id}]]
 
         Rails.logger.expects(:error).with do |msg|
-          assert_equal(expected_lines.size + 1, msg.lines.size) &&
-            msg.include?(HEADER) &&
-            expected_lines.all? { msg_includes_pair?(msg, _1) }
+          assert_equal expected_lines.size + 1, msg.lines.size
+          assert msg.include?(HEADER)
+          assert expected_lines.all? { msg_includes_pair?(msg, _1) }
         end
 
         execute_rake_task "multitenant/tenants.rake", "multitenant:tenants:integrity"
