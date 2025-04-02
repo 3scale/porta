@@ -4,6 +4,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   WORK_TIME_LIMIT_SECONDS = 5
   ASSOCIATION_RE = /Association-(?<klass>[:\w]+)-(?<id>\d+):(?<association>\w+)/
+  PLAIN_OBJECT_RE = /Plain-([:\w]+)-(\d+)/
 
   class DoNotRetryError < RuntimeError; end
 
@@ -103,7 +104,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def handle_one_hierarchy_entry!(hierarchy)
     entry = hierarchy.pop
     case entry
-    when /Plain-([:\w]+)-(\d+)/
+    when PLAIN_OBJECT_RE
       ar_object = $1.constantize.find($2.to_i)
       match = hierarchy.last&.match(ASSOCIATION_RE)
       if match
@@ -189,5 +190,5 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
-  private_constant :DoNotRetryError, :ASSOCIATION_RE
+  private_constant :DoNotRetryError, :ASSOCIATION_RE, :PLAIN_OBJECT_RE
 end
