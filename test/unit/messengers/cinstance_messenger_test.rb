@@ -135,6 +135,18 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     assert_match expected, message.body
   end
 
+  # settings should not be missing at this point but could in edge cases during deletion
+  test "application reject without a settings object" do
+    @provider_account.schedule_for_deletion!
+    @provider_account.settings.delete
+    assert_nil @provider_account.reload.settings
+
+    CinstanceMessenger.reject(@app).deliver
+
+    message = @app.user_account.received_messages.last
+    expected =   "#{@app.provider_account.org_name} has rejected your application for service #{@app.service.name} (#{@app.plan.name})"
+    assert_match expected, message.body
+  end
 
   class ProviderAndMasterTest < ActiveSupport::TestCase
 

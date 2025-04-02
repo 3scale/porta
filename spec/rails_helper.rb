@@ -63,9 +63,6 @@ RSpec::Core::ExampleGroup.class_eval do
   include TestHelpers::Master
 end
 
-# Require FactoryBot configuration
-require_relative '../test/test_helpers/factory_bot'
-
 require 'api_helper'
 require 'database_cleaner'
 

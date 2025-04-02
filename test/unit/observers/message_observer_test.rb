@@ -122,6 +122,14 @@ class MessageObserverTest < ActiveSupport::TestCase
         CinstanceMessenger.expects(:reject).with(@contract).returns(message)
       end
     end
+
+    test '#reject should not send message when provider is scheduled for deletion' do
+      @contract.provider_account.schedule_for_deletion!
+      Contract.transaction do
+        @contract.reject! 'reason'
+        CinstanceMessenger.expects(:reject).never
+      end
+    end
   end
 
   class PlanDoesNotRequireApproval < MessageObserverTest

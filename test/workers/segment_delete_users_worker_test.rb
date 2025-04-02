@@ -17,7 +17,7 @@ class SegmentDeleteUsersWorkerTest < ActiveSupport::TestCase
 
     number_deleted_users = DeletedObject.users.count
     assert_change of: lambda { DeletedObject.users.count }, from: number_deleted_users, to: 0 do
-      perform_enqueued_jobs(only: [DeleteObjectHierarchyWorker, DeletePlainObjectWorker]) do
+      perform_enqueued_jobs(only: [DeleteObjectHierarchyWorker]) do
         SegmentDeleteUsersWorker.new.perform
       end
     end
@@ -29,8 +29,8 @@ class SegmentDeleteUsersWorkerTest < ActiveSupport::TestCase
     SegmentIntegration::DeleteUsersService.expects(:call).never
 
     number_deleted_users = DeletedObject.users.count
-    assert_no_change of: lambda { DeletedObject.users.count }, from: number_deleted_users, to: 0 do
-      perform_enqueued_jobs(only: [DeleteObjectHierarchyWorker, DeletePlainObjectWorker]) do
+    assert_no_change of: lambda { DeletedObject.users.count }, from: number_deleted_users do
+      perform_enqueued_jobs(only: [DeleteObjectHierarchyWorker]) do
         SegmentDeleteUsersWorker.new.perform
       end
     end

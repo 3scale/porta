@@ -119,7 +119,7 @@ module Messenger
 
       def respond_to?(method)
         # in ruby 1.9 the elements of that array are symbols, not strings
-        instance_methods.any? {|m| m.to_s == method.to_s} or super
+        instance_methods.include?(method.to_sym) or super
       end
     end
   end
