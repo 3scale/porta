@@ -5,7 +5,7 @@ module ThreeScale
     def all_models_with_a_table
       return @all_models_with_a_table if defined?(@all_models_with_a_table)
 
-      Rails.autoloaders.main.eager_load_dir("#{Rails.root}/app/models")
+      Rails.autoloaders.main.eager_load_dir(Rails.root.join("app/models"))
       @all_models_with_a_table = ApplicationRecord.descendants.select(&:arel_table).reject(&:abstract_class?)
     end
 
