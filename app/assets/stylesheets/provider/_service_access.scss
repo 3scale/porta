@@ -15,6 +15,7 @@ form.formtastic fieldset > ol > li fieldset {
       .FeatureAccessList-item.FeatureAccessList-item--monitoring::after,
       .FeatureAccessList-item.FeatureAccessList-item--partners::after,
       .FeatureAccessList-item.FeatureAccessList-item--plans::after,
+      .FeatureAccessList-item.FeatureAccessList-item--policy_registry::after,
       .FeatureAccessList-item--services {
         display: none;
       }
@@ -41,14 +42,16 @@ form.formtastic fieldset > ol > li fieldset {
 
       &.is-checked.FeatureAccessList-item--monitoring::after,
       &.is-checked.FeatureAccessList-item--partners::after,
-      &.is-checked.FeatureAccessList-item--plans::after {
+      &.is-checked.FeatureAccessList-item--plans::after,
+      &.is-checked.FeatureAccessList-item--policy_registry::after {
         border-top-style: solid;
         border-right-style: solid;
       }
 
       &--monitoring::after,
       &--partners::after,
-      &--plans::after {
+      &--plans::after,
+      &--policy_registry::after {
         background-color: transparent;
         border-right: $border-width dotted $border-color;
         border-top: $border-width dotted $border-color;
@@ -61,21 +64,27 @@ form.formtastic fieldset > ol > li fieldset {
       }
 
       &--partners:after {
-        margin-left: 43%;
-        top: line-height-times(275 / 100);
-        width: 50%;
+        margin-left: 35%;
+        top: line-height-times(.5);
+        width: 61%;
       }
 
       &--monitoring:after {
-        margin-left: 27%;
-        top: line-height-times(275 / 100);
-        width: 50%;
+        margin-left: 35%;
+        top: line-height-times(.5);
+        width: 48%;
       }
 
       &--plans:after {
-        margin-left: 34%;
-        top: line-height-times(475 / 100);
-        width: 21%;
+        margin-left: 35%;
+        top: line-height-times(.5);
+        width: 35%;
+      }
+
+      &--policy_registry:after {
+        margin-left: 35%;
+        top: line-height-times(.5);
+        width: 22%;
       }
 
       &--services {
