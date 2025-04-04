@@ -20,7 +20,7 @@ class Provider::SessionsController < FrontendController
     session_return_to
     logout_keeping_session!
 
-    @user, strategy = authenticate_user if bot_check
+    @user, strategy = authenticate_user
 
     if @user
       self.current_user = @user
@@ -75,6 +75,9 @@ class Provider::SessionsController < FrontendController
 
   def authenticate_user
     strategy = Authentication::Strategy.build_provider(@provider)
+    captcha_is_available = request.post? # User & pass strategy
+
+    return if captcha_is_available && !bot_check
 
     params = if domain_account.settings.enforce_sso?
                sso_params
