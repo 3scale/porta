@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'metric_slot_close_button' %>
+<% end %>
+
 <%= content_tag('tr', :id => dom_id(metric), :class => metric.child? ? 'child' : 'root') do %>
   <td class="title" title="<%= h metric.friendly_name %>"><%= h metric.friendly_name %></td>
     <% if @plan.pricing_enabled? %>
