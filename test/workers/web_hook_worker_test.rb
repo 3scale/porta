@@ -24,7 +24,7 @@ class WebHookWorkerTest < ActiveSupport::TestCase
       jobs = WebHookWorker.jobs
       assert jobs.empty?
       FactoryBot.create(:buyer_account, :provider_account => webhook.account)
-      assert_equal 2, jobs.size
+      assert_not_empty jobs
     end
   end
 

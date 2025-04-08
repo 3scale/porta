@@ -15,7 +15,7 @@ class NotificationsTest < ActiveSupport::TestCase
       %w[plan_change weekly_reports daily_reports].each do |o|
         SystemOperation.for(o)
       end
-      @account = FactoryBot.create(:account_without_users)
+      @account = FactoryBot.create(:account)
       @admin = FactoryBot.create(:admin, account: @account)
     end
 

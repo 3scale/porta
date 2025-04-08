@@ -7,7 +7,7 @@ class Master::Api::Finance::Accounts::BillingJobsControllerTest < ActionDispatch
   include BillingResultsTestHelpers
 
   setup do
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @access_token = FactoryBot.create(:access_token, owner: master_account.first_admin, scopes: ['account_management'])
 
@@ -33,7 +33,7 @@ class Master::Api::Finance::Accounts::BillingJobsControllerTest < ActionDispatch
   end
 
   test 'create billing job with account_id from different scope' do
-    other_provider = FactoryBot.create(:provider_with_billing)
+    other_provider = FactoryBot.create(:provider_account, :with_billing)
     other_buyer = FactoryBot.create(:buyer_account, provider_account: other_provider)
     post master_api_provider_account_billing_jobs_path(@provider, other_buyer, date: '2018-02-08'), params: { access_token: @access_token.value }
     assert_response :not_found
@@ -74,7 +74,7 @@ class Master::Api::Finance::Accounts::BillingJobsControllerTest < ActionDispatch
     disable_transactional_fixtures!
 
     setup do
-      @provider = FactoryBot.create(:provider_with_billing)
+      @provider = FactoryBot.create(:provider_account, :with_billing)
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @master_admin = master_account.first_admin
       host! master_account.internal_domain

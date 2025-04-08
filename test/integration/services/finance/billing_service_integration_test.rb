@@ -9,7 +9,7 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :buyer
 
   setup do
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
   end
 

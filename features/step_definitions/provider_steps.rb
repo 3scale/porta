@@ -245,14 +245,14 @@ def setup_provider(login)
 
   return unless login
 
-  try_provider_login('foo.3scale.localhost', 'supersecret')
+  try_provider_login(@provider.admins.first.username, 'supersecret')
   assert_current_user('foo.3scale.localhost')
 end
 
 def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
-  @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan, org_name: name,
-                                                                                           domain: name,
-                                                                                           self_domain: "admin.#{name}")
+  @provider = FactoryBot.create(:provider_account, org_name: name,
+                                                   domain: name,
+                                                   self_domain: "admin.#{name}")
   unless @provider.bought?(plan)
     @provider.application_contracts.delete_all
     @provider.buy!(plan, name: 'Default', description: 'Default')

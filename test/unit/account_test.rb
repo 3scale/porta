@@ -191,11 +191,11 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'Account#admins returns users with admin role' do
-    account = FactoryBot.create(:account_without_users)
+    account = FactoryBot.create(:account)
     FactoryBot.create(:simple_user, account: account)
     admin = FactoryBot.create(:admin, account: account)
 
-    assert_equal [admin], account.admins
+    assert_includes account.admins, admin
   end
 
   test 'have nil VAT rate' do

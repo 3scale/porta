@@ -17,7 +17,7 @@ module Signup
     end
 
     test '#valid? returns false if the user is valid but the account is not' do
-      @account = FactoryBot.build(:account, org_name: nil)
+      account.org_name = nil
       assert user.valid?
       refute account.valid?
       refute signup_result.valid?
@@ -38,7 +38,7 @@ module Signup
     end
 
     test '#persisted? returns false if the user is persisted but the account is not' do
-      @account = FactoryBot.build(:account, org_name: nil)
+      account.org_name = nil
       user.save
       assert user.persisted?
       refute account.persisted?
@@ -68,7 +68,7 @@ module Signup
     end
 
     test '#save! raises ActiveRecord::RecordInvalid when the account is invalid' do
-      @account = FactoryBot.build(:account, org_name: nil)
+      account.org_name = nil
       assert_raise ActiveRecord::RecordInvalid do
         signup_result.save!
       end
@@ -100,7 +100,7 @@ module Signup
     end
 
     test '#save does not save and #errors return the errors when the org name is blank' do
-      @account = FactoryBot.build(:account, org_name: nil)
+      account.org_name = nil
       signup_result.save
       refute user.persisted?
       refute account.persisted?
@@ -212,7 +212,7 @@ module Signup
     end
 
     def account
-      @account ||= FactoryBot.build(:account_without_users)
+      @account ||= FactoryBot.build(:account)
     end
 
     def signup_result

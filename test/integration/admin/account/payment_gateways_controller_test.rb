@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryBot.create(:provider_account, billing_strategy: FactoryBot.create(:postpaid_with_charging))
+    @provider = FactoryBot.create(:provider_account, billing_strategy: FactoryBot.create(:postpaid_billing, charging_enabled: true))
     @provider.settings.allow_finance!
 
     login! @provider

@@ -76,7 +76,7 @@ class UserMailerTest < ActionMailer::TestCase
       @provider_account = FactoryBot.create(:provider_account, domain: 'api.monkey.com',
                                                                org_name: "Monkey",
                                                                from_email: 'api@monkey.com')
-      @buyer_account = FactoryBot.create(:buyer_account_with_pending_user, provider_account: @provider_account)
+      @buyer_account = FactoryBot.create(:buyer_account, provider_account: @provider_account)
       @user = FactoryBot.create(:admin, account: @buyer_account)
     end
 

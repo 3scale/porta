@@ -65,12 +65,11 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User#superadmin? return true only if user is admin of the master account' do
-    regular_account = FactoryBot.create(:account)
-    member = FactoryBot.create(:user, account: regular_account)
-    admin = regular_account.admins.first
+    regular_account = FactoryBot.create(:account_without_users)
+    admin = FactoryBot.create(:admin, account: regular_account)
+    member = FactoryBot.create(:member, account: regular_account)
 
-    master_account.delete
-    superadmin = master_account.admins.first
+    superadmin = FactoryBot.create(:master_account).admins.first
 
     assert_not member.superadmin?
     assert_not admin.superadmin?
@@ -90,7 +89,8 @@ class User::RolesTest < ActiveSupport::TestCase
   end
 
   test 'User#provider_admin? return false if user is of non provider account' do
-    account = FactoryBot.create(:account, provider: false)
+    account = FactoryBot.create(:account_without_users, provider: false)
+    FactoryBot.create(:active_admin, account: account)
 
     assert_not account.admins.first.provider_admin?
   end

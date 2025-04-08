@@ -3,7 +3,7 @@ require 'test_helper'
 class Finance::InvoiceProxyTest < ActiveSupport::TestCase
 
   def setup
-    @account = FactoryBot.create(:provider_with_billing)
+    @account = FactoryBot.create(:provider_account, :with_billing)
     buyer = FactoryBot.build_stubbed(:buyer_account, provider_account: @account)
     @month = Month.new(Time.zone.now)
     @proxy = Finance::InvoiceProxy.new(buyer, @month)

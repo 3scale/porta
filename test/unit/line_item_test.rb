@@ -11,8 +11,8 @@ class LineItemTest < ActiveSupport::TestCase
   end
 
   test 'returns cost in currency of the billing strategy' do
-    provider_account_one = FactoryBot.create(:provider_with_billing)
-    provider_account_two = FactoryBot.create(:provider_with_billing)
+    provider_account_one = FactoryBot.create(:provider_account, :with_billing)
+    provider_account_two = FactoryBot.create(:provider_account, :with_billing)
 
     provider_account_one.billing_strategy.update(currency: 'EUR')
     provider_account_two.billing_strategy.update(currency: 'USD')

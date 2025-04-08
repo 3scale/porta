@@ -569,7 +569,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if the account is pending' do
-    account = FactoryBot.create(:account_without_users)
+    account = FactoryBot.create(:account)
     user = FactoryBot.create(:user, account: account)
 
     user.activate!
@@ -579,7 +579,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns false if the account is rejected' do
-    account = FactoryBot.create(:account_without_users)
+    account = FactoryBot.create(:account)
     user = FactoryBot.create(:user, account: account)
 
     user.activate!
@@ -589,7 +589,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#can_login? returns true if the user is active and the account is approved' do
-    account = FactoryBot.create(:account_without_users)
+    account = FactoryBot.create(:account)
     user = FactoryBot.create(:user, account: account)
 
     user.activate!

@@ -171,7 +171,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   class ProviderLoggedInTest < Buyers::AccountsControllerTest
     def setup
-      @buyer = FactoryBot.create(:buyer_account, name: 'bob')
+      @buyer = FactoryBot.create(:buyer_account)
       @provider = @buyer.provider_account
       login! @provider
     end
@@ -287,9 +287,10 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       get edit_admin_buyers_account_path(@buyer)
       assert_response :not_found
 
-      put admin_buyers_account_path(@buyer), params: {account: {name: 'mike'}}
-      assert_response :not_found
-      assert_equal 'bob', @buyer.reload.name
+      assert_no_changes -> { @buyer.reload.name } do
+        put admin_buyers_account_path(@buyer), params: {account: {name: 'mike'}}
+        assert_response :not_found
+      end
 
       delete admin_buyers_account_path(@buyer)
       assert_response :not_found
@@ -301,11 +302,11 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       page = Nokogiri::HTML4::Document.parse(response.body)
       expected_display_names = @provider.buyer_accounts.map { |buyer| buyer.decorate.admin_user_display_name }
-      assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[2]/a').map(&:text)
+      assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[@data-label="Admin"]').map(&:text)
 
 
       get admin_buyers_accounts_path(id: @buyer.id)
-      assert_xpath('//tbody/tr/td[2]/a', @buyer.decorate.admin_user_display_name)
+      assert_xpath('//tbody/tr/td[@data-label="Admin"]', @buyer.decorate.admin_user_display_name)
     end
 
     test 'User with invalid data shows an flash error' do

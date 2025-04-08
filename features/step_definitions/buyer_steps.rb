@@ -1,19 +1,35 @@
 # frozen_string_literal: true
 
 Given "a(n approved) buyer {string}" do |name|
-  @buyer = @account = FactoryBot.create(:buyer_account, provider_account: @provider,
-                                                        org_name: name)
+  @buyer = @account = FactoryBot.create(:buyer_account, :approved, provider_account: @provider,
+                                                                   org_name: name)
   @account.buy! @provider.account_plans.default
-  assert @buyer.approved? # TODO: for debugging. Remove before merging.
+end
+
+Given "a(n approved) buyer {string} signed up to {provider}" do |name, provider|
+  @buyer = @account = FactoryBot.create(:buyer_account, :approved, provider_account: provider,
+                                                                   org_name: name)
+  @account.buy! @provider.account_plans.default
+end
+
+Given "a(n approved) buyer {string} signed up to {service}" do |name, service|
+  @buyer = FactoryBot.create(:buyer_account, :approved, provider_account: service.account,
+                                                        name: name)
+
+  plans = service.service_plans
+  plan = plans.default_or_first || plans.first
+  @buyer.buy! plan
 end
 
 Given "a pending buyer {string}" do |name|
-  @buyer = pending_buyer(@provider, name)
+  @buyer = FactoryBot.create(:buyer_account, :pending, provider_account: @provider,
+                                                       org_name: name)
+  @buyer.buy! @provider.account_plans.default
 end
 
 Given "a rejected buyer {string}" do |name|
-  @buyer = pending_buyer(@provider, name)
-  @buyer.reject!
+  @buyer = FactoryBot.create(:buyer_account, :rejected, provider_account: @provider,
+                                                        org_name: name)
 end
 
 Given "{buyer} has {int} application(s)" do |buyer, number|
@@ -49,15 +65,6 @@ Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   @buyer.buy!(plan)
 end
 
-Given "a buyer {string} signed up to {provider}" do |account_name, provider|
-  @buyer = pending_buyer(provider, account_name)
-  @buyer.approve! unless @buyer.approved?
-end
-
-Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|
-  pending_buyer(provider, account_name)
-end
-
 # Create a group of buyer accounts subscribed to one or more service plans
 
 # Given the following buyers with service subscriptions signed up to the provider:
@@ -73,29 +80,6 @@ Given "the following buyers with service subscriptions signed up to {provider}:"
       contract.update_attribute(:state, row[:state]) if row[:state] # rubocop:disable Rails/SkipsModelValidations
     end
   end
-end
-
-def pending_buyer(provider, account_name)
-  # TODO: Refactor this method into a factory
-  buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
-                  :org_name => account_name,
-                  :buyer => true)
-  buyer.buy! provider.account_plans.default
-
-  buyer.make_pending!
-  assert buyer.pending?
-
-  buyer
-end
-
-Given "an approved buyer {string} signed up to {provider}" do |account_name, provider|
-  @buyer = pending_buyer(provider, account_name)
-  @buyer.approve! unless @buyer.approved?
-end
-
-Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
-  account = pending_buyer(provider, account_name)
-  account.reject!
 end
 
 Given "{buyer} has extra fields:" do |buyer, table|
@@ -238,13 +222,4 @@ end
 When "the buyer wants to sign up" do
   set_current_domain 'foo.3scale.localhost'
   visit signup_path
-end
-
-Given "a buyer {string} signed up to {service}" do |name, service|
-  @buyer = pending_buyer(service.account, name)
-  @buyer.approve! unless @buyer.approved?
-
-  plans = service.service_plans
-  plan = plans.default_or_first || plans.first
-  @buyer.buy! plan
 end
