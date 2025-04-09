@@ -8,6 +8,8 @@ class JanitorWorker
 
     PurgeOldUserSessionsWorker.perform_async
     PurgeStaleObjectsWorker.perform_later(EventStore::Event.name, DeletedObject.name)
+    DeleteAllStaleObjectsWorker.perform_later(MessageRecipient.name, Message.name)
+
     true
   end
 end

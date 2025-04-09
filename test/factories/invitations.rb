@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory(:invitation) do
-    email { "john@example.com" }
+    sequence(:email) { |n| "john-#{n}@example.com" }
     account { |a| a.association(:provider_account) }
 
     transient do

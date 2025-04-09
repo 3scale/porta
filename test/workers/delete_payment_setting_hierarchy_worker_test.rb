@@ -4,7 +4,7 @@ require 'test_helper'
 
 class DeletePaymentSettingHierarchyWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
-  
+
   def setup
     tenant = FactoryBot.create(:simple_provider)
     tenant.schedule_for_deletion!
@@ -14,18 +14,16 @@ class DeletePaymentSettingHierarchyWorkerTest < ActiveSupport::TestCase
 
   attr_reader :payment_gateway_setting, :buyers
 
-  test 'it performs for the buyers is it is destroyed by the provider association' do
+  test 'it performs' do
     perform_enqueued_jobs do
-      DeletePaymentSettingHierarchyWorker.perform_now(payment_gateway_setting,
-        ["Hierarchy-Account-#{payment_gateway_setting.tenant_id}"])
+      DeletePaymentSettingHierarchyWorker.delete_later(payment_gateway_setting)
     end
 
-    buyers.each { |buyer| assert_raises(ActiveRecord::RecordNotFound) { buyer.reload } }
+    assert_raises(ActiveRecord::RecordNotFound) { payment_gateway_setting.reload }
+    buyers.each(&:reload)
   end
 
-  test 'it does not perform for the buyers if it is not destroyed by the provider association' do
-    perform_enqueued_jobs { DeletePaymentSettingHierarchyWorker.perform_now(payment_gateway_setting, []) }
-
-    buyers.each { |buyer| assert buyer.reload }
+  test "compatibility" do
+    assert_equal DeleteObjectHierarchyWorker, DeletePaymentSettingHierarchyWorker
   end
 end

@@ -270,19 +270,24 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
   end
 
   class DefaultTest < ActiveSupport::TestCase
-    class FakeModel < ApplicationRecord
-      self.table_name = 'accounts'
-      include Fields::Fields
-
-      required_fields_are :required_one, :required_two
-      optional_fields_are :optional_one, :optional_two
-      default_fields_are :required_one, :optional_one
-    end
-
     attr_reader :provider
 
     setup do
+      class FakeModel < ApplicationRecord
+        self.table_name = 'accounts'
+        include Fields::Fields
+
+        required_fields_are :required_one, :required_two
+        optional_fields_are :optional_one, :optional_two
+        default_fields_are :required_one, :optional_one
+      end
+
       @provider = FactoryBot.create(:simple_provider)
+    end
+
+    teardown do
+      FieldsDefinition.targets.delete FakeModel.name
+      DefaultTest.send(:remove_const, :FakeModel)
     end
 
     test 'creates default field definitions' do

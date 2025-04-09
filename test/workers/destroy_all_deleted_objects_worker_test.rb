@@ -20,7 +20,7 @@ class DestroyAllDeletedObjectsWorkerTest < ActiveSupport::TestCase
     services = FactoryBot.create_list(:simple_service, 2, account: provider)
     services.first.mark_as_deleted!
 
-    DeleteObjectHierarchyWorker.expects(:perform_later).once.with do |object, _hierarchy|
+    DeleteObjectHierarchyWorker.expects(:delete_later).once.with do |object, _hierarchy|
       object.id == services.first.id
     end
 

@@ -3,6 +3,10 @@ class PostOffice < ActionMailer::Base
   helper ThreeScale::MoneyHelper
 
   def message_notification(message, recipient)
+    unless recipient
+      Rails.logger.error "Can't notify null recipient for message #{message.id}"
+      return
+    end
     receiver = recipient.receiver
     unless receiver
       Rails.logger.error "Can't notify #{recipient.class} #{recipient.id} because it refers to a missing #{recipient.receiver_type}"

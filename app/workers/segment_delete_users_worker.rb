@@ -10,7 +10,7 @@ class SegmentDeleteUsersWorker < ApplicationJob
     config = Features::SegmentDeletionConfig.config
     DeletedObject.users.select(:id, :object_id).order(:id).find_in_batches(batch_size: config.request_size) do |records|
       SegmentIntegration::DeleteUsersService.call(records.map(&:object_id))
-      records.each(&DeleteObjectHierarchyWorker.method(:perform_later))
+      records.each(&DeleteObjectHierarchyWorker.method(:delete_later))
       sleep(config.wait_time)
     end
   rescue SegmentIntegration::ClientError, SegmentIntegration::UnexpectedResponseError => error
