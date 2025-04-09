@@ -172,7 +172,12 @@ class Sidebar
       render: @.render_content
     }
 
-    all = _.union(data.sections || [], data.pages || [], data.files || [], data.builtins || [])
+    all = Array.from(
+      new Set(data.sections)
+        .union(new Set(data.pages))
+        .union(new Set(data.files))
+        .union(new Set(data.builtins))
+      )
     section.empty = _(all).isEmpty()
 
     if section.parent_id || section.rendered
@@ -285,7 +290,12 @@ class SidebarFilter
     types = for type in @status.types || []
       matched.filter("[data-type~=#{type}]").toArray()
     if types.length > 0
-      matched = $(_(matched.toArray()).intersection(_.union types...))
+      union_types = Array.from types.reduce(
+        (result, current) -> result.union(new Set(current)),
+        new Set
+      )
+
+      matched = $(_(matched.toArray()).intersection(union_types))
 
     if origin = @status.origin
       matched = matched.filter("[data-origin~=#{origin}]")
