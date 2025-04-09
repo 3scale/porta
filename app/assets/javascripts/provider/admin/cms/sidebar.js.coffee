@@ -178,7 +178,7 @@ class Sidebar
         .union(new Set(data.files))
         .union(new Set(data.builtins))
       )
-    section.empty = _(all).isEmpty()
+    section.empty = all.length == 0
 
     if section.parent_id || section.rendered
       @template.content(data)
@@ -402,7 +402,7 @@ class SidebarTemplates
                   <%= icon_link_to('code', layout.title, layout.edit_path) %>
                  </li>
               <% }); %>
-              <% if(_.isEmpty(layouts)) { %><li data-behavior="search">No Layouts</li><% }; %>
+              <% if(layouts && layouts.length === 0) { %><li data-behavior="search">No Layouts</li><% }; %>
               <li class="no-results">No Layouts Found</li>
              </ul>
              """
@@ -415,7 +415,7 @@ class SidebarTemplates
                     <%= icon_link_to('rocket', portlet.title, portlet.edit_path) %>
                   </li>
                 <% }); %>
-                <% if(_.isEmpty(portlets)) { %><li data-behavior="search">No Portlets</li><% }; %>
+                <% if (portlets && portlets.length === 0) { %><li data-behavior="search">No Portlets</li><% }; %>
                 <li class="no-results">No Portlets Found</li>
               </ul>
 
@@ -428,7 +428,7 @@ class SidebarTemplates
                     <%= icon_link_to('puzzle-piece', partial.system_name, partial.edit_path) %>
                   </li>
                 <% }); %>
-                <% if(_.isEmpty(partials)) { %><li data-behavior="search">No Partials</li><% }; %>
+                <% if(partials && partials.length === 0) { %><li data-behavior="search">No Partials</li><% }; %>
                 <li class="no-results">No Partials Found</li>
               </ul>
               """
