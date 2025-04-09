@@ -367,25 +367,25 @@ class SidebarTemplates
           """
   @content = """
           <ul id="cms-sidebar-section-<%= section.id %>">
-            <% _.each(pages, function(page) { %>
+            <% pages?.forEach(page => { %>
               <li class="cms-page" data-id="<%= page.id %>" data-behavior="drag search" data-param="cms_page" <%= search(page) %>>
                 <%= icon_link_to('file', page.title, page.edit_path, [ page.path, '(' + page.title + ')' ]) %>
               </li>
             <% }); %>
 
-            <% _.each(files, function(file) { %>
+            <% files?.forEach(file => { %>
               <li class="cms-file" data-id="<%= file.id %>" data-behavior="drag search" data-param="cms_file" <%= search(file) %>>
                 <%= icon_link_to('paperclip', file.attachment_file_name, file.edit_path) %>
               </li>
             <% }); %>
 
-            <% _.each(builtins, function(builtin) { %>
+            <% builtins?.map(builtin => { %>
               <li class="cms-builtin" data-id="<%= builtin.id %>" data-behavior="drag search" data-param="cms_builtin" <%= search(builtin) %>>
                 <%= icon_link_to('cog', builtin.title, builtin.edit_path) %>
               </li>
             <% }); %>
 
-            <% _.each(sections, function(section){ %>
+            <% sections?.forEach(section => { %>
               <li class="cms-section"  data-id="<%= section.id %>" data-behavior="toggle drag search" data-param="cms_section" <%= search(section) %>>
                 <%= icon('folder-open fa-fw') %>
                 <%= link_to(section.title, section.edit_path) %>
@@ -397,7 +397,7 @@ class SidebarTemplates
   @layouts = """
              <h3>Layouts</h3>
              <ul>
-              <% _.each(layouts, function(layout) { %>
+              <% layouts?.forEach(layout => { %>
                 <li <%= search(layout) %> data-behavior="search">
                   <%= icon_link_to('code', layout.title, layout.edit_path) %>
                  </li>
@@ -410,7 +410,7 @@ class SidebarTemplates
   @portlets = """
               <h3>Portlets</h3>
               <ul>
-                <% _.each(portlets, function(portlet) { %>
+                <% portlets?.forEach(portlet => { %>
                   <li <%= search(portlet) %>>
                     <%= icon_link_to('rocket', portlet.title, portlet.edit_path) %>
                   </li>
@@ -423,7 +423,7 @@ class SidebarTemplates
   @partials = """
               <h3>Partials</h3>
               <ul>
-                <% _.each(partials, function(partial) { %>
+                <% partials?.forEach(partial => { %>
                   <li <%= search(partial) %> data-behavior="search">
                     <%= icon_link_to('puzzle-piece', partial.system_name, partial.edit_path) %>
                   </li>
