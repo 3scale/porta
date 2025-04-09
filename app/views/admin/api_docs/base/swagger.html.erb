@@ -125,7 +125,13 @@
         onComplete: function(swaggerApi, swaggerUi) {
           var source   = $("#swagger-notifications").html();
           var template = Handlebars.compile(source);
-          var html = _.reduce( swaggerApi.apis, function(memo, api) { return memo + template(api); }, "" );
+
+          const { apis } = swaggerApi;
+          let html = '';
+          for (const key in apis) {
+            html += template(apis[key]);
+          }
+
           $("#message-bar").append(html);
         },
         onFailure: function(data) {
