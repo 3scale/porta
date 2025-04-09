@@ -133,10 +133,10 @@ class Sidebar
 
   group: (json) ->
     {
-      sections: _.groupBy(json.sections, 'parent_id'),
-      pages: _.groupBy(json.pages, 'section_id'),
-      files: _.groupBy(json.files, 'section_id'),
-      builtins: _.groupBy(json.builtins, 'section_id')
+      sections: Object.groupBy(json.sections, (n) => n.parent_id),
+      pages: Object.groupBy(json.pages, (n) => n.section_id),
+      files: Object.groupBy(json.files, (n) => n.section_id),
+      builtins: Object.groupBy(json.builtins, (n) => n.section_id)
     }
 
   render_layouts: (layouts) =>
