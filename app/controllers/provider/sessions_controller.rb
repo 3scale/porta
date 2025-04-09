@@ -74,9 +74,7 @@ class Provider::SessionsController < FrontendController
   end
 
   def authenticate_user
-    strategy = Authentication::Strategy.build_provider(@provider)
-    captcha_is_available = request.post? # User & pass strategy
-
+    captcha_is_available = request.post? # Internal strategy (user & pass)
     return if captcha_is_available && !bot_check
 
     params = if domain_account.settings.enforce_sso?
@@ -85,6 +83,19 @@ class Provider::SessionsController < FrontendController
                request.post? ? auth_params : sso_params
     end
 
+    # TODO: refactor the authentication flow.
+    # Right now, we have a hierarchy of classes, one for each auth strategy, and we manually instance the last child
+    # class, `ProviderOAuth2`, and then try all strategies one by one by calling `super` and going up in the hierarchy
+    # until a strategy works. Due to this, we can't know from the here which strategy was really used.
+    #
+    # The hierarchy right now is:
+    #
+    # `ProviderOAuth2` < `OAuth2Base` < `Internal` < `SSO` < `Base`
+    #
+    # This is very weird because `Internal`, which means "User + pass" is not a kind of `SSO`; and `OAuth2` is not
+    # a kind of `Internal`. Not to mention we are calling `SSO` to something which is merely a token authentication
+    # not related at all with any SSO.
+    strategy = Authentication::Strategy.build_provider(@provider)
     user = strategy.authenticate(params)
 
     [user, strategy]
