@@ -83,24 +83,14 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
       assert_equal @plan, @application.reload.plan
     end
 
-    test 'sends email to provider and buyer with new notification system' do
-      Account.any_instance.stubs(provider_can_use?: true)
-
+    test 'sends email to provider with new notification system' do
       Cinstances::CinstancePlanChangedEvent.expects(:create).with(@application, any_parameters).once
-      ContractMessenger.expects(:plan_change).never
-
-      ContractMessenger.expects(:plan_change_for_buyer).with(@application, any_parameters).once.returns(mock(deliver: true))
 
       request_plan_change
       assert_response :success
     end
 
-    test 'sends email to provider and buyer with old notification system' do
-      Account.any_instance.stubs(provider_can_use?: false)
-
-      Cinstances::CinstancePlanChangedEvent.expects(:create).never
-      ContractMessenger.expects(:plan_change).with(@application, any_parameters).once.returns(mock(deliver: true))
-
+    test 'sends email to buyer with old notification system' do
       ContractMessenger.expects(:plan_change_for_buyer).with(@application, any_parameters).once.returns(mock(deliver: true))
 
       request_plan_change

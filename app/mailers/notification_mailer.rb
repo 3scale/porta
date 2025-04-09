@@ -55,6 +55,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Applications::ApplicationCreatedEvent
   def application_created(event, receiver)
     @application      = event.application
+    @plan             = event.plan
     @provider_account = event.provider
     @service          = event.service
     @account          = event.account
@@ -396,13 +397,12 @@ class NotificationMailer < ActionMailer::Base
 
   def limit_mail(event, receiver, mail_name)
     @provider_account = event.provider
-    @alert            = event.alert
-    @account          = @alert.account
-    @cinstance        = @alert.cinstance
+    @cinstance        = Cinstance.find_by(application_id: event.application_id)
+    @account          = @cinstance.buyer_account
     @receiver         = receiver.decorate
     @event            = event
 
-    subject = t_subject(mail_name, name: @cinstance.name, message: @alert.message, level: @alert.level)
+    subject = t_subject(mail_name, name: @cinstance.name, message: @event.message, level: @event.level)
 
     mail to: @receiver.email, subject: subject
   end
