@@ -40,7 +40,7 @@ class Sidebar
         .on 'toggle:pack toggle:unpack', (event) ->
           icon = $(event.target).parent().children('.fa')
           for icon_set in ICON_SETS
-            class_names = _(icon_set).map((class_name) -> "." + class_name).join(', ')
+            class_names = icon_set.map((class_name) -> ".#{class_name}").join(', ')
             icon.filter(class_names).toggleClass(icon_set.join(' '))
 
   top_level_sections: () ->
