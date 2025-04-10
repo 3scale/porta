@@ -303,7 +303,9 @@ class SidebarFilter
 
     matched.show().addClass('matched')
 
-    not_matched = _(items.toArray()).difference(matched.toArray())
+    not_matched = Array.from(
+      new Set(items.toArray()).difference(new Set(matched.toArray()))
+    )
     $(not_matched).hide().addClass('not-matched')
 
     items.filter('.cms-section:has(.matched)').show()
@@ -475,7 +477,8 @@ class SidebarToggle
       ids.splice(i, 1) if i >= 0
       @el.trigger('toggle:unpack')
 
-    unless _(ids).isEqual(SidebarToggle.load())
+    sets_are_equal = new Set(SidebarToggle.load()).difference(new Set(ids)).size == 0
+    unless sets_are_equal
       SidebarToggle.save(ids)
 
   pack: (speed) ->
