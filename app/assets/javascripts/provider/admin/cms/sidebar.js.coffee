@@ -9,7 +9,6 @@ class Sidebar
 
     @fire_ajax()
 
-    @template = new SidebarTemplates()
     @filter = new SidebarFilter(this)
 
     @hook(document)
@@ -144,19 +143,19 @@ class Sidebar
       layouts: @json.layouts
     }
 
-    @template.layouts(data)
+    SidebarTemplates.layouts(data)
 
   render_portlets: (portlets) =>
     data =
       portlets: @json.portlets
 
-    @template.portlets(data)
+    SidebarTemplates.portlets(data)
 
   render_partials: (partials) =>
     data =
       partials: @json.partials
 
-    @template.partials(data)
+    SidebarTemplates.partials(data)
 
   render_content: (section) =>
     section_id = section.id
@@ -181,10 +180,10 @@ class Sidebar
     section.empty = all.length == 0
 
     if section.parent_id || section.rendered
-      @template.content(data)
+      SidebarTemplates.content(data)
     else
       section.rendered = true
-      @template.root(data)
+      SidebarTemplates.root(data)
 
   @html = (element) ->
     element.clone().wrap('<div>').parent().html()
@@ -346,113 +345,100 @@ class SidebarFilter
     @save()
 
 class SidebarTemplates
-  @root = """
-          <style>
-            html {
-              // So that the the scrollbar does not
-              // turn on/off while filtering.
-              overflow: -moz-scrollbars-vertical;
-              overflow-y: scroll;
-            }
-          </style>
-
-          <ul>
-            <li class="cms-section" data-behavior="toggle search">
-              <span id="cms-sidebar-collapse-all" class="collapse-button"><i class="folder-open-o fa-fw"></i></span>
-              <%= link_to(section.title, section.edit_path) %>
-              <%= render(section) %>
-            </li>
-            <li class="no-results">No Content Found</li>
-          </ul>
-          """
-  @content = """
-          <ul id="cms-sidebar-section-<%= section.id %>">
-            <% pages?.forEach(page => { %>
-              <li class="cms-page" data-id="<%= page.id %>" data-behavior="drag search" data-param="cms_page" <%= search(page) %>>
-                <%= icon_link_to('file', page.title, page.edit_path, [ page.path, '(' + page.title + ')' ]) %>
-              </li>
-            <% }); %>
-
-            <% files?.forEach(file => { %>
-              <li class="cms-file" data-id="<%= file.id %>" data-behavior="drag search" data-param="cms_file" <%= search(file) %>>
-                <%= icon_link_to('paperclip', file.attachment_file_name, file.edit_path) %>
-              </li>
-            <% }); %>
-
-            <% builtins?.map(builtin => { %>
-              <li class="cms-builtin" data-id="<%= builtin.id %>" data-behavior="drag search" data-param="cms_builtin" <%= search(builtin) %>>
-                <%= icon_link_to('cog', builtin.title, builtin.edit_path) %>
-              </li>
-            <% }); %>
-
-            <% sections?.forEach(section => { %>
-              <li class="cms-section"  data-id="<%= section.id %>" data-behavior="toggle drag search" data-param="cms_section" <%= search(section) %>>
-                <%= icon('folder-open fa-fw') %>
-                <%= link_to(section.title, section.edit_path) %>
-                <%= render(section) %>
-              </li>
-            <% });  %>
-          </ul>
-             """
-  @layouts = """
-             <h3>Layouts</h3>
-             <ul>
-              <% layouts?.forEach(layout => { %>
-                <li <%= search(layout) %> data-behavior="search">
-                  <%= icon_link_to('code', layout.title, layout.edit_path) %>
-                 </li>
-              <% }); %>
-              <% if(layouts && layouts.length === 0) { %><li data-behavior="search">No Layouts</li><% }; %>
-              <li class="no-results">No Layouts Found</li>
-             </ul>
-             """
-
-  @portlets = """
-              <h3>Portlets</h3>
-              <ul>
-                <% portlets?.forEach(portlet => { %>
-                  <li <%= search(portlet) %>>
-                    <%= icon_link_to('rocket', portlet.title, portlet.edit_path) %>
-                  </li>
-                <% }); %>
-                <% if (portlets && portlets.length === 0) { %><li data-behavior="search">No Portlets</li><% }; %>
-                <li class="no-results">No Portlets Found</li>
-              </ul>
-
+  @root: ({ section, render }) ->
+           """
+           <ul>
+             <li class="cms-section" data-behavior="toggle search">
+               <span id="cms-sidebar-collapse-all" class="collapse-button"><i class="folder-open-o fa-fw"></i></span>
+               #{ Sidebar.link_to(section.title, section.edit_path) }
+               #{ render(section) }
+             </li>
+             <li class="no-results">No Content Found</li>
+           </ul>
+           """
+  @content: ({ section, pages, files, builtins, sections, render }) ->
               """
-  @partials = """
-              <h3>Partials</h3>
-              <ul>
-                <% partials?.forEach(partial => { %>
-                  <li <%= search(partial) %> data-behavior="search">
-                    <%= icon_link_to('puzzle-piece', partial.system_name, partial.edit_path) %>
-                  </li>
-                <% }); %>
-                <% if(partials && partials.length === 0) { %><li data-behavior="search">No Partials</li><% }; %>
-                <li class="no-results">No Partials Found</li>
+              <ul id="cms-sidebar-section-#{ section.id }">
+                #{ unless pages then '' else pages.reduce((items, page) ->
+                      items += """
+                      <li class="cms-page" data-id="#{ page.id }" data-behavior="drag search" data-param="cms_page" #{ Sidebar.search(page) }>
+                        #{ Sidebar.icon_link_to('file', page.title, page.edit_path, [page.path, """(#{page.title})"""]) }
+                      </li>
+                      """
+                , '')}
+
+                #{ unless files then '' else files.reduce((items, file) ->
+                      items += """
+                        <li class="cms-file" data-id="#{ file.id }" data-behavior="drag search" data-param="cms_file" #{ Sidebar.search(file) }>
+                          #{ Sidebar.icon_link_to('paperclip', file.attachment_file_name, file.edit_path) }
+                        </li>
+                      """
+                , '')}
+
+                #{ unless builtins then '' else builtins.reduce((items, builtin) ->
+                      items += """
+                        <li class="cms-builtin" data-id="#{ builtin.id }" data-behavior="drag search" data-param="cms_builtin" #{ Sidebar.search(builtin) }>
+                          #{ Sidebar.icon_link_to('cog', builtin.title, builtin.edit_path) }
+                        </li>
+                      """
+                , '')}
+
+                #{ unless sections then '' else sections.reduce((items, section) ->
+                      items += """
+                        <li class="cms-section" data-id="#{ section.id }" data-behavior="toggle drag search" data-param="cms_section" #{ Sidebar.search(section) }>
+                          #{ Sidebar.icon('folder-open fa-fw') }
+                          #{ Sidebar.link_to(section.title, section.edit_path) }
+                          #{ render(section) }
+                        </li>
+                      """
+                , '')}
               </ul>
               """
-
-  @helpers: (template) ->
-
-    helpers =
-      link_to: Sidebar.link_to,
-      icon: Sidebar.icon,
-      icon_link_to: Sidebar.icon_link_to
-      search: Sidebar.search
-
-    (data) ->
-      $.extend(data, helpers)
-      template(data)
-
-  @template: (source) ->
-    @helpers _.template(source)
-
-  content: @template(@content)
-  root: @template(@root)
-  layouts: @template(@layouts)
-  portlets: @template(@portlets)
-  partials: @template(@partials)
+  @layouts: ({ layouts }) ->
+              """
+              <h3>Layouts</h3>
+              <ul>
+                #{ unless layouts then '' else layouts.reduce((items, layout) ->
+                      items += """
+                        <li #{ Sidebar.search(layout) } data-behavior="search">
+                          #{ Sidebar.icon_link_to('code', layout.title, layout.edit_path) }
+                        </li>
+                      """
+                , '')}
+                #{ if layouts?.length == 0 then '<li data-behavior="search">No Layouts</li>' else '' }
+                <li class="no-results">No Layouts Found</li>
+              </ul>
+              """
+  @portlets: ({ portlets }) ->
+               """
+               <h3>Portlets</h3>
+               <ul>
+                 #{ unless portlets then '' else portlets.reduce((items, portlet) ->
+                   items += """
+                     <li #{ Sidebar.search(portlet) }>
+                       #{ Sidebar.icon_link_to('rocket', portlet.title, portlet.edit_path) }
+                     </li>
+                   """
+                 , '')}
+                 #{ if portlets?.length == 0 then '<li data-behavior="search">No Portlets</li>' else '' }
+                 <li class="no-results">No Portlets Found</li>
+               </ul>
+               """
+  @partials: ({ partials }) ->
+               """
+               <h3>Partials</h3>
+               <ul>
+                 #{ unless partials then '' else partials.reduce((items, partial) ->
+                   items += """
+                     <li #{ Sidebar.search(partial) } data-behavior="search">
+                       #{ Sidebar.icon_link_to('puzzle-piece', partial.system_name, partial.edit_path) }
+                     </li>
+                   """
+                 , '')}
+                 #{ if partials?.length == 0 then '<li data-behavior="search">No Partials</li>' else '' }
+                 <li class="no-results">No Partials Found</li>
+               </ul>
+               """
 
 class SidebarToggle
   COOKIE_NAME = 'cms-toggle-ids'
