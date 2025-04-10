@@ -289,12 +289,14 @@ class SidebarFilter
     types = for type in @status.types || []
       matched.filter("[data-type~=#{type}]").toArray()
     if types.length > 0
-      union_types = Array.from types.reduce(
+      union_types = types.reduce(
         (result, current) -> result.union(new Set(current)),
         new Set
       )
 
-      matched = $(_(matched.toArray()).intersection(union_types))
+      matched = $(Array.from(
+        new Set(matched.toArray()).intersection(union_types)
+      ))
 
     if origin = @status.origin
       matched = matched.filter("[data-origin~=#{origin}]")
