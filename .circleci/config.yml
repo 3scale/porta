@@ -142,7 +142,7 @@ dnsmasq-container: &dnsmasq-container
     - --log-facility=-
     - --log-queries
     - --no-poll
-    - --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/10.89.6.1
+    - --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/10.89.6.1
     - --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
