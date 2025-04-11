@@ -1,5 +1,5 @@
 import Form from '@rjsf/core'
-import { customizeValidator } from '@rjsf/validator-ajv6'
+import { customizeValidator } from '@rjsf/validator-ajv8'
 
 import { isNotApicastPolicy } from 'Policies/util'
 
