@@ -42,6 +42,7 @@ const LoginPage: FunctionComponent<Props> = ({
     backgroundImgSrc={PF4DownstreamBG}
     brandImgAlt="Red Hat 3scale API Management"
     brandImgSrc={brandImg}
+    textContent='We have such a bright future ahead... that we are blinded and all we can see is darkness. -- Josemi /quote of the day/'
     forgotCredentials={show3scaleLoginForm && !disablePasswordReset && (
       <LoginMainFooterBandItem>
         <a
