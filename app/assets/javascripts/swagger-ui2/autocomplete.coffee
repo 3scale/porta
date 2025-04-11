@@ -40,12 +40,10 @@ ThreeScaleAutoComplete.handleData = (data)->
   ThreeScaleAutoComplete.DataStatus = data.status
   if(+data.status == 200)
     template = Handlebars.compile(ThreeScaleAutoComplete.TipTemplate)
-    html = _.reduce(data.results
-      , (memo, values, key)->
-          values = {type: key, items: values, description: ThreeScaleAutoComplete.TipDescriptions[key]}
-          memo + template(values)
-      , "")
-    $("body").append(html)
+    html = for key, value of data.results
+      template { type: key, items: value, description: ThreeScaleAutoComplete.TipDescriptions[key] }
+
+    $("body").append(html.join(''))
   new ThreeScaleAutoComplete()
 
 ThreeScaleAutoComplete.Config =
