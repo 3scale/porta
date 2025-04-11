@@ -5,7 +5,7 @@ require 'test_helper'
 class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @data = Pdf::Finance::InvoiceReportData.new(@invoice)

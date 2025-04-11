@@ -65,7 +65,7 @@ resource "Account" do
     put '/admin/api/accounts/:id/make_pending.:format' do
       include_context "resource"
 
-      before { resource.approve! }
+      before { resource.save! }
       before { resource.state.should_not == "pending" }
 
       # the response code and body are checked automatically

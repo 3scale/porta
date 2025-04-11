@@ -4,7 +4,7 @@ class Finance::VariableCostTest < ActiveSupport::TestCase
 
   test 'bill_variable_fee_for' do
     cinstance = FactoryBot.create(:cinstance)
-    fake_model = FactoryBot.create(:provider_with_billing)
+    fake_model = FactoryBot.create(:provider_account, :with_billing)
     period = Month.new(Time.now)
     invoice_proxy = Finance::InvoiceProxy.new(fake_model, period)
 

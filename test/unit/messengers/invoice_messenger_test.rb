@@ -3,7 +3,7 @@ require 'test_helper'
 class InvoiceMessengerTest < ActiveSupport::TestCase
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing,
+    @provider = FactoryBot.create(:provider_account, :with_billing,
                         org_name: 'foos & bars',
                         payment_gateway_type: 'braintree_blue')
     @provider.billing_strategy.update_attribute(:currency, 'EUR')

@@ -147,6 +147,12 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
   class MasterTest < ProviderUserMailerTest
 
+    def setup
+      @user = FactoryBot.create(:pending_user, account: account)
+    end
+
+    attr_reader :user
+
     test 'master user activation on saas' do
       ProviderUserMailer.activation(user).deliver_now
       assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
@@ -158,15 +164,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
     end
 
-    private
-
-    def user
-      @user ||= master_account.admin_user
-    end
-
-    def account
-      master_account
-    end
+    alias account master_account
   end
 
 end

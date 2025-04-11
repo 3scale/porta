@@ -7,7 +7,7 @@ Feature: Variable cost on automatic billing
     And the provider is billing but not charging
     And the provider has "finance" visible
     Given all the rolling updates features are off
-    And the provider has one buyer
+    And a buyer "Bob Buyer"
     And the following application plans:
       | Product | Name         |
       | API     | VariableOnly |

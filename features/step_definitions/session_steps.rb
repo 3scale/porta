@@ -60,8 +60,9 @@ When /^I log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,
   assert_current_user(username)
 end
 
-When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
+When /^I log in as (provider )?"([^"]*)"$/ do |provider, domain|
   if provider
+    username = Account.find_by!(domain: domain).admins.first.username
     try_provider_login(username, 'supersecret')
   else
     try_buyer_login_internal(username, 'supersecret')
@@ -74,10 +75,12 @@ When "{buyer} logs in" do |buyer|
   try_buyer_login_internal(user.username, user.password || 'supersecret')
 end
 
-When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domain|
+When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider, org_name, domain|
   # sometimes the domain is an array. In 1.9 Array#to_s is different
   # so we need to handle it
   domain = domain.first if domain.is_a? Array
+
+  username = Account.find_by!(org_name: org_name).admins.first.username
 
   set_current_domain(domain)
   if provider

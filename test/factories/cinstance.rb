@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory(:contract) do
+    # TODO: can we use 'user_account { association(:buyer_account) }' ?
     user_account {
       provider_account = @overrides[:plan]&.provider_account
       if provider_account

@@ -262,15 +262,15 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.internal_domain
     login_with user.username, 'supersecret'
-    assert_equal 2, user.user_sessions.count
-    put System::UrlHelpers.cms_url_helpers.admin_account_personal_details_path, params: { user: {
-      current_password: 'supersecret',
-      password: 'newpwd',
-      username: 'test',
-      email: 'test2@example.com'
-    } }
 
-    assert_equal 1, user.user_sessions.count
+    assert_difference(user.user_sessions.method(:count), -1) do
+      put System::UrlHelpers.cms_url_helpers.admin_account_personal_details_path, params: { user: {
+        current_password: 'supersecret',
+        password: 'newpwd',
+        username: 'test',
+        email: 'test2@example.com'
+      } }
+    end
   end
 
 end
