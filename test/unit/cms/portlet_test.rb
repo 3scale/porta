@@ -32,6 +32,7 @@ class CMS::PortletTest < ActiveSupport::TestCase
   end
 
   teardown do
+    ActiveSupport::DescendantsTracker.clear([CustomPortlet])
     CMS::PortletTest.send(:remove_const, :CustomPortlet)
   end
 

@@ -287,6 +287,7 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
 
     teardown do
       FieldsDefinition.targets.delete FakeModel.name
+      ActiveSupport::DescendantsTracker.clear([FakeModel])
       DefaultTest.send(:remove_const, :FakeModel)
     end
 
