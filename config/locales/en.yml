@@ -1735,3 +1735,6 @@ en:
       body_html:
         You don't have access to any API on the %{org_name} account. Please %{mail_to_admin}
         to request access.
+
+  qod:
+    0: We have such a bright future ahead... that we are blinded and all we can see is darkness. -- Josemi

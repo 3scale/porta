@@ -14,6 +14,7 @@ class Provider::SessionsController < FrontendController
     @session = Session.new
     @authentication_providers = published_authentication_providers
     @bot_protection_enabled = bot_protection_enabled?
+    @qod = quote_of_day
   end
 
   def create
@@ -123,5 +124,13 @@ class Provider::SessionsController < FrontendController
 
   def bot_protection_level
     domain_account.settings.admin_bot_protection_level
+  end
+
+  def quote_of_day
+    return '' unless params[:qod] == 'true'
+
+    index = rand I18n.backend.translations[:en][:qod].size
+
+    I18n.t("qod.#{index}")
   end
 end

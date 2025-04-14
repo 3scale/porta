@@ -25,6 +25,13 @@ interface Props {
   session: {
     username: string | null;
   };
+  qod: string;
+}
+
+const quoteOfDay = (qod: string) => {
+  if (!qod) return ''
+
+  return `${qod} /quote of the day/`
 }
 
 const LoginPage: FunctionComponent<Props> = ({
@@ -35,6 +42,7 @@ const LoginPage: FunctionComponent<Props> = ({
   providerSessionsPath,
   recaptcha,
   session,
+  qod,
   show3scaleLoginForm
 }) => (
   <PF4LoginPage
@@ -42,26 +50,21 @@ const LoginPage: FunctionComponent<Props> = ({
     backgroundImgSrc={PF4DownstreamBG}
     brandImgAlt="Red Hat 3scale API Management"
     brandImgSrc={brandImg}
-    textContent='We have such a bright future ahead... that we are blinded and all we can see is darkness. -- Josemi /quote of the day/'
     forgotCredentials={show3scaleLoginForm && !disablePasswordReset && (
-      <>
-        <LoginMainFooterBandItem>
-          <a
-            href={providerRequestPasswordResetPath}
-            // HACK: prevent click from missing link after input loses focus and component re-renders
-            onMouseDown={(event) => {
-              event.currentTarget.click()
-            }}
-          >
-            Forgot password?
-          </a>
-        </LoginMainFooterBandItem>
-        <LoginMainFooterBandItem>
-          <p>We have such a bright future ahead... that we are blinded and all we can see is darkness.<b/> -- Josemi /quote of the day/</p>
-        </LoginMainFooterBandItem>
-      </>
+      <LoginMainFooterBandItem>
+        <a
+          href={providerRequestPasswordResetPath}
+          // HACK: prevent click from missing link after input loses focus and component re-renders
+          onMouseDown={(event) => {
+            event.currentTarget.click()
+          }}
+        >
+          Forgot password?
+        </a>
+      </LoginMainFooterBandItem>
     )}
     loginTitle="Log in to your account"
+    textContent={quoteOfDay(qod)}
   >
     {show3scaleLoginForm && (
       <LoginForm
