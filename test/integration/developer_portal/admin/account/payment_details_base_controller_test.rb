@@ -6,7 +6,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::
   include System::UrlHelpers.cms_url_helpers
 
   setup do
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
 
     @provider.settings.allow_finance!
     @provider.settings.show_finance!

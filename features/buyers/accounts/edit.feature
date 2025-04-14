@@ -3,7 +3,7 @@ Feature: Audience > Accounts > Edit
 
   Background:
     Given a provider is logged in
-    And a buyer "Pepe" of the provider
+    And a buyer "Pepe"
 
   Scenario: Navigation
     Given they go to the provider dashboard
@@ -20,7 +20,7 @@ Feature: Audience > Accounts > Edit
     And should see the flash message "Account successfully updated"
 
   Scenario: Deleting an account
-    Given a buyer "Deleteme" of the provider
+    Given a buyer "Deleteme"
     When they go to the buyer account edit page for "Deleteme"
     And follow "Delete"
     And confirm the dialog

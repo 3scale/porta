@@ -17,7 +17,7 @@ Feature: Groups switch
     Then I should be on the groups page
 
   Scenario: Buyer groups do not show if groups is disabled
-    Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    Given a buyer "buyer"
     Given the provider has "groups" switch denied
     And I go to the buyer account page for "buyer"
     Then I should not see link to the buyer account "buyer" groups page

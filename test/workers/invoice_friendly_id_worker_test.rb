@@ -4,7 +4,7 @@ require 'test_helper'
 
 class InvoiceFriendlyIdWorkerTest < ActiveSupport::TestCase
   setup do
-    provider_account = FactoryBot.create(:provider_with_billing)
+    provider_account = FactoryBot.create(:provider_account, :with_billing)
     provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
 
     Invoice.any_instance.stubs(set_friendly_id: true)

@@ -61,7 +61,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
     @now = Time.zone.now
     @later = @now + 2.months
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, created_at: @now)

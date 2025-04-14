@@ -52,8 +52,8 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
   end
 
   def create_provider_account
-    provider_account = FactoryBot.create(:provider_with_billing, :payment_gateway_type => :braintree_blue, :payment_gateway_options => {:merchant_id => 'foo', :public_key => 'bar', :private_key => 'baz'})
-    provider_account.billing_strategy = FactoryBot.create(:postpaid_with_charging)
+    provider_account = FactoryBot.create(:provider_account, :with_billing, :payment_gateway_type => :braintree_blue, :payment_gateway_options => {:merchant_id => 'foo', :public_key => 'bar', :private_key => 'baz'})
+    provider_account.billing_strategy = FactoryBot.create(:postpaid_billing, charging_enabled: true)
     provider_account.payment_gateway_type = :braintree_blue
 
     plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)

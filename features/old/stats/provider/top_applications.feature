@@ -14,8 +14,8 @@ Feature: Top applications stats
       | My API  | Default | Published | true    |
     And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
     And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
-    And a buyer "alice" signed up to provider "foo.3scale.localhost"
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "alice"
+    And a buyer "bob"
     And the following applications:
       | Buyer | Name         |
       | alice | alice widget |

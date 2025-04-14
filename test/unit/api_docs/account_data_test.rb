@@ -55,9 +55,7 @@ class ApiDocs::AccountDataTest < ActiveSupport::TestCase
 
   def test_returns_admin_ids_for_provider
     data = ApiDocs::ProviderData.new(@account).as_json[:results]
-    values = @account.admin_user_ids.map do |admin_id|
-      {name: 'mycompany', value: admin_id}
-    end
+    values = @account.admins.pluck(:username, :id).map { |username, id| { name: username, value: id } }
     assert_equal values, data[:admin_ids]
   end
 
