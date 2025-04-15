@@ -1,7 +1,7 @@
 module Authentication
   module Strategy
 
-    class SSO < Base
+    class Token < Base
 
       attr_reader :error_message
 
