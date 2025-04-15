@@ -14,7 +14,7 @@ module SessionHelper
 
   def try_buyer_login_oauth
     # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
-    visit "/auth/#{@authentication_provider.system_name}/callback"
+    visit "/auth/#{@authentication_provider.system_name}/callback?code=foo"
     @current_user = Account.last.users.last
   end
 

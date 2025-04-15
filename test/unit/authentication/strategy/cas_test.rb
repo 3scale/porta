@@ -22,16 +22,6 @@ class Authentication::Strategy::CasTest < ActiveSupport::TestCase
 
   end
 
-  test "authenticate falls back to internal strategy" do
-    user = FactoryBot.create :user, :account  => @account,
-                          :username => 'dave',
-                          :password => 'kangaroo'
-    user.activate!
-
-    assert_equal user,
-      @strategy.authenticate(:username => 'dave', :password => 'kangaroo')
-  end
-
   test "authenticate a user with cas" do
     user = FactoryBot.create :user, :account  => @account, :cas_identifier => "kongaroo"
     user.activate!

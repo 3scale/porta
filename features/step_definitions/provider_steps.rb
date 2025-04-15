@@ -329,7 +329,7 @@ When "the buyer authenticates by OAuth2" do
   try_buyer_login_oauth
 end
 
-When "the buyer authenticates by SSO Token" do
+When "the buyer authenticates by token" do
   try_buyer_login_sso_token
 end
 
