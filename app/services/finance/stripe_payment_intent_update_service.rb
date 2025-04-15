@@ -32,6 +32,7 @@ class Finance::StripePaymentIntentUpdateService
 
   def create_payment_transaction
     attributes = {
+      account: invoice.buyer_account,
       action: :purchase,
       amount: ThreeScale::Money.cents(payment_intent_data[:amount].presence || 0, payment_intent_data[:currency]&.upcase || invoice.currency),
       reference: payment_intent_id,

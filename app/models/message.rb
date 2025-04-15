@@ -52,6 +52,13 @@ class Message < ApplicationRecord
   }
 
   scope :sent, -> { where(state: 'sent') }
+  # stale when no associated sender AND no associated non-deleted recipients
+  scope :stale, -> do
+    joining { sender.outer }.
+      where.has { sender.id == nil }.
+      joining { recipients.on((recipients.message_id == id) & recipients.sift(:not_deleted)).outer }.
+      where.has { BabySqueel[:message_recipients].id == nil }
+  end
 
   state_machine :initial => :unsent do
 

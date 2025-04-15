@@ -20,8 +20,9 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification is graceful when recipient account is deleted' do
-    message = Message.create! sender: @provider, to: [@buyer], subject: "I am subject"
-    @buyer.destroy!
+    message = Message.create! sender: @provider, subject: "I am subject"
+    recipient = FactoryBot.create(:received_message, receiver: @buyer, message:)
+    recipient.update_column(:receiver_id, 0)
     message.reload
 
     assert_instance_of ActionMailer::Base::NullMail, PostOffice.message_notification(message, message.recipients.first).message

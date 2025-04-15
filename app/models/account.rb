@@ -49,25 +49,31 @@ class Account < ApplicationRecord
   include ProviderDomains
   include Indices::AccountIndex::ForAccount
 
-  self.background_deletion = [
-    :users,
-    :mail_dispatch_rules,
-    [:api_docs_services, { class_name: 'ApiDocs::Service' }],
-    :services,
-    :contracts,
-    :account_plans,
-    [:settings, { action: :destroy, class_name: 'Settings', has_many: false }],
-    [:payment_detail, { action: :destroy, has_many: false }],
-    [:buyer_accounts, { action: :destroy, class_name: 'Account' }],
-    [:payment_gateway_setting, { action: :destroy, has_many: false }],
-    [:profile, { action: :delete, has_many: false }],
-    [:templates, { action: :delete, class_name: 'CMS::Template' }],
-    [:sections, { action: :delete, class_name: 'CMS::Section' }],
-    [:provided_sections, { action: :delete, class_name: 'CMS::Section' }],
-    [:redirects, { action: :delete, class_name: 'CMS::Redirect' }],
-    [:files, { action: :delete, class_name: 'CMS::File' }],
-    [:builtin_pages, { action: :delete, class_name: 'CMS::BuiltinPage' }],
-    [:provided_groups, { action: :delete, class_name: 'CMS::Group' }]
+  # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
+  self.background_deletion = %i[
+    configuration_values
+    settings
+    forum
+    users
+    mail_dispatch_rules
+    api_docs_services
+    contracts
+    services
+    account_plans
+    features
+    buyer_accounts
+    payment_detail
+    payment_gateway_setting
+    buyer_invoices
+    profile
+    cms_templates_versions
+    templates
+    sections
+    provided_sections
+    redirects
+    files
+    builtin_pages
+    provided_groups
   ].freeze
 
   #TODO: this needs testing?
@@ -110,8 +116,7 @@ class Account < ApplicationRecord
 
   has_one :admin_user, -> { admins.but_impersonation_admin }, class_name: 'User', inverse_of: :account
 
-  has_many :features, as: :featurable
-  has_many :email_configurations
+  has_many :features, as: :featurable, dependent: :destroy
 
   composed_of :address,
               mapping: ThreeScale::Address.account_mapping,
@@ -152,7 +157,7 @@ class Account < ApplicationRecord
   end
 
   has_many :messages, -> { visible }, foreign_key: :sender_id, class_name: 'Message'
-  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message'
+  has_many :sent_messages, foreign_key: :sender_id, class_name: 'Message', inverse_of: :sender
 
   has_many :mail_dispatch_rules, dependent: :destroy, inverse_of: :account
   has_many :system_operations, through: :mail_dispatch_rules
@@ -160,6 +165,7 @@ class Account < ApplicationRecord
   # Deleted received messages
   has_many :hidden_messages, -> { latest_first.received.hidden }, as: :receiver, class_name: 'MessageRecipient'
   has_many :received_messages, -> { latest_first.received.visible }, as: :receiver, class_name: 'MessageRecipient'
+  has_many :all_received_messages, as: :receiver, class_name: 'MessageRecipient', inverse_of: :receiver, dependent: :delete_all
 
   has_many :api_docs_services, class_name: 'ApiDocs::Service', dependent: :destroy
   has_many :log_entries, foreign_key: 'provider_id'
@@ -171,7 +177,7 @@ class Account < ApplicationRecord
 
   alias_attribute :name, :org_name
 
-  has_one :onboarding
+  has_one :onboarding, dependent: :delete
 
   def trashed_messages
     Message.where('id IN (:sent) OR id IN (:received)',       sent:     sent_messages.hidden.select(:id),
@@ -230,7 +236,7 @@ class Account < ApplicationRecord
     contracts.map(&:plan).include?(plan)
   end
 
-  has_many :invitations
+  has_many :invitations, inverse_of: :account, dependent: :delete_all
 
   # XXX: This is hax is needed because of current cancan limitation.
   #
@@ -287,6 +293,8 @@ class Account < ApplicationRecord
   def config
     @config ||= Configuration.new(self)
   end
+
+  has_many :configuration_values, class_name: "Configuration::Value", dependent: :destroy, as: :configurable, inverse_of: :configurable
 
   scope :created_before, ->(date) { where(['created_at <= ?', date]) }
   scope :created_after,  ->(date) { where(['created_at >= ?', date]) }

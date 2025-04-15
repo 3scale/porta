@@ -5,7 +5,7 @@ class CMS::Permission < ApplicationRecord
 
   validates :name, length: { maximum: 255 }
 
-  belongs_to :group, :class_name => 'CMS::Group'
-  belongs_to :account
+  belongs_to :group, :class_name => 'CMS::Group', inverse_of: :permissions
+  belongs_to :account, inverse_of: :permissions
 
 end

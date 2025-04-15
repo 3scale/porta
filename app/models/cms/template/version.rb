@@ -1,6 +1,7 @@
 class CMS::Template::Version < ApplicationRecord
   self.table_name = :cms_templates_versions
   belongs_to :template, :polymorphic => true
+  belongs_to :provider, :class_name => 'Account', inverse_of: :cms_templates_versions
 
   validates :type, :path, :title, :system_name, :content_type, :template_type,
             :updated_by, :handler, length: { maximum: 255 }
