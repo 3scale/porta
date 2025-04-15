@@ -127,7 +127,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'wwwwww')
     user.activate
 
-    Authentication::Strategy::Internal.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
+    Authentication::Strategy::Token.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
 
     host! @provider.internal_domain
 
