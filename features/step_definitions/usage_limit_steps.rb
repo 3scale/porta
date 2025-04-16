@@ -51,13 +51,17 @@ end
 
 Then "{plan} should have a usage limit of {int} for metric {string} per {string}" do |plan, value, metric_name, period|
   wait_for_requests
-  metric = plan.service.metrics.find_by_system_name!(metric_name)
-  assert_not_nil plan.usage_limits.find_by_metric_id_and_period_and_value(metric.id, period, value)
+  retry_assertions(times: 5) do
+    metric = plan.service.metrics.find_by_system_name!(metric_name)
+    assert_not_nil plan.usage_limits.find_by_metric_id_and_period_and_value(metric.id, period, value)
+  end
 end
 
 Then "{plan} should not have hourly usage limit for metric {string}" do |plan, metric_name|
-  metric = plan.metrics.find_by_system_name!(metric_name)
-  assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
+  retry_assertions(times: 5) do
+    metric = plan.metrics.find_by_system_name!(metric_name)
+    assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
+  end
 end
 
 def metrics_container
