@@ -174,7 +174,6 @@ module Account::States
   def deliver_confirmed_notification
     if admins.present? && provider_account
       run_after_commit do
-        AccountMessenger.new_signup(self).deliver_now
         AccountMailer.confirmed(self).deliver_later
       end
     end

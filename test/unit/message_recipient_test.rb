@@ -34,31 +34,6 @@ class MessageRecipientTest < ActiveSupport::TestCase
     assert_equal "> First line.\n> \n> Second line.", reply.body
   end
 
-  test 'notifiable? with no system operation' do
-    account = FactoryBot.build_stubbed(:simple_provider)
-    message = Message.new(system_operation: nil)
-    recipient = MessageRecipient.new(message: message, receiver: account)
-    account.expects(:dispatch_rule_for).never
-
-    refute recipient.notifiable?
-
-    account.expects(:provider_can_use?).with(:new_notification_system).returns(false)
-    assert recipient.notifiable?
-  end
-
-  test 'notifiable? with system operation' do
-    account = Account.new
-    operation = SystemOperation.for(:user_signup)
-    message = Message.new(system_operation: operation)
-    recipient = MessageRecipient.new(message: message, receiver: account)
-
-    account.expects(:dispatch_rule_for).with(operation).returns(MailDispatchRule.new(dispatch: true))
-    assert recipient.notifiable?
-
-    account.expects(:dispatch_rule_for).with(operation).returns(MailDispatchRule.new(dispatch: false))
-    refute recipient.notifiable?
-  end
-
   test "stale are all objects without associated message or a receiver" do
     account = FactoryBot.create(:simple_account)
     message = FactoryBot.create(:message, sender: account)

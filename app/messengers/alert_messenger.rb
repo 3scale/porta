@@ -16,32 +16,14 @@ class AlertMessenger < Messenger::Base
                  :alert       => Liquid::Drops::Alert.new(alert)
   end
 
-  def limit_alert_for_provider(alert)
-    @url = app_stats_url_for_provider(@cinstance)
-    send_alert(alert, @account)
-  end
-
   def limit_alert_for_buyer(alert)
     @url = developer_portal_routes.buyer_stats_url(host: domain)
     send_alert(alert, @provider)
   end
 
-  def limit_violation_for_provider(alert)
-    @url = app_stats_url_for_provider(@cinstance)
-    send_violation(alert, @account)
-  end
-
   def limit_violation_for_buyer(alert)
     @url = developer_portal_routes.buyer_stats_url(host: domain)
     send_violation(alert, @provider)
-  end
-
-  def limit_alert_for_provider_of_master(alert)
-    send_violation_for_provider(alert, @provider)
-  end
-
-  def limit_violation_for_provider_of_master(alert)
-    send_violation_for_provider(alert, @provider)
   end
 
 
@@ -67,11 +49,6 @@ class AlertMessenger < Messenger::Base
   def send_violation(alert, sender)
     prepare_limit_message alert, sender,
                           "Application '#{@cinstance.name}' limit violation - limit usage is above #{alert.level}%"
-  end
-
-  def send_violation_for_provider(alert, sender)
-    prepare_limit_message alert, sender,
-                          "Account limit violation - limit usage is above #{alert.level}%"
   end
 
   def prepare_limit_message(alert, sender, subject)

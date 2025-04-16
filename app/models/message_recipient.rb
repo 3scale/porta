@@ -114,21 +114,6 @@ class MessageRecipient < ApplicationRecord
     user.received_messages.where(:state => :unread).count
   end
 
-  def notifiable?
-    operation = message.system_operation
-
-    default = case receiver
-              when Account
-                !Notifications::NewNotificationSystemMigration.new(receiver).enabled?
-              else
-                true
-              end
-
-    return default unless operation
-
-    receiver.dispatch_rule_for(operation).dispatch?
-  end
-
   # TODO: remove after position column is removed from the database
   class << self
     def instance_method_already_implemented?(method_name)
