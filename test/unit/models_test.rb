@@ -56,11 +56,10 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    models = ApplicationRecord.descendants - [BackendApi, Service, Proxy, Topic, Forum]
+    models = three_scale_db_models - [BackendApi, Service, Proxy, Topic, Forum]
 
     validate_columns_for = ->(model, options = {}) do
       model_name = model.name
-      next if model_name.blank? || model_name.match(/^.+Test::.+$/)
       exception_attributes = exceptions.fetch(model_name, [])
       next if exception_attributes == :all
       exception_attributes.concat INHERITANCE_COLUMNS

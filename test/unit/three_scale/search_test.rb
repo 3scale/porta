@@ -5,20 +5,20 @@ require 'test_helper'
 class ThreeScale::SearchTest < ActiveSupport::TestCase
   class ScopesTest < ActiveSupport::TestCase
 
-    setup do
-      class Model < ApplicationRecord
-        self.table_name = 'accounts'
+    class Model < ApplicationRecord
+      self.table_name = 'accounts'
 
-        include ThreeScale::Search::Scopes
+      include ThreeScale::Search::Scopes
 
-        scope :by_fancy_scope, ->(value) { where(id: value == '1') }
-        scope :by_another_scope, -> { where(created_at: :column) }
-      end
+      scope :by_fancy_scope, ->(value) { where(id: value == '1') }
+      scope :by_another_scope, -> { where(created_at: :column) }
     end
 
     teardown do
-      ActiveSupport::DescendantsTracker.clear([Model])
-      ScopesTest.send(:remove_const, :Model)
+      Model.allowed_sort_columns = []
+      Model.allowed_search_scopes = []
+      Model.default_search_scopes = []
+      Model.sort_columns_joins = {}
     end
 
     test "should have right methods" do
