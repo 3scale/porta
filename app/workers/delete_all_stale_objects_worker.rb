@@ -6,14 +6,14 @@ class DeleteAllStaleObjectsWorker < ApplicationJob
 
   def perform(*classes_names)
     classes_names.each do |class_name|
-      delete_all_stale_in_batches class_name.constantize
+      delete_all_stale class_name.constantize
     end
   end
 
   private
 
-  def delete_all_stale_in_batches(model, batch_size: 500)
-    sleep 1 until model.stale.limit(batch_size).delete_all < batch_size
+  def delete_all_stale(model)
+    model.stale.delete_all
   end
 
 end
