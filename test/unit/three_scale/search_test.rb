@@ -4,6 +4,7 @@ require 'test_helper'
 
 class ThreeScale::SearchTest < ActiveSupport::TestCase
   class ScopesTest < ActiveSupport::TestCase
+
     class Model < ApplicationRecord
       self.table_name = 'accounts'
 
