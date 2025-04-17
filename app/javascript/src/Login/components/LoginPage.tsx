@@ -25,6 +25,13 @@ interface Props {
   session: {
     username: string | null;
   };
+  qod: string;
+}
+
+const quoteOfDay = (qod: string) => {
+  if (!qod) return ''
+
+  return `${qod} /quote of the day/`
 }
 
 const LoginPage: FunctionComponent<Props> = ({
@@ -35,6 +42,7 @@ const LoginPage: FunctionComponent<Props> = ({
   providerSessionsPath,
   recaptcha,
   session,
+  qod,
   show3scaleLoginForm
 }) => (
   <PF4LoginPage
@@ -47,13 +55,16 @@ const LoginPage: FunctionComponent<Props> = ({
         <a
           href={providerRequestPasswordResetPath}
           // HACK: prevent click from missing link after input loses focus and component re-renders
-          onMouseDown={(event) => { event.currentTarget.click() }}
+          onMouseDown={(event) => {
+            event.currentTarget.click()
+          }}
         >
           Forgot password?
         </a>
       </LoginMainFooterBandItem>
     )}
     loginTitle="Log in to your account"
+    textContent={quoteOfDay(qod)}
   >
     {show3scaleLoginForm && (
       <LoginForm
