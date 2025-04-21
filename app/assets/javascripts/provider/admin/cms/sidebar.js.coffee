@@ -1,3 +1,4 @@
+# coffeelint: disable=max_line_length
 class Sidebar
   FOLDER_ICONS = ['fa-folder', 'fa-folder-open']
   ICON_SETS = [FOLDER_ICONS]
@@ -132,10 +133,10 @@ class Sidebar
 
   group: (json) ->
     {
-      sections: Object.groupBy(json.sections, (n) => n.parent_id),
-      pages: Object.groupBy(json.pages, (n) => n.section_id),
-      files: Object.groupBy(json.files, (n) => n.section_id),
-      builtins: Object.groupBy(json.builtins, (n) => n.section_id)
+      sections: Object.groupBy(json.sections, (n) -> n.parent_id),
+      pages: Object.groupBy(json.pages, (n) -> n.section_id),
+      files: Object.groupBy(json.files, (n) -> n.section_id),
+      builtins: Object.groupBy(json.builtins, (n) -> n.section_id)
     }
 
   render_layouts: (layouts) =>
@@ -146,14 +147,16 @@ class Sidebar
     SidebarTemplates.layouts(data)
 
   render_portlets: (portlets) =>
-    data =
+    data = {
       portlets: @json.portlets
+    }
 
     SidebarTemplates.portlets(data)
 
   render_partials: (partials) =>
-    data =
+    data = {
       partials: @json.partials
+    }
 
     SidebarTemplates.partials(data)
 
@@ -191,11 +194,11 @@ class Sidebar
   @link_to = (text, path, title = text) ->
     title = " " if title is null
     title = title.join(' ') unless typeof(title) == 'string'
-    Sidebar.html($('<a>', text: text, href: path, title: title))
+    Sidebar.html($('<a>', { text: text, href: path, title: title }))
 
   @icon = (icon, text) ->
     text = if text? then " " + text else ''
-    Sidebar.html($('<i>', class: "fa fa-#{icon} fa-fw")) + text
+    Sidebar.html($('<i>', { class: "fa fa-#{icon} fa-fw" })) + text
 
   @icon_link_to = (icon, text, path, title = text) ->
     icon = Sidebar.icon(icon)
@@ -253,7 +256,7 @@ class SidebarFilter
   ALL = 'all'
 
   @serialized_status: ->
-    $.cookie(CMS_FILTER_COOKIE_NAME, path: '/') || '{}'
+    $.cookie(CMS_FILTER_COOKIE_NAME, { path: '/' }) || '{}'
 
   @load: ->
     @status ||= JSON.parse(@serialized_status())
@@ -261,7 +264,7 @@ class SidebarFilter
   @save: (status) ->
     @status = status
     json = JSON.stringify(status)
-    $.cookie(CMS_FILTER_COOKIE_NAME, json, {expires: 30, path: '/'})
+    $.cookie(CMS_FILTER_COOKIE_NAME, json, { expires: 30, path: '/' })
 
   constructor: (@sidebar) ->
     @status = SidebarFilter.load()
@@ -348,7 +351,7 @@ class SidebarFilter
     @filter()
     @save()
 
-class SidebarTemplates
+class SidebarTemplates # coffeelint: disable=no_nested_string_interpolation
   @root: ({ section, render }) ->
            """
            <ul>
@@ -501,11 +504,11 @@ class SidebarToggle
   # private
 
   @serialized_ids: ->
-    $.cookie(COOKIE_NAME, path: '/') || '[]'
+    $.cookie(COOKIE_NAME, { path: '/' }) || '[]'
 
   @save: (ids) ->
     @cached_ids = ids
-    $.cookie(COOKIE_NAME, JSON.stringify(ids), {expires: 30, path: '/'})
+    $.cookie(COOKIE_NAME, JSON.stringify(ids), { expires: 30, path: '/' })
 
   @load: ->
     @cached_ids ||= JSON.parse(@serialized_ids())
