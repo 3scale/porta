@@ -64,7 +64,7 @@ brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@8.0 
 * **Macs with M1** also require the following:
 
   ```
-  brew install pixman cairo pango
+  brew install pixman cairo pango coreutils
   ```
 
 * Additionally you need to install the **[LiberationSans](https://www.dafont.com/liberation-sans.font)** font. You can install in `~/Library/Fonts` or globally in `/Library/Fonts`.
@@ -172,13 +172,23 @@ bundle install
 > ld: library not found for -lssl
 > ```
 >
-> Try to fix it adding the following config:
+> Try to install the gem manually with the following config:
 >
 > ```sh
-> bundle config --local build.mysql2 --with-ldflags="-L$(brew --prefix openssl)/lib" --with-cppflags="-I$(brew --prefix openssl)/include"
+> gem install mysql2 -- --with-ldflags="-L$(brew --prefix openssl)/lib" --with-cppflags="-I$(brew --prefix openssl)/include"
 > ```
 >
-> and run `bundle install` again.
+> If it fails with the error:
+>
+> ```sh
+> ls: library 'zstd' not found
+> ```
+>
+> Try with the following config:
+>
+> ```sh
+> gem install mysql2 -- --with-ldflags="-L$(brew --prefix zstd)"
+> ```
 
 ### Yarn (1.x)
 
