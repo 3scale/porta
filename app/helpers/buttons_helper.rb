@@ -84,14 +84,6 @@ module ButtonsHelper
     action_link_to :delete, url, options.reverse_merge(:method => :delete)
   end
 
-  def button_to_toggle_suspend_buyer_user(user)
-    if user.active?
-      fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(user.account, user), class: 'action off')
-    elsif user.suspended?
-      fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(user.account, user), class: 'action ok')
-    end
-  end
-
   def link_to_activate_buyer_user(user)
     action_link_to('activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'action')
   end
