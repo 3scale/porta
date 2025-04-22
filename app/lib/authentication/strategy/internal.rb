@@ -1,10 +1,15 @@
 module Authentication
   module Strategy
 
-    class Internal < Token
+    # User + password authentication
+    class Internal < Base
+
+      def self.expected_params
+        %i[username password]
+      end
 
       def authenticate params
-        authenticate_with_username_and_password(params[:username], params[:password]) || super(params)
+        authenticate_with_username_and_password(params[:username], params[:password])
       end
 
       def invalid_credentials_message
@@ -15,8 +20,8 @@ module Authentication
         {strategy: 'credentials'}
       end
 
-      def error_message=(message)
-        @error_message ||= message
+      def bot_protected?
+        true
       end
 
       private

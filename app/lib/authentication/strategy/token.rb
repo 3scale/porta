@@ -1,9 +1,12 @@
 module Authentication
   module Strategy
 
+    # Used for impersonation
     class Token < Base
 
-      attr_reader :error_message
+      def self.expected_params
+        %i[token expires_at]
+      end
 
       def authenticate(params)
         if site_account.settings.sso_key && params[:token] && params[:expires_at]
@@ -18,10 +21,6 @@ module Authentication
         authenticate_with_sso(token)
       end
 
-      def inactive_user_message
-        "Your account isn't active or hasn't been approved yet."
-      end
-
       def redirect_to_on_successful_login
         if @redirect_url
           begin
@@ -31,28 +30,6 @@ module Authentication
           end
         else
           super
-        end
-      end
-
-      protected
-
-      # check if the user can login and if not it sets an <tt>error_message</tt>
-      def can_login?(user)
-        if user.can_login?
-          true
-        else
-          self.error_message = inactive_user_message
-          false
-        end
-      end
-
-      def users
-        @_users ||= begin
-          if admin_domain
-            site_account.users
-          else
-            site_account.buyer_users
-          end
         end
       end
 
