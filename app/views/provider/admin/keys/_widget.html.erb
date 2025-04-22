@@ -4,6 +4,7 @@
       <tr>
         <th>Application ID</th>
         <td><%= cinstance.application_id %></td>
+        <td></td>
       </tr>
       <%= render partial: 'provider/admin/keys/key', collection: cinstance.application_keys,
                                                      locals: { cinstance: cinstance } %>
@@ -39,12 +40,15 @@
       <tr>
         <th>Client ID</th>
         <td><%= cinstance.application_id %></td>
+        <td></td>
       </tr>
 
       <tr>
         <th>Client Secret</th>
         <td>
           <span class="key" id="oauth_secret"><%= keys.first %></span>
+        </td>
+        <td>
           <% if keys.empty? %>
             <%= fancy_link_to 'Add Random key', provider_admin_application_keys_path(cinstance),
                                                 method: :post,
@@ -65,16 +69,20 @@
         <th>Redirect URL</th>
         <td>
           <span class="key"><%= cinstance.redirect_url %></span>
+        </td>
+        <td>
           <%= link_to 'Edit', edit_redirect_url_provider_admin_application_path(cinstance),
                               class: 'fancybox action edit',
                               'data-autodimensions': 'true' %>
         </td>
+        <td></td>
       </tr>
     </table>
   </div>
 
 <% else %>
   <table id="keys" class="pf-c-table pf-m-no-border-rows">
+    <tr>
     <%- user_key = cinstance.user_key %>
       <td class="pf-m-fit-content">
         <%= user_key_label(cinstance) %>
