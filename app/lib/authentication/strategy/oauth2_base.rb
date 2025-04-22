@@ -2,7 +2,7 @@
 
 module Authentication
   module Strategy
-    class OAuth2Base < Authentication::Strategy::Internal
+    class OAuth2Base < Base
 
       def initialize(*)
         super
@@ -26,8 +26,13 @@ module Authentication
 
       self.authenticate_procedure = MissingProcedure
 
+      def self.expected_params
+        %i[system_name code]
+      end
+
       def authenticate(params, procedure: authenticate_procedure)
-        return super(params) unless find_authentication_provider(params[:system_name])
+        return unless find_authentication_provider(params[:system_name])
+
         authenticate_client(params, procedure)
         active_user(@user)
       end

@@ -12,8 +12,6 @@ module Authentication
         build_strategy(:provider_oauth2).new(provider_account, true) # TODO: make this configurable
       end
 
-      protected
-
       def build_strategy(type)
         inflected_type = Rails.autoloaders.main.inflector.camelize(type.to_s, {})
         strategy_class_name = "Authentication::Strategy::#{inflected_type}"
