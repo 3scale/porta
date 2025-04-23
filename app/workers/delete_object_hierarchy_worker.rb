@@ -78,6 +78,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def perform(*hierarchy)
     return compatibility(*hierarchy) unless hierarchy.first.is_a?(String)
 
+    @object_cache = {}
     started = now
     while hierarchy.present? && now - started < WORK_TIME_LIMIT_SECONDS
       Rails.logger.info "Starting background deletion iteration with: #{hierarchy.join(' ')}"
@@ -105,24 +106,9 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     entry = hierarchy.pop
     case entry
     when PLAIN_OBJECT_RE
-      ar_object = $1.constantize.find($2.to_i)
-      match = hierarchy.last&.match(ASSOCIATION_RE)
-      if match
-        # callbacks logic differs between object destroyed by association, so set it here
-        # e.g. for Plans, to prevent acts_as_list to update position of each plan on deletion
-        # we want to have here a reflection with a foreign key that is part of the list scope array.
-        # see acts_as_list/active_record/acts/scope_method_definer.rb
-        # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreign key,
-        # e.g. you delete an ApplicationPlan but association is Account:account_plans or
-        # e.g. the association is for an unrelated parent object id
-        # FYI if there is no such association (e.g. a method name), nil will be returned.
-        # Another possible confusion with hand-crafted hierarchies may occur when before
-        # a Plain- entry, there is set an unrelated Hierarchy- entry, then incorrect association will be set.
-        ar_object.destroyed_by_association = match[:klass].constantize.reflect_on_association(match[:association])
-      end
-      ar_object.background_deletion_method_call
+      delete_object(cached_object($1, $2), hierarchy)
     when ASSOCIATION_RE
-      hierarchy.concat handle_association($1.constantize.find($2.to_i), $3, entry)
+      hierarchy.concat handle_association(cached_object($1, $2), $3, entry)
     else
       raise ArgumentError, "Invalid entry specification: #{entry}"
     end
@@ -134,6 +120,35 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     # we would be here in case of a bad crafted hierarchy entry or something else unrecoverable
     # for example NoMethodError on nil class where retrying is pointless but logging the error is needed
     raise DoNotRetryError, "seems like unexpectedly broken delete hierarchy entry: #{entry}"
+  end
+
+  def delete_object(ar_object, hierarchy)
+    # callbacks logic differs between object destroyed by association, so set it here
+    # e.g. for Plans, to prevent acts_as_list to update position of each plan on deletion
+    # we want to have here a reflection with a foreign key that is part of the list scope array.
+    # see acts_as_list/active_record/acts/scope_method_definer.rb
+    # Note that if you hand-craft garbage hierarchy, it may still count as the expected foreign key,
+    # e.g. you delete an ApplicationPlan but association is Account:account_plans or
+    # e.g. the association is for an unrelated parent object id
+    # FYI if there is no such association (e.g. a method name), nil will be returned (counts as not by association).
+    # Another possible confusion with hand-crafted hierarchies may occur when before a
+    # "Plain-..." entry, there is set an unrelated "Association-..." entry, then incorrect association will be set.
+    match = hierarchy.last&.match(ASSOCIATION_RE)
+    association = match[:klass].constantize.reflect_on_association(match[:association]) if match
+    # doing without a reload is a mess related to Service, Proxy and PaymentGatewaySettings, maybe improve next life
+    ar_object.reload unless ar_object.class.background_deletion.empty?
+    ar_object.destroyed_by_association = association
+    ar_object.background_deletion_method_call
+
+    evict_object(ar_object)
+  end
+
+  def cached_object(str_klass, str_id)
+    @object_cache[[str_klass, str_id]] ||= str_klass.constantize.find(str_id.to_i)
+  end
+
+  def evict_object(ar_object)
+    @object_cache.delete([ar_object.class.name, ar_object.id.to_s])
   end
 
   # @return a single associated object for deletion or nil if non in the association
