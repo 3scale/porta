@@ -2,7 +2,7 @@
 
 class DeleteObjectHierarchyWorker < ApplicationJob
 
-  WORK_TIME_LIMIT_SECONDS = 5
+  WORK_TIME_LIMIT_SECONDS = 25
   ASSOCIATION_RE = /Association-(?<klass>[:\w]+)-(?<id>\d+):(?<association>\w+)/
   PLAIN_OBJECT_RE = /Plain-([:\w]+)-(\d+)/
 
