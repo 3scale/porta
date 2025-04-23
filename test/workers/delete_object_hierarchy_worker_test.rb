@@ -83,7 +83,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test 'the error is not raised and the object is removed' do
       plan = FactoryBot.create(:application_plan)
-      feature = FactoryBot.create(:feature)
+      feature = FactoryBot.create(:feature, featurable: plan.service)
       plan.features_plans.create!(feature: feature)
 
       assert_difference(plan.features_plans.method(:count), -1) do
@@ -103,6 +103,33 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
 
       DeleteObjectHierarchyWorker.perform_now("Plain-BadClass-1234")
+    end
+  end
+
+  class ObjectCachingTest < ActiveSupport::TestCase
+    setup do
+      @page = FactoryBot.create(:cms_page)
+      @page.publish!
+      assert_equal 2, @page.versions.count
+    end
+
+    test "retrieves objects minimal times from db and clears cache" do
+      object_cache = {}
+      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+      job = DeleteObjectHierarchyWorker.new(*hierarchy)
+      job.instance_variable_set(:@object_cache, object_cache)
+
+      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
+        # cms_templates_versions are never loaded by id as they are just `take`n, cached and not reloaded before destroy
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_version\b.*\bid['"` ]{0,2}=/) do
+          job.perform(*hierarchy)
+        end
+      end
+
+      assert_empty object_cache # records are removed from cache once deleted
+
+      assert_raise(ActiveRecord::RecordNotFound) { @page.reload }
     end
   end
 
@@ -561,7 +588,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       account = FactoryBot.create(:simple_account)
       FactoryBot.create_list(:simple_account_plan, 2, issuer: account)
       plans = account.account_plans.order(position: :asc).to_a
-      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
       assert_no_change of: -> { plans.last.reload.position } do
         DeletePlainObjectWorker.perform_now(*%W[Plain-Account-#{account.id} Association-Account-#{account.id}:account_plans Plain-AccountPlan-#{plans.first.id}])
@@ -575,7 +602,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
       plans = service.application_plans.order(position: :asc).to_a
       # note that we don't expect such a hierarchy in the real world ever
-      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
       assert_change of: -> { plans.last.reload.position }, by: -1 do
         DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Account-#{Random.random_number(1000000)}:servies Plain-ApplicationPlan-#{plans.first.id}])
@@ -588,7 +615,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service)
       FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
       plans = service.application_plans.order(position: :asc).to_a
-      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
       assert_no_change of: -> { plans.last.reload.position } do
         DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ApplicationPlan-#{plans.first.id}])
@@ -602,7 +629,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
       plans = service.service_plans.order(position: :asc).to_a
       # note that we don't expect such a hierarchy in the real world ever
-      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
       assert_change of: -> { plans.last.reload.position }, by: -1 do
         DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{Random.random_number(1000000)}:account_plans Plain-ServicePlan-#{plans.first.id}])
@@ -615,7 +642,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service)
       FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
       plans = service.service_plans.order(position: :asc).to_a
-      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,20) # limit iterations to 1
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
       assert_no_change of: -> { plans.last.reload.position } do
         DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ServicePlan-#{plans.first.id}])
