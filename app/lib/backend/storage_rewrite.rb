@@ -47,6 +47,7 @@ module Backend
       REWRITER = ->(service) do
         service.update_backend_service
         service.service_tokens.find_each(&ServiceTokenService.method(:update_backend))
+        service.send(:update_notification_settings)
       end
     end
 
