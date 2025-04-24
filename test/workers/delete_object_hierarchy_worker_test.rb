@@ -122,7 +122,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
       assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
         # cms_templates_versions are never loaded by id as they are just `take`n, cached and not reloaded before destroy
-        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_version\b.*\bid['"` ]{0,2}=/) do
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/) do
           job.perform(*hierarchy)
         end
       end
@@ -388,7 +388,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       # not specific to a provider or should not be deleted with the provider
       NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, Partner, LogEntry, SystemOperation]
 
-      test 'perform big account destroy in background' do
+      test "perform big account destroy in background" do
         provider = create_a_complete_provider
         assert_equal 1, Account.where(provider: true).count
         assert_equal 1, Account.where(buyer: true).count
@@ -397,6 +397,20 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         assert_empty models_without_objects.map(&:to_s)
 
         perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(provider) }
+
+        assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
+      end
+
+      test "perform big account destroy" do
+        skip "we have some objects not deleted with normal deletion, but will fix later"
+        provider = create_a_complete_provider
+        assert_equal 1, Account.where(provider: true).count
+        assert_equal 1, Account.where(buyer: true).count
+
+        provider.schedule_for_deletion!
+        assert_empty models_without_objects.map(&:to_s)
+
+        provider.destroy!
 
         assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
       end
@@ -685,7 +699,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test "deleting CMS::GroupSections through sections" do
       cms_group = FactoryBot.create(:cms_group)
-      section = cms_group.provider.provided_sections.first
+      section = FactoryBot.create(:cms_section, provider: cms_group.provider, parent: cms_group.provider.provided_sections.first)
       group_section = cms_group.group_sections.create(section:)
 
       perform_enqueued_jobs(queue: :deletion) do

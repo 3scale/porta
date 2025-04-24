@@ -11,8 +11,6 @@ class CMS::File < ApplicationRecord
 
   self.table_name = :cms_files
 
-  self.background_deletion_method = :delete
-
   self.allowed_search_scopes = %i[section_id]
 
   scope :by_section_id, ->(section_id) { where(section_id: section_id) }

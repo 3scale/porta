@@ -11,8 +11,6 @@ class SSOAuthorization < ApplicationRecord
 
   scope :newest, -> { order(updated_at: :desc).first }
 
-  self.background_deletion_method = :delete
-
   def mark_as_used(id_token)
     self.id_token = id_token
     self.updated_at = Time.now.utc

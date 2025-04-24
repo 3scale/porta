@@ -7,8 +7,6 @@ class Notification < ApplicationRecord
 
   self.available_notifications = NotificationMailer.available_notifications.map(&:to_s).freeze
 
-  self.background_deletion_method = :delete
-
   delegate :hidden_onprem_multitenancy, to: NotificationMailer
   delegate :account, to: :user
 
