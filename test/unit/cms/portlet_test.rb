@@ -23,16 +23,10 @@ class CMS::PortletTest < ActiveSupport::TestCase
     assert_equal 'Latest Forum Posts', LatestForumPostsPortlet.model_name.human
   end
 
-  setup do
-    class CustomPortlet < CMS::Portlet::Base
-      attributes :fancyness
-      attr_accessible :fancyness
-      validates_presence_of :fancyness
-    end
-  end
-
-  teardown do
-    CMS::PortletTest.send(:remove_const, :CustomPortlet)
+  class CustomPortlet < CMS::Portlet::Base
+    attributes :fancyness
+    attr_accessible :fancyness
+    validates_presence_of :fancyness
   end
 
   test 'custom portlet' do

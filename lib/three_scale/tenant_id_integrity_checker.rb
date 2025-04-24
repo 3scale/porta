@@ -98,7 +98,7 @@ module ThreeScale
     end
 
     def models_with_tenant_id
-      all_models_with_a_table.select! { _1.attribute_names.include? "tenant_id" }
+      three_scale_db_models.select! { _1.attribute_names.include? "tenant_id" }
     end
   end
 end
