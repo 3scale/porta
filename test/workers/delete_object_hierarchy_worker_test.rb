@@ -402,7 +402,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       end
 
       test "perform big account destroy" do
-        skip "we have some objects not deleted with normal deletion, but will fix later"
         provider = create_a_complete_provider
         assert_equal 1, Account.where(provider: true).count
         assert_equal 1, Account.where(buyer: true).count
@@ -410,7 +409,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         provider.schedule_for_deletion!
         assert_empty models_without_objects.map(&:to_s)
 
-        provider.destroy!
+        provider.reload.destroy!
 
         assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
       end
@@ -487,7 +486,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
-        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
           object_of_master?(Account.find(object.account_id))
         when Feature
           object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
@@ -497,7 +496,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object_of_master?(object.provider) if object.provider
         when Configuration::Value
           object_of_master?(object.configurable_type.constantize.find(object.configurable_id))
-        when UserTopic, Notification, UserSession
+        when UserTopic, MemberPermission, Notification, UserSession
           object_of_master?(User.find(object.user_id))
         when Metric
           owner = object.owner
@@ -510,6 +509,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object.receiver == master_account
         when Plan
           object_of_master?(object.issuer) if object.issuer
+        when Post, Topic, TopicCategory
+          object_of_master?(Forum.find(object.forum_id))
         when ProxyConfigAffectingChange, ProxyRule
           object_of_master?(Proxy.find(object.proxy_id))
         when ServiceToken, Proxy
@@ -517,7 +518,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         when SystemOperation
           objects = [object.messages.take, object.mail_dispatch_rules.take].compact
           object_of_master?(objects.first)
-        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints, TopicCategory
+        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints
           false # assume the test master has none of these
         else
           raise "Object of type #{object}"
