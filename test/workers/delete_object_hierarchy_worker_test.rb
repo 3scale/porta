@@ -108,26 +108,54 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   class ObjectCachingTest < ActiveSupport::TestCase
     setup do
-      @page = FactoryBot.create(:cms_page)
-      @page.publish!
-      assert_equal 2, @page.versions.count
+      @user = FactoryBot.create(:user)
+      FactoryBot.create_list(:access_token, 3, owner: @user)
+      assert_equal 3, @user.access_tokens.count
     end
 
     test "retrieves objects minimal times from db and clears cache" do
       object_cache = {}
-      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+      hierarchy = %W[Plain-User-#{@user.id} Association-User-#{@user.id}:access_tokens]
       job = DeleteObjectHierarchyWorker.new(*hierarchy)
       job.instance_variable_set(:@object_cache, object_cache)
 
-      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
-      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
-        # cms_templates_versions are never loaded by id as they are just `take`n, cached and not reloaded before destroy
-        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/) do
-          job.perform(*hierarchy)
+      # user is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\busers\b.*\bid['"` ]{0,2}=/) do
+        # access_tokens are never loaded by id as they are just `take`n, cached and not reloaded before destroy
+        assert_number_of_queries(0, matching: /SELECT.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
+          assert_number_of_queries(3, matching: /DELETE.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
+            job.perform(*hierarchy)
+          end
         end
       end
 
       assert_empty object_cache # records are removed from cache once deleted
+      assert_raise(ActiveRecord::RecordNotFound) { @user.reload }
+    end
+  end
+
+  class DeleteAllAssociationTest < ActiveSupport::TestCase
+    setup do
+      @page = FactoryBot.create(:cms_page)
+      @page.publish!
+      @page.draft = "another draft"
+      @page.publish!
+      assert_equal 3, @page.versions.count
+    end
+
+    test "uses #delete_all instead of individual record deletes for such associations" do
+      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+
+      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
+        # cms_templates_versions are never loaded by id but delete(d)_all
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/) do
+          # ideally we only want one invocation but deletion is also invoked once the Page record is `destroy!`-ed
+          assert_number_of_queries(2, matching: /DELETE.*\bcms_templates_versions\b.*/) do
+            DeleteObjectHierarchyWorker.perform_now(*hierarchy)
+          end
+        end
+      end
 
       assert_raise(ActiveRecord::RecordNotFound) { @page.reload }
     end
