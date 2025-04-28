@@ -4,9 +4,9 @@ module ApiAuthentication
   module ByToken
     extend ActiveSupport::Concern
 
-    ByTokenError = Class.new(StandardError)
-    UserNotFoundError = Class.new(ByTokenError)
-    InvalidSsoTokenError = Class.new(ByTokenError)
+    class ByTokenError < StandardError; end
+    class UserNotFoundError < ByTokenError; end
+    class InvalidSsoTokenError < ByTokenError; end
 
     def current_user
       @current_user ||= sso_token ? authenticated_user_by_sso_token : (defined?(super) && super)
