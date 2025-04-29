@@ -33,6 +33,8 @@ module Authentication
         @admin_domain     = admin_domain
         @user_for_signup  = nil
         @new_user_created = false
+
+        Rails.logger.info("Trying to log in by #{self.name} auth strategy")
       end
 
       def name
