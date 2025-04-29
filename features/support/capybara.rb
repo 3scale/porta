@@ -6,6 +6,8 @@ require 'selenium/webdriver'
 # and that will make some cucumbers fail
 WINDOW_SIZE_ARG = '--window-size=1280,2048'
 
+Capybara.disable_animation = false
+
 Capybara.configure do |config|
   config.default_driver = :rack_test
   config.match = :prefer_exact

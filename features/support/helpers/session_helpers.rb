@@ -24,6 +24,7 @@ module SessionHelper
   end
 
   def try_provider_login(username, password)
+    ensure_javascript
     visit provider_login_path
     fill_in('Email or Username', with: username)
     fill_in('Password', with: password)

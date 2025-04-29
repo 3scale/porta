@@ -20,7 +20,7 @@ import { useState } from 'react'
 
 import { Pagination } from 'Common/components/Pagination'
 import { ajaxJSON } from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import { showToast } from 'utilities/toast'
 import { getSortParams } from 'utilities/patternfly-utils'
 
 import type { FunctionComponent } from 'react'
@@ -67,7 +67,7 @@ const AuthenticationProvidersTable: FunctionComponent<Props> = ({
       .then(res => res.json())
       .then(({ error, redirect }) => {
         if (error) {
-          flash.error(error)
+          showToast(error, 'danger')
           closeModal()
         } else if (redirect) {
           window.location.replace(redirect)

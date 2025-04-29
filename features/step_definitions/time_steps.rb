@@ -6,6 +6,10 @@ When '(I )wait a moment' do
   # e.g. Scenario: Adding a new item
 end
 
+But 'after {int} seconds' do |secs|
+  sleep secs
+end
+
 Given "it's the beginning of the month" do
   time_machine(Time.zone.now.at_beginning_of_month)
 end

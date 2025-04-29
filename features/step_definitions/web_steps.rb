@@ -147,7 +147,3 @@ Then "(they )should see the following details(:)" do |table|
     assert dt.has_sibling?('dd', text: value)
   end
 end
-
-Then "(I )(they )should see the flash message {string}" do |message|
-  assert_flash(message)
-end

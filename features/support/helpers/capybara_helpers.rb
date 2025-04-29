@@ -6,6 +6,7 @@ module CapybaraHelpers
   include Capybara::Minitest::Assertions
 
   FLASH_SELECTOR = [
+    '.pf-c-alert-group.pf-m-toast .pf-c-alert__title',
     '#flash-messages',
     '#flashWrapper span',
     '#flashWrapper p'

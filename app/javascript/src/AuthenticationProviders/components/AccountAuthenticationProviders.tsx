@@ -13,7 +13,7 @@ import { AuthenticationProvidersTable } from 'AuthenticationProviders/components
 import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/components/AuthenticationProvidersEmptyState'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { ajaxJSON } from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import { showToast } from 'utilities/toast'
 
 import type { FunctionComponent } from 'react'
 import type { Props as TableProps } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
@@ -46,10 +46,10 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
         .then(res => res.json())
         .then(res => {
           if (res.error) {
-            flash.error(res.error)
+            showToast(res.error, 'danger')
             setIsSSOEnabled(false)
           } else if (res.notice) {
-            flash.notice(res.notice)
+            showToast(res.notice, 'success')
           }
         })
         .finally(() => {
@@ -70,10 +70,10 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
         .then(res => {
           if (res.error) {
             setIsSSOEnabled(true)
-            flash.error(res.error)
+            showToast(res.error, 'danger')
           } else if (res.notice) {
             setIsSSOEnabled(false)
-            flash.notice(res.notice)
+            showToast(res.notice, 'success')
           }
         })
         .finally(() => {

@@ -1,3 +1,5 @@
+// DEPRECATED: use pack flash.ts. Used in layout: iframe, wizard, suspended.
+
 (function ($) {
   $.flash = function (message) { $.flash.notice(message) }
   $.flash.timeout = 5000

@@ -491,3 +491,9 @@ ParameterType(
     }[value]
   end
 )
+
+ParameterType(
+  name: 'alert_type',
+  regexp: /|default|info|success|warning|danger/,
+  transformer: ->(type) { type || 'default' }
+)

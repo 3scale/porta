@@ -1,4 +1,4 @@
-import * as flash from 'utilities/flash'
+import { showToast } from 'utilities/toast'
 import { ajaxJSON } from 'utilities/ajax'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(({ notice, error }) => {
         if (notice) {
-          flash.notice(notice)
+          showToast(notice, 'success')
         } else if (error) {
-          flash.error(error)
+          showToast(error, 'danger')
         }
       })
       .catch(console.error)

@@ -1,4 +1,8 @@
+import { showToast, hideToast } from 'utilities/toast'
+
 window.ThreeScale = {
+  showToast,
+  hideToast,
   spinnerId: 'ajax-in-progress',
   showSpinner: () => {
     if (document.getElementById(window.ThreeScale.spinnerId) === null) {
