@@ -27,8 +27,7 @@ module Authentication
         given_param_keys = @params.to_h.symbolize_keys.keys
 
         # Take the first strategy in STRATEGIES which expected_params are received in the request
-        # Ignore :request and :redirect_url params since they are not used for authentication
-        STRATEGIES.find { (given_param_keys - %i[request redirect_url] - strategy_class(_1).expected_params).empty? }
+        STRATEGIES.find { |type| strategy_class(type).expected_params.all? { given_param_keys.include? _1 } }
       end
 
       def strategy_class(type)
@@ -39,10 +38,13 @@ module Authentication
         type = provider? ? :provider_oauth2 : :oauth2 if type == :oauth2_base
 
         strategy_class(type).new(@provider, provider?)
+      rescue InvalidStrategyError
+        #return nil if no auth strategy was found
+        nil
       end
 
       def impersonating?(type)
-        strategy_class(type) == Authentication::Strategy::Token
+        type.present? && strategy_class(type) == Authentication::Strategy::Token
       end
 
       def provider?

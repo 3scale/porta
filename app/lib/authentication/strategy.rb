@@ -1,6 +1,8 @@
 module Authentication
   module Strategy
 
+    class InvalidStrategyError < StandardError; end
+
     class << self
       def build(site_account)
         type = site_account.settings.authentication_strategy
@@ -16,6 +18,8 @@ module Authentication
         inflected_type = Rails.autoloaders.main.inflector.camelize(type.to_s, {})
         strategy_class_name = "Authentication::Strategy::#{inflected_type}"
         strategy_class_name.constantize
+      rescue NameError
+        raise InvalidStrategyError
       end
     end
   end
