@@ -6,17 +6,42 @@ module ThreeScale
       def initialize(doc)
         @errors = ActiveModel::Errors.new(self)
         @doc = doc
-        @validator = JSONValidator.new(doc)
       end
 
       attr_reader :errors, :doc
 
-      JSON_SCHEMA = {'$ref' => 'http://apicast.io/policy-v1/schema#'}.freeze
+      SCHEMAS_PATH = 'app/lib/three_scale/policies/schemas/'
+      POLICY_SCHEMAS_FILENAMES = %w[apicast-policy-v1.1.schema.json apicast-policy-v1.schema.json].freeze
+
+      POLICY_SCHEMAS = POLICY_SCHEMAS_FILENAMES.each_with_object({}) do |schema_filename, schemas|
+        policy_schema = JSON.parse(File.read(File.join(SCHEMAS_PATH, schema_filename)))
+        schema_id = policy_schema["$id"]
+        schemas[schema_id] = JSONSchemer.schema(policy_schema) if schema_id
+      end.freeze
 
       def valid?
         return false if errors.any?
-        @validator.fully_validate(JSON_SCHEMA).each { |error| errors.add(:base, error) }
+
+        schemer = POLICY_SCHEMAS[doc["$schema"]]
+
+        unless schemer
+          errors.add(:base, "unsupported schema")
+          return false
+        end
+
+        validate(schemer)
+
         errors.empty?
+      end
+
+      private
+
+      def validate(schemer)
+        schemer&.validate(doc).to_a.map { _1.fetch('error') }.each do |error|
+          errors.add(:base, error)
+        end
+      rescue JSONSchemer::UnknownRef => exception
+        errors.add(:base, "unknown ref: #{exception.message}")
       end
     end
   end
