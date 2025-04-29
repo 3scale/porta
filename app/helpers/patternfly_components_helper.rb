@@ -3,10 +3,11 @@
 module PatternflyComponentsHelper
 
   def icon_name(variant)
-    case variant
+    case variant&.to_sym
+    when :danger then 'exclamation-circle'
     when :info then 'info-circle'
-    when :success then 'check-circled'
-    when :warning, :danger then 'exclamation-triangle'
+    when :success then 'check-circle'
+    when :warning then 'exclamation-triangle'
     else 'bell'
     end
   end
