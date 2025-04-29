@@ -98,7 +98,7 @@ module Authentication
       end
 
       def inactive_user_message
-        "Your account isn't active or hasn't been approved yet."
+        I18n.t("errors.messages.inactive_account")
       end
 
       protected
