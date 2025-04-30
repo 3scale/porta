@@ -4,10 +4,10 @@ module Authentication
   module Strategy
     class InferService < ThreeScale::Patterns::Service
 
-      def initialize(params, account, provider)
+      def initialize(params, site_account, admin_domain: false)
         @params = params
-        @account = account
-        @provider = provider
+        @site_account = site_account
+        @admin_domain = admin_domain
       end
 
       def call
@@ -35,21 +35,17 @@ module Authentication
       end
 
       def build(type)
-        type = provider? ? :provider_oauth2 : :oauth2 if type == :oauth2_base
+        type = @admin_domain ? :provider_oauth2 : :oauth2 if type == :oauth2_base
 
-        strategy_class(type).new(@provider, provider?)
+        strategy_class(type).new(@site_account, @admin_domain)
       end
 
       def impersonating?(type)
         type.present? && strategy_class(type) == Authentication::Strategy::Token
       end
 
-      def provider?
-        @account&.provider?
-      end
-
       def sso_enforced?
-        provider? && @account&.settings&.enforce_sso?
+        @admin_domain && @site_account.settings.enforce_sso?
       end
     end
   end

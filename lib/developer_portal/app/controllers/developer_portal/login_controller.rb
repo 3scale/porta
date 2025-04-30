@@ -70,7 +70,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   end
 
   def set_strategy
-    @strategy = Authentication::Strategy::InferService.call(auth_params, nil, site_account).result
+    @strategy = Authentication::Strategy::InferService.call(auth_params, site_account).result
   end
 
   def add_authentication_drops(drops = {})

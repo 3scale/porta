@@ -74,7 +74,7 @@ class Provider::SessionsController < FrontendController
   end
 
   def authenticate_user
-    strategy = Authentication::Strategy::InferService.call(auth_params, domain_account, @provider).result
+    strategy = Authentication::Strategy::InferService.call(auth_params, @provider, admin_domain: true).result
 
     return if strategy.bot_protected? && !bot_check
 
