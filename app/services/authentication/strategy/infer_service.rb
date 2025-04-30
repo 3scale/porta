@@ -38,9 +38,6 @@ module Authentication
         type = provider? ? :provider_oauth2 : :oauth2 if type == :oauth2_base
 
         strategy_class(type).new(@provider, provider?)
-      rescue InvalidStrategyError
-        #return nil if no auth strategy was found
-        nil
       end
 
       def impersonating?(type)

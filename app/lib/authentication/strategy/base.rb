@@ -34,7 +34,7 @@ module Authentication
         @user_for_signup  = nil
         @new_user_created = false
 
-        Rails.logger.debug("Trying to log in by #{self.name} auth strategy")
+        Rails.logger.debug("Trying to log in by #{name} auth strategy") unless is_a?(Authentication::Strategy::Null)
       end
 
       def name
