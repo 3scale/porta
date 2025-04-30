@@ -47,7 +47,7 @@ module ThreeScale
       def schema_id
         return @schema_id if defined?(@schema_id)
 
-        schema = doc["$schema"]
+        schema = doc&.[]("$schema")
         @schema_id = schema.present? ? transform_uri(schema) : DEFAULT_POLICY_SCHEMA_ID
       end
 
