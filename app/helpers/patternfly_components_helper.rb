@@ -42,9 +42,12 @@ module PatternflyComponentsHelper
     end
   end
 
+  # Generates the same HTML as app/javascript/src/utilities/toast.ts#createAlertGroupItem.
+  # Duplication is not ideal, but justified since this will be used by rails template for
+  # flashes set by controllers.
   def pf_toast_alert(title, **options)
     action_tag = tag.div class: 'pf-c-alert__action' do
-      tag.button class: 'pf-c-button pf-m-plain', type: 'button' do
+      tag.button class: 'pf-c-button pf-m-plain', type: 'button', title: 'Close alert' do
         tag.icon class: 'fas fa-times'
       end
     end

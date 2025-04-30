@@ -42,6 +42,7 @@ function createAlertGroupItem (message: string, type = 'default'): HTMLLIElement
   const closeButton = document.createElement('button')
   closeButton.className = 'pf-c-button pf-m-plain'
   closeButton.type = 'button'
+  closeButton.title = 'Close alert'
 
   closeButton.onclick = () => { hideToast(li) }
 

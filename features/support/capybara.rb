@@ -6,7 +6,10 @@ require 'selenium/webdriver'
 # and that will make some cucumbers fail
 WINDOW_SIZE_ARG = '--window-size=1280,2048'
 
-Capybara.disable_animation = false
+# Disable all animation except toast alerts because they rely on event 'animationend'
+# FIXME: ideally we should enable animations only on toast.feature, otherwise we don't care about
+# alerts closing automatically and it can be done manually if needed.
+Capybara.disable_animation = ':not(.pf-m-toast)'
 
 Capybara.configure do |config|
   config.default_driver = :rack_test

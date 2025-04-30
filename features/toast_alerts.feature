@@ -26,5 +26,5 @@ Feature: Toast alert notifications
 
   Scenario: Close alert manually
     Given a toast alert is displayed with text "This is closeable"
-    When press ""
+    When press "Close alert"
     Then they should not see any toast alerts
