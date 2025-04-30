@@ -10,8 +10,9 @@ module ThreeScale
 
       attr_reader :errors, :doc
 
-      SCHEMAS_PATH = 'app/lib/three_scale/policies/schemas/'
+      SCHEMAS_PATH = "app/lib/three_scale/policies/schemas/"
       POLICY_SCHEMAS_FILENAMES = %w[apicast-policy-v1.1.schema.json apicast-policy-v1.schema.json].freeze
+      DEFAULT_POLICY_SCHEMA_ID = "http://apicast.io/policy-v1.1/schema"
 
       POLICY_SCHEMAS = POLICY_SCHEMAS_FILENAMES.each_with_object({}) do |schema_filename, schemas|
         policy_schema = JSON.parse(File.read(File.join(SCHEMAS_PATH, schema_filename)))
@@ -22,8 +23,8 @@ module ThreeScale
       def valid?
         return false if errors.any?
 
-        schemer = POLICY_SCHEMAS[doc["$schema"]]
-
+        schema_id = doc["$schema"] || DEFAULT_POLICY_SCHEMA_ID
+        schemer = POLICY_SCHEMAS[schema_id]
         unless schemer
           errors.add(:base, "unsupported schema")
           return false
