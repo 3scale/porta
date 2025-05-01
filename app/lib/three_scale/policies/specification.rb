@@ -16,8 +16,8 @@ module ThreeScale
 
       POLICY_SCHEMAS = POLICY_SCHEMAS_FILENAMES.each_with_object({}) do |schema_filename, schemas|
         policy_schema = JSON.parse(File.read(File.join(SCHEMAS_PATH, schema_filename)))
-        schema_id = policy_schema["$id"]
-        schemas[schema_id] = JSONSchemer.schema(policy_schema) if schema_id
+        id = policy_schema["$id"]
+        schemas[id] = JSONSchemer.schema(policy_schema) if id
       end.freeze
 
       def valid?
@@ -45,22 +45,14 @@ module ThreeScale
       end
 
       def schema_id
-        return @schema_id if defined?(@schema_id)
-
-        schema = doc&.[]("$schema")
-        @schema_id = schema.present? ? transform_uri(schema) : DEFAULT_POLICY_SCHEMA_ID
-      end
-
-      # This is for compatibility. Previously, the schema ID was defined as "http://apicast.io/policy-v1/schema#manifest",
-      # or even "http://apicast.io/policy-v1/schema#manifest#"
-      # After changing the validator to `json_schemer`, the schema ID is now defined as "http://apicast.io/policy-v1/schema"
-      # to avoid issues with the existing schemas in the database or those coming from APIcast
-      def transform_uri(uri)
-        new_uri = URI(uri.sub(/\#$/, ''))
-        new_uri.fragment = nil
-        new_uri.to_s
-      rescue URI::InvalidURIError
-        nil
+        @schema_id ||= begin
+          schema = doc&.[]("$schema")
+          # Stripping URL fragment for compatibility. Previously, the schema ID was defined as "http://apicast.io/policy-v1/schema#manifest",
+          # or even "http://apicast.io/policy-v1/schema#manifest#"
+          # After changing the validator to `json_schemer`, the schema ID is now defined as "http://apicast.io/policy-v1/schema"
+          # to avoid issues with the existing schemas in the database or those coming from APIcast
+          schema.present? ? UriUtils.strip_fragment(schema.sub(/\#$/, '')) : DEFAULT_POLICY_SCHEMA_ID
+        end
       end
     end
   end
