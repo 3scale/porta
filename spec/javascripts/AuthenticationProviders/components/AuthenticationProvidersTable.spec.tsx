@@ -8,7 +8,7 @@ import { mockLocation, waitForPromises } from 'utilities/test-utils'
 import type { Props } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const showToast = jest.spyOn(flash, 'showToast')
+const toast = jest.spyOn(flash, 'toast')
 
 const defaultProps = {
   count: 0,
@@ -64,7 +64,7 @@ it('should handle deletion errors gracefully', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(showToast).toHaveBeenCalledWith(payload.error, 'danger')
+  expect(toast).toHaveBeenCalledWith(payload.error, 'danger')
 })
 
 it('should be able to edit an authentication provider', () => {

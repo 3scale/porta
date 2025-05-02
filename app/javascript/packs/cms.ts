@@ -4,7 +4,7 @@ import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/tabs'
 import 'jquery-pjax'
 
-import { showToast } from 'utilities/toast'
+import { toast } from 'utilities/toast'
 
 import type { EditorFromTextArea } from 'codemirror'
 
@@ -222,7 +222,7 @@ function setUpRevertButton () {
         const published = jQuery1('#cms_template_published').data('codemirror') as EditorFromTextArea
 
         draft.setValue(published.getValue())
-        showToast('Reverted draft to a currently published version.', 'success')
+        toast('Reverted draft to a currently published version.', 'success')
 
         const lines = $('.CodeMirror-lines')
         lines.animate({ opacity: 0.2 }, 500, () => { lines.animate({ opacity: 1.0 }) })

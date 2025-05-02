@@ -1,4 +1,4 @@
-import { showToast } from 'utilities/toast'
+import { toast } from 'utilities/toast'
 import { createHostedFields } from 'PaymentGateways/braintree/utils/createHostedFields'
 
 import type { BraintreeError } from 'braintree-web'
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch((error: BraintreeError) => {
             submit.removeAttribute('disabled')
-            showToast('Credit card could not be updated.', 'danger')
+            toast('Credit card could not be updated.', 'danger')
             console.error(error)
           })
       })

@@ -1,6 +1,6 @@
 <% if @message.valid? %>
   jQuery.colorbox.close();
-  jQuery.flash.notice("<%= @notice %>");
+  ThreeScale.toast('<%= @notice %>', 'success');
 <% else %>
   <% [:subject, :body].each do |field| %>
     <% if errors = @message.errors[field].presence %>

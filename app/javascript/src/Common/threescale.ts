@@ -1,7 +1,7 @@
-import { showToast, hideToast } from 'utilities/toast'
+import { toast, hideToast } from 'utilities/toast'
 
 window.ThreeScale = {
-  showToast,
+  toast,
   hideToast,
   spinnerId: 'ajax-in-progress',
   showSpinner: () => {

@@ -20,7 +20,7 @@ import { useState } from 'react'
 
 import { Pagination } from 'Common/components/Pagination'
 import { ajaxJSON } from 'utilities/ajax'
-import { showToast } from 'utilities/toast'
+import { toast } from 'utilities/toast'
 import { getSortParams } from 'utilities/patternfly-utils'
 
 import type { FunctionComponent } from 'react'
@@ -67,7 +67,7 @@ const AuthenticationProvidersTable: FunctionComponent<Props> = ({
       .then(res => res.json())
       .then(({ error, redirect }) => {
         if (error) {
-          showToast(error, 'danger')
+          toast(error, 'danger')
           closeModal()
         } else if (redirect) {
           window.location.replace(redirect)

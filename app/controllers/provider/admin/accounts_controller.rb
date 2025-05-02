@@ -47,7 +47,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
         format.html do
           redirect_to_success
         end
-        format.js   { render :js => "jQuery.flash.notice('#{flash[:notice]}')" }
+        format.js   { render :js => "ThreeScale.toast('#{flash[:notice]}', 'success')" }
       else
         format.html { render :action => 'edit' }
         format.js   { render :template => 'shared/error' }

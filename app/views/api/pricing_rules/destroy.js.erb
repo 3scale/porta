@@ -8,7 +8,7 @@ void function () {
   counter.innerText = <%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>;
 }();
 
-jQuery.flash.notice('Pricing rule has been deleted.');
+ThreeScale.toast('Pricing rule has been deleted.', 'success');
 
 <%# TODO: this should happend when number of metrics falls below 2, not pricing_rules.
   if @plan.pricing_rules.count < 2

@@ -1,4 +1,4 @@
-import { showToast } from 'utilities/toast'
+import { toast } from 'utilities/toast'
 import { ajaxJSON } from 'utilities/ajax'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(({ notice, error }) => {
         if (notice) {
-          showToast(notice, 'success')
+          toast(notice, 'success')
         } else if (error) {
-          showToast(error, 'danger')
+          toast(error, 'danger')
         }
       })
       .catch(console.error)

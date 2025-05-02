@@ -1,4 +1,4 @@
 /**
  * Mock this module because it relies on an existing node in the DOM.
  */
-export const showToast = jest.fn()
+export const toast = jest.fn()

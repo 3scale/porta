@@ -13,7 +13,7 @@ import {
   TableBody
 } from '@patternfly/react-table'
 
-import { showToast } from 'utilities/toast'
+import { toast } from 'utilities/toast'
 import { ajax } from 'utilities/ajax'
 import { waitConfirm } from 'utilities/confirm-dialog'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
@@ -49,17 +49,17 @@ const PlansTable: FunctionComponent<Props> = ({
     .then(data => data.json()
       .then((res) => {
         if (data.status === 201) {
-          showToast(res.notice, 'success')
+          toast(res.notice, 'success')
           const newPlan = JSON.parse(res.plan) as Plan
           setPlans([...plans, newPlan])
         } else if (data.status === 422) {
-          showToast(res.error, 'danger')
+          toast(res.error, 'danger')
         }
       })
     )
     .catch(err => {
       console.error(err)
-      showToast('An error ocurred. Please try again later.', 'danger')
+      toast('An error ocurred. Please try again later.', 'danger')
     })
     .finally(() => { setIsLoading(false) })
 
@@ -70,7 +70,7 @@ const PlansTable: FunctionComponent<Props> = ({
           .then(data => data.json()
             .then((res) => {
               if (data.status === 200) {
-                showToast(res.notice, 'success')
+                toast(res.notice, 'success')
                 const purgedPlans = plans.filter(p => p.id !== res.id)
                 setPlans(purgedPlans)
               }
@@ -79,7 +79,7 @@ const PlansTable: FunctionComponent<Props> = ({
     })
     .catch(err => {
       console.error(err)
-      showToast('An error ocurred. Please try again later.', 'danger')
+      toast('An error ocurred. Please try again later.', 'danger')
     })
     .finally(() => { setIsLoading(false) })
 
@@ -87,19 +87,19 @@ const PlansTable: FunctionComponent<Props> = ({
     .then(data => data.json()
       .then((res) => {
         if (data.status === 200) {
-          showToast(res.notice, 'success')
+          toast(res.notice, 'success')
           const newPlan = JSON.parse(res.plan) as Plan
           const i = plans.findIndex(p => p.id === newPlan.id)
           plans[i] = newPlan
           setPlans(plans)
         } else if (data.status === 406) {
-          showToast(res.error, 'danger')
+          toast(res.error, 'danger')
         }
       })
     )
     .catch(err => {
       console.error(err)
-      showToast('An error ocurred. Please try again later.', 'danger')
+      toast('An error ocurred. Please try again later.', 'danger')
     })
     .finally(() => { setIsLoading(false) })
 

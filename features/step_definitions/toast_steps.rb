@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Given "a( ){alert_type} toast alert is displayed with text {string}" do |type, message|
-  page.execute_script "window.ThreeScale.showToast('#{message}', '#{type}')"
+  page.execute_script "window.ThreeScale.toast('#{message}', '#{type}')"
 end
 
 Then "they should see a( ){alert_type} toast alert with text {string}" do |type, message|

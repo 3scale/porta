@@ -6,7 +6,7 @@
     var keys = container.find("table#keys tbody");
     var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
     $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
-    $.flash.notice('<%= @notice %>')
+    ThreeScale.toast('<%= @notice %>', 'success')
 
   <% else %>
     <% if @error %>

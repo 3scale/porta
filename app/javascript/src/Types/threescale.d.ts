@@ -4,7 +4,7 @@ import type { TYPE } from 'utilities/toast'
 declare global {
   interface Window {
     ThreeScale: {
-      showToast: (message: string, type?: TYPE) => void;
+      toast: (message: string, type?: TYPE) => void;
       hideToast: (alert: HTMLLIElement) => void;
       spinnerId: string;
       showSpinner: () => void;

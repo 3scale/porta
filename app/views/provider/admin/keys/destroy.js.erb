@@ -5,9 +5,9 @@
     container.find("#<%= dom_id(@remove) %>").fadeOut(function() {
       $(this).remove();
     });
-    $.flash.notice('<%= @flash %>');
+    ThreeScale.toast('<%= @flash %>', 'success');
   <%- else -%>
-    $.flash.error('<%= @flash %>');
+    ThreeScale.toast('<%= @flash %>', 'danger');
   <%- end -%>
 
   <%- if @cinstance.application_keys.can_add? -%>

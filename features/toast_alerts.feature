@@ -21,7 +21,7 @@ Feature: Toast alert notifications
 
   Scenario: Timeout
     When a toast alert is displayed with text "Notice for you."
-    But after 5 seconds
+    But after 8 seconds
     Then they should not see any toast alerts
 
   Scenario: Close alert manually

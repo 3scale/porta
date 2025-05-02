@@ -72,7 +72,7 @@ class Admin::ApiDocs::BaseController < FrontendController
       if api_docs_service.update(api_docs_params, without_protection: true)
         message = 'ActiveDocs Spec was successfully updated.'
         format.html { redirect_to(preview_admin_api_docs_service_path(api_docs_service), notice: message) }
-        format.js { render js: "jQuery.flash.notice('#{message}')" }
+        format.js { render js: "ThreeScale.toast('#{message}', 'success')" }
       else
         format.html { render :edit }
         format.js {}

@@ -13,7 +13,7 @@ import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/compo
 import type { Props } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const showToast = jest.spyOn(flash, 'showToast')
+const toast = jest.spyOn(flash, 'toast')
 
 const defaultProps: Props = {
   showToggle: false,
@@ -77,7 +77,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(showToast).toHaveBeenCalledWith(payload.notice, 'success')
+    expect(toast).toHaveBeenCalledWith(payload.notice, 'success')
   })
 
   it('should confirm before enabling password-based authentication', async () => {
@@ -98,7 +98,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(showToast).toHaveBeenCalledWith(payload.notice, 'success')
+    expect(toast).toHaveBeenCalledWith(payload.notice, 'success')
   })
 
   it('should not break when enabling fails', async () => {
@@ -119,7 +119,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(showToast).toHaveBeenCalledWith(payload.error, 'danger')
+    expect(toast).toHaveBeenCalledWith(payload.error, 'danger')
   })
 
   it('should not break when disabling fails', async () => {
@@ -140,6 +140,6 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(showToast).toHaveBeenCalledWith(payload.error, 'danger')
+    expect(toast).toHaveBeenCalledWith(payload.error, 'danger')
   })
 })

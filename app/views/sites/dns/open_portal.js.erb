@@ -2,4 +2,4 @@
 setTimeout(() => {
   document.getElementById('open-portal-to-public').remove();
 });
-jQuery.flash.notice('<%= flash.now[:notice].html_safe %>');
+ThreeScale.toast('<%= flash.now[:notice].html_safe %>', 'success');

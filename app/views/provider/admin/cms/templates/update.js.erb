@@ -3,7 +3,7 @@ $('.inline-errors').remove();
 $('form .input.error').removeClass('error');
 
 <% if @page.valid? %>
-  $.flash(<%= flash.now[:notice].to_json.html_safe %>);
+  ThreeScale.toast(<%= flash.now[:notice].to_json.html_safe %>, 'success');
   $(document).trigger('sidebar:load');
 
   // 'publish' & 'hide' may change the 'published' view

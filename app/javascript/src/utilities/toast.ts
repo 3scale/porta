@@ -1,6 +1,6 @@
 // import { Wrapper as Flash } from 'Common/components/Flash'
 
-const TIMEOUT = 5000
+const TIMEOUT = 8000
 
 export type TYPE = 'danger' | 'default' | 'info' | 'success' | 'warning'
 
@@ -65,7 +65,7 @@ function createAlertGroupItem (message: string, type = 'default'): HTMLLIElement
   return li
 }
 
-export const showToast = (message: string, type: TYPE = 'default'): void => {
+export const toast = (message: string, type: TYPE = 'default'): void => {
   if (!TYPES.includes(type)) {
     console.error(`"${type}" is not a valid alert type. Use one of: ${TYPES.join(', ')}.`)
   }
@@ -105,15 +105,3 @@ export const setUpToasts = (): void => {
       li.querySelector('button')?.addEventListener('click', () => { window.ThreeScale.hideToast(li) })
     })
 }
-
-/* Legacy exports. DEPRECATED: remove after completely replaced by ThreeScale.showToast */
-// @ts-expect-error -- It's OK!
-window.$.flash = (msg) => { showToast(msg, 'success' ) }
-window.$.flash.notice = window.$.flash
-window.$.flash.error = (msg) => { showToast(msg, 'danger') }
-// @ts-expect-error -- It's OK!
-window.$.flash.hide = hideToastDelayed
-// @ts-expect-error -- It's OK!
-window.$.flash.timeout = TIMEOUT
-// @ts-expect-error -- It's OK!
-window.$.flash.timeouts = []

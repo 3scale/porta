@@ -12,7 +12,7 @@ import type { Buyer, Product, Plan } from 'NewApplication/types'
 import type { Props } from 'NewApplication/components/NewApplicationForm'
 import type { ReactWrapper } from 'enzyme'
 
-const showToast = jest.spyOn(flash, 'showToast')
+const toast = jest.spyOn(flash, 'toast')
 
 const appPlans = [{ id: 0, name: 'Basic Plan', default: false }]
 const products = [
@@ -178,7 +178,7 @@ describe('when in Service context', () => {
     const error = 'Something went wrong'
     mountWrapper({ ...props, error })
 
-    expect(showToast).toHaveBeenCalledWith(error, 'danger')
+    expect(toast).toHaveBeenCalledWith(error, 'danger')
   })
 
   describe('when service plans are allowed', () => {
@@ -471,7 +471,7 @@ describe('when in Account context', () => {
     const error = 'Something went wrong'
     mountWrapper({ ...props, error })
 
-    expect(showToast).toHaveBeenCalledWith(error, 'danger')
+    expect(toast).toHaveBeenCalledWith(error, 'danger')
   })
 
   describe('when service plans are not allowed', () => {

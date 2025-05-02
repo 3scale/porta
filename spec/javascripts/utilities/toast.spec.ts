@@ -1,15 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 const flash = jest.requireActual<typeof import('utilities/toast')>('utilities/toast')
 
-const { showToast, hideToastDelayed } = flash
+const { toast, hideToastDelayed } = flash
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('#showToast', () => {
+describe('#toast', () => {
   it('should throw an error if there is no alert group', () => {
-    expect(() => { showToast('Hi Pepe!') }).toThrow()
+    expect(() => { toast('Hi Pepe!') }).toThrow()
   })
 
   it('should add an alert and schedule it for removal', () => {
@@ -21,7 +21,7 @@ describe('#showToast', () => {
     `
 
     expect(document.querySelector('ul')!.children.length).toEqual(0)
-    showToast('Hi Pepe!')
+    toast('Hi Pepe!')
 
     expect(document.querySelector('ul .pf-c-alert p')!.textContent).toEqual('default alert: Hi Pepe!')
     expect(hideToastDelayed).toHaveBeenCalledTimes(1)
