@@ -47,8 +47,7 @@ module SessionHelper
   def assert_current_user(username)
     @user = User.find_by(username: username)
     message = "Expected #{username} to be logged in, but is not"
-    alert = find('.pf-m-toast .pf-c-alert__title, #flashWrapper p')
-    assert alert.has_text?(/Signed (?:in|up) successfully|You can use quick starts/i), message
+    assert_flash /Signed (?:in|up) successfully|You can use quick starts/i, message
   end
 
   private

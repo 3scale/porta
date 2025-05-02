@@ -11,7 +11,7 @@ Then "they should see a( ){alert_type} toast alert with text {string}" do |type,
 end
 
 Then "they should not see any toast alerts" do
-  within '.pf-c-alert-group.pf-m-toast' do
+  within('.pf-c-alert-group.pf-m-toast', visible: :all) do
     assert_no_css '.pf-c-alert', wait: 1
   end
 end

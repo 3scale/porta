@@ -1,9 +1,13 @@
 <%# DEPRECATED: use partial alert_group.html.slim %>
+<% ignored_types = %w[first_login token] %>
+
 <div id="flashWrapper" style="<%= flash.empty? ? "display:none;" : "" %>">
   <div class="ajaxNoticeValid">
     <% flash.each do |type, value| %>
-      <span class="flash-message flash-message--<%= type %>"><%= value %></span>
-      <% flash.discard(type) %>
+      <% unless ignored_types.include?(type) %>
+        <span class="flash-message flash-message--<%= type %>"><%= value %></span>
+        <% flash.discard(type) %>
+      <% end %>
     <%- end -%>
     <script>
       document.addEventListener('DOMContentLoaded', function(){

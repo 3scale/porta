@@ -24,6 +24,7 @@ Then "there should not be a CMS toolbar" do
 end
 
 Then "the cms toolbar {should} be visible" do |should|
-  assert_selector('.pf-c-drawer #cms-toolbar')
-  assert_equal should, find('.pf-c-drawer')[:class].include?('pf-m-expanded')
+  drawer = find('.pf-c-drawer')
+  assert_equal should, drawer.has_selector?('#cms-toolbar', wait: 0)
+  assert_equal should, drawer[:class].include?('pf-m-expanded')
 end
