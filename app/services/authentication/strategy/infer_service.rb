@@ -13,8 +13,8 @@ module Authentication
       def call
         type = infer_type
 
-        return build(:token) if impersonating?(type)
-        return build(:provider_oauth2) if sso_enforced?
+        return null_strategy unless type
+        return build(:provider_oauth2) if sso_enforced? && !impersonating?(type)
 
         build(type)
       end
@@ -40,8 +40,12 @@ module Authentication
         strategy_class(type).new(@site_account, @admin_domain)
       end
 
+      def null_strategy
+        Authentication::Strategy.build_null
+      end
+
       def impersonating?(type)
-        type.present? && strategy_class(type) == Authentication::Strategy::Token
+        type == :token
       end
 
       def sso_enforced?

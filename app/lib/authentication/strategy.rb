@@ -11,12 +11,16 @@ module Authentication
         build_strategy(:provider_oauth2).new(provider_account, true) # TODO: make this configurable
       end
 
+      def build_null
+        Authentication::Strategy::Null.new
+      end
+
       def build_strategy(type)
         inflected_type = Rails.autoloaders.main.inflector.camelize(type.to_s, {})
         strategy_class_name = "Authentication::Strategy::#{inflected_type}"
         strategy_class_name.constantize
       rescue NameError
-        Authentication::Strategy::Null
+        Rails.logger.debug("Tried to build a non-existing strategy: #{type}")
       end
     end
   end
