@@ -1,6 +1,7 @@
 module Authentication
   module Strategy
 
+    # User + password authentication
     class Internal < Base
 
       def self.expected_params

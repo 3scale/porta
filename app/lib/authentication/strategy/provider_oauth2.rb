@@ -1,5 +1,7 @@
 module Authentication
   module Strategy
+
+    # Oauth2 authentication for the admin portal
     class ProviderOAuth2 < Authentication::Strategy::OAuth2Base
 
       class FindOrCreateUser < Procedure

@@ -1,6 +1,7 @@
 module Authentication
   module Strategy
 
+    # Used for impersonation
     class Token < Base
 
       def self.expected_params
