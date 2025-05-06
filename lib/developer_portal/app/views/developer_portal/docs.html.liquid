@@ -15,8 +15,9 @@
 
 <script type="text/javascript">
   (function () {
-    var url = "{{spec.url}}";
-    var serviceEndpoint = "{{spec.api_product_production_public_base_url}}"
-    SwaggerUI({ url: url, dom_id: "#swagger-ui-container" }, serviceEndpoint);
+    const url = "{{spec.url}}";
+    const serviceEndpoint = "{{spec.api_product_production_public_base_url}}"
+    const oauth2RedirectUrl = window.location.origin + "/oauth2-redirect.html"
+    SwaggerUI({ url: url, dom_id: "#swagger-ui-container", oauth2RedirectUrl: oauth2RedirectUrl }, serviceEndpoint);
   }());
 </script>
