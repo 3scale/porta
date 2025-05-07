@@ -9,7 +9,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   def setup
     # Ensure that the invoices created in the test (with period in 1984) pass the validation
     @provider_created_at = Time.zone.local(1983, 11, 1)
-    @provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
+    @provider = FactoryBot.create(:provider_account, :with_billing, created_at: @provider_created_at)
 
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
@@ -66,7 +66,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'all providers but canaries' do
-    canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
+    canaries = FactoryBot.create_list(:provider_account, 4, :with_billing).map(&:id)
     ThreeScale.config.payments.expects(:billing_canaries).at_least_once.returns(canaries)
 
     all_but_canaries = Finance::BillingStrategy.all.pluck(:account_id) - canaries
@@ -75,7 +75,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   test 'canaries' do
-    canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
+    canaries = FactoryBot.create_list(:provider_account, 4, :with_billing).map(&:id)
     ThreeScale.config.payments.expects(:billing_canaries).at_least_once.returns(canaries)
 
     Finance::BillingStrategy.expects(:daily_async).with { |scope| assert_same_elements canaries, scope.pluck(:account_id) }.returns(true)
@@ -173,7 +173,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'increment id by provider' do
     create_two_invoices
 
-    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
+    second_provider = FactoryBot.create(:provider_account, :with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.numbering_period = 'monthly'
     second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
@@ -206,7 +206,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     two = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     other_month = @bs.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 2, 2)))
 
-    second_provider = FactoryBot.create(:provider_with_billing, created_at: @provider_created_at)
+    second_provider = FactoryBot.create(:provider_account, :with_billing, created_at: @provider_created_at)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
     second_buyer = FactoryBot.create(:buyer_account)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
@@ -245,7 +245,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   def test_audit_prepaid_postpaid
     Finance::BillingStrategy.with_synchronous_auditing do
-      @provider = FactoryBot.create(:provider_with_billing)
+      @provider = FactoryBot.create(:provider_account, :with_billing)
       strategy = @provider.billing_strategy
       assert 'postpaid', strategy.type
       strategy.type = 'prepaid'
@@ -280,7 +280,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   class DailyBillingTest < ActiveSupport::TestCase
     setup do
-      @providers = FactoryBot.create_list(:provider_with_billing, 3)
+      @providers = FactoryBot.create_list(:provider_account, 3, :with_billing)
       @billing_strategies = Finance::BillingStrategy.where(account: @providers)
     end
 

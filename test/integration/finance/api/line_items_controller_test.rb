@@ -3,7 +3,7 @@ require 'test_helper'
 class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @provider = FactoryBot.create(:provider_with_billing)
+    @provider = FactoryBot.create(:provider_account, :with_billing)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     @provider.settings.allow_finance!
     @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value

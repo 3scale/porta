@@ -86,7 +86,7 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
 
   test '#usage returns application data if it exists' do
     application_plan = FactoryBot.build_stubbed(:application_plan, id: 1, name: 'Application Plan')
-    account = FactoryBot.build_stubbed(:account, id: 1, name: 'Account')
+    account = FactoryBot.build_stubbed(:account_without_users, id: 1, name: 'Account')
     service = FactoryBot.build_stubbed(:service, id: 1)
     cinstance = FactoryBot.build_stubbed(
       :cinstance,

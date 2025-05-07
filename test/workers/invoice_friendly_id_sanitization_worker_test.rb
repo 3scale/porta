@@ -4,7 +4,7 @@ require 'test_helper'
 
 class InvoiceFriendlyIdSanitizationWorkerTest < ActiveSupport::TestCase
   setup do
-    @provider_account = FactoryBot.create(:provider_with_billing)
+    @provider_account = FactoryBot.create(:provider_account, :with_billing)
     @provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
     FactoryBot.create(:invoice_counter, provider_account: @provider_account, invoice_prefix: Time.now.year.to_s)
 
@@ -25,7 +25,7 @@ class InvoiceFriendlyIdSanitizationWorkerTest < ActiveSupport::TestCase
   end
 
   test "does not affect other providers' invoices" do
-    other_provider_account = FactoryBot.create(:provider_with_billing)
+    other_provider_account = FactoryBot.create(:provider_account, :with_billing)
     other_provider_account.billing_strategy.update_attribute(:numbering_period, 'yearly')
     other_invoice = FactoryBot.create(:invoice, provider_account: other_provider_account)
 
