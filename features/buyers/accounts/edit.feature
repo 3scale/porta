@@ -25,7 +25,7 @@ Feature: Audience > Accounts > Edit
     And follow "Delete"
     And confirm the dialog
     Then the current page is the buyer accounts page
-    And they should see the flash message "The account was successfully deleted."
+    And they should see the flash message "The account was successfully deleted"
     And should see the following table:
       | Group/Org. |
       | Pepe       |

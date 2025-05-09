@@ -43,7 +43,7 @@ Feature: Signup using Cas
       | user fields           |
       | Username              |
 
-    And I should see "Please continue the signup process below."
+    And I should see "Please continue the signup process below"
 
     And fields are required:
       | account fields          |
@@ -72,4 +72,4 @@ Feature: Signup using Cas
 
    When I try to log in as "armstrong" with password ""
    Then I should not be logged in
-    And I should see "Incorrect email or password. Please try again."
+    And I should see "Incorrect email or password. Please try again"

@@ -120,7 +120,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def set_plans
     unless current_account.create_buyer_possible?
-      redirect_to admin_buyers_account_plans_path, alert: 'Please, create an Account Plan first'
+      redirect_to admin_buyers_account_plans_path, danger: t('buyers.accounts.set_plans_error')
     end
 
     @plans = [] # this is here only to make new_signups/form happy

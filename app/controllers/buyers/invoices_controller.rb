@@ -33,7 +33,7 @@ class Buyers::InvoicesController < Buyers::BaseController
     @invoice = @account.invoices.find(params[:id])
 
     unless @invoice.editable?
-      redirect_to admin_buyers_account_invoice_url(@account, @invoice), alert: 'Invoice is no longer editable.'
+      redirect_to admin_buyers_account_invoice_url(@account, @invoice), info: t('.error')
     end
   end
 
@@ -41,7 +41,7 @@ class Buyers::InvoicesController < Buyers::BaseController
     @invoice = @account.invoices.find(params[:id])
 
     if @invoice.update(params[:invoice])
-      redirect_to admin_buyers_account_invoice_url(@account, @invoice), notice: 'Invoice was successfully updated.'
+      redirect_to admin_buyers_account_invoice_url(@account, @invoice), success: t('.success')
     else
       render :edit
     end

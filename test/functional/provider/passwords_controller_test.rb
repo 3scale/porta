@@ -19,7 +19,7 @@ class Provider::PasswordsControllerTest < ActionController::TestCase
 
     get :show, params: { password_reset_token: 123 }
     assert_response 302
-    assert flash[:error].present?
+    assert flash[:danger].present?
   end
 
   test 'generate new token' do

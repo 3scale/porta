@@ -1,3 +1,4 @@
+// TODO: is this used only by dev portal? It will break in admin portal, flash has been removed.
 (function($) {
   $.flash = function(message) { $.flash.notice(message); };
 

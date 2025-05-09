@@ -40,7 +40,7 @@ class Api::BackendUsagesController < Api::BaseController
 
   def update
     if @backend_api_config.update(backend_api_config_params.slice(:path))
-      redirect_to admin_service_backend_usages_path(@service), notice: t('.success')
+      redirect_to admin_service_backend_usages_path(@service), success: t('.success')
     else
       render :edit
     end

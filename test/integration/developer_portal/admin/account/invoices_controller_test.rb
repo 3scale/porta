@@ -46,7 +46,7 @@ class DeveloperPortal::Admin::Account::InvoicesControllerTest < ActionDispatch::
     Finance::StripePaymentIntentUpdateService.expects(:new).with(provider, stripe_payment_intent).returns(mock(call: true))
     post payment_succeeded_admin_account_invoice_path(invoice, params: payment_succeeded_params)
     assert_response :redirect
-    assert_equal 'Payment transaction updated', flash[:notice]
+    assert_equal 'Payment transaction updated', flash[:success]
   end
 
   test 'payment_succeeded with no-op payment intent status' do
@@ -56,7 +56,7 @@ class DeveloperPortal::Admin::Account::InvoicesControllerTest < ActionDispatch::
     Finance::StripePaymentIntentUpdateService.expects(:new).with(provider, stripe_payment_intent).returns(mock(call: false))
     post payment_succeeded_admin_account_invoice_path(invoice, params: payment_succeeded_params)
     assert_response :redirect
-    assert_equal 'Failed to update payment transaction', flash[:error]
+    assert_equal 'Failed to update payment transaction', flash[:danger]
   end
 
   test 'payment while missing pending payment intent' do

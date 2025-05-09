@@ -32,7 +32,7 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Change Plan"
-    Then should see the flash message "Plan change was successful."
+    Then should see the flash message "Plan change was successful"
     And "admin@foo.3scale.localhost" should receive an email with subject "Application My App has changed to plan Enterprise"
 
   Scenario: Without a credit card, changing an application's plan requires approval
@@ -42,7 +42,7 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Request Plan Change"
-    Then they should see "A request to change your application plan has been sent."
+    Then they should see "A request to change your application plan has been sent"
     And "admin@foo.3scale.localhost" should receive an email with subject "Action required: Jane from Jane requested an app plan change"
 
   Scenario: With a valid credit card, an application's plan can be changed directly
@@ -53,7 +53,7 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Change Plan"
-    Then they should see "Plan change was successful."
+    Then they should see "Plan change was successful"
 
   Scenario: Change plan workflow with credit card required without wizard
     Given the product allows to change application plan with credit card required
@@ -76,7 +76,7 @@ Feature: Developer portal change application plan
     # TODO: We need to mock useBraintreeHostedFields for this test work, or the form won't even submit
     # Then I enter my credit card details
     # And I press "Confirm"
-    # Then I should see "Plan change was successful."
+    # Then I should see "Plan change was successful"
     # And a message should be sent from buyer to provider with plan change details from free to paid
 
   # This is the behaviour for existing provider as of 05-07-2016

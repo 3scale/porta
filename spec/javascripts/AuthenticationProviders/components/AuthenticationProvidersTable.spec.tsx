@@ -53,7 +53,7 @@ it('should be able to delete an authentication provider', async () => {
 })
 
 it('should handle deletion errors gracefully', async () => {
-  const payload = { redirect: undefined, error: 'Something went wrong' }
+  const payload = { redirect: undefined, type: 'danger', message: 'Something went wrong' }
   ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
   const wrapper = mountWrapper()
@@ -64,7 +64,7 @@ it('should handle deletion errors gracefully', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(toastSpy).toHaveBeenCalledWith(payload.error, 'danger')
+  expect(toastSpy).toHaveBeenCalledWith(payload.message, 'danger')
 })
 
 it('should be able to edit an authentication provider', () => {

@@ -63,7 +63,7 @@ Feature: Dev Portal Buyer Account Plan
       And they select "GameMaster" from "View plan"
       And they press invisible "Request Plan Change"
       And confirm the dialog
-      Then they should see the flash message "The plan change has been requested."
+      Then they should see the flash message "The plan change has been requested"
 
     @javascript
     Scenario: Plan change is requested without a credit card
@@ -72,7 +72,7 @@ Feature: Dev Portal Buyer Account Plan
       And they select "GameMaster" from "View plan"
       And they press "Request Plan Change"
       And confirm the dialog
-      Then they should see the flash message "The plan change has been requested."
+      Then they should see the flash message "The plan change has been requested"
 
     @javascript
     Scenario: Plan can be changed directly with a credit card

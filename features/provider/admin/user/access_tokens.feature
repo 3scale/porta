@@ -85,7 +85,7 @@ Feature: Provider Admin Access tokens
         | Name        | New Token Name |
         | Billing API | No             |
         | Permission  | Read & Write   |
-      Then they should see the flash message "Access Token was successfully updated."
+      Then they should see the flash message "Access Token was successfully updated"
       Then the table should contain the following:
         | Name           | Scopes        | Permission   |
         | New Token Name | Analytics API | Read & Write |

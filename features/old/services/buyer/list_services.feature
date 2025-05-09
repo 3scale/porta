@@ -35,7 +35,7 @@ Feature: Buyer's service subscription
       When I follow "Subscribe to Verduras"
        And I select "Tomato" from "Plan"
        And I press "Subscribe"
-      Then I should see "You have successfully subscribed to a service."
+      Then I should see "You have successfully subscribed to a service"
 
       When I go to the services list for buyers
       Then I should not see "Subscribe to Verduras"

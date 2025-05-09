@@ -9,7 +9,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
       if current_user.just_changed_password?
         current_user.kill_user_sessions(user_session)
       end
-      redirect_to redirect_path, notice: 'User was successfully updated.'
+      redirect_to redirect_path, success: t('.success')
     else
       render action: 'edit'
     end

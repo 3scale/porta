@@ -15,6 +15,7 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import { ajaxJSON } from 'utilities/ajax'
 import { toast } from 'utilities/toast'
 
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 import type { Props as TableProps } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 
@@ -42,14 +43,12 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
       setLoading(true)
       setIsSSOEnabled(true)
 
-      void ajaxJSON(ssoPath, { method: 'POST' })
+      void ajaxJSON<Required<IAlert> & { ok: boolean }>(ssoPath, { method: 'POST' })
         .then(res => res.json())
-        .then(res => {
-          if (res.error) {
-            toast(res.error, 'danger')
+        .then(({ type, message, ok }) => {
+          toast(message, type)
+          if (!ok) {
             setIsSSOEnabled(false)
-          } else if (res.notice) {
-            toast(res.notice, 'success')
           }
         })
         .finally(() => {
@@ -65,16 +64,11 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
       setLoading(true)
       setIsSSOEnabled(false)
 
-      void ajaxJSON(ssoPath, { method: 'DELETE' })
+      void ajaxJSON<Required<IAlert> & { ok: boolean }>(ssoPath, { method: 'DELETE' })
         .then(res => res.json())
-        .then(res => {
-          if (res.error) {
-            setIsSSOEnabled(true)
-            toast(res.error, 'danger')
-          } else if (res.notice) {
-            setIsSSOEnabled(false)
-            toast(res.notice, 'success')
-          }
+        .then(({ type, message, ok }) => {
+          toast(message, type)
+          setIsSSOEnabled(!ok)
         })
         .finally(() => {
           setLoading(false)

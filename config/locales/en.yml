@@ -152,11 +152,15 @@ en:
             title: No ActiveDocs specs yet
             body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
             primary: Create your first spec
-        destroy:
-          success: ActiveDocs Spec was successfully deleted.
         toggle_visible:
           visible: "Spec %{name} is now visible"
           hidden: "Spec %{name} is now hidden"
+      create:
+        success: ActiveDocs Spec was successfully saved
+      destroy:
+        success: ActiveDocs Spec was successfully deleted.
+      update:
+        success: ActiveDocs Spec was successfully updated
     fields_definitions:
       create:
         success: Field was successfully created.
@@ -722,16 +726,20 @@ en:
           success: Referrer filter has been deleted
 
       service_discovery:
-
         services:
-
           create:
             error: Cannot create product
             success: The product will be imported shortly. You will receive a notification when it is done
-
+          show:
+            error: We could not authenticate you against OpenShift cluster
+            success: You can now use the service discovery
           update:
             error: Cannot update product
             success: Product information will be updated shortly
+
+      sudo:
+        create:
+          success: You are now in super-user mode! Retry the action, please.
 
       cms:
 
@@ -856,6 +864,7 @@ en:
             set_password_html: You have no password set. If you'd like to set one use the <a href="%{href}">password reset form</a>.
             new_password_label: New password
           update:
+            success: User was successfully updated
             wrong: Current password is incorrect
 
       dashboards:
@@ -910,9 +919,10 @@ en:
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
+      set_plans_error: Please, create an Account Plan first
       change_state:
-        notice: "%{account_type} account was %{state_event_past}."
-        error: "Cannot %{state_event} %{account_type} account."
+        success: "%{account_type} account was %{state_event_past}."
+        danger: "Cannot %{state_event} %{account_type} account."
       state_event_past:
         approve: 'approved'
         reject: 'rejected'
@@ -984,6 +994,9 @@ en:
         open_invoice:
           Account '%{name}' already has an open invoice. Please issue it before creating a
           new one.
+      edit:
+        error: Invoice is no longer editable
+      update: Invoice was successfully updated
 
     service_contracts:
       approve:
@@ -1306,6 +1319,11 @@ en:
       update:
         success: The policies are saved successfully
         error: The policies cannot be saved
+    pricing_rules:
+      create:
+        success: Pricing rule was successfully created
+      update:
+        success: Pricing rule was successfully updated
     proxy_rules:
       create:
         success: Mapping rule was created.

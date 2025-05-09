@@ -33,7 +33,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     When they go to application plan "Free" admin edit page
     And follow "Make metric Single rolls invisible"
     And wait a moment
-    Then they should see the flash message "Metric has been set to invisible."
+    Then they should see the flash message "Metric has been set to invisible"
     Then application plan "Free" should not have visible usage limits
 
   Scenario: Adding usage limits
@@ -122,4 +122,4 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
       Then I should see the metric "zeroed" is enabled
       When I disable the metric "zeroed"
       Then I should see the metric "zeroed" is enabled
-      And I should see "Metric cannot be disabled. Please contact support."
+      And I should see "Metric cannot be disabled. Please contact support"

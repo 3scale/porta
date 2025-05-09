@@ -18,7 +18,7 @@ it('should render itself', () => {
 })
 
 it('should render with server side errors when present', () => {
-  const wrapper = mountWrapper({ alerts: [{ type: 'error', message: 'Ooops!' }] })
+  const wrapper = mountWrapper({ alerts: [{ type: 'danger', message: 'Ooops!' }] })
   expect(wrapper).toMatchSnapshot()
 })
 

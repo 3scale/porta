@@ -107,7 +107,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_template 'login/new'
-    assert_not_nil flash[:error]
+    assert_not_nil flash[:danger]
     assert_nil User.current
   end
 

@@ -70,7 +70,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
     assert_equal 0, user.sso_authorizations.count
     post :create, params: { system_name: authentication_provider.system_name, code: 'C6789' }
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
     assert_equal 'fake-id_token', user.sso_authorizations.last.id_token
   end
 
@@ -86,7 +86,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
     assert_equal 'first-id_token', user.sso_authorizations.last.id_token
     post :create, params: { system_name: authentication_provider.system_name, code: 'C6789' }
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
     assert_equal 'fake-id_token', user.sso_authorizations.last.id_token
   end
 
@@ -99,7 +99,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     post :create, params: { system_name: authentication_provider.system_name, code: 'C6789', plan_id: 42 }
 
     assert_redirected_to signup_path(plan_id: 42)
-    assert_equal 'Successfully authenticated, please complete the signup form', flash[:notice]
+    assert_equal 'Successfully authenticated, please complete the signup form', flash[:success]
     assert_equal 'fake-id_token', session[:id_token]
   end
 
@@ -119,7 +119,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     client.stubs(:authenticate!).returns(ThreeScale::OAuth2::ErrorData.new(error: error = 'hostname "example.com" does not match the server certificate'))
     ThreeScale::OAuth2::Client.expects(build: client)
     post :create, params: { system_name: authentication_provider.system_name, code: 'abcdefg1234567' }
-    assert_equal error, flash[:error]
+    assert_equal error, flash[:danger]
   end
 
   test 'login fail generates an audit log' do

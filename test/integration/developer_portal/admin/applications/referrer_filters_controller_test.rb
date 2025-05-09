@@ -30,7 +30,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
       post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: "#{cinstance.filters_limit + 1}.example.org" }
     end
 
-    assert_equal 'Limit reached', flash[:error]
+    assert_equal 'Limit reached', flash[:danger]
   end
 
   class NotLoggedInTest < ActionDispatch::IntegrationTest

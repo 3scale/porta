@@ -32,7 +32,7 @@ class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTe
 
     get developer_portal.activate_path activation_code: @user.activation_code
 
-    assert_equal flash[:notice], I18n.t('errors.messages.activation_approval_required')
+    assert_equal flash[:success], I18n.t('errors.messages.activation_approval_required')
   end
 
   test 'activation complete flash message' do
@@ -40,7 +40,7 @@ class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTe
 
     get developer_portal.activate_path activation_code: @user.activation_code
 
-    assert_equal flash[:notice], I18n.t('errors.messages.activation_complete')
+    assert_equal flash[:success], I18n.t('errors.messages.activation_complete')
   end
 
   test 'emails has been taken problem' do
@@ -52,7 +52,7 @@ class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTe
 
     assert_response :redirect
 
-    assert_equal flash[:error], I18n.t('errors.messages.duplicated_user_buyer_side')
+    assert_equal flash[:danger], I18n.t('errors.messages.duplicated_user_buyer_side')
   end
 
   test 'does not try anything on HEAD request' do

@@ -20,7 +20,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
     assert_difference @invoice.line_items.method(:count) do
       post :create, params: { account_id: @buyer.id, invoice_id: @invoice.id, line_item: line_item_params }
     end
-    assert flash[:error].nil?
+    assert flash[:danger].nil?
   end
 
   def test_not_create_line_item_when_not_editable_invoice_html
@@ -28,7 +28,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
     assert_no_difference @invoice.line_items.method(:count) do
       post :create, params: { account_id: @buyer.id, invoice_id: @invoice.id, line_item: line_item_params }
     end
-    assert_match 'Invalid invoice state', flash[:error]
+    assert_match 'Invalid invoice state', flash[:danger]
   end
 
   def test_create_line_item_when_editable_invoice_js
@@ -52,7 +52,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
     assert_difference @invoice.line_items.method(:count) do
       post :create, params: { account_id: @buyer.id, invoice_id: @invoice.id, line_item: line_item_params }
     end
-    assert flash[:error].nil?
+    assert flash[:danger].nil?
   end
 
   def test_destroy_line_item_when_editable_invoice_html
@@ -60,7 +60,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
     assert_difference @invoice.line_items.method(:count), -1 do
       delete :destroy, params: { id: @line_item.id, account_id: @buyer.id, invoice_id: @invoice.id }
     end
-    assert flash[:error].nil?
+    assert flash[:danger].nil?
     assert_raise(ActiveRecord::RecordNotFound) { @line_item.reload }
   end
 
@@ -69,7 +69,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
     assert_no_difference @invoice.line_items.method(:count) do
       delete :destroy, params: { id: @line_item.id, account_id: @buyer.id, invoice_id: @invoice.id }
     end
-    assert_match 'Invalid invoice state', flash[:error]
+    assert_match 'Invalid invoice state', flash[:danger]
   end
 
   def test_destroy_line_item_when_editable_invoice_js
