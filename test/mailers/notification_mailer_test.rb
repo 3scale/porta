@@ -552,7 +552,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def application
-    @_application ||= FactoryBot.build_stubbed(:simple_cinstance, name: 'Some Name')
+    @_application ||= FactoryBot.create(:simple_cinstance, name: 'Some Name', application_id: 'application_id_test')
   end
 
   def url_helpers

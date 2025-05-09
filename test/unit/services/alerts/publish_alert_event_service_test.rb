@@ -15,26 +15,10 @@ class Alerts::PublishAlertEventServiceTest < ActiveSupport::TestCase
     end
   end
 
-  def test_run_alert_for_buyer
-    alert = FactoryBot.create(:limit_alert, account: @account, cinstance: @cinstance)
-
-    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitAlertReachedBuyerEvent').method(:count)) do
-      assert Alerts::PublishAlertEventService.run! alert
-    end
-  end
-
   def test_run_violation_for_provider
     alert = FactoryBot.create(:limit_violation, account: @account.provider_account, cinstance: @cinstance)
 
     assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitViolationReachedProviderEvent').method(:count)) do
-      assert Alerts::PublishAlertEventService.run! alert
-    end
-  end
-
-  def test_run_violation_for_buyer
-    alert = FactoryBot.create(:limit_violation, account: @account, cinstance: @cinstance)
-
-    assert_difference(EventStore::Event.where(event_type: 'Alerts::LimitViolationReachedBuyerEvent').method(:count)) do
       assert Alerts::PublishAlertEventService.run! alert
     end
   end

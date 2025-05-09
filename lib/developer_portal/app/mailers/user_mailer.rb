@@ -6,22 +6,16 @@ class UserMailer < ActionMailer::Base
 
   #TODO: dry this one
   def signup_notification(user)
-    provider = self.provider_account = user.account.provider_account
+    self.provider_account = user.account.provider_account
 
-    subject = user.account.provider? ? "3scale account confirmation" : "#{account_name(user)} API account confirmation"
+    subject =  "#{account_name(user)} API account confirmation"
 
     headers(
       'Return-Path' => from_address(user),
       'X-SMTPAPI' => '{"category": "Signup Notification"}'
     )
 
-    if user.activation_code
-      activate_url = if user.account.provider?
-                       provider_activate_url(activation_code: user.activation_code, host: domain(user))
-                     else
-                       developer_portal.activate_url(activation_code: user.activation_code, host: domain(user))
-                     end
-    end
+    activate_url = developer_portal.activate_url(activation_code: user.activation_code, host: domain(user)) if user.activation_code
 
     assign_drops user: Liquid::Drops::User.new(user),
                  domain: Liquid::Drops::Deprecated.wrap(domain(user)),
@@ -51,11 +45,7 @@ class UserMailer < ActionMailer::Base
     )
 
     # TODO: make lost_password and provider_lost_password mailer method
-    url = if user.account.buyer?
-            developer_portal.admin_account_password_url password_reset_token: user.lost_password_token, host: domain(user)
-          else
-            provider_password_url password_reset_token: user.lost_password_token, host: domain(user)
-          end
+    url = developer_portal.admin_account_password_url password_reset_token: user.lost_password_token, host: domain(user)
 
     assign_drops :user   => Liquid::Drops::User.new(user),
     :provider => Liquid::Drops::Provider.new(self.provider_account),

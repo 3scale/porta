@@ -35,7 +35,6 @@ module VerticalNavHelper
     sections << {id: :personal, title: 'Personal', items: account_personal_items}     if can?(:manage, current_user)
 
     if can? :manage, current_account
-      sections << {id: :notifications, title: 'Notifications', path: provider_admin_account_notifications_path} unless current_account.provider_can_use? :new_notification_system
       sections << {id: :users,         title: 'Users',         items: account_users_items}
       sections << {id: :billing,       title: 'Billing',       items: account_billing_items} if ThreeScale.master_billing_enabled? && !current_account.master?
     end

@@ -7,6 +7,12 @@ QUOTED_TWO_OR_MORE_PATTERN = "(#{quoted_list_subpattern}+)"
 QUOTED_LIST_PATTERN = QUOTED_ONE_OR_MORE_PATTERN # 1 or more is the default
 
 ParameterType(
+  name: 'symbol',
+  regexp: /(.+)/,
+  transformer: -> { _1.to_sym }
+)
+
+ParameterType(
   name: 'list_of_strings',
   regexp: /(?:"[^"]*"(?: |, | and ))*"[^"]*"/,
   transformer: ->(list) { list.from_sentence.map { |item| item.delete('"') } }

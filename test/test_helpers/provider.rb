@@ -55,6 +55,8 @@ module TestHelpers
           FactoryBot.create(:cms_email_template, provider:)
           FactoryBot.create(:cms_builtin_legal_term, provider:)
           CMS::LegalTerm.create(account_id: provider.id, name: "test", body: "another test")
+          MailDispatchRule.create(account_id: provider.id, system_operation_id: 1, emails: provider.first_admin.email)
+          MailDispatchRule.create(account_id: buyer.id, system_operation_id: 1, emails: buyer.first_admin.email)
           FactoryBot.create(:cms_builtin_static_page, provider:)
           cms_croup = FactoryBot.create(:cms_group, provider:)
           cms_croup.group_sections.create(:section => provider.provided_sections.first)

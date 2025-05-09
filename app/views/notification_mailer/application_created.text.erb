@@ -9,4 +9,8 @@ Application details:
   <%= @application.field_label(field.name) %>: <%= @application.field_value(field.name).presence || 'not provided by user' %>
 <% end %>
 
+<%- if @plan.approval_required? -%>
+This service requires you to approve this application before it can be used.
+<% end %>
+
 To view application, follow this link: <%= provider_admin_application_url(@application) %>

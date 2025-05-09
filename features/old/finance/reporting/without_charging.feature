@@ -26,4 +26,4 @@ Feature: Billing Reporting Without Charging
        When the time flies to 1st June 2009
        Then I should receive 0 emails
         And "admin@not.charging" should receive 1 emails
-        And "admin@not.charging" should receive an email with subject "Invoices to review"
+        And "admin@not.charging" should receive an email with subject "Action needed: review invoices"

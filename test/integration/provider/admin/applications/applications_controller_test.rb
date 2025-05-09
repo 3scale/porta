@@ -237,6 +237,10 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     end
 
     class ChangePlan < ProviderLoggedInTest
+      disable_transactional_fixtures!
+      self.database_cleaner_strategy = :deletion
+      self.database_cleaner_clean_with_strategy = :deletion
+
       include ActiveJob::TestHelper
 
       def setup
@@ -283,16 +287,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
 
       test 'change_plan should email provider with link to app page' do
-        Logic::RollingUpdates.expects(skipped?: true).at_least_once
-
         ActionMailer::Base.deliveries = []
-        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
+        with_sidekiq do
           put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
         end
 
         assert_equal cinstance.reload.plan, new_plan
         assert mail = ActionMailer::Base.deliveries.first, 'missing email'
-        assert_match provider_admin_application_url(cinstance, host: provider.internal_admin_domain), mail.body.to_s
+        assert_match provider_admin_application_url(cinstance, host: provider.internal_admin_domain), mail.text_part.body.to_s
       end
 
       #regression test for https://github.com/3scale/system/issues/1889

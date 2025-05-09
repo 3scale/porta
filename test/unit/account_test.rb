@@ -646,34 +646,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_not Account.new.multiple_applications_allowed?
   end
 
-  test 'fetch_dispatch_rule' do
-    account = FactoryBot.create(:simple_account)
-
-    user_signup = SystemOperation.for(:user_signup)
-    daily_reports = SystemOperation.for(:daily_reports)
-
-    assert account.fetch_dispatch_rule(user_signup).dispatch
-    assert_not account.fetch_dispatch_rule(daily_reports).dispatch
-  end
-
-  test 'dispatch_rule_for' do
-    account = FactoryBot.build_stubbed(:simple_provider)
-    user_signup = SystemOperation.for(:user_signup)
-    daily_reports = SystemOperation.for(:daily_reports)
-
-    FactoryBot.create(:mail_dispatch_rule, system_operation: daily_reports, account: account)
-
-    # When the migration is enabled, we disable the dispatch rules
-    # because notifications are delivered and we don't want to deliver the info twice.
-    account.expects(:provider_can_use?).with(:new_notification_system).returns(true).twice
-    assert_not account.dispatch_rule_for(user_signup).dispatch
-    assert_not account.dispatch_rule_for(daily_reports).dispatch
-
-    account.expects(:provider_can_use?).with(:new_notification_system).returns(false).twice
-    assert account.dispatch_rule_for(user_signup).dispatch
-    assert account.dispatch_rule_for(daily_reports).dispatch
-  end
-
   def test_accessible_services
     service = FactoryBot.create(:simple_service)
     account = FactoryBot.create(:simple_account, services: [service], default_service_id: service.id)

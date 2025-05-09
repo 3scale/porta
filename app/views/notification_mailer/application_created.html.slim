@@ -14,4 +14,8 @@ ul
       b #{@application.field_label(field.name)}:
       |  #{@application.field_value(field.name).presence || 'not provided by user'}
 
+- if @plan.approval_required?
+  p
+    | This service requires you to approve this application before it can be used.
+
 p = link_to 'View new application in your 3scale Admin Portal', provider_admin_application_url(@application)
