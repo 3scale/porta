@@ -74,47 +74,25 @@ class Provider::SessionsController < FrontendController
   end
 
   def authenticate_user
-    captcha_is_available = request.post? # Internal strategy (user & pass)
-    return if captcha_is_available && !bot_check
+    strategy = Authentication::Strategy::InferService.call(auth_params, @provider, admin_domain: true).result
 
-    params = if domain_account.settings.enforce_sso?
-               sso_params
-             else
-               request.post? ? auth_params : sso_params
-    end
+    return if strategy.bot_protected? && !bot_check
 
-    # TODO: refactor the authentication flow.
-    # Right now, we have a hierarchy of classes, one for each auth strategy, and we manually instance the last child
-    # class, `ProviderOAuth2`, and then try all strategies one by one by calling `super` and going up in the hierarchy
-    # until a strategy works. Due to this, we can't know from the here which strategy was really used.
-    #
-    # The hierarchy right now is:
-    #
-    # `ProviderOAuth2` < `OAuth2Base` < `Internal` < `SSO` < `Base`
-    #
-    # This is very weird because `Internal`, which means "User + pass" is not a kind of `SSO`; and `OAuth2` is not
-    # a kind of `Internal`. Not to mention we are calling `SSO` to something which is merely a token authentication
-    # not related at all with any SSO.
-    strategy = Authentication::Strategy.build_provider(@provider)
-    user = strategy.authenticate(params)
-
+    user = strategy.authenticate(auth_params)
     [user, strategy]
   end
 
   def auth_params
-    params.slice(:username, :password)
-  end
-
-  def sso_params
-    params.permit(%i[token expires_at redirect_url system_name code]).merge(request: request)
+    params.permit(*%i[username password ticket token expires_at redirect_url system_name code]).merge(request:)
   end
 
   def session_return_to
     return_to_params = params.permit(:return_to)[:return_to]
-    if return_to_params
-      return_to = safe_return_to(return_to_params)
-      session[:return_to] = return_to if return_to.present?
-    end
+
+    return unless return_to_params
+
+    return_to = safe_return_to(return_to_params)
+    session[:return_to] = return_to if return_to.present?
   end
 
   def instantiate_sessions_presenter

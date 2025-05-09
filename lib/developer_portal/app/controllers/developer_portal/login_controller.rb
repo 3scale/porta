@@ -25,9 +25,9 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   def create
     logout_keeping_session!
 
-    return render_login_error if auth_strategy_is_internal? && !bot_check
+    return render_login_error if @strategy.bot_protected? && !bot_check
 
-    if (@user = @strategy.authenticate(params.merge(request: request)))
+    if (@user = @strategy.authenticate(auth_params))
       self.current_user = @user
       create_user_session!
       flash[:notice] = @strategy.new_user_created? ? 'Signed up successfully' : 'Signed in successfully'
@@ -54,6 +54,10 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
 
   private
 
+  def auth_params
+    params.permit(*%i[username password ticket token expires_at redirect_url system_name code]).merge(request:)
+  end
+
   def render_login_error(error_message = nil)
     @session = Session.new
     flash.now[:error] = error_message if error_message
@@ -66,7 +70,7 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   end
 
   def set_strategy
-    @strategy = Authentication::Strategy.build(site_account)
+    @strategy = Authentication::Strategy::InferService.call(auth_params, site_account).result
   end
 
   def add_authentication_drops(drops = {})
@@ -76,9 +80,5 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
     end
 
     drops
-  end
-
-  def auth_strategy_is_internal?
-    params.key?(:username) || params.key?(:password)
   end
 end

@@ -1049,6 +1049,7 @@ en:
       host_label_too_long: is too long for one or more labels of the host (maximum is %{count} characters)
       duplicated_user_provider_side: "Duplicate user registration. Delete one of the duplicates in order to continue."
       duplicated_user_buyer_side: "For activating your account please contact support."
+      inactive_account: "Your account isn't active or hasn't been approved yet."
       activation_complete: "Signup complete. You can now sign in."
       activation_approval_required: "You will receive a message once your account is approved."
       invitation_not_found: "Invitation token did not exist."

@@ -22,13 +22,19 @@ module Authentication
     class Base
       include System::UrlHelpers.cms_url_helpers
 
-      attr_reader :site_account, :admin_domain, :user_for_signup, :new_user_created
+      attr_reader :site_account, :admin_domain, :user_for_signup, :new_user_created, :error_message
+
+      def self.expected_params
+        raise NotImplementedError, "expected #{self} to implement #{__method__}"
+      end
 
       def initialize(site_account, admin_domain = false)
         @site_account     = site_account
         @admin_domain     = admin_domain
         @user_for_signup  = nil
         @new_user_created = false
+
+        Rails.logger.debug("Trying to log in by #{name} auth strategy")
       end
 
       def name
@@ -47,6 +53,11 @@ module Authentication
 
       # Useful for remotely hosted authentication strategies such as Janrain strategy.
       def redirects_to_signup?
+        false
+      end
+
+      # Whether we should run the bot check for this strategy
+      def bot_protected?
         false
       end
 
@@ -82,6 +93,36 @@ module Authentication
         authentication_provider.try(:id)
       rescue Authentication::Strategy::OAuth2Base::MissingAuthenticationProvider
         nil
+      end
+
+      def error_message=(message)
+        @error_message ||= message
+      end
+
+      def inactive_user_message
+        I18n.t("errors.messages.inactive_account")
+      end
+
+      protected
+
+      def users
+        @_users ||= begin
+                      if admin_domain
+                        site_account.users
+                      else
+                        site_account.buyer_users
+                      end
+                    end
+      end
+
+      # check if the user can login and if not it sets an <tt>error_message</tt>
+      def can_login?(user)
+        if user.can_login?
+          true
+        else
+          self.error_message = inactive_user_message
+          false
+        end
       end
     end
   end

@@ -1,10 +1,14 @@
 module Authentication
   module Strategy
-    class Cas < Internal
+    class Cas < Base
+
+      def self.expected_params
+        %i[ticket]
+      end
 
       def authenticate params
 
-        return super unless params[:ticket]
+        return unless params[:ticket]
 
         res = HTTPClient.get validate_url_with_query params[:ticket]
 
