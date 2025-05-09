@@ -146,13 +146,11 @@ module VerticalNavHelper
       items << {id: :feature_visibility, title: 'Feature Visibility', path: provider_admin_cms_switches_path}
       # FIXME: should be a link not a href
       items << {id: :ActiveDocs,         title: 'ActiveDocs',         path: admin_api_docs_services_path}          if can?(:manage, :plans)
-    end
 
-    items << {id: 'separator 0'} # Separator
-    items << {title: 'Visit Portal', path: provider_admin_cms_visit_portal_path.html_safe, target: '_blank'}
-    items << {id: 'separator 1'} # Separator
+      items << {id: 'separator 0'} # Separator
+      items << {title: 'Visit Portal', path: provider_admin_cms_visit_portal_path.html_safe, target: '_blank'}
+      items << {id: 'separator 1'} # Separator
 
-    if can?(:manage, :portal)
       items << { title: 'Legal Terms', subItems: [
         {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)},
         {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)},

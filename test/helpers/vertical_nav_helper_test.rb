@@ -59,6 +59,33 @@ class VerticalNavHelperTest < ActionView::TestCase
       assert_equal([], service_nav_sections.pluck(:title))
     end
 
+    test '#audience_nav_sections' do
+      # admin
+      assert_equal(["Accounts", "Applications", "Billing", "Developer Portal", "Messages"], audience_nav_sections.pluck(:title))
+
+      # member that can't manage portal, settings and plans
+      stubs(:can?).with(:manage, :portal).returns(false)
+      stubs(:can?).with(:manage, :settings).returns(false)
+      stubs(:can?).with(:manage, :plans).returns(false)
+      assert_equal(%w[Accounts Applications Billing Messages], audience_nav_sections.pluck(:title))
+    end
+
+    test '#audience_portal_items' do
+      assert_equal(["Content", "Drafts", "Redirects", "Groups", "Logo", "Feature Visibility", "ActiveDocs", "Visit Portal", "Legal Terms", "Settings", "Docs"], audience_portal_items.pluck(:title).compact)
+
+      stubs(:can?).with(:see, :groups).returns(false)
+      assert_not_includes audience_portal_items.pluck(:title), "Groups"
+
+      stubs(:can?).with(:update, :logo).returns(false)
+      assert_not_includes audience_portal_items.pluck(:title), "Logo"
+
+      stubs(:can?).with(:manage, :plans).returns(false)
+      assert_not_includes audience_portal_items.pluck(:title), "ActiveDocs"
+
+      stubs(:can?).with(:manage, :portal).returns(false)
+      assert_equal(%w[Settings Docs], audience_portal_items.pluck(:title).compact)
+    end
+
     test 'Email configurations' do
       Features::EmailConfigurationConfig.stubs(enabled?: true)
       assert_not_includes account_nav_sections.pluck(:id), :email_configurations
