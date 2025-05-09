@@ -18,15 +18,15 @@ class Buyers::InvoicesController < Buyers::BaseController
   end
 
   def create
-    current_account.billing_strategy.create_invoice!(:buyer_account => @account,
-                                                     :period => Month.new(Time.zone.now))
-    respond_to do |format|
-      format.js   { flash.now[:notice] = 'Invoice successfully created.' }
-      format.html do
-        flash[:notice] = 'Invoice successfully created.'
-        redirect_to admin_buyers_account_invoices_path(@account)
-      end
+    if @account.current_invoice.present?
+      flash[:info] = t('.open_invoice', name: @account.name)
+    else
+      current_account.billing_strategy.create_invoice!(:buyer_account => @account,
+                                                       :period => Month.new(Time.zone.now))
+      flash[:success] = t('.success')
     end
+
+    redirect_to admin_buyers_account_invoices_path(@account)
   end
 
   def edit

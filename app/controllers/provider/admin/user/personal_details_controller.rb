@@ -33,7 +33,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
     return true unless current_user.using_password?
 
     unless current_user.authenticated?(user_params[:current_password])
-      flash.now[:error] = 'Current password is incorrect.'
+      flash.now[:danger] = t('.wrong')
       AuditLogService.call("User tried to change password, but failed due to incorrect current password: #{current_user.id}/#{current_user.username}") if user_params[:password].present?
       render(action: :edit)
     end

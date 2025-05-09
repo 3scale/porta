@@ -8,9 +8,9 @@ class Provider::Admin::Account::AuthenticationProviderPublishingController < Pro
     # using update_column cause we don't want to change updated_at when publishing
     # as that would render the oauth dance test out of date
     if authentication_provider.update_column(:published, true)
-      flash.now[:notice] = 'SSO Integration successfully published'
+      flash[:success] = t('.success')
     else
-      flash.now[:error] = 'SSO Integration couldn not be published'
+      flash.now[:danger] = t('.error')
     end
 
     redirect_to provider_admin_account_authentication_provider_path(authentication_provider)
@@ -20,9 +20,9 @@ class Provider::Admin::Account::AuthenticationProviderPublishingController < Pro
     # using update_column cause we don't want to change updated_at when publishing as
     # that would render the oauth dance test out of date
     if authentication_provider.update_column(:published, false)
-      flash.now[:notice] = 'SSO Integration successfully unpublished'
+      flash[:success] = t('.success')
     else
-      flash.now[:error] = 'SSO Integration couldn not be unpublished'
+      flash[:danger] = t('.error')
     end
 
     redirect_to provider_admin_account_authentication_provider_path(authentication_provider)
@@ -52,7 +52,7 @@ class Provider::Admin::Account::AuthenticationProviderPublishingController < Pro
     publisher = AuthenticationProviderPublishValidator.new(current_account, authentication_provider)
 
     return if publisher.valid?
-    flash.now[:error] = publisher.error_message
-    redirect_to provider_admin_account_authentication_provider_url(authentication_provider)
+
+    redirect_to provider_admin_account_authentication_provider_url(authentication_provider), danger: publisher.error_message
   end
 end

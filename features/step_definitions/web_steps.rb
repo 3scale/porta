@@ -147,3 +147,7 @@ Then "(they )should see the following details(:)" do |table|
     assert dt.has_sibling?('dd', text: value)
   end
 end
+
+Given "they {are} using a modern browser" do |modern|
+  ApplicationController.any_instance.expects(:browser_not_modern?).returns(!modern).at_least_once
+end

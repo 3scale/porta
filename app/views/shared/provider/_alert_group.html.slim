@@ -1,9 +1,7 @@
-- ignored_types = %w[first_login token]
+- alert_types = %w[default info warning success danger]
 
 ul class="pf-c-alert-group pf-m-toast"
   - flash.each do |type, value|
-    - unless ignored_types.include?(type)
-      - flash.discard(type)
-      - type = type == 'error' ? :danger : (type == 'notice' ? :success : type.to_sym)
+    - if alert_types.include?(type)
       li class="pf-c-alert-group__item animate__animated animate__slideInRight animate__faster"
-        = pf_toast_alert(value, type: type)
+        = pf_toast_alert(value, type: type.to_sym)

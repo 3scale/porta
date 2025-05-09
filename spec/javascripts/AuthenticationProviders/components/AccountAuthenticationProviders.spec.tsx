@@ -3,7 +3,7 @@ import { Modal } from '@patternfly/react-core'
 import { act } from 'react-dom/test-utils'
 
 import * as ajax from 'utilities/ajax'
-import * as flash from 'utilities/toast'
+import * as toast from 'utilities/toast'
 import { AccountAuthenticationProviders } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 import { mockLocation, waitForPromises } from 'utilities/test-utils'
 import { EnforceSSOSwitch } from 'AuthenticationProviders/components/EnforceSSOSwitch'
@@ -13,7 +13,7 @@ import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/compo
 import type { Props } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const toast = jest.spyOn(flash, 'toast')
+const toastSpy = jest.spyOn(toast, 'toast')
 
 const defaultProps: Props = {
   showToggle: false,
@@ -77,7 +77,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(toast).toHaveBeenCalledWith(payload.notice, 'success')
+    expect(toastSpy).toHaveBeenCalledWith(payload.notice, 'success')
   })
 
   it('should confirm before enabling password-based authentication', async () => {
@@ -98,7 +98,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(toast).toHaveBeenCalledWith(payload.notice, 'success')
+    expect(toastSpy).toHaveBeenCalledWith(payload.notice, 'success')
   })
 
   it('should not break when enabling fails', async () => {
@@ -119,7 +119,7 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(toast).toHaveBeenCalledWith(payload.error, 'danger')
+    expect(toastSpy).toHaveBeenCalledWith(payload.error, 'danger')
   })
 
   it('should not break when disabling fails', async () => {
@@ -140,6 +140,6 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(toast).toHaveBeenCalledWith(payload.error, 'danger')
+    expect(toastSpy).toHaveBeenCalledWith(payload.error, 'danger')
   })
 })

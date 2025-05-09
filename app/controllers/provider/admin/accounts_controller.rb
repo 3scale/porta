@@ -24,8 +24,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
       ProviderUserMailer.activation(@user).deliver_later
-      flash[:notice] = t('.success')
-      redirect_to admin_buyers_account_path(@provider)
+      redirect_to admin_buyers_account_path(@provider), success: t('.success')
     else
       render :new
     end
@@ -43,14 +42,12 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
     respond_to do |format|
       if @account.update(account_params)
-        flash[:notice] = t('.success')
-        format.html do
-          redirect_to_success
-        end
-        format.js   { render :js => "ThreeScale.toast('#{flash[:notice]}', 'success')" }
+        flash.now[:success] = flash[:success] = t('.success')
+        format.html { redirect_to_success }
+        format.js   { render 'shared/flash_message' }
       else
         format.html { render :action => 'edit' }
-        format.js   { render :template => 'shared/error' }
+        format.js   { render :template => 'shared/error' } # TODO: is this a bug? File does not exists
       end
     end
   end
@@ -65,7 +62,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   end
 
   def check_provider_signup_possible
-    redirect_to admin_buyers_accounts_path, alert: 'Please, create an Account Plan and a Service Plan first' unless current_account.signup_provider_possible?
+    redirect_to admin_buyers_accounts_path, info: t('.not_possible') unless current_account.signup_provider_possible?
   end
 
   def account_params

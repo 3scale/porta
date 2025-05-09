@@ -1,5 +1,4 @@
 export * from 'Types/Api'
-export * from 'Types/FlashMessages'
 
 export interface IRecord {
   id: number;
@@ -55,3 +54,10 @@ export interface FieldDefinition {
 }
 
 export type ValidationErrors = Record<string, string[]> | undefined
+
+export type IAlertType = 'danger' | 'default' | 'info' | 'success' | 'warning'
+
+export interface IAlert {
+  type?: IAlertType;
+  message?: string;
+}

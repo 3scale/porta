@@ -22,8 +22,7 @@ module Provider
           create! do |success, _failure|
             success.html do
               flash[:token] = @access_token.id
-              flash[:notice] = 'Access Token was successfully created.'
-              redirect_to(collection_url)
+              redirect_to collection_url, success: t('.success')
             end
           end
         end
@@ -36,8 +35,7 @@ module Provider
         def update
           update! do |success, _failure|
             success.html do
-              flash[:notice] = 'Access Token was successfully updated.'
-              redirect_to(collection_url)
+              redirect_to collection_url, success: t('.success')
             end
           end
         end

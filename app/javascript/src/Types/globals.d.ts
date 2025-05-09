@@ -34,10 +34,6 @@ declare global {
   interface JQueryStaticV1Plugins {
     colorbox: ColorboxStatic;
     cookie: (name: string, value?: string, opts?: unknown) => string | undefined;
-    flash: ((message: string) => void) & {
-      notice: (message: string) => void;
-      error: (message: string) => void;
-    };
   }
 
   // jQueryUI static props injected into jQuery 3.7 when imported from webpack

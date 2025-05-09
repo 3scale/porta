@@ -5,6 +5,5 @@ var html  = "<%= escape_javascript(render :partial => 'usage_limit', :locals => 
 
 jQuery('#usage_limits_table_body').append(html);
 jQuery(id).html(count);
-<% if flash[:notice].present? %>
-  ThreeScale.toast('<%= flash[:notice].html_safe %>', 'success');
-<% end %>
+
+<%= render 'shared/flash_message' %>

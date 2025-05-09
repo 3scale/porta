@@ -22,11 +22,12 @@ class Sites::EmailsController < Sites::BaseController
       end
     end
 
-    flash[:notice] = if not_saved
-                       'There were errors saving some of your emails. Please review the marked fields.'
-                     else
-                       'Your support emails have been updated.'
-                     end
+    if not_saved
+      flash.now[:warning] = t('.warning')
+    else
+      flash.now[:success] = t('.success')
+    end
+
     render 'edit'
   end
 

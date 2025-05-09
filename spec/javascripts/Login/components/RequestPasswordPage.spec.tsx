@@ -5,7 +5,7 @@ import { RequestPasswordPage } from 'Login/components/RequestPasswordPage'
 import type { Props } from 'Login/components/RequestPasswordPage'
 
 const defaultProps: Props = {
-  flashMessages: [],
+  alerts: [],
   providerLoginPath: 'login-path',
   providerPasswordPath: 'password-path'
 }

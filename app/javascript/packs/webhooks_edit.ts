@@ -1,6 +1,8 @@
 import { toast } from 'utilities/toast'
 import { ajaxJSON } from 'utilities/ajax'
 
+import type { IAlert } from 'Types'
+
 document.addEventListener('DOMContentLoaded', () => {
   const pingButton = document.querySelector<HTMLButtonElement>('button[data-ping-url]')
 
@@ -26,15 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     event.stopImmediatePropagation()
     disableButton()
 
-    ajaxJSON<{ error: string } | { notice: string }>(pingUrl, { method: 'GET' })
+    ajaxJSON<Required<IAlert>>(pingUrl, { method: 'GET' })
       .then(res => res.json())
-      .then(({ notice, error }) => {
-        if (notice) {
-          toast(notice, 'success')
-        } else if (error) {
-          toast(error, 'danger')
-        }
-      })
+      .then(({ message, type }) => { toast(message, type) })
       .catch(console.error)
       .finally(enableButton)
   })

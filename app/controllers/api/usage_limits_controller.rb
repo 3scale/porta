@@ -28,7 +28,7 @@ class Api::UsageLimitsController < FrontendController
 
     respond_to do |format|
       if @usage_limit.save
-        flash.now[:notice] = 'Usage Limit has been created.'
+        flash.now[:success] = t('.success')
         format.js
       else
         format.js { render :action => 'error' }

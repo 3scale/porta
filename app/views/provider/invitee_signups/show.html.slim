@@ -1,9 +1,9 @@
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'sign_up_page'
 
-- flash_messages = flash ? flash.map { |f| {type: f[0], message: f[1]}} : @user.errors.map { |key, value| {type: 'error', message: "#{key} #{value}"}}
+- alerts = flash ? flash.map { |f| {type: f[0], message: f[1]}} : @user.errors.map { |key, value| {type: 'danger', message: "#{key} #{value}"}}
 
-div#pf-login-page-container data-signup-props={flashMessages: flash_messages,
+div#pf-login-page-container data-signup-props={alerts: alerts,
   path: provider_invitee_signup_path(@invitation.token),
   name: @invitation.account.name,
   user: { email: @user.email || "",

@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   include ThreeScale::OnPremises
   include ProxyConfigAffectingChanges::ControllerExtension
 
+  add_flash_types :default, :info, :success, :warning, :danger
+
   _helpers.module_eval { prepend DecoratorAdditions }
 
   protect_from_forgery with: ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
@@ -92,8 +94,7 @@ class ApplicationController < ActionController::Base
     if current_user && browser_not_modern?
       logout_killing_session!
 
-      flash.now[:error] = "The browser you are using doesn't seem to support the X-Frame-Options header. That means we can't protect you against Cross Frame Scripting and thus not guarantee the security of your session. Please upgrade your browser and sign in again."
-      redirect_to provider_admin_path
+      redirect_to provider_admin_path, warning: t('shared.check_browser_error')
     end
   end
 

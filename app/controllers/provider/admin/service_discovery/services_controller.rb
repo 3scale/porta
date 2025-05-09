@@ -10,19 +10,17 @@ class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::B
     if can_create?
       @service = ::ServiceDiscovery::ImportClusterDefinitionsService.create_service(current_account, cluster_namespace: create_service_params[:namespace],
                                                                                                      cluster_service_name: create_service_params[:name], user: current_user)
-      flash[:notice] = 'The product will be imported shortly. You will receive a notification when it is done.'
-      redirect_to provider_admin_dashboard_path
+      redirect_to provider_admin_dashboard_path, success: t('.success')
     else
-      flash[:error] = 'Cannot create product.'
-      redirect_to admin_new_service_path
+      redirect_to admin_new_service_path, danger: t('.error')
     end
   end
 
   def update
     if @service.discovered? && ::ServiceDiscovery::ImportClusterDefinitionsService.refresh_service(@service, user: current_user)
-      flash[:notice] =  'Product information will be updated shortly.'
+      flash[:success] =  t('.success')
     else
-      flash[:error] =  'Cannot update product.'
+      flash[:danger] =  t('.error')
     end
 
     redirect_back_or_to admin_service_metrics_path(@service)

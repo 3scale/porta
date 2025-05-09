@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-const flash = jest.requireActual<typeof import('utilities/toast')>('utilities/toast')
+const toastLib = jest.requireActual<typeof import('utilities/toast')>('utilities/toast')
 
-const { toast, hideToastDelayed } = flash
+const { toast, hideToastDelayed } = toastLib
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -13,7 +13,7 @@ describe('#toast', () => {
   })
 
   it('should add an alert and schedule it for removal', () => {
-    const hideToastDelayed = jest.spyOn(flash, 'hideToastDelayed')
+    const hideToastDelayed = jest.spyOn(toastLib, 'hideToastDelayed')
     document.body.innerHTML = `
       <div>
         <ul class="pf-c-alert-group pf-m-toast"></ul>
@@ -32,7 +32,7 @@ describe('#hideToastDelayed', () => {
   it('should hide a toast after 5 seconds', () => {
     jest.useFakeTimers()
     jest.spyOn(global, 'setTimeout')
-    jest.spyOn(flash, 'hideToast').mockImplementation(toast => { toast.remove() })
+    jest.spyOn(toastLib, 'hideToast').mockImplementation(toast => { toast.remove() })
 
     document.body.innerHTML = `
       <div>
@@ -43,7 +43,7 @@ describe('#hideToastDelayed', () => {
     `
 
     hideToastDelayed(document.querySelector('.pf-c-alert')!)
-    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 5000)
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 8000)
 
     jest.runAllTimers()
     expect(document.querySelector('.pf-c-alert')).toBeNull()

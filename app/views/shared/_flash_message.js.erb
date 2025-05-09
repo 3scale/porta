@@ -1,0 +1,3 @@
+<% flash.each do |type, value| %>
+  ThreeScale.toast('<%= escape_javascript(value) %>', '<%= type %>');
+<% end %>

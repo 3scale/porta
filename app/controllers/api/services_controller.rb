@@ -56,10 +56,9 @@ class Api::ServicesController < Api::BaseController
     creator = ServiceCreator.new(service: @service)
 
     if can_create? && creator.call(create_params)
-      flash[:notice] = t('flash.services.create.notice')
-      redirect_to admin_service_path(@service)
+      redirect_to admin_service_path(@service), success: t('.success')
     else
-      flash.now[:error] = @service.errors.full_messages.to_sentence.presence || I18n.t!('flash.services.create.errors.default')
+      flash.now[:danger] = @service.errors.full_messages.to_sentence.presence || t('.error')
       activate_menu :dashboard
       render :new
     end
@@ -67,18 +66,16 @@ class Api::ServicesController < Api::BaseController
 
   def update
     if integration_settings_updater_service.call(service_attributes: service_params.to_h, proxy_attributes: proxy_params.to_h)
-      flash[:notice] =  t('flash.services.update.notice')
-      redirect_back_or_to({ action: "settings" })
+      redirect_back_or_to({ action: "settings" }, success: t('.success'))
     else
-      flash.now[:error] = t('flash.services.update.error')
+      flash.now[:danger] = t('.error')
       render action: params[:update_settings].present? ? :settings : :edit # edit page is only page with free form fields. other forms are less probable to have errors
     end
   end
 
   def destroy
     @service.mark_as_deleted!
-    flash[:notice] = t('flash.services.destroy.notice', resource_name: @service.name)
-    redirect_to provider_admin_dashboard_path
+    redirect_to provider_admin_dashboard_path, success: t('.success', name: @service.name)
   end
 
   private

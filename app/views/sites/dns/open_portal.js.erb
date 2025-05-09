@@ -2,4 +2,5 @@
 setTimeout(() => {
   document.getElementById('open-portal-to-public').remove();
 });
-ThreeScale.toast('<%= flash.now[:notice].html_safe %>', 'success');
+
+<%= render 'shared/flash_message' %>

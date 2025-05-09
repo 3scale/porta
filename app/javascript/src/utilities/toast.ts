@@ -1,12 +1,8 @@
-// import { Wrapper as Flash } from 'Common/components/Flash'
+import type { IAlertType } from 'Types'
 
 const TIMEOUT = 8000
 
-export type TYPE = 'danger' | 'default' | 'info' | 'success' | 'warning'
-
-const TYPES = ['danger', 'default', 'info', 'success', 'warning']
-
-const typeIcons: Record<string, string> = {
+const typeIcons: Record<IAlertType, string> = {
   danger: 'exclamation-circle',
   info: 'info-circle',
   success: 'check-circle',
@@ -14,7 +10,7 @@ const typeIcons: Record<string, string> = {
   default: 'bell'
 }
 
-function createAlertGroupItem (message: string, type = 'default'): HTMLLIElement {
+function createAlertGroupItem (message: string, type: IAlertType = 'default'): HTMLLIElement {
   const li = document.createElement('li')
   li.className = 'pf-c-alert-group__item animate__animated animate__slideInRight animate__faster'
 
@@ -65,11 +61,7 @@ function createAlertGroupItem (message: string, type = 'default'): HTMLLIElement
   return li
 }
 
-export const toast = (message: string, type: TYPE = 'default'): void => {
-  if (!TYPES.includes(type)) {
-    console.error(`"${type}" is not a valid alert type. Use one of: ${TYPES.join(', ')}.`)
-  }
-
+export const toast = (message: string, type: IAlertType = 'default'): void => {
   const groupAlert = document.querySelector('.pf-c-alert-group.pf-m-toast')
 
   if (!groupAlert) {
