@@ -1,6 +1,18 @@
-<%- unless @service_contract.changed? %>
+<% if success = flash.now[:success] %>
   $.colorbox.close();
-  window.location.reload();
-<%-else-%>
-  $.colorbox({html: "<%= escape_javascript @form %>"});
-<%-end-%>
+
+  (function () {
+    const id = 'contract_<%= @service_contract.id %>';
+    const link = document.getElementById(id).querySelector('[data-label="Plan"] a');
+
+    <% plan = @service_contract.plan %>
+    link.innerText = '<%= plan.name %>';
+    link.href = '<%= edit_polymorphic_path([:admin, plan]) %>';
+    link.title = 'Edit <%= plan.class.model_name.human %> "<%= plan.name %>"';
+  })();
+
+  ThreeScale.toast('<%= success %>', 'success')
+<% else %>
+  $.colorbox.close();
+  ThreeScale.toast('<%= flash.now[:danger] %>', 'danger');
+<% end %>

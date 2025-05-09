@@ -60,7 +60,7 @@ Feature: Provider's application referrer filters
       When they fill in "referrer_filter" with "foo5.example.org" within the referrer filters
       And press "Add Filter" within the referrer filters
       Then there should not be a button to "Add Filter" within the referrer filters
-      And they should see "At most 5 referrer filters are allowed." within the referrer filters
+      And they should see "At most 5 referrer filters are allowed" within the referrer filters
 
     Scenario: Remove filter after reaching the limit
       Given the application has the following referrer filters:
@@ -71,7 +71,7 @@ Feature: Provider's application referrer filters
         | foo5.example.org |
       And they go to the application's admin page
       And there should not be a button to "Add Filter" within the referrer filters
-      And they should see "At most 5 referrer filters are allowed." within the referrer filters
+      And they should see "At most 5 referrer filters are allowed" within the referrer filters
       When they press "Delete" that belongs to the referrer filter "foo1.example.org"
       Then there should be a button to "Add Filter" within the referrer filters
-      And they should not see "At most 5 referrer filters are allowed." within the referrer filters
+      And they should not see "At most 5 referrer filters are allowed" within the referrer filters

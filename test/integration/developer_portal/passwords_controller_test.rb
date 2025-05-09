@@ -28,11 +28,11 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
     put developer_portal.admin_account_password_path(user: { password: 'password123',
       password_confirmation: 'password123' }, password_reset_token: user.lost_password_token)
-    assert_match 'password has been changed', flash[:notice]
+    assert_match 'password has been changed', flash[:success]
 
     put developer_portal.admin_account_password_path(user: { password: '123password',
       password_confirmation: '123password' }, password_reset_token: user.lost_password_token)
-    assert_match 'password reset token is invalid', flash[:error]
+    assert_match 'password reset token is invalid', flash[:danger]
   end
 
   test 'captcha is present when spam security enabled' do
@@ -64,7 +64,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     DeveloperPortal::Admin::Account::PasswordsController.any_instance.stubs(verify_captcha: false)
 
     post developer_portal.admin_account_password_path(email: 'user@example.com')
-    assert_equal 'Bot protection failed.', flash[:error]
+    assert_equal 'Bot protection failed.', flash[:danger]
     assert_redirected_to developer_portal.new_admin_account_password_path(request_password_reset: true)
   end
 
@@ -78,13 +78,13 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
       post developer_portal.admin_account_password_path(email: user.email)
     end
     assert_in_delta Time.now, user.reload.lost_password_token_generated_at, 2.seconds
-    assert_equal "A password reset link will be sent to #{user.email} if a user exists with this email.", flash[:notice]
+    assert_equal "A password reset link will be sent to #{user.email} if a user exists with this email.", flash[:success]
     assert_redirected_to developer_portal.login_path
   end
 
   test 'create renders the right error message when the email is not found' do
     post developer_portal.admin_account_password_path(email: 'fake@example.com')
-    assert_equal "A password reset link will be sent to fake@example.com if a user exists with this email.", flash[:notice]
+    assert_equal "A password reset link will be sent to fake@example.com if a user exists with this email.", flash[:success]
     assert_redirected_to developer_portal.login_path
   end
 

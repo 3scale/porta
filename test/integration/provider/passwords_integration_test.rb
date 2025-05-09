@@ -45,10 +45,10 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       assert_nil @user.reload.lost_password_token
       get provider_password_path(password_reset_token: email_token)
       assert_response :redirect
-      assert_match 'password reset token is invalid', flash[:error]
+      assert_match 'password reset token is invalid', flash[:danger]
       get provider_password_path(password_reset_token: regenerated_token)
       assert_response :redirect
-      assert_match 'password reset token is invalid', flash[:error]
+      assert_match 'password reset token is invalid', flash[:danger]
     end
   end
 

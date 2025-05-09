@@ -14,8 +14,7 @@ class Buyers::CustomPlansController < FrontendController
 
   def destroy
     @contract.decustomize_plan!
-    flash[:notice] = "The plan was set back to #{@contract.plan.name}."
-    redirect_to admin_buyers_account_url(@contract.buyer)
+    redirect_to admin_buyers_account_url(@contract.buyer), success: t('.success', name: @contract.plan.name)
   end
 
   private

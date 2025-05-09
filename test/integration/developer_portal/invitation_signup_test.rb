@@ -66,7 +66,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     OAuth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/auth0/auth0_ab1234/callback?state=#{@invitation.token}"
     assert_response :redirect
-    assert_equal 'Signed up successfully', flash[:notice]
+    assert_equal 'Signed up successfully', flash[:success]
   end
 
   def test_sso_create
@@ -87,7 +87,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     OAuth2.any_instance.expects(:authenticate).returns(user).at_least_once
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :redirect
-    assert_equal 'Signed up successfully', flash[:notice]
+    assert_equal 'Signed up successfully', flash[:success]
   end
 
   def test_error_sso_create
@@ -99,7 +99,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     refute assigns(:user).valid?
-    assert_equal 'The code is incorrect or expired.', flash[:error]
+    assert_equal 'The code is incorrect or expired.', flash[:danger]
   end
 
   def test_create

@@ -67,7 +67,7 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     And fill in "Body" with "This is the body"
     And press "Send"
     And confirm the dialog
-    Then I should see "Successfully sent 2 emails."
+    Then I should see "Successfully sent 2 emails"
     Then "jane@example.com" should receive 1 email
     Then "bob@example.com" should receive 1 email
 

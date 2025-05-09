@@ -10,11 +10,7 @@ class Provider::ActivationsController < FrontendController
 
     user.activate!
 
-    flash[:notice] = if user.account.approval_required?
-      'You will receive a message once your account is approved.'
-                     else
-      'Signup complete. You can now sign in.'
-                     end
+    flash[:success] = user.account.approval_required? ? t('.approval_required') : t('.signup_complete')
 
     logout_keeping_session!
 

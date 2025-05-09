@@ -14,9 +14,9 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingController < Pr
     strategy = Authentication::Strategy.build_provider(site_account_request.find_provider)
     auth_params = params.permit(:token, :expires_at, :system_name, :code).merge(request: request)
     if strategy.authenticate(auth_params)
-      flash[:success] = 'Authentication flow successfully tested.'
+      flash[:success] = t('.success')
     else
-      flash[:error] = strategy.error_message || 'Authentication flow could not be tested.'
+      flash[:danger] = strategy.error_message || t('.error')
     end
     redirect_to provider_admin_account_authentication_provider_path(strategy.authentication_provider)
   end

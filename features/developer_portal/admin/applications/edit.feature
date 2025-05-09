@@ -52,7 +52,7 @@ Feature: Developer portal edit application page
       When they follow "Delete My App"
       And confirm the dialog
       Then the current page is the dev portal applications page
-      And they should see the flash message "Application was successfully deleted."
+      And they should see the flash message "Application was successfully deleted"
       But should not see "My App"
 
     Scenario: Edit an application's extra fields

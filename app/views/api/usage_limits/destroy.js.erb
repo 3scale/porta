@@ -8,4 +8,4 @@ void function () {
   counter.innerText = <%= @usage_limit.metric.usage_limits.where(plan_id: @usage_limit.plan.id).size %>;
 }();
 
-jQuery.flash.notice('Limit has been deleted.');
+ThreeScale.toast('Limit has been deleted.', 'success');

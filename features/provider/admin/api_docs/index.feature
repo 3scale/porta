@@ -58,9 +58,9 @@ Feature: Audience > Developer portal > ActiveDocs
     Given the product has a <swagger version> spec "Echo API"
     When they go to the ActiveDocs page
     And they select action "Delete" of "Echo API"
-    And they should see "Yes, I want to delete spec Echo API forever." within the modal
+    And they should see "Yes, I want to delete spec Echo API forever" within the modal
     And press "Delete spec" within the modal
-    Then they should see the flash message "ActiveDocs Spec was successfully deleted."
+    Then they should see the flash message "ActiveDocs Spec was successfully deleted"
     And they should not see "Echo API"
 
     Examples:

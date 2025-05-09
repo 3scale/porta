@@ -17,7 +17,7 @@ Feature: Contributor role
 
     When I choose "Contributor"
       And I press "Update"
-    Then I should see "User was successfully updated."
+    Then I should see "User was successfully updated"
       And "alice" should be a contributor
 
   Scenario: Contributor allowed content

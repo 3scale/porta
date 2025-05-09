@@ -19,6 +19,6 @@ class DeveloperPortal::Buyer::AccountContractsControllerTest < DeveloperPortal::
     put :update, params: { plan_id: @plan.id }
 
     assert_response :redirect
-    assert flash[:error].present?
+    assert flash[:danger].present?
   end
 end

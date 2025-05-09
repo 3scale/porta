@@ -11,9 +11,9 @@ class Admin::Account::PaymentGatewaysController < Finance::Provider::BaseControl
 
     if type.present? && options.present?
       @account.change_payment_gateway!(type, options)
-      flash[:notice] = 'Payment gateway details were successfully saved.'
+      flash[:success] = t('.success')
     else
-      flash[:error] = 'Failed to save payment gateway details. Choose a payment gateway or disable charging.'
+      flash[:danger] = t('.error')
     end
     redirect_to(admin_finance_settings_path)
   end

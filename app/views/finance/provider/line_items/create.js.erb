@@ -15,5 +15,5 @@ void function () {
   document.getElementById('invoice_cost').innerHTML = '<%= price_tag(@invoice.cost) %>';
 }();
 
-$.flash.notice('Line item added.');
+ThreeScale.toast('Line item added.', 'success');
 $.colorbox.close();

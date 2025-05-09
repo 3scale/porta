@@ -54,14 +54,14 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
     login_as @buyer.admins.first
     put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'}}
     assert_redirected_to admin_account_users_path
-    assert_equal flash[:notice], 'User was successfully updated.'
+    assert_equal flash[:success], 'User was successfully updated.'
   end
 
   test 'update should fail without current password' do
     login_as @buyer.admins.first
     put :update, params: { user: {username: 'test', email: 'test@example.com'}}
     assert_response :success
-    assert_equal flash[:error], 'Current password is incorrect'
+    assert_equal flash[:danger], 'Current password is incorrect'
   end
 
   test 'changing password is audited' do

@@ -3,4 +3,4 @@ var html = "<%= escape_javascript(render(:partial => 'pricing_rule', :locals => 
     id   = "#<%= dom_id(@pricing_rule) %>";
 
 jQuery(id).replaceWith(html);
-jQuery.flash.notice('Pricing rule has been edited.');
+ThreeScale.toast('Pricing rule has been edited.', 'success');

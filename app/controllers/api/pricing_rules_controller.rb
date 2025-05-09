@@ -24,7 +24,7 @@ class Api::PricingRulesController < FrontendController
     respond_to do |format|
       if @pricing_rule.save
         format.js
-        format.html { redirect_to(admin_application_plan_metric_pricing_rules_path(@plan, @metric), :notice => 'Pricing rule was successfully created.') }
+        format.html { redirect_to admin_application_plan_metric_pricing_rules_path(@plan, @metric), success: t('.success') }
       else
         format.js { render :action => 'error' }
         format.html { render :action => "new" }
@@ -39,7 +39,7 @@ class Api::PricingRulesController < FrontendController
     respond_to do |format|
       if @pricing_rule.update(pricing_rule_params)
         format.js
-        format.html { redirect_to(edit_admin_application_plan_pricing_rule_path(@plan, @pricing_rule), :notice => 'Pricing rule was successfully updated.')}
+        format.html { redirect_to edit_admin_application_plan_pricing_rule_path(@plan, @pricing_rule), success: t('.success')}
       else
         format.js { render :action => 'error' }
         format.html { render :action => "edit" }

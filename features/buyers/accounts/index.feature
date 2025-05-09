@@ -252,4 +252,4 @@ Feature: Audience > Accounts
       Given the search server is offline
       When they go to the buyer accounts page
       And they search "bananas" using the toolbar
-      Then should see "Search is temporarily offline. Please try again in few minutes."
+      Then should see "Search is temporarily offline. Please try again in few minutes"

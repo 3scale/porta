@@ -6,16 +6,16 @@ import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 import { RequestPasswordForm } from 'Login/components/RequestPasswordForm'
 
 import type { FunctionComponent } from 'react'
-import type { FlashMessage } from 'Types'
+import type { IAlert } from 'Types'
 
 interface Props {
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
 const RequestPasswordPage: FunctionComponent<Props> = ({
-  flashMessages,
+  alerts,
   providerLoginPath,
   providerPasswordPath
 }) => (
@@ -27,7 +27,7 @@ const RequestPasswordPage: FunctionComponent<Props> = ({
     loginTitle="Request Password"
   >
     <RequestPasswordForm
-      flashMessages={flashMessages}
+      alerts={alerts}
       providerLoginPath={providerLoginPath}
       providerPasswordPath={providerPasswordPath}
     />

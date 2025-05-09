@@ -23,7 +23,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
   test 'show when not found invitation, redirects to login path with the invitation_not_found flash error message' do
     get invitee_signup_path(invitation_token: 'invalid')
 
-    assert_equal I18n.t('errors.messages.invitation_not_found'), flash[:error]
+    assert_equal I18n.t('errors.messages.invitation_not_found'), flash[:danger]
     assert_redirected_to login_path
   end
 
@@ -32,7 +32,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
 
     get invitee_signup_path(invitation_token: invitation.token)
 
-    assert_equal I18n.t('errors.messages.invitation_not_found'), flash[:error]
+    assert_equal I18n.t('errors.messages.invitation_not_found'), flash[:danger]
     assert_redirected_to login_path
   end
 
@@ -43,7 +43,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
       post invitee_signup_path(invitation_token: invitation.token, user: user_params)
     end
 
-    assert_equal I18n.t('flash.signups.create.notice'), flash[:notice]
+    assert_equal I18n.t('flash.signups.create.notice'), flash[:success]
     assert_redirected_to login_path
   end
 
@@ -61,7 +61,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
 
     post invitee_signup_path(invitation_token: invitation.token, user: user_params)
 
-    assert_equal I18n.t('errors.messages.invitation_already_accepted'), flash[:error]
+    assert_equal I18n.t('errors.messages.invitation_already_accepted'), flash[:danger]
     assert_redirected_to login_path
   end
 

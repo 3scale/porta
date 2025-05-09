@@ -97,6 +97,6 @@ Feature: CMS Pages
     And I should see "Title can't be blank"
     And I fill in "Title" with "New title"
     And I press "Save"
-    And I should see "Page saved."
+    And I should see "Page saved"
     And I go to the CMS Page "/some-path" page
     Then I should see "Page 'New title'"

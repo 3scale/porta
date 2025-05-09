@@ -20,7 +20,7 @@ Feature: Credit Card policies
       And they fill in "Path to Privacy page" with "/privacy-page"
       And they fill in "Path to Refund page" with "/refund-page"
       And press "Save"
-      Then they should see "Settings updated."
+      Then they should see "Settings updated"
 
   Rule: Master
     Background:
@@ -33,4 +33,4 @@ Feature: Credit Card policies
       And they fill in "Path to Privacy page" with "/privacy-page"
       And they fill in "Path to Refund page" with "/refund-page"
       And press "Save"
-      Then they should see "Settings updated."
+      Then they should see "Settings updated"
