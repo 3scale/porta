@@ -99,6 +99,10 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert_nil buyer.credit_card_partial_number
   end
 
+    test 'unstore credit card raises an event on failure and error' do
+      TODO
+    end
+
   test '#credit_card_editable? returns false for master account' do
     refute master_account.credit_card_editable?
   end
