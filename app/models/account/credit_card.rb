@@ -5,7 +5,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   extend ActiveSupport::Concern
 
   included do
-    before_destroy :unstore_credit_card!
+    before_destroy :unstore_credit_card_on_destroy!, if: -> { provider_account&.should_not_be_deleted? }
 
     scope :expired_credit_card, ->(time) {
       expired_credit_card = joins(:payment_detail).where.has do
@@ -82,7 +82,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   end
 
   def wipe_buyers_cc_details!
-    buyers.select{ |b| b.credit_card_stored? }.each do |buyer|
+    buyers.select { |b| b.credit_card_stored? }.each do |buyer|
       buyer.delete_cc_details
       buyer.save!
     end
@@ -98,16 +98,25 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   def unstore_credit_card!
     begin
       response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
-      log_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+      # TODO: An exception would fail the operation but should we notify user on a failure response?
     rescue Account::Gateway::InvalidSettingsError => error
       Rails.logger.warn("Couldn't unstore credit card details from the payment gateway: #{error.message}")
     end
 
-    return if payment_detail.destroyed?
+    unless payment_detail.destroyed?
+      self.credit_card_auth_code = nil
+      self.credit_card_expires_on = nil
+      self.credit_card_partial_number = nil
+    end
 
-    self.credit_card_auth_code = nil
-    self.credit_card_expires_on = nil
-    self.credit_card_partial_number = nil
+    response
+  end
+
+  def unstore_credit_card_on_destroy!
+    response = unstore_credit_card!
+    notify_gateway_response(response, "unstore [auth: #{credit_card_auth_code}]")
+  rescue => error
+    Accounts::CreditCardUnstoreFailedEvent.create(self, error.message)
   end
 
   def notify_credit_card_change
@@ -141,11 +150,9 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     response.success?
   end
 
-  def log_gateway_response(response, action)
-    if response
-      logger.info "----------"
-      logger.info "~> [#{provider_payment_gateway.try!(:display_name)} / #{credit_card_partial_number.inspect}] #{action} response: #{response.inspect}"
-      logger.info "----------"
+  def notify_gateway_response(response, action)
+    if response&.failure?
+      Accounts::CreditCardUnstoreFailedEvent.create(self, response.inspect)
     end
   end
 end

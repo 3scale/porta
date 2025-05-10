@@ -126,6 +126,7 @@ module EventStore
       subscribe_for_notification(:account_deleted, Accounts::AccountDeletedEvent)
       subscribe_for_notification(:account_plan_change_requested, Accounts::AccountPlanChangeRequestedEvent)
       subscribe_for_notification(:account_state_changed, Accounts::AccountStateChangedEvent)
+      subscribe_for_notification(:credit_card_unstore_failed, Accounts::CreditCardUnstoreFailedEvent)
       subscribe_for_notification(:expired_credit_card_provider, Accounts::ExpiredCreditCardProviderEvent)
       # alerts
       subscribe_for_notification(:limit_violation_reached_provider, Alerts::LimitViolationReachedProviderEvent)
