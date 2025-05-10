@@ -88,21 +88,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_not account.tenant?
   end
 
-  test 'destroy association' do
-    account = FactoryBot.create(:simple_account)
-    service = FactoryBot.create(:simple_service, account: account)
-    account.update_column(:default_service_id, service.id) # rubocop:disable Rails/SkipsModelValidations
-    metric  = service.metrics.hits
-
-    assert service.default?
-    assert metric
-
-    account.destroy
-
-    assert_raise(ActiveRecord::RecordNotFound) { service.reload }
-    assert_raise(ActiveRecord::RecordNotFound) { metric.reload }
-  end
-
   test '#trashed_messages' do
     account = FactoryBot.build_stubbed(:simple_account)
     other = FactoryBot.build_stubbed(:simple_account)
@@ -116,16 +101,6 @@ class AccountTest < ActiveSupport::TestCase
 
     message2.recipients[0].hide!
     assert_equal 2, account.trashed_messages.count
-  end
-
-  test 'avoid deletion of master account' do
-    assert_not master_account.destroy, "Should not destroy master account"
-
-    provider = FactoryBot.create(:simple_provider)
-    buyer = FactoryBot.create(:simple_buyer)
-
-    assert provider.destroy, "Should destroy provider account"
-    assert buyer.destroy, "Should destroy buyer account"
   end
 
   # regression test: https://github.com/3scale/system/pull/3406
@@ -455,13 +430,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_not master_account.feature_allowed?(:anonymous_clients)
   end
 
-  test "deleted billing strategy on destroy" do
-    provider = FactoryBot.create(:simple_provider)
-    id = provider.create_billing_strategy.id
-    provider.destroy
-    assert_nil Finance::BillingStrategy.find_by(id: id), 'BillingStrategy not deleted'
-  end
-
   test 'Account.id_from_api_key reads data from cache on cache hit' do
     Rails.cache.expects(:fetch).with("account_ids/foobar", any_parameters).returns(42)
     Account.expects(:find).never
@@ -481,55 +449,6 @@ class AccountTest < ActiveSupport::TestCase
 
   test 'Account#provider? returns true also for master account' do
     assert master_account.provider?
-  end
-
-  test "destroying account destroys it's services" do
-    account = FactoryBot.create(:provider_account)
-    service = FactoryBot.create(:simple_service, account: account)
-
-    account.destroy
-
-    assert_nil Service.find_by(id: service.id)
-  end
-
-  test "destroying account destroys the default service firing services destroy callbacks" do
-    account = FactoryBot.create(:provider_account)
-    service = account.default_service
-    metric = FactoryBot.create(:metric, owner: service)
-    feature = FactoryBot.create(:feature, featurable: service)
-
-    account.destroy
-
-    assert_nil Service.find_by(id: service.id)
-    assert_nil Metric.find_by(id: metric.id)
-    assert_nil Feature.find_by(id: feature.id)
-  end
-
-  test "destroying account will stop if features deletion fails" do
-    Feature.any_instance.stubs(:destroy).returns(false)
-
-    account = FactoryBot.create(:provider_account)
-    service = account.default_service
-    metric = FactoryBot.create(:metric, owner: service)
-    feature = FactoryBot.create(:feature, featurable: service)
-
-    assert_not account.destroy
-
-    assert_not_nil Service.find_by(id: service.id)
-    assert_not_nil Metric.find_by(id: metric.id)
-    assert_not_nil Feature.find_by(id: feature.id)
-  end
-
-  test 'destroying provider account with buyer accounts' do
-    provider_account = FactoryBot.create(:provider_account)
-    plan = FactoryBot.create(:simple_application_plan, service: provider_account.default_service)
-
-    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
-    buyer_account.buy!(plan)
-
-    assert_change :of => -> { Account.providers.count }, :by => -1 do
-      provider_account.destroy
-    end
   end
 
   test '.model_name.human is account' do
@@ -566,29 +485,6 @@ class AccountTest < ActiveSupport::TestCase
 
     provider.update(finance_support_email: "finance-support@acc.example.net")
     assert_equal provider.finance_support_email, "finance-support@acc.example.net"
-  end
-
-  # regression test for https://github.com/3scale/system/issues/2767
-  test 'destroy should destroy all cinstances and application_plans' do
-    master_plan = master_account.default_application_plans.first!
-
-    provider = FactoryBot.create(:simple_provider, provider_account: master_account)
-    FactoryBot.create(:cinstance, plan: master_plan, user_account: provider)
-
-    service = FactoryBot.create(:simple_service, account: provider)
-    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
-    tenant_plan = FactoryBot.create(:application_plan, issuer: service)
-    FactoryBot.create(:cinstance, plan: tenant_plan, user_account: buyer)
-
-    assert_not_equal 0, provider.provided_cinstances.reload.count
-    assert_not_equal 0, provider.provided_plans.reload.count
-    assert_not_equal 0, provider.bought_plans.reload.count
-
-    provider.destroy!
-
-    assert_equal 0, provider.provided_cinstances.reload.count
-    assert_equal 0, provider.provided_plans.reload.count
-    assert_equal 0, provider.bought_plans.reload.count
   end
 
   test 'onboarding builds object if not already created' do
@@ -684,26 +580,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_not account.accessible_services.exists?
   end
 
-  def test_smart_destroy_buyer
-    buyer = FactoryBot.create(:buyer_account)
-
-    buyer.smart_destroy
-    assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
-  end
-
-  def test_smart_destroy_provider
-    provider = FactoryBot.create(:simple_provider)
-
-    provider.smart_destroy
-    assert provider.reload.scheduled_for_deletion?
-  end
-
-  def test_smart_destroy_master
-    master_account.smart_destroy
-    assert master_account.reload
-    assert_not master_account.reload.scheduled_for_deletion?
-  end
-
   test "#current_versions for an account's services" do
     account = FactoryBot.create(:account)
 
@@ -734,6 +610,206 @@ class AccountTest < ActiveSupport::TestCase
     account = FactoryBot.build(:simple_account, org_name: '.?+@')
     assert_not account.valid?
     assert_includes account.errors.messages[:org_name], "must contain at least one alphanumeric character"
+  end
+
+  class DestroyTest < ActiveSupport::TestCase
+    attr_reader :provider
+
+    setup do
+      @provider = FactoryBot.create(:provider_account)
+      ActionMailer::Base.deliveries.clear
+    end
+
+    test 'destroy association' do
+      service = FactoryBot.create(:simple_service, account: provider)
+      provider.update_column(:default_service_id, service.id) # rubocop:disable Rails/SkipsModelValidations
+      metric  = service.metrics.hits
+
+      assert service.default?
+      assert metric
+
+      provider.destroy
+
+      assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { metric.reload }
+    end
+
+    test 'avoid deletion of master account' do
+      assert_not master_account.destroy, "Should not destroy master account"
+
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+
+      assert buyer.destroy, "Should destroy buyer account"
+      assert provider.destroy, "Should destroy provider account"
+    end
+
+    test "delete billing strategy on destroy" do
+      id = provider.create_billing_strategy.id
+      provider.destroy
+      assert_nil Finance::BillingStrategy.find_by(id: id), 'BillingStrategy not deleted'
+    end
+
+    test "destroying account destroys it's services" do
+      service = FactoryBot.create(:simple_service, account: provider)
+
+      provider.destroy
+
+      assert_nil Service.find_by(id: service.id)
+    end
+
+    test "destroying account destroys the default service firing services destroy callbacks" do
+      service = provider.default_service
+      metric = FactoryBot.create(:metric, owner: service)
+      feature = FactoryBot.create(:feature, featurable: service)
+
+      provider.destroy
+
+      assert_nil Service.find_by(id: service.id)
+      assert_nil Metric.find_by(id: metric.id)
+      assert_nil Feature.find_by(id: feature.id)
+    end
+
+    test "destroying account will stop if features deletion fails" do
+      Feature.any_instance.stubs(:destroy).returns(false)
+
+      service = provider.default_service
+      metric = FactoryBot.create(:metric, owner: service)
+      feature = FactoryBot.create(:feature, featurable: service)
+
+      assert_not provider.destroy
+
+      assert_not_nil Service.find_by(id: service.id)
+      assert_not_nil Metric.find_by(id: metric.id)
+      assert_not_nil Feature.find_by(id: feature.id)
+    end
+
+    test 'destroying provider account with buyer accounts' do
+      plan = FactoryBot.create(:simple_application_plan, service: provider.default_service)
+
+      buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider)
+      buyer_account.buy!(plan)
+
+      assert_change :of => -> { Account.providers.count }, :by => -1 do
+        provider.destroy
+      end
+    end
+
+    # regression test for https://github.com/3scale/system/issues/2767
+    test 'destroy should destroy all cinstances and application_plans' do
+      master_plan = master_account.default_application_plans.first!
+
+      FactoryBot.create(:cinstance, plan: master_plan, user_account: provider)
+
+      service = FactoryBot.create(:simple_service, account: provider)
+      buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+      tenant_plan = FactoryBot.create(:application_plan, issuer: service)
+      FactoryBot.create(:cinstance, plan: tenant_plan, user_account: buyer)
+
+      assert_not_equal 0, provider.provided_cinstances.reload.count
+      assert_not_equal 0, provider.provided_plans.reload.count
+      assert_not_equal 0, provider.bought_plans.reload.count
+
+      provider.destroy!
+
+      assert_equal 0, provider.provided_cinstances.reload.count
+      assert_equal 0, provider.provided_plans.reload.count
+      assert_equal 0, provider.bought_plans.reload.count
+    end
+
+    test "#smart_destroy a buyer" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+
+      buyer.smart_destroy
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+    end
+
+    test "#smart_destroy a provider" do
+      provider.smart_destroy
+      assert provider.reload.scheduled_for_deletion?
+    end
+
+    test "#smart_destroy master" do
+      master_account.smart_destroy
+      assert master_account.reload
+      assert_not master_account.reload.scheduled_for_deletion?
+    end
+
+    test "email provider when buyer is deleted on failure unstoring credit card" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-2")
+      preferences = provider.first_admin.notification_preferences
+      preferences.enabled_notifications = ["credit_card_unstore_failed"]
+      preferences.user.save!
+
+      ::Sidekiq::Testing.inline! do
+        buyer.destroy!
+      end
+
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      assert_includes ActionMailer::Base.deliveries.first.header["X-SMTPAPI"].value, "CreditCardUnstoreFailedEvent"
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+    end
+
+    test "email provider when buyer is deleted on error unstoring credit card" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-3")
+      preferences = provider.first_admin.notification_preferences
+      preferences.enabled_notifications = ["credit_card_unstore_failed"]
+      preferences.user.save!
+
+      ::Sidekiq::Testing.inline! do
+        buyer.destroy!
+      end
+
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      assert_includes ActionMailer::Base.deliveries.first.header["X-SMTPAPI"].value, "CreditCardUnstoreFailedEvent"
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+    end
+
+    test "delete a provider with buyer credit cards" do
+      buyers = FactoryBot.create_list(:buyer_account, 3, provider_account: provider)
+      buyers.each_with_index do |buyer, idx|
+        FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-#{idx}")
+      end
+      provider.schedule_for_deletion!
+
+      # cards of buyers of deleted providers should not be touched
+      ActiveMerchant::Billing::BogusGateway.any_instance.expects(:unstore).never
+
+      ::Sidekiq::Testing.inline! do
+        provider.destroy!
+      end
+
+      # TODO: master should not be emailed about events related to schduled_for_deletion providers
+      # assert_empty ActionMailer::Base.deliveries
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
+
+    test "destroy a provider with failure unstoring its credit card" do
+      FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-2")
+      provider.schedule_for_deletion!
+
+      ::Sidekiq::Testing.inline! do
+        provider.destroy!
+      end
+
+      # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
+      # assert_empty ActionMailer::Base.deliveries
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
+
+    test "destroy a provider with error unstoring its credit card" do
+      FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-3")
+      provider.schedule_for_deletion!
+
+      ::Sidekiq::Testing.inline! do
+        provider.destroy!
+      end
+
+      # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
+      # assert_empty ActionMailer::Base.deliveries
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
   end
 
   class DestroyableTest < ActiveSupport::TestCase

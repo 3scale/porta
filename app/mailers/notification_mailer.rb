@@ -273,6 +273,21 @@ class NotificationMailer < ActionMailer::Base
     mail to: @receiver.email, subject: "#{@account.name} has downgraded"
   end
 
+  # @param [Accounts::CreditCardUnstoreFailedEvent] event
+  # @param [User] receiver
+  delivers Accounts::CreditCardUnstoreFailedEvent
+  def credit_card_unstore_failed(event, receiver)
+    @provider_account     = Account.find(event.metadata[:provider_id])
+    @receiver             = receiver.decorate
+    @account_name         = event.buyer_name
+    @error_message        = event.reason
+    @payment_gateway_name = event.gateway_name
+    @card_partial         = event.partial_number
+    @event                = event
+
+    mail to: @receiver.email, subject: "Failed to unstore #{@account_name}'s credit card"
+  end
+
   # @param [Accounts::ExpiredCreditCardProviderEvent] event
   # @param [User] receiver
   delivers Accounts::ExpiredCreditCardProviderEvent

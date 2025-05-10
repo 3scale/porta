@@ -165,7 +165,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 
     setup do
-      @object = FactoryBot.create(:simple_account)
+      @object = FactoryBot.create(:simple_provider)
       System::ErrorReporting.stubs(:report_error)
     end
 
@@ -362,7 +362,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_equal 1, provider2.buyers.count
     end
 
-    test "delete with a payment_gateway_setting" do
+    test "delete provider with a payment_gateway_setting" do
       pgs = FactoryBot.create(:payment_gateway_setting, account: provider)
       provider.schedule_for_deletion!
       perform_enqueued_jobs(queue: "deletion") do
@@ -409,6 +409,92 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_equal before_objects, all_objects
     end
 
+    test "deleting provider with a buyer with unresolved invoices" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert_not_empty buyer.invoices.unresolved
+      assert buyer.payment_detail.save
+      assert buyer.reload.profile
+      provider.schedule_for_deletion!
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
+
+    class DeleteWithPaymentDetails < ActiveSupport::TestCase
+      include ActiveJob::TestHelper
+
+      attr_reader :provider
+
+      setup do
+        @provider = FactoryBot.create(:provider_account)
+        ActionMailer::Base.deliveries.clear
+      end
+
+      test "notify provider on buyer credit card failed unstore" do
+        buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+        FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-2")
+        preferences = provider.first_admin.notification_preferences
+        preferences.enabled_notifications = ["credit_card_unstore_failed"]
+        preferences.user.save!
+
+        Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later buyer
+          end
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        assert_includes ActionMailer::Base.deliveries.first.header["X-SMTPAPI"].value, "CreditCardUnstoreFailedEvent"
+      end
+
+      test "delete a provider with failure unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-2")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with error unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-3")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with buyer credit credit cards" do
+        buyers = FactoryBot.create_list(:buyer_account, 3, provider_account: provider)
+        buyers.each_with_index do |buyer, idx|
+          FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-#{idx}")
+        end
+
+        provider.schedule_for_deletion!
+
+        ::Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later provider
+          end
+        end
+
+        # TODO: assert_empty ActionMailer::Base.deliveries
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[0].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[1].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[2].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+    end
+
     class DeleteCompleteAccountTest < ActiveSupport::TestCase
       include ActiveJob::TestHelper
       include TestHelpers::Provider
@@ -419,7 +505,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       test "perform big account destroy in background" do
         provider = create_a_complete_provider
         assert_equal 1, Account.where(provider: true).count
-        assert_equal 1, Account.where(buyer: true).count
+        assert_equal 3, Account.where(buyer: true).count
 
         provider.schedule_for_deletion!
         assert_empty models_without_objects.map(&:to_s)
@@ -432,7 +518,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       test "perform big account destroy" do
         provider = create_a_complete_provider
         assert_equal 1, Account.where(provider: true).count
-        assert_equal 1, Account.where(buyer: true).count
+        assert_equal 3, Account.where(buyer: true).count
 
         provider.schedule_for_deletion!
         assert_empty models_without_objects.map(&:to_s)
