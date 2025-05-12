@@ -27,8 +27,7 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
     update! do |success, failure|
       success.html do
-        flash[:notice] = 'User was successfully updated.'
-        redirect_to(collection_url)
+        redirect_to collection_url, success: t('.success')
       end
     end
   end

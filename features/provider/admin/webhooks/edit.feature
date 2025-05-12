@@ -20,7 +20,7 @@ Feature: Provider webhooks
     When they go to the edit webhooks page
     And the form is submitted with:
       | URL | http://example.com |
-    Then they should see the flash message "Webhooks settings were successfully updated."
+    Then they should see the flash message "Webhooks settings were successfully updated"
 
   Scenario: Testing the webhook enpoint
     When they go to the edit webhooks page

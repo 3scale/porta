@@ -28,7 +28,7 @@ Feature: Account management
      And I select "Santiago" from "Time Zone"
      And I press "Update Account"
 
-    Then I should see "The account information was updated."
+    Then I should see "The account information was updated"
       And I should see the account details:
         | Organization/Group Name | Fantastically awesome API |
         | Address                 | Middle of nowhere         |

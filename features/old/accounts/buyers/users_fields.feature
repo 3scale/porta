@@ -46,6 +46,6 @@ Feature: Buyer side, user extra fields
      When I fill in "Required field" with "1 Horse Power"
        And I select "3" from "Choices field"
        And I press "Update User"
-     Then I should see "User was successfully updated."
+     Then I should see "User was successfully updated"
 
   # Scenario: Viewing user with extra fields

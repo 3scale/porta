@@ -2,9 +2,9 @@
 
 exports[`should not render reset password button when disablePasswordReset is true 1`] = `
 <LoginPage
+  alerts={[]}
   authenticationProviders={[]}
   disablePasswordReset={true}
-  flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
   recaptcha={
@@ -112,7 +112,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 className="pf-c-login__main-body"
               >
                 <LoginForm
-                  flashMessages={[]}
+                  alerts={[]}
                   providerSessionsPath="sessions-path"
                   recaptcha={
                     {
@@ -483,6 +483,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
 
 exports[`should render Login form and Authentication providers when available 1`] = `
 <LoginPage
+  alerts={[]}
   authenticationProviders={
     [
       {
@@ -496,7 +497,6 @@ exports[`should render Login form and Authentication providers when available 1`
     ]
   }
   disablePasswordReset={false}
-  flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
   recaptcha={
@@ -613,7 +613,7 @@ exports[`should render Login form and Authentication providers when available 1`
                 className="pf-c-login__main-body"
               >
                 <LoginForm
-                  flashMessages={[]}
+                  alerts={[]}
                   providerSessionsPath="sessions-path"
                   recaptcha={
                     {
@@ -1220,9 +1220,9 @@ exports[`should render Login form and Authentication providers when available 1`
 
 exports[`should render itself 1`] = `
 <LoginPage
+  alerts={[]}
   authenticationProviders={[]}
   disablePasswordReset={false}
-  flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
   recaptcha={
@@ -1339,7 +1339,7 @@ exports[`should render itself 1`] = `
                 className="pf-c-login__main-body"
               >
                 <LoginForm
-                  flashMessages={[]}
+                  alerts={[]}
                   providerSessionsPath="sessions-path"
                   recaptcha={
                     {
@@ -1745,9 +1745,9 @@ exports[`should render itself 1`] = `
 
 exports[`should render reset password button when disablePasswordReset is false 1`] = `
 <LoginPage
+  alerts={[]}
   authenticationProviders={[]}
   disablePasswordReset={false}
-  flashMessages={[]}
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
   recaptcha={
@@ -1864,7 +1864,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                 className="pf-c-login__main-body"
               >
                 <LoginForm
-                  flashMessages={[]}
+                  alerts={[]}
                   providerSessionsPath="sessions-path"
                   recaptcha={
                     {

@@ -9,10 +9,9 @@ class Sites::ForumsController < Sites::BaseController
 
   def update
     if @settings.update(params[:settings])
-      flash[:notice] = 'Forum settings updated.'
-      redirect_to edit_admin_site_forum_url
+      redirect_to edit_admin_site_forum_url, success: t('.success')
     else
-      flash[:error] = 'There were problems saving the settings.'
+      flash.now[:danger] = t('.error')
       render :action => 'edit'
     end
   end

@@ -20,14 +20,13 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
     end
 
     if @billing_strategy.numbering_period != finance_billing_strategy_params['numbering_period']
-      ok_message = "Already existent invoices won't change their id."
+      ok_message = t('.ok_message')
     end
 
     if @billing_strategy.update(finance_billing_strategy_params)
-      flash[:message] = "Finance settings updated. #{ok_message}"
-      redirect_to :action => 'show'
+      redirect_to({ action: :show }, success: t('.success', ok_message: ok_message))
     else
-      flash[:message] = 'Invalid finance settings'
+      flash.now[:danger] = t('.invalid')
       render :action => :show
     end
   end

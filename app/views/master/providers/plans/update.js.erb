@@ -1,3 +1,3 @@
 $('#provider-change-plan').replaceWith(<%= json render('widget', :provider => @provider) %>);
-$.flash('Plan upgraded.');
+ThreeScale.toast('Plan upgraded.', 'success');
 $.colorbox.close();

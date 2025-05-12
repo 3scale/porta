@@ -1,2 +1,2 @@
-$.flash('<%= "#{@page.class.model_name.human} \"#{@page.name}\" published." %>');
+ThreeScale.toast('<%= @page.class.model_name.human %> "<%= @page.name %>" published.', 'success');
 $('#<%= dom_id(@page) + '_change' %>').fadeOut();

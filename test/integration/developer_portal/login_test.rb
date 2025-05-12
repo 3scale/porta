@@ -28,7 +28,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(authentication_id: @user.authentication_id, uid: 'new-uid')
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
 
     get logout_path
     assert_response :redirect
@@ -43,7 +43,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: @user.sso_authorizations.last.uid)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
 
     @user.sso_authorizations.destroy_all
 
@@ -51,7 +51,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: 'new-uid', email: @user.email, email_verified: false)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_equal 'Successfully authenticated, please complete the signup form', flash[:notice]
+    assert_equal 'Successfully authenticated, please complete the signup form', flash[:success]
     @user.reload
     assert_equal 0, @user.sso_authorizations.count
 
@@ -59,7 +59,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: 'new-uid', email: @user.email, email_verified: true)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
     @user.reload
     assert_equal 1, @user.sso_authorizations.count
 
@@ -71,7 +71,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: @user.sso_authorizations.first.uid)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_equal 'Signed in successfully', flash[:notice]
+    assert_equal 'Signed in successfully', flash[:success]
     @user.reload
     assert_equal 1, @user.sso_authorizations.count
   end
@@ -85,7 +85,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
       post session_path(system_name: @auth.system_name, code: 'example')
     end
-    assert_match "Your account isn't active or hasn't been approved yet.", flash[:error]
+    assert_match "Your account isn't active or hasn't been approved yet.", flash[:danger]
     assert_match 'email once we have approved your account', waiting_list_confirmation_email('foo@example.com').body.to_s
     user = @provider.buyer_users.find_by_email('foo@example.com')
     assert user.active?
@@ -96,7 +96,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: 'ud2', email: 'foo2@example.com', username: 'foo2', org_name: 'company2', email_verified: true)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_match 'Signed up successfully', flash[:notice]
+    assert_match 'Signed up successfully', flash[:success]
     assert_nil waiting_list_confirmation_email('foo2@example.com')
     user_2 = @provider.buyer_users.find_by_email('foo2@example.com')
     assert user_2.active?
@@ -108,7 +108,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: 'ud3', email: 'foo3@example.com', username: 'foo3', org_name: 'company3', email_verified: true)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_match 'Signed up successfully', flash[:notice]
+    assert_match 'Signed up successfully', flash[:success]
     assert_nil waiting_list_confirmation_email('foo3@example.com')
     user_3 = @provider.buyer_users.find_by_email('foo2@example.com')
     assert user_3.active?
@@ -121,7 +121,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     stub_user_data(uid: 'ud2', email: 'foo2@example.com', org_name: 'company', email_verified: true)
     stub_oauth2_request
     post session_path(system_name: @auth.system_name, code: 'example')
-    assert_match 'Successfully authenticated, please complete the signup form', flash[:notice]
+    assert_match 'Successfully authenticated, please complete the signup form', flash[:success]
     post signup_path(account: {
       org_name: 'company',
       user: {
@@ -133,7 +133,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
 
     user = @provider.buyer_users.find_by_email('foo2@example.com')
     assert user.account.approved?
-    assert_match 'Signed up successfully', flash[:notice]
+    assert_match 'Signed up successfully', flash[:success]
     assert_nil waiting_list_confirmation_email('foo2@example.com')
   end
 

@@ -3,4 +3,4 @@ setTimeout(() => {
   document.getElementById('<%= dom_id(@feature) %>').remove();
 });
 
-jQuery.flash.notice('Feature has been deleted.');
+ThreeScale.toast('Feature has been deleted.', 'success');

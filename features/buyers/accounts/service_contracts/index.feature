@@ -154,7 +154,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Full    |
     And the modal is submitted with:
       | Plan | Full |
-    Then they should see the flash message "Plan of the contract was changed."
+    Then they should see the flash message "Plan of the contract was changed"
     And the table should contain the following:
       | Service    | Plan | State | Paid? |
       | Banana API | Full | live  | free  |
@@ -167,7 +167,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |
     When they follow "Approve subscription to Banana API"
-    Then they should see the flash message "Service contract was approved."
+    Then they should see the flash message "Service contract was approved"
     And the table should contain the following:
       | Service    | Plan    | State | Paid? |
       | Banana API | Default | live  | free  |
@@ -181,7 +181,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |
     When they follow "Approve subscription to Banana API"
-    Then they should see the flash message "Cannot approve service contract."
+    Then they should see the flash message "Cannot approve service contract"
     And the table should contain the following:
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |

@@ -48,7 +48,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
     login_buyer @buyer_account
     get developer_portal.edit_admin_account_braintree_blue_path
     assert_redirected_to developer_portal.admin_account_braintree_blue_path
-    assert_equal 'Invalid merchant id', flash[:error]
+    assert_equal 'Invalid merchant id', flash[:danger]
   end
 
   def create_provider_account

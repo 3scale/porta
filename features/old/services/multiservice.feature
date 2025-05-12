@@ -86,4 +86,4 @@ Feature: Multiservice feature
     And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
     When I follow "I understand the consequences, proceed to delete 'Second service' product"
     And confirm the dialog
-    Then I should see "Product 'Second service' will be deleted shortly."
+    Then I should see "Product 'Second service' will be deleted shortly"

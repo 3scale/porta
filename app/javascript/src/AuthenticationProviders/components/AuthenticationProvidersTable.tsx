@@ -20,9 +20,10 @@ import { useState } from 'react'
 
 import { Pagination } from 'Common/components/Pagination'
 import { ajaxJSON } from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import { toast } from 'utilities/toast'
 import { getSortParams } from 'utilities/patternfly-utils'
 
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Integration {
@@ -63,11 +64,11 @@ const AuthenticationProvidersTable: FunctionComponent<Props> = ({
       return
     }
 
-    void ajaxJSON(deleteTemplateHref.replace(':id', String(itemToBeDeleted.id)), { method: 'Delete' })
+    void ajaxJSON<Required<IAlert>>(deleteTemplateHref.replace(':id', String(itemToBeDeleted.id)), { method: 'Delete' })
       .then(res => res.json())
-      .then(({ error, redirect }) => {
-        if (error) {
-          flash.error(error)
+      .then(({ type, message, redirect }) => {
+        if (type === 'danger') {
+          toast(message, type)
           closeModal()
         } else if (redirect) {
           window.location.replace(redirect)

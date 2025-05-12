@@ -9,17 +9,16 @@ class Sites::DnsController < Sites::BaseController
 
   def update
     if @account.update(site_params, without_protection: true)
-      flash[:notice] = 'The account information was updated.'
-      redirect_to(admin_site_dns_url)
+      redirect_to admin_site_dns_url, success: t('.success')
     else
-      flash[:error] = @account.errors.full_messages.join(' ')
+      flash.now[:danger] = @account.errors.full_messages.join(' ')
       render :action => 'show'
     end
   end
 
   def open_portal
     @account.update_attribute(:site_access_code, nil)
-    flash.now[:notice] = 'Developer portal opened'
+    flash.now[:success] = t('.success')
     respond_to do |format|
       format.js
     end

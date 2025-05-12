@@ -18,9 +18,9 @@ class Provider::Admin::Account::LogosController < Provider::Admin::Account::Base
 
   def update_logo(logo:)
     if profile.update({logo: logo})
-      flash[:notice] = t("#{action_name}_success", scope: 'logos_controller')
+      flash[:success] = t('.success')
     else
-      flash[:error] = profile.errors.full_messages.to_sentence
+      flash[:danger] = profile.errors.full_messages.to_sentence
     end
     redirect_to edit_provider_admin_account_logo_path
   end

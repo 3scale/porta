@@ -1,2 +1,2 @@
-$.flash('<%= "#{@page.class.model_name.human} \"#{@page.name}\" reverted." %>');
+ThreeScale.toast('<%= @page.class.model_name.human %> "<%= @page.name %>" reverted.', 'success');
 $('#<%= dom_id(@page) + '_change' %>').fadeOut(function(){ $(this).remove() });
