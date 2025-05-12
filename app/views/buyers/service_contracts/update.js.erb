@@ -1,6 +1,4 @@
 <% if success = flash.now[:success] %>
-  $.colorbox.close();
-
   (function () {
     const id = 'contract_<%= @service_contract.id %>';
     const link = document.getElementById(id).querySelector('[data-label="Plan"] a');
@@ -10,9 +8,7 @@
     link.href = '<%= edit_polymorphic_path([:admin, plan]) %>';
     link.title = 'Edit <%= plan.class.model_name.human %> "<%= plan.name %>"';
   })();
-
-  ThreeScale.toast('<%= success %>', 'success')
-<% else %>
-  $.colorbox.close();
-  ThreeScale.toast('<%= flash.now[:danger] %>', 'danger');
 <% end %>
+
+$.colorbox.close();
+<%= render 'shared/flash' %>

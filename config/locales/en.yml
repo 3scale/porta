@@ -1912,11 +1912,6 @@ en:
       billing_mode:
         none: disabled
 
-  flash:
-    actions:
-      destroy:
-        notice: "%{resource_name} was successfully deleted"
-
   proxy:
     credentials_location:
       headers: "As HTTP Headers"
