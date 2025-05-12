@@ -1134,10 +1134,10 @@ en:
           empty_search:
             title: No invoices found
             body: There are no invoices matching the search criteria.
-          show:
-            not_found: Invoice not found
-          update:
-            success: Invoice was successfully updated
+        show:
+          not_found: Invoice not found
+        update:
+          success: Invoice was successfully updated
       settings:
         show:
           switch_button: Switch to %{mode}
