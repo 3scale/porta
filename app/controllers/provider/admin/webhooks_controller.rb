@@ -42,7 +42,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
     @webhook ||= current_account.build_web_hook(params[:web_hook])
 
     if @webhook.save
-      redirect_to action: :edit, success: t('.success')
+      redirect_to({ action: :edit }, success: t('.success'))
     else
       render :edit
     end
@@ -50,7 +50,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
 
   def update
     if @webhook.update(params[:web_hook])
-      redirect_to action: :edit, success: t('.success')
+      redirect_to({ action: :edit }, success: t('.success'))
     else
       flash.now[:danger] = t('.error')
       render :edit

@@ -15,7 +15,7 @@ class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseContr
   def destroy
     version.destroy
 
-    redirect_to action: :index, success: t('.success')
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   def revert

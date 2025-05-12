@@ -27,7 +27,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
     @group = current_account.provided_groups.build(sections_params)
 
     if @group.save
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       available_groups
       available_sections
@@ -39,7 +39,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
     @group = current_account.provided_groups.find(params[:id])
 
     if @group.update(sections_params)
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       available_groups
       available_sections
@@ -50,7 +50,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   def destroy
     @group = current_account.provided_groups.find(params[:id])
     @group.destroy
-    redirect_to action: :index, success: t('.success')
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
 

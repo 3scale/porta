@@ -19,7 +19,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
     @redirect = redirects.build(params[:cms_redirect])
 
     if @redirect.save
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       render :new
     end

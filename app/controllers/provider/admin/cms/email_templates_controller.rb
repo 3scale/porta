@@ -18,7 +18,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
     @page = templates.find(params[:id])
 
     if @page.update(cms_templates_params)
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       render :edit
     end
@@ -28,7 +28,7 @@ class Provider::Admin::CMS::EmailTemplatesController < Sites::BaseController
     @page ||= templates.build(cms_templates_params)
 
     if @page.save
-      redirect_to action: :index, succes: t('.success')
+      redirect_to({ action: :index }, succes: t('.success'))
     else
       render :new
     end

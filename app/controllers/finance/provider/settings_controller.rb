@@ -24,7 +24,7 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
     end
 
     if @billing_strategy.update(finance_billing_strategy_params)
-      redirect_to action: :show, success: t('.success', ok_message: ok_message)
+      redirect_to({ action: :show }, success: t('.success', ok_message: ok_message))
     else
       flash.now[:danger] = t('.invalid')
       render :action => :show

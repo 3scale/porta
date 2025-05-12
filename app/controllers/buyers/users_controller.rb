@@ -19,7 +19,7 @@ class Buyers::UsersController < Buyers::BaseController
     user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
 
     if user.save
-      redirect_to action: :show, success: t('.success')
+      redirect_to({ action: :show }, success: t('.success'))
     else
       render :edit
     end
@@ -31,7 +31,7 @@ class Buyers::UsersController < Buyers::BaseController
 
   def destroy
     if user.destroy
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       redirect_back_or_show_detail danger: t('.error')
     end

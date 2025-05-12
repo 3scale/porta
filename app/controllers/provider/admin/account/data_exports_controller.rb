@@ -23,7 +23,7 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
                                     recipient.id,
                                     permitted_params[:data],
                                     permitted_params[:period])
-    redirect_to action: :new, success: t('.success', email: recipient.email)
+    redirect_to({ action: :new }, success: t('.success', email: recipient.email))
   end
 
   protected

@@ -21,7 +21,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
   def destroy
     @message.hide!
 
-    redirect_to action: :index, success: t('.success')
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   def reply
@@ -29,7 +29,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
     reply.attributes = message_params
 
     if reply.save && reply.deliver
-      redirect_to action: :index, success: t('.success')
+      redirect_to({ action: :index }, success: t('.success'))
     else
       redirect_to provider_admin_messages_inbox_path(@message), danger: reply.errors.full_messages.to_sentence
     end
