@@ -1,11 +1,10 @@
 require 'test_helper'
 
-class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
+class Authentication::Strategy::TokenTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @account  = FactoryBot.create(:buyer_account, provider_account: @provider)
-    @strategy = Authentication::Strategy.build(@provider)
+    @strategy = Authentication::Strategy.build_strategy(:token).new(@provider, true)
   end
 
   def test_authenticate_wrong_credentials
@@ -15,7 +14,7 @@ class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
   end
 
   def test_authenticate_user_id
-    user = FactoryBot.create(:active_user, account: @account)
+    user = FactoryBot.create(:active_user, account: @provider)
 
     stub_extract! [user.id, 'supetramp']
 
@@ -23,7 +22,7 @@ class Authentication::Strategy::SsoTest < ActiveSupport::TestCase
   end
 
   def test_authenticate_username
-    user = FactoryBot.create(:active_user, account: @account)
+    user = FactoryBot.create(:active_user, account: @provider)
 
     stub_extract! [nil, user.username]
 

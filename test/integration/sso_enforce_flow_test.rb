@@ -44,7 +44,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     user_attributes = { email: @user.email, uid: 'bar|123', authentication_id: 'alaska' }
     user_data = ThreeScale::OAuth2::UserData.new(user_attributes)
     ThreeScale::OAuth2::Auth0Client.any_instance.expects(:authenticate!).returns(user_data).at_least_once
-    get provider_admin_account_flow_testing_callback_url(system_name: auth_provider.system_name)
+    get provider_admin_account_flow_testing_callback_url(system_name: auth_provider.system_name, code: 'foo')
     assert_match 'User cannot be authenticated by not verified email address.', flash[:error]
 
     # auth provider successfully tested
@@ -52,7 +52,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     user_attributes = { email: @user.email, email_verified: true, uid: 'bar|123', authentication_id: 'alaska' }
     user_data = ThreeScale::OAuth2::UserData.new(user_attributes)
     ThreeScale::OAuth2::Auth0Client.any_instance.expects(:authenticate!).returns(user_data).at_least_once
-    get provider_admin_account_flow_testing_callback_url(system_name: auth_provider.system_name)
+    get provider_admin_account_flow_testing_callback_url(system_name: auth_provider.system_name, code: 'foo')
     assert_match 'Authentication flow successfully tested.', flash[:success]
 
     # auth provider has been tested, no error message visible
@@ -72,7 +72,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_match 'You have been logged out.', flash[:notice]
 
     # current user has been sso logged in
-    get provider_sso_path(system_name: auth_provider.system_name)
+    get provider_sso_path(system_name: auth_provider.system_name, code: 'foo')
     assert_match 'Signed in successfully', flash[:notice]
 
     # enforce sso feature has been successfully enabled
@@ -90,7 +90,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_nil User.current
 
     # current user has been sso logged in
-    get provider_sso_path(system_name: auth_provider.system_name)
+    get provider_sso_path(system_name: auth_provider.system_name, code: 'foo')
     assert_match 'Signed in successfully', flash[:notice]
   end
 

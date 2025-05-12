@@ -2,6 +2,8 @@
 
 module Authentication
   module Strategy
+
+    # Oauth2 authentication for the developer portal
     class OAuth2 < Authentication::Strategy::OAuth2Base
       class FindOrCreateAccount < Procedure
 
