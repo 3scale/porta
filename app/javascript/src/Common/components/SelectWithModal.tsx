@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SortByDirection } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 
@@ -52,8 +52,6 @@ const SelectWithModal = <T extends IRecord>({
   helperTextInvalid,
   fetchItems
 }: Props<T>): React.ReactElement => {
-  let { current: isOnMount } = useRef(true)
-
   const [count, setCount] = useState(itemsCount)
   const [isLoading, setIsLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
@@ -73,8 +71,7 @@ const SelectWithModal = <T extends IRecord>({
   const handleOnModalSelect = (selected: T | null) => {
     setModalOpen(false)
     onSelect(selected)
-    // FIXME: search input is cleared on modal close even though the items are filtered. This is a bit confusing,
-    // however resetting the search results would require a new request that would be ineffectual
+    clearResults()
   }
 
   useEffect(() => {
@@ -89,7 +86,7 @@ const SelectWithModal = <T extends IRecord>({
     if (pageIsEmpty && thereAreMoreItems) {
       setIsLoading(true)
 
-      fetchItems({ page, perPage: PER_PAGE })
+      fetchItems({ page, perPage: PER_PAGE, query })
         .then(({ items: newItems, count: newCount }) => {
           setPageDictionary({ ...pageDictionary, [page]: newItems })
           setCount(newCount)
@@ -102,22 +99,19 @@ const SelectWithModal = <T extends IRecord>({
   }, [page, shouldHaveModal, modalOpen])
 
   useEffect(() => {
-    if (!fetchItems) {
+    if (!fetchItems || !modalOpen) {
       return
     }
 
-    if (isOnMount) {
-      isOnMount = false
-    } else {
-      // perPage 20 to get 4 pages
-      fetchItems({ page: 1, perPage: 20, query })
-        .then(({ items: fetchedItems, count: newCount }) => {
-          setSearchResults(fetchedItems, newCount)
-        })
-        .catch(() => {
-          // TODO
-        })
-    }
+    // perPage 20 to get 4 pages
+    fetchItems({ page: 1, perPage: 20, query })
+      .then(({ items: fetchedItems, count: newCount }) => {
+        setSearchResults(fetchedItems, newCount)
+      })
+      .catch(() => {
+        // TODO
+      })
+
   }, [query])
 
   const setSearchResults = (items: T[], newCount: number) => {
@@ -126,12 +120,18 @@ const SelectWithModal = <T extends IRecord>({
     setPage(1)
   }
 
+  const clearResults = () => {
+    setQuery('')
+    setSearchResults([], 0)
+  }
+
   const handleModalOnSetPage = (newPage: number) => {
     setPage(newPage)
   }
 
   const handleOnModalClose = () => {
     setModalOpen(false)
+    clearResults()
     // TODO: abort any ongoing request? (using signal).
     // This makes the component much more complex and it might not worth it.
   }
@@ -170,6 +170,7 @@ const SelectWithModal = <T extends IRecord>({
           page={page}
           pageItems={pageDictionary[page]}
           searchPlaceholder={searchPlaceholder}
+          searchQuery={query}
           selectedItem={item}
           setPage={handleModalOnSetPage}
           sortBy={sortBy}
