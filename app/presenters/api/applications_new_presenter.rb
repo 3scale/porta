@@ -25,8 +25,8 @@ class Api::ApplicationsNewPresenter
       product: ServicePresenter.new(service).new_application_data.to_json,
       'most-recently-created-buyers': buyers.to_json,
       'buyers-count': buyers_count,
+      'buyers-path': admin_buyers_accounts_path
     }
-    data['buyers-path'] = admin_buyers_accounts_path if buyers_count > 20
     data.merge new_application_form_base_data(provider, cinstance)
   end
 end
