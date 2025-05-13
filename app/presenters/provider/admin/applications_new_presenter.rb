@@ -25,10 +25,10 @@ class Provider::Admin::ApplicationsNewPresenter
       'most-recently-created-buyers': buyers.to_json,
       'buyers-count': buyers_count,
       'most-recently-updated-products': products.to_json,
-      'products-count': products_count
+      'products-count': products_count,
+      'buyers-path': admin_buyers_accounts_path,
+      'products-path': admin_services_path,
     }
-    data['buyers-path'] = admin_buyers_accounts_path if buyers_count > 20
-    data['products-path'] = admin_services_path if products_count > 20
     data.merge new_application_form_base_data(provider, cinstance)
   end
 
