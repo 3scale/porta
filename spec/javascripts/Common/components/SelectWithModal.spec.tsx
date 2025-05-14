@@ -151,7 +151,7 @@ describe('with more than 20 items', () => {
       openModal(wrapper)
 
       expect(fetchItems).toHaveBeenCalledTimes(1)
-      expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage })
+      expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage, query: '' })
 
       await waitForPromises(wrapper)
       const modal = wrapper.find('TableModal')
