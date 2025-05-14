@@ -43,10 +43,10 @@ class Api::ServicesIndexPresenter
     }
   end
 
-  # The JSON response of index endpoint is used to populate NewApplicationForm's BuyerSelect
+  # The JSON response of index endpoint is used to populate NewApplicationForm's ProductSelect
   def render_json
     {
-      items: products.map { |p| ServicePresenter.new(p).new_application_data.as_json }.to_json,
+      items: products.includes(:default_application_plan).map { |p| ServicePresenter.new(p).new_application_data.as_json }.to_json,
       count: total_entries
     }
   end

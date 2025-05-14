@@ -27,5 +27,4 @@ export interface Buyer {
   createdAt: string;
   contractedProducts: ContractedProduct[];
   createApplicationPath: string;
-  multipleAppsAllowed?: boolean;
 }

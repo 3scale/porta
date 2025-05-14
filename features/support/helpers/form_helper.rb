@@ -42,6 +42,13 @@ module FormHelper
     end
   end
 
+  def pf4_select_toggle(label)
+    select = find_pf_select(label)
+    within select do
+      find('button.pf-c-select__toggle, button.pf-c-select__toggle-button').click if has_no_css?('.pf-c-select__menu', wait: 0)
+    end
+  end
+
   # def has_pf_select?(label_or_placeholder)
   #   has_css?(".pf-c-select[data-ouia-component-id=\"#{label_or_placeholder}\"]", wait: 0)
   # end
