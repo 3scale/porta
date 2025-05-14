@@ -127,6 +127,12 @@ And "can reset the toolbar filter {string}" do |filter|
   end
 end
 
+When "(they )clear the search filter" do
+  within('.pf-c-toolbar__item.pf-m-search-filter') do
+    find('button[aria-label="Reset"]').click
+  end
+end
+
 def perform_toolbar_search(text)
   within '.pf-m-search-filter' do
     find('.pf-c-text-input-group__text-input').set(text)

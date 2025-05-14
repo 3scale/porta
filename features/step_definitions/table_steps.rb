@@ -22,6 +22,14 @@ end
 
 # TODO: can we use "has_table?" instead of this complex step?
 Then /^(?:I |they )?should see (?:the )?following table( with exact columns)?:?$/ do |exact_columns, expected|
+  # Wait for the data in the table to load and render, otherwise the following error may occur:
+  # Selenium::WebDriver::Error::StaleElementReferenceError: stale element reference: stale element not found in the current frame
+  # This is because of finding the table element first, and then manipulating its children, while they might still be rendering with JS
+
+  first_value = expected.rows.first.first
+  # fall back to checking for the first column name in the header in case en empty table is asserted
+  first_value.present? ? has_element?('td', text: first_value) : has_element?('th', text: expected.columns.first.first.value)
+
   table = extract_table('table', 'tr:not(.search, .table_title)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters

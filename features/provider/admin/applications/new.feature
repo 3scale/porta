@@ -43,6 +43,57 @@ Feature: Audience's new application page
     Then they should see a toast alert with text "Application was successfully created"
     And the current page is application "New App" admin page
 
+  @search
+  Scenario: Search for account
+    # Create 20 accounts to ensure "Jane", as least recently updated account,
+    # appears at position 21, i.e. a single entry on page 5
+    Given application plan "Basic" has 20 contracts
+    When they go to the admin portal new application page
+    And they toggle the menu on select "Account"
+    And they press "View all accounts"
+    Then they should see "Select an account"
+    And they should see 5 pages
+
+    When they search "Jane" using the toolbar
+    Then the search input should be filled with "Jane"
+    And they should see following table:
+      | Name  | Admin   |
+      | Jane  | Jane    |
+
+    When they clear the search filter
+    And they look at the 5th page
+    Then they should see following table:
+      | Name  | Admin   |
+      | Jane  | Jane    |
+
+  @search
+  Scenario: Search for product
+    # Travel in time to ensure the new products are within the first 20 results
+    # (because the products are sorted by updated_at: :desc)
+    Given 5 minutes pass
+    And 18 products and 1 backend apis
+    # Bump updated_at for "API" to ensure "My API" is the least recently updated product,
+    # so it appears at position 21 (a single entry on page 5)
+    And product "API" has name set to "Old"
+    And another product "Another product"
+    When they go to the admin portal new application page
+    And they select "Jane" from "Account"
+    And they toggle the menu on select "Product"
+    And they press "View all products"
+    Then they should see "Select a product"
+
+    When they search "another" using the toolbar
+    Then the search input should be filled with "another"
+    And they should see following table:
+      | Name            | System Name          |
+      | Another product | another_product      |
+
+    When they clear the search filter
+    And they look at the 5th page
+    And they should see following table:
+      | Name    | System Name  |
+      | My API  | my_api       |
+
   Scenario: Create an application for a subscribed product
     Given the buyer is subscribed to product "My API"
     And they go to the admin portal new application page

@@ -23,11 +23,11 @@ module NewApplicationForm
   end
 
   def buyers
-    paginated_buyers.map { |b| BuyerPresenter.new(b).new_application_data.as_json }
+    paginated_buyers.includes(:bought_service_contracts).map { |b| BuyerPresenter.new(b).new_application_data.as_json }
   end
 
   def products
-    paginated_products.includes(:default_application_plan).map { |p| ServicePresenter.new(p).new_application_data.as_json }
+    paginated_products.includes([:default_application_plan, :default_service_plan]).map { |p| ServicePresenter.new(p).new_application_data.as_json }
   end
 
   def application_defined_fields_data(provider)
