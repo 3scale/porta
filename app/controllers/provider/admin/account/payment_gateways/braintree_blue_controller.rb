@@ -18,7 +18,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
       braintree_blue_crypt.create_customer_data
       @braintree_authorization = braintree_blue_crypt.authorization
     rescue Braintree::ConfigurationError, Braintree::AuthenticationError
-      redirect_to action: 'show', danger: t('.invalid_merchant')
+      redirect_to({ action: :show }, danger: t('.invalid_merchant'))
     end
     @errors = params[:errors]
   end
@@ -44,10 +44,9 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
         flash.now[:warning] = t('.credit_card_error')
         render action: 'edit'
       end
-
     else
       @errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
-      redirect_to action: 'edit', errors: @errors, danger: t('.billing_address_error')
+      redirect_to({ action: :edit, errors: @errors }, danger: t('.billing_address_error')) # @errors what for?
     end
   end
 
@@ -55,7 +54,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
     current_account.unstore_credit_card!
     current_account.delete_billing_address
     current_account.save
-    redirect_to action: 'show', success: t('.success')
+    redirect_to({ action: :show }, success: t('.success'))
   end
 
   private

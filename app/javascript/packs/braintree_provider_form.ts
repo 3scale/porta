@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch((error: BraintreeError) => {
             submit.removeAttribute('disabled')
-            toast('Credit card could not be updated.', 'danger')
+            toast('Credit card could not be updated', 'danger')
             console.error(error)
           })
       })

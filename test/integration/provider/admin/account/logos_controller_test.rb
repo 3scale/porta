@@ -19,7 +19,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully uploaded.', flash[:success]
+    assert_equal 'The logo was successfully uploaded', flash[:success]
     assert_nil flash[:danger]
 
     sizes = %i(large medium thumb invoice).map do |style|
@@ -35,7 +35,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     put provider_admin_account_logo_path, params: { profile: {logo: small_logo_file} }
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully uploaded.', flash[:success]
+    assert_equal 'The logo was successfully uploaded', flash[:success]
     assert_nil flash[:danger]
 
     sizes = %i(large medium thumb invoice).map do |style|
@@ -75,7 +75,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully deleted.', flash[:success]
+    assert_equal 'The logo was successfully deleted', flash[:success]
     assert_nil flash[:danger]
   end
 

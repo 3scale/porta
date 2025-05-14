@@ -25,7 +25,7 @@ end
 Then "charging can be enabled" do
   check('Charging enabled')
   click_button('Save')
-  assert_flash('Finance settings updated.')
+  assert_flash('Finance settings updated')
   assert has_checked_field?('Charging enabled')
 end
 
@@ -39,7 +39,7 @@ Then "they can set a different currency to be charged" do
   assert has_select?('Currency', selected: 'USD - American Dollar')
   select('EUR - Euro', from: 'Currency')
   click_button('Save')
-  assert_flash('Finance settings updated.')
+  assert_flash('Finance settings updated')
 end
 
 And "buyers will receive new invoices with that currency" do
@@ -64,7 +64,7 @@ Then "they can set the billing period to yearly" do
   assert has_select?('Billing periods for invoice IDs', selected: 'Monthly (YYYY-MM-XXXXXXXX)')
   select('Yearly (YYYY-XXXXXXXX)', from: 'Billing periods for invoice IDs')
   click_button('Save')
-  assert_flash("Finance settings updated. Already existent invoices won't change their id.")
+  assert_flash("Finance settings updated. Already existent invoices won't change their id")
 end
 
 And "only new invoices will change their id" do
@@ -110,7 +110,7 @@ Then "Stripe can be set as a payment gateway" do
 
     save_changes_and_confirm
   end
-  assert_flash 'Payment gateway details were successfully saved.'
+  assert_flash 'Payment gateway details were successfully saved'
 end
 
 Then "Braintree can be set as a payment gateway" do
@@ -123,7 +123,7 @@ Then "Braintree can be set as a payment gateway" do
 
     save_changes_and_confirm
   end
-  assert_flash 'Payment gateway details were successfully saved.'
+  assert_flash 'Payment gateway details were successfully saved'
 end
 
 Given "master {is} billing tenants" do |master_billing_enabled|

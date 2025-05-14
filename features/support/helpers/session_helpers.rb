@@ -45,13 +45,14 @@ module SessionHelper
   end
 
   def assert_current_user(username)
+    @user = User.find_by(username: username)
+
     browser = Capybara.current_session.driver.browser
     if Capybara.current_driver == :rack_test
       assert browser.current_session.cookie_jar[:user_session]
     else
       assert browser.manage.cookie_named(:user_session)
     end
-    @user = User.find_by(username: username)
   end
 
   private

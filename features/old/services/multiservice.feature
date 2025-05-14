@@ -44,7 +44,7 @@ Feature: Multiservice feature
     And I fill in "System name" with "SystemName@123"
     And I press "Create Product"
     Then I should see "invalid"
-    And I should see the flash message "System name invalid"
+    And I should see a toast alert with text "System name invalid"
 
   @javascript
   Scenario: Create new product: with already existing System name
@@ -56,7 +56,7 @@ Feature: Multiservice feature
     And I fill in "System name" with "api"
     And I press "Create Product"
     Then I should see "Has already been taken"
-    And I should see the flash message "System name has already been taken"
+    And I should see a toast alert with text "System name has already been taken"
 
   @wip
   Scenario: Create new backend

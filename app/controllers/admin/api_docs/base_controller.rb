@@ -58,9 +58,13 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def toggle_visible
     api_docs_service.toggle! :published
-    msg = t("admin.api_docs.base.toggle_visible.#{api_docs_service.published? ? :visible : :hidden}", name: api_docs_service.name)
 
-    redirect_to preview_admin_api_docs_service_path(api_docs_service), success: msg
+    flash[:success] = t("admin.api_docs.base.toggle_visible.#{api_docs_service.published? ? :visible : :hidden}", name: api_docs_service.name)
+
+    respond_to do |format|
+      format.html { redirect_to preview_admin_api_docs_service_path(api_docs_service) }
+      format.json
+    end
   end
 
   def edit; end
@@ -84,7 +88,12 @@ class Admin::ApiDocs::BaseController < FrontendController
   def destroy
     api_docs_service.destroy
 
-    redirect_to admin_api_docs_services_path, success: t('admin.api_docs.destroy.success')
+    flash[:success] = t('admin.api_docs.destroy.success')
+
+    respond_to do |format|
+      format.html { redirect_to admin_api_docs_services_path }
+      format.json
+    end
   end
 
   private

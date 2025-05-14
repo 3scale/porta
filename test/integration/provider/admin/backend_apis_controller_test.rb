@@ -70,7 +70,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
       delete provider_admin_backend_api_path(backend_api)
       assert_redirected_to provider_admin_dashboard_path
       assert_not BackendApi.exists? backend_api.id
-      assert_equal 'Backend will be deleted shortly.', flash[:success]
+      assert_equal 'Backend will be deleted shortly', flash[:success]
     end
   end
 

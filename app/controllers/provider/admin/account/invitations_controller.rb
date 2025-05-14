@@ -13,7 +13,7 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   end
 
   destroy! do |success, failure|
-    success.html { redirect_to(provider_admin_account_invitations_path) }
+    success.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
   end
 
   def resend

@@ -38,14 +38,18 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     check_require_billing_information
     respond_to do |format|
+      # FIXME: Always false if account does not have billing address. Billing address is set in the next page.
       if @account.update(account_params)
-        flash.now[:success] = flash[:success] = t('.success')
         format.html { redirect_to_success }
-        format.js   { render 'shared/flash_message' }
+        format.js do
+          flash.now[:success] = t('.success')
+          render 'shared/flash_message'
+        end
       else
+        flash.now[:danger] = @account.errors.full_messages
         format.html { render :action => 'edit' }
         format.js   { render :template => 'shared/error' } # TODO: is this a bug? File does not exists
       end
@@ -89,9 +93,9 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
 
   def redirect_to_success
     if upgrading_account?
-      redirect_to edit_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan')
+      redirect_to edit_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan'), success: t('.success')
     else
-      redirect_to provider_admin_account_path
+      redirect_to provider_admin_account_path, success: t('.success')
     end
   end
 

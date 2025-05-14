@@ -17,7 +17,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        | Doctor                                     |
       | Client Secret | tardis                                     |
       | Realm         | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "Authentication provider created"
+    Then they should see a toast alert with text "Authentication provider created"
     And the current page is the developer portal edit integration page
     And should see "Customize Red Hat Single Sign-On"
 
@@ -27,7 +27,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        | Doctor                   |
       | Client Secret | tardis                   |
       | Site          | https://doctor.auth0.com |
-    Then they should see the flash message "Authentication provider created"
+    Then they should see a toast alert with text "Authentication provider created"
     And the current page is the developer portal edit integration page
     And should see "Customize Auth0"
 
@@ -38,7 +38,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
     When the form is submitted with:
       | Client        | Doctor |
       | Client Secret | tardis |
-    Then they should see the flash message "Authentication provider updated"
+    Then they should see a toast alert with text "Authentication provider updated"
     And the current page is the developer portal sso integration page
 
   Scenario: Client Secret is required
@@ -48,7 +48,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        | Doctor                                     |
       | Client Secret |                                            |
       | Realm         | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "Authentication provider has not been updated"
+    Then they should see a toast alert with text "Authentication provider has not been updated"
     And field "Client Secret" has inline error "can't be blank"
 
   Scenario: Client is required
@@ -58,7 +58,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        |                                            |
       | Client Secret | tardis                                     |
       | Realm         | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "Authentication provider has not been updated"
+    Then they should see a toast alert with text "Authentication provider has not been updated"
     And field "Client" has inline error "can't be blank"
 
   Scenario: Realm is required
@@ -68,7 +68,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        | Doctor |
       | Client Secret | tardis |
       | Realm         |        |
-    Then they should see the flash message "Authentication provider has not been updated"
+    Then they should see a toast alert with text "Authentication provider has not been updated"
     And field "Realm" has inline error "can't be blank"
 
   Scenario: Realm validation
@@ -77,6 +77,6 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > > New
       | Client        | Doctor     |
       | Client Secret | tardis     |
       | Realm         | not-an-url |
-    Then they should see the flash message "Authentication provider has not been updated"
+    Then they should see a toast alert with text "Authentication provider has not been updated"
     And field "Realm" has inline error "Invalid URL format"
 

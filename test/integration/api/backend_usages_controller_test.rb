@@ -33,7 +33,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
       backend_api_config_params = { backend_api_id: backend_api.id, path: 'foo' }
       post admin_service_backend_usages_path(service), params: { backend_api_config: backend_api_config_params }
       assert_redirected_to admin_service_backend_usages_path(service)
-      assert_equal 'Backend added to Product.', flash[:success]
+      assert_equal 'Backend added to Product', flash[:success]
       assert_equal backend_api, service.backend_api_configs.find_by(path: '/foo').backend_api
     end
   end
@@ -73,7 +73,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     config = service.backend_api_configs.create(backend_api: backend_api, path: 'foo')
     put admin_service_backend_usage_path(service, config), params: { backend_api_config: { path: 'bar' } }
     assert_redirected_to admin_service_backend_usages_path(service)
-    assert_equal 'Backend usage was updated.', flash[:success]
+    assert_equal 'Backend usage was updated', flash[:success]
     assert_equal '/bar', config.reload.path
   end
 

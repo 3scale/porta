@@ -41,4 +41,4 @@ Feature: Master Portal Provider's Plan Settings
       Then they should see "Upgrade 'banana.example.org'"
       And should see "You are changing the plan from Basic to Advanced"
       Then they press "Yes, change the plan to Advanced"
-      And should see the flash message "Plan upgraded"
+      And should see a toast alert with text "Plan upgraded"

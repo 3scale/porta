@@ -41,5 +41,5 @@ Feature: Integration errors of a product
         | 2024-01-01 13:00:00 UTC | Error 2 |
       When they select toolbar action "Purge"
       And confirm the dialog
-      Then they should see the flash message "All errors were purged"
+      Then they should see a toast alert with text "All errors were purged"
       And they should see "No integration errors reported for this service"

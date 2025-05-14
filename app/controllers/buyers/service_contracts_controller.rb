@@ -46,7 +46,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def edit
-    @service_plans = @service_contract.issuer.service_plans.where.not(id: @service_contract.plan)
+    @service_plans = @service_contract.issuer.service_plans # TODO: .where.not(id: @service_contract.plan)
 
     render layout: false # Rendered inside a modal
   end

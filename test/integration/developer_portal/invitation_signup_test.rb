@@ -99,7 +99,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     refute assigns(:user).valid?
-    assert_equal 'The code is incorrect or expired.', flash[:danger]
+    assert_equal 'The code is incorrect or expired', flash[:danger]
   end
 
   def test_create

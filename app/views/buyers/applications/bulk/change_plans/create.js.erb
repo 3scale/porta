@@ -15,4 +15,4 @@ const paidCol = document.querySelector('[data-label="Paid?"]') !== null;
   }
 <% end %>
 $.colorbox.close()
-ThreeScale.toast('<%= j @notice %>', 'success')
+<%= render 'shared/flash_message' %>

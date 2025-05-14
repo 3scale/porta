@@ -46,7 +46,7 @@ class Api::UsageLimitsControllerTest < ActionDispatch::IntegrationTest
     test "create renders correcty the flash notices" do
       post admin_application_plan_metric_usage_limits_path(plan, metric), xhr: true, params: usage_limit_params
       assert_response :success
-      assert_equal 'Usage Limit has been created.', flash[:success] # usage_limit created
+      assert_equal 'Usage Limit has been created', flash[:success] # usage_limit created
 
       post admin_application_plan_metric_usage_limits_path(plan, metric), xhr: true, params: usage_limit_params.deep_merge(usage_limit: { value: 300 })
       assert_response :success
@@ -54,7 +54,7 @@ class Api::UsageLimitsControllerTest < ActionDispatch::IntegrationTest
 
       post admin_application_plan_metric_usage_limits_path(plan, metric), xhr: true, params: usage_limit_params.deep_merge(usage_limit: { period: 'day' })
       assert_response :success
-      assert_equal 'Usage Limit has been created.', flash[:success] # different period, ok
+      assert_equal 'Usage Limit has been created', flash[:success] # different period, ok
     end
 
     test 'edit' do

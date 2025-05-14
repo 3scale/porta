@@ -27,6 +27,15 @@ module Provider
           end
         end
 
+        def destroy
+          destroy! do |success|
+            success.html do
+              flash[:success] = t('.success')
+              super
+            end
+          end
+        end
+
         def index
           index!
           @last_access_key = flash[:token]

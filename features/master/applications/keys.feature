@@ -16,7 +16,7 @@ Feature: Application Keys management
     And confirm the dialog
     And fill in "Current password" with "supersecret"
     And press "Confirm Password"
-    And should should see "You are now in super-user mode! Retry the action, please"
+    And should see "You are now in super-user mode! Retry the action, please"
     And follow "Regenerate"
     And confirm the dialog
     Then should see "The key was successfully changed"

@@ -22,6 +22,15 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
                                                                    params: params)
   end
 
+  def destroy
+    destroy! do |success|
+      success.html do
+        flash[:success] = t('.success')
+        super
+      end
+    end
+  end
+
   def update
     resource.validate_fields!
 
