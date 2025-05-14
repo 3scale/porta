@@ -10,8 +10,7 @@ const buyer = {
   admin: 'The Admin',
   contractedProducts: [],
   createApplicationPath: '',
-  createdAt: '',
-  multipleAppsAllowed: false
+  createdAt: ''
 }
 const buyers = [buyer]
 const props: Props = {
