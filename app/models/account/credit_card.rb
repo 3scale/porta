@@ -97,7 +97,6 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
 
   def unstore_credit_card!
     begin
-      # TODO: An exception here would fail the operation but should we notify provider/buyer on unsuccessful response?
       response = provider_payment_gateway.try!(:threescale_unstore, credit_card_auth_code)
     rescue Account::Gateway::InvalidSettingsError => error
       Rails.logger.warn("Couldn't unstore credit card details from the payment gateway: #{error.message}")
