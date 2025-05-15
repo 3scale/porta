@@ -116,8 +116,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     response = unstore_credit_card!
     notify_gateway_response(response)
   rescue => error
-    event = Accounts::CreditCardUnstoreFailedEvent.create(self, error.message)
-    Rails.application.config.event_store.publish_event(event)
+    notify_credit_card_unstore_failed(error.message)
   end
 
   def notify_credit_card_change
@@ -150,9 +149,11 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   end
 
   def notify_gateway_response(response)
-    if response&.failure?
-      event = Accounts::CreditCardUnstoreFailedEvent.create(self, response.inspect)
-      Rails.application.config.event_store.publish_event(event)
-    end
+    notify_credit_card_unstore_failed(response.inspect) if response&.failure?
+  end
+
+  def notify_credit_card_unstore_failed(error)
+    event = Accounts::CreditCardUnstoreFailedEvent.create(self, error)
+    Rails.application.config.event_store.publish_event(event)
   end
 end
