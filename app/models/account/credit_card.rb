@@ -103,7 +103,9 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     end
 
     unless payment_detail.destroyed?
-      clear_cc_attributes
+      self.credit_card_auth_code = nil
+      self.credit_card_expires_on = nil
+      self.credit_card_partial_number = nil
     end
 
     response
@@ -113,7 +115,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
 
   def unstore_credit_card_on_destroy!
     response = unstore_credit_card!
-    notify_gateway_response(response)
+    notify_credit_card_unstore_failed(response.inspect) if response&.fail
   rescue => error
     notify_credit_card_unstore_failed(error.message)
   end
@@ -145,10 +147,6 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     response = provider_payment_gateway.void(authorization)
     log_gateway_response(response, "void [transaction: #{authorization}]")
     response.success?
-  end
-
-  def notify_gateway_response(response)
-    notify_credit_card_unstore_failed(response.inspect) if response&.failure?
   end
 
   def notify_credit_card_unstore_failed(error)
