@@ -14,11 +14,7 @@ module CMS
     end
 
     def admin?
-      valid_token?(user_cms_token)
-    end
-
-    def valid_token?(token)
-      token.present? && token == @settings.cms_token
+      !!@session[:cms_edit]
     end
 
     def escape_html?
@@ -34,10 +30,6 @@ module CMS
     end
 
     private
-
-    def user_cms_token
-      @session[:cms_token]
-    end
 
     def cms_session
       ActiveSupport::StringInquirer.new(@session[:cms] || DEFAULT_MODE)
