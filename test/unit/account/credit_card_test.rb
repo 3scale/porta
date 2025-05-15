@@ -99,6 +99,22 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert_nil buyer.credit_card_partial_number
   end
 
+  test 'unstore credit card raises an event on error' do
+    provider = FactoryBot.create(:simple_provider, payment_gateway_type: :bogus)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider,
+                              credit_card_auth_code: "fdsa-3", # values ending on 3 raise error on unstore
+                              credit_card_expires_on: Date.new(2020, 4, 2),
+                              credit_card_partial_number: "0989")
+
+    assert_raise(ActiveMerchant::Billing::Error) do
+      buyer.unstore_credit_card!
+    end
+
+    assert_equal "fdsa-3", buyer.credit_card_auth_code
+    assert_equal Date.new(2020, 4, 2), buyer.credit_card_expires_on_with_default
+    assert_equal "0989", buyer.credit_card_partial_number
+  end
+
   test '#credit_card_editable? returns false for master account' do
     refute master_account.credit_card_editable?
   end

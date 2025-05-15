@@ -37,7 +37,7 @@ module Logic
           cms.has_many :all_partials,         class_name: 'CMS::Partial'
           cms.has_many :portlets,             class_name: 'CMS::Portlet'
 
-          cms.has_many :provided_groups,      class_name: 'CMS::Group', dependent: :delete_all
+          cms.has_many :provided_groups,      class_name: 'CMS::Group', dependent: :destroy
           cms.has_many :email_templates,      class_name: 'CMS::EmailTemplate',
                         extend: ::CMS::EmailTemplate::ProviderAssociationExtension
         end

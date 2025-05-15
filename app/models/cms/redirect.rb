@@ -11,6 +11,4 @@ class CMS::Redirect < ApplicationRecord
 
   include NormalizePathAttribute
   verify_path_format :source, :target
-
-  self.background_deletion_method = :delete
 end

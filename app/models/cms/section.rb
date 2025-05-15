@@ -9,7 +9,6 @@ class CMS::Section < ApplicationRecord
   self.table_name = :cms_sections
 
   self.background_deletion = %w[group_sections]
-  self.background_deletion_method = :delete
 
   self.allowed_search_scopes = %i[parent_id]
 
