@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Button,
+  Flex,
+  FlexItem,
   Modal,
   ModalVariant,
   Pagination,
@@ -173,7 +175,13 @@ const TableModal = <T extends IRecord>({
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      {isLoading ? <Spinner size="xl" /> : rows.length === 0 ? <NoMatchFound /> : (
+      {isLoading ? (
+        <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+          <FlexItem>
+            <Spinner size="lg" />
+          </FlexItem>
+        </Flex>
+      ) : rows.length === 0 ? <NoMatchFound /> : (
         <Table
           aria-label={title}
           cells={cells}
