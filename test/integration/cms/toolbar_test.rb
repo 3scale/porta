@@ -8,9 +8,9 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
   end
 
   test 'CMS toolbar rendering' do
-    cms_token = @provider.settings.cms_token!
+    provider_id = @provider.id
     expires_at = Time.now.utc.round + 1.minute
-    signature = CMS::Signature.generate(cms_token, expires_at)
+    signature = CMS::Signature.generate(provider_id, expires_at)
     host! @provider.internal_domain
 
     get "/", params: { expires_at: expires_at.to_i, signature: }
