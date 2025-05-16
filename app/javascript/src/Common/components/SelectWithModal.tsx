@@ -99,7 +99,12 @@ const SelectWithModal = <T extends IRecord>({
   }, [page, shouldHaveModal, modalOpen])
 
   useEffect(() => {
-    if (!fetchItems || !modalOpen) {
+    if (!modalOpen) {
+      return
+    }
+
+    if (!fetchItems) {
+      onLocalSearch(query)
       return
     }
 
@@ -122,7 +127,7 @@ const SelectWithModal = <T extends IRecord>({
 
   const clearResults = () => {
     setQuery('')
-    setSearchResults([], 0)
+    setSearchResults(initialItems, initialItems.length)
   }
 
   const handleModalOnSetPage = (newPage: number) => {
@@ -176,7 +181,7 @@ const SelectWithModal = <T extends IRecord>({
           sortBy={sortBy}
           title={title}
           onClose={handleOnModalClose}
-          onSearch={fetchItems ? setQuery : onLocalSearch}
+          onSearch={setQuery}
           onSelect={handleOnModalSelect}
         />
       )}
