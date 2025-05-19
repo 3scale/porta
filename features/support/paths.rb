@@ -226,6 +226,9 @@ World(Module.new do
       access_token = AccessToken.find_by(name: $2) || @access_token
       edit_provider_admin_user_access_token_path(access_token)
 
+    when 'the notification preferences page'
+      provider_admin_user_notification_preferences_path
+
     #
     # Account management (Dev portal)
     #
