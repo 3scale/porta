@@ -33,6 +33,11 @@ class NotificationPreferences < ApplicationRecord
     super Hash(preferences).stringify_keys
   end
 
+  def new_preferences=(updated_preferences)
+    prefs = updated_preferences.transform_values { |v| ActiveModel::Type::Boolean.new.cast(v) }
+    self.preferences = preferences.merge(prefs)
+  end
+
   def include?(preference)
     enabled_notifications.include?(preference.to_s)
   end

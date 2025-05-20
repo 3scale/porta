@@ -509,6 +509,12 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       namespace :personal, defaults: { format: :json } do
         resources :access_tokens, except: %i[new edit update]
+        resources :notification_preferences do
+          collection do
+            get :index
+            put :update
+          end
+        end
       end
 
       # /admin/api/provider
