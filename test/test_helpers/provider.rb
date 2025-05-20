@@ -11,6 +11,7 @@ module TestHelpers
           provider.create_onboarding!
           SimpleLayout.new(provider).import!
           buyer = provider.buyers.take
+          FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
           service = FactoryBot.create(:service, account: provider)
           FactoryBot.create(:account_contract, plan: FactoryBot.create(:account_plan, issuer: provider))
           FactoryBot.create(:application_contract, user_account: provider, service: provider.default_service)
@@ -42,7 +43,11 @@ module TestHelpers
           FactoryBot.create(:line_item_variable_cost, metric: service.metrics.take, invoice:)
           FactoryBot.create(:payment_intent, invoice:)
           FactoryBot.create(:payment_transaction, success: true, invoice:)
-          FactoryBot.create(:payment_detail, account: provider)
+          FactoryBot.create(:payment_transaction, success: false, invoice:)
+          FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-1")
+          provider.buyers.each_with_index do |buyer, idx|
+            FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-#{idx}")
+          end
           FactoryBot.create(:invoice_counter, provider_account: provider, invoice_prefix: ::Time.now.year.to_s)
           FactoryBot.create(:webhook, account: provider, account_created_on: true, active: true)
           FactoryBot.create(:policy, account: provider, name: 'my-policy', version: '1.0')

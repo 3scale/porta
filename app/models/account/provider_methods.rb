@@ -19,7 +19,7 @@ module Account::ProviderMethods
 
     has_one :provider_constraints, foreign_key: 'provider_id', dependent: :delete
 
-    has_one :forum
+    has_one :forum, dependent: :destroy
 
     has_one  :web_hook, inverse_of: :account, dependent: :delete
     has_many :alerts

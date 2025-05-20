@@ -54,6 +54,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   end
 
   def destroy
+    # TODO: should we notify somehow when #unstore_credit_card! returned a failure response?
     current_account.unstore_credit_card!
     current_account.delete_billing_address
     current_account.save

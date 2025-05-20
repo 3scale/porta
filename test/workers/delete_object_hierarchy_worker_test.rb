@@ -108,26 +108,54 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   class ObjectCachingTest < ActiveSupport::TestCase
     setup do
-      @page = FactoryBot.create(:cms_page)
-      @page.publish!
-      assert_equal 2, @page.versions.count
+      @user = FactoryBot.create(:user)
+      FactoryBot.create_list(:access_token, 3, owner: @user)
+      assert_equal 3, @user.access_tokens.count
     end
 
     test "retrieves objects minimal times from db and clears cache" do
       object_cache = {}
-      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+      hierarchy = %W[Plain-User-#{@user.id} Association-User-#{@user.id}:access_tokens]
       job = DeleteObjectHierarchyWorker.new(*hierarchy)
       job.instance_variable_set(:@object_cache, object_cache)
 
-      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
-      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
-        # cms_templates_versions are never loaded by id as they are just `take`n, cached and not reloaded before destroy
-        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_version\b.*\bid['"` ]{0,2}=/) do
-          job.perform(*hierarchy)
+      # user is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\busers\b.*\bid['"` ]{0,2}=/) do
+        # access_tokens are never loaded by id as they are just `take`n, cached and not reloaded before destroy
+        assert_number_of_queries(0, matching: /SELECT.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
+          assert_number_of_queries(3, matching: /DELETE.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
+            job.perform(*hierarchy)
+          end
         end
       end
 
       assert_empty object_cache # records are removed from cache once deleted
+      assert_raise(ActiveRecord::RecordNotFound) { @user.reload }
+    end
+  end
+
+  class DeleteAllAssociationTest < ActiveSupport::TestCase
+    setup do
+      @page = FactoryBot.create(:cms_page)
+      @page.publish!
+      @page.draft = "another draft"
+      @page.publish!
+      assert_equal 3, @page.versions.count
+    end
+
+    test "uses #delete_all instead of individual record deletes for such associations" do
+      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+
+      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
+        # cms_templates_versions are never loaded by id but delete(d)_all
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/) do
+          # ideally we only want one invocation but deletion is also invoked once the Page record is `destroy!`-ed
+          assert_number_of_queries(2, matching: /DELETE.*\bcms_templates_versions\b.*/) do
+            DeleteObjectHierarchyWorker.perform_now(*hierarchy)
+          end
+        end
+      end
 
       assert_raise(ActiveRecord::RecordNotFound) { @page.reload }
     end
@@ -137,7 +165,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 
     setup do
-      @object = FactoryBot.create(:simple_account)
+      @object = FactoryBot.create(:simple_provider)
       System::ErrorReporting.stubs(:report_error)
     end
 
@@ -334,7 +362,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_equal 1, provider2.buyers.count
     end
 
-    test "delete with a payment_gateway_setting" do
+    test "delete provider with a payment_gateway_setting" do
       pgs = FactoryBot.create(:payment_gateway_setting, account: provider)
       provider.schedule_for_deletion!
       perform_enqueued_jobs(queue: "deletion") do
@@ -381,6 +409,92 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       assert_equal before_objects, all_objects
     end
 
+    test "deleting provider with a buyer with unresolved invoices" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert_not_empty buyer.invoices.unresolved
+      assert buyer.payment_detail.save
+      assert buyer.reload.profile
+      provider.schedule_for_deletion!
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
+
+    class DeleteWithPaymentDetails < ActiveSupport::TestCase
+      include ActiveJob::TestHelper
+
+      attr_reader :provider
+
+      setup do
+        @provider = FactoryBot.create(:provider_account)
+        ActionMailer::Base.deliveries.clear
+      end
+
+      test "notify provider on buyer credit card failed unstore" do
+        buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+        FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-2")
+        preferences = provider.first_admin.notification_preferences
+        preferences.enabled_notifications = ["credit_card_unstore_failed"]
+        preferences.user.save!
+
+        Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later buyer
+          end
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        assert_includes ActionMailer::Base.deliveries.first.header["X-SMTPAPI"].value, "CreditCardUnstoreFailedEvent"
+      end
+
+      test "delete a provider with failure unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-2")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with error unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-3")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with buyer credit credit cards" do
+        buyers = FactoryBot.create_list(:buyer_account, 3, provider_account: provider)
+        buyers.each_with_index do |buyer, idx|
+          FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-#{idx}")
+        end
+
+        provider.schedule_for_deletion!
+
+        ::Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later provider
+          end
+        end
+
+        # TODO: assert_empty ActionMailer::Base.deliveries
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[0].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[1].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[2].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+    end
+
     class DeleteCompleteAccountTest < ActiveSupport::TestCase
       include ActiveJob::TestHelper
       include TestHelpers::Provider
@@ -388,15 +502,28 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       # not specific to a provider or should not be deleted with the provider
       NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, Partner, LogEntry, SystemOperation]
 
-      test 'perform big account destroy in background' do
+      test "perform big account destroy in background" do
         provider = create_a_complete_provider
         assert_equal 1, Account.where(provider: true).count
-        assert_equal 1, Account.where(buyer: true).count
+        assert_equal 3, Account.where(buyer: true).count
 
         provider.schedule_for_deletion!
         assert_empty models_without_objects.map(&:to_s)
 
         perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(provider) }
+
+        assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
+      end
+
+      test "perform big account destroy" do
+        provider = create_a_complete_provider
+        assert_equal 1, Account.where(provider: true).count
+        assert_equal 3, Account.where(buyer: true).count
+
+        provider.schedule_for_deletion!
+        assert_empty models_without_objects.map(&:to_s)
+
+        provider.reload.destroy!
 
         assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
       end
@@ -473,7 +600,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
-        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
           object_of_master?(Account.find(object.account_id))
         when Feature
           object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
@@ -483,7 +610,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object_of_master?(object.provider) if object.provider
         when Configuration::Value
           object_of_master?(object.configurable_type.constantize.find(object.configurable_id))
-        when UserTopic, Notification, UserSession
+        when UserTopic, MemberPermission, Notification, UserSession
           object_of_master?(User.find(object.user_id))
         when Metric
           owner = object.owner
@@ -496,6 +623,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object.receiver == master_account
         when Plan
           object_of_master?(object.issuer) if object.issuer
+        when Post, Topic, TopicCategory
+          object_of_master?(Forum.find(object.forum_id))
         when ProxyConfigAffectingChange, ProxyRule
           object_of_master?(Proxy.find(object.proxy_id))
         when ServiceToken, Proxy
@@ -503,7 +632,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         when SystemOperation
           objects = [object.messages.take, object.mail_dispatch_rules.take].compact
           object_of_master?(objects.first)
-        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints, TopicCategory
+        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints
           false # assume the test master has none of these
         else
           raise "Object of type #{object}"
@@ -685,7 +814,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test "deleting CMS::GroupSections through sections" do
       cms_group = FactoryBot.create(:cms_group)
-      section = cms_group.provider.provided_sections.first
+      section = FactoryBot.create(:cms_section, provider: cms_group.provider, parent: cms_group.provider.provided_sections.first)
       group_section = cms_group.group_sections.create(section:)
 
       perform_enqueued_jobs(queue: :deletion) do

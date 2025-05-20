@@ -17,7 +17,6 @@ class Profile < ApplicationRecord
 
   after_initialize :set_company_size
 
-  self.background_deletion_method = :delete
   audited
   state_machine :initial => :private do
 

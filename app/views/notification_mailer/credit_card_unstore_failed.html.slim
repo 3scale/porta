@@ -1,0 +1,12 @@
+p
+  | Dear #{@receiver.informal_name},
+
+p
+  | This is to notify you that we failed to unstore from your payment provider #{@payment_gateway_name}
+    the credit card '#{@card_partial}' of #{@account_name}.
+
+p
+  | The error message for the failure was: #{@error_message}
+
+p
+  | Please remove your customer's card details from your payment provider manually if necessary.

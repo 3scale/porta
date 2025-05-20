@@ -56,14 +56,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
         raise DoNotRetryError, "Background deleting #{ar_object.class}:#{ar_object.id} which is not destroyable."
       end
 
-      if ar_object.is_a?(FeaturesPlan)
-        # This is an ugly hack to handle lack of `#id` but we have only FeaturesPlans with a composite primary key.
-        # Rails 7.1 supports composite primary keys so we can implement universal handling. See [FeaturesPlan].
-        # Now to avoid complications, just sweep it under the rag.
-        FeaturesPlan.where(feature_id: ar_object.feature_id, plan_id: ar_object.plan_id).delete_all
-        return []
-      end
-
       ar_object_str = "#{ar_object.class}-#{ar_object.id}"
 
       [
@@ -133,14 +125,29 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     # FYI if there is no such association (e.g. a method name), nil will be returned (counts as not by association).
     # Another possible confusion with hand-crafted hierarchies may occur when before a
     # "Plain-..." entry, there is set an unrelated "Association-..." entry, then incorrect association will be set.
-    match = hierarchy.last&.match(ASSOCIATION_RE)
-    association = match[:klass].constantize.reflect_on_association(match[:association]) if match
+    if ar_object.destroyed_by_association
+      reflection = ar_object.destroyed_by_association
+    else
+      # the association was not cached
+      match = hierarchy.last&.match(ASSOCIATION_RE)
+      reflection = match[:klass].constantize.reflect_on_association(match[:association]) if match
+    end
     # doing without a reload is a mess related to Service, Proxy and PaymentGatewaySettings, maybe improve next life
     ar_object.reload unless ar_object.class.background_deletion.empty?
-    ar_object.destroyed_by_association = association
-    ar_object.background_deletion_method_call
+    ar_object.destroyed_by_association = reflection
+    call_delete_method(ar_object)
 
     evict_object(ar_object)
+  end
+
+  def call_delete_method(ar_object)
+    association = ar_object.destroyed_by_association
+    method = association&.options&.fetch(:dependent, nil) == :delete ? :delete : :destroy!
+    ar_object.send(method)
+  end
+
+  def cache_object(ar_object)
+    @object_cache[[ar_object.class.name, ar_object.id.to_s]] = ar_object
   end
 
   def cached_object(str_klass, str_id)
@@ -155,11 +162,14 @@ class DeleteObjectHierarchyWorker < ApplicationJob
   def handle_association(ar_object, association, hierarchy_association_string)
     reflection = ar_object.class.reflect_on_association(association)
 
+    return [] if delete_all_association(ar_object, association, reflection)
+
     case reflection.macro
     when :has_many
       # here we keep original hierarchy entry if we still find an associated object
       dependent = ar_object.public_send(association).take
       if dependent
+        cache_object(dependent)
         dependent.destroyed_by_association = reflection
         [hierarchy_association_string, *hierarchy_entries_for(dependent)]
       else
@@ -168,11 +178,20 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     when :has_one
       # maximum of one associated so we never keep the original hierarchy entry
       dependent = ar_object.public_send(association)
-      dependent.destroyed_by_association = reflection if dependent
+      if dependent
+        cache_object(dependent)
+        dependent.destroyed_by_association = reflection
+      end
       hierarchy_entries_for dependent
     else
       raise ArgumentError, "Cannot handle association #{ar_object}:#{association} type #{reflection.macro}"
     end
+  end
+
+  def delete_all_association(ar_object, association, reflection)
+    return unless reflection.options[:dependent] == :delete_all
+
+    ar_object.send(association).delete_all
   end
 
   # previously an example invocation could be with

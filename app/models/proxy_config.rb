@@ -14,8 +14,6 @@ class ProxyConfig < ApplicationRecord
   # Do not set it too high though the column accept until 16.megabytes
   MAX_CONTENT_LENGTH = 2.megabytes
 
-  self.background_deletion_method = :delete
-
   belongs_to :proxy, optional: false
   belongs_to :user, optional: true
 

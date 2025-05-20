@@ -62,7 +62,6 @@ class Account < ApplicationRecord
     account_plans
     features
     buyer_accounts
-    payment_detail
     payment_gateway_setting
     buyer_invoices
     profile

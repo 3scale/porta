@@ -5,14 +5,13 @@ class CMS::Group < ApplicationRecord
   self.table_name = :cms_groups
 
   self.background_deletion = %w[group_sections permissions]
-  self.background_deletion_method = :delete
 
   belongs_to :provider, :class_name => "Account"
 
   validates :name, :provider, presence: true, length: { maximum: 255 }
   validates :name, uniqueness: { scope: [:provider_id], case_sensitive: true }
 
-  has_many :group_sections, :class_name => 'CMS::GroupSection', inverse_of: :group, dependent: :destroy
+  has_many :group_sections, :class_name => 'CMS::GroupSection', inverse_of: :group, dependent: :delete_all
   has_many :sections, :class_name => 'CMS::Section', :through => :group_sections
 
   has_many :permissions, :class_name => 'CMS::Permission', inverse_of: :group, dependent: :delete_all
