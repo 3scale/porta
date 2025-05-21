@@ -67,9 +67,7 @@ class MessageTest < ActiveSupport::TestCase
 
     sender = FactoryBot.create(:simple_provider)
     approved_buyer = FactoryBot.create(:simple_buyer, provider_account: sender)
-    suspended_buyer = FactoryBot.create(:simple_buyer, provider_account: sender)
-    suspended_buyer.marked_for_suspension = true
-    suspended_buyer.suspend!
+    suspended_buyer = FactoryBot.create(:simple_buyer, provider_account: sender, state: 'suspended')
     recipients = [approved_buyer, suspended_buyer]
 
     recipients.each do |account|
