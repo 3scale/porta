@@ -3,7 +3,7 @@
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'table_toolbar'
 
-table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" data-toolbar-props=presenter.toolbar_props.to_json
+table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Users table" data-toolbar-props=presenter.toolbar_props.to_json data-ouia-component-id="users"
   thead
     tr role="row"
       th role="columnheader" scope="col" Name
