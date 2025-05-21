@@ -201,12 +201,17 @@ class Message < ApplicationRecord
   protected
 
   def can_send_message?(recipient)
-    if recipient.emails.present?
-      true
-    else
-      logger.warn "Skipping message notification for Message(id:#{id}) because account has no emails."
-      false
+    if recipient.receiver.suspended_or_scheduled_for_deletion?
+      logger.warn "Skipping message notification for Message(id:#{id}) because account is suspended."
+      return false
     end
+
+    if recipient.emails.blank?
+      logger.warn "Skipping message notification for Message(id:#{id}) because account has no emails."
+      return false
+    end
+
+    true
   end
 
   def attempt_to_send_message(recipient)
