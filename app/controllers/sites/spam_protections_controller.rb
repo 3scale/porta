@@ -8,10 +8,9 @@ class Sites::SpamProtectionsController < Sites::BaseController
 
   def update
     if @settings.update(params[:settings])
-      flash[:notice] = 'Bot protection settings updated.'
-      redirect_to edit_admin_site_spam_protection_url
+      redirect_to edit_admin_site_spam_protection_url, t('.success')
     else
-      flash[:error] = 'There were problems saving the settings.'
+      flash.now[:danger] = t('.error')
       render :action => 'edit'
     end
   end

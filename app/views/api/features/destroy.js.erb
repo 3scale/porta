@@ -1,6 +1,8 @@
-<%# If EventTarget is replaced immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
-setTimeout(() => {
-  document.getElementById('<%= dom_id(@feature) %>').remove();
-});
+<% if flash[:success].present? %>
+  <%# If EventTarget is replaced immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+  setTimeout(() => {
+    document.getElementById('<%= dom_id(@feature) %>').remove();
+  });
+<% end %>
 
-jQuery.flash.notice('Feature has been deleted.');
+<%= render 'shared/flash_alerts' %>

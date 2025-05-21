@@ -43,7 +43,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
       post invitee_signup_path(invitation_token: invitation.token, user: user_params)
     end
 
-    assert_equal I18n.t('flash.signups.create.notice'), flash[:notice]
+    assert_equal I18n.t('developer_portal.accounts.invitee_signups.create.success'), flash[:notice]
     assert_redirected_to login_path
   end
 

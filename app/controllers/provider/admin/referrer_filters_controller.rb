@@ -10,7 +10,7 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
       if request.xhr?
         render
       else
-        redirect_to return_url, notice: 'Referrer filter has been created.'
+        redirect_to return_url, success: t('.success')
       end
     else
       @error = @referrer_filter.errors.full_messages.to_sentence
@@ -18,8 +18,7 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
       if request.xhr?
         render :action => 'error'
       else
-        flash[:error] = @error
-        redirect_to(return_url)
+        redirect_to return_url, danger: @error
       end
     end
   end
@@ -31,7 +30,7 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
     if request.xhr?
       render
     else
-      redirect_to return_url, notice: 'Referrer filter has been deleted.'
+      redirect_to return_url, success: t('.success')
     end
   end
 

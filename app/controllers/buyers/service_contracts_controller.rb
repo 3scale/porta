@@ -37,17 +37,16 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @service_contract = @account.bought_service_contracts.create(service_contract_params)
 
     if @service_contract.persisted?
-      flash[:success] = "Service contract created successfully"
+      flash[:success] = t('.success') # Page will be reloaded
     else
-      @service_plans = @service.service_plans
-      @form = render_to_string :action => :new, :layout => false, :format => :html
+      flash.now[:danger] = t('.error')
     end
 
     respond_to(:js)
   end
 
   def edit
-    @service_plans = @service_contract.issuer.service_plans
+    @service_plans = @service_contract.issuer.service_plans # TODO: .where.not(id: @service_contract.plan)
 
     render layout: false # Rendered inside a modal
   end
@@ -57,7 +56,9 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     new_plan = service.service_plans.find(service_contract_plan_id)
 
     if @service_contract.change_plan!(new_plan)
-      flash[:success] = "Plan of the contract was changed."
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
     end
 
     respond_to(:js)
@@ -68,9 +69,9 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     service_contract = service_subscription.unsubscribe(@service_contract)
 
     if service_contract.destroyed?
-      flash[:notice] = t('service_contracts.unsubscribe_confirmation')
+      flash[:success] = t('.success')
     else
-      flash[:error] = t('service_contracts.unsubscribe_failure')
+      flash[:danger] = t('.error')
     end
 
     redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))
@@ -78,9 +79,9 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   def approve
     if resource.accept
-      flash[:notice] = 'Service contract was approved.'
+      flash[:success] = t('.success')
     else
-      flash[:error] = 'Cannot approve service contract.'
+      flash[:danger] = t('.error')
     end
 
     redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))

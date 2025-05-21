@@ -40,7 +40,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
     assert_no_difference backend_api.metrics.method(:count) do
       post provider_admin_backend_api_metrics_path(backend_api), params: { metric: metric_params }
-      assert_equal 'Metric could not be created', flash[:error]
+      assert_equal 'The metric could not be created', flash[:danger]
     end
   end
 
@@ -55,7 +55,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
     assert_no_difference backend_api.metrics.method(:count) do
       post provider_admin_backend_api_metric_children_path(backend_api, hits), params: { metric: metric_params }
-      assert_equal 'Method could not be created', flash[:error]
+      assert_equal 'The method could not be created', flash[:danger]
     end
   end
 
@@ -73,7 +73,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
     assert_equal new_description, ads.reload.description
 
     put provider_admin_backend_api_metric_path(backend_api, ads), params: { metric: { friendly_name: '' } }
-    assert_equal 'Metric could not be updated', flash[:error]
+    assert_equal 'The metric could not be updated', flash[:danger]
     assert_select '#metric_friendly_name[aria-invalid="true"]'
   end
 

@@ -20,7 +20,7 @@ Feature: Product > Integration > Backends > Edit
     Given they go to the edit backend usage page of "Backend 1" for product "My API"
     When the form is submitted with:
       | Public Path | /banana |
-    Then they should see "Backend usage was updated."
+    Then they should see "Backend usage was updated"
     And should see the following table:
       | Name      | Public path |
       | Backend 1 | /banana     |

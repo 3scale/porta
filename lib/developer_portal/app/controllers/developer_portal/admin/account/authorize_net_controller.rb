@@ -19,7 +19,7 @@ module DeveloperPortal::Admin::Account
 
       if authorize_net.has_credit_card?(auth_response)
         authorize_net.update_user(auth_response)
-        flash[:success] = 'Credit Card details were saved correctly'
+        flash[:notice] = 'Credit Card details were saved correctly'
       else
         delete_profile(cim_gateway, customer)
       end

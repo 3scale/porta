@@ -19,8 +19,8 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully uploaded.', flash[:notice]
-    assert_nil flash[:error]
+    assert_equal 'The logo was successfully uploaded', flash[:success]
+    assert_nil flash[:danger]
 
     sizes = %i(large medium thumb invoice).map do |style|
       file = Tempfile.new(["logo-", ".jpg"])
@@ -35,8 +35,8 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     put provider_admin_account_logo_path, params: { profile: {logo: small_logo_file} }
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully uploaded.', flash[:notice]
-    assert_nil flash[:error]
+    assert_equal 'The logo was successfully uploaded', flash[:success]
+    assert_nil flash[:danger]
 
     sizes = %i(large medium thumb invoice).map do |style|
       file = Tempfile.new(["logo-", ".png"])
@@ -53,8 +53,8 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_match /Logo content type invalid/, flash[:error]
-    assert_nil flash[:notice]
+    assert_match /Logo content type invalid/, flash[:danger]
+    assert_nil flash[:success]
   end
 
   test 'update unauthorized without branding switch' do
@@ -75,8 +75,8 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'The logo was successfully deleted.', flash[:notice]
-    assert_nil flash[:error]
+    assert_equal 'The logo was successfully deleted', flash[:success]
+    assert_nil flash[:danger]
   end
 
   test 'destroy when it should fail' do
@@ -89,8 +89,8 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
-    assert_equal 'Error 1st and Another Error', flash[:error]
-    assert_nil flash[:notice]
+    assert_equal 'Error 1st and Another Error', flash[:danger]
+    assert_nil flash[:success]
   end
 
   test 'destroy unauthorized without branding switch' do

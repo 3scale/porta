@@ -20,18 +20,18 @@ Feature: Provider webhooks
     When they go to the edit webhooks page
     And the form is submitted with:
       | URL | http://example.com |
-    Then they should see the flash message "Webhooks settings were successfully updated."
+    Then they should see a toast alert with text "Webhooks settings were successfully updated"
 
   Scenario: Testing the webhook enpoint
     When they go to the edit webhooks page
     And press "Ping!"
-    Then they should see the flash message "http://3scale-test.org responded with 200"
+    Then they should see a toast alert with text "http://3scale-test.org responded with 200"
 
   Scenario: Webhook endpoint is wrong
     Given the provider has a webhook with endpoint "http:://banana"
     When they go to the edit webhooks page
     And press "Ping!"
-    Then they should see the flash message "Hostname not supplied: 'http:://banana'"
+    Then they should see a toast alert with text "Hostname not supplied: 'http:://banana'"
 
   Scenario: Webhooks switch is denied
     Given the provider has "web_hooks" switch denied

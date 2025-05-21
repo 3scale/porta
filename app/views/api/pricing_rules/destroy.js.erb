@@ -1,17 +1,18 @@
-<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
-setTimeout(() => {
-  document.getElementById('<%= dom_id(@pricing_rule) %>').remove();
-});
+<% if flash[:success].present? %>
+  <%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+  setTimeout(() => {
+    document.getElementById('<%= dom_id(@pricing_rule) %>').remove();
+  });
 
-void function () {
-  const counter = document.getElementById('#pricing_rules_counter_<%= @pricing_rule.metric.id %>');
-  counter.innerText = <%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>;
-}();
+  void function () {
+    const counter = document.getElementById('pricing_rules_counter_<%= @pricing_rule.metric.id %>');
+    counter.innerText = <%= @pricing_rule.metric.pricing_rules.where(plan_id: @pricing_rule.plan.id).size %>;
+  }();
+  <%# TODO: this should happend when number of metrics falls below 2, not pricing_rules.
+    if @plan.pricing_rules.count < 2
+      page.hide('total_cost')
+    end
+  %>
+<% end %>
 
-jQuery.flash.notice('Pricing rule has been deleted.');
-
-<%# TODO: this should happend when number of metrics falls below 2, not pricing_rules.
-  if @plan.pricing_rules.count < 2
-    page.hide('total_cost')
-  end
-%>
+<%= render 'shared/flash_alerts' %>

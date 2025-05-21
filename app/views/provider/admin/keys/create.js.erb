@@ -6,7 +6,6 @@
     var keys = container.find("table#keys tbody");
     var key = <%= render_to_js_string('key', :cinstance => @cinstance, :key => @key) %>;
     $(key).hide().appendTo(keys.<%= @cinstance.backend_version.oauth? ? 'empty' : 'slice' %>()).fadeIn();
-    $.flash.notice('<%= @notice %>')
 
   <% else %>
     <% if @error %>
@@ -29,3 +28,5 @@
 
   container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
 })(jQuery);
+
+<%= render 'shared/flash_alerts' %>

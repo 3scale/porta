@@ -70,7 +70,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
       delete provider_admin_backend_api_path(backend_api)
       assert_redirected_to provider_admin_dashboard_path
       assert_not BackendApi.exists? backend_api.id
-      assert_equal 'Backend will be deleted shortly.', flash[:notice]
+      assert_equal 'Backend will be deleted shortly', flash[:success]
     end
   end
 
@@ -81,7 +81,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     perform_enqueued_jobs do
       delete provider_admin_backend_api_path(backend_api)
       assert backend_api.reload.published?
-      assert_equal 'cannot be deleted because it is used by at least one Product', flash[:error]
+      assert_equal 'cannot be deleted because it is used by at least one Product', flash[:danger]
     end
   end
 

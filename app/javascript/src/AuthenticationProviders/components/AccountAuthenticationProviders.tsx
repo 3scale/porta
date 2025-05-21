@@ -13,8 +13,9 @@ import { AuthenticationProvidersTable } from 'AuthenticationProviders/components
 import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/components/AuthenticationProvidersEmptyState'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { ajaxJSON } from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import { toast } from 'utilities/toast'
 
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 import type { Props as TableProps } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 
@@ -42,14 +43,12 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
       setLoading(true)
       setIsSSOEnabled(true)
 
-      void ajaxJSON(ssoPath, { method: 'POST' })
+      void ajaxJSON<Required<IAlert> & { ok: boolean }>(ssoPath, { method: 'POST' })
         .then(res => res.json())
-        .then(res => {
-          if (res.error) {
-            flash.error(res.error)
+        .then(({ type, message, ok }) => {
+          toast(message, type)
+          if (!ok) {
             setIsSSOEnabled(false)
-          } else if (res.notice) {
-            flash.notice(res.notice)
           }
         })
         .finally(() => {
@@ -65,16 +64,11 @@ const AccountAuthenticationProviders: FunctionComponent<Props> = ({
       setLoading(true)
       setIsSSOEnabled(false)
 
-      void ajaxJSON(ssoPath, { method: 'DELETE' })
+      void ajaxJSON<Required<IAlert> & { ok: boolean }>(ssoPath, { method: 'DELETE' })
         .then(res => res.json())
-        .then(res => {
-          if (res.error) {
-            setIsSSOEnabled(true)
-            flash.error(res.error)
-          } else if (res.notice) {
-            setIsSSOEnabled(false)
-            flash.notice(res.notice)
-          }
+        .then(({ type, message, ok }) => {
+          toast(message, type)
+          setIsSSOEnabled(!ok)
         })
         .finally(() => {
           setLoading(false)

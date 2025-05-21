@@ -28,9 +28,9 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
     @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.to_h.symbolize_keys)
 
     if @authentication_provider.save
-      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration created'
+      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), success: t('.success')
     else
-      flash.now[:error] = t('.error')
+      flash.now[:danger] = t('.error')
       render 'new'
     end
   end
@@ -48,16 +48,16 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
     @authentication_provider = authentication_provider
 
     if @authentication_provider.update(authentication_provider_params)
-      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration updated'
+      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), success: t('.success')
     else
-      flash.now[:error] = t('.error')
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
 
   def destroy
     authentication_provider.destroy
-    flash[:notice] = t('.success')
+    flash[:success] = t('.success')
     path = provider_admin_account_authentication_providers_path
 
     respond_to do |format|
@@ -94,8 +94,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
     error = t('.authorize_changes.error')
     respond_to do |format|
       format.html do
-        flash[:error] = error
-        redirect_to provider_admin_account_authentication_providers_path
+        redirect_to provider_admin_account_authentication_providers_path, danger: error
       end
       format.json { render json: { error: error } }
     end

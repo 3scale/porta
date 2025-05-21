@@ -15,4 +15,4 @@ const paidCol = document.querySelector('[data-label="Paid?"]') !== null;
   }
 <% end %>
 $.colorbox.close()
-$.flash('<%= j @notice %>')
+<%= render 'shared/flash_alerts' %>

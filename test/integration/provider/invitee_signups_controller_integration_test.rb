@@ -23,7 +23,7 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
       post provider_invitee_signup_path(invitation_token: invitation.token, user: user_params)
     end
 
-    assert_equal I18n.t('flash.signups.create.notice'), flash[:notice]
+    assert_equal I18n.t('provider.invitee_signups.create.success'), flash[:success]
     assert_redirected_to provider_login_path
   end
 
@@ -56,7 +56,7 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
 
     get provider_invitee_signup_path(invitation_token: 'abc123')
 
-    assert_equal I18n.t('flash.signups.already_logged_in'), flash[:notice]
+    assert_equal I18n.t('provider.invitee_signups.already_logged_in'), flash[:info]
     assert_redirected_to provider_admin_dashboard_url
   end
 

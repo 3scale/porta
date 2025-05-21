@@ -54,7 +54,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
       session.delete(:invitation_sso_system_name)
       user_created_webhook(@user)
 
-      flash[:notice] = t('flash.signups.create.notice')
+      flash[:notice] = t('.success')
       redirect_to(login_url)
     else
       render_show

@@ -38,7 +38,7 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
     @fields_definition = field_definitions.build(field_definition_params)
 
     if @fields_definition.save
-      flash[:notice] = 'Field was successfully created.'
+      flash[:success] = t('.success')
 
     elsif @fields_definition.errors[:target].empty?
       @optional_fields = @fields_definition.target.classify.constantize.builtin_fields -

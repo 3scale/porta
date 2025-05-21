@@ -1,6 +1,15 @@
-$.colorbox.close(); <%# FIXME: do we need this? %>
-<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
-setTimeout(() => {
-  $('#plan-widget-with-actions').replaceWith(<%= json render('buyers/accounts/account_plan', :contract => @contract, :plan => @plan) %>);
-});
-$.flash.notice('Plan customized.');
+<% if flash[:success].present? %>
+  <%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+  setTimeout(() => {
+    $('#plan-widget-with-actions').replaceWith(<%= json render('buyers/accounts/account_plan', contract: @contract, plan: @plan) %>);
+  });
+
+  $.colorbox.close();
+<% else %>
+  <%# TODO: I think this branch is broken since forever (colorbox modal is empty). If so,
+      remove it along with app/views/buyers/custom_plans/_form.html.erb %>
+  $.colorbox({ html: <%= json render('form', contract: @contract, plan: @plan) %> });
+  $.resize();
+<% end %>
+
+<%= render 'shared/flash_alerts' %>

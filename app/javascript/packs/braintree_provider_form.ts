@@ -1,4 +1,4 @@
-import * as flash from 'utilities/flash'
+import { danger } from 'utilities/toast'
 import { createHostedFields } from 'PaymentGateways/braintree/utils/createHostedFields'
 
 import type { BraintreeError } from 'braintree-web'
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .catch((error: BraintreeError) => {
             submit.removeAttribute('disabled')
-            flash.error('Credit card could not be updated.')
+            danger('Credit card could not be updated')
             console.error(error)
           })
       })

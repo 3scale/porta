@@ -13,7 +13,8 @@ void function () {
   <% end %>
 
   document.getElementById('invoice_cost').innerHTML = '<%= price_tag(@invoice.cost) %>';
+
+  $.colorbox.close();
 }();
 
-$.flash.notice('Line item added.');
-$.colorbox.close();
+<%= render 'shared/flash_alerts' %>

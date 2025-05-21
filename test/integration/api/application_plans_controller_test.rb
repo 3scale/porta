@@ -37,7 +37,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference @service.application_plans.method(:count) do
         post admin_service_application_plans_path(service), params: application_plan_params
         assert_response :redirect
-        assert_equal "Created Application plan #{application_plan[:name]}", flash[:notice]
+        assert_equal "Created Application plan #{application_plan[:name]}", flash[:success]
       end
 
       app = service.reload.application_plans.last
@@ -162,7 +162,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference service.application_plans.method(:count) do
         post admin_service_application_plans_path(service), params: application_plan_params
         assert_response :redirect
-        assert_equal "Created Application plan #{application_plan[:name]}", flash[:notice]
+        assert_equal "Created Application plan #{application_plan[:name]}", flash[:success]
       end
     end
 
@@ -176,7 +176,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       plan.create_contract_with(FactoryBot.create(:buyer_account))
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
-      assert_equal error_message(:has_contracts), flash[:error]
+      assert_equal error_message(:has_contracts), flash[:danger]
     end
 
     test 'plan cannot be deleted because of customizations' do
@@ -184,7 +184,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       customization.create_contract_with(FactoryBot.create(:buyer_account, provider_account: current_account))
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
-      assert_equal error_message(:customizations_has_contracts), flash[:error]
+      assert_equal error_message(:customizations_has_contracts), flash[:danger]
     end
 
     test 'Actions are always authorized' do

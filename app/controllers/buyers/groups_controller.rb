@@ -6,12 +6,12 @@ class Buyers::GroupsController < Buyers::BaseController
 
   def show
     @groups = @account.groups
-    @page_title = "Groups of #{@account.org_name}"
+    @page_title = t('.page_title', org_name: @account.org_name)
   end
 
   def update
     if @account.update params[:account]
-      flash[:notice]= "Account updated"
+      flash[:success] = t('.success')
     end
 
     redirect_to :action => :show, :id => @account.id

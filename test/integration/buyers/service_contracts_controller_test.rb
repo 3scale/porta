@@ -56,7 +56,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
         delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path }
 
         assert_response :redirect
-        assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:error]
+        assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:danger]
       end
     end
 
@@ -67,7 +67,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path }
 
       assert_response :redirect
-      assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:error]
+      assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:danger]
     end
 
     test 'unauthorized access master_on_premises' do
