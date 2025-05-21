@@ -59,7 +59,7 @@ class PolicyTest < ActiveSupport::TestCase
 
     policy.schema = '{"foo": "bar"}'
     refute policy.valid?
-    assert_includes policy.errors[:schema], 'The property \'#/\' did not contain a required property of \'name\' in schema http://apicast.io/policy-v1/schema#'
+    assert_includes policy.errors[:schema], "object at root is missing required properties: name, version, configuration, summary"
 
     policy.schema = file_fixture('policies/apicast-policy.json').read
     policy.version = policy.schema['version']
