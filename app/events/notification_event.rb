@@ -6,11 +6,13 @@ class NotificationEvent < BaseEventStoreEvent
 
   def self.create(system_name, event)
     provider_id = event.try(:provider)&.id || event.metadata[:provider_id]
+    account_id = event.try(:account)&.id || event.try(:account_id)
 
     new(
       parent_event_id: event.event_id,
       system_name:     system_name.to_s,
       provider_id:     provider_id,
+      account_id:      account_id,
       metadata: {
         provider_id: provider_id
       }
