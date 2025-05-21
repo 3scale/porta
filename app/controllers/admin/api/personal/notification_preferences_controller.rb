@@ -14,8 +14,9 @@ class Admin::Api::Personal::NotificationPreferencesController < Admin::Api::Pers
   # Notification Preferences Update
   # PUT /admin/api/personal/notification_preferences.json
   def update
-    current_user.notification_preferences.update(new_preferences: notification_preferences_params)
-    respond_with current_user.notification_preferences
+    prefs = current_user.notification_preferences
+    prefs.update(new_preferences: notification_preferences_params)
+    respond_with prefs.reload
   end
 
   private
