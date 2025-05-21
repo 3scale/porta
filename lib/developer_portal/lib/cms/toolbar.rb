@@ -17,18 +17,16 @@ module CMS::Toolbar
   protected
 
   def handle_cms_edit
-    case validate_provider_id
+    result = validate_signature
+    case result
     when :valid
       enable_edit_mode
       Rails.logger.info "CMS edit mode enabled for portal #{site_account.external_domain}"
-    when :empty
-      disable_edit_mode
-      Rails.logger.info "CMS edit mode disabled for portal #{site_account.external_domain}"
     when :not_provided
       # This request is not attempting to alter the CMS mode, we keep the same mode we have
-    else # :invalid, whatever
+    else # :empty, :invalid, whatever
       disable_edit_mode
-      Rails.logger.info "Invalid CMS edit mode signature for portal #{site_account.external_domain}"
+      Rails.logger.info "CMS edit mode disabled for portal #{site_account.external_domain}. Signature is #{result}"
     end
 
     if (mode = params.delete(:cms).presence)
@@ -51,7 +49,7 @@ module CMS::Toolbar
     session[:cms] = nil
   end
 
-  def validate_provider_id
+  def validate_signature
     signature = params.delete(:signature)
     return :not_provided if signature.nil?
     return :empty if signature.blank?
