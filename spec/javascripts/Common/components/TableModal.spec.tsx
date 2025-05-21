@@ -64,13 +64,14 @@ describe('when is open', () => {
 
   it('should be filterable', () => {
     const wrapper = mountWrapper(props)
-    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[type="search"]')
-    const searchButton = wrapper.find('.pf-c-toolbar').at(0).find('button[data-testid="search"]')
+    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[aria-label="Search input"]')
+    const searchButton = wrapper.find('.pf-c-toolbar').at(0).find('button[aria-label="Search"]')
 
     expect(searchInput.prop('disabled')).toEqual(false)
-    expect(searchButton.prop('disabled')).toEqual(false)
+    expect(searchButton.prop('disabled')).toEqual(true)
 
     updateInput(wrapper, 'foo', searchInput)
+
     searchButton.simulate('click')
 
     expect(onSearch).toHaveBeenCalledWith('foo')
@@ -80,7 +81,7 @@ describe('when is open', () => {
     const searchPlaceholder = 'Find Waldo'
     const wrapper = mountWrapper({ ...props, searchPlaceholder })
 
-    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[type="search"]')
+    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[aria-label="Search input"]')
     expect(searchInput.props().placeholder).toEqual(searchPlaceholder)
   })
 
