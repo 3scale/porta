@@ -22,7 +22,7 @@ Feature: Login feature
     Given the current domain is foo.3scale.localhost
     When I try to log in as "foo.3scale.localhost" with password "supersecret"
     Then I should not be logged in
-    And I should see "Incorrect email or password. Please try again."
+    And I should see "Incorrect email or password. Please try again"
 
   @security
   Scenario: Buyer can log in with csrf protection enabled

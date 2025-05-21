@@ -20,7 +20,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   def create
     @api_docs_service = api_docs_services.new(api_docs_params(:system_name), without_protection: true)
     if @api_docs_service.save
-      redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
+      redirect_to preview_admin_api_docs_service_path(@api_docs_service), success: t('admin.api_docs.create.success')
     else
       render :new
     end
@@ -58,10 +58,12 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def toggle_visible
     api_docs_service.toggle! :published
-    flash[:notice] = t("admin.api_docs.base.toggle_visible.#{api_docs_service.published? ? :visible : :hidden}", name: api_docs_service.name)
+
+    flash[:success] = t("admin.api_docs.base.toggle_visible.#{api_docs_service.published? ? :visible : :hidden}", name: api_docs_service.name)
 
     respond_to do |format|
       format.html { redirect_to preview_admin_api_docs_service_path(api_docs_service) }
+      format.json
     end
   end
 
@@ -70,9 +72,12 @@ class Admin::ApiDocs::BaseController < FrontendController
   def update
     respond_to do |format|
       if api_docs_service.update(api_docs_params, without_protection: true)
-        message = 'ActiveDocs Spec was successfully updated.'
-        format.html { redirect_to(preview_admin_api_docs_service_path(api_docs_service), notice: message) }
-        format.js { render js: "jQuery.flash.notice('#{message}')" }
+        msg = t('admin.api_docs.update.success')
+        format.html { redirect_to preview_admin_api_docs_service_path(api_docs_service), success: msg }
+        format.js do
+          flash.now[:success] = msg
+          render 'shared/flash_alerts'
+        end
       else
         format.html { render :edit }
         format.js {}
@@ -82,10 +87,12 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def destroy
     api_docs_service.destroy
-    flash[:notice] = t('admin.api_docs.base.destroy.success')
+
+    flash[:success] = t('admin.api_docs.destroy.success')
 
     respond_to do |format|
       format.html { redirect_to admin_api_docs_services_path }
+      format.json
     end
   end
 

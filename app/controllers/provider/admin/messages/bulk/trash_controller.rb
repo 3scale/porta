@@ -23,8 +23,7 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
     @message_ids      = message_ids
     @no_more_messages = no_more_messages
 
-    flash[:notice] = t('.success')
-    redirect_to request.referer
+    redirect_to request.referer, success: t('.success')
   end
 
   private

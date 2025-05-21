@@ -1,24 +1,20 @@
+# frozen_string_literal: true
+
+# p/admin/applications/:id
 class Buyers::CustomApplicationPlansController < FrontendController
-
   before_action :find_contract
-
-  def new
-  end
 
   def create
     @plan = @contract.customize_plan!(params[:application_plan] || {})
 
-    respond_to do |format|
-      format.js do
-        render @plan.persisted? ? :create : :new
-      end
-    end
+    flash.now[:success] = t('.success') if @plan.persisted?
+
+    respond_to :js
   end
 
   def destroy
     @contract.decustomize_plan!
-    flash[:notice] = "The plan was set back to #{@contract.plan.name}."
-    redirect_to provider_admin_application_path(@contract)
+    redirect_to provider_admin_application_path(@contract), success: t('.success', name: @contract.plan.name)
   end
 
   private

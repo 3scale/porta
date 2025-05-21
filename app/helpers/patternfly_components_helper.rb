@@ -42,6 +42,26 @@ module PatternflyComponentsHelper
     end
   end
 
+  # Generates the same HTML as app/javascript/src/utilities/toast.ts#createAlertGroupItem.
+  # Duplication is not ideal, but justified since this will be used by rails template for
+  # flashes set in controllers.
+  def pf_toast_alert(title, **options)
+    action_tag = tag.div class: 'pf-c-alert__action' do
+      tag.button class: 'pf-c-button pf-m-plain', type: 'button', title: 'Close alert' do
+        tag.icon class: 'fas fa-times'
+      end
+    end
+
+    if (type = options[:type])
+      type_class = "pf-m-#{type}"
+    end
+
+    classes = "pf-c-alert #{type_class}"
+    tag.div class: classes do
+      icon_tag(type) + title_tag(title) + action_tag
+    end
+  end
+
   # TODO: this action button is used only in app/views/provider/admin/account/users/index.html.slim
   # right now, but could be used in other tables. Eliminate existing repetition by using this helper
   def pf_delete_table_action(url, button_options = {})

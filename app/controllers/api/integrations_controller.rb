@@ -23,10 +23,9 @@ class Api::IntegrationsController < Api::BaseController
       proxy_pro_update
     elsif @proxy.save_and_deploy(proxy_params)
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
-      flash[:notice] = flash_message(:update_success, environment: environment)
       update_mapping_rules_position
 
-      redirect_to admin_service_integration_path(@service)
+      redirect_to admin_service_integration_path(@service), success: flash_message(:update_success, environment: environment)
     else
       attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
@@ -34,7 +33,7 @@ class Api::IntegrationsController < Api::BaseController
       @marked_for_destroy = splitted[true]
       @marked_for_update = splitted[false]
 
-      flash.now[:error] = flash_message(:update_error)
+      flash.now[:danger] = flash_message(:update_error)
       @api_test_form_error = true
 
       render :show
@@ -43,9 +42,9 @@ class Api::IntegrationsController < Api::BaseController
 
   def promote_to_production
     if ProxyDeploymentService.call(@proxy, environment: :production)
-      flash[:notice] = flash_message(:promote_to_production_success)
+      flash[:success] = flash_message(:promote_to_production_success)
     else
-      flash[:error] = flash_message(:promote_to_production_error)
+      flash[:danger] = flash_message(:promote_to_production_error)
     end
     redirect_to action: :show
   end
@@ -58,7 +57,7 @@ class Api::IntegrationsController < Api::BaseController
     apicast_configuration_driven = @proxy.apicast_configuration_driven
 
     if @proxy.oidc? && apicast_configuration_driven
-      flash[:error] = flash_message(:oidc_not_available_on_old_apicast)
+      flash[:danger] = flash_message(:oidc_not_available_on_old_apicast)
     elsif @proxy.toggle!(:apicast_configuration_driven)
       apicast_configuration_driven_after_toggle = !apicast_configuration_driven
 
@@ -69,7 +68,7 @@ class Api::IntegrationsController < Api::BaseController
                      )
       flash[:success] = apicast_configuration_driven_after_toggle ? flash_message(:apicast_version_upgraded) : flash_message(:apicast_version_reverted)
     else
-      flash[:error] = apicast_configuration_driven ? flash_message(:apicast_not_not_reverted) :  flash_message(:apicast_not_not_upgraded)
+      flash[:danger] = apicast_configuration_driven ? flash_message(:apicast_not_not_reverted) :  flash_message(:apicast_not_not_upgraded)
     end
 
     redirect_to toggle_land_path
@@ -85,7 +84,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def edit_stale
-    flash.now[:error] = flash_message(:stale_object)
+    flash.now[:danger] = flash_message(:stale_object)
 
     @proxy.reload
     @proxy.assign_attributes(proxy_params.except(:lock_version))
@@ -100,8 +99,8 @@ class Api::IntegrationsController < Api::BaseController
   def proxy_pro_update
     if @proxy.update(proxy_params)
       update_mapping_rules_position
-      flash[:notice] = flash_message(:proxy_pro_update_sucess)
-      redirect_to :show
+
+      redirect_to :show, success: flash_message(:proxy_pro_update_sucess)
     else
       render :show
     end

@@ -90,7 +90,7 @@ Feature: Buyer accounts bulk operations
       And fill in "Body" with "This is the body"
       And press "Send"
       And confirm the dialog
-      Then I should see "Successfully sent 2 emails."
+      Then they should see a toast alert with text "Successfully sent 2 emails"
       Then "alice@example.com" should receive 1 email
       Then "bob@example.com" should receive 1 email
 
@@ -109,7 +109,7 @@ Feature: Buyer accounts bulk operations
       And select "Awesome" from "Plan"
       And press "Change plan"
       And confirm the dialog
-      Then should see "Successfully changed the plan of 2 accounts"
+      Then should see a toast alert with text "Successfully changed the plan of 2 accounts"
       And the table should contain the following:
         | Group/Org.    | Plan    |
         | Pending buyer | Tricky  |
@@ -131,7 +131,7 @@ Feature: Buyer accounts bulk operations
       And select "Make pending" from "Action"
       And press "Change state" within the modal
       And confirm the dialog
-      Then should see "Successfully changed the state of 2 accounts"
+      Then should see a toast alert with text "Successfully changed the state of 2 accounts"
       And the table should contain the following:
         | Group/Org.    | State    |
         | Alice         | Pending  |
@@ -188,7 +188,7 @@ Feature: Buyer accounts bulk operations
       And select "Reject" from "Action"
       And press "Change state" within the modal
       And confirm the dialog
-      Then should see "Successfully changed the state of 4 accounts"
+      Then should see a toast alert with text "Successfully changed the state of 4 accounts"
       And the table should contain the following:
         | Group/Org.    | State    |
         | Alice         | Rejected |

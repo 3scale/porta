@@ -1,6 +1,15 @@
-$("a[href='/finance/accounts/<%=@buyer.id%>/invoices/<%=@invoice.id%>/line_items/new']").hide(); // Hide the 'Add line items'
-$.flash.error("<%=j @line_item.errors.full_messages.to_sentence%>");
-$('form[action^="/finance/accounts/<%=@buyer.id%>/invoices/<%=@invoice.id%>/line_items/"]').each(function(){ // Destroy all the 'Dele line item' forms
+<% url = "/finance/accounts/#{@buyer.id}/invoices/#{@invoice.id}/line_items" %>
+
+void function ($) {
+  const addButtonId = 'a[href="<%= url %>/new"]';
+  $(addButtonId).hide();
+
+  const deleteLineItemFormsId = 'form[action^="<%= url %>"]';
+  $(deleteLineItemFormsId).each(function () {
     this.parentElement.removeChild(this);
-});
-$.colorbox.close();
+  });
+
+  $.colorbox.close();
+}(jQuery);
+
+<%= render 'shared/flash_alerts' %>

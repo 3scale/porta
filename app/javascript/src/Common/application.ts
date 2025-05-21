@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 const jQuery1 = window.$
 
 export default function (): void {

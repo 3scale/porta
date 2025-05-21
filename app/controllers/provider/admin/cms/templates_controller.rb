@@ -19,14 +19,13 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
     @page.attributes = template_params
 
     if @page.save
-      flash[:info] = "#{@page.class.model_name.human} created."
-      redirect_to( :action => :edit, :id => @page.id)
+      redirect_to({ action: :edit, id: @page.id }, success: t('provider.admin.cms.templates.created'))
     else
       render :new
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     @page ||= templates.find(params[:id])
 
     @page.assign_attributes(template_params)
@@ -35,13 +34,10 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
     if @page.save
       msg = publish_or_hide_page_with_message
       respond_to do |format|
-        format.html do
-          flash[:notice] = msg
-          redirect_to(action: :edit, id: @page.id)
-        end
+        format.html { redirect_to({ action: :edit, id: @page.id }, success: msg) }
 
         format.js do
-          flash.now[:notice] = msg
+          flash.now[:success] = msg
           render template: '/provider/admin/cms/templates/update'
         end
       end
@@ -90,12 +86,12 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
   def publish_or_hide_page_with_message
     if params[:publish]
       @page.publish!
-      return "#{@page.class.model_name.human} saved and published."
+      t('provider.admin.cms.templates.saved_and_published')
     elsif params[:hide]
       @page.hide!
-      return "#{@page.class.model_name.human} has been hidden."
+      t('provider.admin.cms.templates.hidden')
     else
-      return "#{@page.class.model_name.human} saved."
+      t('provider.admin.cms.templates.saved')
     end
   end
 

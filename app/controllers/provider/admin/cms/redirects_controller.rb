@@ -19,8 +19,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
     @redirect = redirects.build(params[:cms_redirect])
 
     if @redirect.save
-      flash[:notice] = 'Redirect created.'
-      redirect_to :action => :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
       render :new
     end
@@ -28,7 +27,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
 
   def update
     if redirect.update(params[:cms_redirect])
-      redirect_to provider_admin_cms_redirects_path, notice: 'Redirect updated'
+      redirect_to provider_admin_cms_redirects_path, success: t('.success')
     else
       render :edit
     end
@@ -36,8 +35,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
 
   def destroy
     redirect.destroy
-    flash[:notice] = 'Redirect deleted.'
-    redirect_to provider_admin_cms_redirects_path
+    redirect_to provider_admin_cms_redirects_path, success: t('.success')
   end
 
   private

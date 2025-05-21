@@ -182,7 +182,7 @@ Given(/^a provider signs up and activates his account$/) do
     click_on 'Sign in'
   end
 
-  page.should have_content('Signed in successfully')
+  assert_content 'Hello admin,'
 
   @provider = Account.find_by_self_domain!(@domain)
 end

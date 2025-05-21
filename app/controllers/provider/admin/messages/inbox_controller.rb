@@ -21,8 +21,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
   def destroy
     @message.hide!
 
-    flash[:notice] = 'Message was deleted.'
-    redirect_to action: :index
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   def reply
@@ -30,11 +29,9 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
     reply.attributes = message_params
 
     if reply.save && reply.deliver
-      flash[:notice] = 'Reply was sent.'
-      redirect_to action: :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
-      flash[:error] = reply.errors.full_messages.to_sentence
-      redirect_to provider_admin_messages_inbox_path(@message)
+      redirect_to provider_admin_messages_inbox_path(@message), danger: reply.errors.full_messages.to_sentence
     end
   end
 

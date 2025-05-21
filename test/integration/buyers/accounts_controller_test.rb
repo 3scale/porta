@@ -188,7 +188,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       }
 
       assert_redirected_to admin_buyers_account_plans_path
-      assert_equal 'Please, create an Account Plan first', flash[:alert]
+      assert_equal 'Please, create an Account Plan first', flash[:danger]
     end
 
     test 'POST with an error outside account or user is shown as a flash error' do
@@ -204,7 +204,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert_equal 'error that is not in "user" or "account". another error', flash[:error]
+      assert_equal 'error that is not in "user" or "account". another error', flash[:danger]
     end
 
     # regression test for: https://github.com/3scale/system/issues/2567
@@ -317,7 +317,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
           }
         }
       }
-      assert_equal 'Users invalid', flash[:error]
+      assert_equal 'Users invalid', flash[:danger]
     end
   end
 

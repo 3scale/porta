@@ -23,7 +23,7 @@ Feature: Application API credentials
       Given they follow "Set a custom User Key" within the API Credentials card
       When the modal is submitted with:
         | User key | my-custom-key |
-      Then they should see "User key has been updated."
+      Then they should see "User key has been updated"
       And the application user key should be "my-custom-key"
 
     Scenario: Field "User key" is required
@@ -38,7 +38,7 @@ Feature: Application API credentials
       When they fill in "User key" with "   "
       And press "Save"
       Then the application user key should still be "key-123"
-      And should see "Key can't be blank."
+      And should see "Key can't be blank"
 
     Scenario: Set custom user key fails
       Given they follow "Set a custom User Key" within the API Credentials card
@@ -65,36 +65,36 @@ Feature: Application API credentials
       And follow "Add Custom key" within the API Credentials card
       When the modal is submitted with:
         | Key | new-valid-key |
-      Then they should see the flash message "A new key has been added."
+      Then they should see a toast alert with text "A new key has been added"
       And should see "new-valid-key" within the API Credentials card
 
     Scenario: Adding a random key
       Given the application has no keys
       And they go to the application's admin page
       When follow "Add Random key" within the API Credentials card
-      Then they should see the flash message "A new key has been added."
+      Then they should see a toast alert with text "A new key has been added"
       And there is 1 key within the API Credentials card
 
     Scenario: Adding keys beyond the limit
       Given the application has 5 keys
       And they go to the application's admin page
-      Then should see "Keys limit reached." within the API Credentials card
+      Then should see "Keys limit reached" within the API Credentials card
 
     Scenario: Reaching the limit should toggle the switch
       Given the application has 4 keys
       And they go to the application's admin page
-      And should not see "Keys limit reached." within the API Credentials card
+      And should not see "Keys limit reached" within the API Credentials card
       When they follow "Add Random key" within the API Credentials card
-      Then they should see "Keys limit reached." within the API Credentials card
+      Then they should see "Keys limit reached" within the API Credentials card
       And there should not be a link to "Add Random key" within the API Credentials card
 
     Scenario: Deleting a key once the limit is reached should toggle the switch
       Given the application has 5 keys
       And they go to the application's admin page
-      And should see "Keys limit reached." within the API Credentials card
+      And should see "Keys limit reached" within the API Credentials card
       And there should not be a link to "Add Random key" within the API Credentials card
       When they follow any "Delete" within the API Credentials card
-      Then they should not see "Keys limit reached." within the API Credentials card
+      Then they should not see "Keys limit reached" within the API Credentials card
       And there should be a link to "Add Random key" within the API Credentials card
 
     Scenario: Field "Key" is required
@@ -122,7 +122,7 @@ Feature: Application API credentials
       And they go to the application's admin page
       When follow "Delete" that belongs to application key "key-1"
       And wait a moment
-      Then they should see the flash message "The key has been removed."
+      Then they should see a toast alert with text "The key has been removed"
       And there is 1 key
 
     Scenario: Deleting last key when not mandatory
@@ -131,7 +131,7 @@ Feature: Application API credentials
       When they go to the application's admin page
       And follow "Delete" within the API Credentials card
       And wait a moment
-      Then they should see the flash message "The key has been removed."
+      Then they should see a toast alert with text "The key has been removed"
       And there are 0 keys
 
     Scenario: Trying to delete last key but it's mandatory

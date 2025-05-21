@@ -22,7 +22,7 @@ Feature: CMS Pages
 
        And I select "new-layout" from "Layout"
        And I press "Create Page"
-      Then I should see "Page created"
+      Then I should see "Template created"
       When I check "Liquid enabled"
        And I select "Markdown" from "Handler"
        And I fill in the draft with:
@@ -31,7 +31,7 @@ Feature: CMS Pages
         """
 
        And I press "Save"
-      Then I should see "Page saved"
+      Then I should see "Template saved"
       And CMS Page "/potato" should have:
         | Title          | Potato        |
         | Layout         | new-layout    |
@@ -42,7 +42,7 @@ Feature: CMS Pages
       Then I should see the tags "potato, salad"
 
        And I press "Publish"
-      Then I should see "Page saved and published"
+      Then I should see "Template saved and published"
 
       And I hit "/potato" on foo.3scale.localhost
      Then I should see "<h1>Potato is public!</h1>"
@@ -50,7 +50,7 @@ Feature: CMS Pages
      When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to the CMS Page "/potato" page
       And I follow "Hide" from the CMS "Publish" dropdown
-     Then I should see "Page has been hidden"
+     Then I should see "Template has been hidden"
 
      When I hit "/potato" on foo.3scale.localhost
      Then I should see "Not found"
@@ -66,13 +66,13 @@ Feature: CMS Pages
       """
 
      And I press "Save"
-    Then I should see "Built-in page saved"
+    Then I should see "Template saved"
 
      And I press "Publish"
-    Then I should see "Built-in page saved and published"
+    Then I should see "Template saved and published"
 
      And I follow "Hide" from the CMS "Publish" dropdown
-    Then I should see "Built-in page has been hidden"
+    Then I should see "Template has been hidden"
 
   @allow-rescue
   Scenario: Bug, preview link should be updated
@@ -83,7 +83,7 @@ Feature: CMS Pages
     And I go to the CMS Page "/pathbug" page
     And I fill in "Path" with "/hattori"
     And I press "Publish"
-    And I should see "Page saved and published"
+    And I should see "Template saved and published"
     Then preview draft link should link to "/hattori"
 
   Scenario: Update page after unsuccessful validation
@@ -97,6 +97,6 @@ Feature: CMS Pages
     And I should see "Title can't be blank"
     And I fill in "Title" with "New title"
     And I press "Save"
-    And I should see "Page saved."
+    And I should see "Template saved"
     And I go to the CMS Page "/some-path" page
     Then I should see "Page 'New title'"

@@ -12,11 +12,11 @@ class Api::MetricVisibilitiesController < FrontendController
 
     errors = @metric.errors.presence
     if errors
-      flash[:error] = errors.full_messages.to_sentence
+      flash[:danger] = errors.full_messages.to_sentence
     else
       metric = @metric.method_metric? ? 'Method' : 'Metric'
       metric_option = @metric.visible_in_plan?(@plan) ? 'visible' : 'invisible'
-      flash[:notice] = "#{metric} has been set to #{metric_option}."
+      flash[:success] = "#{metric} has been set to #{metric_option}."
     end
 
     respond_to do |format|
@@ -30,11 +30,11 @@ class Api::MetricVisibilitiesController < FrontendController
 
     errors = @metric.errors.presence
     if errors
-      flash[:error] = errors.full_messages.to_sentence
+      flash[:danger] = errors.full_messages.to_sentence
     else
       metric = @metric.method_metric? ? 'Method' : 'Metric'
       metric_option = @metric.limits_only_text_in_plan?(@plan) ? 'only text' : 'text and icons'
-      flash[:notice] = "#{metric} has been set to show #{metric_option}."
+      flash[:success] = "#{metric} has been set to show #{metric_option}."
     end
 
     respond_to do |format|
@@ -48,11 +48,11 @@ class Api::MetricVisibilitiesController < FrontendController
 
     errors = @metric.errors.presence
     if errors
-      flash[:error] = errors.full_messages.to_sentence
+      flash[:danger] = errors.full_messages.to_sentence
     else
       metric = @metric.method_metric? ? 'Method' : 'Metric'
       metric_option = @metric.enabled_for_plan?(@plan) ? 'enabled' : 'disabled'
-      flash[:notice] = "#{metric} has been #{metric_option}."
+      flash[:success] = "#{metric} has been #{metric_option}."
     end
 
     respond_to do |format|

@@ -1,6 +1,13 @@
-jQuery.colorbox.close();
-var html = "<%= escape_javascript(render(:partial => 'pricing_rule', :locals => {:pricing_rule => @pricing_rule})) %>",
-    id   = "#<%= dom_id(@pricing_rule) %>";
+<% if flash[:success].present? %>
+  void function () {
+    jQuery.colorbox.close();
+    const html = "<%= escape_javascript(render partial: 'pricing_rule', locals: { pricing_rule: @pricing_rule }) %>";
+    const id = "#<%= dom_id(@pricing_rule) %>";
 
-jQuery(id).replaceWith(html);
-jQuery.flash.notice('Pricing rule has been edited.');
+    jQuery(id).replaceWith(html);
+  }();
+<% else %>
+  <%= render 'shared/flash_alerts' %>
+<% end %>
+
+<%= render 'shared/flash_alerts' %>

@@ -33,7 +33,7 @@ Feature: Product > Integration > Metrics > New
       Then they should see the following table:
         | Method         | System name  | Unit | Description            |
         | Cotto e Funghi | cotto_funghi | hit  | Number of times served |
-      And should see the flash message "The method was created"
+      And should see a toast alert with text "The method was created"
 
     Scenario: Creating a method with existing data
       Given the product has the following method:
@@ -61,7 +61,7 @@ Feature: Product > Integration > Metrics > New
         | Metric    | System name | Unit  | Description        | Mapped             |
         | Hits      | hits        | hit   | Number of API hits |                    |
         | Antipasti | antipasti   | order | Number of orders   | Add a mapping rule |
-      And should see the flash message "The metric was created"
+      And should see a toast alert with text "The metric was created"
 
     Scenario: Creating a metric with existing data
       Given the product has the following metric:

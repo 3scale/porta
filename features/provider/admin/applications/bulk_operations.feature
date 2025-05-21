@@ -76,7 +76,7 @@ Feature: Audience > Applications > Bulk operations
       | Subject | This is a subject |
       | Body    | This is the body  |
     And confirm the dialog
-    Then they should see the flash message "Successfully sent 3 emails."
+    Then they should see a toast alert with text "Successfully sent 3 emails"
     Then buyer "Bob" has received 1 email
     And buyer "Jane" has received 2 email
 
@@ -92,7 +92,7 @@ Feature: Audience > Applications > Bulk operations
     And the modal is submitted with:
       | Plan | Expensive |
     And confirm the dialog
-    Then they should see the flash message "Successfully changed the plan of 2 applications"
+    Then they should see a toast alert with text "Successfully changed the plan of 2 applications"
     And the table has the following rows:
       | Name            | Plan      |
       | Jane's Full App | Expensive |
@@ -117,7 +117,7 @@ Feature: Audience > Applications > Bulk operations
     And the modal is submitted with:
       | Action | Suspend |
     And confirm the dialog
-    Then they should see the flash message "Successfully changed the state of 2 applications"
+    Then they should see a toast alert with text "Successfully changed the state of 2 applications"
     And the table has the following rows:
       | Name            | State     |
       | Jane's Full App | suspended |

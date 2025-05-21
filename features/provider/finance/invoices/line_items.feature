@@ -24,7 +24,7 @@ Feature: Invoice line items
       | Description | Very bad service |
       | Cost        | -200             |
     And wait a moment
-    Then they should see the flash message "Line item added."
+    Then they should see a toast alert with text "Line item added"
     And the table should contain the following within the line items card:
       | Name    | Description      | Quantity | Price         | Charged |
       | Bananas | A bunch of them  | 1        | EUR 42.0000   |         |

@@ -213,7 +213,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
                                                            cinstance: { plan_id: application_plan.id, name: name } }
 
           assert_response :redirect
-          assert_equal 'Application was successfully created.', flash[:notice], "Failed creating application with name #{name}"
+          assert_equal 'Application was successfully created', flash[:success], "Failed creating application with name #{name}"
         end
       end
     end

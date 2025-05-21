@@ -26,10 +26,9 @@ class Api::MetricsController < Api::BaseController
   def create
     @metric = collection.build(create_params)
     if @metric.save
-      flash[:notice] = "The #{method_or_metric} was created"
-      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
+      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s"), success: t('.success', type: method_or_metric)
     else
-      flash[:error] = "#{method_or_metric.capitalize} could not be created"
+      flash.now[:danger] = t('.error', type: method_or_metric)
       render :new
     end
   end
@@ -38,8 +37,7 @@ class Api::MetricsController < Api::BaseController
 
   def update
     if @metric.update(update_params)
-      flash[:notice] = "The #{method_or_metric} was updated"
-      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
+      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s"), success: t('.success', type: method_or_metric)
     else
       render :edit
     end
@@ -47,9 +45,9 @@ class Api::MetricsController < Api::BaseController
 
   def destroy
     if @metric.destroy
-      flash[:notice] = "The #{method_or_metric} was deleted"
+      flash[:success] = t('.success', type: method_or_metric)
     else
-      flash[:error] = @metric.errors.full_messages.to_sentence
+      flash[:danger] = @metric.errors.full_messages.to_sentence
     end
 
     redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")

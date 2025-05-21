@@ -19,8 +19,7 @@ class Sites::SettingsController < Sites::BaseController
 
   def update
     if @settings.update(params[:settings])
-      flash[:notice] = 'Settings updated.'
-      redirect_to edit_admin_site_settings_path
+      redirect_to edit_admin_site_settings_path, success: t('.success')
     else
       render :accessrules
     end

@@ -44,7 +44,7 @@ Feature: Buyer side, account fields
 
      When I fill in "Required field" with "1 Horse Power"
        And I press "Update"
-     Then I should see "The account information was updated."
+     Then I should see "The account information was updated"
 
   Scenario: Read-only extra fields are ignored on update
     Given I log in as "bob" on foo.3scale.localhost
@@ -56,7 +56,7 @@ Feature: Buyer side, account fields
       | False field    |        |
       | Choices field  |      3 |
       | Non editable   | edited |
-    Then I should see "The account information was updated."
+    Then I should see "The account information was updated"
     Then I should not see "Non editable"
 
   Scenario: Viewing account with extra fields
@@ -91,5 +91,5 @@ Feature: Buyer side, account fields
     When I go to the account edit page
       And I select "Spain" from "Country"
       And I press "Update"
-    Then I should see "The account information was updated."
+    Then I should see "The account information was updated"
       And I should see "Spain" in the "country" field in the list

@@ -148,6 +148,6 @@ Then "(they )should see the following details(:)" do |table|
   end
 end
 
-Then "(I )(they )should see the flash message {string}" do |message|
-  assert_flash(message)
+Given "they {are} using a modern browser" do |modern|
+  ApplicationController.any_instance.expects(:browser_not_modern?).returns(!modern).at_least_once
 end

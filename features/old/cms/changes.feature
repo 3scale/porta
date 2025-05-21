@@ -16,5 +16,5 @@ Feature: CMS Changes
     Given I have changed CMS page "Users"
     When I go to the CMS changes
     And I follow "Revert"
-    Then they should see the flash message "Page \"Users\" reverted."
+    Then they should see a toast alert with text "Template reverted"
     And the CMS page "Users" should be reverted

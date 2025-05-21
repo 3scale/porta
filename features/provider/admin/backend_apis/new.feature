@@ -22,7 +22,7 @@ Feature: Backend API new page
       | System name      | my-backend                 |
       | Description      | This is my new backend API |
       | Private Base URL | http://api.example.org     |
-    Then they should see the flash message "Backend created"
+    Then they should see a toast alert with text "Backend created"
     And the current page is the admin portal overview page of backend "My Backend"
 
   Scenario: The form won't be submitted withouth Name and URL

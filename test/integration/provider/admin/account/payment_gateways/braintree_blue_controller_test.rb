@@ -139,7 +139,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:try_find_customer).raises(Braintree::AuthenticationError)
     get edit_provider_admin_account_braintree_blue_path
     assert_redirected_to provider_admin_account_braintree_blue_path
-    assert_equal 'Invalid merchant id', flash[:error]
+    assert_equal 'Invalid merchant id', flash[:danger]
   end
 
   test 'missing credentials' do
@@ -149,6 +149,6 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
 
     get edit_provider_admin_account_braintree_blue_path
     assert_redirected_to provider_admin_account_braintree_blue_path
-    assert_equal 'Invalid merchant id', flash[:error]
+    assert_equal 'Invalid merchant id', flash[:danger]
   end
 end

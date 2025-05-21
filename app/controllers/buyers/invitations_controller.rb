@@ -10,14 +10,11 @@ class Buyers::InvitationsController < Buyers::BaseController
   belongs_to :account
 
   create! do |success, failure|
-    success.html do
-      redirect_to admin_buyers_account_invitations_path(@account),
-                  notice: 'Invitation will be sent soon.'
-    end
+    success.html { redirect_to admin_buyers_account_invitations_path(@account), success: t('.success') }
   end
 
   destroy! do |success, failure|
-    success.html { redirect_to(admin_buyers_account_invitations_path(@account)) }
+    success.html { redirect_to admin_buyers_account_invitations_path(@account), success: t('.success') }
   end
 
   def resend
@@ -25,10 +22,7 @@ class Buyers::InvitationsController < Buyers::BaseController
     @invitation.resend
 
     respond_to do |format|
-      format.html do
-        flash[:success] = 'Invitation will be resent soon.'
-        redirect_to(admin_buyers_account_invitations_path(@account))
-      end
+      format.html { redirect_to admin_buyers_account_invitations_path(@account), success: t('.success') }
       format.xml  { head :ok }
     end
   end

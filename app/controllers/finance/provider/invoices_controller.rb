@@ -24,13 +24,13 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     current_account.billing_strategy.create_invoice!(buyer_account: @buyer,
                                                      period: Month.new(Time.now.utc))
     respond_to do |format|
-      format.js { flash.now[:notice] = 'Invoice successfully created.' }
+      format.js { flash.now[:success] = t('.success') }
     end
   end
 
   def show
     unless @invoice
-      render_error("Invoice not found", status: :not_found)
+      render_error t('.not_found'), status: :not_found
       return false
     end
 
@@ -55,7 +55,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   def edit
     unless @invoice.editable?
-      redirect_to admin_finance_invoice_url(@invoice), alert: 'Invoice is no longer editable.'
+      redirect_to admin_finance_invoice_url(@invoice), danger: t('.non_editable')
     end
   end
 
@@ -66,7 +66,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     #end
 
     if @invoice.update(params[:invoice])
-      redirect_to admin_finance_invoice_url(@invoice), notice: 'Invoice was successfully updated.'
+      redirect_to admin_finance_invoice_url(@invoice), success: t('.success')
     else
       render :edit
     end
@@ -79,7 +79,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
       @header = render_headers_to_string
       @actions = render_actions_to_string
       @line_items = render_line_items_to_string
-      flash.now[:notice] = success_message
+      flash.now[:success] = success_message
 
       respond_to do |format|
         format.js do
@@ -88,8 +88,8 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
         end
       end
     else
-      flash.now[:error] = error_message
-      render :partial => '/shared/flash_message'
+      flash.now[:danger] = error_message
+      render :partial => '/shared/flash_alerts'
     end
   end
 

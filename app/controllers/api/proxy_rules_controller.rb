@@ -17,7 +17,7 @@ class Api::ProxyRulesController < Api::BaseController
   def create
     @proxy_rule = proxy_rules.build(proxy_rule_params)
     if @proxy_rule.save
-      redirect_to admin_service_proxy_rules_path(@service), notice: 'Mapping rule was created.'
+      redirect_to admin_service_proxy_rules_path(@service), success: t('.success')
     else
       render :new
     end
@@ -27,7 +27,7 @@ class Api::ProxyRulesController < Api::BaseController
 
   def update
     if @proxy_rule.update(proxy_rule_params)
-      redirect_to admin_service_proxy_rules_path(@service), notice: 'Mapping rule was updated.'
+      redirect_to admin_service_proxy_rules_path(@service), success: t('.success')
     else
       render :edit
     end
@@ -35,9 +35,9 @@ class Api::ProxyRulesController < Api::BaseController
 
   def destroy
     if @proxy_rule.destroy
-      flash[:notice] = 'The mapping rule was deleted'
+      flash[:success] = t('.success')
     else
-      flash[:error] = 'The mapping rule cannot be deleted'
+      flash[:danger] = t('.error')
     end
 
     redirect_to admin_service_proxy_rules_path(@service)

@@ -38,7 +38,7 @@ module DeveloperPortal
 
       post hosted_success_admin_account_stripe_path, params: {stripe: {payment_method_id: payment_method_id}}
 
-      assert_equal 'Credit card details were saved correctly', flash[:success]
+      assert_equal 'Credit card details were saved correctly', flash[:notice]
     end
 
     test '#update updates billing address successfully' do

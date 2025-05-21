@@ -8,11 +8,11 @@ import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 
 import type { FunctionComponent } from 'react'
 import type { ProvidersProps } from 'Login/components/AuthenticationProviders'
-import type { FlashMessage } from 'Types'
+import type { IAlert } from 'Types'
 
 interface Props {
   authenticationProviders: ProvidersProps[];
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   providerSessionsPath: string;
   providerRequestPasswordResetPath: string;
   show3scaleLoginForm: boolean;
@@ -30,7 +30,7 @@ interface Props {
 const LoginPage: FunctionComponent<Props> = ({
   authenticationProviders,
   disablePasswordReset,
-  flashMessages,
+  alerts,
   providerRequestPasswordResetPath,
   providerSessionsPath,
   recaptcha,
@@ -57,7 +57,7 @@ const LoginPage: FunctionComponent<Props> = ({
   >
     {show3scaleLoginForm && (
       <LoginForm
-        flashMessages={flashMessages}
+        alerts={alerts}
         providerSessionsPath={providerSessionsPath}
         recaptcha={recaptcha}
         session={session}

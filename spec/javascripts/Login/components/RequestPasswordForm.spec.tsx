@@ -8,7 +8,7 @@ import type { FormEvent } from 'react'
 import type { Props } from 'Login/components/RequestPasswordForm'
 
 const defaultProps = {
-  flashMessages: [],
+  alerts: [],
   providerLoginPath: 'login-path',
   providerPasswordPath: 'password-path'
 }

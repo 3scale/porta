@@ -1,6 +1,5 @@
 <% if @message.valid? %>
   jQuery.colorbox.close();
-  jQuery.flash.notice("<%= @notice %>");
 <% else %>
   <% [:subject, :body].each do |field| %>
     <% if errors = @message.errors[field].presence %>
@@ -18,3 +17,5 @@
 
   jQuery.colorbox.resize()
 <% end %>
+
+<%= render 'shared/flash_alerts' %>

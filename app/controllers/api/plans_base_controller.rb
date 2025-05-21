@@ -78,13 +78,8 @@ class Api::PlansBaseController < Api::BaseController
       else
         plan.reload
 
-        respond_to do |format|
-          format.html do
-            flash[:notice] = "Created #{plan.class.model_name.human} #{plan.name}"
-            # collection.build to create new record to properly generate path to index action (rails)
-            redirect_to plans_index_path
-          end
-        end
+        # collection.build to create new record to properly generate path to index action (rails)
+        redirect_to plans_index_path, success: t('api.plans.create.success', type: plan.class.model_name.human, name: plan.name)
       end
 
     else
@@ -130,15 +125,13 @@ class Api::PlansBaseController < Api::BaseController
 
   def masterize(issuer, assoc)
     assign_plan!(issuer, assoc)
-    flash[:notice] = 'The default plan has been changed.'
-    redirect_to plans_index_path
+    redirect_to plans_index_path, success: t('api.plans.masterize.success')
   end
 
   # REFACTOR: this has nothing to do in a controller layer!
   def check_plan_can_be_deleted
     return if plan.can_be_destroyed?
 
-    flash[:error] = plan.errors.full_messages.to_sentence
-    redirect_to(plans_index_path)
+    redirect_to plans_index_path, danger: plan.errors.full_messages.to_sentence
   end
 end

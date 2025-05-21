@@ -13,7 +13,7 @@ import {
 
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { notice } from 'utilities/flash'
+import { toast } from 'utilities/toast'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
@@ -51,7 +51,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
   const isFormComplete = backend !== null
 
   const handleOnCreateBackend = (newBackend: Backend) => {
-    notice('Backend created')
+    toast('Backend created', 'success')
     setIsModalOpen(false)
     setBackend(newBackend)
     setUpdatedBackends([newBackend, ...updatedBackends])

@@ -34,9 +34,9 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
     build_authentication_provider
     authorize_authentication_provider
     if @authentication_provider.save
-      redirect_to edit_provider_admin_authentication_provider_path(@authentication_provider), notice: 'Authentication provider created'
+      redirect_to edit_provider_admin_authentication_provider_path(@authentication_provider), success: t('.success')
     else
-      flash[:error] = 'Authentication provider has not been updated'
+      flash.now[:danger] = t('.error')
       render 'new'
     end
   end
@@ -48,9 +48,9 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
     published = params.require(:authentication_provider).require(:published)
     persisted = @authentication_provider.update({published: published})
     if persisted
-      flash[:notice] = 'Authentication provider updated'
+      flash.now[:success] = t('.success')
     else
-      flash[:error] = 'Authentication provider has not been updated'
+      flash.now[:danger] = t('.error')
     end
     @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
     render :show
@@ -60,18 +60,18 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
     authorize_authentication_provider('edit')
     persisted = @authentication_provider.update(update_params)
     if persisted
-      flash[:notice] = 'Authentication provider updated'
+      flash.now[:success] = t('.success')
       @oauth_presenter = OAuthFlowPresenter.new(@authentication_provider, request)
       render :show
     else
-      flash[:error] = 'Authentication provider has not been updated'
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
 
   def destroy
     @authentication_provider.destroy
-    redirect_to provider_admin_authentication_providers_path, notice: 'Authentication provider deleted'
+    redirect_to provider_admin_authentication_providers_path, success: t('.success')
   end
 
   private

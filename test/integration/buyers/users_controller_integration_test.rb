@@ -41,11 +41,11 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: destroyable_user.id)
     assert_not User.exists?(destroyable_user.id)
-    assert_equal 'User was successfully deleted.', flash[:notice]
+    assert_equal 'User was successfully deleted', flash[:success]
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: non_destroyable_user.id)
     assert User.exists?(non_destroyable_user.id)
-    assert_equal 'User could not be deleted.', flash[:error]
+    assert_equal 'User could not be deleted', flash[:danger]
   end
 
   test '#update all attributes' do

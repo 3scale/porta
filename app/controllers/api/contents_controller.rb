@@ -8,8 +8,7 @@ class Api::ContentsController < FrontendController
 
   def update
     if @service.update(params[:service])
-      flash[:notice] =  'Content updated.'
-      redirect_to edit_admin_service_content_path(@service)
+      redirect_to edit_admin_service_content_path(@service), success: 'Content updated.'
     else
       render :action => :edit
     end

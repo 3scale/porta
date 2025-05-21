@@ -101,9 +101,9 @@ class FrontendController < ApplicationController
       ThreeScale::Analytics.track(current_account.users.first, "golive:#{step}")
 
       if request.xhr?
-        flash.now[:notice] = I18n.t(step, scope: :go_live_states)
+        flash.now[:success] = I18n.t(step, scope: :go_live_states)
       else
-        flash[:notice] = I18n.t(step, scope: :go_live_states)
+        flash[:success] = I18n.t(step, scope: :go_live_states)
       end
       return true
     end

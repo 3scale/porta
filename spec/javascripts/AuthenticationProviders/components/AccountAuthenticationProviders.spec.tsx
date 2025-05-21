@@ -3,7 +3,7 @@ import { Modal } from '@patternfly/react-core'
 import { act } from 'react-dom/test-utils'
 
 import * as ajax from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import * as toast from 'utilities/toast'
 import { AccountAuthenticationProviders } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 import { mockLocation, waitForPromises } from 'utilities/test-utils'
 import { EnforceSSOSwitch } from 'AuthenticationProviders/components/EnforceSSOSwitch'
@@ -13,8 +13,7 @@ import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/compo
 import type { Props } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const error = jest.spyOn(flash, 'error')
-const notice = jest.spyOn(flash, 'notice')
+const toastSpy = jest.spyOn(toast, 'toast')
 
 const defaultProps: Props = {
   showToggle: false,
@@ -61,7 +60,7 @@ describe('when SSO toggle is visible', () => {
   })
 
   it('should confirm before disabling password-based authentication', async () => {
-    const payload = { notice: 'Enabled', error: undefined  }
+    const payload = { type: 'success', message: 'Enabled', ok: true }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: false })
@@ -78,12 +77,11 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(notice).toHaveBeenCalledWith(payload.notice)
-    expect(error).not.toHaveBeenCalled()
+    expect(toastSpy).toHaveBeenCalledWith(payload.message, 'success')
   })
 
   it('should confirm before enabling password-based authentication', async () => {
-    const payload = { notice: 'Disabled', error: undefined }
+    const payload = { type: 'success', message: 'Disabled', ok: true }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: true })
@@ -100,12 +98,11 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(notice).toHaveBeenCalledWith(payload.notice)
-    expect(error).not.toHaveBeenCalled()
+    expect(toastSpy).toHaveBeenCalledWith(payload.message, 'success')
   })
 
   it('should not break when enabling fails', async () => {
-    const payload = { error: 'Cannot enable', notice: undefined }
+    const payload = { type: 'danger', message: 'Cannot enable', ok: false }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: false })
@@ -122,12 +119,11 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(false)
-    expect(error).toHaveBeenCalledWith(payload.error)
-    expect(notice).not.toHaveBeenCalled()
+    expect(toastSpy).toHaveBeenCalledWith(payload.message, 'danger')
   })
 
   it('should not break when disabling fails', async () => {
-    const payload = { error: 'Cannot disable', notice: undefined }
+    const payload = { type: 'danger', message: 'Cannot disable', ok: false }
     ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
     const wrapper = mountWrapper({ ...props, ssoEnabled: true })
@@ -144,7 +140,6 @@ describe('when SSO toggle is visible', () => {
 
     await waitForPromises(wrapper)
     expect(wrapper.find(EnforceSSOSwitch).props().isChecked).toEqual(true)
-    expect(error).toHaveBeenCalledWith(payload.error)
-    expect(notice).not.toHaveBeenCalled()
+    expect(toastSpy).toHaveBeenCalledWith(payload.message, 'danger')
   })
 })

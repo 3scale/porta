@@ -77,7 +77,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
     authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, client_id: 'client_id')
     put provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {client_id: 'clientID'})
     assert_template 'provider/admin/authentication_providers/show'
-    assert_equal 'Authentication provider updated', flash[:notice]
+    assert_equal 'Authentication provider updated', flash[:success]
     assert_equal 'clientID', authentication_provider.reload.client_id
   end
 
@@ -87,7 +87,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
     authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, client_id: 'client_id')
     put provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {client_id: 'clientID'})
     assert_template 'provider/admin/authentication_providers/edit'
-    assert_equal 'Authentication provider has not been updated', flash[:error]
+    assert_equal 'Authentication provider has not been updated', flash[:danger]
   end
 
   test 'PUT publish_or_hide updates \'published\' correctly and renders show' do
@@ -95,7 +95,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
     authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
     patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {published: true})
     assert_template 'provider/admin/authentication_providers/show'
-    assert_equal 'Authentication provider updated', flash[:notice]
+    assert_equal 'Authentication provider updated', flash[:success]
     assert authentication_provider.reload.published
   end
 
@@ -105,7 +105,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
     authentication_provider = FactoryBot.create(:github_authentication_provider, account: @provider, branding_state: 'threescale_branded')
     patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: { published: true })
     assert_template 'provider/admin/authentication_providers/show'
-    assert_equal 'Authentication provider has not been updated', flash[:error]
+    assert_equal 'Authentication provider has not been updated', flash[:danger]
   end
 
   test 'DELETE destroy' do

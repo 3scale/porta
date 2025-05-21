@@ -26,8 +26,7 @@ class Buyer::BulkApprovalsController < FrontendController
       if(@state_action == 'reject')
         Account.bulk_reject(params[:account_ids])
       end
-      flash[:notice] = "Selected accounts have been updated."
-      redirect_to buyer_accounts_path(:kind => :pending)
+      redirect_to buyer_accounts_path(:kind => :pending), success: "Selected accounts have been updated."
     else
       render(:action => :show)
     end

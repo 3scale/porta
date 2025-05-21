@@ -81,13 +81,13 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
     case controller_action_method
 
     when "Provider::SessionsController#create"
-        @analytics.track('Login') if flash[:notice]
+        @analytics.track('Login') if flash[:success]
 
     when "Provider::Admin::Account::InvitationsController#create"
-        @analytics.track('Sent invitation') if flash[:notice]
+        @analytics.track('Sent invitation') if flash[:success]
 
     when /Provider::Admin::CMS::(.)*#(create|update)/
-        if flash[:notice]
+        if flash[:success]
           @analytics.track('Edited a page')
           if params["publish"].present?
             @analytics.track('Published a page')
@@ -98,7 +98,7 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
         @analytics.track('Visited CMS')
 
     when "Sites::DnsController#update"
-        if flash[:notice] && params["account"]["site_access_code"].blank?
+        if flash[:success] && params["account"]["site_access_code"].blank?
           @analytics.track('Developer portal opened')
         end
 
@@ -106,7 +106,7 @@ class TrackingNotifications < Struct.new(:name, :start, :finish, :id, :payload)
         @analytics.track('Visited New AD Spec')
 
     when /Admin::ApiDocs::ServicesController#(create|update)/
-        if flash[:notice]
+        if flash[:success]
           @analytics.track('Created AD Spec')            if action.create?
           if params["api_docs_service"]["published"]
             @analytics.track('Published AD Spec')
