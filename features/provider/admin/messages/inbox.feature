@@ -37,6 +37,22 @@ Feature: Audience > Messages > Inbox
       And follow "Inbox"
       Then they should see read message from "Alice" with subject "Oh, no!"
 
+    Scenario: Mark as read
+      Given a message sent from buyer "Alice" to the provider with subject "Mark me" and body "No need to read"
+      And they go to the provider inbox page
+      And they should see unread message from "Alice" with subject "Mark me"
+      When they select action "Mark as read" of "Mark me"
+      Then they should see read message from "Alice" with subject "Mark me"
+
+    @wip
+    # https://issues.redhat.com/browse/THREESCALE-11854
+    Scenario: Mark all messages as read
+      Given they go to the provider inbox page
+      When they select all items in the current page
+      And select bulk action "Mark as read"
+      Then they should not see any unread message
+      And should see "Messages marked as read"
+
     Scenario: Bulk operations
       Given they go to the provider inbox page
       When item "Oh, no!" is selected
@@ -78,3 +94,8 @@ Feature: Audience > Messages > Inbox
       Then wait a moment
       And should see "Messages moved into the trash"
       And should see "Nothing to see here"
+
+    Scenario: Export all messages
+      Given they go to the provider inbox page
+      When they select toolbar action "Export to CSV"
+      Then they should be on the admin portal data exports page

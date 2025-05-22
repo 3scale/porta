@@ -1,0 +1,7 @@
+<%# If EventTarget is removed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  const row = document.querySelector('#message_<%= @message.id %>');
+  row.classList.remove('unread');
+  row.classList.add('read');
+  row.querySelector('.pf-c-table__action .pf-c-dropdown__menu li').remove();
+});
