@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
+  add_flash_types :default, :info, :success, :warning, :danger
+
   SecureHeaders::Configuration.override(:disable_x_frame) do |config|
     config.x_frame_options = SecureHeaders::OPT_OUT
   end
