@@ -43,7 +43,6 @@ class Admin::Api::AccountPlansController < Admin::Api::BaseController
   # Account Plan set to Default
   # PUT /admin/api/account_plans/{id}/default.xml
   def default
-    binding.pry
     current_account.update_attribute(:default_account_plan, account_plan)
 
     respond_with(account_plan)

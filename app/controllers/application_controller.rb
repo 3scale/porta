@@ -10,8 +10,6 @@ class ApplicationController < ActionController::Base
   include ThreeScale::OnPremises
   include ProxyConfigAffectingChanges::ControllerExtension
 
-  add_flash_types :default, :info, :success, :warning, :danger
-
   _helpers.module_eval { prepend DecoratorAdditions }
 
   protect_from_forgery with: ActionController::RequestForgeryProtection::ExceptionAndResetStrategy
