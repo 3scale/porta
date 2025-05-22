@@ -25,7 +25,7 @@ Feature: Provider accounts management
       | Password                | 123456               |
       | Password confirmation   | 123456               |
       | Organization/Group Name | The Provider         |
-    Then they should see the flash message "Tenant account was successfully created."
+    Then they should see a toast alert with text "Tenant account was successfully created"
     And the current page is the overview page of account "The Provider"
 
   Scenario: Create a provider account with invalid data

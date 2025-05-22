@@ -17,5 +17,5 @@ Feature: Provider login page
   Scenario: Buyer cannot login in admin domain
     Given a buyer "buyer"
     When they try to log in as provider "buyer"
-    Then they should see "Incorrect email or password. Please try again."
+    Then they should see "Incorrect email or password. Please try again"
     And should not be logged in

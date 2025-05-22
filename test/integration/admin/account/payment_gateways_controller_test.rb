@@ -25,7 +25,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     provider.reload
     provider.gateway_setting.reload
     assert_redirected_to admin_finance_settings_url
-    assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
+    assert_equal 'Payment gateway details were successfully saved', flash[:success]
     assert_equal attributes['gateway_type'], 'stripe'
     assert_equal attributes['gateway_settings'], ActionController::Parameters.new(gateway_options)
   end
@@ -60,7 +60,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     provider.reload
     provider.gateway_setting.reload
     assert_redirected_to admin_finance_settings_url
-    assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
+    assert_equal 'Payment gateway details were successfully saved', flash[:success]
     assert_equal attributes['gateway_type'], 'stripe'
     assert_equal attributes['gateway_settings'], ActionController::Parameters.new(gateway_options)
   end
@@ -80,7 +80,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     provider.reload
     provider.gateway_setting.reload
     assert_redirected_to admin_finance_settings_url
-    assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
+    assert_equal 'Payment gateway details were successfully saved', flash[:success]
     assert_equal attributes['gateway_type'], 'bogus'
     assert_equal attributes['gateway_settings'], ActionController::Parameters.new(gateway_options)
   end

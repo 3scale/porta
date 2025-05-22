@@ -7,10 +7,9 @@ class Sites::DeveloperPortalsController < Sites::BaseController
 
   def update
     if settings.update(settings_params)
-      flash[:notice] = 'Developer Portal settings updated.'
-      redirect_to edit_admin_site_developer_portal_path
+      redirect_to edit_admin_site_developer_portal_path, success: t('.success')
     else
-      flash[:error] = 'There were problems saving the settings.'
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end

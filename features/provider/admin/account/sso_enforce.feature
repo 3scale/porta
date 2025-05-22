@@ -38,7 +38,7 @@ Feature: Enforce SSO for all users
     When they go to the users sso integrations page
     And switch "Disable password-based authentication for all users of this account" on
     And press "Disable password-based authentication" within the modal
-    Then they should see the flash message "Password-based authentication disabled"
+    Then they should see a toast alert with text "Password-based authentication disabled"
 
   Scenario: Enable password-based authentication for all users
     Given the provider has an sso integration for the admin portal
@@ -48,11 +48,11 @@ Feature: Enforce SSO for all users
     When they go to the users sso integrations page
     And switch "Disable password-based authentication for all users of this account" off
     And press "Enable password-based authentication" within the modal
-    Then they should see the flash message "Password-based authentication enabled"
+    Then they should see a toast alert with text "Password-based authentication enabled"
 
   Scenario: Re-enabling password sign-ins should always be possible
     Given the provider has sso enabled for all users
     When they go to the users sso integrations page
     And switch "Disable password-based authentication for all users of this account" off
     And press "Enable password-based authentication" within the modal
-    Then they should see the flash message "Password-based authentication enabled"
+    Then they should see a toast alert with text "Password-based authentication enabled"

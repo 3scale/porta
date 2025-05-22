@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
+  ALERT_TYPES = %w[default info warning success danger].freeze
+  add_flash_types(*ALERT_TYPES)
+
   SecureHeaders::Configuration.override(:disable_x_frame) do |config|
     config.x_frame_options = SecureHeaders::OPT_OUT
   end
@@ -39,7 +42,7 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
-  helper_method :quickstarts_presenter, :masthead_data
+  helper_method :quickstarts_presenter, :masthead_data, :alert_type?
 
   private
 
@@ -101,9 +104,9 @@ class FrontendController < ApplicationController
       ThreeScale::Analytics.track(current_account.users.first, "golive:#{step}")
 
       if request.xhr?
-        flash.now[:notice] = I18n.t(step, scope: :go_live_states)
+        flash.now[:success] = I18n.t(step, scope: :go_live_states)
       else
-        flash[:notice] = I18n.t(step, scope: :go_live_states)
+        flash[:success] = I18n.t(step, scope: :go_live_states)
       end
       return true
     end
@@ -184,5 +187,9 @@ class FrontendController < ApplicationController
                     current_account.default_service
                   end
     @quickstarts_presenter = QuickstartsPresenter.new(current_api)
+  end
+
+  def alert_type?(type)
+    ALERT_TYPES.include?(type)
   end
 end

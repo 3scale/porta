@@ -1,2 +1,3 @@
-$.flash('<%= "#{@page.class.model_name.human} \"#{@page.name}\" reverted." %>');
 $('#<%= dom_id(@page) + '_change' %>').fadeOut(function(){ $(this).remove() });
+
+<%= render 'shared/flash_alerts' %>

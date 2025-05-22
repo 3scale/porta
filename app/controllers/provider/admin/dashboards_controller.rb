@@ -47,6 +47,6 @@ class Provider::Admin::DashboardsController < FrontendController
 
     return unless Features::QuickstartsConfig.enabled? && first_login.present?
 
-    flash[:notice] = t('provider.admin.dashboards.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
+    flash[:success] = t('.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 end

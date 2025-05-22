@@ -1,3 +1,6 @@
-$('#provider-change-plan').replaceWith(<%= json render('widget', :provider => @provider) %>);
-$.flash('Plan upgraded.');
-$.colorbox.close();
+void function ($) {
+  $('#provider-change-plan').replaceWith(<%= json render('widget', provider: @provider) %>);
+  $.colorbox.close();
+  <%= render 'shared/flash_alerts' %>
+}(jQuery);
+

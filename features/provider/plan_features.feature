@@ -76,7 +76,7 @@ Feature: Application, service and account plan Features
       | Name        | Free T-shirt                               |
       | System name | free-tee                                   |
       | Description | T-shirt with logo of our company for free. |
-    Then they should see the flash message "Feature has been created."
+    Then they should see a toast alert with text "Feature has been created"
     And should see the following table within the features:
       | Name         | Description                                |
       | Free T-shirt | T-shirt with logo of our company for free. |
@@ -93,7 +93,7 @@ Feature: Application, service and account plan Features
   Scenario Outline: Plan with no features
     Given <plan> does not have any features
     When they go to <plan> admin edit page
-    Then they should see "This plan has no features yet." within the features
+    Then they should see "This plan has no features yet" within the features
 
     Examples:
       | plan                    |
@@ -107,7 +107,7 @@ Feature: Application, service and account plan Features
       | Some Feature | True     |
     And they go to <plan> admin edit page
     When they disable feature "Some Feature"
-    Then they should see the flash message "Feature has been disabled."
+    Then they should see a toast alert with text "Feature has been disabled"
 
     Examples:
       | plan                    |
@@ -121,7 +121,7 @@ Feature: Application, service and account plan Features
       | Some Feature | False    |
     And they go to <plan> admin edit page
     When they enable feature "Some Feature"
-    Then they should see the flash message "Feature has been enabled."
+    Then they should see a toast alert with text "Feature has been enabled"
 
     Examples:
       | plan                    |
@@ -137,7 +137,7 @@ Feature: Application, service and account plan Features
     When they follow "Edit" that belongs to feature "Some Feature"
     And the modal is submitted with:
       | Name | New name |
-    Then they should see the flash message "Feature has been updated."
+    Then they should see a toast alert with text "Feature has been updated"
     And should see the following table within the features:
       | Name     | Description |
       | New name | Bananas     |
@@ -155,7 +155,7 @@ Feature: Application, service and account plan Features
     And they go to <plan> admin edit page
     When they press "Delete" that belongs to feature "Some Feature"
     And confirm the dialog
-    Then they should see the flash message "Feature has been deleted."
+    Then they should see a toast alert with text "Feature has been deleted"
     And should not see "Some Features" within the features
 
     Examples:

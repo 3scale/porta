@@ -17,7 +17,7 @@ Feature: Audience > Accounts > Edit
     When the form is submitted with:
       | Organization/Group Name | Pepito |
     Then the current page is the buyer account page for "Pepito"
-    And should see the flash message "Account successfully updated"
+    And should see a toast alert with text "Account successfully updated"
 
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider
@@ -25,7 +25,7 @@ Feature: Audience > Accounts > Edit
     And follow "Delete"
     And confirm the dialog
     Then the current page is the buyer accounts page
-    And they should see the flash message "The account was successfully deleted."
+    And they should see a toast alert with text "The account was successfully deleted"
     And should see the following table:
       | Group/Org. |
       | Pepe       |

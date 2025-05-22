@@ -1,6 +1,6 @@
-<%- unless @service_contract.new_record? %>
-  $.colorbox.close();
+<% if flash[:success].present? %>
   window.location.reload();
-<%-else-%>
-  $.colorbox({html: "<%= escape_javascript @form %>"});
-<%-end-%>
+<% else %>
+  $.colorbox.close();
+  <%= render 'shared/flash_alerts' %>
+<% end %>

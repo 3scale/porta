@@ -19,7 +19,7 @@ Feature: Provider webhooks
     And there shouldn't be a button to "Ping!"
     When the form is submitted with:
       | URL | http://3scale-test.org |
-    Then they should see the flash message "Webhooks settings were successfully updated."
+    Then they should see a toast alert with text "Webhooks settings were successfully updated"
     And there should be a button to "Ping!"
     And the current page is the edit webhooks page
 

@@ -22,7 +22,7 @@ Feature: Buyer's service subscription
       | My API  | AnotherOne | Published |
      And I go to the service subscription page
      And I press "Subscribe"
-    Then I should see "You have successfully subscribed to a service."
+    Then I should see "You have successfully subscribed to a service"
 
   Scenario: Subscription with approval
     Given the following service plan:
@@ -32,7 +32,7 @@ Feature: Buyer's service subscription
     When I go to the service subscription page
      And I select "Platinum" from "Plan"
      And press "Subscribe"
-    Then I should see "You have successfully subscribed to a service."
+    Then I should see "You have successfully subscribed to a service"
      And I should see "Platinum (pending)"
 
   Scenario: Subscribe with legal terms
@@ -48,9 +48,9 @@ Feature: Buyer's service subscription
     When I go to the service subscription page
     Then I should see "Magna Charta"
      And I press "Subscribe"
-    Then I should see "You have successfully subscribed to a service."
+    Then I should see "You have successfully subscribed to a service"
 
   Scenario: Fast lane - automatically subscribed when there is no plan to choose from
     When I log in as "bob" on foo.3scale.localhost
      And I go to the service subscription page
-    Then I should see "You have successfully subscribed to a service."
+    Then I should see "You have successfully subscribed to a service"

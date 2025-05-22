@@ -15,7 +15,7 @@ Feature: Deleting buyer account
     And I follow "Delete"
     And confirm the dialog
     Then I should be on the buyer accounts page
-    And I should see "The account was successfully deleted."
+    And I should see "The account was successfully deleted"
     And I should not see "bob"
 
   Scenario: Cannot delete account if there are unsettled invoices

@@ -45,7 +45,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
     # redirects to the account page and has the right flash message
     assert_redirected_to admin_buyers_account_path(account)
-    assert_equal 'Tenant account was successfully created.', flash[:notice]
+    assert_equal 'Tenant account was successfully created', flash[:success]
 
     # sets the limits
     constraints = User.find_by!(email: valid_params[:account][:user][:email]).account.provider_constraints

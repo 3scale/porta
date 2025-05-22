@@ -14,9 +14,9 @@ class Api::PoliciesController < Api::BaseController
 
   def update
     if proxy.update(proxy_params)
-      redirect_to({action: :edit}, notice: 'The policies are saved successfully')
+      redirect_to({ action: :edit }, success: t('.success'))
     else
-      flash.now[:error] = 'The policies cannot be saved'
+      flash.now[:danger] = t('.error')
       render :edit, status: status_from_error(:unprocessable_entity)
     end
   end

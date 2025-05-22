@@ -11,7 +11,7 @@ import {
   TextContent
 } from '@patternfly/react-core'
 
-import * as flash from 'utilities/flash'
+import { toast } from 'utilities/toast'
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 import { BuyerLogic } from 'Logic/BuyerLogic'
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
@@ -124,7 +124,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   const isFormComplete = Boolean(buyer && product && servicePlanValid && appPlan && buyerValid && definedFieldsValid)
 
   if (error) {
-    flash.error(error)
+    toast(error, 'danger')
   }
 
   return (

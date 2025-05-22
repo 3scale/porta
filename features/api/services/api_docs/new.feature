@@ -33,7 +33,7 @@ Feature: Product's new ActiveDocs page
       | Description              | This is an API    |
       | API JSON Spec            | <swagger version> |
       | Skip swagger validations | No               |
-    Then they should see the flash message "ActiveDocs Spec was successfully saved."
+    Then they should see a toast alert with text "ActiveDocs Spec was successfully saved"
     And the current page is the spec's preview page from Product context
 
     Examples:

@@ -8,8 +8,7 @@ class Api::SupportsController < FrontendController
 
   def update
     if @edited_service.update(params[:service])
-      flash[:notice] =  'Support information was updated.'
-      redirect_to edit_admin_service_support_path(@service)
+      redirect_to edit_admin_service_support_path(@service), success: 'Support information was updated.'
     else
       render :action => :edit
     end

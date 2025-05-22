@@ -50,7 +50,7 @@ class Provider::Admin::Messages::TrashControllerTest < ActionDispatch::Integrati
     assert provider_sent_message.hidden?
     delete provider_admin_messages_trash_path(provider_sent_message)
     assert_response :redirect
-    assert_equal 'Message was restored.', flash[:notice]
+    assert_equal 'Message was restored', flash[:success]
     refute provider_sent_message.reload.hidden?
   end
 
@@ -58,7 +58,7 @@ class Provider::Admin::Messages::TrashControllerTest < ActionDispatch::Integrati
     assert_equal 2, provider.trashed_messages.count
     delete empty_provider_admin_messages_trash_index_path
     assert_response :redirect
-    assert_equal 'The trash was emptied.', flash[:notice]
+    assert_equal 'The trash was emptied', flash[:success]
     assert_equal 1, provider.trashed_messages.count # only trashed messages received by the provider are emptied
   end
 end

@@ -24,3 +24,6 @@ Feature: Create invoice
     And confirm the dialog
     When I follow "2009-01-00000001"
     Then I should see "Invoice for January 2009"
+
+  @wip
+  Scenario: Buyer already has an open invoice

@@ -37,14 +37,14 @@ Feature: Application details card
     Given they go to the application's admin page
     When they follow "Suspend" within the application details
     And confirm the dialog
-    Then they should see the flash message "The application has been suspended"
+    Then they should see a toast alert with text "The application has been suspended"
     And should see "Suspended" within the application details
 
   Scenario: Resuming the application
     Given the application is suspended
     And they go to the application's admin page
     When they follow "Resume" within the application details
-    Then they should see the flash message "The application is live again!"
+    Then they should see a toast alert with text "The application is live again!"
     And should see "Live" within the application details
 
   Scenario: Extra fields are listed alongside the application details

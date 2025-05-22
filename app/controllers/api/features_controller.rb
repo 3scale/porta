@@ -18,16 +18,13 @@ class Api::FeaturesController < FrontendController
     end
   end
 
+  # TODO: return actual errors instead of showing generic warning (see _error.js.erb)
   def create
     @feature = collection.build(feature_params.merge(scope: @plan.class.to_s, featurable: @plan.issuer))
 
-    respond_to do |format|
-      if @feature.save
-        format.js
-      else
-        format.js { render :action => 'error' }
-      end
-    end
+    flash.now[:success] = t('.success') if @feature.save
+
+    respond_to :js
   end
 
   def edit
@@ -37,24 +34,23 @@ class Api::FeaturesController < FrontendController
     end
   end
 
+  # TODO: return actual errors instead of showing generic warning (see _error.js.erb)
   def update
-    respond_to do |format|
-      if @feature.update(feature_params)
-        format.js
-      else
-        format.js { render :action => 'error' }
-      end
-    end
+    flash.now[:success] = t('.success') if @feature.update(feature_params)
+
+    respond_to :js
   end
 
   def destroy
-    @feature.destroy
+    if @feature.destroy
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
+    end
 
     # redirect_to  edit_admin_plan_url(@plan, :type => @plan.class.to_s.underscore)
     # TODO: Solve problem of charging with AJAX
-    respond_to do |format|
-      format.js
-    end
+    respond_to :js
   end
 
   protected
