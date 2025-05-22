@@ -1,8 +1,6 @@
-- alert_types = %w[default info warning success danger]
-
 ul class="pf-c-alert-group pf-m-toast"
   - flash.each do |type, messages|
-    - if alert_types.include?(type)
+    - if alert_type?(type)
       - Array(messages).each do |message|
         li class="pf-c-alert-group__item animate__animated animate__slideInRight animate__faster"
           = pf_toast_alert(message, type: type.to_sym)
