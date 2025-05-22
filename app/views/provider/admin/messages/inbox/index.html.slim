@@ -7,7 +7,7 @@
 
 - else
   - content_for :javascripts do
-    = javascript_packs_with_chunks_tag 'table_toolbar'
+    = javascript_packs_with_chunks_tag 'table_toolbar', 'pf_table'
 
   table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Messages table" id="messages" data-toolbar-props=toolbar_props.to_json
     thead
@@ -28,10 +28,17 @@
           td role="cell" data-label="Date Sent" = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
-              div class="pf-c-overflow-menu__content"
-                div class="pf-c-overflow-menu__group pf-m-button-group"
-                  div class="pf-c-overflow-menu__item"
-                    = delete_button_for provider_admin_messages_inbox_path(message), class: 'action'
-
-  = will_paginate(@messages)
-  = link_to_export_widget_for('Messages') if can?(:export, :data)
+              div class="pf-c-overflow-menu__control"
+                div class="pf-c-dropdown"
+                  button class="pf-c-button pf-c-dropdown__toggle pf-m-plain" type="button"
+                    i class="fas fa-ellipsis-v" aria-hidden="true"
+                  ul class="pf-c-dropdown__menu pf-m-align-right" hidden="hidden"
+                    - unless message.read?
+                      li
+                        = pf_fancy_button_to 'Mark as read', mark_as_read_provider_admin_messages_inbox_path(message),
+                                                             remote: true,
+                                                             class: 'pf-c-dropdown__menu-item'
+                    li
+                      = pf_fancy_button_to 'Delete', provider_admin_messages_inbox_path(message),
+                                                     method: :delete,
+                                                     class: 'pf-c-dropdown__menu-item'

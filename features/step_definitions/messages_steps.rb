@@ -94,3 +94,7 @@ end
 When "the email will fail when sent" do
   Message.any_instance.stubs(:save).returns(false).once
 end
+
+Then "they should not see any unread message" do
+  assert_empty find_all('table#messages .read')
+end

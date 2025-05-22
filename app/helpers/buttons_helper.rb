@@ -55,6 +55,22 @@ module ButtonsHelper
     end
   end
 
+  def pf_fancy_button_to(label, url, options = {})
+    form_attributes = { method: options.delete(:method) || :post }
+    form_attributes['data-remote'] = true if options.delete(:remote)
+    form_attributes['data-confirm'] = options.delete(:confirm)
+
+    button_class = options.delete(:class)
+
+    button_attributes = { type: 'submit', class: button_class.strip }.merge(options)
+
+    capture do
+      form_tag url, form_attributes do
+        tag.button(label, **button_attributes)
+      end
+    end
+  end
+
   # Convenience method for buttons to some action. The action symbol will be used for button's
   # label and it's css class by default:
   #
