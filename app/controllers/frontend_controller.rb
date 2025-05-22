@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
-  add_flash_types :default, :info, :success, :warning, :danger
+  ALERT_TYPES = %w[default info warning success danger].freeze
+  add_flash_types(*ALERT_TYPES)
 
   SecureHeaders::Configuration.override(:disable_x_frame) do |config|
     config.x_frame_options = SecureHeaders::OPT_OUT
@@ -41,7 +42,7 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
-  helper_method :quickstarts_presenter, :masthead_data
+  helper_method :quickstarts_presenter, :masthead_data, :alert_type?
 
   private
 
@@ -186,5 +187,9 @@ class FrontendController < ApplicationController
                     current_account.default_service
                   end
     @quickstarts_presenter = QuickstartsPresenter.new(current_api)
+  end
+
+  def alert_type?(type)
+    ALERT_TYPES.include?(type)
   end
 end
