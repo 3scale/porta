@@ -1,18 +1,18 @@
 - content_for :page_header_title, 'Trash'
 
 - if @messages.blank?
-  p The trash is empty.
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'trash' }
 
 - else
   - content_for :javascripts do
-    / HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
-      import the whole pack with "javascript_packs_with_chunks_tag"
-    = stylesheet_packs_chunks_tag 'table_toolbar'
+    = javascript_packs_with_chunks_tag 'table_toolbar'
   // temporarily hidden Empty the trash action
   // the whole explanation: https://github.com/3scale/system/issues/6275
   //.operations
   //  = fancy_button_to 'Empty the trash', empty_provider_admin_messages_trash_index_path, method: :delete, class: 'empty_trash'
-  table class="pf-c-table pf-m-grid-lg" role="grid" id="messages"
+  table class="pf-c-table pf-m-grid-lg" role="grid" id="messages" data-toolbar-props=toolbar_props.to_json
     thead
       tr role="row"
         th role="columnheader" scope="col" Subject
@@ -22,16 +22,15 @@
         th
     tbody role="rowgroup"
       - @messages.each do |message|
+        - message_path = provider_admin_messages_trash_path(message)
         tr role="row" class=cycle('odd', 'even', name: 'messages')
-          td role="cell" data-label="Subject" = link_to message.subject, provider_admin_messages_trash_path(message)
-          td role="cell" data-label="From" = link_to message_sender(message), provider_admin_messages_trash_path(message)
-          td role="cell" data-label="To" = link_to message_receiver(message), provider_admin_messages_trash_path(message)
+          td role="cell" data-label="Subject" = link_to message.subject, message_path
+          td role="cell" data-label="From" = link_to message_sender(message), message_path
+          td role="cell" data-label="To" = link_to message_receiver(message), message_path
           td role="cell" data-label="Data sent" = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
               div class="pf-c-overflow-menu__content"
                 div class="pf-c-overflow-menu__group pf-m-button-group"
                   div class="pf-c-overflow-menu__item"
-                    = fancy_button_to 'Restore', provider_admin_messages_trash_path(message), method: :delete, class: 'undelete action'
-
-  = will_paginate(@messages)
+                    = fancy_button_to 'Restore', message_path, method: :delete, class: 'pf-c-button pf-m-secondary'

@@ -519,6 +519,11 @@ en:
               title: Nothing to see here
               body: Your outbox is empty, there are no new sent messages.
               primary: Compose Message
+        trash:
+          index:
+            empty_state:
+              title: Nothing to see here
+              body: The trash is empty
       cms:
         builtin_legal_terms:
           info:
