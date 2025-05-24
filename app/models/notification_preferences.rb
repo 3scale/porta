@@ -34,7 +34,7 @@ class NotificationPreferences < ApplicationRecord
   end
 
   def new_preferences=(updated_preferences)
-    prefs = updated_preferences.transform_values { ActiveModel::Type::Boolean.new.cast(_1) }
+    prefs = updated_preferences.transform_values { ActiveModel::Type::Boolean.new.cast(_1) || false }
     self.preferences = preferences.merge(prefs)
   end
 
