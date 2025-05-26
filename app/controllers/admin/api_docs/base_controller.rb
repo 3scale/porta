@@ -63,7 +63,6 @@ class Admin::ApiDocs::BaseController < FrontendController
 
     respond_to do |format|
       format.html { redirect_to preview_admin_api_docs_service_path(api_docs_service) }
-      format.json
     end
   end
 
@@ -92,7 +91,6 @@ class Admin::ApiDocs::BaseController < FrontendController
 
     respond_to do |format|
       format.html { redirect_to admin_api_docs_services_path }
-      format.json
     end
   end
 

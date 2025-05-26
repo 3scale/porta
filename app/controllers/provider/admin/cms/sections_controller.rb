@@ -54,7 +54,7 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
         redirect_to edit_provider_admin_cms_section_path(@section), danger: t('.success')
       end
     else
-      render_error status: :method_not_allowed, text: t('.not_allwed')
+      render_error status: :method_not_allowed, text: t('.not_allowed')
     end
   end
 
