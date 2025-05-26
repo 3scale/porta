@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
-  ALERT_TYPES = %w[default info warning success danger].freeze
+  ALERT_TYPES = %i[default info warning success danger].freeze
   add_flash_types(*ALERT_TYPES)
 
   SecureHeaders::Configuration.override(:disable_x_frame) do |config|
@@ -190,6 +190,6 @@ class FrontendController < ApplicationController
   end
 
   def alert_type?(type)
-    ALERT_TYPES.include?(type)
+    ALERT_TYPES.include?(type.to_sym)
   end
 end
