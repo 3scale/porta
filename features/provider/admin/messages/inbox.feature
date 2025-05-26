@@ -43,6 +43,8 @@ Feature: Audience > Messages > Inbox
       And they should see unread message from "Alice" with subject "Mark me"
       When they select action "Mark as read" of "Mark me"
       Then they should see read message from "Alice" with subject "Mark me"
+      And the actions of row "Mark me" are:
+        | Delete |
 
     @wip
     # https://issues.redhat.com/browse/THREESCALE-11854
