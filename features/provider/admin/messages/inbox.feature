@@ -101,3 +101,9 @@ Feature: Audience > Messages > Inbox
       Given they go to the provider inbox page
       When they select toolbar action "Export to CSV"
       Then they should be on the admin portal data exports page
+
+    Scenario: Only admins can export all messages
+      Given a member user "Pepe" of the provider
+      And the user logs in
+      When they go to the provider inbox page
+      Then they can't find toolbar action "Export to CSV"
