@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class FrontendController < ApplicationController
-  ALERT_TYPES = %i[default info warning success danger].freeze
-  add_flash_types(*ALERT_TYPES)
-
   SecureHeaders::Configuration.override(:disable_x_frame) do |config|
     config.x_frame_options = SecureHeaders::OPT_OUT
   end
@@ -30,6 +27,8 @@ class FrontendController < ApplicationController
 
   include MenuHelper # TODO: convert to a presenter
 
+  include FlashAlerts
+
   # TODO: this should go to Provider::BaseController when one such will exist
   activate_menu :topmenu => :dashboard
 
@@ -42,7 +41,7 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
-  helper_method :quickstarts_presenter, :masthead_data, :alert_type?
+  helper_method :quickstarts_presenter, :sudo
 
   private
 
@@ -82,8 +81,6 @@ class FrontendController < ApplicationController
       true
     end
   end
-
-  helper_method :sudo
 
   def sudo
     return_path = request.xhr? ? request.fullpath : request.headers.fetch('Referer') { request.fullpath }
@@ -187,9 +184,5 @@ class FrontendController < ApplicationController
                     current_account.default_service
                   end
     @quickstarts_presenter = QuickstartsPresenter.new(current_api)
-  end
-
-  def alert_type?(type)
-    ALERT_TYPES.include?(type.to_sym)
   end
 end
