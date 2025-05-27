@@ -99,4 +99,25 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
     assert_not preferences.preferences["service_contract_created"]
     assert preferences.preferences["plan_downgraded"]
   end
+
+  test 'new_preferences= invalid values' do
+    preferences = FactoryBot.create(:user_with_account).notification_preferences
+    preferences.save
+
+    preferences.new_preferences = { non_existing_preference: true }
+
+    assert_not preferences.valid?
+    assert_equal ["notification 'non_existing_preference' is not valid"], preferences.errors[:preferences]
+
+    preferences.reload
+    new_prefs = { account_created: "asdf", application_created: "", service_contract_created: 1 }
+    preferences.new_preferences = new_prefs
+
+    assert_not preferences.valid?
+    errors = preferences.errors[:preferences]
+    assert_equal 3, errors.size
+    new_prefs.each_key do |key|
+      errors.include?("invalid value for '#{key}', must be either true or false")
+    end
+  end
 end
