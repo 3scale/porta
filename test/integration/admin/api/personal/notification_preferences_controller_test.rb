@@ -44,13 +44,24 @@ class Admin::Api::Personal::NotificationPreferencesControllerTest < ActionDispat
   test 'update with wrong parameters' do
     user.notification_preferences.update(enabled_notifications: ['account_created'])
     previous_prefs = user.notification_preferences.preferences
+
     update_params = {
-      non_existing_notification: false,
+      non_existing_notification: false
+    }
+
+    put admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
+
+    # Strong parameters filter out non-existing preferences
+    assert_response :success
+    assert_equal previous_prefs, user.notification_preferences.reload.preferences
+
+    update_params = {
       account_created: 'some-value'
     }
     put admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
 
-    assert_response :success
-    assert_equal previous_prefs, user.notification_preferences.reload.preferences
+    assert_response :unprocessable_entity
+    resp = JSON.parse(response.body)
+    assert_equal ["invalid value for 'account_created', must be either true or false"], resp["errors"]["preferences"]
   end
 end
