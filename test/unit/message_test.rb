@@ -74,7 +74,7 @@ class MessageTest < ActiveSupport::TestCase
       FactoryBot.create(:simple_admin, account: account)
     end
 
-    ActionMailer::Base.deliveries = []
+    ActionMailer::Base.deliveries.clear
 
     message = Message.create!(sender: sender, to: recipients,
                               subject: 'hello', body: "what's up?")
