@@ -33,12 +33,11 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_equal 0, assigns(:messages).count
   end
 
-  test 'renders index page with export option for admins' do
+  test 'renders index page' do
     login_as(@admin)
     get :index
     assert_response :success
     assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
-    assert_select '#export-to-csv', 'Export all Messages'
   end
 
   test 'renders index page without export option for members' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::BaseController
-  before_action :find_message, only: %i[show destroy reply]
+  before_action :find_message, only: %i[show destroy reply mark_as_read]
 
   activate_menu :buyers, :messages, :inbox
 
@@ -33,6 +33,11 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
     else
       redirect_to provider_admin_messages_inbox_path(@message), danger: reply.errors.full_messages.to_sentence
     end
+  end
+
+  def mark_as_read
+    @message.view! unless @message.read?
+    respond_to :js
   end
 
   private

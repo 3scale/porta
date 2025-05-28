@@ -257,7 +257,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         root to: 'inbox#index'
         resources :inbox, only: [:show, :destroy] do
           member do
-            post :reply
+            post :reply, :mark_as_read
           end
         end
         resources :outbox, except: [:edit, :update]
