@@ -50,6 +50,17 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     refute @worker.create_notifications(notification)
   end
 
+  def test_skip_notifications_from_suspended_buyer
+    provider = FactoryBot.create(:simple_provider)
+    buyer = FactoryBot.create(:simple_buyer, state: 'suspended')
+    event  = CustomEvent.new(provider: provider, account_id: buyer.id)
+    notification = NotificationEvent.create(:application_created, event)
+
+    ProcessNotificationEventWorker::UserNotificationWorker.expects(:perform_async).never
+
+    refute @worker.create_notifications(notification)
+  end
+
   def test_only_send_notifications_for_active_users
     provider = FactoryBot.create(:simple_provider)
     system_name = 'application_created'
