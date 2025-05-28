@@ -13,6 +13,10 @@ Given /^they visit the developer portal in CMS mode(\swith an expired signature)
                         access_code: @provider.site_access_code)
 end
 
+Given /^they visit the developer portal home page/ do
+  visit root_url(host: @provider.external_domain)
+end
+
 Given "the CMS toolbar has been previously hidden" do
   # FIXME: Unfortunately we can't stub just cookie['cms-toolbar-state'] without breaking the rest
   # ActionDispatch::Cookies::CookieJar.any_instance.stubs('[]').with('cms-toolbar-state').returns('hidden')

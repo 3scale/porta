@@ -38,6 +38,14 @@ Feature: CMS Toolbar
     Then there should not be a CMS toolbar
     And should see "Invalid or expired signature"
 
+  Scenario: Hide the toolbar when the CMS mode expires
+    When they visit the developer portal in CMS mode
+    Then the cms toolbar should be visible
+    Then 2 days pass
+    Then they visit the developer portal home page
+    Then there should not be a CMS toolbar
+    And should see "CMS Edit mode expired"
+
   Rule: There is a John Doe admin user
     Background:
       When the admin user is John Doe
