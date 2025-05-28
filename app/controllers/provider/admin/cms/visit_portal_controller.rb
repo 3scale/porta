@@ -3,9 +3,8 @@
 class Provider::Admin::CMS::VisitPortalController < Provider::Admin::CMS::BaseController
   # Encrypt the CMS token under a temporary SSO token and redirect to the Developer Portal
   def with_token
-    cms_token = current_account.settings.cms_token!
     expires_at = Time.now.utc.round + 1.minute
-    signature = CMS::Signature.generate(cms_token, expires_at)
+    signature = CMS::Signature.generate(current_account.id, expires_at)
 
     redirect_to access_code_url(
       host: current_account.external_domain,
