@@ -7,6 +7,7 @@
 - recaptcha_enabled = !!@bot_protection_enabled
 - recaptcha_site_key = Rails.configuration.three_scale.recaptcha_public_key
 - recaptcha_action = controller_path
+
 div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to])),
   authenticationProviders: authentication_providers,
   flashMessages: flash_messages,
@@ -18,4 +19,5 @@ div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].
   disablePasswordReset: is_master_account,
   recaptcha: { enabled: recaptcha_enabled, siteKey: recaptcha_site_key, action: recaptcha_action },
   session: {username: params[:username]},
+  qod: @qod,
 }.to_json
