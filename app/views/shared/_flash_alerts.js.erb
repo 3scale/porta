@@ -1,7 +1,5 @@
-<% alert_types = %w[default info warning success danger] %>
-
 <% flash.each do |type, messages| %>
-  <% if alert_types.include?(type) %>
+  <% if alert_type?(type) %>
     <% Array(messages).each do |message| %>
       ThreeScale.toast('<%= escape_javascript(message) %>', '<%= type %>');
     <% end %>
