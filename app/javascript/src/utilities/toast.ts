@@ -87,11 +87,6 @@ export const hideToast = (alertGroupItem: HTMLLIElement): void => {
   }
 }
 
-export const success = (message: string): void => { toast(message, 'success') }
-export const danger = (message: string): void => { toast(message, 'danger') }
-export const info = (message: string): void => { toast(message, 'info') }
-export const warning = (message: string): void => { toast(message, 'warning') }
-
 /**
  * For alerts rendered by rails, set close buttons up and set timeouts to automacally hide.
  */
