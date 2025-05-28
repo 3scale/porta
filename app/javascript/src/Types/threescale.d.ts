@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import type { TYPE } from 'utilities/toast'
+import type { IAlertType } from 'Types'
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     ThreeScale: {
-      toast: (message: string, type?: TYPE) => void;
+      toast: (message: string, type?: IAlertType) => void;
       hideToast: (alert: HTMLLIElement) => void;
       spinnerId: string;
       showSpinner: () => void;
