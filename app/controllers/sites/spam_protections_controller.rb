@@ -8,7 +8,7 @@ class Sites::SpamProtectionsController < Sites::BaseController
 
   def update
     if @settings.update(params[:settings])
-      redirect_to edit_admin_site_spam_protection_url, t('.success')
+      redirect_to edit_admin_site_spam_protection_url, success: t('.success')
     else
       flash.now[:danger] = t('.error')
       render :action => 'edit'
