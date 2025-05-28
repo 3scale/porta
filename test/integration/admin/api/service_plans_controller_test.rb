@@ -187,7 +187,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
 
       delete admin_service_plan_path(service_plan)
       assert_response :success
-      assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
+      assert_equal 'The plan was deleted', (JSON.parse response.body)['success']
 
       delete admin_service_plan_path(forbidden_service_plan)
       assert_response :not_found

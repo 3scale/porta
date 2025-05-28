@@ -83,12 +83,12 @@ class Api::PlanCopiesControllerTest < ActionDispatch::IntegrationTest
   def assert_plan_copied
     assert_response :created
     json = JSON.parse(response.body)
-    assert_equal 'Plan copied.', json['notice']
+    assert_equal 'Plan copied', json['success']
     assert_includes current_account.provided_plans.pluck(:id), JSON.parse(json['plan'])['id']
   end
 
   def assert_plan_not_copied
     assert_response :unprocessable_entity
-    assert_equal 'Plan could not be copied.', JSON.parse(response.body)['error']
+    assert_equal 'Plan could not be copied', JSON.parse(response.body)['error']
   end
 end

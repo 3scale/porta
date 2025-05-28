@@ -60,7 +60,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference( @service.application_plans.method(:count), -1 ) do
         delete polymorphic_path([:admin, plan], format: :json)
         assert_response :success
-        assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
+        assert_equal 'The plan was deleted', (JSON.parse response.body)['success']
       end
       assert_raise ActiveRecord::RecordNotFound do
         plan.reload
@@ -169,7 +169,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     test 'destroy' do
       delete polymorphic_path([:admin, plan], format: :json)
       assert_response :success
-      assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
+      assert_equal 'The plan was deleted', (JSON.parse response.body)['success']
     end
 
     test 'plan cannot be deleted because of having contracts' do
