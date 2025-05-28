@@ -8,11 +8,11 @@ class Api::PlansController < Api::PlansBaseController
     name = @plan.name
     json = {}
     if @plan.publish
-      json[:notice] = "Plan #{name} was published."
+      json[:success] = t('.success', name: name)
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:error] = "Plan #{name} cannot be published."
+      json[:error] = t('.error', name: name)
       status = :not_acceptable
     end
 
@@ -25,11 +25,11 @@ class Api::PlansController < Api::PlansBaseController
     name = @plan.name
     json = {}
     if @plan.hide
-      json[:notice] = "Plan #{name} was hidden."
+      json[:success] = t('.success', name: name)
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:alert] = "Plan #{name} cannot be hidden."
+      json[:error] = t('.error', name: name)
       status = :not_acceptable
     end
 

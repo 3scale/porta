@@ -884,6 +884,12 @@ en:
           success: Webhooks settings were successfully updated
 
   buyers:
+    account_contracts:
+      update:
+        success: Plan changed to '%{name}'
+    account_plans:
+      destroy:
+        success: The plan was deleted
     accounts:
       create:
         success: Developer account was successfully created
@@ -920,11 +926,11 @@ en:
             other: Successfully sent %{count} emails
         change_states:
           success:
-            one: The account's state was changed successfully
+            one: The account state was changed successfully
             other: Successfully changed the state of %{count} accounts
         change_plans:
           success:
-            one: The account's plan was changed successfully
+            one: The account plan was changed successfully
             other: Successfully changed the plan of %{count} accounts
       update:
         success: Account successfully updated
@@ -1192,6 +1198,9 @@ en:
           service: Alerts
           all: Alerts for all services
         delete_alert_confirmation: Do you really want to delete this alert?
+    application_plans:
+      destroy:
+        success: The plan was deleted
     applications:
       index:
         description: |
@@ -1223,6 +1232,9 @@ en:
       destroy:
         success: The Backend was removed from the Product
         error: The Backend cannot be removed from the Product
+    contents:
+      update:
+        success: Content updated
     errors:
       index:
         title: Integration Errors for %{service}
@@ -1253,6 +1265,9 @@ en:
         success: Feature has been enabled
       destroy:
         success: Feature has been disabled
+    service_plans:
+      destroy:
+        success: The plan was deleted
     services:
       create:
         success: Product created
@@ -1268,6 +1283,12 @@ en:
       update:
         success: Product information updated
         error: Couldn't update Product
+    supports:
+      update:
+        success: Support information was updated
+    terms:
+      update:
+        success: Terms & Conditions updated
     integrations:
       edit:
         proxy_or_plugin: |
@@ -1312,11 +1333,21 @@ en:
         submit: Create %{type}
       update:
         success: The %{type} was updated
+    plan_copies:
+      create:
+        error: Plan could not be copied
+        success: Plan copied
     plans:
       create:
         success: Created %{type} %{name}
+      hide:
+        error: Plan %{name} cannot be hidden
+        success: Plan %{name} was hidden
       masterize:
         success: The default plan has been changed
+      publish:
+        error: Plan %{name} cannot be published
+        success: Plan %{name} was published
     policies:
       edit:
         empty_state:

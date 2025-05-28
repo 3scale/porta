@@ -45,11 +45,11 @@ const PlansTable: FunctionComponent<Props> = ({
   const [plans, setPlans] = useState<Plan[]>(initialPlans)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleActionCopy = (path: string) => ajax<{ notice: string; plan: string; error: string }>(path, { method: 'POST' })
+  const handleActionCopy = (path: string) => ajax<{ success: string; plan: string; error: string }>(path, { method: 'POST' })
     .then(data => data.json()
       .then((res) => {
         if (data.status === 201) {
-          toast(res.notice, 'success')
+          toast(res.success, 'success')
           const newPlan = JSON.parse(res.plan) as Plan
           setPlans([...plans, newPlan])
         } else if (data.status === 422) {
@@ -66,11 +66,11 @@ const PlansTable: FunctionComponent<Props> = ({
   const handleActionDelete = (path: string) => waitConfirm('Are you sure?')
     .then(confirmed => {
       if (confirmed) {
-        return ajax<{ notice: string; id: number }>(path, { method: 'DELETE' })
+        return ajax<{ success: string; id: number }>(path, { method: 'DELETE' })
           .then(data => data.json()
             .then((res) => {
               if (data.status === 200) {
-                toast(res.notice, 'success')
+                toast(res.success, 'success')
                 const purgedPlans = plans.filter(p => p.id !== res.id)
                 setPlans(purgedPlans)
               }
@@ -83,11 +83,11 @@ const PlansTable: FunctionComponent<Props> = ({
     })
     .finally(() => { setIsLoading(false) })
 
-  const handleActionPublishHide = (path: string) => ajax<{ notice: string; plan: string; error: string }>(path, { method: 'POST' })
+  const handleActionPublishHide = (path: string) => ajax<{ success: string; plan: string; error: string }>(path, { method: 'POST' })
     .then(data => data.json()
       .then((res) => {
         if (data.status === 200) {
-          toast(res.notice, 'success')
+          toast(res.success, 'success')
           const newPlan = JSON.parse(res.plan) as Plan
           const i = plans.findIndex(p => p.id === newPlan.id)
           plans[i] = newPlan

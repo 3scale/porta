@@ -107,7 +107,7 @@ class Api::PlansBaseController < Api::BaseController
 
     return yield if block_given?
 
-    json = { notice: 'The plan was deleted', id: plan.id }
+    json = { success: t('.success'), id: plan.id }
     respond_to do |format|
       format.json { render json: json, status: :ok }
     end

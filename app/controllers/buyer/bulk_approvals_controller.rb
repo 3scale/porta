@@ -1,3 +1,5 @@
+# TODO: can we remove this?
+
 class Buyer::BulkApprovalsController < FrontendController
   include SiteAccountSupport
   include ProviderRequirements
