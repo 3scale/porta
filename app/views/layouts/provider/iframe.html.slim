@@ -15,20 +15,22 @@ html[lang="en"]
     = yield :javascript
 
     javascript:
-      (function($){
-        $(window).load(function () {
-          setTimeout(function () {
+      (function ($) {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
             var content = $(#{json yield(:after_load)}).toArray();
             var body = $(document.body);
 
-            (function nextNode(){
+            (function nextNode () {
               var deferred;
               var node = content.shift();
 
-              if(!node) return;
+              if (!node) {
+                return;
+              }
 
               if ($(node).is('script[src]')) {
-                deferred = $.ajax({url: $(node).attr('src'), dataType: "script", cache: true});
+                deferred = $.ajax({ url: $(node).attr('src'), dataType: 'script', cache: true });
               } else {
                 deferred = $.Deferred();
                 body.append(node);
@@ -37,7 +39,6 @@ html[lang="en"]
 
               deferred.then(nextNode);
             }());
-
-          }, 0);
+          });
         });
       }(jQuery));
