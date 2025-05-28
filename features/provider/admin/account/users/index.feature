@@ -69,7 +69,7 @@ Feature: Account Settings > Users > Listing
       Given they go to the provider users page
       When they select action "Delete" of "hunk"
       And confirm the dialog
-      Then they should see the flash message "User was successfully deleted"
+      Then they should see a toast alert with text "User was successfully deleted"
       And they should see the following table:
         | Name          | Email                | Role   | Permission groups |
         | Albert Wesker | wesker@umbrella.corp | admin  | Unlimited access  |
@@ -81,7 +81,7 @@ Feature: Account Settings > Users > Listing
       When the form is submitted with:
         | Username | honk               |
         | Email    | honk@umbrella.corp |
-      Then they should see the flash message "User was successfully updated"
+      Then they should see a toast alert with text "User was successfully updated"
       And they should see the following table:
         | Name          | Email                | Role   | Permission groups |
         | Albert Wesker | wesker@umbrella.corp | admin  | Unlimited access  |

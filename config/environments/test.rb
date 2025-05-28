@@ -70,11 +70,6 @@ Rails.application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
-
-  # Disable css/jquery animations in tests
-  # TODO: remove in favor of Capybara.disable_animation = true when we upgrade to capybara 3
-  config.middleware.use Rack::NoAnimations
-
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
 
   config.asset_host = ->(source) do

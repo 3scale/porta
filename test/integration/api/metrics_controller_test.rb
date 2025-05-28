@@ -67,7 +67,7 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
     assert_difference @service.metrics.method(:count), -1 do
       delete admin_service_metric_path(service_id: @service.id, id: @metric.id)
       assert_response :redirect
-      assert_equal 'The metric was deleted', flash[:notice]
+      assert_equal 'The metric was deleted', flash[:success]
     end
   end
 
@@ -75,7 +75,7 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference @service.metrics.method(:count) do
       delete admin_service_metric_path(service_id: @service.id, id: @service.metrics.hits)
       assert_response :redirect
-      assert_equal 'The Hits metric cannot be deleted', flash[:error]
+      assert_equal 'The Hits metric cannot be deleted', flash[:danger]
     end
   end
 end

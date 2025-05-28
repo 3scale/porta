@@ -24,6 +24,7 @@ module SessionHelper
   end
 
   def try_provider_login(username, password)
+    ensure_javascript
     visit provider_login_path
     fill_in('Email or Username', with: username)
     fill_in('Password', with: password)
@@ -45,8 +46,13 @@ module SessionHelper
 
   def assert_current_user(username)
     @user = User.find_by(username: username)
-    message = "Expected #{username} to be logged in, but is not"
-    assert has_content?(/Signed (?:in|up) successfully/i, wait: 0) || has_content?(/You can use quick starts/i, wait: 0), message
+
+    browser = Capybara.current_session.driver.browser
+    if Capybara.current_driver == :rack_test
+      assert browser.current_session.cookie_jar[:user_session]
+    else
+      assert browser.manage.cookie_named(:user_session)
+    end
   end
 
   private

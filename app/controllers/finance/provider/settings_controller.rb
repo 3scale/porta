@@ -19,15 +19,16 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
       finance_billing_strategy_params['currency'] = nil
     end
 
-    if @billing_strategy.numbering_period != finance_billing_strategy_params['numbering_period']
-      ok_message = "Already existent invoices won't change their id."
-    end
+    success_msg = if @billing_strategy.numbering_period == finance_billing_strategy_params['numbering_period']
+                    t('.success')
+                  else
+                    t('.success_extra')
+                  end
 
     if @billing_strategy.update(finance_billing_strategy_params)
-      flash[:message] = "Finance settings updated. #{ok_message}"
-      redirect_to :action => 'show'
+      redirect_to({ action: :show }, success: success_msg)
     else
-      flash[:message] = 'Invalid finance settings'
+      flash.now[:danger] = t('.invalid')
       render :action => :show
     end
   end

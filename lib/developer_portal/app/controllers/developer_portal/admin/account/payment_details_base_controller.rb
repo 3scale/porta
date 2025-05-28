@@ -58,7 +58,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
   end
 
   def after_hosted_success_path
-    if flash[:success] && plan_changes?
+    if flash[:notice] && plan_changes?
       admin_account_plan_changes_path
     else
       after_hosted_success_without_plan_changes_path

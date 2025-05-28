@@ -27,6 +27,8 @@ class FrontendController < ApplicationController
 
   include MenuHelper # TODO: convert to a presenter
 
+  include FlashAlerts
+
   # TODO: this should go to Provider::BaseController when one such will exist
   activate_menu :topmenu => :dashboard
 
@@ -39,7 +41,7 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
-  helper_method :quickstarts_presenter, :masthead_data
+  helper_method :quickstarts_presenter, :sudo
 
   private
 
@@ -80,8 +82,6 @@ class FrontendController < ApplicationController
     end
   end
 
-  helper_method :sudo
-
   def sudo
     return_path = request.xhr? ? request.fullpath : request.headers.fetch('Referer') { request.fullpath }
     Sudo.new(return_path: return_path, user_session: user_session, xhr: request.xhr?)
@@ -101,9 +101,9 @@ class FrontendController < ApplicationController
       ThreeScale::Analytics.track(current_account.users.first, "golive:#{step}")
 
       if request.xhr?
-        flash.now[:notice] = I18n.t(step, scope: :go_live_states)
+        flash.now[:success] = I18n.t(step, scope: :go_live_states)
       else
-        flash[:notice] = I18n.t(step, scope: :go_live_states)
+        flash[:success] = I18n.t(step, scope: :go_live_states)
       end
       return true
     end

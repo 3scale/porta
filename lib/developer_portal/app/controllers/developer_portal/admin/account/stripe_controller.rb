@@ -14,7 +14,7 @@ module DeveloperPortal::Admin::Account
       @payment_result = stripe_crypt.update_payment_detail(payment_method_id)
 
       if @payment_result
-        flash[:success] = 'Credit card details were saved correctly'
+        flash[:notice] = 'Credit card details were saved correctly'
       else
         flash[:error] = "Couldn't save the credit card details: #{stripe_crypt.errors.full_messages.to_sentence}"
       end

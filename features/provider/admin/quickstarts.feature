@@ -37,20 +37,20 @@ Feature: Quick Starts
       Then I should be able to restart its progress
 
     Scenario: Provider logs in for the first time
-      Given they should see the flash message "You can use quick starts to learn about 3scale features step by step."
+      Given they should see a toast alert with text "You can use quick starts to learn about 3scale features step by step"
       When they follow "Take tour"
       Then the current page is the quick start catalog page
 
     Scenario: Provider reloads dashboard
-      Given they should see the flash message "You can use quick starts to learn about 3scale features step by step."
+      Given they should see a toast alert with text "You can use quick starts to learn about 3scale features step by step"
       When they go to the dashboard
-      And they should not see "You can use quick starts to learn about 3scale features step by step."
+      And they should not see "You can use quick starts to learn about 3scale features step by step"
 
     Scenario: Provider logs in more than once
       When they log out
       And the provider logs in
-      Then they should see the flash message "Signed in successfully"
-      And they should not see "You can use quick starts to learn about 3scale features step by step."
+      Then they should see a toast alert with text "Signed in successfully"
+      And they should not see "You can use quick starts to learn about 3scale features step by step"
 
   Rule: Quickstarts disabled
     Background:
@@ -70,5 +70,5 @@ Feature: Quick Starts
       Then I won't be able to see the quick start
 
     Scenario: Provider logs in for the first time
-      Then they should see the flash message "Signed in successfully"
-      And they should not see "You can use quick starts to learn about 3scale features step by step."
+      Then they should see a toast alert with text "Signed in successfully"
+      And they should not see "You can use quick starts to learn about 3scale features step by step"

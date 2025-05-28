@@ -22,13 +22,21 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
                                                                    params: params)
   end
 
+  def destroy
+    destroy! do |success|
+      success.html do
+        flash[:success] = t('.success')
+        super
+      end
+    end
+  end
+
   def update
     resource.validate_fields!
 
     update! do |success, failure|
       success.html do
-        flash[:notice] = 'User was successfully updated.'
-        redirect_to(collection_url)
+        redirect_to collection_url, success: t('.success')
       end
     end
   end

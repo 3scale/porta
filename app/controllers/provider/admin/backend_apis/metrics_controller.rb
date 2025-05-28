@@ -24,10 +24,9 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def create
     @metric = collection.build(create_params)
     if @metric.save
-      flash[:notice] = "The #{metric_type} was created"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s"), success: t('.success', metric_type: metric_type)
     else
-      flash[:error] = "#{metric_type.capitalize} could not be created"
+      flash.now[:danger] = t('.error', metric_type: metric_type)
       render :new
     end
   end
@@ -36,20 +35,18 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
 
   def update
     if @metric.update(update_params)
-      flash[:notice] = "The #{metric_type} was updated"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s"), success: t('.success', metric_type: metric_type)
     else
-      flash[:error] = "#{metric_type.capitalize} could not be updated"
+      flash.now[:danger] = t('.error', metric_type: metric_type)
       render :edit
     end
   end
 
   def destroy
     if @metric.destroy
-      flash[:notice] = "The #{metric_type} was deleted"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s"), success: t('.success', metric_type: metric_type)
     else
-      flash[:error] = "The #{metric_type} could not be deleted"
+      flash.now[:danger] = t('.error', metric_type: metric_type)
       render :edit
     end
   end

@@ -33,7 +33,7 @@ Feature: Buyer password reset
       Given they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
       And they press "Send instructions"
-      Then they should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email."
+      Then they should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email"
       When they follow the link found in the password reset email send to "zed@3scale.localhost"
       And they fill in "Password" with "monkey"
       And they fill in "Password confirmation" with "monkey"
@@ -51,7 +51,7 @@ Feature: Buyer password reset
       And they follow "Forgot password?"
       And they fill in "Email" with "bob@3scale.localhost"
       And they press "Send instructions"
-      Then they should see "A password reset link will be sent to bob@3scale.localhost if a user exists with this email."
+      Then they should see "A password reset link will be sent to bob@3scale.localhost if a user exists with this email"
       And "bob@3scale.localhost" should receive no emails
 
     Scenario: Wrong confirmation
@@ -81,8 +81,8 @@ Feature: Buyer password reset
       Given they fill in "Username" with "zed@3scale.localhost"
       And they fill in "Password" with "ihavenoclue"
       And they press "Sign in"
-      Then they should see "Incorrect email or password. Please try again."
+      Then they should see "Incorrect email or password. Please try again"
       When they follow "Forgot password?"
       And they fill in "Email" with "zed@3scale.localhost"
       And they press "Send instructions"
-      Then they should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email."
+      Then they should see "A password reset link will be sent to zed@3scale.localhost if a user exists with this email"

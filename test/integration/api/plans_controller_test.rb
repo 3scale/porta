@@ -65,7 +65,7 @@ class Api::PlansControllerTest < ActionDispatch::IntegrationTest
   def assert_plan_hid(plan)
     assert_response :ok
     json = JSON.parse(response.body)
-    assert_equal "Plan #{plan.name} was hidden.", json['notice']
+    assert_equal "Plan #{plan.name} was hidden", json['success']
     assert_equal plan.id, JSON.parse(json['plan'])['id']
     assert plan.reload.hidden?
   end
@@ -73,7 +73,7 @@ class Api::PlansControllerTest < ActionDispatch::IntegrationTest
   def assert_plan_published(plan)
     assert_response :ok
     json = JSON.parse(response.body)
-    assert_equal "Plan #{plan.name} was published.", json['notice']
+    assert_equal "Plan #{plan.name} was published", json['success']
     assert_equal plan.id, JSON.parse(json['plan'])['id']
     assert plan.reload.published?
   end
@@ -81,7 +81,7 @@ class Api::PlansControllerTest < ActionDispatch::IntegrationTest
   def assert_not_plan_published(plan)
     assert_response :not_acceptable
     json = JSON.parse(response.body)
-    assert_equal "Plan #{plan.name} cannot be published.", json['error']
+    assert_equal "Plan #{plan.name} cannot be published", json['error']
     assert_nil json['plan']
   end
 end

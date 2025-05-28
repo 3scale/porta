@@ -17,7 +17,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
     post :activate, params: { id: user.id, account_id: @buyer.id }
 
     assert_response :redirect
-    assert_not_nil flash[:error]
+    assert_not_nil flash[:danger]
   end
 
   test 'activate a user creates onboarding process' do
@@ -46,7 +46,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     error_message = 'Failed to activate user: ' << I18n.t('errors.messages.duplicated_user_provider_side')
 
-    assert_equal flash[:error], error_message
+    assert_equal flash[:danger], error_message
   end
 
   test 'redirect back to the index page' do

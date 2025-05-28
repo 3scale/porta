@@ -48,7 +48,7 @@ Feature: Product > Integration > Backends
       When they go to the backends of product "My API"
       And follow "Delete config with Backend 1"
       And confirm the dialog
-      Then they should see the flash message "The Backend was removed from the Product"
+      Then they should see a toast alert with text "The Backend was removed from the Product"
       And should see the following table:
         | Name      | Private base URL          | Public path |
         | Backend 2 | http://www.example.com:80 | /v2         |

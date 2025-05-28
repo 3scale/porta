@@ -17,8 +17,7 @@ class Provider::Admin::Messages::TrashController < FrontendController
   def destroy
     @message.restore_for!(current_account)
 
-    flash[:notice] = 'Message was restored.'
-    redirect_to action: :index
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   def empty
@@ -26,8 +25,7 @@ class Provider::Admin::Messages::TrashController < FrontendController
                                        association_class: MessageRecipient,
                                        scope:             :hidden)
 
-    flash[:notice] = 'The trash was emptied.'
-    redirect_to action: :index
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   private

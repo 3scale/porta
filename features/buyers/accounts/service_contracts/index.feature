@@ -131,7 +131,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Full    |
     And the modal is submitted with:
       | Plan | Lite |
-    Then they should see the flash message "Service contract created successfully"
+    Then they should see a toast alert with text "Service contract created successfully"
     And the table should contain the following:
       | Service     | Plan    | State | Paid? |
       | Banana API  | Default | live  | free  |
@@ -154,7 +154,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Full    |
     And the modal is submitted with:
       | Plan | Full |
-    Then they should see the flash message "Plan of the contract was changed."
+    Then they should see a toast alert with text "Plan of the contract was changed"
     And the table should contain the following:
       | Service    | Plan | State | Paid? |
       | Banana API | Full | live  | free  |
@@ -167,7 +167,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |
     When they follow "Approve subscription to Banana API"
-    Then they should see the flash message "Service contract was approved."
+    Then they should see a toast alert with text "Service contract was approved"
     And the table should contain the following:
       | Service    | Plan    | State | Paid? |
       | Banana API | Default | live  | free  |
@@ -181,7 +181,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |
     When they follow "Approve subscription to Banana API"
-    Then they should see the flash message "Cannot approve service contract."
+    Then they should see a toast alert with text "Cannot approve service contract"
     And the table should contain the following:
       | Service    | Plan    | State   | Paid? |
       | Banana API | Default | pending | free  |
@@ -194,7 +194,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Banana API | Default | live  | free  |
     When they follow "Unsubscribe from Banana API"
     And confirm the dialog
-    Then they should see the flash message "Successfully unsubscribed from the service"
+    Then they should see a toast alert with text "Successfully unsubscribed from the service"
     And they should see an empty search state
   # TODO: should be -> And they should see an empty state
 
@@ -209,7 +209,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
     And they go to the buyer's service subscriptions page
     When they follow "Unsubscribe from Banana API"
     And confirm the dialog
-    Then they should see the flash message "Cannot unsubscribe from the service"
+    Then they should see a toast alert with text "Cannot unsubscribe from the service"
     And the table should contain the following:
       | Service    | Plan    | State | Paid? |
       | Banana API | Default | live  | free  |

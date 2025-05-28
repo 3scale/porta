@@ -25,7 +25,7 @@ Feature: Signup with invitation
       And I fill in "Password" with "monkey"
       And I fill in "Password confirmation" with "monkey"
       And I press "Sign up"
-    Then I should see "Thanks for signing up! You can now sign in."
+    Then I should see "Thanks for signing up! You can now sign in"
       And the current domain should be the admin domain of provider "foo.3scale.localhost"
       But "bob@foo.3scale.localhost" should receive no email with subject "Account Activation"
     When I fill in "Username" with "bob"

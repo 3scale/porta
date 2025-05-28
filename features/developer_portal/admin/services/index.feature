@@ -74,7 +74,7 @@ Feature: Dev portal services
       When they follow "Review/Change"
       And follow "GameMaster"
       And press "Change Plan"
-      Then they should see the flash message "Plan was successfully changed to GameMaster."
+      Then they should see the flash message "Plan was successfully changed to GameMaster"
 
     Scenario: Requesting a service plan change
       Given the provider allows to change service plan by request
@@ -82,7 +82,7 @@ Feature: Dev portal services
       When they follow "Review/Change"
       And follow "GameMaster"
       And press "Request Plan Change"
-      Then they should see the flash message "A request to change your service plan has been sent."
+      Then they should see the flash message "A request to change your service plan has been sent"
 
     Scenario: Plan change is requested without a credit card
       Given the provider allows to change service plan only with credit card
@@ -90,7 +90,7 @@ Feature: Dev portal services
       When they follow "Review/Change"
       And follow "GameMaster"
       And press "Request Plan Change"
-      Then they should see the flash message "A request to change your service plan has been sent."
+      Then they should see the flash message "A request to change your service plan has been sent"
 
     Scenario: Plan can be changed directly with a credit card
       Given the provider allows to change service plan only with credit card
@@ -99,4 +99,4 @@ Feature: Dev portal services
       When they follow "Review/Change"
       And follow "GameMaster"
       And press "Change Plan"
-      Then they should see the flash message "Plan was successfully changed to GameMaster."
+      Then they should see the flash message "Plan was successfully changed to GameMaster"

@@ -28,10 +28,9 @@ class Api::BackendUsagesController < Api::BaseController
     @backend_api_config = service.backend_api_configs.build(backend_api_config_params)
 
     if @backend_api_config.save
-      flash[:notice] = t('.success')
-      redirect_to admin_service_backend_usages_path(@service)
+      redirect_to admin_service_backend_usages_path(@service), success: t('.success')
     else
-      flash[:error] = t('.error')
+      flash.now[:danger] = t('.error')
       @inline_errors = @backend_api_config.errors.as_json
       render 'new'
     end
@@ -41,7 +40,7 @@ class Api::BackendUsagesController < Api::BaseController
 
   def update
     if @backend_api_config.update(backend_api_config_params.slice(:path))
-      redirect_to admin_service_backend_usages_path(@service), notice: t('.success')
+      redirect_to admin_service_backend_usages_path(@service), success: t('.success')
     else
       render :edit
     end
@@ -49,9 +48,9 @@ class Api::BackendUsagesController < Api::BaseController
 
   def destroy
     if @backend_api_config.destroy
-      flash[:notice] = t('.success')
+      flash[:success] = t('.success')
     else
-      flash[:error] = t('.error')
+      flash[:danger] = t('.error')
     end
 
     redirect_to admin_service_backend_usages_path(@service)
@@ -79,7 +78,7 @@ class Api::BackendUsagesController < Api::BaseController
   def ensure_same_account_backend_api
     return if current_account.backend_apis.find_by(id: backend_api_config_params[:backend_api_id])
 
-    flash[:error] = "Couldn't add Backend to Product"
+    flash.now[:danger] = t('.error')
     @inline_errors = { backend_api_id: ['Not a valid backend'] }
     render 'new'
   end

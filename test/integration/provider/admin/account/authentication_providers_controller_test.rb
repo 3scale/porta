@@ -28,7 +28,7 @@ class Provider::Admin::Account::AuthenticationProvidersControllerTest < ActionDi
       assert_redirected_to provider_admin_account_authentication_provider_path(authentication_provider)
       follow_redirect!
       assert_response :success
-      assert_match 'SSO integration created', flash[:notice]
+      assert_match 'SSO integration created', flash[:success]
     end
   end
 
@@ -40,7 +40,7 @@ class Provider::Admin::Account::AuthenticationProvidersControllerTest < ActionDi
       assert_nil @provider.self_authentication_providers.find_by kind: kind, client_id: attrs[:client_id]
       assert_response :success
       assert_template :new
-      assert_match 'SSO integration could not be created', flash[:error]
+      assert_match 'SSO integration could not be created', flash[:danger]
       assert_match "contain whitespaces", response.body
     end
   end
@@ -75,7 +75,7 @@ class Provider::Admin::Account::AuthenticationProvidersControllerTest < ActionDi
 
     assert_response :success
     assert_template :edit
-    assert_match 'SSO integration could not be updated', flash[:error]
+    assert_match 'SSO integration could not be updated', flash[:danger]
     assert_match "contain whitespaces", response.body
   end
 

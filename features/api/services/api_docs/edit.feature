@@ -42,7 +42,7 @@ Feature: Product edit ActiveDocs page
       | Service                  | New service             |
       | API JSON Spec            | { "todo": "yes" }       |
       | Skip swagger validations | Yes                     |
-    Then they should see the flash message "ActiveDocs Spec was successfully updated."
+    Then they should see a toast alert with text "ActiveDocs Spec was successfully updated"
 
     Examples:
       | swagger version |

@@ -67,5 +67,5 @@ Feature: Audience > Messages > Outbox
       Given a message sent from the provider to buyer "Alice" with subject "Deleteme" and body "Deleteme"
       When they go to the provider sent messages page
       And delete the message with subject "Deleteme"
-      And should see "Message was deleted."
+      And should see "Message was deleted"
       And should not see "Deleteme"

@@ -44,7 +44,7 @@ Feature: Application plan change card
       And follow "Convert to a Custom Plan" within the plan card
       When they select "Premium" from "Change plan" within the change plan card
       And press "Change" within the change plan card
-      Then they should see the flash message "Plan changed to 'Premium'."
+      Then they should see a toast alert with text "Plan changed to 'Premium'"
 
     Scenario: Buyer is notified if their plan is changed
       Given they go to the application's admin page

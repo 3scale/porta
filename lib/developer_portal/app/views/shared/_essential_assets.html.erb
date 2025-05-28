@@ -13,7 +13,11 @@
 <%= javascript_include_tag 'vendor/jquery.colorbox-min.js' %>
 <%= stylesheet_link_tag 'colorbox/colorbox.css' %>
 
-<%= javascript_include_tag 'essential_assets/highlight-7.5', 'flash', 'essential_assets/remote', 'essential_assets/switch', 'extra_fields' %>
+<%= javascript_include_tag 'essential_assets/highlight-7.5',
+                           'essential_assets/flash',
+                           'essential_assets/remote',
+                           'essential_assets/switch',
+                           'extra_fields' %>
 <%= javascript_include_tag 'application' %>
 
 <%= yield :javascripts %>

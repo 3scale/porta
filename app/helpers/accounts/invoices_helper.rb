@@ -9,7 +9,7 @@ module Accounts::InvoicesHelper
 
   def create_invoice_disabled(account)
     if @account.current_invoice
-      "You cannot create a new invoice for '#{account.name}' since it already has one open. Please issue it before creating a new one."
+      I18n.t('buyers.invoices.create.open_invoice', name: account.name)
     end
   end
 end

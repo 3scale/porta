@@ -8,13 +8,11 @@ class Api::TermsController < FrontendController
     redirect_to :action => :edit, :service_id => @service.id
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @edited_service.update(params[:edited_service])
-      flash[:notice] =  'Terms & Conditions updated.'
-      redirect_to edit_admin_service_terms_path(@edited_service)
+      redirect_to edit_admin_service_terms_path(@edited_service), success: t('.success')
     else
       render :action => :edit
     end

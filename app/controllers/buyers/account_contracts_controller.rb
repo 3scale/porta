@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::AccountContractsController < FrontendController
 
   include ProviderRequirements
@@ -7,8 +9,7 @@ class Buyers::AccountContractsController < FrontendController
 
   def update
     @buyer.bought_account_contract.provider_changes_plan!(@plan)
-    flash[:notice] = "Plan changed to '#{@plan.name}'."
-    redirect_to admin_buyers_account_url(@buyer)
+    redirect_to admin_buyers_account_url(@buyer), success: t('.success', name: @plan.name)
   end
 
   def find_buyer

@@ -17,12 +17,12 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     ApplicationController.any_instance.stubs(:browser_not_modern?).returns(false)
     get admin_buyers_accounts_path
     assert_response :success
-    assert flash[:error].blank?
+    assert flash[:danger].blank?
 
     ApplicationController.any_instance.stubs(:browser_not_modern?).returns(true)
     get admin_buyers_accounts_path
     assert_response :redirect
-    assert_match 'Please upgrade your browser and sign in again', flash[:error]
+    assert_match 'Please upgrade your browser and sign in again', flash[:warning]
   end
 
   test '#save_return_to' do

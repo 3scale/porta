@@ -1,5 +1,13 @@
-jQuery.colorbox.close();
-var html = "<%= escape_javascript(render :partial => 'usage_limit', :locals => {:usage_limit => @usage_limit}) %>",
-    id   = "#" + "<%= dom_id(@usage_limit) %>";
+<% if flash[:success].present? %>
+  void function () {
+    jQuery.colorbox.close();
+    const html = "<%= escape_javascript(render partial: 'usage_limit', locals: { usage_limit: @usage_limit }) %>";
+    const id = "#<%= dom_id(@usage_limit) %>";
 
-jQuery(id).replaceWith(html);
+    jQuery(id).replaceWith(html);
+  }();
+<% else %>
+  <%= render 'error' %>
+<% end %>
+
+<%= render 'shared/flash_alerts' %>

@@ -25,7 +25,7 @@ Feature: Product > ActiveDocs spec preview page
     And the spec is published
     When they go to the spec's preview page from Product context
     And follow "Hide"
-    Then they should see the flash message "Spec Echo API is now hidden"
+    Then they should see a toast alert with text "Spec Echo API is now hidden"
     And there should be a link to "Publish"
 
     Examples:
@@ -39,7 +39,7 @@ Feature: Product > ActiveDocs spec preview page
     And the spec is not published
     When they go to the spec's preview page from Product context
     And follow "Publish"
-    Then they should see the flash message "Spec Echo API is now visible"
+    Then they should see a toast alert with text "Spec Echo API is now visible"
     And there should be a link to "Hide"
 
     Examples:

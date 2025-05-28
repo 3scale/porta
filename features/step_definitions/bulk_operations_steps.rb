@@ -25,7 +25,7 @@ When /^they (un)?select all items in the table$/ do |unselect|
 end
 
 Then "the following bulk operations {are} available:" do |visible, operations|
-  assert_same_elements find_all(bulk_action_selector).map(&:text), operations.raw.flatten
+  assert_same_elements operations.raw.flatten, find_all(bulk_action_selector).map(&:text)
 end
 
 Then "the bulk operation has failed for {string}" do |name|

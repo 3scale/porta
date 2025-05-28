@@ -7,17 +7,17 @@ class Provider::Admin::Account::EnforceSSOController < Provider::Admin::Account:
   def create
     if current_account.settings.update(enforce_sso: true)
       logout_all_password_users
-      render json: { notice: t('.success') }
+      render json: { type: :success, message: t('.success'), ok: true }
     else
-      render json: { error: t('.error') }
+      render json: { type: :danger, message: t('.error'), ok: false }
     end
   end
 
   def destroy
     if current_account.settings.update(enforce_sso: false)
-      render json: { notice: t('.success') }
+      render json: { type: :success, message: t('.success'), ok: true }
     else
-      render json: { error: t('.error') }
+      render json: { type: :danger, message: t('.error'), ok: false }
     end
   end
 

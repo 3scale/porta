@@ -50,7 +50,7 @@ Feature: Internal authentication
     And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "whatever"
     And I press "Sign in"
-    Then I should see "Incorrect email or password. Please try again."
+    Then I should see "Incorrect email or password. Please try again"
 
   @wip
   Scenario: Successful sign in as a provider on their domain

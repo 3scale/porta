@@ -10,9 +10,9 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
     user_data = oauth_client.authenticate!(params.permit(:code)[:code], request)
 
     if update_redhat_login(user_data)
-      flash[:notice] = 'The Red Hat Login was linked to the account'
+      flash[:success] = t('.success')
     else
-      flash[:error] = extract_error_message_from(user_data)
+      flash[:danger] = extract_error_message_from(user_data)
     end
 
     redirect_to referrer_url
@@ -54,7 +54,7 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
     account_errors = current_account.errors
     return account_errors.full_messages.to_sentence if account_errors.any?
 
-    raise_client_error('Unknown response from OAuth Authentication', user_data: user_data.to_h)
+    raise_client_error(t('.unknown'), user_data: user_data.to_h)
   end
 
   def raise_client_error(error_message, opts = {})

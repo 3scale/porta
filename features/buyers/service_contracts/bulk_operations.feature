@@ -67,7 +67,7 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     And fill in "Body" with "This is the body"
     And press "Send"
     And confirm the dialog
-    Then I should see "Successfully sent 2 emails."
+    Then they should see a toast alert with text "Successfully sent 2 emails"
     Then "jane@example.com" should receive 1 email
     Then "bob@example.com" should receive 1 email
 
@@ -85,7 +85,7 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     And select "Fancy Plan B" from "Plan"
     And press "Change plan"
     And confirm the dialog
-    Then should see "Successfully changed the plan of 2 subscriptions"
+    Then should see a toast alert with text "Successfully changed the plan of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan B |
@@ -113,7 +113,7 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     And select "Suspend" from "Action"
     And press "Change state" within the modal
     And confirm the dialog
-    Then should see "Successfully changed the state of 2 subscriptions"
+    Then should see a toast alert with text "Successfully changed the state of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | State     |
       | Bob     | Fancy API   | suspended |

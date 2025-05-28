@@ -10,7 +10,6 @@ html[lang="en"]
 
   body
     div id="content"
-      = render "shared/provider/flash", :flash => flash
       = yield
     = javascript_include_tag 'provider/layout/iframe'
     = yield :javascript

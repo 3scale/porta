@@ -17,7 +17,7 @@ Feature: Update notification preferences
       | Alert: usage violation          |
       | Weekly report                   |
     And they press "Update Notification Preferences"
-    Then they should see "Notification preferences successfully updated."
+    Then they should see "Notification preferences successfully updated"
     And only the following notifications are checked:
       | New account created             |
       | Expiring credit card            |
@@ -31,5 +31,5 @@ Feature: Update notification preferences
     Then I should see "Notification Preferences"
     When they disable all notifications
     And they press "Update Notification Preferences"
-    Then they should see "Notification preferences successfully updated."
+    Then they should see "Notification preferences successfully updated"
     And all notifications are unchecked

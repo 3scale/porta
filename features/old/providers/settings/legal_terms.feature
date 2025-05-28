@@ -17,7 +17,7 @@ Feature: Legal terms settings
     Then I should see "Legal terms saved"
     When the current domain is "foo.3scale.localhost"
     And I go to the signup page
-    Then I should see "Ich war hier, Fantomas."
+    Then I should see "Ich war hier, Fantomas"
 
   Scenario: Legal Terms settings
     Given provider "foo.3scale.localhost" has "multiple_services" switch allowed

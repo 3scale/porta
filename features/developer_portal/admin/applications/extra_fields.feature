@@ -117,4 +117,4 @@ Feature: Developer portal application extra fields
     Then the form is submitted with:
       | Engine | turbo |
       | Wheels | 2     |
-    Then they should see the flash message "Application was successfully updated."
+    Then they should see the flash message "Application was successfully updated"

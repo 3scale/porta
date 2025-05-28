@@ -11,11 +11,11 @@ class Api::PlanCopiesController < FrontendController
 
     respond_to do |format|
       if @plan.save && @plan.persisted?
-        json = { notice: 'Plan copied.' }
+        json = { success: t('.success') }
         json[:plan] = @plan.decorate.index_table_data.to_json
         format.json { render json: json, status: :created }
       else
-        json = { error: 'Plan could not be copied.' }
+        json = { error: t('.error') }
         format.json { render json: json, status: :unprocessable_entity }
       end
     end
