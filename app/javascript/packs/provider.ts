@@ -2,6 +2,7 @@ import { renderVerticalNav } from 'Navigation/renderVerticalNav'
 import { renderQuickStarts } from 'QuickStarts/renderQuickStarts'
 import 'Common/threescale'
 import application from 'Common/application'
+import 'Common/remote'
 import 'Common/ajaxEvents'
 
 const jQuery1 = window.$
