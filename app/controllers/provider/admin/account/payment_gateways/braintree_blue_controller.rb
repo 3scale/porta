@@ -41,7 +41,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
       if braintree_blue_crypt.update_user(braintree_response)
         redirect_to_success
       else
-        flash.now[:warning] = t('.credit_card_error')
+        flash.now[:danger] = t('.credit_card_error')
         render action: 'edit'
       end
     else
