@@ -1,4 +1,7 @@
+import $ from 'jquery'
+
 window.ThreeScale = {
+  activeAjaxRequests: () => $.active + window.$.active,
   spinnerId: 'ajax-in-progress',
   showSpinner: () => {
     if (document.getElementById(window.ThreeScale.spinnerId) === null) {
