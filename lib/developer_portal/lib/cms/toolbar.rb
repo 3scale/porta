@@ -5,6 +5,8 @@ require 'base64'
 module CMS::Toolbar
   extend ActiveSupport::Concern
 
+  CMS_EDIT_EXPIRATION_TIME = 1.day
+
   included do
     prepend_before_action :handle_cms_edit
     append_after_action :inject_cms_toolbar, if: :cms_toolbar_enabled?
@@ -24,6 +26,8 @@ module CMS::Toolbar
       Rails.logger.debug "CMS edit mode enabled for portal #{site_account.external_domain}"
     when :not_provided
       # This request is not attempting to alter the CMS mode, we keep the same mode we have
+      # But we check the expiration time
+      check_edit_mode_expiration
     else # :empty, :invalid, whatever
       disable_edit_mode
       Rails.logger.debug "CMS edit mode disabled for portal #{site_account.external_domain}. Signature is #{result}"
@@ -40,12 +44,26 @@ module CMS::Toolbar
 
   private
 
+  def check_edit_mode_expiration
+    return unless session[:cms_edit]
+
+    expiration = session[:cms_edit_expire] || Time.zone.now
+
+    return if expiration > Time.zone.now
+
+    disable_edit_mode
+    Rails.logger.debug "CMS edit mode disabled for portal #{site_account.external_domain}. Edit mode expired."
+    flash[:error] = 'CMS Edit mode expired.'
+  end
+
   def enable_edit_mode
     session[:cms_edit] = true
+    session[:cms_edit_expire] = Time.zone.now + CMS_EDIT_EXPIRATION_TIME
   end
 
   def disable_edit_mode
     session.delete :cms_edit
+    session.delete :cms_edit_expire
     session.delete :cms
   end
 
