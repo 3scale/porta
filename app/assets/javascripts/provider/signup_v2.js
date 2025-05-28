@@ -1,5 +1,3 @@
-//= require jquery
-
 /**
  * How to use this library
  *
