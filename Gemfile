@@ -179,10 +179,6 @@ end
 
 gem 'mail_view', '~> 2.0.4'
 
-# legacy from rails 2.3 -
-gem 'dynamic_form'
-gem 'record_tag_helper', '~> 1.0'
-
 group :test do
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'rails-controller-testing', '~> 1.0.4'
@@ -224,9 +220,7 @@ group :test do
   # IMPORTANT: Load 'mocha' after 'shoulda'.
   gem 'mocha', require: 'mocha/minitest'
 
-  # proxy tests
   gem 'database_cleaner', require: false
-  gem 'thin', require: false
 
   # performance tests
   gem "n_plus_one_control"
