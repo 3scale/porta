@@ -8,11 +8,11 @@
     </tr>
 
   <% @sections.each do |section| %>
-    <%= content_tag_for :tr, section do %>
+    <tr>
       <td><%= section.title %></td>
       <td><%= link_to 'Edit', edit_provider_admin_cms_section_path(section) %></td>
       <td><%= link_to 'Destroy', provider_admin_cms_section_path(section), data: {:confirm => 'Are you sure?'}, :method => :delete %></td>
-    <% end %>
+    </tr>
   <% end %>
   </table>
 

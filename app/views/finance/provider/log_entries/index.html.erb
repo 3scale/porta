@@ -23,7 +23,7 @@
 
   <tbody role="rowgroup">
     <% @log_entries.each do |entry| %>
-      <%= content_tag_for(:tr, entry, class: entry.level, role: 'row') do %>
+      <%= content_tag(:tr, class: entry.level, role: 'row') do %>
 	      <td role="cell" data-label="Account">
           <%= entry.buyer.try(:name) || '--GLOBAL--' %>
         </td>
