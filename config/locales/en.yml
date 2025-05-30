@@ -1663,6 +1663,11 @@ en:
         invalid_event: 'cannot transition when %{state}'
         invalid_transition: 'cannot transition via "%{event}"'
         not_path_format: 'must be a path separated by "/". E.g. "" or "my/path"'
+      template:
+        header:
+          one: "1 error prohibited this %{model} from being saved"
+          other: "%{count} errors prohibited this %{model} from being saved"
+        body: "There were problems with the following fields:"
       models:
         access_token:
           attributes:
