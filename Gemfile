@@ -24,7 +24,7 @@ gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
-gem 'protected_attributes_continued', '~> 1.8.2'
+gem 'protected_attributes_continued', '~> 1.9.0'
 
 gem 'rails-observers'
 
@@ -234,7 +234,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 7.0.7'
+  gem 'bullet', '~> 7.1.6'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
