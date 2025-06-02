@@ -21,7 +21,7 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     # Services
     user_accessible_services = user.accessible_services
-    can %i[show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.is_a? ActiveRecord::NullRelation
+    can %i[show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.null_relation?
 
     #
     # Events
