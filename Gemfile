@@ -12,7 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.1.5'
 
 # Fixing "uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger"
 # that fails after upgrading to 1.3.5. Can be removed after upgrading to Rails 7.1
@@ -65,7 +65,7 @@ gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.137'
-gem 'audited', '~> 5.0.2'
+gem 'audited', '~> 5.4.2'
 gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 
 gem 'acts_as_list', '~> 0.9.17'
@@ -258,7 +258,7 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 7.0.3', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 7.1.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 
