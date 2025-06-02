@@ -96,11 +96,10 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def change_state
-    status = account.fire_events(action_name) ? :success : :danger
-
     account_type = account.provider? ? 'tenant' : 'developer'
-    action_name_past = t(action_name, scope: 'buyers.accounts.state_event_past')
-    flash[status] = t(status, scope: 'buyers.accounts.change_state', account_type: account_type, state_event: action_name, state_event_past: action_name_past)
+    flash_type = account.fire_events(action_name) ? :success : :danger
+
+    flash[flash_type] = t(".#{account_type}.#{flash_type}")
 
     redirect_to admin_buyers_account_path(account)
   end

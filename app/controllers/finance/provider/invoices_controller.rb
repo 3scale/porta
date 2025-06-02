@@ -42,14 +42,14 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     end
   end
 
-  [ [ :pay, 'Invoice marked as "paid".', 'Failed to mark invoice as paid.' ],
-    [ :generate_pdf, 'PDF generated.', 'Failed to generate the PDF' ],
-    [ :cancel, 'Invoice cancelled.', 'Failed to cancel the invoice' ],
-    [ :issue, 'Invoice issued.', 'Failed to issue the invoice' ],
-    [ :charge, 'Payment successfully completed!', 'Failed to charge the credit card.', false]
-  ].each do |action,success,error, *opts|
+  [ [:pay          ],
+    [:generate_pdf ],
+    [:cancel       ],
+    [:issue        ],
+    [:charge, false]
+  ].each do |action, *opts|
     define_method(action) do
-      invoice_action(action, success, error, *opts)
+      invoice_action(action, *opts)
     end
   end
 
@@ -74,12 +74,12 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   private
 
-  def invoice_action(action, success_message, error_message, *action_params)
+  def invoice_action(action, *action_params)
     if @invoice.transition_allowed?(action) && @invoice.send("#{action}!", *action_params)
       @header = render_headers_to_string
       @actions = render_actions_to_string
       @line_items = render_line_items_to_string
-      flash.now[:success] = success_message
+      flash.now[:success] = t('.success')
 
       respond_to do |format|
         format.js do
@@ -88,7 +88,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
         end
       end
     else
-      flash.now[:danger] = error_message
+      flash.now[:danger] = t('.error')
       render :partial => '/shared/flash_alerts'
     end
   end

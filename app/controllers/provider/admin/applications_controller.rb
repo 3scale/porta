@@ -58,7 +58,7 @@ class Provider::Admin::ApplicationsController < FrontendController
   end
 
   def accept
-    change_state('accept','The application has been accepted.')
+    change_state('accept', t('.success'))
   end
 
   def reject
@@ -68,11 +68,11 @@ class Provider::Admin::ApplicationsController < FrontendController
   end
 
   def suspend
-    change_state('suspend','The application has been suspended.')
+    change_state('suspend', t('.success'))
   end
 
   def resume
-    change_state('resume','The application is live again!')
+    change_state('resume', t('.success'))
   end
 
   def change_plan

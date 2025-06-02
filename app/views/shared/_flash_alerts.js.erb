@@ -1,7 +1,7 @@
 <% flash.each do |type, messages| %>
   <% if alert_type?(type) %>
     <% Array(messages).each do |message| %>
-      ThreeScale.toast('<%= escape_javascript(message) %>', '<%= type %>');
+      ThreeScale.toast('<%= raw escape_javascript(message) %>', '<%= type %>');
     <% end %>
   <% end %>
 <% end %>

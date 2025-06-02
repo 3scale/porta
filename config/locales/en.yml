@@ -48,7 +48,7 @@ en:
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
     promote_to_production_error: "Couldn't promote Staging configuration to production"
-    update_onpremises_production_success: 'Production configuration saved.'
+    update_onpremises_production_success: Production configuration saved
     update_production_success: 'Proxy settings deployed'
     update_error: "Couldn't update the Staging Configuration"
     update_success: '%{environment} Configuration Updated'
@@ -175,7 +175,7 @@ en:
         success: ActiveDocs Spec was successfully updated
     fields_definitions:
       create:
-        success: Field was successfully created.
+        success: Field was successfully created
     user_confirmations:
       create:
         already_active: User is already confirmed
@@ -439,7 +439,7 @@ en:
         password_login_disabled: Password login has been disabled
 
       update:
-        success: The password has been changed.
+        success: The password has been changed
       new:
         has_password: 'User already has a password. Use it to change the password.'
       show:
@@ -583,6 +583,8 @@ en:
           submit_button_next_step_label: Save and continue with payment details
 
       applications:
+        accept:
+          success: The application has been accepted
         change_plan:
           success: Plan changed to '%{name}'
         change_user_key:
@@ -599,6 +601,10 @@ en:
             primary: Add an application
         reject:
           success: The application has been rejected
+        resume:
+          success: The application is live again!
+        suspend:
+          success: The application has been suspended
         update:
           success: Application was successfully updated
 
@@ -911,14 +917,34 @@ en:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
       set_plans_error: Please, create an Account Plan first
-      change_state:
-        success: '%{account_type} account was %{state_event_past}'
-        danger: Cannot %{state_event} %{account_type} account
-      state_event_past:
-        approve: 'approved'
-        reject: 'rejected'
-        suspend: 'suspended'
-        resume: 'resumed'
+      approve:
+        developer:
+          danger: Cannot approve developer account
+          success: Developer account was approved
+        tenant:
+          danger: Cannot approve tenant account
+          success: Tenant account was approved
+      resume:
+        developer:
+          danger: Cannot resume developer account
+          success: Developer account was resumed
+        tenant:
+          danger: Cannot resume tenant account
+          success: Tenant account was resumed
+      reject:
+        developer:
+          danger: Cannot reject developer account
+          success: Developer account was rejected
+        tenant:
+          danger: Cannot reject tenant account
+          success: Tenant account was rejected
+      suspend:
+        developer:
+          danger: Cannot suspend developer account
+          success: Developer account was suspended
+        tenant:
+          danger: Cannot suspend tenant account
+          success: Tenant account was suspended
       bulk:
         send_emails:
           success:
@@ -1113,6 +1139,21 @@ en:
   finance:
     provider:
       invoices:
+        cancel:
+          error: Failed to cancel the invoice
+          success: Invoice cancelled
+        charge:
+          error: Failed to charge the credit card
+          success: Payment successfully completed!
+        generate_pdf:
+          error: Failed to generate the PDF
+          success: PDF generated
+        issue:
+          error: Failed to issue the invoice
+          success: Invoice issued
+        pay:
+          error: Failed to mark invoice as paid
+          success: Invoice marked as paid
         actions:
           confirm: Are you sure?
         create:
@@ -1333,6 +1374,16 @@ en:
         submit: Create %{type}
       update:
         success: The %{type} was updated
+    metric_visibilities:
+      toggle_enabled:
+        disabled: "%{type} '%{name}' has been disabled"
+        enabled: "%{type} '%{name}' has been enabled"
+      toggle_limits_only_text:
+        only_text: "%{type} '%{name}' has been set to show only text"
+        text_icons: "%{type} '%{name}' has been set to show text and icons"
+      toggle_visible:
+        visible: "%{type} '%{name}' is now visible"
+        invisible: "%{type} '%{name}' is now invisible"
     plan_copies:
       create:
         error: Plan could not be copied
