@@ -15,18 +15,10 @@ module ProviderRequirements
   end
 
   module ClassMethods
-
-    def require_provider_admin(options = {})
-      before_action(options) do | controller |
-        controller.send(:provider_admin?) || unauthorized!
-      end
-    end
-
     def require_provider_user(options = {})
       before_action(options) do | controller |
         controller.send(:provider_user?) || unauthorized!
       end
     end
-
   end
 end
