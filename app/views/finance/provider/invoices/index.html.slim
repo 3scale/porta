@@ -23,7 +23,7 @@
                                                                  body: t('.empty_search.body') }
       - else
         - presenter.invoices.each do |invoice|
-          tr role="row" class="invoice"
+          = content_tag :tr, id: dom_id(invoice), role: "row" do
             td role="cell" data-label="Number"
               = link_to(invoice.friendly_id, admin_finance_invoice_path(invoice))
             td role="cell" data-label="Account"
