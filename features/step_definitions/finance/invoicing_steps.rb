@@ -80,9 +80,9 @@ end
 
 Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
   if count.to_i == 0
-    page.should have_no_css('tr.invoice')
+    should have_no_xpath("//tr[contains(@id, 'invoice_')]")
   else
-    page.should have_css('tr.invoice', count: count.to_i)
+    should have_xpath("//tr[contains(@id, 'invoice_')]", count: count.to_i)
   end
 end
 
