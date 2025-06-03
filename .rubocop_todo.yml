@@ -674,7 +674,6 @@ Style/SpaceAroundEqualsInParameterDefault:
 # Cop supports --auto-correct.
 Style/SpaceAroundKeyword:
   Exclude:
-    - 'app/controllers/buyer/bulk_approvals_controller.rb'
     - 'script/fake_data/fake_data.rb'
     - 'test/unit/account/provider_test.rb'
 
