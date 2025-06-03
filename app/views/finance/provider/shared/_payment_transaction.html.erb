@@ -1,4 +1,4 @@
-<tr>
+<%= content_tag :tr, id: dom_id(payment_transaction) do %>
   <td role="cell">
     <%= boolean_status_img(payment_transaction.success?) %>
   </td>
@@ -12,4 +12,4 @@
     <%= payment_transaction.amount %>
     <%= payment_transaction.currency %>
   </td>
-</tr>
+<% end %>
