@@ -837,6 +837,11 @@ interface JQueryEasingFunctions {
 */
 export interface JQueryStatic {
   /**
+   * This is jQuery's global ajax counter, undocumented for some reason.
+   */
+  active: number;
+
+  /**
    * Perform an asynchronous HTTP (Ajax) request.
    *
    * @param settings A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with $.ajaxSetup().
