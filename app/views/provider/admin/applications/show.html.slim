@@ -56,7 +56,7 @@ div class="pf-l-grid pf-m-gutter pf-m-all-6-col"
         div class="pf-l-flex__item"
           div class="pf-c-card"
             div class="pf-c-card__body"
-              = render partial: 'plan', locals: { contract: @cinstance }
+              = render partial: 'application_plan', locals: { plan: @cinstance.plan, contract: @cinstance }
 
         / HACK: this condition really hurts - more than dancing CanCan
         - if can?( :manage, :plans) && @cinstance.available_application_plans.size > 0 && !current_account.master?
