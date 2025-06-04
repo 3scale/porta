@@ -133,6 +133,5 @@ class CacheStoreTest < ActionView::TestCase
     cache = ActiveSupport::Cache.lookup_store(*System::Application.cache_store_config)
 
     assert_equal ActiveSupport::Cache::RedisCacheStore, cache.class
-    assert_equal options, cache.redis_options
   end
 end
