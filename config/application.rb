@@ -335,9 +335,7 @@ module System
 
     config.after_initialize do
       ThreeScale.validate_settings!
-      require 'system/redis_pool'
-      redis_config = ThreeScale::RedisConfig.new(config.redis)
-      System.redis = System::RedisPool.new(redis_config.config)
+      System.redis = System::RedisPool.new(System::Application.config.redis)
     end
 
     config.assets.quiet = true

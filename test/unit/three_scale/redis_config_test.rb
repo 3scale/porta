@@ -101,5 +101,26 @@ module ThreeScale
 
       assert_not result.key? :ssl_params
     end
+
+    test "#client_config" do
+      config = {
+        url: 'redis://localhost:6379',
+        username: 'user',
+        password: 'passwd',
+        pool_size: 2,
+        pool_timeout: 10
+      }
+      redis_config = RedisConfig.new(config)
+      
+      assert_equal config.except(:pool_size, :pool_timeout), redis_config.client_config
+    end
+
+    test "#pool_config" do
+      redis_config = RedisConfig.new(url: 'redis://localhost:6379', pool_size: 2, pool_timeout: 10)
+      assert_equal({ size: 2, timeout: 10 }, redis_config.pool_config)
+
+      redis_config = RedisConfig.new(url: 'redis://localhost:6379')
+      assert_equal({ size: 5, timeout: 5 }, redis_config.pool_config)
+    end
   end
 end
