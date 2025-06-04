@@ -33,8 +33,14 @@ Rails.application.configure do
 
       # Array of redis servers for Redlock quorum.
       # Read more at https://github.com/leandromoreira/redlock-rb#redis-client-configuration
-      #
-      config.redlock_servers = [System.redis]
+
+      # TODO: to refactor to reuse existin code in System::RedisConfig
+      conf = ThreeScale::RedisConfig.new(System::Application.config.redis).config
+      pool_conf= conf.extract!(:pool_size, :pool_timeout)
+      redis_config = RedisClient.config(**conf)
+      redis = redis_config.new_pool(size: pool_conf[:pool_size] || 5, timeout: pool_conf[:pool_timeout] || 5)
+
+      config.redlock_servers = [redis]
 
       # Custom options for Redlock.
       # Read more at https://github.com/leandromoreira/redlock-rb#redlock-configuration
