@@ -14,6 +14,17 @@ module ThreeScale
 
     attr_reader :config
 
+    def client_config
+      config.except(:pool_size, :pool_timeout)
+    end
+
+    def pool_config
+      {
+        size: config[:pool_size] || 5,
+        timeout: config[:pool_timeout] || 5
+      }
+    end
+
     def reverse_merge(other)
       other.merge(config)
     end

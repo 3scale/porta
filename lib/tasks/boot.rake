@@ -20,8 +20,7 @@ namespace :boot do
     require Rails.root.join('app/lib/three_scale/redis_config')
     require Rails.root.join('app/lib/system/redis_pool')
 
-    redis_config = ThreeScale::RedisConfig.new(Rails.application.config_for(:redis)).config
-    pool = System::RedisPool.new(redis_config)
+    pool = System::RedisPool.new(Rails.application.config_for(:redis))
     pool.with do |redis|
       redis.ping
       puts "Connected to #{redis.id}"

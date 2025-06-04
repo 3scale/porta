@@ -21,6 +21,6 @@ class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
 
   def manager
     # we may cache this as thread/fiber local variable but for now creating a new one seems good enough
-    Redlock::Client.new([System.redis], { retry_count: 0, redis_timeout: 1 })
+    Redlock::Client.new([System::RedisClientPool.default], { retry_count: 0, redis_timeout: 1 })
   end
 end

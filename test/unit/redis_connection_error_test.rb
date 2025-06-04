@@ -9,9 +9,9 @@ class RedisConnectionErrorTest < ActiveSupport::TestCase
       name: 'mymaster',
       sentinels: 'invalid_host:26380,other_invalid_host:26381',
       role: :master
-    ).config
+    )
 
-    redis = Redis.new(redis_config)
+    redis = Redis.new(redis_config.client_config)
 
     exception = assert_raises(Redis::CannotConnectError) { redis.ping }
     assert_equal 'No sentinels available', exception.message
