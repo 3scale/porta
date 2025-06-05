@@ -342,20 +342,6 @@ class Account < ApplicationRecord
     end
   end
 
-  # TODO: Put the bulk approval back.
-
-  # #OPTIMIZE these bulk methods won't work if an unexisting id is passed!
-
-  # # Calls approve on an array of accounts
-  # def self.bulk_approve(ids)
-  #   ids.each{|id| self.find(id).approve!}
-  # end
-
-  # # Calls reject on an array of accounts
-  # def self.bulk_reject(ids)
-  #   ids.each{|id| self.find(id).reject!}
-  # end
-
   # def self.to_csv
   # end
 

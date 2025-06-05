@@ -224,9 +224,7 @@ group :test do
   # IMPORTANT: Load 'mocha' after 'shoulda'.
   gem 'mocha', require: 'mocha/minitest'
 
-  # proxy tests
   gem 'database_cleaner', require: false
-  gem 'thin', require: false
 
   # performance tests
   gem "n_plus_one_control"
