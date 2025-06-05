@@ -41,6 +41,7 @@ declare global {
     ui?: {
       version: string;
     };
+    active: number; // This is the global ajax counter, undocumented for some reason
   }
 
   // jQueryUI widgets injected into jQuery 3.7 when imported from webpack. Only the ones imported

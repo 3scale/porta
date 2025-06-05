@@ -1,6 +1,9 @@
+import $ from 'jquery'
+
 import { toast, hideToast } from 'utilities/toast'
 
 window.ThreeScale = {
+  activeAjaxRequests: () => $.active + window.$.active,
   toast,
   hideToast,
   spinnerId: 'ajax-in-progress',

@@ -252,7 +252,7 @@ function setUpRemoveFromSectionAction () {
  * the whole page. It is used only by Sidebar class, to give the CMS a page-less experience. It's
  * definitely tech debt and modern rails applications will use turbolinks, but right now we stick
  * to it for convenience.
- * PJAX automatically extends window.$, that is 1.11.3 (JQueryStaticV1Plugins)
+ * PJAX automatically extends window.$, that is 1.12.4 (JQueryStaticV1Plugins)
  */
 function setUpPjax () {
   jQuery1(document).pjax('#cms-sidebar .cms-sidebar-listing a', '#tab-content', { timeout: 3000 })
