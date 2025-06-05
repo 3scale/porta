@@ -918,33 +918,17 @@ en:
       search_results: *account_delete_msg
       set_plans_error: Please, create an Account Plan first
       approve:
-        developer:
-          danger: Cannot approve developer account
-          success: Developer account was approved
-        tenant:
-          danger: Cannot approve tenant account
-          success: Tenant account was approved
+        danger: Cannot approve %{account_type} account
+        success: '%{account_type} account was approved'
       resume:
-        developer:
-          danger: Cannot resume developer account
-          success: Developer account was resumed
-        tenant:
-          danger: Cannot resume tenant account
-          success: Tenant account was resumed
+        danger: Cannot resume %{account_type} account
+        success: '%{account_type} account was resumed'
       reject:
-        developer:
-          danger: Cannot reject developer account
-          success: Developer account was rejected
-        tenant:
-          danger: Cannot reject tenant account
-          success: Tenant account was rejected
+        danger: Cannot reject %{account_type} account
+        success: '%{account_type} account was rejected'
       suspend:
-        developer:
-          danger: Cannot suspend developer account
-          success: Developer account was suspended
-        tenant:
-          danger: Cannot suspend tenant account
-          success: Tenant account was suspended
+        danger: Cannot suspend %{account_type} account
+        success: '%{account_type} account was suspended'
       bulk:
         send_emails:
           success:
