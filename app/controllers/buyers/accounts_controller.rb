@@ -99,7 +99,7 @@ class Buyers::AccountsController < Buyers::BaseController
     account_type = account.provider? ? 'tenant' : 'developer'
     flash_type = account.fire_events(action_name) ? :success : :danger
 
-    flash[flash_type] = t(".#{flash_type}", account_type:).capitalization
+    flash[flash_type] = t(".#{flash_type}", account_type:).capitalize
 
     redirect_to admin_buyers_account_path(account)
   end
