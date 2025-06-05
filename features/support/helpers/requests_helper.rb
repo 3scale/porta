@@ -99,9 +99,9 @@ module WaitForRequests
   end
 
   def finished_all_ajax_requests?
-    return true if Capybara.page.evaluate_script('typeof jQuery === "undefined"')
+    return true if Capybara.page.evaluate_script('typeof ThreeScale === "undefined"')
 
-    Capybara.page.evaluate_script('jQuery.active').zero?
+    Capybara.page.evaluate_script('ThreeScale.activeAjaxRequests()').zero?
   end
 end
 
