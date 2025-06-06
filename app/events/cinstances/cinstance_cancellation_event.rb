@@ -15,6 +15,7 @@ class Cinstances::CinstanceCancellationEvent < ApplicationRelatedEvent
         plan_name:      plan.name,
         plan_id:        cinstance.plan_id,
         service_name:   service.name,
+        account_id:     account.id,
         account_name:   account.name,
         provider:       provider,
         service:        service,
