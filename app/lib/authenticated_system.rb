@@ -193,9 +193,9 @@ module AuthenticatedSystem
   # when you cross quarantine (logged-out to logged-in).
   def logout_killing_session!
     logout_keeping_session!
-    cms_token = session[:cms_token]
+    cms_edit = session[:cms_edit]
     reset_session
-    session[:cms_token] = cms_token if cms_token
+    session[:cms_edit] = cms_edit if cms_edit
   end
 
   # Remember_me Tokens

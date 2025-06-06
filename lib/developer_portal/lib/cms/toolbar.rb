@@ -5,8 +5,10 @@ require 'base64'
 module CMS::Toolbar
   extend ActiveSupport::Concern
 
+  CMS_EDIT_EXPIRATION_TIME = 1.day
+
   included do
-    prepend_before_action :handle_cms_token
+    prepend_before_action :handle_cms_edit
     append_after_action :inject_cms_toolbar, if: :cms_toolbar_enabled?
   end
 
@@ -16,16 +18,19 @@ module CMS::Toolbar
 
   protected
 
-  def handle_cms_token
-    token = validate_and_extract_cms_token
-
-    if cms.valid_token?(token)
-      session[:cms_token] = token
-      Rails.logger.info "CMS edit mode enabled for portal #{site_account.external_domain}"
-    elsif token
-      session[:cms_token] = nil
-      session[:cms] = nil
-      Rails.logger.info "Invalid CMS edit mode signature for portal #{site_account.external_domain}"
+  def handle_cms_edit
+    result = validate_signature
+    case result
+    when :valid
+      enable_edit_mode
+      Rails.logger.debug "CMS edit mode enabled for portal #{site_account.external_domain}"
+    when :not_provided
+      # This request is not attempting to alter the CMS mode, we keep the same mode we have
+      # But we check the expiration time
+      check_edit_mode_expiration
+    else # :empty, :invalid, whatever
+      disable_edit_mode
+      Rails.logger.debug "CMS edit mode disabled for portal #{site_account.external_domain}. Signature is #{result}"
     end
 
     if (mode = params.delete(:cms).presence)
@@ -39,15 +44,39 @@ module CMS::Toolbar
 
   private
 
-  def validate_and_extract_cms_token
+  def check_edit_mode_expiration
+    return unless session[:cms_edit]
+
+    expiration = session[:cms_edit_expire] || Time.zone.now
+
+    return if expiration > Time.zone.now
+
+    disable_edit_mode
+    Rails.logger.debug "CMS edit mode disabled for portal #{site_account.external_domain}. Edit mode expired."
+    flash[:error] = 'CMS Edit mode expired.'
+  end
+
+  def enable_edit_mode
+    session[:cms_edit] = true
+    session[:cms_edit_expire] = Time.zone.now + CMS_EDIT_EXPIRATION_TIME
+  end
+
+  def disable_edit_mode
+    session.delete :cms_edit
+    session.delete :cms_edit_expire
+    session.delete :cms
+  end
+
+  def validate_signature
     signature = params.delete(:signature)
-    return signature if signature.blank?
+    return :not_provided if signature.nil?
+    return :empty if signature.blank?
 
     expires_at = Time.at(params.delete(:expires_at).to_i).utc
     raise ActiveSupport::MessageVerifier::InvalidSignature unless expires_at > Time.now.utc
 
-    cms_token = site_account.settings.cms_token!
-    valid_signature = signature == CMS::Signature.generate(cms_token, expires_at)
+    provider_id = site_account.id
+    valid_signature = signature == CMS::Signature.generate(provider_id, expires_at)
 
     raise ActiveSupport::MessageVerifier::InvalidSignature unless valid_signature
 
@@ -55,12 +84,12 @@ module CMS::Toolbar
     request.query_parameters.delete(:expires_at)
     request.query_parameters.delete(:signature)
 
-    cms_token
+    :valid
   rescue StandardError
     # In the case the signature is invalid or any other problem, I don't think we have to bother the client and
-    # BugSnag with an exception. Better return an empty token which means "Disable CMS edit mode (hide toolbar)"
+    # BugSnag with an exception. Better mark the token as :invalid to Disable CMS edit mode (hide toolbar)
     flash[:error] = 'Disabling CMS edit mode due to an invalid or expired signature'
-    ''
+    :invalid
   end
 
   def cms_toolbar_enabled?
