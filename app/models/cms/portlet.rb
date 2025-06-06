@@ -43,11 +43,11 @@ class CMS::Portlet < CMS::Partial
     end
 
     def self.human_name
-      I18n.t(:name, :scope => [:cms, :portlet, name.underscore])
+      I18n.t(:name, :scope => [:cms, :portlet, name.underscore], default: nil)
     end
 
     def self.description
-      I18n.t(:description, :scope => [:cms, :portlet, name.underscore])
+      I18n.t(:description, :scope => [:cms, :portlet, name.underscore], default: nil)
     end
 
     def draft
