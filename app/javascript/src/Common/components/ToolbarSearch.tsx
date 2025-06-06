@@ -6,17 +6,22 @@ import {
 
 import type { SearchInputProps } from '@patternfly/react-core'
 
-type Props = SearchInputProps
+interface Props extends SearchInputProps {
+  onSubmitSearch?: (term: string) => void;
+  searchQuery?: string;
+}
 
 const INPUT_NAME_QUERY = 'search[query]'
 const INPUT_NAME_UTF8 = 'utf8'
 
 const ToolbarSearch: React.FunctionComponent<Props> = ({
   name = INPUT_NAME_QUERY,
+  onSubmitSearch,
+  searchQuery,
   ...rest
 }) => {
   const url = new URL(window.location.href)
-  const query = url.searchParams.get(name)
+  const query = searchQuery ?? url.searchParams.get(name)
   const [searchText, setSearchText] = useState<string>(query ?? '')
   const [showPopover, setShowPopover] = useState<boolean>(false)
 
@@ -26,12 +31,14 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     }
   }, [searchText])
 
-  const onSubmitSearch = (value: string) => {
+  const reloadWithQuery = (value: string) => {
     url.searchParams.delete('page')
     url.searchParams.set(INPUT_NAME_UTF8, '✓')
     url.searchParams.set(name, value)
     window.location.replace(url.toString())
   }
+
+  const onSubmitSearchHandler = onSubmitSearch ?? reloadWithQuery
 
   const onSearch = () => {
     const searchTextTooShortForSphinx = searchText.length < 3
@@ -41,16 +48,15 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
       return
     }
 
-    onSubmitSearch(searchText)
+    onSubmitSearchHandler(searchText)
   }
 
   const onClear = () => {
-    const inputClearedBeforeAnySearch = !query
+    setSearchText('')
 
-    if (inputClearedBeforeAnySearch) {
-      setSearchText('')
-    } else {
-      onSubmitSearch('')
+    // query is being cleared from a non-empty value
+    if (query) {
+      onSubmitSearchHandler('')
     }
   }
 
