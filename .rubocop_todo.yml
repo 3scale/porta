@@ -26,7 +26,6 @@ Style/AndOr:
     - 'app/controllers/buyers/applications/bulk/send_emails_controller.rb'
     - 'app/controllers/buyers/service_contracts/bulk/send_emails_controller.rb'
     - 'app/helpers/application_helper.rb'
-    - 'app/helpers/posts_helper.rb'
     - 'app/models/account/domains.rb'
 
 # Offense count: 16
@@ -34,7 +33,6 @@ Style/AsciiComments:
   Exclude:
     - 'app/controllers/api/plans_base_controller.rb'
     - 'app/helpers/alerts_helper.rb'
-    - 'app/models/topic_category.rb'
     - 'app/portlets/table_of_contents_portlet.rb'
     - 'config/initializers/constants.rb'
     - 'features/step_definitions/personal_details_steps.rb'
@@ -45,7 +43,6 @@ Style/AsciiComments:
     - 'app/lib/three_scale/spam_protection/configuration.rb'
     - 'app/lib/three_scale/swagger/specification.rb'
     - 'test/unit/cms/tags_test.rb'
-    - 'test/unit/topic_test.rb'
 
 # Offense count: 139
 # Cop supports --auto-correct.
@@ -333,7 +330,6 @@ Style/MultilineBlockLayout:
     - 'app/controllers/finance/provider/invoices_controller.rb'
     - 'app/models/cinstance.rb'
     - 'app/models/invoice.rb'
-    - 'app/models/topic.rb'
     - 'spec/acceptance/api/api_doc_spec.rb'
     - 'spec/acceptance/api/application_spec.rb'
     - 'spec/acceptance/api/line_item_plan_cost_spec.rb'
@@ -540,7 +536,6 @@ Style/RedundantParentheses:
 # Configuration parameters: AllowMultipleReturnValues.
 Style/RedundantReturn:
   Exclude:
-    - 'app/helpers/forums_helper.rb'
     - 'app/models/account/provider_methods.rb'
     - 'app/models/cms/page.rb'
     - 'app/models/plan.rb'
@@ -863,7 +858,6 @@ Style/UnlessElse:
     - 'app/models/message.rb'
     - 'config/initializers/autosave_fix.rb'
     - 'app/lib/authentication/strategy/cas.rb'
-    - 'lib/forum_support/posts.rb'
     - 'lib/heroku.rb'
     - 'lib/pdf/report.rb'
     - 'app/lib/stats/views/csv/metrics.rb'

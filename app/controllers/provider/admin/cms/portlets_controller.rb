@@ -41,7 +41,7 @@ class Provider::Admin::CMS::PortletsController < Provider::Admin::CMS::Templates
   end
 
   def allowed_params
-    %i[title portlet_type system_name draft url_feed type section_id posts].freeze
+    %i[title portlet_type system_name draft url_feed type section_id].freeze
   end
 
 end

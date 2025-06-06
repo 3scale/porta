@@ -37,12 +37,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     "#{controller_name} - #{action_name}"
   end
 
-  def link_to_unless_current_styled(text, url, options = {})
-    link_to_unless_current text, url, options do |active_text|
-      content_tag 'span', active_text, :class => 'active is-active'
-    end
-  end
-
   def pf4_nav_item(text, url)
     content_tag 'li', class: 'pf-c-nav__item' do
       link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
@@ -92,68 +86,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
 
       render :layout => layout, &block
     end
-  end
-
-  ##
-  # Forum imported helpers
-
-  def feed_icon_tag(title, url)
-    (@feed_icons ||= []) << { :url => url, :title => title }
-    link_to image_tag('forum/feed-icon.png', :size => '14x14', :alt => "Subscribe to #{title}"), url
-  end
-
-  def pagination(collection)
-    if collection.total_entries > 1
-      "<p class='pages'>" + 'Pages'[:pages_title] + ": <strong>" +
-      will_paginate(collection, :inner_window => 10, :next_label => "next"[], :prev_label => "previous"[]) +
-      "</strong></p>"
-    end
-  end
-
-  def next_page(collection)
-    unless collection.current_page == collection.total_entries || collection.total_entries == 0
-      "<p style='float:right;'>" + link_to("Next page"[], { :page => collection.current_page.next }.merge(params.reject{|k,v| k=="page"})) + "</p>"
-    end
-  end
-
-  def search_posts_title
-    returning(params[:q].blank? ? 'Recent Posts'[] : "Searching for"[] + " '#{h params[:q]}'") do |title|
-      title << " "+'by {user}'[:by_user,h(@user.display_name)] if @user
-      title << " "+'in {forum}'[:in_forum,h(@forum.name)] if @forum
-    end
-  end
-
-  def topic_title_link(topic, options)
-    if topic.title =~ /\A\[([^\]]{1,15})\]((\s+)\w+.*)/
-      "<span class='flag'>#{$1}</span>" +
-      link_to(h($2.strip), forum_topic_path(@forum, topic), options)
-    else
-      link_to(h(topic.title), forum_topic_path(@forum, topic), options)
-    end
-  end
-
-  def avatar_for(user, size=62)
-    email_hash = Digest::MD5.hexdigest(user.try!(:email) || "")
-
-    image_tag "https://secure.gravatar.com/avatar.php?gravatar_id=#{email_hash}&rating=PG&size=#{size}", :size => "#{size}x#{size}", :class => 'photo'
-  end
-
-  def search_path(atom = false)
-    options = params[:q].blank? ? {} : {:q => params[:q]}
-    prefix =
-      if @topic
-        options.update :topic_id => @topic, :forum_id => @forum
-        :forum_topic
-      elsif @forum
-        options.update :forum_id => @forum
-        :forum
-      elsif @user
-        options.update :user_id => @user
-        :user
-      else
-        :search
-      end
-    atom ? send("formatted_#{prefix}_posts_path", options.update(:format => :atom)) : send("#{prefix}_posts_path", options)
   end
 
   # Join CSS classes to single space-separated string, ready for inserting into a "class"

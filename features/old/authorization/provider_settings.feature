@@ -39,7 +39,6 @@ Feature: Provider settings authorization
     And I go to the provider dashboard
     Then there shouldn't be a link to "0 Accounts"
     And there shouldn't be a link to "Billing"
-    And there shouldn't be a link to "Forum"
     And there shouldn't be a link to "0 Messages"
     And there shouldn't be a link to "Developer Portal"
     And they should see an error when going to the following pages:
@@ -47,7 +46,6 @@ Feature: Provider settings authorization
       | the fields definitions index page                |
       | the edit site settings page                      |
       | the finance settings page                        |
-      | the forum settings page                          |
       | the emails settings page                         |
       | the email templates page                         |
       | the site settings page                           |
