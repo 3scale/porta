@@ -29,7 +29,10 @@ module Liquid
 
         ::Rails.logger.debug { "Liquid::Template::View for #{path.inspect} - #{record.inspect}" }
 
-        content = record.content(cms.try(:render_draft_content?))
+        # Default to "" to avoid an issue with strict locals, where
+        # `self.source.sub!(STRICT_LOCALS_REGEX, "")` fails with "can't modify frozen String", because
+        # `self.source` is `nil.to_s`, which is frozen
+        content = record.content(cms.try(:render_draft_content?)) || ""
 
         new(content, ident, handler, details)
       end

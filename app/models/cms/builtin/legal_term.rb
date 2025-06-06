@@ -10,11 +10,11 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
   before_validation :publish_draft
 
   def title
-    I18n.t("builtin_legal_terms.#{system_name}.title")
+    I18n.t("builtin_legal_terms.#{system_name}.title") if system_name_whitelisted?
   end
 
   def description
-    I18n.t("builtin_legal_terms.#{system_name}.description")
+    I18n.t("builtin_legal_terms.#{system_name}.description") if system_name_whitelisted?
   end
 
   def self.system_name_whitelist
