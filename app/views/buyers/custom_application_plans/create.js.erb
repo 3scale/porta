@@ -1,6 +1,0 @@
-$.colorbox.close(); <%# FIXME: do we need this? %>
-$.flash.notice('Plan customized.');
-<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
-setTimeout(() => {
-  $('#plan-widget-with-actions').replaceWith(<%= json render('provider/admin/applications/plan', contract: @contract) %>);
-});

@@ -935,7 +935,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
         resources :service_contracts, :only => [:index]
         resources :contracts, :only => [] do
-          resources :custom_plans, :only => [:create, :destroy]
+          resources :custom_plans, :only => [:create, :destroy], controller: 'custom_account_plans'
           resources :custom_application_plans, :only => [:create, :destroy]
         end
         namespace :applications do
