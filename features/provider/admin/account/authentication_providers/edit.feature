@@ -20,7 +20,7 @@ Feature: Account Settings > Users > SSO Integrations > Edit
       | Client Secret                     | outdated-tardis                                |
       | Realm                             | https://rh-sso.rose-tyler.com/auth/realms/demo |
       | Skip SSL certificate verification | Yes                                           |
-    Then they should see the flash message "SSO integration updated"
+    Then they should see a toast alert with text "SSO integration updated"
 
   Scenario: Missing field
     When they go to the edit rh sso integration page
@@ -28,4 +28,4 @@ Feature: Account Settings > Users > SSO Integrations > Edit
       | Client                            |                                                |
       | Client Secret                     | outdated-tardis                                |
       | Realm                             | https://rh-sso.rose-tyler.com/auth/realms/demo |
-    Then they should see the flash message "SSO integration could not be updated"
+    Then they should see a toast alert with text "SSO integration could not be updated"

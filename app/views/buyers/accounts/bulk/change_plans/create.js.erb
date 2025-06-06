@@ -3,4 +3,4 @@
     .innerText = '<%= account.bought_account_plan.name %>'
 <% end %>
 $.colorbox.close()
-$.flash('<%= j @notice %>')
+<%= render 'shared/flash_alerts' %>

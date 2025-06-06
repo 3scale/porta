@@ -22,7 +22,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   def create
     @file = files.new(file_params)
     if @file.save
-      redirect_to edit_provider_admin_cms_file_path(@file), notice: 'Created new file'
+      redirect_to edit_provider_admin_cms_file_path(@file), success: t('.success')
     else
       render :new
     end
@@ -40,9 +40,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   def destroy
     file.destroy
 
-    flash[:success] = "File #{file.path} deleted"
-
-    redirect_to provider_admin_cms_templates_path
+    redirect_to provider_admin_cms_templates_path, success: t('.success', path: file.path)
   end
 
   private

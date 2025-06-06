@@ -14,6 +14,10 @@ Given "{product} has a {spec_version} spec {string}" do |product, version, name|
                                                            body: spec_body_builder(version))
 end
 
+Given "{product} has no specs" do |product|
+  product.api_docs_services.delete_all
+end
+
 Given "{api_docs_service} {is} published" do |spec, published|
   spec.update!(published: published)
 end

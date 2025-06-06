@@ -27,7 +27,7 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        | Doctor                                     |
       | Client Secret | tardis                                     |
       | Realm or Site | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "SSO integration created"
+    Then they should see a toast alert with text "SSO integration created"
     And the current page is the sso integration page
     And should see "Red Hat Single Sign-On"
 
@@ -38,7 +38,7 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        | Doctor                   |
       | Client Secret | tardis                   |
       | Realm or Site | https://doctor.auth0.com |
-    Then they should see the flash message "SSO integration created"
+    Then they should see a toast alert with text "SSO integration created"
     And the current page is the sso integration page
     And should see "Auth0"
 
@@ -57,7 +57,7 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        | Doctor                                     |
       | Client Secret |                                            |
       | Realm or Site | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "SSO integration could not be created"
+    Then they should see a toast alert with text "SSO integration could not be created"
     And field "Client Secret" has inline error "can't be blank"
 
   Scenario: Client is required
@@ -68,7 +68,7 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        |                                            |
       | Client Secret | tardis                                     |
       | Realm or Site | https://rh-sso.doctor.com/auth/realms/demo |
-    Then they should see the flash message "SSO integration could not be created"
+    Then they should see a toast alert with text "SSO integration could not be created"
     And field "Client" has inline error "can't be blank"
 
   # TODO: Investigate why Realm or site hasn't can't be blank error on Red Hat Single Sign-On option
@@ -80,7 +80,7 @@ Feature: Account Settings > Users > SSO Integrations > New
   #     | Client        | Doctor                 |
   #     | Client Secret | tardis                 |
   #     | Realm or Site |                        |
-  #   Then they should see the flash message "SSO integration could not be created"
+  #   Then they should see a toast alert with text "SSO integration could not be created"
   #   And field "Realm or Site" has inline error "can't be blank"
 
   Scenario: Realm or Site is required
@@ -91,7 +91,7 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        | Doctor                 |
       | Client Secret | tardis                 |
       | Realm or Site |                        |
-    Then they should see the flash message "SSO integration could not be created"
+    Then they should see a toast alert with text "SSO integration could not be created"
     And field "Realm or Site" has inline error "can't be blank"
 
   Scenario: Realm or Site validation
@@ -102,5 +102,5 @@ Feature: Account Settings > Users > SSO Integrations > New
       | Client        | Doctor                 |
       | Client Secret | tardis                 |
       | Realm or Site | not-an-url             |
-    Then they should see the flash message "SSO integration could not be created"
+    Then they should see a toast alert with text "SSO integration could not be created"
     And field "Realm or Site" has inline error "Invalid URL format"

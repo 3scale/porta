@@ -40,6 +40,6 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
   test 'update shows an error message when fails' do
     Rails.application.config.three_scale.stubs(readonly_custom_domains_settings: false)
     put admin_site_dns_path, params: { account: { domain: 'INVALID' } }
-    assert_match 'Domain must be downcase', flash[:error]
+    assert_match 'Domain must be downcase', flash[:danger]
   end
 end

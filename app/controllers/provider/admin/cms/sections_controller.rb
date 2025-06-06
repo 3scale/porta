@@ -23,15 +23,14 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
     @section = current_account.sections.build(section_params)
 
     if @section.save
-      flash[:info] = 'Section created successfully.'
-      redirect_to :action => :edit, :id => @section.id
+      redirect_to({ action: :edit, id: @section.id }, success: t('.success'))
     else
       render :action => :new
     end
   end
 
-  def update
-    @section.valid? or raise "Invalid section"
+  def update # rubocop:disable Metrics/AbcSize
+    @section.valid? or raise t('.invalid')
 
     @section.add_remove_by_ids( :section, params[:cms_section][:cms_section_ids])
     @section.add_remove_by_ids( :page, params[:cms_section][:cms_page_ids])
@@ -40,8 +39,7 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
     @section.save!
 
     if @section.update(section_params)
-      flash[:info] = 'section saved successfully.'
-      redirect_to( :action => :edit, :id => @section.id)
+      redirect_to({ action: :edit, id: @section.id }, success: t('.success'))
     else
       render :action => :edit
     end
@@ -53,11 +51,10 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
       if @section.destroy
         redirect_to edit_provider_admin_cms_section_path(parent)
       else
-        flash[:error] = 'Failed to delete the section.'
-        redirect_to edit_provider_admin_cms_section_path(@section)
+        redirect_to edit_provider_admin_cms_section_path(@section), danger: t('.success')
       end
     else
-      render_error status: :method_not_allowed, text: "This section can't be deleted"
+      render_error status: :method_not_allowed, text: t('.not_allowed')
     end
   end
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-interface ResponseBody { redirect?: string; error?: string; notice?: string }
+interface ResponseBody { redirect?: string }
 interface APIResponse<T> extends Response { json: () => Promise<ResponseBody & T> }
 type FetchFunction = <T>(url: string, opts: RequestInit) => Promise<APIResponse<T>>
 

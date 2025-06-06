@@ -52,7 +52,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
     test '#update with the right params' do
       put admin_api_docs_service_path update_params(service_id: service.id)
       assert_response :redirect
-      assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
+      assert_equal 'ActiveDocs Spec was successfully updated', flash[:success]
 
       api_docs_service.reload
       update_params[:api_docs_service].each do |name, value|
@@ -67,7 +67,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
       put admin_api_docs_service_path update_params(service_id: '')
       assert_response :redirect
-      assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
+      assert_equal 'ActiveDocs Spec was successfully updated', flash[:success]
 
       assert_nil api_docs_service.reload.service_id
     end

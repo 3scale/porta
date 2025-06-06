@@ -12,7 +12,7 @@ Feature: Buyer signup
   Scenario: Signup creates account created event
     And there are no events
     When a buyer signs up
-    Then I should see "We have sent you an email to confirm your email address."
+    Then I should see "We have sent you an email to confirm your email address"
 
     Then there should be 1 valid account created event
       And there should be 1 valid application created event

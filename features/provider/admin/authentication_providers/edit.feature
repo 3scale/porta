@@ -22,7 +22,7 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > Edit
       | Client Secret                     | outdated-tardis                                |
       | Realm                             | https://rh-sso.rose-tyler.com/auth/realms/demo |
       | Skip SSL certificate verification | Yes                                            |
-    Then they should see the flash message "Authentication provider updated"
+    Then they should see a toast alert with text "Authentication provider updated"
 
   Scenario: Missing field
     When they go to the developer portal edit rh sso integration page
@@ -30,4 +30,4 @@ Feature: Audience > Developer Portal > Settings > SSO Integrations > Edit
       | Client ID     |                                                |
       | Client Secret | outdated-tardis                                |
       | Realm         | https://rh-sso.rose-tyler.com/auth/realms/demo |
-    Then they should see the flash message "Authentication provider has not been updated"
+    Then they should see a toast alert with text "Authentication provider has not been updated"

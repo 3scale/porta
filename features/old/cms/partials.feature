@@ -16,11 +16,11 @@ Feature: CMS Partials
       awesomeness builtin
       """
     And I press "Create Partial"
-    Then I should see "Partial created"
+    Then I should see "Template created"
     When I fill in the following:
       | System name | brand-new-potato |
     And I press "Save"
-    Then I should see "Partial saved"
+    Then I should see "Template saved"
     And CMS Partial "brand-new-potato" should have:
       | Draft       | awesomeness builtin |
       | System name | brand-new-potato    |
@@ -34,6 +34,6 @@ Feature: CMS Partials
       awesomeness builtin
       """
     And I press "Save"
-    Then I should see "Partial saved"
+    Then I should see "Template saved"
     And I press "Publish"
-    Then I should see "Partial saved and published"
+    Then I should see "Template saved and published"

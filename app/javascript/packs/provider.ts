@@ -3,6 +3,7 @@ import { renderQuickStarts } from 'QuickStarts/renderQuickStarts'
 import 'Common/threescale'
 import application from 'Common/application'
 import 'Common/ajaxEvents'
+import { setUpToasts } from 'utilities/toast'
 
 const jQuery1 = window.$
 
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuickStarts()
 
   application()
+  setUpToasts()
 
   /**
    * This is a legacy functionality that could be replaced with standard PF forms.

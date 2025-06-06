@@ -23,8 +23,7 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
                                     recipient.id,
                                     permitted_params[:data],
                                     permitted_params[:period])
-    flash[:notice] = "Report will be mailed to #{recipient.email}."
-    redirect_to action: :new
+    redirect_to({ action: :new }, success: t('.success', email: recipient.email))
   end
 
   protected

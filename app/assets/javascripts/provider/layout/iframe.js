@@ -1,6 +1,5 @@
 //= require jquery
 //= require rails-ujs
-//= require 'flash'
 //= require_self
 
 

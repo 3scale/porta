@@ -211,8 +211,3 @@ div.form-hints {
     font-style: italic;
   }
 }
-
-// make sure measurement stuff doesn't mess up the rendering
-iframe[name="google_conversion_frame"], img[height="1"][width="1"] {
-  display: none;
-}

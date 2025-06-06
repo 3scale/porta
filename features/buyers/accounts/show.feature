@@ -14,7 +14,7 @@ Feature: Buyer account overview
     And fill in "Body" with "You are invited to my party."
     And the "To" field should be fixed to "Bob Buyer"
     And press "Send"
-    Then should see "Message was sent."
+    Then should see "Message was sent"
 
   Rule: Account plans hidden
     Background:
@@ -31,7 +31,7 @@ Feature: Buyer account overview
     Scenario: Customizing the account plan
       And they go to buyer "Bob Buyer" overview page
       When they follow "Convert to a Custom Plan"
-      Then they should see the flash message "Plan customized."
+      Then they should see a toast alert with text "Plan customized"
       And should see "Custom Account Plan" within the plan card
       And there should be a link to "Edit" within the plan card
       And there should be a button to "Remove customization" within the plan card
@@ -40,7 +40,7 @@ Feature: Buyer account overview
       And the buyer uses a custom plan "Banana Plan"
       And they go to buyer "Bob Buyer" overview page
       When they press "Remove customization" within the plan card
-      Then they should see the flash message "The plan was set back to Banana Plan."
+      Then they should see a toast alert with text "The plan was set back to Banana Plan"
       And there should be a link to "Convert to a Custom Plan" within the plan card
 
     Scenario: Changing the account plan
@@ -51,4 +51,4 @@ Feature: Buyer account overview
       When they select "Advanced" from "account_contract_plan_id"
       And press "Change"
       And confirm the dialog
-      Then they should see the flash message "Plan changed to 'Advanced'"
+      Then they should see a toast alert with text "Plan changed to 'Advanced'"

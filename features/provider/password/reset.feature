@@ -54,7 +54,7 @@ Feature: Provider password reset
       And they fill in "Password" with "monkey"
       And they fill in "Password confirmation" with "monkey"
       And press "Change Password"
-      Then they should see "The password has been changed."
+      Then they should see "The password has been changed"
       And the current page is the provider login page
       And the user is now able to sign in with password "monkey"
 

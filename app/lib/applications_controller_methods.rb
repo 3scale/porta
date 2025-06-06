@@ -32,12 +32,11 @@ module ApplicationsControllerMethods
 
     respond_to do |format|
       format.html do
-        flash[:notice] = message
-        redirect_to provider_admin_application_url(@cinstance)
+        redirect_to provider_admin_application_url(@cinstance), success: message
       end
 
       format.js do
-        flash.now[:notice] = message
+        flash.now[:success] = message
         render action: 'update_state'
       end
     end

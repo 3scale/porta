@@ -3,10 +3,11 @@
 module PatternflyComponentsHelper
 
   def icon_name(variant)
-    case variant
+    case variant&.to_sym
+    when :danger then 'exclamation-circle'
     when :info then 'info-circle'
-    when :success then 'check-circled'
-    when :warning, :danger then 'exclamation-triangle'
+    when :success then 'check-circle'
+    when :warning then 'exclamation-triangle'
     else 'bell'
     end
   end
@@ -38,6 +39,26 @@ module PatternflyComponentsHelper
     classes = "pf-c-alert pf-m-inline #{plain_class} #{variant_class}"
     tag.div class: classes do
       icon_tag(variant) + title_tag(title) + description_tag(options[:description])
+    end
+  end
+
+  # Generates the same HTML as app/javascript/src/utilities/toast.ts#createAlertGroupItem.
+  # Duplication is not ideal, but justified since this will be used by rails template for
+  # flashes set in controllers.
+  def pf_toast_alert(title, **options)
+    action_tag = tag.div class: 'pf-c-alert__action' do
+      tag.button class: 'pf-c-button pf-m-plain', type: 'button', title: 'Close alert' do
+        tag.icon class: 'fas fa-times'
+      end
+    end
+
+    if (type = options[:type])
+      type_class = "pf-m-#{type}"
+    end
+
+    classes = "pf-c-alert #{type_class}"
+    tag.div class: classes do
+      icon_tag(type) + title_tag(title) + action_tag
     end
   end
 

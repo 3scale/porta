@@ -8,10 +8,9 @@ class Sites::ApplicationsController < Sites::BaseController
 
   def update
     if @account.update(params[:account])
-      flash[:notice] = 'The applications settings were updated.'
-      redirect_to admin_site_settings_url
+      redirect_to admin_site_settings_url, success: t('.success')
     else
-      flash[:error] = 'There were problems saving the settings.'
+      flash.now[:danger] = t('.error')
       render :action => 'edit'
     end
   end

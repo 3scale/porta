@@ -2,14 +2,14 @@
   = javascript_packs_with_chunks_tag 'login_page'
 
 - authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
-- flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
+- alerts = (flash || []).map { |f| {type: f[0], message: f[1]}}
 - is_master_account = domain_account.master?
 - recaptcha_enabled = !!@bot_protection_enabled
 - recaptcha_site_key = Rails.configuration.three_scale.recaptcha_public_key
 - recaptcha_action = controller_path
 div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].nil? ? "null" : (request.protocol + request.host_with_port + session[:return_to])),
   authenticationProviders: authentication_providers,
-  flashMessages: flash_messages,
+  alerts: alerts,
   show3scaleLoginForm: @presenter.show_username_password_related_content?,
   providerRequestPasswordResetPath: reset_provider_password_path,
   providerSessionsPath: provider_sessions_path,

@@ -73,10 +73,10 @@ Feature: Developer portal application referrer filters
         | foo4.example.org |
       And they go to the application's dev portal page
       And there should be a button to "Add" within the referrer filters
-      And they should not see "At most 5 referrer filters are allowed." within the referrer filters
+      And they should not see "At most 5 referrer filters are allowed" within the referrer filters
       When they fill in "referrer_filter" with "foo5.example.org" within the referrer filters
       And press "Add" within the referrer filters
-      Then they should see "At most 5 referrer filters are allowed." within the referrer filters
+      Then they should see "At most 5 referrer filters are allowed" within the referrer filters
       And there should not be a button to "Add" within the referrer filters
 
     @javascript
@@ -89,7 +89,7 @@ Feature: Developer portal application referrer filters
         | foo5.example.org |
       And they go to the application's dev portal page
       And there should not be a button to "Add" within the referrer filters
-      And they should see "At most 5 referrer filters are allowed." within the referrer filters
+      And they should see "At most 5 referrer filters are allowed" within the referrer filters
       And they press "Delete" that belongs to the referrer filter "foo5.example.org"
-      Then they should not see "At most 5 referrer filters are allowed." within the referrer filters
+      Then they should not see "At most 5 referrer filters are allowed" within the referrer filters
       And there should be a button to "Add" within the referrer filters

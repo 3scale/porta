@@ -1,15 +1,14 @@
 import { mount } from 'enzyme'
 
 import * as ajax from 'utilities/ajax'
-import * as flash from 'utilities/flash'
+import * as toast from 'utilities/toast'
 import { AuthenticationProvidersTable } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 import { mockLocation, waitForPromises } from 'utilities/test-utils'
 
 import type { Props } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const notice = jest.spyOn(flash, 'notice')
-const error = jest.spyOn(flash, 'error')
+const toastSpy = jest.spyOn(toast, 'toast')
 
 const defaultProps = {
   count: 0,
@@ -54,7 +53,7 @@ it('should be able to delete an authentication provider', async () => {
 })
 
 it('should handle deletion errors gracefully', async () => {
-  const payload = { redirect: undefined, error: 'Something went wrong' }
+  const payload = { redirect: undefined, type: 'danger', message: 'Something went wrong' }
   ajaxJSON.mockResolvedValueOnce({ json: () => Promise.resolve(payload) } as Response)
 
   const wrapper = mountWrapper()
@@ -65,8 +64,7 @@ it('should handle deletion errors gracefully', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(error).toHaveBeenCalledWith(payload.error)
-  expect(notice).not.toHaveBeenCalled()
+  expect(toastSpy).toHaveBeenCalledWith(payload.message, 'danger')
 })
 
 it('should be able to edit an authentication provider', () => {

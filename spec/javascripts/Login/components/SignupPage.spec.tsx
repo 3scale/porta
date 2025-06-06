@@ -5,7 +5,7 @@ import { SignupPage } from 'Login/components/SignupPage'
 import type { Props } from 'Login/components/SignupPage'
 
 const defaultProps: Props = {
-  flashMessages: [],
+  alerts: [],
   name: 'Best API',
   path: 'bikini-bottom',
   user: {

@@ -21,14 +21,13 @@ class Provider::InviteeSignupsController < FrontendController
       # We are activating users directly on signup so no activation email
       @user.activate!
 
-      flash[:notice] = t('flash.signups.create.notice')
-      redirect_to(provider_login_path)
+      redirect_to provider_login_path, success: t('.success')
     else
       errors = @user.errors.full_messages.reduce do |result, error|
         "#{result}\n#{error}"
       end
 
-      flash[:error] = t('flash.signups.create.error', errors: errors)
+      flash.now[:danger] = t('.error', errors: errors)
       render 'show'
     end
   end
@@ -41,7 +40,7 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def redirect_if_logged_in
-    redirect_to provider_admin_dashboard_url, notice: I18n.t('flash.signups.already_logged_in') if logged_in?
+    redirect_to provider_admin_dashboard_url, info: t('.already_logged_in') if logged_in?
   end
 
   def find_invitation

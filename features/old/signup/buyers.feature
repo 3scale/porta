@@ -32,7 +32,7 @@ Feature: Sign Up of enterprise buyers
       But user "hugo" should be pending
 
     When I follow the activation link in an email sent to "hugo@3scale.localhost"
-    Then I should see "Signup complete. You can now sign in."
+    Then I should see "Signup complete. You can now sign in"
      And user "hugo" should be active
 
    Then the account "hugo's stuff" should have an account contract with the plan "Tier-1"
@@ -43,7 +43,7 @@ Feature: Sign Up of enterprise buyers
   Scenario: Choose application plan, the rest is default
     Given provider "foo.3scale.localhost" has "multiple_applications" denied
     When I go to the sign up page for the "iPhone" plan
-    Then I should see "You are signing up to plan iPhone."
+    Then I should see "You are signing up to plan iPhone"
      And I fill in the signup fields as "hugo"
      Then I should see the registration succeeded
       And account "hugo's stuff" should be buyer

@@ -30,8 +30,7 @@ class Provider::Admin::ApplicationsController < FrontendController
 
   def create
     if @cinstance.save
-      flash[:notice] = 'Application was successfully created.'
-      redirect_to provider_admin_application_path(@cinstance)
+      redirect_to provider_admin_application_path(@cinstance), success: t('.success')
     else
       initialize_new_presenter
       @cinstance.extend(AccountForNewPlan)
@@ -49,10 +48,7 @@ class Provider::Admin::ApplicationsController < FrontendController
     respond_to do |format|
       json = @cinstance.to_json(only: %i[id name], methods: %i[errors])
       if @cinstance.save
-        format.html do
-          flash[:notice] = 'Application was successfully updated.'
-          redirect_to provider_admin_application_path(@cinstance)
-        end
+        format.html { redirect_to provider_admin_application_path(@cinstance), success: t('.success') }
         format.json { render json: json, status: :ok }
       else
         format.html { render action: :edit }
@@ -62,46 +58,42 @@ class Provider::Admin::ApplicationsController < FrontendController
   end
 
   def accept
-    change_state('accept','The application has been accepted.')
+    change_state('accept', t('.success'))
   end
 
   def reject
     # TODO: use change_state('reject','The application has been rejected. params[:reason])
     @cinstance.reject!(params[:reason])
-    flash[:notice] = 'The application has been rejected.'
-    redirect_to admin_buyers_account_url(@cinstance.buyer_account)
+    redirect_to admin_buyers_account_url(@cinstance.buyer_account), success: t('.success')
   end
 
   def suspend
-    change_state('suspend','The application has been suspended.')
+    change_state('suspend', t('.success'))
   end
 
   def resume
-    change_state('resume','The application is live again!')
+    change_state('resume', t('.success'))
   end
 
   def change_plan
     # there is no need to query available_application_plans as we already have a validation
     new_plan = accessible_plans.stock.find(plan_id)
     @cinstance.provider_changes_plan!(new_plan)
-    flash[:notice] = "Plan changed to '#{new_plan.name}'."
-    redirect_to provider_admin_application_url(@cinstance)
+    redirect_to provider_admin_application_url(@cinstance), success: t('.success', name: new_plan.name)
   end
 
   def change_user_key
     with_password_confirmation! do
       @cinstance.change_user_key!
-      redirect_to provider_admin_application_url(@cinstance), notice: 'The key was successfully changed'
+      redirect_to provider_admin_application_url(@cinstance), success: t('.success')
     end
   end
 
   def destroy
     if @cinstance.destroy
-      flash[:notice] = 'The application was successfully deleted.'
-      redirect_to provider_admin_applications_path
+      redirect_to provider_admin_applications_path, success: t('.success')
     else
-      flash[:notice] = 'Not possible to delete application'
-      redirect_back_or_to(provider_admin_applications_path)
+      redirect_back_or_to provider_admin_applications_path, danger: t('.not_possible')
     end
   end
 

@@ -18,7 +18,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
       @cinstance.errors.add(:user_key, :blank)
     else
       @cinstance.user_key = user_key
-      @notice = t('.update.success') if @cinstance.save
+      flash.now[:success] = t('.success') if @cinstance.save
     end
 
     if (error = @cinstance.errors.full_messages_for(:user_key).presence&.to_sentence)
@@ -33,7 +33,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
 
     if @key.persisted?
       @keys = @cinstance.application_keys.pluck_values
-      @notice = t('.create.success')
+      flash.now[:success] = t('.success')
     end
 
     if (error = @key.errors.full_messages_for(:value).presence&.to_sentence)
@@ -47,7 +47,11 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
     @key = params[:id]
     @remove = @cinstance.application_keys.remove(@key)
 
-    @flash = t(".destroy.#{@remove ? 'success' : 'error'}")
+    if @remove
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
+    end
 
     respond_to(:js)
   end

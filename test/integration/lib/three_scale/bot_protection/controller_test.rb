@@ -10,7 +10,7 @@ module ThreeScale
 
         def create
           bot_check
-          render plain: flash[:error] || 'Bot protection passed'
+          render plain: flash[:danger] || 'Bot protection passed'
         end
       end
 

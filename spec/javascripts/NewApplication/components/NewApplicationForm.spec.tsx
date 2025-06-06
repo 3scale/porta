@@ -5,14 +5,14 @@ import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 import { assertInputs, isSubmitDisabled } from 'utilities/test-utils'
-import * as flash from 'utilities/flash'
+import * as toast from 'utilities/toast'
 
 import type { FieldDefinition } from 'Types'
 import type { Buyer, Product, Plan } from 'NewApplication/types'
 import type { Props } from 'NewApplication/components/NewApplicationForm'
 import type { ReactWrapper } from 'enzyme'
 
-const errorSpy = jest.spyOn(flash, 'error')
+const toastSpy = jest.spyOn(toast, 'toast')
 
 const appPlans = [{ id: 0, name: 'Basic Plan', default: false }]
 const products = [
@@ -178,7 +178,7 @@ describe('when in Service context', () => {
     const error = 'Something went wrong'
     mountWrapper({ ...props, error })
 
-    expect(errorSpy).toHaveBeenCalledWith(error)
+    expect(toastSpy).toHaveBeenCalledWith(error, 'danger')
   })
 
   describe('when service plans are allowed', () => {
@@ -471,7 +471,7 @@ describe('when in Account context', () => {
     const error = 'Something went wrong'
     mountWrapper({ ...props, error })
 
-    expect(errorSpy).toHaveBeenCalledWith(error)
+    expect(toastSpy).toHaveBeenCalledWith(error, 'danger')
   })
 
   describe('when service plans are not allowed', () => {

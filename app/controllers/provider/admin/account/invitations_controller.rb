@@ -9,11 +9,11 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   belongs_to :account
 
   create! do |success, failure|
-    success.html { redirect_to provider_admin_account_invitations_path, notice: t('.success') }
+    success.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
   end
 
   destroy! do |success, failure|
-    success.html { redirect_to(provider_admin_account_invitations_path) }
+    success.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
   end
 
   def resend
@@ -21,7 +21,7 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
     @invitation.resend
 
     respond_to do |format|
-      format.html { redirect_to provider_admin_account_invitations_path, notice: t('.success') }
+      format.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
       format.xml  { head :ok } # TODO: figure out if this is still used or it needs to be cleaned up
     end
   end

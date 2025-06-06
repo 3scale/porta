@@ -19,7 +19,7 @@ Feature: Product > Integration > Backends > New
       And select "Backend 1" from "Backend"
       And fill in "Public Path" with "/v1"
       And press "Add to product"
-      Then should see "Backend added to Product."
+      Then should see "Backend added to Product"
       And should see the following table:
         | Name      | Public path |
         | Backend 1 | /v1         |
@@ -31,7 +31,7 @@ Feature: Product > Integration > Backends > New
         | Name             | My new backend         |
         | Private Base URL | http://www.example.com |
       And press "Add to product"
-      Then should see "Backend added to Product."
+      Then should see "Backend added to Product"
       And should see the following table:
         | Name           | Private base URL          | Public path |
         | My new backend | http://www.example.com:80 | /           |

@@ -14,10 +14,9 @@ class Sites::DocumentationsController < Sites::BaseController
                                      :documentation_public)
 
     if @settings.update(attrs)
-      flash[:notice] = 'Documentations settings updated.'
-      redirect_to edit_admin_site_documentation_url
+      redirect_to edit_admin_site_documentation_url, success: t('.success')
     else
-      flash[:error] = 'There were problems saving the settings.'
+      flash.now[:danger] = t('.error')
       render :action => 'edit'
     end
   end

@@ -27,7 +27,7 @@ Feature: Audience > Developer portal > ActiveDocs
     And the spec is published
     When they go to the ActiveDocs page
     And they select action "Hide" of "Echo API"
-    Then they should see the flash message "Spec Echo API is now hidden"
+    Then they should see a toast alert with text "Spec Echo API is now hidden"
     And the table has the following row:
       | Name     | State  |
       | Echo API | hidden |
@@ -43,7 +43,7 @@ Feature: Audience > Developer portal > ActiveDocs
     And the spec is not published
     When they go to the ActiveDocs page
     And they select action "Publish" of "Echo API"
-    Then they should see the flash message "Spec Echo API is now visible"
+    Then they should see a toast alert with text "Spec Echo API is now visible"
     And the table has the following row:
       | Name     | State   |
       | Echo API | visible |
@@ -58,9 +58,9 @@ Feature: Audience > Developer portal > ActiveDocs
     Given the product has a <swagger version> spec "Echo API"
     When they go to the ActiveDocs page
     And they select action "Delete" of "Echo API"
-    And they should see "Yes, I want to delete spec Echo API forever." within the modal
+    And they should see "Yes, I want to delete spec Echo API forever" within the modal
     And press "Delete spec" within the modal
-    Then they should see the flash message "ActiveDocs Spec was successfully deleted."
+    Then they should see a toast alert with text "ActiveDocs Spec was successfully deleted"
     And they should not see "Echo API"
 
     Examples:

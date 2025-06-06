@@ -60,7 +60,7 @@ Feature: Provider Admin Access tokens
         | Permission    | Read & Write  |
         | Expires in    | No expiration |
       Then the current page is the personal tokens page
-      And they should see the flash message "Access token was successfully created"
+      And they should see a toast alert with text "Access token was successfully created"
       And should see the following details:
         | Name       | LeToken        |
         | Scopes     | Analytics API  |
@@ -85,7 +85,7 @@ Feature: Provider Admin Access tokens
         | Name        | New Token Name |
         | Billing API | No             |
         | Permission  | Read & Write   |
-      Then they should see the flash message "Access Token was successfully updated."
+      Then they should see a toast alert with text "Access token was successfully updated"
       Then the table should contain the following:
         | Name           | Scopes        | Permission   |
         | New Token Name | Analytics API | Read & Write |
@@ -100,5 +100,5 @@ Feature: Provider Admin Access tokens
       When they follow "Delete"
       And confirm the dialog
       Then the current page is the personal tokens page
-      And they should see the flash message "Access token was successfully deleted"
+      And they should see a toast alert with text "Access token was successfully deleted"
       But should not see "LeToken"

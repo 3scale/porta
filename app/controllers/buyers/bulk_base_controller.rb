@@ -79,6 +79,6 @@ class Buyers::BulkBaseController < FrontendController
 
   def notify_success
     count = collection.length - @errors.length
-    @notice = t('.success', count: count)
+    flash.now[:success] = t('.success', count: count)
   end
 end

@@ -24,8 +24,7 @@ class Buyers::ApplicationsController < FrontendController
 
   def create
     if @cinstance.save
-      flash[:notice] = 'Application was successfully created.'
-      redirect_to provider_admin_application_path(@cinstance)
+      redirect_to provider_admin_application_path(@cinstance), success: t('.success')
     else
       initialize_new_presenter
       @cinstance.extend(AccountForNewPlan)

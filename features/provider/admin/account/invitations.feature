@@ -104,5 +104,5 @@ Feature: Provider Account Settings User Invitations
       When they go to the provider sent invitations page
       And select action "Delete" of "alice@example.org"
       And confirm the dialog
-      Then they should see the flash message "Invitation was successfully deleted"
+      Then they should see a toast alert with text "Invitation was successfully deleted"
       And they should see "No invitations"

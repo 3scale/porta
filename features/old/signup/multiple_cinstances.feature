@@ -24,7 +24,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
     And I press "Sign up"
     Then I should see "Please click the link in the email and you can directly login!"
     When I follow the activation link in an email sent to "hugo@stuff.com"
-    Then I should see "You will receive a message once your account is approved."
+    Then I should see "You will receive a message once your account is approved"
 
     And buyer "hugo's stuff" should be pending
     When buyer "hugo's stuff" is approved

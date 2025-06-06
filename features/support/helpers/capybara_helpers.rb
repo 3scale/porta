@@ -6,6 +6,7 @@ module CapybaraHelpers
   include Capybara::Minitest::Assertions
 
   FLASH_SELECTOR = [
+    '.pf-c-alert-group.pf-m-toast .pf-c-alert__title',
     '#flash-messages',
     '#flashWrapper span',
     '#flashWrapper p'
@@ -23,9 +24,10 @@ module CapybaraHelpers
     Capybara.current_session.driver.browser.local_storage.[](key)
   end
 
-  def assert_flash(message)
+  def assert_flash(message, failure_message = nil)
     assert_match Regexp.new(message, true),
-                 find(FLASH_SELECTOR).text
+                 find(FLASH_SELECTOR).text,
+                 failure_message
   end
 
   def assert_path_returns_error(path, status_code: 403)

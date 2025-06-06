@@ -1,5 +1,9 @@
-jQuery.colorbox.close();
+<% if flash[:success].present? %>
+  jQuery.colorbox.close();
+  document.querySelector('table#features tbody').innerHTML += '<%= escape_javascript(render partial: 'feature', locals: { feature: @feature }) %>';
+<% else %>
+  jQuery('#warning').show();
+  $.colorbox.resize();
+<% end %>
 
-document.querySelector('table#features tbody').innerHTML += '<%= escape_javascript(render partial: 'feature', locals: { feature: @feature }) %>';
-
-jQuery.flash.notice('Feature has been created.');
+<%= render 'shared/flash_alerts' %>

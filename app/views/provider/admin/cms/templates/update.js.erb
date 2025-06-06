@@ -3,7 +3,6 @@ $('.inline-errors').remove();
 $('form .input.error').removeClass('error');
 
 <% if @page.valid? %>
-  $.flash(<%= flash.now[:notice].to_json.html_safe %>);
   $(document).trigger('sidebar:load');
 
   // 'publish' & 'hide' may change the 'published' view
@@ -26,3 +25,5 @@ $('form .input.error').removeClass('error');
   var new_form = <%= render('/provider/admin/cms/templates/update').to_json.html_safe %>;
   $('#tab-content form #cms-template-fields-wrapper').replaceWith(new_form);
 <% end %>
+
+<%= render 'shared/flash_alerts' %>

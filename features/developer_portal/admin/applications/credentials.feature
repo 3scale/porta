@@ -116,10 +116,10 @@ Feature: Developer portal application credentials
         | key-three |
         | key-four  |
       When they go to the application's dev portal page
-      Then they should not see "At most 5 keys are allowed."
+      Then they should not see "At most 5 keys are allowed"
       And there should be a button to "Create new key" within the application keys
       When they press "Create new key"
-      Then they should see "At most 5 keys are allowed."
+      Then they should see "At most 5 keys are allowed"
       And there should not be a button to "Create new key" within the application keys
 
     @javascript
@@ -131,10 +131,10 @@ Feature: Developer portal application credentials
         | key-four  |
         | key-five  |
       When they go to the application's dev portal page
-      Then they should see "At most 5 keys are allowed."
+      Then they should see "At most 5 keys are allowed"
       And there should not be a button to "Create new key" within the application keys
       When they press "Delete"
-      Then they should not see "At most 5 keys are allowed."
+      Then they should not see "At most 5 keys are allowed"
       And there should be a button to "Create new key" within the application keys
 
     Scenario: Can't delete last key when mandatory app key set
@@ -150,4 +150,4 @@ Feature: Developer portal application credentials
       And the product has mandatory app key set to "false"
       When they go to the application's dev portal page
       And press "Delete"
-      Then they should see "Application key was deleted."
+      Then they should see "Application key was deleted"
