@@ -53,7 +53,6 @@ class Account < ApplicationRecord
   self.background_deletion = %i[
     configuration_values
     settings
-    forum
     users
     mail_dispatch_rules
     api_docs_services
@@ -211,14 +210,6 @@ class Account < ApplicationRecord
   def managed_users
     conditions = ['users.account_id = :id OR accounts.provider_account_id = :id', { id: id }]
     User.where(conditions).joins(:account).readonly(false)
-  end
-
-  def build_forum(attributes = {})
-    self.forum = Forum.new(attributes.reverse_merge(name: 'Forum'))
-  end
-
-  def create_forum(attributes = {})
-    build_forum(attributes).tap(&:save)
   end
 
   #TODO: check if the comment below still holds
@@ -527,12 +518,6 @@ class Account < ApplicationRecord
     else
       id
     end
-  end
-
-  def sections
-    # Filter out existing forum sections (builtin static pages) from the CMS sidebar and return 404
-    # if accessed via URL. TODO: Remove forums THREESCALE-6714
-    super.where.not(system_name: %i[forum categories posts topics user-topics])
   end
 
   private

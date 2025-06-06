@@ -1,12 +1,13 @@
+# frozen_string_literal: true
+
 class Sites::DocumentationsController < Sites::BaseController
-  # see ForumsController
+
   activate_menu :serviceadmin
 
   before_action :authorize_connect
   before_action :find_settings
 
-  def edit
-  end
+  def edit; end
 
   def update
     attrs = params[:settings].slice( :app_gallery_enabled,

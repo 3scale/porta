@@ -101,7 +101,6 @@ en:
     cinstance_plan_changed: 'Application plan change'
     application_plan_change_requested: 'Application plan change request'
     message_received: 'New messages'
-    post_created: 'New forum post'
     csv_data_export: 'CSV data export'
     daily_report: 'Daily report'
     weekly_report: 'Weekly report'
@@ -128,7 +127,6 @@ en:
     cinstance_plan_changed: 'Sent when an application is changed to a different plan.'
     application_plan_change_requested: 'Sent when a request for application plan change is made.'
     message_received: 'Sent when a developer sends you a new message.'
-    post_created: 'Sent when a developer posts a new message in your forum.'
     csv_data_export: 'Sent when a member of your team generates a report with data about messages/ developer accounts/ applications.'
     daily_report: 'Contains information about your API(s) performance in the last 24 hours.'
     weekly_report: 'Contains information about your API(s) performance in the last 7 days.'
@@ -1069,10 +1067,6 @@ en:
       update:
         warning: There were errors saving some of your emails. Please review the marked fields
         success: Your support emails have been updated
-    forums:
-      update:
-        error: There were problems saving the settings
-        success: Forum settings updated
     settings:
       update:
         success: Settings updated
@@ -1539,9 +1533,6 @@ en:
       table_of_contents_portlet:
         name: Table of Contents
         description: Creates HTML TOC from your section.
-      latest_forum_posts_portlet:
-        name: Latest Forum Posts
-        description: Shows you number of latest forum posts.
 
     email_template:
       account_approved: Buyer Account approved
@@ -1865,11 +1856,9 @@ en:
               invalid_range: 'must be between the provider account creation date and 12 months from now'
 
     models:
-      topic_category: category
       cinstance: Application
       service_contract: Service contract
       account_contract: Account contract
-      topic: thread
       profile: Account profile
       application_plan: Application plan
       service_plan: Service plan

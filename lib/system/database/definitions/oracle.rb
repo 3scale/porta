@@ -87,14 +87,6 @@ System::Database::Oracle.define do
     SQL
   end
 
-  trigger 'forums' do
-    <<~SQL
-      IF :new.account_id <> master_id THEN
-        :new.tenant_id := :new.account_id;
-      END IF;
-    SQL
-  end
-
   trigger 'invitations' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
@@ -181,12 +173,6 @@ System::Database::Oracle.define do
     SQL
   end
 
-  trigger 'moderatorships' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM forums WHERE id = :new.forum_id AND tenant_id <> master_id;
-    SQL
-  end
-
   trigger 'payment_transactions' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM invoices WHERE id = :new.invoice_id AND tenant_id <> master_id;
@@ -213,12 +199,6 @@ System::Database::Oracle.define do
   trigger 'policies' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
-    SQL
-  end
-
-  trigger 'posts' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM forums WHERE id = :new.forum_id AND tenant_id <> master_id;
     SQL
   end
 
@@ -267,18 +247,6 @@ System::Database::Oracle.define do
       ELSIF :new.sluggable_type = 'Service' THEN
         SELECT tenant_id INTO :new.tenant_id FROM services WHERE id = :new.sluggable_id AND tenant_id <> master_id;
       END IF;
-    SQL
-  end
-
-  trigger 'topic_categories' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM forums WHERE id = :new.forum_id AND tenant_id <> master_id;
-    SQL
-  end
-
-  trigger 'topics' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM forums WHERE id = :new.forum_id AND tenant_id <> master_id;
     SQL
   end
 

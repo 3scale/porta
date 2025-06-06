@@ -25,17 +25,5 @@ Ability.define do |user|
           buyer_user.admin? &&
           buyer_user.account.admins.count <= 1
     end
-
-    #COPY these come from forum.rb
-
-    can :manage, Topic do |topic|
-      forum = topic.forum || topic.category.try!(:forum)
-      forum.account == user.account
-    end
-
-    can :manage, Post do |post|
-      can?(:manage, post.topic)
-    end
-
   end
 end

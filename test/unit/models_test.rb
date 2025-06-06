@@ -34,7 +34,6 @@ class ModelsTest < ActiveSupport::TestCase
       'FieldsDefinition' => %w[target],
       'Invitation' => %w[token],
       'Invoice' => %w[pdf_file_name pdf_content_type state friendly_id fiscal_code vat_code currency creation_type],
-      'LatestForumPostsPortlet' => %w[content_type],
       'LogEntry' => %w[description],
       'Message' => %w[state],
       'Metric' => %w[owner_type],
@@ -56,7 +55,7 @@ class ModelsTest < ActiveSupport::TestCase
     }
 
     Rails.application.eager_load!
-    models = three_scale_db_models - [BackendApi, Service, Proxy, Topic, Forum]
+    models = three_scale_db_models - [BackendApi, Service, Proxy]
 
     validate_columns_for = ->(model, options = {}) do
       model_name = model.name

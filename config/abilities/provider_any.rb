@@ -65,22 +65,6 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
       can :read, Invoice, :buyer_account_id => account.id
     end
 
-    #
-    # Forum permissions
-    #
-    can :read, Topic do |topic|
-      topic.forum.public? or topic.forum.account == account
-    end
-
-    can :read, TopicCategory do |category|
-      category.forum.public? or category.forum.account == account
-    end
-
-    can :reply, Topic do |topic|
-      forum = topic.forum || topic.category&.forum
-      forum.account == account
-    end
-
     can %i[show edit update], NotificationPreferences, user_id: user.id
     can %i[show update], NotificationPreferences, &:new_record?
 

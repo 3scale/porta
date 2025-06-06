@@ -21,11 +21,6 @@ class DeveloperPortal::SearchController < DeveloperPortal::BaseController
     end
   end
 
-  def forum
-    @presenter = SearchPresenters::ForumPresenter.new params, request, site_account.id
-    render :action => 'index'
-  end
-
   protected
 
   def login_required

@@ -18,10 +18,6 @@ module Liquid
           </ul>
         </div>
 
-        {% if site.forum? %}
-          <p>The forum is enabled.</p>
-        {% endif %}
-
         <a href="{{ site.theme_css_link }}">link theme to css</a>
       }
 
@@ -32,10 +28,6 @@ module Liquid
 
       def account
         Liquid::Drops::Provider.new(@account)
-      end
-
-      def forum?
-        false
       end
 
       def service

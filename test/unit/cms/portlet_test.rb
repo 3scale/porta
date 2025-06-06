@@ -20,7 +20,6 @@ class CMS::PortletTest < ActiveSupport::TestCase
   test 'human name' do
     assert_equal 'External RSS Feed', ExternalRssFeedPortlet.model_name.human
     assert_equal 'Table of Contents', TableOfContentsPortlet.model_name.human
-    assert_equal 'Latest Forum Posts', LatestForumPostsPortlet.model_name.human
   end
 
   class CustomPortlet < CMS::Portlet::Base

@@ -20,10 +20,9 @@ class DeveloperPortal::DashboardsControllerTest < DeveloperPortal::ActionControl
     assert_select 'p', text: '10 days remaining.'
   end
 
-  # Remove when all such templates are gone. It's using trial_notice,
-  # latest_messages and lates_forum_posts tags.
+  # Remove when all such templates are gone. It's using trial_notice and latest_messages
   test 'legacy liquid template' do
-    legacy_code = "<h2>Dashboard</h2>\n{% trial_notice %}\n\n{% if account.credit_card_required? and account.credit_card_missing? %}\n  <div class=\"dashboard_card round\">\n    {% credit_card_missing %}\n  </div>\n{% endif %}\n\n<div class=\"dashboard_card round\">\n  <h3>Messages</h3>\n  {% latest_messages %}\n</div>\n\n{% latest_forum_posts %}\n"
+    legacy_code = "<h2>Dashboard</h2>\n{% trial_notice %}\n\n{% if account.credit_card_required? and account.credit_card_missing? %}\n  <div class=\"dashboard_card round\">\n    {% credit_card_missing %}\n  </div>\n{% endif %}\n\n<div class=\"dashboard_card round\">\n  <h3>Messages</h3>\n  {% latest_messages %}\n</div>\n"
 
     SimpleLayout.new(@provider).create_builtin_pages_and_partials!
     dashboard = @provider.builtin_pages.find_or_create!('dashboards/show', 'Dashboard', @provider.sections.root)

@@ -44,7 +44,6 @@ Ability.define do |user|
     can :manage, :finance unless user.account.master_on_premises?
     can :manage, :monitoring
     can :manage, :analytics
-    can :manage, :forum
     can :manage, :settings
     can :manage, :groups
     can :manage, :authentication_providers
@@ -53,11 +52,6 @@ Ability.define do |user|
     can %i[index show edit update create destroy], BackendApi
 
     can :manage, BackendApiConfig
-
-    #COPY these come from forum.rb
-    can :manage, TopicCategory do |category|
-      category.forum.account = user.account
-    end
 
     can :manage, :multiple_users
     can :manage, User

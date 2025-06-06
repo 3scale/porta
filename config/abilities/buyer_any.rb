@@ -65,24 +65,5 @@ Ability.define do |user|
 
 
     can([ :update ], ServiceContract, :user_account_id => account.id)
-
-
-    #
-    # Forum permissions
-    #
-
-    can :read, Topic do |topic|
-     topic.forum.public? or topic.forum.account == provider
-    end
-
-    can :read, TopicCategory do |category|
-      category.forum.public? or category.forum.account == provider
-    end
-
-    can :reply, Topic do |topic|
-      forum = topic.forum || topic.category.try!(:forum)
-      forum.account == provider
-    end
-
   end
 end

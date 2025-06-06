@@ -30,7 +30,7 @@ class CMS::Portlet < CMS::Partial
   end
 
   def self.available
-    [ ExternalRssFeedPortlet, TableOfContentsPortlet, LatestForumPostsPortlet ]
+    [ ExternalRssFeedPortlet, TableOfContentsPortlet ]
   end
 
   class Base < CMS::Portlet

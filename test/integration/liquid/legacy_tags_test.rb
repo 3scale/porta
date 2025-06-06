@@ -9,18 +9,6 @@ class Liquid::LegacyTagsTest < ActionDispatch::IntegrationTest
     login_buyer(@buyer)
   end
 
-  test 'latest_forum_posts' do
-    @provider.forum = FactoryBot.create(:forum, account: @provider)
-    topic = FactoryBot.create(:topic, forum: @provider.forum)
-    FactoryBot.create(:post, forum: @provider.forum, topic: topic)
-    override_dashboard_with '{% latest_forum_posts %}'
-
-    get '/admin'
-
-    assert_response :success
-    assert_match /Latest.Forum.Activity/, response.body
-  end
-
   test 'latest_messages' do
     override_dashboard_with '{% latest_messages %}'
 

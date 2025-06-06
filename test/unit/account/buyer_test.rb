@@ -133,11 +133,6 @@ class Account::BuyerTest < ActiveSupport::TestCase
     assert_not buyer_account.feature_allowed?(:world_domination)
   end
 
-  test 'forum is not created for buyers' do
-    account = FactoryBot.create(:simple_buyer)
-    assert_nil account.forum
-  end
-
   test '#destroy returns false if buyer has unresolved invoices' do
     invoice = FactoryBot.create(:invoice)
     buyer = invoice.buyer

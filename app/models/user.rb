@@ -27,12 +27,11 @@ class User < ApplicationRecord
     user_sessions
     access_tokens
     sso_authorizations
-    moderatorships
     notifications
     notification_preferences
   ].freeze
 
-  audited except: %i[salt posts_count janrain_identifier cas_identifier
+  audited except: %i[salt janrain_identifier cas_identifier
                      authentication_id open_id last_login_at last_login_ip crypted_password].freeze,
           redacted: %i[password_digest].freeze
 
@@ -53,21 +52,7 @@ class User < ApplicationRecord
   # has_one :provider_account, :through => :account, :source => :provider_account
   delegate :provider_account, :to => :account, :allow_nil => true
 
-  has_many :posts, -> { latest_first }
-  has_many :topics, -> { latest_first }
   has_many :sso_authorizations, dependent: :delete_all
-
-  has_many :moderatorships, :dependent => :delete_all
-  has_many :forums, :through => :moderatorships, :source => :forum do
-    def moderatable
-      select("#{Forum.table_name}.*, #{Moderatorship.table_name}.id as moderatorship_id")
-    end
-  end
-
-  # TODO: this should be called topic_subscriptions
-  has_many :user_topics, dependent: :delete_all
-
-  has_many :subscribed_topics, :through => :user_topics, :source => :topic
 
   has_many :user_sessions, dependent: :destroy
 
@@ -351,10 +336,6 @@ class User < ApplicationRecord
 
     # do not call callbacks
     self.class.where(id: id).update_all(last_login_at: options[:time], last_login_ip: options[:ip])
-  end
-
-  def subscribed?(topic)
-    self.subscribed_topics.include? topic
   end
 
   def to_xml(options = {})

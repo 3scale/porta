@@ -2,4 +2,3 @@ The components are rendered by legacy tags. Remove them when they are no longer 
 
 {% latest_messages %}
 {% trial %}
-{% latest_forum_posts %}

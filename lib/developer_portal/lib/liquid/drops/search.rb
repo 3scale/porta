@@ -43,10 +43,6 @@ module Liquid
           case result.class.name
           when "CMS::Page"
             Result::Page.new(result, @presenter)
-          when "Topic"
-            Result::Topic.new(result, @presenter)
-          when "Post"
-            Result::Post.new(result, @presenter)
           end
         end
       end
@@ -62,7 +58,7 @@ module Liquid
           desc "Returns the title of result."
           def title; end
 
-          desc "Returns the kind of result; can be 'topic' or 'page'."
+          desc "Returns the kind of result; can be 'page'."
           def kind; end
 
           desc "Returns the resource URL of the result."
@@ -75,43 +71,6 @@ module Liquid
 
           def highlight(object = nil)
             @presenter.highlight(object || @result)
-          end
-        end
-
-        class Post < Base
-          def title
-            highlight(@result.topic).title
-          end
-
-          def kind
-            "post"
-          end
-
-          def url
-            "/forum/topics/#{@result.topic.to_param}"
-          end
-
-          def description
-            highlight.body
-          end
-        end
-
-        class Topic < Base
-
-          def title
-            highlight.title
-          end
-
-          def kind
-            "topic"
-          end
-
-          def url
-            "/forum/topics/#{@result.to_param}"
-          end
-
-          def description
-           "#{ highlight(@result.forum).name } &ndash; #{ highlight.title }".html_safe
           end
         end
 

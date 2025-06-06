@@ -146,7 +146,6 @@ module Liquid
         :urls    => Liquid::Drops::Urls.new(site_account, request),
         :site_account => Liquid::Drops::Provider.new(site_account),
         :provider     => Liquid::Drops::Provider.new(site_account),
-        :forum        => Liquid::Drops::Forum.new(site_account),
         :today        => Liquid::Drops::Today.new,
         :i18n         => Liquid::Drops::I18n.new,
         content_of:      Liquid::Drops::ContentOf.new,

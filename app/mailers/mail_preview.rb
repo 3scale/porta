@@ -119,18 +119,6 @@ class MailPreview < MailView
     NotificationMailer.message_received(event, receiver)
   end
 
-  def post_created_registered_user
-    event = Posts::PostCreatedEvent.create(Post.where.not(user_id: nil).last)
-
-    NotificationMailer.post_created(event, receiver)
-  end
-
-  def post_created_anonymous_user
-    event = Posts::PostCreatedEvent.create(Post.where(user_id: nil).last)
-
-    NotificationMailer.post_created(event, receiver)
-  end
-
   def csv_data_export
     event = Reports::CsvDataExportEvent.create(Account.providers.last, User.last, 'users', 'week')
 

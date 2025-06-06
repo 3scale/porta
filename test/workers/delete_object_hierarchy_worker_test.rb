@@ -553,9 +553,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         before_objects << FactoryBot.create(:payment_transaction, invoice:, account: buyer, reference: "ip_some_id")
         permission = buyer.permissions.create(:group => provider.provided_groups.take)
         buyer.save!
-        topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)
-        before_objects << topic
-        topic_subscription = UserTopic.create({user: buyer.admin_user, topic:}, {without_protection: true})
 
         perform_enqueued_jobs(queue: "deletion") do
           DeleteObjectHierarchyWorker.delete_later buyer
@@ -564,7 +561,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         assert_empty before_objects - all_objects # basically all original objects are still here
         assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
         assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
-        assert_raise(ActiveRecord::RecordNotFound) { topic_subscription.reload }
       end
 
       test "deleting service should not delete unrelated objects" do
@@ -600,7 +596,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
-        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting
           object_of_master?(Account.find(object.account_id))
         when Feature
           object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
@@ -610,7 +606,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object_of_master?(object.provider) if object.provider
         when Configuration::Value
           object_of_master?(object.configurable_type.constantize.find(object.configurable_id))
-        when UserTopic, MemberPermission, Notification, UserSession
+        when MemberPermission, Notification, UserSession
           object_of_master?(User.find(object.user_id))
         when Metric
           owner = object.owner
@@ -623,8 +619,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           object.receiver == master_account
         when Plan
           object_of_master?(object.issuer) if object.issuer
-        when Post, Topic, TopicCategory
-          object_of_master?(Forum.find(object.forum_id))
         when ProxyConfigAffectingChange, ProxyRule
           object_of_master?(Proxy.find(object.proxy_id))
         when ServiceToken, Proxy

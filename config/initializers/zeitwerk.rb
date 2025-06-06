@@ -11,7 +11,3 @@ Rails.autoloaders.main.inflector.inflect(
   'json_validator' => 'JSONValidator',
   'by_sso_token' => 'BySSOToken'
 )
-
-Rails.autoloaders.main.ignore(
-  'app/lib/forum_support/deprecated/'
-)

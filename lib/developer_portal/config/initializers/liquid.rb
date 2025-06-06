@@ -33,7 +33,6 @@ Rails.application.config.to_prepare do
     Liquid::Tags::Oldfooter,
     Liquid::Tags::Form,
     Liquid::Tags::InternalError,
-    Liquid::Tags::LatestForumPosts,
     Liquid::Tags::LatestMessages,
     Liquid::Tags::Logo,
     Liquid::Tags::Menu,
