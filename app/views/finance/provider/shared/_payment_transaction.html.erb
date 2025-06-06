@@ -1,4 +1,4 @@
-<%= content_tag_for(:tr, payment_transaction) do  %>
+<%= content_tag :tr, id: dom_id(payment_transaction) do %>
   <td role="cell">
     <%= boolean_status_img(payment_transaction.success?) %>
   </td>

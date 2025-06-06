@@ -27,7 +27,7 @@
   </thead>
   <tbody role="rowgroup">
     <% @invoices.each do |invoice| %>
-      <%= content_tag_for(:tr, invoice, role: 'row') do %>
+      <%= content_tag :tr, id: dom_id(invoice), role: "row" do %>
         <td role="cell" data-label="ID"><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice) , title: "Show #{invoice.friendly_id}" %></td>
         <td role="cell" data-label="Month"><%= invoice.name %></td>
         <td role="cell" data-label="State"><%= h invoice.state %></td>
@@ -35,7 +35,7 @@
         <td role="cell" data-label="Download" colspan="2">
           <%= invoice_pdf_link(invoice, label: 'PDF') %>
         </td>
-       <% end %>
+      <% end %>
     <% end %>
   </tbody>
 </table>
