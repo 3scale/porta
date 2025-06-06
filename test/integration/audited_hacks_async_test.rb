@@ -8,12 +8,13 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
   include NPlusOneControl::MinitestHelper
   include TestHelpers::Sidekiq
 
-  attr_reader :provider, :admin, :audit_class
+  attr_reader :provider, :admin, :audit_class, :access_token
 
   setup do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
     @provider = FactoryBot.create(:simple_provider)
+    @provider.create_settings # prevent creating settings lazily, as this triggers an Audit creation
     @admin = FactoryBot.create :simple_user, account: @provider, role: 'admin'
     User.current = @admin
 
@@ -21,13 +22,15 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
 
     @audit_class = Audited.audit_class
 
+    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: ['account_management']).value
+
     audit_class.delete_all
   end
 
   test "async auditing sets all attributes" do
     with_sidekiq do
       User.with_auditing do
-        put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: account_management_admin_token.value })
+        put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: })
         assert_response :ok
       end
     end
@@ -45,7 +48,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
     Audited::Audit.any_instance.expects(:set_version_number).never
 
     User.with_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: account_management_admin_token.value})
+      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: })
       assert_response :ok
     end
 
@@ -55,12 +58,12 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
 
   test "async audit version selected on actual creation" do
     User.with_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: account_management_admin_token.value})
+      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: })
       assert_response :ok
     end
 
     User.with_synchronous_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "sync-audit@example.com", access_token: account_management_admin_token.value})
+      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "sync-audit@example.com", access_token: })
       assert_response :ok
     end
 
@@ -76,7 +79,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
 
     with_sidekiq do
       User.with_auditing do
-        put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: account_management_admin_token.value })
+        put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: })
         assert_response :ok
       end
     end
@@ -106,7 +109,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
     ActionDispatch::Request.any_instance.expects(:uuid).returns(expected_uuid).at_least_once
 
     User.with_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: account_management_admin_token.value})
+      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "async-audit@example.com", access_token: })
       assert_response :ok
     end
 
@@ -114,7 +117,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
     ActionDispatch::Request.any_instance.stubs(:uuid).returns(expected_another_uuid)
 
     User.with_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "second-audit@example.com", access_token: account_management_admin_token.value})
+      put(admin_api_user_path(format: :xml, id: admin.id), params: {email: "second-audit@example.com", access_token: })
       assert_response :ok
     end
 
@@ -126,7 +129,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
 
   test "async audit user is set from actual API call" do
     User.with_auditing do
-      put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: account_management_admin_token.value })
+      put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: })
       assert_response :ok
     end
 
@@ -138,10 +141,6 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
   end
 
   private
-
-  def account_management_admin_token
-    FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
-  end
 
   def first_audit
     Audited.audit_class.first!
