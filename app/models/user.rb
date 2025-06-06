@@ -31,6 +31,8 @@ class User < ApplicationRecord
     notification_preferences
   ].freeze
 
+  self.ignored_columns = %i[posts_count]
+
   audited except: %i[salt janrain_identifier cas_identifier
                      authentication_id open_id last_login_at last_login_ip crypted_password].freeze,
           redacted: %i[password_digest].freeze
