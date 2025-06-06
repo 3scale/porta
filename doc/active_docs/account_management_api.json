@@ -7251,6 +7251,149 @@
         }
       }
     },
+    "/admin/api/personal/notification_preferences.json": {
+      "get": {
+        "summary": "Notification Preferences List",
+        "description": "Returns the list of notification preferences for the current user.",
+        "tags": [
+          "Notification Preferences"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "summary": "Notification Preferences Update",
+        "description": "Update the notification preferences for the current user.",
+        "tags": [
+          "Notification Preferences"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "application_created": {
+                    "type": "boolean",
+                    "description": "Application created."
+                  },
+                  "account_created": {
+                    "type": "boolean",
+                    "description": "Account created."
+                  },
+                  "limit_alert_reached_provider": {
+                    "type": "boolean",
+                    "description": "Limit alert reached provider."
+                  },
+                  "limit_violation_reached_provider": {
+                    "type": "boolean",
+                    "description": "Limit violation reached provider."
+                  },
+                  "account_plan_change_requested": {
+                    "type": "boolean",
+                    "description": "Account plan change requested."
+                  },
+                  "account_deleted": {
+                    "type": "boolean",
+                    "description": "Account deleted."
+                  },
+                  "cinstance_cancellation": {
+                    "type": "boolean",
+                    "description": "Application cancellation."
+                  },
+                  "cinstance_plan_changed": {
+                    "type": "boolean",
+                    "description": "Application plan changed."
+                  },
+                  "application_plan_change_requested": {
+                    "type": "boolean",
+                    "description": "Application plan change requested."
+                  },
+                  "service_contract_created": {
+                    "type": "boolean",
+                    "description": "Service contract created."
+                  },
+                  "service_plan_change_requested": {
+                    "type": "boolean",
+                    "description": "Service plan change requested."
+                  },
+                  "service_contract_plan_changed": {
+                    "type": "boolean",
+                    "description": "Service contract plan changed."
+                  },
+                  "cinstance_expired_trial": {
+                    "type": "boolean",
+                    "description": "Application expired trial."
+                  },
+                  "invoices_to_review": {
+                    "type": "boolean",
+                    "description": "Invoices to review."
+                  },
+                  "plan_downgraded": {
+                    "type": "boolean",
+                    "description": "Plan downgraded."
+                  },
+                  "expired_credit_card_provider": {
+                    "type": "boolean",
+                    "description": "Expired credit card."
+                  },
+                  "unsuccessfully_charged_invoice_provider": {
+                    "type": "boolean",
+                    "description": "Unsuccessfully charged invoice."
+                  },
+                  "message_received": {
+                    "type": "boolean",
+                    "description": "Message received."
+                  },
+                  "csv_data_export": {
+                    "type": "boolean",
+                    "description": "CSV data export."
+                  },
+                  "service_deleted": {
+                    "type": "boolean",
+                    "description": "Service deleted."
+                  },
+                  "weekly_report": {
+                    "type": "boolean",
+                    "description": "Weekly report."
+                  },
+                  "daily_report": {
+                    "type": "boolean",
+                    "description": "Daily report."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
     "/admin/api/policies.json": {
       "get": {
         "summary": "APIcast Policy Registry",
