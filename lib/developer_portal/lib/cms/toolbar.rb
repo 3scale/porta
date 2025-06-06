@@ -62,9 +62,9 @@ module CMS::Toolbar
   end
 
   def disable_edit_mode
-    session[:cms_edit] = nil
-    session[:cms_edit_expire] = nil
-    session[:cms] = nil
+    session.delete :cms_edit
+    session.delete :cms_edit_expire
+    session.delete :cms
   end
 
   def validate_signature
