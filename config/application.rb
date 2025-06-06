@@ -149,7 +149,6 @@ module System
     config.active_record.observers = :account_observer,
                                      :message_observer,
                                      :billing_observer,
-                                     :post_observer,
                                      :user_observer,
                                      :billing_strategy_observer,
                                      :provider_plan_change_observer,

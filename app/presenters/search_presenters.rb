@@ -112,8 +112,6 @@ module SearchPresenters
       case @result
       when CMS::Page
         {:title => @presenter.highlight(@result).name, :path => @result.path, :content => @presenter.highlight(@result).content }
-      when Topic
-        nil # we dont care about these now
       end
     end
   end
@@ -146,15 +144,4 @@ module SearchPresenters
       @search
     end
   end
-
-  class ForumPresenter < SearchAbstractPresenter
-    def item
-      'forum document'
-    end
-
-    def options
-      super.merge(:classes => [Topic])
-    end
-  end
-
 end

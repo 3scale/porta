@@ -66,11 +66,6 @@ Ability.define do |user|
 
   can :create, Account
 
-  #COPY these come from forum.rb
-  can :manage, TopicCategory do |category|
-    category.forum.account = account
-  end
-
   can :index, Service
   can :create, Service if account.can_create_service?
   can :destroy, Service do |service|
