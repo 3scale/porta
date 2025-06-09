@@ -49,7 +49,7 @@ class ModelsTest < ActiveSupport::TestCase
       'ProxyConfig' => %w[hosts],
       'ProxyRule' => %w[metric_system_name owner_type],
       'ServicePlan' => %w[issuer_type],
-      'Settings' => Switches::SWITCHES.map { |switch| "#{switch}_switch" },
+      'Settings' => Switches::SWITCHES.map { |switch| "#{switch}_switch" }  << "cms_token",
       'TableOfContentsPortlet' => %w[content_type],
       'UsageLimit' => %w[period plan_type],
       'UserSession' => %w[key user_agent]

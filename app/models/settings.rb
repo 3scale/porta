@@ -11,7 +11,7 @@ class Settings < ApplicationRecord
   validates :bg_colour, :link_colour, :text_colour, :menu_bg_colour, :link_label, :link_url, :menu_link_colour, :token_api,
             :content_bg_colour, :tracker_code, :favicon, :plans_tab_bg_colour, :plans_bg_colour, :content_border_colour,
             :cc_privacy_path, :cc_terms_path, :cc_refunds_path, :change_service_plan_permission, :spam_protection_level,
-            :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cms_token, :cas_server_url, :sso_key,
+            :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cas_server_url, :sso_key,
             :admin_bot_protection_level, :sso_login_url, length: { maximum: 255 }
 
   symbolize :spam_protection_level, :admin_bot_protection_level
@@ -69,13 +69,6 @@ class Settings < ApplicationRecord
 
   def authentication_strategy
     ActiveSupport::StringInquirer.new(super)
-  end
-
-  def cms_token!
-    unless cms_token?
-      self.update_attribute(:cms_token, SecureRandom.hex(16))
-    end
-    cms_token
   end
 
   def has_privacy_policy?

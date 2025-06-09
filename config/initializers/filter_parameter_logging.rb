@@ -3,7 +3,7 @@
 # Configure parameters to be filtered from the log file. Use this to limit dissemination of
 # sensitive information. See the ActiveSupport::ParameterFilter documentation for supported
 # notations and behaviors.
-Rails.application.config.filter_parameters += %i[activation_code cms_token credit_card credit_card_auth_code
+Rails.application.config.filter_parameters += %i[activation_code credit_card credit_card_auth_code
                                                  credit_card_authorize_net_payment_profile_token credit_card_expires_on
                                                  credit_card_partial_number crypted_password janrain_api_key lost_password_token
                                                  password password_digest payment_gateway_options payment_service_reference salt
