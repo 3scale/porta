@@ -288,16 +288,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_nil account.profile
   end
 
-  test 'forum is not created' do
-    account = nil
-
-    assert_no_change :of => -> { Forum.count } do
-      account = FactoryBot.create(:simple_provider)
-    end
-
-    assert_nil account.forum
-  end
-
   test 'generates site_access_code if the account is a provider' do
     account = Account.new(org_name: 'Foo', subdomain: 'foo', self_subdomain: 'foo-admin')
     account.provider = true

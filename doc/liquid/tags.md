@@ -43,7 +43,7 @@ SwaggerUI 2.1.3
 
 SwaggerUI 2.2.10
 - swagger-ui/2.2.10/swagger-ui.js
-      
+
 
 __Example:__ Using cdn_asset tag in liquid
 ```liquid
@@ -58,7 +58,7 @@ Renders body of a page. Use this only inside a layout.
 
 Prints all liquid variables available in a template into an HTML comment.'
 We recommend __to remove this tag__ from public templates.
-      
+
 
 ```liquid
 {% debug:help %}
@@ -94,7 +94,7 @@ SMTP header for the message.
 | reply-to      |                    | {% reply-to = 'support@example.com' %}            |
 | header        | custom SMTP header | {% header 'X-SMTP-Group' = 'Important' %}         |
 | do_not_send   | discard the email  | {% do_not_send %}                                 |
-    
+
 
 __Example:__ Conditional blind carbon copy
 ```liquid
@@ -212,7 +212,7 @@ of the form. The supported forms are:
      </td>
    </tr>
  </table>
-      
+
 
 __Example:__ A form to create an application
 ```liquid
@@ -225,16 +225,6 @@ __Example:__ A form to create an application
 
    <input name='commit'  value='Create!'>
 {% endform %}
-```
-# Tag 'latest_forum_posts'
-
-An HTML table with latest forum posts.
-
-__DEPRECATED__: Use `forum` drop instead.
-
-__Example:__ Using latest_forum_posts tag liquid
-```liquid
-{% latest_forum_posts %}
 ```
 # Tag 'latest_messages'
 
@@ -283,7 +273,7 @@ Includes a widget to review or change application plan
 
 
 This tag includes portlet by system name.
-      
+
 # Tag 'sort_link'
 
 Renders a link that sorts the column of table based on current params

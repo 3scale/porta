@@ -16,7 +16,6 @@ module CMS
 
     HARD_WIRED_PATHS = {
       'home' => '/',
-      'forum' => '/forum',
       'signup' => '/signup'
     }.freeze
 
