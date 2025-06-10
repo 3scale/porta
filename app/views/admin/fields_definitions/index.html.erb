@@ -32,12 +32,13 @@
 
   <ol id="<%= class_name %>-list" class="fields-definitions-list ui-sortable">
     <% @fields_definitions.by_target(class_name).sort_by(&:pos).each do |fields_definition| %>
-	<li id="<%=dom_id(fields_definition)%>">
-	<span class="name"><%=h fields_definition.name %></span>
-	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
-	<span class="action-set">
-	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+      <li id="<%=dom_id(fields_definition)%>">
+        <span class="name"><%=h fields_definition.name %></span>
+        <span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
+        <span class="action-set">
+          <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
+          <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+        </span>
       </li>
     <% end %>
   </ol>

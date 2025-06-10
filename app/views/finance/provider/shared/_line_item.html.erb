@@ -1,4 +1,4 @@
-<%= content_tag_for :tr, line_item, :class => "line_item" do %>
+<%= content_tag :tr, id: dom_id(line_item), class: "line_item" do %>
   <td role="cell" data-label="Name"><%= h line_item.name %></td>
   <td role="cell" data-label="Description"><%= h line_item.description %></td>
   <td role="cell" data-label="Quantity"><%= h line_item.quantity %></td>
