@@ -3,7 +3,7 @@
 require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.1.5.1/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
@@ -139,6 +139,7 @@ module System
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
     config.eager_load = true
+    config.enable_dependency_loading = false
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.

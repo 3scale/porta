@@ -6,10 +6,11 @@ Rails.application.configure do
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
-  config.cache_classes = false
+  config.enable_reloading = true
 
   # Do not eager load code on boot.
   config.eager_load = false
+  config.enable_dependency_loading = true
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -31,6 +32,7 @@ Rails.application.configure do
 
   # Enable caching.
   config.action_controller.perform_caching = true
+  # config.action_controller.enable_fragment_cache_logging = true # this is default in Rails for development env
 
   # when we don't set this, the default from application config is used
   # config.cache_store = :memory_store
@@ -63,11 +65,11 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
-
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
+  # Highlight code that enqueued background job in logs.
+  config.active_job.verbose_enqueue_logs = true
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -83,6 +85,9 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # WARNING: we can't enable it because it breaks some views that use `render_to_js_string`
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Raise error when a before_action's only/except options reference missing actions
+  config.action_controller.raise_on_missing_callback_actions = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
