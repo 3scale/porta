@@ -42,6 +42,22 @@ Feature: Audience's new application page
     Then the current page is application "New App" admin page
     And they should see a toast alert with text "Application was successfully created"
 
+  @chrome @search
+  Scenario: Search for product
+    Given 25 products and 1 backend apis
+    And they go to the admin portal new application page
+    And they select "Jane" from "Account"
+    And they toggle the menu on select "Product"
+    And they press "View all product"
+    Then they should see "Select a product"
+
+    When they search "API" using the toolbar
+    And wait a moment
+    Then the search input should be filled with "API"
+    And they should see following table:
+      | Name |
+      | My API |
+
   Scenario: Create an application for a subscribed product
     Given the buyer is subscribed to product "My API"
     And they go to the admin portal new application page
