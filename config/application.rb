@@ -64,13 +64,14 @@ module System
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
     config.action_controller.raise_on_open_redirects = false
 
-    # ** Please read carefully, this must be configured in config/application.rb **
     # Change the format of the cache entry.
+    #
     # Changing this default means that all new cache entries added to the cache
-    # will have a different format that is not supported by Rails 6.1 applications.
-    # Only change this value after your application is fully deployed to Rails 7.0
+    # will have a different format that is not supported by Rails 7.0
+    # applications.
+    # Only change this value after your application is fully deployed to Rails 7.1
     # and you have no plans to rollback.
-    # When you're ready to change format, change the value to 7.0
+    # TODO: update to 7.1
     config.active_support.cache_format_version = 7.0
 
     # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
@@ -109,6 +110,12 @@ module System
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
+
+    # Keeping the historic behavior by setting to `YAML`
+    # It is recommended to explicitly define the serialization method for each column
+    # rather than to rely on a global default.
+    # TODO: see if we can use the Rails 7.1 default `nil` value by setting serialization for each column explicitly
+    config.active_record.default_column_serializer = YAML
 
     config.active_job.queue_adapter = :sidekiq
 

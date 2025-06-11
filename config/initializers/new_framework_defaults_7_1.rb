@@ -196,7 +196,7 @@ end
 # recommended to explicitly define the serialization method for each column
 # rather than to rely on a global default.
 #++
-# Rails.application.config.active_record.default_column_serializer = nil
+# Rails.application.config.active_record.default_column_serializer = nil # OVERRIDEN
 
 ###
 # Enable a performance optimization that serializes Active Record models
@@ -207,24 +207,24 @@ end
 # leave this optimization off on the first deploy, then enable it on a
 # subsequent deploy.
 #++
-# Rails.application.config.active_record.marshalling_format_version = 7.1
+Rails.application.config.active_record.marshalling_format_version = 7.1
 
 ###
 # Run `after_commit` and `after_*_commit` callbacks in the order they are defined in a model.
 # This matches the behaviour of all other callbacks.
 # In previous versions of Rails, they ran in the inverse order.
 #++
-# Rails.application.config.active_record.run_after_transaction_callbacks_in_order_defined = true
+# Rails.application.config.active_record.run_after_transaction_callbacks_in_order_defined = true # TODO
 
 ###
 # Whether a `transaction` block is committed or rolled back when exited via `return`, `break` or `throw`.
 #++
-# Rails.application.config.active_record.commit_transaction_on_non_local_return = true
+# Rails.application.config.active_record.commit_transaction_on_non_local_return = true # TODO
 
 ###
 # Controls when to generate a value for <tt>has_secure_token</tt> declarations.
 #++
-# Rails.application.config.active_record.generate_secure_token_on = :initialize
+Rails.application.config.active_record.generate_secure_token_on = :initialize
 
 ###
 # ** Please read carefully, this must be configured in config/application.rb **
@@ -250,7 +250,7 @@ end
 #
 # In previous versions of Rails, Action View always used `Rails::HTML4::Sanitizer` as its vendor.
 #++
-# Rails.application.config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
+Rails.application.config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
 
 ###
 # Configure Action Text to use an HTML5 standards-compliant sanitizer when it is supported on your
@@ -261,7 +261,7 @@ end
 #
 # In previous versions of Rails, Action Text always used `Rails::HTML4::Sanitizer` as its vendor.
 #++
-# Rails.application.config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
+Rails.application.config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
 
 ###
 # Configure the log level used by the DebugExceptions middleware when logging
