@@ -138,6 +138,8 @@ module System
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
+    config.add_autoload_paths_to_load_path = false # TODO: remove when switched to 7.1
+
     config.eager_load = true
 
     # Only load the plugins named here, in the order given (default is alphabetical).
