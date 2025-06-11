@@ -138,7 +138,7 @@ module System
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
-    config.add_autoload_paths_to_load_path = false # TODO: remove when switched to 7.1
+    config.add_autoload_paths_to_load_path = true # TODO: default value in 7.1 is false, but it requires significant refactoring
 
     config.eager_load = true
 
