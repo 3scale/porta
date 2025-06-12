@@ -219,7 +219,7 @@ Rails.application.config.active_record.marshalling_format_version = 7.1
 ###
 # Whether a `transaction` block is committed or rolled back when exited via `return`, `break` or `throw`.
 #++
-# Rails.application.config.active_record.commit_transaction_on_non_local_return = true # TODO
+Rails.application.config.active_record.commit_transaction_on_non_local_return = true
 
 ###
 # Controls when to generate a value for <tt>has_secure_token</tt> declarations.
