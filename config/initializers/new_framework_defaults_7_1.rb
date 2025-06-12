@@ -168,14 +168,14 @@ end
 # behavior would allow assignment but silently not persist changes to the
 # database.
 #++
-# Rails.application.config.active_record.raise_on_assign_to_attr_readonly = true
+# Rails.application.config.active_record.raise_on_assign_to_attr_readonly = true # OVERRIDEN
 
 ###
 # Enable validating only parent-related columns for presence when the parent is mandatory.
 # The previous behavior was to validate the presence of the parent record, which performed an extra query
 # to get the parent every time the child record was updated, even when parent has not changed.
 #++
-# Rails.application.config.active_record.belongs_to_required_validates_foreign_key = false
+Rails.application.config.active_record.belongs_to_required_validates_foreign_key = false
 
 ###
 # Enable precompilation of `config.filter_parameters`. Precompilation can

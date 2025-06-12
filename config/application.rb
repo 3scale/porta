@@ -117,6 +117,11 @@ module System
     # TODO: see if we can use the Rails 7.1 default `nil` value by setting serialization for each column explicitly
     config.active_record.default_column_serializer = YAML
 
+    # The default behavior in 7.1 is to raise on assignment to attr_readonly attributes.
+    # This setting restores the previous behavior which allows assignment but silently not persist changes to the
+    # database.
+    config.active_record.raise_on_assign_to_attr_readonly = false
+
     config.active_job.queue_adapter = :sidekiq
 
     def try_config_for(*args)
