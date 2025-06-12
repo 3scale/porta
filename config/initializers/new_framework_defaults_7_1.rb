@@ -261,7 +261,7 @@ Rails.application.config.action_view.sanitizer_vendor = Rails::HTML::Sanitizer.b
 #
 # In previous versions of Rails, Action Text always used `Rails::HTML4::Sanitizer` as its vendor.
 #++
-Rails.application.config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor
+# Rails.application.config.action_text.sanitizer_vendor = Rails::HTML::Sanitizer.best_supported_vendor # We do not use action_text
 
 ###
 # Configure the log level used by the DebugExceptions middleware when logging
