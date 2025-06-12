@@ -128,21 +128,29 @@ class Account::StatesTest < ActiveSupport::TestCase
     end
   end
 
-  test 'suspend account' do
-    account = Account.new(state: 'approved', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
-    account.provider_account = master_account
+  %w[provider buyer].each do |account_type|
+    test "suspend #{account_type} account" do
+      account = Account.new(state: 'approved', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
+      account.provider_account = master_account
+      account.provider = account_type == 'provider'
+      account.buyer = !account.provider?
 
-    assert_raise StateMachines::InvalidTransition do
       account.suspend!
+
+      assert_equal 'suspended', account.state
+      assert account.suspended?
     end
 
-    refute account.suspended?
+    test "resume #{account_type} account" do
+      account = Account.new(state: 'suspended', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
+      account.provider_account = master_account
+      account.provider = account_type == 'provider'
 
-    account.provider = true
-    account.suspend!
+      account.resume!
 
-    assert_equal 'suspended', account.state
-    assert account.suspended?
+      assert_equal 'approved', account.state
+      assert account.approved?
+    end
   end
 
   def test_suspend_master
@@ -150,23 +158,6 @@ class Account::StatesTest < ActiveSupport::TestCase
     assert_raise StateMachines::InvalidTransition do
       account.suspend!
     end
-  end
-
-  test 'resume account' do
-    account = Account.new(state: 'suspended', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
-    account.provider_account = master_account
-
-    assert_raise StateMachines::InvalidTransition do
-      account.resume!
-    end
-
-    refute account.approved?
-
-    account.provider = true
-    account.resume!
-
-    assert_equal 'approved', account.state
-    assert account.approved?
   end
 
   test '.deleted_since' do

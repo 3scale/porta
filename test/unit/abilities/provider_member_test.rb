@@ -228,6 +228,30 @@ module Abilities
       assert_cannot ability, :index, Service
     end
 
+    %i[suspend resume].each do | action |
+      previous_state = action == :suspend ? 'approved' : 'suspended'
+
+      test "can #{action} a buyer if has :partners permission" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
+
+        assert_can ability, :suspend, buyer
+      end
+
+      test "can't #{action} a buyer if it doesn't have :partners permission" do
+        buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
+
+        assert_cannot ability, :suspend, buyer
+      end
+
+      test "can't #{action} a buyer if it belongs to another provider" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.create(:buyer_account, state: previous_state)
+
+        assert_cannot ability, :suspend, buyer
+      end
+    end
+
     private
 
     def ability
