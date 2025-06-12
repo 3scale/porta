@@ -37,6 +37,14 @@ Ability.define do |user|
 
     # abilities for buyer users
     can %i[read update update_role destroy suspend unsuspend], User, account: { provider_account_id: user.account_id }
+
+    can :suspend, Account do | buyer |
+      buyer.provider_account == account
+    end
+
+    can :resume, Account do | buyer |
+      buyer.provider_account == account
+    end
   end
 
   if user.has_permission?('plans')

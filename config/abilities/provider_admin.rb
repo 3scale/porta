@@ -87,4 +87,12 @@ Ability.define do |user|
   can [:read, :show, :edit, :update], Cinstance
 
   can :read, :account_plans
+
+  can :suspend, Account do | buyer |
+    buyer.provider_account == account
+  end
+
+  can :resume, Account do | buyer |
+    buyer.provider_account == account
+  end
 end
