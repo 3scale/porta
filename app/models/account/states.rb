@@ -79,11 +79,11 @@ module Account::States
       end
 
       event :suspend do
-        transition all => :suspended, if: :ready_to_be_suspended?
+        transition all => :suspended, unless: :master?
       end
 
       event :resume do
-        transition :suspended => :approved, if: :provider?
+        transition :suspended => :approved, unless: :master?
         transition :scheduled_for_deletion => :approved
       end
 
@@ -143,12 +143,6 @@ module Account::States
       scheduled_for_deletion? || (buyer? && provider_account.try(:should_be_deleted?))
     end
 
-    def ready_to_be_suspended?
-      tenant? || marked_for_suspension
-    end
-
-    attr_accessor :marked_for_suspension
-
     def suspended_or_scheduled_for_deletion?
       suspended? || scheduled_for_deletion?
     end
@@ -200,12 +194,12 @@ module Account::States
   def notify_account_suspended
     ThreeScale::Analytics.track_account(self, 'Account Suspended')
     ThreeScale::Analytics.group(self)
-    ReverseProviderKeyWorker.enqueue(self)
+    ReverseProviderKeyWorker.enqueue(self) if tenant?
   end
 
   def notify_account_resumed
     ThreeScale::Analytics.track_account(self, 'Account Resumed')
     ThreeScale::Analytics.group(self)
-    ReverseProviderKeyWorker.enqueue(self)
+    ReverseProviderKeyWorker.enqueue(self) if tenant?
   end
 end
