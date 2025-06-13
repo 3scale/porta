@@ -97,6 +97,10 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def change_state
     account_type = account.provider? ? 'tenant' : 'developer'
+
+    # Buyers need to be marked for suspension before being suspended
+    account.marked_for_suspension = true if action_name == 'suspend' && account.buyer?
+
     flash_type = account.fire_events(action_name) ? :success : :danger
 
     flash[flash_type] = t(".#{flash_type}", account_type:).capitalize
