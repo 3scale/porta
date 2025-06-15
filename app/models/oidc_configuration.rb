@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class OIDCConfiguration < ApplicationRecord
-  class Config < ActiveRecord::Coders::JSON
+  class Config
     include ActiveModel::Serialization
 
-    def self.load(string)
-      new(super || {})
+    def self.load(json)
+      decoded = json.blank? ? {} : ActiveSupport::JSON.decode(json)
+      new(decoded)
     end
 
-    def self.dump(record)
-      super(record.attributes)
+    def self.dump(obj)
+      ActiveSupport::JSON.encode(obj.attributes)
     end
 
     FLOWS = %i[

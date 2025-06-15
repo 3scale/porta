@@ -3,7 +3,7 @@
 require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.1.5.1/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
@@ -64,13 +64,14 @@ module System
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
     config.action_controller.raise_on_open_redirects = false
 
-    # ** Please read carefully, this must be configured in config/application.rb **
     # Change the format of the cache entry.
+    #
     # Changing this default means that all new cache entries added to the cache
-    # will have a different format that is not supported by Rails 6.1 applications.
-    # Only change this value after your application is fully deployed to Rails 7.0
+    # will have a different format that is not supported by Rails 7.0
+    # applications.
+    # Only change this value after your application is fully deployed to Rails 7.1
     # and you have no plans to rollback.
-    # When you're ready to change format, change the value to 7.0
+    # TODO: update to 7.1
     config.active_support.cache_format_version = 7.0
 
     # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
@@ -110,6 +111,17 @@ module System
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
 
+    # Keeping the historic behavior by setting to `YAML`
+    # It is recommended to explicitly define the serialization method for each column
+    # rather than to rely on a global default.
+    # TODO: see if we can use the Rails 7.1 default `nil` value by setting serialization for each column explicitly
+    config.active_record.default_column_serializer = YAML
+
+    # The default behavior in 7.1 is to raise on assignment to attr_readonly attributes.
+    # This setting restores the previous behavior which allows assignment but silently not persist changes to the
+    # database.
+    config.active_record.raise_on_assign_to_attr_readonly = false
+
     config.active_job.queue_adapter = :sidekiq
 
     def try_config_for(*args)
@@ -138,8 +150,9 @@ module System
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
+    config.add_autoload_paths_to_load_path = true # TODO: default value in 7.1 is false, but it requires significant refactoring
+
     config.eager_load = true
-    config.enable_dependency_loading = false
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.

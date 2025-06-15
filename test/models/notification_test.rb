@@ -12,7 +12,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'readonly' do
-    assert_equal Set['event_id', 'user_id', 'system_name'],
+    assert_equal %w[event_id user_id system_name],
                  Notification.readonly_attributes
   end
 

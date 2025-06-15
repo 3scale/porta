@@ -20,7 +20,13 @@ class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
   attr_accessor :resource, :block, :timeout
 
   def manager
+    # TODO: to refactor to reuse existin code in System::RedisConfig
+    conf = ThreeScale::RedisConfig.new(System::Application.config.redis).config
+    pool_conf= conf.extract!(:pool_size, :pool_timeout)
+    redis_config = RedisClient.config(**conf)
+    redis = redis_config.new_pool(size: pool_conf[:pool_size] || 5, timeout: pool_conf[:pool_timeout] || 5)
+
     # we may cache this as thread/fiber local variable but for now creating a new one seems good enough
-    Redlock::Client.new([System.redis], { retry_count: 0, redis_timeout: 1 })
+    Redlock::Client.new([redis], { retry_count: 0, redis_timeout: 1 })
   end
 end
