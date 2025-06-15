@@ -65,7 +65,7 @@ Rails.application.config.active_record.encryption.support_sha1_for_non_determini
 # state which matches what was committed to the database, typically the last
 # instance to save.
 #++
-# Rails.application.config.active_record.run_commit_callbacks_on_first_saved_instances_in_transaction = false
+Rails.application.config.active_record.run_commit_callbacks_on_first_saved_instances_in_transaction = false
 
 ###
 # Configures SQLite with a strict strings mode, which disables double-quoted string literals.
@@ -138,7 +138,7 @@ Rails.application.config.active_record.query_log_tags_format = :sqlcommenter
 # servers, first deploy without changing the serializer, then set the serializer
 # in a subsequent deploy.
 #++
-# Rails.application.config.active_support.message_serializer = :json_allow_marshal
+Rails.application.config.active_support.message_serializer = :json_allow_marshal
 
 ###
 # Enable a performance optimization that serializes message data and metadata
@@ -151,7 +151,7 @@ Rails.application.config.active_record.query_log_tags_format = :sqlcommenter
 # leave this optimization off on the first deploy, then enable it on a
 # subsequent deploy.
 #++
-# Rails.application.config.active_support.use_message_serializer_for_metadata = true
+Rails.application.config.active_support.use_message_serializer_for_metadata = true
 
 ###
 # Set the maximum size for Rails log files.

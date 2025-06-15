@@ -32,7 +32,7 @@ Then "field {string} has inline error {string}" do |field, error|
   form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
 
   text = Regexp.new(Regexp.escape(error), Regexp::IGNORECASE)
-  assert form_group.has_css?(INLINE_ERROR_SELECTORS, text: text, wait: 0)
+  assert form_group.has_css?(INLINE_ERROR_SELECTORS, text: text)
 end
 
 Then "field {string} has no inline error" do |field|
