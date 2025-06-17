@@ -50,11 +50,10 @@ module DeveloperPortal
         country: 'US',
         state: 'Some State',
         zip: '123456'
-      }
+      }.stringify_keys
       account_params = { account: { billing_address: billing_address } }
-      billing_address_params = ::ActionController::Parameters.new(billing_address).permit!
 
-      PaymentGateways::StripeCrypt.any_instance.expects(:update_billing_address).with(billing_address_params).returns(true)
+      PaymentGateways::StripeCrypt.any_instance.expects(:update_billing_address).with(billing_address).returns(true)
 
       put admin_account_stripe_path, params: account_params
 

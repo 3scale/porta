@@ -29,7 +29,9 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::
       }
     }.deep_stringify_keys
 
-    Account.any_instance.expects(:update).with(account_params).returns(true)
+    permitted_account_params = ::ActionController::Parameters.new(account_params).permit!
+    Account.any_instance.expects(:update).with(permitted_account_params).returns(true)
+
     put admin_account_payment_details_path, params: { account: account_params.deep_merge(billing_address: { injected_param: 'unauthorized' }) }
   end
 end
