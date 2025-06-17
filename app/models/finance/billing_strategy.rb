@@ -18,7 +18,7 @@ class Finance::BillingStrategy < ApplicationRecord
   CURRENCIES = CurrenciesLoader.load_config.freeze
 
   belongs_to :account
-  alias_attribute :provider, :account
+  alias_method :provider, :account
 
   attr_protected :account_id, :tenant_id, :audit_ids
 
