@@ -5,7 +5,7 @@ module Fields::ExtraFields
   extend ActiveSupport::Concern
 
   included do
-    serialize :extra_fields, Hash
+    serialize :extra_fields, type: Hash
     validate  :extra_fields_valid?, :if => :validate_fields?
   end
 

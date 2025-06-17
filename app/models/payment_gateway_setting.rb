@@ -68,7 +68,7 @@ class PaymentGatewaySetting < ApplicationRecord
   #   end
   #
   #   class PaymentGatewaySetting < Gateway
-  #     serialize :gateway_settings, GatewaySetting
+  #     serialize :gateway_settings, coder: GatewaySetting
   #   end
   #
   def gateway_settings=(hash)

@@ -40,11 +40,11 @@ module EventStore
       end
     end
 
-    serialize :data, WithGlobalId
+    serialize :data, coder: WithGlobalId
     # Can't really use ActiveJob::Arguments because it does not support Time type
     # and metadata contain timestamp when the event was created
     # https://github.com/rails/rails/issues/18519
-    # serialize :metadata, WithGlobalId
+    # serialize :metadata, coder: WithGlobalId
     # TODO: review this statement, because the abovementioned issue is fixed
     # in Rails 6.0 by https://github.com/rails/rails/pull/32026
 
