@@ -23,7 +23,7 @@ module User::Roles
       end
       alias_method "make_#{role}", "#{role}!"
 
-      deprecate("#{role}!")
+      deprecate "#{role}!", deprecator: Rails.application.deprecators[:threescale]
     end
   end
 
