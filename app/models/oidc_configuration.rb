@@ -57,7 +57,7 @@ class OIDCConfiguration < ApplicationRecord
   end
 
   belongs_to :oidc_configurable, polymorphic: true, inverse_of: :oidc_configuration
-  serialize :config, OIDCConfiguration::Config
+  serialize :config, coder: OIDCConfiguration::Config
 
   delegate(*OIDCConfiguration::Config::ATTRIBUTES, to: :config)
   delegate(*OIDCConfiguration::Config::ATTRIBUTES.map {|attr| "#{attr}=" }, to: :config)

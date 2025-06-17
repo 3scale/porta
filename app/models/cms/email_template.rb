@@ -47,7 +47,7 @@ class CMS::EmailTemplate < CMS::Template
     end
   end
 
-  serialize :options, HashOrParameters.new(:options, Hash)
+  serialize :options, coder: HashOrParameters.new(:options, Hash)
 
   attr_accessor :file
 

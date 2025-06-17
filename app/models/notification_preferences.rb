@@ -3,7 +3,7 @@ class NotificationPreferences < ApplicationRecord
 
   validates :user, presence: true
   validate :preferences_valid?
-  serialize :preferences, JSON
+  serialize :preferences, coder: JSON
 
   after_initialize :set_defaults
 
