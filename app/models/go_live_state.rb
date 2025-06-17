@@ -1,7 +1,7 @@
 class GoLiveState < ApplicationRecord
 
   belongs_to :account, inverse_of: :go_live_state
-  serialize :steps, OpenStruct
+  serialize :steps, type: OpenStruct
   alias_attribute :closed, :finished
 
   validates :recent, length: {maximum: 255}

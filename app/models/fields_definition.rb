@@ -15,7 +15,7 @@ class FieldsDefinition < ApplicationRecord
     @targets << klass.to_s
   end
 
-  serialize :choices, Array
+  serialize :choices, type: Array
 
   belongs_to :account, :inverse_of => :fields_definitions
   acts_as_list :scope => %i[account_id target], :column => :pos

@@ -3,7 +3,7 @@ class CMS::Portlet < CMS::Partial
 
   after_initialize :default_values
   validate :available_types
-  serialize :options, Hash
+  serialize :options, type: Hash
 
   class_attribute :_attributes, :_inputs, :instance_writer => false, :instance_reader => false
 
