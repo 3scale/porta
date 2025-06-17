@@ -1,4 +1,4 @@
-<% ThreeScale::Deprecation.warn "Plans are being migrated to React and this will no longer be used" %>
+<% Rails.application.deprecators[:threescale].warn "Plans are being migrated to React and this will no longer be used" %>
 <h2>Copy Plan</h2>
 
 <%= semantic_form_for plan,

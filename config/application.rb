@@ -303,7 +303,10 @@ module System
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
-    require 'three_scale/deprecation'
+    # Add a custom deprecator, silenced in test and production
+    Rails.application.deprecators[:threescale] = ActiveSupport::Deprecation.new('future version', '3scale')
+    Rails.application.deprecators[:threescale].silenced = %w[test production].include?(Rails.env)
+
     require 'three_scale/domain_substitution'
     require 'three_scale/middleware/presigned_downloads'
     require 'three_scale/middleware/multitenant'
