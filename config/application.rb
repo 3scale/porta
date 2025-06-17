@@ -101,9 +101,6 @@ module System
     # Reconsider whether to enable again after upgrading to Rails 7.1, where the size of the header is limited to 1KB
     config.action_view.preload_links_header = false
 
-    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
-    config.active_support.to_time_preserves_timezone = false
-
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
                                                           ActionController::Parameters,
