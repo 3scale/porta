@@ -3,6 +3,7 @@
 ActiveSupport::TestCase.class_eval do
   include ActiveSupport::Testing::FileFixtures
 
-  self.fixture_path = Rails.root.join('test/fixtures')
-  self.file_fixture_path = fixture_path
+  path = Rails.root.join('test/fixtures')
+  self.fixture_paths = [path]
+  self.file_fixture_path = path
 end
