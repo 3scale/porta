@@ -33,7 +33,7 @@ class Invoice < ApplicationRecord
   has_many :paid_line_items, -> { where(invoices: {state: 'paid'}).includes(:invoice).references(:invoice) }, class_name: 'LineItem'
   has_many :line_items, -> { oldest_first }, dependent: :destroy, inverse_of: :invoice
 
-  has_many :payment_transactions, -> { oldest_first }, dependent: :nullify, inverse_of: :invoice, dependent: :delete_all
+  has_many :payment_transactions, -> { oldest_first }, inverse_of: :invoice, dependent: :delete_all
   has_many :payment_intents, dependent: :destroy, inverse_of: :invoice
 
   has_attached_file :pdf, url: ':url_root/:class/:id/:attachment/:style/:basename.:extension'
