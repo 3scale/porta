@@ -52,13 +52,32 @@ ActiveSupport.on_load(:active_record) do
             super
           end
         end
+
+        # Fixing OCIError: ORA-01741: illegal zero-length identifier
+        # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
+        # the value of `columns` is  [ "\"ACCOUNTS\".\"ID\"" ] which forms an incorrect query
+        # ... OVER (PARTITION BY ["\"ACCOUNTS\".\"ID\""] ORDER BY "ACCOUNTS"."ID") ...
+        def columns_for_distinct(columns, orders) # :nodoc:
+          # construct a valid columns name for DISTINCT clause,
+          # ie. one that includes the ORDER BY columns, using FIRST_VALUE such that
+          # the inclusion of these columns doesn't invalidate the DISTINCT
+          #
+          # It does not construct DISTINCT clause. Just return column names for distinct.
+          orders.reject(&:blank?).map { |s|
+            s = visitor.compile(s) unless s.is_a?(String)
+            # remove any ASC/DESC modifiers
+            s.gsub(/\s+(ASC|DESC)\s*?/i, "")
+          }.reject(&:blank?).map.with_index { |column, i|
+            "FIRST_VALUE(#{column}) OVER (PARTITION BY #{columns.join(', ')} ORDER BY #{column}) AS alias_#{i}__"
+          }
+        end
       end)
     end
 
     ActiveRecord::Relation.prepend(Module.new do
       # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
       # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
-      # https://github.com/rails/rails/blob/v6.1.7.7/activerecord/lib/active_record/relation/finder_methods.rb#L465
+      # https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/relation/finder_methods.rb#L506
       def find_one(id)
         if ActiveRecord::Base === id
           raise ArgumentError, <<-MSG.squish
@@ -67,8 +86,16 @@ ActiveSupport.on_load(:active_record) do
           MSG
         end
 
-        relation = where(primary_key => id)
-        record = relation.to_a.first # this is the only change from the original method
+        relation = if klass.composite_primary_key?
+                     where(primary_key.zip(id).to_h)
+                   else
+                     where(primary_key => id)
+                   end
+
+        # this is the only change from the original method
+        # original line:
+        # record = relation.take
+        record = relation.to_a.first
 
         raise_record_not_found_exception!(id, 0, 1) unless record
 
