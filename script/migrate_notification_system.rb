@@ -9,8 +9,8 @@ module MigrateNotificationSystem
 
   module_function
 
-  # Preferences that didin't exist in the old system
-  NEW_PREFERENCES = %i[account_deleted application_plan_change_requested service_plan_change_requested
+  # Notifications that didn't exist in the old system
+  NEW_NOTIFICATIONS = %i[account_deleted application_plan_change_requested service_plan_change_requested
                        invoices_to_review plan_downgraded credit_card_unstore_failed expired_credit_card_provider
                        unsuccessfully_charged_invoice_provider unsuccessfully_charged_invoice_final_provider
                        csv_data_export service_deleted].freeze
@@ -69,7 +69,7 @@ module MigrateNotificationSystem
   end
 
   def new_preferences_disabled
-    NotificationPreferences.preferences_to_hash(NEW_PREFERENCES, value: false)
+    NotificationPreferences.preferences_to_hash(NEW_NOTIFICATIONS, value: false)
   end
 
   # @param [SystemOperation] operation
