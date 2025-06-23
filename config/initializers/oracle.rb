@@ -58,7 +58,7 @@ ActiveSupport.on_load(:active_record) do
     ActiveRecord::Relation.prepend(Module.new do
       # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
       # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
-      # https://github.com/rails/rails/blob/v6.1.7.7/activerecord/lib/active_record/relation/finder_methods.rb#L465
+      # https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/relation/finder_methods.rb#L506
       def find_one(id)
         if ActiveRecord::Base === id
           raise ArgumentError, <<-MSG.squish
@@ -67,8 +67,16 @@ ActiveSupport.on_load(:active_record) do
           MSG
         end
 
-        relation = where(primary_key => id)
-        record = relation.to_a.first # this is the only change from the original method
+        relation = if klass.composite_primary_key?
+                     where(primary_key.zip(id).to_h)
+                   else
+                     where(primary_key => id)
+                   end
+
+        # this is the only change from the original method
+        # original line:
+        # record = relation.take
+        record = relation.to_a.first
 
         raise_record_not_found_exception!(id, 0, 1) unless record
 
