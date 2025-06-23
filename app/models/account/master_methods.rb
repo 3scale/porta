@@ -8,11 +8,11 @@ module Account::MasterMethods
     alias_method :providers, :provider_accounts
 
     scope :by_provider_key, ->(provider_key) {
-      includes(:bought_cinstances).references(:bought_cinstances).merge(Cinstance.by_user_key(provider_key))
+      joins(:bought_cinstances).where(cinstances: { user_key: provider_key })
     }
 
     scope :by_service_token, ->(service_token) {
-      includes(:service_tokens).where(service_tokens: { value: service_token })
+      joins(:service_tokens).where(service_tokens: { value: service_token })
     }
 
     before_destroy :avoid_destroy_of_master_account
