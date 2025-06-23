@@ -57,15 +57,21 @@ module MigrateNotificationSystem
   def migrated_preferences(user)
     previous_preferences = NotificationPreferences.default_preferences
 
-    migrated_preferences = SystemOperation.order(:pos).each_with_object({}) do |operation, preferences|
-      rule = fetch_dispatch_rule(operation, user.account)
-
-      equivalents_for(operation).each do |equivalent|
-        preferences[equivalent] = rule.dispatch
-      end
-    end
+    migrated_preferences = provider_preferences(user.account)
 
     previous_preferences.merge(new_preferences_disabled).merge(migrated_preferences)
+  end
+
+  def provider_preferences(provider)
+    Rails.cache.fetch("provider/#{provider.id}/migrated_notification_preferences", expires_in: 1.day) do
+      SystemOperation.order(:pos).each_with_object({}) do |operation, preferences|
+        rule = fetch_dispatch_rule(operation, provider)
+
+        equivalents_for(operation).each do |equivalent|
+          preferences[equivalent] = rule.dispatch
+        end
+      end
+    end
   end
 
   def new_preferences_disabled
