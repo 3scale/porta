@@ -80,7 +80,7 @@ module MigrateNotificationSystem
 
   # @param [SystemOperation] operation
   def fetch_dispatch_rule(operation, account)
-    MailDispatchRule.fetch_with_retry!(system_operation: operation, account:) do |m|
+    MailDispatchRule.find_or_initialize_by(system_operation: operation, account:) do |m|
       m.dispatch = false if %w[weekly_reports daily_reports new_forum_post].include?(operation.ref)
     end
   end
