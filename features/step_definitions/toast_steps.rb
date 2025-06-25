@@ -5,12 +5,14 @@ Given /^a(?: )?(\w+)? toast alert is displayed with text "(.*)"$/ do |type, mess
 end
 
 Then /^(?:they )?should see a(?: )?(\w+)? toast alert with text "(.*)"$/ do |type, message|
+  find '.pf-c-alert-group.pf-m-toast'
   within '.pf-c-alert-group.pf-m-toast' do
     find(".pf-c-alert#{type ? %(.pf-m-#{type}) : nil} .pf-c-alert__title", text: message)
   end
 end
 
 Then "they should not see any toast alerts" do
+  find '.pf-c-alert-group.pf-m-toast', visible: :all
   within('.pf-c-alert-group.pf-m-toast', visible: :all) do
     assert_no_css '.pf-c-alert', wait: 1
   end
