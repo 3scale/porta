@@ -55,11 +55,11 @@ module MigrateNotificationSystem
   end
 
   def migrated_preferences(user)
-    previous_preferences = NotificationPreferences.default_preferences
+    default_preferences = NotificationPreferences.default_preferences
 
     migrated_preferences = provider_preferences(user.account)
 
-    previous_preferences.merge(new_preferences_disabled).merge(migrated_preferences)
+    default_preferences.merge(new_preferences_disabled).merge(migrated_preferences)
   end
 
   def provider_preferences(provider)
