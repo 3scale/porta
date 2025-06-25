@@ -120,10 +120,10 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       job.instance_variable_set(:@object_cache, object_cache)
 
       # user is obtained by ID once then reused for each association; and once reloaded before being destroyed
-      assert_number_of_queries(2, matching: /SELECT.*\busers\b.*\bid['"` ]{0,2}=/) do
+      assert_number_of_queries(2, matching: /SELECT.*\busers\b.*\bid['"` ]{0,2}=/i) do
         # access_tokens are never loaded by id as they are just `take`n, cached and not reloaded before destroy
-        assert_number_of_queries(0, matching: /SELECT.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
-          assert_number_of_queries(3, matching: /DELETE.*\baccess_tokens\b.*\bid['"` ]{0,2}=/) do
+        assert_number_of_queries(0, matching: /SELECT.*\baccess_tokens\b.*\bid['"` ]{0,2}=/i) do
+          assert_number_of_queries(3, matching: /DELETE.*\baccess_tokens\b.*\bid['"` ]{0,2}=/i) do
             job.perform(*hierarchy)
           end
         end
@@ -147,11 +147,11 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
 
       # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
-      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/) do
+      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/i) do
         # cms_templates_versions are never loaded by id but delete(d)_all
-        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/) do
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/i) do
           # ideally we only want one invocation but deletion is also invoked once the Page record is `destroy!`-ed
-          assert_number_of_queries(2, matching: /DELETE.*\bcms_templates_versions\b.*/) do
+          assert_number_of_queries(2, matching: /DELETE.*\bcms_templates_versions\b.*/i) do
             DeleteObjectHierarchyWorker.perform_now(*hierarchy)
           end
         end
