@@ -7,12 +7,15 @@ module System
   class RedisPool
 
     # @param [Hash] config - configuration, as in config/redis.yml
-    # @return System::RedisPool
     def initialize(config = {})
       redis_config = ThreeScale::RedisConfig.new(config)
       @pool = ConnectionPool.new(**redis_config.pool_config) do
         Redis.new(redis_config.client_config)
       end
+    end
+
+    def with(...)
+      @pool.with(...)
     end
 
     # This class only respond to public methods of Redis
