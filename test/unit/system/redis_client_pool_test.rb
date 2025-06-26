@@ -31,7 +31,6 @@ class System::RedisClientPoolTest < ActiveSupport::TestCase
     pool_kwargs = pool.instance_variable_get(:@pool_kwargs)
     assert_equal 1, pool_kwargs[:size]
     assert_equal 1, pool_kwargs[:timeout]
-    
   end
 
   test 'pool size and timeout default to 5 if not provided' do

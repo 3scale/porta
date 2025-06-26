@@ -34,7 +34,11 @@ module ThreeScale
     end
 
     def method_missing(method_sym, *args, &block)
-      config.send(method_sym, *args, &block) if config.respond_to?(method_sym)
+      if config.respond_to?(method_sym)
+        config.send(method_sym, *args, &block)
+      else
+        super
+      end
     end
 
     def respond_to_missing?(method_sym, *args)
