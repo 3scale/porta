@@ -114,6 +114,24 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
       delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
       assert_response :not_found
     end
+
+    test 'mapping rules are ordered by position' do
+      backend_api.proxy_rules.destroy_all
+
+      FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/two')
+      rule_3 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/three')
+      rule_1 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/one')
+      rule_1.move_to_top
+      rule_3.move_to_bottom
+
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+
+      assert_response :success
+      assert(response_mapping_rules = JSON.parse(response.body)['mapping_rules'])
+
+      patterns = response_mapping_rules.map { |mapping_rule| mapping_rule.dig('mapping_rule', 'pattern') }
+      assert_equal %w[/one /two /three], patterns
+    end
   end
 
   class MemberPermission < self

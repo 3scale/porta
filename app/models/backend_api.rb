@@ -18,7 +18,7 @@ class BackendApi < ApplicationRecord
   after_create :create_default_metrics
   before_destroy :avoid_destruction
 
-  has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
+  has_many :proxy_rules, -> { order(position: :asc) }, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
   alias_method :all_metrics, :metrics
 
