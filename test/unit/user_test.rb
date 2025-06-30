@@ -900,4 +900,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal session1, user.user_sessions.reload.first
     assert_equal 1, user.user_sessions.reload.length
   end
+
+  test 'new users have notification preferences' do
+    user = FactoryBot.build :user
+
+    user.save
+
+    assert user.notification_preferences.persisted?
+  end
 end
