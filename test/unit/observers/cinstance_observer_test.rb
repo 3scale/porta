@@ -12,6 +12,9 @@ class CinstanceObserverTest < ActiveSupport::TestCase
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
+    @provider.first_admin.notification_preferences.enabled_notifications = %i[application_created cinstance_cancellation cinstance_plan_changed]
+    @provider.first_admin.notification_preferences.save!
+
     Logic::RollingUpdates.stubs(skipped?: true)
   end
 

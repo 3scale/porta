@@ -69,7 +69,6 @@ module TestHelpers
           buyer.save!
           FactoryBot.create(:referrer_filter, application: provider.application_contracts.take)
           FactoryBot.create(:partner, providers: [provider], )
-          NotificationPreferences.create(user: provider.admin_user)
           FactoryBot.create(:prepaid_billing, account: provider)
           service.proxy.gateway_configuration.save!
 

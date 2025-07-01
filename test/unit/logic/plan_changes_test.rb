@@ -53,6 +53,9 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
       @buyer = @app.buyer_account
       @user = @buyer.first_admin
       User.stubs(:current).returns(@user)
+
+      @provider.first_admin.notification_preferences.enabled_notifications = %i[cinstance_plan_changed application_plan_change_requested]
+      @provider.first_admin.notification_preferences.save!
     end
 
     test '#buyer_changes_plan! - :direct' do

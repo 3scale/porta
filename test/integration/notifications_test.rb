@@ -63,6 +63,8 @@ class NotificationsTest < ActiveSupport::TestCase
       @provider = FactoryBot.create(:provider_account)
       @admin = @provider.admins.first
       @admin.update(email: "provider-admin@example.com")
+      @admin.notification_preferences.enabled_notifications = %i[application_created]
+      @admin.notification_preferences.save!
 
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @plan  = FactoryBot.create(:application_plan, issuer: @provider.default_service)

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-Given "admin of {account} has notification {symbol} {enabled}" do |account, key, enabled|
-  account.admins.first.create_notification_preferences(preferences: NotificationPreferences.default_preferences.merge(key => enabled))
+Given "admin of {account} has notification {string} {enabled}" do |account, key, enabled|
+  admin = account.first_admin
+  admin.notification_preferences.preferences = admin.notification_preferences.preferences.merge(key => enabled)
+  admin.notification_preferences.save!
 end
 
 Given /^(?:I|they) check only the following notifications:$/ do |table|
