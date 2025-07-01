@@ -482,6 +482,8 @@ class User < ApplicationRecord
   end
 
   def create_notification_preferences
+    return unless account&.provider?
+
     super(preferences: NotificationPreferences.default_preferences)
   end
 
