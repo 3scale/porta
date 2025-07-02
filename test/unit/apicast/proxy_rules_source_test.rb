@@ -2,14 +2,19 @@ require 'test_helper'
 
 class Apicast::ProxyRulesSourceTest < ActiveSupport::TestCase
 
+  def setup
+    @proxy = FactoryBot.create(:proxy)
+    backend_api_config = FactoryBot.create(:backend_api_config, service: @proxy.service, path: '/test/path/')
+    @backend_api = backend_api_config.backend_api
+    @metric = FactoryBot.create(:metric, owner: backend_api, description: 'My awesome metric', system_name: 'my-metric')
+  end
+
+  attr_reader :backend_api, :metric, :proxy
+
   def test_to_hash
-    proxy = FactoryBot.create(:proxy)
     rule_1 = FactoryBot.create(:proxy_rule, proxy: proxy, last: true)
     rule_2 = FactoryBot.create(:proxy_rule, proxy: proxy)
 
-    backend_api_config = FactoryBot.create(:backend_api_config, service: proxy.service, path: '/test/path/')
-    backend_api = backend_api_config.backend_api
-    metric = FactoryBot.create(:metric, owner: backend_api, description: 'My awesome metric', system_name: 'my-metric')
     rule_3 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/create')
     rule_4 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/delete', metric: metric)
     rule_5 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/list?filter=a', metric: metric)
@@ -31,6 +36,21 @@ class Apicast::ProxyRulesSourceTest < ActiveSupport::TestCase
     assert_equal metric['system_name'], rule_hash_4['metric_system_name']
     assert_equal({'filter' => 'a'}, rule_hash_5['querystring_parameters'])
     assert_equal ['username'], rule_hash_6['parameters']
+  end
+
+  test 'backend api mapping rules are ordered by position' do
+    proxy.proxy_rules.destroy_all
+
+    assert backend_api.proxy_rules.empty?
+
+    FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/two')
+    rule_3 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/three')
+    rule_1 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/one')
+    rule_1.move_to_top
+    rule_3.move_to_bottom
+
+    source = Apicast::ProxyRulesSource.new(proxy).to_hash
+    assert_equal %w[/test/path/one /test/path/two /test/path/three], source.map { |rule| rule['pattern'] }
   end
 
   private
