@@ -77,4 +77,11 @@ class System::RedisClientPoolTest < ActiveSupport::TestCase
       assert_equal 'redis-master', conf.name
     end
   end
+
+  test 'default pool is available for reuse' do
+    pool1 = System::RedisClientPool.default
+    pool2 = System::RedisClientPool.default
+
+    assert_same pool1, pool2
+  end
 end
