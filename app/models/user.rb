@@ -39,7 +39,7 @@ class User < ApplicationRecord
   before_validation :trim_white_space_from_username
   # after_validation :reset_lost_password_token
 
-  after_create :create_notification_preferences
+  after_create :set_default_notification_preferences
 
   before_destroy :avoid_destruction
   after_destroy :archive_as_deleted
@@ -481,10 +481,10 @@ class User < ApplicationRecord
     throw :abort unless can_be_destroyed?
   end
 
-  def create_notification_preferences
+  def set_default_notification_preferences
     return unless account&.provider?
 
-    super(preferences: NotificationPreferences.default_preferences)
+    create_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
 
   class << self
