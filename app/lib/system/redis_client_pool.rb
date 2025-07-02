@@ -5,7 +5,8 @@ module System
 
     def new_pool(config = System::Application.config.redis)
       redis_config = ThreeScale::RedisConfig.new(config)
-      redis_client_config = RedisClient.config(**redis_config.client_config)
+      client_config = redis_config.client_config
+      redis_client_config = client_config.key?(:sentinels) ? RedisClient.sentinel(**client_config) : RedisClient.config(**client_config)
       redis_client_config.new_pool(**redis_config.pool_config)
     end
   end
