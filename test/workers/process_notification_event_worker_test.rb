@@ -23,8 +23,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
     user         = FactoryBot.create(:simple_admin, state: :active, account: provider)
 
-    user.notification_preferences.preferences = { invoices_to_review: true }
-    user.notification_preferences.save!
+    user.notification_preferences.update(preferences: { invoices_to_review: true })
 
     Sidekiq::Testing.inline! do
       assert_difference Notification.method(:count) do
@@ -114,8 +113,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
     user         = FactoryBot.create(:simple_admin, account: provider)
 
-    user.notification_preferences.preferences = { invoices_to_review: true }
-    user.notification_preferences.save!
+    user.notification_preferences.update(preferences: { invoices_to_review: true })
 
     Notification.any_instance.stubs(:deliver!).raises(
       ::NotificationDeliveryService::InvalidEventError.new(event))
