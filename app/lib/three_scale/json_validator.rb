@@ -6,8 +6,7 @@ module ThreeScale
     # or add them manually later with ThreeScale::JSONValidator.add_schema(schema)
     AUTOLOAD_SCHEMA_FILES  = [
       'app/lib/three_scale/swagger/schemas/*.schema.json',
-      'app/lib/three_scale/swagger/schemas/1.2/*.json',
-      'app/lib/three_scale/policies/schemas/*.schema.json'
+      'app/lib/three_scale/swagger/schemas/1.2/*.json'
     ].freeze
     private_constant :AUTOLOAD_SCHEMA_FILES
 

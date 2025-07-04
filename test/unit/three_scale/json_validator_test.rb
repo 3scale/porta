@@ -16,17 +16,15 @@ class ThreeScale::JSONValidatorTest < ActiveSupport::TestCase
 
   test 'extract the schema draft' do
     assert_equal 4, @klass.send(:schema_draft, { '$schema' => 'http://json-schema.org/draft-04/schema#' })
-    assert_equal 7, @klass.send(:schema_draft, { '$schema' => 'http://json-schema.org/draft-07/schema#' })
     assert_equal 0, @klass.send(:schema_draft, {})
   end
 
   test 'extract the schema id' do
     assert_equal 'my-id', @klass.send(:schema_id, { 'id' => 'my-id', '$schema' => 'http://json-schema.org/draft-04/schema#' })
-    assert_equal 'my-id', @klass.send(:schema_id, { '$id' => 'my-id', '$schema' => 'http://json-schema.org/draft-07/schema#' })
   end
 
   test 'schema build' do
-    schema_json = { '$id' => 'http://example.com/schema-v1/my-schema#frag', '$schema' => 'http://json-schema.org/draft-07/schema#' }
+    schema_json = { 'id' => 'http://example.com/schema-v1/my-schema#frag', '$schema' => 'http://json-schema.org/draft-04/schema#' }
     schema = @klass.build_schema schema_json
     assert_kind_of JSON::Schema, schema
   end
