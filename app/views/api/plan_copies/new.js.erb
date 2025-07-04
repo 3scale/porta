@@ -1,2 +1,2 @@
-<% ThreeScale::Deprecation.warn "Plans are being migrated to React this logic should be handled inside a component" %>
+<% Rails.application.deprecators[:threescale].warn "Plans are being migrated to React this logic should be handled inside a component" %>
 $.colorbox({ html: <%= json render('form', :plan => @plan) %> });

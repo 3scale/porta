@@ -9,7 +9,7 @@ class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::B
   helper_method :empty_invoices?
 
   def index
-    @invoices = current_account.invoices
+    @invoices = current_account.invoices.ordered
   end
 
   def show

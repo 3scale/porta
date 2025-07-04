@@ -11,9 +11,6 @@ module User::Permissions
     has_many :member_permissions, dependent: :destroy, autosave: true
 
     attr_accessible :member_permission_service_ids, :member_permission_ids, :allowed_sections, :allowed_service_ids
-
-    alias_attribute :allowed_sections, :member_permission_ids
-    alias_attribute :allowed_service_ids, :member_permission_service_ids
   end
 
   def has_permission?(permission)
@@ -54,6 +51,26 @@ module User::Permissions
 
   def member_permission_ids=(roles)
     self.admin_sections = (Array(roles).reject(&:blank?).map(&:to_sym) & AdminSection.permissions)
+  end
+
+  
+  # TODO: We can't use `alias_attribute` anymore because its deprecated for this scenario (not a real attribute),
+  # and `alias_method` doesn't work either, throwing "unknown attribute 'allowed_sections' for User."
+  # but we can investigate other ways to refactor the code to reduce duplication
+  def allowed_sections
+    member_permission_ids
+  end
+
+  def allowed_sections=(roles)
+    self.member_permission_ids = roles
+  end
+
+  def allowed_service_ids
+    member_permission_service_ids
+  end
+
+  def allowed_service_ids=(service_ids)
+    self.member_permission_service_ids = service_ids
   end
 
   def member_permission_service_ids=(service_ids)
