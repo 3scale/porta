@@ -32,10 +32,6 @@ class InvalidDataDetector
           error "application #{app.id} has no buyer"
         end
       end
-
-      if (count = p.forum.posts_count) < 0
-        error "forum posts_count is #{count}"
-      end
     end
 
 

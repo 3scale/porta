@@ -14,7 +14,6 @@ class SystemOperation < ApplicationRecord
               "key_deleted"            => "Application key deleted",
               'new_message'            => 'Receiving a new message',
               'plan_change'            => 'Plan change by a user',
-              'new_forum_post'         => "New forum post",
               'limit_alerts'           => 'Limit alerts and violations',
               'cinstance_cancellation' => 'User cancels account',
               'contract_cancellation'  => 'Service subscription cancelation',

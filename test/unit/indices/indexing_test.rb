@@ -59,7 +59,6 @@ class IndexingTest < ActiveSupport::TestCase
   test "all models with index methods are indexed" do
     exclusions = [Plan, Cinstance, User]
     index_modules = [Searchable, Indices::AccountIndex::ForAccount]
-    index_modules << Indices::TopicIndex unless System::Database.oracle?
 
     models = three_scale_db_models.select do |model|
       index_modules.any? { |mod| mod === model.new } unless exclusions.include?(model)
@@ -101,7 +100,6 @@ class IndexingTest < ActiveSupport::TestCase
       Metric => :friendly_name,
       ProxyRule => :pattern,
       CMS::Page => :title,
-      Topic => :title,
       EmailConfiguration => :email,
     }
 

@@ -157,7 +157,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
-      Bullet.add_safelist class_name: "Post", type: :n_plus_one_query, association: :topic
       Bullet.add_safelist class_name: "ProxyConfig", type: :n_plus_one_query, association: :user
       Bullet.add_safelist class_name: "ProxyRule", type: :n_plus_one_query, association: :owner
       Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :backend_api_configs
@@ -173,13 +172,10 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "ServicePlan", type: :unused_eager_loading, association: :pricing_rules # Or features/buyers/accounts/service_contracts/index.feature:90 fails
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
-      Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
-      Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :metric
       Bullet.add_safelist class_name: "User", type: :n_plus_one_query, association: :member_permissions
-      Bullet.add_safelist class_name: "UserTopic", type: :n_plus_one_query, association: :topic
     end
   end
 

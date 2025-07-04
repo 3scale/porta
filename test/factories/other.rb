@@ -3,43 +3,6 @@ FactoryBot.define do
     association :account
   end
 
-  factory(:forum) do
-    name { 'Forum' }
-    account {|a| a.association(:provider_account)}
-
-    trait :public do
-      after :create do |forum|
-        forum.account.settings.update(forum_public: true)
-      end
-    end
-
-    trait :private do
-      after :create do |forum|
-        forum.account.settings.update(forum_public: false)
-      end
-    end
-
-    factory :public_forum, traits: [:public]
-    factory :private_forum, traits: [:private]
-  end
-
-  factory(:topic_category) do
-    name { 'Tech' }
-  end
-
-  factory(:topic) do
-    title { "Title #{SecureRandom.hex}" }
-    body { 'body body body of the first post' }
-    association(:forum)
-    association(:user, factory: :user_with_account)
-  end
-
-  factory(:post) do
-    body { "Body of post" }
-    user  { |post| post.association(:user_with_account) }
-    topic { |post| post.association(:topic) }
-  end
-
   factory(:service) do
     mandatory_app_key { false }
     sequence(:name) { |n| "service#{n}" }
