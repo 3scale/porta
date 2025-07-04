@@ -9,7 +9,7 @@ class Finance::Provider::InvoicesIndexPresenter
   def initialize(provider:, user:, params:)
     @provider = provider
     @search = ThreeScale::Search.new(params[:search] || params)
-    @sort_params = [params[:sort], params[:direction]]
+    @sort_params = [params[:sort] || 'friendly_id', params[:direction] || 'desc']
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     @ability = Ability.new(user)
   end

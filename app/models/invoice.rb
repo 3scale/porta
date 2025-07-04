@@ -57,13 +57,12 @@ class Invoice < ApplicationRecord
             :to_address_line1, :to_address_line2, :to_address_city, :to_address_region, :to_address_state,
             :to_address_country, :to_address_zip, :to_address_phone, length: {maximum: 255}
 
-  default_scope -> { order('invoices.created_at DESC') }
-
   # 'conditions' is a simple convenience method defined here ... see below
   scope :before, ->(month) { where('period < ?', month.beginning_of_month.to_date ) }
   scope :due, ->(time) { where(:due_on => time.to_date) }
   scope :due_on_or_before, ->(date) { where('due_on <= ?', date ) }
   scope :finalized_before, ->(date) { where("state='finalized' AND finalized_at <= ?", date) }
+  scope :ordered, -> { order(friendly_id: :desc) }
 
   # The month should be a YYYY-MM formatted string.
   scope :by_month, ->(month) { where(:period => ::Month.parse_month(month)) }
