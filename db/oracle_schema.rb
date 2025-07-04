@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_06_142909) do
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
     t.text "scopes"
@@ -548,21 +548,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.index ["account_id"], name: "index_fields_definitions_on_account_id"
   end
 
-  create_table "forums", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
-    t.integer "topics_count", precision: 38, default: 0
-    t.integer "posts_count", precision: 38, default: 0
-    t.integer "position", precision: 38, default: 0
-    t.text "description_html"
-    t.string "state", default: "public"
-    t.string "permalink"
-    t.integer "account_id", precision: 38
-    t.integer "tenant_id", precision: 38
-    t.index ["permalink"], name: "index_forums_on_site_id_and_permalink"
-    t.index ["position"], name: "index_forums_on_position_and_site_id"
-  end
-
   create_table "gateway_configurations", force: :cascade do |t|
     t.text "settings"
     t.integer "proxy_id", precision: 38
@@ -810,14 +795,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.index ["service_id"], name: "index_metrics_on_service_id"
   end
 
-  create_table "moderatorships", force: :cascade do |t|
-    t.integer "forum_id", precision: 38
-    t.integer "user_id", precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "tenant_id", precision: 38
-  end
-
   create_table "notification_preferences", force: :cascade do |t|
     t.integer "user_id", precision: 38
     t.binary "preferences"
@@ -979,24 +956,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.string "identifier"
     t.index ["account_id", "identifier"], name: "index_policies_on_account_id_and_identifier", unique: true
     t.index ["account_id"], name: "index_policies_on_account_id"
-  end
-
-  create_table "posts", force: :cascade do |t|
-    t.integer "user_id", precision: 38
-    t.integer "topic_id", precision: 38
-    t.text "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "forum_id", precision: 38
-    t.text "body_html"
-    t.string "email"
-    t.string "first_name"
-    t.string "last_name"
-    t.boolean "anonymous_user", default: false
-    t.integer "tenant_id", precision: 38
-    t.index ["created_at", "forum_id"], name: "index_posts_on_forum_id"
-    t.index ["created_at", "topic_id"], name: "index_posts_on_topic_id"
-    t.index ["created_at", "user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "pricing_rules", force: :cascade do |t|
@@ -1223,9 +1182,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.string "plans_tab_bg_colour"
     t.string "plans_bg_colour"
     t.string "content_border_colour"
-    t.boolean "forum_enabled", default: true
     t.boolean "app_gallery_enabled", default: false
-    t.boolean "anonymous_posts_enabled", default: false
     t.boolean "signups_enabled", default: true
     t.boolean "documentation_enabled", default: true
     t.boolean "useraccountarea_enabled", default: true
@@ -1234,7 +1191,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.boolean "monthly_charging_enabled", default: true
     t.string "token_api", default: "default"
     t.boolean "documentation_public", default: true, null: false
-    t.boolean "forum_public", default: true, null: false
     t.boolean "hide_service"
     t.string "cc_terms_path", default: "/termsofservice"
     t.string "cc_privacy_path", default: "/privacypolicy"
@@ -1337,37 +1293,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.index ["name", "tenant_id"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "topic_categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "forum_id", precision: 38
-    t.integer "tenant_id", precision: 38
-    t.index ["forum_id"], name: "index_topic_categories_on_forum_id"
-  end
-
-  create_table "topics", force: :cascade do |t|
-    t.integer "forum_id", precision: 38
-    t.integer "user_id", precision: 38
-    t.string "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "hits", precision: 38, default: 0
-    t.boolean "sticky", default: false, null: false
-    t.integer "posts_count", precision: 38, default: 0
-    t.boolean "locked", default: false
-    t.integer "last_post_id", precision: 38
-    t.datetime "last_updated_at"
-    t.integer "last_user_id", precision: 38
-    t.string "permalink"
-    t.integer "category_id", precision: 38
-    t.boolean "delta", default: true, null: false
-    t.integer "tenant_id", precision: 38
-    t.index ["forum_id", "permalink"], name: "index_topics_on_forum_id_and_permalink"
-    t.index ["last_updated_at", "forum_id"], name: "index_topics_on_forum_id_and_last_updated_at"
-    t.index ["sticky", "last_updated_at", "forum_id"], name: "index_topics_on_sticky_and_last_updated_at"
-  end
-
   create_table "usage_limits", force: :cascade do |t|
     t.integer "metric_id", precision: 38
     t.string "period"
@@ -1397,14 +1322,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.index ["user_id"], name: "idx_user_id"
   end
 
-  create_table "user_topics", force: :cascade do |t|
-    t.integer "user_id", precision: 38
-    t.integer "topic_id", precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "tenant_id", precision: 38
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "username", limit: 40
     t.string "email"
@@ -1419,7 +1336,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.string "state"
     t.string "role", default: ""
     t.string "lost_password_token"
-    t.integer "posts_count", precision: 38, default: 0
     t.integer "account_id", precision: 38
     t.string "first_name"
     t.string "last_name"
@@ -1439,7 +1355,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
     t.index ["account_id"], name: "idx_users_account_id"
     t.index ["email"], name: "index_users_on_email"
     t.index ["open_id"], name: "index_users_on_open_id", unique: true
-    t.index ["posts_count"], name: "index_site_users_on_posts_count"
     t.index ["username"], name: "index_users_on_login"
   end
 
