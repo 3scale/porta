@@ -9,10 +9,8 @@ class Finance::Api::InvoicesController < Finance::Api::BaseController
   # Invoice List
   # GET  /api/invoices.xml
   def index
-    search = ThreeScale::Search.new(params[:search] || params)
-    results = invoices.scope_search(search)
-                .order_by(params[:sort], params[:direction])
-                .paginate(pagination_params)
+    search = ThreeScale::Search.new(params)
+    results = invoices.scope_search(search).paginate(pagination_params)
 
     respond_with(results)
   end
