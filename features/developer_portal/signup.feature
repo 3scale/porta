@@ -11,6 +11,9 @@ Feature: Buyer signup
 
   Scenario: Signup creates account created event
     And there are no events
+    And admin of account "foo.3scale.localhost" has notification "account_created" enabled
+    And admin of account "foo.3scale.localhost" has notification "application_created" enabled
+    And admin of account "foo.3scale.localhost" has notification "service_contract_created" enabled
     When a buyer signs up
     Then I should see "We have sent you an email to confirm your email address"
 

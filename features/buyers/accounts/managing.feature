@@ -9,6 +9,7 @@ Feature: Accounts management
     And there are no events
 
   Scenario: Delete account events
+    Given admin of account "foo.3scale.localhost" has notification "account_deleted" enabled
     When the provider deletes the account named "Alexander"
       Then there should be 1 valid account deleted event
       # TODO

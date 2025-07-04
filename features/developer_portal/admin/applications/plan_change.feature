@@ -4,6 +4,7 @@ Feature: Developer portal change application plan
   Background:
     Given a provider "foo.3scale.localhost"
     And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
+    And admin of account "foo.3scale.localhost" has notification "cinstance_plan_changed" enabled
     And the provider has "multiple_services" visible
     And the provider has "service_plans" visible
     And a product "The API"

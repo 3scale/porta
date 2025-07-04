@@ -39,6 +39,9 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
   class ProviderLoggedInTest < Provider::Admin::ApplicationsTest
     setup do
       @provider = FactoryBot.create(:provider_account)
+
+      @provider.first_admin.notification_preferences.update(enabled_notifications: %i[cinstance_plan_changed])
+
       login! @provider
     end
 

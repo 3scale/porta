@@ -8,7 +8,7 @@ class PostObserverTest < ActiveSupport::TestCase
     forum    = FactoryBot.create(:forum, account: provider)
     topic    = FactoryBot.create(:topic, forum: forum)
     admin    = provider.first_admin
-    admin.create_notification_preferences!(preferences: { post_created: true })
+    admin.notification_preferences.update(preferences: { post_created: true })
     user     = FactoryBot.create(:user, account: provider)
 
     assert_difference(Notification.where(title: "New forum post by #{user.username}").method(:count), +1) do
