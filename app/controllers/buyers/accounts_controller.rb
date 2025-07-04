@@ -97,6 +97,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def change_state
     account_type = account.provider? ? 'tenant' : 'developer'
+
     flash_type = account.fire_events(action_name) ? :success : :danger
 
     flash[flash_type] = t(".#{flash_type}", account_type:).capitalize
