@@ -16,7 +16,11 @@ class NotificationPreferences < ApplicationRecord
 
   self.available_notifications = NotificationMailer.available_notifications.freeze
 
-  self.disabled_by_default  = %i(post_created weekly_report daily_report).freeze
+  self.disabled_by_default  = %i[application_created cinstance_cancellation cinstance_expired_trial
+                                 cinstance_plan_changed account_created account_deleted
+                                 unsuccessfully_charged_invoice_provider service_contract_cancellation
+                                 service_contract_created service_contract_plan_changed plan_downgraded service_deleted
+                                 post_created weekly_report daily_report].freeze
   self.enabled_by_default   = (available_notifications - disabled_by_default).freeze
   self.hidden_notifications = NotificationMailer.hidden_notifications.freeze
 

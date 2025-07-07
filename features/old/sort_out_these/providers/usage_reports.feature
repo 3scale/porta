@@ -7,7 +7,7 @@ Feature: Usage reports
     Given all the rolling updates features are off
       And a provider "foo.3scale.localhost"
       And admin of account "foo.3scale.localhost" has email "fake@email.com"
-      And admin of account "foo.3scale.localhost" has notification weekly_report enabled
+      And admin of account "foo.3scale.localhost" has notification "weekly_report" enabled
 
   Scenario: usage report sent weekly
     When weekly reports are dispatched
