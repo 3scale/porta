@@ -718,7 +718,7 @@ this returns the errors that occurred.
 Returns the title of result.
 
 ### kind
-Returns the kind of result; can be 'page'.
+Returns the kind of result; it can only be 'page'.
 
 ### url
 Returns the resource URL of the result.
