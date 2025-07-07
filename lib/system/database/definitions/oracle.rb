@@ -256,12 +256,6 @@ System::Database::Oracle.define do
     SQL
   end
 
-  trigger 'user_topics' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM topics WHERE id = :new.topic_id AND tenant_id <> master_id;
-    SQL
-  end
-
   trigger 'users' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;

@@ -116,7 +116,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.internal_domain
 
-    get developer_portal.create_session_url(username: user.username, password: 'wwwwww')
+    get developer_portal.create_session_url(username: user.username, password: 'wwwwww', redirect_url: '/discarded')
     follow_redirect!
 
     assert_equal root_path, path
@@ -130,10 +130,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.internal_domain
 
-    get developer_portal.create_session_url(token: 'yabadabado', expires_at: '2016')
+    get developer_portal.create_session_url(token: 'yabadabado', expires_at: '2016', redirect_url: admin_buyers_accounts_path)
     follow_redirect!
 
-    assert_nil path
+    assert_equal admin_buyers_accounts_path, path
   end
 
   test 'passing redirect_to to login form' do

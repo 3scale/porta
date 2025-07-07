@@ -40,10 +40,7 @@ module Liquid
       desc "Returs an array of results for the search."
       def results
         @presenter.search_results.compact.map do |result|
-          case result.class.name
-          when "CMS::Page"
-            Result::Page.new(result, @presenter)
-          end
+          Result::Page.new(result, @presenter) if result.class.name == "CMS::Page"
         end
       end
 

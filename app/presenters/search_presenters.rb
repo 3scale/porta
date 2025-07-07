@@ -109,10 +109,13 @@ module SearchPresenters
     end
 
     def as_json(options)
-      case @result
-      when CMS::Page
-        {:title => @presenter.highlight(@result).name, :path => @result.path, :content => @presenter.highlight(@result).content }
-      end
+      return unless @result == CMS::Page
+
+      {
+        title: @presenter.highlight(@result).name,
+        path: @result.path,
+        content: @presenter.highlight(@result).content
+      }
     end
   end
 

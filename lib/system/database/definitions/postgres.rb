@@ -256,12 +256,6 @@ System::Database::Postgres.define do
     SQL
   end
 
-  trigger 'user_topics' do
-    <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM topics WHERE id = NEW.topic_id AND tenant_id <> master_id;
-    SQL
-  end
-
   trigger 'users' do
     <<~SQL
       SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id;
