@@ -16,6 +16,8 @@ class Settings < ApplicationRecord
 
   symbolize :spam_protection_level, :admin_bot_protection_level
 
+  self.ignored_columns = %i[forum_enabled forum_public anonymous_posts_enabled]
+
   include Switches
 
   before_create :generate_sso_key
