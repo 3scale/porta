@@ -29,11 +29,11 @@ module Account::MasterMethods
 
   module ClassMethods
     def find_by_service_token!(service_token, error: ActiveRecord::RecordNotFound)
-      by_service_token(service_token).first || raise(error)
+      by_service_token(service_token).take || raise(error)
     end
 
     def first_by_provider_key(provider_key)
-      by_provider_key(provider_key).first
+      by_provider_key(provider_key).take
     end
 
     def first_by_provider_key!(provider_key, error: Backend::ProviderKeyInvalid)
