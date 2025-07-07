@@ -258,7 +258,7 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
       acc_target_pos = @acc_target.pos
       acc_target_another_pos = @acc_target_another.pos
 
-      @required.update(position: 1, name: '%*&#^%@)*$')
+      @required.update(pos: 1, name: '%*&#^%@)*$')
 
       assert_not @required.errors.empty?
       assert_equal @hidden.reload.pos, hidden_pos

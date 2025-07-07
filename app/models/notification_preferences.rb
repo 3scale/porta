@@ -2,7 +2,7 @@ class NotificationPreferences < ApplicationRecord
   belongs_to :user, inverse_of: :notification_preferences
 
   validates :user, presence: true
-  serialize :preferences, JSON
+  serialize :preferences, coder: JSON
 
   after_initialize :set_defaults
 

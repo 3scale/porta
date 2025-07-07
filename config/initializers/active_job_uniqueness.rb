@@ -33,8 +33,7 @@ Rails.application.configure do
 
       # Array of redis servers for Redlock quorum.
       # Read more at https://github.com/leandromoreira/redlock-rb#redis-client-configuration
-      #
-      config.redlock_servers = [System.redis]
+      config.redlock_servers = [System::RedisClientPool.default]
 
       # Custom options for Redlock.
       # Read more at https://github.com/leandromoreira/redlock-rb#redlock-configuration
