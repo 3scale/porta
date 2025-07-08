@@ -109,7 +109,7 @@ module SearchPresenters
     end
 
     def as_json(options)
-      return unless @result == CMS::Page
+      return unless @result.is_a?(CMS::Page)
 
       {
         title: @presenter.highlight(@result).name,
