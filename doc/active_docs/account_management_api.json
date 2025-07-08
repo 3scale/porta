@@ -7276,7 +7276,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "summary": "Notification Preferences Update",
         "description": "Update the notification preferences for the current user.",
         "tags": [
@@ -7293,93 +7293,105 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                  "application_created": {
-                    "type": "boolean",
-                    "description": "Application created."
-                  },
                   "account_created": {
                     "type": "boolean",
-                    "description": "Account created."
-                  },
-                  "limit_alert_reached_provider": {
-                    "type": "boolean",
-                    "description": "Limit alert reached provider."
-                  },
-                  "limit_violation_reached_provider": {
-                    "type": "boolean",
-                    "description": "Limit violation reached provider."
-                  },
-                  "account_plan_change_requested": {
-                    "type": "boolean",
-                    "description": "Account plan change requested."
+                    "description": "New account created. Sent when a developer account is created."
                   },
                   "account_deleted": {
                     "type": "boolean",
-                    "description": "Account deleted."
+                    "description": "Account deleted. Sent when an account is deleted."
                   },
-                  "cinstance_cancellation": {
+                  "account_plan_change_requested": {
                     "type": "boolean",
-                    "description": "Application cancellation."
+                    "description": "Account plan change request. Sent when a developer requests to change to a different account plan."
                   },
-                  "cinstance_plan_changed": {
+                  "application_created": {
                     "type": "boolean",
-                    "description": "Application plan changed."
+                    "description": "New application created. Sent when a new application is created."
                   },
                   "application_plan_change_requested": {
                     "type": "boolean",
-                    "description": "Application plan change requested."
+                    "description": "Application plan change request. Sent when a request for application plan change is made."
                   },
-                  "service_contract_created": {
+                  "cinstance_cancellation": {
                     "type": "boolean",
-                    "description": "Service contract created."
-                  },
-                  "service_plan_change_requested": {
-                    "type": "boolean",
-                    "description": "Service plan change requested."
-                  },
-                  "service_contract_plan_changed": {
-                    "type": "boolean",
-                    "description": "Service contract plan changed."
+                    "description": "Application deleted. Sent when an application is deleted."
                   },
                   "cinstance_expired_trial": {
                     "type": "boolean",
-                    "description": "Application expired trial."
+                    "description": "Application trial expired. Sent when an application trial period expires."
                   },
-                  "invoices_to_review": {
+                  "cinstance_plan_changed": {
                     "type": "boolean",
-                    "description": "Invoices to review."
+                    "description": "Application plan change. Sent when an application is changed to a different plan."
                   },
-                  "plan_downgraded": {
+                  "credit_card_unstore_failed": {
                     "type": "boolean",
-                    "description": "Plan downgraded."
-                  },
-                  "expired_credit_card_provider": {
-                    "type": "boolean",
-                    "description": "Expired credit card."
-                  },
-                  "unsuccessfully_charged_invoice_provider": {
-                    "type": "boolean",
-                    "description": "Unsuccessfully charged invoice."
-                  },
-                  "message_received": {
-                    "type": "boolean",
-                    "description": "Message received."
+                    "description": "Unstoring credit card failed. Sent when customer’s credit card failed to be unstored from your payment gateway."
                   },
                   "csv_data_export": {
                     "type": "boolean",
-                    "description": "CSV data export."
-                  },
-                  "service_deleted": {
-                    "type": "boolean",
-                    "description": "Service deleted."
-                  },
-                  "weekly_report": {
-                    "type": "boolean",
-                    "description": "Weekly report."
+                    "description": "CSV data export. Sent when a member of your team generates a report with data about messages/ developer accounts/ applications."
                   },
                   "daily_report": {
                     "type": "boolean",
-                    "description": "Daily report."
+                    "description": "Daily report. Contains information about your API(s) performance in the last 24 hours."
+                  },
+                  "expired_credit_card_provider": {
+                    "type": "boolean",
+                    "description": "Expiring credit card. Sent when a customer’s credit card is about to expire."
+                  },
+                  "invoices_to_review": {
+                    "type": "boolean",
+                    "description": "Action required: review invoices. Sent a few days before end of billing cycle so you can review invoices before they are being sent to customers."
+                  },
+                  "limit_alert_reached_provider": {
+                    "type": "boolean",
+                    "description": "'Alert: usage warning. Sent when an application triggers a usage alert for usage levels below 100%."
+                  },
+                  "limit_violation_reached_provider": {
+                    "type": "boolean",
+                    "description": "Alert: usage violation. Sent when an application triggers a usage alert for usage levels of 100% and above."
+                  },
+                  "message_received": {
+                    "type": "boolean",
+                    "description": "New messages. Sent when a developer sends you a new message."
+                  },
+                  "plan_downgraded": {
+                    "type": "boolean",
+                    "description": "Customer downgraded. Sent when a customer changes to a plan with a lower monthly fixed price."
+                  },
+                  "service_contract_cancellation": {
+                    "type": "boolean",
+                    "description": "Service subscription cancelled. Sent when an existing service subscription is cancelled."
+                  },
+                  "service_contract_created": {
+                    "type": "boolean",
+                    "description": "New service subscription. Sent when a new service subscription is started."
+                  },
+                  "service_contract_plan_changed": {
+                    "type": "boolean",
+                    "description": "Service subscription changed. Sent when an existing service subscription is changed."
+                  },
+                  "service_deleted": {
+                    "type": "boolean",
+                    "description": "Service deleted. Sent when a service is deleted."
+                  },
+                  "service_plan_change_requested": {
+                    "type": "boolean",
+                    "description": "Service plan change request. Sent when a developer requests to change to a different service plan."
+                  },
+                  "unsuccessfully_charged_invoice_final_provider": {
+                    "type": "boolean",
+                    "description": "Payment error (final). Sent when the final retry of a payment fails, resulting in a failed invoice."
+                  },
+                  "unsuccessfully_charged_invoice_provider": {
+                    "type": "boolean",
+                    "description": "Payment error (retry). Sent when payment fails, resulting in an unpaid invoice and a retry."
+                  },
+                  "weekly_report": {
+                    "type": "boolean",
+                    "description": "Weekly report. Contains information about your API(s) performance in the last 7 days."
                   }
                 }
               }
