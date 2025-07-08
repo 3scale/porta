@@ -54,13 +54,13 @@ table.list
                           reject_admin_buyers_account_path(account),
                           method: :post,
                           class: 'reject action'
-      - unless account.suspended_or_scheduled_for_deletion?
+      - if !account.suspended_or_scheduled_for_deletion? && can?(:suspend, account)
         = action_link_to 'Suspend',
                           suspend_admin_buyers_account_path(account),
                           method: :post,
                           data: { confirm: 'Are you sure?', disable_with: 'suspending…' },
                           class: 'action suspend'
-      - if can?(:resume, account) && account.can_resume?
+      - if account.suspended? && can?(:resume, account)
         = action_link_to 'Resume',
                         resume_admin_buyers_account_path(account),
                         method: :post,

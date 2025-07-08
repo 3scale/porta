@@ -92,7 +92,7 @@
           "description": "ID of the policy. It can be an integer value or a combination 'name-version' of the policy (e.g. 'mypolicy-1.0')",
           "required": true,
           "schema": {
-            "type": "integer"
+            "type": "string"
           }
         }
       ],

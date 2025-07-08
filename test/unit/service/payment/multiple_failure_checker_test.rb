@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Payment::MultipleFailureCheckerTest < ActiveSupport::TestCase
   test 'suspends the account and revoke session if too many errors' do
-    account = FactoryBot.create(:simple_account)
+    account = FactoryBot.create(:simple_buyer)
     mocked_session.expects(:revoke!)
     service = Payment::MultipleFailureChecker.new(account, false, mocked_session)
     9.times { service.call }
@@ -14,7 +14,7 @@ class Payment::MultipleFailureCheckerTest < ActiveSupport::TestCase
   end
 
   test 'should not suspend the account if failures is below the threshold' do
-    account = FactoryBot.create(:simple_account)
+    account = FactoryBot.create(:simple_buyer)
     service = Payment::MultipleFailureChecker.new(account, false, mocked_session)
 
     5.times { service.call }

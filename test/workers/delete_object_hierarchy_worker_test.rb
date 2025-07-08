@@ -617,6 +617,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
           true
         when MessageRecipient
           object.receiver == master_account
+        when NotificationPreferences
+          object_of_master?(object.user)
         when Plan
           object_of_master?(object.issuer) if object.issuer
         when ProxyConfigAffectingChange, ProxyRule

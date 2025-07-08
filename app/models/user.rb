@@ -38,7 +38,14 @@ class User < ApplicationRecord
           redacted: %i[password_digest].freeze
 
   before_validation :trim_white_space_from_username
+  # after_validation :reset_lost_password_token
+
+  after_create :set_default_notification_preferences
+
   before_destroy :avoid_destruction
+  after_destroy :archive_as_deleted
+
+  after_save :nullify_authentication_id, if: :any_sso_authorizations?
 
   include WebHooksHelpers #TODO: make this inclusion more dsl-ish
   fires_human_web_hooks_on_events
@@ -114,10 +121,7 @@ class User < ApplicationRecord
 
   attr_accessible :member_permission_service_ids, :member_permission_ids, as: %i[admin]
 
-  # after_validation :reset_lost_password_token
 
-  after_save :nullify_authentication_id, if: :any_sso_authorizations?
-  after_destroy :archive_as_deleted
 
   def self.search_states
     %w(pending active)
@@ -458,6 +462,12 @@ class User < ApplicationRecord
 
   def avoid_destruction
     throw :abort unless can_be_destroyed?
+  end
+
+  def set_default_notification_preferences
+    return unless account&.provider?
+
+    create_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
 
   class << self
