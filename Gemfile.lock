@@ -13,13 +13,6 @@ GIT
     httpclient (2.8.3)
 
 GIT
-  remote: https://github.com/3scale/json-schema.git
-  revision: 26487618a68443e94d623bb585cb464b07d36702
-  specs:
-    json-schema (3.0.0)
-      addressable (>= 2.4)
-
-GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
   revision: 58b19212afcf66540da729214287d85f586fa7cd
   branch: fix/rspec-3-with-xml-document
@@ -163,8 +156,8 @@ GEM
       activerecord (>= 3.0)
     acts_as_tree (2.9.1)
       activerecord (>= 3.0.0)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     afm (0.2.2)
     after_commit_queue (1.1.0)
       rails (>= 3.0)
@@ -219,7 +212,7 @@ GEM
       ransack (~> 4.1)
     base64 (0.2.0)
     bcrypt (3.1.13)
-    bigdecimal (3.1.8)
+    bigdecimal (3.1.9)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
     bootsnap (1.16.0)
@@ -433,7 +426,10 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.7.1)
-    json_schemer (2.3.0)
+    json-schema (5.1.1)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
+    json_schemer (2.4.0)
       bigdecimal
       hana (~> 1.3)
       regexp_parser (~> 2.0)
@@ -604,7 +600,7 @@ GEM
     pry-stack_explorer (0.6.1)
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
-    public_suffix (4.0.7)
+    public_suffix (6.0.1)
     raabro (1.4.0)
     racc (1.8.1)
     rack (2.2.14)
@@ -701,7 +697,7 @@ GEM
     reform-rails (0.2.6)
       activemodel (>= 5.0)
       reform (>= 2.3.1, < 3.0.0)
-    regexp_parser (2.6.1)
+    regexp_parser (2.10.0)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -1022,7 +1018,7 @@ DEPENDENCIES
   inherited_resources (~> 1.14.0)
   jquery-rails (= 4.6)
   json (~> 2.7, >= 2.7.1)
-  json-schema!
+  json-schema
   json_schemer
   jwt (~> 1.5.2)
   kt-paperclip (~> 7.2)
