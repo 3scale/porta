@@ -88,10 +88,15 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
     assert preferences.preferences["application_created"]
     assert_not preferences.preferences["limit_alert_reached_provider"]
 
+    before_change = preferences.preferences.except("application_created", "limit_alert_reached_provider")
+
     preferences.new_preferences = { application_created: false, limit_alert_reached_provider: true }
 
     assert_not preferences.preferences["application_created"]
     assert preferences.preferences["limit_alert_reached_provider"]
+
+    # the notifications that were not updated by #new_preferences= have not been changed
+    assert_equal before_change, preferences.preferences.except("application_created", "limit_alert_reached_provider")
 
     # process string values correctly
     preferences.new_preferences = { "plan_downgraded" => "true", "service_contract_created" => "false" }

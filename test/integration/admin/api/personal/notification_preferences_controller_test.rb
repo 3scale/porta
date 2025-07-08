@@ -29,7 +29,7 @@ class Admin::Api::Personal::NotificationPreferencesControllerTest < ActionDispat
       weekly_report: true,
       daily_report: true
     }
-    put admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
+    patch admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
 
     prefs =  JSON.parse(response.body)['notification_preferences']
 
@@ -49,19 +49,21 @@ class Admin::Api::Personal::NotificationPreferencesControllerTest < ActionDispat
       non_existing_notification: false
     }
 
-    put admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
+    patch admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
 
     # Strong parameters filter out non-existing preferences
     assert_response :success
     assert_equal previous_prefs, user.notification_preferences.reload.preferences
 
-    update_params = {
-      account_created: 'some-value'
-    }
-    put admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
+    ['some-value', '', nil].each do |value|
+      update_params = {
+        account_created: value
+      }
+      patch admin_api_personal_notification_preferences_path(format: :json), params: { access_token: token, **update_params }
 
-    assert_response :unprocessable_entity
-    resp = JSON.parse(response.body)
-    assert_equal ["invalid value for 'account_created', must be either true or false"], resp["errors"]["preferences"]
+      assert_response :unprocessable_entity
+      resp = JSON.parse(response.body)
+      assert_equal ["invalid value for 'account_created', must be either true or false"], resp["errors"]["preferences"]
+    end
   end
 end
