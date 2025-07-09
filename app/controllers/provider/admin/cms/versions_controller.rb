@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseController
 
-  activate_menu :audience, :cms
+  activate_menu :audience, :cms, :content
 
   def index
     @page = page
