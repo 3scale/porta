@@ -19,8 +19,6 @@
                                               method: :patch,
                                               html: { class: 'pf-c-form pf-m-limit-width' } do |f|
 
-        /! Hidden input to allow disabling all notifications
-        = hidden_field_tag 'notification_preferences[enabled_notifications][]', '', id: nil
         - categories.each do |category|
           = f.inputs t(category.title_key, scope: :notification_category_titles) do
             = f.input :enabled_notifications, as: :patternfly_check_boxes,

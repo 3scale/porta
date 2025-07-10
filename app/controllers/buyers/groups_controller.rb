@@ -18,7 +18,7 @@ class Buyers::GroupsController < Buyers::BaseController
   protected
 
   def collection
-    @collection ||= @account.provider_account.provided_groups
+    @collection ||= @account.provider_account.provided_groups.includes([:sections])
   end
 
   def authorize_groups

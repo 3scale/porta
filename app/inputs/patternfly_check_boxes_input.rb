@@ -5,7 +5,7 @@ class PatternflyCheckBoxesInput < Formtastic::Inputs::CheckBoxesInput
 
   def to_html
     tag.div(class: 'pf-c-form__group') do
-      label_html + control
+      label_html + control + hidden_field_for_all
     end
   end
 
