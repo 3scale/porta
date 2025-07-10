@@ -180,6 +180,10 @@ class User < ApplicationRecord
     persisted? ? sso_authorizations.exists? : sso_authorizations.any?
   end
 
+  def notification_categories
+    @notification_categories ||= NotificationCategories.new(self)
+  end
+
   def notification_preferences
     super || build_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
