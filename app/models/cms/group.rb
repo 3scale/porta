@@ -4,16 +4,17 @@ class CMS::Group < ApplicationRecord
   # This is BuyerGroup
   self.table_name = :cms_groups
 
-  belongs_to :tenant
+  self.background_deletion = %w[group_sections permissions]
+
   belongs_to :provider, :class_name => "Account"
 
   validates :name, :provider, presence: true, length: { maximum: 255 }
   validates :name, uniqueness: { scope: [:provider_id], case_sensitive: true }
 
-  has_many :group_sections, :class_name => 'CMS::GroupSection'
+  has_many :group_sections, :class_name => 'CMS::GroupSection', inverse_of: :group, dependent: :delete_all
   has_many :sections, :class_name => 'CMS::Section', :through => :group_sections
 
-  has_many :permissions, :class_name => 'CMS::Permission'
+  has_many :permissions, :class_name => 'CMS::Permission', inverse_of: :group, dependent: :delete_all
   has_many :accounts, :through => :permissions
 
   def label

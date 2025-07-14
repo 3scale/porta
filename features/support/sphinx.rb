@@ -1,24 +1,22 @@
 require 'thinking_sphinx'
 require 'thinking_sphinx/test'
 
-Before "not @search" do
+BeforeAll do
   ::ThinkingSphinx::Test.disable_search_jobs!
 end
 
-Before('@search') do
-  Sidekiq::Worker.clear_all
+Before '@search' do
+  Sidekiq::Job.clear_all
+  ::ThinkingSphinx::Test.stop
   ::ThinkingSphinx::Test.clear
   ::ThinkingSphinx::Test.init
-  ::ThinkingSphinx::Test.stop
-  ::ThinkingSphinx::Test.autostop
-  output = ::ThinkingSphinx::Test.start index: false
-  assert ::ThinkingSphinx::Test.config.controller.running?, "thinking sphinx should be running: #{output.output}"
+  $searchd_autostop_installed ||= ::ThinkingSphinx::Test.autostop
+  ::ThinkingSphinx::Test.wait_start
+
+  ::ThinkingSphinx::Test.enable_search_jobs!
 end
 
 After '@search' do
+  ::ThinkingSphinx::Test.disable_search_jobs!
   ::ThinkingSphinx::Test.stop
-end
-
-After "not @search" do
-  ::ThinkingSphinx::Test.enable_search_jobs!
 end

@@ -10,7 +10,7 @@ Feature: Internal authentication
   Background:
     Given a provider "foo.3scale.localhost"
     And a default service of provider "foo.3scale.localhost" has name "api"
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" requires cinstances to be approved before use
     And provider "foo.3scale.localhost" requires accounts to be approved
 
@@ -50,7 +50,7 @@ Feature: Internal authentication
     And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "whatever"
     And I press "Sign in"
-    Then I should see "Incorrect email or password. Please try again."
+    Then I should see "Incorrect email or password. Please try again"
 
   @wip
   Scenario: Successful sign in as a provider on their domain

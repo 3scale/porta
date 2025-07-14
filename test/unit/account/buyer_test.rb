@@ -20,7 +20,7 @@ class Account::BuyerTest < ActiveSupport::TestCase
   should have_many(:bought_service_plans).through(:bought_service_contracts)
 
   test '#has_bought_cinstance?' do
-    buyer = FactoryBot.create(:simple_buyer)
+    buyer = FactoryBot.create(:buyer_account)
 
     assert_not buyer.has_bought_cinstance?
 
@@ -118,7 +118,7 @@ class Account::BuyerTest < ActiveSupport::TestCase
   test 'Account#bought_plan' do
     provider_account = FactoryBot.create(:provider_account)
     service = FactoryBot.create(:simple_service, account: provider_account)
-    plan = FactoryBot.create(:application_plan, service: service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
     buyer_account.buy(plan)

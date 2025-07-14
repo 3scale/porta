@@ -1,0 +1,18 @@
+- icon = local_assigns[:icon] || :search
+- title = local_assigns[:title] || t('.title')
+
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'empty_state'
+
+div class="pf-c-empty-state"
+  div class="pf-c-empty-state__content"
+    i class="fas fa-#{icon} pf-c-empty-state__icon" aria-hidden="true"
+    h1 class="pf-c-title pf-m-lg"
+      = title
+    - if body = local_assigns[:body]
+      div class="pf-c-empty-state__body"
+        = body
+    - if primary = local_assigns[:primary]
+      div class="pf-c-empty-state__primary"
+        a class="pf-c-button pf-m-primary" type="button" href=primary[:href]
+          = primary[:title]

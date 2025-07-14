@@ -6,7 +6,6 @@ base: &default
   duplicate_application_id: true
   duplicate_user_key: true
   instant_bill_plan_change: false
-  new_notification_system: true
   plan_changes_wizard: false
   policy_registry: true
   provider_sso:
@@ -26,3 +25,4 @@ test:
 
 production:
   <<: *default
+  service_mesh_integration: true

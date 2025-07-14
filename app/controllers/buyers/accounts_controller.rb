@@ -34,8 +34,7 @@ class Buyers::AccountsController < Buyers::BaseController
     account.vat_rate = vat if vat # vat_rate is protected attribute
 
     if account.update(account_params)
-      flash[:notice] = t('.success')
-      redirect_to admin_buyers_account_path(account)
+      redirect_to admin_buyers_account_path(account), success: t('.success')
     else
       render :edit
     end
@@ -50,20 +49,19 @@ class Buyers::AccountsController < Buyers::BaseController
         signup_result.account_approve!
         signup_result.user_activate!
       end
-      flash[:notice] = 'Developer account was successfully created.'
-      redirect_to admin_buyers_account_path(@buyer)
+      redirect_to admin_buyers_account_path(@buyer), success: t('.success')
     else
       @user = signup_result.user
-      flash.now[:error] = signup_result.errors.messages.without(:user).values.join('. ')
+      flash.now[:danger] = signup_result.errors.messages.without(:user).values.join('. ')
       render action: :new
     end
   end
 
   def destroy
     if account.smart_destroy
-      flash[:notice] = "The account was successfully #{account.destroyed? ? 'deleted' : 'scheduled for deletion'}."
+      flash[:success] = account.destroyed? ? t('.destroyed') : t('.scheduled_for_deletion')
     else
-      flash[:error] = account.errors.full_messages.join(' ')
+      flash[:danger] = account.errors.full_messages.join(' ')
     end
 
     redirect_to redirection_path
@@ -71,12 +69,12 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def toggle_monthly_charging
     account.settings.toggle!(:monthly_charging_enabled)
-    redirect_back(fallback_location: redirection_path)
+    redirect_back_or_to(redirection_path)
   end
 
   def toggle_monthly_billing
     account.settings.toggle!(:monthly_billing_enabled)
-    redirect_back(fallback_location: redirection_path)
+    redirect_back_or_to(redirection_path)
   end
 
   def show
@@ -98,11 +96,11 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def change_state
-    status = account.fire_events(action_name) ? :notice : :error
-
     account_type = account.provider? ? 'tenant' : 'developer'
-    action_name_past = t(action_name, scope: 'buyers.accounts.state_event_past')
-    flash[status] = t(status, scope: 'buyers.accounts.change_state', account_type: account_type, state_event: action_name, state_event_past: action_name_past)
+
+    flash_type = account.fire_events(action_name) ? :success : :danger
+
+    flash[flash_type] = t(".#{flash_type}", account_type:).capitalize
 
     redirect_to admin_buyers_account_path(account)
   end
@@ -122,7 +120,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def set_plans
     unless current_account.create_buyer_possible?
-      redirect_to admin_buyers_account_plans_path, alert: 'Please, create an Account Plan first'
+      redirect_to admin_buyers_account_plans_path, danger: t('buyers.accounts.set_plans_error')
     end
 
     @plans = [] # this is here only to make new_signups/form happy

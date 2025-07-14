@@ -11,8 +11,7 @@ class ApiDocsProxy
     obj.originalUrl = obj.url
     # console.log "[ApiDocsProxy] incoming url #{obj.url}"
     if not @sameOrigin()
-      if _.isUndefined obj.method
-        obj.method = obj.type || "POST" # fallback to POST
+      obj.method ||= obj.type || "POST" # fallback to POST
 
       obj.url = @locationOrigin() + '/api_docs/proxy'
       obj.url += '?_=' + (new Date).getTime() # cache buster

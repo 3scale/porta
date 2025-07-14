@@ -3,9 +3,11 @@ module Alerts::LimitReachedCreatable
     provider = alert.cinstance.provider_account
 
     new(
-      alert:    alert,
       provider: provider,
-      service:  alert.cinstance.service,
+      application_id: alert.cinstance.application_id,
+      service_id:  alert.cinstance.service.id,
+      level: alert.level,
+      message: alert.message,
       metadata: {
         provider_id: provider.try!(:id)
       }

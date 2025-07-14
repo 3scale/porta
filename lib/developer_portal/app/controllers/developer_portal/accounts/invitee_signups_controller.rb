@@ -54,7 +54,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
       session.delete(:invitation_sso_system_name)
       user_created_webhook(@user)
 
-      flash[:notice] = t('flash.signups.create.notice')
+      flash[:notice] = t('.success')
       redirect_to(login_url)
     else
       render_show
@@ -119,7 +119,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   end
 
   def build_user
-    @user = @invitation.make_user(params[:user] || {})
+    @user = @invitation.make_user(filter_readonly_params(params[:user], User))
   end
 
   def invitation_token

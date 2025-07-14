@@ -8,63 +8,65 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   setup do
     @plan = FactoryBot.create(:application_plan)
     @service = @plan.service
-
-    @buyer = FactoryBot.create(:buyer_account)
-
     @provider = @plan.provider_account
+
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+
+    @provider.first_admin.notification_preferences.update(enabled_notifications: %i[application_created cinstance_cancellation cinstance_plan_changed])
 
     Logic::RollingUpdates.stubs(skipped?: true)
   end
 
   class NewCinstanceCreatedTest < CinstanceObserverTest
     setup do
-      @cinstance = @buyer.buy!(@plan)
-      @message = Message.last
+      with_sidekiq do
+        @cinstance = @buyer.buy!(@plan)
+      end
+
+      @notification = @provider.first_admin.notifications.find_by(system_name: :application_created)
+      @mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == @notification&.parent_event&.event_id }&.first
     end
 
     test 'a message should be sent' do
-      assert_not_nil @message
-      assert @message.sent?
+      assert_not_nil @notification
+      assert @notification.delivered?
     end
 
     test 'a message should have the provider as a recipient' do
-      assert_equal [@provider], @message.to
-    end
-
-    test 'a message should have the buyer as a sender' do
-      assert_equal @buyer, @message.sender
+      assert_equal [@provider.first_admin.email], @mail.to
     end
 
     test 'a message should have meaningful subject' do
-      assert_match(/New Application submission/i, @message.subject)
+      assert_not_nil @mail.subject
     end
 
     test 'a message should contain service name' do
-      assert_match(@service.name, @message.body)
+      assert_match(@service.name, @mail.text_part.body.to_s)
     end
 
     test 'a message should contain plan name' do
-      assert_match(@plan.name, @message.body)
+      assert_match(@plan.name, @mail.text_part.body.to_s)
     end
 
     test 'a message should contain buyer name' do
-      assert_match(@buyer.org_name, @message.body)
-    end
-
-    test 'a message should contain buyer email' do
-      assert_match(@buyer.admins.first.email, @message.body)
+      assert_match(@buyer.org_name,@mail.text_part.body.to_s)
     end
   end
 
   class NewCinstanceApprovalRequired < CinstanceObserverTest
     setup do
-      @plan.update(approval_required: true)
-      @cinstance = @buyer.buy!(@plan)
+      with_sidekiq do
+        @plan.update(approval_required: true)
+        @cinstance = @buyer.buy!(@plan)
+      end
+
+      @notification = @provider.first_admin.notifications.find_by(system_name: :application_created)
+      @mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == @notification&.parent_event&.event_id }&.first
     end
 
     class PendingCinstanceTest < NewCinstanceApprovalRequired
       test 'a message should say that the cinstance needs approval' do
-        assert_match(/requires you to approve/i, Message.last.body)
+        assert_match(/requires you to approve/i, @mail.text_part.body.to_s)
       end
     end
 
@@ -117,12 +119,17 @@ class CinstanceObserverTest < ActiveSupport::TestCase
 
   class NewCinstanceApprovalNotRequired < CinstanceObserverTest
     setup do
-      @plan.update(approval_required: false)
-      @cinstance = @buyer.buy!(@plan)
+      with_sidekiq do
+        @plan.update(approval_required: false)
+        @cinstance = @buyer.buy!(@plan)
+      end
+
+      @notification = @provider.first_admin.notifications.find_by(system_name: :application_created)
+      @mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == @notification&.parent_event&.event_id }&.first
     end
 
     test 'a message should not say that the cinstance needs approval' do
-      assert_no_match(/requires your approval/i, Message.last.body)
+      assert_no_match(/requires your approval/i, @mail.text_part.body.to_s)
     end
 
     test 'does not send accept message to buyer if plan does not require approval' do
@@ -134,78 +141,84 @@ class CinstanceObserverTest < ActiveSupport::TestCase
 
   class CinstanceCancelledTest < CinstanceObserverTest
     setup do
-      @cinstance = @buyer.buy!(@plan)
-      Message.destroy_all
+      with_sidekiq do
+        cinstance = @buyer.buy!(@plan)
+        cinstance.reload # to load the tenant_id set by the trigger
+        cinstance.destroy
+      end
 
-      @cinstance.destroy
-      assert @message = Message.last
+      @notification = @provider.first_admin.notifications.find_by(system_name: :cinstance_cancellation)
+      @mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == @notification&.parent_event&.event_id }&.first
     end
 
-    test 'a message should be sent' do
-      assert_not_nil @message
-      assert @message.sent?
+    test 'cancel a message should be sent' do
+      assert_not_nil @notification
+      assert @notification.delivered?
     end
 
     test 'a message should have the provider as a recipient' do
-      assert_equal [@provider], @message.to
-    end
-
-    test 'a message should have the buyer as a sender' do
-      assert_equal @buyer, @message.sender
+      assert_equal [@provider.first_admin.email], @mail.to
     end
 
     test 'a message should have meaningful subject' do
-      assert_not_nil @message.subject
+      assert_not_nil @mail.subject
     end
 
     test 'a message should contain service name' do
-      assert_match(@service.name, @message.body)
+      assert_match(@service.name, @mail.text_part.body.to_s)
     end
 
     test 'a message should contain plan name' do
-      assert_match(@plan.name, @message.body)
+      assert_match(@plan.name, @mail.text_part.body.to_s)
     end
 
     test 'a message should contain buyer name' do
-      assert_match(@buyer.org_name, @message.body)
+      assert_match(@buyer.org_name, @mail.text_part.body.to_s)
     end
   end
 
   class CinstanceChangesPlanTest < CinstanceObserverTest
     setup do
-      @cinstance = @buyer.buy!(@plan)
-      @new_plan = FactoryBot.create( :application_plan, :issuer => @service)
+      with_sidekiq do
+        @cinstance = @buyer.buy!(@plan)
+        @new_plan = FactoryBot.create( :application_plan, :issuer => @service)
 
-      @cinstance.change_plan!(@new_plan)
-      @cinstance.save!
+        @cinstance.change_plan!(@new_plan)
+        @cinstance.save!
+      end
     end
 
     class MessageToProviderTest < CinstanceChangesPlanTest
+      disable_transactional_fixtures!
+      self.database_cleaner_strategy = :deletion
+      self.database_cleaner_clean_with_strategy = :deletion
+
       setup do
-        @message = @buyer.messages.last
+        @notification = @provider.first_admin.notifications.find_by(system_name: :cinstance_plan_changed)
+        @mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == @notification&.parent_event&.event_id }&.first
       end
 
       test 'a message to provider should be sent' do
-        assert_not_nil @message
-        assert @message.sent?
+        assert_not_nil @notification
+        assert @notification.delivered?
       end
 
       test 'a message to provider should have the provider as a recipient' do
-        assert_equal [@provider], @message.to
+        assert_equal [@provider.first_admin.email], @mail.to
       end
 
       test 'a message to provider should contain service name' do
-        assert_match(@service.name, @message.body)
+        assert_match(@service.name, @mail.text_part.body.to_s)
       end
 
       test 'a message to provider should contain buyer name' do
-        assert_match(@buyer.org_name, @message.body)
+        assert_match(@buyer.org_name, @mail.text_part.body.to_s)
       end
 
       pending_test 'a message to provider should contain old plan name'
 
       test 'a message to provider should contain new plan name' do
-        assert_match(@new_plan.name, @message.body)
+        assert_match(@new_plan.name, @mail.text_part.body.to_s)
       end
     end
 

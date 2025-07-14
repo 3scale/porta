@@ -1,6 +1,8 @@
 module ThreeScale
   class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::BotProtection::Form
+    include ApplicationHelper
+    include ActionView::Helpers::TagHelper
 
     delegate :tag, :site_account, :controller, to: :template
 
@@ -64,15 +66,9 @@ module ThreeScale
       action :submit, label: label, as: :button, **opts
     end
 
-    def button(label, *args)
-      options = args.extract_options!
-      button_html = options.delete(:button_html) || {}
-
-      button_html.reverse_merge! :type => :submit, :value => true
-
-      template.content_tag :li, template.content_tag(:button, options[:label] || label, button_html)
+    def error_messages
+      error_messages_for(@object_name, object: @object)
     end
-
 
     # Adds cancel link to a form.
     #

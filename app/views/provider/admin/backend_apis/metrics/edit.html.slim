@@ -1,0 +1,3 @@
+- url = provider_admin_backend_api_metric_path(@backend_api, @metric)
+
+= render partial: 'api/metrics/form', locals: { url: url, metric: @metric, scope: :edit }

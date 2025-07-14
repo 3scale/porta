@@ -52,7 +52,7 @@ Feature: Developer portal edit application page
       When they follow "Delete My App"
       And confirm the dialog
       Then the current page is the dev portal applications page
-      And they should see the flash message "Application was successfully deleted."
+      And they should see the flash message "Application was successfully deleted"
       But should not see "My App"
 
     Scenario: Edit an application's extra fields
@@ -76,8 +76,8 @@ Feature: Developer portal edit application page
       And there is a field "Phone number"
       And the form is submitted with:
         | Phone number | 999-888-777 |
-      Then they should see the following details:
         | Email        |             |
+      Then they should see the following details:
         | Phone number | 999-888-777 |
         | UUID         | 123         |
-        | Secret sauce | Ketchup     |
+      And should not see "Secret sauce"

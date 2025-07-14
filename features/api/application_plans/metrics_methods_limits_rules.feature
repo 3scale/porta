@@ -9,7 +9,6 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     And the following application plan:
       | Product    | Name | Default |
       | Dice rolls | Free | true    |
-    # And the provider has plans ready for signups
     And the product has the following metrics:
       | Friendly name    |
       | Single rolls     |
@@ -34,6 +33,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     When they go to application plan "Free" admin edit page
     And follow "Make metric Single rolls invisible"
     And wait a moment
+    Then they should see a toast alert with text "Metric 'Single rolls' is now invisible"
     Then application plan "Free" should not have visible usage limits
 
   Scenario: Adding usage limits
@@ -43,7 +43,7 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
     And the modal is submitted with:
       | Period     | minute |
       | Max. value | 10     |
-    Then they should see the flash message "Usage Limit has been created"
+    Then they should see a toast alert with text "Usage limit was successfully created"
     And should see the following table that belongs to metric "Hits" usage limits:
       | Period   | Value |
       | 1 minute | 10    |
@@ -122,4 +122,4 @@ Feature: Application plan Metrics, Methods, Limits & Pricing Rules
       Then I should see the metric "zeroed" is enabled
       When I disable the metric "zeroed"
       Then I should see the metric "zeroed" is enabled
-      And I should see "Metric cannot be disabled. Please contact support."
+      And I should see "Metric cannot be disabled. Please contact support"

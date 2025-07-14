@@ -6,7 +6,7 @@ Feature: Buyer users fields management
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
     And the provider has the following fields defined for users:
       | name                 | required | read_only | hidden |
@@ -31,13 +31,13 @@ Feature: Buyer users fields management
       | User extra read only |
       | User extra hidden    |
     When I press "Update User"
-    Then I should see "User was successfully updated."
+    Then I should see "User was successfully updated"
 
   Scenario: Fields edition
     When I go to the buyer user edit page for "SpaceWidgets"
     And I fill in "First name" with "bob"
     And I fill in "User extra read only" with "notEditable"
     When I press "Update User"
-    Then I should see "User was successfully updated."
+    Then I should see "User was successfully updated"
     And I should see "bob" in the "First name" field
     And I should see "notEditable" in the "User extra read only" field

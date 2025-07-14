@@ -35,7 +35,6 @@ module VerticalNavHelper
     sections << {id: :personal, title: 'Personal', items: account_personal_items}     if can?(:manage, current_user)
 
     if can? :manage, current_account
-      sections << {id: :notifications, title: 'Notifications', path: provider_admin_account_notifications_path} unless current_account.provider_can_use? :new_notification_system
       sections << {id: :users,         title: 'Users',         items: account_users_items}
       sections << {id: :billing,       title: 'Billing',       items: account_billing_items} if ThreeScale.master_billing_enabled? && !current_account.master?
     end
@@ -77,6 +76,7 @@ module VerticalNavHelper
     items = []
     items << {id: :webhooks,  title: 'Webhooks',        path: edit_provider_admin_webhooks_path} if can? :manage, :web_hooks
     items << {id: :apidocs,   title: '3scale API Docs', path: provider_admin_api_docs_path}
+    items << {id: :bot_protection,  title: 'Bot Protection',  path: edit_provider_admin_bot_protection_path}
   end
 
   # Audience
@@ -146,13 +146,11 @@ module VerticalNavHelper
       items << {id: :feature_visibility, title: 'Feature Visibility', path: provider_admin_cms_switches_path}
       # FIXME: should be a link not a href
       items << {id: :ActiveDocs,         title: 'ActiveDocs',         path: admin_api_docs_services_path}          if can?(:manage, :plans)
-    end
 
-    items << {id: 'separator 0'} # Separator
-    items << {title: 'Visit Portal', path: access_code_url(host: current_account.external_domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
-    items << {id: 'separator 1'} # Separator
+      items << {id: 'separator 0'} # Separator
+      items << {title: 'Visit Portal', path: provider_admin_cms_visit_portal_path.html_safe, target: '_blank'}
+      items << {id: 'separator 1'} # Separator
 
-    if can?(:manage, :portal)
       items << { title: 'Legal Terms', subItems: [
         {id: :signup_licence,               title: 'Signup',               path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SIGNUP_SYSTEM_NAME)},
         {id: :service_subscription_licence, title: 'Service Subscription', path: edit_legal_terms_url(CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME)},
@@ -196,14 +194,19 @@ module VerticalNavHelper
     sections = []
     return sections unless @service
 
-    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can? :manage, :plans
+    can_manage_plans = can? :manage, :plans
+
+    sections << {id: :overview,      title: 'Product Overview',      path: admin_service_path(@service)} if can_manage_plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
-    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
+    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if can_manage_plans || can?(:manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
 
-    if can? :manage, :plans
-      sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)}
-      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: has_out_of_date_configuration?(@service)}
+    sections << {id: :ActiveDocs,  title: 'ActiveDocs',  path: admin_service_api_docs_path(@service)} if can_manage_plans
+
+    if can_manage_plans || can?(:manage, :policy_registry)
+      # do not show out of date icon if the user can't promote (i.e. can't manage plans)
+      out_of_date = can_manage_plans ? has_out_of_date_configuration?(@service) : nil
+      sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: out_of_date }
     end
 
     sections
@@ -225,7 +228,7 @@ module VerticalNavHelper
     items = []
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
-    unless master_on_premises?
+    if can?(:manage, :plans) && !master_on_premises?
       items << { title: 'Settings', subItems: [
         { id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service) }
       ]}
@@ -241,12 +244,19 @@ module VerticalNavHelper
 
   def service_integration_items
     items = []
-    items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
-    items << {id: :methods_metrics,     title: 'Methods and Metrics', path: admin_service_metrics_path(@service)}
-    items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
-    items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
-    items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
-    items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
+    if can?(:manage, :plans)
+      items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
+      items << {id: :methods_metrics,     title: 'Methods and Metrics', path: admin_service_metrics_path(@service)}
+      items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
+    end
+    if @service.can_use_policies? && (can?(:manage, :plans) || can?(:manage, :policy_registry))
+      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
+    end
+    if can?(:manage, :plans)
+      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
+      items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
+    end
+    items
   end
 
   # Backend APIs
@@ -256,8 +266,9 @@ module VerticalNavHelper
 
     sections << {id: :overview,         title: 'Backend Overview',             path: provider_admin_backend_api_path(@backend_api)}
     sections << {id: :monitoring,       title: 'Analytics',            path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
-    sections << {id: :methods_metrics,  title: 'Methods and Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
-    sections << {id: :mapping_rules,    title: 'Mapping Rules',        path: provider_admin_backend_api_mapping_rules_path(@backend_api)}
+    sections << {id: :methods_metrics,  title: 'Methods and Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)} if can? :edit, BackendApi
+    sections << {id: :mapping_rules,    title: 'Mapping Rules',        path: provider_admin_backend_api_mapping_rules_path(@backend_api)} if can? :edit, BackendApi
+    sections
   end
 
   # Others

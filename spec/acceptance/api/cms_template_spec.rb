@@ -29,7 +29,7 @@ resource "CMS::Template" do
   api 'cms template', format: [:json] do
     get '/admin/api/cms/templates', action: :index do
       before { collection.each(&:save!).sort_by!(&:id) }
-      let(:serialized) { representer.send(serialization_format, short: true) }
+      let(:serialized) { representer.send(serialization_format, user_options: { short: true }) }
     end
 
     context do

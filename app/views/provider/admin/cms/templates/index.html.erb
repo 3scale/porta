@@ -1,8 +1,12 @@
 <%= cms_new_button_dropdown(CMS::Page) %>
 
+<%= javascript_packs_with_chunks_tag 'cms_intro_tabs' %>
+
 <div id='cms-intro-tabs'>
-  <%# filled by JS in //= require provider/admin/cms/intro --> %>
-  <ul></ul>
+  <ul>
+    <li><a href='#quick-links'>Quick Links</a></li>
+    <li><a href='#tips-and-tricks'>Snippets</a></li>
+  </ul>
 
   <%= render 'quick_links' %>
   <%= render 'snippets' %>

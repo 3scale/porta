@@ -30,19 +30,25 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  developer_portal:
+    accounts:
+      invitee_signups:
+        create:
+          success:
+            Thanks for signing up! You can now sign in
   # start documentation links
   docs:
-    base_url: 'https://access.redhat.com/documentation/en-us/%{docs_version}/html'
+    base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{docs_version}/html'
     hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
-      email_configuration: '%{docs_base_url}/creating-developer-portal/email-configuration'
+      email_configuration: '%{docs_base_url}/creating_the_developer_portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'
-    terminology: '%{docs_base_url}/terminology'
+    terminology: '%{docs_base_url}/glossary/index'
   # end documentation links
   api_integrations_controller:
     promote_to_production_success: 'Staging configuration promoted to production'
     promote_to_production_error: "Couldn't promote Staging configuration to production"
-    update_onpremises_production_success: 'Production configuration saved.'
+    update_onpremises_production_success: Production configuration saved
     update_production_success: 'Proxy settings deployed'
     update_error: "Couldn't update the Staging Configuration"
     update_success: '%{environment} Configuration Updated'
@@ -53,18 +59,18 @@ en:
     apicast_version_not_reverted: 'The APIcast version for this service could not be reverted'
     apicast_version_not_upgraded: 'The APIcast version for this service could not be upgraded'
     oidc_not_available_on_old_apicast: 'OpenID Connect is not supported for the old APIcast. Pick a different authentication option before reverting back.'
-  logos_controller:
-    update_success: 'The logo was successfully uploaded.'
-    destroy_success: 'The logo was successfully deleted.'
 
   access_token_options:
     finance: 'Billing API'
     stats: 'Analytics API'
     account_management: 'Account Management API'
     policy_registry: 'Policy Registry API'
-    cms: 'Developer Portal API (Tech Preview)'
+    cms: 'Developer Portal API'
     ro: 'Read Only'
     rw: 'Read & Write'
+    no_expiration: 'Never expires'
+    expires_at: 'Expires at'
+    expires_in: 'Expires in'
   notification_category_titles:
     account: 'Accounts'
     application: 'Applications'
@@ -81,6 +87,7 @@ en:
     account_plan_change_requested: 'Account plan change request'
     invoices_to_review: 'Action required: review invoices'
     expired_credit_card_provider: 'Expiring credit card'
+    credit_card_unstore_failed: 'Unstoring credit card failed'
     cinstance_cancellation: 'Application deleted'
     service_contract_cancellation: 'Service subscription cancelled'
     service_contract_created: 'New service subscription'
@@ -108,6 +115,7 @@ en:
     account_plan_change_requested: 'Sent when a developer requests to change to a different account plan.'
     invoices_to_review: 'Sent a few days before end of billing cycle so you can review invoices before they are being sent to customers.'
     expired_credit_card_provider: 'Sent when a customer’s credit card is about to expire.'
+    credit_card_unstore_failed: 'Sent when customer’s credit card failed to be unstored from your payment gateway.'
     cinstance_cancellation: 'Sent when an application is deleted.'
     service_contract_cancellation: 'Sent when an existing service subscription is cancelled.'
     service_contract_created: 'Sent when a new service subscription is started.'
@@ -132,13 +140,11 @@ en:
         limit_violation_reached_provider: 'Application %{name} limit violation - usage of %{message} is above %{level}%'
         weekly_report: '%{name} weekly report'
         daily_report: '%{name} daily report'
-
-  controller:
-    title:
-      provider:
-        admin:
-          authentication_providers: SSO Integrations
-
+  master:
+    providers:
+      plans:
+        update:
+          success: Plan upgraded
   admin:
     api_docs:
       services:
@@ -149,13 +155,36 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
-          cms_api: 'Developer Portal API (Tech Preview)'
+          cms_api: 'Developer Portal API'
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
-          # start documentation links
-          update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
-          # end documentation links
+          update_link: "%{docs_base_url}/providing_apis_in_the_developer_portal/activedocs-migrate"
+          empty_state:
+            title: No ActiveDocs specs yet
+            body: Make your API documentation clear, intuitive, and user friendly with 3scale ActiveDocs.
+            primary: Create your first spec
+        toggle_visible:
+          visible: "Spec %{name} is now visible"
+          hidden: "Spec %{name} is now hidden"
+      create:
+        success: ActiveDocs Spec was successfully saved
+      destroy:
+        success: ActiveDocs Spec was successfully deleted
+      update:
+        success: ActiveDocs Spec was successfully updated
+    fields_definitions:
+      create:
+        success: Field was successfully created
+    user_confirmations:
+      create:
+        already_active: User is already confirmed
+        activated: User successfully confirmed and can now sign in
+    account:
+      payment_gateways:
+        update:
+          success: Payment gateway details were successfully saved
+          error: Failed to save payment gateway details. Choose a payment gateway or disable charging
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
@@ -187,11 +216,10 @@ en:
     apicast_gateway_deployed: "Done: Deploy your API Gateway to production on APIcast"
 
   service_contracts:
+    unsubscribe_failure: Cannot unsubscribe from the service
     unsubscribe_forbidden:
-      one: 'There is 1 unsuspended application subscribed to the service'
+      one: There is 1 unsuspended application subscribed to the service
       other: 'There are %{count} unsuspended applications subscribed to the service'
-    unsubscribe_confirmation: 'Successfully unsubscribed from the service'
-    unsubscribe_failure: 'Cannot unsubscribe from the service'
 
   forbidden_on_premises: 'You are not allowed to perform this action'
   account_messenger_expired_credit_card_notification_for_buyer: "Expired Credit Card"
@@ -390,60 +418,334 @@ en:
         <p>Ability to trigger webhooks when certain events happen.</p>
 
   provider:
+    activations:
+      create:
+        approval_required: You will receive a message once your account is approved
+        signup_complete: Signup complete. You can now sign in
+
+    invitee_signups:
+      create:
+        error: There are some errors:\n%{errors}
+        success: Thanks for signing up! You can now sign in
+      already_logged_in: You are already signed up. Log out if you want to sign up again
+
     passwords:
       destroy:
         success: |
           We sent an email with password reset instructions to: %{email}. If you do not
           receive it soon, check your spam folder or request a password reset again.
+
+      passwords_allowed?:
+        password_login_disabled: Password login has been disabled
+
       update:
-        success: The password has been changed.
+        success: The password has been changed
       new:
         has_password: 'User already has a password. Use it to change the password.'
+      show:
+        error: The password reset token is invalid
+
+    sessions:
+      create:
+        success: Signed in successfully
+      destroy:
+        logged_out: You have been logged out
 
     admin:
       account:
+        change_plans:
+          update:
+            success: The plan change has been requested
+
+        data_exports:
+          create:
+            success: Report will be mailed to %{email}
+
+        email_configurations:
+          create:
+            success: Email configuration created
+          destroy:
+            success: Email configuration deleted
+          update:
+            success: Email configuration updated
+
+        invitations:
+          create:
+            success: Invitation will be sent soon
+          destroy:
+            success: Invitation was successfully deleted
+          index:
+            delete_confirm: Are you sure you want to delete this invitation?
+            empty_state_title: No invitations
+            empty_state_body: To add new members to your team, send them an invitation to join.
+            empty_state_primary_title: Invite a new team member
+            send_invitation_title: Invite a new team member
+          resend:
+            success: Invitation will be resent soon
+
+        invoices:
+          index:
+            empty_state:
+              title: Nothing to see here
+              body: There are no invoices yet
+
+        logos:
+          update:
+            success: The logo was successfully uploaded
+          destroy:
+            success: The logo was successfully deleted
+
+        notifications:
+          update:
+            success: Settings were updated
+
+        payment_gateways:
+          braintree_blue:
+            destroy:
+              success: Your credit card was successfully removed
+            invalid_merchant: Invalid merchant id
+            hosted_success:
+              billing_address_error: Something went wrong and billing information could not be stored
+              credit_card_error: Credit Card details could not be stored
+              success: Credit card details were successfully stored
+
+          update:
+            success: Credit card details were successfully stored
+
         users:
+          index:
+            authorization_exists: yes
+            authorization_exists_not: not yet
+            delete_user_confirm: Are you sure you want to delete this user?
+            edit: Edit
+            invite_new_user: Invite a new user
+            page_header_title: Users
+            personal_details: Personal details
+            unlimited_access: Unlimited access
+          destroy:
+            success: User was successfully deleted
           form:
-            submit_button_label: 'Update User'
+            submit_button_label: Update User
+          update:
+            success: User was successfully updated
+
+        authentication_providers:
+          index:
+            header:
+              title: Single Sign-On Integrations
+              body:
+                Access the Admin Portal using your chosen authentication provider’s single sign-on
+                (SSO).
+          create:
+            error: SSO integration could not be created
+            success: SSO integration created
+          destroy:
+            success: SSO integration deleted
+          authorize_changes:
+            error: You cannot edit active SSO Providers when SSO is enforced
+          update:
+            error: SSO integration could not be updated
+            success: SSO integration updated
+
+        authentication_provider_flow_testing:
+          callback:
+            error: Authentication flow could not be tested
+            success: Authentication flow successfully tested
+
+        authentication_provider_publishing:
+          create:
+            error: SSO Integration could not be published
+            success: SSO Integration successfully published
+          destroy:
+            error: SSO Integration could not be unpublished
+            success: SSO Integration successfully unpublished
+
+        enforce_sso:
+          error_test: Password-based authentication could not be disabled. Authentication flow has to be checked.
+          error_by_sso: Password-based authentication could not be disabled. You need to be logged in by SSO.
+          error_exist: Password-based authentication could not be disabled. No published authentication providers.
+          create:
+            success: Password-based authentication disabled
+            error: Password-based authentication could not be disabled
+          destroy:
+            success: Password-based authentication enabled
+            error: Password-based authentication could not be enabled
+
       accounts:
+        check_provider_signup_possible:
+          not_possible: Please, create an Account Plan and a Service Plan first
         create:
-          success: Tenant account was successfully created.
+          success: Tenant account was successfully created
         update:
-          success: The account information was updated.
+          success: The account information was updated
         form:
-          submit_button_label: 'Update Account'
-          submit_button_next_step_label: 'Save and continue with payment details'
+          submit_button_label: Update Account
+          submit_button_next_step_label: Save and continue with payment details
+
+      applications:
+        accept:
+          success: The application has been accepted
+        change_plan:
+          success: Plan changed to '%{name}'
+        change_user_key:
+          success: The key was successfully changed
+        create:
+          success: Application was successfully created
+        destroy:
+          success: The application was successfully deleted
+          not_possible: Not possible to delete application
+        index:
+          empty_state:
+            title: No applications yet
+            body: There are no applications subscribed to any of your products.
+            primary: Add an application
+        reject:
+          success: The application has been rejected
+        resume:
+          success: The application is live again!
+        suspend:
+          success: The application has been suspended
+        update:
+          success: Application was successfully updated
+
+      backend_apis:
+        create:
+          error: Backend could not be created
+          success: Backend created
+        destroy:
+          success: Backend will be deleted shortly
+        edit:
+          delete_link: I understand the consequences, proceed to delete '%{name}' backend
+          delete_confirmation: Are you sure you want to delete the backend '%{name}'?
+        update:
+          error: Backend could not be updated
+          success: Backend updated
+
+        mapping_rules:
+          create:
+            success: Mapping rule was created
+          destroy:
+            error: The mapping rule cannot be deleted
+            success: The mapping rule was deleted
+          update:
+            success: Mapping rule was updated
+
+        metrics:
+          create:
+            error: The %{metric_type} could not be created
+            success: The %{metric_type} was created
+          destroy:
+            error: The %{metric_type} could not be deleted
+            success: The %{metric_type} was deleted
+          update:
+            error: The %{metric_type} could not be updated
+            success: The %{metric_type} was updated
+
+      bot_protections:
+        edit:
+          selector_label: Protection against bots on the admin portal
+          description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the admin portal.
+        update:
+          error: There were problems saving the settings
+          success: Bot protection settings updated
+
       keys:
         create:
-          success: A new key has been added.
+          success: A new key has been added
         destroy:
-          error: At least one application key is required.
-          success: The key has been removed.
+          error: At least one application key is required
+          success: The key has been removed
         update:
-          success: User key has been updated.
+          success: User key has been updated
 
       authentication_providers:
-        form:
-          automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
-          submit_button_label: 'Create Authentication provider'
+        create:
+          error: Authentication provider has not been updated
+          success: Authentication provider created
+        destroy:
+          success: Authentication provider deleted
+        edit:
+          automatically_approve_accounts_hint_html: "Even if the <a href=%{link}>account approval settings</a> say otherwise"
+          submit_button_label: Update
+        index:
+          header:
+            title: Single Sign-On Integrations
+        new:
+          submit_button_label: Create
+        publish_or_hide:
+          success: Authentication provider updated
+          error: Authentication provider has not been updated
+        update:
+          success: Authentication provider updated
+          error: Authentication provider has not been updated
+
       messages:
         bulk:
           trash:
             success: Messages moved into the trash
-        no_metrics: "You have no metrics"
-        no_methods: "You have no methods"
+        no_metrics: You have no metrics
+        no_methods: You have no methods
         inbox:
+          destroy:
+            success: Message was deleted
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your inbox is empty, there are no new messages."
+              title: Nothing to see here
+              body: Your inbox is empty, there are no new messages.
+          reply:
+            success: Reply was sent
         outbox:
+          create:
+            success: Message was sent
+          destroy:
+            success: Message was deleted
           index:
             empty_state:
-              title: "Nothing to see here"
-              body: "Your outbox is empty, there are no new sent messages."
+              title: Nothing to see here
+              body: Your outbox is empty, there are no new sent messages.
+              primary: Compose Message
+        trash:
+          index:
+            empty_state:
+              title: Nothing to see here
+              body: The trash is empty
+          destroy:
+            success: Message was restored
+          empty:
+            success: The trash was emptied
+
+      redhat:
+        auth:
+          show:
+            unknown: Unknown response from OAuth Authentication
+            success: The Red Hat Login was linked to the account
+
+      referrer_filters:
+        create:
+          success: Referrer filter has been created
+        destroy:
+          success: Referrer filter has been deleted
+
+      service_discovery:
+        services:
+          create:
+            error: Cannot create product
+            success: The product will be imported shortly. You will receive a notification when it is done
+          show:
+            error: We could not authenticate you against OpenShift cluster
+            success: You can now use the service discovery
+          update:
+            error: Cannot update product
+            success: Product information will be updated shortly
+
+      sudo:
+        create:
+          success: You are now in super-user mode! Retry the action, please.
+
       cms:
         builtin_legal_terms:
+          create:
+            success: Legal terms saved
           info:
             lt_usage_details_html: |
               <p>Use any combination of custom HTML, Javascript and CSS to craft your legal terms.
@@ -456,18 +758,105 @@ en:
               the <code>include</code> statement from the pages that use those snippets,
               these settings will no longer have any effect.
               </p>
+          update:
+            success: Legal terms saved
+        changes:
+          publish:
+            success: Template published
+          publish_all:
+            success: All pending changes published
+          revert:
+            success: Template reverted
+
+        email_templates:
+          create:
+            success: Email Template overridden
+          update:
+            success: Email Template updated
+
+        files:
+          create:
+            success: Created new file
+          destroy:
+            success: File %{path} deleted
+
+        groups:
+          create:
+            success: Group created
+          destroy:
+            success: Group deleted
+          update:
+            success: Group saved
+
+        redirects:
+          create:
+            success: Redirect created
+          destroy:
+            success: Redirect deleted
+          update:
+            success: Redirect updated
+
+        sections:
+          create:
+            success: Section created successfully
+          destroy:
+            error: Failed to delete the section
+            not_allowed: This section can't be deleted
+          update:
+            invalid: Invalid section
+            success: Section saved successfully
+
+        templates:
+          created: Template created
+          hidden: Template has been hidden
+          saved_and_published: Template saved and published
+          saved: Template saved
+
+        versions:
+          destroy:
+            success: Version was destroyed
+          revert:
+            error: Problem reverting version
+            success: Reverted to version from %{date}
+
       user:
+        access_tokens:
+          create:
+            success: Access token was successfully created
+          destroy:
+            success: Access token was successfully deleted
+          edit:
+            page_header_title: Edit Access Token
+            submit_button_label: Update Access Token
+          new:
+            page_header_title: New Access Token
+            submit_button_label: Create Access Token
+          update:
+            success: Access token was successfully updated
         notification_preferences:
           show:
-            no_notification_preferences_html: |
-              You don't have access to any notifications on the %{account_name} account.
-              Please contact <a href="mailto:%{email}">%{username}</a> to request access.
-          form:
-            submit_button_label: 'Update Notification Preferences'
+            header_title: Notification Preferences
+            header_body:
+              Events originate from interactions with the 3scale interface & the 3scale API. They
+              can be triggered by developers, you, your team & 3scale. You will only receive
+              API-related notifications for those APIs that you have access to.
+            empty_state:
+              title: Access denied
+              body_html:
+                You don't have access to any notifications on the %{account} account.
+                Please contact <a href="mailto:%{email}">%{username}</a> to request access.
+            submit_button_label: Update Notification Preferences
+          update:
+            success: Notification preferences successfully updated
         personal_details:
           edit:
-            form:
-              submit_button_label: 'Update Details'
+            header_title: Personal Details
+            submit_button_label: Update Details
+            set_password_html: You have no password set. If you'd like to set one use the <a href="%{href}">password reset form</a>.
+            new_password_label: New password
+          update:
+            success: User was successfully updated
+            wrong: Current password is incorrect
 
       dashboards:
         show:
@@ -479,85 +868,223 @@ en:
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
+        quick_starts_html: "You can use quick starts to learn about 3scale features step by step. <a href='%{link}'>Take tour</a>"
+
       webhooks:
+        create:
+          success: Webhooks settings were successfully updated
         edit:
+          header:
+            title: Webhooks
+            body:
+              Webhooks let you define a URL to be called with a notification when events in the
+              3scale management system happen.
           form:
-            submit_button_label: 'Update webhooks settings'
+            submit_button_label: Update webhooks settings
+        show:
+          error: Nowhere to ping
+          failed: 'Ping failed: %{response}'
+          success: '%{url} responded with %{status}'
+        update:
+          error: Webhooks settings could not be updated
+          success: Webhooks settings were successfully updated
 
   buyers:
+    account_contracts:
+      update:
+        success: Plan changed to '%{name}'
+    account_plans:
+      destroy:
+        success: The plan was deleted
     accounts:
+      create:
+        success: Developer account was successfully created
+      destroy:
+        destroyed: The account was successfully deleted scheduled for deletion
+        scheduled_for_deletion: The account was successfully scheduled for deletion
       index:
         empty_state:
           title: Nobody here
           body: There are no accounts yet
           primary: Add your first account
         empty_search:
+          title: No accounts found
           body: No accounts match the filter criteria. Clear all filters and try again.
       edit: &account_delete_msg
         schedule_for_deletion_confirmation: "Scheduling a tenant account for deletion means it will be permanently deleted in %{deletion_time_left}. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. Are you sure you want to schedule the account '%{name}' for deletion on %{deletion_date}?"
-        delete_confirmation: "Are you sure you want to delete '%{name}'?"
+        delete_confirmation: Are you sure you want to delete '%{name}'?
         delete:
           admin_restricted: 'Only administrators can delete accounts. Contact your administrator %{admin}'
       search_results: *account_delete_msg
-      change_state:
-        notice: "%{account_type} account was %{state_event_past}."
-        error: "Cannot %{state_event} %{account_type} account."
-      state_event_past:
-        approve: 'approved'
-        reject: 'rejected'
-        suspend: 'suspended'
-        resume: 'resumed'
+      set_plans_error: Please, create an Account Plan first
+      approve:
+        danger: Cannot approve %{account_type} account
+        success: '%{account_type} account was approved'
+      resume:
+        danger: Cannot resume %{account_type} account
+        success: '%{account_type} account was resumed'
+      reject:
+        danger: Cannot reject %{account_type} account
+        success: '%{account_type} account was rejected'
+      suspend:
+        danger: Cannot suspend %{account_type} account
+        success: '%{account_type} account was suspended'
       bulk:
         send_emails:
           success:
-            one: The email was sent successfully.
-            other: Successfully sent %{count} emails.
+            one: The email was sent successfully
+            other: Successfully sent %{count} emails
         change_states:
           success:
-            one: The account's state was changed successfully.
-            other: Successfully changed the state of %{count} accounts.
+            one: The account state was changed successfully
+            other: Successfully changed the state of %{count} accounts
         change_plans:
           success:
-            one: The account's plan was changed successfully.
-            other: Successfully changed the plan of %{count} accounts.
+            one: The account plan was changed successfully
+            other: Successfully changed the plan of %{count} accounts
       update:
         success: Account successfully updated
 
     applications:
+      create:
+        success: Application was successfully created
+      index:
+        empty_state:
+          title: No applications yet
+          body: This account doesn't have applications subscribed to any product.
+          primary: Add an application
       bulk:
         send_emails:
           success:
-            one: The email was sent successfully.
-            other: Successfully sent %{count} emails.
+            one: The email was sent successfully
+            other: Successfully sent %{count} emails
         change_states:
           success:
-            one: The application's state was changed successfully.
-            other: Successfully changed the state of %{count} applications.
+            one: The application's state was changed successfully
+            other: Successfully changed the state of %{count} applications
         change_plans:
           success:
-            one: The application's plan was changed successfully.
-            other: Successfully changed the plan of %{count} applications.
+            one: The application's plan was changed successfully
+            other: Successfully changed the plan of %{count} applications
+
+    custom_plans:
+      create:
+        success: Plan customized
+      destroy:
+        success: The plan was set back to %{name}
+
+    custom_application_plans:
+      create:
+        success: Plan customized
+      destroy:
+        success: The plan was set back to %{name}
+
+    groups:
+      show:
+        page_title: Groups of %{org_name}
+      update:
+        success: Account updated
+
+    invitations:
+      create:
+        success: Invitation was successfully created and will be sent soon
+      destroy:
+        success: Invitation was successfully deleted
+      resend:
+        success: Invitation will be resent soon
+
+    invoices:
+      create:
+        success: Invoice successfully created
+        open_invoice:
+          Account '%{name}' already has an open invoice. Please issue it before creating a
+          new one.
+      edit:
+        error: Invoice is no longer editable
+      update:
+        success: Invoice was successfully updated
 
     service_contracts:
+      approve:
+        success: Service contract was approved
+        error: Cannot approve service contract
       bulk:
         send_emails:
           success:
-            one: The email was sent successfully.
-            other: Successfully sent %{count} emails.
+            one: The email was sent successfully
+            other: Successfully sent %{count} emails
         change_states:
           success:
-            one: The subscription's state was changed successfully.
-            other: Successfully changed the state of %{count} subscriptions.
+            one: The subscription's state was changed successfully
+            other: Successfully changed the state of %{count} subscriptions
         change_plans:
           success:
-            one: The subscription's plan was changed successfully.
-            other: Successfully changed the plan of %{count} subscriptions.
+            one: The subscription's plan was changed successfully
+            other: Successfully changed the plan of %{count} subscriptions
+      create:
+        success: Service contract created successfully
+        error: Could not create subscription
+      destroy:
+        success: Successfully unsubscribed from the service
+        error: Cannot unsubscribe from the service
+      update:
+        success: Plan of the contract was changed
+        error: Could not change the plan of the contract
+
+    users:
+      activate:
+        success: User was activated
+        error: 'Failed to activate user: %{error_message}'
+      destroy:
+        success: User was successfully deleted
+        error: User could not be deleted
+      suspend:
+        success: User was suspended
+      unsuspend:
+        success: User was unsuspended
+      update:
+        success: User was successfully updated
 
   sites:
+    applications:
+      update:
+        error: There were problems saving the settings
+        success: The applications settings were updated
+    developer_portals:
+      update:
+        error: There were problems saving the settings
+        success: Developer Portal settings updated
+    documentations:
+      update:
+        error: There were problems saving the settings
+        success: Documentations settings updated
+    emails:
+      edit:
+        outbound_emails_html: |
+          If you are on a 3scale Plus plan or higher, you may define a
+          custom outbound email address to send messages to your
+          developer community. Please follow the
+          <a href="%{docs_email_configuration_url}" target="_blank">
+          How-To guide</a> instructions to configure your DNS settings, etc.
+      update:
+        warning: There were errors saving some of your emails. Please review the marked fields
+        success: Your support emails have been updated
+    forums:
+      update:
+        error: There were problems saving the settings
+        success: Forum settings updated
+    settings:
+      update:
+        success: Settings updated
     spam_protections:
       edit:
-        captcha_hint_false: 'reCAPTCHA has not been configured correctly, bot protection cannot be enabled.'
-        captcha_hint_true: "reCAPTCHA v3 will invisibly verify interactions to detect bots."
+        selector_label: Protection against bots on the developer portal
+        description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the developer portal.
+        captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
+        captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
+      update:
+        error: There were problems saving the settings
+        success: Bot protection settings updated
     usage_rules:
       edit:
         plans_label: 'Developers are allowed to:'
@@ -569,21 +1096,18 @@ en:
         sso_integrations_info_html: |
           This setting can be overridden for <a href='%{link}'>each individual SSO integration</a>
           so sign ups through trusted SSO integrations will always be approved.
-    emails:
-      edit:
-        outbound_emails_html: |
-          If you are on a 3scale Plus plan or higher, you may define a
-          custom outbound email address to send messages to your
-          developer community. Please follow the
-          <a href="%{docs_email_configuration_url}" target="_blank">
-          How-To guide</a> instructions to configure your DNS settings, etc.
-
+      update:
+        success: Settings updated
     dns:
+      open_portal:
+        success: Developer portal opened
       show:
         editable_domain_hints_html: |
           You can change the domain of your Developer Portal to your own domain,
           for instance https://developer.example.com.
           To do so, <a href="https://docs.openshift.com/enterprise/latest/dev_guide/routes.html" target="_blank">add a route on OpenShift</a> and then indicate the new domain here.
+      update:
+        success: The account information was updated
 
   invoices:
     creation_type:
@@ -599,13 +1123,47 @@ en:
   finance:
     provider:
       invoices:
+        cancel:
+          error: Failed to cancel the invoice
+          success: Invoice cancelled
+        charge:
+          error: Failed to charge the credit card
+          success: Payment successfully completed!
+        generate_pdf:
+          error: Failed to generate the PDF
+          success: PDF generated
+        issue:
+          error: Failed to issue the invoice
+          success: Invoice issued
+        pay:
+          error: Failed to mark invoice as paid
+          success: Invoice marked as paid
+        actions:
+          confirm: Are you sure?
+        create:
+          success: Invoice successfully created
+          open_invoice:
+            You cannot create a new invoice for '%{account.name}' since it already has one open.
+            Please issue it before creating a new one.
+        edit:
+          non_editable: Invoice is no longer editable
         index:
+          page_header_title: Invoices
           empty_state:
             title: Nothing to see here
             body: There are no invoices yet
           empty_search:
             title: No invoices found
-            primary: Clear all filters
+            body: There are no invoices matching the search criteria.
+        show:
+          not_found: Invoice not found
+        update:
+          success: Invoice was successfully updated
+      line_items:
+        create:
+          success: Line item added
+        destroy:
+          success: Line item deleted
       settings:
         show:
           switch_button: Switch to %{mode}
@@ -640,6 +1198,11 @@ en:
             card details again to be able to bill them.\n\nDo you want to remove all credit card
             details from your customers?
 
+        update:
+          invalid: Invalid finance settings
+          success: Finance settings updated
+          success_extra: Finance settings updated. Already existent invoices won't change their id
+
   api:
     alerts:
       index:
@@ -649,7 +1212,6 @@ en:
         empty_search:
           title: No results
           body: There are no recent alerts matching that search criteria.
-          primary: Clear all filters
         read_all_button:
           label: Mark all as read
           confirm: Do you really want to mark all alerts as read?
@@ -661,35 +1223,97 @@ en:
           service: Alerts
           all: Alerts for all services
         delete_alert_confirmation: Do you really want to delete this alert?
+    application_plans:
+      destroy:
+        success: The plan was deleted
     applications:
+      index:
+        description: |
+          Applications represent pieces of software consuming the API. They contain a set of credentials used to access the API,
+          along with usage metrics and other metadata. The application plan sets the limits for each application.
+        empty_state:
+          title: No applications yet
+          body: There are no applications subscribed to %{name}.
+          primary: Add an application
+      create:
+        success: Application was successfully created
       edit:
         delete_confirmation: Are you sure you want to delete this application?
-    backend_apis:
-      edit:
-        delete_confirmation: "Are you sure you want to delete the backend '%{name}'?"
     backend_usages:
       index:
         empty_state:
           title: There are no backends yet
           body: The current product %{name} does not have any backends.
-          primary_action: Add a backend
+          primary: Add a backend
         toolbar:
           primary: Add a backend
         action_edit: Edit config with %{name}
         action_delete: Delete config with %{name}
       create:
-        success: Backend added to Product.
+        success: Backend added to Product
         error: Couldn't add Backend to Product
       update:
-        success: Backend usage was updated.
+        success: Backend usage was updated
       destroy:
         success: The Backend was removed from the Product
         error: The Backend cannot be removed from the Product
+    contents:
+      update:
+        success: Content updated
+    errors:
+      index:
+        title: Integration Errors for %{service}
+        body_html:
+          Here you can see errors related to your API's integration with 3scale, in particular in
+          calls made to methods of 3scale's Service Management API.
+          Please refer to the <a href=%{href} target="_blank">API ActiveDocs</a> documentation
+          section on using 3scale's Service Management API.
+        empty_state:
+          title: Hooray!
+          body: No integration errors reported for this service.
+        toolbar:
+          purge:
+            title: Purge
+            confirm: All errors will be permanently deleted.
+      purge:
+        success: All errors were purged
+    features:
+      create:
+        success: Feature has been created
+      destroy:
+        success: Feature has been deleted
+        error: Feature could not be deleted
+      update:
+        success: Feature has been updated
+    featurings:
+      create:
+        success: Feature has been enabled
+      destroy:
+        success: Feature has been disabled
+    service_plans:
+      destroy:
+        success: The plan was deleted
     services:
+      create:
+        success: Product created
+        error: Couldn't create Product. Check your Plan limits
+      destroy:
+        success: Product '%{name}' will be deleted shortly. You will receive a notification when it is done
       forms:
         definition_settings:
-          delete_confirmation: "Are you sure you want to delete the service '%{name}'?"
-          refresh_confirmation: "This action will overwrite the API's Private URL and automatically created ActiveDocs. Are you sure you want to proceed?"
+          delete_confirmation: Are you sure you want to delete the service '%{name}'?
+          refresh_confirmation:
+            This action will overwrite the API's Private URL and automatically created ActiveDocs.
+            Are you sure you want to proceed?
+      update:
+        success: Product information updated
+        error: Couldn't update Product
+    supports:
+      update:
+        success: Support information was updated
+    terms:
+      update:
+        success: Terms & Conditions updated
     integrations:
       edit:
         proxy_or_plugin: |
@@ -700,15 +1324,11 @@ en:
           the OAuth authentication mode. You can change the authentication mode
           in the %{link_to_settings_tab}.
       proxy:
-        enabled_html: "Deployed at %{at}. <a href='%{list}'>See the history.</a>"
-        disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
+        enabled_html: Deployed at %{at}. <a href='%{list}'>See the history.</a>
+        disabled_html: Not deployed. <a href='%{list}'>See the history.</a>
 
-        # start documentation links
-        documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
-        documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
-        documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/setting-up-and-evaluating-the-threescale-response-codes-log-for-your-api_analytics-for-threescale-apis'
-        # end documentation links
+
         proxy_rule_catch_all_warning: |
           "Catch all" Mapping Rules often lead to double counts when more specific rules are added.
         curl:
@@ -717,6 +1337,11 @@ en:
           no_application:
             In order to send a valid test request, please create an application that subscribes to an application plan of this service.
     metrics:
+      create:
+        success: The %{type} was created
+        error: The %{type} could not be created
+      destroy:
+        success: The %{type} was deleted
       edit:
         page_header_title: Edit %{type}
         delete_confirmation: "Removing this %{type} will affect all plans that contain this %{type}, all associated mapping rules will be deleted too. Are you sure?"
@@ -731,10 +1356,76 @@ en:
       new:
         page_header_title: New %{type}
         submit: Create %{type}
+      update:
+        success: The %{type} was updated
+    metric_visibilities:
+      toggle_enabled:
+        disabled: "%{type} '%{name}' has been disabled"
+        enabled: "%{type} '%{name}' has been enabled"
+      toggle_limits_only_text:
+        only_text: "%{type} '%{name}' has been set to show only text"
+        text_icons: "%{type} '%{name}' has been set to show text and icons"
+      toggle_visible:
+        visible: "%{type} '%{name}' is now visible"
+        invisible: "%{type} '%{name}' is now invisible"
+    plan_copies:
+      create:
+        error: Plan could not be copied
+        success: Plan copied
+    plans:
+      create:
+        success: Created %{type} %{name}
+      hide:
+        error: Plan %{name} cannot be hidden
+        success: Plan %{name} was hidden
+      masterize:
+        success: The default plan has been changed
+      publish:
+        error: Plan %{name} cannot be published
+        success: Plan %{name} was published
+    policies:
+      edit:
+        empty_state:
+          title: A valid APIcast Policies endpoint must be provided
+      update:
+        success: The policies are saved successfully
+        error: The policies cannot be saved
+    pricing_rules:
+      create:
+        success: Pricing rule was successfully created
+      destroy:
+        success: Pricing rule was successfully deleted
+        error: Pricing rule could not be deleted
+      update:
+        success: Pricing rule was successfully updated
+    proxy_rules:
+      create:
+        success: Mapping rule was created
+      destroy:
+        success: The mapping rule was deleted
+        error: The mapping rule cannot be deleted
+      index:
+        empty_state:
+          title: No mapping rules
+          body: There are no mapping rules defined for %{name} yet
+          primary: Create a mapping rule
+      update:
+        success: Mapping rule was updated
+    usage_limits:
+      create:
+        success: Usage limit was successfully created
+      destroy:
+        success: Usage limit was successfully deleted
+        error: Usage limit could not be deleted
+      update:
+        success: Usage limit was successfully updated
 
   deployment_options:
-    missing: |
-      Please take a moment to update your integration settings and tell us which deployment option you are using. If you're using multiple integration options, pick the one that's most important to your business. This setting has no functional consequences, it adjusts the user interface to better suit your use case.
+    missing:
+      Please take a moment to update your integration settings and tell us which deployment option
+      you are using. If you're using multiple integration options, pick the one that's most
+      important to your business. This setting has no functional consequences, it adjusts the user
+      interface to better suit your use case.
     phrased:
       self_managed: Self-managed Gateway
       hosted: APIcast
@@ -818,7 +1509,9 @@ en:
     rest: REST
 
   oidc:
-    authorization_flow_warning: "Any changes to the authorization flow of this product will only be applied to new applications; existing applications will continue to use the original flow."
+    authorization_flow_warning:
+      Any changes to the authorization flow of this product will only be applied to new
+      applications; existing applications will continue to use the original flow.
 
   time:
     formats:
@@ -851,92 +1544,69 @@ en:
         description: Shows you number of latest forum posts.
 
     email_template:
-      account_approved: 'Buyer Account approved'
-      account_confirmed: 'Buyer Account confirmed'
-      account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
-      account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
-      account_messenger_invoices_to_review: "Review invoices prior to charging provider"
-      account_messenger_new_signup: 'Sign up notification for provider'
-      account_messenger_plan_change_request: 'Plan change request for provider'
-      account_rejected: 'Buyer account rejected'
-      alert_messenger_limit_alert_for_buyer: 'Alert notification for buyer (< 100%)'
-      alert_messenger_limit_alert_for_provider: 'Alert notification for provider (< 100%)'
-      alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer (>= 100%)'
-      alert_messenger_limit_violation_for_provider: 'Alert notification for provider (>= 100%)'
-      cinstance_messenger_accept: 'Application accepted for buyer'
-      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
-      cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
-      cinstance_messenger_key_created: 'Application key created for buyer'
-      cinstance_messenger_key_deleted: 'Application key deleted for buyer'
-      cinstance_messenger_new_application: 'Application created for provider'
-      cinstance_messenger_plan_change: 'Application plan changed for provider'
-      cinstance_messenger_plan_change_for_buyer: 'Application plan changed for buyer'
-      cinstance_messenger_reject: 'Application rejected for buyer'
-      cinstance_messenger_suspended: 'Application suspended for buyer'
-      invitation_mailer_invite: 'Invitation to join Account'
-      invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
-      invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
-      invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
-      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
-      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
-      invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
-      lost_password_email: 'Password recovery for buyer'
+      account_approved: Buyer Account approved
+      account_confirmed: Buyer Account confirmed
+      account_messenger_expired_credit_card_notification_for_buyer: Credit card expired notification for buyer
+      account_rejected: Buyer account rejected
+      alert_messenger_limit_alert_for_buyer: Alert notification for buyer (< 100%)
+      alert_messenger_limit_alert_for_provider: Alert notification for provider (< 100%)
+      alert_messenger_limit_violation_for_buyer: Alert notification for buyer (>= 100%)
+      alert_messenger_limit_violation_for_provider: Alert notification for provider (>= 100%)
+      cinstance_messenger_accept: Application accepted for buyer
+      cinstance_messenger_expired_trial_period_notification: Application trial period expired for buyer
+      cinstance_messenger_key_created: Application key created for buyer
+      cinstance_messenger_key_deleted: Application key deleted for buyer
+      cinstance_messenger_plan_change_for_buyer: Application plan changed for buyer
+      cinstance_messenger_reject: Application rejected for buyer
+      cinstance_messenger_suspended: Application suspended for buyer
+      invitation_mailer_invite: Invitation to join Account
+      invoice_messenger_successfully_charged: Invoice charged successfully for buyer
+      invoice_messenger_unsuccessfully_charged_for_buyer: Invoice charge failure for buyer with retry
+      invoice_messenger_unsuccessfully_charged_for_buyer_final: Invoice charge failure for buyer without retry
+      invoice_messenger_upcoming_charge_notification: Upcoming invoice charge for buyer
+      lost_password_email: Password recovery for buyer
       plans_messenger_plan_change_request_made: "Plan change request for buyer"
-      service_contract_messenger_accept: 'Service accepted for buyer'
-      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
-      service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
-      service_contract_messenger_new_contract: 'Service created for provider'
-      service_contract_messenger_plan_change: 'Service plan changed for provider'
-      service_contract_messenger_reject: 'Service rejected for buyer'
-      service_contract_messenger_suspended: 'Service contract suspended for buyer'
-      signup_notification_email: 'Sign up notification for buyer'
+      service_contract_messenger_accept: Service accepted for buyer
+      service_contract_messenger_expired_trial_period_notification: Service trial period expired for buyer
+      service_contract_messenger_reject: Service rejected for buyer
+      service_contract_messenger_suspended: Service contract suspended for buyer
+      signup_notification_email: Sign up notification for buyer
 
     email_template_description:
-      account_approved: 'After provider approves sign up, notification for buyer'
-      account_confirmed: 'Buyer Account confirmed'
-      account_messenger_expired_credit_card_notification_for_buyer: 'Credit card expired notification for buyer'
-      account_messenger_expired_credit_card_notification_for_provider: 'Credit card expired notification for provider'
-      account_messenger_invoices_to_review: "After end of monthly billing cycle, and once preliminary invoices have been calculated, notification for provider to review"
-      account_messenger_new_signup: 'New sign up notification for provider'
-      account_messenger_plan_change_request: 'Plan change request for provider'
-      account_rejected: 'Buyer account rejected'
-      alert_messenger_limit_alert_for_buyer: 'Alert notification for buyer when near 100% threshold'
-      alert_messenger_limit_alert_for_provider: 'Alert notification for provider when near 100% threshold'
-      alert_messenger_limit_violation_for_buyer: 'Alert notification for buyer when over 100% threshold'
-      alert_messenger_limit_violation_for_provider: 'Alert notification for provider when over 100% threshold'
-      cinstance_messenger_accept: 'After provider approves application, notification for buyer'
-      cinstance_messenger_contract_cancellation: 'Application deleted for provider'
-      cinstance_messenger_expired_trial_period_notification: 'Application trial period expired for buyer'
-      cinstance_messenger_key_created: 'Application key created for buyer'
-      cinstance_messenger_key_deleted: 'Application key deleted for buyer'
-      cinstance_messenger_new_application: 'After buyer creates a new application, notification for provider'
-      cinstance_messenger_plan_change: 'After buyer requests/changes application plan, notification for provider'
-      cinstance_messenger_plan_change_for_buyer: 'After provider changes application plan, notification for buyer'
-      cinstance_messenger_reject: 'After provider rejects application, notification for buyer'
-      cinstance_messenger_suspended: 'When provider suspends application, notification for buyer'
-      invitation_mailer_invite: 'Invitation to join Account'
-      invoice_messenger_successfully_charged: 'Invoice charged successfully for buyer'
-      invoice_messenger_unsuccessfully_charged_for_buyer: 'Invoice charge failure for buyer with retry'
-      invoice_messenger_unsuccessfully_charged_for_buyer_final: 'Invoice charge failure for buyer without retry'
-      invoice_messenger_unsuccessfully_charged_for_provider: 'Invoice charge failure for provider with retry'
-      invoice_messenger_unsuccessfully_charged_for_provider_final: 'Invoice charge failure for provider without retry'
-      invoice_messenger_upcoming_charge_notification: 'Upcoming invoice charge for buyer'
-      lost_password_email: 'When buyer requests password recovery, message containing password reset link'
+      account_approved: After provider approves sign up, notification for buyer
+      account_confirmed: Buyer Account confirmed
+      account_messenger_expired_credit_card_notification_for_buyer: Credit card expired notification for buyer
+      account_rejected: Buyer account rejected
+      alert_messenger_limit_alert_for_buyer: Alert notification for buyer when near 100% threshold
+      alert_messenger_limit_alert_for_provider: Alert notification for provider when near 100% threshold
+      alert_messenger_limit_violation_for_buyer: Alert notification for buyer when over 100% threshold
+      alert_messenger_limit_violation_for_provider: Alert notification for provider when over 100% threshold
+      cinstance_messenger_accept: After provider approves application, notification for buyer
+      cinstance_messenger_expired_trial_period_notification: Application trial period expired for buyer
+      cinstance_messenger_key_created: Application key created for buyer
+      cinstance_messenger_key_deleted: Application key deleted for buyer
+      cinstance_messenger_plan_change_for_buyer: After provider changes application plan, notification for buyer
+      cinstance_messenger_reject: After provider rejects application, notification for buyer
+      cinstance_messenger_suspended: When provider suspends application, notification for buyer
+      invitation_mailer_invite: Invitation to join Account
+      invoice_messenger_successfully_charged: Invoice charged successfully for buyer
+      invoice_messenger_unsuccessfully_charged_for_buyer: Invoice charge failure for buyer with retry
+      invoice_messenger_unsuccessfully_charged_for_buyer_final: Invoice charge failure for buyer without retry
+      invoice_messenger_upcoming_charge_notification: Upcoming invoice charge for buyer
+      lost_password_email: When buyer requests password recovery, message containing password reset link
       plans_messenger_plan_change_request_made: "After buyer requests application plan change, notification for buyer"
-      service_contract_messenger_accept: 'After provider approves service, notification for buyer'
-      service_contract_messenger_contract_cancellation: 'Service contract cancelled for provider'
-      service_contract_messenger_expired_trial_period_notification: 'Service trial period expired for buyer'
-      service_contract_messenger_new_contract: 'After buyer creates a new service, notification for provider'
-      service_contract_messenger_plan_change: 'After buyer requests/changes service plan, notification for provider'
-      service_contract_messenger_reject: 'After provider rejects service, notification for buyer'
-      service_contract_messenger_suspended: 'After provider suspends service contract, notification for buyer'
-      signup_notification_email: 'After buyer sign up, message containing activation link for account'
+      service_contract_messenger_accept: After provider approves service, notification for buyer
+      service_contract_messenger_expired_trial_period_notification: Service trial period expired for buyer
+      service_contract_messenger_reject: After provider rejects service, notification for buyer
+      service_contract_messenger_suspended: After provider suspends service contract, notification for buyer
+      signup_notification_email: After buyer sign up, message containing activation link for account
 
   errors:
     messages:
       host_label_too_long: is too long for one or more labels of the host (maximum is %{count} characters)
       duplicated_user_provider_side: "Duplicate user registration. Delete one of the duplicates in order to continue."
       duplicated_user_buyer_side: "For activating your account please contact support."
+      inactive_account: "Your account isn't active or hasn't been approved yet."
       activation_complete: "Signup complete. You can now sign in."
       activation_approval_required: "You will receive a message once your account is approved."
       invitation_not_found: "Invitation token did not exist."
@@ -993,17 +1663,24 @@ en:
         invalid_event: 'cannot transition when %{state}'
         invalid_transition: 'cannot transition via "%{event}"'
         not_path_format: 'must be a path separated by "/". E.g. "" or "my/path"'
+      template:
+        header:
+          one: "1 error prohibited this %{model} from being saved"
+          other: "%{count} errors prohibited this %{model} from being saved"
+        body: "There were problems with the following fields:"
       models:
-        authentication/by_access_token/access_token:
+        access_token:
+          attributes:
+            scopes:
+              too_short: select at least one scope
+        authentication/by_access_token:
           attributes:
             scopes:
               too_short: "Select at least %{count} scope"
         authentication_provider:
           attributes:
             site:
-              invalid: "Please, remove any white space."
-            realm:
-              invalid: "Please, remove any white space."
+              contains_whitespace: "can't contain whitespaces"
             kind:
               not_found: "unavailable for this account type"
 
@@ -1175,6 +1852,9 @@ en:
               unsuspended_applications:
                 one: 'There is 1 unsuspended application subscribed to the service'
                 other: 'There are %{count} unsuspended applications subscribed to the service'
+            plan:
+              service_conflict: 'must belong to the same product'
+
         invoice:
           attributes:
             state:
@@ -1322,28 +2002,6 @@ en:
       billing_mode:
         none: disabled
 
-  flash:
-    actions:
-      destroy:
-        notice: "%{resource_name} was successfully deleted"
-
-    signups:
-      create:
-        notice: "Thanks for signing up! You can now sign in."
-        error: "There are some errors:\n%{errors}"
-      already_logged_in: 'You are already signed up. Log out if you want to sign up again.'
-
-    services:
-      create:
-        notice: "Product created."
-        errors:
-          default: "Couldn't create Product. Check your Plan limits"
-      update:
-        notice: "Product information updated."
-        error: "Couldn't update Product."
-      destroy:
-        notice: "Product '%{resource_name}' will be deleted shortly. You will receive a notification when it is done"
-
   proxy:
     credentials_location:
       headers: "As HTTP Headers"
@@ -1354,6 +2012,15 @@ en:
       rest: 'REST API'
   formtastic:
     hints:
+      authentication_provider/keycloak:
+        site: e.g. https://rh-sso.example.com/auth/realms/demo
+      authentication_provider/auth0:
+        site: e.g. https://XXXXX.auth0.com
+      backend_api:
+        system_name: Only ASCII letters, numbers, dashes and underscores are allowed.
+        private_endpoint_html:
+          Private address of your API that will be called by the API gateway.
+          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
       backend_api_config:
         path: Changing the Public Path will only affect this Product.
 
@@ -1380,7 +2047,7 @@ en:
       liquid_enabled: "Process Liquid tags and drops?"
 
       api_docs/service:
-        body: 'Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/1.2.md#52-api-declaration">1.2</a>, <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a>'
+        body: 'Specification must comply with Swagger <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">2.0</a>, or OpenAPI specification <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">3.0</a> or <a href="https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.1.md">3.1</a>.'
         system_name: "Only ASCII letters, numbers, dashes and underscores are allowed.<br/><span style='font-size:90%;color:red'>Warning: With ActiveDocs 1.2 the API will be described in your developer portal as <i>System name: Description</i></span>"
 
       settings:
@@ -1389,7 +2056,6 @@ en:
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
-        signups_enabled: ''
         strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
           Allow anyone to search on your Developer Portal.
@@ -1417,12 +2083,14 @@ en:
         hidden: "Developers won't be able to see this field."
 
       web_hook:
+        active: On/off switch for triggering webhooks
+        provider_actions: If unchecked, only actions in the developer portal trigger webhooks.
         url: URL that will be notified about all the events selected below.
 
       cinstance:
         intentions: "Please describe briefly your intentions of use of this service"
-        user_key: "Allowed characters: [A-Z a-z 0-9 - _ .], or Base64 format without forward slash (/), no spaces and up to 256 characters."
-        key: "Allowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
+        user_key: "Allowed characters: A-Z a-z 0-9 - _ . or Base64 format without forward slash (/), no spaces and up to 256 characters."
+        key: "Allowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters."
 
       cms:
         page:
@@ -1438,9 +2106,6 @@ en:
           <span>Make sure to <a href="https://docs.openshift.com/container-platform/3.11/dev_guide/routes.html#creating-routes">add the correct route</a></span>
         endpoint_apicast_2_html: >
           Public address of your API gateway in the %{environment_name} environment.
-        api_backend_https: |
-          Private address of your API that will be called by the API gateway.
-          <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
         api_backend_http: |
           Private address of your API that will be called by the API gateway.
         oauth_login_url: |
@@ -1491,6 +2156,9 @@ en:
         vat_zero_text: Text to show if VAT/Sales Tax is 0%
         payment_gateway_type: Gateway
 
+      backend_api:
+        private_endpoint: Private Base URL
+
       finance/billing_strategy:
         numbering_period: Billing periods for invoice IDs
 
@@ -1510,13 +2178,10 @@ en:
         client_secret: Client Secret
         automatically_approve_accounts: 'Always approve accounts that sign up through this SSO Integration'
         published_admin_portal: Display this SSO Integration on the sign-in page of the admin portal.
-      authentication_provider/github:
-        <<: *authentication_provider
-      authentication_provider/auth0:
-        <<: *authentication_provider
+        skip_ssl_certificate_verification: Skip SSL certificate verification
       authentication_provider/keycloak:
         <<: *authentication_provider
-        skip_ssl_certificate_verification: Do not verify SSL certificate
+        site: Realm
 
       settings:
         account_approval_required: Account approval required
@@ -1548,12 +2213,46 @@ en:
         headers: 'Content-type'
         message: 'Response Body'
 
+      web_hook:
+        active: Webhooks enabled
+        provider_actions: Actions in the admin portal also trigger webhooks
+        account_created_on: Account created
+        account_updated_on: Account updated
+        account_plan_changed_on: Account Plan changed
+        account_deleted_on: Account deleted
+        user_created_on: User created
+        user_updated_on: User updated
+        user_deleted_on: User deleted
+        application_created_on: Application created
+        application_updated_on: Application updated
+        application_suspended_on: Application suspended
+        application_plan_changed_on: Application Plan changed
+        application_user_key_updated_on: API Key changed
+        application_deleted_on: Application deleted
+        application_key_created_on: Application Key created
+        application_key_deleted_on: Application Key deleted
+        application_key_updated_on: Application Key updated
+
   action_controller:
     errors:
       unknown_format: 'The server does not understand "%{request_format}" request.'
 
   shared:
-    empty_search:
+    annotations:
+      managed_title: Managed by %{value}
+      managed_description: This resource is managed externally and any modifications may be overwritten.
+    empty_search_state:
       title: No results
       body: There are no items matching your search criteria.
       primary: Clear all filters
+    empty_state:
+      title: This page is empty
+    service_access:
+      title: Access permissions needed
+      body_html:
+        You don't have access to any API on the %{org_name} account. Please %{mail_to_admin}
+        to request access.
+    check_browser_error:
+      The browser you are using doesn't seem to support the X-Frame-Options header. That means we
+      can't protect you against Cross Frame Scripting and thus not guarantee the security of your
+      session. Please upgrade your browser and sign in again.

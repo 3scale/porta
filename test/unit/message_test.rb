@@ -20,7 +20,7 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal 2, provider.messages.reload.not_system_for_provider.count
   end
 
-  test 'send notifications' do
+  test 'sends email notifications to providers using the new system' do
     provider = FactoryBot.create(:simple_provider)
     buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
 
@@ -28,12 +28,13 @@ class MessageTest < ActiveSupport::TestCase
     Messages::MessageReceivedEvent.expects(:create).with(message, instance_of(MessageRecipient)).once
     message.deliver!
 
+    # The new notification system doesn't handle email notifications to buyers
     message = Message.create!(sender: provider, to: [buyer], subject: '1', body: '2')
     Messages::MessageReceivedEvent.expects(:create).with(message, instance_of(MessageRecipient)).never
     message.deliver!
   end
 
-  test 'notifies recipients with email' do
+  test 'sends email notifications to buyers using the old system' do
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
     sender = FactoryBot.create(:simple_provider)
@@ -59,6 +60,31 @@ class MessageTest < ActiveSupport::TestCase
 
       assert_not_nil email
     end
+  end
+
+  test "doesn't send email notifications to suspended buyers" do
+    Logic::RollingUpdates.expects(skipped?: true).at_least_once
+
+    sender = FactoryBot.create(:simple_provider)
+    approved_buyer = FactoryBot.create(:simple_buyer, provider_account: sender)
+    suspended_buyer = FactoryBot.create(:simple_buyer, provider_account: sender, state: 'suspended')
+    recipients = [approved_buyer, suspended_buyer]
+
+    recipients.each do |account|
+      FactoryBot.create(:simple_admin, account: account)
+    end
+
+    ActionMailer::Base.deliveries.clear
+
+    message = Message.create!(sender: sender, to: recipients,
+                              subject: 'hello', body: "what's up?")
+    perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) { message.deliver! }
+
+    assert delivery = ActionMailer::Base.deliveries.first
+    assert_equal delivery['from'].value, Rails.configuration.three_scale.noreply_email
+
+    assert_not_nil ActionMailer::Base.deliveries.find { _1.bcc.include?(approved_buyer.admins.first.email) }
+    assert_nil ActionMailer::Base.deliveries.find { _1.bcc.include?(suspended_buyer.admins.first.email) }
   end
 
   test 'keeps subject' do
@@ -491,5 +517,80 @@ class MessageAsAClassTest < ActiveSupport::TestCase
 
   test 'include only visible messages in visible scope' do
     assert_equal [@visible_message], Message.visible
+  end
+end
+
+class MessageStaleTest < ActiveSupport::TestCase
+  attr_reader :provider, :buyer, :hidden_message, :visible_message
+
+  def setup
+    @provider = FactoryBot.create(:provider_account, :with_a_buyer)
+    @buyer = provider.buyers.take
+
+    Message.delete_all
+    @hidden_message = FactoryBot.create(:message, hidden_at: Time.zone.now, sender: provider)
+    FactoryBot.create(:received_message, receiver: buyer, message: hidden_message)
+    @visible_message = FactoryBot.create(:message, sender: buyer)
+    FactoryBot.create(:received_message, receiver: provider, message: visible_message)
+  end
+
+  test "hidden and visible messages - both are not stale" do
+    stale = Message.stale.to_a
+    assert_not_includes stale, visible_message
+    assert_not_includes stale, hidden_message
+  end
+
+  test "messages with a sender or a recipient are not stale" do
+    hidden_message.update_column(:sender_id, 0)
+    assert_raise(ActiveRecord::RecordNotFound) { Account.find(0) }
+    assert_equal 1, visible_message.recipients.delete_all
+
+    stale = Message.stale.to_a
+    assert_not_includes stale, visible_message
+    assert_not_includes stale, hidden_message
+  end
+
+  test "messages with some deleted and some non-deleted recipients are not stale" do
+    another_recipient = FactoryBot.create(:buyer_account, provider_account: provider)
+
+    hidden_message.update_column(:sender_id, 0)
+    assert_raise(ActiveRecord::RecordNotFound) { Account.find(0) }
+
+    FactoryBot.create(:received_message, receiver: another_recipient, message: visible_message, deleted_at: Time.now)
+    FactoryBot.create(:received_message, receiver: another_recipient, message: hidden_message, deleted_at: Time.now)
+
+    stale = Message.stale.to_a
+    assert_not_includes stale, visible_message
+    assert_not_includes stale, hidden_message
+  end
+
+  test "messages without a sender and without recipients are stale" do
+    assert_raise(ActiveRecord::RecordNotFound) { Account.find(0) }
+    hidden_message.update_column(:sender_id, 0)
+    visible_message.update_column(:sender_id, 0)
+
+    hidden_message.recipients.delete_all
+    visible_message.recipients.delete_all
+
+    stale = Message.stale.to_a
+    assert_includes stale, visible_message
+    assert_includes stale, hidden_message
+  end
+
+  test "messages without a sender deleted on the recipient are stale" do
+    another_recipient = FactoryBot.create(:buyer_account, provider_account: provider)
+
+    assert_raise(ActiveRecord::RecordNotFound) { Account.find(0) }
+    hidden_message.update_column(:sender_id, 0)
+    visible_message.update_column(:sender_id, 0)
+
+    FactoryBot.create(:received_message, receiver: another_recipient, message: hidden_message)
+
+    hidden_message.recipients.update(deleted_at: Time.now)
+    visible_message.recipients.update(deleted_at: Time.now)
+
+    stale = Message.stale.to_a
+    assert_includes stale, visible_message
+    assert_includes stale, hidden_message
   end
 end

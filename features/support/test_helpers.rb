@@ -6,4 +6,6 @@ if defined?(Rails.root)
   World(TestHelpers::Time)
   World(TestHelpers::Country)
   World(TestHelpers::Backend)
+  World(TestHelpers::Retries)
 end
+

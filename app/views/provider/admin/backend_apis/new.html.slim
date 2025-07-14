@@ -1,6 +1,21 @@
 - content_for :page_header_title, 'New Backend'
 
-= semantic_form_for @backend_api, url: provider_admin_backend_apis_path do |form|
-  = render partial: 'provider/admin/backend_apis/forms/naming', locals: { form: form }
-  = form.actions do
-    = form.commit_button 'Create Backend', button_html: { data: { testid: 'newBackendCreateBackend-buttonSubmit' } }
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @backend_api, builder: Fields::PatternflyFormBuilder,
+                                      url: provider_admin_backend_apis_path,
+                                      html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+      = form.input :name, as: :patternfly_input,
+                          input_html: { autofocus: true, required: true }
+      = form.input :system_name, as: :patternfly_input,
+                                 required: false
+      = form.input :description, as: :patternfly_textarea,
+                                 input_html: { rows: 3 }
+      = form.input :private_endpoint, as: :patternfly_input,
+                                      hint: t("formtastic.hints.backend_api.private_endpoint_html"),
+                                      input_html: { required: true }
+      = form.actions do
+        = form.commit_button 'Create Backend'

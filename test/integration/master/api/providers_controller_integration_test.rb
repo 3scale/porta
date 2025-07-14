@@ -19,8 +19,6 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   end
 
   test '#create' do
-    AccessToken.stubs(:random_id).returns('randomValue')
-
     # sends activation email
     ProviderUserMailer.expects(:activation).returns(mock(deliver_later: true))
 
@@ -67,7 +65,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
   test '#create with published account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
-    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'published')
+    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, issuer: master_account, state: 'published')
     post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
     assert_not user.can_login?
     assert user.pending?
@@ -78,7 +76,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
   test '#create with unpublished account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
-    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'hidden')
+    new_account_plan = FactoryBot.create(:account_plan, approval_required: true, issuer: master_account, state: 'hidden')
     post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
     assert_not user.can_login?
     assert user.pending?
@@ -89,7 +87,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
   test '#create with account plan send (for on-premises) is ignored' do
     ThreeScale.config.stubs(onpremises: true)
-    new_account_plan = FactoryBot.create(:account_plan, provider: master_account)
+    new_account_plan = FactoryBot.create(:account_plan, issuer: master_account)
     post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
     assert_equal account_plan, account.bought_account_plan
   end
@@ -269,7 +267,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     end
 
     test '#plan_upgrade successful upgrade' do
-      new_plan = FactoryBot.create(:application_plan, service: master_account.default_service)
+      new_plan = FactoryBot.create(:application_plan, issuer: master_account.default_service)
 
       put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)
 
@@ -289,7 +287,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
     test '#plan_upgrade no stock plan' do
       new_plan_name = 'invalid-plan'
-      new_plan = FactoryBot.create(:application_plan_without_rules, service: master_account.default_service, name: new_plan_name)
+      new_plan = FactoryBot.create(:application_plan_without_rules, issuer: master_account.default_service, name: new_plan_name)
       current_plan_id = provider.reload.bought_application_plans.first.id
 
       put plan_upgrade_master_api_provider_path(provider, access_token: token.value, plan_id: new_plan.id, format: :xml)

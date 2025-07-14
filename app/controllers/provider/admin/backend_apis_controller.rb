@@ -24,9 +24,9 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
     respond_to do |format|
       if @backend_api.save
         format.json { render json: @backend_api.decorate.add_backend_usage_backends_data, status: :created }
-        format.html { redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend created' }
+        format.html { redirect_to provider_admin_backend_api_path(@backend_api), success: t('.success') }
       else
-        flash.now[:error] = 'Backend could not be created'
+        flash.now[:danger] = t('.error')
         format.json { render json: @backend_api.errors, status: :unprocessable_entity }
         format.html { render :new }
       end
@@ -39,18 +39,18 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
 
   def update
     if @backend_api.update(update_params)
-      redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend updated'
+      redirect_to provider_admin_backend_api_path(@backend_api), success: t('.success')
     else
-      flash.now[:error] = 'Backend could not be updated'
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
 
   def destroy
     if @backend_api.mark_as_deleted
-      redirect_to provider_admin_dashboard_path, notice: 'Backend will be deleted shortly.'
+      redirect_to provider_admin_dashboard_path, success: t('.success')
     else
-      flash[:error] = @backend_api.errors.full_messages.to_sentence
+      flash[:danger] = @backend_api.errors.full_messages.to_sentence
       render :edit
     end
   end
@@ -71,6 +71,6 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   alias update_params backend_api_params
 
   def presenter
-    @presenter ||= Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account, params: params)
+    @presenter ||= Provider::Admin::BackendApisIndexPresenter.new(user: current_user, params: params)
   end
 end

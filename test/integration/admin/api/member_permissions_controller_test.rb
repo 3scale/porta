@@ -20,7 +20,11 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
 
   test 'get' do
     get admin_api_permissions_path(id: user.id, format: :json, access_token: token)
+    permissions = JSON.parse(response.body)['permissions']
+
     assert_response :success
+    assert_equal %w[allowed_sections allowed_service_ids links role user_id], permissions.keys.sort
+    assert_equal %w[href rel], permissions['links'].first.keys.sort
   end
 
   test "PUT: enable 'analytics' section for service 1" do
@@ -86,7 +90,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test "PUT: enable 'settings', but disable all services" do
     user.update({ allowed_service_ids: [service1_id] })
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D=%5B%5D
-    params = { allowed_sections: ['settings'], allowed_service_ids: ["[]"], access_token: token }
+    params = { allowed_sections: ['settings'], allowed_service_ids: [""], access_token: token }
 
     put admin_api_permissions_path(id: user.id, format: :json), params: params
 
@@ -97,6 +101,21 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     user.member_permissions.reload
     assert_equal [:settings], user.allowed_sections.to_a
     assert_empty user.allowed_service_ids
+  end
+
+  # This way was previously documented in ActiveDocs, so keeping it for backwards compatibility
+  test "PUT: disable all services with `[]` value" do
+    user.update({ allowed_service_ids: [service1_id] })
+    # allowed_service_ids%5B%5D=%5B%5D
+    params = { allowed_service_ids: ["[]"], access_token: token }
+
+    put admin_api_permissions_path(id: user.id, format: :json), params: params
+
+    assert_not_nil(permissions = JSON.parse(response.body)['permissions'])
+    assert_empty permissions['allowed_service_ids']
+
+    user.member_permissions.reload
+    assert_equal [], user.allowed_service_ids
   end
 
   test "updating admin's permissions is not allowed" do

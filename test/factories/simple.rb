@@ -1,5 +1,7 @@
 FactoryBot.define do
-# TODO: dry up with account_without_users
+
+  # Note: tenant_id discrepancies when using simple factories, not good for request testing
+
   factory(:simple_account, :class => Account) do
     association(:country)
 
@@ -81,7 +83,7 @@ FactoryBot.define do
 
     trait :with_default_backend_api do
       after(:create) do |record|
-        backend_api = FactoryBot.create(:backend_api, private_endpoint: 'https://echo-api.3scale.net')
+        backend_api = FactoryBot.create(:backend_api, account: record.account, private_endpoint: 'https://echo-api.3scale.net')
         FactoryBot.create(:backend_api_config, path: '', service: record, backend_api: backend_api)
       end
     end
@@ -128,6 +130,12 @@ FactoryBot.define do
 
   factory(:simple_service_plan, :parent => :simple_plan, :class => ServicePlan) do
     association(:issuer, :factory => :simple_service)
+
+    trait :default do
+      after(:build) do |plan|
+        plan.issuer.default_service_plan = plan
+      end
+    end
   end
 
   factory(:simple_proxy, class: Proxy) do

@@ -6,7 +6,7 @@ Feature: Buyer side, account fields
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_applications" visible
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name            | choices | required | read_only | hidden |
@@ -44,8 +44,20 @@ Feature: Buyer side, account fields
 
      When I fill in "Required field" with "1 Horse Power"
        And I press "Update"
-     Then I should see "The account information was updated."
+     Then I should see "The account information was updated"
 
+  Scenario: Read-only extra fields are ignored on update
+    Given I log in as "bob" on foo.3scale.localhost
+    And provider "foo.3scale.localhost" has the field "non_editable" for accounts as editable
+    Then I go to the account edit page
+    And provider "foo.3scale.localhost" has the field "non_editable" for accounts as read only
+    And the form is submitted with:
+      | Required field | value  |
+      | False field    |        |
+      | Choices field  |      3 |
+      | Non editable   | edited |
+    Then I should see "The account information was updated"
+    Then I should not see "Non editable"
 
   Scenario: Viewing account with extra fields
     #TODO ugly table change this
@@ -71,7 +83,6 @@ Feature: Buyer side, account fields
       | Choices field           |
       | Required field          |
 
-
   Scenario: Country field works correctly
     Given provider "foo.3scale.localhost" has the following fields defined for accounts:
       | name    |
@@ -80,5 +91,5 @@ Feature: Buyer side, account fields
     When I go to the account edit page
       And I select "Spain" from "Country"
       And I press "Update"
-    Then I should see "The account information was updated."
+    Then I should see "The account information was updated"
       And I should see "Spain" in the "country" field in the list

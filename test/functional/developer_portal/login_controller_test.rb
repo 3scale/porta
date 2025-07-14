@@ -20,46 +20,6 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     assert_not_match />[^<>]*?CAS/, @response.body
   end
 
-  test 'cas is displayed on login page' do
-    provider_account = FactoryBot.create :provider_account
-
-    provider_settings = provider_account.settings
-    provider_settings.authentication_strategy = 'cas'
-    provider_settings.cas_server_url = "http://mamacit.as"
-    provider_settings.save!
-    host! provider_account.external_domain
-
-    get :new
-
-    assert_response 200
-    assert_match />[^<>]*?CAS/, @response.body
-  end
-
-  test 'cas successful auth' do
-    provider_account = FactoryBot.create :provider_account
-    provider_settings = provider_account.settings
-    provider_settings.authentication_strategy = 'cas'
-    provider_settings.cas_server_url = "http://mamacit.as"
-    provider_settings.save!
-
-    buyer_account = FactoryBot.create :buyer_account, :provider_account => provider_account
-    user = FactoryBot.create :user, :account  => buyer_account, :cas_identifier => "laurie"
-    user.activate!
-    user.save!
-
-    host! provider_account.external_domain
-
-    res = stub :body => "yes\nlaurie", :code => 200
-    HTTPClient.expects(:get).with(anything).returns(res)
-
-    get :create, params: { ticket: "made-up" }
-
-    assert_redirected_to '/'
-
-    assert_nil session[:user_id]
-    assert_equal UserSession.authenticate(cookies.signed[:user_session]).user.id, user.id
-  end
-
   test 'oauth2 successful authenticate for the first time using oauth2' do
     user
 
@@ -120,6 +80,19 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     ThreeScale::OAuth2::Client.expects(build: client)
     post :create, params: { system_name: authentication_provider.system_name, code: 'abcdefg1234567' }
     assert_equal error, flash[:error]
+  end
+
+  test 'login fail generates an audit log' do
+    buyer_account = FactoryBot.create :buyer_account
+    buyer_settings = buyer_account.settings
+    buyer_settings.authentication_strategy = 'internal'
+    buyer_settings.save!
+    user = buyer_account.admins.first
+
+    AuditLogService.expects(:call).with { |msg| msg.start_with? "Login attempt failed" }
+
+    host! buyer_account.provider_account.external_domain
+    post :create, params: { username: user.username, password: 'wrong_pass' }
   end
 
   def user

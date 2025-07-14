@@ -14,20 +14,20 @@ Feature: Provider's default account plan
   Scenario: Set a default account plan
     When they select "Pro" from "Default plan"
     And press "Change plan"
-    Then they should see "The default plan has been changed."
+    Then they should see "The default plan has been changed"
     And "Pro" is the option selected in "Default plan"
 
   Scenario: Unset the default account plan
     Given "Free" is the option selected in "Default plan"
     When they select "No plan selected" from "Default plan"
     And press "Change plan"
-    Then they should see "The default plan has been changed."
+    Then they should see "The default plan has been changed"
     And "No plan selected" is the option selected in "Default plan"
 
   Scenario: Set a hidden account plan as default
     When they select "Secret" from "Default plan"
     And press "Change plan"
-    Then they should see "The default plan has been changed."
+    Then they should see "The default plan has been changed"
     And "Secret" is the option selected in "Default plan"
 
   Scenario: Set an account plan that does not exist

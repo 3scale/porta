@@ -10,7 +10,7 @@ Feature: Credit Card policies
       When they press "Dashboard"
       And they follow "Audience"
       And they press "Billing"
-      And they press "Settings" within the main manu's section Billing
+      And they press "Settings" within the main menu's section Billing
       And they follow "Credit Card Policies"
       Then the current page is the edit site settings page
 
@@ -20,7 +20,7 @@ Feature: Credit Card policies
       And they fill in "Path to Privacy page" with "/privacy-page"
       And they fill in "Path to Refund page" with "/refund-page"
       And press "Save"
-      Then they should see "Settings updated."
+      Then they should see "Settings updated"
 
   Rule: Master
     Background:
@@ -33,4 +33,4 @@ Feature: Credit Card policies
       And they fill in "Path to Privacy page" with "/privacy-page"
       And they fill in "Path to Refund page" with "/refund-page"
       And press "Save"
-      Then they should see "Settings updated."
+      Then they should see "Settings updated"

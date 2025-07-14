@@ -1,6 +1,6 @@
 base: &default
   github:
-    enabled: <%= ENV.fetch('GITHUB_ENABLED', '1') == '1' %>
+    enabled: <%= ENV.fetch('GITHUB_ENABLED', '0') == '1' %>
     client_id: <%= ENV['GITHUB_CLIENT_ID'] %>
     client_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
 
@@ -14,4 +14,5 @@ test:
     client_secret: fake_secret
 
 production:
-  <<: *default
+  github:
+    enabled: false

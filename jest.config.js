@@ -92,7 +92,8 @@ module.exports = {
   moduleNameMapper: {
     'c3': '<rootDir>/__mocks__/c3.js',
     '\\.(css|less|sass|scss)$': '<rootDir>/spec/javascripts/__mocks__/styleMock.js',
-    '\\.(gif|ttf|eot)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js'
+    '\\.(gif|ttf|eot)$': '<rootDir>/spec/javascripts/__mocks__/fileMock.js',
+    'nanoid': '<rootDir>/node_modules/nanoid/index.browser.cjs'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -143,7 +144,9 @@ module.exports = {
   ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: [
+    '<rootDir>/spec/javascripts/customJestMatchers.ts',
+  ],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -184,16 +187,16 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
+    '\\.jsx?$': ['babel-jest', { configFile: './spec/javascripts/babel.config.js' }],
     // Png and svg imports fails in jest, workaround found in:
     // https://github.com/facebook/jest/issues/2663#issuecomment-369040789
     '.+\\.(png|svg)$': 'jest-transform-stub'
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "/node_modules/",
-  //   "\\.pnp\\.[^\\/]+$"
-  // ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(?:@patternfly/react-icons)/)', // Transform @patternfly/react-icons
+  ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

@@ -16,7 +16,7 @@ class MessageObserverTest < ActiveSupport::TestCase
   class OtherTest < MessageObserverTest
     test 'after_create after_destroy' do
       app_plan = FactoryBot.create(:application_plan, issuer: @service)
-      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan))
+      contract = FactoryBot.build(:service_contract, plan: FactoryBot.create(:service_plan, issuer: @service))
       cinstance = contract(app_plan)
 
       Applications::ApplicationCreatedEvent.expects(:create).once
@@ -33,27 +33,15 @@ class MessageObserverTest < ActiveSupport::TestCase
     end
 
     test 'plan changed' do
-      contract = FactoryBot.create(:service_contract)
+      contract = FactoryBot.create(:service_contract, plan: FactoryBot.create(:simple_service_plan, issuer: @service))
 
       ServiceContracts::ServiceContractPlanChangedEvent.expects(:create).once
-      ContractMessenger.expects(:plan_change).never
 
-      contract.change_plan! FactoryBot.create(:simple_service_plan)
+      contract.change_plan! FactoryBot.create(:simple_service_plan, issuer: @service)
 
       cinstance = FactoryBot.create(:cinstance, service: @service)
 
       Cinstances::CinstancePlanChangedEvent.expects(:create).once
-      ContractMessenger.expects(:plan_change).never
-
-      ContractMessenger.expects(:plan_change_for_buyer).once.returns(mock(deliver: true))
-
-      cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
-
-      Logic::RollingUpdates.stubs(skipped?: true)
-
-      Cinstances::CinstancePlanChangedEvent.expects(:create).never
-      ContractMessenger.expects(:plan_change).once.returns(mock(deliver: true))
-
       ContractMessenger.expects(:plan_change_for_buyer).once.returns(mock(deliver: true))
 
       cinstance.change_plan! FactoryBot.create(:simple_application_plan, service: @service)
@@ -62,43 +50,24 @@ class MessageObserverTest < ActiveSupport::TestCase
     pending_test 'after_commit_on_destroy'
   end
 
-  class AfterCommitOnCreateTest < MessageObserverTest
-    test "should call correct messenger" do
+  class AfterCreateTest < MessageObserverTest
+    test "should publish the correct event" do
       @app_plan = FactoryBot.create(:application_plan, issuer: @service)
       @service_plan = FactoryBot.create(:service_plan, issuer: @service)
 
       @cinstance = contract(@app_plan)
-      CinstanceMessenger.expects(:new_contract).with(@cinstance).returns(message)
+      Applications::ApplicationCreatedEvent.expects(:create).with(@cinstance, nil)
       @cinstance.save!
 
       @service_contract = contract(@service_plan)
-      ServiceContractMessenger.expects(:new_contract).with(@service_contract).returns(message)
+      ServiceContracts::ServiceContractCreatedEvent.expects(:create).with(@service_contract, nil)
       @service_contract.save!
     end
 
     test 'should call observer' do
       @contract = contract(@plan)
-      @observer.expects(:after_commit_on_create).with(@contract)
+      @observer.expects(:after_create).with(@contract)
       @contract.save!
-    end
-
-    test 'with account it should send message' do
-      @contract = contract(@plan)
-      CinstanceMessenger.expects(:new_contract).with(@contract).returns(message)
-      @contract.save!
-    end
-
-    test 'with account but without admin users it should not send message' do
-      @contract = contract(@plan)
-      @buyer.admins.delete_all
-      CinstanceMessenger.expects(:new_contract).with(@cinstance).never
-      @contract.save!
-    end
-
-    test 'without account it should not send message' do
-      @cinstance = @plan.contracts.build
-      CinstanceMessenger.expects(:new_contract).with(@cinstance).never
-      @cinstance.save!
     end
   end
 
@@ -120,6 +89,14 @@ class MessageObserverTest < ActiveSupport::TestCase
       Contract.transaction do
         @contract.reject! 'reason'
         CinstanceMessenger.expects(:reject).with(@contract).returns(message)
+      end
+    end
+
+    test '#reject should not send message when provider is scheduled for deletion' do
+      @contract.provider_account.schedule_for_deletion!
+      Contract.transaction do
+        @contract.reject! 'reason'
+        CinstanceMessenger.expects(:reject).never
       end
     end
   end

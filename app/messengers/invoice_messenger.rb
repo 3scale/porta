@@ -44,21 +44,7 @@ class InvoiceMessenger < Messenger::Base
     to_buyer(invoice, 'Problem with payment')
   end
 
-  def unsuccessfully_charged_for_provider(invoice)
-    to_provider(invoice, 'API System: User payment problem')
-  end
-
-  def unsuccessfully_charged_for_provider_final(invoice)
-    to_provider(invoice, 'API System: User payment problem')
-  end
-
   private
-
-  def to_provider(invoice, reason)
-    message(:to      => invoice.provider_account,
-            :sender  => invoice.buyer_account,
-            :subject => buyer_subject(invoice, reason))
-  end
 
   def to_buyer(invoice, reason)
     message(:to      => invoice.buyer_account,

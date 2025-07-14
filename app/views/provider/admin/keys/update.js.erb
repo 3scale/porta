@@ -1,15 +1,22 @@
+(function ($) {
   <% if @error.nil? %>
     $.colorbox.close();
-    document.getElementById('cinstance-user-key').innerHTML = '<%= @cinstance.user_key %>'
-    $.flash.notice('<%= @notice %>')
+    const userKey = document.getElementById('cinstance-user-key')
+    userKey.innerHTML = '<%= @cinstance.user_key %>'
+    userKey.title = '<%= @cinstance.user_key %>'
+
   <% else %>
     const input = document.getElementById('cinstance_user_key')
+    const constrol = input.closest('.pf-c-form__group-control')
 
     <%# HACK: Remove helperText and add it again, since replacing the text also removes the icon. %>
-    input.closest('.pf-c-form__group-control').children[1].remove()
+    constrol.children[1].remove()
+    constrol.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
 
-    input.insertAdjacentHTML('afterend', '<%= j render partial: "shared/pf_error_helper_text", locals: { error: @error } %>')
     input.setAttribute('aria-invalid', 'true')
 
     $.colorbox.resize();
   <% end %>
+})(jQuery);
+
+<%= render 'shared/flash_alerts' %>

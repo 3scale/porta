@@ -105,11 +105,19 @@ module ApiAuthentication
     def authenticated_token
       return @authenticated_token if instance_variable_defined?(:@authenticated_token)
 
-      @authenticated_token = domain_account.access_tokens.find_from_value(access_token) if access_token
+      given_token = access_token
+
+      return if given_token.blank?
+
+      token = domain_account.access_tokens.find_from_value(given_token)
+
+      return if token.blank? || token.expired?
+
+      @authenticated_token = token
     end
 
-    def enforce_access_token_permission
-      PermissionEnforcer.enforce(authenticated_token, &Proc.new)
+    def enforce_access_token_permission(&block)
+      PermissionEnforcer.enforce(authenticated_token, &block)
     end
 
     def verify_access_token_scopes
@@ -156,7 +164,7 @@ module ApiAuthentication
       class EnforceError < StandardError
       end
 
-      def enforce(access_token)
+      def enforce(access_token, &block)
         self.level = access_token&.permission
 
         return yield unless requires_transaction?
@@ -168,7 +176,7 @@ module ApiAuthentication
           System::ErrorReporting.report_error(error)
         end
 
-        connection.transaction(requires_new: true, &Proc.new)
+        connection.transaction(requires_new: true, &block)
       rescue ActiveRecord::StatementInvalid => error
         if error.message =~ /read(-|\s)only transaction/i
           raise PermissionError, error.message, caller

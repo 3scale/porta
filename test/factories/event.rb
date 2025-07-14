@@ -16,9 +16,8 @@ FactoryBot.define do
   end
 
   factory(:limit_alert, :class => Alert) do
-    association :account
-    association :cinstance
-
+    account { @overrides[:cinstance]&.user_account&.provider_account || association( :provider_account, :with_a_buyer) }
+    cinstance { association :cinstance, user_account: (account.buyer_accounts.first || account) }
     state { :unread }
 
     timestamp { Time.now }

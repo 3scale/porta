@@ -18,8 +18,8 @@ module AccountRepresenter
   end
 
   with_options(if: ->(*) { provider? }) do
-    property :admin_domain # TODO
-    property :domain # TODO
+    property :external_admin_domain, as: :admin_domain
+    property :external_domain, as: :domain
     property :admin_base_url
     property :base_url
     property :from_email
@@ -38,9 +38,9 @@ module AccountRepresenter
     #
     #
     # TODO: this one needs to have option passed like in
-    #   https://github.com/3scale/system/blob/master/app/representers/cms/page_representer.rb#L8
+    #   https://github.com/3scale/porta/blob/master/app/representers/cms/page_representer.rb#L23
     #
-    # if options[:with_apps]
+    # if options.dig(:user_options, :with_apps)
     #  bought_cinstances.to_xml(:builder => xml, :root => 'applications')
     # end
 
@@ -54,6 +54,7 @@ module AccountRepresenter
   end
 
   property :state
+  property :annotations_hash, as: :annotations
 
   link :self do
     admin_api_account_url(self) unless provider?

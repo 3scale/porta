@@ -1,9 +1,9 @@
-// Each PatternFly component already contains the CSS related to the component. In order to have
-// consistent styles throughout the application, PatternFly Base CSS should be used in the project,
-// or some components may diverge in appearance. This import statement should be placed before your
-// main application component is imported.
-@import '~@patternfly/react-core/dist/styles/base.css';
-
 .pf-c-alert.invisible {
   visibility: hidden;
+}
+
+.login-layout {
+  .grecaptcha-badge {
+    visibility: hidden;
+  }
 }

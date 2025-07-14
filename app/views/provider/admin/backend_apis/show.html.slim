@@ -1,8 +1,10 @@
 - content_for :page_header_title, 'Backend Overview'
+- content_for :page_header_annotation do
+  = render partial: 'shared/annotations', locals: { resource: @backend_api, plain: true }
 
 section.Section
   .SettingsBox
-    = pf_link_to 'edit', edit_provider_admin_backend_api_path(@backend_api), class: 'SettingsBox-toggle'
+    = pf_link_to 'edit', edit_provider_admin_backend_api_path(@backend_api), class: 'SettingsBox-toggle' if can?(:edit, BackendApi)
     dl.SettingsBox-summary.u-dl data-state="open"
       dt.u-dl-term Name
       dd.u-dl-definition = @backend_api.name
@@ -18,7 +20,7 @@ section class="overview-widget"
   div
 
     div.left
-      = render 'provider/admin/backend_apis/cards/products_used_list', backend_api: @backend_api
+      = render 'provider/admin/backend_apis/cards/products_used_list', products: @backend_api.decorate.products_table_data(current_user)
 
     div.right
       h2 Methods & mapping rules

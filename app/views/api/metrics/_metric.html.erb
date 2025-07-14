@@ -1,8 +1,12 @@
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'metric_slot_close_button' %>
+<% end %>
+
 <%= content_tag('tr', :id => dom_id(metric), :class => metric.child? ? 'child' : 'root') do %>
   <td class="title" title="<%= h metric.friendly_name %>"><%= h metric.friendly_name %></td>
     <% if @plan.pricing_enabled? %>
     <td class="metrics-subtable-toggle pricing">
-      <%= link_to polymorphic_path([:admin, @plan, metric, :pricing_rules]), :class => 'remote' do %>
+      <%= link_to polymorphic_path([:admin, @plan, metric, :pricing_rules]), remote: true do %>
         <%= icon('money')  %>
         Pricing (<span id="pricing_rules_counter_<%= metric.id %>"><%= @plan.pricing_rules.of_metric(metric).size %></span>)
       <% end %>
@@ -10,7 +14,7 @@
     <% end %>
 
   <td class="metrics-subtable-toggle limits">
-    <%= link_to polymorphic_path([:admin, @plan, metric, :usage_limits]), :class => 'remote', title: "Edit limits of #{metric.friendly_name}" do %>
+    <%= link_to polymorphic_path([:admin, @plan, metric, :usage_limits]), remote: true, title: "Edit limits of #{metric.friendly_name}" do %>
       <%= icon('signal')  %>
       Limits (<span id="limits_counter_<%= metric.id %>"><%= @plan.usage_limits.of_metric(metric).size %></span>)
     <% end %>

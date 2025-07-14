@@ -2,6 +2,11 @@
   = render 'menu'
 
 - content_for :page_header_title, "Edit account #{@account.org_name} details"
+- content_for :page_header_annotation do
+  = render partial: 'shared/annotations', locals: { resource: @account, description: true, variant: :warning }
+
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
 
 div class="pf-c-card"
   div class="pf-c-card__body"
@@ -11,5 +16,5 @@ div class="pf-c-card"
       = form.user_defined_form
 
       = form.actions do
-        button class="pf-c-button pf-m-primary" type="submit" Update Account
+        = form.commit_button 'Update Account'
         = delete_buyer_link(@account)

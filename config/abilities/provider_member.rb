@@ -26,10 +26,25 @@ Ability.define do |user|
     can :create, Account
     can :update, Account if account.provider_can_use?(:service_permissions)
 
-    can %i[read show edit update], Cinstance, user.accessible_cinstances.where_values_hash
+    # Using historical optimized way and leave canonical way (through plan) commented out below
+    # The resulting hash presently is something like {"type"=>"Cinstance", "service_id"=>[ids..]}
+    permitted_cinstances = Cinstance.permitted_for(user)
+    can %i[read show edit update], Cinstance, permitted_cinstances.where_values_hash unless permitted_cinstances.is_a? ActiveRecord::NullRelation
+    # can %i[read show edit update], Cinstance, user.accessible_cinstances do |cinstance|
+    #   cinstance.plan&.issuer_type == "Service" && cinstance.plan.issuer.account == user.account &&
+    #     (user.permitted_services_status == :selected || user.member_permission_service_ids.include?(cinstance.plan.issuer.id))
+    # end
 
     # abilities for buyer users
     can %i[read update update_role destroy suspend unsuspend], User, account: { provider_account_id: user.account_id }
+
+    can :suspend, Account do | buyer |
+      buyer.provider_account == account
+    end
+
+    can :resume, Account do | buyer |
+      buyer.provider_account == account
+    end
   end
 
   if user.has_permission?('plans')
@@ -47,6 +62,7 @@ Ability.define do |user|
   if user.has_permission?('monitoring')
     can :manage, :monitoring
     can :manage, :analytics
+    can %i[index show], BackendApi
   end
 
   if user.has_permission?('portal')
@@ -59,4 +75,6 @@ Ability.define do |user|
 
   # Member cannot manage permissions, neither his own, nor other members'
   cannot :update_permissions, User
+
+  can :index, Service if can?(:manage, :plans) || can?(:manage, :policy_registry) || can?(:manage, :monitoring) || can?(:manage, :partners)
 end

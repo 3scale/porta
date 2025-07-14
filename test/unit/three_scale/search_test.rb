@@ -4,6 +4,7 @@ require 'test_helper'
 
 class ThreeScale::SearchTest < ActiveSupport::TestCase
   class ScopesTest < ActiveSupport::TestCase
+
     class Model < ApplicationRecord
       self.table_name = 'accounts'
 
@@ -91,7 +92,7 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
   end
 
   test "Cinstance should order and search" do
-    account = FactoryBot.create(:account)
+    account = FactoryBot.create(:buyer_account)
 
     abc = FactoryBot.create(:cinstance, name: "abc", user_account: account)
     bcd = FactoryBot.create(:cinstance, name: "bcd", user_account: account)

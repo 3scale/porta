@@ -9,7 +9,7 @@ module Logic
       included do
         with_options(foreign_key: :provider_id) do |cms|
           # TODO: remove the CMS::LegalTerm condition when DB are cleaned (see test/functional/.../changes_controller_test.rb)
-          cms.has_many :templates, -> { where.not(type: 'CMS::LegalTerm') }, class_name: 'CMS::Template', dependent: :delete_all
+          cms.has_many :templates, -> { where.not(type: 'CMS::LegalTerm') }, class_name: 'CMS::Template', dependent: :delete_all, inverse_of: :provider
           cms.has_many :sections,             class_name: 'CMS::Section',
                         extend: ::CMS::Section::ProviderAssociationExtension, dependent: :delete_all
 
@@ -37,7 +37,7 @@ module Logic
           cms.has_many :all_partials,         class_name: 'CMS::Partial'
           cms.has_many :portlets,             class_name: 'CMS::Portlet'
 
-          cms.has_many :provided_groups,      class_name: 'CMS::Group', dependent: :delete_all
+          cms.has_many :provided_groups,      class_name: 'CMS::Group', dependent: :destroy
           cms.has_many :email_templates,      class_name: 'CMS::EmailTemplate',
                         extend: ::CMS::EmailTemplate::ProviderAssociationExtension
         end

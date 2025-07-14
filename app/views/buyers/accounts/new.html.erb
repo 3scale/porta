@@ -1,5 +1,9 @@
 <% content_for :page_header_title, "Create new Account" %>
 
+<% content_for :javascripts do %>
+  <%= stylesheet_packs_chunks_tag 'pf_form' %>
+<% end %>
+
 <div class="pf-c-card">
   <div class="pf-c-card__body">
     <%= semantic_form_for @buyer, builder: Fields::PatternflyFormBuilder,

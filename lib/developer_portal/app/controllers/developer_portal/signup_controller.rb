@@ -30,8 +30,8 @@ module DeveloperPortal
     end
 
     def create
-      account_params = (params[:account] || {}) .dup
-      user_params    = account_params.try(:delete, :user) || {}
+      account_params = filter_readonly_params(params[:account], Account)
+      user_params    = filter_readonly_params(account_params.try(:delete, :user), User)
 
       if signup_user!(account_params, user_params)
         if @user.can_login?
@@ -69,7 +69,7 @@ module DeveloperPortal
 
     def signup_user!(account_params, user_params)
       Account.transaction do
-        SignupService.create(signup_service_params(account_params, user_params)) do |signup_result|
+        SignupService.create(**signup_service_params(account_params, user_params)) do |signup_result|
           @signup_result = signup_result
           @user  = signup_result.user
           @buyer = signup_result.account

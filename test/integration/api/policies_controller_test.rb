@@ -23,7 +23,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     ]
     put admin_service_policies_path(@service), params: { proxy: {policies_config: config} }
     # Checking flash won't work anymore in rails 5+
-    assert_equal 'The policies are saved successfully', flash[:notice]
+    assert_equal 'The policies are saved successfully', flash[:success]
     assert_equal Proxy::PoliciesConfig.new(expected_policies), @service.proxy.policies_config
     assert_redirected_to edit_admin_service_policies_path(@service)
   end
@@ -31,7 +31,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
   test 'invalid config - does not update policies' do
     invalid_config = 'invalid-config'.to_json
     put admin_service_policies_path(@service), params: { proxy: { policies_config: invalid_config } }
-    assert_equal 'The policies cannot be saved', flash[:error]
+    assert_equal 'The policies cannot be saved', flash[:danger]
     assert_response :unprocessable_entity
   end
 
@@ -39,7 +39,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     invalid_config = [{ 'name' => 'foo' }].to_json
     put admin_service_policies_path(@service), params: { proxy: {policies_config: invalid_config} }
     # Checking flash won't work anymore in rails 5+
-    assert_equal 'The policies cannot be saved', flash[:error]
+    assert_equal 'The policies cannot be saved', flash[:danger]
     assert_equal Proxy::PoliciesConfig.new([Proxy::PolicyConfig::DEFAULT_POLICY]), @service.proxy.policies_config
     assert_response :unprocessable_entity
   end
@@ -54,5 +54,16 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     Policies::PoliciesListService.expects(:call!).raises(HTTP::TimeoutError.new)
     get edit_admin_service_policies_path(@service)
     assert_response :service_unavailable
+  end
+
+  test 'policies edit for members with no permissions' do
+    Policies::PoliciesListService.unstub(:call!)
+    Policies::PoliciesListService.expects(:call!).never
+    member = FactoryBot.create(:member, account: @provider, state: 'active')
+    logout! && login!(@provider, user: member)
+
+    get edit_admin_service_policies_path(@service)
+
+    assert_response :not_found
   end
 end

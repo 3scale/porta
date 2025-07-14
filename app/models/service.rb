@@ -17,13 +17,13 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   define_proxy_config_affecting_attributes :backend_version
 
-  self.background_deletion = [
-    :service_plans,
-    :application_plans,
-    [:api_docs_services, class_name: 'ApiDocs::Service'],
-    :backend_api_configs,
-    :metrics,
-    [:proxy, { action: :destroy, has_many: false }]
+  self.background_deletion = %i[
+    service_plans
+    application_plans
+    api_docs_services
+    backend_api_configs
+    metrics
+    proxy
   ].freeze
 
   DELETE_STATE = 'deleted'
@@ -60,7 +60,11 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
 
-  scope :of_account, ->(account) { where.has { account_id == account.id } }
+  sifter :of_account do |account|
+    account_id == account.id
+  end
+
+  scope :of_account, ->(account) { where.has { sift(:of_account, account) } }
 
   has_one :proxy, dependent: :destroy, inverse_of: :service, autosave: true
 
@@ -111,10 +115,14 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :permitted_for, ->(user = nil) {
     next all unless user
 
+    permitted_services_status = user.permitted_services_status
+
+    next none if permitted_services_status == :none
+
     account = user.account
     account_services = (account.provider? ? account : account.provider_account).services
-    self.merge(
-      account_services.merge(user.forbidden_some_services? ? where(id: user.member_permission_service_ids) : {})
+    merge(
+      account_services.merge(permitted_services_status == :selected ? where(id: user.member_permission_service_ids) : {})
     )
   }
 
@@ -159,7 +167,9 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   serialize :notification_settings
 
-  audited allow_mass_assignment: true
+  annotated
+  audited
+
   state_machine initial: :incomplete do
     state :incomplete
     state :hidden
@@ -370,6 +380,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
       xml.mandatory_app_key mandatory_app_key
       xml.buyer_can_select_plan buyer_can_select_plan
       xml.buyer_plan_change_permission buyer_plan_change_permission
+      annotations_xml(:builder => xml)
 
       if notification_settings
         xml.notification_settings do |xml|
@@ -384,20 +395,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     xml.to_xml
-  end
-
-  # Reorder plans according to list of ids.
-  #
-  # == Example
-  #
-  # reorder_plans([3, 2, 1]) # will reorder plans so the one with
-  # id=3 will be first, the one with id=2 second and the one with id=1
-  # last.
-  #
-  def reorder_plans(ids)
-    ids.each_with_index do |id, position|
-      application_plans.find_by_id(id).update_attribute(:position, position)
-    end
   end
 
   # Notification settings cleanup before assign
@@ -466,7 +463,9 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   APPLY_I18N = ->(args) do
     args.map do |opt|
       [
-        I18n.t(opt, scope: :deployment_options, raise: ActionView::Base.raise_on_missing_translations),
+        # The `raise:` argument can be removed after upgrading to Rails 7.1, because `I18n.t` should respect the
+        # `config.i18n.raise_on_missing_translations` config, see https://github.com/rails/rails/commit/6c4f3be929f1f427d6767050848f2fbee8c1f05f
+        I18n.t(opt, scope: :deployment_options, raise: Rails.application.config.i18n.raise_on_missing_translations),
         opt
       ]
     end.to_h.freeze

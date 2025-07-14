@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v6.1.7.3/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
@@ -58,17 +58,50 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
+
+    # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
+    # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
+    config.action_controller.raise_on_open_redirects = false
+
+    # ** Please read carefully, this must be configured in config/application.rb **
+    # Change the format of the cache entry.
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 6.1 applications.
+    # Only change this value after your application is fully deployed to Rails 7.0
+    # and you have no plans to rollback.
+    # When you're ready to change format, change the value to 7.0
+    config.active_support.cache_format_version = 7.0
+
+    # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
+    #
+    # Rails transparently deserializes existing (Marshal-serialized) cookies on read and
+    # re-writes them in the JSON format.
+    #
+    # It is fine to use `:hybrid` long term; you should do that until you're confident *all* your cookies
+    # have been converted to JSON. To keep using `:hybrid` long term, move this config to its own
+    # initializer or to `config/application.rb`.
+    # TODO: use the new default - THREESCALE-11545
+    config.action_dispatch.cookies_serializer = :hybrid
+
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
+
+    # Support for inversing belongs_to -> has_many Active Record associations.
+    # Overriding the default (since Rails 6.1) default, because it causes various issues.
+    # Likely we need to keep it forever as we can't override it for individual use cases.
+    # Also the feature has outstanding bugs: rails/rails#47559 rails/rails#50258.
+    config.active_record.has_many_inversing = false
+
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
+
+    # Disable generating Link header with URLs from javascript_include_tag and stylesheet_link_tag
+    # Reconsider whether to enable again after upgrading to Rails 7.1, where the size of the header is limited to 1KB
+    config.action_view.preload_links_header = false
+
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
-
-    # Use a modern approved hashing function.
-    # This is the default in Rails 7.0, so can be removed when we upgrade.
-    config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
 
     # Applying the patch for CVE-2022-32224 broke YAML deserialization because some classes are disallowed in the serialized YAML
     config.active_record.yaml_column_permitted_classes = [Symbol, Time, Date, BigDecimal, OpenStruct,
@@ -77,25 +110,13 @@ module System
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
 
-
-    # The old config_for gem returns HashWithIndifferentAccess
-    # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
-    def config_for(*args)
-      config = super
-      config.is_a?(Hash) ? config.with_indifferent_access : config
-    end
-
     config.active_job.queue_adapter = :sidekiq
 
-    def simple_try_config_for(*args)
+    def try_config_for(*args)
       config_for(*args)
     rescue => exception # rubocop:disable Style/RescueStandardError
       warn "[Warning][ConfigFor] Failed to load config with: #{exception}" if $VERBOSE
       nil
-    end
-
-    def try_config_for(*args)
-      simple_try_config_for(*args)&.symbolize_keys
     end
 
     config.before_eager_load do
@@ -108,9 +129,10 @@ module System
 
     config.boot_time = Time.now
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
 
     # Include developer_portal into the autoload and eager load path
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
@@ -191,7 +213,7 @@ module System
     config.encoding = "utf-8"
 
     config.web_hooks = ActiveSupport::OrderedOptions.new
-    config.web_hooks.merge!(config_for(:web_hooks).symbolize_keys)
+    config.web_hooks.merge!(config_for(:web_hooks))
 
     config.liquid = ActiveSupport::OrderedOptions.new
     config.liquid.resolver_caching = false
@@ -206,19 +228,19 @@ module System
     config.three_scale.rolling_updates = ActiveSupport::OrderedOptions.new
     config.three_scale.email_sanitizer = ActiveSupport::OrderedOptions.new
     config.three_scale.sandbox_proxy = ActiveSupport::OrderedOptions.new
-    config.three_scale.sandbox_proxy.merge!(config_for(:sandbox_proxy).symbolize_keys)
+    config.three_scale.sandbox_proxy.merge!(config_for(:sandbox_proxy))
 
     config.three_scale.tracking = ActiveSupport::OrderedOptions.new
-    config.three_scale.core.merge!(config_for(:core).symbolize_keys)
+    config.three_scale.core.merge!(config_for(:core))
 
     config.three_scale.segment = ActiveSupport::OrderedOptions.new
-    config.three_scale.segment.merge!(config_for(:segment).symbolize_keys)
+    config.three_scale.segment.merge!(config_for(:segment))
 
     config.three_scale.redhat_customer_portal = ActiveSupport::OrderedOptions.new
     config.three_scale.redhat_customer_portal.enabled = false
     config.three_scale.redhat_customer_portal.merge!(try_config_for(:redhat_customer_portal) || {})
 
-    config.three_scale.rolling_updates.features = try_config_for(:rolling_updates).deep_merge(try_config_for(:"extra-rolling_updates") || {})
+    config.three_scale.rolling_updates.features = try_config_for(:rolling_updates)&.deep_merge(try_config_for(:"extra-rolling_updates") || {})
 
     config.three_scale.service_discovery = ActiveSupport::OrderedOptions.new
     config.three_scale.service_discovery.enabled = false
@@ -240,7 +262,8 @@ module System
     config.three_scale.cors.enabled = false
     config.three_scale.cors.merge!(try_config_for(:cors) || {})
 
-    three_scale = config_for(:settings).symbolize_keys
+    three_scale = config_for(:settings)
+
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
     payment_settings = three_scale.extract!(:active_merchant_mode, :active_merchant_logging, :billing_canaries)
@@ -250,10 +273,10 @@ module System
     config.three_scale.payments.merge!(try_config_for(:payments) || {})
     config.three_scale.payments.active_merchant_mode ||= Rails.env.production? ? :production : :test
 
-    email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {}).symbolize_keys
+    email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {})
     config.three_scale.email_sanitizer.merge!(email_sanitizer_configs)
 
-    config.three_scale.merge!(three_scale.slice!(:force_ssl, :access_code))
+    config.three_scale.merge!(three_scale.slice!(:force_ssl))
     three_scale.each do |key, val|
       config.public_send("#{key}=", val)
     end
@@ -267,12 +290,15 @@ module System
 
     require 'three_scale/deprecation'
     require 'three_scale/domain_substitution'
+    require 'three_scale/middleware/presigned_downloads'
     require 'three_scale/middleware/multitenant'
     require 'three_scale/middleware/cors'
+    require 'three_scale/patterns/service'
 
-    config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
+    config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
+    config.middleware.insert_before ActionDispatch::Static, ThreeScale::Middleware::PresignedDownloads
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
-    config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
+    config.middleware.insert_before(Rack::Runtime, Rack::XServedBy) if ENV["DEBUG_X_SERVED_BY"] == "1"
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
@@ -280,8 +306,8 @@ module System
     config.action_dispatch.cookies_serializer = :hybrid
 
     initializer :load_configs, before: :load_config_initializers do
-      config.backend_client = { max_tries: 5 }.merge(config_for(:backend).symbolize_keys)
-      config.redis = config.sidekiq = config_for(:redis)
+      config.backend_client = { max_tries: 5 }.merge(config_for(:backend))
+      config.redis = config_for(:redis)
       config.s3 = config_for(:amazon_s3)
       config.three_scale.oauth2 = config_for(:oauth2)
     end

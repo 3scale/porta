@@ -10,7 +10,9 @@
   set the order in which they will be shown.
 <% end %>
 
-<%= javascript_include_tag 'jqueryui/jquery-ui-1.9.2.custom.min.js' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'fields_definitions' %>
+<% end %>
 
 <%= javascript_tag do %>
   var AUTH_TOKEN ='<%= form_authenticity_token.to_s -%>';
@@ -30,25 +32,14 @@
 
   <ol id="<%= class_name %>-list" class="fields-definitions-list ui-sortable">
     <% @fields_definitions.by_target(class_name).sort_by(&:pos).each do |fields_definition| %>
-	<li id="<%=dom_id(fields_definition)%>">
-	<span class="name"><%=h fields_definition.name %></span>
-	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
-	<span class="action-set">
-	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+      <li id="<%=dom_id(fields_definition)%>">
+        <span class="name"><%=h fields_definition.name %></span>
+        <span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
+        <span class="action-set">
+          <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
+          <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+        </span>
       </li>
     <% end %>
   </ol>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  $("#<%=class_name%>-list").sortable({
-    update : function () {
-      $.post('/admin/fields_definitions/sort', $(this).sortable('serialize'));
-    }
-  });
-  $("#<%=class_name%>-list").disableSelection();
-});
-</script>
-
 <% end %>

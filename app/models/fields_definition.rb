@@ -24,6 +24,7 @@ class FieldsDefinition < ApplicationRecord
   scope :by_target, ->(class_name) { where(['target = ?', class_name])}
   scope :by_name, ->(name) { where(['name = ?', name])}
   scope :required, -> { where({ :required => true })}
+  scope :read_only, ->(read_only = true) { where(read_only: read_only) }
 
   def self.editable_by(user)
     select{ |fd| fd.editable_by?(user) }
@@ -42,7 +43,7 @@ class FieldsDefinition < ApplicationRecord
 
   before_create :set_last_position_in_target_scope
 
-  before_destroy :avoid_destroy_required_field_on_target
+  before_destroy :avoid_destroy_required_field_on_target, unless: :destroyed_by_association
 
   default_scope { by_position }
   scope :by_position, -> { order(:pos) }

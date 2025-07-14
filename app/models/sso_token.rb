@@ -15,7 +15,7 @@ class SSOToken
   validate :one_of_user_id_or_username_is_required
   validate :account_is_provider_and_user_of_provider, :if => Proc.new {|o| o.account && o.user_id || o.username }
 
-  def initialize attributes = {}
+  def initialize(**attributes)
     assign_attributes({:expires_in => 10.minutes, :protocol => 'https'}.merge(attributes))
     @new_record= true
   end
@@ -59,11 +59,12 @@ class SSOToken
   # however, if the provider is also master, host needs to be the provider's admin domain for which we create the URL
   #
   #
-  def sso_url! host = nil
+  def sso_url!(host: nil, port: nil)
     save if new_record?
 
     params= {
       host: host || account.external_domain,
+      port: port,
       protocol: protocol,
       token: encrypted_token,
       expires_at: expires_at.to_i,

@@ -1,11 +1,10 @@
-import type { JSONSchema6 } from 'json-schema'
-
-export type Configuration = JSONSchema6
+import type { JSONSchema7 } from 'json-schema'
+import type { RJSFSchema } from '@rjsf/utils'
 
 // Represents the data stored for @proxy.policies_config
 export interface PolicyConfig {
   name: string;
-  configuration: JSONSchema6;
+  configuration: JSONSchema7;
   version: string;
   enabled: boolean;
 }
@@ -13,13 +12,13 @@ export interface PolicyConfig {
 // Represents policies of the Registry
 export interface RegistryPolicy {
   $schema: string;
-  schema?: JSONSchema6;
-  configuration: JSONSchema6;
+  schema?: RJSFSchema;
+  configuration: JSONSchema7;
   description: string[]; // TODO: verify this prop is correctly typed
   name: string;
   summary: string;
   version: string;
-  data?: Configuration;
+  data?: JSONSchema7;
   humanName: string;
 }
 

@@ -8,7 +8,13 @@ module Liquid
         end
 
         def path
-          admin_account_payment_details_path
+          polymorphic_path([:admin, :account, payment_gateway_type])
+        end
+
+        private
+
+        def payment_gateway_type
+          @payment_gateway_type ||= context.registers[:site_account].payment_gateway_type
         end
       end
 

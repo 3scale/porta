@@ -12,6 +12,7 @@ import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 import type { FunctionComponent } from 'react'
 import type { Backend } from 'Types'
 import type { Props as NewBackendFormProps } from 'BackendApis/components/NewBackendForm'
+import type { AJAXSuccessEvent, AJAXErrorEvent, AJAXBeforeEvent } from 'Types/rails-ujs'
 
 import './NewBackendModal.scss'
 
@@ -31,23 +32,33 @@ const NewBackendModal: FunctionComponent<Props> = ({
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<NewBackendFormProps['errors']>()
 
-  const handleOnAjaxComplete = (_event: unknown, xhr: { responseText: string }, status: string) => {
+  const handleAJAXBefore = (event: AJAXBeforeEvent) => {
+    setIsLoading(true)
+
+    event.stopPropagation() // Prevent ajax spinner from showing up
+  }
+
+  const handleAJAXSuccess = (event: AJAXSuccessEvent<Backend>) => {
+    const [response] = event.detail
+
+    onCreateBackend(response)
+    setIsLoading(false)
+  }
+
+  const handleAJAXError = (event: AJAXErrorEvent<NewBackendFormProps['errors']>) => {
+    const [response] = event.detail
+    setErrors(response)
     setIsLoading(false)
 
-    if (status === 'success') {
-      onCreateBackend(JSON.parse(xhr.responseText) as Backend)
-    } else if (status === 'error') {
-      setErrors(JSON.parse(xhr.responseText) as NewBackendFormProps['errors'])
-    }
+    event.stopPropagation() // Prevent from calling error handler in ajaxEvents.ts
   }
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any -- FIXME: jQuery used here is 1.8.2 but in our node_modules is 3.5
-    ($ as any)('form#new_backend_api_config')
-      // TODO: jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
-      .live('ajax:send', () => { setIsLoading(true) })
-      .live('ajax:complete', handleOnAjaxComplete)
-    // No need for cleanup
+    document.body.addEventListener('ajax:before', handleAJAXBefore)
+    document.body.addEventListener('ajax:success', handleAJAXSuccess)
+    document.body.addEventListener('ajax:error', handleAJAXError)
+
+    // No need for useEffect cleanup
   }, [])
 
   const header = (

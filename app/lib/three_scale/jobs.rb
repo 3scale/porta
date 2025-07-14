@@ -43,7 +43,7 @@ module ThreeScale
 
         def deserialize(args)
           hash = normalize_task_args(args)
-          klass, method, arguments = YAML.load(hash[:init_args]) # rubocop:disable Security/YAMLLoad
+          klass, method, arguments = YAML.unsafe_load(hash[:init_args])
           hash[:klass].constantize.new(klass, method, *arguments)
         end
 

@@ -29,7 +29,7 @@ class Api::AccountHelperTest < ActionView::TestCase
       assert_includes link, "href=\"#{admin_buyers_account_path(developer)}\""
 
       assert_does_not_contain link, /data-confirm=\"[^=]*in 15 days/
-      assert_does_not_contain link, /data-confirm=\"[^=]*#{15.days.from_now.to_date.to_s(:long)}/
+      assert_does_not_contain link, /data-confirm=\"[^=]*#{15.days.from_now.to_date.to_fs(:long)}/
       assert_contains link, /data-confirm=\"[^=]*Are you sure you want to delete/
     end
   end
@@ -45,7 +45,7 @@ class Api::AccountHelperTest < ActionView::TestCase
       assert_includes link, "href=\"#{admin_buyers_account_path(provider)}\""
 
       assert_contains link, /data-confirm=\"[^=]*in 15 days/
-      assert_contains link, /data-confirm=\"[^=]*#{15.days.from_now.to_date.to_s(:long)}/
+      assert_contains link, /data-confirm=\"[^=]*#{15.days.from_now.to_date.to_fs(:long)}/
       assert_does_not_contain link, /data-confirm=\"[^=]*Are you sure you want to delete/
     end
   end

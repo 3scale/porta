@@ -37,14 +37,20 @@ class Finance::Provider::LineItemsController < Finance::Provider::BaseController
   def render_template_success
     respond_to do |format|
       format.html { redirect_to(admin_finance_account_invoice_url(@buyer, @invoice)) }
-      format.js
+      format.js do
+        flash.now[:success] = t('.success')
+      end
     end
   end
 
   def render_template_error
+    errors = @line_item.errors.full_messages.to_sentence
     respond_to do |format|
-      format.html { redirect_to(admin_finance_account_invoice_url(@buyer, @invoice), flash: { error: @line_item.errors.full_messages.join(', ') }) }
-      format.js { render 'finance/provider/line_items/errors' }
+      format.html { redirect_to admin_finance_account_invoice_url(@buyer, @invoice), danger: errors }
+      format.js do
+        flash.now[:danger] = errors
+        render 'finance/provider/line_items/errors'
+      end
     end
   end
 

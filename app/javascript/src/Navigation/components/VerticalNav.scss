@@ -19,7 +19,7 @@
     color: #fff;
     background-color: var(--pf-c-nav__link--BackgroundColor);outline-offset: var(--pf-c-nav__link--OutlineOffset);
 
-    height: 45px;
+    min-height: 45px;
     border-bottom: 1px solid #3c3f42;
   }
 

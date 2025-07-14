@@ -3,7 +3,7 @@ require 'test_helper'
 class EventStore::EventTest < ActiveSupport::TestCase
 
   def test_serialization_event_error
-    ActiveJob::Arguments.expects(:serialize).raises(URI::InvalidURIError)
+    ActiveJob::Arguments.stubs(:serialize).raises(URI::InvalidURIError)
 
     event = EventStore::Event.new(
       stream:     'dummie',
@@ -85,5 +85,43 @@ class EventStore::EventTest < ActiveSupport::TestCase
 
     expected_stale_events_count = EventStore::Event.where('created_at <= ?', EventStore::Event::TTL.ago).count
     assert_equal expected_stale_events_count, EventStore::Event.stale.count
+  end
+
+  class EventRollbacksTest < ActiveSupport::TestCase
+
+    class EventWithCallbacks < EventStore::Event
+      after_rollback :after_rollback_method
+
+      def after_rollback_method; end
+    end
+
+    test 'exceptions in #rolledback! are not reported for events without transactional callbacks' do
+      System::ErrorReporting.expects(:report_error).with(instance_of(EventStore::Event::EventRollbackError)).never
+
+      ActiveRecord::Base.transaction do
+        EventStore::Event.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        ActiveJob::Arguments.expects(:deserialize).raises(ActiveRecord::RecordNotFound).at_least_once
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    test 'exceptions in #rolledback! are reported for events with transactional callbacks' do
+      System::ErrorReporting.expects(:report_error).with(instance_of(EventStore::Event::EventRollbackError))
+
+      ActiveRecord::Base.transaction do
+        EventWithCallbacks.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        ActiveJob::Arguments.stubs(:deserialize).raises(ActiveRecord::RecordNotFound)
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    test 'transactional callbacks are executed on successful #rolledback!' do
+      EventWithCallbacks.any_instance.expects(:after_rollback_method)
+
+      ActiveRecord::Base.transaction do
+        EventWithCallbacks.create!(stream: 'dummy', event_type: 'Dummy', event_id: 1, provider_id: 1, data: { whatever: 1 })
+        raise ActiveRecord::Rollback
+      end
+    end
   end
 end

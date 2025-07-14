@@ -64,10 +64,6 @@ class ApplicationController < ActionController::Base
   #
   helper_method :sublayout
 
-  def redirect_back_or_to(fallback_location)
-    redirect_back(fallback_location: fallback_location)
-  end
-
   def sublayout
     sublayout = self.class._sublayout
 
@@ -81,7 +77,7 @@ class ApplicationController < ActionController::Base
 
   def disable_client_cache
     response.headers.merge!(
-      'Cache-Control' => 'no-cache, no-store',
+      'Cache-Control' => 'no-store',
       'Pragma' => 'no-cache',
       'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
     )
@@ -96,8 +92,7 @@ class ApplicationController < ActionController::Base
     if current_user && browser_not_modern?
       logout_killing_session!
 
-      flash.now[:error] = "The browser you are using doesn't seem to support the X-Frame-Options header. That means we can't protect you against Cross Frame Scripting and thus not guarantee the security of your session. Please upgrade your browser and sign in again."
-      redirect_to provider_admin_path
+      redirect_to provider_admin_path, warning: t('shared.check_browser_error')
     end
   end
 

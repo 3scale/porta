@@ -3,8 +3,11 @@ require 'test_helper'
 class ServiceContracts::ServiceContractPlanChangedEventTest < ActiveSupport::TestCase
 
   def test_create
-    account  = FactoryBot.build_stubbed(:simple_buyer)
-    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 1, user_account: account)
+    provider = FactoryBot.build_stubbed(:simple_provider)
+    account  = FactoryBot.build_stubbed(:buyer_account, provider_account: provider)
+    service = FactoryBot.build_stubbed(:simple_service, account: provider)
+    plan = FactoryBot.build_stubbed(:simple_service_plan, service: service, issuer: service)
+    contract = FactoryBot.build_stubbed(:simple_service_contract, id: 1, plan: plan, user_account: account)
     user     = FactoryBot.build_stubbed(:simple_user, account: account)
     contract.stubs(:old_plan).returns(FactoryBot.build_stubbed(:simple_service_plan, id: 2))
     event    = ServiceContracts::ServiceContractPlanChangedEvent.create(contract, user)

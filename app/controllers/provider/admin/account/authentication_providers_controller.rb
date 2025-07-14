@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Account::AuthenticationProvidersController < Provider::Admin::Account::BaseController
   before_action :authorize_rolling_update!
   before_action :authorize_changes, only: [:edit, :update, :destroy]
@@ -5,9 +7,16 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
 
   before_action :disable_client_cache
 
+  attr_reader :presenter
+
+  helper_method :presenter
+
   def index
     @presenter = Provider::Admin::Account::AuthenticationProvidersIndexPresenter.new(
-      current_user, self_authentication_providers, user_session)
+      user: current_user,
+      authentication_providers: self_authentication_providers,
+      session: user_session,
+      params: params)
   end
 
   def new
@@ -19,9 +28,9 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
     @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.to_h.symbolize_keys)
 
     if @authentication_provider.save
-      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration created'
+      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), success: t('.success')
     else
-      flash.now[:error] = 'SSO integration could not be created'
+      flash.now[:danger] = t('.error')
       render 'new'
     end
   end
@@ -39,16 +48,22 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
     @authentication_provider = authentication_provider
 
     if @authentication_provider.update(authentication_provider_params)
-      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration updated'
+      redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), success: t('.success')
     else
-      flash.now[:error] = 'SSO integration could not be updated'
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end
 
   def destroy
     authentication_provider.destroy
-    redirect_to provider_admin_account_authentication_providers_path, notice: 'SSO integration deleted'
+    flash[:success] = t('.success')
+    path = provider_admin_account_authentication_providers_path
+
+    respond_to do |format|
+      format.html { redirect_to path }
+      format.json { render json: { redirect: path } }
+    end
   end
 
   private
@@ -76,8 +91,13 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
   def authorize_changes
     return if can_edit?
 
-    flash[:error] = 'You cannot edit active SSO Providers when SSO is enforced'
-    redirect_to provider_admin_account_authentication_providers_path
+    error = t('.authorize_changes.error')
+    respond_to do |format|
+      format.html do
+        redirect_to provider_admin_account_authentication_providers_path, danger: error
+      end
+      format.json { render json: { error: error } }
+    end
   end
 
   def can_edit?

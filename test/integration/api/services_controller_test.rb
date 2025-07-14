@@ -74,7 +74,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # Self managed
       put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'self_managed' })
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       get settings_admin_service_path(service)
 
@@ -85,7 +85,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # Hosted
       put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'hosted' })
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       get settings_admin_service_path(service)
 
@@ -96,7 +96,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # Istio
       put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'service_mesh_istio' })
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       get settings_admin_service_path(service)
 
@@ -127,7 +127,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # App_Id and App_Key Pair
       put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '2' })
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       get settings_admin_service_path(service)
 
@@ -139,7 +139,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # API Key (user_key)
       put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '1' })
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       get settings_admin_service_path(service)
 
@@ -154,7 +154,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'text/plain; charset=us-ascii', no_match_error_headers
 
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { error_headers_no_match: 'application/problem+json' } })
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       follow_redirect!
       assert_equal 'application/problem+json', no_match_error_headers
@@ -168,7 +168,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params(oidc_id: previous_oidc_config_id)
 
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
 
       update_service_params = update_params[:service]
       update_proxy_params = update_service_params.delete(:proxy_attributes)
@@ -219,7 +219,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
@@ -243,14 +243,14 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       service.update!(deployment_option: 'self_managed')
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
 
     test 'update settings' do
       put admin_service_path(service), params: update_params
-      assert_equal 'Product information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:success]
     end
 
     test 'update api_backend' do
@@ -330,15 +330,15 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class ServiceCreateTest < self
     test 'create error shows the right flash message' do
       post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
+      assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:danger]
 
       @provider.settings.allow_multiple_services!
 
       post admin_services_path, params: { service: { name: '' } }
-      assert_equal 'Name can\'t be blank', flash[:error]
+      assert_equal 'Name can\'t be blank', flash[:danger]
 
       post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
-      assert_equal 'System name invalid', flash[:error]
+      assert_equal 'System name invalid', flash[:danger]
     end
   end
 
@@ -415,6 +415,22 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       delete admin_service_path(service)
       assert_response :forbidden
+    end
+
+    test 'members with certain permissions can see the index page' do
+      %i[plans monitoring policy_registry partners].each do |section|
+        member.update(allowed_sections: [section])
+        get admin_services_path
+        assert_response :success, "'#{section}' permission should allow services index"
+      end
+    end
+
+    test 'members with certain permissions cannot see the index page' do
+      %i[portal finance settings].each do |section|
+        member.update(allowed_sections: [section])
+        get admin_services_path
+        assert_response :forbidden, "'#{section}' permission should not allow services index"
+      end
     end
 
     test 'member with right permission and restricted access to services' do

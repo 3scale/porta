@@ -3,4 +3,5 @@
     .innerText = '<%= application.state %>'
 <% end %>
 $.colorbox.close()
-$.flash('<%= j @notice %>')
+
+<%= render 'shared/flash_alerts' %>

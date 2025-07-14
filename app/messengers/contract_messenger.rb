@@ -15,12 +15,6 @@ class ContractMessenger < Messenger::Base
                  :plan             => Liquid::Drops::Plan.new(@plan)
   end
 
-  def new_contract(contract, options = {})
-    message options, 'new_contract',
-                     :sender => @user_account,
-                     :to     => @provider_account
-  end
-
   def expired_trial_period_notification(contract, options = {})
     message options, 'plan_change',
                      :subject => "#{@provider_account.org_name} API - Trial period expiry",
@@ -28,28 +22,11 @@ class ContractMessenger < Messenger::Base
                      :to      => @user_account
   end
 
-  # TODO: plan_change_for_provider
-  def plan_change(contract, options = {})
-    assign_drops(previous_plan: Liquid::Drops::Plan.new(@contract.old_plan))
-
-    message(options, 'plan_change',
-                     :subject => "API System: #{contract.class.model_name.human} plan change",
-                     :sender  => @user_account,
-                     :to      => @provider_account)
-  end
-
   def plan_change_for_buyer(contract, options = {})
     message options, 'plan_change',
                      :subject => "#{contract.class.model_name.human} plan changed to '#{contract.plan.name}'",
                      :sender  => @provider_account,
                      :to      => @user_account
-  end
-
-  def contract_cancellation(contract, options = {})
-    message options, 'contract_cancellation',
-                     :subject => "API System: #{contract.class.model_name.human} cancelation",
-                     :sender  => @user_account,
-                     :to      => @provider_account
   end
 
   def accept(contract, options = {})

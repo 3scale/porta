@@ -3,7 +3,7 @@ class Cinstance < Contract
   # Maximum number of cinstances permitted between provider and buyer
   MAX = 10
 
-  self.background_deletion = [:referrer_filters, :application_keys, [:alerts, { action: :delete }]]
+  self.background_deletion = %i[referrer_filters application_keys alerts]
 
   delegate :backend_version, to: :service, allow_nil: true
 
@@ -120,9 +120,9 @@ class Cinstance < Contract
   USER_KEY_FORMAT = /(([\w\-.]+)|([A-Za-z0-9+]{4})*([A-Za-z0-9+]{4}|[A-Za-z0-9+]{3}=|[A-Za-z0-9+]{2}==))/.freeze
 
   # The following characters are accepted:
-  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~
-  # Spaces and / are not allowed
-  validates :application_id, format: { with: /\A[\x21-\x2E\x30-\x7E]+\Z/ }, length: { in: 4..255 }
+  # A-Z a-z 0-9 ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+  # Spaces are not allowed
+  validates :application_id, format: { with: /\A[\x21-\x7E]+\Z/ }, length: { in: 4..255 }
 
   validates :user_key, format: { with: /\A#{USER_KEY_FORMAT}\Z/ }, length: { maximum: 256 }
 
@@ -148,7 +148,9 @@ class Cinstance < Contract
   }
 
   def self.provided_by(account)
-    joins(:service).references(:service).merge(Service.of_account(account)).readonly(false)
+    # we can access service through plan but also keep service.id in sync with plan.service.id
+    # this is a simpler way to do the query used historically
+    joins(:service).where.has { service.sift(:of_account, account) }
   end
 
   scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }
@@ -172,7 +174,7 @@ class Cinstance < Contract
     if service == :all || service.blank?
       all
     else
-      where{ plan_id.in( my{Plan.issued_by(service).select(:id)} ) }
+      where { plan_id.in( my { Plan.issued_by(service).select(:id)} ) }
     end
   end
 
@@ -199,9 +201,17 @@ class Cinstance < Contract
 
   # maybe move both limit methods to their models?
 
-  def self.serialization_preloading
-    includes(:application_keys, :plan, :user_account,
-             service: [:account, :default_application_plan])
+  def self.serialization_preloading(format = nil)
+    # With Rails 6.1 trying to include plan->issuer without service results in
+    #   > Cannot eagerly load the polymorphic association :issuer
+    # When both have the same sub-includes, cache takes care of the duplicate queries.
+    service_includes = %i[proxy account]
+    plan_includes = [{issuer: service_includes}]
+    if format == "xml"
+      service_includes << :default_application_plan
+      plan_includes << :original
+    end
+    includes(:user_account, service: service_includes, plan: plan_includes)
   end
 
 

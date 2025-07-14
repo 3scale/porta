@@ -11,8 +11,7 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     can :manage, user
 
-    can(:manage, :policy_registry) if account.tenant? && account.provider_can_use?(:policy_registry)
-    can(:manage, :policy_registry_ui) if account.tenant? && account.provider_can_use?(:policy_registry_ui)
+    can :manage, :policy_registry if account.tenant? && account.provider_can_use?(:policy_registry) && user.has_permission?(:policy_registry)
 
     # Overriding `can :manage, user` and `can :manage, User, :id => user.id`
     cannot :update_permissions, User, &:admin?
@@ -21,7 +20,8 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
     cannot %i[destroy update_role], user
 
     # Services
-    can %i[read show edit update], Service, user.accessible_services.where_values_hash
+    user_accessible_services = user.accessible_services
+    can %i[show edit update], Service, user_accessible_services.where_values_hash unless user_accessible_services.is_a? ActiveRecord::NullRelation
 
     #
     # Events
@@ -30,18 +30,21 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
 
     if user.has_permission?(:partners)
       can [:show], AccountRelatedEvent do |event|
-        service_id = event.try(:service)&.id || event.try(:service_id)
-        !service_id || user.has_access_to_service?(service_id)
+        next true if user.has_access_to_all_services?
+
+        service_ids = event.try(:service_ids) || [event.try(:service)&.id || event.try(:service_id)].compact
+
+        service_ids.any? { user.has_access_to_service?(_1) }
       end
 
       can [:show], ServiceRelatedEvent do |event|
-        user.has_access_to_service?(event.try(:service) || event.service_id)
+        user.has_access_to_service?(event.try(:service) || event.try(:service_id))
       end
     end
 
     if user.has_permission?(:monitoring)
       can [:show], AlertRelatedEvent do |event|
-        user.has_access_to_service?(event.try(:service))
+        user.has_access_to_service?(event.try(:service) || event.try(:service_id))
       end
     end
 
@@ -78,10 +81,8 @@ Ability.define do |user| # rubocop:disable Metrics/BlockLength
       forum.account == account
     end
 
-    if account.provider_can_use?(:new_notification_system)
-      can %i[show edit update], NotificationPreferences, user_id: user.id
-      can %i[show update], NotificationPreferences, &:new_record?
-    end
+    can %i[show edit update], NotificationPreferences, user_id: user.id
+    can %i[show update], NotificationPreferences, &:new_record?
 
     if account.partner?
       cannot :manage, Invoice

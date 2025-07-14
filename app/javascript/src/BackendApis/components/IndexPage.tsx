@@ -1,9 +1,12 @@
-import { Table, TableBody, TableHeader } from '@patternfly/react-table'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  wrappable
+} from '@patternfly/react-table'
 import {
   Button,
   Divider,
-  Level,
-  LevelItem,
   PageSection,
   PageSectionVariants,
   Text,
@@ -18,11 +21,11 @@ import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
-import type { IActions } from '@patternfly/react-table'
+import type { IActionsResolver } from '@patternfly/react-table'
 import type { Backend } from 'BackendApis/types'
 
 interface Props {
-  newBackendPath: string;
+  newBackendPath?: string;
   backends: Backend[];
   backendsCount: number;
 }
@@ -37,12 +40,12 @@ const IndexPage: FunctionComponent<Props> = ({
     'System name',
     'Last updated',
     'Private base URL',
-    'Linked products'
+    { title: 'Linked products', transforms: [wrappable] }
   ]
 
   const tableRows = backends.map((tableRow) => ({
     cells: [
-      { title: <Button isInline component="a" href={tableRow.links[1].path} variant="link">{tableRow.name}</Button> },
+      { title: <Button isInline component="a" href={tableRow.link} variant="link">{tableRow.name}</Button> },
       tableRow.systemName,
       <span key={tableRow.systemName} className="api-table-timestamp">{tableRow.updatedAt}</span>,
       tableRow.privateEndpoint,
@@ -50,30 +53,21 @@ const IndexPage: FunctionComponent<Props> = ({
     ]
   }))
 
-  const linkToPage = (rowId: number, actionNumber: number) => {
-    const { path } = backends[rowId].links[actionNumber]
-    window.location.href = path
-  }
+  const actionResolver: IActionsResolver = (_rowData, { rowIndex }) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const links = backends[rowIndex!].links
 
-  const tableActions: IActions = ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
-    title,
-    onClick: (_event, rowId) => { linkToPage(rowId, i) }
-  }))
+    return links.map(link => ({
+      title: link.name,
+      onClick: () => { window.location.href = link.path }
+    }))
+  }
 
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
         <TextContent>
-          <Level>
-            <LevelItem>
-              <Text component="h1">Backends</Text>
-            </LevelItem>
-            <LevelItem>
-              <Button component="a" href={newBackendPath} variant="primary">
-                Create Backend
-              </Button>
-            </LevelItem>
-          </Level>
+          <Text component="h1">Backends</Text>
           <Text component="p">Explore and manage all your internal APIs.</Text>
         </TextContent>
       </PageSection>
@@ -83,15 +77,22 @@ const IndexPage: FunctionComponent<Props> = ({
       <PageSection variant={PageSectionVariants.light}>
         <Toolbar id="top-toolbar">
           <ToolbarContent>
-            <ToolbarItem variant="search-filter">
+            <ToolbarItem spacer={{ default: 'spacerMd' }} variant="search-filter">
               <ToolbarSearch placeholder="Find a backend" />
             </ToolbarItem>
+            {newBackendPath && (
+              <ToolbarItem>
+                <Button component="a" href={newBackendPath} variant="primary">
+                  Create a backend
+                </Button>
+              </ToolbarItem>
+            )}
             <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
               <Pagination itemCount={backendsCount} />
             </ToolbarItem>
           </ToolbarContent>
         </Toolbar>
-        <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
+        <Table actionResolver={actionResolver} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
           <TableHeader />
           <TableBody />
         </Table>

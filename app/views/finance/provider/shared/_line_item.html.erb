@@ -1,4 +1,4 @@
-<%= content_tag_for :tr, line_item, :class => "line_item" do %>
+<%= content_tag :tr, id: dom_id(line_item), class: "line_item" do %>
   <td role="cell" data-label="Name"><%= h line_item.name %></td>
   <td role="cell" data-label="Description"><%= h line_item.description %></td>
   <td role="cell" data-label="Quantity"><%= h line_item.quantity %></td>
@@ -12,7 +12,7 @@
             <div class="pf-c-overflow-menu__item">
               <%= form_tag admin_finance_account_invoice_line_item_path(line_item.invoice.buyer_account, line_item.invoice, line_item),
                            :method => 'delete',
-                           :class => 'remote' do %>
+                           :remote => true do %>
                 <button type="submit" class="pf-c-button pf-m-link action delete">Delete</button>
               <% end %>
             </div>

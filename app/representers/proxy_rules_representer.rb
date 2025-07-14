@@ -7,7 +7,7 @@ class ProxyRulesRepresenter < ThreeScale::CollectionRepresenter
   end
 
   class XML < ProxyRulesRepresenter
-    include Roar::XML
+    include Representable::XML::Collection
     wraps_resource :mapping_rules # because including Roar::XML resets the wrap
     items extend: ProxyRuleRepresenter::XML, class: ProxyRule
   end

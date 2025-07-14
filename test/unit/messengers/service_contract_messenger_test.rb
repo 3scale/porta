@@ -10,7 +10,7 @@ class ServiceContractMessengerTest < ActiveSupport::TestCase
     @buyer = @contract.user_account
     @service = @contract.service
 
-    ServiceContractMessenger.new_contract(@contract).deliver
+    ServiceContractMessenger.accept(@contract).deliver
     @message = Message.last
   end
 
@@ -18,8 +18,8 @@ class ServiceContractMessengerTest < ActiveSupport::TestCase
     assert @message.sent?
   end
 
-  test 'should have the provider as recipient' do
-    assert_equal [@provider], @message.to
+  test 'should have the buyer as recipient' do
+    assert_equal [@buyer], @message.to
   end
 
   test 'should have meaningful subject' do
@@ -34,11 +34,11 @@ class ServiceContractMessengerTest < ActiveSupport::TestCase
     assert_match @plan.name, @message.body
   end
 
-  test 'should contain buyer name' do
-    assert_match @buyer.org_name, @message.body
+  test 'should contain provider name' do
+    assert_match @provider.org_name, @message.body
   end
 
-  test 'should contain buyer email' do
-    assert_match @buyer.admins.first.email, @message.body
+  test 'should contain provider email' do
+    assert_match @provider.admins.first.email, @message.body
   end
 end

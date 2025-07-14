@@ -1,3 +1,6 @@
+- content_for :javascripts
+  = javascript_packs_with_chunks_tag 'access_tokens'
+
 - if flash[:token]
   - token = @access_tokens.last
   - content_for :page_header_title, 'Copy the new token and store it somewhere safe'
@@ -31,6 +34,13 @@
         div class="pf-c-description-list__group"
           dt class="pf-c-description-list__term"
             span class="pf-c-description-list__text"
+              | Expires at
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text"
+              = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text"
               | Token
           dd class="pf-c-description-list__description"
             div class="pf-c-description-list__text"
@@ -55,6 +65,7 @@
         tr role="row"
           th role="columnheader" scope="col" Name
           th role="columnheader" scope="col" Scopes
+          th role="columnheader" scope="col" Expiration
           th role="columnheader" scope="col" Permission
           th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
             = fancy_link_to 'Add Access Token', new_provider_admin_user_access_token_path, class: 'new' if allowed_scopes.any?
@@ -64,6 +75,7 @@
             tr role="row"
               td role="cell" data-label="Name" = token.name
               td role="cell" data-label="Scopes" = token.human_scopes.to_sentence
+              td role="cell" data-label="Expiration" = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
               td role="cell" data-label="Permission" = token.human_permission
               td role="cell" class="pf-c-table__action"
                 div class="pf-c-overflow-menu"

@@ -95,6 +95,15 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
       end
     end
 
+    test 'POST accepts an expiration time' do
+      expires_at = 1.day.from_now.utc.iso8601
+      assert_difference @admin.access_tokens.method(:count) do
+        create_access_token(access_token: admin_access_token.value, params: access_token_params({ expires_at: }))
+        assert_response :created
+        assert_equal expires_at, JSON.parse(response.body).dig('access_token', 'expires_at')
+      end
+    end
+
     def assert_it_worked(_access_token = nil)
       assert_response :created
       created_token = AccessToken.last

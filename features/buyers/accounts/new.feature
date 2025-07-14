@@ -30,10 +30,39 @@ Feature: Audience > Accounts > New
     And user "alice" should be active
     But "alice@web-widgets.com" should receive no emails
 
-  Scenario: Required fields and validation
+  Scenario: Fields validation
     Given they go to the new buyer account page
-    When press "Create"
+    When the form is submitted with:
+      | Username | u        |
+      | Email    | invalid  |
+      | Password | p        |
+      | Organization/Group Name | Org |
     Then field "Username" has inline error "is too short"
     And field "Email" has inline error "should look like an email address"
-    And field "Organization/Group Name" has inline error "can't be blank"
     But field "Password" has no inline error
+
+  Scenario: Create account with fields with choices
+    Given the provider has the following fields defined for accounts:
+      | Name                 | Choices                 | Label                  | Required | Read only | Hidden |
+      | country              |                         | Country                | true     |           |        |
+      | field_with_choices   | hello, option1, option2 | Fields with choices    | true     |           |        |
+
+    When they go to the new buyer account page
+    And there is a select "Country" that includes options:
+      | Spain |
+      | United States of America |
+    And there is a select "Fields with choices" that includes options:
+      | hello   |
+      | option1 |
+      | option2 |
+    And the form is submitted with:
+      | Username                | alice              |
+      | Email                   | alice@example.com  |
+      | Organization/Group Name | Alice's Web Widget |
+      | Country                 | Spain              |
+      | Fields with choices     | option1            |
+
+    Then the current page is the buyer account page for "Alice's Web Widget"
+    And the inverted table has the following rows within the account details card:
+      | Country | Spain |
+      | Fields with choices | option1 |

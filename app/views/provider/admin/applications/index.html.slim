@@ -1,15 +1,17 @@
-- content_for :page_header_title_with_button, 'Applications'
+- content_for :page_header_title, 'Applications'
 - content_for :page_header_body do
-  ' Applications are a representation of an API consumer. They include credentials obtained through the API's authentication method,
-  ' along with usage metrics and other metadata. The application plan sets the limits for each application.
-
-- content_for :page_header_button_label, 'Create application'
-- content_for :page_header_button_href, new_provider_admin_application_path
+  = t('api.applications.index.description')
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'
+- elsif presenter.empty_state?
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'plus-circle',
+                                                    primary: { title: t('.empty_state.primary'),
+                                                               href: new_provider_admin_application_path } }
 - else
-  = render 'shared/applications/listing', { applications: @cinstances,
+  = render 'shared/applications/listing', { applications: presenter.applications,
                                             application_plans: @application_plans,
                                             plan: @plan,
                                             account: @account,

@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "three_scale/middleware/presigned_downloads"
+
 # Put any custom interpolations for paperclip here.
 Paperclip.interpolates(:param) { |attachment, style| attachment.instance.to_param }
 Paperclip.interpolates(:account_id) { |attachment, style| attachment.instance.account.id }
@@ -76,6 +80,12 @@ module Paperclip
   TempfileFactory.prepend(Module.new do
     def basename
       Digest::SHA256.hexdigest(File.basename(@name, extension))
+    end
+  end)
+
+  Storage::Filesystem.prepend(Module.new do
+    def expiring_url(expires_in = 3600, style_name = default_style)
+      ThreeScale::Middleware::PresignedDownloads.sign_path_if_needed url(style_name, timestamp: false), expires_in
     end
   end)
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: when input is required, add input_html: required prop instead of doing it manually in every form.
+
 class PatternflyInputInput < Formtastic::Inputs::StringInput
   delegate :tag, to: :template
 
@@ -26,12 +28,27 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
   def control
     tag.div(class: 'pf-c-form__group-control') do
-      input + helper_text
+      input_group + helper_text
+    end
+  end
+
+  def input_group
+    tag.div(class: "pf-c-input-group") do
+      input + action
     end
   end
 
   def input
     builder.text_field(method, input_html_options)
+  end
+
+  def action
+    action_html_options = options.delete(:action)
+    return nil if action_html_options.nil?
+
+    action_title = action_html_options.delete(:title)
+    action_html_options.reverse_merge!(class: 'pf-c-button pf-m-primary')
+    tag.button(action_title, **action_html_options)
   end
 
   def helper_text

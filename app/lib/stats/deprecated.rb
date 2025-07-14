@@ -55,7 +55,7 @@ module Stats
       data = data.group_by { |day, value| day.wday }
       data = data.sort.to_h
 
-      data.map_keys! { |wday| weekday_name(wday) }
+      data.transform_keys! { |wday| weekday_name(wday) }
 
       data.transform_values! { |data_for_day| data_for_day.map(&:second) }
       data.transform_values! { |values| values.sum.to_f / weeks_count }
@@ -136,7 +136,7 @@ module Stats
     end
 
     def self.date_labels(period, format)
-      period.to_time_range.each(:day).map { |time| time.to_date.to_s(format) }
+      period.to_time_range.each(:day).map { |time| time.to_date.to_fs(format) }
     end
 
     def self.weekday_name(number)
@@ -144,7 +144,7 @@ module Stats
     end
 
     def self.format_hours(data)
-      data.map_keys { |hour| format_hour(hour) }
+      data.transform_keys { |hour| format_hour(hour) }
     end
 
     def self.format_hour(hour)

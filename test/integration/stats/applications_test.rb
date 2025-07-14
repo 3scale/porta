@@ -8,36 +8,33 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
     @service = @provider.default_service
     @plan = FactoryBot.create(:simple_application_plan, issuer: @service)
     @application = FactoryBot.create(:simple_cinstance, plan: @plan)
+    @member = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], state: 'active')
 
     host! @provider.external_admin_domain
-    login_provider @provider
+    login_provider @provider, user: @member
   end
 
   test '#show nonexistent application does not check permissions' do
-    User.any_instance.expects(:has_access_to_all_services?).never
     User.any_instance.expects(:member_permission_service_ids).never
 
     get admin_buyers_stats_application_path(id: 'foo')
     assert_response :not_found
   end
 
-  test '#show does not check member permission with access to all services' do
-    User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
-    User.any_instance.expects(:member_permission_service_ids).never
+  test '#show succeeds with access to all services' do
+    assert_nil @member.member_permission_service_ids
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success
   end
 
-  test '#show needs member permission' do
-    User.any_instance.expects(:has_access_to_all_services?).returns(false)
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+  test '#show succeeds with permission for a specific service' do
+    @member.update(member_permission_service_ids: [@service.id])
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success
   end
 
   test '#show is forbidden without member permission' do
-    User.any_instance.expects(:has_access_to_all_services?).returns(false)
-    User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
+    @member.update(member_permission_service_ids: [])
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :forbidden
   end

@@ -2,7 +2,7 @@
   position:absolute;
   top: 0;
   left:0;
-  z-index:9999;
+  z-index: 599;
   overflow:hidden;
   -webkit-transform: translate3d(0,0,0);
   min-width: line-height-times(20);
@@ -32,16 +32,16 @@
       margin-left: 0 !important;
     }
 
-    .fancybox-close {
-      float: left;
-    }
-
     table, tr, td {
       height: auto;
 
       label {
         line-height: 2.4;
       }
+    }
+
+    .actions > * {
+      margin-right: var(--pf-global--spacer--sm);
     }
   }
 }

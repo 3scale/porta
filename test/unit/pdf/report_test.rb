@@ -13,7 +13,7 @@ class Pdf::ReportTest < ActiveSupport::TestCase
 
     test 'send_notification!' do
       user = FactoryBot.create(:simple_user, role: :admin, account: @account)
-      user.create_notification_preferences!(enabled_notifications: %w[daily_report])
+      user.notification_preferences.update(enabled_notifications: %w[daily_report])
 
       assert_difference ActionMailer::Base.deliveries.method(:count) do
         assert @report.send_notification!
@@ -120,7 +120,7 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     buyer = FactoryBot.create(:buyer_account, org_name: company_name)
     provider = buyer.provider_account
     service = provider.services.first
-    plan = FactoryBot.create(:application_plan, service: service, name: plan_name, state: 'published')
+    plan = FactoryBot.create(:application_plan, issuer: service, name: plan_name, state: 'published')
 
     cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: plan)
     custom_metric = FactoryBot.create(:metric, friendly_name: metric_name, owner: service)

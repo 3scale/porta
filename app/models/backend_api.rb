@@ -5,7 +5,8 @@ class BackendApi < ApplicationRecord
   include SystemName
   include ProxyConfigAffectingChanges::ModelExtension
 
-  audited :allow_mass_assignment => true
+  annotated
+  audited
 
   define_proxy_config_affecting_attributes :private_endpoint
 
@@ -18,7 +19,7 @@ class BackendApi < ApplicationRecord
   after_create :create_default_metrics
   before_destroy :avoid_destruction
 
-  has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
+  has_many :proxy_rules, -> { order(position: :asc) }, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
   alias_method :all_metrics, :metrics
 
@@ -105,7 +106,7 @@ class BackendApi < ApplicationRecord
   private
 
   def schedule_deletion
-    DeleteObjectHierarchyWorker.perform_later(self)
+    DeleteObjectHierarchyWorker.delete_later(self)
   end
 
   def set_port_private_endpoint

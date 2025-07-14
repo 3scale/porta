@@ -1,0 +1,24 @@
+- content_for :page_header_title, t('.title', service: @service.name)
+- content_for :page_header_body, t('.body_html', href: provider_admin_api_docs_path(anchor: '/service_management_api'))
+
+- if presenter.empty_state?
+  = render partial: 'shared/empty_state', locals: { icon: 'check-circle',
+                                                    title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body') }
+- else
+  - content_for :javascripts do
+    = javascript_packs_with_chunks_tag 'table_toolbar'
+
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Integration errors table" data-toolbar-props=presenter.toolbar_props.to_json
+    thead
+      tr role="row"
+        th role="columnheader" scope="col" Time (UTC)
+        th role="columnheader" scope="col" Error
+        td
+
+    tbody role="rowgroup"
+      - presenter.errors.each do |error|
+        tr role="row"
+          td role="cell" data-label="Time (UTC)" = error.timestamp
+          td role="cell" data-label="Error" = h error.message
+          td

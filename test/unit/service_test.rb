@@ -257,7 +257,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     assert_equal 'foos', method1.system_name
 
-    FactoryBot.create(:metric, service: service)
+    FactoryBot.create(:metric, owner: service)
 
     assert_same_elements [method1, method2], service.method_metrics
   end
@@ -387,26 +387,6 @@ class ServiceTest < ActiveSupport::TestCase
       assert_equal account.id, deleted_object_entry.owner_id
       assert_equal 'Account', deleted_object_entry.owner_type
     end
-  end
-
-  test 'reordering plans' do
-    service = FactoryBot.create(:simple_service)
-
-    free = FactoryBot.create(:application_plan, issuer: service)
-    basic = FactoryBot.create(:application_plan, issuer: service)
-    pro = FactoryBot.create(:application_plan, issuer: service)
-
-    service.reorder_plans([free.id, basic.id, pro.id])
-    [free, basic, pro].map(&:reload)
-
-    assert free.position < basic.position
-    assert basic.position < pro.position
-
-    service.reorder_plans([pro.id, basic.id, free.id])
-    [free, basic, pro].map(&:reload)
-
-    assert pro.position < basic.position
-    assert basic.position < free.position
   end
 
   test 'support_email should fallback to account.support_email' do
@@ -582,10 +562,10 @@ class ServiceTest < ActiveSupport::TestCase
     member_permission_service_ids = [Service.last.id]
     user.stubs(member_permission_service_ids: member_permission_service_ids)
 
-    user.stubs(forbidden_some_services?: false)
+    user.stubs(permitted_services_status: :all)
     assert_same_elements account.services.pluck(:id), Service.permitted_for(user).pluck(:id)
 
-    user.stubs(forbidden_some_services?: true)
+    user.stubs(permitted_services_status: :selected)
     assert_same_elements member_permission_service_ids, Service.permitted_for(user).pluck(:id)
     assert_same_elements Service.pluck(:id), Service.permitted_for.pluck(:id)
   end

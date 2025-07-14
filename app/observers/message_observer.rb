@@ -5,14 +5,6 @@ class MessageObserver < ActiveRecord::Observer
 
   include AfterCommitOn
 
-  def after_commit_on_create(contract)
-    return unless should_notify?(contract)
-    return if contract.user_account.nil?
-    return if contract.user_account.admins.empty?
-
-    contract.messenger.new_contract(contract).deliver
-  end
-
   def after_create(contract)
     event = case contract
             when Cinstance
@@ -40,21 +32,6 @@ class MessageObserver < ActiveRecord::Observer
     # nop
   end
 
-  def after_commit_on_destroy(contract)
-    return unless should_notify?(contract)
-    return if contract.user_account.nil?
-
-    # Do not send if there is no-one to send the message to.
-    return unless contract.provider_account
-    return if     contract.provider_account.admins.empty?
-
-    # Do not send message when contract is pending, because that is handled by
-    # +after_reject+.
-    return if contract.pending?
-
-    contract.messenger.contract_cancellation(contract).deliver
-  end
-
   def plan_changed(contract)
     notify_plan_change_provider(contract)
     notify_plan_change_developer(contract)
@@ -78,7 +55,7 @@ class MessageObserver < ActiveRecord::Observer
 
   def rejected(contract)
     return unless should_notify?(contract)
-    return if contract.user_account.nil?
+    return unless contract.user_account&.should_not_be_deleted?
     return if contract.user_account.admins.empty?
     return if contract.provider_account.blank?
 
@@ -107,11 +84,7 @@ class MessageObserver < ActiveRecord::Observer
   end
 
   def notify_plan_change_provider(contract)
-    if contract.provider_account.provider_can_use?(:new_notification_system)
-      plan_changed_publish_event!(contract)
-    elsif should_notify?(contract)
-      contract.messenger.plan_change(contract).deliver
-    end
+    plan_changed_publish_event!(contract)
   end
 
   def notify_plan_change_developer(contract)

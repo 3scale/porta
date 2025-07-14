@@ -1,0 +1,11 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "foo": "Simple API",
+    "version": "1.0"
+  },
+  "host": "echo-api.3scale.net",
+  "invalid": "",
+  "another": {},
+  "paths": {}
+}

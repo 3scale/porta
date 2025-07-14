@@ -7,7 +7,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
   def setup
     provider = FactoryBot.create(:provider_account)
     @service  = FactoryBot.create(:service, account: provider)
-    @plan    = FactoryBot.create(:application_plan, service: @service)
+    @plan    = FactoryBot.create(:application_plan, issuer: @service)
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
     @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
 
@@ -62,7 +62,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
       host! @provider.external_admin_domain
 
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-      @plan = FactoryBot.create(:application_plan, service: @provider.default_service)
+      @plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
       @application = @buyer.buy! @plan
     end
 
@@ -77,30 +77,20 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
 
     test 'cannot change plan to a different service' do
       service = FactoryBot.create(:service, account: @provider)
-      new_plan_other_service = FactoryBot.create(:application_plan, service: service)
+      new_plan_other_service = FactoryBot.create(:application_plan, issuer: service)
       request_plan_change new_plan_other_service
       assert_response :unprocessable_entity
       assert_equal @plan, @application.reload.plan
     end
 
-    test 'sends email to provider and buyer with new notification system' do
-      Account.any_instance.stubs(provider_can_use?: true)
-
+    test 'sends email to provider with new notification system' do
       Cinstances::CinstancePlanChangedEvent.expects(:create).with(@application, any_parameters).once
-      ContractMessenger.expects(:plan_change).never
-
-      ContractMessenger.expects(:plan_change_for_buyer).with(@application, any_parameters).once.returns(mock(deliver: true))
 
       request_plan_change
       assert_response :success
     end
 
-    test 'sends email to provider and buyer with old notification system' do
-      Account.any_instance.stubs(provider_can_use?: false)
-
-      Cinstances::CinstancePlanChangedEvent.expects(:create).never
-      ContractMessenger.expects(:plan_change).with(@application, any_parameters).once.returns(mock(deliver: true))
-
+    test 'sends email to buyer with old notification system' do
       ContractMessenger.expects(:plan_change_for_buyer).with(@application, any_parameters).once.returns(mock(deliver: true))
 
       request_plan_change
@@ -115,7 +105,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
     end
 
     def create_new_plan_same_service
-      FactoryBot.create(:application_plan, service: @provider.default_service)
+      FactoryBot.create(:application_plan, issuer: @provider.default_service)
     end
   end
 end

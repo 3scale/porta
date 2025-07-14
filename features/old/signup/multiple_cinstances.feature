@@ -6,7 +6,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
 
   Background:
     Given a provider "foo.3scale.localhost" with default plans
-    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "multiple_applications" visible
     And provider "foo.3scale.localhost" requires cinstances to be approved before use
     And provider "foo.3scale.localhost" requires accounts to be approved
     # TODO: add scenario without default app plan
@@ -24,7 +24,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
     And I press "Sign up"
     Then I should see "Please click the link in the email and you can directly login!"
     When I follow the activation link in an email sent to "hugo@stuff.com"
-    Then I should see "You will receive a message once your account is approved."
+    Then I should see "You will receive a message once your account is approved"
 
     And buyer "hugo's stuff" should be pending
     When buyer "hugo's stuff" is approved

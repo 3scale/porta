@@ -43,7 +43,8 @@ const defaultProps: Props = {
   },
   threeDSecureEnabled: false,
   formActionPath: '',
-  countriesList: COUNTRIES_LIST
+  countriesList: COUNTRIES_LIST,
+  ipAddress: '123.123.123.123'
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<BraintreeForm {...{ ...defaultProps, ...props }} />)
@@ -202,7 +203,7 @@ describe('after hosted fields instantiated', () => {
 
         wrapper.find('button[type="submit"]').simulate('submit')
 
-        expect(getNonce).toHaveBeenCalledWith(expect.objectContaining({ ...billingAddress, countryCode: 'ES' }))
+        expect(getNonce).toHaveBeenCalledWith(expect.objectContaining({ billingAddress: { ...billingAddress, country: 'Spain', countryCode: 'ES' }, ipAddress: '123.123.123.123' }))
 
         await waitForPromises(wrapper)
       })

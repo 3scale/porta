@@ -14,12 +14,16 @@ Feature: Create invoice
 
   @javascript
   Scenario: Create and view the invoice
-    And go to the invoices of account "zoidberg" page
+    And go to the invoices page of account "zoidberg"
     Then I should not see "open"
     When the date is 1st January 2009
     And I follow "Create invoice"
     Then I should see "Invoice successfully created"
     And I should see "open"
-    Then I follow "Create invoice" and confirm the dialog "You cannot create a new invoice for 'zoidberg' since it already has one open. Please issue it before creating a new one."
+    Then I follow "Create invoice"
+    And confirm the dialog
     When I follow "2009-01-00000001"
     Then I should see "Invoice for January 2009"
+
+  @wip
+  Scenario: Buyer already has an open invoice

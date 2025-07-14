@@ -12,7 +12,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
-  self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
+  self.background_deletion = %i[proxy_rules proxy_configs oidc_configuration]
 
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
@@ -344,7 +344,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return false unless saved
 
     success = ProxyDeploymentService.call(self)
-    analytics.track('Sandbox Proxy Deploy', success: success)
+    analytics.track('Sandbox Proxy Deploy', { success: success })
     success
   end
 
@@ -443,7 +443,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # Ridiculously hacking Rails to skip lock increment on touch
-  def touch(*)
+  def touch(...)
     @instance_locking_enabled = false
     super
   ensure
@@ -602,8 +602,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def policies_config_structure
     return if policies_config.valid?
 
-    policies_config.errors.each do |_attribute, message|
-      errors.add(:policies_config, message)
+    policies_config.errors.each do |error|
+      errors.add(:policies_config, error.message)
     end
   end
 

@@ -6,11 +6,12 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    = rails_asset_url_tag
     = render 'provider/theme'
-    = javascript_packs_with_chunks_tag 'provider'
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
+    / Order matters! Base must go before any other pack:
+    = stylesheet_packs_chunks_tag 'patternfly_base', 'toast'
+    = javascript_packs_with_chunks_tag 'provider'
     = yield :javascripts
 
   body
@@ -19,7 +20,6 @@ html[lang="en" class="pf-m-redhat-font"]
       = render partial: 'shared/provider/header'
       = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
       .pf-c-page__main role="main"
-        = render 'shared/provider/flash', flash: flash
         = yield :menu
         - if content_for(:main_section_with_react).present?
           = yield :main_section_with_react
@@ -36,3 +36,4 @@ html[lang="en" class="pf-m-redhat-font"]
                 = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
+    = render 'shared/provider/alert_group'

@@ -25,7 +25,7 @@ module Account::BuyerMethods
 
     alias_method :application_contracts, :bought_cinstances
 
-    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy
+    has_many :contracts, foreign_key: :user_account_id, dependent: :destroy, inverse_of: :user_account
 
     module UniqueAssociation
       # Oracle can't do DISTINCT when there are TEXT columns
@@ -77,7 +77,7 @@ module Account::BuyerMethods
     has_many :bought_plans, UniqueAssociation, class_name: 'Plan', through: :contracts, source: :plan
 
     # CMS permissions
-    has_many :permissions, :class_name => 'CMS::Permission'
+    has_many :permissions, :class_name => 'CMS::Permission', inverse_of: :account, dependent: :delete_all
     has_many :groups, :through => :permissions, :class_name => 'CMS::Group', :source => :group
 
     def accessible_sections

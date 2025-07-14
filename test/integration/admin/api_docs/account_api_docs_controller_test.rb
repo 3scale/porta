@@ -15,17 +15,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       @api_docs_service = FactoryBot.create(:api_docs_service, account: @provider, service: nil)
     end
 
-    test 'index gets the api_docs of an account independently of the service' do
-      service_2 = FactoryBot.create(:simple_service, account: provider)
-      FactoryBot.create(:api_docs_service, service: service, account: provider)
-      FactoryBot.create(:api_docs_service, service: service_2, account: provider)
-
-      get admin_api_docs_services_path
-      assert_account_active_docs_menus
-
-      assert_same_elements provider.api_docs_services.pluck(:id), assigns(:api_docs_services).map(&:id)
-    end
-
     test 'preview under the service scope when there is a service' do
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_account_active_docs_menus
@@ -63,7 +52,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
     test '#update with the right params' do
       put admin_api_docs_service_path update_params(service_id: service.id)
       assert_response :redirect
-      assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
+      assert_equal 'ActiveDocs Spec was successfully updated', flash[:success]
 
       api_docs_service.reload
       update_params[:api_docs_service].each do |name, value|
@@ -78,7 +67,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
       put admin_api_docs_service_path update_params(service_id: '')
       assert_response :redirect
-      assert_equal 'ActiveDocs Spec was successfully updated.', flash[:notice]
+      assert_equal 'ActiveDocs Spec was successfully updated', flash[:success]
 
       assert_nil api_docs_service.reload.service_id
     end
@@ -101,11 +90,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       member.activate!
 
       logout! && login!(provider, user: member)
-
-      get admin_api_docs_services_path
-      api_docs_service_ids = assigns(:api_docs_services).map(&:id)
-      assert_includes api_docs_service_ids, api_docs_service.id
-      assert_not_includes api_docs_service_ids, forbidden_api_docs_service.id
 
       get new_admin_api_docs_service_path
       page = Nokogiri::HTML4::Document.parse(response.body)
@@ -169,9 +153,6 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
         post admin_api_docs_services_path(create_params)
         assert_response :redirect
       end
-
-      get admin_api_docs_service_path(id: api_docs_service.id, format: :json)
-      assert_response :ok
 
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_response :ok

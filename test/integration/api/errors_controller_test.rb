@@ -12,7 +12,7 @@ class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
 
   test 'index with pagination' do
     get admin_service_errors_path(@service), params: { per_page: 1, page: 2 }
-    assigned_errors = assigns(:errors)
+    assigned_errors = assigns(:presenter).errors
     assert_equal 2, assigned_errors.size
     assigned_errors.each { |error| assert_instance_of(ThreeScale::Core::ServiceError, error) }
     assert_same_elements @service_errors, assigned_errors.map { |error| {timestamp: error.timestamp.to_time.iso8601, message: error.message} }
@@ -22,7 +22,6 @@ class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
   test 'purge with js' do
     IntegrationErrorsService.any_instance.expects(:delete_all).with(@service.id)
     delete purge_admin_service_errors_path(@service, format: :js)
-    assert_response :success
-    assert_template 'api/errors/purge'
+    assert_redirected_to admin_service_errors_path(@service)
   end
 end

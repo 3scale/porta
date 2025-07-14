@@ -1,7 +1,6 @@
 module ExtraFieldsRepresenter
   def representable_attrs
-    # Representable::Config#clone does not work, just create new one and inherit it
-    attrs = Representable::Config.new.inherit!(super)
+    attrs = super
     representable_extra_fields_attrs.each do |(name, options)|
       attrs.add(name, options)
     end

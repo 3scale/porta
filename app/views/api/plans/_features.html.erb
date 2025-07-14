@@ -14,14 +14,13 @@
     </thead>
 
     <tbody>
-
-      <tr class="notice" <%= "style=display:none;" unless @plan.features.of_service.empty? -%>>
+      <tr class="notice"><%# Visibility of .notice is handled by css. %>
         <td colspan="4">
           <span>This plan has no features yet.</span>
         </td>
       </tr>
 
-      <%= render :partial => 'api/features/feature', :collection => @plan.features.of_service %>
+      <%= render :partial => 'api/features/feature', :collection => @plan.features.all_available %>
     </tbody>
   </table>
 </div>

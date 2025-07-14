@@ -2,9 +2,21 @@
 
 require 'three_scale/sidekiq_retry_support'
 require 'three_scale/sidekiq_logging_middleware'
-require 'sidekiq/throttled'
 
-Sidekiq::Throttled.setup!
+REDIS_PARAMS_WHITELIST = %i[username password db id timeout read_timeout write_timeout connect_timeout ssl
+                            custom ssl_params driver protocol client_implementation command_builder inherit_socket
+                            reconnect_attempts middlewares circuit_breaker sentinels sentinel_password
+                            sentinel_username role name url].freeze
+
+def sanitize_redis_config(cfg)
+  cfg.slice(*REDIS_PARAMS_WHITELIST)
+end
+
+class Sidekiq::Batch
+  # Override the default value of 30 days with 6 hours
+  remove_const(:BID_EXPIRE_TTL) if defined?(BID_EXPIRE_TTL)
+  const_set(:BID_EXPIRE_TTL, 21_600)
+end
 
 Sidekiq::Client.try(:reliable_push!) unless Rails.env.test?
 
@@ -12,8 +24,7 @@ Rails.application.config.to_prepare do
   Sidekiq.configure_server do |config|
     config.try(:reliable!)
 
-    config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
-    config.error_handlers << System::ErrorReporting.method(:report_error)
+    config.redis = sanitize_redis_config(ThreeScale::RedisConfig.new(System::Application.config.redis).config)
 
     config.logger.formatter = Sidekiq::Logger::Formatters::Pretty.new
 
@@ -37,7 +48,7 @@ Rails.application.config.to_prepare do
     # Use PROMETHEUS_EXPORTER_BIND and PROMETHEUS_EXPORTER_PORT
     # if no PROMETHEUS_EXPORT_PORT given, it will start the server with default port 9394 + index
     port = ENV.fetch('PROMETHEUS_EXPORTER_PORT', 9394).to_i
-    port += Sidekiq.options[:index].to_i
+    port += Sidekiq.default_configuration[:index].to_i
     ENV['PROMETHEUS_EXPORTER_PORT'] ||= port.to_s
 
     require 'yabeda/prometheus/mmap'
@@ -48,7 +59,7 @@ end
 
 Rails.application.config.to_prepare do
   Sidekiq.configure_client do |config|
-    config.redis = ThreeScale::RedisConfig.new(System::Application.config.sidekiq).config
+    config.redis = sanitize_redis_config(ThreeScale::RedisConfig.new(System::Application.config.redis).config)
 
     config.client_middleware do |chain|
       chain.add ThreeScale::SidekiqLoggingMiddleware

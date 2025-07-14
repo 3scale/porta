@@ -9,8 +9,7 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
 
   def update
     if @page.update(permitted_params.fetch(:cms_template))
-      flash[:info] = 'Legal terms saved.'
-      redirect_back(fallback_location: { action: "edit", id: @page.id})
+      redirect_back_or_to({ action: :edit, id: @page.id }, success: t('.success'))
     else
       render :edit
     end
@@ -18,8 +17,7 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
 
   def create
     if @page.save
-      flash[:info] = 'Legal terms saved.'
-      redirect_to action: :edit, id: @page.id
+      redirect_to({ action: :edit, id: @page.id }, success: t('.success'))
     else
       render :new
     end

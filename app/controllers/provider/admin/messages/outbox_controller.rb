@@ -5,17 +5,19 @@ class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::B
 
   delegate :messages, to: :current_account
 
+  helper_method :modal?
+
   def new
-    activate_menu :buyers, :messages, :inbox
     @message = build_message({})
+
+    render partial: 'form' if modal?
   end
 
   def destroy
     @message = messages.find(message_id_param)
     @message.hide!
 
-    flash[:notice] = 'Message was deleted.'
-    redirect_to request.referer
+    redirect_to request.referer, success: t('.success')
   end
 
   def create
@@ -44,6 +46,10 @@ class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::B
 
   private
 
+  def modal?
+    @modal ||= request.xhr?
+  end
+
   def build_message(params)
     message = messages.build(params)
     message.to recipients
@@ -53,15 +59,15 @@ class Provider::Admin::Messages::OutboxController < Provider::Admin::Messages::B
   def enqueue_message_and_respond
     @message.enqueue! :to => recipient_ids
 
-    @notice = 'Message was sent.'
-
     respond_to do |format|
       format.html do
-        flash[:notice] = @notice
-        redirect_to provider_admin_messages_root_path
+        redirect_to provider_admin_messages_root_path, success: t('.success')
       end
 
-      format.js
+      format.js do
+        flash.now[:success] = t('.success')
+        render :create
+      end
     end
   end
 

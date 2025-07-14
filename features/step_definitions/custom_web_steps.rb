@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+#DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then "(I )(they )should see (a )(the )link to {}" do |page_name|
+  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   path = path_to(page_name)
   assert page.all('a').any? { |node| matches_path?(node[:href], path) }
 end
 
+#DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then /^I should not see link to (.+)$/ do |page_name|
+  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   path = path_to(page_name)
   assert page.all('a').none? { |node| matches_path?(node[:href], path) }
 end
@@ -15,8 +19,9 @@ def matches_path?(url, path)
   url =~ /^(?:https?:\/\/[^\/]+)?#{Regexp.quote(path)}/
 end
 
-#TODO: turn steps into the use of the 'the'
+#DEPRECATED: replace with <<there should( not| n't)? be a link to ([^"]*)>>
 Then /^I should see (?:|the )link "([^"]*)" containing "([^"]*)" in the URL$/ do |label, params|
+  ActiveSupport::Deprecation.warn 'replace with <<there should( not| n\'t)? be a link to ([^"]*)>>'
   params = params.split
   href_contain_params = proc do |selector|
     params.each do |param|
@@ -26,20 +31,52 @@ Then /^I should see (?:|the )link "([^"]*)" containing "([^"]*)" in the URL$/ do
   assert page.has_css?('a', :text => label, &href_contain_params)
 end
 
+#DEPRECATED: replace with "there {should} be a link to {string}"
 Then /^(?:I )?should see (the |)link "([^"]*)"$/ do |_, label|
+  ActiveSupport::Deprecation.warn 'replace with "there {should} be a link to {string}"'
   assert page.has_css?('a', :text => label)
 end
 
+#DEPRECATED: replace with "there {should} be a link to {string}"
 Then /^I should not see (?:the )?link "([^"]*)"$/ do |label|
+  ActiveSupport::Deprecation.warn 'replace with "there {should} be a link to {string}"'
   assert page.has_no_xpath? ".//a[text()='#{label}']"
 end
 
+# Assert whether a button with a certain label is visible in the current page.
+#
+# Examples:
+#   Then there should be a button to "Plans"
+#   Then there should not be a button to "Create a plan"
+#   Then there shouldn't be a button to "Dashboard"
+#
 Then "there {should} be a button to {string}" do |visible, label|
-  assert_equal visible, has_button?(label)
+  assert public_send(visible ? :has_button? : :has_no_button?, label)
 end
 
+# Assert whether a link with a certain label is visible in the current page.
+#
+# Examples:
+#   Then there should be a link to "Plans"
+#   Then there should not be a link to "Create a plan"
+#   Then there shouldn't be a link to "Dashboard"
+#
 Then "there {should} be a link to {string}" do |visible, label|
-  assert_equal visible, has_link?(label)
+  assert public_send(visible ? :has_link? : :has_no_link?, label)
+end
+
+# Assert whether a link to a certain href is visible in the current page. The href is looked up from
+# "paths.rb" by name.
+#
+# Examples:
+#   Then there should be a link to the plans index page
+#   Then there should not be a link to the new plan page
+#   Then there shouldn't be a link to the provider dashboard
+#
+Then /^there should( not| n't)? be a link to ([^"]*)$/ do |invisible, page_name|
+  visible = invisible.nil?
+  path = path_to(page_name)
+  assert_equal visible, has_link?(href: path, wait: visible)
 end
 
 Then(/^I should see button "([^"]*)"( disabled)?$/) do |label, disabled|
@@ -67,6 +104,7 @@ Then "I/they should see the fields in order:" do |table|
   page.html.should match /#{table.rows.map(&:first).map(&:downcase).join(".*")}/mi
 end
 
+# DEPRECATED: replace with field {string} has inline error {string}
 Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
   # This assumes the error is in a <p> element next to (sibling of) the input field.
   # Not sure if this will work in the general case.
@@ -76,7 +114,7 @@ Then /^I should see error "([^"]*)" for field "([^"]*)"$/ do |error, field|
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" column and "([^"]*)" row$/ do |text, column, row|
-  if has_css?('table.pf-c-table')
+  if has_css?('table.pf-c-table', wait: 0)
     column_values = find_all("td[data-label='#{column}'").map(&:text)
     rows = find_all('tbody tr td[data-label="Group/Org."]')
     index = rows.find_index{ |r| r.text == row }
@@ -172,14 +210,8 @@ When /^(.*) that belongs to ([^:]+):$/ do |lstep, scope, table|
   end
 end
 
-When /^I visit "(.+?)"$/ do |path|
+When /^(?:|I |they )visit "(.+?)"$/ do |path|
   visit path
-end
-
-And(/^I press "Hide" inside the dropdown$/) do
-  find(:button, text: 'Publish').sibling('a').click
-  find(:button, name: 'hide').click
-  wait_for_requests
 end
 
 toggled_input_selector = '[data-behavior="toggle-inputs"] legend'

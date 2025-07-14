@@ -1,3 +1,9 @@
-= render 'shared/proxy_rules/header_section', new_rule_path: new_admin_service_proxy_rule_path(@service)
-= render 'shared/proxy_rules/body_section', proxy_rules: @proxy_rules,
-                                            include_redirect: @service.using_proxy_pro?
+- if @presenter.empty_state?
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body', name: @service.name),
+                                                    icon: 'plus-circle',
+                                                    primary: { title: t('.empty_state.primary'),
+                                                               href: new_admin_service_proxy_rule_path(@service) } }
+- else
+  = render 'shared/proxy_rules/body_section', proxy_rules: @proxy_rules,
+                                              include_redirect: @service.using_proxy_pro?

@@ -17,7 +17,7 @@ class Stats::Aggregation::RuleTest < ActiveSupport::TestCase
             :created_at => time}
 
     rule.aggregate(data)
-    key = "stats/{service:#{service.backend_id}}/metric:789/day:#{time.beginning_of_cycle(:day).to_s(:compact)}"
+    key = "stats/{service:#{service.backend_id}}/metric:789/day:#{time.beginning_of_cycle(:day).to_fs(:compact)}"
 
     ttl = @storage.ttl(key)
 

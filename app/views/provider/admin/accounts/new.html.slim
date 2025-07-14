@@ -1,5 +1,8 @@
 - content_for :page_header_title, 'Create new Account'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for @provider, builder: Fields::PatternflyFormBuilder,
@@ -10,8 +13,8 @@ div class="pf-c-card"
           ' User Information
         = form.fields_for [:user, @user] do |user|
           = user.user_defined_form
-          = user.input :password, as: :patternfly_input, required: true
-          = user.input :password_confirmation, as: :patternfly_input, required: true
+          = user.input :password, as: :patternfly_input, input_html: { type: 'password' }, required: true
+          = user.input :password_confirmation, as: :patternfly_input, input_html: { type: 'password' }, required: true
 
       section class="pf-c-form__section" role="group" aria-labelledby="form-section-org"
         div class="pf-c-form__section-title" id="form-section-org" aria-hidden="true"
@@ -19,4 +22,4 @@ div class="pf-c-card"
         = form.user_defined_form
 
       = form.actions do
-        button class="pf-c-button pf-m-primary" type="submit" Create Account
+        = form.commit_button 'Create Account'

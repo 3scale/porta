@@ -5,12 +5,17 @@ import { LoginPage } from 'Login/components/LoginPage'
 import type { Props } from 'Login/components/LoginPage'
 
 const defaultProps: Props = {
-  flashMessages: [],
+  alerts: [],
   authenticationProviders: [],
   providerRequestPasswordResetPath: 'password-path',
   providerSessionsPath: 'sessions-path',
   show3scaleLoginForm: true,
   disablePasswordReset: false,
+  recaptcha: {
+    enabled: false,
+    siteKey: '',
+    action: ''
+  },
   session: { username: '' }
 }
 

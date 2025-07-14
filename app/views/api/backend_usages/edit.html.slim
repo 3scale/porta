@@ -1,5 +1,8 @@
 - content_for :page_header_title, 'Edit Backend Usage'
 
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
+
 div class="pf-c-card"
   div class="pf-c-card__body"
     = semantic_form_for @backend_api_config, url: admin_service_backend_usage_path(@service, @backend_api_config),

@@ -46,7 +46,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
         @provider.settings.update(account_approval_required: true) # rubocop:disable Rails/ActiveRecordAliases) This method is being overriden
 
         @auth = FactoryBot.create(:authentication_provider, published: true, account: @provider)
-        stub_user_data({uid: '12345', email: ACCOUNT_EMAIL, email_verified: true}, stubbed_method: :authenticate!)
+        stub_user_data(:authenticate!, uid: '12345', email: ACCOUNT_EMAIL, email_verified: true)
 
         post session_path(system_name: @auth.system_name, code: 'alaska')
         assert_redirected_to signup_path

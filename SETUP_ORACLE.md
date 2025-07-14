@@ -12,6 +12,8 @@ If you wish, you can also install SQLPLus client from same location as well.
 
 ### Setup Podman with user namespaces
 
+On recent Fedora versions, new users already have that setup.
+
 ```sh
 dnf install -y podman-docker
 sudoedit /etc/subuid # add line: myusername:10000:54321
@@ -20,7 +22,7 @@ sudoedit /etc/subgid # add line: myusername:10000:54330
 
 ## Prerequisites on other Linux and probably MAC
 
-### Install Oracle dependencies using the script
+### Install Oracle Instant Client using the script
 
 1. Run the script with sudo
 ```shell
@@ -34,13 +36,15 @@ LD_LIBRARY_PATH="/opt/oracle/instantclient/:$LD_LIBRARY_PATH"
 ORACLE_HOME=/opt/oracle/instantclient/
 ```
 
-### Install Oracle Instant Client
+### Install Oracle Instant Client via RPM
 
 1. Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and download the following **.rpm** packages for your operative system:
 
   - Basic
   - SQL Plus
   - SDK
+
+On Fedora or a Red Hat based distro, you can just install the RPMs. Instructions for Debian based systems follow.
 
 2. Create a folder in `/opt/oracle` if it does not exist yet (with `mkdir -p /opt/oracle`) and save these packages there.
 
@@ -60,7 +64,7 @@ export OCI_LIB_DIR=$ORACLE_HOME/lib
 export OCI_INC_DIR=/usr/include/oracle/X/client64
 ```
 
-### Setup Docker
+### Setup Docker (but preferably use podman)
 
 You need to have Docker installed and running. You also need to be able to [run containers as a non-root user](https://docs.docker.com/install/linux/linux-postinstall/).
 
@@ -95,10 +99,15 @@ You need to have Docker installed and running. You also need to be able to [run 
 
 ### ORA-12637: Packet receive failed
 
-Add `DISABLE_OOB=ON` to `sqlnet.ora` ([github issue](https://github.com/oracle/docker-images/issues/1352)).
+Add `DISABLE_OOB=ON` to `sqlnet.ora` ([github issue](https://github.com/oracle/docker-images/issues/1352)). For installation from archive that would be
 
 ```shell
 echo "DISABLE_OOB=ON" >> /opt/oracle/instantclient/network/admin/sqlnet.ora
+```
+
+For RPM installation (update version `21` with whatever you installed locally).
+```shell
+echo "DISABLE_OOB=ON" >> /usr/lib/oracle/21/client64/lib/network/admin/sqlnet.ora
 ```
 
 For IntelliJ/RubyMine, go to Database -> Database Source properties -> Drivers -> Oracle -> Advanced -> oracle.net.disableOob -> true

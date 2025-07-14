@@ -2,6 +2,8 @@
 
 module Authentication
   module Strategy
+
+    # Oauth2 authentication for the developer portal
     class OAuth2 < Authentication::Strategy::OAuth2Base
       class FindOrCreateAccount < Procedure
 
@@ -21,7 +23,7 @@ module Authentication
           signup_result = new_user_created = nil
 
           Account.transaction do
-            signup_result = SignupService.create(signup_service_params(session))
+            signup_result = SignupService.create(**signup_service_params(session))
             if new_user_created = signup_result.persisted?
               if authentication_provider.automatically_approve_accounts? && !signup_result.account_approved?
                 signup_result.account_approve!

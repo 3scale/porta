@@ -23,4 +23,14 @@ class CMS::Builtin::LegalTermsTest < ActiveSupport::TestCase
     assert_not_empty lt.errors[:system_name]
   end
 
+  test 'published is filled with draft value' do
+    value = 'some text'
+    lt = @provider.builtin_legal_terms.create(system_name: 'signup_licence', draft: value)
+    assert_equal value, lt.published
+
+    new_value = 'updated text'
+    lt.update(draft: new_value)
+    assert_equal new_value, lt.published
+  end
+
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ButtonsHelper # rubocop:disable Metrics/ModuleLength
+module ButtonsHelper
 
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
@@ -27,33 +27,46 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     switch_link label, url, options
   end
 
-  # Mini form with signle <button> element, ready for fancy styling.
+  # Mini form with single <button> element, ready for fancy styling.
   #
   # == Options
   #
   # +method+:: HTTP method
   # +remote+:: if true, the request will be sent asynchronously (AJAXy)
   # +class+:: css class applied to the button element
+  # +confirm+:: shows a confirmation dialog
   def fancy_button_to(label, url, options = {})
     form_attributes = {:method => (method = options.delete(:method) || :post),
-                       :class  => join_dom_classes('button-to', options.delete(:remote) && 'remote')}
+                       :class  => 'button-to'}
     form_attributes[:style] = 'display:none' if options.delete(:visible) == false
+    form_attributes['data-remote'] = true if options.delete(:remote)
+    form_attributes['data-confirm'] = options.delete(:confirm)
 
     button_class = options.delete(:class)
     button_class ||= 'delete' if method == :delete
     button_class = join_dom_classes('action', button_class)
 
-    confirmation = if (confirm = options.delete(:confirm)).blank?
-                     { }
-                   else
-                     { :onclick => "return confirm('#{confirm}');" }
-                   end
-
-    button_attributes = {:type => 'submit', :class => button_class.strip }.merge(confirmation).merge(options)
+    button_attributes = { type: 'submit', class: button_class.strip }.merge(options)
 
     capture do
       form_tag url, form_attributes do
-        content_tag 'button', label, button_attributes
+        tag.button(label, **button_attributes)
+      end
+    end
+  end
+
+  def pf_fancy_button_to(label, url, options = {})
+    form_attributes = { method: options.delete(:method) || :post }
+    form_attributes['data-remote'] = true if options.delete(:remote)
+    form_attributes['data-confirm'] = options.delete(:confirm)
+
+    button_class = options.delete(:class)
+
+    button_attributes = { type: 'submit', class: button_class.strip }.merge(options)
+
+    capture do
+      form_tag url, form_attributes do
+        tag.button(label, **button_attributes)
       end
     end
   end
@@ -87,14 +100,6 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     action_link_to :delete, url, options.reverse_merge(:method => :delete)
   end
 
-  def button_to_toggle_suspend_buyer_user(user)
-    if user.active?
-      fancy_button_to('Suspend', suspend_admin_buyers_account_user_path(user.account, user), class: 'action off')
-    elsif user.suspended?
-      fancy_button_to('Unsuspend', unsuspend_admin_buyers_account_user_path(user.account, user), class: 'action ok')
-    end
-  end
-
   def link_to_activate_buyer_user(user)
     action_link_to('activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'action')
   end
@@ -110,42 +115,9 @@ module ButtonsHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def dropdown_button( title, url = nil, opts = {}, &block)
-    css_class = opts.delete(:important) ? 'important-button' : 'less-important-button'
-
-    main_item = if url.nil?
-      title
-                else
-      link_to(title, url, opts.slice!(:id).merge(:class => css_class))
-                end
-
-    list = content_tag(:ul, capture(&block), :class => 'dropdown')
-
-    caret = %{<a class="#{css_class} dropdown-toggle" href="#">
-                 <i class="fa fa-caret-down"></i>
-              </a>}.html_safe
-
-    content_tag(:div, main_item + list + caret, opts.merge(:class => 'button-group'))
-  end
-
-  # Usage:
-  #
-  # dropdown_link 'Preview published', cms_published_url(@page), :target => "_blank", 'data-preview' => :published
-  #
-  #   or
-  #
-  # dropdown_link '<button type="submit" value="Publish"></button>'
-  #
-  def dropdown_link(*args)
-    if args.size > 1
-      content_tag :li, link_to(*args)
-    else
-      content_tag :li, args.first
-    end
-  end
-
   def pf_link_to(label, url, options = {})
-    options[:class] = join_dom_classes('pf-c-button pf-m-link', options[:class])
+    variant = options.delete(:variant) || :link
+    options[:class] = join_dom_classes("pf-c-button pf-m-#{variant}", options[:class])
     link_to label, url, options
   end
 

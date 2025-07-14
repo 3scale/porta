@@ -39,8 +39,8 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = emptyArray, isDisa
     >
       <TextInput
         id="api_docs_service_system_name"
-        isDisabled={isDisabled}
         name="api_docs_service[system_name]"
+        readOnly={isDisabled}
         type="text"
         validated={validated}
         value={systemName}

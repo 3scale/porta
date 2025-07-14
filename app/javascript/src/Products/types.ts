@@ -8,6 +8,7 @@ export interface Product {
   name: string;
   systemName: string;
   updatedAt: string;
+  link?: string;
   links: ProductLink[];
   appsCount: number;
   backendsCount: number;

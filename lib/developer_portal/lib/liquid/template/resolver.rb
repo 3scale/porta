@@ -4,17 +4,20 @@ module Liquid
       # really nasty way, but how else ?
       attr_accessor :cms
 
-      def self.config
-        Rails.configuration.liquid
-      end
+      @instances = Concurrent::Map.new
 
-      def self.instance(scope)
-        config.resolver_caching ? cached(scope) : new(scope)
-      end
+      class << self
+        def config
+          Rails.configuration.liquid
+        end
 
-      @@cache = {}
-      def self.cached(scope)
-        @@cache[scope.id] ||= new(scope)
+        def instance(scope)
+          config.resolver_caching ? cached(scope) : new(scope)
+        end
+
+        def cached(scope)
+          @instances[scope.id] ||= new(scope)
+        end
       end
 
       def initialize(scope)

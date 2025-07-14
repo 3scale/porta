@@ -8,9 +8,9 @@ class ProxyRule < ApplicationRecord
 
   include ProxyConfigAffectingChanges::ModelExtension
 
-  belongs_to :proxy
+  belongs_to :proxy, inverse_of: :proxy_rules
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
-  belongs_to :metric
+  belongs_to :metric, inverse_of: :proxy_rules
 
   validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
   validates :owner_type, length: { maximum: 255 }
@@ -89,7 +89,7 @@ class ProxyRule < ApplicationRecord
   validates :http_method, inclusion: { in: ALLOWED_HTTP_METHODS }
   validate :non_repeated_parameters
   validate :no_vars_in_keys
-  validates :redirect_url, format: URI.regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
+  validates :redirect_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true, length: { maximum: 10000 }
 
   def parameters
     Addressable::Template.new(path_pattern).variables

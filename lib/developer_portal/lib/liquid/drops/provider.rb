@@ -108,7 +108,7 @@ module Liquid
         {% endif %}
       )
       def multiple_applications_allowed?
-        @model.settings.multiple_applications.visible?
+        @model.settings&.multiple_applications&.visible?
       end
 
       desc """*True* if your 3scale plan allows you to manage multiple APIs
@@ -171,7 +171,7 @@ module Liquid
         </ul>
       )
       def account_plans
-        Drops::AccountPlan.wrap(@model.account_plans.published)
+        Drops::AccountPlan.wrap(@model.account_plans.published.ordered)
       end
 
       desc "Returns all defined services."
@@ -202,7 +202,7 @@ module Liquid
       )
       def logo_url
         if logo = @model.try(:profile).try(:logo)
-          logo.url(:large)
+          logo.expiring_url(CMS::S3::DEFAULT_EXPIRES_IN, :large)
         end
       end
 

@@ -10,13 +10,18 @@ When "{} in the {ordinal} row" do |lstep, n|
   end
 end
 
+# Select an action for a given row in a Patternfly table.
+#
+#   When they select action "Hide" of "Public Plan"
+#   And select action "Delete" of "alice@example.org"
+#
 When "(they )select action {string} of (row ){string}" do |action, row|
   find_inline_actions_of_row(row).find { |node| node.text == action }
                                  .click
 end
 
 # TODO: can we use "has_table?" instead of this complex step?
-Then "(I )(they )should see (the )following table(:)" do |expected|
+Then /^(?:I |they )?should see (?:the )?following table( with exact columns)?:?$/ do |exact_columns, expected|
   table = extract_table('table', 'tr:not(.search, .table_title)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
@@ -35,7 +40,8 @@ Then "(I )(they )should see (the )following table(:)" do |expected|
 
   retries ||= 1
 
-  expected.diff! table
+  options = exact_columns.present? ? { surplus_col: true } : {}
+  expected.diff! table, options
 rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
   if retries > 0
     retries -= 1
@@ -61,7 +67,7 @@ end
 #   | Name            | State     |
 #   | Jane's Full App | suspended |
 #   | Jane's Lite App | live      |
-Given "the table has the following row(s):" do |table|
+Given "the table has the following row(s)(:)" do |table|
   actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   expected = table.raw
 
@@ -93,8 +99,8 @@ end
 #   | Name            | State     |
 #   | Jane's Full App | suspended |
 #   | Jane's Lite App | live      |
-Then "the table should contain the following:" do |table|
-  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+Then "the table should contain the following(:)" do |table|
+  actual = extract_table('table', 'thead tr:not(.search), tbody tr', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
   expected = table.raw
 
   headers = actual.first
@@ -122,4 +128,15 @@ Then "the actions of row {string} are:" do |row, table|
   actions = find_inline_actions_of_row(row)
 
   assert_same_elements table.raw.flatten, actions.map(&:text)
+end
+
+# The table where the first column contains headers, and the second one contains values
+Then "the inverted table has the following row(s)(:)" do |table|
+  actual = extract_table('table', 'tr:not(.search)', 'td:not(.select, .pf-c-table__check), th:not(.select, .pf-c-table__check)')
+  expected = table.raw.first
+  assert_includes actual, expected
+end
+
+Then "the table {should} have a column {string}" do |should, column|
+  assert_equal should, has_css?('table thead th', text: column, wait: 0)
 end

@@ -47,11 +47,11 @@ module Liquid
       end
 
       desc "Javascript includes tag."
-      def javascript_include_tag(name, options = {})
+      def javascript_include_tag(name)
         js = RailsHelpers.replace_googleapis(name)
         case
         when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
-          active_docs_proxy(name) + view.javascript_packs_with_chunks_tag(name.chomp('.js'), options)
+          active_docs_proxy(name) + view.javascript_packs_with_chunks_tag(name.chomp('.js'))
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           active_docs_proxy(js) + view.javascript_include_tag(js)
         else
@@ -238,7 +238,7 @@ module Liquid
         return url unless Rails.env.test?
 
         if url =~ %r{//ajax.googleapis.com/ajax/libs/jquery/(.+?)/jquery.min.js}
-          "vendor/jquery-#{$1}.min.js"
+          "essential_assets/jquery-#{$1}.min.js"
         else
           url
         end

@@ -63,7 +63,8 @@
         dom_id: "swagger-ui-container",
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
         onComplete: function(swaggerApi, swaggerUi) {
-          $('#swagger-ui-container pre code').each(function(i, e) {
+          document.querySelectorAll('#swagger-ui-container pre code').forEach((e) => {
+            // hljs is leaked to the global scope from /dev-portal-assets/swagger-ui/2.2.10/swagger-ui.js
             hljs.highlightBlock(e)
           });
         },
@@ -124,7 +125,13 @@
         onComplete: function(swaggerApi, swaggerUi) {
           var source   = $("#swagger-notifications").html();
           var template = Handlebars.compile(source);
-          var html = _.reduce( swaggerApi.apis, function(memo, api) { return memo + template(api); }, "" );
+
+          const { apis } = swaggerApi;
+          let html = '';
+          for (const key in apis) {
+            html += template(apis[key]);
+          }
+
           $("#message-bar").append(html);
         },
         onFailure: function(data) {

@@ -15,14 +15,18 @@ module Account::ProviderMethods
     end
 
     validates :self_domain, uniqueness: { allow_nil: true, case_sensitive: false }
-    has_one :go_live_state
+    has_one :go_live_state, inverse_of:  :account, dependent: :delete
 
-    has_one :provider_constraints, foreign_key: 'provider_id'
+    has_one :provider_constraints, foreign_key: 'provider_id', dependent: :delete
 
-    has_one :forum
+    has_one :forum, dependent: :destroy
 
-    has_one  :web_hook, inverse_of: :account
+    has_one  :web_hook, inverse_of: :account, dependent: :delete
     has_many :alerts
+
+    has_many :email_configurations, inverse_of: :account, dependent: :destroy
+
+    has_many :cms_templates_versions, class_name: "CMS::Template::Version", inverse_of: :provider, foreign_key: :provider_id, dependent: :delete_all
 
     has_many :policies, inverse_of: :account
 
@@ -79,8 +83,8 @@ module Account::ProviderMethods
 
     has_one :billing_strategy, class_name: 'Finance::BillingStrategy', inverse_of: :account, dependent: :destroy
 
-    has_many :buyer_invoices, class_name: 'Invoice', foreign_key: :provider_account_id
-    has_many :buyer_invoice_counters, class_name: 'InvoiceCounter', foreign_key: :provider_account_id
+    has_many :buyer_invoices, class_name: 'Invoice', foreign_key: :provider_account_id, dependent: :destroy
+    has_many :buyer_invoice_counters, class_name: 'InvoiceCounter', foreign_key: :provider_account_id, dependent: :delete_all
     has_many :buyer_line_items, through: :buyer_invoices, source: :line_items
     has_many :buyer_invitations, through: :buyer_accounts, source: :invitations
 
@@ -103,7 +107,7 @@ module Account::ProviderMethods
     has_many :default_application_plans, through: :services, class_name: 'ApplicationPlan'
     belongs_to :default_account_plan, class_name: 'AccountPlan'
 
-    has_many :fields_definitions, -> { by_position }, inverse_of: :account do
+    has_many :fields_definitions, -> { by_position }, inverse_of: :account, dependent: :delete_all do
       def by_target(kind)
         grouped_by_target[kind.downcase]
       end
@@ -169,20 +173,6 @@ module Account::ProviderMethods
 
   def partner?
     partner_id.present?
-  end
-
-  # @return [Array<AuthenticationProvider>]
-  def authentication_provider_kinds
-    available = AuthenticationProvider.available
-    indexed = authentication_providers.where(type: available.map(&:name)).group_by(&:type)
-
-    available.each do |model|
-      unless indexed[model.name].present?
-        indexed[model.name] = model.new
-      end
-    end
-
-    indexed.values.flatten.sort_by{ |a| a.to_param.to_s }.reverse
   end
 
   def provided_cinstances

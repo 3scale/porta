@@ -8,9 +8,7 @@ class Provider::Admin::SudoController < FrontendController
     if sudo.correct_password?(current_password)
       sudo.secure!(period: 1.hour)
       respond_to do |format|
-        format.html do
-          redirect_to sudo.return_path, notice: 'You are now in super-user mode! Retry the action, please.'
-        end
+        format.html { redirect_to sudo.return_path, success: t('.success') }
         format.js
       end
     else
@@ -29,7 +27,7 @@ class Provider::Admin::SudoController < FrontendController
   end
 
   def sudo
-    @sudo ||= ::Sudo.new(sudo_params.to_h.symbolize_keys)
+    @sudo ||= ::Sudo.new(**sudo_params.to_h.symbolize_keys)
   end
 
 end

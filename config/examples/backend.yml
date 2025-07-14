@@ -17,4 +17,6 @@ test:
   <<: *default
 
 production:
-  <<: *default
+  url: <%= ENV.fetch('BACKEND_URL', 'http://backend-listener:3000') %>
+  public_url: <%= ENV.fetch('BACKEND_PUBLIC_URL') { "https://backend-#{ENV['TENANT_NAME']}.#{ENV['THREESCALE_SUPERDOMAIN']}" } %>
+  persistent: true

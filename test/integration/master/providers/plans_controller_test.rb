@@ -7,7 +7,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
     @master_member = FactoryBot.create(:member, account: master_account, state: 'active')
     @service = master_account.default_service
     @tenant = FactoryBot.create(:simple_provider, provider_account: master_account)
-    @old_plan, @new_plan = FactoryBot.create_list(:application_plan, 2, service: service)
+    @old_plan, @new_plan = FactoryBot.create_list(:application_plan, 2, issuer: service)
     @tenant.buy! old_plan
   end
 
@@ -52,7 +52,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#update for a member with permission partners but without the service' do
-    master_member.update!({member_permission_ids: ['partners'], member_permission_service_ids: '[]'})
+    master_member.update!({member_permission_ids: ['partners'], member_permission_service_ids: []})
     login! master_account, user: master_member
 
     put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }

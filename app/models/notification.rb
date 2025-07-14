@@ -36,7 +36,7 @@ class Notification < ApplicationRecord
   end
 
   def should_deliver?
-    enabled? && subscribed? && permitted?
+    not_hidden_if_onprem_multitenancy? && subscribed? && permitted?
   end
 
   def deliver_email_notification!
@@ -54,15 +54,6 @@ class Notification < ApplicationRecord
   def subscribed?
     user.notification_preferences.include?(system_name)
   end
-
-  def enabled?
-    new_notification_system? && not_hidden_if_onprem_multitenancy?
-  end
-
-  def new_notification_system?
-    user.account.provider_can_use?(:new_notification_system)
-  end
-
   def not_hidden_if_onprem_multitenancy?
     return true unless account.master_on_premises?
 

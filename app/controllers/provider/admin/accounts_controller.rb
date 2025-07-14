@@ -24,8 +24,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
       ProviderUserMailer.activation(@user).deliver_later
-      flash[:notice] = t('.success')
-      redirect_to admin_buyers_account_path(@provider)
+      redirect_to admin_buyers_account_path(@provider), success: t('.success')
     else
       render :new
     end
@@ -39,18 +38,20 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     check_require_billing_information
     respond_to do |format|
+      # FIXME: Always false if account does not have billing address. Billing address is set in the next page.
       if @account.update(account_params)
-        flash[:notice] = t('.success')
-        format.html do
-          redirect_to_success
+        format.html { redirect_to_success }
+        format.js do
+          flash.now[:success] = t('.success')
+          render 'shared/flash_alerts'
         end
-        format.js   { render :js => "jQuery.flash.notice('#{flash[:notice]}')" }
       else
+        flash.now[:danger] = @account.errors.full_messages
         format.html { render :action => 'edit' }
-        format.js   { render :template => 'shared/error' }
+        format.js   { render :template => 'shared/error' } # TODO: is this a bug? File does not exists
       end
     end
   end
@@ -65,7 +66,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   end
 
   def check_provider_signup_possible
-    redirect_to admin_buyers_accounts_path, alert: 'Please, create an Account Plan and a Service Plan first' unless current_account.signup_provider_possible?
+    redirect_to admin_buyers_accounts_path, info: t('.not_possible') unless current_account.signup_provider_possible?
   end
 
   def account_params
@@ -92,9 +93,9 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
 
   def redirect_to_success
     if upgrading_account?
-      redirect_to edit_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan')
+      redirect_to edit_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan'), success: t('.success')
     else
-      redirect_to provider_admin_account_path
+      redirect_to provider_admin_account_path, success: t('.success')
     end
   end
 

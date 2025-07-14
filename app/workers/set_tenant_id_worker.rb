@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class SetTenantIdWorker < ApplicationJob
-  include Sidekiq::Throttled::Worker
+  include Sidekiq::Throttled::Job
 
   queue_as :low
-  sidekiq_throttle({ concurrency: { limit: 10 } })
+  sidekiq_throttle concurrency: { limit: 10 }
 
   TENANT_RELATIONS = %w[backend_apis log_entries"]
   ACCOUNT_RELATIONS = %w[alerts]
@@ -55,10 +55,10 @@ class SetTenantIdWorker < ApplicationJob
   end
 
   class ModelTenantIdWorker < ApplicationJob
-    include Sidekiq::Throttled::Worker
+    include Sidekiq::Throttled::Job
 
     queue_as :low
-    sidekiq_throttle({ concurrency: { limit: 10 } })
+    sidekiq_throttle concurrency: { limit: 10 }
 
     def perform(model, ids, tenant_id)
       model.where(id: ids).update_all(tenant_id: tenant_id)

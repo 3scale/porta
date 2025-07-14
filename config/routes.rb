@@ -155,20 +155,12 @@ without fake Core server your after commit callbacks will crash and you might ge
   namespace :provider, :path => 'p', constraints: MasterOrProviderDomainConstraint do
     get 'activate/:activation_code' => 'activations#create', :as => :activate
 
-    resource :domains, :only => [:show] do
-      collection do
-        post :recover
-      end
-    end
-
-
     resource :signup, :only => [:show, :create] do
       match '', action: :cors, via: 'OPTIONS'
       match '*path', action: :cors, via: 'OPTIONS'
 
       collection do
         get :success
-        get :test, as: :iframe
       end
     end
 
@@ -225,10 +217,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resource :potential_upgrades, only: [:show]
 
         namespace :service, path: 'service/:service_id', as: :service do
-          resource :hits, only: [:show]
           resource :integration_errors, only: [:show]
-          resource :navigations, only: [:show]
-          resource :top_traffic, only: [:show], controller: :top_traffic
         end
       end
 
@@ -239,6 +228,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :api_docs, :only => [:show]
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]
+      resource :bot_protection, :only => [ :edit, :update ]
 
       namespace :registry do
         constraints(id: /((?!\.json\Z)[^\/])+/) do
@@ -267,7 +257,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         root to: 'inbox#index'
         resources :inbox, only: [:show, :destroy] do
           member do
-            post :reply
+            post :reply, :mark_as_read
           end
         end
         resources :outbox, except: [:edit, :update]
@@ -287,7 +277,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
 
       scope 'applications/:application_id', :as => :application do
-        resources :keys, constraints: { id: %r{[^/]+} }, only: %i[new create edit update destroy] do
+        resources :keys, constraints: { id: /.+/ }, only: %i[new create edit update destroy] do
           member do
             put :regenerate
           end
@@ -356,6 +346,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
 
         end
+        get 'visit_portal' => 'visit_portal#with_token'
       end
 
       namespace :user do
@@ -372,7 +363,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         get '/callback/:system_name', action: :callback, controller: :authentication_provider_flow_testing, as: :flow_testing_callback
 
         resource :enforce_sso, :controller => 'enforce_sso', :only => [:create, :destroy]
-        resources :notifications, :only => [:index, :update]
         resources :users, :only => [:index, :edit, :update, :destroy] do
           resources :access_tokens, only: [:index, :new, :create, :edit, :update, :destroy]
         end
@@ -518,7 +508,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       get 'objects/status' => 'objects#status', as: :objects_status, controller: :objects, defaults: { format: :json }
 
       namespace :personal, defaults: { format: :json } do
-        resources :access_tokens, except: %i[new edit]
+        resources :access_tokens, except: %i[new edit update]
       end
 
       # /admin/api/provider
@@ -607,11 +597,19 @@ without fake Core server your after commit callbacks will crash and you might ge
             put :suspend
             put :resume
           end
-          resources :keys, :controller => 'buyer_application_keys', :only => [:index, :create, :destroy]
+          resources :keys, constraints: { id: %r{([^/]+?)(?=\.json|\.xml|$|/)} }, controller: 'buyer_application_keys', only: %i[index create destroy]
+
           resources :referrer_filters, :controller => 'buyer_application_referrer_filters', :only => [:index, :create, :destroy]
         end
 
         resources :service_contracts, :only => [:index, :destroy]
+
+        resources :service_subscriptions, constraints: { format: :json }, defaults: { format: :json }, except: %i[new edit update] do
+          member do
+            put :change_plan
+            put :approve
+          end
+        end
 
         resources :messages, :only => [:create]
       end

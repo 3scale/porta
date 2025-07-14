@@ -1,5 +1,5 @@
 @javascript
-Feature: Service subscriptions bulk operations
+Feature: Audience > Accounts > Service subscriptions bulk operations
 
   Background:
     Given a provider is logged in
@@ -11,13 +11,13 @@ Feature: Service subscriptions bulk operations
       | Fancy API   | Fancy Plan B |         |
       | Another API | Another Plan | true    |
     And the following buyers with service subscriptions signed up to the provider:
-      | name  | plans                      |
+      | Buyer | Plans                      |
       | Alice | Fancy Plan A, Another Plan |
       | Bob   | Fancy Plan A               |
       | Jane  | Another Plan               |
     And admin of account "Jane" has email "jane@example.com"
     And admin of account "Bob" has email "bob@example.com"
-    And they go to the service contracts admin page
+    And they go to the provider service subscriptions page
 
   Scenario: Available bulk operations
     When item "Alice" is selected
@@ -65,8 +65,9 @@ Feature: Service subscriptions bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "This is the subject"
     And fill in "Body" with "This is the body"
-    And press "Send" and confirm the dialog
-    Then I should see "Successfully sent 2 emails."
+    And press "Send"
+    And confirm the dialog
+    Then they should see a toast alert with text "Successfully sent 2 emails"
     Then "jane@example.com" should receive 1 email
     Then "bob@example.com" should receive 1 email
 
@@ -82,8 +83,9 @@ Feature: Service subscriptions bulk operations
     And item "Bob" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
-    And press "Change plan" and confirm the dialog
-    Then should see "Successfully changed the plan of 2 subscriptions"
+    And press "Change plan"
+    And confirm the dialog
+    Then should see a toast alert with text "Successfully changed the plan of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan B |
@@ -109,8 +111,9 @@ Feature: Service subscriptions bulk operations
     And item "Jane" is selected
     And select bulk action "Change state"
     And select "Suspend" from "Action"
-    And press "Change state" and confirm the dialog within the modal
-    Then should see "Successfully changed the state of 2 subscriptions"
+    And press "Change state" within the modal
+    And confirm the dialog
+    Then should see a toast alert with text "Successfully changed the state of 2 subscriptions"
     And the table should contain the following:
       | Account | Service     | State     |
       | Bob     | Fancy API   | suspended |
@@ -124,7 +127,8 @@ Feature: Service subscriptions bulk operations
     And select bulk action "Send email"
     And fill in "Subject" with "Error"
     And fill in "Body" with "This will fail"
-    And press "Send" and confirm the dialog
+    And press "Send"
+    And confirm the dialog
     Then the bulk operation has failed for "Jane"
     And "jane@example.com" should receive no emails
 
@@ -133,7 +137,8 @@ Feature: Service subscriptions bulk operations
     When item "Jane" is selected
     And select bulk action "Change state"
     When select "Suspend" from "Action"
-    And press "Change state" and confirm the dialog within the modal
+    And press "Change state" within the modal
+    And confirm the dialog
     Then the bulk operation has failed for "Subscription of Jane to service Another API"
     And the table should contain the following:
       | Account | Service     | State |
@@ -148,7 +153,8 @@ Feature: Service subscriptions bulk operations
     And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"
-    And press "Change plan" and confirm the dialog
+    And press "Change plan"
+    And confirm the dialog
     Then the bulk operation has failed for "Subscription of Alice to service Fancy API"
     And the table should contain the following:
       | Account | Service     | Plan         |

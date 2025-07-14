@@ -9,7 +9,7 @@ class Provider::Admin::Account::ChangePlansController < Provider::Admin::Account
 
     current_account.upgrade_to_provider_plan!(plan)
 
-    flash[:success] = 'The plan change has been requested.'
+    flash[:success] = t('.success')
   end
 
   def widget

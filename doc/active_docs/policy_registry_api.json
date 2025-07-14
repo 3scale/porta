@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Policy Registry API",
     "description": "API for managing the APIcast Policy Registry.",
@@ -92,7 +92,7 @@
           "description": "ID of the policy. It can be an integer value or a combination 'name-version' of the policy (e.g. 'mypolicy-1.0')",
           "required": true,
           "schema": {
-            "type": "integer"
+            "type": "string"
           }
         }
       ],

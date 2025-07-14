@@ -1,5 +1,8 @@
 - content_for :page_header_title, 'Overview'
 
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'provider_account_overview'
+
 div id="key-overview"
   h2 Provider API key
   p class="info"

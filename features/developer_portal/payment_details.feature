@@ -19,7 +19,7 @@ Feature: Developer portal payment details
 
     Scenario: Paid plan with prepaid billing
       Given the date is 1st January 2023
-      Given the provider has multiple applications disabled
+      Given the provider has "multiple_applications" denied
       And the provider is charging its buyers in prepaid mode
       And plan "Pro" has a monthly fee of 200
       And they go to the dev portal API access details page
@@ -29,7 +29,7 @@ Feature: Developer portal payment details
 
     Scenario: Paid plan with postpaid billing
       Given the date is 1st January 2023
-      Given the provider has multiple applications disabled
+      Given the provider has "multiple_applications" denied
       And the provider is charging its buyers in postpaid mode
       And plan "Pro" has a monthly fee of 200
       And they go to the dev portal API access details page

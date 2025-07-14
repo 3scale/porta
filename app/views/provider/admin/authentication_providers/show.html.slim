@@ -1,6 +1,4 @@
-- content_for :page_header_title do
-  i.fa> class=("fa-#{@authentication_provider.kind}")
-  = @authentication_provider.human_kind
+- content_for :page_header_title, @authentication_provider.human_kind
 
 .SettingsBox
 

@@ -7,6 +7,8 @@ import { safeFromJsonString } from 'utilities/json-utils'
 import type { Props as ProductsWidgetProps } from 'Dashboard/components/ProductsWidget'
 import type { Props as BackendsWidgetProps } from 'Dashboard/components/BackendsWidget'
 
+import './dashboard.scss'
+
 const productsContainerId = 'products-widget'
 const backendsContainerId = 'backends-widget'
 

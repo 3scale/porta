@@ -10,7 +10,14 @@ class SectionInput < Formtastic::Inputs::SelectInput
     super unless options.key?(:paths)
 
     paths = Hash[sections.partial_paths]
-    super << template.javascript_tag("$.partial_paths(#{paths.to_json});")
+    super << template.javascript_tag("
+      const fn = () => { window.CMS.partialPaths(#{paths.to_json}); };
+      if (document.readyState === 'complete') {
+        fn();
+      } else {
+        document.addEventListener('DOMContentLoaded', fn);
+      };
+    ")
   end
 
   def include_blank

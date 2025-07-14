@@ -14,7 +14,6 @@ module Payment
       limiter = ActionLimiter.new(account)
       limiter.perform 'invalid_payment'
     rescue ActionLimiter::ActionLimitsExceededError
-      account.marked_for_suspension = true
       account.suspend!
       user_session.revoke!
       Rails.logger.info "spam_protection_service: account_suspended id: #{account.id}"

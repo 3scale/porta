@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# Create a list of invoices.
+#
+#   And the following invoices:
+#     | Buyer | Month          | Friendly ID | State |
+#     | Jane  | December, 2010 | paid        | Paid  |
+#     | Jane  | January, 2011  | open        | Open  |
+#
+Given "the following invoice(s):" do |table|
+  transform_invoices_table(table)
+  table.hashes.each do |options|
+    options[:provider_account] = options[:buyer_account].provider_account
+    FactoryBot.create(:invoice, options.reverse_merge(creation_type: :background))
+  end
+end
+
+# TODO: remove this, use "the following invoices:"
 Given "an invoice of {buyer} for {date}" do |buyer, date|
   create_invoice buyer, date
 end
@@ -16,7 +32,23 @@ Given "an issued invoice of {buyer} for {date}" do |buyer, month|
   invoice.issue_and_pay_if_free!
 end
 
+# Creates an invoice for a given account at a given time, with line items.
+#
+#   Given the buyer has an invoice for February, 2009 with the following items:
+#     | Name    | Description     | Quantity | Cost |
+#     | Bananas | A bunch of them | 1        | 42   |
+#
+Given "{buyer} has an invoice for {date} with the following item(s):" do |buyer, month, items|
+  @invoice = FactoryBot.create(:invoice, provider_account: buyer.provider_account,
+                                         buyer_account: buyer)
+  line_items = @invoice.line_items
+
+  parameterize_headers(items)
+  items.hashes.each { |item| line_items.create!(item) }
+end
+
 Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Use the newer step.'
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
@@ -48,9 +80,9 @@ end
 
 Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
   if count.to_i == 0
-    page.should have_no_css('tr.invoice')
+    should have_no_xpath("//tr[contains(@id, 'invoice_')]")
   else
-    page.should have_css('tr.invoice', count: count.to_i)
+    should have_xpath("//tr[contains(@id, 'invoice_')]", count: count.to_i)
   end
 end
 
@@ -63,6 +95,7 @@ Then /^the buyer should have (\d+) invoices?$/ do |number|
 end
 
 Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
   set_current_domain @provider.external_domain
   try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
   visit admin_account_invoices_path
@@ -80,16 +113,13 @@ Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?
   assert_line_items(items)
 end
 
-Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
-  assert_selector(:css, 'table tbody tr.invoice td[data-label="Account"]', text: buyer)
-end
-
 Then(/^I should have (\d+) invoices?$/) do |count|
   assert_equal count, current_account.invoices.visible_for_buyer.size
 end
 
 # TODO: change to accept REGEXPs! (use page.body and assert)
 Then(/^I should see line items$/) do |items|
+  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
   assert_line_items(items)
 end
 
@@ -137,7 +167,7 @@ When(/^I see my invoice from "([^"]*)" is "([^"]*)"$/) do |month, state|
   page.should have_css('dl', text: state.capitalize)
 end
 
-Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
+Then "there should be a secure link to download the PDF of invoice {string}" do |invoice_number|
   link = find('tr.invoice', text: invoice_number).find('td a', text: 'PDF')
 
   # This only checks that the link points to the s3 server and that it contains the
@@ -147,8 +177,8 @@ Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
   assert_secure_invoice_pdf_url(link[:href], Invoice.find_by!(friendly_id: invoice_number))
 end
 
-Then(/^I should see secure PDF link for the shown (buyer )?invoice$/) do |buyer_side|
-  link = buyer_side ? page.find_link('PDF') : page.find_link('Download PDF')
+Then "there should be a secure link to download the PDF" do
+  link = page.find_link('PDF')
 
   id = link[:href].scan(%r{/invoices/(\d+)/}).join
   assert_secure_invoice_pdf_url(link[:href], Invoice.find(id))
@@ -182,11 +212,23 @@ Then(/there is only one invoice for "([^"]*)"/) do |date|
 end
 
 Then "invoices can be filtered by the following years:" do |table|
-  actual_years = find('#search_year').find_all('option').map(&:value).map(&:to_s)
+  select_attribute_filter('Year')
+
+  select = find('[data-ouia-component-id="attribute-search"] .pf-c-select[data-ouia-component-id="Filter by year"]')
+  select.click
+  actual_years = select.find_all('ul .pf-c-select__menu-item', wait: 0).map(&:text)
   expected_years = table.raw.flatten.map(&:to_s)
   assert_same_elements expected_years, actual_years
 end
 
-Given "{buyer} has no invoices" do |buyer|
-  assert_empty buyer.invoices
+Given "buyers of {provider} have no invoices" do |provider|
+  assert_empty provider.buyer_invoices
+end
+
+Given "{provider} has no invoices" do |provider|
+  assert_empty provider.buyer_invoices
+end
+
+Then "the total cost is/should( be) {string}" do |cost_with_currency|
+  assert_equal cost_with_currency, find('table.invoice tfoot tr td#invoice_cost').text
 end

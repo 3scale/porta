@@ -6,7 +6,10 @@ Feature: Buyer users management
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
+    And the provider has the following fields defined for users:
+      | Name            | Choices | Label | Required | Read Only | Hidden |
+      | custom_field    |         |       |          |           |        |
     And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
     And an active user "alice" of account "SpaceWidgets"
     And an active user "bob" of account "SpaceWidgets"
@@ -44,14 +47,17 @@ Feature: Buyer users management
     When I go to the buyer user page for "bob"
     And I follow "Edit"
     And I fill in "Email" with "smith@example.net"
+    And I fill in "Custom field" with "custom value"
     And I press "Update User"
     Then I should be on the buyer user page for "bob"
     And I should see "smith@example.net"
+    And I should see "custom value"
 
   Scenario: Delete buyer user
     When I go to the buyer user page for "bob"
     And I follow "Edit"
-    Then I follow "Delete" and confirm the dialog
+    Then I follow "Delete"
+    And confirm the dialog
     # TODO: confirm step here
     Then I should be on the buyer users page for "SpaceWidgets"
     And I should not see buyer user "bob"
@@ -116,7 +122,7 @@ Feature: Buyer users management
       | User extra read only |
       | User extra hidden    |
     When I press "Update User"
-    Then I should see "User was successfully updated."
+    Then I should see "User was successfully updated"
 
   Scenario: Fields edition by provider
     Given provider "foo.3scale.localhost" has the following fields defined for users:
@@ -131,6 +137,6 @@ Feature: Buyer users management
     And I fill in "First name" with "bob"
     And I fill in "User extra read only" with "notEditable"
     When I press "Update User"
-    Then I should see "User was successfully updated."
+    Then I should see "User was successfully updated"
     And I should see "bob" in the "First name" field
     And I should see "notEditable" in the "User extra read only" field

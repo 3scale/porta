@@ -2,9 +2,14 @@
 
 class Provider::Admin::DashboardsController < FrontendController
   before_action :ensure_provider_domain
+  before_action :quickstarts_flash, only: :show
 
   activate_menu :dashboard
   layout 'provider'
+
+  helper_method :presenter
+
+  attr_reader :presenter
 
   def show
     @service    = find_service
@@ -14,22 +19,15 @@ class Provider::Admin::DashboardsController < FrontendController
     #
     # but 'Cannot eagerly load the polymorphic association :sender'
     @services           = current_user.accessible_services
-    @messages_presenter = current_presenter
+    @messages_presenter = notification_presenter
     @unread_messages_presenter = unread_messages_presenter
+    @presenter = Provider::Admin::DashboardPresenter.new(user: current_user)
   end
 
   include DashboardTimeRange
   helper_method :current_range, :previous_range, :backend_apis_presenter, :products_presenter
 
   private
-
-  def current_presenter
-    if current_account.provider_can_use?(:new_notification_system)
-      notification_presenter
-    else
-      messages_presenter
-    end
-  end
 
   def notification_presenter
     ::Dashboard::NotificationsPresenter.new(current_user.notifications)
@@ -43,11 +41,12 @@ class Provider::Admin::DashboardsController < FrontendController
     ::Dashboard::UnreadMessagesPresenter.new(current_account.received_messages.not_system)
   end
 
-  def backend_apis_presenter
-    Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account, params: { per_page: 5 })
-  end
+  def quickstarts_flash
+    first_login = flash[:first_login]
+    flash.delete(:first_login)
 
-  def products_presenter
-    Api::ServicesIndexPresenter.new(current_user: current_user, params: { per_page: 5 })
+    return unless Features::QuickstartsConfig.enabled? && first_login.present?
+
+    flash[:success] = t('.quick_starts_html', link: provider_admin_quickstarts_path).html_safe
   end
 end

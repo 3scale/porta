@@ -8,6 +8,10 @@
   feature is <b>hidden</b>.
 <% end %>
 
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'switches' %>
+<% end %>
+
 <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Switches table" id="switches">
   <thead>
     <tr role="row">

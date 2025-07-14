@@ -7,12 +7,12 @@ junit_reporter_path = 'tmp/junit/unit'
 if ENV['CI']
   require 'simplecov'
   require "simplecov_json_formatter"
-  require 'codecov'
+  require 'simplecov-cobertura'
   formatters = [
     SimpleCov::Formatter::SimpleFormatter,
     SimpleCov::Formatter::JSONFormatter,
     SimpleCov::Formatter::HTMLFormatter,
-    Codecov::SimpleCov::Formatter
+    SimpleCov::Formatter::CoberturaFormatter
   ]
   SimpleCov.start do
     formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
@@ -47,6 +47,14 @@ require 'webmock/minitest'
 WebMock.enable!
 
 WebMock.disable_net_connect!
+
+require 'mocha/minitest'
+Mocha.configure do |c|
+  c.strict_keyword_argument_matching = true
+  # TODO: enable the following two configs to improve the tests eventually
+  # c.stubbing_non_existent_method = :prevent
+  # c.stubbing_method_unnecessarily = :prevent
+end
 
 class ActiveSupport::TestCase
   self.use_transactional_tests = true

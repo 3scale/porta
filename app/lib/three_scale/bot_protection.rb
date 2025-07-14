@@ -2,7 +2,7 @@
 
 module ThreeScale
   module BotProtection
-    LEVELS = [['None', :none], ['reCAPTCHA', :captcha]].freeze
+    LEVELS = [['None', :none], ['reCAPTCHA v3', :captcha]].freeze
   end
 end
 

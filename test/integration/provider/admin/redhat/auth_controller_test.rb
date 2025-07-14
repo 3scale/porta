@@ -16,7 +16,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
     user_data = ThreeScale::OAuth2::UserData.new(username: 'redhat_user')
     ThreeScale::OAuth2::KeycloakClient.any_instance.stubs(:authenticate!).returns(user_data)
     get @callback_url
-    assert_equal 'The Red Hat Login was linked to the account', flash[:notice]
+    assert_equal 'The Red Hat Login was linked to the account', flash[:success]
   end
 
   test 'successful provider callback - implicit flow' do
@@ -26,7 +26,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
     user_data = ThreeScale::OAuth2::UserData.new(username: 'redhat_user')
     ThreeScale::OAuth2::RedhatCustomerPortalClient::ImplicitFlow.any_instance.stubs(:authenticate!).returns(user_data)
     get @callback_url
-    assert_equal 'The Red Hat Login was linked to the account', flash[:notice]
+    assert_equal 'The Red Hat Login was linked to the account', flash[:success]
   end
 
   test 'undefined error on provider callback' do

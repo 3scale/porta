@@ -16,32 +16,14 @@ class AlertMessenger < Messenger::Base
                  :alert       => Liquid::Drops::Alert.new(alert)
   end
 
-  def limit_alert_for_provider(alert)
-    @url = app_stats_url_for_provider(@cinstance)
-    send_alert(alert, @account)
-  end
-
   def limit_alert_for_buyer(alert)
     @url = developer_portal_routes.buyer_stats_url(host: domain)
     send_alert(alert, @provider)
   end
 
-  def limit_violation_for_provider(alert)
-    @url = app_stats_url_for_provider(@cinstance)
-    send_violation(alert, @account)
-  end
-
   def limit_violation_for_buyer(alert)
     @url = developer_portal_routes.buyer_stats_url(host: domain)
     send_violation(alert, @provider)
-  end
-
-  def limit_alert_for_provider_of_master(alert)
-    send_violation_for_provider(alert, @provider)
-  end
-
-  def limit_violation_for_provider_of_master(alert)
-    send_violation_for_provider(alert, @provider)
   end
 
 
@@ -69,11 +51,6 @@ class AlertMessenger < Messenger::Base
                           "Application '#{@cinstance.name}' limit violation - limit usage is above #{alert.level}%"
   end
 
-  def send_violation_for_provider(alert, sender)
-    prepare_limit_message alert, sender,
-                          "Account limit violation - limit usage is above #{alert.level}%"
-  end
-
   def prepare_limit_message(alert, sender, subject)
     assign_drops :url         => @url,
                  :sender      => Liquid::Drops::Account.new(sender)
@@ -85,20 +62,6 @@ class AlertMessenger < Messenger::Base
   end
 
   def self.limit_message_for(alert)
-    account = alert.account
-    type = if account.buyer?
-             :buyer
-           elsif account.provider? && account == alert.cinstance.user_account
-             # We are sending a message to provider
-             # This case is when the provider breaks the limits of Master
-             :provider_of_master
-           else
-             # Takes into account:
-             # - sending message to provider. Its buyer is breaking the limits
-             # - sending message to master. One of its provider is breaking the limits
-             :provider
-           end
-
-    public_send "limit_#{alert.kind}_for_#{type}", alert
+    public_send "limit_#{alert.kind}_for_buyer", alert
   end
 end

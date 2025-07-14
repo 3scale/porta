@@ -6,5 +6,5 @@ end
 
 Given "{provider} has service subscription legal terms:" do |provider, text|
   provider.builtin_legal_terms.create!(system_name: CMS::Builtin::LegalTerm::SUBSCRIPTION_SYSTEM_NAME,
-                                      published: text)
+                                       draft: text)
 end

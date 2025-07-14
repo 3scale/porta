@@ -6,9 +6,8 @@ Feature: Email templates management
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has Browser CMS activated
-      And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
-    Given I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
+    And I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Creating template
     When I go to the email templates page
@@ -27,7 +26,7 @@ Feature: Email templates management
       | Subject | Bcc            | Cc                            | From       |
       | subj3ct | some@email.com | "Example" <other@3scale.localhost> | My Company |
     And I press "Create Email Template"
-    Then I should see "Email Template overrided"
+    Then they should see a toast alert with text "Email Template overridden"
     And the content of the email template "account_approved" should be
       """
       new content for account approved
@@ -58,10 +57,10 @@ Feature: Email templates management
       And all the rolling updates features are off
 
     When I go to the email templates page
-     And I follow "Sign up notification for provider"
+     And I follow "Sign up notification for buyer"
      And I fill the form with following:
       | Bcc          | From |
-      | test@bcc.com | "Some Really Long String" <api@example.net> |
+      | test@bcc.com | "Some Really Long String" <api@example.com> |
      And I fill in the draft with:
       """
       Email: {{user.email}}
@@ -70,7 +69,7 @@ Feature: Email templates management
     When I press "Create Email Template"
 
     When buyer "bob" with email "bob@mail.com" signs up to provider "foo.3scale.localhost"
-     And "test@bcc.com" opens the email with subject "API System: New Account Signup"
+     And "test@bcc.com" opens the email with subject "foo.3scale.localhost API account confirmation"
 
     Then I should see following email body
       """
@@ -78,12 +77,12 @@ Feature: Email templates management
       Org: bob
       """
 
-    When I follow "Sign up notification for provider"
+    When I follow "Sign up notification for buyer"
      And I fill in the draft with:
       """
       {% email %}
-      {% bcc 'bcc@mail.com' %}
-      {% subject 'Overriden' %}
+        {% bcc 'bcc@mail.com' %}
+        {% subject 'Overriden' %}
       {% endemail %}
       Email: {{user.email}}
       Org: {{account.name}}
@@ -98,4 +97,4 @@ Feature: Email templates management
       Email: steve@mail.com
       Org: steve
       """
-    Then I should see the email delivered from "Some Really Long String <api@example.net>"
+    Then I should see the email delivered from "Some Really Long String <api@example.com>"

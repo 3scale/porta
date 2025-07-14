@@ -6,7 +6,7 @@ Feature: Personal Details
 
   Background:
     Given a provider is logged in
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
 
   Scenario: Edit personal details as provider
     When I navigate to the Account Settings
@@ -38,7 +38,7 @@ Feature: Personal Details
   Scenario: Edit personal details with invalid data
     When I navigate to the Account Settings
     And I go to the provider personal details page
-    And I fill in "Username" with ""
+    And I fill in "Username" with "u"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then field "Username" has inline error "is too short (minimum is 3 characters)"
@@ -83,7 +83,7 @@ Feature: Personal Details
     Given the user was signed up with password
     When I navigate to the Account Settings
     And I go to the provider personal details page
-    And I fill in "New Password" with "hi"
+    And I fill in "New password" with "hi"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then field "New Password" has inline error "is too short (minimum is 6 characters)"
+    Then field "New password" has inline error "is too short (minimum is 6 characters)"

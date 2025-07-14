@@ -19,8 +19,7 @@ class Buyers::UsersController < Buyers::BaseController
     user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
 
     if user.save
-      flash[:notice] = 'User was successfully updated.'
-      redirect_to action: :show
+      redirect_to({ action: :show }, success: t('.success'))
     else
       render :edit
     end
@@ -32,33 +31,29 @@ class Buyers::UsersController < Buyers::BaseController
 
   def destroy
     if user.destroy
-      flash[:notice] = 'User was successfully deleted.'
-      redirect_to action: :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
-      flash[:error] = 'User could not be deleted.'
-      redirect_back_or_show_detail
+      redirect_back_or_show_detail danger: t('.error')
     end
   end
 
   def suspend
     user.suspend!
-    flash[:notice] = 'User was suspended'
 
-    redirect_back_or_show_detail
+    redirect_back_or_show_detail success: t('.success')
   end
 
   def unsuspend
     user.unsuspend!
-    flash[:notice] = 'User was unsuspended'
 
-    redirect_back_or_show_detail
+    redirect_back_or_show_detail success: t('.success')
   end
 
   def activate
     if user.activate
       user.account.create_onboarding
 
-      flash[:notice] = 'User was activated'
+      flash[:success] = t('.success')
     else
       errors = user.errors
       error_message = if errors.include?(:email)
@@ -67,7 +62,7 @@ class Buyers::UsersController < Buyers::BaseController
                         errors.full_messages.join(',')
       end
 
-      flash[:error] = "Failed to activate user: #{error_message}"
+      flash[:danger] = t('.error', error_message: error_message)
     end
 
     redirect_back_or_show_detail
@@ -88,10 +83,10 @@ class Buyers::UsersController < Buyers::BaseController
   DEFAULT_PARAMS = %i[username email password password_confirmation role].freeze
 
   def user_params
-    @user_params ||= params.require(:user).permit(DEFAULT_PARAMS | user.defined_extra_fields_names)
+    @user_params ||= params.require(:user).permit(*DEFAULT_PARAMS, extra_fields: [*user.defined_extra_fields_names])
   end
 
-  def redirect_back_or_show_detail
-    redirect_back(fallback_location: admin_buyers_account_user_path(account_id: user.account_id, id: user.id))
+  def redirect_back_or_show_detail(**opts)
+    redirect_back_or_to admin_buyers_account_user_path(account_id: user.account_id, id: user.id), **opts
   end
 end

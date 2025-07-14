@@ -98,7 +98,7 @@ class NotificationPreferencesForm < Reform::Form
     when :alert
       at_least_one_service? && has_permission?(:monitoring)
     when :service_plan
-      current_user.provider_account.settings.service_plans_ui_visible? &&
+      current_user.account.settings.service_plans_ui_visible? &&
         at_least_one_service? && has_permission?(:partners)
     when :report
       has_permission?(:partners) && current_user.admin? && Rails.application.config.three_scale.daily_weekly_reports_pref

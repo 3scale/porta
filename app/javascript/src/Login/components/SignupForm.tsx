@@ -12,11 +12,11 @@ import { validateSignup } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { LoginAlert } from 'Login/components/LoginAlert'
 
-import type { FlashMessage } from 'Types'
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   path: string;
   user: {
     email: string;
@@ -27,7 +27,7 @@ interface Props {
 }
 
 const SignupForm: FunctionComponent<Props> = ({
-  flashMessages,
+  alerts,
   path,
   user
 }) => {
@@ -70,7 +70,7 @@ const SignupForm: FunctionComponent<Props> = ({
       [key]: (validationVisibility[key] && validation?.[key]) ? 'error' : 'default'
     }), {}) as Record<keyof typeof state, 'default' | 'error' | undefined>
 
-  const alert = flashMessages.length ? flashMessages[0] : undefined
+  const alert = alerts.length ? alerts[0] : undefined
 
   return (
     <Form

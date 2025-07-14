@@ -63,7 +63,7 @@ resource 'CMS::Page' do
         ]
       end
 
-      let(:serialized) { representer.public_send(serialization_format, short: true) }
+      let(:serialized) { representer.public_send(serialization_format, user_options: { short: true }) }
 
       json(:resource, skip_resource_save: true, skip_root_check: true) do
         it 'should have the correct attributes' do

@@ -33,7 +33,7 @@ class Invoice < ApplicationRecord
   has_many :paid_line_items, -> { where(invoices: {state: 'paid'}).includes(:invoice).references(:invoice) }, class_name: 'LineItem'
   has_many :line_items, -> { oldest_first }, dependent: :destroy, inverse_of: :invoice
 
-  has_many :payment_transactions, -> { oldest_first }, dependent: :nullify, inverse_of: :invoice
+  has_many :payment_transactions, -> { oldest_first }, dependent: :nullify, inverse_of: :invoice, dependent: :delete_all
   has_many :payment_intents, dependent: :destroy, inverse_of: :invoice
 
   has_attached_file :pdf, url: ':url_root/:class/:id/:attachment/:style/:basename.:extension'
@@ -281,6 +281,7 @@ class Invoice < ApplicationRecord
     LogEntry.log( :info, "Invoice created for #{buyer_account.org_name} for period #{period}", provider_account, buyer_account)
   end
 
+  # TODO: move to decorator
   def name
     self.period.begin.strftime('%B, %Y')
   end
@@ -470,11 +471,6 @@ class Invoice < ApplicationRecord
 
         InvoiceMessenger.unsuccessfully_charged_for_buyer(self).deliver
 
-        # do not send email if provider's using new notification system
-        unless provider_account.provider_can_use?(:new_notification_system)
-          InvoiceMessenger.unsuccessfully_charged_for_provider(self).deliver
-        end
-
         event = Invoices::UnsuccessfullyChargedInvoiceProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)
       else
@@ -482,11 +478,6 @@ class Invoice < ApplicationRecord
         fail!
         # TODO: Decouple the notification to observer and delete the IF
         InvoiceMessenger.unsuccessfully_charged_for_buyer_final(self).deliver
-
-        # do not send email if provider's using new notification system
-        unless provider_account.provider_can_use?(:new_notification_system)
-          InvoiceMessenger.unsuccessfully_charged_for_provider_final(self).deliver
-        end
 
         event = Invoices::UnsuccessfullyChargedInvoiceFinalProviderEvent.create(self)
         Rails.application.config.event_store.publish_event(event)

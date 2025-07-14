@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WebHookWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
   include ThreeScale::SidekiqRetrySupport::Worker
   HANDLED_ERRORS = [
     SocketError, RestClient::Exception,
@@ -45,7 +45,7 @@ class WebHookWorker
     @webhook_id = webhook_id
 
     with_retry_log do
-      push(options.symbolize_keys.slice(:url, :xml, :content_type))
+      push(**options.symbolize_keys.slice(:url, :xml, :content_type))
     end
   end
 

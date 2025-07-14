@@ -270,6 +270,8 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
   end
 
   class DefaultTest < ActiveSupport::TestCase
+    attr_reader :provider
+
     class FakeModel < ApplicationRecord
       self.table_name = 'accounts'
       include Fields::Fields
@@ -278,8 +280,6 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
       optional_fields_are :optional_one, :optional_two
       default_fields_are :required_one, :optional_one
     end
-
-    attr_reader :provider
 
     setup do
       @provider = FactoryBot.create(:simple_provider)

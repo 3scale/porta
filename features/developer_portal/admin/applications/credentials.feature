@@ -2,15 +2,15 @@ Feature: Developer portal application credentials
 
   Background:
     Given a provider
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a product "My API"
     And the following application plan:
       | Product | Name |
       | My API  | Free |
     And a buyer "Jane"
     And the following application:
-      | Buyer | Name       | Product |
-      | Jane  | Jane's App | My API  |
+      | Buyer | Name       | Product | Application Id | User key               |
+      | Jane  | Jane's App | My API  | jane123        | qwerty-12345-banana123 |
     And the buyer logs in
 
   Scenario: Regenerate user key
@@ -51,23 +51,25 @@ Feature: Developer portal application credentials
       Given the product uses backend v1
 
     Scenario: Backend v1 uses a single user key
-      Given the application has user key "qwerty-12345-banana"
       When they go to the dev portal API access details page
       Then they should see the following details:
         | Name     | Jane's App          |
-        | User key | qwerty-12345-banana |
+        | User Key | qwerty-12345-banana |
       But there should not be a button to "Create new key"
 
   Rule: Oauth
     Background:
       Given the product uses backend oauth
-      And the application has 3 keys
+      And the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
 
     Scenario: Oauth uses client secret and ID
       When they go to the dev portal API access details page
       Then they should see the following details:
-        | Client ID     | 123                                 |
-        | Client Secret | app-key                             |
+        | Client ID     | jane123                             |
+        | Client Secret | key-one                             |
         | Redirect URL  | This is your Redirect URL for OAuth |
       And there should be a button to "Regenerate"
 
@@ -106,6 +108,35 @@ Feature: Developer portal application credentials
       When they go to the application's dev portal page
       Then they should see "At most 5 keys are allowed"
 
+    @javascript
+    Scenario: Reaching the limit of 5 will toggle the switch
+      Given the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
+        | key-four  |
+      When they go to the application's dev portal page
+      Then they should not see "At most 5 keys are allowed"
+      And there should be a button to "Create new key" within the application keys
+      When they press "Create new key"
+      Then they should see "At most 5 keys are allowed"
+      And there should not be a button to "Create new key" within the application keys
+
+    @javascript
+    Scenario: Deleting a key once the limit is reached will toggle switch
+      Given the application has the following keys:
+        | key-one   |
+        | key-two   |
+        | key-three |
+        | key-four  |
+        | key-five  |
+      When they go to the application's dev portal page
+      Then they should see "At most 5 keys are allowed"
+      And there should not be a button to "Create new key" within the application keys
+      When they press "Delete"
+      Then they should not see "At most 5 keys are allowed"
+      And there should be a button to "Create new key" within the application keys
+
     Scenario: Can't delete last key when mandatory app key set
       Given the application has the following key:
         | key-one |
@@ -119,4 +150,4 @@ Feature: Developer portal application credentials
       And the product has mandatory app key set to "false"
       When they go to the application's dev portal page
       And press "Delete"
-      Then they should see "Application key was deleted."
+      Then they should see "Application key was deleted"

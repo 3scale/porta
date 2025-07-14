@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.7.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 14](https://nodejs.org/download/release/v14.21.3/)**.
+The project supports **[ruby 3.1.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 18](https://nodejs.org/download/release/v18.20.4/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -24,7 +24,7 @@ asdf install
 
 > Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
 > ```
-> dnf module install nodejs:14
+> dnf module install nodejs:16
 > ```
 
 ### Dependencies
@@ -50,7 +50,7 @@ podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mys
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 redis
+podman run -d -p 6379:6379 redis:6.2-alpine
 ```
 
 Alternatively, Redis can be run directly on your machine with `dnf`:

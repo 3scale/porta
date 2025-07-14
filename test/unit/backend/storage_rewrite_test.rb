@@ -76,6 +76,20 @@ module Backend
       end
     end
 
+    class ServiceRewriterTest < ActiveSupport::TestCase
+      test 'updates service-related objects' do
+        provider = FactoryBot.create(:simple_provider)
+        service = FactoryBot.create(:simple_service, account: provider)
+
+        Service.any_instance.expects(:update_notification_settings).once
+        Service.any_instance.expects(:update_backend_service).once
+        ServiceTokenService.expects(:update_backend).times(service.service_tokens.count)
+
+        processor = Backend::StorageRewrite::Processor.new
+        processor.rewrite(scope: provider.services)
+      end
+    end
+
     class AsyncProcessorTest < ActiveSupport::TestCase
       test 'calls enqueuer for each collection batch' do
         # ensure all collections have items

@@ -5,11 +5,11 @@ import brandImg from 'Login/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'Login/assets/images/PF4DownstreamBG.svg'
 import { SignupForm } from 'Login/components/SignupForm'
 
-import type { FlashMessage } from 'Types'
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   name: string;
   path: string;
   user: {
@@ -21,7 +21,7 @@ interface Props {
 }
 
 const SignupPage: FunctionComponent<Props> = ({
-  flashMessages,
+  alerts,
   user,
   name,
   path
@@ -34,7 +34,7 @@ const SignupPage: FunctionComponent<Props> = ({
     loginTitle={`Signup to ${String(name)}`}
   >
     <SignupForm
-      flashMessages={flashMessages}
+      alerts={alerts}
       path={path}
       user={user}
     />

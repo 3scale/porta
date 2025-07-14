@@ -7,7 +7,7 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
     @app_plan = FactoryBot.create(:application_plan, issuer: @service)
-    @metric = FactoryBot.create(:metric, service: @service)
+    @metric = FactoryBot.create(:metric, owner: @service)
     @limit = FactoryBot.create(:usage_limit, plan: @app_plan, metric: @metric)
 
     host! @provider.external_admin_domain
@@ -16,8 +16,8 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
   class AccessTokenTest < Admin::Api::ApplicationPlanLimitsTest
     def setup
       super
-      user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
-      @token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+      @user = FactoryBot.create(:member, account: @provider, member_permission_ids: %i[partners plans], member_permission_service_ids: [])
+      @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
 
       User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     end
@@ -28,20 +28,18 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
     end
 
     test 'index with access to no services' do
-      User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
       get admin_api_application_plan_limits_path(@app_plan), params: params
       assert_response :not_found
     end
 
     test 'index with access to some service' do
-      User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+      @user.update(member_permission_service_ids: [@service.id])
       get admin_api_application_plan_limits_path(@app_plan), params: params
       assert_response :success
     end
 
-    test 'index' do
-      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      User.any_instance.expects(:member_permission_service_ids).never
+    test 'index with access to all services' do
+      @user.update(member_permission_service_ids: nil)
       get admin_api_application_plan_limits_path(@app_plan), params: params
       assert_response :success
     end

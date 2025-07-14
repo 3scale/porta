@@ -15,13 +15,15 @@ Feature: BackendApi > Metrics index > Metric
   Scenario: Delete a method
     When I change to tab 'Methods'
     And I follow "Margherita"
-    And I press "Delete" and confirm the dialog
+    And I follow "Delete"
+    And confirm the dialog
     Then I should not see metric "Margherita"
 
   Scenario: Delete a metric
     When I change to tab 'Metrics'
     And I follow "Pizza"
-    And I press "Delete" and confirm the dialog
+    And I follow "Delete"
+    And confirm the dialog
     Then I should not see metric "Pizza"
 
   Scenario: Default metric can't be deleted

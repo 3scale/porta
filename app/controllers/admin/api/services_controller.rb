@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
-  wrap_parameters Service, include: Service.attribute_names | %w[state_event]
+  wrap_parameters Service, include: Service.attribute_names | %w[state_event annotations]
   representer Service
 
   before_action :deny_on_premises_for_master
@@ -12,7 +12,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   # Service List
   # GET /admin/api/services.xml
   def index
-    services = accessible_services.includes(:proxy, :account).order(:id).paginate(pagination_params)
+    services = accessible_services.includes(:proxy, :annotations).order(:id).paginate(pagination_params)
     respond_with(services)
   end
 
@@ -62,7 +62,8 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
                         :txt_support, :terms,
-                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []]}]
+                        {notification_settings: [web_provider: [], email_provider: [], web_buyer: [], email_buyer: []],
+                        annotations: {}}]
     params.require(:service).permit(*permitted_params)
   end
 

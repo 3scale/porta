@@ -1,21 +1,21 @@
+# frozen_string_literal: true
+
 # TODO: rename to CustomAccountPlansController
+# buyers/accounts/:id
 class Buyers::CustomPlansController < FrontendController
   before_action :find_contract
 
   def create
     @plan = @contract.customize_plan!(params[:account_plan] || {})
 
-    respond_to do |format|
-      format.js do
-        render @plan.persisted? ? :create : :new
-      end
-    end
+    flash.now[:success] = t('.success') if @plan.persisted?
+
+    respond_to :js
   end
 
   def destroy
     @contract.decustomize_plan!
-    flash[:notice] = "The plan was set back to #{@contract.plan.name}."
-    redirect_to admin_buyers_account_url(@contract.buyer)
+    redirect_to admin_buyers_account_url(@contract.buyer), success: t('.success', name: @contract.plan.name)
   end
 
   private

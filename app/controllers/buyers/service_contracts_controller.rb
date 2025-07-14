@@ -12,37 +12,17 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   activate_menu :buyers, :accounts, :subscriptions
 
+  helper_method :presenter
+
+  attr_reader :presenter
+
   def index
-    @states = ServiceContract.allowed_states.collect(&:to_s).sort
-    @services = accessible_services.includes(:service_plans)
-    @search = ThreeScale::Search.new(params[:search] || params)
-    @plans = current_account.service_plans
-    @multiservice = current_account.multiservice?
+    @presenter = Buyers::ServiceContractsIndexPresenter.new(user: current_user,
+                                                            params: params,
+                                                            provider: current_account)
 
-    if (service_id = params[:service_id] || @search.service_id)
-      @service = @services.find service_id
-      @search.service_id = @service.id
-    end
-
-    if (service_plan_id = params[:service_plan_id] || @search.service_plan_id)
-      @plan = current_account.service_plans.find(service_plan_id)
-      @search.plan_id = @plan.id
-      @service ||= @plan.service
-    end
-
-    if params[:account_id]
-      @account = current_account.buyers.find params[:account_id]
-      @search.account = @account.id
-      activate_menu :audience, :accounts, :listing
-    end
-
-    @service_contracts = current_user.accessible_service_contracts
-              .scope_search(@search).order_by(*sorting_params)
-              .includes(plan: %i[pricing_rules], user_account: [:admin_user])
-              .paginate(pagination_params)
-              .decorate
-
-    activate_menu :serviceadmin, :subscriptions if @service
+    activate_menu(*presenter.menu_context)
+    @service = presenter.service # For vertical nav...
   end
 
   def new
@@ -57,17 +37,16 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @service_contract = @account.bought_service_contracts.create(service_contract_params)
 
     if @service_contract.persisted?
-      flash[:success] = "Service contract created successfully"
+      flash[:success] = t('.success') # Page will be reloaded
     else
-      @service_plans = @service.service_plans
-      @form = render_to_string :action => :new, :layout => false, :format => :html
+      flash.now[:danger] = t('.error')
     end
 
     respond_to(:js)
   end
 
   def edit
-    @service_plans = @service_contract.issuer.service_plans
+    @service_plans = @service_contract.issuer.service_plans # TODO: .where.not(id: @service_contract.plan)
 
     render layout: false # Rendered inside a modal
   end
@@ -77,7 +56,9 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     new_plan = service.service_plans.find(service_contract_plan_id)
 
     if @service_contract.change_plan!(new_plan)
-      flash[:success] = "Plan of the contract was changed."
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
     end
 
     respond_to(:js)
@@ -88,31 +69,25 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     service_contract = service_subscription.unsubscribe(@service_contract)
 
     if service_contract.destroyed?
-      flash[:notice] = t('service_contracts.unsubscribe_confirmation')
+      flash[:success] = t('.success')
     else
-      flash[:error] = t('service_contracts.unsubscribe_failure')
+      flash[:danger] = t('.error')
     end
 
-    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))
   end
 
   def approve
     if resource.accept
-      flash[:notice] = 'Service contract was approved.'
+      flash[:success] = t('.success')
     else
-      flash[:error] = 'Cannot approve service contract.'
+      flash[:danger] = t('.error')
     end
 
-    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back_or_to(admin_buyers_account_service_contracts_path(@account))
   end
 
   private
-
-  def sorting_params
-    column = params[:sort] || 'cinstances.id'
-    direction =  params[:direction] || 'DESC'
-    [ column, direction ]
-  end
 
   def collection
     @account.bought_service_contracts.permitted_for(current_user)

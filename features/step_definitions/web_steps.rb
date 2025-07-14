@@ -39,6 +39,14 @@ When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(
   click_link(link, exact: true, visible: !invisible)
 end
 
+When "(they )switch {string} on" do |switch|
+  check(switch, allow_label_click: true)
+end
+
+When "(they )switch {string} off" do |switch|
+  uncheck(switch, allow_label_click: true)
+end
+
 Then /^(?:|I |they )should see "([^"]*)"$/ do |text|
   assert_page_has_content text
 end
@@ -59,7 +67,7 @@ end
 #   And they should not be able to see the feature "Max. Speed"
 #
 Then "they {should} be able to see {css_selector}" do |visible, selector|
-  assert_equal visible, has_selector?(:css, selector, wait: 0)
+  assert_equal visible, has_selector?(:css, selector, wait: visible)
 end
 
 Then /^(?:|I |they )should not see "([^"]*)"$/ do |text|
@@ -99,7 +107,7 @@ Then "the current page is {}" do |page_name|
   assert_current_path path_to(page_name)
 end
 
-Then /^(?:|I )should be on (.+)$/ do |page_name|
+Then /^(?:|I |they )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
@@ -133,24 +141,13 @@ And "confirm the dialog" do
   accept_confirm
 end
 
-Then /^(.+) and confirm the dialog(?: "(.*)")?$/ do |original, text|
-  ActiveSupport::Deprecation.warn "🥒 Replace with step 'And confirm the dialog'"
-  if rack_test?
-    step original
-  else
-    accept_confirm(text) do
-      step original
-    end
-    wait_for_requests
-  end
-end
-
 Then "(they )should see the following details(:)" do |table|
-  assert table.rows_hash.all? do |key, value|
-    find('dl dt', text: key).has_sibling?('dd', text: value)
+  table.rows_hash.all? do |key, value|
+    dt = find('dl dt', text: key)
+    assert dt.has_sibling?('dd', text: value)
   end
 end
 
-Then "(I )(they )should see the flash message {string}" do |message|
-  assert_flash(message)
+Given "they {are} using a modern browser" do |modern|
+  ApplicationController.any_instance.expects(:browser_not_modern?).returns(!modern).at_least_once
 end

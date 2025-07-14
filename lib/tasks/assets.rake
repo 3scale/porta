@@ -24,19 +24,18 @@ namespace :assets do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  namespace :precompile do
-    desc 'Compile assets for tests'
-    task :test do
-      ENV['NODE_ENV'] = 'test'
-      ENV['RAILS_ENV'] = 'test'
-      Rake::Task['assets:precompile'].invoke
-    end
-  end
-
   desc "Clear assets compile cache"
   task :clear_cache do
     Rails.root.join('tmp/cache/assets').rmtree
   end
 
   Rake::Task['assets:environment'].enhance(%w[assets:environment:factory_bot assets:environment:observers])
+
+  Rake::Task['assets:clobber'].enhance do
+    FileUtils.rm 'public/packs/manifest.json', force: true
+  end
+
+  Rake::Task["assets:precompile"].enhance do
+    Rake::Task["webpack:compile"].invoke
+  end
 end

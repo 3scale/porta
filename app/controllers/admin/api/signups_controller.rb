@@ -10,7 +10,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
     @signup_result = Signup::DeveloperAccountManager.new(current_account).create(signup_params)
 
     check_creation_errors
-    respond_with(@signup_result.account, with_apps: true)
+    respond_with(@signup_result.account, user_options: { with_apps: true })
   end
 
   private
@@ -25,8 +25,8 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
     # and not respond with pathetic error
     raise ActiveRecord::RecordNotFound if @signup_result.errors[:plans].present?
 
-    @signup_result.user.errors.each do |attr, error|
-      @signup_result.account.errors.add(attr, error)
+    @signup_result.user.errors.each do |error|
+      @signup_result.account.errors.add(error.attribute, error.message)
     end
   end
 

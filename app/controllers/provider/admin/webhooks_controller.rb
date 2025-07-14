@@ -23,11 +23,16 @@ class Provider::Admin::WebhooksController < Sites::BaseController
 
   def show
     respond_to do |format|
-      format.js do
+      format.json do
         if @webhook
           @ping_response = @webhook.ping
+          if @ping_response.respond_to?(:status)
+            render json: { type: :success, message: t('.success', url: @webhook.url, status: @ping_response.status) }
+          else
+            render json: { type: :danger, message: t('.failed', response: @ping_response.message.to_json.html_safe) }
+          end
         else
-          render :status => :forbidden, :plain => 'Nowhere to ping'
+          render json: { type: :danger, message: t('.error') }
         end
       end
     end
@@ -37,8 +42,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
     @webhook ||= current_account.build_web_hook(params[:web_hook])
 
     if @webhook.save
-      flash[:notice] = 'Webhooks settings were successfully updated.'
-      redirect_to :action => :edit
+      redirect_to({ action: :edit }, success: t('.success'))
     else
       render :edit
     end
@@ -46,10 +50,9 @@ class Provider::Admin::WebhooksController < Sites::BaseController
 
   def update
     if @webhook.update(params[:web_hook])
-      flash[:notice] = 'Webhooks settings were successfully updated.'
-      redirect_to :action => :edit
+      redirect_to({ action: :edit }, success: t('.success'))
     else
-      flash[:error] = 'Webhooks settings could not be updated.'
+      flash.now[:danger] = t('.error')
       render :edit
     end
   end

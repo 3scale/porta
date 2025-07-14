@@ -5,6 +5,8 @@ class CMS::Template < ApplicationRecord
   include ThreeScale::Search::Scopes
   include CMS::Filtering
 
+  self.background_deletion = [:versions]
+
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
   scope :for_rails_view, ->(path) { where(rails_view_path: path.to_s) }
 
@@ -18,8 +20,8 @@ class CMS::Template < ApplicationRecord
 
   self.table_name = :cms_templates
 
-  belongs_to :provider, class_name: 'Account'
-  has_many :versions, as: :template
+  belongs_to :provider, class_name: 'Account', inverse_of: :templates
+  has_many :versions, as: :template, dependent: :delete_all
 
   validates :provider, presence: true
   validates :system_name, uniqueness: { scope: [:provider_id, :type], allow_blank: true, case_sensitive: true },
@@ -33,10 +35,10 @@ class CMS::Template < ApplicationRecord
 
   validate :check_liquid_syntax
 
-  before_save :set_updated_by
-  before_save :set_rails_view_path
   after_validation :create_first_version, on: :update
 
+  before_save :set_updated_by
+  before_save :set_rails_view_path
 
   # remove this when all code will read from #published and not #body
   alias_attribute :body, :published
@@ -109,8 +111,9 @@ class CMS::Template < ApplicationRecord
     updated_at.utc.to_i
   end
 
-  def save(*)
-    raise "#{self.inspect} cannot be saved because it is CMS::Template" if self.class == CMS::Template
+  def save(...)
+    raise "#{inspect} cannot be saved because it is CMS::Template" if instance_of?(CMS::Template)
+
     super
   end
 

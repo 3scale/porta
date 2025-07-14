@@ -39,6 +39,9 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
   class ProviderLoggedInTest < Provider::Admin::ApplicationsTest
     setup do
       @provider = FactoryBot.create(:provider_account)
+
+      @provider.first_admin.notification_preferences.update(enabled_notifications: %i[cinstance_plan_changed])
+
       login! @provider
     end
 
@@ -47,7 +50,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     class Index < ProviderLoggedInTest
       setup do
         @service = provider.services.first!
-        plans = FactoryBot.create_list(:application_plan, 2, service: @service)
+        plans = FactoryBot.create_list(:application_plan, 2, issuer: @service)
         buyers = FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
         plans.each_with_index { |plan, index| buyers[index].buy! plan }
       end
@@ -133,12 +136,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
 
       test 'show renders application for the permitted services ids when there is no access to all services' do
+        member = FactoryBot.create(:member, account: provider, member_permission_ids: [:partners], member_permission_service_ids: [application.issuer.id])
+        member.activate!
+        logout! && login!(provider, user: member)
+
         second_service = FactoryBot.create(:simple_service, account: provider)
         second_plan = FactoryBot.create(:application_plan, issuer: second_service)
         second_app = FactoryBot.create(:cinstance, plan: second_plan)
 
-        User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
-        User.any_instance.expects(:member_permission_service_ids).returns([application.issuer.id]).at_least_once
         get provider_admin_application_path(application)
         assert_response :success
         get provider_admin_application_path(second_app)
@@ -200,6 +205,20 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         assert_response :redirect
         assert_equal subscribed_service_plan, buyer.bought_service_contracts.first.service_plan
       end
+
+      test 'crate application with special characters and numeric values' do
+        provider.settings.allow_multiple_applications!
+        subscribed_service_plan = FactoryBot.create(:service_plan, service: service)
+        buyer.bought_service_contracts.create(plan: subscribed_service_plan)
+
+        %w[9999_ {}*~KEY "%<>\[\\\]^`{|} ;=?@ !#$&\'(].each do |name|
+          post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                           cinstance: { plan_id: application_plan.id, name: name } }
+
+          assert_response :redirect
+          assert_equal 'Application was successfully created', flash[:success], "Failed creating application with name #{name}"
+        end
+      end
     end
 
     class Edit < ProviderLoggedInTest
@@ -221,6 +240,10 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     end
 
     class ChangePlan < ProviderLoggedInTest
+      disable_transactional_fixtures!
+      self.database_cleaner_strategy = :deletion
+      self.database_cleaner_clean_with_strategy = :deletion
+
       include ActiveJob::TestHelper
 
       def setup
@@ -267,16 +290,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
 
       test 'change_plan should email provider with link to app page' do
-        Logic::RollingUpdates.expects(skipped?: true).at_least_once
-
         ActionMailer::Base.deliveries = []
-        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
+        with_sidekiq do
           put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
         end
 
         assert_equal cinstance.reload.plan, new_plan
         assert mail = ActionMailer::Base.deliveries.first, 'missing email'
-        assert_match provider_admin_application_url(cinstance, host: provider.internal_admin_domain), mail.body.to_s
+        assert_match provider_admin_application_url(cinstance, host: provider.internal_admin_domain), mail.text_part.body.to_s
       end
 
       #regression test for https://github.com/3scale/system/issues/1889

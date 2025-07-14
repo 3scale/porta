@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseController
 
-  activate_menu :audience, :cms
+  activate_menu :audience, :cms, :content
 
   def index
     @page = page
@@ -15,17 +17,14 @@ class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseContr
   def destroy
     version.destroy
 
-    flash[:notice] = "Version was destroyed"
-    redirect_to :action => :index
+    redirect_to({ action: :index }, success: t('.success'))
   end
 
   def revert
     if page.revert_to(version).save
-      flash[:notice] = "Reverted to version from #{I18n.l(version.created_at)}"
-      redirect_to polymorphic_path([:edit, :provider, :admin, @page])
+      redirect_to polymorphic_path([:edit, :provider, :admin, @page]), success: t('.success', date: l(version.created_at))
     else
-      flash[:error] = "Problem reverting version"
-      redirect_back(fallback_location: provider_admin_cms_template_version_path(@page, version))
+      redirect_back_or_to provider_admin_cms_template_version_path(@page, version), danger: t('.error')
     end
   end
 

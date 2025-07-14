@@ -45,13 +45,19 @@ class MessageRecipient < ApplicationRecord
   # I know it does not make much sense for received messages to have state sent, but it is like that
   scope :received,     -> { with_message.merge(Message.sent) }
   scope :unread,       -> { where(state: 'unread') }
-  scope :not_deleted,  -> { where(deleted_at: nil) }
+  sifter(:not_deleted) { deleted_at == nil }
+  scope :not_deleted,  -> { where.has { sift(:not_deleted) } }
   scope :deleted,      -> { where.not(deleted_at: nil) }
   scope :hidden,       -> { not_deleted.where.not(hidden_at: nil) }
   scope :of_account,   ->(account) { where(receiver: account) }
   scope :not_system,   -> {
     includes(:message).where(messages: { system_operation_id: nil }).references(:message)
   }
+  # stale is when there is no associated message OR no associated receiver
+  scope :stale, -> do
+    joining { [message.outer, receiver.of(Account).outer] }.
+      where.has { (message.id == nil) | (BabySqueel[:accounts].id == nil) }
+  end
 
   state_machine :initial => :unread do
 
@@ -106,21 +112,6 @@ class MessageRecipient < ApplicationRecord
 
   def self.number_of_unread_for user
     user.received_messages.where(:state => :unread).count
-  end
-
-  def notifiable?
-    operation = message.system_operation
-
-    default = case receiver
-              when Account
-                !Notifications::NewNotificationSystemMigration.new(receiver).enabled?
-              else
-                true
-              end
-
-    return default unless operation
-
-    receiver.dispatch_rule_for(operation).dispatch?
   end
 
   # TODO: remove after position column is removed from the database

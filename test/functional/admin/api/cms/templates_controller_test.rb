@@ -228,6 +228,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @layout, page.reload.layout
+        assert JSON.parse(response.body)['draft']
       end
 
       def test_update_page_layout_id_unknown

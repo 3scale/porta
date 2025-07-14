@@ -1,21 +1,19 @@
-<h1>New service subscription</h1>
-
-<%= semantic_form_for @service_contract,
-  url: admin_buyers_account_service_contracts_path(@account, service_id: @service.id),
-  html: { data: { remote: true } } do |form| %>
-
-  <%= form.inputs do %>
-
-    <li>
-      <label>Service</label>
-      <p><%= h @service.name %></p>
-    </li>
-
-    <!--  It will prompt only if there is no default service plan selected -->
-    <%= form.input :plan, collection: @service_plans, prompt: !@service_contract.plan_id? %>
-  <% end %>
+<%= semantic_form_for @service_contract, url: admin_buyers_account_service_contracts_path(@account, service_id: @service.id),
+                                         builder: Fields::PatternflyFormBuilder,
+                                         html: { 'data-remote': true, class: 'pf-c-form' } do |form| %>
+  <%= form.input :plan, as: :patternfly_select,
+                        collection: @service_plans,
+                        include_blank: false,
+                        required: true %>
 
   <%= form.actions do %>
-    <%= form.commit_button 'Create subscription', button_html: { data: { disable_with: 'Creating subscription...' } } %>
-  <%-end%>
-<%-end %>
+    <%= form.commit_button 'Create subscription', data: { 'disable_with': 'Create subscription' } %>
+  <% end %>
+<% end %>
+
+<%# Workaround to fill colorbox modal's width with the PF form %>
+<style>
+  div#cboxLoadedContent {
+    width: auto !important;
+  }
+</style>

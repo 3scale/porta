@@ -1,7 +1,8 @@
 <%= content_tag(:tr, :id => dom_id(key),
                 :class => 'key', 'data-key' => key.to_param) do %>
   <td>Application key</td>
-  <td class="key" <% if cinstance.backend_version.oauth? %>id="oauth_secret"<% end %>><%= key %>
+  <td class="key" <% if cinstance.backend_version.oauth? %>id="oauth_secret"<% end %>><%= key %></td>
+  <td>
     <%= content_tag(:span, :class => 'delete_key operations', :style => ("display:none;" unless cinstance.can_delete_key?)) do %>
       <% if cinstance.backend_version.oauth? %>
         <%= fancy_link_to("Regenerate", regenerate_provider_admin_application_key_path(:application_id => cinstance.id, :id => cinstance.keys.first),

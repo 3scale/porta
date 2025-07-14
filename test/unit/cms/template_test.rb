@@ -51,6 +51,16 @@ class CMS::TemplateTest < ActiveSupport::TestCase
     assert_equal 'old', page.current
   end
 
+  test "destroy" do
+    page = FactoryBot.create(:cms_page, draft: 'something')
+    page.publish!
+    versions = page.versions
+    assert_not_empty versions
+
+    page.destroy!
+    assert_empty CMS::Template::Version.where(id: versions)
+  end
+
   test '#upgrade_content' do
     page = FactoryBot.create(:cms_page, draft: 'old draft', published: 'published')
 

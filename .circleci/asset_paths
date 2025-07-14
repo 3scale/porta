@@ -3,11 +3,9 @@ yarn.lock
 app/javascript
 app/assets
 app/lib/pdf/images
-babel.config.js
 public/dev-portal-assets
 config/compass.rb
 config/webpack
-config/webpacker.yml
 lib/developer_portal/app/assets
 lib/developer_portal/app/views/developer_portal/css
 lib/developer_portal/app/views/developer_portal/javascripts

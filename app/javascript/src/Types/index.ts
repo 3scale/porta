@@ -1,7 +1,4 @@
-import type { Method } from 'utilities/ajax'
-
 export * from 'Types/Api'
-export * from 'Types/FlashMessages'
 
 export interface IRecord {
   id: number;
@@ -11,7 +8,7 @@ export interface IRecord {
 export interface Action {
   title: string;
   path: string;
-  method: Method;
+  method: Request['method'];
 }
 
 export type Plan = IRecord & {
@@ -57,3 +54,10 @@ export interface FieldDefinition {
 }
 
 export type ValidationErrors = Record<string, string[]> | undefined
+
+export type IAlertType = 'danger' | 'default' | 'info' | 'success' | 'warning'
+
+export interface IAlert {
+  type?: IAlertType;
+  message?: string;
+}

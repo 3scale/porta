@@ -17,12 +17,12 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     ApplicationController.any_instance.stubs(:browser_not_modern?).returns(false)
     get admin_buyers_accounts_path
     assert_response :success
-    assert flash[:error].blank?
+    assert flash[:danger].blank?
 
     ApplicationController.any_instance.stubs(:browser_not_modern?).returns(true)
     get admin_buyers_accounts_path
     assert_response :redirect
-    assert_match 'Please upgrade your browser and sign in again', flash[:error]
+    assert_match 'Please upgrade your browser and sign in again', flash[:warning]
   end
 
   test '#save_return_to' do
@@ -39,6 +39,17 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     login! provider
 
     ApplicationController.any_instance.expects(:track_proxy_affecting_changes)
+    ApplicationController.any_instance.expects(:flush_proxy_affecting_changes)
+
+    get admin_buyers_accounts_path
+  end
+
+  test "proxy config objects tracked for changes are cleared" do
+    provider = FactoryBot.create(:provider_account)
+    login! provider
+
+    ProxyConfigAffectingChanges::Tracker.any_instance.expects(:reported_clear)
+    # make sure #reported_clear is not called by #flush_proxy_affecting_changes
     ApplicationController.any_instance.expects(:flush_proxy_affecting_changes)
 
     get admin_buyers_accounts_path
@@ -155,7 +166,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
         get '/client_caching'
       end
 
-      assert_equal 'no-cache, no-store', response.headers['Cache-Control']
+      assert_equal 'no-store', response.headers['Cache-Control']
       assert_equal 'no-cache', response.headers['Pragma']
       assert_equal 'Mon, 01 Jan 1990 00:00:00 GMT', response.headers['Expires']
     end

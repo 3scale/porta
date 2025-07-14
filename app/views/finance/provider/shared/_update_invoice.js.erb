@@ -1,5 +1,8 @@
-<%= render :partial => '/shared/flash_message' %>
+<%= render 'shared/flash_alerts' %>
 
-$('#invoice_header').replaceWith(<%= json @header %>);
-$('#actions').replaceWith(<%= json(@actions) %>);
-$('.invoice#line_items').replaceWith(<%= json @line_items %>);
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  $('#invoice_header').replaceWith(<%= json @header %>);
+  $('#actions').replaceWith(<%= json(@actions) %>);
+  $('.invoice#line_items').replaceWith(<%= json @line_items %>);
+});

@@ -14,9 +14,9 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
     case data
     when ThreeScale::OAuth2::UserData
       current_user.provided_access_tokens.create_from_access_token!(oauth_client.access_token)
-      redirect_options = { success: 'You can now use the service discovery' }
+      redirect_options = { success: t('.success') }
     else
-      redirect_options = { error: 'We could not authenticate you against OpenShift cluster' }
+      redirect_options = { danger: t('.error') }
     end
     redirect_to referrer_url, redirect_options
   end

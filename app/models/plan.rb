@@ -4,16 +4,15 @@ class Plan < ApplicationRecord
   class PeriodRangeCalculationError < StandardError; end
   include Symbolize
 
-  self.allowed_sort_columns = %w[position name state contracts_count]
-  self.default_sort_column = :position
+  self.allowed_sort_columns = %w[name state contracts_count]
+  self.default_sort_column = :name
   self.default_sort_direction = :asc
 
 
   include SystemName
   include Logic::MetricVisibility::Plan
 
-  self.background_deletion = [:cinstances, :contracts, :plan_metrics, :pricing_rules,
-                              :usage_limits, [:customizations, { action: :destroy, class_name: 'Plan' }]]
+  self.background_deletion = %i[contracts plan_metrics pricing_rules usage_limits customizations]
 
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
 
@@ -73,8 +72,6 @@ class Plan < ApplicationRecord
   # But calling `#lock!` will call `#reload` so some instance variables are reset
   before_destroy :avoid_destruction, prepend: true
 
-  has_many :cinstances, :dependent => :destroy
-
   has_many :contracts, dependent: :destroy
 
   # TODO: move this to application plan, but beware
@@ -95,13 +92,10 @@ class Plan < ApplicationRecord
     plan.has_many :plan_metrics, foreign_key: :plan_id, &Logic::MetricVisibility::OfMetricAssociationProxy
   end
 
-  has_many :features_plans, :as => :plan
-
-  # FIXME: this should be a simple HABTM
-  # No it can't, because it is POLYMORPHIC
-  has_many :features, :through => :features_plans do
-    # returns all features owned by issuer, not only enabled by plan
-    def of_service
+  has_many :features_plans, as: :plan, dependent: :delete_all
+  has_many :features, through: :features_plans do # Only enabled features
+    # returns all features available for this plan, not only enabled ones
+    def all_available
       owner = proxy_association.owner
       owner.issuer.features.with_object_scope(owner)
     end
@@ -110,8 +104,6 @@ class Plan < ApplicationRecord
   has_many :customizations, :foreign_key => :original_id, :class_name => "Plan", :dependent => :destroy
 
   belongs_to :original, :class_name => self.name
-
-  default_scope -> { order(:position) }
 
   scope :latest, -> { limit(5).order(created_at: :desc) }
 
@@ -127,6 +119,7 @@ class Plan < ApplicationRecord
   scope :stock, -> { where(original_id: [0, nil]) }
   scope :not_custom, -> { where(original_id: 0)}
 
+  scope :ordered, -> { order(:id) }
   scope :alphabetically, -> { order(name: :asc) }
 
   def self.provided_by(account)
@@ -166,24 +159,6 @@ class Plan < ApplicationRecord
     end
 
     alias by_issuer issued_by
-
-
-    # Reorder plans according to list of ids.
-    #
-    # == Example
-    #
-    # Plan.reorder!([3, 2, 1]) # will reorder plans so the one with
-    # id=3 will be first, the one with id=2 second and the one with id=1
-    # last.
-    #
-    # TODO: should be a method on issuer
-    #
-    def reorder!(account, ids)
-      ids.each_with_index do |id, position|
-        account.service.application_plans.find_by_id(id).update_attribute(:position, position)
-      end
-    end
-
   end
 
   def reset_contracts_counter

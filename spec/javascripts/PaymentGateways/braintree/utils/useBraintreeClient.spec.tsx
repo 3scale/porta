@@ -6,7 +6,7 @@ import * as createHostedFields from 'PaymentGateways/braintree/utils/createHoste
 
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
 import type { CustomHostedFields } from 'PaymentGateways/braintree/utils/useBraintreeHostedFields'
-import type { HostedFields } from 'braintree-web/modules/hosted-fields'
+import type { HostedFields } from 'braintree-web/hosted-fields'
 import type { FunctionComponent } from 'react'
 
 interface Props {
@@ -94,7 +94,19 @@ describe('when hosted fields are created', () => {
 
     await waitForPromises()
 
-    const nonce = await hostedFields!.getNonce({} as BillingAddress)
+    const nonce = await hostedFields!.getNonce({ billingAddress: {} as BillingAddress, ipAddress: '' })
+    expect(nonce).toEqual('This is non-cense')
+  })
+
+  it('should pass cardholder name to tokenize', async () => {
+    let hostedFields: CustomHostedFields | undefined
+
+    mountWrapper({ setHostedFields: (hf) => { hostedFields = hf }, threeDSecureEnabled: false })
+
+    await waitForPromises()
+
+    const nonce = await hostedFields!.getNonce({ billingAddress: { firstName: 'First', lastName: 'Last' } as BillingAddress, ipAddress: '' })
+    expect(hostedFields!.tokenize).toHaveBeenCalledWith({ cardholderName: 'First Last' })
     expect(nonce).toEqual('This is non-cense')
   })
 
@@ -105,7 +117,7 @@ describe('when hosted fields are created', () => {
 
     await waitForPromises()
 
-    const nonce = await hostedFields!.getNonce({} as BillingAddress)
+    const nonce = await hostedFields!.getNonce({ billingAddress: {} as BillingAddress, ipAddress: '' })
     expect(nonce).toEqual('This is a 3DS verified transaction')
   })
 })

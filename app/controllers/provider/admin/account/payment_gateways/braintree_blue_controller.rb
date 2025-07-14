@@ -18,16 +18,14 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
       braintree_blue_crypt.create_customer_data
       @braintree_authorization = braintree_blue_crypt.authorization
     rescue Braintree::ConfigurationError, Braintree::AuthenticationError
-      flash[:error] = 'Invalid merchant id'
-      redirect_to action: 'show'
+      redirect_to({ action: :show }, danger: t('.invalid_merchant'))
     end
     @errors = params[:errors]
   end
 
   def update
-    current_account.updating_payment_detail = true
     if current_account.update params.permit(:account)[:account]
-      redirect_to provider_admin_account_braintree_blue_url, notice: 'Credit card details were successfully stored.'
+      redirect_to provider_admin_account_braintree_blue_url, success: t('.success')
     else
       hack_errors
       render action: 'edit'
@@ -43,23 +41,21 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
       if braintree_blue_crypt.update_user(braintree_response)
         redirect_to_success
       else
-        flash[:notice] = 'Credit Card details could not be stored.'
+        flash.now[:danger] = t('.credit_card_error')
         render action: 'edit'
       end
-
     else
       @errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
-      flash[:error] = 'Something went wrong and billing information could not be stored.'
-      redirect_to action: 'edit', errors: @errors
+      redirect_to({ action: :edit, errors: @errors }, danger: t('.billing_address_error')) # @errors what for?
     end
   end
 
   def destroy
+    # TODO: should we notify somehow when #unstore_credit_card! returned a failure response?
     current_account.unstore_credit_card!
     current_account.delete_billing_address
     current_account.save
-    flash[:notice] = 'Your credit card was successfully removed'
-    redirect_to action: 'show'
+    redirect_to({ action: :show }, success: t('.success'))
   end
 
   private
@@ -73,7 +69,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
   end
 
   def redirect_to_success
-    flash[:notice] = 'Credit card details were successfully stored.'
+    flash[:success] = t('.success')
     if params[:next_step] == 'upgrade_plan'
       redirect_to provider_admin_account_path(next_step: 'upgrade_plan')
     else

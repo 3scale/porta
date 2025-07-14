@@ -11,48 +11,41 @@ class Api::PricingRulesController < FrontendController
 
   def index
     @pricing_rules = @plan.pricing_rules.where(metric_id: @metric.id)
+    respond_to :js
   end
 
   def new
     @pricing_rule = @plan.pricing_rules.build(:metric => @metric)
+    respond_to :html # will render in a colorbox
   end
 
   def create
     @pricing_rule = @plan.pricing_rules.build(pricing_rule_params)
     @pricing_rule.metric = @metric
 
-    respond_to do |format|
-      if @pricing_rule.save
-        format.js
-        format.html { redirect_to(admin_application_plan_metric_pricing_rules_path(@plan, @metric), :notice => 'Pricing rule was successfully created.') }
-      else
-        format.js { render :action => 'error' }
-        format.html { render :action => "new" }
-      end
-    end
+    flash.now[:success] = t('.success') if @pricing_rule.save
+
+    respond_to :js
   end
 
   def edit
+    respond_to :html # will render in a colorbox
   end
 
   def update
-    respond_to do |format|
-      if @pricing_rule.update(pricing_rule_params)
-        format.js
-        format.html { redirect_to(edit_admin_application_plan_pricing_rule_path(@plan, @pricing_rule), :notice => 'Pricing rule was successfully updated.')}
-      else
-        format.js { render :action => 'error' }
-        format.html { render :action => "edit" }
-      end
-    end
+    flash.now[:success] = t('.success') if @pricing_rule.update(pricing_rule_params)
+
+    respond_to :js
   end
 
   def destroy
-    @pricing_rule.destroy
-
-    respond_to do |format|
-      format.js
+    if @pricing_rule.destroy
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
     end
+
+    respond_to :js
   end
 
   private

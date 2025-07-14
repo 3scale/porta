@@ -17,8 +17,9 @@
   table.append(newRow);
   newRow.show();
 
-  // Hide form is limit reached.
-  if (table.find("tr").size() >= <%= ReferrerFilter::REFERRER_FILTERS_LIMIT %>) {
-    container.disableSwitch();
-  }
+  <%# Hide form if limit reached. %>
+  <% if @cinstance.referrer_filters.size >= ReferrerFilter::REFERRER_FILTERS_LIMIT %>
+    $("#referrer-filters-form").hide()
+    $("#referrer-filters-limit").show()
+  <% end %>
 })(jQuery);

@@ -7,7 +7,7 @@ class Provider::PasswordsController < FrontendController
   before_action :passwords_allowed?
 
   def new
-    return redirect_back(fallback_location: root_path), error: t('.has_password') if current_user.using_password?
+    return redirect_back_or_to(root_path), danger: t('.has_password') if current_user.using_password?
 
     reset_session_password_token
     token = current_user.generate_lost_password_token
@@ -19,8 +19,7 @@ class Provider::PasswordsController < FrontendController
     if (user = @provider.users.find_by(email: email))
       user.generate_lost_password_token!
     end
-    flash[:success] = t('.success', email: email)
-    redirect_to provider_login_path
+    redirect_to provider_login_path, success: t('.success', email: email)
   end
 
   def show
@@ -35,9 +34,8 @@ class Provider::PasswordsController < FrontendController
     user = password_params[:user]
     if @user.update_password(user[:password], user[:password_confirmation] )
       reset_session_password_token
-      flash[:success] = t('.success')
       @user.kill_user_sessions
-      redirect_to provider_login_path
+      redirect_to provider_login_path, success: t('.success')
     else
       render :action => 'show'
     end
@@ -63,8 +61,7 @@ class Provider::PasswordsController < FrontendController
   def find_user
     @user = @provider.users.find_with_valid_password_token(password_reset_token)
     unless @user
-      flash[:error] = 'The password reset token is invalid.'
-      redirect_to provider_login_path
+      redirect_to provider_login_path, danger: t('.error')
     end
   end
 
@@ -86,7 +83,8 @@ class Provider::PasswordsController < FrontendController
 
   def passwords_allowed?
     return unless @provider.settings.enforce_sso?
-    redirect_to provider_login_path, flash: {error: 'Password login has been disabled.'}
+
+    redirect_to provider_login_path, warning: t('.password_login_disabled')
   end
 
   def password_params

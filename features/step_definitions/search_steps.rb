@@ -4,10 +4,25 @@ Given "the search server is offline" do
   ThinkingSphinx::Test.stop
 end
 
+# Filter elements from a table using a Patternfly Toolbar attribute filters
+#
+# When the table is filtered with:
+#   | filter | value |
+#   | Name   | Bob   |
+#   | Plan   | Cheap |
+#   | State  | Live  |
 When "the table is filtered with:" do |table|
-  table.hashes.each do |search|
-    within '.pf-c-toolbar .pf-m-filter-group' do
-      pf4_select(search[:value], from: search[:filter])
+  within '.pf-c-page__main-section .pf-c-toolbar' do
+    if has_css?('[data-ouia-component-id="attribute-search"]', wait: 0)
+      raise InvalidParameterError('No filters found') if table.hashes.empty?
+
+      parameterize_headers(table)
+      table.hashes.each do |search|
+        select_attribute_filter(search[:filter])
+        fill_attribute_filter(search[:value])
+      end
+    else
+      table.hashes.each { |search| pf4_select(search[:value], from: search[:filter]) }
     end
   end
 end
@@ -86,7 +101,7 @@ end
 
 Then "they should see an empty search state" do
   within('tbody .pf-c-empty-state') do
-    assert_selector(:css, '.pf-c-title', text: 'No results found')
+    assert_selector(:css, '.pf-c-title')
     assert_selector(:css, '.pf-c-empty-state__body')
     assert_selector(:css, '.pf-c-empty-state__primary', text: 'Clear all filters')
   end
@@ -101,11 +116,11 @@ And "they should be able to reset the search" do
   assert find_all('tbody tr').size > 1
 end
 
-When "they search {string} using the toolbar" do |text|
+When "(they )search {string} using the toolbar" do |text|
   perform_toolbar_search(text)
 end
 
-And "can able to reset the toolbar filter {string}" do |filter|
+And "can reset the toolbar filter {string}" do |filter|
   within '.pf-m-filter-group' do
     find_pf_select(filter.capitalize)
       .find('.pf-c-select__toggle-clear')

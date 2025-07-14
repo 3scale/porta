@@ -17,7 +17,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     open_session do |session|
       session.host! @provider.external_admin_domain
-      session.get provider_sso_path
+      session.get provider_sso_path(system_name: 'foo', code: 'bar')
 
       session.assert_response :redirect
       session.assert_equal provider_user, User.current
@@ -123,11 +123,11 @@ class SessionsTest < ActionDispatch::IntegrationTest
     assert_equal root_path, path
   end
 
-  test 'passing redirect_url with sso' do
+  test 'passing redirect_url with token' do
     user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'wwwwww')
     user.activate
 
-    Authentication::Strategy::Internal.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
+    Authentication::Strategy::Token.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
 
     host! @provider.internal_domain
 

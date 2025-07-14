@@ -16,18 +16,18 @@ import { validateChangePassword } from 'Login/utils/validations'
 import { LoginAlert } from 'Login/components/LoginAlert'
 
 import type { FunctionComponent } from 'react'
-import type { FlashMessage } from 'Types'
+import type { IAlert } from 'Types'
 
 interface Props {
   lostPasswordToken?: string | null;
   url?: string;
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
 }
 
 const ChangePasswordPage: FunctionComponent<Props> = ({
   lostPasswordToken = null,
   url,
-  flashMessages
+  alerts
 }) => {
   const [state, setState] = useState({
     password: '',
@@ -51,7 +51,7 @@ const ChangePasswordPage: FunctionComponent<Props> = ({
     }
   }
 
-  const alert = flashMessages.length ? flashMessages[0] : undefined
+  const alert = alerts.length ? alerts[0] : undefined
 
   const validation = validateChangePassword(state)
 

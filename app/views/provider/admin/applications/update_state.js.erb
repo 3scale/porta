@@ -1,5 +1,10 @@
-(function($) {
-  <%= render :partial => '/shared/flash_message' %>
-  $("#cinstance_state").replaceWith(<%= render_to_js_string('state') %>);
-  $("#cinstance_trial").replaceWith(<%= render_to_js_string('trial') %>);
-})(jQuery);
+<%= render 'shared/flash_alerts' %>
+
+<%# If EventTarget is replaceWith'ed immediately, ajax:success and ajax:complete are not called and the spinner will stay %>
+setTimeout(() => {
+  $('#cinstance_state').replaceWith(<%= render_to_js_string('state') %>);
+
+  <% if @cinstance.trial? %>
+    $('#cinstance_trial').replaceWith(<%= render_to_js_string('trial') %>);
+  <% end %>
+});

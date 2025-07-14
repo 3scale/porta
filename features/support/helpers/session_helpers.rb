@@ -14,7 +14,7 @@ module SessionHelper
 
   def try_buyer_login_oauth
     # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
-    visit "/auth/#{@authentication_provider.system_name}/callback"
+    visit "/auth/#{@authentication_provider.system_name}/callback?code=foo"
     @current_user = Account.last.users.last
   end
 
@@ -24,6 +24,7 @@ module SessionHelper
   end
 
   def try_provider_login(username, password)
+    ensure_javascript
     visit provider_login_path
     fill_in('Email or Username', with: username)
     fill_in('Password', with: password)
@@ -37,14 +38,27 @@ module SessionHelper
   end
 
   def log_out
+    return unless logged_in?
+
     find(:css, '[aria-label="Session toggle"]').click
     click_link 'Sign Out'
   end
 
   def assert_current_user(username)
     @user = User.find_by(username: username)
-    message = "Expected #{username} to be logged in, but is not"
-    assert has_content?(/Signed (?:in|up) successfully/i), message
+
+    browser = Capybara.current_session.driver.browser
+    if Capybara.current_driver == :rack_test
+      assert browser.current_session.cookie_jar[:user_session]
+    else
+      assert browser.manage.cookie_named(:user_session)
+    end
+  end
+
+  private
+
+  def logged_in?
+    has_css?('[aria-label="Session toggle"]', wait: 0)
   end
 end
 

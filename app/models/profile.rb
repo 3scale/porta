@@ -17,7 +17,7 @@ class Profile < ApplicationRecord
 
   after_initialize :set_company_size
 
-  audited :allow_mass_assignment => true
+  audited
   state_machine :initial => :private do
 
     state :private
@@ -56,7 +56,6 @@ class Profile < ApplicationRecord
     processors: [:g_d_image_processor],
     styles: LOGO_STYLES,
     :url => ':url_root/:account_id/:class/:attachment/:style/:basename.:extension'.freeze,
-    :s3_permissions => 'public-read'.freeze,
     :default_url => '/assets/3scale-logo.png'.freeze
   validates_attachment_content_type :logo, content_type: %r{^image\/(png|jpeg)}, if: :will_save_change_to_logo?
 

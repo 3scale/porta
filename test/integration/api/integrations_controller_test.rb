@@ -23,7 +23,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     login! provider, user: member
 
     get admin_service_integration_path(service_id: service.id)
-    assert_response 403
+    assert_response 404
 
     member.member_permissions.create!(admin_section: 'plans')
     get admin_service_integration_path(service_id: service.id)
@@ -40,16 +40,16 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     ProxyDeploymentService.any_instance.expects(:deploy_production).returns(true).once
     patch promote_to_production_admin_service_integration_path(service_id: service.id)
     assert_response :redirect
-    assert_not_nil flash[:notice]
-    assert_nil flash[:error]
+    assert_not_nil flash[:success]
+    assert_nil flash[:danger]
   end
 
   def test_promote_to_production_error
     ProxyDeploymentService.any_instance.expects(:deploy_production).returns(false).once
     patch promote_to_production_admin_service_integration_path(service_id: service.id)
     assert_response :redirect
-    assert_nil flash[:notice]
-    assert_not_nil flash[:error]
+    assert_nil flash[:success]
+    assert_not_nil flash[:danger]
   end
 
   def test_update

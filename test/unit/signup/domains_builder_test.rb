@@ -28,7 +28,7 @@ module Signup
     def generate_subdomain(org_name:, current_subdomain: nil)
       provider = FactoryBot.build(:simple_provider)
       domains_builder_params = { org_name: org_name, current_subdomain: current_subdomain, invalid_subdomain_condition: provider.method(:subdomain_exists?) }
-      Signup::DomainsBuilder.new(domains_builder_params).generate.subdomain
+      Signup::DomainsBuilder.new(**domains_builder_params).generate.subdomain
     end
   end
 end

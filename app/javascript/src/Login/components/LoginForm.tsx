@@ -9,22 +9,29 @@ import {
 
 import { validateLogin } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
+import { ReCaptchaV3 } from 'utilities/ReCaptchaV3'
 import { LoginAlert } from 'Login/components/LoginAlert'
 
-import type { FlashMessage } from 'Types/FlashMessages'
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   providerSessionsPath: string;
+  recaptcha: {
+    enabled: boolean;
+    siteKey: string;
+    action: string;
+  };
   session: {
     username: string | null;
   };
 }
 
 const LoginForm: FunctionComponent<Props> = ({
-  flashMessages,
+  alerts,
   providerSessionsPath,
+  recaptcha,
   session
 }) => {
   const [state, setState] = useState({
@@ -57,7 +64,7 @@ const LoginForm: FunctionComponent<Props> = ({
   const usernameValidated = (validationVisibility.username && usernameErrors) ? 'error' : 'default'
   const passwordValidated = (validationVisibility.password && passwordErrors) ? 'error' : 'default'
 
-  const alert = flashMessages.length ? flashMessages[0] : undefined
+  const alert = alerts.length ? alerts[0] : undefined
 
   return (
     <Form
@@ -114,6 +121,7 @@ const LoginForm: FunctionComponent<Props> = ({
           onChange={handleOnChange('password')}
         />
       </FormGroup>
+      {recaptcha.enabled && <ReCaptchaV3 action={recaptcha.action} siteKey={recaptcha.siteKey} /> }
 
       <ActionGroup>
         <Button

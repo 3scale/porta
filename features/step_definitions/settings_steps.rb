@@ -10,13 +10,9 @@ end
 
 Given "{provider} has the following settings:" do |account, table|
   attributes = table.rows_hash
-  attributes.map_keys! { |key| underscore_spaces(key) }
+  attributes.transform_keys! { |key| underscore_spaces(key) }
 
   account.settings.update!(attributes)
-end
-
-Then /^I should see the settings updated$/ do
-  assert has_content?("Settings updated.")
 end
 
 Then "{provider} should have strong passwords {enabled}" do |provider, enabled|

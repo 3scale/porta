@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Around '@security' do |scenario, block|
+  with_forgery_protection(&block)
+end
+
 Before '@onpremises' do
   ThreeScale.config.stubs(onpremises: true)
   ThreeScale.config.stubs(saas?: false)
@@ -28,7 +32,6 @@ end
 
 Before '@javascript' do
   stub_core_reset!
-  @javascript = true
 end
 
 AfterStep('@javascript') do
@@ -37,6 +40,15 @@ AfterStep('@javascript') do
       stub_core_integration_errors(service_id: id)
     end
   end
+end
+
+Before '@narrow-screen' do
+  @browser_width, @browser_height = page.driver.browser.manage.window.size.to_a
+  page.driver.browser.manage.window.resize_to(1190, @browser_height)
+end
+
+After '@narrow-screen' do
+  page.driver.browser.manage.window.resize_to(@browser_width, @browser_height)
 end
 
 Before do
@@ -118,11 +130,12 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   line_number = scenario.location.line.to_s
 
   # Network logs
-  if page.driver.browser.respond_to?(:manage)
+  if page.driver.browser.respond_to?(:logs)
     # performance logs may fail if this logging type is not configured or not supported by driver
-    if page.driver.browser.manage.logs.available_types.include? :performance
-      logs = page.driver.browser.manage.logs.get(:performance)
-      array = logs.each_with_object([]) do |entry, messages|
+    logs = page.driver.browser.logs
+    if logs.available_types.include? :performance
+      perf_logs = logs.get(:performance)
+      array = perf_logs.each_with_object([]) do |entry, messages|
         message = JSON.parse(entry.message)
         # next unless message.dig('message', 'params', 'documentURL').to_s.end_with? '/p/login'
         messages << message
@@ -139,11 +152,11 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
 
     console_log = folder.join("#{line_number}.log")
 
-    if (logs = page.driver.browser.manage.logs.get(:browser)).present?
-      entries = logs.map{ |entry| "[#{entry.level}] #{entry.message}" }
+    if (browser_logs = logs.get(:browser)).present?
+      entries = browser_logs.map { |entry| "[#{entry.level}] #{entry.message}" }
 
       console_log.open('w') do |f|
-        f.puts *entries
+        f.puts(*entries)
       end
 
       print "Saved console log to #{console_log}\n"
@@ -187,6 +200,10 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   end
 end
 
+After("@javascript") do
+  Capybara.page&.driver&.quit
+end
+
 After do |scenario|
   if ENV['FAIL_FAST']
     Cucumber.wants_to_quit = true if scenario.failed?
@@ -200,7 +217,7 @@ end
 # Before '@stripe' do
 
 Before '@webhook' do
-  stub_request(:any, %r{google.com}).to_return(status: 200, body: '')
+  stub_request(:any, %r{3scale-test.org}).to_return(status: 200, body: '')
 end
 
 current_step = ->(scenario) do

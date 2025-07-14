@@ -30,6 +30,7 @@ class Onboarding::RequestFormTest < ActiveSupport::TestCase
     assert_equal base_url, form.api_base_url
 
     refute form.save
+    assert_equal proxy.errors[:api_backend], form.errors[:api_base_url]
   end
 
   test '#uri' do

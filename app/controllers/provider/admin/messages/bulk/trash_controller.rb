@@ -13,18 +13,17 @@ class Provider::Admin::Messages::Bulk::TrashController < FrontendController
   end
 
   def create
-    ::Messages::DeleteService.run!({
+    ::Messages::DeleteService.run!(
       account:           current_account,
       association_class: association_class,
       ids:               message_ids,
       delete_all:        params[:selected_total_entries].present?
-    })
+    )
 
     @message_ids      = message_ids
     @no_more_messages = no_more_messages
 
-    flash[:notice] = t('.success')
-    redirect_to request.referer
+    redirect_to request.referer, success: t('.success')
   end
 
   private

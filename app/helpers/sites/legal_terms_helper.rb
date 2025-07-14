@@ -7,7 +7,7 @@ module Sites::LegalTermsHelper
        (<a id="legal-terms-trigger" href="" >show</a>)
      </p>
 
-     <div id="legal-terms" style="display:none; overflow-y: scroll; height: 30em;">
+     <div id="legal-terms" style="display:none; overflow-y: auto; max-height: 30em;">
         <!--
            -
            -
@@ -21,16 +21,16 @@ module Sites::LegalTermsHelper
 
      <script type="text/javascript">
      //<![CDATA[
-         $('#legal-terms-trigger').toggle(
-           function() {
-             $('#legal-terms').fadeIn();
-             $('#legal-terms-trigger').text('hide');
-           },
-           function() {
-             $('#legal-terms').fadeOut();
-             $('#legal-terms-trigger').text('show');
-           }
-          );
+          $(document).on('click', '#legal-terms-trigger', function (event) {
+            event.preventDefault();
+            if ($('#legal-terms').is(':visible')) {
+              $('#legal-terms').hide();
+              $('#legal-terms-trigger').text('show');
+            } else {
+              $('#legal-terms').show();
+              $('#legal-terms-trigger').text('hide');
+            }
+          });
      //]]>
      </script>
     SNIPPET
@@ -38,7 +38,7 @@ module Sites::LegalTermsHelper
     escaped_snippet = legal_term_snippet.strip_heredoc.to_json
     js = "$('#cms_template_draft').data('codemirror').setValue(#{escaped_snippet});"
 
-    link_to 'Insert toggling code', '#', onclick: js, class: 'less-important-button'
+    link_to 'Insert toggling code', '#', onclick: js, class: 'pf-c-button pf-m-secondary'
   end
 
   def edit_legal_terms_url(system_name)

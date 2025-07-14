@@ -45,9 +45,9 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     post :create, params: { message: { subject: nil, :body => "message with nil subject" }, :to => buyer.id }
 
     MessageWorker.drain
-    assert msg = Message.last
-    assert_not_equal "message with nil subject", msg.body
-  end
+    assert_nil Message.last
+    assert_response :redirect
+ end
 
   test "creates valid message" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider

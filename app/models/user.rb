@@ -23,20 +23,28 @@ class User < ApplicationRecord
   include ProvidedAccessTokens
   include Indices::AccountIndex::ForDependency
 
-  self.background_deletion = [
-    :user_sessions,
-    :access_tokens,
-    [:sso_authorizations, { action: :delete }],
-    [:moderatorships, { action: :delete }],
-    [:notifications, { action: :delete }],
-    [:notification_preferences, { action: :delete, class_name: 'NotificationPreferences', has_many: false }]
+  self.background_deletion = %i[
+    user_sessions
+    access_tokens
+    sso_authorizations
+    moderatorships
+    notifications
+    notification_preferences
   ].freeze
 
-  audited except: %i[salt posts_count janrain_identifier cas_identifier password_digest
-                     authentication_id open_id last_login_at last_login_ip crypted_password].freeze
+  audited except: %i[salt posts_count janrain_identifier cas_identifier
+                     authentication_id open_id last_login_at last_login_ip crypted_password].freeze,
+          redacted: %i[password_digest].freeze
 
   before_validation :trim_white_space_from_username
+  # after_validation :reset_lost_password_token
+
+  after_create :set_default_notification_preferences
+
   before_destroy :avoid_destruction
+  after_destroy :archive_as_deleted
+
+  after_save :nullify_authentication_id, if: :any_sso_authorizations?
 
   include WebHooksHelpers #TODO: make this inclusion more dsl-ish
   fires_human_web_hooks_on_events
@@ -64,7 +72,7 @@ class User < ApplicationRecord
   end
 
   # TODO: this should be called topic_subscriptions
-  has_many :user_topics
+  has_many :user_topics, dependent: :delete_all
 
   has_many :subscribed_topics, :through => :user_topics, :source => :topic
 
@@ -126,10 +134,7 @@ class User < ApplicationRecord
 
   attr_accessible :member_permission_service_ids, :member_permission_ids, as: %i[admin]
 
-  # after_validation :reset_lost_password_token
 
-  after_save :nullify_authentication_id, if: :any_sso_authorizations?
-  after_destroy :archive_as_deleted
 
   def self.search_states
     %w(pending active)
@@ -176,9 +181,7 @@ class User < ApplicationRecord
   end
 
   def notification_preferences
-    migration = Notifications::NewNotificationSystemMigration.new(account)
-
-    super || build_notification_preferences(preferences: migration.notification_preferences)
+    super || build_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
 
   def accessible_services
@@ -476,6 +479,12 @@ class User < ApplicationRecord
 
   def avoid_destruction
     throw :abort unless can_be_destroyed?
+  end
+
+  def set_default_notification_preferences
+    return unless account&.provider?
+
+    create_notification_preferences(preferences: NotificationPreferences.default_preferences)
   end
 
   class << self

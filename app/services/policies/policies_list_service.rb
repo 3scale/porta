@@ -12,12 +12,12 @@ class Policies::PoliciesListService
   SERVICE_CALL_ERRORS = [PoliciesListServiceError, *HTTP_ERRORS].freeze
   private_constant :HTTP_ERRORS, :SERVICE_CALL_ERRORS
 
-  def self.call(*args)
-    new(*args).call
+  def self.call(...)
+    new(...).call
   end
 
-  def self.call!(*args)
-    new(*args).call!
+  def self.call!(...)
+    new(...).call!
   end
 
   attr_reader :account, :proxy, :builtin

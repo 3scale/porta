@@ -38,11 +38,11 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
     @fields_definition = field_definitions.build(field_definition_params)
 
     if @fields_definition.save
-      flash[:notice] = 'Field was successfully created.'
+      flash[:success] = t('.success')
 
     elsif @fields_definition.errors[:target].empty?
       @optional_fields = @fields_definition.target.classify.constantize.builtin_fields -
-          current_account.fields_definitions.by_target(@fields_definition.target).map(&:name)
+          current_account.reload.fields_definitions.by_target(@fields_definition.target).map(&:name)
       @required_fields = @fields_definition.target_class.required_fields
       @optional_fields.unshift "[new field]"
     end

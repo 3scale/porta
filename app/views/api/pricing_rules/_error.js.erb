@@ -1,0 +1,21 @@
+void function () {
+  <% if errors = @pricing_rule.errors[:min].presence %>
+    const minValueError = "<%= escape_javascript(errors.to_sentence) %>";
+    jQuery('#minValueError').html(minValueError);
+    jQuery('#minValueError').show();
+  <% end %>
+
+  <% if errors = @pricing_rule.errors[:max].presence %>
+    const maxValueError = "<%= escape_javascript(errors.to_sentence) %>";
+    jQuery('#maxValueError').html(maxValueError);
+    jQuery('#maxValueError').show();
+  <% end %>
+
+  <% if errors = @pricing_rule.errors[:cost_per_unit].presence %>
+    const costError = "<%= escape_javascript(errors.to_sentence) %>";
+    jQuery('#costPerUnitError').html(costError);
+    jQuery('#costPerUnitError').show();
+  <% end %>
+
+  $.colorbox.resize();
+}();

@@ -5,6 +5,8 @@ require 'test_helper'
 class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
+  DoNotRetryError = DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+
   setup do
     @object = FactoryBot.create(:metric)
   end
@@ -13,20 +15,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     perform_enqueued_jobs do
       perform_expectations
 
-      hierarchy_worker.perform_now(object)
+      DeleteObjectHierarchyWorker.delete_later(object)
     end
-  end
-
-  def test_success_callback_method
-    caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
-    hierarchy_worker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
-  end
-
-  def test_complete_callback_method
-    caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-    DeletePlainObjectWorker.expects(:perform_later).with(object, caller_worker_hierarchy, 'destroy')
-    hierarchy_worker.new.on_complete(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
   end
 
   private
@@ -35,8 +25,57 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
   def perform_expectations; end
 
-  def hierarchy_worker
-    DeleteObjectHierarchyWorker
+  class DeletingOrderCheck < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    class TracingDeleteObjectHierarchyWorker < DeleteObjectHierarchyWorker
+      def self.trace
+        @trace ||= []
+      end
+
+      private def handle_one_hierarchy_entry!(hierarchy)
+        self.class.trace << hierarchy.last
+        super
+      end
+    end
+
+    test "basic order test" do
+      metric = FactoryBot.create(:metric)
+      pricing_rule = FactoryBot.create(:pricing_rule, metric: metric)
+
+      perform_enqueued_jobs do
+        TracingDeleteObjectHierarchyWorker.delete_later(metric)
+      end
+
+      exp = %W[
+        Association-Metric-#{metric.id}:proxy_rules
+        Association-Metric-#{metric.id}:plan_metrics
+        Association-Metric-#{metric.id}:usage_limits
+        Association-Metric-#{metric.id}:pricing_rules
+        Plain-PricingRule-#{pricing_rule.id}
+        Association-Metric-#{metric.id}:pricing_rules
+        Plain-Metric-#{metric.id}
+        ]
+
+      assert_equal exp, TracingDeleteObjectHierarchyWorker.trace
+    end
+  end
+
+  class ReschedulingTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+
+    test "will reschedule if timeout is reached" do
+      now = DeleteObjectHierarchyWorker.new.send :now
+      DeleteObjectHierarchyWorker.any_instance.expects(:now).times(5).returns(now, now, now + DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS)
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.perform_later("Plain-Alert-123456", "Plain-Alert-654321")
+      end
+
+      assert_equal ["Plain-Alert-123456", "Plain-Alert-654321"], performed_jobs[0]["arguments"]
+      assert_equal ["Plain-Alert-123456"], performed_jobs[1]["arguments"]
+    end
   end
 
   class AssociationUnknownPrimaryKeyTest < ActiveSupport::TestCase
@@ -44,26 +83,81 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     test 'the error is not raised and the object is removed' do
       plan = FactoryBot.create(:application_plan)
-      feature = FactoryBot.create(:feature)
-      features_plan = plan.features_plans.create!(feature: feature)
+      feature = FactoryBot.create(:feature, featurable: plan.service)
+      plan.features_plans.create!(feature: feature)
 
       assert_difference(plan.features_plans.method(:count), -1) do
-        perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(feature) }
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(feature) }
       end
 
       assert_raises(ActiveRecord::RecordNotFound) { feature.reload }
     end
   end
 
-  class DeleteObjectHierarchyWorkerWhenDoesNotHaveAssociationsTest < ActiveSupport::TestCase
-    def test_execute_success_when_empty_batch
-      object = FactoryBot.create(:metric)
-      worker = DeleteObjectHierarchyWorker.new
-      worker.instance_variable_set(:@object, object)
-      caller_worker_hierarchy = %w[HTestClass123 HTestClass1123]
-      worker.instance_variable_set(:@caller_worker_hierarchy, caller_worker_hierarchy)
-      worker.expects(:on_complete).with(anything, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy})
-      worker.perform(object: object)
+  class BadHierarchyEntryTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test "call with bad hierarchy entry" do
+      System::ErrorReporting.expects(:report_error).with do |exception|
+        exception.is_a? DoNotRetryError
+      end
+
+      DeleteObjectHierarchyWorker.perform_now("Plain-BadClass-1234")
+    end
+  end
+
+  class ObjectCachingTest < ActiveSupport::TestCase
+    setup do
+      @user = FactoryBot.create(:user)
+      FactoryBot.create_list(:access_token, 3, owner: @user)
+      assert_equal 3, @user.access_tokens.count
+    end
+
+    test "retrieves objects minimal times from db and clears cache" do
+      object_cache = {}
+      hierarchy = %W[Plain-User-#{@user.id} Association-User-#{@user.id}:access_tokens]
+      job = DeleteObjectHierarchyWorker.new(*hierarchy)
+      job.instance_variable_set(:@object_cache, object_cache)
+
+      # user is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\busers\b.*\bid['"` ]{0,2}=/i) do
+        # access_tokens are never loaded by id as they are just `take`n, cached and not reloaded before destroy
+        assert_number_of_queries(0, matching: /SELECT.*\baccess_tokens\b.*\bid['"` ]{0,2}=/i) do
+          assert_number_of_queries(3, matching: /DELETE.*\baccess_tokens\b.*\bid['"` ]{0,2}=/i) do
+            job.perform(*hierarchy)
+          end
+        end
+      end
+
+      assert_empty object_cache # records are removed from cache once deleted
+      assert_raise(ActiveRecord::RecordNotFound) { @user.reload }
+    end
+  end
+
+  class DeleteAllAssociationTest < ActiveSupport::TestCase
+    setup do
+      @page = FactoryBot.create(:cms_page)
+      @page.publish!
+      @page.draft = "another draft"
+      @page.publish!
+      assert_equal 3, @page.versions.count
+    end
+
+    test "uses #delete_all instead of individual record deletes for such associations" do
+      hierarchy = %W[Plain-CMS::Page-#{@page.id} Association-CMS::Page-#{@page.id}:versions]
+
+      # cms_template is obtained by ID once then reused for each association; and once reloaded before being destroyed
+      assert_number_of_queries(2, matching: /SELECT.*\bcms_templates\b.*\bid['"` ]{0,2}=/i) do
+        # cms_templates_versions are never loaded by id but delete(d)_all
+        assert_number_of_queries(0, matching: /SELECT.*\bcms_templates_versions\b.*\bid['"` ]{0,2}=/i) do
+          # ideally we only want one invocation but deletion is also invoked once the Page record is `destroy!`-ed
+          assert_number_of_queries(2, matching: /DELETE.*\bcms_templates_versions\b.*/i) do
+            DeleteObjectHierarchyWorker.perform_now(*hierarchy)
+          end
+        end
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { @page.reload }
     end
   end
 
@@ -71,31 +165,71 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
 
     setup do
-      @object = FactoryBot.create(:simple_account)
-      Rails.logger.stubs(:info)
+      @object = FactoryBot.create(:simple_provider)
+      System::ErrorReporting.stubs(:report_error)
     end
 
     attr_reader :object
 
-    def test_perform_deserialization_error
+    test "compatibility perform deserialization error" do
       object.destroy!
-      Rails.logger.expects(:info).with { |message| message.match(/DeleteObjectHierarchyWorker#perform raised ActiveJob::DeserializationError/) }
+      System::ErrorReporting.expects(:report_error).with { _1.is_a? ActiveJob::DeserializationError }
       perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(object) }
     end
 
-    def test_success_record_not_found
+    test "compatibility perform error with hierarchy" do
+      fake_object = {}
       object.destroy!
-      Rails.logger.expects(:info).with("DeleteObjectHierarchyWorker#on_success raised ActiveRecord::RecordNotFound with message Couldn't find #{object.class} with 'id'=#{object.id}")
-      DeleteObjectHierarchyWorker.new.on_success(1, {'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => %w[Hierarchy-TestClass-123]})
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later(fake_object, ["Hierarchy-Account-#{object.id}"]) }
+    end
+
+    test "success when record not found" do
+      object.destroy!
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_later("Plain-#{object.class}-#{object.id}") }
+    end
+
+    test "deleting records that mixed do not exist" do
+      account = object
+      service, other_service = FactoryBot.create_list(:simple_service, 2, account:)
+      service.destroy!
+      Rails.logger.stubs(:warn)
+      Rails.logger.expects(:warn).with { |msg| msg.start_with? "DeleteObjectHierarchyWorker skipping object, maybe something else already deleted it: " }.twice
+      perform_enqueued_jobs {
+        DeleteObjectHierarchyWorker.perform_later(
+          "Plain-#{object.class}-#{object.id}",
+          "Plain-Service-#{service.id}",
+          "Association-Service-#{service.id}:metrics",
+          "Plain-Service-#{other_service.id}",
+        )
+      }
+
+      assert_raises(ActiveRecord::RecordNotFound) { other_service.reload }
+      assert_raises(ActiveRecord::RecordNotFound) { account.reload }
     end
   end
 
-  class DeletePlanTest < DeleteObjectHierarchyWorkerTest
+  class DeletePlanTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
       # ApplicationPlan setup
-      @object = @plan = FactoryBot.create(:application_plan)
+      @plan = FactoryBot.create(:application_plan)
       @contract = FactoryBot.create(:application_contract, plan: @plan)
       @customized_plan = FactoryBot.create(:application_plan, original_id: @plan.id)
+    end
+
+    test "delete plan" do
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later(plan)
+      end
+
+      [plan, contract, customized_plan].each do |object|
+        assert_raise(ActiveRecord::RecordNotFound) { object.reload }
+      end
     end
 
     private
@@ -103,7 +237,6 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :plan, :contract, :customized_plan
 
     def perform_expectations
-      DeletePlainObjectWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.stubs(:perform_later)
       DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
       DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything, 'destroy')
@@ -111,7 +244,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     class AccountPlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryBot.create(:account_plan)
+        @plan = FactoryBot.create(:account_plan)
         @contract = FactoryBot.create(:account_contract, plan: @plan)
         @customized_plan = FactoryBot.create(:account_plan, original_id: @plan.id)
       end
@@ -119,14 +252,16 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     class ServicePlanTest < DeletePlanTest
       def setup
-        @object = @plan = FactoryBot.create(:service_plan)
+        @plan = FactoryBot.create(:service_plan)
         @contract = FactoryBot.create(:service_contract, plan: @plan)
         @customized_plan = FactoryBot.create(:service_plan, original_id: @plan.id)
       end
     end
   end
 
-  class DeleteServiceTest < DeleteObjectHierarchyWorkerTest
+  class DeleteServiceTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
       @object = @service = FactoryBot.create(:simple_service)
 
@@ -141,23 +276,408 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       @backend_api_config = FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api)
     end
 
+    test "delete when destroyable" do
+      FactoryBot.create(:service, account: service.account) # just a second service to make first destroyable
+      cinstance = FactoryBot.create(:cinstance, plan: application_plan)
+      limit_alerts = FactoryBot.create_list(:limit_alert, 4, cinstance:, account: cinstance.user_account)
+      perform_enqueued_jobs(queue: "deletion") do
+        service.mark_as_deleted!
+      end
+
+      [service, service_plan, application_plan, *metrics.to_a, api_docs_service, service.proxy, backend_api_config, *limit_alerts].each do |object|
+        assert_raise(ActiveRecord::RecordNotFound) { object.reload }
+      end
+
+      assert backend_api.reload
+    end
+
+    test "delete plain non-destroyable fails" do
+      assert_raise(ActiveRecord::RecordNotDestroyed) do
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.perform_later("Plain-Service-#{service.id}")
+        end
+      end
+
+      assert service.reload
+    end
+
+    test "deleting last service should not delete anything" do
+      before_objects = all_objects
+
+      assert_raise(DoNotRetryError) do
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later(service)
+        end
+      end
+
+      after_objects = all_objects
+
+      # splitting the assertions to more easily see what was deleted from logs in case of an issue
+      assert_empty before_objects - after_objects
+      assert_empty after_objects - before_objects
+    end
+
+    test "delete default service as association" do
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.perform_later("Association-Account-#{service.account_id}:services", "Plain-Service-#{service.id}")
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+    end
+
     private
 
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
+  end
 
-    def perform_expectations
-      DeletePlainObjectWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.stubs(:perform_later)
+  class DeleteAccountTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
 
-      [service_plan, application_plan].each do |association|
-        DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
+    attr_reader :provider
+
+    setup do
+      @provider = FactoryBot.create(:provider_account, :with_a_buyer)
+    end
+
+    test "delete succeeds" do
+      provider2 = FactoryBot.create(:provider_account, :with_a_buyer)
+
+      buyer1 = provider.buyers.first
+      buyer2 = FactoryBot.create(:buyer_account, provider_account: provider)
+      provider.schedule_for_deletion!
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later buyer1
       end
-      metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything, 'destroy') }
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(service.proxy, anything, 'destroy')
+      assert_raise(ActiveRecord::RecordNotFound) { buyer1.reload }
+      buyer2.reload
 
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api_config, anything, 'destroy').once
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').never
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { buyer2.reload }
+
+      provider2.reload
+      assert_equal 1, provider2.buyers.count
+    end
+
+    test "delete provider with a payment_gateway_setting" do
+      pgs = FactoryBot.create(:payment_gateway_setting, account: provider)
+      provider.schedule_for_deletion!
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { pgs.reload }
+    end
+
+    test "account is not deleted when not scheduled" do
+      buyer = provider.buyers.first
+      perform_enqueued_jobs(queue: "deletion") do
+        assert_raises { DeleteObjectHierarchyWorker.delete_later provider }
+      end
+      assert provider.reload
+      assert buyer.reload
+    end
+
+    test "buyer account can be deleted if provider is not destroyable" do
+      buyer = provider.buyers.first
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later buyer
+        assert_raises { DeleteObjectHierarchyWorker.delete_later provider }
+      end
+      assert provider.reload
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+    end
+
+    test "deleting buyer with unresolved invoices will not delete anything" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert buyer.payment_detail.save
+      assert buyer.reload.profile
+
+      before_objects = all_objects
+      perform_enqueued_jobs(queue: "deletion") do
+        assert_raise(DoNotRetryError) do
+          DeleteObjectHierarchyWorker.delete_later buyer
+        end
+      end
+
+      assert_equal before_objects, all_objects
+    end
+
+    test "deleting provider with a buyer with unresolved invoices" do
+      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer)
+      assert_not_empty buyer.invoices.unresolved
+      assert buyer.payment_detail.save
+      assert buyer.reload.profile
+      provider.schedule_for_deletion!
+
+      perform_enqueued_jobs(queue: "deletion") do
+        DeleteObjectHierarchyWorker.delete_later provider
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+    end
+
+    class DeleteWithPaymentDetails < ActiveSupport::TestCase
+      include ActiveJob::TestHelper
+
+      attr_reader :provider
+
+      setup do
+        @provider = FactoryBot.create(:provider_account)
+        ActionMailer::Base.deliveries.clear
+      end
+
+      test "notify provider on buyer credit card failed unstore" do
+        buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+        FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-2")
+        preferences = provider.first_admin.notification_preferences
+        preferences.enabled_notifications = ["credit_card_unstore_failed"]
+        preferences.user.save!
+
+        Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later buyer
+          end
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        assert_includes ActionMailer::Base.deliveries.first.header["X-SMTPAPI"].value, "CreditCardUnstoreFailedEvent"
+      end
+
+      test "delete a provider with failure unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-2")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with error unstoring credit card in background" do
+        FactoryBot.create(:payment_detail, account: provider, buyer_reference: "provider-3")
+        provider.schedule_for_deletion!
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later provider
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+
+      test "delete a provider with buyer credit credit cards" do
+        buyers = FactoryBot.create_list(:buyer_account, 3, provider_account: provider)
+        buyers.each_with_index do |buyer, idx|
+          FactoryBot.create(:payment_detail, account: buyer, buyer_reference: "buyer-#{idx}")
+        end
+
+        provider.schedule_for_deletion!
+
+        ::Sidekiq::Testing.inline! do
+          perform_enqueued_jobs(queue: "deletion") do
+            DeleteObjectHierarchyWorker.delete_later provider
+          end
+        end
+
+        # TODO: assert_empty ActionMailer::Base.deliveries
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[0].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[1].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { buyers[2].reload }
+        assert_raise(ActiveRecord::RecordNotFound) { provider.reload }
+      end
+    end
+
+    class DeleteCompleteAccountTest < ActiveSupport::TestCase
+      include ActiveJob::TestHelper
+      include TestHelpers::Provider
+
+      # not specific to a provider or should not be deleted with the provider
+      NON_PROVIDER_MODELS = [BackendEvent, CMS::LegalTerm, Country, Partner, LogEntry, SystemOperation]
+
+      test "perform big account destroy in background" do
+        provider = create_a_complete_provider
+        assert_equal 1, Account.where(provider: true).count
+        assert_equal 3, Account.where(buyer: true).count
+
+        provider.schedule_for_deletion!
+        assert_empty models_without_objects.map(&:to_s)
+
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(provider) }
+
+        assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
+      end
+
+      test "perform big account destroy" do
+        provider = create_a_complete_provider
+        assert_equal 1, Account.where(provider: true).count
+        assert_equal 3, Account.where(buyer: true).count
+
+        provider.schedule_for_deletion!
+        assert_empty models_without_objects.map(&:to_s)
+
+        provider.reload.destroy!
+
+        assert_empty non_master_objects.map { "#{_1.class} #{_1.id}" }
+      end
+
+      test "background destroy does not delete anything from another provider" do
+        provider = create_a_complete_provider
+        provider.schedule_for_deletion!
+        before_objects = all_objects
+
+        another_complete_provider = create_a_complete_provider
+        another_complete_provider.schedule_for_deletion!
+
+        perform_enqueued_jobs { DeleteObjectHierarchyWorker.delete_later(another_complete_provider) }
+
+        assert_raise(ActiveRecord::RecordNotFound) { another_complete_provider.reload }
+        assert_empty before_objects - all_objects # all original objects are still here
+      end
+
+      test "deleting a buyer account does not affect other buyers" do
+        provider = create_a_complete_provider
+        before_objects = all_objects
+
+        buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+        invoice = FactoryBot.create(:invoice, provider_account: provider, buyer_account: buyer, state: "paid")
+        before_objects << invoice
+        before_objects << FactoryBot.create(:payment_intent, reference: "ip_some_id", invoice:)
+        before_objects << FactoryBot.create(:payment_transaction, invoice:, account: buyer, reference: "ip_some_id")
+        permission = buyer.permissions.create(:group => provider.provided_groups.take)
+        buyer.save!
+        topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)
+        before_objects << topic
+        topic_subscription = UserTopic.create({user: buyer.admin_user, topic:}, {without_protection: true})
+
+        perform_enqueued_jobs(queue: "deletion") do
+          DeleteObjectHierarchyWorker.delete_later buyer
+        end
+
+        assert_empty before_objects - all_objects # basically all original objects are still here
+        assert_raise(ActiveRecord::RecordNotFound) { buyer.reload }
+        assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+        assert_raise(ActiveRecord::RecordNotFound) { topic_subscription.reload }
+      end
+
+      test "deleting service should not delete unrelated objects" do
+        provider = create_a_complete_provider
+        before_objects = all_objects
+
+        service = FactoryBot.create(:simple_service, account: provider)
+        FactoryBot.create(:application_plan, issuer: service)
+        FactoryBot.create(:api_docs_service, service: service, account: service.account)
+        FactoryBot.create(:backend_api_config, service: service, backend_api: provider.backend_apis.take)
+
+        perform_enqueued_jobs(queue: "deletion") do
+          service.mark_as_deleted!
+        end
+
+        assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+        assert_empty before_objects - all_objects # basically all original objects are still here
+      end
+
+      private
+
+      def models_without_objects
+        (leaf_models - NON_PROVIDER_MODELS).select { _1.all.empty? }
+      end
+
+      def non_master_objects
+        (leaf_models - NON_PROVIDER_MODELS).inject([]) do |objects, model|
+          objects.concat model.all.reject { object_of_master?(_1) }
+        end
+      end
+
+      def object_of_master?(object)
+        case object
+        when Account, InvoiceCounter, Invoice
+          object.provider_account_id == master_account.id
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
+          object_of_master?(Account.find(object.account_id))
+        when Feature
+          object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
+        when Cinstance, FeaturesPlan
+          object_of_master?(object.plan) if object.plan
+        when CMS::Section
+          object_of_master?(object.provider) if object.provider
+        when Configuration::Value
+          object_of_master?(object.configurable_type.constantize.find(object.configurable_id))
+        when UserTopic, MemberPermission, Notification, UserSession
+          object_of_master?(User.find(object.user_id))
+        when Metric
+          owner = object.owner
+          object_of_master?(owner) if owner
+        when Message, DeletedObject
+          # DeletedObject might be needed for updating backend, JanitorWorker handles stale ones
+          # Figuring out stale Message is hard during deletion, it is done by JanitorWorker
+          true
+        when MessageRecipient
+          object.receiver == master_account
+        when NotificationPreferences
+          object_of_master?(object.user)
+        when Plan
+          object_of_master?(object.issuer) if object.issuer
+        when Post, Topic, TopicCategory
+          object_of_master?(Forum.find(object.forum_id))
+        when ProxyConfigAffectingChange, ProxyRule
+          object_of_master?(Proxy.find(object.proxy_id))
+        when ServiceToken, Proxy
+          object_of_master?(Service.find(object.service_id))
+        when SystemOperation
+          objects = [object.messages.take, object.mail_dispatch_rules.take].compact
+          object_of_master?(objects.first)
+        when Partner, Onboarding, CMS::GroupSection, CMS::LegalTerm, CMS::Template::Version, PaymentIntent, ProviderConstraints
+          false # assume the test master has none of these
+        else
+          raise "Object of type #{object}"
+        end
+      rescue ActiveRecord::RecordNotFound
+        # if relation is not found, we consider it part of a deleted provider
+        return false
+      end
+    end
+  end
+
+  class WorkerCompatibilityTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    setup do
+      @service = FactoryBot.create(:service)
+    end
+
+    test "perform with hierarchy" do
+      fake_ar_object = {}
+      @service = FactoryBot.create(:service)
+      DeleteObjectHierarchyWorker.perform_later(fake_ar_object, ["Hierarchy-Service-#{@service.id}", "Hierarchy-Proxy-392685", "Hierarchy-ProxyRule-124893"], "fake_method")
+
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(*DeleteObjectHierarchyWorker.send(:hierarchy_entries_for, @service))
+
+      perform_enqueued_jobs queue: "deletion"
+    end
+
+    test "perform without hierarchy" do
+      @service = FactoryBot.create(:service)
+      DeleteObjectHierarchyWorker.perform_later(@service)
+
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(*DeleteObjectHierarchyWorker.send(:hierarchy_entries_for, @service))
+
+      perform_enqueued_jobs queue: "deletion"
+    end
+
+    test "perform with bad hierarchy" do
+      fake_object = {}
+      System::ErrorReporting.expects(:report_error).with do |exception|
+        exception.is_a? DeleteObjectHierarchyWorker.const_get(:DoNotRetryError)
+      end
+      DeleteObjectHierarchyWorker.perform_now(fake_object, ["Some-crap-1324"])
     end
   end
 
@@ -180,45 +700,130 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     end
   end
 
-  class BackgroundAssociationListsTest < ActiveSupport::TestCase
+  class DeletePlanUpdatePosition < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
 
-    class DoubleObject
+    test 'destroy account plan updates position when it is not destroyed by account association' do
+      account = FactoryBot.create(:simple_account)
+      FactoryBot.create_list(:simple_account_plan, 2, issuer: account)
+      plans = account.account_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.perform_later(*%W[Association-Service-42:cinstances Plain-AccountPlan-#{plans.first.id}])
 
-      def id
-        1
-      end
-
-      def to_global_id
-        'double/1'
-      end
-
-      def service
-        Service.new({ id: 1}, without_protection: true)
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        perform_enqueued_jobs(queue: "deletion")
       end
     end
 
-    class DoubleWithBackgroundDestroyAssociation < DoubleObject
+    test 'destroy account plan does not update position when it is destroyed by account association' do
+      account = FactoryBot.create(:simple_account)
+      FactoryBot.create_list(:simple_account_plan, 2, issuer: account)
+      plans = account.account_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
-      include BackgroundDeletion
-      self.background_deletion = { service: { action: :destroy, has_many: false } }
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Account-#{account.id} Association-Account-#{account.id}:account_plans Plain-AccountPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
     end
 
-    class DoubleWithBackgroundDeleteAssociation < DoubleObject
+    test 'destroy application plan updates position when it is not destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
+      plans = service.application_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
 
-      include BackgroundDeletion
-      self.background_deletion = { service: { action: :delete, has_many: false } }
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Account-#{Random.random_number(1000000)}:servies Plain-ApplicationPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
     end
 
-    def test_defined_background_destroy_associations
-      double_object = DoubleWithBackgroundDestroyAssociation.new
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'destroy').once
-      DeleteObjectHierarchyWorker.perform_now(double_object)
+    test 'destroy application plan does not update position when it is destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_application_plan, 2, issuer: service)
+      plans = service.application_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
+
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ApplicationPlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
     end
 
-    def test_defined_background_delete_associations
-      double_object = DoubleWithBackgroundDeleteAssociation.new
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'delete').once
-      DeleteObjectHierarchyWorker.perform_now(double_object)
+    test 'destroy service plan updates position when it is not destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
+      plans = service.service_plans.order(position: :asc).to_a
+      # note that we don't expect such a hierarchy in the real world ever
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
+
+      assert_change of: -> { plans.last.reload.position }, by: -1 do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{Random.random_number(1000000)}:account_plans Plain-ServicePlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+
+    test 'destroy service plan does not update position when it is destroyed by service association' do
+      service = FactoryBot.create(:simple_service)
+      FactoryBot.create_list(:simple_service_plan, 2, issuer: service)
+      plans = service.service_plans.order(position: :asc).to_a
+      DeletePlainObjectWorker.any_instance.expects(:now).times(3).returns(5,5,5+DeleteObjectHierarchyWorker::WORK_TIME_LIMIT_SECONDS) # limit iterations to 1
+
+      assert_no_change of: -> { plans.last.reload.position } do
+        DeletePlainObjectWorker.perform_now(*%W[Plain-Service-#{service.id} Association-Service-#{service.id}:service_plans Plain-ServicePlan-#{plans.first.id}])
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { plans.first.reload }
+    end
+  end
+
+  class DeleteCMSObjects < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    test "deleting CMS::Permissions through User" do
+      provider = FactoryBot.create(:provider_account, :with_a_buyer)
+      buyer = provider.buyers.first
+      cms_group = FactoryBot.create(:cms_group, provider:)
+      permission = buyer.permissions.create(:group => cms_group)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(buyer)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+    end
+
+    test "deleting CMS::Permissions and CMS::GroupSections through group" do
+      provider = FactoryBot.create(:provider_account, :with_a_buyer)
+      buyer = provider.buyers.first
+      cms_group = FactoryBot.create(:cms_group, provider:)
+      group_section = cms_group.group_sections.create(section: provider.provided_sections.first)
+      permission = buyer.permissions.create(:group => cms_group)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(cms_group)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { group_section.reload }
+      assert_raise(ActiveRecord::RecordNotFound) { permission.reload }
+    end
+
+    test "deleting CMS::GroupSections through sections" do
+      cms_group = FactoryBot.create(:cms_group)
+      section = FactoryBot.create(:cms_section, provider: cms_group.provider, parent: cms_group.provider.provided_sections.first)
+      group_section = cms_group.group_sections.create(section:)
+
+      perform_enqueued_jobs(queue: :deletion) do
+        DeleteObjectHierarchyWorker.delete_later(section)
+      end
+
+      assert_raise(ActiveRecord::RecordNotFound) { group_section.reload }
     end
   end
 end

@@ -30,7 +30,7 @@ end
 
 Given "{application} has {amount} key(s)" do |application, amount|
   if amount.positive?
-    application.update!(application_keys: FactoryBot.create_list(:application_key, amount))
+    FactoryBot.create_list(:application_key, amount, application: application)
   else
     application.application_keys.destroy_all
   end
@@ -83,10 +83,6 @@ Given "the backend will create key {string} for {application}" do |key, applicat
   stub_request(:post, backend_application_url(application, '/keys.xml'))
     .to_return(status: fake_status(201), body: %(<key value="#{key}"/>))
   fake_application_keys(application, [key])
-end
-
-Given "{application} has user key {string}" do |application, key|
-  application.update!(user_key: key)
 end
 
 Then "there are/is {int} key(s)" do |keys|

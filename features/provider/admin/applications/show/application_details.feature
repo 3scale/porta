@@ -35,15 +35,16 @@ Feature: Application details card
 
   Scenario: Suspending the application
     Given they go to the application's admin page
-    When they follow "Suspend" and confirm the dialog within the application details
-    Then they should see the flash message "The application has been suspended"
+    When they follow "Suspend" within the application details
+    And confirm the dialog
+    Then they should see a toast alert with text "The application has been suspended"
     And should see "Suspended" within the application details
 
   Scenario: Resuming the application
     Given the application is suspended
     And they go to the application's admin page
     When they follow "Resume" within the application details
-    Then they should see the flash message "The application is live again!"
+    Then they should see a toast alert with text "The application is live again!"
     And should see "Live" within the application details
 
   Scenario: Extra fields are listed alongside the application details
@@ -55,12 +56,9 @@ Feature: Application details card
     And the application has the following extra fields:
       | Recovery email    | This is a required field |
       | Verification code |                          |
-      | hidde_field       | Hidden content           |
+      | Hidden field      | Hidden content           |
     When they go to the application's admin page
     Then they should see the following details within the application details:
-      | Recovery email    | This is a required field |
-      | User extra hidden | Hidden content           |
-    Then they should see the following details within the application details:
-      | Recovery email    | This is a required field |
-      | User extra hidden | Hidden content           |
+      | Recovery email | This is a required field |
+      | Hidden field   | Hidden content           |
     But should not see "User extra read only" within the application details

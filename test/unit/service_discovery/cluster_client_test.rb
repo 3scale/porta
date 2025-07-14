@@ -65,11 +65,11 @@ module ServiceDiscovery
     end
 
     test 'services in a given namespace' do
-      cluster.expects(:get_services).with(namespace: 'my-namespace').returns([
+      cluster.expects(:get_services).with({ namespace: 'my-namespace' }).returns([
         cluster_service(metadata: { name: 'my-api-staging',    uid: '220151f0-1918-4eca-808a-d4d07cea4b16', namespace: 'my-namespace' }, spec: { ports: [{ protocol: 'TCP', port: 3000, targetPort: 8080 }] }),
         cluster_service(metadata: { name: 'my-api-production', uid: '97a926db-e104-44ac-a5dd-43a0cf5ec686', namespace: 'my-namespace' }, spec: { ports: [{ protocol: 'TCP', port: 3001, targetPort: 8080 }] })
       ])
-      cluster.expects(:get_services).with(namespace: 'other-namespace').returns([
+      cluster.expects(:get_services).with({ namespace: 'other-namespace' }).returns([
         cluster_service(metadata: { name: 'my-other-api',      uid: 'b3ae7f5b-6188-4cc9-8fff-5fd4eff79056', namespace: 'other-namespace' }, spec: { ports: [{ protocol: 'TCP', port: 3000, targetPort: 8080 }] })
       ])
 
@@ -137,11 +137,11 @@ module ServiceDiscovery
         cluster_project(metadata: { name: 'project-2', uid: '9649ec16-5500-4531-9f77-1bb2246cc672' })
       ])
 
-      cluster.expects(:get_services).with(namespace: 'project-1', label_selector: 'discovery.3scale.net=true').returns([
+      cluster.expects(:get_services).with({ namespace: 'project-1', label_selector: 'discovery.3scale.net=true' }).returns([
         cluster_service(metadata: { name: 'non-discoverable-api-1', uid: '220151f0-1918-4eca-808a-d4d07cea4b16', namespace: 'project-1' } )
       ])
 
-      cluster.expects(:get_services).with(namespace: 'project-2', label_selector: 'discovery.3scale.net=true').returns([
+      cluster.expects(:get_services).with({ namespace: 'project-2', label_selector: 'discovery.3scale.net=true' }).returns([
         cluster_service(metadata: { name: 'non-discoverable-api-2', uid: 'a608a921-d715-4192-9171-5306c476260a', namespace: 'project-2' } ),
         cluster_service(
           metadata: {

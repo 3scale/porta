@@ -7,7 +7,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   # GET /admin/api/applications.xml
   def index
     apps = applications.scope_search(search)
-           .serialization_preloading.paginate(:page => current_page, :per_page => per_page)
+           .serialization_preloading(request.format).paginate(:page => current_page, :per_page => per_page)
     respond_with(apps)
   end
 
@@ -24,28 +24,26 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   end
 
   def applications
-    @applications ||= begin
-      cinstances = current_account.provided_cinstances.where(service: accessible_services)
-      if (service_id = params[:service_id])
-        cinstances = cinstances.where(service_id: service_id)
-      end
-      cinstances
-    end
+    @applications ||= current_account.provided_cinstances.merge(accessible_services)
   end
 
   def application
-    @application ||= case
+    return @application if defined?(@application)
 
-                     when user_key = params[:user_key]
+    scope = params[:service_id] ? applications.where(service_id: params[:service_id]) : applications
+
+    @application = case
+
+                     when param_key = params[:user_key]
       # TODO: these scopes should be in model layer
       # but there is scope named by_user_key already
-      applications.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?)", user_key).first!
+      scope.where.has { (service.backend_version == '1') & (user_key == param_key) }.first!
 
-                     when app_id = params[:app_id]
-      applications.joins(:service).where("(services.backend_version <> '1' AND cinstances.application_id = ?)", app_id).first!
+                   when app_id = params[:app_id]
+      scope.where.has { (service.backend_version != '1') & (application_id == app_id) }.first!
 
                      else
-      applications.find(params[:application_id] || params[:id])
+      scope.find(params[:application_id] || params[:id])
     end
   end
 

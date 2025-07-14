@@ -1,28 +1,23 @@
 (function($) {
-  var container = $("#application_keys");
+  const container = $("#application_keys");
 
-  <%- if @remove -%>
+  <% if @remove %>
     container.find("#<%= dom_id(@remove) %>").fadeOut(function() {
       $(this).remove();
     });
-    $.flash.notice('<%= @flash %>');
-  <%- else -%>
-    $.flash.error('<%= @flash %>');
-  <%- end -%>
+  <% end %>
 
-  <%- if @cinstance.application_keys.can_add? -%>
-    $('#app-keys-limit-warning').hide();     // provider side
+  <% if @cinstance.application_keys.can_add? %>
+    $('#app-keys-limit-warning').hide();
     $('#app-keys-operations').show();
 
-    container.find('.operations').enableSwitch(); // buyer side
-
-  <%- else -%> // hide operations and show warning
-    $('#app-keys-limit-warning').show(); // provider side
+  <% else # hide operations and show warning %>
+    $('#app-keys-limit-warning').show();
     $('#app-keys-operations').hide();
-
-    container.find('.operations').disableSwitch(); // buyer side
-  <%- end -%>
+  <% end %>
 
   container.find('.delete_key').<%= @cinstance.can_delete_key? ? 'fadeIn' : 'fadeOut' %>();
 
 })(jQuery);
+
+<%= render 'shared/flash_alerts' %>

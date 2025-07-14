@@ -3,17 +3,17 @@
 
 module HtmlSelectorsHelper
   # :reek:TooManyStatements
-  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def selector_for(scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     case scope
 
     #
     # Page sections
     #
-    when /the main menu/
+    when /^the main menu$/
       '#mainmenu'
 
-    when /^the main manu's section (.*)$/
-      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav')
+    when /^the main menu's section (.*)$/
+      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
 
     when /the apis dashboard widget/
       '.DashboardSection--services'
@@ -22,7 +22,7 @@ module HtmlSelectorsHelper
       'nav.pf-c-nav.pf-m-horizontal'
 
     when /the modal/
-      '#cboxContent' # '#fancybox-content'
+      '#cboxContent, .pf-c-modal-box' # '#fancybox-content'
 
     #
     # Dashboard
@@ -31,6 +31,8 @@ module HtmlSelectorsHelper
       '#audience'
     when /the products widget/
       '#products-widget'
+    when /the backends widget/
+      '#backends-widget'
 
     #
     # Tables
@@ -52,6 +54,9 @@ module HtmlSelectorsHelper
 
     when /the bulk operations/ # Legacy bulk operations card, not the toolbar dropdown
       '.pf-c-card#bulk-operations'
+
+    when /the access tokens table/
+      '.pf-c-table[aria-label="Access tokens table"]'
 
     #
     # Product
@@ -89,6 +94,9 @@ module HtmlSelectorsHelper
     when /the application details/
       '[aria-label="Application details list"], dl.dl-horizontal'
 
+    when /the account details card/
+      '[aria-label="Account details"], div.dashboard_card'
+
     when /the referrer filters/
       '#referrer_filters'
 
@@ -116,6 +124,12 @@ module HtmlSelectorsHelper
     #
     when /user "(.*)"/
       "#user_#{User.find_by(username: $1).id}"
+
+    #
+    # Finance
+    #
+    when 'the line items card'
+      '.pf-c-card#line_items'
 
     #
     # Dev portal

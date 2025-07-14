@@ -22,7 +22,7 @@ class Contract < ApplicationRecord
   after_destroy :destroy_customized_plan
   after_commit :notify_plan_changed, if: :saved_change_to_plan_id?
 
-  belongs_to :plan
+  belongs_to :plan, inverse_of: :contracts
   validate   :correct_plan_subclass?
   # this breaks nested saving of records, when validating there is no user_account yet, its new record
   # validates_presence_of :user_account
@@ -35,7 +35,7 @@ class Contract < ApplicationRecord
   validates :user_key, length: { maximum: 256 }
 
   # TODO: rename to buyer_account and remove alias
-  belongs_to :user_account, class_name: 'Account', autosave: false
+  belongs_to :user_account, class_name: 'Account', autosave: false, inverse_of: :contracts
 
   alias buyer_account user_account
   alias buyer         user_account
@@ -63,9 +63,14 @@ class Contract < ApplicationRecord
   end
 
   scope :permitted_for, ->(user) {
-    next all unless user.forbidden_some_services?
-
-    where(service_id: user.member_permission_service_ids)
+    case user.permitted_services_status
+    when :none
+      none
+    when :all
+      merge(provided_by(user.account))
+    else
+      merge(where(service_id: user.member_permission_service_ids))
+    end
   }
 
   # Return contracts bought by given account.
@@ -178,9 +183,9 @@ class Contract < ApplicationRecord
       # no validation because our DB has broken data
       # TODO: cleanup DB and add validations?
       self.save(:validate => false) if invoice.used?
-
-      return invoice.used?
     end
+
+    invoice.used?
   end
 
   # this is remaining now here for service_contracts as of now

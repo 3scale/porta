@@ -3,7 +3,7 @@ Feature: Audience's new application page
 
   Background:
     Given a provider
-    And the provider has multiple applications enabled
+    And the provider has "multiple_applications" visible
     And a product "My API"
     And the following application plan:
       | Product | Name  |
@@ -16,7 +16,7 @@ Feature: Audience's new application page
 
   Scenario: Navigation
     Given they go to the admin portal applications page
-    When they follow "Create application"
+    When they follow "Create an application"
     Then the current page is the admin portal new application page
 
   Scenario: Create an application
@@ -28,7 +28,7 @@ Feature: Audience's new application page
       | Name             | New App        |
       | Description      | This is an app |
     Then the current page is application "New App" admin page
-    And they should see the flash message "Application was successfully created"
+    And they should see a toast alert with text "Application was successfully created"
 
   Scenario: Create an application without being subscribed to a product
     Given the buyer is not subscribed to product "My API"
@@ -40,7 +40,7 @@ Feature: Audience's new application page
       | Name             | New App        |
       | Description      | This is an app |
     Then the current page is application "New App" admin page
-    And they should see the flash message "Application was successfully created"
+    And they should see a toast alert with text "Application was successfully created"
 
   Scenario: Create an application for a subscribed product
     Given the buyer is subscribed to product "My API"
@@ -52,7 +52,7 @@ Feature: Audience's new application page
       | Name             | New App        |
       | Description      | This is an app |
     Then the current page is application "New App" admin page
-    And they should see the flash message "Application was successfully created"
+    And they should see a toast alert with text "Application was successfully created"
 
   Scenario: Create an application when product has no application plans
     Given a product "No plans API" with no plans
@@ -78,7 +78,7 @@ Feature: Audience's new application page
     But they fill in "Banana" with "Yes, please."
     And press "Create application"
     Then the current page is application "New App" admin page
-    And they should see the flash message "Application was successfully created"
+    And they should see a toast alert with text "Application was successfully created"
 
   Scenario: Submit button should be disabled until form is filled
     Given they go to the admin portal new application page
@@ -102,15 +102,15 @@ Feature: Audience's new application page
       | Application plan | Basic          |
       | Name             | New App        |
       | Description      | This is an app |
-    Then they should see the flash message "must have an approved subscription to service"
+    Then they should see a toast alert with text "must have an approved subscription to service"
 
   Rule: Multiple applications denied
     Background:
-      Given the provider has multiple applications disabled
+      Given the provider has "multiple_applications" denied
 
     Scenario: Manual navigation
       Given they go to the admin portal applications page
-      When they follow "Create application"
+      When they follow "Create an application"
       When the form is submitted with:
         | Account          | Jane           |
         | Product          | My API        |

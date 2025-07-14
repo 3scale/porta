@@ -2,34 +2,34 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_27_012615) do
-
-  create_table "access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2024_11_07_134140) do
+  create_table "access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
     t.text "scopes"
     t.string "value", null: false
     t.string "name", null: false
     t.string "permission", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "expires_at", precision: nil
     t.index ["owner_id"], name: "idx_auth_tokens_of_user"
     t.index ["value", "owner_id"], name: "idx_value_auth_tokens_of_user", unique: true
   end
 
-  create_table "accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "accounts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "org_name", default: "", null: false
     t.string "org_legaladdress", default: ""
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.boolean "provider", default: false
     t.boolean "buyer", default: false
     t.bigint "country_id"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "state_region"
     t.string "state"
     t.boolean "paid", default: false
-    t.datetime "paid_at"
+    t.datetime "paid_at", precision: nil
     t.boolean "signs_legal_terms", default: true
     t.string "timezone"
     t.boolean "delta", default: true, null: false
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.integer "prepared_assets_version"
     t.boolean "sample_data"
     t.integer "proxy_configs_file_size"
-    t.datetime "proxy_configs_updated_at"
+    t.datetime "proxy_configs_updated_at", precision: nil
     t.string "proxy_configs_content_type"
     t.string "proxy_configs_file_name"
     t.string "support_email"
@@ -89,25 +89,24 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "proxy_configs_conf_file_name"
     t.string "proxy_configs_conf_content_type"
     t.integer "proxy_configs_conf_file_size"
-    t.datetime "proxy_configs_conf_updated_at"
-    t.datetime "hosted_proxy_deployed_at"
+    t.datetime "proxy_configs_conf_updated_at", precision: nil
+    t.datetime "hosted_proxy_deployed_at", precision: nil
     t.string "po_number"
-    t.datetime "state_changed_at"
+    t.datetime "state_changed_at", precision: nil
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id"
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at"
     t.index ["domain"], name: "index_accounts_on_domain", unique: true
     t.index ["master"], name: "index_accounts_on_master", unique: true
     t.index ["provider_account_id", "created_at"], name: "index_accounts_on_provider_account_id_and_created_at"
     t.index ["provider_account_id", "state"], name: "index_accounts_on_provider_account_id_and_state"
-    t.index ["provider_account_id"], name: "index_accounts_on_provider_account_id"
     t.index ["self_domain", "state_changed_at"], name: "index_accounts_on_self_domain_and_state_changed_at"
     t.index ["self_domain"], name: "index_accounts_on_self_domain", unique: true
     t.index ["state", "state_changed_at"], name: "index_accounts_on_state_and_state_changed_at"
   end
 
-  create_table "alerts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "alerts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.datetime "timestamp", null: false
+    t.datetime "timestamp", precision: nil, null: false
     t.string "state", null: false
     t.bigint "cinstance_id", null: false
     t.decimal "utilization", precision: 6, scale: 2, null: false
@@ -122,15 +121,26 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["timestamp"], name: "index_alerts_on_timestamp"
   end
 
-  create_table "api_docs_services", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "annotations", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "value"
+    t.string "annotated_type", null: false
+    t.bigint "annotated_id", null: false
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["annotated_type", "annotated_id", "name"], name: "index_annotations_on_annotated_type_and_annotated_id_and_name", unique: true
+  end
+
+  create_table "api_docs_services", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.string "name"
     t.text "body", size: :long
     t.text "description"
     t.boolean "published", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "system_name"
     t.string "base_path"
     t.string "swagger_version"
@@ -141,16 +151,16 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["service_id"], name: "fk_rails_e4d18239f1"
   end
 
-  create_table "application_keys", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "application_keys", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["application_id", "value"], name: "index_application_keys_on_application_id_and_value", unique: true
   end
 
-  create_table "audits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "audits", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "auditable_id"
     t.string "auditable_type"
     t.bigint "user_id"
@@ -158,7 +168,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "username"
     t.string "action"
     t.integer "version", default: 0
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.string "kind"
@@ -180,7 +190,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["version"], name: "index_audits_on_version"
   end
 
-  create_table "authentication_providers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "authentication_providers", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "system_name"
     t.string "client_id"
@@ -190,8 +200,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "authorize_url"
     t.string "site"
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.string "identifier_key", default: "id"
     t.string "username_key", default: "login"
@@ -207,46 +217,46 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_authentication_providers_on_account_id"
   end
 
-  create_table "backend_api_configs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "backend_api_configs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "path", default: ""
     t.bigint "service_id"
     t.bigint "backend_api_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.index ["backend_api_id", "service_id"], name: "index_backend_api_configs_on_backend_api_id_and_service_id", unique: true
     t.index ["path", "service_id"], name: "index_backend_api_configs_on_path_and_service_id", unique: true
     t.index ["service_id"], name: "index_backend_api_configs_on_service_id"
   end
 
-  create_table "backend_apis", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "backend_apis", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name", limit: 511, null: false
     t.string "system_name", null: false
     t.text "description", size: :medium
     t.string "private_endpoint"
     t.bigint "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.string "state", default: "published", null: false
     t.index ["account_id", "system_name"], name: "index_backend_apis_on_account_id_and_system_name", unique: true
     t.index ["state"], name: "index_backend_apis_on_state"
   end
 
-  create_table "backend_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "backend_events", id: :bigint, default: nil, charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "billing_strategies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "billing_strategies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.boolean "prepaid", default: false
     t.boolean "charging_enabled", default: false
     t.integer "charging_retry_delay", default: 3
     t.integer "charging_retry_times", default: 3
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "numbering_period", default: "monthly"
     t.string "currency", default: "USD"
     t.bigint "tenant_id"
@@ -254,50 +264,50 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_billing_strategies_on_account_id"
   end
 
-  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "category_type_id"
     t.bigint "parent_id"
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_categories_on_account_id"
   end
 
-  create_table "category_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "category_types", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_category_types_on_account_id"
   end
 
-  create_table "cinstances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cinstances", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "user_account_id"
     t.string "user_key", limit: 256
     t.string "provider_public_key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.string "state", null: false
     t.text "description"
-    t.datetime "paid_until"
+    t.datetime "paid_until", precision: nil
     t.string "application_id"
     t.string "name"
-    t.datetime "trial_period_expires_at"
+    t.datetime "trial_period_expires_at", precision: nil
     t.decimal "setup_fee", precision: 20, scale: 2, default: "0.0"
     t.string "type", default: "Cinstance", null: false
     t.text "redirect_url"
-    t.datetime "variable_cost_paid_until"
+    t.datetime "variable_cost_paid_until", precision: nil
     t.text "extra_fields"
     t.bigint "tenant_id"
     t.string "create_origin"
-    t.datetime "first_traffic_at"
-    t.datetime "first_daily_traffic_at"
+    t.datetime "first_traffic_at", precision: nil
+    t.datetime "first_daily_traffic_at", precision: nil
     t.bigint "service_id"
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.index ["application_id"], name: "index_cinstances_on_application_id"
     t.index ["plan_id"], name: "fk_ct_contract_id"
     t.index ["type", "plan_id", "service_id", "state"], name: "index_cinstances_on_type_and_plan_id_and_service_id_and_state"
@@ -308,77 +318,77 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["user_key"], name: "index_cinstances_on_user_key", length: 255
   end
 
-  create_table "cms_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_files", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "section_id"
     t.bigint "tenant_id"
-    t.datetime "attachment_updated_at"
+    t.datetime "attachment_updated_at", precision: nil
     t.string "attachment_content_type"
     t.bigint "attachment_file_size"
     t.string "attachment_file_name"
     t.string "random_secret"
     t.string "path"
     t.boolean "downloadable"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id", "path"], name: "index_cms_files_on_provider_id_and_path"
     t.index ["provider_id"], name: "index_cms_files_on_provider_id"
     t.index ["section_id"], name: "index_cms_files_on_section_id"
   end
 
-  create_table "cms_group_sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_group_sections", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "group_id"
     t.bigint "section_id"
     t.bigint "tenant_id"
     t.index ["group_id"], name: "index_cms_group_sections_on_group_id"
   end
 
-  create_table "cms_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_groups", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id", null: false
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id"], name: "index_cms_groups_on_provider_id"
   end
 
-  create_table "cms_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_permissions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "account_id"
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "group_id"
     t.index ["account_id"], name: "index_cms_permissions_on_account_id"
   end
 
-  create_table "cms_redirects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_redirects", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.string "source", null: false
     t.string "target", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["provider_id", "source"], name: "index_cms_redirects_on_provider_id_and_source"
     t.index ["provider_id"], name: "index_cms_redirects_on_provider_id"
   end
 
-  create_table "cms_sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_sections", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "parent_id"
     t.string "partial_path"
     t.string "title"
     t.string "system_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "public", default: true
     t.string "type", default: "CMS::Section"
     t.index ["parent_id"], name: "index_cms_sections_on_parent_id"
     t.index ["provider_id"], name: "index_cms_sections_on_provider_id"
   end
 
-  create_table "cms_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_templates", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "section_id"
@@ -390,8 +400,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.text "draft", size: :medium
     t.boolean "liquid_enabled"
     t.string "content_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "layout_id"
     t.text "options"
     t.string "updated_by"
@@ -406,7 +416,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["type"], name: "index_cms_templates_on_type"
   end
 
-  create_table "cms_templates_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "cms_templates_versions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id", null: false
     t.bigint "tenant_id"
     t.bigint "section_id"
@@ -418,8 +428,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.text "draft", size: :medium
     t.boolean "liquid_enabled"
     t.string "content_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "layout_id"
     t.bigint "template_id"
     t.string "template_type"
@@ -431,66 +441,66 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["template_id", "template_type"], name: "by_template"
   end
 
-  create_table "configuration_values", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "configuration_values", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "configurable_id"
     t.string "configurable_type", limit: 50
     t.string "name"
     t.string "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["configurable_id", "configurable_type", "name"], name: "index_on_configurable_and_name", unique: true
     t.index ["configurable_id", "configurable_type"], name: "index_on_configurable"
   end
 
-  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "countries", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "code"
     t.string "name"
     t.string "currency"
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "tenant_id"
     t.boolean "enabled", default: true
     t.index ["code"], name: "index_countries_on_code"
   end
 
-  create_table "deleted_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "deleted_objects", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id"
     t.string "owner_type"
     t.bigint "object_id"
     t.string "object_type"
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.text "metadata"
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
   end
 
-  create_table "email_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "email_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "account_id"
-    t.string "email", null: false, collation: "utf8_general_ci"
-    t.string "domain", collation: "utf8_general_ci"
+    t.string "email", null: false, collation: "utf8mb3_general_ci"
+    t.string "domain", collation: "utf8mb3_general_ci"
     t.string "user_name"
     t.string "password"
     t.string "authentication"
     t.string "tls"
     t.string "openssl_verify_mode"
-    t.string "address", collation: "utf8_general_ci"
+    t.string "address", collation: "utf8mb3_general_ci"
     t.integer "port", limit: 2, unsigned: true
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["account_id"], name: "index_email_configurations_on_account_id"
     t.index ["email"], name: "index_email_configurations_on_email", unique: true
   end
 
-  create_table "event_store_events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "event_store_events", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "stream", null: false
     t.string "event_type", null: false
     t.string "event_id", null: false
     t.text "metadata", size: :medium
     t.text "data"
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.bigint "provider_id"
     t.bigint "tenant_id"
     t.index ["created_at"], name: "index_event_store_events_on_created_at"
@@ -499,12 +509,12 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["stream"], name: "index_event_store_events_on_stream"
   end
 
-  create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "features", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "featurable_id"
     t.string "name"
     t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "system_name"
     t.boolean "visible", default: true, null: false
     t.string "featurable_type", default: "Service", null: false
@@ -516,17 +526,17 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["system_name"], name: "index_features_on_system_name"
   end
 
-  create_table "features_plans", primary_key: ["plan_id", "feature_id"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "features_plans", primary_key: ["plan_id", "feature_id"], charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.bigint "feature_id", null: false
     t.string "plan_type", null: false
     t.bigint "tenant_id"
   end
 
-  create_table "fields_definitions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "fields_definitions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "target"
     t.boolean "hidden", default: false
     t.boolean "required", default: false
@@ -540,7 +550,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_fields_definitions_on_account_id"
   end
 
-  create_table "forums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "forums", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.integer "topics_count", default: 0
@@ -555,19 +565,19 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["position"], name: "index_forums_on_position_and_site_id"
   end
 
-  create_table "gateway_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "gateway_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "settings"
     t.bigint "proxy_id"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["proxy_id"], name: "index_gateway_configurations_on_proxy_id", unique: true
   end
 
-  create_table "go_live_states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "go_live_states", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "steps"
     t.string "recent"
     t.boolean "finished", default: false
@@ -575,44 +585,44 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_go_live_states_on_account_id"
   end
 
-  create_table "invitations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "invitations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "token"
     t.string "email"
-    t.datetime "sent_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "user_id"
   end
 
-  create_table "invoice_counters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "invoice_counters", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_account_id", null: false
     t.string "invoice_prefix", null: false
     t.integer "invoice_count", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_account_id", "invoice_prefix"], name: "index_invoice_counters_provider_prefix", unique: true
   end
 
-  create_table "invoices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "invoices", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_account_id"
     t.bigint "buyer_account_id"
-    t.datetime "paid_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "paid_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.date "due_on"
     t.string "pdf_file_name"
     t.string "pdf_content_type"
     t.integer "pdf_file_size"
-    t.datetime "pdf_updated_at"
+    t.datetime "pdf_updated_at", precision: nil
     t.date "period"
     t.date "issued_on"
     t.string "state", default: "open", null: false
     t.string "friendly_id", default: "fix", null: false
     t.bigint "tenant_id"
-    t.datetime "finalized_at"
+    t.datetime "finalized_at", precision: nil
     t.string "fiscal_code"
     t.string "vat_code"
     t.decimal "vat_rate", precision: 20, scale: 2
@@ -641,40 +651,39 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["buyer_account_id", "state"], name: "index_invoices_on_buyer_account_id_and_state"
     t.index ["buyer_account_id"], name: "index_invoices_on_buyer_account_id"
     t.index ["provider_account_id", "buyer_account_id"], name: "index_invoices_on_provider_account_id_and_buyer_account_id"
-    t.index ["provider_account_id"], name: "index_invoices_on_provider_account_id"
   end
 
-  create_table "legal_term_acceptances", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "legal_term_acceptances", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "legal_term_version"
     t.string "resource_type"
     t.bigint "resource_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.bigint "account_id"
     t.index ["account_id"], name: "index_legal_term_acceptances_on_account_id"
   end
 
-  create_table "legal_term_bindings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "legal_term_bindings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "legal_term_version"
     t.string "resource_type"
     t.bigint "resource_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "scope"
     t.bigint "tenant_id"
   end
 
-  create_table "legal_term_versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "legal_term_versions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "legal_term_id"
     t.integer "version"
     t.string "name"
     t.string "slug"
     t.text "body", size: :long
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "published", default: false
     t.boolean "deleted", default: false
     t.boolean "archived", default: false
@@ -684,14 +693,14 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.bigint "tenant_id"
   end
 
-  create_table "legal_terms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "legal_terms", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "version"
     t.integer "lock_version", default: 0
     t.string "name"
     t.string "slug"
     t.text "body", size: :long
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "published", default: false
     t.boolean "deleted", default: false
     t.boolean "archived", default: false
@@ -702,16 +711,16 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_legal_terms_on_account_id"
   end
 
-  create_table "line_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "line_items", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "invoice_id"
     t.string "name"
     t.string "description"
     t.decimal "cost", precision: 20, scale: 4, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "type", default: ""
     t.bigint "metric_id"
-    t.datetime "finished_at"
+    t.datetime "finished_at", precision: nil
     t.integer "quantity"
     t.time "started_at"
     t.bigint "tenant_id"
@@ -722,61 +731,61 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["invoice_id"], name: "index_line_items_on_invoice_id"
   end
 
-  create_table "log_entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "log_entries", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.bigint "buyer_id"
     t.integer "level", default: 10
     t.string "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["provider_id"], name: "index_log_entries_on_provider_id"
   end
 
-  create_table "mail_dispatch_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "mail_dispatch_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "system_operation_id"
     t.text "emails"
     t.boolean "dispatch", default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["account_id", "system_operation_id"], name: "index_mail_dispatch_rules_on_account_id_and_system_operation_id", unique: true
   end
 
-  create_table "member_permissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "member_permissions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "admin_section"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.binary "service_ids"
     t.index ["user_id"], name: "index_member_permissions_on_user_id"
   end
 
-  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "message_recipients", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "receiver_id", null: false
     t.string "receiver_type", default: "", null: false
     t.string "kind", default: "", null: false
     t.integer "position"
     t.string "state", null: false
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.bigint "tenant_id"
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.index ["message_id", "kind"], name: "index_message_recipients_on_message_id_and_kind"
     t.index ["receiver_id"], name: "idx_receiver_id"
   end
 
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.text "subject"
     t.text "body"
     t.string "state", null: false
-    t.datetime "hidden_at"
+    t.datetime "hidden_at", precision: nil
     t.string "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "system_operation_id"
     t.text "headers"
     t.bigint "tenant_id"
@@ -784,12 +793,12 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["sender_id", "hidden_at"], name: "index_messages_on_sender_id_and_hidden_at"
   end
 
-  create_table "metrics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "metrics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "system_name"
     t.text "description"
     t.string "unit"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.bigint "service_id"
     t.string "friendly_name"
     t.bigint "parent_id"
@@ -803,76 +812,76 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["service_id"], name: "index_metrics_on_service_id"
   end
 
-  create_table "moderatorships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "moderatorships", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "forum_id"
     t.bigint "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
   end
 
-  create_table "notification_preferences", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "notification_preferences", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.binary "preferences"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
   end
 
-  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "event_id", null: false
     t.string "system_name", limit: 1000
     t.string "state", limit: 20
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "title", limit: 1000
     t.index ["event_id"], name: "index_notifications_on_event_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "oidc_configurations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "oidc_configurations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "config"
     t.string "oidc_configurable_type", null: false
     t.bigint "oidc_configurable_id", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["oidc_configurable_type", "oidc_configurable_id"], name: "oidc_configurable", unique: true
   end
 
-  create_table "onboardings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "onboardings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "wizard_state"
     t.string "bubble_api_state"
     t.string "bubble_metric_state"
     t.string "bubble_deployment_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "bubble_mapping_state"
     t.string "bubble_limit_state"
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_onboardings_on_account_id"
   end
 
-  create_table "partners", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "partners", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "api_key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "system_name"
     t.string "logout_url"
   end
 
-  create_table "payment_details", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "payment_details", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "buyer_reference"
     t.string "payment_service_reference"
     t.string "credit_card_partial_number"
     t.date "credit_card_expires_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
     t.string "payment_method_id"
     t.index ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference"
@@ -880,29 +889,29 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "index_payment_details_on_account_id"
   end
 
-  create_table "payment_gateway_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "payment_gateway_settings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.binary "gateway_settings"
     t.string "gateway_type"
     t.bigint "account_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["account_id"], name: "index_payment_gateway_settings_on_account_id"
   end
 
-  create_table "payment_intents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "payment_intents", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.string "state"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "reference"
     t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id"
     t.index ["reference"], name: "index_payment_intents_on_reference", unique: true
     t.index ["state"], name: "index_payment_intents_on_state"
   end
 
-  create_table "payment_transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "payment_transactions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.bigint "invoice_id"
     t.boolean "success", default: false, null: false
@@ -913,34 +922,34 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "action"
     t.text "params"
     t.boolean "test", default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["invoice_id"], name: "index_payment_transactions_on_invoice_id"
   end
 
-  create_table "plan_metrics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "plan_metrics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "plan_id"
     t.bigint "metric_id"
     t.boolean "visible", default: true
     t.boolean "limits_only_text", default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "plan_type", null: false
     t.bigint "tenant_id"
     t.index ["metric_id"], name: "idx_plan_metrics_metric_id"
     t.index ["plan_id"], name: "idx_plan_metrics_plan_id"
   end
 
-  create_table "plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "plans", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "issuer_id", null: false
     t.string "name"
     t.string "rights"
     t.text "full_legal", size: :long
     t.decimal "cost_per_month", precision: 20, scale: 4, default: "0.0", null: false
     t.integer "trial_period_days"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "position", default: 0
     t.string "state", null: false
     t.integer "cancellation_period", default: 0, null: false
@@ -961,25 +970,25 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["issuer_id"], name: "fk_contracts_service_id"
   end
 
-  create_table "policies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "policies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "version", null: false
     t.binary "schema", size: :long, null: false
     t.bigint "account_id", null: false
     t.bigint "tenant_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "identifier"
     t.index ["account_id", "identifier"], name: "index_policies_on_account_id_and_identifier", unique: true
     t.index ["account_id"], name: "index_policies_on_account_id"
   end
 
-  create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "posts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "topic_id"
     t.text "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "forum_id"
     t.text "body_html"
     t.string "email"
@@ -992,19 +1001,19 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["created_at", "user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "pricing_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "pricing_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "metric_id"
     t.bigint "min", default: 1, null: false
     t.bigint "max"
     t.decimal "cost_per_unit", precision: 20, scale: 4, default: "0.0", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "plan_id"
     t.bigint "tenant_id"
     t.index ["plan_id"], name: "index_pricing_rules_on_plan_id_and_plan_type"
   end
 
-  create_table "profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "profiles", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "oneline_description"
     t.text "description"
@@ -1014,8 +1023,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "email_sales"
     t.string "email_techsupport"
     t.string "email_press"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "logo_file_name"
     t.string "logo_content_type"
     t.integer "logo_file_size"
@@ -1028,39 +1037,39 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["account_id"], name: "fk_account_id"
   end
 
-  create_table "provided_access_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "provided_access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.text "value"
     t.bigint "user_id"
     t.bigint "tenant_id"
-    t.datetime "expires_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "expires_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["user_id"], name: "fk_rails_260e99b630"
   end
 
-  create_table "provider_constraints", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "provider_constraints", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "provider_id"
     t.integer "max_users"
     t.integer "max_services"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["provider_id"], name: "index_provider_constraints_on_provider_id", unique: true
   end
 
-  create_table "proxies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "proxies", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tenant_id"
     t.bigint "service_id"
     t.string "endpoint"
-    t.datetime "deployed_at"
+    t.datetime "deployed_at", precision: nil
     t.string "auth_app_key", default: "app_key"
     t.string "auth_app_id", default: "app_id"
     t.string "auth_user_key", default: "user_key"
     t.string "credentials_location", default: "query", null: false
     t.string "error_auth_failed", default: "Authentication failed"
     t.string "error_auth_missing", default: "Authentication parameters missing"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "error_status_auth_failed", default: 403, null: false
     t.string "error_headers_auth_failed", default: "text/plain; charset=us-ascii", null: false
     t.integer "error_status_auth_missing", default: 403, null: false
@@ -1089,38 +1098,38 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["staging_domain", "production_domain"], name: "index_proxies_on_staging_domain_and_production_domain"
   end
 
-  create_table "proxy_config_affecting_changes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "proxy_config_affecting_changes", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.integer "proxy_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["proxy_id"], name: "index_proxy_config_affecting_changes_on_proxy_id", unique: true
   end
 
-  create_table "proxy_configs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "proxy_configs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "proxy_id", null: false
     t.bigint "user_id"
     t.integer "version", default: 0, null: false
     t.bigint "tenant_id"
     t.string "environment", null: false
     t.text "content", size: :medium, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "hosts", limit: 8192
     t.index ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version"
     t.index ["proxy_id"], name: "index_proxy_configs_on_proxy_id"
     t.index ["user_id"], name: "index_proxy_configs_on_user_id"
   end
 
-  create_table "proxy_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "proxy_logs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "provider_id"
     t.bigint "tenant_id"
     t.text "lua_file", size: :medium
     t.string "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
-  create_table "proxy_rules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "proxy_rules", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "proxy_id"
     t.string "http_method"
     t.string "pattern"
@@ -1128,8 +1137,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "metric_system_name"
     t.integer "delta"
     t.bigint "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.text "redirect_url"
     t.integer "position"
     t.boolean "last", default: false
@@ -1139,39 +1148,39 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["proxy_id"], name: "index_proxy_rules_on_proxy_id"
   end
 
-  create_table "referrer_filters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "referrer_filters", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "value", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["application_id"], name: "index_referrer_filters_on_application_id"
   end
 
-  create_table "service_cubert_infos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "service_cubert_infos", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "bucket_id"
     t.bigint "service_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tenant_id"
   end
 
-  create_table "service_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "service_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "service_id"
     t.string "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.index ["service_id"], name: "index_service_tokens_on_service_id"
   end
 
-  create_table "services", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "services", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "name", default: ""
     t.text "description"
     t.text "txt_support"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "logo_file_name"
     t.string "logo_content_type"
     t.integer "logo_file_size"
@@ -1200,13 +1209,13 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true
   end
 
-  create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "settings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "bg_colour"
     t.string "link_colour"
     t.string "text_colour"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "menu_bg_colour"
     t.string "link_label"
     t.string "link_url"
@@ -1270,48 +1279,49 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "iam_tools_switch", default: "denied", null: false
     t.string "require_cc_on_signup_switch", default: "denied", null: false
     t.boolean "enforce_sso", default: false, null: false
+    t.string "admin_bot_protection_level", default: "none"
     t.index ["account_id"], name: "index_settings_on_account_id", unique: true
   end
 
-  create_table "slugs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "slugs", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
     t.string "sluggable_type", limit: 50
     t.bigint "sluggable_id"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.integer "sequence", default: 1, null: false
     t.bigint "tenant_id"
     t.index ["name", "sluggable_type", "sequence"], name: "index_slugs_on_n_s_and_s"
     t.index ["sluggable_id"], name: "index_slugs_on_sluggable_id"
   end
 
-  create_table "sso_authorizations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "sso_authorizations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "uid"
     t.bigint "authentication_provider_id"
     t.bigint "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.text "id_token"
     t.index ["authentication_provider_id"], name: "index_sso_authorizations_on_authentication_provider_id"
     t.index ["user_id"], name: "index_sso_authorizations_on_user_id"
   end
 
-  create_table "system_operations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "system_operations", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "ref"
     t.string "name"
     t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "pos"
     t.integer "tenant_id"
   end
 
-  create_table "taggings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "tag_id"
     t.bigint "taggable_id"
     t.string "taggable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
     t.integer "tagger_id"
     t.string "tagger_type"
@@ -1320,10 +1330,10 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
   end
 
-  create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "tags", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "account_id"
     t.bigint "tenant_id"
     t.integer "taggings_count", default: 0
@@ -1331,27 +1341,27 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["name", "tenant_id"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "topic_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "topic_categories", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "forum_id"
     t.bigint "tenant_id"
     t.index ["forum_id"], name: "index_topic_categories_on_forum_id"
   end
 
-  create_table "topics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "topics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "forum_id"
     t.bigint "user_id"
     t.string "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "hits", default: 0
     t.boolean "sticky", default: false, null: false
     t.integer "posts_count", default: 0
     t.boolean "locked", default: false
     t.bigint "last_post_id"
-    t.datetime "last_updated_at"
+    t.datetime "last_updated_at", precision: nil
     t.bigint "last_user_id"
     t.string "permalink"
     t.bigint "category_id"
@@ -1362,12 +1372,12 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["sticky", "last_updated_at", "forum_id"], name: "index_topics_on_sticky_and_last_updated_at"
   end
 
-  create_table "usage_limits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "usage_limits", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "metric_id"
     t.string "period"
     t.bigint "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "plan_id"
     t.string "plan_type", null: false
     t.bigint "tenant_id"
@@ -1376,41 +1386,41 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["plan_id"], name: "idx_usage_limits_plan_id"
   end
 
-  create_table "user_sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "user_sessions", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.string "key"
     t.string "ip"
     t.string "user_agent"
-    t.datetime "accessed_at"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "secured_until"
+    t.datetime "accessed_at", precision: nil
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "secured_until", precision: nil
     t.bigint "sso_authorization_id"
     t.index ["key"], name: "idx_key"
     t.index ["sso_authorization_id"], name: "index_user_sessions_on_sso_authorization_id"
     t.index ["user_id"], name: "idx_user_id"
   end
 
-  create_table "user_topics", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "user_topics", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "topic_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "tenant_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "users", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "username", limit: 40
     t.string "email"
     t.string "crypted_password", limit: 40
     t.string "salt", limit: 40
-    t.datetime "created_at", null: false
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil
     t.string "remember_token", limit: 40
-    t.datetime "remember_token_expires_at"
+    t.datetime "remember_token_expires_at", precision: nil
     t.string "activation_code", limit: 40
-    t.datetime "activated_at"
+    t.datetime "activated_at", precision: nil
     t.string "state"
     t.string "role", default: ""
     t.string "lost_password_token"
@@ -1420,14 +1430,14 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.string "last_name"
     t.string "signup_type"
     t.string "job_role"
-    t.datetime "last_login_at"
+    t.datetime "last_login_at", precision: nil
     t.string "last_login_ip"
     t.string "email_verification_code"
     t.string "title"
     t.text "extra_fields"
     t.bigint "tenant_id"
     t.string "cas_identifier"
-    t.datetime "lost_password_token_generated_at"
+    t.datetime "lost_password_token_generated_at", precision: nil
     t.string "authentication_id"
     t.string "open_id"
     t.string "password_digest"
@@ -1438,7 +1448,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.index ["username"], name: "index_users_on_login"
   end
 
-  create_table "web_hooks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+  create_table "web_hooks", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "account_id"
     t.string "url"
     t.boolean "account_created_on", default: false
@@ -1450,8 +1460,8 @@ ActiveRecord::Schema.define(version: 2023_09_27_012615) do
     t.boolean "application_created_on", default: false
     t.boolean "application_updated_on", default: false
     t.boolean "application_deleted_on", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "provider_actions", default: false
     t.boolean "account_plan_changed_on", default: false
     t.boolean "application_plan_changed_on", default: false

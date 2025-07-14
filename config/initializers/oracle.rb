@@ -4,29 +4,16 @@ ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
 
-    # in 6.0.6 we probably don't need this as it introduces
-    # #use_shorter_identifier, #supports_longer_identifier? and
-    # #max_identifier_length
-    ActiveRecord::ConnectionAdapters::OracleEnhanced::DatabaseLimits.class_eval do
-      remove_const(:IDENTIFIER_MAX_LENGTH)
-      const_set(:IDENTIFIER_MAX_LENGTH, 128)
-    end
-
-    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-      # Remove when https://github.com/rsim/oracle-enhanced/issues/2237 is fixed
-      self.use_old_oracle_visitor = true
-    end
-
     ENV['SCHEMA'] = 'db/oracle_schema.rb'
-    Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
+    Rails.configuration.active_record.schema_format = ActiveRecord.schema_format = :ruby
 
     ActiveRecord::ConnectionAdapters::TableDefinition.prepend(Module.new do
-      def column(name, type, options = {})
+      def column(name, type, **options)
         # length parameter is not compatible with rails mysql/pg adapters:
         # rails expects it is limit in bytes, but oracle adapter expects it in number of characters
         # TODO: probably would be better to convert the byte limit to character limit
         if type == :integer
-          super(name, type, options.except(:limit))
+          super(name, type, **options.except(:limit))
         else
           super
         end
@@ -39,9 +26,9 @@ ActiveSupport.on_load(:active_record) do
       prepend(Module.new do
         # TODO: is this needed after
         # https://github.com/rsim/oracle-enhanced/commit/f76b6ef4edda72bddabab252177cb7f28d4418e2
-        def add_column(table_name, column_name, type, options = {})
+        def add_column(table_name, column_name, type, **options)
           if type == :integer
-            super(table_name, column_name, type, options.except(:limit))
+            super(table_name, column_name, type, **options.except(:limit))
           else
             super
           end
@@ -67,6 +54,27 @@ ActiveSupport.on_load(:active_record) do
         end
       end)
     end
+
+    ActiveRecord::Relation.prepend(Module.new do
+      # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
+      # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
+      # https://github.com/rails/rails/blob/v6.1.7.7/activerecord/lib/active_record/relation/finder_methods.rb#L465
+      def find_one(id)
+        if ActiveRecord::Base === id
+          raise ArgumentError, <<-MSG.squish
+            You are passing an instance of ActiveRecord::Base to `find`.
+            Please pass the id of the object by calling `.id`.
+          MSG
+        end
+
+        relation = where(primary_key => id)
+        record = relation.to_a.first # this is the only change from the original method
+
+        raise_record_not_found_exception!(id, 0, 1) unless record
+
+        record
+      end
+    end)
 
     BabySqueel::Nodes::Attribute.prepend(Module.new do
       # those relations are used in subqueries and oracle does not support ORDER in subqueries
@@ -154,7 +162,7 @@ ActiveSupport.on_load(:active_record) do
       # For now it is only particular to our project, later we could extract it and make a PR to the upstream project
       def set_database_settings(settings)
         super
-        conf = System::Database.configuration_specification.config
+        conf = System::Database.database_config.configuration_hash
         if type == 'odbc'
           @odbc_dsn ||= "DSN=oracle;Driver={Oracle-Driver};Dbq=#{conf[:host]}:#{conf[:port] || 1521}/#{conf[:database]};Uid=#{conf[:username]};Pwd=#{conf[:password]}"
         end
@@ -162,11 +170,11 @@ ActiveSupport.on_load(:active_record) do
     end)
 
     ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaStatements.module_eval do
-      def add_index(table_name, column_name, options = {}) #:nodoc:
+      def add_index(table_name, column_name, **options) #:nodoc:
         # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
         # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
         # upstreamed: https://github.com/rsim/oracle-enhanced/pull/2293
-        index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, options)
+        index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, **options)
         quoted_table_name = quote_table_name(table_name)
         quoted_column_name = quote_column_name(index_name)
         execute "CREATE #{index_type} INDEX #{quoted_column_name} ON #{quoted_table_name} (#{quoted_column_names})#{tablespace} #{index_options}"
@@ -175,5 +183,17 @@ ActiveSupport.on_load(:active_record) do
         end
       end
     end
+
+    # see https://github.com/rsim/oracle-enhanced/issues/2276
+    module OracleEnhancedAdapterSchemaIssue2276
+      def column_definitions(table_name)
+        deleted_object_id = prepared_statements_disabled_cache.delete(object_id)
+        super
+      ensure
+        prepared_statements_disabled_cache.add(deleted_object_id) if deleted_object_id
+      end
+    end
+
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend OracleEnhancedAdapterSchemaIssue2276
   end
 end

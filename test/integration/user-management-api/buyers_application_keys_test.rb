@@ -25,7 +25,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
   test 'create (access_token)' do
     User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user  = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     app   = @buyer.bought_cinstances.last
 
@@ -33,7 +33,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([app.issuer.id]).at_least_once
+    user.update(member_permission_service_ids: [app.issuer.id])
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :success
   end
@@ -70,20 +70,39 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy key' do
-    rm_key = "foo-key"
+    %w[foo-key foo.key].each do |rm_key|
 
-    application = @buyer.bought_cinstances.last
-    expect_backend_create_key(application, rm_key)
-    expect_backend_delete_key(application, rm_key)
+      application = @buyer.bought_cinstances.last
+      expect_backend_create_key(application, rm_key)
+      expect_backend_delete_key(application, rm_key)
 
+      application.application_keys.add(rm_key)
 
-    application.application_keys.add(rm_key)
+      delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key),
+             params: { provider_key: @provider.api_key,
+                       method: '_destroy',
+                       format: :xml })
 
-    delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key),
-           params: { provider_key: @provider.api_key,
-           method: "_destroy", format: :xml })
+      assert_response :success, "response #{@response.response_code} for key #{rm_key}"
+    end
+  end
 
-    assert_response :success
+  # to delete keys ending in .xml or .json via API, format has to be added to the url path
+  test 'destroy key with appended format to the path' do
+    %w[foo-key foo.key foo.key.xml foo.key.json].each do |rm_key|
+
+      application = @buyer.bought_cinstances.last
+      expect_backend_create_key(application, rm_key)
+      expect_backend_delete_key(application, rm_key)
+
+      application.application_keys.add(rm_key)
+
+      delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key + ".json"),
+             params: { provider_key: @provider.api_key,
+                       method: '_destroy' })
+
+      assert_response :success, "response #{@response.response_code} for key #{rm_key}"
+    end
   end
 
   test 'destroy not existing key returns not found' do

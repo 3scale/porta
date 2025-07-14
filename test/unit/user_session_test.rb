@@ -83,4 +83,26 @@ class UserSessionTest < ActiveSupport::TestCase
     assert_equal 3.weeks, UserSession.send(:ttl_value, 3.weeks.seconds.to_s)
     assert_raise(ApplicationConfigurationError) { UserSession.send(:ttl_value, "123p") }
   end
+
+  test 'new session is audited' do
+    user = FactoryBot.create :user_with_account
+    session = FactoryBot.build :user_session, user: user
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      UserSession.with_synchronous_auditing do
+        session.save!
+      end
+    end
+  end
+
+  test 'revoke session is audited' do
+    user = FactoryBot.create :user_with_account
+    session = FactoryBot.create :user_session, user: user
+
+    assert_difference(Audited.audit_class.method(:count)) do
+      UserSession.with_synchronous_auditing do
+        session.revoke!
+      end
+    end
+  end
 end

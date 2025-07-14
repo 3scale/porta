@@ -11,5 +11,6 @@ class AccessTokenRepresenter < ThreeScale::Representer
   property :name
   property :scopes
   property :permission
+  property :expires_at
   property :value, if: :show_value?
 end

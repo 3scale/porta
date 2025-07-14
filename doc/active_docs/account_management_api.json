@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.1.1",
   "info": {
     "title": "Account Management API",
     "description": "API for managing 3scale Admin Portal objects, such as Accounts, Applications, Users, API products, gateway configurations etc.",
@@ -258,6 +258,290 @@
             }
           }
         ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions.json": {
+      "get": {
+        "summary": "Service Subscription List",
+        "description": "List all the service subscriptions of an account.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "summary": "Service Subscription Create",
+        "description": "Subscribe an account to a service through the specified service plan.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the Service plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}.json": {
+      "get": {
+        "summary": "Service Subscription Show",
+        "description": "Retrieve details of a specific service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "summary": "Service Subscription Delete",
+        "description": "Unsubscribe from a service. This endpoint will delete all the applications under the subscribed service.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service contract.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/approve.json": {
+      "put": {
+        "summary": "Service Subscription Approve",
+        "description": "Approve a pending service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service subscription.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/accounts/{account_id}/service_subscriptions/{id}/change_plan.json": {
+      "put": {
+        "summary": "Service Subscription Change Plan",
+        "description": "Update the plan of a service subscription.",
+        "tags": [
+          "Service Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the service subscription.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the target account plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -902,7 +1186,7 @@
                   },
                   "key": {
                     "type": "string",
-                    "description": "app_key to be added.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
+                    "description": "app_key to be added.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters."
                   }
                 },
                 "required": [
@@ -1229,8 +1513,8 @@
     },
     "/admin/api/accounts/{account_id}/service_contracts.xml": {
       "get": {
-        "summary": "Service Subscription List",
-        "description": "List all the service_contracts of an account",
+        "summary": "[DEPRECATED] Service Subscription List",
+        "description": "This endpoint is deprecated, use `GET /admin/api/accounts/{account_id}/service_subscriptions.xml` instead.",
         "tags": [
           "Accounts"
         ],
@@ -1265,8 +1549,8 @@
     },
     "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
       "delete": {
-        "summary": "Service Subscription Delete",
-        "description": "Unsubscribe from a service. This endpoint will delete all the applications that are under the subscribed service.",
+        "summary": "[DEPRECATED] Service Subscription Delete",
+        "description": "This endpoint is deprecated, use `DELETE /admin/api/accounts/{account_id}/service_subscriptions/{id}.xml` instead.",
         "tags": [
           "Accounts"
         ],
@@ -2528,7 +2812,7 @@
                   },
                   "allowed_service_ids[]": {
                     "type": "array",
-                    "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
+                    "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, send `allowed_service_ids[]` with an empty value, e.g. `allowed_service_ids%5B%5D=` (can't be done in ActiveDocs). `<allowed_service_ids/>` or `\"allowed_service_ids\":[]` in the response indicate that no services are allowed. To enable all services, send 'allowed_service_ids' with no value to the 'curl' command, e.g. `allowed_service_ids=` (can't be done in ActiveDocs). Missing `<allowed_service_ids>` or `\"allowed_service_ids\":null` indicate that all services are allowed.",
                     "items": {
                       "type": "integer"
                     }
@@ -2722,6 +3006,12 @@
                         "policy_registry"
                       ]
                     }
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Expiration time of the access token. In ISO 8601 format",
+                    "example": "2030-01-01T12:00:00Z"
                   }
                 },
                 "required": [
@@ -2831,7 +3121,7 @@
     "/admin/api/account_plans/{account_plan_id}/features.xml": {
       "get": {
         "summary": "Account Plan Features List",
-        "description": "Returns the list of the features associated to an account plan.",
+        "description": "Returns the list of the features enabled for an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -2862,12 +3152,10 @@
             "content": {}
           }
         }
-      }
-    },
-    "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
+      },
       "post": {
-        "summary": "Account Plan Features Create",
-        "description": "Associate an account feature to an account plan.",
+        "summary": "Account Plan Feature Enable",
+        "description": "Enables an account feature on an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -2877,15 +3165,6 @@
             "in": "path",
             "description": "ID of the account plan.",
             "x-data-threescale-name": "account_plan_ids",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the feature.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -2902,10 +3181,15 @@
                   "access_token": {
                     "type": "string",
                     "description": "A personal Access Token."
+                  },
+                  "feature_id": {
+                    "type": "integer",
+                    "description": "ID of the feature."
                   }
                 },
                 "required": [
-                  "access_token"
+                  "access_token",
+                  "feature_id"
                 ]
               }
             }
@@ -2917,10 +3201,12 @@
             "content": {}
           }
         }
-      },
+      }
+    },
+    "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Account Plan Features Delete",
-        "description": "Deletes the association of an account feature to an account plan.",
+        "summary": "Account Plan Feature Disable",
+        "description": "Disables an account feature on an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3390,7 +3676,7 @@
     "/admin/api/application_plans/{application_plan_id}/features.xml": {
       "get": {
         "summary": "Application Plan Feature List",
-        "description": "Returns the list of features of the application plan.",
+        "description": "Returns the list of features enabled on the application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3423,8 +3709,8 @@
         }
       },
       "post": {
-        "summary": "Application Plan Feature Create",
-        "description": "Associates a feature to an application plan.",
+        "summary": "Application Plan Feature Enable",
+        "description": "Enables a feature on an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3474,8 +3760,8 @@
     },
     "/admin/api/application_plans/{application_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Application Plan Feature Delete",
-        "description": "Removes the association of a feature to an application plan.",
+        "summary": "Application Plan Feature Disable",
+        "description": "Disable a feature on an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -6865,6 +7151,12 @@
                         "policy_registry"
                       ]
                     }
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Expiration time of the access token. In ISO 8601 format",
+                    "example": "2030-01-01T12:00:00Z"
                   }
                 },
                 "required": [
@@ -7088,7 +7380,7 @@
     "/admin/api/service_plans/{service_plan_id}/features.xml": {
       "get": {
         "summary": "Service Plan Feature List",
-        "description": "Returns the list of features of a service plan.",
+        "description": "Returns the list of features enabled on a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7121,8 +7413,8 @@
         }
       },
       "post": {
-        "summary": "Service Plan Feature Add",
-        "description": "Associates an existing feature to a service plan.",
+        "summary": "Service Plan Feature Enable",
+        "description": "Enables an existing feature on a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7172,8 +7464,8 @@
     },
     "/admin/api/service_plans/{service_plan_id}/features/{id}.xml": {
       "delete": {
-        "summary": "Service Plan Features Delete",
-        "description": "Removes the association of a feature to a service plan.",
+        "summary": "Service Plan Feature Disable",
+        "description": "Disables a feature on a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -9751,15 +10043,15 @@
           },
           "user_key": {
             "type": "string",
-            "description": "User Key (API Key) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 - _ .], or Base64 format without forward slash (/), no spaces and up to 256 characters.",
+            "description": "User Key (API Key) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 - _ . or Base64 format without forward slash (/), no spaces and up to 256 characters.",
             "x-data-threescale-name": "user_keys"
           },
           "application_id": {
             "type": "string",
-            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters."
+            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters."
           },
           "application_key": {
-            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: [A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . : ; < = > ? @ [ \\ ] ^ _ ` { | } ~], no spaces and between 5 and 255 characters.",
+            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.\n\nAllowed characters: A-Z a-z 0-9 ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ , no spaces and between 5 and 255 characters.",
             "type": "string"
           },
           "redirect_url": {

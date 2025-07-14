@@ -7,22 +7,21 @@ import {
 import type { SelectProps } from '@patternfly/react-core'
 
 interface Props {
-  attribute: string;
   collection: {
     id: string;
     title: string;
   }[];
+  name: string;
   placeholder: string;
 }
 
 const INPUT_NAME_UTF8 = 'utf8'
 
 const ToolbarSelect: React.FunctionComponent<Props> = ({
-  attribute,
   collection,
-  placeholder
+  placeholder,
+  name
 }) => {
-  const name = `search[${attribute}]`
   const url = new URL(window.location.href)
   const selectedId = url.searchParams.get(name)
 
@@ -30,6 +29,7 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
   const selected = collection.find(item => item.id === selectedId)?.title ?? null
 
   const clearSelection = () => {
+    url.searchParams.delete('page')
     url.searchParams.delete(name)
     window.location.replace(url.toString())
   }
@@ -40,6 +40,7 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
       return
     }
 
+    url.searchParams.delete('page')
     url.searchParams.set(INPUT_NAME_UTF8, '✓')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     url.searchParams.set(name, collection.find(i => i.title === value)!.id)

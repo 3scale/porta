@@ -8,10 +8,6 @@ class ServiceContractMessenger < ContractMessenger
                  :subscription => Liquid::Drops::Contract.new(contract)
   end
 
-  def new_contract(contract)
-    super contract, :subject => 'API System: New Service subscription'
-  end
-
   def accept(contract)
     super contract, :subject => 'API System: Service subscription has been accepted'
   end

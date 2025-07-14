@@ -11,17 +11,17 @@ import { validateRequestPassword } from 'Login/utils/validations'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { LoginAlert } from 'Login/components/LoginAlert'
 
-import type { FlashMessage } from 'Types/FlashMessages'
+import type { IAlert } from 'Types'
 import type { FunctionComponent } from 'react'
 
 interface Props {
-  flashMessages: FlashMessage[];
+  alerts: IAlert[];
   providerLoginPath: string;
   providerPasswordPath: string;
 }
 
 const RequestPasswordForm: FunctionComponent<Props> = ({
-  flashMessages,
+  alerts,
   providerLoginPath,
   providerPasswordPath
 }) => {
@@ -40,7 +40,7 @@ const RequestPasswordForm: FunctionComponent<Props> = ({
   const emailValidationErrors = validateRequestPassword(email)
   const validatedEmail = (validationVisibility && emailValidationErrors) ? 'error' : 'default'
 
-  const alert = flashMessages.length ? flashMessages[0] : undefined
+  const alert = alerts.length ? alerts[0] : undefined
 
   return (
     <Form

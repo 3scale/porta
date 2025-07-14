@@ -1,17 +1,20 @@
-= semantic_form_for access_token, url: [:provider, :admin, :user, access_token] do |f|
+= form.input :name, as: :patternfly_input,
+                    input_html: { autofocus: true }
 
-  = f.inputs do
-    = f.input :name, input_html: { autofocus: true }
-    = f.input :scopes,
-              as: :check_boxes,
-              collection: access_token.available_scopes.to_a
+= form.input :scopes, as: :patternfly_check_boxes,
+                      collection: access_token.available_scopes.to_collection_for_check_boxes
 
-    = f.input :permission, as: :select, collection: access_token.available_permissions, include_blank: false
+= form.input :permission, as: :patternfly_select,
+                          collection: access_token.available_permissions,
+                          include_blank: false
 
-
-  = f.actions
-    = f.commit_button
-    - unless access_token.new_record?
-      = link_to 'Delete', provider_admin_user_access_token_path(@access_token),
-                data: {confirm: 'Are you sure?'}, method: :delete,
-                title: 'Delete Access Token', class: 'action delete'
+- if access_token.persisted?
+  .pf-c-form__group
+    .pf-c-form__group-label
+      label.pf-c-form__label
+        span.pf-c-form__label-text
+          = t('access_token_options.expires_at')
+    .pf-c-form__group-control
+      = access_token.expires_at.present? ? l(access_token.expires_at) : t('access_token_options.no_expiration')
+- else
+  div id='expiration-date-picker-container' data-props=date_picker_props.to_json

@@ -51,13 +51,15 @@ FactoryBot.define do
   end
 
   factory(:cms_page, :parent => :cms_template, :class => CMS::Page) do
-    # association is copied to child factory because we reference provider
-    # and it is not yet created, but copying association to this factory fixes it
-    association :provider, :factory => :provider_account
     sequence(:title) { |n| "page-#{n}" }
     sequence(:path) { |n| "/page-#{n}" }
     content_type { 'text/html' }
+    draft { "Some random draft page text. Guaranteed random, I promise!" }
     section { |p| p.provider && p.provider.builtin_sections.root }
+  end
+
+  factory(:cms_published_page, :parent => :cms_page, :class => CMS::Page) do
+    published { "Some random published page text. Guaranteed random, I promise!" }
   end
 
   factory(:cms_builtin_page, :parent => :cms_template, :class => CMS::Builtin::Page) do
@@ -80,6 +82,6 @@ FactoryBot.define do
   factory :cms_builtin_legal_term, :parent => :cms_builtin_partial, :class => CMS::Builtin::LegalTerm do
     system_name { 'signup_licence' }
     sequence(:title) { |n| "Legal Term ##{n}" }
-    published { "some text" }
+    draft { "some text" }
   end
 end

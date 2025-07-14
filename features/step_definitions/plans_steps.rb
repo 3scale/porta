@@ -9,7 +9,7 @@
 #   | My API  | Premium |                |        10 |                   | Hidden    | True    |
 Given "the following {plan_type} plan(s):" do |plan_type, table|
   transform_plans_table(plan_type, table).hashes.each do |row|
-    FactoryBot.create(plan_type, row)
+    FactoryBot.create(plan_type, **row)
   end
 end
 
@@ -53,13 +53,14 @@ Given "{application_plan} has no usage limits for metric {string}" do |plan, met
       .delete_all
 end
 
+# Given application plan "Free" has defined the following usage limit:
+#   | Metric       | Period | Max. value |
+#   | Some metric  | day    | 15         |
+#   | Other metric | hour   | 24         |
 Given "{application_plan} has defined the following usage limit(s):" do |plan, table|
   transform_usage_limits_table(table, plan)
   table.hashes.each do |row|
-    FactoryBot.create(:usage_limit, plan: plan,
-                                    metric: row[:metric],
-                                    period: row[:period],
-                                    value: row[:max_value])
+    FactoryBot.create(:usage_limit, plan: plan, **row)
   end
 end
 

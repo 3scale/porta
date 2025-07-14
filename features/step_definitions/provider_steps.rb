@@ -3,14 +3,18 @@
 def import_simple_layout(provider)
   simple_layout = SimpleLayout.new(provider)
   simple_layout.import_pages!
-  simple_layout.import_js_and_css! if @javascript
+  simple_layout.import_js_and_css! if javascript_test?
+end
+
+Given "a provider signed up to {plan}" do |plan|
+  create_provider_with_plan('foo.3scale.localhost', plan)
 end
 
 Given "a provider {string} signed up to {plan}" do |name, plan|
   create_provider_with_plan(name, plan)
 end
 
-Given(/^a provider "([^"]*)"$/) do |account_name|
+Given "a(nother) provider {string}" do |account_name|
   create_provider_with_plan(account_name, ApplicationPlan.first)
 end
 
@@ -58,6 +62,12 @@ end
 Given "{provider} has the field {string} for {string} in the position {int}" do |provider, name, klass, pos|
   a = provider.fields_definitions.by_target(klass.underscore).find{ |fd| fd.name == name }
   a.pos = pos
+  a.save!
+end
+
+Given "{provider} has the field {string} for {field_definition_target} as {read_only_status}" do |provider, name, target, read_only|
+  a = provider.fields_definitions.by_target(target).find { |fd| fd.name == name }
+  a.read_only = read_only
   a.save!
 end
 
@@ -120,6 +130,22 @@ Given "{provider} has no account plans" do |provider|
   provider.account_plans.delete_all
 end
 
+Given "{provider} has an sso integration for the admin portal" do |provider|
+  @authentication_provider = FactoryBot.create(:self_authentication_provider, account: provider)
+end
+
+Given "{provider} has sso {enabled} for all users" do |provider, enabled|
+  provider.settings.update_column(:enforce_sso, enabled)
+end
+
+And /^the sso integration is (published|hidden)$/ do |state|
+  @authentication_provider.update!(published: state == 'published')
+end
+
+And /^the sso integration is tested$/ do
+  EnforceSSOValidator.any_instance.stubs(:valid?).returns(true)
+end
+
 When "{provider} creates sample data" do |provider|
   provider.create_sample_data!
 end
@@ -156,7 +182,7 @@ Given(/^a provider signs up and activates his account$/) do
     click_on 'Sign in'
   end
 
-  page.should have_content('Signed in successfully')
+  assert_content 'Hello admin,'
 
   @provider = Account.find_by_self_domain!(@domain)
 end
@@ -227,9 +253,11 @@ def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
   @provider = FactoryBot.create(:provider_account_with_pending_users_signed_up_to_no_plan, org_name: name,
                                                                                            domain: name,
                                                                                            self_domain: "admin.#{name}")
-  @provider.application_contracts.delete_all
-
-  @provider.buy!(plan, name: 'Default', description: 'Default') unless @provider.bought?(plan)
+  unless @provider.bought?(plan)
+    @provider.application_contracts.delete_all
+    @provider.buy!(plan, name: 'Default', description: 'Default')
+    @provider.bought_cinstances.reset
+  end
 
   import_simple_layout(@provider)
 end
@@ -240,14 +268,6 @@ Given(/^master admin( is logged in)?/) do |login|
   set_current_domain @master.external_domain
   stub_integration_errors_dashboard
   try_provider_login(admin.username, 'supersecret') if login
-end
-
-Given "the provider has bot protection enabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :captcha)
-end
-
-Given "the provider has bot protection disabled" do
-  @provider.settings.update_attribute(:spam_protection_level, :none)
 end
 
 When(/^I have opened edit page for the active member$/) do
@@ -309,7 +329,7 @@ When "the buyer authenticates by OAuth2" do
   try_buyer_login_oauth
 end
 
-When "the buyer authenticates by SSO Token" do
+When "the buyer authenticates by token" do
   try_buyer_login_sso_token
 end
 
@@ -326,7 +346,7 @@ end
 
 Given(/^master is the provider$/) do
   @provider = Account.master
-  @service ||= @provider.default_service
+  @service = @provider.default_service
   @provider.settings.allow_multiple_applications!
   @provider.settings.show_multiple_applications!
   FactoryBot.create(:application_plan, name: 'The Plan',
@@ -335,14 +355,14 @@ Given(/^master is the provider$/) do
                                        default: true)
 end
 
-When "the provider is at {}" do |page_name|
-  visit path_to(page_name)
-end
-
 When "{provider} is suspended" do |provider|
   provider.suspend!
 end
 
 Then "I see the support email of {provider}" do |provider|
   assert_text ThreeScale.config.support_email
+end
+
+Given "{provider} has no users" do |provider|
+  provider.users.each(&:delete)
 end

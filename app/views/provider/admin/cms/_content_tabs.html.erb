@@ -27,22 +27,23 @@
 </div>
 
 <div class='button-bar'>
-  <%= f.actions :style => 'position:absolute' do %>
+  <%= f.actions do %>
     <% if f.object.respond_to?(:destroy) %>
-      <%= can_be_destroyed?(f.object) ? f.delete_button : f.disabled_delete_button %>
+      <li id="cms-template-delete-button">
+        <%= can_be_destroyed?(f.object) ? f.delete_button : f.disabled_delete_button %>
+      </li>
     <% end %>
 
     <li>
-      <a class="less-important-button destructive"
+      <a class="pf-c-button pf-m-secondary pf-m-danger"
          href="#cms-template-revert"
          title="Reverts draft to a currently published version.">
-        <i class="fa fa-undo"></i>
         Revert
       </a>
     </li>
   <% end %>
 
-  <%= f.actions :style => 'position:absolute' do %>
+  <%= f.actions do %>
     <%= render '/provider/admin/cms/preview_buttons', :f =>f %>
     <%= render '/provider/admin/cms/save_buttons', :f => f %>
   <% end %>

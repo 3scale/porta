@@ -7,6 +7,12 @@ QUOTED_TWO_OR_MORE_PATTERN = "(#{quoted_list_subpattern}+)"
 QUOTED_LIST_PATTERN = QUOTED_ONE_OR_MORE_PATTERN # 1 or more is the default
 
 ParameterType(
+  name: 'symbol',
+  regexp: /(.+)/,
+  transformer: -> { _1.to_sym }
+)
+
+ParameterType(
   name: 'list_of_strings',
   regexp: /(?:"[^"]*"(?: |, | and ))*"[^"]*"/,
   transformer: ->(list) { list.from_sentence.map { |item| item.delete('"') } }
@@ -26,7 +32,7 @@ ParameterType(
   transformer: ->(type, name) {
     case type
     when 'provider'
-      name.present? ? provider_by_name(name) : @provider
+      name.present? ? provider_by_name(name) : @provider.reload
     when 'buyer'
       name.present? ? Account.buyers.find_by!(name: name) : @buyer || @account
     end
@@ -393,15 +399,20 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'spec_version',
-  regexp: /Swagger 1.2|Swagger 2|OAS 3.0/,
-  transformer: ->(version) do
-    {
-      'Swagger 1.2' => '1.2',
-      'Swagger 2' => '2.0',
-      'OAS 3.0' => '3.0'
-    }[version]
+  name: 'api_docs_service',
+  class: ApiDocs::Service,
+  regexp: /the spec|spec "(.*)"/,
+  transformer: ->(name) do
+    return ApiDocs::Service.find_by!(name: name) if name.present?
+
+    @api_docs_service
   end
+)
+
+ParameterType(
+  name: 'spec_version',
+  regexp: /(invalid)?\s?(Swagger 1.2|Swagger 2|OAS 3.0|OAS 3.1)/,
+  transformer: ->(invalid, version_name) { { version: numbered_swagger_version(version_name), invalid: invalid.present? } }
 )
 
 ParameterType(
@@ -468,4 +479,21 @@ ParameterType(
   name: 'css_selector',
   regexp: /(.*)/,
   transformer: ->(selector) { selector_for(selector) }
+)
+
+ParameterType(
+  name: 'read_only_status',
+  regexp: /(editable|read only)/,
+  transformer: ->(value) do
+    {
+      'editable' => false,
+      'read only' => true,
+    }[value]
+  end
+)
+
+ParameterType(
+  name: 'alert_type',
+  regexp: /|default|info|success|warning|danger/,
+  transformer: ->(type) { type || 'default' }
 )

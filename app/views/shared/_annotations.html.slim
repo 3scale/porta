@@ -1,0 +1,7 @@
+- if resource.respond_to?(:managed_by) && resource.managed_by.present?
+  - var = defined?(variant) ? variant : :info
+  - if defined?(plain)
+    = pf_inline_alert t('.managed_title', value: resource.managed_by), variant: var, plain: true
+  - else
+    - description = (defined?(description) && description) ? t('.managed_description') : nil
+    = pf_inline_alert t('.managed_title', value: resource.managed_by), description: description, variant: var

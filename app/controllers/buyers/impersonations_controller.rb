@@ -8,13 +8,13 @@ class Buyers::ImpersonationsController < Buyers::BaseController
 
     user= provider.users.impersonation_admin!
 
-    sso_token = SSOToken.new user_id: user.id
+    sso_token = SSOToken.new user_id: user.id, expires_in: 1.minute
 
     sso_token.protocol     = 'http'                unless request.ssl?
     sso_token.redirect_url = params[:redirect_url] if params[:redirect_url] && params[:redirect_url] != "null"
     sso_token.account      = provider
 
-    sso_url = sso_token.sso_url!(provider.external_admin_domain)
+    sso_url = sso_token.sso_url!(host: provider.external_admin_domain, port: request.port)
 
     respond_to do | format |
       format.json { render json: {url: sso_url}, status: :created }

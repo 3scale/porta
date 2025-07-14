@@ -1,8 +1,0 @@
-= form.inputs do
-  = form.input :friendly_name, hint: @metric.child? ? 'e.g. Create new user' : 'e.g. Transfer Out', input_html: { autofocus: true }
-  = form.input :system_name, hint: ( @metric.child? ? 'e.g. users/create or create_user' : 'e.g. transfer_out' ) + '. Spaces are not permitted.', input_html: { disabled: @metric.persisted? }
-  = form.input :unit unless @metric.child?
-  = form.input :description, input_html: { rows: 3 }
-
-= form.actions do
-  = form.commit_button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"

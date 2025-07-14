@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Given "{provider} logs in" do |provider|
+  set_current_domain(provider.external_admin_domain)
   try_provider_login(provider.admins.first.username, 'supersecret')
 end
 
@@ -91,7 +92,7 @@ When "I log in as {string} on the admin domain of {provider}" do |username, prov
   try_provider_login(username, 'supersecret')
 end
 
-When "I try to log in as {string}" do |username|
+When "(I )(they )try to log in as (buyer ){string}" do |username|
   try_buyer_login_internal(username, 'supersecret')
 end
 
@@ -99,7 +100,7 @@ When "I try to log in as {string} with password {string}" do |username, password
   try_buyer_login_internal(username, password)
 end
 
-When "I try to log in as provider {string}" do |username|
+When "(I )(they )try to log in as provider {string}" do |username|
   try_provider_login(username, 'supersecret')
 end
 
@@ -113,7 +114,7 @@ When /^I fill in the "([^"]*)" login data$/ do |username|
   click_button('Sign in')
 end
 
-Then /^I should be logged in as "([^"]*)"$/ do |username|
+Then /^(?:|I |they )should be logged in as "([^"]*)"$/ do |username|
   assert_current_user(username)
 end
 
@@ -128,7 +129,7 @@ When /^(?:I|they) log ?out$/ do
 end
 
 # TODO: merge those 3 assertion steps
-When /^I am not logged in$/ do
+When /^(?:I am not|user is not) logged in$/ do
   if Account.exists?(domain: @domain)
     visit '/admin'
   else
@@ -144,11 +145,11 @@ Then /^I should not be logged in as "([^"]*)"$/ do |username|
   assert has_no_css?('#user_widget .username', :text => username)
 end
 
-Then /^I should not be logged in$/ do
+Then "(I )(they )should not be logged in" do
   assert_includes [provider_sessions_path, session_path], current_path
 end
 
-When "the user logs in" do
+When "{user} logs in" do |user|
   log_out
-  try_provider_login(@user.username, 'supersecret')
+  try_provider_login(user.username, 'supersecret')
 end

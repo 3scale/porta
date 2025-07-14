@@ -9,7 +9,7 @@ namespace :swagger do
   end
 
   task destroy_orphans: :environment do
-    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeleteObjectHierarchyWorker.method(:perform_later))
+    ApiDocs::Service.joining { account.outer }.where.has { account.id == nil }.find_each(&DeleteObjectHierarchyWorker.method(:delete_later))
   end
 
   task stats_version: :environment do
@@ -33,7 +33,7 @@ namespace :swagger do
     scope.find_each do |swagger|
       next if swagger.specification.valid?
       invalids += 1
-      p "#{swagger.id}, #{swagger.account.id}, #{swagger.specification.validate!.count}"
+      p "#{swagger.id}, #{swagger.account.id}, #{swagger.specification.validate.count}"
     end
 
     puts "Invalids #{invalids} from #{scope.count}"

@@ -52,6 +52,13 @@ class Message < ApplicationRecord
   }
 
   scope :sent, -> { where(state: 'sent') }
+  # stale when no associated sender AND no associated non-deleted recipients
+  scope :stale, -> do
+    joining { sender.outer }.
+      where.has { sender.id == nil }.
+      joining { recipients.on((recipients.message_id == id) & recipients.sift(:not_deleted)).outer }.
+      where.has { BabySqueel[:message_recipients].id == nil }
+  end
 
   state_machine :initial => :unsent do
 
@@ -149,12 +156,11 @@ class Message < ApplicationRecord
     # Notify recipients also by email.
     recipients.find_each do |recipient|
 
-      if !system_operation? && recipient.receiver.try(:provider?)
+      # Use new notification system for provider, direct email for buyers
+      if recipient.receiver.try(:provider?)
         event = Messages::MessageReceivedEvent.create(self, recipient)
         Rails.application.config.event_store.publish_event(event)
-      end
-
-      if recipient.notifiable?
+      else
         report_and_supress_exceptions do
           attempt_to_send_message(recipient) if can_send_message?(recipient)
         end
@@ -195,12 +201,7 @@ class Message < ApplicationRecord
   protected
 
   def can_send_message?(recipient)
-    if recipient.emails.present?
-      true
-    else
-      logger.warn "Skipping message notification for Message(id:#{id}) because account has no emails."
-      false
-    end
+    recipient.emails.present? && !recipient.receiver.suspended_or_scheduled_for_deletion?
   end
 
   def attempt_to_send_message(recipient)

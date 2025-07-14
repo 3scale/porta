@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'invoices_show' %>
+<% end %>
+
 <%= render '/finance/provider/shared/invoice_title', invoice: @invoice %>
 
 <% content_for :menu do %>
@@ -10,4 +14,3 @@
   <%= render :partial => '/finance/provider/shared/payment_transactions' %>
   <%= render :partial => '/finance/provider/invoices/actions' %>
 </div>
-

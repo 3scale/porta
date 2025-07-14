@@ -1,5 +1,11 @@
 <% content_for :page_header_title, 'Groups' %>
 
+<% content_for :javascripts do %>
+  <%# HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
+      import the whole pack with "javascript_packs_with_chunks_tag" %>
+  <%= stylesheet_packs_chunks_tag 'table_toolbar' %>
+<% end %>
+
 <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Groups table">
   <thead>
     <tr role="row">
@@ -13,7 +19,7 @@
 
   <tbody role="rowgroup">
     <% @groups.each do |group| %>
-      <%= content_tag_for :tr, group, role: 'row' do %>
+      <%= content_tag :tr, id: dom_id(group), role: 'row' do %>
         <td role="cell" data-label="Name"><%= link_to h(group.name), edit_provider_admin_cms_group_path(group) %></td>
         <td role="cell" data-label="Allowed Sections"><%= group.sections.map(&:title).join(", ") %></td>
         <td role="cell" class="pf-c-table__action actions">

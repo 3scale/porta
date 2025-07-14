@@ -20,6 +20,8 @@ module Liquid
         @request.original_url
       end
 
+      alias original_url request_uri
+
       desc "Returns the host with port of the request."
       def host_with_port
         @request.host_with_port

@@ -6,16 +6,15 @@ Feature: Provider finance authorization
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has Browser CMS activated
     And provider "foo.3scale.localhost" has "finance" allowed
 
   Scenario: Provider admin can access finance
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost"
     When I go to the provider dashboard
-    Then I should see "Billing" within the audience dashboard widget
+    Then there should be a link to "Billing"
     And they should be able to go to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |
 
   Scenario: Members per default cannot access finance
@@ -24,9 +23,9 @@ Feature: Provider finance authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should not see "Billing" within the audience dashboard widget
+    Then there should not be a link to "Billing"
     And they should see an error when going to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |
 
   Scenario: Members of finance group can access finance
@@ -35,7 +34,7 @@ Feature: Provider finance authorization
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "member"
     And I go to the provider dashboard
-    Then I should see "Billing" within the audience dashboard widget
+    Then there should be a link to "Billing"
     And they should be able to go to the following pages:
-      | the finance page          |
+      | the earnings by month page          |
       | the finance settings page |

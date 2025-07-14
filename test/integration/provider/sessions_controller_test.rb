@@ -32,31 +32,24 @@ class Provider::SessionsControllerTest < ActionDispatch::IntegrationTest
     partner = FactoryBot.create(:partner, logout_url: "http://example.net/?")
     account = FactoryBot.create(:provider_account, partner: partner)
 
-    AuditLogService.expects(:call).with { |msg| msg.start_with? "Signed in: #{account.admins.first.id}/" }
     login! account
 
-    AuditLogService.expects(:call).with { |msg| msg.start_with? "Signed out: #{account.admins.first.id}/" }
     delete provider_sessions_path
 
     assert_redirected_to "http://example.net/?provider_id=#{account.id}&user_id=#{account.admin_user.id}"
   end
 
-  test "redirect users to SSO when there's only one authentication provider and enforce_sso is on" do
-    @provider.settings.update_column(:enforce_sso, true)
-    get new_provider_sessions_path
-    assert_redirected_to authorization_provider_bounce_path(authentication_provider.system_name)
+  test 'failed login generates an audit log' do
+    partner = FactoryBot.create(:partner, logout_url: "http://example.net/?")
+    provider = FactoryBot.create(:provider_account, partner: partner)
+    AuditLogService.expects(:call).with { |msg| msg.start_with? 'Login attempt failed' }
+
+    host! provider.external_admin_domain
+    provider_login_with provider.admins.first.username, 'wrong_pass'
   end
 
-  test "redirect users to SSO when there's more than one authentication provider but only one is published " do
+  test "does not redirect users to SSO even with enforce_sso and single provider" do
     @provider.settings.update_column(:enforce_sso, true)
-    FactoryBot.create(:self_authentication_provider, account: @provider)
-    get new_provider_sessions_path
-    assert_redirected_to authorization_provider_bounce_path(authentication_provider.system_name)
-  end
-
-  test "does not redirect when there's more than one authentication provider" do
-    @provider.settings.update_column(:enforce_sso, true)
-    FactoryBot.create(:self_authentication_provider, account: @provider, published: true)
     get new_provider_sessions_path
     assert_response :success
 

@@ -27,8 +27,12 @@ Feature: Product's service plans index page
 
     Scenario: Copying service plans
       When they select action "Copy" of "Public Plan"
-      And they select action "Copy" of "Secret Plan"
-      And wait a moment
+      Then they should see "Plan copied"
+      And the table has the following row:
+        | Name               | Contracts | State     |
+        | Public Plan (copy) | 0         | published |
+
+      When they select action "Copy" of "Secret Plan"
       Then they should see "Plan copied"
       And the table has the following row:
         | Name               | Contracts | State     |
@@ -41,7 +45,7 @@ Feature: Product's service plans index page
       When they select action "Delete" of "Public Plan"
       And confirm the dialog
       And wait a moment
-      Then they should see "Plan was deleted"
+      Then they should see "The plan was deleted"
       And the table should contain the following:
         | Name        | Contracts | State  |
         | Secret Plan | 0         | hidden |

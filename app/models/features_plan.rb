@@ -1,10 +1,22 @@
 class FeaturesPlan < ApplicationRecord
-  self.primary_key = nil # this column does not exist, but rails needs to have something
-
   belongs_to :feature
   belongs_to :plan, :polymorphic => true
 
+  # TODO: set composite primary key when on Rails 7.1
+  # see https://discuss.rubyonrails.org/t/rfc-finally-support-composite-primary-keys/81368/20
+  # see https://guides.rubyonrails.org/active_record_composite_primary_keys.html
+  # self.primary_key = [:plan_id, :feature_id]
+
   validate :feature_scope_matches_plan_class?
+
+  def ==(other)
+    self.class == other.class && feature_id == other.feature_id && plan_id == other.plan_id
+  end
+  alias_method :eql?, :==
+
+  def hash
+    [self.class, feature_id, plan_id].hash
+  end
 
   attr_protected :plan_id, :feature_id, :plan_type, :tenant_id
 

@@ -127,24 +127,6 @@ class EmailTemplateTest < ActiveSupport::TestCase
                    'X-Custom' => 'X-Value' }, message.headers)
   end
 
-  # this is to check we can override template of message send to provider to buyer
-  test "Account Messenger New Signup template should assign headers to messenger" do
-    @provider = FactoryBot.create(:provider_account)
-    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    @body = "awesome content"
-    @template = CMS::EmailTemplate.create!(system_name: 'account_messenger_new_signup', published: @body,
-                                                                                        provider: @provider,
-                                                                                        headers: {
-                                                                                          bcc: @bcc,
-                                                                                          cc: @cc,
-                                                                                          subject: @subject,
-                                                                                          custom: @custom
-                                                                                        })
-    message = AccountMessenger.new_signup(@buyer) && Message.last
-
-    assert_equal("awesome content", message.body)
-  end
-
   test "Account Approved template should assign headers to mailer" do
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
@@ -175,8 +157,6 @@ class EmailTemplateTest < ActiveSupport::TestCase
 
   test 'all new and overriden' do
     provider = FactoryBot.create(:provider_account)
-
-    assert provider.provider_can_use?(:new_notification_system)
 
     templates = provider.email_templates.all_new_and_overridden.map(&:system_name)
     assert_equal CMS::EmailTemplate::BUYER_BILLING_TEMPLATES.sort, (templates & CMS::EmailTemplate::BUYER_BILLING_TEMPLATES).sort

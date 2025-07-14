@@ -7,13 +7,13 @@ class Admin::Api::ServiceContractsController < Admin::Api::ServiceBaseController
   before_action :deny_on_premises_for_master
   before_action :authorize_service_plans!
 
-  # Service Subscription List
+  # [DEPRECATED] Service Subscription List
   # GET /admin/api/accounts/{account_id}/service_contracts.xml
   def index
     respond_with account.bought_service_contracts
   end
 
-  # Service Subscription Delete
+  # [DEPRECATED] Service Subscription Delete
   # DELETE /admin/api/accounts/{account_id}/service_contracts/{id}.xml
   def destroy
     service_subscription = ServiceSubscriptionService.new(account)

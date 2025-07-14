@@ -7,7 +7,6 @@ Feature: Provider settings authorization
   Background:
     Given a provider exists
     And the provider is charging its buyers
-    And provider "foo.3scale.localhost" has Browser CMS activated
 
   Scenario: Provider admin can access settings
     Given current domain is the admin domain of provider "foo.3scale.localhost"
@@ -21,16 +20,16 @@ Feature: Provider settings authorization
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
     Then they should be able to go to the following pages:
-      | the edit site settings page       |
-      | the finance settings page         |
-      | the usage rules settings page     |
-      | the fields definitions index page |
-      | the emails settings page          |
-      | the email templates page          |
-      | the dns settings page             |
-      | the bot protection page           |
-      | the xss protection page           |
-      | the authentication providers page |
+      | the edit site settings page                      |
+      | the finance settings page                        |
+      | the usage rules settings page                    |
+      | the fields definitions index page                |
+      | the emails settings page                         |
+      | the email templates page                         |
+      | the dns settings page                            |
+      | the bot protection page                          |
+      | the xss protection page                          |
+      | the developer portal users sso integrations page |
 
   Scenario: Members per default cannot access settings
     Given an active user "member" of account "foo.3scale.localhost"
@@ -44,18 +43,18 @@ Feature: Provider settings authorization
     And there shouldn't be a link to "0 Messages"
     And there shouldn't be a link to "Developer Portal"
     And they should see an error when going to the following pages:
-      | the usage rules settings page     |
-      | the fields definitions index page |
-      | the edit site settings page       |
-      | the finance settings page         |
-      | the forum settings page           |
-      | the emails settings page          |
-      | the email templates page          |
-      | the site settings page            |
-      | the dns settings page             |
-      | the bot protection page           |
-      | the xss protection page           |
-      | the authentication providers page |
+      | the usage rules settings page                    |
+      | the fields definitions index page                |
+      | the edit site settings page                      |
+      | the finance settings page                        |
+      | the forum settings page                          |
+      | the emails settings page                         |
+      | the email templates page                         |
+      | the site settings page                           |
+      | the dns settings page                            |
+      | the bot protection page                          |
+      | the xss protection page                          |
+      | the developer portal users sso integrations page |
 
   Scenario: Members of settings group can access settings
     Given an active user "member" of account "foo.3scale.localhost"
@@ -65,15 +64,15 @@ Feature: Provider settings authorization
     And I go to the provider dashboard
     And I follow "0 Messages"
     And they should be able to go to the following pages:
-      | the usage rules settings page     |
-      | the fields definitions index page |
-      | the edit site settings page       |
-      | the finance settings page         |
-      | the emails settings page          |
-      | the email templates page          |
-      | the site settings page            |
-      | the feature visibility page       |
-      | the dns settings page             |
-      | the bot protection page           |
-      | the xss protection page           |
-      | the authentication providers page |
+      | the usage rules settings page                    |
+      | the fields definitions index page                |
+      | the edit site settings page                      |
+      | the finance settings page                        |
+      | the emails settings page                         |
+      | the email templates page                         |
+      | the site settings page                           |
+      | the feature visibility page                      |
+      | the dns settings page                            |
+      | the bot protection page                          |
+      | the xss protection page                          |
+      | the developer portal users sso integrations page |

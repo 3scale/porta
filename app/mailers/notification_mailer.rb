@@ -55,6 +55,7 @@ class NotificationMailer < ActionMailer::Base
   delivers Applications::ApplicationCreatedEvent
   def application_created(event, receiver)
     @application      = event.application
+    @plan             = event.plan
     @provider_account = event.provider
     @service          = event.service
     @account          = event.account
@@ -273,6 +274,21 @@ class NotificationMailer < ActionMailer::Base
     mail to: @receiver.email, subject: "#{@account.name} has downgraded"
   end
 
+  # @param [Accounts::CreditCardUnstoreFailedEvent] event
+  # @param [User] receiver
+  delivers Accounts::CreditCardUnstoreFailedEvent
+  def credit_card_unstore_failed(event, receiver)
+    @provider_account     = Account.find(event.metadata[:provider_id])
+    @receiver             = receiver.decorate
+    @account_name         = event.buyer_name
+    @error_message        = event.reason
+    @payment_gateway_name = event.gateway_name
+    @card_partial         = event.partial_number
+    @event                = event
+
+    mail to: @receiver.email, subject: "Failed to unstore #{@account_name}'s credit card"
+  end
+
   # @param [Accounts::ExpiredCreditCardProviderEvent] event
   # @param [User] receiver
   delivers Accounts::ExpiredCreditCardProviderEvent
@@ -396,13 +412,12 @@ class NotificationMailer < ActionMailer::Base
 
   def limit_mail(event, receiver, mail_name)
     @provider_account = event.provider
-    @alert            = event.alert
-    @account          = @alert.account
-    @cinstance        = @alert.cinstance
+    @cinstance        = Cinstance.find_by(application_id: event.application_id)
+    @account          = @cinstance.buyer_account
     @receiver         = receiver.decorate
     @event            = event
 
-    subject = t_subject(mail_name, name: @cinstance.name, message: @alert.message, level: @alert.level)
+    subject = t_subject(mail_name, name: @cinstance.name, message: @event.message, level: @event.level)
 
     mail to: @receiver.email, subject: subject
   end
@@ -411,8 +426,8 @@ class NotificationMailer < ActionMailer::Base
     super.merge(host: provider_account&.external_admin_domain)
   end
 
-  def t_subject(key, options = {})
-    I18n.t(key, { scope: 'mailers.notification_mailer.subject', raise: true }.merge(options))
+  def t_subject(key, **options)
+    I18n.t(key, scope: 'mailers.notification_mailer.subject', raise: true, **options)
   end
 
   private

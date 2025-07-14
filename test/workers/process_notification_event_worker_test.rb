@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
 
-  CustomEvent = Class.new(RailsEventStore::Event)
+  CustomEvent = Class.new(BaseEventStoreEvent)
 
   def setup
     @worker = ProcessNotificationEventWorker.new
@@ -23,7 +23,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
     user         = FactoryBot.create(:simple_admin, state: :active, account: provider)
 
-    user.create_notification_preferences!(preferences: { invoices_to_review: true })
+    user.notification_preferences.update(preferences: { invoices_to_review: true })
 
     Sidekiq::Testing.inline! do
       assert_difference Notification.method(:count) do
@@ -48,6 +48,40 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     ProcessNotificationEventWorker::UserNotificationWorker.expects(:perform_async).never
 
     refute @worker.create_notifications(notification)
+  end
+
+  def test_skip_notifications_from_suspended_buyer
+    provider = FactoryBot.create(:simple_provider)
+    FactoryBot.create(:simple_admin, state: :active, account: provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider, state: 'suspended')
+    event  = CustomEvent.new(provider: provider, account_id: buyer.id, metadata: { provider_id: provider.id })
+    event.publish
+    notification_event = NotificationEvent.create(:invoices_to_review, event)
+    notification_event.publish
+
+    NotificationDeliveryService.expects(:call).never
+
+    Sidekiq::Testing.inline! { @worker.create_notifications(notification_event) }
+
+    mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == event.event_id }&.first
+    assert_nil mail
+  end
+
+  def test_skip_notifications_from_buyer_belonging_to_suspended_provider
+    provider = FactoryBot.create(:simple_provider, state: 'suspended')
+    FactoryBot.create(:simple_admin, state: :active, account: provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    event  = CustomEvent.new(provider: provider, account_id: buyer.id, metadata: { provider_id: provider.id })
+    event.publish
+    notification_event = NotificationEvent.create(:invoices_to_review, event)
+    notification_event.publish
+
+    NotificationDeliveryService.expects(:call).never
+
+    Sidekiq::Testing.inline! { @worker.create_notifications(notification_event) }
+
+    mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == event.event_id }&.first
+    assert_nil mail
   end
 
   def test_only_send_notifications_for_active_users
@@ -79,7 +113,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
     user         = FactoryBot.create(:simple_admin, account: provider)
 
-    user.create_notification_preferences!(preferences: { invoices_to_review: true })
+    user.notification_preferences.update(preferences: { invoices_to_review: true })
 
     Notification.any_instance.stubs(:deliver!).raises(
       ::NotificationDeliveryService::InvalidEventError.new(event))

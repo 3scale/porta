@@ -4,7 +4,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test "name" do
     authentication_provider = FactoryBot.build_stubbed(:authentication_provider, name: '')
-    refute authentication_provider.valid?
+    assert_not authentication_provider.valid?
     assert authentication_provider.errors[:name].present?
   end
 
@@ -14,7 +14,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     assert_equal "foo", authentication_provider.system_name
 
     authentication_provider = FactoryBot.build(:authentication_provider, name: "foo", system_name: nil, account_id: 1)
-    refute authentication_provider.valid?
+    assert_not authentication_provider.valid?
     assert authentication_provider.errors[:system_name].present?
 
     authentication_provider = FactoryBot.build(:authentication_provider, name: "foo", system_name: nil, account_id: 2)
@@ -37,14 +37,12 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     authentication_provider.authorize_url = 'foo'
     authentication_provider.user_info_url = 'foo'
 
-    refute authentication_provider.valid?
+    assert_not authentication_provider.valid?
 
-    assert authentication_provider.errors[:site].present?
-    assert authentication_provider.errors[:token_url].present?
-    assert authentication_provider.errors[:authorize_url].present?
-    assert authentication_provider.errors[:user_info_url].present?
+    errors = authentication_provider.errors
 
-    assert_equal ["Invalid URL format"], authentication_provider.errors.values.flat_map{|x| x[0]}.uniq
+    assert_equal %i[authorize_url site token_url user_info_url], errors.map(&:attribute).sort
+    assert_equal ['Invalid URL format'], errors.map(&:message).uniq
 
     authentication_provider.site = 'https://example.org'
     authentication_provider.token_url = 'http://example.org'
@@ -54,18 +52,40 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     assert authentication_provider.valid?
   end
 
+  test 'blank site and whitespaces in URLs' do
+    keycloak = FactoryBot.build_stubbed(:keycloak_authentication_provider)
+    auth0 = FactoryBot.build_stubbed(:auth0_authentication_provider)
+    [keycloak, auth0].each do |auth|
+      auth.site = ''
+      assert_not auth.valid?
+      assert ["can't be blank"], auth.errors.messages_for(:site)
+
+      auth.site = '  http://example.org  '
+      assert_not auth.valid?
+      assert ["can't contain whitespaces"], auth.errors.messages_for(:site)
+
+      auth.site = 'abc'
+      assert_not auth.valid?
+      assert ["Invalid URL format"], auth.errors.messages_for(:site)
+
+      auth.site = 'http://example.org'
+      assert auth.valid?
+    end
+  end
+
   test 'callback_account' do
-      auth_provider = FactoryBot.build_stubbed(:authentication_provider)
-          .becomes(AuthenticationProvider::GitHub)
-      master = FactoryBot.build_stubbed(:master_account)
+    account = FactoryBot.create(:simple_provider)
+    auth_provider = FactoryBot.build_stubbed(:authentication_provider, account: account)
+                              .becomes(AuthenticationProvider::GitHub)
+    master = FactoryBot.build_stubbed(:master_account)
 
-      auth_provider.branding_state = 'threescale_branded'
-      assert auth_provider.threescale_branded?, 'should be 3scale branded'
-      assert_equal master, auth_provider.callback_account
+    auth_provider.branding_state = 'threescale_branded'
+    assert auth_provider.threescale_branded?, 'should be 3scale branded'
+    assert_equal master, auth_provider.callback_account
 
-      auth_provider.branding_state = 'custom_branded'
-      assert auth_provider.custom_branded?, 'should have custom branding'
-      assert_equal auth_provider.account, auth_provider.callback_account
+    auth_provider.branding_state = 'custom_branded'
+    assert auth_provider.custom_branded?, 'should have custom branding'
+    assert_equal auth_provider.account, auth_provider.callback_account
   end
 
   test 'find_kind' do
@@ -88,16 +108,16 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'branded_available?' do
     config = { client_id: 'id', client_secret: 'secret' }
-    ThreeScale::OAuth2.stubs(config: { 'authentication_provider' => config })
+    ThreeScale::OAuth2.stubs(config: { authentication_provider: config })
 
-    refute_predicate AuthenticationProvider, :branded_available?
+    assert_not_predicate AuthenticationProvider, :branded_available?
 
     config[:enabled] = true
     assert_predicate AuthenticationProvider, :branded_available?
 
     config[:client_id] = ''
     config[:client_secret] = ''
-    refute_predicate AuthenticationProvider, :branded_available?
+    assert_not_predicate AuthenticationProvider, :branded_available?
   end
 
   test 'initial state github' do
@@ -112,7 +132,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
 
   test 'ssl verification' do
     auth = AuthenticationProvider.new
-    refute auth.skip_ssl_certificate_verification
+    assert_not auth.skip_ssl_certificate_verification
 
     assert_equal OpenSSL::SSL::VERIFY_PEER, auth.ssl_verify_mode
 
@@ -143,7 +163,7 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
   test '#published: github not branded on existing record can publish it' do
     AuthenticationProvider::GitHub.stubs(:branded_available?).returns(false)
     auth = AuthenticationProvider::GitHub.create!(published: false, client_id: '12345', client_secret: '12345')
-    refute auth.published
+    assert_not auth.published
     auth.published = true
     auth.save!
     auth.reload
@@ -157,12 +177,12 @@ class AuthenticationProviderTest < ActiveSupport::TestCase
     auth.published = false
     auth.save!
     auth.reload
-    refute auth.published
+    assert_not auth.published
   end
 
   test "Red Hat customer system_name can't be used" do
     auth = AuthenticationProvider.new system_name: RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME
-    refute auth.valid?
+    assert_not auth.valid?
     assert_includes auth.errors[:system_name], 'is reserved'
   end
 end

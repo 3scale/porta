@@ -95,39 +95,33 @@ class UserTest < ActiveSupport::TestCase
 
     service.service_tokens.create!(value: 'money-makes-people-cautious')
 
-    member.stubs(:has_access_to_all_services?).returns(true)
-    member.expects(:has_permission?).with(:plans).returns(true)
-    assert_equal 1, member.accessible_service_tokens.count
-
-    member.expects(:has_permission?).with(:plans).returns(false)
     assert_equal 0, member.accessible_service_tokens.count
+
+    member.member_permission_ids = ['plans']
+    assert_equal 1, member.accessible_service_tokens.count
   end
 
   def test_accessible_services
     provider = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: provider)
+    another_service = FactoryBot.create(:service, account: provider)
     admin = FactoryBot.build_stubbed(:admin, account: provider)
     member = FactoryBot.build_stubbed(:member, account: provider)
 
-    assert_equal [service.id], admin.accessible_services.map(&:id)
-    assert_equal [service.id], member.accessible_services.map(&:id)
-
-    member.stubs(:has_access_to_all_services?).returns(true)
-
-    assert_equal [service.id], member.accessible_services.map(&:id)
-
-    member.stubs(:has_access_to_all_services?).returns(false)
-    member.stubs(:member_permission_service_ids).returns([service.id])
-
-    assert_equal [service.id], member.accessible_services.map(&:id)
-
-    member.stubs(:member_permission_service_ids).returns([])
-
+    assert_same_elements [service.id, another_service.id], admin.accessible_services.map(&:id)
     assert_equal [], member.accessible_services.map(&:id)
 
-    member.stubs(:has_access_to_all_services?).returns(true)
-    member.stubs(:member_permission_service_ids).returns(nil)
+    member.member_permission_ids = ['partners']
+
+    assert_same_elements [service.id, another_service.id], member.accessible_services.map(&:id)
+
+    member.member_permission_service_ids = [service.id]
+
     assert_equal [service.id], member.accessible_services.map(&:id)
+
+    member.member_permission_service_ids = []
+
+    assert_equal [], member.accessible_services.map(&:id)
   end
 
   test '#find_by_username_or_email returns nil for TypeError' do
@@ -905,5 +899,23 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal session1, user.user_sessions.reload.first
     assert_equal 1, user.user_sessions.reload.length
+  end
+
+  test 'new provider users have notification preferences' do
+    provider = FactoryBot.create :simple_provider
+    user = FactoryBot.build :user, account: provider
+
+    user.save
+
+    assert user.notification_preferences.persisted?
+  end
+
+  test "new buyer users don't have notification preferences" do
+    buyer = FactoryBot.create :simple_buyer
+    user = FactoryBot.build :user, account: buyer
+
+    user.save
+
+    assert_not user.notification_preferences.persisted?
   end
 end

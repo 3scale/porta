@@ -18,7 +18,7 @@ Given "{provider} has the following buyers:" do |provider, table|
     next unless (plan_name = hash[:plan])
 
     plan = provider.account_plans.find_by(name: plan_name) ||
-           create_plan(:account, name: plan_name, issuer: provider)
+           FactoryBot.create(:account_plan, name: plan_name, issuer: provider)
     buyer.buy! plan
   end
 end

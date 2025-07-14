@@ -18,7 +18,7 @@ class Api::UsageLimitsController < FrontendController
 
   def new
     @usage_limit = @metric.usage_limits.build(:plan => @plan)
-    respond_to(:html)
+    respond_to :html # will render in a colorbox
   end
 
   def create
@@ -26,34 +26,28 @@ class Api::UsageLimitsController < FrontendController
     @usage_limit.plan = @plan
     @usage_limit.save
 
-    respond_to do |format|
-      if @usage_limit.save
-        flash.now[:notice] = 'Usage Limit has been created.'
-        format.js
-      else
-        format.js { render :action => 'error' }
-      end
-    end
+    flash.now[:success] = t('.success') if @usage_limit.save
+
+    respond_to :js
   end
 
   def edit
-    respond_to(:html)
+    respond_to :html # will render in a colorbox
   end
 
   def update
-    if @usage_limit.update(usage_limit_params)
-      respond_to do |format|
-        format.js
-      end
-    else
-      respond_to do |format|
-        format.js { render :action => 'error' }
-      end
-    end
+    flash.now[:success] = t('.success') if @usage_limit.update(usage_limit_params)
+
+    respond_to :js
   end
 
   def destroy
-    @usage_limit.destroy
+    if @usage_limit.destroy
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = t('.error')
+    end
+
     respond_to(:js)
   end
 

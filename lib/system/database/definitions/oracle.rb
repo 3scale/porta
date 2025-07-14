@@ -481,7 +481,9 @@ System::Database::Oracle.define do
 
   trigger 'event_store_events' do
     <<~SQL
-      :new.tenant_id := :new.provider_id;
+      IF :new.provider_id <> master_id THEN
+        :new.tenant_id := :new.provider_id;
+      END IF;
     SQL
   end
 
@@ -507,9 +509,7 @@ System::Database::Oracle.define do
 
   trigger 'onboardings' do
     <<~SQL
-      IF :new.account_id <> master_id THEN
-        :new.tenant_id := :new.account_id;
-      END IF;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND tenant_id <> master_id;
     SQL
   end
 
@@ -568,6 +568,20 @@ System::Database::Oracle.define do
     <<~SQL
       IF :new.account_id <> master_id THEN
           :new.tenant_id := :new.account_id;
+      END IF;
+    SQL
+  end
+
+  trigger 'annotations' do
+    definitions = Annotating.models.map do |model|
+      [
+        ":new.annotated_type = '#{model}'",
+        "SELECT tenant_id INTO :new.tenant_id FROM #{model.table_name} WHERE id = :new.annotated_id AND tenant_id <> master_id;"
+      ]
+    end
+
+    <<~SQL
+      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSIF ")}
       END IF;
     SQL
   end

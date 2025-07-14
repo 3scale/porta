@@ -1,6 +1,14 @@
-<%- unless @service_contract.changed? %>
-  $.colorbox.close();
-  window.location.reload();
-<%-else-%>
-  $.colorbox({html: "<%= escape_javascript @form %>"});
-<%-end-%>
+<% if success = flash.now[:success] %>
+  (function () {
+    const id = 'contract_<%= @service_contract.id %>';
+    const link = document.getElementById(id).querySelector('[data-label="Plan"] a');
+
+    <% plan = @service_contract.plan %>
+    link.innerText = '<%= plan.name %>';
+    link.href = '<%= edit_polymorphic_path([:admin, plan]) %>';
+    link.title = 'Edit <%= plan.class.model_name.human %> "<%= plan.name %>"';
+  })();
+<% end %>
+
+$.colorbox.close();
+<%= render 'shared/flash_alerts' %>

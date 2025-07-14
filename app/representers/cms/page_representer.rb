@@ -20,7 +20,7 @@ module CMS::PageRepresenter
     p.property :hidden, getter: ->(*) { hidden? }
   end
 
-  with_options(if: ->(options) { !options[:short] }) do
+  with_options(if: ->(options) { !options.dig(:user_options, :short) }) do
     property :draft, render_nil: true
     property :published, render_nil: true
   end

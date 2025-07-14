@@ -6,6 +6,46 @@
 # Original transformers: https://github.com/3scale/porta/blob/a5d6622d5a56bbda401f7d95e09b0ab19d05adba/features/support/transforms.rb#L185-L202
 
 module DataTableTransforms
+  def transform_access_tokens_table(table)
+    parameterize_headers(table)
+
+    codes = I18n.t('.access_token_options')
+
+    table.map_column!(:scopes) do |scopes|
+      scopes.split(',').map(&:strip).map { |scope| codes.key(scope).to_s }
+    end
+    table.map_column!(:permission) { |permission| codes.key(permission) }
+  end
+
+  def transform_invoices_table(table)
+    parameterize_headers(table, 'Buyer' => 'buyer_account',
+                                'Month' => 'period')
+    table.map_column!(:buyer_account) { |buyer| Account.buyers.find_by!(org_name: buyer) }
+    table.map_column!(:period) { |date| Month.new(date) }
+    table.map_column!(:state, false) { |state| state.downcase.to_sym }
+  end
+
+  def transform_service_contract_table(table, provider)
+    parameterize_headers(table)
+    table.map_column!(:plans) { |plans| plans.from_sentence.map { |plan| Plan.find_by!(name: plan) } }
+    table.map_column!(:buyer) do |name|
+      provider.buyers.find_by(org_name: name) ||
+        FactoryBot.create(:buyer_account, provider_account: provider, org_name: name)
+    end
+    table
+  end
+
+  def transform_integration_errors_table(table)
+    parameterize_headers(table)
+    table.map_column!(:timestamp) { |timestamp| timestamp.to_time.utc.to_s }
+  end
+
+  def transform_backend_apis_table(table)
+    parameterize_headers(table, 'System name' => 'system_name',
+                                'Private Base URL' => 'private_endpoint')
+    table
+  end
+
   def transform_plan_features_table(table)
     parameterize_headers(table)
     table.map_column!(:enabled, false) { |enabled| enabled.casecmp?('true') }
@@ -48,9 +88,9 @@ module DataTableTransforms
   end
 
   def transform_usage_limits_table(table, plan)
-    parameterize_headers(table)
+    parameterize_headers(table, 'Max. value' => 'value')
     table.map_column!(:metric) { |metric| plan.issuer.metrics.find_by!(friendly_name: metric) }
-    table.map_column!(:max_value, &:to_i)
+    table.map_column!(:value, &:to_i)
     table
   end
 

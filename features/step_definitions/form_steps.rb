@@ -22,20 +22,27 @@ INLINE_ERROR_SELECTORS = [
   'p.inline-errors'
 ].join(', ')
 
+FORM_GROUP_SELECTORS = [
+  '.pf-c-form__group',
+  'li',
+  '.form-group'
+].join(', ')
+
 Then "field {string} has inline error {string}" do |field, error|
+  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
+
   text = Regexp.new(Regexp.escape(error), Regexp::IGNORECASE)
-  find_field(field)
-    .assert_sibling(INLINE_ERROR_SELECTORS, text: text, wait: 0)
+  assert form_group.has_css?(INLINE_ERROR_SELECTORS, text: text, wait: 0)
 end
 
 Then "field {string} has no inline error" do |field|
-  find_field(field)
-    .assert_no_sibling(INLINE_ERROR_SELECTORS, wait: 0)
+  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
+  assert form_group.has_no_css?(INLINE_ERROR_SELECTORS, wait: 0)
 end
 
-Then /^there is (a|no)? (required )?(readonly )?field "(.*)"$/ do |presence, required, readonly, field|
+Then /^there is (a|no) (required )?(readonly )?field "(.*)"$/ do |presence, required, readonly, field|
   present = presence == 'a'
-  assert_equal present, has_field?(field, readonly: readonly.present?)
+  assert_equal present, has_field?(field, readonly: readonly.present?, wait: present)
 
   if present && required.present?
     assert find('label', text: field).has_css?('.required, .pf-c-form__label-required'),
@@ -86,12 +93,13 @@ When "the modal is submitted with:" do |table|
 end
 
 When "(I )(they )select {string} from {string}" do |value, field|
-  if page.has_css?('.pf-c-form__label', text: field, wait: 0)
-    pf4_select(value, from: field)
+  ActiveSupport::Deprecation.warn "[cucumber] Detected a form not using PF4 css" unless page.has_css?('.pf-c-form__label', text: field, wait: 0)
+  element = find_field(field)
+  # 'input' for React forms, and 'select' for HTML
+  if element.tag_name == 'select'
+    element.find(:option, value).select_option
   else
-    # DEPRECATED: remove when all selects have been replaced for PF4
-    ActiveSupport::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-    find_field(field).find(:option, value).select_option
+    pf4_select(value, from: field)
   end
 end
 
@@ -102,7 +110,10 @@ Then "(they )can't select {string} from {string}" do |option, label|
 end
 
 Then "{string} is the option selected in {string}" do |option, select|
-  assert_equal option, find_field(select).value
+  field = find_field(select)
+  # 'input' for React forms, and 'select' for HTML
+  value = field.tag_name == 'select' ? field.find('option[selected]').text : field.value
+  assert_equal option, value
 end
 
 When "(I )check {string}" do |field|
@@ -118,4 +129,19 @@ When "they should be able to choose one of the following(:)" do |table|
 
   assert_same_elements table.raw.flatten,
                        find_all(radio_button_selector).map(&:text)
+end
+
+Then /there is a select "([^"]*)" (that includes|with) options:/ do |label, inclusion, table|
+  expected_options = table.raw.flatten
+  select = find_field(label)
+  assert_equal 'select', select.tag_name
+  actual_options = select.find_all('option').map(&:text)
+
+  if inclusion == 'with'
+    assert_equal expected_options, actual_options
+  else
+    expected_options.each do |option|
+      assert_includes actual_options, option
+    end
+  end
 end

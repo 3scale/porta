@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
@@ -10,8 +12,34 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
   test 'javascript_include_tag' do
     @context.registers[:controller] = ApplicationController.new
-    Webpacker.manifest.stubs(:lookup_pack_with_chunks!).with('stats', {:type => :javascript}).returns('/packs/stats.js')
-    assert_equal "<script src=\"/packs/stats.js\"></script>", javascript_include_tag('stats.js')
+
+    test_manifest ||= {
+      entrypoints: {
+        stats: {
+          assets: {
+            js: ['/packs/stats.js'],
+            css: ['/packs/stats.css']
+          }
+        },
+        'validate_signup.ts': {
+          assets: {
+            js: ['/packs/foo.js']
+          }
+        }
+      }
+    }.to_json
+
+    # FIXME: we should mock javascript_packs_with_chunks_tag or load_webpack_manifest instead of File
+    File.stubs(:read).with('public/packs/manifest.json').returns(test_manifest).once
+
+    assert_same_elements [
+      "<script src=\"/packs/stats.js\"></script>",
+      "<link rel=\"stylesheet\" href=\"/packs/stats.css\" />"
+    ], javascript_include_tag('stats.js').split(/\n/)
+
+    assert_same_elements [
+      "<script src=\"/packs/foo.js\"></script>"
+    ], javascript_include_tag('validate_signup.js').split(/\n/)
   end
 
   test 'mail_to' do
@@ -86,6 +114,6 @@ class Liquid::Filters::RailsHelpersTest < ActiveSupport::TestCase
 
     html = create_button('Title', '/path', 'disable_with' => 'deleting...', 'confirm' => 'sure?', 'class' => 'foo')
 
-    assert_equal '<form class="button_to" method="post" action="/path"><input class="foo" data-confirm="sure?" data-disable-with="deleting..." type="submit" value="Title" /></form>', html
+    assert_equal '<form class="button_to" method="post" action="/path"><button class="foo" data-confirm="sure?" data-disable-with="deleting..." type="submit">Title</button></form>', html
   end
 end

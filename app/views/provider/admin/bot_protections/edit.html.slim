@@ -1,0 +1,5 @@
+- content_for :title, 'Bot Protection'
+- content_for :page_header_title, 'Bot Protection'
+- content_for :page_header_body, t('.description')
+
+= render partial: 'form', locals: { url: provider_admin_bot_protection_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label') }

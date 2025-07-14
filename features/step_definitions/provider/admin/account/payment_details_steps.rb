@@ -51,7 +51,7 @@ Then "the provider's payment details {can} be added" do |will_be_added|
   if will_be_added
     fill_in_braintree_form
     click_on 'Save'
-    assert_flash 'Credit card details were successfully stored.'
+    assert_flash 'Credit card details were successfully stored'
     assert_provider_payment_details
   else
     assert_flash 'Invalid merchant id'
@@ -82,7 +82,7 @@ Then "the admin can edit the provider's payment details" do
   within('section', text: 'Billing Address') do
     find('dt', text: 'Company').assert_sibling('dd', text: 'Friendly Robot Company')
   end
-  assert_flash 'Credit card details were successfully stored.'
+  assert_flash 'Credit card details were successfully stored'
 end
 
 When "the admin will add a valid credit card" do
@@ -106,7 +106,7 @@ Then "the provider's payment details can't be stored because the card number is 
 
   assert_text 'Your payment details could not be saved'
   assert_text 'Credit card number is invalid'
-  assert_flash 'Something went wrong and billing information could not be stored.'
+  assert_flash 'Something went wrong and billing information could not be stored'
 end
 
 Then "the provider's payment details can't be stored because something went wrong" do
@@ -114,7 +114,7 @@ Then "the provider's payment details can't be stored because something went wron
   fill_in_braintree_form
   click_on 'Save credit card'
 
-  assert_flash 'Credit Card details could not be stored.'
+  assert_flash 'Credit Card details could not be stored'
 end
 
 Then "an admin can remove the provider's payment details" do

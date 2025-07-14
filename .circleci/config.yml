@@ -1,11 +1,8 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@3.3.0
 
 ##################################### YAML ANCHORS  ############################################
-
-upload-coverage: &upload-coverage
-  run:
-    name: Upload test coverage to Codecov
-    command: bash <(curl --retry 10 --retry-delay 5 --retry-max-time 60 -s https://codecov.io/bash) -Z || echo "Codecov is not working again..."
 
 persist-vendored-dependencies-to-workspace: &persist-vendored-dependencies-to-workspace
   persist_to_workspace:
@@ -28,9 +25,10 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-npm-cache-key: &npm-cache-key porta-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
-bundle-cache-key: &bundle-cache-key porta-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
-assets-cache-key: &assets-cache-key porta-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+npm-cache-key: &npm-cache-key stream9-{{ .Environment.CACHE_VERSION }}-node-modules-{{ checksum "yarn.lock" }}
+bundle-cache-key: &bundle-cache-key stream9-{{ .Environment.CACHE_VERSION }}-bundler-gems-{{ arch }}-{{ checksum "Gemfile.lock" }}-{{ checksum "/tmp/db" }}
+assets-cache-key: &assets-cache-key stream9-{{ .Environment.CACHE_VERSION }}-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
+oracle-libs-cache-key: &oracle-libs-cache-key ora1-{{ .Environment.CACHE_VERSION }}-oracle-libs-cache-{{ checksum "script/oracle/install-instantclient-packages.sh" }}
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -42,14 +40,23 @@ save-npm-cache: &save-npm-cache
     paths:
       - ./node_modules
 
+restore-oracle-libs-cache: &restore-oracle-libs-cache
+  restore_cache:
+    key: *oracle-libs-cache-key
+
+save-oracle-libs-cache: &save-oracle-libs-cache
+  save_cache:
+    key: *oracle-libs-cache-key
+    paths:
+      - vendor/oracle
+
 save-assets-cache: &save-assets-cache
   save_cache:
     key: *assets-cache-key
     paths:
       - public/assets
-      - public/packs-test
+      - public/packs
       - tmp/cache/assets
-      - tmp/cache/webpacker
 
 restore-assets-cache: &restore-assets-cache
   restore_cache:
@@ -68,20 +75,22 @@ use-example-config-files: &use-example-config-files
 disable-internet-access: &disable-internet-access
   run:
     name: Disable internet access
-    command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+    command: |
+      cat /etc/resolv.conf
+      sudo sed -c -i".bak" 's/^nameserver.*/nameserver 127.0.0.1/' /etc/resolv.conf
 
 enable-internet-access: &enable-internet-access
   run:
     name: Enabled internet access
-    command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+    command: sudo tee /etc/resolv.conf < /etc/resolv.conf.bak
     when: always
 
 attach-to-workspace: &attach-to-workspace
   attach_workspace:
     at: .
 
-system-builder-ruby27: &system-builder-ruby27
-  image: quay.io/3scale/system-builder:ruby27
+system-builder-ruby31: &system-builder-ruby31
+  image: quay.io/3scale/system-builder:ps
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -91,21 +100,21 @@ system-builder-ruby27: &system-builder-ruby27
     TZ: UTC
     MASTER_PASSWORD: p
     USER_PASSWORD: p
-    LC_ALL: en_US.UTF-8
+    LC_ALL: C.utf8
     RAILS_ENV: test
 
 mysql-container: &mysql-container
   image: cimg/mysql:8.0
+  command: mysqld --performance_schema=0 --table_definition_cache=400 --innodb_buffer_pool_size=16M --innodb_log_buffer_size=4M --tmp_table_size=1M --key_buffer_size=4M --sort_buffer_size=128K --skip-log-bin
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
     MYSQL_DATABASE: circleci
 
 postgres-container: &postgres-container
-  image: cimg/postgres:10.20
+  image: cimg/postgres:14.12
   environment:
     POSTGRES_USER: postgres
-    POSTGRES_DB: systemdb
 
 oracle-db-container: &oracle-db-container
   image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
@@ -123,20 +132,24 @@ memcached-container: &memcached-container
   image: memcached:1.5-alpine
 
 redis-container: &redis-container
-  image: redis:4.0-alpine
+  image: redis:6.2-alpine
 
-# https://github.com/poseidon/dnsmasq
-# TODO: create our own image like https://www.redhat.com/en/blog/build-ubi-containers-github-actions-buildah-and-podman
 dnsmasq-container: &dnsmasq-container
-  image: quay.io/poseidon/dnsmasq
+  image: quay.io/3scale/dnsmasq
+  entrypoint:
+    - /bin/bash
+    - -c
   command:
-    - --user=root
-    - --keep-in-foreground
-    - --log-facility=-
-    - --log-queries
-    - --no-poll
-    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/circleci-binary-releases.s3.amazonaws.com/127.0.0.11
-    - --address=/#/127.0.0.1
+    - |
+      DEFAULT_DNS=$(sed -nEe 's/nameserver\s+(.*)/\1/p' /etc/resolv.conf | head -1)
+      /usr/sbin/dnsmasq \
+      --user=root \
+      --keep-in-foreground \
+      --log-facility=- \
+      --log-queries \
+      --no-poll \
+      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/$DEFAULT_DNS \
+      --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
   filters:
@@ -164,6 +177,7 @@ build-envs:
     environment:
       DB: oracle
       DATABASE_URL: oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb
+      CAPYBARA_MAX_WAIT_TIME: 30
 
 ##################################### CIRCLECI COMMANDS ############################################
 
@@ -221,6 +235,7 @@ commands: # reusable commands with parameters
             echo "Running gems install for database: $DB"
             echo "$(bundle version)"
             bundle config set --local deployment 'true'
+            bundle config build.nokogiri --use-system-libraries
             bundle check || bundle install
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
@@ -233,11 +248,14 @@ commands: # reusable commands with parameters
 
   clone-oracle-libraries:
     steps:
+      - *restore-oracle-libs-cache
       - run:
           name: "Fetch oracle libraries"
           command: |
             set +o pipefail
-            sudo ./script/oracle/install-instantclient-packages.sh
+            ls vendor/oracle
+            sudo ORACLE_KEEP_DOWNLOADS=1 ./script/oracle/install-instantclient-packages.sh
+      - *save-oracle-libs-cache
 
   prepare-db-for-tests:
     steps:
@@ -262,9 +280,15 @@ commands: # reusable commands with parameters
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
       - run:
+          name: jemalloc availability
+          command: ldd /bin/bash | grep "$LD_PRELOAD" || ( ldconfig -p && exit 1 )
+          environment: &malloc_preload
+            LD_PRELOAD: libjemalloc.so.2
+      - run:
           name: Rspec tests
           command: |
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress" --verbose --split-by=timings
+          environment: *malloc_preload
       - upload-artifacts
 
   cucumber-tests:
@@ -284,6 +308,8 @@ commands: # reusable commands with parameters
           command: |
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
+          environment: *malloc_preload
+      - log-memory-usage-periodic
       - run:
           name: Run cucumber tests
           command: |
@@ -291,6 +317,7 @@ commands: # reusable commands with parameters
             # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
             bundle exec ruby .circleci/features.rb | circleci tests run --command="xargs bundle exec cucumber --profile ci" --verbose --split-by=timings
       - *enable-internet-access
+      - print-oom-process-count
       - upload-artifacts
       - store_artifacts:
           path: tmp/capybara
@@ -315,8 +342,9 @@ commands: # reusable commands with parameters
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
             bundle exec rake "test:files:${taskname}" | circleci tests run --command="cat > $list" --verbose --split-by=timings
             if [ -s $list ]; then
-              bundle exec rake test:run TEST="$(cat $list)" TESTOPTS=--verbose --verbose --trace
+              bundle exec rails test $(awk 'ORS=" "' < $list) --verbose --backtrace
             fi
+          environment: *malloc_preload
       - upload-artifacts
 
   save-gem-cache:
@@ -338,74 +366,97 @@ commands: # reusable commands with parameters
       - *store-junit-test-results
       - *store-test-artifacts
       - *store-log-artifacts
-      - *upload-coverage
+      - codecov/upload
+
+  log-memory-usage-periodic:
+    steps:
+      - run:
+          name: Log process memory usage
+          command: |
+            while sleep 2; do
+              date
+              ps -eo pid,user,%mem,rss,command ww --sort rss
+              echo
+            done
+          background: true
+
+  print-oom-process-count:
+    steps:
+      - run:
+          name: Number of OOM killed processes
+          command: |
+            # see https://support.circleci.com/hc/en-us/articles/19306469418139-How-to-detect-when-a-process-is-killed-by-the-OOM-killer
+            printf "OOM Control: "
+            cat /sys/fs/cgroup/memory.events | sed -n 5p | tee tmp/oom_num
+            [ "oom_kill 0" = "$(<tmp/oom_num)" ] # fails when a proc was killed by OOM
+          when: always
 
 ##################################### CIRCLECI EXECUTORS ############################################
 
 executors:
-  builder-ruby27: &builder-ruby27
+  builder-ruby31: &builder-ruby31
     parameters:
       database:
         type: string
         default: mysql
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
     environment:
       DB: << parameters.database >>
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
 
-  builder-with-mysql-ruby27: &builder-with-mysql-ruby27
+  builder-with-mysql-ruby31: &builder-with-mysql-ruby31
     resource_class: small
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *mysql-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-mysql
 
-  builder-with-postgres-ruby27: &builder-with-postgres-ruby27
+  builder-with-postgres-ruby31: &builder-with-postgres-ruby31
     resource_class: small
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *postgres-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-postgresql
 
-  builder-with-oracle-ruby27: &builder-with-oracle-ruby27
+  builder-with-oracle-ruby31: &builder-with-oracle-ruby31
     resource_class: large
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *oracle-db-container
       - *memcached-container
       - *redis-container
-    working_directory: /opt/app-root/src/project
+    working_directory: /opt/ci/workdir
     <<: *build-envs-oracle
 
-  cucumber-with-mysql-ruby27: &cucumber-with-mysql-ruby27
+  cucumber-with-mysql-ruby31: &cucumber-with-mysql-ruby31
     resource_class: small
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *dnsmasq-container
       - *mysql-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-postgres-ruby27: &cucumber-with-postgres-ruby27
+  cucumber-with-postgres-ruby31: &cucumber-with-postgres-ruby31
     resource_class: small
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *dnsmasq-container
       - *postgres-container
       - *memcached-container
       - *redis-container
 
-  cucumber-with-oracle-ruby27: &cucumber-with-oracle-ruby27
+  cucumber-with-oracle-ruby31: &cucumber-with-oracle-ruby31
     resource_class: large
     docker:
-      - *system-builder-ruby27
+      - *system-builder-ruby31
       - *dnsmasq-container
       - *oracle-db-container
       - *memcached-container
@@ -418,7 +469,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
       database: mysql
@@ -430,7 +481,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
       database: postgresql
@@ -442,7 +493,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
       database: oracle
@@ -456,7 +507,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -479,7 +530,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -490,7 +541,7 @@ jobs:
       - *use-example-config-files
       - run:
           name: Precompile assets
-          command: bundle exec rake assets:precompile:test
+          command: bundle exec rake assets:precompile
           environment:
             RAILS_GROUPS: assets
       - *save-assets-cache
@@ -498,7 +549,6 @@ jobs:
           root: .
           paths:
             - ./public/packs
-            - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
       - notify_failure
@@ -507,7 +557,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -522,7 +572,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -542,7 +592,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-ruby27
+        default: builder-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -550,8 +600,8 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Jest specs
-          command: yarn jest --maxWorkers=3
-      - *upload-coverage
+          command: yarn jest --maxWorkers=3 --coverage
+      - codecov/upload
       - notify_failure
 
   unit:
@@ -559,7 +609,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby27
+        default: builder-with-mysql-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -571,7 +621,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby27
+        default: builder-with-postgres-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -583,7 +633,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby27
+        default: builder-with-oracle-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -597,7 +647,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby27
+        default: builder-with-mysql-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -609,7 +659,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby27
+        default: builder-with-postgres-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -621,7 +671,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby27
+        default: builder-with-oracle-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -635,7 +685,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby27
+        default: builder-with-mysql-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -647,7 +697,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby27
+        default: builder-with-postgres-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -659,7 +709,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby27
+        default: builder-with-oracle-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -673,7 +723,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-mysql-ruby27
+        default: builder-with-mysql-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -685,7 +735,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-postgres-ruby27
+        default: builder-with-postgres-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -697,7 +747,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: builder-with-oracle-ruby27
+        default: builder-with-oracle-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -712,7 +762,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-mysql-ruby27
+        default: cucumber-with-mysql-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -725,7 +775,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-postgres-ruby27
+        default: cucumber-with-postgres-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -738,7 +788,7 @@ jobs:
     parameters:
       executor:
         type: string
-        default: cucumber-with-oracle-ruby27
+        default: cucumber-with-oracle-ruby31
     executor:
       name: << parameters.executor >>
     steps:
@@ -996,37 +1046,37 @@ workflows:
   ######## Nightly workflows
 
 
-  mysql_nightly_build_ruby27:
+  mysql_nightly_build_ruby31:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - dependencies_npm:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - assets_precompile:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - dependencies_bundler
             - dependencies_npm
       - unit:
-          executor: builder-with-mysql-ruby27
+          executor: builder-with-mysql-ruby31
           requires:
             - dependencies_bundler
       - functional:
-          executor: builder-with-mysql-ruby27
+          executor: builder-with-mysql-ruby31
           requires:
             - assets_precompile
       - integration:
-          executor: builder-with-mysql-ruby27
+          executor: builder-with-mysql-ruby31
           requires:
             - assets_precompile
       - rspec:
-          executor: builder-with-mysql-ruby27
+          executor: builder-with-mysql-ruby31
           requires:
             - dependencies_bundler
       - cucumber:
-          executor: cucumber-with-mysql-ruby27
+          executor: cucumber-with-mysql-ruby31
           requires:
             - assets_precompile
       - notify_success:
@@ -1039,37 +1089,37 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  postgres_nightly_build_ruby27:
+  postgres_nightly_build_ruby31:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_postgres:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - dependencies_npm:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - assets_precompile:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - deps_bundler_postgres
             - dependencies_npm
       - unit-postgres:
-          executor: builder-with-postgres-ruby27
+          executor: builder-with-postgres-ruby31
           requires:
             - deps_bundler_postgres
       - functional-postgres:
-          executor: builder-with-postgres-ruby27
+          executor: builder-with-postgres-ruby31
           requires:
             - assets_precompile
       - integration-postgres:
-          executor: builder-with-postgres-ruby27
+          executor: builder-with-postgres-ruby31
           requires:
             - assets_precompile
       - rspec-postgres:
-          executor: builder-with-postgres-ruby27
+          executor: builder-with-postgres-ruby31
           requires:
             - deps_bundler_postgres
       - cucumber-postgres:
-          executor: cucumber-with-postgres-ruby27
+          executor: cucumber-with-postgres-ruby31
           requires:
             - assets_precompile
       - notify_success:
@@ -1082,45 +1132,45 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  oracle_nightly_build_ruby27:
+  oracle_nightly_build_ruby31:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - deps_bundler_oracle:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - dependencies_npm:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - assets_precompile:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - deps_bundler_oracle
             - dependencies_npm
       - unit-oracle:
-          executor: builder-with-oracle-ruby27
+          executor: builder-with-oracle-ruby31
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - functional-oracle:
-          executor: builder-with-oracle-ruby27
+          executor: builder-with-oracle-ruby31
           context:
             - quay
           requires:
             - assets_precompile
       - integration-oracle:
-          executor: builder-with-oracle-ruby27
+          executor: builder-with-oracle-ruby31
           context:
             - quay
           requires:
             - assets_precompile
       - rspec-oracle:
-          executor: builder-with-oracle-ruby27
+          executor: builder-with-oracle-ruby31
           context:
             - quay
           requires:
             - deps_bundler_oracle
       - cucumber-oracle:
-          executor: cucumber-with-oracle-ruby27
+          executor: cucumber-with-oracle-ruby31
           context:
             - quay
           requires:
@@ -1135,29 +1185,29 @@ workflows:
           <<: *only-master-filter
     <<: *nightly-trigger
 
-  javascript_nightly_build_ruby27:
+  javascript_nightly_build_ruby31:
     jobs:
       - notify_start:
           <<: *only-master-filter
       - dependencies_bundler:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - dependencies_npm:
-          executor: builder-ruby27
+          executor: builder-ruby31
       - assets_precompile:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - dependencies_bundler
             - dependencies_npm
       - licenses:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - dependencies_bundler
       - lint:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - dependencies_npm
       - jest:
-          executor: builder-ruby27
+          executor: builder-ruby31
           requires:
             - dependencies_npm
       - notify_success:

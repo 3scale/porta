@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BillingWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   sidekiq_options queue: :billing, retry: 3
 
@@ -52,7 +52,7 @@ class BillingWorker
       return
     end
 
-    time = billing_date.to_s(:iso8601)
+    time = billing_date.to_fs(:iso8601)
     perform_async(buyer.id, buyer.provider_account_id, time)
   end
 

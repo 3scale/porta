@@ -36,14 +36,14 @@ module Finance
       payment_profile = payment_profiles.is_a?(Array) ? payment_profiles[-1] : payment_profiles # payment_profiles can be a Hash or an Array of hashes
       payment_profile_id = payment_profile['customer_payment_profile_id']
 
-      gateway.cim_gateway.create_customer_profile_transaction(
-        transaction: {
-          customer_profile_id: buyer_reference,
-          customer_payment_profile_id: payment_profile_id,
-          type: :auth_capture,
-          amount: amount.to_f
-        }
-      )
+      gateway.cim_gateway.create_customer_profile_transaction({
+                                                                transaction: {
+                                                                  customer_profile_id: buyer_reference,
+                                                                  customer_payment_profile_id: payment_profile_id,
+                                                                  type: :auth_capture,
+                                                                  amount: amount.to_f
+                                                                }
+                                                              })
     end
 
     def authorize_net_customer_profile

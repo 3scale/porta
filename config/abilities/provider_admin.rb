@@ -71,6 +71,7 @@ Ability.define do |user|
     category.forum.account = account
   end
 
+  can :index, Service
   can :create, Service if account.can_create_service?
   can :destroy, Service do |service|
     service.account_id == user.account_id && can?(:manage, :multiple_services) && !service.default_or_last?
@@ -86,4 +87,12 @@ Ability.define do |user|
   can [:read, :show, :edit, :update], Cinstance
 
   can :read, :account_plans
+
+  can :suspend, Account do | buyer |
+    buyer.provider_account == account
+  end
+
+  can :resume, Account do | buyer |
+    buyer.provider_account == account
+  end
 end

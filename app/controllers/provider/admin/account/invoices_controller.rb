@@ -6,6 +6,7 @@ class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::B
   before_action :authorize_finance
   prepend_before_action :deny_on_premises
   activate_menu :account, :billing, :invoices
+  helper_method :empty_invoices?
 
   def index
     @invoices = current_account.invoices
@@ -21,5 +22,8 @@ class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::B
     authorize! :read, Invoice
   end
 
+  def empty_invoices?
+    @invoices.blank?
+  end
 
 end

@@ -79,17 +79,17 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       cinstance = service.cinstances.last
       cinstance.update(name: 'Alaska Application App')
 
-      User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
+      assert_nil user.member_permission_service_ids
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_match 'Alaska Application App', response.body
 
-      User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
+      user.update(member_permission_service_ids: [])
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_not_match 'Alaska Application App', response.body
 
-      User.any_instance.expects(:member_permission_service_ids).returns([service.id]).at_least_once
+      user.update(member_permission_service_ids: [service.id])
       get admin_buyers_account_path(buyer)
       assert_response :success
       assert_match 'Alaska Application App', response.body
@@ -188,7 +188,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       }
 
       assert_redirected_to admin_buyers_account_plans_path
-      assert_equal 'Please, create an Account Plan first', flash[:alert]
+      assert_equal 'Please, create an Account Plan first', flash[:danger]
     end
 
     test 'POST with an error outside account or user is shown as a flash error' do
@@ -204,7 +204,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert_equal 'error that is not in "user" or "account". another error', flash[:error]
+      assert_equal 'error that is not in "user" or "account". another error', flash[:danger]
     end
 
     # regression test for: https://github.com/3scale/system/issues/2567
@@ -228,16 +228,20 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'checks if link under number of applications is correct as member' do
       @provider.settings.allow_multiple_applications!
       service = FactoryBot.create(:service, account: @provider)
+      plan  = FactoryBot.create(:published_application_plan, issuer: service)
 
       FactoryBot.create_list(:application, 2, user_account: @buyer)
-      FactoryBot.create_list(:application, 3, service: service, user_account: @buyer)
+      FactoryBot.create_list(:application, 3, service: service, plan: plan, user_account: @buyer)
 
       # Testing member permissions
       member = FactoryBot.create(:member, account: @provider)
+      member.activate!
+      member.member_permissions.create(admin_section: :partners)
       member.member_permission_service_ids = [service.id]
       member.save!
       login! @provider, user: member
       get admin_buyers_accounts_path
+      assert_response :success
 
       assert_select %(td a[href="#{admin_buyers_account_applications_path(@buyer)}"]), text: '3'
     end
@@ -249,7 +253,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
             org_name: 'My organization'
           }
         }
-        assert_select 'input#account_user_username + .pf-m-error'
+        assert_select '.pf-m-error'
         assert_response :success
       end
 
@@ -264,6 +268,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
             }
           }
         }
+        assert_select '.pf-m-error', false
         assert_response :redirect
       end
     end
@@ -312,7 +317,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
           }
         }
       }
-      assert_equal 'Users invalid', flash[:error]
+      assert_equal 'Users invalid', flash[:danger]
     end
   end
 

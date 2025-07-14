@@ -11,10 +11,10 @@ module DeveloperPortal::Admin::Account
 
     def hosted_success
       payment_method_id = params.require(:stripe).require(:payment_method_id)
-      @payment_result = stripe_crypt.update!(payment_method_id)
+      @payment_result = stripe_crypt.update_payment_detail(payment_method_id)
 
       if @payment_result
-        flash[:success] = 'Credit card details were saved correctly'
+        flash[:notice] = 'Credit card details were saved correctly'
       else
         flash[:error] = "Couldn't save the credit card details: #{stripe_crypt.errors.full_messages.to_sentence}"
       end
@@ -25,6 +25,11 @@ module DeveloperPortal::Admin::Account
 
     def stripe_crypt
       @stripe_crypt ||= ::PaymentGateways::StripeCrypt.new(current_user)
+    end
+
+    def update_address_on_payment_gateway
+      billing_address = account_params['billing_address']
+      stripe_crypt.update_billing_address(billing_address.to_h)
     end
   end
 end

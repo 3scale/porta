@@ -34,46 +34,51 @@ module Abilities
       contract = FactoryBot.build_stubbed(:simple_service_contract, plan: plan)
       event    = ServiceContracts::ServiceContractCreatedEvent.create(contract, @member)
 
-      @member.stubs(:has_permission?).with(anything)
-      @member.expects(:has_permission?).with(:partners).returns(false).at_least_once
-
       assert_cannot ability, :show, event
 
-      @member.expects(:has_permission?).with(:partners).returns(true).at_least_once
+      @member.member_permission_ids = ['partners']
       assert_can ability, :show, event
 
-      @member.admin_sections = [:services]
+      @member.member_permission_service_ids = []
       assert_cannot ability, :show, event
 
       @member.member_permission_service_ids = [service.id]
-
       assert_can ability, :show, event
     end
 
     def test_events_according_the_users_permissions
+      # @account has a service and a service plan
+      service  = FactoryBot.create(:simple_service, account: @account)
+      service_plan     = FactoryBot.create(:simple_service_plan, issuer: service)
+
+      # The provider user (not admin) has permissions over the service
+      @member.member_permission_service_ids = [service.id]
+
+      # There's a buyer for @account and it's subscribed to the service
+      buyer = FactoryBot.create(:buyer_account, provider_account: @account)
+      user  = FactoryBot.create(:simple_user, account: buyer)
+      FactoryBot.create(:service_contract, plan: service_plan, user_account: buyer)
+
+      # There's also an application plan and an application
+      app_plan = FactoryBot.create(:simple_application_plan, issuer: service)
+      app = FactoryBot.create(:cinstance, plan: app_plan, user_account: buyer)
+
+      account_event = Accounts::AccountCreatedEvent.create(buyer, user)
       billing_event = Invoices::InvoicesToReviewEvent.create(@account)
-      account_event = Accounts::AccountCreatedEvent.create(@account, @member)
-      limit_alert   = FactoryBot.build_stubbed(:limit_alert)
+      limit_alert   = FactoryBot.create(:limit_alert, cinstance: app)
       alert_event   = Alerts::LimitAlertReachedProviderEvent.create(limit_alert)
 
-      @member.stubs(:has_permission?).with(anything)
-
-      @member.expects(:has_permission?).with(:finance).returns(false)
       assert_cannot ability, :show, billing_event
-
-      @member.expects(:has_permission?).with(:finance).returns(true)
-      assert_can ability, :show, billing_event
-
-      @member.expects(:has_permission?).with(:partners).returns(false)
       assert_cannot ability, :show, account_event
-
-      @member.expects(:has_permission?).with(:partners).returns(true)
-      assert_can ability, :show, account_event
-
-      @member.expects(:has_permission?).with(:monitoring).returns(false)
       assert_cannot ability, :show, alert_event
 
-      @member.expects(:has_permission?).with(:monitoring).returns(true)
+      @member.member_permission_ids = ['finance']
+      assert_can ability, :show, billing_event
+
+      @member.member_permission_ids = ['partners']
+      assert_can ability, :show, account_event
+
+      @member.member_permission_ids = ['monitoring']
       assert_can ability, :show, alert_event
     end
 
@@ -83,37 +88,36 @@ module Abilities
       service_3 = FactoryBot.create(:simple_service, account: @account)
 
       assert_cannot ability, :show, service_1, 'foreign service'
+      assert_cannot ability, :show, service_2, 'no services allowed'
+      assert_cannot ability, :show, service_3, 'no services allowed'
+
+      @member.update(allowed_sections: ['plans'])
+
+      assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'all services allowed by default'
       assert_can ability, :show, service_3, 'all services allowed by default'
 
-      @member.admin_sections = [ :services ]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_cannot ability, :show, service_2, 'none services allowed'
-      assert_cannot ability, :show, service_3, 'none services allowed'
-
-      @member.member_permission_service_ids = [service_1.id, service_2.id]
-      @member.save
+      @member.update(allowed_service_ids: [service_1.id, service_2.id])
 
       assert_cannot ability, :show, service_1, 'foreign service'
       assert_can ability, :show, service_2, 'allowed service'
-      assert_cannot ability, :show, service_3, 'not allowed service'
-
-      @member.admin_sections += [:plans]
-
-      assert_cannot ability, :show, service_1, 'foreign service'
-      assert_can ability, :show, service_2, 'all services allowed'
       assert_cannot ability, :show, service_3, 'not allowed service'
 
       # this is migration path for existing customers that don't have service permissions yet
       Logic::RollingUpdates.stubs(skipped?: true)
 
-      @member.member_permission_ids = [:analytics]
-      @member.member_permission_service_ids = nil
+      @member.update(allowed_service_ids: nil)
 
       assert_cannot ability, :show, service_1, 'foreign service'
-      assert_can ability, :show, service_2, 'allowed service'
-      assert_can ability, :show, service_3, 'allowed service'
+      assert_can ability, :show, service_2, 'all services allowed by default'
+      assert_can ability, :show, service_3, 'all services allowed by default'
+
+      @member.member_permissions.delete_all
+      @member.reload
+
+      assert_cannot ability, :show, service_1, 'foreign service'
+      assert_cannot ability, :show, service_2, 'no services allowed'
+      assert_cannot ability, :show, service_3, 'no services allowed'
     end
 
     def test_cinstances
@@ -121,9 +125,9 @@ module Abilities
       service_2 = FactoryBot.create(:simple_service, account: @account)
       service_3 = FactoryBot.create(:simple_service, account: @account)
 
-      plan_1 = FactoryBot.create(:simple_application_plan, service: service_1)
-      plan_2 = FactoryBot.create(:simple_application_plan, service: service_2)
-      plan_3 = FactoryBot.create(:simple_application_plan, service: service_3)
+      plan_1 = FactoryBot.create(:simple_application_plan, issuer: service_1)
+      plan_2 = FactoryBot.create(:simple_application_plan, issuer: service_2)
+      plan_3 = FactoryBot.create(:simple_application_plan, issuer: service_3)
 
       app_1 = FactoryBot.create(:simple_cinstance, plan: plan_1)
       app_2 = FactoryBot.create(:simple_cinstance, plan: plan_2)
@@ -208,6 +212,44 @@ module Abilities
 
       @member.stubs(admin_sections: [])
       assert_cannot ability, :manage, :portal
+    end
+
+    def test_index_services
+      @member.stubs(admin_sections: [:plans])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: [:policy_registry])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: [:monitoring])
+      assert_can ability, :index, Service
+
+      @member.stubs(admin_sections: %i[portal settings])
+      assert_cannot ability, :index, Service
+    end
+
+    %i[suspend resume].each do | action |
+      previous_state = action == :suspend ? 'approved' : 'suspended'
+
+      test "can #{action} a buyer if has :partners permission" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
+
+        assert_can ability, :suspend, buyer
+      end
+
+      test "can't #{action} a buyer if it doesn't have :partners permission" do
+        buyer = FactoryBot.create(:buyer_account, provider_account: @account, state: previous_state)
+
+        assert_cannot ability, :suspend, buyer
+      end
+
+      test "can't #{action} a buyer if it belongs to another provider" do
+        @member.member_permission_ids = [:partners]
+        buyer = FactoryBot.create(:buyer_account, state: previous_state)
+
+        assert_cannot ability, :suspend, buyer
+      end
     end
 
     private

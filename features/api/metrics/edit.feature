@@ -18,15 +18,16 @@ Feature: Product > Integration > Metrics > Edit
       When the form is submitted with:
         | Friendly name | Aglio e oleo       |
         | Description   | Deliciously simple |
-      Then should see the flash message "The method was updated"
+      Then they should see a toast alert with text "The method was updated"
       And should see the following table:
         | Method       | Description        |
         | Aglio e oleo | Deliciously simple |
 
     Scenario: Deleting a method
       Given they go to the edit page of method "Carbonara"
-      When they follow "Delete" and confirm the dialog
-      Then should see the flash message "The method was deleted"
+      When they follow "Delete"
+      And confirm the dialog
+      Then they should see a toast alert with text "The method was deleted"
       And should not see method "Carbonara"
 
   Rule: Metrics
@@ -42,7 +43,7 @@ Feature: Product > Integration > Metrics > Edit
         | Friendly name | Dessert            |
         | Unit          | serving            |
         | Description   | Last but not least |
-      Then should see the flash message "The metric was updated"
+      Then they should see a toast alert with text "The metric was updated"
       And should see the following table:
         | Metric  | Description        | Unit    |
         | Hits    | Number of API hits | hit     |
@@ -50,8 +51,9 @@ Feature: Product > Integration > Metrics > Edit
 
     Scenario: Deleting a metric
       Given they go to the edit page of metric "Pasta"
-      When they follow "Delete" and confirm the dialog
-      Then should see the flash message "The metric was deleted"
+      When they follow "Delete"
+      And confirm the dialog
+      Then they should see a toast alert with text "The metric was deleted"
       And should not see metric "Pasta"
 
     Scenario: Default metric can't be deleted
@@ -61,6 +63,7 @@ Feature: Product > Integration > Metrics > Edit
     Scenario: Cannot delete a metric used in the latest gateway configuration
       Given metric "Pasta" is used in the latest gateway configuration
       When they go to the edit page of metric "Pasta"
-      And follow "Delete" and confirm the dialog
-      Then should see the flash message "Metric is used by the latest gateway configuration and cannot be deleted"
+      And follow "Delete"
+      And confirm the dialog
+      Then they should see a toast alert with text "Metric is used by the latest gateway configuration and cannot be deleted"
       And should see metric "Pasta"

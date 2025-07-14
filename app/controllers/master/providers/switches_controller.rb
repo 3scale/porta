@@ -6,17 +6,19 @@ module Master
       before_action :find_switch
 
       def update
-        head(@switch.allow ? :found : :not_modified, location: :back)
+        status = @switch.allow ? :found : :not_modified
+        redirect_back_or_to(back_url, status: status)
       end
 
       def destroy
-        head(@switch.deny ? :found : :not_modified, location: :back)
+        status = @switch.deny ? :found : :not_modified
+        redirect_back_or_to(back_url, status: status)
       end
 
       protected
 
       def back_url
-        request.referer
+        admin_buyers_account_path(@provider)
       end
 
       def find_switch

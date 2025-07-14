@@ -481,7 +481,9 @@ System::Database::Postgres.define do
 
   trigger 'event_store_events' do
     <<~SQL
-      NEW.tenant_id := NEW.provider_id;
+      IF NEW.provider_id <> master_id THEN
+        NEW.tenant_id := NEW.provider_id;
+      END IF;
     SQL
   end
 
@@ -507,9 +509,7 @@ System::Database::Postgres.define do
 
   trigger 'onboardings' do
     <<~SQL
-      IF NEW.account_id <> master_id THEN
-        NEW.tenant_id := NEW.account_id;
-      END IF;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id;
     SQL
   end
 
@@ -567,6 +567,20 @@ System::Database::Postgres.define do
     <<~SQL
       IF NEW.account_id <> master_id THEN
           NEW.tenant_id := NEW.account_id;
+      END IF;
+    SQL
+  end
+
+  trigger 'annotations' do
+    definitions = Annotating.models.map do |model|
+      [
+        "NEW.annotated_type = '#{model}'",
+        "SELECT tenant_id INTO NEW.tenant_id FROM #{model.table_name} WHERE id = NEW.annotated_id AND tenant_id <> master_id;"
+      ]
+    end
+
+    <<~SQL
+      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSEIF ")}
       END IF;
     SQL
   end

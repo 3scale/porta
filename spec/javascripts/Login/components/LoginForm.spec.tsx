@@ -8,8 +8,13 @@ import type { FocusEvent } from 'react'
 import type { Props } from 'Login/components/LoginForm'
 
 const defaultProps: Props = {
-  flashMessages: [],
+  alerts: [],
   providerSessionsPath: 'sessions-path',
+  recaptcha: {
+    enabled: false,
+    siteKey: '',
+    action: ''
+  },
   session: { username: null }
 }
 

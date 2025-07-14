@@ -47,6 +47,7 @@ module Backend
       REWRITER = ->(service) do
         service.update_backend_service
         service.service_tokens.find_each(&ServiceTokenService.method(:update_backend))
+        service.send(:update_notification_settings)
       end
     end
 
@@ -86,7 +87,7 @@ module Backend
         raise ArgumentError, ':class_name or :scope arguments must be provided' if klass.blank?
 
         rewriter = Backend::StorageRewrite.const_get("#{klass}Rewriter")
-        rewriter.rewrite({ **kwargs, log_progress: log_progress})
+        rewriter.rewrite(**kwargs, log_progress: log_progress)
       end
 
       # Schedule all objects for all providers, or execute inline
@@ -130,14 +131,8 @@ module Backend
         rewrite(scope: collection)
       end
 
-      # This logger just prints out a message to STDOUT, with new line before and after.
-      # New line before is to make progress log look better
       def logger
-        @logger ||= begin
-          log = ActiveSupport::Logger.new($stdout)
-          log.formatter = ->(_, _, _, msg) { "\n#{msg.is_a?(String) ? msg : msg.inspect}\n" }
-          log
-        end
+        @logger ||= ProgressCounter.stdout_logger
       end
 
       # All accounts eligible for backend sync

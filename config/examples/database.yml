@@ -3,7 +3,8 @@ when /^oracle/ %>
 base: &default
   adapter: oracle_enhanced
   url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
+  encoding: utf8
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   statement_limit: <%= ENV.fetch('ORACLE_STATEMENT_LIMIT', 250) %>
 
 development:
@@ -15,22 +16,26 @@ test:
 
 production:
   <<: *default
-  url: <%= "#{ENV['DATABASE_URL']}production" %>
 
 <% when /^postgresql/ %>
 base: &default
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
-  encoding: unicode
+  encoding: utf8
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   variables:
     timezone: 'UTC'
+  sslmode: <%= ENV.fetch('DATABASE_SSL_MODE', ENV.fetch('DATABASE_SSL_CA', nil) ? 'verify-full' : 'disable') %>
+  sslrootcert: <%= ENV['DATABASE_SSL_CA'] %>
+  sslcert: <%= ENV['DATABASE_SSL_CERT'] %>
+  sslkey: <%= ENV['DATABASE_SSL_KEY'] %>
+
 development:
   <<: *default
 
 test:
   <<: *default
-  url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
+  url: <%= "#{ENV['DATABASE_URL'].delete_suffix("_development")}test#{ENV['TEST_ENV_NUMBER']}" %>
 
 production:
   <<: *default
@@ -38,9 +43,14 @@ production:
 <% else; db_host = ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
 base: &default
   adapter: mysql2
+  url: <%= ENV['DATABASE_URL'] %>
   encoding: utf8
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   collation: utf8_bin
-  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
+  ssl_mode: <%= ENV.fetch('DATABASE_SSL_MODE', ENV.fetch('DATABASE_SSL_CA', nil) ? 'verify_identity' : 'disabled') %>
+  sslca: <%= ENV['DATABASE_SSL_CA'] %>
+  sslcert: <%= ENV['DATABASE_SSL_CERT'] %>
+  sslkey: <%= ENV['DATABASE_SSL_KEY'] %>
 
 development:
   <<: *default
@@ -52,5 +62,4 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_production") %>
 <% end %>

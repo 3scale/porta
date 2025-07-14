@@ -29,17 +29,41 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    service_2 = FactoryBot.create(:service, account: @provider)
+    service_3 = FactoryBot.create(:service, account: @provider)
+    @provider.reload
+    application_plan_2 = FactoryBot.create(:application_plan, issuer: service_2)
+    application_plan_3 = FactoryBot.create(:application_plan, issuer: service_3)
+    application_2 = FactoryBot.create(:cinstance, plan: application_plan_2, user_account: @buyer)
+    FactoryBot.create(:cinstance, plan: application_plan_3, user_account: @buyer)
 
     get(admin_api_applications_path)
     assert_response :forbidden
     get admin_api_applications_path, params: { access_token: token.value }
     assert_response :success
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+    assert_select "applications/application", false
+
+    user.update(member_permission_service_ids: [@service.id])
+    get admin_api_applications_path, params: { access_token: token.value, service_id: service_2.id }
+    assert_response :success
+    assert_select "applications/application", false
+
+    user.update(member_permission_service_ids: [@service.id, service_2.id])
+    get admin_api_applications_path, params: { access_token: token.value }
+    assert_response :success
+    assert_select "applications/application", 2
+    assert_select "applications/application/id", @application.id.to_s
+    assert_select "applications/application/service_id", @service.id.to_s
+    assert_select "applications/application/id", application_2.id.to_s
+    assert_select "applications/application/service_id", service_2.id.to_s
+
     get admin_api_applications_path, params: { access_token: token.value, service_id: @service.id }
     assert_response :success
+    assert_select "applications/application", 1
+    assert_select "applications/application/id", @application.id.to_s
+    assert_select "applications/application/service_id", @service.id.to_s
   end
 
   # Provider key
@@ -150,24 +174,6 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
   pending_test 'index returns fields defined'
 
-  test 'return 404 on non found app' do
-    get find_admin_api_applications_path(format: :xml), params: { user_key: "SHAWARMA", provider_key: @provider.api_key }
-
-    assert_xml_404
-  end
-
-  test 'find by user_key on backend v1' do
-    @service.backend_version = '1'
-    @service.save!
-
-    get find_admin_api_applications_path(format: :xml), params: { user_key: @application.user_key, provider_key: @provider.api_key }
-
-    assert_response :success
-    assert_application(@response.body,
-                       { id: @application.id,
-                         user_key: @application.user_key })
-  end
-
   test 'find by app_id on backend v2' do
     @service.backend_version = '2'
     @service.save!
@@ -207,6 +213,117 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
                          application_id: @application.application_id, oidc: true})
   end
 
+  test "find by app_id with service_id" do
+    @service.backend_version = '2'
+    @service.save!
+
+    get find_admin_api_applications_path(format: :xml), params: { app_id: @application.application_id,
+                                                                  service_id: @service.id,
+                                                                  provider_key: @provider.api_key }
+
+    assert_response :success
+    assert_application(@response.body,
+                       { id: @application.id,
+                         user_account_id: @buyer.id,
+                         application_id: @application.application_id })
+
+    another_service = FactoryBot.create(:service, account: @provider)
+
+    get find_admin_api_applications_path(format: :xml), params: { app_id: @application.application_id,
+                                                                  service_id: another_service.id,
+                                                                  provider_key: @provider.api_key }
+
+    assert_response :not_found
+  end
+
+  test "find by application_id with service_id" do
+    @service.backend_version = '2'
+    @service.save!
+
+    get find_admin_api_applications_path(format: :xml), params: { application_id: @application.id,
+                                                                  service_id: @service.id,
+                                                                  provider_key: @provider.api_key }
+
+    assert_response :success
+    assert_application(@response.body,
+                       { id: @application.id,
+                         user_account_id: @buyer.id,
+                         application_id: @application.application_id })
+
+    another_service = FactoryBot.create(:service, account: @provider)
+
+    get find_admin_api_applications_path(format: :xml), params: { application_id: @application.id,
+                                                                  service_id: another_service.id,
+                                                                  provider_key: @provider.api_key }
+
+    assert_response :not_found
+  end
+
+  test 'find by non-existing user_key' do
+    get find_admin_api_applications_path(format: :xml), params: { user_key: "SHAWARMA", provider_key: @provider.api_key }
+
+    assert_xml_404
+  end
+
+  test 'find by user_key on backend v1' do
+    @service.backend_version = '1'
+    @service.save!
+
+    get find_admin_api_applications_path(format: :xml), params: { user_key: @application.user_key, provider_key: @provider.api_key }
+
+    assert_response :success
+    assert_application(@response.body,
+                       { id: @application.id,
+                         user_key: @application.user_key })
+  end
+
+  test 'find by user_key with correct service_id' do
+    @service.backend_version = '1'
+    @service.save!
+
+    get find_admin_api_applications_path(format: :xml), params: { user_key: @application.user_key,
+                                                                  provider_key: @provider.api_key,
+                                                                  service_id: @service.id }
+
+    assert_response :success
+    assert_application(@response.body,
+                       { id: @application.id,
+                         user_key: @application.user_key })
+  end
+
+  test 'find by user_key with incorrect service_id' do
+    @service.backend_version = '1'
+    @service.save!
+
+    another_service = FactoryBot.create(:service, account: @provider)
+
+    get find_admin_api_applications_path(format: :xml), params: { user_key: @application.user_key,
+                                                                  provider_key: @provider.api_key,
+                                                                  service_id: another_service.id }
+
+    assert_response :not_found
+  end
+
+  test 'find by user_key when there are two apps with the same user key' do
+    @service.backend_version = '1'
+    @service.save!
+
+    another_service = FactoryBot.create(:service, account: @provider, backend_version: '1')
+    another_app = FactoryBot.create(:cinstance,
+                                    service: another_service,
+                                    plan: FactoryBot.create(:application_plan, issuer: another_service),
+                                    user_key: @application.user_key)
+
+    get find_admin_api_applications_path(format: :xml), params: { user_key: @application.user_key,
+                                                                  provider_key: @provider.api_key,
+                                                                  service_id: another_service.id }
+
+    assert_application(@response.body, {
+                       id: another_app.id,
+                       service_id: another_service.id,
+                       user_key: another_app.user_key })
+  end
+
   test 'return the oidc_configuration' do
     @service.backend_version = 'oidc'
     @service.save!
@@ -224,41 +341,6 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     assert json.dig('application', 'oidc_configuration', 'standard_flow_enabled')
     assert_not json.dig('application', 'oidc_configuration', 'implicit_flow_enabled')
     assert_not json.dig('application', 'oidc_configuration', 'direct_access_grants_enabled')
-  end
-
-  test 'find by id (application_id) on any backend' do
-    @service.backend_version = 'oauth'
-    @service.save!
-
-    get find_admin_api_applications_path(format: :xml), params: { application_id: @application.id, provider_key: @provider.api_key }
-
-    assert_response :success
-    assert_application(@response.body,
-                       { id: @application.id,
-                         user_account_id: @buyer.id,
-                         application_id: @application.application_id })
-
-    @service.backend_version = '2'
-    @service.save!
-
-    get find_admin_api_applications_path(format: :xml), params: { application_id: @application.id, provider_key: @provider.api_key }
-
-    assert_response :success
-    assert_application(@response.body,
-                       { id: @application.id,
-                         user_account_id: @buyer.id,
-                         application_id: @application.application_id })
-
-    @service.backend_version = '1'
-    @service.save!
-
-    get find_admin_api_applications_path(format: :xml), params: { application_id: @application.id, provider_key: @provider.api_key }
-
-    assert_response :success
-    assert_application(@response.body,
-                       { id: @application.id,
-                         user_account_id: @buyer.id,
-                         user_key: @application.user_key  })
   end
 
   test 'security wise: applications is access denied in buyer side' do

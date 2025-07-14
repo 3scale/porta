@@ -227,6 +227,22 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
   end
 
+  def test_credit_card_unstore_failed
+    provider = FactoryBot.create(:simple_provider, id: 1)
+    account  = FactoryBot.build_stubbed(:simple_buyer, id: 2, name: 'Alex', provider_account: provider)
+    event    = Accounts::CreditCardUnstoreFailedEvent.create(account, "just a test")
+    mail     = NotificationMailer.credit_card_unstore_failed(event, receiver)
+
+    assert_equal "Failed to unstore #{account.name}'s credit card", mail.subject
+    assert_equal [receiver.email], mail.to
+
+    [mail.html_part.body, mail.text_part.body].each do |body|
+      assert_includes body.encoded, 'Dear Foobar Admin'
+      assert_includes body.encoded, "failed to unstore from your payment provider #{account.provider_payment_gateway.try!(:display_name)}"
+      assert_includes body.encoded, "the credit card '#{account.credit_card_partial_number}' of #{account.name}"
+    end
+  end
+
   def test_cinstance_cancellation
     event = Cinstances::CinstanceCancellationEvent.create(application)
     mail  = NotificationMailer.cinstance_cancellation(event, receiver)
@@ -552,7 +568,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   end
 
   def application
-    @_application ||= FactoryBot.build_stubbed(:simple_cinstance, name: 'Some Name')
+    @_application ||= FactoryBot.create(:simple_cinstance, name: 'Some Name', application_id: 'application_id_test')
   end
 
   def url_helpers

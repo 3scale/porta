@@ -12,7 +12,7 @@ class PlanTest < ActiveSupport::TestCase
   should validate_numericality_of :cost_per_month
 
   should belong_to :issuer
-  should have_many(:cinstances).dependent(:destroy)
+  should have_many(:contracts).dependent(:destroy)
   should have_many(:customizations).dependent(:destroy)
 
   should belong_to :original

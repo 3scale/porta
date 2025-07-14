@@ -11,11 +11,11 @@ Feature: Settings management
     And I go to the usage rules settings page
     When I check "Strong passwords"
     And I press "Update Settings"
-    Then I should see the settings updated
+    Then they should see a toast alert with text "Settings updated"
     And the provider should have strong passwords enabled
     When I uncheck "Strong passwords"
     And I press "Update Settings"
-    Then I should see the settings updated
+    Then they should see a toast alert with text "Settings updated"
     And the provider should have strong passwords disabled
 
   Scenario: Account approval required checkbox is enabled

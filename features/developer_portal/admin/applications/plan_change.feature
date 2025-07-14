@@ -2,7 +2,9 @@
 Feature: Developer portal change application plan
 
   Background:
-    Given a provider
+    Given a provider "foo.3scale.localhost"
+    And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
+    And admin of account "foo.3scale.localhost" has notification "cinstance_plan_changed" enabled
     And the provider has "multiple_services" visible
     And the provider has "service_plans" visible
     And a product "The API"
@@ -22,7 +24,7 @@ Feature: Developer portal change application plan
     And follow "Enterprise"
     And press "Request Plan Change"
     Then should see the flash message "A request to change your application plan has been sent"
-    And a message should be sent from buyer "Jane" to the provider with subject "API System: Plan change request" and body "Jane are requesting to have their plan changed to Enterprise"
+    And "admin@foo.3scale.localhost" should receive an email with subject "Action required: Jane from Jane requested an app plan change"
 
   Scenario: Change an application's plan directly
     Given all the rolling updates features are off
@@ -31,8 +33,8 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Change Plan"
-    Then should see the flash message "Plan change was successful."
-    And a message should be sent from buyer "Jane" to the provider with subject "API System: Application plan change" and body "plan from Developer to Enterprise"
+    Then should see the flash message "Plan change was successful"
+    And "admin@foo.3scale.localhost" should receive an email with subject "Application My App has changed to plan Enterprise"
 
   Scenario: Without a credit card, changing an application's plan requires approval
     Given all the rolling updates features are off
@@ -41,8 +43,8 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Request Plan Change"
-    Then they should see "A request to change your application plan has been sent."
-    And a message should be sent from buyer "Jane" to the provider with subject "API System: Plan change request" and body "Jane are requesting to have their plan changed to Enterprise"
+    Then they should see "A request to change your application plan has been sent"
+    And "admin@foo.3scale.localhost" should receive an email with subject "Action required: Jane from Jane requested an app plan change"
 
   Scenario: With a valid credit card, an application's plan can be changed directly
     Given all the rolling updates features are off
@@ -52,7 +54,7 @@ Feature: Developer portal change application plan
     And follow "Review/Change"
     And follow "Enterprise"
     And press "Change Plan"
-    Then they should see "Plan change was successful."
+    Then they should see "Plan change was successful"
 
   Scenario: Change plan workflow with credit card required without wizard
     Given the product allows to change application plan with credit card required
@@ -75,7 +77,7 @@ Feature: Developer portal change application plan
     # TODO: We need to mock useBraintreeHostedFields for this test work, or the form won't even submit
     # Then I enter my credit card details
     # And I press "Confirm"
-    # Then I should see "Plan change was successful."
+    # Then I should see "Plan change was successful"
     # And a message should be sent from buyer to provider with plan change details from free to paid
 
   # This is the behaviour for existing provider as of 05-07-2016

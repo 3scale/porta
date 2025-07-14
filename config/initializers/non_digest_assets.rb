@@ -4,4 +4,4 @@ NonStupidDigestAssets.whitelist += %w(
   tree-line.png
   3scale-logo.png
   error.css
-)
+) if defined?(NonStupidDigestAssets) # container image excludes the assets gem group

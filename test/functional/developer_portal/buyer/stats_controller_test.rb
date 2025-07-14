@@ -77,10 +77,10 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
         @live_app1 = @buyer.buy! @app_plan
         @hits = @provider.default_service.metrics.first
 
-        disabled_metric = FactoryBot.create(:metric, service: @provider.default_service)
+        disabled_metric = FactoryBot.create(:metric, owner: @provider.default_service)
         disabled_metric.disable_for_plan @app_plan
 
-        hidden_metric = FactoryBot.create(:metric, service: @provider.default_service)
+        hidden_metric = FactoryBot.create(:metric, owner: @provider.default_service)
         hidden_metric.toggle_visible_for_plan(@app_plan)
       end
 

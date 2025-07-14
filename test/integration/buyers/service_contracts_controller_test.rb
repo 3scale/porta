@@ -56,7 +56,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
         delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path }
 
         assert_response :redirect
-        assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:error]
+        assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:danger]
       end
     end
 
@@ -67,7 +67,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path }
 
       assert_response :redirect
-      assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:error]
+      assert_match I18n.t('service_contracts.unsubscribe_failure'), flash[:danger]
     end
 
     test 'unauthorized access master_on_premises' do
@@ -75,22 +75,6 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       ThreeScale.stubs(master_on_premises?: true)
       get admin_buyers_account_service_contracts_path(account_id: provider.id)
       assert_response :forbidden
-    end
-
-    test 'renders a prompt if there is no default service plan' do
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
-
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).include?('Please select')
-    end
-
-    test 'does not render a prompt if there is a default service plan' do
-      service.update(default_service_plan: service_plan)
-
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
-
-      page = Nokogiri::HTML4::Document.parse(response.body)
-      assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).exclude?('Please select')
     end
 
     test 'no n+1 queries on index' do
@@ -142,16 +126,16 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
         { params: { service_id: service.id } }
       }
 
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), request_options.call(service)
+      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), **request_options.call(service)
       assert_response :forbidden
 
       member.member_permission_ids = ['partners']
       member.save!
 
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), request_options.call(service)
+      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), **request_options.call(service)
       assert_response :success
 
-      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), request_options.call(forbidden_service)
+      get new_admin_buyers_account_service_contract_path(account_id: buyer1.id), **request_options.call(forbidden_service)
       assert_response :not_found
     end
 
@@ -167,16 +151,16 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), request_options.call(service, other_service_plan)
+      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), **request_options.call(service, other_service_plan)
       assert_response :forbidden
 
       member.member_permission_ids = ['partners']
       member.save!
 
-      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), request_options.call(service, other_service_plan)
+      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), **request_options.call(service, other_service_plan)
       assert_response :success
 
-      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), request_options.call(forbidden_service, forbidden_service_plan)
+      post admin_buyers_account_service_contracts_path(account_id: buyer1.id), **request_options.call(forbidden_service, forbidden_service_plan)
       assert_response :not_found
     end
 
@@ -203,35 +187,35 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options.call(other_service_plan)
+      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options.call(other_service_plan)
       assert_response :forbidden
 
       member.member_permission_ids = ['partners']
       member.save!
 
-      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options.call(other_service_plan)
+      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options.call(other_service_plan)
       assert_response :success
 
-      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options.call(forbidden_service_plan)
+      put admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options.call(forbidden_service_plan)
       assert_response :not_found
 
-      put admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), request_options.call(other_service_plan)
+      put admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), **request_options.call(other_service_plan)
       assert_response :not_found
     end
 
     test 'approve' do
       request_options = { headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path } }
 
-      post approve_admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options
+      post approve_admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options
       assert_response :forbidden
 
       member.member_permission_ids = ['partners']
       member.save!
 
-      post approve_admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options
+      post approve_admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options
       assert_response :redirect
 
-      post approve_admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), request_options
+      post approve_admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), **request_options
       assert_response :not_found
     end
 
@@ -239,17 +223,17 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       buyer1.bought_cinstances.by_service_id(service_contract.service_id).update_all(state: 'suspended')
       request_options = { headers: { 'HTTP_REFERER' => admin_buyers_service_contracts_path } }
 
-      delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options
+      delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options
       assert_response :forbidden
 
       member.member_permission_ids = ['partners']
       member.save!
 
-      delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), request_options
+      delete admin_buyers_account_service_contract_path(service_contract.id, account_id: buyer1.id), **request_options
       assert_response :redirect
       assert_raise(ActiveRecord::RecordNotFound) { service_contract.reload }
 
-      delete admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), request_options
+      delete admin_buyers_account_service_contract_path(forbidden_service_contract.id, account_id: buyer1.id), **request_options
       assert_response :not_found
     end
   end

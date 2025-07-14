@@ -1,10 +1,14 @@
 module Authentication
   module Strategy
-    class Cas < Internal
+    class Cas < Base
+
+      def self.expected_params
+        %i[ticket]
+      end
 
       def authenticate params
 
-        return super unless params[:ticket]
+        return unless params[:ticket]
 
         res = HTTPClient.get validate_url_with_query params[:ticket]
 
@@ -51,7 +55,7 @@ module Authentication
       end
 
       def login_url_with_service
-        login_url + "?service=" + URI.escape(service)
+        "#{login_url}?#{{service: service}.to_param}"
       end
 
       # /validate path is standard for CAS servers
@@ -60,7 +64,7 @@ module Authentication
       end
 
       def validate_url_with_query ticket
-        validate_url + "?" + {:service => service, :ticket => ticket}.to_param
+        "#{validate_url}?#{{:service => service, :ticket => ticket}.to_param}"
       end
 
       def service

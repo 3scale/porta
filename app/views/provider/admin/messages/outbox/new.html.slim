@@ -1,34 +1,9 @@
 - content_for :title, 'Compose'
 - content_for :page_header_title, 'Compose'
 
-- is_modal = request.xhr?
-- formClass = "pf-c-form pf-m-limit-width #{is_modal ? 'remote' : ''}"
-
-- sending_to_all = current_account.provider? && params[:to].nil? && @message.to.size == current_account.buyer_accounts.size
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form'
 
 div class="pf-c-card"
   div class="pf-c-card__body"
-    = semantic_form_for @message, url: provider_admin_messages_outbox_index_path, html: { class: formClass } do |form|
-      - if sending_to_all
-        div class="pf-c-alert pf-m-info pf-m-inline" aria-label="Inline information alert"
-          div class="pf-c-alert__icon"
-            i class="fas fa-fw fa-info-circle" aria-hidden="true"
-          p class="pf-c-alert__title"
-            ' If you want to send a message to a particular user, go to the
-            = link_to 'accounts page', admin_buyers_accounts_path
-            ' , click on the user and then click on the send message icon.
-
-      = form.input :to, as: :patternfly_input, readonly: true, input_html: { readonly: true, value: sending_to_all ? 'All Users' : @message.to.map(&:org_name).join(', '), name: nil }
-      = form.input :subject, as: :patternfly_input, input_html: { type: 'text', required: true }
-      = form.input :body, as: :patternfly_textarea, input_html: { type: 'text', rows: 10, required: true }, required: true
-      - if params[:to]
-        = hidden_field_tag :to, params[:to]
-
-      = form.actions do
-        button class="pf-c-button pf-m-primary" type="submit" Send message
-        = link_to 'Cancel', provider_admin_messages_root_path, class: "pf-c-button pf-m-link #{is_modal ? 'fancybox-close' : ''}"
-
-css:
-  div#cboxLoadedContent {
-    width: auto !important;
-  }
+    = render partial: 'form'

@@ -17,7 +17,7 @@ module EventStore
     class_attribute :raise_errors, instance_accessor: false
 
     self.raise_errors = Rails.env.development?
-    self.repository = RailsEventStoreActiveRecord::EventRepository.new(adapter: EventStore::Event)
+    self.repository = EventStore::ActiveRecordEventRepository.new(adapter: EventStore::Event)
 
     class << self
       delegate :adapter, to: :repository
@@ -108,6 +108,7 @@ module EventStore
       end
     end
 
+    # rubocop:disable Lint/MissingSuper
     def initialize(repository = self.class.repository, event_broker = EventBroker.new)
       @client = ::RailsEventStore::Client.new(repository: repository, event_broker: event_broker)
       @facade = Facade.new(repository, event_broker)
@@ -125,6 +126,7 @@ module EventStore
       subscribe_for_notification(:account_deleted, Accounts::AccountDeletedEvent)
       subscribe_for_notification(:account_plan_change_requested, Accounts::AccountPlanChangeRequestedEvent)
       subscribe_for_notification(:account_state_changed, Accounts::AccountStateChangedEvent)
+      subscribe_for_notification(:credit_card_unstore_failed, Accounts::CreditCardUnstoreFailedEvent)
       subscribe_for_notification(:expired_credit_card_provider, Accounts::ExpiredCreditCardProviderEvent)
       # alerts
       subscribe_for_notification(:limit_violation_reached_provider, Alerts::LimitViolationReachedProviderEvent)
@@ -166,6 +168,7 @@ module EventStore
       subscribe_event(ProxyConfigEventSubscriber.new, ProxyConfigs::AffectingObjectChangedEvent)
       subscribe_event(ZyncSubscriber.new, ZyncEvent)
     end
+    # rubocop:enable Lint/MissingSuper
 
     delegate :publish_event, to: :facade
 

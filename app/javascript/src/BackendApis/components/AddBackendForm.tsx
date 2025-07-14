@@ -13,7 +13,7 @@ import {
 
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { notice } from 'utilities/flash'
+import { toast } from 'utilities/toast'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
@@ -24,6 +24,7 @@ import type { Backend } from 'Types'
 interface Props {
   backend: Backend | null;
   backends: Backend[];
+  canCreateBackend: boolean;
   url: string;
   inlineErrors: {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
@@ -36,6 +37,7 @@ interface Props {
 const AddBackendForm: FunctionComponent<Props> = ({
   backend: initialBackend,
   backends,
+  canCreateBackend,
   url,
   backendsPath,
   inlineErrors
@@ -49,7 +51,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
   const isFormComplete = backend !== null
 
   const handleOnCreateBackend = (newBackend: Backend) => {
-    notice('Backend created')
+    toast('Backend created', 'success')
     setIsModalOpen(false)
     setBackend(newBackend)
     setUpdatedBackends([newBackend, ...updatedBackends])
@@ -80,6 +82,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
               <BackendSelect
                 backend={backend}
                 backends={updatedBackends}
+                canCreateBackend={canCreateBackend}
                 error={inlineErrors?.backend_api_id?.[0]}
                 searchPlaceholder="Find a backend"
                 onCreateNewBackend={() => { setIsModalOpen(true) }}
@@ -99,7 +102,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
                   type="submit"
                   variant="primary"
                 >
-                Add to product
+                  Add to product
                 </Button>
               </ActionGroup>
             </Form>
@@ -109,7 +112,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
 
       <NewBackendModal
         backendsPath={backendsPath}
-        isOpen={isModalOpen}
+        isOpen={canCreateBackend && isModalOpen}
         onClose={() => { setIsModalOpen(false) }}
         onCreateBackend={handleOnCreateBackend}
       />

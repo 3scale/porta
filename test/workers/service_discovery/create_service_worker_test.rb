@@ -5,7 +5,6 @@ require 'test_helper'
 module ServiceDiscovery
   class CreateServiceWorkerTest < ActiveSupport::TestCase
     setup do
-      ThreeScale.config.service_discovery.stubs(enabled: true)
       @user = nil
     end
 

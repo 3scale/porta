@@ -3,8 +3,20 @@
 module ApplicationsControllerMethods
   def self.included(base)
     base.class_eval do
-      helper_method :accessible_services
+      helper_method :accessible_services, :presenter
+      attr_reader :presenter
     end
+  end
+
+  def index
+    @presenter = ApplicationsIndexPresenter.new(application_plans: @application_plans,
+                                                accessible_services: accessible_services,
+                                                service: @service,
+                                                provider: current_account,
+                                                accessible_plans: accessible_plans,
+                                                buyer: @account,
+                                                user: current_user,
+                                                params: params)
   end
 
   protected
@@ -15,24 +27,16 @@ module ApplicationsControllerMethods
     @cinstance.validate_human_edition!
   end
 
-  def define_search_scope(opts = {})
-    @search = ThreeScale::Search.new(params[:search] || params)
-    @search.account = params['account_id'] if params.key?('account_id')
-    @search.plan_id = params['application_plan_id'] if params.key?('application_plan_id')
-    @search.merge!(opts)
-  end
-
   def change_state(action, message, *rest)
     @cinstance.public_send("#{action}!", *rest)
 
     respond_to do |format|
       format.html do
-        flash[:notice] = message
-        redirect_to provider_admin_application_url(@cinstance)
+        redirect_to provider_admin_application_url(@cinstance), success: message
       end
 
       format.js do
-        flash.now[:notice] = message
+        flash.now[:success] = message
         render action: 'update_state'
       end
     end
@@ -42,17 +46,8 @@ module ApplicationsControllerMethods
     @states = Cinstance.allowed_states.collect(&:to_s).sort
   end
 
-  def find_applications
-    define_search_scope
-    @cinstances = accessible_not_bought_cinstances.scope_search(@search)
-                                                  .order_by(params[:sort], params[:direction])
-                                                  .preload(:service, user_account: %i[admin_user], plan: %i[pricing_rules])
-                                                  .paginate(pagination_params)
-                                                  .decorate
-  end
-
   def find_cinstance
-    @cinstance = accessible_not_bought_cinstances.includes(plan: %i[service original plan_metrics pricing_rules])
+    @cinstance = accessible_not_bought_cinstances.includes(plan: %i[service pricing_rules])
                                                  .find(params[:id])
   end
 

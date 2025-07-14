@@ -1,12 +1,32 @@
-- content_for :page_header_title, 'Notification Preferences'
-- content_for :page_header_body do
-  ' Events originate from interactions with the 3scale interface & the 3scale API. They can be
-  ' triggered by developers, you, your team & 3scale. You will only receive API-related
-  ' notifications for those APIs that you have access to.
+- content_for :page_header_title, t('.header_title')
+- content_for :page_header_body, t('.header_body')
 
-- if @preferences_form.categories.blank?
-  p= t('.no_notification_preferences_html', account_name: current_user.account.name,
-                                            username: current_user.account.first_admin.username,
-                                            email: current_user.account.first_admin.email)
+- categories = @preferences.categories
+
+- if categories.blank?
+  - admin = current_user.account.first_admin
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body_html', account: current_user.account.name, username: admin.username, email: admin.email),
+                                                    icon: :lock }
 - else
-  = render 'form', preferences_form: @preferences_form
+  - content_for :javascripts do
+    = stylesheet_packs_chunks_tag 'pf_form'
+
+  div class="pf-c-card"
+    div class="pf-c-card__body"
+      = semantic_form_for @preferences.model, url: provider_admin_user_notification_preferences_path,
+                                              builder: Fields::PatternflyFormBuilder,
+                                              method: :patch,
+                                              html: { class: 'pf-c-form pf-m-limit-width' } do |f|
+
+        /! Hidden input to allow disabling all notifications
+        = hidden_field_tag 'notification_preferences[enabled_notifications][]', '', id: nil
+        - categories.each do |category|
+          = f.inputs t(category.title_key, scope: :notification_category_titles) do
+            = f.input :enabled_notifications, as: :patternfly_check_boxes,
+                                              label: false,
+                                              collection: category.notifications.map { |value| [t(value, scope: :notification_preference_titles), value] },
+                                              member_hint: ->(value) { t(value, scope: :notification_preference_hints) }
+
+        = f.actions do
+          = f.commit_button t('.submit_button_label')

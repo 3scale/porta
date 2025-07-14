@@ -13,7 +13,8 @@ Feature: CMS Changes
     Then I should see 2 CMS changes
 
   Scenario: Revert page
-    Given I have changed CMS page "page"
+    Given I have changed CMS page "Users"
     When I go to the CMS changes
     And I follow "Revert"
-    Then the CMS page "page" should be reverted
+    Then they should see a toast alert with text "Template reverted"
+    And the CMS page "Users" should be reverted

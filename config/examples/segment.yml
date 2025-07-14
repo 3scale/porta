@@ -1,7 +1,6 @@
 base: &default
-  enabled: false
-  stub: false
-  write_key: 'null'
+  enabled: <%= ENV['SEGMENT_WRITE_KEY'].present? %>
+  write_key: <%= ENV['SEGMENT_WRITE_KEY'] %>
 
 development:
   <<: *default

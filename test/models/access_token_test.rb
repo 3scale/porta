@@ -175,6 +175,42 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert_equal expected_audited_changes, audit.audited_changes
   end
 
+  test 'expiration time is not mandatory' do
+    access_token = FactoryBot.build(:access_token)
+
+    assert access_token.valid?
+  end
+
+  test "expiration time can be blank" do
+    access_token = FactoryBot.build(:access_token, expires_at: '')
+
+    assert access_token.valid?
+  end
+
+  test "expiration time can be nil" do
+    access_token = FactoryBot.build(:access_token, expires_at: nil)
+
+    assert access_token.valid?
+  end
+
+  test "expiration time can't be invalid" do
+    access_token = FactoryBot.build(:access_token, expires_at: 'invalid')
+
+    assert_not access_token.valid?
+  end
+
+  test "expiration time can't be in the past" do
+    access_token = FactoryBot.build(:access_token, expires_at: 1.day.ago.utc.iso8601)
+
+    assert_not access_token.valid?
+  end
+
+  test "expiration time accepts a valid ISO 8601 datetime" do
+    access_token = FactoryBot.build(:access_token, expires_at: 1.year.from_now.utc.iso8601)
+
+    assert access_token.valid?
+  end
+
   private
 
   def assert_access_token_audit_all_data(access_token, audit)

@@ -9,6 +9,8 @@ import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 import type { AccountDataResponse, ApiDocsServices, BackendApiReportBody, BackendApiTransaction, BodyValue, BodyValueObject, FormData } from 'Types/SwaggerTypes'
 import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
+import type { Component } from 'react'
+import type { SwaggerUIContext, ParameterIncludeEmptyProperties } from 'swagger-ui-utils'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
   return `${baseUrl.replace(/\/$/, '')}${specPath}`
@@ -118,6 +120,18 @@ const RequestBodyTransformerPlugin: SwaggerUIPlugin = () => {
   }
 }
 
+const UncheckSendEmptyValuePlugin: SwaggerUIPlugin = () => {
+  return {
+    wrapComponents: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      ParameterIncludeEmpty: (originalComponent: Component, { React }: SwaggerUIContext ) => function ParameterIncludeEmptyWrapped (props: ParameterIncludeEmptyProperties) {
+        props.isIncludedOptions.defaultValue = false
+        return React.createElement(originalComponent, props)
+      }
+    }
+  }
+}
+
 export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, accountDataUrl: string): Promise<void> => {
   const apiSpecs: ApiDocsServices = await fetchData<ApiDocsServices>(apiDocsPath)
 
@@ -134,7 +148,7 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
       ]
     })
   })

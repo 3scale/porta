@@ -13,16 +13,15 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'show (access_token)' do
-    User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     feature = FactoryBot.create(:feature, featurable: @service)
-    user    = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user    = FactoryBot.create(:member, account: @provider, member_permission_ids: [:partners], member_permission_service_ids: [])
     token   = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     get admin_api_service_feature_path(@service, feature)
     assert_response :forbidden
     get admin_api_service_feature_path(@service, feature), params: { access_token: token.value }
     assert_response :not_found
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+    user.update(member_permission_service_ids: [@service.id])
     get admin_api_service_feature_path(@service, feature), params: { access_token: token.value }
     assert_response :success
   end
@@ -39,7 +38,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
     xml = Nokogiri::XML::Document.parse(@response.body)
 
-    assert_all_features_of_service xml, service
+    assert_all_features_available xml, service
   end
 
   test 'show' do

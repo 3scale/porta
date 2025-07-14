@@ -142,10 +142,10 @@ module AuthenticatedSystem
   # to the passed default.  Set an appropriately modified
   #   after_action :store_location, :only => [:index, :new, :show, :edit]
   # for any controller you want to be bounce-backable.
-  def redirect_back_or_default(default)
+  def redirect_back_or_default(default, **opts)
     url = URI.parse(url_for(session[:return_to] || default))
 
-    redirect_to(url.select(:path, :query).compact.join('?'))
+    redirect_to(url.select(:path, :query).compact.join('?'), **opts)
   ensure
     session[:return_to] = nil
   end
@@ -193,9 +193,9 @@ module AuthenticatedSystem
   # when you cross quarantine (logged-out to logged-in).
   def logout_killing_session!
     logout_keeping_session!
-    cms_token = session[:cms_token]
+    cms_edit = session[:cms_edit]
     reset_session
-    session[:cms_token] = cms_token if cms_token
+    session[:cms_edit] = cms_edit if cms_edit
   end
 
   # Remember_me Tokens

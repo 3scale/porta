@@ -1,5 +1,5 @@
 class IntegrationErrorsService
-  def list(service_id, page: 1, per_page: 100)
+  def list(service_id, page: 1, per_page: 20)
     pagination = { page: page, per_page: per_page }
     errors     = ThreeScale::Core::ServiceError.load_all(service_id, pagination)
 

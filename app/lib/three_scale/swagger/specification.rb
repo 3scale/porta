@@ -1,7 +1,12 @@
+# frozen_string_literal: true
+
 module ThreeScale
   module Swagger
     class Specification
       class VBase
+
+        attr_reader :doc, :errors, :validator
+
         def initialize(spec)
           @doc = spec.doc
           @errors = spec.errors
@@ -10,14 +15,14 @@ module ThreeScale
 
         # The base path of the specification. This is needed to have it whitelisted on api_docs_proxy.
         def base_path
-          @doc.fetch("basePath", nil).try(:downcase)
+          doc.fetch("basePath", nil).try(:downcase)
         end
 
         def servers
           [base_path]
         end
 
-        def validate!
+        def validate
           raise "#{self.class} should implement #{__method__}"
         end
 
@@ -26,14 +31,13 @@ module ThreeScale
         end
 
         def as_json
-          doc = Autocomplete.fix!(@doc)
-          Schemes.fix!(doc)
+          Schemes.fix!(Autocomplete.fix!(doc))
         end
       end
 
       class VInvalid < VBase
-        def validate!
-          @errors.add(:base, :invalid_version)
+        def validate
+          errors.add(:base, :invalid_version)
         end
 
         def swagger?
@@ -41,31 +45,35 @@ module ThreeScale
         end
       end
 
-      class V30 < VBase
+      class V3x < VBase
         def base_path
           servers.first
         end
 
-        JSON_SCHEMA = {'$ref' => 'https://spec.openapis.org/oas/3.0/schema/2019-04-02'}.freeze
-
-        def validate!
-          @validator.fully_validate(JSON_SCHEMA).each do |error|
-            @errors.add(:base, error)
+        def validate
+          JSONSchemer.openapi(doc).validate.to_a.map { _1.fetch('error') }.each do |error|
+            errors.add(:base, error)
           end
         end
 
+        # NOTE: it's technically OpenAPI, and not Swagger,
+        # but it is rendered by swagger-ui
         def swagger?
-          true # FIXME: Is it really!?
+          true
         end
 
         def servers
-          @servers ||= ThreeScale::OpenApi::UrlResolver.new(@doc).servers
+          @servers ||= ThreeScale::OpenApi::UrlResolver.new(doc).servers
         end
 
         def as_json
-          Autocomplete.fix!(@doc)
+          Autocomplete.fix!(doc)
         end
       end
+
+      class V31 < V3x; end
+
+      class V30 < V3x; end
 
       class V20 < VBase
         # NOTE:
@@ -74,17 +82,17 @@ module ThreeScale
         # To accomplish this we return an empty string.
         # ApiDocsProxy supports only http/s
         def base_path
-          schema = @doc.fetch("schemes", [])[0]
-          host   = @doc["host"]
+          schema = doc.fetch("schemes", [])[0]
+          host   = doc["host"]
           # TODO: join the basePath also
           (schema && host)? [schema, host].join("://") : ""
         end
 
         JSON_SCHEMA = {'$ref' => 'http://swagger.io/v2/schema.json#'}.freeze
 
-        def validate!
-          @validator.fully_validate(JSON_SCHEMA).each do |error|
-            @errors.add(:base, error)
+        def validate
+          validator.fully_validate(JSON_SCHEMA).each do |error|
+            errors.add(:base, error)
           end
         end
 
@@ -96,9 +104,9 @@ module ThreeScale
       class V12 < VBase
         JSON_SCHEMA = {'$ref' => 'http://swagger-api.github.io/schemas/v1.2/apiDeclaration.json#'}.freeze
 
-        def validate!
-          @validator.fully_validate(JSON_SCHEMA).each do |error|
-            @errors.add(:base, error)
+        def validate
+          validator.fully_validate(JSON_SCHEMA).each do |error|
+            errors.add(:base, error)
           end
         end
 
@@ -113,12 +121,12 @@ module ThreeScale
         #  - paramType=body on GET methods
         #  - invalid paramType
         #  - ∞ other things that could go wrong ™
-        def validate!
-          return if @errors.added? :base, :invalid_json
+        def validate
+          return if errors.added? :base, :invalid_json
 
-          apis = @doc.fetch('apis', nil)
+          apis = doc.fetch('apis', nil)
           unless apis.is_a?(Array)
-            @errors.add(:base, :invalid_swagger)
+            errors.add(:base, :invalid_swagger)
             return
           end
 
@@ -127,7 +135,7 @@ module ThreeScale
             if operation["parameters"]
               paramTypes = operation["parameters"].map{|e| e["paramType"]}.compact
               if paramTypes.include?("query") && paramTypes.include?("body")
-                @errors.add(:base, :invalid_json_body_and_query_paramtypes)
+                errors.add(:base, :invalid_json_body_and_query_paramtypes)
                 return # no need to continue to loop
               end
             end
@@ -161,7 +169,7 @@ module ThreeScale
         @version = init_version
       end
 
-      delegate :base_path, :servers, :validate!, :swagger?, :as_json, to: :@version
+      delegate :base_path, :servers, :validate, :swagger?, :as_json, to: :@version
 
       # Check if this specification is swagger thus it can be displayed in swagger-ui
       def swagger_1_2?
@@ -184,7 +192,7 @@ module ThreeScale
       end
 
       def valid?
-        validate!
+        validate
         @errors.empty?
       end
 

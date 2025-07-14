@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# This shell script is for compatibility with the 3scale operator
+exec "$@"

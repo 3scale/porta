@@ -1,14 +1,19 @@
+- account_name = @account.name
 - content_for :menu do
   = render '/buyers/accounts/menu'
 
-- content_for :page_header_title_with_button, "Applications for #{@account.name}"
-- content_for :page_header_button_label, 'Create application'
-- content_for :page_header_button_href, create_application_link_href(@account)
+- content_for :page_header_title, "Applications for #{account_name}"
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'
+- elsif presenter.empty_state?
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'plus-circle',
+                                                    primary: { title: t('.empty_state.primary'),
+                                                               href: presenter.create_application_link_href } }
 - else
-  = render 'shared/applications/listing', { applications: @cinstances,
+  = render 'shared/applications/listing', { applications: presenter.applications,
                                             application_plans: @application_plans,
                                             plan: @plan,
                                             account: @account,

@@ -1,13 +1,9 @@
 - content_for :page_header_title, 'Policies'
 
 - if @error.present?
-  div class="pf-c-empty-state pf-m-lg"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-exclamation-circle pf-c-empty-state__icon" aria-hidden="true"
-
-      h1 class="pf-c-title pf-m-lg" A valid APIcast Policies endpoint must be provided
-      div class="pf-c-empty-state__body"
-        = @error.message
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: @error.message,
+                                                    icon: 'exclamation-circle' }
 
 - else
   - content_for :javascripts do

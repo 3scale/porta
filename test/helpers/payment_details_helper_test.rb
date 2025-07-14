@@ -111,13 +111,15 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
     stubs(:merchant_countries).returns([])
     stubs(:braintree_authorization).returns('token')
     stubs(:billing_address).returns({})
+    stubs(:request).returns(ActionDispatch::Request.new('action_dispatch.remote_ip' => '123.123.123.123'))
 
     expected = {
       formActionPath: '/admin/account/braintree_blue/hosted_success',
       threeDSecureEnabled: true,
       clientToken: 'token',
       countriesList: [],
-      billingAddress: empty_billing_address_data
+      billingAddress: empty_billing_address_data,
+      ipAddress: '123.123.123.123'
     }
 
     assert_equal expected, braintree_form_data
@@ -128,6 +130,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
     stubs(:merchant_countries).returns([])
     stubs(:braintree_authorization).returns('token')
     stubs(:has_billing_address?).returns(true)
+    stubs(:request).returns(ActionDispatch::Request.new('action_dispatch.remote_ip' => '123.123.123.123'))
 
     account = FactoryBot.build(:account)
     stubs(:current_account).returns(account)
@@ -137,7 +140,8 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
       threeDSecureEnabled: true,
       clientToken: 'token',
       countriesList: [],
-      billingAddress: billing_address_data
+      billingAddress: billing_address_data,
+      ipAddress: '123.123.123.123'
     }
 
     assert_equal expected, braintree_form_data

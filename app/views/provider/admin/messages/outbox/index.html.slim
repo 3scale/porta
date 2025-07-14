@@ -1,14 +1,11 @@
 - content_for :page_header_title, 'Sent Messages'
 
 - if @messages.blank?
-  div class="pf-c-empty-state"
-    div class="pf-c-empty-state__content"
-      i class="fas fa-paper-plane pf-c-empty-state__icon" aria-hidden="true"
-      h1 class="pf-c-title pf-m-lg"
-        = t('.empty_state.title')
-      div class="pf-c-empty-state__body"
-        = t('.empty_state.body')
-      = link_to 'Compose Message', new_provider_admin_messages_outbox_path, class: "pf-c-button pf-m-primary"
+  = render partial: 'shared/empty_state', locals: { title: t('.empty_state.title'),
+                                                    body: t('.empty_state.body'),
+                                                    icon: 'paper-plane',
+                                                    primary: { title: t('.empty_state.primary'),
+                                                               href: new_provider_admin_messages_outbox_path } }
 
 - else
   - content_for :javascripts do
@@ -33,7 +30,7 @@
           td role="cell" data-label="To"
             = message_receiver(message)
           td role="cell" data-label="Data Sent"
-            = message.created_at.to_s(:long)
+            = message.created_at.to_fs(:long)
           td role="cell" class="pf-c-table__action"
             div class="pf-c-overflow-menu"
               div class="pf-c-overflow-menu__content"

@@ -11,6 +11,7 @@ import './BackendSelect.scss'
 interface Props {
   backend: Backend | null;
   backends: Backend[];
+  canCreateBackend: boolean;
   onCreateNewBackend: () => void;
   error?: string;
   searchPlaceholder?: string;
@@ -20,6 +21,7 @@ interface Props {
 const BackendSelect: React.FunctionComponent<Props> = ({
   backend,
   backends,
+  canCreateBackend,
   onSelect,
   onCreateNewBackend,
   searchPlaceholder,
@@ -50,15 +52,17 @@ const BackendSelect: React.FunctionComponent<Props> = ({
         title="Select a backend"
         onSelect={onSelect}
       />
-      <Button
-        className="pf-c-button__as-hint"
-        data-testid="newBackendCreateBackend-buttonLink"
-        icon={<PlusCircleIcon />}
-        variant="link"
-        onClick={onCreateNewBackend}
-      >
-        Create a backend
-      </Button>
+      {canCreateBackend && (
+        <Button
+          className="pf-c-button__as-hint"
+          data-testid="newBackendCreateBackend-buttonLink"
+          icon={<PlusCircleIcon />}
+          variant="link"
+          onClick={onCreateNewBackend}
+        >
+          Create a backend
+        </Button>
+      )}
     </>
   )
 }

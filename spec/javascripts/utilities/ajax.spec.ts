@@ -24,6 +24,23 @@ describe('#ajax', () => {
       signal: undefined
     })
   })
+
+  it('should accept string as body', () => {
+    void ajax('url', {
+      method: 'GET',
+      body: 'da body'
+    })
+
+    expect(mockedFetch).toHaveBeenCalledWith('url', {
+      method: 'GET',
+      body: 'da body',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-CSRF-Token': ''
+      },
+      signal: undefined
+    })
+  })
 })
 
 describe('#ajaxJSON', () => {
@@ -40,6 +57,7 @@ describe('#ajaxJSON', () => {
       body: params,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -60,6 +78,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -72,6 +91,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined
@@ -84,6 +104,7 @@ describe('#fetchPaginated', () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json; charset=UTF-8',
         'X-CSRF-Token': ''
       },
       signal: undefined

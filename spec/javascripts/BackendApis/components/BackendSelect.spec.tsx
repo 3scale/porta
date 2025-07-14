@@ -15,6 +15,7 @@ const backends = [
 const defaultProps = {
   backend: null,
   backends,
+  canCreateBackend: true,
   onCreateNewBackend,
   error: undefined,
   onSelect
@@ -35,6 +36,9 @@ it('should have a button to create a new backend', () => {
 
   button.simulate('click')
   expect(onCreateNewBackend).toHaveBeenCalledTimes(1)
+
+  wrapper.setProps({ canCreateBackend: false })
+  expect(wrapper.exists('button[data-testid="newBackendCreateBackend-buttonLink"]')).toEqual(false)
 })
 
 describe('when there are more than 20 backends', () => {

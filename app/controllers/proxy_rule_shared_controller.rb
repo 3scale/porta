@@ -11,14 +11,6 @@ module ProxyRuleSharedController
     end
   end
 
-  def index
-    @search = ThreeScale::Search.new(params[:search])
-    query = ProxyRuleQuery.new(owner_type: params[:owner_type], owner_id: owner_id,
-                               direction: params[:direction], sort: params[:sort])
-    @proxy_rules = query.search_for(@search['query'], proxy_rules.includes(:metric))
-                        .paginate(pagination_params)
-  end
-
   def new
     last_position = proxy_rules.maximum(:position) || 0
     next_position = last_position + 1

@@ -1,5 +1,5 @@
 class ProcessNotificationEventWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def self.enqueue(event)
     batch = Sidekiq::Batch.new
@@ -17,7 +17,7 @@ class ProcessNotificationEventWorker
   end
 
   class UserNotificationWorker
-    include Sidekiq::Worker
+    include Sidekiq::Job
 
     def perform(user_id, event_id, system_name)
       user = User.find(user_id)
@@ -36,11 +36,10 @@ class ProcessNotificationEventWorker
   # @return [Account]
   def create_notifications(event)
     provider = Provider.find(event.provider_id)
+    return if provider.suspended_or_scheduled_for_deletion?
 
-    if provider.suspended_or_scheduled_for_deletion?
-      Rails.logger.info "[Notification] skipping notifications for event #{event.event_id} of #{provider.state} account #{event.provider_id}"
-      return
-    end
+    buyer = provider.buyers.find_by(id: event.try(:account_id))
+    return if buyer&.should_be_deleted?
 
     parallelize do
       provider.users.active.but_impersonation_admin.find_each do |user|

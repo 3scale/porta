@@ -1,19 +1,33 @@
 # frozen_string_literal: true
 
+require 'capybara/minitest'
+
 module CapybaraHelpers
+  include Capybara::Minitest::Assertions
+
   FLASH_SELECTOR = [
+    '.pf-c-alert-group.pf-m-toast .pf-c-alert__title',
     '#flash-messages',
     '#flashWrapper span',
     '#flashWrapper p'
   ].join(', ').freeze
 
-  def rack_test?
-    %I[webkit selenium webkit_debug headless_chrome chrome headless_firefox firefox].exclude? Capybara.current_driver
+  def javascript_test?
+    Capybara.current_driver != Capybara.default_driver
   end
 
-  def assert_flash(message)
+  def ensure_javascript
+    raise 'Please mark this scenario with @javascript or another driver with JavaScript support' unless javascript_test?
+  end
+
+  def local_storage(key)
+    Capybara.current_session.driver.browser.local_storage.[](key)
+  end
+
+  def assert_flash(message, failure_message = nil)
     assert_match Regexp.new(message, true),
-                 find(FLASH_SELECTOR).text
+                 find(FLASH_SELECTOR).text,
+                 failure_message
   end
 
   def assert_path_returns_error(path, status_code: 403)
@@ -22,7 +36,8 @@ module CapybaraHelpers
     end
     # HACK: the error page requests assets that return 200 and checking the first one is not always
     # right. As an easy workaround, rule out requests with an url to assets.
-    requests.reject { |request| request.url&.include?('/assets/') }.first.status_code.should == status_code
+    request = requests.reject { |request| request.url&.include?('/assets/') }.first
+    assert_equal status_code, request.status_code, "Expected: #{status_code} Actual: #{request.status_code} for #{request.url}"
   end
 
   def assert_page_has_content(text)
@@ -46,15 +61,47 @@ module CapybaraHelpers
 
   def find_inline_actions_of_row(row)
     if has_css?('td', text: row, wait: 0)
-      dropdown = find('tr', text: row).find('.pf-c-table__action .pf-c-dropdown')
+      overflow_menu = find('tr', text: row).find('.pf-c-table__action')
+
+      if overflow_menu.has_css?('.pf-c-dropdown', wait: 0) # collapsed overflow menu
+        dropdown = overflow_menu.find('.pf-c-dropdown')
+      elsif overflow_menu.has_css?('.pf-c-overflow-menu', wait: 0) # desktop overflow menu
+        desktop = overflow_menu.find('.pf-c-overflow-menu__content')
+      end
     elsif has_css?('.pf-c-data-list__cell', text: row, wait: 0)
       dropdown = find('.pf-c-data-list__item-row', text: row).find('.pf-c-data-list__item-action .pf-c-dropdown')
     else
       raise "No table or datalist row found with text: #{row}"
     end
 
-    dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
-    dropdown.all('.pf-c-dropdown__menu-item')
+    if dropdown
+      dropdown.find('.pf-c-dropdown__toggle').click if dropdown[:class].exclude?('pf-m-expanded')
+      dropdown.all('.pf-c-dropdown__menu-item')
+    elsif desktop
+      desktop.all('.pf-c-overflow-menu__item')
+    else
+      raise "Can't find table actions"
+    end
+  end
+
+  def select_attribute_filter(label)
+    selector = find('[data-ouia-component-id="attribute-search"] .pf-c-toolbar__item:first-child')
+    selector.click unless selector.has_css?('.pf-c-menu-toggle.pf-m-expanded', wait: 0)
+    selector.find('.pf-c-menu')
+            .find('.pf-c-menu__list-item', text: label)
+            .click
+  end
+
+  def fill_attribute_filter(value)
+    within '[data-ouia-component-id="attribute-search"] .pf-c-toolbar__item:last-child' do
+      if has_css?('input', wait: 0)
+        find('input').set(value)
+        find('button.pf-m-control').click
+      else
+        find('button.pf-c-select__toggle, button.pf-c-select__toggle-button').click unless has_css?('.pf-c-select.pf-m-expanded', wait: 0)
+        find('.pf-c-select__menu-item', text: value).click
+      end
+    end
   end
 end
 

@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/stale@v9
         with:
-          stale-pr-message: 'This PR is stale because it has not received activity for more than 14 days. Remove stale label or comment or this will be closed in 7 days.'
-          days-before-stale: 14
-          days-before-close: 7
+          stale-pr-message: 'This PR is stale because it has not received activity for more than 30 days. Remove stale label or comment or this will be closed in 15 days.'
+          days-before-stale: 30
+          days-before-close: 15

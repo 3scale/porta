@@ -222,12 +222,6 @@ module Logic
         end
       end
 
-      class NewNotificationSystem < Base
-        def missing_config
-          master? || provider?
-        end
-      end
-
       class ApicastV2 < Base
         def missing_config
           master?

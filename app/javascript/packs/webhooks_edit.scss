@@ -1,0 +1,12 @@
+@import '~@patternfly/patternfly/components/Check/check.css';
+@import '~@patternfly/patternfly/components/Form/form.css';
+@import '~@patternfly/patternfly/components/FormControl/form-control.css';
+
+input#web_hook_url {
+  flex: 7;
+
+  & + button {
+    flex: 1;
+    margin-left: 1rem;
+  }
+}

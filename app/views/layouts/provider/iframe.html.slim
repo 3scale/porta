@@ -6,31 +6,31 @@ html[lang="en"]
     base href=base_url
     = stylesheet_link_tag "provider/layouts/iframe"
     = csrf_meta_tag
-    = rails_asset_url_tag
     = yield :head
 
   body
     div id="content"
-      = render "shared/provider/flash", :flash => flash
       = yield
     = javascript_include_tag 'provider/layout/iframe'
     = yield :javascript
 
     javascript:
-      (function($){
-        $(window).load(function () {
-          setTimeout(function () {
+      (function ($) {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
             var content = $(#{json yield(:after_load)}).toArray();
             var body = $(document.body);
 
-            (function nextNode(){
+            (function nextNode () {
               var deferred;
               var node = content.shift();
 
-              if(!node) return;
+              if (!node) {
+                return;
+              }
 
               if ($(node).is('script[src]')) {
-                deferred = $.ajax({url: $(node).attr('src'), dataType: "script", cache: true});
+                deferred = $.ajax({ url: $(node).attr('src'), dataType: 'script', cache: true });
               } else {
                 deferred = $.Deferred();
                 body.append(node);
@@ -39,7 +39,6 @@ html[lang="en"]
 
               deferred.then(nextNode);
             }());
-
-          }, 0);
+          });
         });
       }(jQuery));

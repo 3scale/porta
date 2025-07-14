@@ -1,13 +1,75 @@
-- content_for :javascripts, javascript_include_tag('provider/admin/webhooks')
-- content_for(:title)
-  = "Webhooks"
-- content_for :page_header_title, 'Webhooks'
-- content_for :page_header_body do
-  ' Webhooks let you define a URL to be called with a notification when events in the 3scale
-  ' management system happen.
+- content_for :title, t('.header.title')
+- content_for :page_header_title, t('.header.title')
+- content_for :page_header_body, t('.header.body')
 
-= semantic_form_for @webhook, url: provider_admin_webhooks_path do |f|
-  = render 'form', form: f
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'webhooks_edit'
 
-  = f.actions do
-    = f.commit_button I18n.t('provider.admin.webhooks.edit.form.submit_button_label')
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @webhook, url: provider_admin_webhooks_path,
+                                  builder: Fields::PatternflyFormBuilder,
+                                  html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+      section class="pf-c-form__section" role="group"
+        div class="pf-c-form__section-title" aria-hidden="true" Behavior
+        div class="pf-c-form__group"
+          = form.input :active, as: :patternfly_checkbox
+          = form.input :provider_actions, as: :patternfly_checkbox
+
+      section class="pf-c-form__section" role="group"
+        div class="pf-c-form__section-title" aria-hidden="true" Webhooks endpoint
+        div class="pf-c-form__group"
+          - show_action = @webhook.persisted? && @webhook.url.present?
+          = form.input :url, as: :patternfly_input, action:(show_action ? { title: 'Ping!', 'data-ping-url': provider_admin_webhooks_path } : nil)
+
+      section class="pf-c-form__section" role="group"
+        div class="pf-c-form__section-title" aria-hidden="true" Events that trigger webhooks
+        div class="pf-l-flex pf-m-space-items-2xl"
+          div class="pf-l-flex__item"
+            div class="pf-c-form__group" role="group"
+              div class="pf-c-form__group-label pf-m-no-padding-top"
+                span class="pf-c-form__label"
+                  span class="pf-c-form__label-text" Accounts
+              div class="pf-c-form__group-control pf-m-stack"
+                = form.input :account_created_on, as: :patternfly_checkbox
+                = form.input :account_updated_on, as: :patternfly_checkbox
+                - unless master_on_premises?
+                  = form.input :account_plan_changed_on, as: :patternfly_checkbox
+                = form.input :account_deleted_on, as: :patternfly_checkbox
+
+          div class="pf-l-flex__item"
+            div class="pf-c-form__group" role="group"
+              div class="pf-c-form__group-label pf-m-no-padding-top"
+                span class="pf-c-form__label"
+                  span class="pf-c-form__label-text" Users
+              div class="pf-c-form__group-control pf-m-stack"
+                = form.input :user_created_on, as: :patternfly_checkbox
+                = form.input :user_updated_on, as: :patternfly_checkbox
+                = form.input :user_deleted_on, as: :patternfly_checkbox
+
+          div class="pf-l-flex__item"
+            div class="pf-c-form__group" role="group"
+              div class="pf-c-form__group-label pf-m-no-padding-top"
+                span class="pf-c-form__label"
+                  span class="pf-c-form__label-text" Applications
+              div class="pf-c-form__group-control pf-m-stack"
+                = form.input :application_created_on, as: :patternfly_checkbox
+                = form.input :application_updated_on, as: :patternfly_checkbox
+                = form.input :application_suspended_on, as: :patternfly_checkbox
+                - unless master_on_premises?
+                  = form.input :application_plan_changed_on, as: :patternfly_checkbox
+                = form.input :application_user_key_updated_on, as: :patternfly_checkbox
+                = form.input :application_deleted_on, as: :patternfly_checkbox
+
+          div class="pf-l-flex__item"
+            div class="pf-c-form__group" role="group"
+              div class="pf-c-form__group-label pf-m-no-padding-top"
+                span class="pf-c-form__label"
+                  span class="pf-c-form__label-text" Keys
+              div class="pf-c-form__group-control pf-m-stack"
+                = form.input :application_key_created_on, as: :patternfly_checkbox
+                = form.input :application_key_deleted_on, as: :patternfly_checkbox
+                = form.input :application_key_updated_on, as: :patternfly_checkbox
+
+      = form.actions do
+        = form.commit_button t('.form.submit_button_label')

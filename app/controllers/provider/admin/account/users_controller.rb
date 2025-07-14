@@ -3,7 +3,7 @@
 class Provider::Admin::Account::UsersController < Provider::Admin::Account::BaseController
   inherit_resources
   defaults :route_prefix => 'provider_admin_account'
-  actions :index, :edit, :update, :destroy
+  actions :edit, :update, :destroy
 
   before_action :load_services, only: %i[edit update]
 
@@ -11,13 +11,32 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
   activate_menu :account, :users, :listing
 
+  helper_method :presenter
+
+  attr_reader :presenter
+
+  def index
+    users = end_of_association_chain.but_impersonation_admin
+    @presenter = Provider::Admin::Account::UsersIndexPresenter.new(current_user: current_user,
+                                                                   users: users,
+                                                                   params: params)
+  end
+
+  def destroy
+    destroy! do |success|
+      success.html do
+        flash[:success] = t('.success')
+        super
+      end
+    end
+  end
+
   def update
     resource.validate_fields!
 
     update! do |success, failure|
       success.html do
-        flash[:notice] = 'User was successfully updated.'
-        redirect_to(collection_url)
+        redirect_to collection_url, success: t('.success')
       end
     end
   end
@@ -30,10 +49,6 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
   def begin_of_association_chain
     current_account
-  end
-
-  def collection
-    @users ||= end_of_association_chain.but_impersonation_admin.paginate(page: params[:page]).decorate
   end
 
   def update_resource(user, attributes)

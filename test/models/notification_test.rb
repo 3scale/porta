@@ -38,12 +38,6 @@ class NotificationTest < ActiveSupport::TestCase
     notification.expects(:permitted?).returns(true).at_least_once
     assert notification.should_deliver?
 
-    notification.user.account.expects(:provider_can_use?).with(:new_notification_system).returns(false).at_least_once
-    refute notification.should_deliver?
-
-    notification.user.account.expects(:provider_can_use?).with(:new_notification_system).returns(true).at_least_once
-    assert notification.should_deliver?
-
     notification.account.master = true
     ThreeScale.config.stubs(onpremises: true)
     assert notification.should_deliver?

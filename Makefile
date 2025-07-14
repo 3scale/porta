@@ -92,7 +92,8 @@ clean:
 
 oracle-db-setup: ## Creates databases in Oracle
 oracle-db-setup: oracle-database
-	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" bundle exec rake db:drop db:create db:setup
+	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_DO_NOT_EXPIRE_SYSTEM=1 bundle exec rake db:drop db:create db:setup
+	MASTER_PASSWORD=p USER_PASSWORD=p ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG='AMERICAN_AMERICA.UTF8' DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" RAILS_ENV=test bundle exec rake db:drop db:create db:setup
 
 schema: ## Runs db schema migrations. Run this when you have changes to your database schema that you have added as new migrations.
 schema: POSTGRES_DATABASE_URL ?= "postgresql://postgres:@localhost:5432/3scale_system_development"
@@ -103,8 +104,8 @@ schema:
 
 oracle-database: ## Starts Oracle database container
 oracle-database:
-	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database &>/dev/null || docker run \
-	    -d \
+	if [ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" != "true" ]; then \
+	  docker start oracle-database &>/dev/null || docker run -d \
 		--shm-size=6gb \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \
@@ -112,7 +113,9 @@ oracle-database:
 		-e ORACLE_SID=threescale \
 		-e ORACLE_PWD=threescalepass \
 		-e ORACLE_CHARACTERSET=AL32UTF8 \
-		$(ORACLE_DB_IMAGE)
+		$(ORACLE_DB_IMAGE) && \
+	  docker logs --tail=1 -f oracle-database | grep -m 1 "DATABASE IS READY TO USE"; \
+	fi
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help

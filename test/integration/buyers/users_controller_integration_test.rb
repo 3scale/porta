@@ -41,11 +41,11 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: destroyable_user.id)
     assert_not User.exists?(destroyable_user.id)
-    assert_equal 'User was successfully deleted.', flash[:notice]
+    assert_equal 'User was successfully deleted', flash[:success]
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: non_destroyable_user.id)
     assert User.exists?(non_destroyable_user.id)
-    assert_equal 'User could not be deleted.', flash[:error]
+    assert_equal 'User could not be deleted', flash[:danger]
   end
 
   test '#update all attributes' do
@@ -57,7 +57,9 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
         role: 'admin',
         username: 'updatedusername',
         email: 'newemail@example.org',
-        country: 'Japan'
+        extra_fields: {
+          country: 'Japan'
+        }
       }
     }
 
@@ -65,5 +67,16 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal 'updatedusername', user.username
     assert_equal 'newemail@example.org', user.email
     assert_equal 'Japan', user.field_value('country')
+  end
+
+  test "#activate" do
+    user = FactoryBot.create(:pending_user, account: buyer)
+    assert_not user.active?
+
+    post activate_admin_buyers_account_user_path(account_id: buyer.id, id: user.id)
+    follow_redirect!
+
+    assert_response :ok
+    assert user.reload.active?
   end
 end

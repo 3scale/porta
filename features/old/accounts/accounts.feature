@@ -28,7 +28,7 @@ Feature: Account management
      And I select "Santiago" from "Time Zone"
      And I press "Update Account"
 
-    Then I should see "The account information was updated."
+    Then I should see "The account information was updated"
       And I should see the account details:
         | Organization/Group Name | Fantastically awesome API |
         | Address                 | Middle of nowhere         |
@@ -69,54 +69,14 @@ Feature: Account management
     When I log in as provider "foo.3scale.localhost"
     And I navigate to the Account Settings
     And I go to the provider personal details page
-    When I fill in "Email" with ""
+    When I fill in "Email" with "invalid"
      And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should see "should look like an email address"
 
   @regression-test @javascript
   Scenario: Edit account information even with advanced CMS enabled
-    When provider "foo.3scale.localhost" has Browser CMS activated
-    And current domain is the admin domain of provider "foo.3scale.localhost"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
      And I go to the provider edit account page
     Then I should see "Edit Account Details"
-
-  @javascript
-  Scenario: Provider should see all fields defined for account
-    And provider "foo.3scale.localhost" has multiple applications enabled
-      And provider "foo.3scale.localhost" has the following fields defined for accounts:
-      | name                 | required | read_only | hidden | label                |
-      | vat_code             | true     |           |        | VAT Code             |
-      | telephone_number     |          | true      |        | Telephone Number     |
-      | vat_rate             |          |           | true   | VAT Rate             |
-      | user_extra_required  | true     |           |        | User extra required  |
-      | user_extra_read_only |          | true      |        | User extra read only |
-      | user_extra_hidden    |          |           | true   | User extra hidden    |
-
-      And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
-      And buyer "randomdude" has extra fields:
-      | user_extra_required | user_extra_read_only | user_extra_hidden |
-      | extra_required      | user_read_only       | hidden            |
-
-      And account "randomdude" has telephone number "666"
-      And VAT rate of buyer "randomdude" is 9%
-      And VAT code of buyer "randomdude" is 9
-
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-    When I log in as provider "foo.3scale.localhost"
-      And I go to the buyer account "randomdude" edit page
-
-    Then I should see the fields:
-      | VAT Code             |
-      | Telephone Number     |
-      | VAT Rate             |
-      | User extra required  |
-      | User extra read only |
-      | User extra hidden    |
-
-    When I press "Update Account"
-    Then I should not see error in fields:
-      | errors              |
-      | Vat code            |
-      | User extra required |

@@ -1,8 +1,10 @@
 module Account::Gateway
   extend ActiveSupport::Concern
 
+  class InvalidSettingsError < StandardError; end
+
   included do
-    has_many :payment_transactions
+    has_many :payment_transactions, inverse_of: :account
     has_one :payment_gateway_setting, dependent: :destroy, inverse_of: :account
     accepts_nested_attributes_for :payment_gateway_setting
 
@@ -17,7 +19,9 @@ module Account::Gateway
   def payment_gateway(**options)
     return if payment_gateway_type.blank?
 
-    PaymentGateway.implementation(payment_gateway_type, options).new(payment_gateway_options || {})
+    PaymentGateway.implementation(payment_gateway_type, **options).new(payment_gateway_options || {})
+  rescue ArgumentError => exception
+    raise InvalidSettingsError, exception.message
   end
 
   def payment_gateway_configured?

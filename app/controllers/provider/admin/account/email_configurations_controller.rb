@@ -20,8 +20,7 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
 
   def update
     if @email_configuration.update(email_configuration_params)
-      flash[:notice] = 'Email configuration updated'
-      redirect_to action: :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
       render :edit
     end
@@ -30,8 +29,7 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   def create
     @email_configuration = email_configurations.create(email_configuration_params)
     if @email_configuration.persisted?
-      flash[:notice] = 'Email configuration created'
-      redirect_to action: :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
       render :new
     end
@@ -39,8 +37,7 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
 
   def destroy
     if @email_configuration.destroy
-      flash[:notice] = 'Email configuration deleted'
-      redirect_to action: :index
+      redirect_to({ action: :index }, success: t('.success'))
     else
       redirect_to action: :edit
     end

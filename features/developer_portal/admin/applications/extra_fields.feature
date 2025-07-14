@@ -63,6 +63,28 @@ Feature: Developer portal application extra fields
       | Plate number |
       | Stealth      |
 
+  Scenario: Read-only extra fields are ignored if received
+    Given the following application:
+      | Buyer | Name       | Product |
+      | Jane  | Jane's App | The API |
+    And the application has the following extra fields:
+      | Description | It's a car |
+      | Engine      | 120        |
+      | Wheels      | 4          |
+      | Color       | White      |
+    When the buyer logs in
+    And the provider has the field "plate_number" for applications as editable
+    And they go to application "Jane's App" dev portal edit page
+    And the provider has the field "plate_number" for applications as read only
+    And the form is submitted with:
+      | Description  | It's a car |
+      | Engine       | 120        |
+      | Wheels       | 4          |
+      | Color        | White      |
+      | Plate number | edit me    |
+    Then they should see the flash message "Application was successfully updated"
+    And they should not see "Plate number"
+
   Scenario: Extra fields validation
     When they go to the dev portal new application page
     And the form is submitted with:
@@ -95,4 +117,4 @@ Feature: Developer portal application extra fields
     Then the form is submitted with:
       | Engine | turbo |
       | Wheels | 2     |
-    Then they should see the flash message "Application was successfully updated."
+    Then they should see the flash message "Application was successfully updated"

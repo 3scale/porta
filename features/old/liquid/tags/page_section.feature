@@ -10,8 +10,7 @@ Feature: Liquid tags
 
 
   Scenario: Tag page_section works for simple cms
-    Given provider "foo.3scale.localhost" has Browser CMS deactivated
-    And a liquid template "main_layout" of provider "foo.3scale.localhost" with content
+    Given a liquid template "main_layout" of provider "foo.3scale.localhost" with content
       """
         simple cms page_section {{ page_section }}
       """
@@ -20,8 +19,7 @@ Feature: Liquid tags
 
 
   Scenario: Tag page_section works for browser cms
-    Given provider "foo.3scale.localhost" has Browser CMS activated
-    And a liquid template "main_layout" of provider "foo.3scale.localhost" with content
+    Given a liquid template "main_layout" of provider "foo.3scale.localhost" with content
       """
         bcms page_section {{ page_section }}
       """

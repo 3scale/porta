@@ -1,4 +1,10 @@
 # frozen_string_literal: true
+
+Given "{provider} has the following backend( api):" do |provider, table|
+  opts = transform_backend_apis_table(table).rows_hash
+  @backend = FactoryBot.create(:backend_api, account: provider, **opts)
+end
+
 When "an admin is reviewing backend apis index page" do
   visit provider_admin_backend_apis_path
 end
@@ -58,30 +64,8 @@ Then "it {is} possible to delete the backend" do |deleteable|
   end
 end
 
-Given "an admin goes to the backend apis page" do
-  visit provider_admin_backend_apis_path
-end
-
-And "they create a new backend api" do
-  click_on 'Create Backend'
-  fill_in_backend_api_form
-  assert_created
-end
-
-Then "they are redirected to the new backend api overview page" do
-  assert_equal current_path, provider_admin_backend_api_path(BackendApi.last)
-end
-
-When "an admin is creating a new backend api" do
-  visit new_provider_admin_backend_api_path
-end
-
 Given /^a backend(?: "(.*)")?$/ do |name|
   @backend = @provider.backend_apis.create!(name: name || 'My Backend', private_endpoint: 'https://foo')
-end
-
-Given "the following backends:" do |table|
-
 end
 
 When "an admin is in the backend overview page" do
@@ -105,39 +89,6 @@ Then "the product is not in the list of all products using it" do
   within products_used_table do
     should_not have_css('[data-label="Name"]', text: @product.name)
   end
-end
-
-When "it is not possible to create it without a name, a valid url or system name" do
-  fill_in_backend_api_form(name: '')
-  click_on 'Create Backend'
-  assert_equal new_provider_admin_backend_api_path, current_path
-
-  fill_in_backend_api_form(system_name: '$')
-  assert_not_created(error: 'invalid')
-
-  fill_in_backend_api_form(url: '')
-  click_on 'Create Backend'
-
-  fill_in_backend_api_form(url: '%')
-  assert_not_created(error: 'Invalid domain')
-end
-
-But "it is possible to create it without system name" do
-  name = 'some_name'
-  fill_in_backend_api_form(name: name, system_name: '')
-  assert_created
-  assert_equal name, BackendApi.last.system_name
-end
-
-Then "it is possible to create it using the same name and url" do
-  fill_in_backend_api_form(name: @backend.name, system_name: 'foo', url: @backend.private_endpoint)
-  assert_created
-end
-
-But "it is not possible to use the same system name" do
-  visit new_provider_admin_backend_api_path
-  fill_in_backend_api_form(name: 'Backend 3', system_name: @backend.system_name)
-  assert_not_created(error: 'has already been taken')
 end
 
 And '{backend} is unavailable' do |backend|

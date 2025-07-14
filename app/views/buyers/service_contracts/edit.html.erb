@@ -1,20 +1,18 @@
-<h1>Change subscribed plan</h1>
-
-<%= semantic_form_for @service_contract,
-  :url => admin_buyers_account_service_contract_path(@account, @service_contract),
-  :html => { :'data-remote' => true } do |form| %>
-
-  <%= form.inputs do %>
-    <li>
-      <label>Service</label>
-      <p><%= h @service_contract.issuer.name %></p>
-    </li>
-
-    <%= form.input :plan, :collection => @service_plans, :include_blank => false %>
-  <% end %>
-
+<%= semantic_form_for @service_contract, url: admin_buyers_account_service_contract_path(@account, @service_contract),
+                                         builder: Fields::PatternflyFormBuilder,
+                                         html: { 'data-remote': true, class: 'pf-c-form' } do |form| %>
+  <%= form.input :plan, as: :patternfly_select,
+                        collection: @service_plans,
+                        include_blank: false,
+                        required: true %>
   <%= form.actions do %>
-    <%= form.commit_button 'Change subscription', :button_html => { :'data-disable-with' => 'Changing subscription...' } %>
+    <%= form.commit_button 'Change subscription', data: { 'disable-with': 'Change subscription' } %>
   <% end %>
 <% end %>
 
+<%# Workaround to fill colorbox modal's width with the PF form %>
+<style>
+  div#cboxLoadedContent {
+    width: auto !important;
+  }
+</style>
