@@ -12,9 +12,17 @@ class MonthlyRevenueQuery
   delegate :arel_table, :connection, to: Invoice
 
   # @param [Account] account is a provider Account or master
-  def initialize(account, options = { include_vat: true })
+  def initialize(account:, params:, options: { include_vat: true })
     @account = account
     @options = options
+    pagination_params = { page: params[:page], per_page: params[:per_page] || 20 }
+    selected_year = params.dig(:search, :year)
+
+    selection = [arel_table[:period], *sums_with_states]
+    grouped = uncancelled_buyer_invoices.selecting { selection }
+                                        .group(:period)
+    filtered = selected_year.nil? ? grouped : grouped.by_year(selected_year)
+    @raw_arel = filtered.paginate(pagination_params)
   end
 
   module CastValues
@@ -27,6 +35,7 @@ class MonthlyRevenueQuery
       end
     end
   end
+
   # Returns an array of Hash of costs by months.
   # Each Hash has following String keys:
   #
@@ -39,14 +48,14 @@ class MonthlyRevenueQuery
   # @return [Array<Hash>]
 
   def with_states
-    selection = [arel_table[:period], *sums_with_states]
-    arel = uncancelled_buyer_invoices
-           .selecting { selection }
-           .group(:period)
-           .joins { line_items.outer } # This is a left outer joins so if no line items the columns will be set to NULL
-           .reorder(period: :desc)
+    arel = @raw_arel.joins { line_items.outer } # This is a left outer joins so if no line items the columns will be set to NULL
+                    .reorder(period: :desc)
     result = connection.select_all(arel).extend(CastValues)
     result.cast_values(MonthlyRevenueRow)
+  end
+
+  def total_entries
+    @raw_arel.total_entries
   end
 
   protected

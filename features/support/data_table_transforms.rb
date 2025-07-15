@@ -23,6 +23,7 @@ module DataTableTransforms
     table.map_column!(:buyer_account) { |buyer| Account.buyers.find_by!(org_name: buyer) }
     table.map_column!(:period) { |date| Month.new(date) }
     table.map_column!(:state, false) { |state| state.downcase.to_sym }
+    table.map_column!(:total_cost, false, &:to_f)
   end
 
   def transform_service_contract_table(table, provider)

@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
 # Create a list of invoices.
+# State can be: 'unpaid', 'pending', 'paid', 'finalized'.
 #
 #   And the following invoices:
-#     | Buyer | Month          | Friendly ID | State |
-#     | Jane  | December, 2010 | paid        | Paid  |
-#     | Jane  | January, 2011  | open        | Open  |
+#     | Buyer | Month          | Friendly ID      | State | Total cost |
+#     | Jane  | December, 2010 | 2011-01-00000001 | Paid  | 20.00      |
+#     | Jane  | January, 2011  | 2011-01-00000002 | Open  |            |
 #
 Given "the following invoice(s):" do |table|
   transform_invoices_table(table)
   table.hashes.each do |options|
-    options[:provider_account] = options[:buyer_account].provider_account
-    FactoryBot.create(:invoice, options.reverse_merge(creation_type: :background))
+    buyer = options[:buyer_account]
+    options[:provider_account] = buyer.provider_account
+    total_cost = options.delete('total_cost')
+
+    invoice = FactoryBot.create(:invoice, :skip_validations, options.reverse_merge(creation_type: :background))
+
+    FactoryBot.create(:line_item, invoice: invoice, name: 'Custom', cost: total_cost) if total_cost.present?
   end
 end
 
@@ -187,20 +193,6 @@ end
 Then(/^I should have an invoice of "(\d+\.?\d*) (.+)"$/) do |amount, currency|
   invoices = Invoice.where(provider_account_id: current_account.id)
   assert invoices.select { |x| x.cost.to_s == amount && x.currency == currency }.any?
-end
-
-Given(/^an invoice of the buyer with a total cost of (\d+)/) do |cost|
-  date = Time.zone.now.strftime('%B, %Y')
-  invoice = create_invoice(@buyer, date)
-  invoice.line_items.create!({ name: 'Custom', cost: cost })
-end
-
-Then(/^I should see in the invoice period for the column "(in process|overdue|paid|total)" a cost of (\d+\.\d+) (\w+)$/) do |column, cost, money|
-  columns = ['month', 'total', 'in process', 'overdue', 'paid']
-  position = columns.index(column) + 1
-  date = Time.zone.now.strftime('%B, %Y')
-  node = find(:xpath, %(//table//td/a[text()="#{date}"]/../..//td[#{position}]))
-  assert_equal "#{money} #{cost}", node.text
 end
 
 Then(/there is only one invoice for "([^"]*)"/) do |date|

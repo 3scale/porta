@@ -1122,6 +1122,12 @@ en:
 
   finance:
     provider:
+      dashboards:
+        show:
+          empty_state:
+            body: There is still no monthly revenue to display here.
+            title: Nothing to see here
+          page_title: Earnings by month
       invoices:
         cancel:
           error: Failed to cancel the invoice
@@ -2256,3 +2262,5 @@ en:
       The browser you are using doesn't seem to support the X-Frame-Options header. That means we
       can't protect you against Cross Frame Scripting and thus not guarantee the security of your
       session. Please upgrade your browser and sign in again.
+    nav:
+      earnings: Earnings by month
