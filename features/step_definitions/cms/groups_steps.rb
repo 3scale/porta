@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 
-Given "{provider} has groups for buyers:" do |provider, table|
+# Create CMS groups in bulk for a provider account.
+#
+# And the provider has the following CMS groups:
+#   | Name        |
+#   | BuyerGroup1 |
+#
+Given "{provider} has the following CMS groups:" do |provider, table|
+  parameterize_headers(table)
   table.hashes.each do |hash|
-    FactoryBot.create :cms_group, name: hash['name'], provider: provider
+    FactoryBot.create(:cms_group, name: hash['name'], provider: provider)
   end
+end
+
+Given "{provider} has no CMS groups" do |provider|
+  provider.provided_groups.destroy_all
+  assert_empty provider.provided_groups
 end
 
 Given "{user} has access to the admin section {string}" do |user, group|
@@ -17,14 +29,6 @@ Given "{user} does not belong to the admin group {string} of provider {string}" 
   end
 end
 
-Then /^I should see no groups$/ do
-  CMS::Group.all.each do |group|
-    assert has_no_xpath?(".//tr[@id='cms_group_#{group.id}']")
-  end
-end
-
-Then /^I should see my groups$/ do
-  current_account.provided_groups.each do |group|
-    assert has_xpath?(".//tr[@id='cms_group_#{group.id}']")
-  end
+Then "all groups should be unchecked" do
+  assert_not find_all('#groups input.pf-c-check__input').map(&:checked?).any?
 end

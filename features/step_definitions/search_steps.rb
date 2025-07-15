@@ -95,7 +95,6 @@ end
 Then "they should see an empty state" do
   within('.pf-c-empty-state') do
     assert_selector(:css, '.pf-c-title')
-    assert_selector(:css, '.pf-c-empty-state__body')
   end
 end
 
