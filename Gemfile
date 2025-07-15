@@ -87,7 +87,7 @@ gem 'analytics-ruby', require: false
 gem 'dalli'
 gem 'faraday', '~> 2.0', '<= 2.9'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.16.2'
+gem 'nokogiri', '~> 1.18.8', force_ruby_platform: true
 gem 'secure_headers', '~> 6.3.0'
 gem 'redlock'
 
