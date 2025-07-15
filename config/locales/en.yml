@@ -982,6 +982,9 @@ en:
     groups:
       show:
         page_title: Groups of %{org_name}
+        empty_state:
+          title: No groups yet
+          primary: Create a group
       update:
         success: Account updated
 
