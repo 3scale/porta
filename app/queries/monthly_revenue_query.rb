@@ -12,7 +12,7 @@ class MonthlyRevenueQuery
   delegate :arel_table, :connection, to: Invoice
 
   # @param [Account] account is a provider Account or master
-  def initialize(account:, params:, options: { include_vat: true })
+  def initialize(account:, params: {}, options: { include_vat: true })
     @account = account
     @options = options
     pagination_params = { page: params[:page], per_page: params[:per_page] || 20 }
