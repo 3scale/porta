@@ -6,13 +6,13 @@ Feature: Password change
   @javascript
   Scenario: Provider password change
     Given a provider is logged in
-    When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "New password" with "monkey"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     And I log out
     And I go to the provider login page
+    And I should see "Log in to your account"
     And I fill in "Email or Username" with "foo.3scale.localhost"
     And I fill in "Password" with "monkey"
     And I press "Sign in"

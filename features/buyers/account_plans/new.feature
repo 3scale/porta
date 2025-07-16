@@ -38,5 +38,3 @@ Feature: New account plan page
       | Name        |  |
       | System name |  |
     Then field "Name" has inline error "Can't be blank"
-
-

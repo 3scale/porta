@@ -19,12 +19,13 @@ Feature: Groups and Sections
   @javascript
   Scenario: Mark a section as Access Restricted
     Given current domain is the admin domain of provider "foo.3scale.localhost"
-      And I am logged in as provider "foo.3scale.localhost" on its admin domain
+    And I am logged in as provider "foo.3scale.localhost" on its admin domain
     When I go to the cms page
-      And I follow "Docs"
-    When I uncheck "Public"
-      And I press "Update"
-    Then the section "Docs" of provider "foo.3scale.localhost" should be access restricted
+    And I follow "Docs"
+    And I uncheck "Public"
+    And I press "Update"
+    Then the "Public" checkbox should not be checked
+    And the section "Docs" of provider "foo.3scale.localhost" should be access restricted
 
   @allow-rescue
   Scenario: Access restricted sections are access denied for not logged in users

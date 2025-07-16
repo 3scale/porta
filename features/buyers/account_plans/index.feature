@@ -51,13 +51,13 @@ Feature: Account plans index page
 
     Scenario: Copying account plans
       When they select action "Copy" of "Public Plan"
-      Then they should see "Plan copied"
+      Then they should see a toast alert with text "Plan copied"
       And the table has the following rows:
         | Name               | Contracts | State     |
         | Public Plan (copy) | 0         | published |
 
       When they select action "Copy" of "Secret Plan"
-      Then they should see "Plan copied"
+      Then they should see a toast alert with text "Plan copied"
       And the table has the following rows:
         | Name               | Contracts | State     |
         | Secret Plan (copy) | 0         | hidden    |

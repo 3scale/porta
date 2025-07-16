@@ -29,9 +29,9 @@ FORM_GROUP_SELECTORS = [
 ].join(', ')
 
 Then "field {string} has inline error {string}" do |field, error|
-  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
-
   text = Regexp.new(Regexp.escape(error), Regexp::IGNORECASE)
+  assert_content text
+  form_group = find_field(field).ancestor(FORM_GROUP_SELECTORS)
   assert form_group.has_css?(INLINE_ERROR_SELECTORS, text: text, wait: 0)
 end
 
@@ -87,7 +87,7 @@ When "the form is submitted with:" do |table|
 end
 
 When "the modal is submitted with:" do |table|
-  within 'div.pf-c-modal-box form, #colorbox[role="dialog"] form' do
+  within 'div.pf-c-modal-box, #colorbox[role="dialog"]' do
     submit_form_with table
   end
 end

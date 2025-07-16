@@ -16,6 +16,7 @@ Feature: Audience > Accounts > New
       | Username                | alice              |
       | Email                   | alice@example.com  |
       | Organization/Group Name | Alice's Web Widget |
+    Then they should see a toast alert with text "Developer account was successfully created"
     Then the current page is the buyer account page for "Alice's Web Widget"
 
   Scenario: Creating an account without legal terms

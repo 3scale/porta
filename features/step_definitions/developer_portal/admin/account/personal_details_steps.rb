@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-Given "the buyer wants to edit their personal details" do
-  visit admin_account_personal_details_path
-end
-
 When "they edit their personal details" do
   fill_in('user[username]', with: 'Alfred')
   fill_in('user[email]', with: 'alfred@batcave.com')

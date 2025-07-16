@@ -7,6 +7,8 @@ module FormHelper
   end
 
   def fill_form_with(table)
+    # wait for the form to be rendered
+    assert has_element? 'form'
     table.rows_hash.each do |name, value|
       if has_select?(name, wait: 0)
         select(value, from: name)

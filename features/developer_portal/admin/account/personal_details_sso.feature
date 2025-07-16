@@ -10,7 +10,7 @@ Feature: Dev Portal Buyer Personal Details SSO
     And I authenticate by Oauth2
 
   Scenario: Buyer shouldn't see any password input
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
     And I should not see the fields:
       | hidden fields         |
       | Current password      |
@@ -20,6 +20,7 @@ Feature: Dev Portal Buyer Personal Details SSO
 
   @javascript
   Scenario: Buyer can edit their personal details
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
+    And the current page is the personal details page
     When they edit their personal details
     Then they should be able to edit their personal details

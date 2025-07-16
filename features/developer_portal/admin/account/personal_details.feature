@@ -12,25 +12,28 @@ Feature: Dev Portal Buyer Personal Details
     And the following application:
       | Buyer | Name   |
       | John  | My App |
-    And the buyer logs in to the provider
+    And the buyer logs in
 
   @javascript
   Scenario: Buyer doesn't use current password
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
+    And the current page is the personal details page
     When they edit their personal details
     But fill in "Current Password" with ""
     Then they should not be able to edit their personal details
 
   @javascript
   Scenario: Buyer uses wrong current password
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
+    And the current page is the personal details page
     When they edit their personal details
     But fill in "Current Password" with "wrong password"
     Then they should not be able to edit their personal details
 
   @javascript
   Scenario: Buyer uses correct current password
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
+    And the current page is the personal details page
     When they edit their personal details
     And they change their password
     Then they should be able to edit their personal details
@@ -46,8 +49,7 @@ Feature: Dev Portal Buyer Personal Details
       | user_extra_required  | true     |           |        |
       | user_extra_read_only |          | true      |        |
       | user_extra_hidden    |          |           | true   |
-
-    When the buyer wants to edit their personal details
+    When they go to the personal details page
     Then fields are required:
       | required            |
       | First name          |
@@ -77,13 +79,14 @@ Feature: Dev Portal Buyer Personal Details
 
   @javascript
   Scenario: Buyer sends an empty form
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
     When they don't provide any personal details
     Then they should not be able to edit their personal details
 
   @javascript
   Scenario: Buyer sends a wrong email
-    Given the buyer wants to edit their personal details
+    Given they go to the personal details page
+    And the current page is the personal details page
     When they edit their personal details
     And fill in "Email" with "wrong"
     Then they should not be able to edit the email
