@@ -58,12 +58,12 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
   end
 
   test 'enabled_notifications' do
-    preferences = NotificationPreferences.new(enabled_notifications: %w(application_created foo))
+    preferences = NotificationPreferences.new(enabled_notifications: %w[application_created foo])
 
     assert_includes preferences.enabled_notifications, 'application_created'
     refute_includes preferences.enabled_notifications, 'foo'
 
-    enabled_notifications = %w(application_created) + hidden_notifications.map(&:to_s)
+    enabled_notifications = %w[application_created] + hidden_notifications.map(&:to_s)
 
     assert_same_elements enabled_notifications, preferences.enabled_notifications
 
@@ -75,10 +75,54 @@ class NotificationPreferencesTest < ActiveSupport::TestCase
   test 'enabled_notifications=' do
     preferences = NotificationPreferences.new
 
-    enabled = preferences.enabled_notifications = %w(application_created)
+    enabled = preferences.enabled_notifications = %w[application_created]
     enabled += hidden_notifications.map(&:to_s)
 
     assert_same_elements enabled, preferences.enabled_notifications
     assert_equal preferences.available_notifications, Set.new(preferences.preferences.keys)
+  end
+
+  test 'new_preferences=' do
+    preferences = NotificationPreferences.new(enabled_notifications: %w[account_created application_created service_contract_created])
+
+    assert preferences.preferences["application_created"]
+    assert_not preferences.preferences["limit_alert_reached_provider"]
+
+    before_change = preferences.preferences.except("application_created", "limit_alert_reached_provider")
+
+    preferences.new_preferences = { application_created: false, limit_alert_reached_provider: true }
+
+    assert_not preferences.preferences["application_created"]
+    assert preferences.preferences["limit_alert_reached_provider"]
+
+    # the notifications that were not updated by #new_preferences= have not been changed
+    assert_equal before_change, preferences.preferences.except("application_created", "limit_alert_reached_provider")
+
+    # process string values correctly
+    preferences.new_preferences = { "plan_downgraded" => "true", "service_contract_created" => "false" }
+
+    assert_not preferences.preferences["service_contract_created"]
+    assert preferences.preferences["plan_downgraded"]
+  end
+
+  test 'new_preferences= invalid values' do
+    preferences = FactoryBot.create(:user_with_account).notification_preferences
+    preferences.save
+
+    preferences.new_preferences = { non_existing_preference: true }
+
+    assert_not preferences.valid?
+    assert_equal ["notification 'non_existing_preference' is not valid"], preferences.errors[:preferences]
+
+    preferences.reload
+    new_prefs = { account_created: "asdf", application_created: "", service_contract_created: 1 }
+    preferences.new_preferences = new_prefs
+
+    assert_not preferences.valid?
+    errors = preferences.errors[:preferences]
+    assert_equal 3, errors.size
+    new_prefs.each_key do |key|
+      errors.include?("invalid value for '#{key}', must be either true or false")
+    end
   end
 end
