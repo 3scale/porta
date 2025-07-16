@@ -9,6 +9,7 @@ module SessionHelper
     fill_in('Password', with: password)
     click_button('Sign in')
 
+    assert_selector('div', text: 'Signed in successfully', visible: :all)
     @current_user = User.find_by!(username: username)
   end
 
@@ -30,6 +31,7 @@ module SessionHelper
     fill_in('Password', with: password)
     click_button('Sign in')
 
+    assert_title(/Dashboards/)
     @current_user = User.find_by!(username: username)
   end
 

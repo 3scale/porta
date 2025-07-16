@@ -108,12 +108,7 @@ Then "the current page is {}" do |page_name|
 end
 
 Then /^(?:|I |they )should be on (.+)$/ do |page_name|
-  current_path = URI.parse(current_url).path
-  if current_path.respond_to? :should
-    current_path.should == path_to(page_name)
-  else
-    assert_equal path_to(page_name), current_path
-  end
+  assert_current_path path_to(page_name), ignore_query: true
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
