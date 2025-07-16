@@ -117,9 +117,9 @@ module VerticalNavHelper
     items = []
 
     if can?(:manage, :finance)
-      items << {id: :earnings,    title: 'Earnings by Month', path: admin_finance_root_path}
-      items << {id: :invoices,    title: 'Invoices',          path: admin_finance_invoices_path}
-      items << {id: :log_entries, title: 'Finance Log',       path: admin_finance_log_entries_path} if current_user.impersonation_admin?
+      items << {id: :earnings,    title: t('shared.nav.earnings'), path: admin_finance_root_path}
+      items << {id: :invoices,    title: 'Invoices',               path: admin_finance_invoices_path}
+      items << {id: :log_entries, title: 'Finance Log',            path: admin_finance_log_entries_path} if current_user.impersonation_admin?
     end
 
     if can?(:manage, :settings)

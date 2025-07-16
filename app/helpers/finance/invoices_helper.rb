@@ -54,6 +54,10 @@ module Finance::InvoicesHelper
     price_tag(cost, precision: Invoice::DECIMALS)
   end
 
+  def years_by_provider(provider)
+    Invoice.years_by_provider(provider.id).presence || [(ActiveSupport::TimeZone.new(provider.timezone) || Time.zone).now.year]
+  end
+
   private
 
   def invoice_date_format(date)

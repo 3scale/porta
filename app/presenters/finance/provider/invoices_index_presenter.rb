@@ -2,6 +2,7 @@
 
 class Finance::Provider::InvoicesIndexPresenter
   include System::UrlHelpers.system_url_helpers
+  include Finance::InvoicesHelper
 
   delegate :can?, to: :ability
 
@@ -34,7 +35,7 @@ class Finance::Provider::InvoicesIndexPresenter
   end
 
   def years
-    @years ||= Invoice.years_by_provider(provider.id).presence || [(ActiveSupport::TimeZone.new(provider.timezone) || Time.zone).now.year]
+    @years ||= years_by_provider(provider)
   end
 
   def toolbar_props

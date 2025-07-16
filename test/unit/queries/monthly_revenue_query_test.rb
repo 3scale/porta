@@ -21,7 +21,7 @@ class MonthlyRevenueQueryTest < ActiveSupport::TestCase
     @invoice_one.line_items.create!(name: 'A', cost: 42)
     @invoice_one.line_items.create!(name: 'B', cost: 58)
 
-    @query = MonthlyRevenueQuery.new(@provider)
+    @query = MonthlyRevenueQuery.new(account: @provider)
   end
 
   test '#with_states' do
@@ -59,7 +59,7 @@ class MonthlyRevenueQueryTest < ActiveSupport::TestCase
     groups = @query.with_states
     assert_equal 200, groups.first.total_cost
 
-    @query = MonthlyRevenueQuery.new(@provider, include_vat: false)
+    @query = MonthlyRevenueQuery.new(account: @provider, options: { include_vat: false })
     groups = @query.with_states
     assert_equal 100, groups.first.total_cost
   end
