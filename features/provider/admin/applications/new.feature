@@ -42,6 +42,53 @@ Feature: Audience's new application page
     Then the current page is application "New App" admin page
     And they should see a toast alert with text "Application was successfully created"
 
+  @search
+  Scenario: Search for account
+    Given application plan "Basic" has 20 contracts
+    When they go to the admin portal new application page
+    And they toggle the menu on select "Account"
+    And they press "View all accounts"
+    Then they should see "Select an account"
+    And they should see 5 pages
+
+    When they search "Jane" using the toolbar
+    Then the search input should be filled with "Jane"
+    And they should see following table:
+      | Name  | Admin   |
+      | Jane  | Jane    |
+
+    When they clear the search filter
+    And they look at the 5th page
+    Then they should see following table:
+      | Name  | Admin   |
+      | Jane  | Jane    |
+
+  @search
+  Scenario: Search for product
+    # To ensure the new products are within the first 20 results (updated latest)
+    Given 5 minutes pass
+    And 18 products and 1 backend apis
+    # To ensure that API is updated latest
+    And product "API" has name set to "Old"
+    And another product "Another product"
+    When they go to the admin portal new application page
+    And they select "Jane" from "Account"
+    And they toggle the menu on select "Product"
+    And they press "View all product"
+    Then they should see "Select a product"
+
+    When they search "another" using the toolbar
+    Then the search input should be filled with "another"
+    And they should see following table:
+      | Name            | System Name          |
+      | Another product | another_product      |
+
+    When they clear the search filter
+    And they look at the 5th page
+    And they should see following table:
+      | Name    | System Name  |
+      | My API  | my_api          |
+
   Scenario: Create an application for a subscribed product
     Given the buyer is subscribed to product "My API"
     And they go to the admin portal new application page

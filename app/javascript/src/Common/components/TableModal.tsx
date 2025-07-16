@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Button,
-  InputGroup,
+  Flex,
+  FlexItem,
   Modal,
   ModalVariant,
   Pagination,
   Spinner,
-  TextInput,
   Toolbar,
   ToolbarContent,
   ToolbarItem
@@ -16,8 +16,8 @@ import {
   TableBody,
   TableHeader
 } from '@patternfly/react-table'
-import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { NoMatchFound } from 'Common/components/NoMatchFound'
 import type { IRecord } from 'utilities/patternfly-utils'
 
@@ -47,6 +47,7 @@ interface Props<T extends IRecord> {
   page: number;
   setPage: (page: number) => void;
   onSearch: (term: string) => void;
+  searchQuery?: string;
   searchPlaceholder?: string;
   perPage?: number;
   sortBy: {
@@ -74,6 +75,7 @@ const TableModal = <T extends IRecord>({
   setPage,
   onSearch,
   searchPlaceholder,
+  searchQuery,
   sortBy
 }: Props<T>): React.ReactElement => {
   const [selected, setSelected] = useState<T | null>(selectedItem)
@@ -104,12 +106,6 @@ const TableModal = <T extends IRecord>({
 
   const handleOnSelect = (_e: unknown, _i: unknown, rowId: number) => {
     setSelected(pageItems[rowId])
-  }
-
-  const handleOnClickSearch = () => {
-    if (searchInputRef.current) {
-      onSearch(searchInputRef.current.value)
-    }
   }
 
   // TODO: can we use Common/components/Pagination.tsx here?
@@ -172,31 +168,20 @@ const TableModal = <T extends IRecord>({
       <Toolbar>
         <ToolbarContent>
           <ToolbarItem variant="search-filter">
-            <InputGroup>
-              <TextInput
-                aria-label="search for an item"
-                isDisabled={isLoading || !onSearch}
-                placeholder={searchPlaceholder}
-                ref={searchInputRef}
-                type="search"
-              />
-              <Button
-                aria-label="search button for search input"
-                data-testid="search"
-                isDisabled={isLoading || !onSearch}
-                variant="control"
-                onClick={handleOnClickSearch}
-              >
-                <SearchIcon />
-              </Button>
-            </InputGroup>
+            <ToolbarSearch placeholder={searchPlaceholder} searchQuery={searchQuery} onSubmitSearch={onSearch} />
           </ToolbarItem>
           <ToolbarItem alignment={{ default: 'alignRight' }} variant="pagination">
             {pagination}
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      {isLoading ? <Spinner size="xl" /> : rows.length === 0 ? <NoMatchFound /> : (
+      {isLoading ? (
+        <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+          <FlexItem>
+            <Spinner size="lg" />
+          </FlexItem>
+        </Flex>
+      ) : rows.length === 0 ? <NoMatchFound /> : (
         <Table
           aria-label={title}
           cells={cells}

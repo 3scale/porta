@@ -33,7 +33,8 @@ Feature: Personal Details
     And I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then I should be on the provider users page
+    Then I should see the flash message "User was successfully updated"
+    And I should be on the provider users page
 
   Scenario: Edit personal details with invalid data
     When I navigate to the Account Settings

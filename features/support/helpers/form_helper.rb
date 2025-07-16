@@ -8,9 +8,9 @@ module FormHelper
 
   def fill_form_with(table)
     table.rows_hash.each do |name, value|
-      if has_select?(name, wait: 0)
+      if has_select?(name)
         select(value, from: name)
-      elsif has_field?(name, type: 'checkbox', wait: 0)
+      elsif has_field?(name, type: 'checkbox')
         if value.casecmp?('yes')
           check(name)
         elsif value.casecmp?('no')
@@ -37,6 +37,13 @@ module FormHelper
     within select do
       find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
       find('.pf-c-select__menu .pf-c-select__menu-item:not(.pf-m-disabled)').click
+    end
+  end
+
+  def pf4_select_toggle(label)
+    select = find_pf_select(label)
+    within select do
+      find('button.pf-c-select__toggle, button.pf-c-select__toggle-button').click if has_no_css?('.pf-c-select__menu', wait: 0)
     end
   end
 
