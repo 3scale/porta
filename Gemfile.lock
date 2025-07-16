@@ -503,7 +503,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.10.3)
     minitest-ci (3.4.0)
       minitest (>= 5.0.6)
@@ -536,7 +536,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.4)
-    nokogiri (1.16.2)
+    nokogiri (1.18.8)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     non-stupid-digest-assets (1.0.9)
@@ -1041,7 +1041,7 @@ DEPENDENCIES
   mocha
   mysql2 (~> 0.5.3)
   n_plus_one_control
-  nokogiri (~> 1.16.2)
+  nokogiri (~> 1.18.8)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 2.0)
   open_id_authentication
