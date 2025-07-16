@@ -19,6 +19,7 @@ Feature: Activation
     Given a pending user "alice" of account "foo.3scale.localhost"
     When I try to log in as provider "alice"
     Then I should not be logged in
+    And I should see "Your account isn't active or hasn't been approved yet."
 
   Scenario: Activated user logs in
     Given a pending user "alice" of account "foo.3scale.localhost"

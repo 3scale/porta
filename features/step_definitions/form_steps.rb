@@ -87,7 +87,7 @@ When "the form is submitted with:" do |table|
 end
 
 When "the modal is submitted with:" do |table|
-  within 'div.pf-c-modal-box form, #colorbox[role="dialog"] form' do
+  within 'div.pf-c-modal-box, #colorbox[role="dialog"]' do
     submit_form_with table
   end
 end

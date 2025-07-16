@@ -28,7 +28,8 @@ Feature: Buyer Account Invitations
   Scenario: Sending an invitation for a partner account
     When I navigate to the page of the invitations of the partner "lol cats"
     And I send an invitation to "new@lolcats.net"
-    Then "new@lolcats.net" should receive an invitation to account "lol cats"
+    Then I should see "Invitation was successfully created and will be sent soon"
+    And "new@lolcats.net" should receive an invitation to account "lol cats"
 
   @emails
   Scenario: Inviting an existing user is not allowed
@@ -58,7 +59,8 @@ Feature: Buyer Account Invitations
     And an invitation sent to "pending@lolcats.com" to join account "lol cats"
     When I navigate to the page of the invitations of the partner "lol cats"
     And I resend the invitation to "invited@lolcats.com"
-    Then invitation from account "lol cats" should be resent to "invited@lolcats.com"
+    Then I should see "Invitation will be resent soon"
+    And invitation from account "lol cats" should be resent to "invited@lolcats.com"
     And I should see the invitation for "invited@lolcats.com" on top of the list
 
   Scenario: Accepted invitations cannot be resent

@@ -21,11 +21,11 @@ Feature: Login page
   Scenario: Provider can log in with Captcha enabled
     Given the provider has bot protection enabled
     And the client will not be marked as a bot
-    When the provider logs in
+    When the provider tries to log in
     Then the current page is the provider dashboard
 
   Scenario: Captcha rejects a bot attempt also when it sends the correct credentials
     Given the provider has bot protection enabled
     And the client will be marked as a bot
-    When the provider logs in
+    When the provider tries to log in
     Then they should not be logged in

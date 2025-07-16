@@ -84,6 +84,7 @@ Feature: Provider Account Settings User Invitations
         | Username              | peter             |
         | Password              | 123456            |
         | Password confirmation | 123456            |
+      And they log out
       When the provider logs in
       And they go to the provider users page
       Then the table has the following row:

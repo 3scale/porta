@@ -16,8 +16,8 @@ Feature: Audience > Accounts > Edit
     Given they go to the buyer account edit page for "Pepe"
     When the form is submitted with:
       | Organization/Group Name | Pepito |
-    Then the current page is the buyer account page for "Pepito"
-    And should see a toast alert with text "Account successfully updated"
+    Then should see a toast alert with text "Account successfully updated"
+    And the current page is the buyer account page for "Pepito"
 
   Scenario: Deleting an account
     Given a buyer "Deleteme" of the provider

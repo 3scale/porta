@@ -88,6 +88,7 @@ Feature: Email templates management
       Org: {{account.name}}
       """
     When I press "Save"
+    Then I should see "Email Template updated"
 
     When buyer "steve" with email "steve@mail.com" signs up to provider "foo.3scale.localhost"
     And "bcc@mail.com" opens the email with subject "Overriden"

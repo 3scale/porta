@@ -29,23 +29,23 @@ module SessionHelper
     fill_in('Email or Username', with: username)
     fill_in('Password', with: password)
     click_button('Sign in')
-
-    @current_user = User.find_by!(username: username)
   end
 
   def current_account
     current_user.account
   end
 
+  # provider log out
   def log_out
     return unless logged_in?
 
     find(:css, '[aria-label="Session toggle"]').click
     click_link 'Sign Out'
+    assert_current_path '/p/sessions/new'
   end
 
   def assert_current_user(username)
-    @user = User.find_by(username: username)
+    @current_user = User.find_by(username: username)
 
     browser = Capybara.current_session.driver.browser
     if Capybara.current_driver == :rack_test
@@ -53,6 +53,11 @@ module SessionHelper
     else
       assert browser.manage.cookie_named(:user_session)
     end
+  end
+
+  def user_is_logged_in(username)
+    assert_no_current_path %r{\A(/p/sessions|/session|/p/login|/login)\z}, ignore_query: true
+    assert_current_user(username)
   end
 
   private

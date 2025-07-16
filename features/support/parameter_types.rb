@@ -273,7 +273,7 @@ ParameterType(
   name: 'user',
   type: User,
   regexp: /user "([^"]*)"|the user/,
-  transformer: ->(name) { name.present? ? User.find_by!(username: name) : @user }
+  transformer: ->(name) { name.present? ? User.find_by!(username: name) : (@user || @current_user)}
 )
 
 ParameterType(
