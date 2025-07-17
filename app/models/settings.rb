@@ -16,10 +16,11 @@ class Settings < ApplicationRecord
 
   symbolize :spam_protection_level, :admin_bot_protection_level
 
+  self.ignored_columns = %i[forum_enabled forum_public anonymous_posts_enabled]
+
   include Switches
 
   before_create :generate_sso_key
-  before_create :set_forum_enabled
 
   alias provider account
 
@@ -47,12 +48,6 @@ class Settings < ApplicationRecord
     update_approval_required(attrs) if approval_required_editable?
 
     super(attrs)
-  end
-
-  def set_forum_enabled
-    self.forum_public = false if account
-
-    true
   end
 
   def account_approval_required

@@ -430,37 +430,6 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
   end
 
-  def test_post_created
-    forum = FactoryBot.build_stubbed(:forum, account: provider)
-    topic = FactoryBot.build_stubbed(:topic, forum: forum, permalink: 'alex')
-    post  = FactoryBot.build_stubbed(:post, forum: forum, topic: topic)
-    event = Posts::PostCreatedEvent.create(post)
-    mail  = NotificationMailer.post_created(event, receiver)
-    user  = post.user
-    user_decorator = user.decorate
-
-    assert_equal [[:manage, :forum]], NotificationMailer.required_abilities[:post_created]
-
-    assert_equal "New forum post by #{user_decorator.informal_name}", mail.subject
-    assert_equal [receiver.email], mail.to
-
-    [mail.html_part.body, mail.text_part.body].each do |body|
-      assert_match "#{user_decorator.informal_name} from #{user.account.name}", body.encoded
-    end
-
-    # anonymous user
-    post.stubs(user: nil)
-
-    no_user_event = Posts::PostCreatedEvent.create(post)
-    not_user_mail = NotificationMailer.post_created(no_user_event, receiver)
-
-    assert_equal 'New forum post by anonymous user', not_user_mail.subject
-
-    [not_user_mail.html_part.body, not_user_mail.text_part.body].each do |body|
-      assert_match 'Anonymous user has posted', body.encoded
-    end
-  end
-
   def test_csv_data_export
     user  = FactoryBot.build_stubbed(:simple_user, account: account)
     event = Reports::CsvDataExportEvent.create(provider, user, 'users', 'week')

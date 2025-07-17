@@ -87,14 +87,6 @@ System::Database::MySQL.define do
     SQL
   end
 
-  trigger 'forums' do
-    <<~SQL
-      IF NEW.account_id <> master_id THEN
-        SET NEW.tenant_id = NEW.account_id;
-      END IF;
-    SQL
-  end
-
   trigger 'invitations' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id);
@@ -172,12 +164,6 @@ System::Database::MySQL.define do
     SQL
   end
 
-  trigger 'moderatorships' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM forums WHERE id = NEW.forum_id AND tenant_id <> master_id);
-    SQL
-  end
-
   trigger 'payment_transactions' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM invoices WHERE id = NEW.invoice_id AND tenant_id <> master_id);
@@ -203,12 +189,6 @@ System::Database::MySQL.define do
   trigger 'policies' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id);
-    SQL
-  end
-
-  trigger 'posts' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM forums WHERE id = NEW.forum_id AND tenant_id <> master_id);
     SQL
   end
 
@@ -260,27 +240,9 @@ System::Database::MySQL.define do
     SQL
   end
 
-  trigger 'topic_categories' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM forums WHERE id = NEW.forum_id AND tenant_id <> master_id);
-    SQL
-  end
-
-  trigger 'topics' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM forums WHERE id = NEW.forum_id AND tenant_id <> master_id);
-    SQL
-  end
-
   trigger 'usage_limits' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM metrics WHERE id = NEW.metric_id AND tenant_id <> master_id);
-    SQL
-  end
-
-  trigger 'user_topics' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM topics WHERE id = NEW.topic_id AND tenant_id <> master_id);
     SQL
   end
 
