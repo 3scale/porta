@@ -4,7 +4,7 @@ PROJECT = $(subst @,,$(notdir $(subst /workspace,,$(PROJECT_PATH))))
 
 export PROJECT
 
-TMP = tmp/capybara tmp/junit tmp/codeclimate coverage log/test.searchd.log
+TMP = tmp/capybara tmp/junit coverage log/test.searchd.log
 
 DB ?= mysql
 
