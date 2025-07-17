@@ -17,12 +17,15 @@ module SuspendInactiveProviders
     2357355852194, # Personal (5K calls/day)
   ]
 
+  BATCH_SIZE = ENV.fetch("BATCH_SIZE", 50).to_i
+
   def scope
     Account.providers
            .includes(:bought_cinstances)
            .where(state: 'approved')
            .where(bought_cinstances: { first_daily_traffic_at: ..6.months.ago })
            .where(bought_cinstances: { plan_id: PLANS })
+           .limit(BATCH_SIZE)
   end
 
   def call
@@ -37,6 +40,8 @@ module SuspendInactiveProviders
   end
 
   def each_with_progress_counter(enumerable, count)
+    puts "Affected IDs: #{enumerable.pluck(:id)}"
+
     progress = ProgressCounter.new(count)
     enumerable.each do |element|
       progress.call
