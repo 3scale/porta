@@ -13,7 +13,7 @@ class Provider::Admin::User::NotificationPreferencesControllerTest < ActionContr
   end
 
   test 'should get list of notification preferences' do
-    NotificationPreferencesForm.any_instance.expects(:enabled?).returns(true).at_least_once
+    NotificationCategories.any_instance.expects(:enabled?).returns(true).at_least_once
 
     get :show
     assert_response :success
