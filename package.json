@@ -46,7 +46,7 @@
     "ts-jest": "^29.2.2",
     "typescript": "5.0.4",
     "webpack": "5.92.1",
-    "webpack-dev-server": "4.15.2"
+    "webpack-dev-server": "5.2.1"
   },
   "dependencies": {
     "@patternfly/patternfly": "4.224.2",
