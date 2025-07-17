@@ -18,7 +18,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
   end
 
   def test_create_notifications
-    provider     = FactoryBot.create(:simple_provider)
+    provider     = FactoryBot.create(:provider_with_billing)
     event        = Invoices::InvoicesToReviewEvent.create_and_publish!(provider)
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
     user         = FactoryBot.create(:simple_admin, state: :active, account: provider)
@@ -26,8 +26,8 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     user.notification_preferences.update(preferences: { invoices_to_review: true })
 
     Sidekiq::Testing.inline! do
-      assert_difference Notification.method(:count) do
-        NotificationDeliveryService.expects(:call).with(instance_of(Notification))
+      assert_difference Notification.method(:count), +2 do
+        NotificationDeliveryService.expects(:call).with(instance_of(Notification)).twice
         @worker.create_notifications(notification)
       end
     end
