@@ -218,7 +218,7 @@ class NotificationPreferencesFormTest < ActiveSupport::TestCase
   end
 
   def stubs_at_least_one_service?(result)
-    NotificationPreferencesForm.any_instance
+    NotificationCategories.any_instance
       .stubs(:at_least_one_service?).returns(result)
   end
 

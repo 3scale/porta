@@ -36,6 +36,7 @@ class NotificationTest < ActiveSupport::TestCase
     notification = FactoryBot.build_stubbed(:notification_with_parent_event)
 
     notification.expects(:permitted?).returns(true).at_least_once
+    notification.expects(:category_enabled?).returns(true).at_least_once
     assert notification.should_deliver?
 
     notification.account.master = true
