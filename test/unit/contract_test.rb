@@ -118,7 +118,7 @@ class ContractTest < ActiveSupport::TestCase
     assert_same_elements all_cinstances_of_provider, permitted_contract_ids
 
     user.update(allowed_service_ids: [service1.id])
-    assert_equal cinstances1.pluck(:id), Contract.permitted_for(user).pluck(:id)
+    assert_same_elements cinstances1.pluck(:id), Contract.permitted_for(user).pluck(:id)
 
     user.update(allowed_service_ids: [])
     assert_empty Contract.permitted_for(user)
