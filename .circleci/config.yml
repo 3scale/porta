@@ -90,7 +90,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby31: &system-builder-ruby31
-  image: quay.io/3scale/system-builder:stream9-ruby3.1-libyaml
+  image: quay.io/3scale/system-builder:b6b2e83
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
