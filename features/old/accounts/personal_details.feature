@@ -34,6 +34,7 @@ Feature: Personal Details
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should be on the provider users page
+    And I should see the flash message "User was successfully updated"
 
   Scenario: Edit personal details with invalid data
     When I navigate to the Account Settings

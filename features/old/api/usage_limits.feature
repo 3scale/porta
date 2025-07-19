@@ -26,9 +26,9 @@ Feature: Usage limits
     And I follow "Limits (0)" for metric "hits" on application plan "Basic"
     And I follow "New usage limit"
     And I select "hour" from "Period"
-    And I select "hour" from "Period"
     And I fill in "Max. value" with "0"
     And I press "Create usage limit"
+    Then they should see a toast alert with text "Usage limit was successfully created"
     Then I should see a usage limit of 0 for metric "hits" on application plan "Basic" per "1 hour"
     And plan "Basic" should have a usage limit of 0 for metric "hits" per "hour"
     And I should see the edit limit link

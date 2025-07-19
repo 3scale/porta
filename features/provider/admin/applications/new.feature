@@ -17,7 +17,8 @@ Feature: Audience's new application page
   Scenario: Navigation
     Given they go to the admin portal applications page
     When they follow "Create an application"
-    Then the current page is the admin portal new application page
+    And they should see "Create application"
+    And the current page is the admin portal new application page
 
   Scenario: Create an application
     Given they go to the admin portal new application page
@@ -27,8 +28,8 @@ Feature: Audience's new application page
       | Application plan | Basic          |
       | Name             | New App        |
       | Description      | This is an app |
-    Then the current page is application "New App" admin page
-    And they should see a toast alert with text "Application was successfully created"
+    Then they should see a toast alert with text "Application was successfully created"
+    And the current page is application "New App" admin page
 
   Scenario: Create an application without being subscribed to a product
     Given the buyer is not subscribed to product "My API"
@@ -39,8 +40,8 @@ Feature: Audience's new application page
       | Application plan | Basic          |
       | Name             | New App        |
       | Description      | This is an app |
-    Then the current page is application "New App" admin page
-    And they should see a toast alert with text "Application was successfully created"
+    Then they should see a toast alert with text "Application was successfully created"
+    And the current page is application "New App" admin page
 
   Scenario: Create an application for a subscribed product
     Given the buyer is subscribed to product "My API"
@@ -51,8 +52,8 @@ Feature: Audience's new application page
       | Application plan | Basic          |
       | Name             | New App        |
       | Description      | This is an app |
-    Then the current page is application "New App" admin page
-    And they should see a toast alert with text "Application was successfully created"
+    Then they should see a toast alert with text "Application was successfully created"
+    And the current page is application "New App" admin page
 
   Scenario: Create an application when product has no application plans
     Given a product "No plans API" with no plans
@@ -77,8 +78,8 @@ Feature: Audience's new application page
     Then the submit button is disabled
     But they fill in "Banana" with "Yes, please."
     And press "Create application"
-    Then the current page is application "New App" admin page
-    And they should see a toast alert with text "Application was successfully created"
+    Then they should see a toast alert with text "Application was successfully created"
+    And the current page is application "New App" admin page
 
   Scenario: Submit button should be disabled until form is filled
     Given they go to the admin portal new application page

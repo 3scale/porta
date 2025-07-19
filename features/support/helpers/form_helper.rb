@@ -7,10 +7,12 @@ module FormHelper
   end
 
   def fill_form_with(table)
+    # wait for the form to be rendered
+    assert has_element? 'form'
     table.rows_hash.each do |name, value|
-      if has_select?(name, wait: 0)
+      if has_select?(name)
         select(value, from: name)
-      elsif has_field?(name, type: 'checkbox', wait: 0)
+      elsif has_field?(name, type: 'checkbox')
         if value.casecmp?('yes')
           check(name)
         elsif value.casecmp?('no')

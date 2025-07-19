@@ -87,8 +87,8 @@ Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
 end
 
 Then /^the buyer should have (\d+) invoices?$/ do |number|
-  set_current_domain @provider.external_domain
-  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  step "the buyer logs in"
+
   visit admin_account_invoices_path
 
   assert_selector(:css, 'tr.invoice', count: number.to_i)
@@ -96,8 +96,8 @@ end
 
 Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
   ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
-  set_current_domain @provider.external_domain
-  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  step "the buyer logs in"
+
   visit admin_account_invoices_path
 
   order ||= '1'
@@ -204,8 +204,8 @@ Then(/^I should see in the invoice period for the column "(in process|overdue|pa
 end
 
 Then(/there is only one invoice for "([^"]*)"/) do |date|
-  set_current_domain @provider.external_domain
-  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  step "the buyer logs in"
+
   visit admin_account_invoices_path
   nodes = page.find_all(:xpath, ".//tr[contains(@class,'invoice')]/td[contains(text(), '#{date}')]")
   assert_equal 1, nodes.count

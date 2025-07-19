@@ -67,6 +67,7 @@ Feature: Email templates management
       Org: {{account.name}}
       """
     When I press "Create Email Template"
+    And they should see a toast alert with text "Email Template overridden"
 
     When buyer "bob" with email "bob@mail.com" signs up to provider "foo.3scale.localhost"
      And "test@bcc.com" opens the email with subject "foo.3scale.localhost API account confirmation"
@@ -88,6 +89,7 @@ Feature: Email templates management
       Org: {{account.name}}
       """
     When I press "Save"
+    Then they should see a toast alert with text "Email Template updated"
 
     When buyer "steve" with email "steve@mail.com" signs up to provider "foo.3scale.localhost"
     And "bcc@mail.com" opens the email with subject "Overriden"

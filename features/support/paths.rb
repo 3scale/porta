@@ -426,11 +426,13 @@ World(Module.new do
       end
 
     when /^(application "(.*)"|the application's) admin page$/
-      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      app_name = $2
+      app = app_name.present? ? Cinstance.find_by(name: app_name) : (@cinstance || @application)
       provider_admin_application_path(app)
 
     when /^(application "(.*)"|the application's) admin edit page$/
-      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      app_name = $2
+      app = app_name.present? ? Cinstance.find_by(name: app_name) : (@cinstance || @application)
       edit_provider_admin_application_path(app)
 
     when 'the admin portal data exports page'
