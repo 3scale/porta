@@ -204,8 +204,8 @@ Then(/^I should see in the invoice period for the column "(in process|overdue|pa
 end
 
 Then(/there is only one invoice for "([^"]*)"/) do |date|
-  set_current_domain @provider.external_domain
-  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
+  step "the buyer logs in"
+
   visit admin_account_invoices_path
   nodes = page.find_all(:xpath, ".//tr[contains(@class,'invoice')]/td[contains(text(), '#{date}')]")
   assert_equal 1, nodes.count
