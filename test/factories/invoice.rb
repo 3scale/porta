@@ -6,6 +6,10 @@ FactoryBot.define do
     association :provider_account,  :factory => :simple_provider
     period { Month.new(Time.zone.now) }
 
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     after(:create) do |invoice|
       invoice.generate_pdf! if %w[finalized paid].include?(invoice.state)
     end
