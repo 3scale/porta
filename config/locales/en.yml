@@ -1872,6 +1872,12 @@ en:
               charging_failed: 'Failed to charge the credit card.'
             period:
               invalid_range: 'must be between the provider account creation date and 12 months from now'
+              
+        notification_preferences:
+          attributes:
+            preferences:
+              invalid_value: "invalid value for '%{key}', must be either true or false"
+              invalid_key: "notification '%{key}' is not valid"
 
     models:
       topic_category: category

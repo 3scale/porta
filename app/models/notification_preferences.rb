@@ -2,6 +2,7 @@ class NotificationPreferences < ApplicationRecord
   belongs_to :user, inverse_of: :notification_preferences
 
   validates :user, presence: true
+  validate :preferences_valid?
   serialize :preferences, JSON
 
   after_initialize :set_defaults
@@ -33,6 +34,17 @@ class NotificationPreferences < ApplicationRecord
     super Hash(preferences).stringify_keys
   end
 
+  # "patches" the notification preferences, setting only the preferences that appear in the hash,
+  # to the corresponding values. The other preferences remain unchanged.
+  # @param [Hash] updated_preferences - new values for the preferences
+  # @example Update preferences
+  #   preferences.update(new_preferences: { account_created: true, limit_alert_reached_provider: false })
+  # Valid values are: true, false, "true", "false". Other values (including empty) will not pass validation.
+  def new_preferences=(updated_preferences = {})
+    transformed = updated_preferences.transform_values { transform_boolean(_1) }
+    self.preferences = preferences.merge(transformed)
+  end
+
   def include?(preference)
     enabled_notifications.include?(preference.to_s)
   end
@@ -53,6 +65,10 @@ class NotificationPreferences < ApplicationRecord
     self.class.default_preferences.stringify_keys
   end
 
+  # Sets the notification preferences:
+  # - enables all preferences, included in the argument
+  # - disables all other preferences, not included in the argument
+  # @param [Array<String>] preferences - list of enabled preferences
   def enabled_notifications=(preferences)
     enabled  = preferences_to_hash(preferences, value: true).stringify_keys
     hidden   = preferences_to_hash(hidden_notifications, value: true)
@@ -74,4 +90,22 @@ class NotificationPreferences < ApplicationRecord
   end
 
   delegate :preferences_to_hash, to: :class
+
+  def transform_boolean(value)
+    case value
+    when "false"
+      false
+    when "true"
+      true
+    else
+      value
+    end
+  end
+
+  def preferences_valid?
+    preferences.each_pair do |key,value|
+      errors.add(:preferences, :invalid_value, key: key) unless [true, false].include? value
+      errors.add(:preferences, :invalid_key, key: key) unless available_notifications.include? key.to_s
+    end
+  end
 end
