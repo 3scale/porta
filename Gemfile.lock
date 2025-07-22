@@ -536,7 +536,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.4)
-    nokogiri (1.18.8)
+    nokogiri (1.18.9)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     non-stupid-digest-assets (1.0.9)
@@ -1041,7 +1041,7 @@ DEPENDENCIES
   mocha
   mysql2 (~> 0.5.3)
   n_plus_one_control
-  nokogiri (~> 1.18.8)
+  nokogiri (~> 1.18.9)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 2.0)
   open_id_authentication
