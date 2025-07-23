@@ -4,7 +4,7 @@ require 'test_helper'
 
 class VerticalNavHelperTest < ActionView::TestCase
   def setup
-    stubs(can?: true, edit_legal_terms_url: '', logged_in?: '', user_has_subscriptions?: true)
+    stubs(can?: true, edit_legal_terms_url: '', logged_in?: '')
   end
 
   attr_reader :current_account, :current_user
