@@ -784,7 +784,7 @@ jobs:
 
   cucumber-oracle:
     <<: *build-envs-oracle
-    parallelism: 30
+    parallelism: 40
     parameters:
       executor:
         type: string
