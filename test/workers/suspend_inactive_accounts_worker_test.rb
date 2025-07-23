@@ -24,7 +24,7 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
     assert_not tenant2.reload.suspended?
   end
 
-  test 'ignores accounts that fails to validate' do
+  test 'ignores accounts that fail to validate' do
     valid_tenant = FactoryBot.create(:simple_provider)
     invalid_tenant = FactoryBot.build(:simple_provider, org_name: '@@@')
     invalid_tenant.save!(validate: false)
