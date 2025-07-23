@@ -3,11 +3,11 @@
 class SuspendInactiveAccountsWorker
   include Sidekiq::IterableJob
 
-  def build_enumerator(*_args, cursor:)
+  def build_enumerator(cursor:)
     active_record_records_enumerator(AutoAccountDeletionQueries.should_be_suspended, cursor:)
   end
 
-  def each_iteration(item, *_args)
-    item.suspend
+  def each_iteration(account)
+    account.suspend
   end
 end
