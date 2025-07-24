@@ -12,4 +12,5 @@ Feature: Account approval required
     Given they go to account plan "Free" admin edit page
     When the form is submitted with:
       | Accounts require approval? | Yes        |
-    Then new accounts with account plan "Free" will be pending for approval
+    Then the current page is the account plans admin page
+    And new accounts with account plan "Free" will be pending for approval

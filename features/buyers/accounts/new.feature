@@ -26,7 +26,8 @@ Feature: Audience > Accounts > New
       | Organization/Group Name | Alice's Web Widget |
       | Username                | alice              |
       | Email                   | alice@example.com  |
-    Then the current page is the buyer account page for "Alice's Web Widget"
+    Then they should see a toast alert with text "Developer account was successfully created"
+    And the current page is the buyer account page for "Alice's Web Widget"
     And account "Alice's Web Widget" should be approved
     And user "alice" should be active
     But "alice@web-widgets.com" should receive no emails
