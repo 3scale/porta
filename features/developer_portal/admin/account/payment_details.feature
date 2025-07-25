@@ -13,7 +13,7 @@ Feature: Dev Portal Buyer Payment Details
     And the following application:
       | Buyer | Name   |
       | John  | My App |
-    And the buyer logs in to the provider
+    And the buyer logs in
 
   Scenario: Finance is disabled
     Given the provider is charging its buyers

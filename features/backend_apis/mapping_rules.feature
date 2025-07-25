@@ -11,18 +11,21 @@ Feature: Backend API mapping rules
   Scenario: Sorting mapping rules
     When I go to the mapping rules index page for backend "My Backend"
     And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
-    Then the mapping rules should be in the following order:
+    Then they should see a toast alert with text "Mapping rule was created"
+    And the mapping rules should be in the following order:
       | http_method | pattern | position | metric |
       | GET         | /       | 1        | hits   |
       | POST        | /beers  | 2        | hits   |
     And I add a new mapping rule with method "PUT" pattern "/mixers" position "2" and metric "Hits"
-    Then the mapping rules should be in the following order:
+    Then they should see a toast alert with text "Mapping rule was created"
+    And the mapping rules should be in the following order:
       | http_method | pattern | position | metric |
       | GET         | /       | 1        | hits   |
       | PUT         | /mixers | 2        | hits   |
       | POST        | /beers  | 3        | hits   |
     And I add a new mapping rule with method "GET" pattern "/gins" position "1" and metric "Hits"
-    Then the mapping rules should be in the following order:
+    Then they should see a toast alert with text "Mapping rule was created"
+    And the mapping rules should be in the following order:
       | http_method | pattern | position | metric |
       | GET         | /       | 1        | hits   |
       | GET         | /gins   | 2        | hits   |

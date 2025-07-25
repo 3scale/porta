@@ -20,7 +20,7 @@ Feature: Dev Portal Buyer Invoices
     Given the provider is charging its buyers in prepaid mode
     And the provider has "finance" visible
     And 1 month pass
-    When the buyer logs in to the provider
+    When the buyer logs in
     And the buyer is reviewing their account settings
     Then they should have access last's month invoice
     And the buyer should receive some emails
@@ -28,7 +28,7 @@ Feature: Dev Portal Buyer Invoices
   Scenario: Provider has charging disabled
     Given the provider has "finance" denied
     And 1 month pass
-    When the buyer logs in to the provider
+    When the buyer logs in
     And the buyer is reviewing their account settings
     Then they should not have access to invoices
     And the buyer should receive no emails

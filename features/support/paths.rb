@@ -284,8 +284,8 @@ World(Module.new do
       admin_service_api_docs_path(@product)
     when /the product's new ActiveDocs spec page/
       new_admin_service_api_doc_path(@product)
-    when /the spec's preview page from Product context/
-      spec = @api_docs_service
+    when /(?:the spec's|spec "(.*)") preview page from Product context/
+      spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
       preview_admin_service_api_doc_path(spec.service, spec)
     when /(?:the spec's|spec "(.*)") edit page from Product context/
       spec = $1.present? ? @provider.api_docs_services.find_by!(name: $1) : @api_docs_service
@@ -426,11 +426,13 @@ World(Module.new do
       end
 
     when /^(application "(.*)"|the application's) admin page$/
-      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      app_name = $2
+      app = app_name.present? ? Cinstance.find_by(name: app_name) : (@cinstance || @application)
       provider_admin_application_path(app)
 
     when /^(application "(.*)"|the application's) admin edit page$/
-      app = Cinstance.find_by(name: $2) || @cinstance || @application
+      app_name = $2
+      app = app_name.present? ? Cinstance.find_by(name: app_name) : (@cinstance || @application)
       edit_provider_admin_application_path(app)
 
     when 'the admin portal data exports page'

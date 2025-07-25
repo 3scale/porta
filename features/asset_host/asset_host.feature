@@ -38,21 +38,21 @@ Feature: Asset host
 
     Scenario: Developer portal with asset host not configured
       Given the asset host is unset
-      When the buyer logs in to the provider
+      When the buyer logs in
       And follow "Documentation"
       Then javascript assets shouldn't be loaded from the asset host
       And cdn assets shouldn't be loaded from the asset host
 
     Scenario: Developer portal with asset host configured
       Given the asset host is set to "cdn.3scale.localhost"
-      When the buyer logs in to the provider
+      When the buyer logs in
       And follow "Documentation"
       Then javascript assets should be loaded from the asset host
       And cdn assets should be loaded from the asset host
 
     Scenario: Developer portal with asset host configured as full URL
       Given the asset host is set to "http://cdn.3scale.localhost"
-      When the buyer logs in to the provider
+      When the buyer logs in
       And follow "Documentation"
       Then javascript assets should be loaded from the asset host
       Then cdn assets should be loaded from the asset host

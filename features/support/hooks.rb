@@ -6,6 +6,10 @@ After("@javascript") do
   Capybara.page&.driver&.quit
 end
 
+After do
+  ActiveRecord::Base.clear_active_connections!
+end
+
 Around '@security' do |scenario, block|
   with_forgery_protection(&block)
 end

@@ -34,7 +34,7 @@ Feature: Product's new ActiveDocs page
       | API JSON Spec            | <swagger version> |
       | Skip swagger validations | No               |
     Then they should see a toast alert with text "ActiveDocs Spec was successfully saved"
-    And the current page is the spec's preview page from Product context
+    And the current page is spec "My Spec" preview page from Product context
 
     Examples:
       | swagger version |

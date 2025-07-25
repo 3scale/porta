@@ -14,7 +14,8 @@ Feature: Rejecting buyer account
     Given a pending buyer "bob" signed up to provider "foo.3scale.localhost"
     When I go to the buyer account page for "bob"
     And I press "Reject"
-    Then buyer "bob" should be rejected
+    Then they should see a toast alert with text "Developer account was rejected"
+    And buyer "bob" should be rejected
 
   Scenario: Reject button is not shown for already rejected accounts
     Given a rejected buyer "bob" signed up to provider "foo.3scale.localhost"

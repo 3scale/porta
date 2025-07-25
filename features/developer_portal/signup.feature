@@ -38,7 +38,7 @@ Feature: Buyer signup
     And the provider has credit card on signup feature in automatic mode
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch visible
-    When the buyer logs in to the provider
+    When the buyer logs in
     Then I should be on the edit credit card details page
     And I should be warned to complete my signup
 
@@ -55,7 +55,7 @@ Feature: Buyer signup
     And the provider upgrades to plan "enterprise"
     Then the provider should have credit card on signup switch hidden
 
-    When the buyer logs in to the provider
+    When the buyer logs in
     Then I should be on the homepage
 
   # This is the behaviour for existing providers as of 05-07-2016
@@ -75,7 +75,7 @@ Feature: Buyer signup
     And the provider enables credit card on signup feature manually
     Then the provider should have credit card on signup switch visible
 
-    When the buyer logs in to the provider
+    When the buyer logs in
 
     Then I should be on the edit credit card details page
     And I should be warned to complete my signup

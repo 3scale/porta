@@ -15,6 +15,6 @@ Feature: XSS protection
 
   @javascript
   Scenario: Inline javascript attempted into error messages rendered
-    When the buyer logs in to the provider
+    When the buyer logs in
     And I open an URL with XSS exploit
     Then I should see "Granularity must be one of [:month, :day, 6 hours, :hour], not 123<img src='1' onerror='confirm(/XSS/)'>"

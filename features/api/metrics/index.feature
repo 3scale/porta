@@ -27,7 +27,8 @@ Feature: Product > Integration > Metrics
 
     Scenario: Metrics has always Hits by default
       When they go to the metrics page of product "My API"
-      Then should see metric "Hits"
+      Then they should see "Methods and Metrics"
+      And should see metric "Hits"
 
   Rule: Tab methods
     Background:

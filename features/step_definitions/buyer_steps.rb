@@ -191,11 +191,6 @@ When(/^a buyer signs up/) do
   fill_in_signup_fields_as 'supertramp'
 end
 
-When(/^the buyer logs in to the provider$/) do
-  set_current_domain @provider.external_domain
-  try_buyer_login_internal(@buyer.admins.first.username, "supersecret")
-end
-
 When(/^I should be warned to complete my signup$/) do
   assert_text "To complete your signup, please fill in your credit card details."
 end

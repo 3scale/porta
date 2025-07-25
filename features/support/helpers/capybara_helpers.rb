@@ -60,6 +60,7 @@ module CapybaraHelpers
   end
 
   def find_inline_actions_of_row(row)
+    assert_content row
     if has_css?('td', text: row, wait: 0)
       overflow_menu = find('tr', text: row).find('.pf-c-table__action')
 

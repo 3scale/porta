@@ -44,5 +44,4 @@ When "the ActiveDocs form is submitted with:" do |table|
     fill_in_api_docs_service_body(spec_body_builder(swagger_version))
   end
   submit_form_with(table)
-  @api_docs_service = ApiDocs::Service.last
 end

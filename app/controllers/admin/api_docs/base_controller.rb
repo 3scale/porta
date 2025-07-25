@@ -26,6 +26,7 @@ class Admin::ApiDocs::BaseController < FrontendController
     end
   end
 
+  # Fetching the spec JSON via /admin/api_docs/services/<ID>.json
   def show
     specification = api_docs_service.specification
     if specification.swagger_2_0?
@@ -42,6 +43,7 @@ class Admin::ApiDocs::BaseController < FrontendController
     end
   end
 
+  # Render the spec preview page, e.g. /apiconfig/services/<svc_id>/api_docs/<api_doc_id>/preview
   def preview
     if api_docs_service.specification.swagger?
       respond_to do |format|

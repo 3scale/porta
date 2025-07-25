@@ -81,10 +81,11 @@ Feature: Provider password reset
       Then they should see "The password reset token is invalid"
 
     Scenario: Reuse a password reset token
-      And the user has requested a new password
+      Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
       And they fill in "Password" with "monkey"
       And they fill in "Password confirmation" with "monkey"
-      And press "Change Password"
-      And follow the link found in the provider password reset email send to "pepe@example.com"
+      When press "Change Password"
+      Then they should see "The password has been changed"
+      When follow the link found in the provider password reset email send to "pepe@example.com"
       Then they should see "The password reset token is invalid"

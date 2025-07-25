@@ -12,4 +12,5 @@ Feature: Application approval required
     Given they go to application plan "Free" admin edit page
     When the form is submitted with:
       | Applications require approval? | Yes |
-    Then new applications with application plan "Free" will be pending for approval
+    Then the current page is the product's application plans admin page
+    And new applications with application plan "Free" will be pending for approval

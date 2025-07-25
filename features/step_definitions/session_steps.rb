@@ -2,7 +2,17 @@
 
 Given "{provider} logs in" do |provider|
   set_current_domain(provider.external_admin_domain)
-  try_provider_login(provider.admins.first.username, 'supersecret')
+  username = provider.admins.first.username
+  try_provider_login(username, 'supersecret')
+  assert user_is_logged_in(username)
+end
+
+# TODO: consider merging with steps with 'try to log in as provider'
+# and/or with '{provider} logs in'
+Given "{provider} tries to log in" do |provider|
+  set_current_domain(provider.external_admin_domain)
+  username = provider.admins.first.username
+  try_provider_login(username, 'supersecret')
 end
 
 Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
@@ -11,11 +21,13 @@ Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   else
     try_buyer_login_internal(username, 'supersecret')
   end
+  assert user_is_logged_in(username)
 end
 
 Given /^I am logged in as provider "([^\"]*)" on its admin domain$/ do |username|
   set_current_domain(Account.providers.find_by(org_name: username).external_admin_domain)
   try_provider_login(username, 'supersecret')
+  assert user_is_logged_in(username)
 end
 
 Given /^I am logged in as (provider )?"([^\"]*)" on (\S+)$/ do |provider,username, domain|
@@ -42,7 +54,9 @@ end
 When /^I am logged in as master admin on master domain$/ do
   master = Account.master
   set_current_domain(master.external_domain)
-  try_provider_login(master.admins.first.username, 'supersecret')
+  username = master.admins.first.username
+  try_provider_login(username, 'supersecret')
+  assert user_is_logged_in(username)
 end
 
 # TODO: name this step better
@@ -57,7 +71,7 @@ When /^I log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,
   else
     try_buyer_login_internal(username, password)
   end
-  assert_current_user(username)
+  assert user_is_logged_in(username)
 end
 
 When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
@@ -66,12 +80,14 @@ When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
   else
     try_buyer_login_internal(username, 'supersecret')
   end
+  assert user_is_logged_in(username)
 end
 
 When "{buyer} logs in" do |buyer|
   set_current_domain(buyer.provider_account.domain)
   user = buyer.users.first
   try_buyer_login_internal(user.username, user.password || 'supersecret')
+  assert user_is_logged_in(user.username)
 end
 
 When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domain|
@@ -85,11 +101,13 @@ When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domai
   else
     try_buyer_login_internal(username, 'supersecret')
   end
+  assert user_is_logged_in(username)
 end
 
 When "I log in as {string} on the admin domain of {provider}" do |username, provider|
   set_current_domain(provider.internal_admin_domain)
   try_provider_login(username, 'supersecret')
+  assert user_is_logged_in(username)
 end
 
 When "(I )(they )try to log in as (buyer ){string}" do |username|
@@ -146,10 +164,11 @@ Then /^I should not be logged in as "([^"]*)"$/ do |username|
 end
 
 Then "(I )(they )should not be logged in" do
-  assert_includes [provider_sessions_path, session_path], current_path
+  assert_current_path %r{\A(/p/sessions|/session)\z}, ignore_query: true
 end
 
 When "{user} logs in" do |user|
   log_out
   try_provider_login(user.username, 'supersecret')
+  assert user_is_logged_in(user.username)
 end

@@ -246,7 +246,7 @@ def setup_provider(login)
   return unless login
 
   try_provider_login('foo.3scale.localhost', 'supersecret')
-  assert_current_user('foo.3scale.localhost')
+  assert user_is_logged_in('foo.3scale.localhost')
 end
 
 def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
@@ -267,7 +267,10 @@ Given(/^master admin( is logged in)?/) do |login|
   admin = @provider.admins.first!
   set_current_domain @master.external_domain
   stub_integration_errors_dashboard
-  try_provider_login(admin.username, 'supersecret') if login
+  if login
+    try_provider_login(admin.username, 'supersecret')
+    assert user_is_logged_in(admin.username)
+  end
 end
 
 When(/^I have opened edit page for the active member$/) do
