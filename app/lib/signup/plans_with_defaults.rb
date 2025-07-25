@@ -67,7 +67,6 @@ module Signup
       provider.settings.service_plans_ui_visible?
     end
 
-    # CodeClimate says that this method smells very much, but it is hard and risky to change, to I just set it there as "won't fix"
     def add_default_plans_to_service(service)
       # returns nil when there is no default plan and no plan given
       # that means that there is no service plan and cannot be application plan
