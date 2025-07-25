@@ -12,4 +12,28 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
 
     assert tenant.reload.suspended?
   end
+
+  test "doesn't suspend accounts not in the scope" do
+    tenant1 = FactoryBot.create(:simple_provider)
+    tenant2 = FactoryBot.create(:simple_provider)
+
+    AutoAccountDeletionQueries.expects(:should_be_suspended).returns(Account.where(id: tenant1.id))
+
+    SuspendInactiveAccountsWorker.new.perform
+
+    assert_not tenant2.reload.suspended?
+  end
+
+  test 'ignores accounts that fail to validate' do
+    valid_tenant = FactoryBot.create(:simple_provider)
+    invalid_tenant = FactoryBot.build(:simple_provider, org_name: '@@@')
+    invalid_tenant.save!(validate: false)
+
+    AutoAccountDeletionQueries.expects(:should_be_suspended).returns(Account.where(id: [valid_tenant.id, invalid_tenant.id]))
+
+    SuspendInactiveAccountsWorker.new.perform
+
+    assert valid_tenant.reload.suspended?
+    assert_not invalid_tenant.reload.suspended?
+  end
 end
