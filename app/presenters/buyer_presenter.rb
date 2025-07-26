@@ -10,8 +10,7 @@ class BuyerPresenter < SimpleDelegator
       admin: decorate.admin_user_display_name,
       createdAt: created_at.to_fs(:long),
       contractedProducts: contracts,
-      createApplicationPath: admin_buyers_account_applications_path(id),
-      multipleAppsAllowed: multiple_applications_allowed?
+      createApplicationPath: admin_buyers_account_applications_path(id)
     }
   end
 
