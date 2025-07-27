@@ -14,10 +14,12 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
     Given the current domain is foo.3scale.localhost
 
       When someone signs up with the email "user@3scale.localhost"
+      And they should see "We have sent you an email to confirm your email address."
       Then "user@3scale.localhost" should receive the default account activation email with viral footer applied
 
     Given provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
       When someone signs up with the email "anotheruser@3scale.localhost"
+      And they should see "We have sent you an email to confirm your email address."
       Then "anotheruser@3scale.localhost" should receive the default account activation email
 
   @javascript
@@ -31,7 +33,8 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
 
     Given the current domain is foo.3scale.localhost
     When someone signs up with the email "user@3scale.localhost"
-      And "user@3scale.localhost" opens the account activation email
+    And they should see "We have sent you an email to confirm your email address."
+    And "user@3scale.localhost" opens the account activation email
     Then they should see "provider custom account notification email" in the email body
 
   @javascript
@@ -50,5 +53,6 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
 
     Given the current domain is foo.3scale.localhost
     When someone signs up with the email "user@3scale.localhost"
-      And "user@3scale.localhost" opens the account activation email
+    And they should see "We have sent you an email to confirm your email address."
+    And "user@3scale.localhost" opens the account activation email
     Then they should see "another version of account notification email" in the email body
