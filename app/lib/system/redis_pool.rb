@@ -14,10 +14,6 @@ module System
       end
     end
 
-    def with(...)
-      @pool.with(...)
-    end
-
     # This class only respond to public methods of Redis
     def respond_to_missing?(method_sym, _include_private = false)
       @pool.with do |conn|

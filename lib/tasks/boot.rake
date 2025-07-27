@@ -21,10 +21,8 @@ namespace :boot do
     require Rails.root.join('app/lib/system/redis_pool')
 
     pool = System::RedisPool.new(Rails.application.config_for(:redis))
-    pool.with do |redis|
-      redis.ping
-      puts "Connected to #{redis.id}"
-    end
+    pool.ping
+    puts "Connected to #{pool.id}"
   end
 
   task all: %i[backend database redis]
