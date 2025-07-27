@@ -23,6 +23,27 @@ ActiveSupport.on_load(:active_record) do
     ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8'
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      # Fixing OCIError: ORA-01741: illegal zero-length identifier
+      # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
+      # the value of `columns` is  [ "\"ACCOUNTS\".\"ID\"" ] which forms an incorrect query
+      # ... OVER (PARTITION BY ["\"ACCOUNTS\".\"ID\""] ORDER BY "ACCOUNTS"."ID") ...
+      # Will not be needed after https://github.com/rsim/oracle-enhanced/pull/2471 is merged and Rails upgraded
+      def columns_for_distinct(columns, orders) # :nodoc:
+        # construct a valid columns name for DISTINCT clause,
+        # ie. one that includes the ORDER BY columns, using FIRST_VALUE such that
+        # the inclusion of these columns doesn't invalidate the DISTINCT
+        #
+        # It does not construct DISTINCT clause. Just return column names for distinct.
+        order_columns = orders.reject(&:blank?).map { |s|
+          s = visitor.compile(s) unless s.is_a?(String)
+          # remove any ASC/DESC modifiers
+          s.gsub(/\s+(ASC|DESC)\s*?/i, "")
+        }.reject(&:blank?).map.with_index { |column, i|
+          "FIRST_VALUE(#{column}) OVER (PARTITION BY #{columns.join(', ')} ORDER BY #{column}) AS alias_#{i}__"
+        }
+        (order_columns << super).join(", ")
+      end
+
       prepend(Module.new do
         # TODO: is this needed after
         # https://github.com/rsim/oracle-enhanced/commit/f76b6ef4edda72bddabab252177cb7f28d4418e2
