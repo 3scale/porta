@@ -14,7 +14,8 @@ Feature: Approving buyer account
     Given a pending buyer "bob" signed up to provider "foo.3scale.localhost"
     When I go to the buyer account page for "bob"
     And I press "Approve"
-    Then buyer "bob" should be approved
+    Then I should see "Developer account was approved"
+    And buyer "bob" should be approved
 
   Scenario: Approve button is not shown for already approved accounts
     Given an approved buyer "bob" signed up to provider "foo.3scale.localhost"
