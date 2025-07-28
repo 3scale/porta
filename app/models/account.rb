@@ -263,11 +263,11 @@ class Account < ApplicationRecord
 
   # TODO: multitenant. enable it?
   # validates_uniqueness_of :s3_prefix
-  validates :org_name, presence: true, length: { maximum: 255 },
-                       format: { with: /\A.*[a-zA-Z0-9]+.*\z/, message: :invalid_format }
+  validates :org_name, presence: true
+  validates :org_name, format: { with: /\A.*[a-zA-Z0-9]+.*\z/, message: :invalid_format }, on: :create
 
 
-  validates :org_legaladdress, :domain, :telephone_number, :site_access_code,
+  validates :org_name, :org_legaladdress, :domain, :telephone_number, :site_access_code,
             :billing_address_name, :billing_address_address1, :billing_address_address2, :billing_address_city,
             :billing_address_state, :billing_address_country, :billing_address_zip, :billing_address_phone,
             :org_legaladdress_cont, :city, :state_region, :state, :timezone, :from_email, :primary_business,

@@ -578,10 +578,16 @@ class AccountTest < ActiveSupport::TestCase
     assert account.valid?
   end
 
-  test "there should be at least one alphanum character anywhere in the org_name" do
+  test "there should be at least one alphanum character anywhere in the org_name during account creation" do
     account = FactoryBot.build(:simple_account, org_name: '.?+@')
     assert_not account.valid?
     assert_includes account.errors.messages[:org_name], "must contain at least one alphanumeric character"
+  end
+
+  test "allows no alphanum characters in the org_name on update" do
+    account = FactoryBot.create(:simple_account, org_name: 'name')
+    account.org_name = '.?+@'
+    assert account.valid?
   end
 
   class DestroyTest < ActiveSupport::TestCase
