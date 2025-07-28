@@ -16,7 +16,7 @@ class NotificationPreferencesForm < Reform::Form
   def initialize(current_user, preferences)
     @current_user = current_user
     @user_ability = Ability.new(current_user)
-    @notification_categories = NotificationCategories.new(@current_user)
+    @available_categories = NotificationCategories.new(@current_user)
 
     super preferences
   end
@@ -41,7 +41,7 @@ class NotificationPreferencesForm < Reform::Form
   def notification_categories(visible_categories)
     ui_notification_categories = []
 
-    @notification_categories.enabled_categories.each do |category_name|
+    @available_categories.enabled_categories.each do |category_name|
       ui_title_key  = category_ui_title_key(category_name)
       notifications = Array(visible_categories[category_name])
       category      = ui_notification_categories.find { |c| c.title_key == ui_title_key }
