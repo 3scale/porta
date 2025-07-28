@@ -119,7 +119,7 @@ module Tasks
 
       class SuspendEnterpriseScheduledForDeletionTest < Multitenant::TenantsTest
         setup do
-          config = {'account_suspension' => 2, 'account_inactivity' => 3, 'contract_unpaid_time' => 4, disabled_for_app_plans: ['enterprise']}
+          config = { 'account_suspension' => 2, 'account_inactivity' => 3, 'contract_unpaid_time' => 4, disabled_for_app_plans: ['enterprise'] }
           Features::AccountDeletionConfig.config.stubs(**config)
           Features::AccountDeletionConfig.stubs(enabled?: true)
 
@@ -160,6 +160,113 @@ module Tasks
           assert @tenant_with_pro.reload.scheduled_for_deletion?
           assert @tenant_without_any_cinstance.reload.scheduled_for_deletion?
           assert @developer_with_enterprise.reload.scheduled_for_deletion?
+        end
+      end
+
+      class StaleThrottledDeleteTest < ActiveSupport::TestCase
+        setup do
+          @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
+          @provider2 = FactoryBot.create(:simple_provider, state: "suspended", state_changed_at: 5.months.ago)
+          Sidekiq::Testing.disable!
+        end
+
+        teardown do
+          Sidekiq::ScheduledSet.new.each(&:delete)
+          Sidekiq::Queue.new.each(&:delete)
+          assert_empty Sidekiq::Workers.new.to_a
+          Sidekiq::Testing.fake!
+        end
+
+        # Concurrency is 3. We start with a fake user deletion in the queue.
+        # On the first iteration we want to schedule 2 and 2 are available.
+        # We remove the fake user deletion during the first iteration.
+        # On the second iteration concurrency allows us to schedule 3.
+        # But we find 2 available.
+        # So the loop must be interrupted.
+        # Note that stubbing the :delete_later calls prevents jobs to be added to the queue,
+        # and this allows us to find the providers in both iterations.
+        # This test also assures that other deletions affect concurrency but don't disturb deduplication.
+        test "loops until accounts to schedule are less than the concurrency number" do
+          DeleteObjectHierarchyWorker.perform_later("Plain-User-#{@provider1.id}")
+          assert_equal 1, Sidekiq::Queue.new("deletion").size
+
+          # Emulate Mocha StateMachine::State to clear the extra deletion job from the queue
+          clear_deletion_queue = proc { Sidekiq::Queue.new("deletion").each(&:delete) }
+          clear_deletion_queue.singleton_class.alias_method :activate, :call
+
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1).then(clear_deletion_queue).twice
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2).twice
+
+          exec_task concurrency: 3, since: 15, wait: 0
+        end
+
+        test "schedules account deletions ignoring jobs in any queues but deletion" do
+          DeleteObjectHierarchyWorker.set(queue: "default").perform_later("Plain-Account-#{@provider1.id}")
+
+          assert_equal 1, Sidekiq::Queue.new("default").size
+
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
+
+          exec_task concurrency: 3, since: 15
+        end
+
+        test "by default only tenants suspended more than 6 months ago are deleted" do
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+
+          exec_task
+        end
+
+        test "tenants already in the deletion queue are not scheduled anymore" do
+          DeleteObjectHierarchyWorker.delete_later(@provider1)
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
+
+          exec_task concurrency: 3, since: 15
+        end
+
+        # this test is not very good because we emulate the API and upstream can potentially break it
+        test "tenants already being processed are not scheduled anymore" do
+          DeleteObjectHierarchyWorker.delete_later(@provider1)
+
+          job = Sidekiq::Queue.new("deletion").to_a.first
+          job_wrapper = OpenStruct.new(job:)
+
+          job.delete
+          assert_equal 0, Sidekiq::Queue.new("deletion").size
+
+          Sidekiq::Workers.stubs(:new).returns([[nil, nil, job_wrapper]])
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
+
+          exec_task concurrency: 3, since: 15
+
+          Sidekiq::Workers.unstub(:new)
+        end
+
+        test "tenant scheduling deduplication is graceful with other job types" do
+          service = FactoryBot.create(:simple_service, account: @provider2)
+
+          # Other kinds of ActiveJob jobs
+          CreateDefaultProxyWorker.set(queue: "deletion").perform_later(service)
+          # Other kinds of Sidekiq native jobs
+          BackendProviderSyncWorker.set(queue: "deletion").perform_async(@provider1.id)
+
+          # Emulate Mocha StateMachine::State to clear the extra deletion job from the queue
+          clear_deletion_queue = proc { Sidekiq::Queue.new("deletion").each(&:delete) }
+          clear_deletion_queue.singleton_class.alias_method :activate, :call
+
+          # we also validate that we don't schedule more than concurrency jobs because
+          # during first iteration we only have 1 slot and schedule only provider 1
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1).then(clear_deletion_queue).twice
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider2)
+
+          exec_task concurrency: 3, since: 15, wait: 0
+        end
+
+        def exec_task(concurrency: 3, since: nil, wait: nil)
+          raise ArgumentError if wait && !since
+
+          args = [concurrency, since, wait].compact.map(&:to_s)
+          execute_rake_task 'multitenant/tenants.rake', 'multitenant:tenants:stale_throttled_delete', *args
         end
       end
     end
