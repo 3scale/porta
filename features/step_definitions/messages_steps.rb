@@ -12,6 +12,11 @@ And "{int} message(s) sent from {provider_or_buyer} to {provider_or_buyer} with 
   end
 end
 
+Given "{provider_or_buyer} reads all messages" do |account|
+  account.received_messages.unread.each(&:view)
+end
+
+
 Given "{provider_or_buyer} has no messages" do |account|
   account.messages.each(&:destroy)
   account.received_messages.destroy_all
