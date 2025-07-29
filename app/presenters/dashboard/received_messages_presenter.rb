@@ -1,12 +1,13 @@
-class Dashboard::UnreadMessagesPresenter
+class Dashboard::ReceivedMessagesPresenter
   include ::Draper::ViewHelpers
 
-  attr_reader :visible_messages
+  attr_reader :visible_messages, :unread_messages
 
   MAX_VISIBLE_MESSAGES = 100
 
   def initialize(visible_messages)
-    @visible_messages = visible_messages
+    @visible_messages = visible_messages.limit(MAX_VISIBLE_MESSAGES)
+    @unread_messages = visible_messages.unread.limit(MAX_VISIBLE_MESSAGES)
   end
 
   def show_counter?
@@ -15,11 +16,5 @@ class Dashboard::UnreadMessagesPresenter
 
   def unread_messages_size
     h.number_to_human(unread_messages.size)
-  end
-
-  private
-
-  def unread_messages
-    @unread_messages ||= visible_messages.unread
   end
 end
