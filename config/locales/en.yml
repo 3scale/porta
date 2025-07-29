@@ -1060,12 +1060,18 @@ en:
         success: Documentations settings updated
     emails:
       edit:
-        outbound_emails_html: |
-          If you are on a 3scale Plus plan or higher, you may define a
-          custom outbound email address to send messages to your
-          developer community. Please follow the
-          <a href="%{docs_email_configuration_url}" target="_blank">
-          How-To guide</a> instructions to configure your DNS settings, etc.
+        add_exception: Add an exception
+        page_title: Support emails
+        outbound_emails_title: Outbound Email Addresses
+        outbound_emails_html:
+          If you are on a 3scale Plus plan or higher, you may define a custom outbound email address
+          to send messages to your developer community. Please follow the
+          <a href="%{docs_base_url}/creating_the_developer_portal/email-configuration" target="_blank">How-To guide</a>
+          instructions to configure your DNS settings, etc.
+        popover:
+          Products will use the general support email address by default. Add exceptions for those
+          with a different one.
+        remove_confirmation: This product will use the general support email. Are you sure?
       update:
         warning: There were errors saving some of your emails. Please review the marked fields
         success: Your support emails have been updated
