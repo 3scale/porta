@@ -26,7 +26,9 @@ class SuspendInactiveAccountsWorkerTest < ActiveSupport::TestCase
 
   test 'ignores accounts that fail to validate' do
     valid_tenant = FactoryBot.create(:simple_provider)
-    invalid_tenant = FactoryBot.build(:simple_provider, org_name: '')
+    # a blank, but not an empty value, because an empty string causes
+    # OCIError: ORA-01400: cannot insert NULL into ("RAILS"."ACCOUNTS"."ORG_NAME")
+    invalid_tenant = FactoryBot.build(:simple_provider, org_name: ' ')
     invalid_tenant.save!(validate: false)
 
     AutoAccountDeletionQueries.expects(:should_be_suspended).returns(Account.where(id: [valid_tenant.id, invalid_tenant.id]))
