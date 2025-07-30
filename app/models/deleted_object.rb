@@ -4,7 +4,7 @@ class DeletedObject < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :object, polymorphic: true
 
-  serialize :metadata, Hash
+  serialize :metadata, type: Hash
 
   [Metric, Contract, User, ApplicationKey, ReferrerFilter].each do |scoped_class|
     scoped_class_string = scoped_class.to_s

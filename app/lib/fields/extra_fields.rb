@@ -5,7 +5,7 @@ module Fields::ExtraFields
   extend ActiveSupport::Concern
 
   included do
-    serialize :extra_fields, Hash
+    serialize :extra_fields, type: Hash
     validate  :extra_fields_valid?, :if => :validate_fields?
   end
 
@@ -23,7 +23,7 @@ module Fields::ExtraFields
       extra_fields.try!(:[], name.to_s)
     # domain and self_domain accessors have been deprecated but validation still use them. More info in lib/three_scale/domain_substitution.rb
     elsif %i[domain self_domain].include?(name)
-      ThreeScale::Deprecation.silence { super }
+      Rails.application.deprecators[:threescale].silence { super }
     else
       super
     end

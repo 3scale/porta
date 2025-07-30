@@ -3,7 +3,7 @@
 require_relative "boot"
 
 # We don't want to load any Rails component we don't use
-# See https://github.com/rails/rails/blob/v7.0.8.6/railties/lib/rails/all.rb for the list
+# See https://github.com/rails/rails/blob/v7.1.5.1/railties/lib/rails/all.rb for the list
 # of what is being included here
 require "rails"
 
@@ -58,19 +58,20 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
     config.action_controller.raise_on_open_redirects = false
 
-    # ** Please read carefully, this must be configured in config/application.rb **
     # Change the format of the cache entry.
+    #
     # Changing this default means that all new cache entries added to the cache
-    # will have a different format that is not supported by Rails 6.1 applications.
-    # Only change this value after your application is fully deployed to Rails 7.0
+    # will have a different format that is not supported by Rails 7.0
+    # applications.
+    # Only change this value after your application is fully deployed to Rails 7.1
     # and you have no plans to rollback.
-    # When you're ready to change format, change the value to 7.0
+    # TODO: update to 7.1
     config.active_support.cache_format_version = 7.0
 
     # To migrate an existing application to the `:json` serializer, use the `:hybrid` option.
@@ -100,6 +101,8 @@ module System
     # Reconsider whether to enable again after upgrading to Rails 7.1, where the size of the header is limited to 1KB
     config.action_view.preload_links_header = false
 
+    # TODO: remove this config to get rid of the deprecation before upgrading to Rails 7.2
+    # DEPRECATION WARNING: Support for the pre-Ruby 2.4 behavior of to_time has been deprecated and will be removed in Rails 7.2.
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
 
@@ -109,6 +112,17 @@ module System
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
                                                           ActiveSupport::HashWithIndifferentAccess]
+
+    # Keeping the historic behavior by setting to `YAML`
+    # It is recommended to explicitly define the serialization method for each column
+    # rather than to rely on a global default.
+    # TODO: see if we can use the Rails 7.1 default `nil` value by setting serialization for each column explicitly
+    config.active_record.default_column_serializer = YAML
+
+    # The default behavior in 7.1 is to raise on assignment to attr_readonly attributes.
+    # This setting restores the previous behavior which allows assignment but silently not persist changes to the
+    # database.
+    config.active_record.raise_on_assign_to_attr_readonly = false
 
     config.active_job.queue_adapter = :sidekiq
 
@@ -138,8 +152,9 @@ module System
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
+    config.add_autoload_paths_to_load_path = true # TODO: default value in 7.1 is false, but it requires significant refactoring
+
     config.eager_load = true
-    config.enable_dependency_loading = false
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -288,7 +303,10 @@ module System
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
 
-    require 'three_scale/deprecation'
+    # Add a custom deprecator, silenced in test and production
+    Rails.application.deprecators[:threescale] = ActiveSupport::Deprecation.new('future version', '3scale')
+    Rails.application.deprecators[:threescale].silenced = %w[test production].include?(Rails.env)
+
     require 'three_scale/domain_substitution'
     require 'three_scale/middleware/presigned_downloads'
     require 'three_scale/middleware/multitenant'
@@ -336,9 +354,7 @@ module System
 
     config.after_initialize do
       ThreeScale.validate_settings!
-      require 'system/redis_pool'
-      redis_config = ThreeScale::RedisConfig.new(config.redis)
-      System.redis = System::RedisPool.new(redis_config.config)
+      System.redis = System::RedisPool.new(System::Application.config.redis)
     end
 
     config.assets.quiet = true

@@ -10,7 +10,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   activate_menu :audience, :accounts, :listing
 
   def index
-    @invoices = @account.invoices.includes(:buyer_account, :provider_account)
+    @invoices = @account.invoices.includes(:provider_account).ordered
   end
 
   def show

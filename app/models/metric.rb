@@ -38,7 +38,7 @@ class Metric < ApplicationRecord
 
   deprecate service: "refer to #owner",
             service_id: "use #owner_type and #owner_id",
-            deprecator: ThreeScale::Deprecation::Deprecator.new
+            deprecator: Rails.application.deprecators[:threescale]
 
   # After add the index the results for .first changed.
   # http://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html
@@ -262,7 +262,7 @@ class Metric < ApplicationRecord
 
   # keep service_id attribute in sync with parent before we remove all its usages
   def associate_to_service
-    ThreeScale::Deprecation.silence do
+    Rails.application.deprecators[:threescale].silence do
       if parent
         self.service = parent.service
       elsif owner.is_a? Service
@@ -281,7 +281,7 @@ class Metric < ApplicationRecord
     if new_record? && child?
       self.owner = parent.owner
     else
-      ThreeScale::Deprecation.warn "Metrics should be created by specifying owner_id and owner_type instead of service_id"
+      Rails.application.deprecators[:threescale].warn "Metrics should be created by specifying owner_id and owner_type instead of service_id"
       self.owner_id = service_id
       self.owner_type = 'Service'
     end

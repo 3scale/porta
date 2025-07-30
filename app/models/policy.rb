@@ -15,7 +15,7 @@ class Policy < ApplicationRecord
 
   READONLY_ATTRIBUTES = %i[name version schema].freeze
 
-  serialize :schema, ActiveRecord::Coders::JSON
+  serialize :schema, coder: ActiveRecord::Coders::JSON
 
   # Overriding attribute but that is OK
   def schema=(value)

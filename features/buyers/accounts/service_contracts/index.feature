@@ -114,6 +114,47 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | State      |
       | Created On |
 
+  Scenario: Order by plan name
+    Given the following service plans:
+      | Product     | Name  |
+      | Banana API  | Pro   |
+      | Coconut API | Basic |
+    And the following buyers with service subscriptions signed up to the provider:
+      | Buyer | Plans      |
+      | Alice | Basic, Pro |
+    When they go to the buyer's service subscriptions page
+    Then they should see the following table:
+      | Service      | Plan    |
+      | Banana API   | Pro     |
+      | Coconut API  | Basic   |
+    And the table is sorted by "Plan"
+    Then they should see the following table:
+      | Service      | Plan   |
+      | Coconut API  | Basic  |
+      | Banana API   | Pro    |
+
+  Scenario: Ordering and filtering by service
+    Given the following service plans:
+      | Product     | Name  |
+      | Banana API  | Basic |
+      | Coconut API | Pro   |
+    And the following buyers with service subscriptions signed up to the provider:
+      | Buyer | Plans      | State     |
+      | Alice | Basic      | suspended |
+      | Alice | Pro        | live      |
+    When they go to the buyer's service subscriptions page
+    Then they should see the following table:
+      | Service     | Plan    | State      |
+      | Banana API  | Basic   | suspended  |
+      | Coconut API | Pro     | live       |
+    When the table is filtered with:
+      | Filter  | Value      |
+      | Service | Banana API |
+    And the table is sorted by "State"
+    Then they should see the following table:
+      | Service    | Plan    | State      |
+      | Banana API | Basic   | suspended  |
+
   Scenario: Create a new subscription
     Given the buyer is subscribed to product "Banana API"
     And the following service plans:
@@ -122,7 +163,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Coconut API | Full |
     And they go to the buyer's service subscriptions page
     And the table should contain the following:
-      | Service    | Plan    | State | Paid? |
+      | Service    | Plan    | State | Paid? |d
       | Banana API | Default | live  | free  |
     When they follow "Subscribe to Coconut API"
     And there is a select "Plan" with options:

@@ -16,8 +16,11 @@ class ServiceContract < Contract
     where(:issuer_type => service.class.model_name.to_s, :issuer_id => service.id)
   end
 
-  scope :provided_by, ->(account) do
-    where(plan_id: ServicePlan.provided_by(account).select(:id))
+  # Same as Cinstance
+  def self.provided_by(account)
+    # we can access service through plan but also keep service.id in sync with plan.service.id
+    # this is a simpler way to do the query used historically
+    joins(:service).where.has { service.sift(:of_account, account) }
   end
 
   alias service issuer
@@ -25,11 +28,11 @@ class ServiceContract < Contract
 
   include ThreeScale::Search::Scopes
 
-  self.allowed_sort_columns = %w{ cinstances.state accounts.org_name cinstances.created_at } # can't order by plans.name, service.name - mysql blows up
+  self.allowed_sort_columns = %w{ cinstances.state accounts.org_name cinstances.created_at plans.name } # can't order by plans.name, service.name - mysql blows up
   self.allowed_search_scopes = %w{ service_id plan_id plan_type state account account_query state name }
   self.sort_columns_joins = {
     'accounts.org_name' => [:user_account],
-    'plans.name' => [:application_plan],
+    'plans.name' => [:service_plan],
     'service.name' => [:service]
   }
 
