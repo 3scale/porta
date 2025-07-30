@@ -8,8 +8,7 @@ const buyer: Buyer = {
   admin: 'The Admin',
   createApplicationPath: '',
   createdAt: '',
-  contractedProducts: [],
-  multipleAppsAllowed: false
+  contractedProducts: []
 }
 const plan: Plan = { id: 10, name: 'The Plan' } as Plan
 const product: Product = { id: 1, name: 'The Product' } as Product

@@ -35,7 +35,7 @@ class Buyers::AccountsIndexPresenter
   # The JSON response of index endpoint is used to populate NewApplicationForm's BuyerSelect
   def render_json
     {
-      items: buyers.map { |a| BuyerPresenter.new(a).new_application_data.as_json }.to_json,
+      items: buyers.includes(:bought_service_contracts).map { |a| BuyerPresenter.new(a).new_application_data.as_json }.to_json,
       count: total_entries
     }
   end

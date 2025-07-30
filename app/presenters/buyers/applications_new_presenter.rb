@@ -24,9 +24,9 @@ class Buyers::ApplicationsNewPresenter
       'create-application-path': admin_buyers_account_applications_path(buyer),
       buyer: BuyerPresenter.new(buyer).new_application_data.to_json,
       'most-recently-updated-products': products.to_json,
-      'products-count': products_count
+      'products-count': products_count,
+      'products-path': admin_services_path
     }
-    data['products-path'] = admin_services_path if products_count > 20
     data.merge new_application_form_base_data(provider, cinstance)
   end
 

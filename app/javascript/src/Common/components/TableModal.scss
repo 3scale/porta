@@ -17,9 +17,6 @@ div[role="dialog"] {
 
   th.pf-c-table__sort,
   th.pf-c-table__sort.pf-m-selected {
-    padding: var(--pf-c-table-cell--PaddingTop) var(--pf-c-table-cell--PaddingRight)
-      var(--pf-c-table-cell--PaddingBottom) var(--pf-c-table-cell--PaddingLeft);
-
     .pf-c-table__button {
       border: unset;
       color: var(--pf-c-table__sort--sorted--Color);

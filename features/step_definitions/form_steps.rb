@@ -103,6 +103,10 @@ When "(I )(they )select {string} from {string}" do |value, field|
   end
 end
 
+When "(I )(they )toggle the menu on select {string}" do |label|
+  pf4_select_toggle(label)
+end
+
 Then "(they )can't select {string} from {string}" do |option, label|
   select = find_pf_select(label)
   select.find('.pf-c-select__toggle').click unless select.has_css?('.pf-c-select__menu', wait: 0)

@@ -17,7 +17,7 @@ class Provider::Admin::ApplicationsNewPresenterTest < ActiveSupport::TestCase
     presenter = Presenter.new(provider: provider, user: user)
     form_data = presenter.new_application_form_data
 
-    expected_keys = %i[create-application-path create-application-plan-path create-service-plan-path service-subscriptions-path service-plans-allowed defined-fields most-recently-created-buyers buyers-count most-recently-updated-products products-count]
+    expected_keys = %i[create-application-path create-application-plan-path create-service-plan-path service-subscriptions-path service-plans-allowed defined-fields most-recently-created-buyers buyers-count most-recently-updated-products products-count products-path buyers-path]
     unexpected_keys = %i[product buyer errors]
 
     assert_same_elements expected_keys, form_data.keys
