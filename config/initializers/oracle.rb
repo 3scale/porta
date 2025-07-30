@@ -211,6 +211,45 @@ ActiveSupport.on_load(:active_record) do
           execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_column_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_column_name}"
         end
       end
+
+      def distinct_relation_for_primary_key(relation) # :nodoc:
+        primary_key_columns = Array(relation.primary_key).map do |column|
+          visitor.compile(relation.table[column])
+        end
+
+        values = columns_for_distinct(
+          primary_key_columns,
+          relation.order_values
+        )
+
+        limited = relation.reselect(values).distinct!
+
+        # The original code in https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/connection_adapters/abstract/schema_statements.rb#L1404-L1406
+        # ----
+        # limited_ids = select_rows(limited.arel, "SQL").map do |results|
+        #   results.last(Array(relation.primary_key).length) # ignores order values for MySQL and PostgreSQL
+        # end
+        # ----
+        # The change is needed because in Oracle, because otherwise the resulting `limited_ids` array would be wrong. For example,
+        # for a ServiceContract model that has the primary key "id" and a query with ordering and filtering you may get:
+        # 1. `limited` variable can be something like: #<ActiveRecord::Relation [#<ServiceContract alias_0__: "live", id: 4, raw_rnum_: 1>]>
+        # 2. `select_rows` would then return [["live",4,1]]
+        # 3. `limited_ids` calculation will result in [[1]], which is an invalid IDs list (the expected is [[4]])
+        # The updated code doesn't make assumptions about how many columns are selected or their order, but fetches the values according
+        # to the primary key column names
+        limited_ids = select_all(limited.arel, "SQL").to_ary.map do |result|
+          result.values_at(*Array(relation.primary_key))
+        end
+
+        if limited_ids.empty?
+          relation.none!
+        else
+          relation.where!(**Array(relation.primary_key).zip(limited_ids.transpose).to_h)
+        end
+
+        relation.limit_value = relation.offset_value = nil
+        relation
+      end
     end
 
     # see https://github.com/rsim/oracle-enhanced/issues/2276
