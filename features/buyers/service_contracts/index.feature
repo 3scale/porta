@@ -130,3 +130,42 @@ Feature: Audience > Accounts > Service subscriptions
       | Plan       |
       | State      |
       | Created On |
+
+  Scenario: Ordering and filtering by service
+    Given the following service plan:
+      | Product          | Name         |
+      | Elephant Taming  | Service Plan |
+    Given a buyer "First"
+    And a buyer "Second"
+    And buyer "First" is subscribed to plan "Service Plan"
+    And buyer "Second" is subscribed to plan "Service Plan"
+    And buyer "First" plan "Service Plan" contract gets suspended
+    When they go to the provider service subscriptions page
+    When the table is filtered with:
+      | Filter  | Value           |
+      | Service | Elephant Taming |
+    And the table is sorted by "State"
+    And the table should contain the following:
+      | Account  | Service         | Plan         | State     |
+      | First    | Elephant Taming | Service Plan | live      |
+      | Second   | Elephant Taming | Service Plan | suspended |
+
+  Scenario: Order by plan name
+    Given a buyer "Someone"
+    And the following service plans:
+      | Product               | Name  |
+      | Elephant Taming       | Pro   |
+      | Zeebra Stripe Drawing | Basic |
+    And the following buyers with service subscriptions signed up to the provider:
+      | Buyer   | Plans      |
+      | Someone | Basic, Pro |
+    When they go to the buyer's service subscriptions page
+    Then the table should contain the following:
+      | Service                | Plan    |
+      | Elephant Taming        | Pro     |
+      | Zeebra Stripe Drawing  | Basic   |
+    And the table is sorted by "Plan"
+    Then the table should contain the following:
+      | Service                | Plan   |
+      | Zeebra Stripe Drawing  | Basic  |
+      | Elephant Taming        | Pro    |
