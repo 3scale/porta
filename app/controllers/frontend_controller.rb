@@ -118,9 +118,7 @@ class FrontendController < ApplicationController
   end
 
   # TODO: When there are no controllers that handle Buyer and Provider side
-  # together, this can be removed. Those are so far:
-  #
-  # Forums* controllers (?)
+  # together, this can be removed. Those are so far: none?
   #
   def pick_buyer_or_provider_layout
     if site_account.master?
