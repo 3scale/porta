@@ -166,7 +166,7 @@ module Tasks
       class StaleThrottledDeleteTest < ActiveSupport::TestCase
         setup do
           @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
-          @provider2 = FactoryBot.create(:simple_provider, state: "suspended", state_changed_at: 5.months.ago)
+          @provider2 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 5.months.ago)
           Sidekiq::Testing.disable!
         end
 
@@ -211,7 +211,7 @@ module Tasks
           exec_task concurrency: 3, since: 15
         end
 
-        test "by default only tenants suspended more than 6 months ago are deleted" do
+        test "by default only tenants marked more than 6 months ago are deleted" do
           DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
 
           exec_task
@@ -265,6 +265,16 @@ module Tasks
         test "jobs scheduled but not yet queued are not taken into account" do
           DeleteObjectHierarchyWorker.set(wait: 2.days).perform_later("Plain-Account-#{@provider1.id}")
           assert_equal 1, Sidekiq::ScheduledSet.new.to_a.size
+
+          DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
+
+          exec_task
+        end
+
+        test "only marked for deletion accounts are deleted" do
+          Account::States::STATES.reject { _1 == :scheduled_for_deletion }.each do |state|
+            FactoryBot.create(:simple_provider, state: state, state_changed_at: 7.months.ago)
+          end
 
           DeleteObjectHierarchyWorker.expects(:delete_later).with(@provider1)
 

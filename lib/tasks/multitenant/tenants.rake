@@ -83,16 +83,15 @@ namespace :multitenant do
     task :stale_throttled_delete, %i[concurrency days_since_disabled iteration_wait] => :environment do |_task, args|
       require "progress_counter"
 
-      # Not using Account::States::PERIOD_BEFORE_DELETION for two reasons:
-      # * we also delete suspended accounts
-      # * customers using this task will probably have FindAndDeleteScheduledAccountsWorker disabled
-      # Thus I want to err on the safe side and only delete ancient stuff by default.
+      # Not using Account::States::PERIOD_BEFORE_DELETION because customers using this task
+      # will probably have FindAndDeleteScheduledAccountsWorker disabled. To err on the safe side
+      # we only delete ancient stuff by default.
       args.with_defaults(:concurrency => 3, :days_since_disabled => 30*6, :iteration_wait => 60)
       target_concurrency = Integer(args.concurrency)
       since = Integer(args.days_since_disabled).days.ago
       iteration_wait = Integer(args.iteration_wait)
 
-      deletion_scope = ->{ Account.tenants.deleted_since(since).or(Account.unscoped.suspended_since(since)) }
+      deletion_scope = ->{ Account.tenants.deleted_since(since) }
 
       progress = ProgressCounter.new(deletion_scope.call.count)
       loop do
