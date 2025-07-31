@@ -71,7 +71,7 @@ Feature: Audience's new application page
     # Travel in time to ensure the new products are within the first 20 results
     # (because the products are sorted by updated_at: :desc)
     Given 5 minutes pass
-    And 18 products and 1 backend apis
+    And 18 products and 0 backend apis
     # Bump updated_at for "API" to ensure "My API" is the least recently updated product,
     # so it appears at position 21 (a single entry on page 5)
     And product "API" has name set to "Old"
