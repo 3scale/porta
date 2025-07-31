@@ -12,7 +12,9 @@ module.exports = (_, _argv) => {
   webpackConfig.devtool = 'cheap-module-source-map';
 
   webpackConfig.devServer = {
-    https: false,
+    server: {
+      type: 'http'
+    },
     host: 'localhost',
     port: devServerPort,
     hot: false,
@@ -25,7 +27,8 @@ module.exports = (_, _argv) => {
       'Access-Control-Allow-Origin': '*',
     },
     static: {
-      publicPath: path.resolve(process.cwd(), `${publicRootPath}/${publicOutputPath}`),
+      directory: path.resolve(process.cwd(), `${publicRootPath}/${publicOutputPath}`),
+      publicPath: `/${publicOutputPath}/`,
       watch: {
         ignored: '**/node_modules/**',
       },
