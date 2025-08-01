@@ -1,5 +1,5 @@
 [![CircleCI](https://circleci.com/gh/3scale/porta.svg?style=svg)](https://circleci.com/gh/3scale/porta)
-[![Maintainability](https://api.codeclimate.com/v1/badges/1fe7e330e8507ea893be/maintainability)](https://codeclimate.com/github/3scale/porta/maintainability)
+[![Maintainability](https://qlty.sh/gh/3scale/projects/porta/maintainability.svg)](https://qlty.sh/gh/3scale/projects/porta)
 [![codecov](https://codecov.io/gh/3scale/porta/branch/master/graph/badge.svg)](https://codecov.io/gh/3scale/porta)
 [![container-image](https://github.com/3scale/porta/actions/workflows/container-image.yml/badge.svg)](https://quay.io/repository/3scale/porta)
 

@@ -465,6 +465,21 @@ executors:
 ##################################### CIRCLECI JOBS ############################################
 
 jobs:
+  bundle_audit:
+    parameters:
+      executor:
+        type: string
+        default: builder-ruby31
+    executor:
+      name: << parameters.executor >>
+    steps:
+      - checkout
+      - *attach-to-workspace
+      - run:
+          name: Bundle audit
+          command: bundle exec bundle-audit
+      - notify_failure
+
   dependencies_bundler:
     parameters:
       executor:
@@ -892,6 +907,9 @@ workflows:
           requires:
             - dependencies_bundler
             - dependencies_npm
+      - bundle_audit:
+          requires:
+            - dependencies_bundler
       - unit:
           requires:
             - dependencies_bundler
@@ -935,6 +953,9 @@ workflows:
           requires:
             - deps_bundler_postgres
             - dependencies_npm
+      - bundle_audit:
+          requires:
+            - deps_bundler_postgres
       - unit-postgres:
           requires:
             - deps_bundler_postgres
@@ -978,6 +999,9 @@ workflows:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
+      - bundle_audit:
+          requires:
+            - deps_bundler_oracle
       - unit-oracle:
           requires:
             - deps_bundler_oracle
