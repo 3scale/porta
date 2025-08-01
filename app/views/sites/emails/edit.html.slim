@@ -1,0 +1,68 @@
+- content_for :title, t('.page_title')
+- content_for :page_header_title, t('.page_title')
+
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'site_emails_edit'
+
+- if readonly_dns_domains? || true
+  = pf_inline_alert t('.outbound_emails_title'), variant: :info,
+                                                 description: t(".outbound_emails_html", docs_base_url: docs_base_url)
+  br
+
+div class="pf-l-flex pf-m-column"
+  div class="pf-l-flex__item"
+    div id='site-emails-edit' class="pf-c-card" data-popover=popover_props.to_json data-props=props.to_json data-confirmation=t('.remove_confirmation')
+      div class="pf-c-card__body"
+        = semantic_form_for @account, url: admin_site_emails_url,
+                                      builder: Fields::PatternflyFormBuilder,
+                                      html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+          = form.inputs 'General support email'
+            = form.input :support_email, as: :patternfly_input, label: false, input_html: { type: :email }
+            div class="pf-c-content"
+              p Use it in your Liquid templates as following:
+              = pf_code_block do
+                | {{ provider.support_email }}
+
+          = form.inputs 'Finance support email'
+            = form.input :finance_support_email, as: :patternfly_input, label: false, input_html: { type: :email }
+            div class="pf-c-content"
+              p Use it in your Liquid templates as following:
+              = pf_code_block do
+                | {{ provider.finance_support_email }}
+
+          / Don't use form.inputs here. It doesn't support complex titles like this one.
+          section class='pf-c-form__section'
+            div class='pf-c-form__section-title'
+              ' Support emails for products
+              span class="pf-c-form__group-label-help" aria-label="More information for support emails" role="button" type="button"
+                i class="pficon pf-icon-help" aria-hidden="true" id='popover-selector'
+            = form.input :support_email, as: :patternfly_input, label: false, input_html: { disabled: true }
+            div class="pf-c-content"
+              p Use it in your Liquid templates as following:
+              = pf_code_block do
+                | {{ service.support_email }}
+
+            div class="pf-c-form__group horizontal"
+              div class="pf-c-form__group-label"
+                label class="pf-c-form__label"
+                  span class="pf-c-form__label-text" Exceptions
+              div id="exceptions-stack" class="pf-c-form__group-control pf-m-stack"
+                - @exceptions.each do |service|
+                  = form.semantic_fields_for service, namespace: 'exceptions' do |sf|
+                    = sf.input :support_email, as: :patternfly_input,
+                                              prefix: service.name,
+                                              label: false,
+                                              action: :remove,
+                                              input_html: { type: :email,
+                                                            id: "account_service_#{service.id}_support_email",
+                                                            name: "account[services][#{service.id}][support_email]" }
+                - if products_with_default_email.size > 0
+                  / span id="add-new-exceptions-react"
+                  div id="add-new-exceptions-react" class="pf-c-form__group-control pf-m-stack"
+                  button aria-disabled="false" class="pf-c-button pf-m-link pf-m-inline" type="button" id="add-exception"
+                    span class="pf-c-button__icon pf-m-start"
+                      i class="fas fa-plus-circle"
+                    = t('.add_exception')
+
+          = form.actions
+            = form.commit_button 'Update'
