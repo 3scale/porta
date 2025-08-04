@@ -37,7 +37,6 @@ const BackendSelect: React.FunctionComponent<Props> = ({
     <>
       <SelectWithModal
         cells={cells}
-        fetchItems={() => { throw new Error('Function not implemented.') }} // FIXME: add it or make it optional
         footerLabel="View all backends"
         header="Recently created backends"
         helperTextInvalid={error}

@@ -84,3 +84,42 @@ Feature: Product > Integration > Backends > New
       Given they go to the backends of product "My API"
       When they select toolbar action "Add a backend"
       Then the current page is the new backend page for product "My API"
+
+  @search
+  Scenario: Search for a backend
+    # Travel in time to make the order of the entries predictable (as they are sorted by updated_at)
+    Given 5 minutes pass
+    And the provider has the following backend api:
+      | Name             | Mango                           |
+      | System name      | mango                           |
+      | Private Base URL | https://backend.example.org:443 |
+    And 5 minutes pass
+    And 0 products and 20 backend apis
+    When they go to the new backend page for product "My API"
+    And they should see "Add a backend"
+    And they toggle the menu on select "Backend"
+    And they press "View all backends"
+    Then they should see "Select a backend"
+    And they should see 5 pages
+
+    When they search "Mango" using the toolbar
+    Then the search input should be filled with "Mango"
+    And they should see following table:
+      | Name   | Private Base URL                    |
+      | Mango  | https://backend.example.org:443     |
+
+    When they clear the search filter
+    # The backend APIs created by 'And 0 products and 20 backend apis' step
+    Then they should see following table:
+      | Private Base URL                    |
+      | http://api.example.net:80           |
+      | http://api.example.net:80           |
+      | http://api.example.net:80           |
+      | http://api.example.net:80           |
+      | http://api.example.net:80           |
+
+    And they look at the 5th page
+    Then they should see following table:
+      | Name        | Private Base URL                    |
+      | Mango       | https://backend.example.org:443     |
+      | API Backend | https://echo-api.3scale.net:443     |

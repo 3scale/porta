@@ -26,8 +26,6 @@ end
 Given "{int} products and {int} backend apis" do |products, backends|
   FactoryBot.create_list(:service, products, account: @provider)
   FactoryBot.create_list(:backend_api, backends, account: @provider)
-
-  visit admin_dashboard_path
 end
 
 Then "the most recently updated products and backends can be found in the dashboard" do
