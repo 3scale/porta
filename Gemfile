@@ -169,11 +169,11 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '1.39', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
+  gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
 
-  gem 'reek', '6.01', require: false # Should match codeclimate's stable version of Reek. See https://docs.codeclimate.com/docs/reek
+  gem 'reek', require: false
 end
 
 
@@ -251,6 +251,7 @@ group :licenses do
   gem 'license_finder', '~> 7.1.0'
 end
 
+gem 'bundler-audit'
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production]
