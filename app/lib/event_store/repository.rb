@@ -143,8 +143,6 @@ module EventStore
       subscribe_for_notification(:plan_downgraded, Plans::PlanDowngradedEvent)
       # messages
       subscribe_for_notification(:message_received, Messages::MessageReceivedEvent)
-      # posts
-      subscribe_for_notification(:post_created, Posts::PostCreatedEvent)
       # reports
       subscribe_for_notification(:csv_data_export, Reports::CsvDataExportEvent)
       # services
