@@ -72,13 +72,12 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     Then "bob@example.com" should receive 1 email
 
   Scenario: Change service plan in bulk
-    When the table is sorted by "Plan"
-    And the table is sorted by "Plan"
-    Then the table should contain the following:
+    When the table is sorted by "Account"
+    And the table should contain the following:
       | Account | Service     | Plan         |
       | Alice   | Fancy API   | Fancy Plan A |
-      | Bob     | Fancy API   | Fancy Plan A |
       | Alice   | Another API | Another Plan |
+      | Bob     | Fancy API   | Fancy Plan A |
       | Jane    | Another API | Another Plan |
     When item "Alice" is selected
     And item "Bob" is selected
@@ -150,8 +149,13 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
 
   Scenario: Changing service plan throws an error
     Given the subscription will return an error when changing its plan
-    When the table is sorted by "Plan"
-    And the table is sorted by "Plan" again
+    And the table is sorted by "Account"
+    And the table should contain the following:
+      | Account | Service     | Plan         |
+      | Alice   | Fancy API   | Fancy Plan A |
+      | Alice   | Another API | Another Plan |
+      | Bob     | Fancy API   | Fancy Plan A |
+      | Jane    | Another API | Another Plan |
     And item "Alice" is selected
     And select bulk action "Change service plan"
     And select "Fancy Plan B" from "Plan"

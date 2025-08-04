@@ -127,7 +127,6 @@ Feature: Audience > Accounts > Service subscriptions
     Examples:
       | order by   |
       | Account    |
-      | Plan       |
       | State      |
       | Created On |
 
@@ -150,6 +149,8 @@ Feature: Audience > Accounts > Service subscriptions
       | First    | Elephant Taming | Service Plan | live      |
       | Second   | Elephant Taming | Service Plan | suspended |
 
+  # Enable when sorting by plan is enabled
+  @wip
   Scenario: Order by plan name
     Given a buyer "Someone"
     And the following service plans:

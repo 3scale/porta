@@ -110,10 +110,11 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
 
     Examples:
       | order by   |
-      | Plan       |
       | State      |
       | Created On |
 
+  # Enable when sorting by plan is enabled
+  @wip
   Scenario: Order by plan name
     Given the following service plans:
       | Product     | Name  |
@@ -163,7 +164,7 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
       | Coconut API | Full |
     And they go to the buyer's service subscriptions page
     And the table should contain the following:
-      | Service    | Plan    | State | Paid? |d
+      | Service    | Plan    | State | Paid? |
       | Banana API | Default | live  | free  |
     When they follow "Subscribe to Coconut API"
     And there is a select "Plan" with options:

@@ -109,6 +109,5 @@ Feature: Audience > Applications
       | Name       |
       | State      |
       | Account    |
-      | Plan       |
       | Created on |
       | Traffic on |

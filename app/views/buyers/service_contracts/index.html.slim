@@ -47,7 +47,8 @@ div class="pf-l-flex pf-m-column"
             th role="columnheader" scope="col"
               label for="search_service_id"
                 | Service
-          = th_sortable('plans.name', 'Plan')
+          th role="columnheader" scope="col"
+            | Plan
           = th_sortable('cinstances.state', 'State')
           th role="columnheader" scope="col"
             | Paid?

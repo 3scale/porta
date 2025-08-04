@@ -28,12 +28,13 @@ class ServiceContract < Contract
 
   include ThreeScale::Search::Scopes
 
-  self.allowed_sort_columns = %w{ cinstances.state accounts.org_name cinstances.created_at plans.name } # can't order by plans.name, service.name - mysql blows up
+  # TODO: verify if `plans.name` and `service.name` can be added without issues with MySQL
+  self.allowed_sort_columns = %w{ cinstances.state accounts.org_name cinstances.created_at }
   self.allowed_search_scopes = %w{ service_id plan_id plan_type state account account_query state name }
   self.sort_columns_joins = {
-    'accounts.org_name' => [:user_account],
-    'plans.name' => [:service_plan],
-    'service.name' => [:service]
+    'accounts.org_name' => [:user_account]
+    # 'plans.name' => [:service_plan],
+    # 'service.name' => [:service]
   }
 
   scope :by_service_id, ->(service_id) do
