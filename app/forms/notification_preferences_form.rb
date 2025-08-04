@@ -11,50 +11,44 @@ class NotificationPreferencesForm < Reform::Form
   delegate :hidden_notifications, to: NotificationMailer
   delegate :hidden_onprem_multitenancy, to: NotificationMailer
 
-  NotificationCategoryUI = Struct.new(:title_key, :notifications)
+  FormCategory = Struct.new(:title_key, :notifications)
 
   def initialize(current_user, preferences)
     @current_user = current_user
     @user_ability = Ability.new(current_user)
-    @available_categories = NotificationCategories.new(@current_user)
+    @enabled_categories = NotificationCategories.new(@current_user).enabled_categories
 
     super preferences
   end
 
   def categories
     @categories ||= begin
-      visible_categories = Hash.new { |h, k| h[k] = [] }
+      form_categories = []
 
       model.available_notifications.each do |notification|
         next if invisible?(notification) || !authorize_event_abilities(notification)
 
         event_class = event_mapping.fetch(notification.to_sym)
-        visible_categories[event_class.category] << notification
+        category_name = event_class.category
+
+        next unless @enabled_categories.include?(category_name)
+
+        ui_title_key  = category_ui_title_key(category_name)
+
+        form_category = form_categories.find { _1.title_key == ui_title_key }
+
+        if form_category.present?
+          form_category.notifications << notification
+        else
+          form_categories << FormCategory.new(ui_title_key, [notification])
+        end
       end
 
-      notification_categories(visible_categories)
+      form_categories.sort_by! { NotificationCategories::CATEGORIES_UI_ORDER.index(_1.title_key) }
     end
   end
 
   private
-
-  def notification_categories(visible_categories)
-    ui_notification_categories = []
-
-    @available_categories.enabled_categories.each do |category_name|
-      ui_title_key  = category_ui_title_key(category_name)
-      notifications = Array(visible_categories[category_name])
-      category      = ui_notification_categories.find { |c| c.title_key == ui_title_key }
-
-      if category.present?
-        category.notifications += notifications
-      else
-        ui_notification_categories << NotificationCategoryUI.new(ui_title_key, notifications)
-      end
-    end
-
-    ui_notification_categories
-  end
 
   # some categories have independent "enabled?" conditions
   # but in the UI should be merged with another category

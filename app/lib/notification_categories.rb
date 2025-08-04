@@ -3,6 +3,7 @@
 class NotificationCategories
 
   AVAILABLE_CATEGORIES = %i[account billing application service service_plan alert report].freeze
+  CATEGORIES_UI_ORDER = %i[account service application billing alert report].freeze
 
   def initialize(user)
     @user = user
