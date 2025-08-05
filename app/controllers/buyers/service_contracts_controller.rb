@@ -26,7 +26,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def new
-    @service_plans = @service.service_plans
+    @service_plans = @service.service_plans.order(:name)
     @service_contract = collection.build :plan => @service_plans.default_or_nil
 
     render layout: false # Rendered inside a modal
@@ -46,7 +46,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def edit
-    @service_plans = @service_contract.issuer.service_plans # TODO: .where.not(id: @service_contract.plan)
+    @service_plans = @service_contract.issuer.service_plans.order(:name) # TODO: .where.not(id: @service_contract.plan)
 
     render layout: false # Rendered inside a modal
   end

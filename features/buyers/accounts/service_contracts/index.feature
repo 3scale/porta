@@ -169,8 +169,8 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
     When they follow "Subscribe to Coconut API"
     And there is a select "Plan" with options:
       | Default |
-      | Lite    |
       | Full    |
+      | Lite    |
     And the modal is submitted with:
       | Plan | Lite |
     Then they should see a toast alert with text "Service contract created successfully"
@@ -192,8 +192,8 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
     When they follow "Change Banana API subscription"
     And there is a select "Plan" with options:
       | Default |
-      | Lite    |
       | Full    |
+      | Lite    |
     And the modal is submitted with:
       | Plan | Full |
     Then they should see a toast alert with text "Plan of the contract was changed"
