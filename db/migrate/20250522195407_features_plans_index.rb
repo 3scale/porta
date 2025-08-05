@@ -1,4 +1,4 @@
-class FeaturesPlansIndex< ActiveRecord::Migration[7.0]
+class FeaturesPlansIndex< ActiveRecord::Migration[7.1]
   disable_ddl_transaction! if System::Database.postgres?
 
   def up
