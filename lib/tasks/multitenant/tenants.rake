@@ -97,7 +97,7 @@ namespace :multitenant do
       loop do
         deletions = scheduled_or_running_background_deletions
         to_schedule = target_concurrency - deletions.count
-        unless to_schedule.zero?
+        if to_schedule > 0
           already_scheduled_providers = deletions.filter_map { provider_being_deleted(_1) }
           scheduled = deletion_scope.call.limit(to_schedule).where.not(id: already_scheduled_providers).each do |provider|
             DeleteObjectHierarchyWorker.delete_later(provider)
@@ -136,14 +136,10 @@ namespace :multitenant do
     def scheduled_or_running_background_deletions
       [
         # I was thinking that future schedules shouldn't count towards concurrency
-        # *Sidekiq::ScheduledSet.new.select { job_is_a_background_deletion? _1 },
-        *Sidekiq::Queue.new("deletion").select { job_is_a_background_deletion? _1 },
-        *Sidekiq::Workers.new.filter_map { |_pid, _tid, work| work.job if job_is_a_background_deletion? work.job },
+        # *Sidekiq::ScheduledSet.new.select { job.queue == "deletion" },
+        *Sidekiq::Queue.new("deletion").to_a,
+        *Sidekiq::Workers.new.filter_map { |_pid, _tid, work| work.job if work.job.queue == "deletion" },
       ]
-    end
-
-    def job_is_a_background_deletion?(job)
-      job.queue == "deletion"
     end
 
     def provider_being_deleted(job)
