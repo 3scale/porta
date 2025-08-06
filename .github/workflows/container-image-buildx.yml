@@ -3,6 +3,7 @@ on:
   workflow_call:
     inputs:
       platforms:
+        type: string
         description: comma-separated list of platforms to build for
         default: linux/amd64,linux/s390x,linux/ppc64le
 
