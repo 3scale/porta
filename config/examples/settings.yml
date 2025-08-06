@@ -23,6 +23,9 @@ base: &default
   readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '0') == '1' %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
+  recaptcha_enterprise_api_key: <%= ENV['RECAPTCHA_ENTERPRISE_API_KEY'] %>
+  recaptcha_enterprise_project_id: <%= ENV.fetch('RECAPTCHA_ENTERPRISE_PROJECT_ID', 'YOUR_RECAPTCHA_ENTERPRISE_PROJECT_ID') %>
+  recaptcha_enterprise_enabled: <%= ENV.fetch('RECAPTCHA_ENTERPRISE_ENABLED', '0') == '1' %>
   recaptcha_min_bot_score: <%= ENV.fetch('RECAPTCHA_MIN_BOT_SCORE', '0.5') %>
   report_traffic: false
   secure_cookie: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
