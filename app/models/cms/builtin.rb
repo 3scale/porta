@@ -181,11 +181,13 @@ class CMS::Builtin < CMS::BasePage
       ORIGINAL_PATHS.keys
     end
 
+    def system_name_whitelisted?
+      self.class.system_name_whitelist.include? system_name
+    end
+
     def system_name_rules
       if new_record?
-        unless self.class.system_name_whitelist.include?(system_name)
-          errors.add(:system_name, :not_reserved)
-        end
+        errors.add(:system_name, :not_reserved) unless system_name_whitelisted?
       elsif will_save_change_to_system_name?
         errors.add(:system_name, :cannot_be_changed)
       end

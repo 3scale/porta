@@ -7,7 +7,7 @@ class AccessToken < ApplicationRecord
 
   validates :name, length: { maximum: 255 }
 
-  serialize :scopes, Array
+  serialize :scopes, type: Array
 
   audited only: %i[owner_id scopes name permission created_at updated_at]
 

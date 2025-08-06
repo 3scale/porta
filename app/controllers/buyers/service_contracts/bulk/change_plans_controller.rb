@@ -37,6 +37,6 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
   end
 
   def plans
-    @plans ||= service.service_plans
+    @plans ||= service.service_plans.order(:name)
   end
 end

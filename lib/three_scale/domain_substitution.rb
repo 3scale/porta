@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'three_scale/deprecation'
-
 module ThreeScale::DomainSubstitution
-
 
   module Request
     def internal_host
@@ -101,14 +98,14 @@ module ThreeScale::DomainSubstitution
     # or some internal checks (See lib/routing_constraints.rb)
     # @return [String] the domain of the Account
     def internal_domain
-      ThreeScale::Deprecation.silence { domain }
+      Rails.application.deprecators[:threescale].silence { domain }
     end
 
     # This is an alias to _#admin_domain_ as it is private.
     # Use this method when checking against the database
     # @return [String] the admin domain of the Account
     def internal_admin_domain
-      ThreeScale::Deprecation.silence { admin_domain }
+      Rails.application.deprecators[:threescale].silence { admin_domain }
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -117,7 +114,7 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_domain)
     #   # => "https://provider.proxied-domain.com"
     def external_domain
-      ThreeScale::Deprecation.silence do
+      Rails.application.deprecators[:threescale].silence do
         ThreeScale::DomainSubstitution::Substitutor.to_external(domain)
       end
     end
@@ -128,7 +125,7 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_admin_domain)
     #   # => "https://provider-admin.proxied-domain.com"
     def external_admin_domain
-      ThreeScale::Deprecation.silence do
+      Rails.application.deprecators[:threescale].silence do
         ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
       end
     end
@@ -150,8 +147,8 @@ module ThreeScale::DomainSubstitution
     end
 
     deprecate domain: "use #internal_domain or #external_domain",
-      self_domain: "use #internal_admin_domain or #external_admin_domain",
-      deprecator: ThreeScale::Deprecation::Deprecator.new
+              self_domain: "use #internal_admin_domain or #external_admin_domain",
+              deprecator: Rails.application.deprecators[:threescale]
   end
 
   class Substitutor

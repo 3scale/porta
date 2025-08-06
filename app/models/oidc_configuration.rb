@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class OIDCConfiguration < ApplicationRecord
-  class Config < ActiveRecord::Coders::JSON
+  class Config
     include ActiveModel::Serialization
 
-    def self.load(string)
-      new(super || {})
+    def self.load(json)
+      decoded = json.blank? ? {} : ActiveSupport::JSON.decode(json)
+      new(decoded)
     end
 
-    def self.dump(record)
-      super(record.attributes)
+    def self.dump(obj)
+      ActiveSupport::JSON.encode(obj.attributes)
     end
 
     FLOWS = %i[
@@ -56,7 +57,7 @@ class OIDCConfiguration < ApplicationRecord
   end
 
   belongs_to :oidc_configurable, polymorphic: true, inverse_of: :oidc_configuration
-  serialize :config, OIDCConfiguration::Config
+  serialize :config, coder: OIDCConfiguration::Config
 
   delegate(*OIDCConfiguration::Config::ATTRIBUTES, to: :config)
   delegate(*OIDCConfiguration::Config::ATTRIBUTES.map {|attr| "#{attr}=" }, to: :config)

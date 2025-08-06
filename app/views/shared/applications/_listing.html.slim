@@ -31,7 +31,8 @@ div class="pf-c-card"
           th role="columnheader" scope="col"
             | Service
         - if show_application_plans
-          = th_sortable('plans.name', 'Plan')
+          th role="columnheader" scope="col"
+            | Plan
         - if current_account.settings.finance.allowed?
           th role="columnheader" scope="col"
             | Paid?

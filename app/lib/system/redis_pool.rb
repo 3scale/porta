@@ -6,11 +6,11 @@ module System
   # RedisPool a simple wrapper around Redis with connection pooling
   class RedisPool
 
+    # @param [Hash] config - configuration, as in config/redis.yml
     def initialize(config = {})
-      cfg = config.to_h
-      pool_config = cfg.extract!(:pool_size, :pool_timeout)
-      @pool = ConnectionPool.new(size: pool_config[:pool_size] || 5, timeout: pool_config[:pool_timeout] || 5 ) do
-        Redis.new(cfg)
+      redis_config = ThreeScale::RedisConfig.new(config)
+      @pool = ConnectionPool.new(**redis_config.pool_config) do
+        Redis.new(redis_config.client_config)
       end
     end
 

@@ -11,8 +11,7 @@ module Backend
     end
 
     def initialize
-      config = ThreeScale::RedisConfig.new(self.class.parse_config).config
-      super(config)
+      super(self.class.parse_config)
     end
 
     # Writes any Ruby object into the storage. Use +get_object+ to read it back in the

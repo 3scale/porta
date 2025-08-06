@@ -3,7 +3,7 @@ class CMS::Portlet < CMS::Partial
 
   after_initialize :default_values
   validate :available_types
-  serialize :options, Hash
+  serialize :options, type: Hash
 
   class_attribute :_attributes, :_inputs, :instance_writer => false, :instance_reader => false
 
@@ -43,11 +43,11 @@ class CMS::Portlet < CMS::Partial
     end
 
     def self.human_name
-      I18n.t(:name, :scope => [:cms, :portlet, name.underscore])
+      I18n.t(:name, :scope => [:cms, :portlet, name.underscore], default: nil)
     end
 
     def self.description
-      I18n.t(:description, :scope => [:cms, :portlet, name.underscore])
+      I18n.t(:description, :scope => [:cms, :portlet, name.underscore], default: nil)
     end
 
     def draft

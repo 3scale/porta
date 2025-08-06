@@ -15,7 +15,7 @@ class FieldsDefinition < ApplicationRecord
     @targets << klass.to_s
   end
 
-  serialize :choices, Array
+  serialize :choices, type: Array
 
   belongs_to :account, :inverse_of => :fields_definitions
   acts_as_list :scope => %i[account_id target], :column => :pos
@@ -51,7 +51,14 @@ class FieldsDefinition < ApplicationRecord
   attr_protected :account_id, :tenant_id
   attr_readonly :account_id, :tenant_id, :target, :name
 
-  alias_attribute :position, :pos
+  # The attribute `pos` is exposed as `position` in the API
+  def position=(value)
+    self.pos = value
+  end
+
+  def position
+    pos
+  end
 
   # This smells of :reek:NestedIterators: FieldsDefinition#self.create_defaults! contains iterators nested 2 deep
   def self.create_defaults!(account)
@@ -126,7 +133,7 @@ class FieldsDefinition < ApplicationRecord
   def set_last_position_in_target_scope
     fields_for_target = self.account.fields_definitions.where(target: target)
     max_position = fields_for_target.maximum(:pos) || 0
-    self.position = max_position + 1
+    self.pos = max_position + 1
   end
 
   def allowed_fields_definition_name

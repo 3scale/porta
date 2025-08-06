@@ -253,7 +253,7 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
           locale.t :header, :count => count, :model => object_name
         end
         message = options.include?(:message) ? options[:message] : locale.t(:body)
-        error_messages = objects.sum {|object| object.errors.full_messages.map {|msg| content_tag(:li, msg) unless ignore_me.include?(msg) } }.join
+        error_messages = objects.map {|object| object.errors.full_messages.map {|msg| content_tag(:li, msg) unless ignore_me.include?(msg) } }.join
 
         contents = ''
         contents << content_tag(options[:header_tag] || :h2, header_message.html_safe) unless header_message.blank?

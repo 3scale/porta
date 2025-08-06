@@ -63,15 +63,16 @@ class Cinstance < Contract
     %w( id user_account_id name description user_key plan_id state trial_period_expires_at created_at extra_fields)
   end
 
-  self.allowed_sort_columns = %w{ cinstances.name cinstances.state accounts.org_name cinstances.created_at cinstances.first_daily_traffic_at } # can't order by plans.name, service.name - mysql blows up
+  # TODO: verify if `plans.name` and `service.name` can be added without issues with MySQL
+  self.allowed_sort_columns = %w{ cinstances.name cinstances.state accounts.org_name cinstances.created_at cinstances.first_daily_traffic_at }
   self.default_sort_column = :created_at
   self.default_sort_direction = :desc
   self.allowed_search_scopes = %w{ service_id plan_id plan_type state account account_query state name user_key active_since inactive_since }
   self.default_search_scopes = { }
   self.sort_columns_joins = {
-    'accounts.org_name' => [:user_account],
-    'plans.name' => [:plan],
-    'service.name' => [:service]
+    'accounts.org_name' => [:user_account]
+    # 'plans.name' => [:plan],
+    # 'service.name' => [:service]
   }
 
   def redirect_url=(redirect_url)

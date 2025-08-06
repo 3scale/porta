@@ -23,6 +23,27 @@ ActiveSupport.on_load(:active_record) do
     ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8'
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      # Fixing OCIError: ORA-01741: illegal zero-length identifier
+      # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
+      # the value of `columns` is  [ "\"ACCOUNTS\".\"ID\"" ] which forms an incorrect query
+      # ... OVER (PARTITION BY ["\"ACCOUNTS\".\"ID\""] ORDER BY "ACCOUNTS"."ID") ...
+      # Will not be needed after https://github.com/rsim/oracle-enhanced/pull/2471 is merged and Rails upgraded
+      def columns_for_distinct(columns, orders) # :nodoc:
+        # construct a valid columns name for DISTINCT clause,
+        # ie. one that includes the ORDER BY columns, using FIRST_VALUE such that
+        # the inclusion of these columns doesn't invalidate the DISTINCT
+        #
+        # It does not construct DISTINCT clause. Just return column names for distinct.
+        order_columns = orders.reject(&:blank?).map { |s|
+          s = visitor.compile(s) unless s.is_a?(String)
+          # remove any ASC/DESC modifiers
+          s.gsub(/\s+(ASC|DESC)\s*?/i, "")
+        }.reject(&:blank?).map.with_index { |column, i|
+          "FIRST_VALUE(#{column}) OVER (PARTITION BY #{columns.join(', ')} ORDER BY #{column}) AS alias_#{i}__"
+        }
+        (order_columns << super).join(", ")
+      end
+
       prepend(Module.new do
         # TODO: is this needed after
         # https://github.com/rsim/oracle-enhanced/commit/f76b6ef4edda72bddabab252177cb7f28d4418e2
@@ -58,7 +79,7 @@ ActiveSupport.on_load(:active_record) do
     ActiveRecord::Relation.prepend(Module.new do
       # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
       # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
-      # https://github.com/rails/rails/blob/v6.1.7.7/activerecord/lib/active_record/relation/finder_methods.rb#L465
+      # https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/relation/finder_methods.rb#L506
       def find_one(id)
         if ActiveRecord::Base === id
           raise ArgumentError, <<-MSG.squish
@@ -67,8 +88,16 @@ ActiveSupport.on_load(:active_record) do
           MSG
         end
 
-        relation = where(primary_key => id)
-        record = relation.to_a.first # this is the only change from the original method
+        relation = if klass.composite_primary_key?
+                     where(primary_key.zip(id).to_h)
+                   else
+                     where(primary_key => id)
+                   end
+
+        # this is the only change from the original method
+        # original line:
+        # record = relation.take
+        record = relation.to_a.first
 
         raise_record_not_found_exception!(id, 0, 1) unless record
 
@@ -181,6 +210,45 @@ ActiveSupport.on_load(:active_record) do
         if index_type == 'UNIQUE' && quoted_column_names !~ /\(.*\)/
           execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_column_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_column_name}"
         end
+      end
+
+      def distinct_relation_for_primary_key(relation) # :nodoc:
+        primary_key_columns = Array(relation.primary_key).map do |column|
+          visitor.compile(relation.table[column])
+        end
+
+        values = columns_for_distinct(
+          primary_key_columns,
+          relation.order_values
+        )
+
+        limited = relation.reselect(values).distinct!
+
+        # The original code in https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/connection_adapters/abstract/schema_statements.rb#L1404-L1406
+        # ----
+        # limited_ids = select_rows(limited.arel, "SQL").map do |results|
+        #   results.last(Array(relation.primary_key).length) # ignores order values for MySQL and PostgreSQL
+        # end
+        # ----
+        # The change is needed because in Oracle, because otherwise the resulting `limited_ids` array would be wrong. For example,
+        # for a ServiceContract model that has the primary key "id" and a query with ordering and filtering you may get:
+        # 1. `limited` variable can be something like: #<ActiveRecord::Relation [#<ServiceContract alias_0__: "live", id: 4, raw_rnum_: 1>]>
+        # 2. `select_rows` would then return [["live",4,1]]
+        # 3. `limited_ids` calculation will result in [[1]], which is an invalid IDs list (the expected is [[4]])
+        # The updated code doesn't make assumptions about how many columns are selected or their order, but fetches the values according
+        # to the primary key column names
+        limited_ids = select_all(limited.arel, "SQL").to_ary.map do |result|
+          result.values_at(*Array(relation.primary_key))
+        end
+
+        if limited_ids.empty?
+          relation.none!
+        else
+          relation.where!(**Array(relation.primary_key).zip(limited_ids.transpose).to_h)
+        end
+
+        relation.limit_value = relation.offset_value = nil
+        relation
       end
     end
 

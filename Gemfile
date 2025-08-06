@@ -12,11 +12,7 @@ gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 7.0.0'
-
-# Fixing "uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger"
-# that fails after upgrading to 1.3.5. Can be removed after upgrading to Rails 7.1
-gem 'concurrent-ruby', '1.3.4'
+gem 'rails', '~> 7.1.5'
 
 gem 'mail', '~> 2.8.1'
 
@@ -24,7 +20,7 @@ gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
-gem 'protected_attributes_continued', '~> 1.8.2'
+gem 'protected_attributes_continued', '~> 1.9.0'
 
 gem 'rails-observers'
 
@@ -65,7 +61,7 @@ gem 'yabeda-prometheus-mmap'
 gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.137'
-gem 'audited', '~> 5.0.2'
+gem 'audited', '~> 5.4.2'
 gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 
 gem 'acts_as_list', '~> 0.9.17'
@@ -116,7 +112,7 @@ gem 'rubyzip', '~>1.3.0', require: false
 gem 'svg-graph', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
-gem 'thinking-sphinx', '~> 5.5.0'
+gem 'thinking-sphinx', '~> 5.6.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.3'
 gem 'zip-zip', require: false
@@ -234,7 +230,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 7.0.7'
+  gem 'bullet', '~> 7.1.6'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
@@ -258,7 +254,7 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 7.0.3', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 7.1.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 

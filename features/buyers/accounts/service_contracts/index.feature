@@ -110,9 +110,51 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
 
     Examples:
       | order by   |
-      | Plan       |
       | State      |
       | Created On |
+
+  # Enable when sorting by plan is enabled
+  @wip
+  Scenario: Order by plan name
+    Given the following service plans:
+      | Product     | Name  |
+      | Banana API  | Pro   |
+      | Coconut API | Basic |
+    And the following buyers with service subscriptions signed up to the provider:
+      | Buyer | Plans      |
+      | Alice | Basic, Pro |
+    When they go to the buyer's service subscriptions page
+    Then they should see the following table:
+      | Service      | Plan    |
+      | Banana API   | Pro     |
+      | Coconut API  | Basic   |
+    And the table is sorted by "Plan"
+    Then they should see the following table:
+      | Service      | Plan   |
+      | Coconut API  | Basic  |
+      | Banana API   | Pro    |
+
+  Scenario: Ordering and filtering by service
+    Given the following service plans:
+      | Product     | Name  |
+      | Banana API  | Basic |
+      | Coconut API | Pro   |
+    And the following buyers with service subscriptions signed up to the provider:
+      | Buyer | Plans      | State     |
+      | Alice | Basic      | suspended |
+      | Alice | Pro        | live      |
+    When they go to the buyer's service subscriptions page
+    Then they should see the following table:
+      | Service     | Plan    | State      |
+      | Banana API  | Basic   | suspended  |
+      | Coconut API | Pro     | live       |
+    When the table is filtered with:
+      | Filter  | Value      |
+      | Service | Banana API |
+    And the table is sorted by "State"
+    Then they should see the following table:
+      | Service    | Plan    | State      |
+      | Banana API | Basic   | suspended  |
 
   Scenario: Create a new subscription
     Given the buyer is subscribed to product "Banana API"
@@ -127,8 +169,8 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
     When they follow "Subscribe to Coconut API"
     And there is a select "Plan" with options:
       | Default |
-      | Lite    |
       | Full    |
+      | Lite    |
     And the modal is submitted with:
       | Plan | Lite |
     Then they should see a toast alert with text "Service contract created successfully"
@@ -150,8 +192,8 @@ Feature: Audience > Accounts > Listing > Account > Service subscriptions
     When they follow "Change Banana API subscription"
     And there is a select "Plan" with options:
       | Default |
-      | Lite    |
       | Full    |
+      | Lite    |
     And the modal is submitted with:
       | Plan | Full |
     Then they should see a toast alert with text "Plan of the contract was changed"
