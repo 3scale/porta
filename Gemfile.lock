@@ -491,7 +491,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    libxml-ruby (5.0.3)
+    libxml-ruby (5.0.5)
     license_finder (7.1.0)
       bundler
       rubyzip (>= 1, < 3)
