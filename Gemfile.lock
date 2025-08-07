@@ -436,7 +436,7 @@ GEM
       responders (>= 2)
     injectedlogger (0.0.13)
     innertube (1.1.0)
-    io-console (0.8.0)
+    io-console (0.5.11)
     irb (1.15.2)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
