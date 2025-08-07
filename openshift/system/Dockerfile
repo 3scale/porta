@@ -11,17 +11,17 @@ RUN cp config/examples/*.yml config/ \
     && cp openshift/system/config/* config/
 
 RUN dnf -y --enablerepo=crb --setopt=module_stream_switch=True module enable ruby:${RUBY_VERSION} nodejs:18 \
-    && dnf install -y --enablerepo=crb --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libxslt-devel git 'dnf-command(download)' cpio \
+    && dnf install -y --enablerepo=crb --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel libxml2-devel libyaml-devel libxslt-devel git 'dnf-command(download)' cpio \
     && BUNDLER_VERSION=$(awk '/BUNDLED WITH/ { getline; print $1 }' Gemfile.lock) \
     && gem install --no-document bundler:$BUNDLER_VERSION \
-    && bundle config build.nokogiri --use-system-libraries \
+    && bundle config set --local build.nokogiri --use-system-libraries \
     && bundle config set --local without development:test:licenses \
     && bundle config set --local deployment true \
+    && bundle config list \
     && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.1
-    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
+    && SECRET_KEY_BASE_DUMMY=1 bundle exec rake assets:precompile tmp:clear \
     && rm -rf node_modules /usr/local/share/gems/cache /usr/local/share/gems/doc
 
 # can just install memkind once it is fixed, see
@@ -99,8 +99,7 @@ ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
     THINKING_SPHINX_QUERY_LOG=/dev/stdout \
     THINKING_SPHINX_LOG=/dev/stdout \
     RAILS_ENV=production \
-    # TODO: update to SECRET_KEY_BASE_DUMMY=1 when we upgrade to Rails 7.1
-    SECRET_KEY_BASE=dummy \
+    SECRET_KEY_BASE_DUMMY=1 \
     DATABASE_URL='mysql2://root:@localhost/porta'
 USER 0
 RUN dnf install --enablerepo=crb -y mysql-server mysql-test \
