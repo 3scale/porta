@@ -11,10 +11,10 @@ class Dashboard::ReceivedMessagesPresenter
   end
 
   def show_counter?
-    unread_messages.exists? && visible_messages.size < MAX_VISIBLE_MESSAGES
+    unread_messages.exists? && visible_messages.count < MAX_VISIBLE_MESSAGES
   end
 
   def unread_messages_size
-    h.number_to_human(unread_messages.size)
+    h.number_to_human(unread_messages.count)
   end
 end

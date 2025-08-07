@@ -38,7 +38,7 @@ module Provider::Admin::DashboardsHelper
 
   def dashboard_collection_link(singular_name, collection, path, options = {})
     limit = options.fetch(:limit, nil)
-    collection_size = collection.size
+    collection_size = collection.count
     collection_size = limit if limit && collection_size > limit
     human_size = number_to_human(collection_size)
     human_size += "+" if collection_size == limit
