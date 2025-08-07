@@ -2,3 +2,4 @@ ignore:
   - "features"
   - "test"
   - "spec"
+  - "db"
