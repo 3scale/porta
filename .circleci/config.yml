@@ -90,7 +90,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby33: &system-builder-ruby33
-  image: quay.io/3scale/system-builder:5207de2
+  image: quay.io/3scale/system-builder:ruby-3.3
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
