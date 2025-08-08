@@ -229,7 +229,7 @@ group :development, :test do
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
-  gem 'pry-byebug', '>= 3.7.0'
+  gem 'pry-byebug', '>= 3.11.0'
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
