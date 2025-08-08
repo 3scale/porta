@@ -26,3 +26,15 @@ Feature: Dashboard
     And 5 messages sent from buyer "john" to the provider with subject "any" and body "any"
     And I go to the provider dashboard
     And I should see the link "5 MESSAGES" within the audience dashboard widget
+
+  Scenario: Messages link shows correct count when the size exceeds the limit
+    And a buyer "john" signed up to provider "foo.3scale.localhost"
+    And 110 messages sent from buyer "john" to the provider with subject "any" and body "any"
+    And I go to the provider dashboard
+    And I should see the link "100+ MESSAGES" within the audience dashboard widget
+
+  Scenario: Messages link shows unread correct count
+    And a buyer "john" signed up to provider "foo.3scale.localhost"
+    And 5 messages sent from buyer "john" to the provider with subject "any" and body "any"
+    And I go to the provider dashboard
+    And I should see "5 MESSAGES (5)" within the audience dashboard widget
