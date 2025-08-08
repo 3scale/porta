@@ -1,0 +1,19 @@
+@import 'app/javascript/packs/pf_form.scss';
+
+@import '~@patternfly/patternfly/components/CodeBlock/code-block.css';
+@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
+
+@import '~@patternfly/patternfly/utilities/Spacing/spacing.css';
+
+.pf-c-form__group-control#exceptions-stack {
+  .pf-c-form__group {
+    &.to-be-removed {
+      display: none;
+    }
+
+    .pf-c-input-group__text,
+    .pf-c-form-control {
+      flex: 2; // Give Product name / email input the same width
+    }
+  }
+}
