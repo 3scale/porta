@@ -11,12 +11,12 @@
     padding: line-height-times(1/2) 0 line-height-times(1/2) line-height-times(1);
 
     &.ui-sortable-helper {
-      @include box-shadow(0 0 line-height-times(1/2) $box-shadow-color);
+      box-shadow: 0 0 line-height-times(1/2) $box-shadow-color;
     }
 
     .name {
       font-weight: $font-weight-bold;
-      @include inline-block;
+      display: inline-block;
       min-width: 10em;
     }
 
@@ -24,8 +24,6 @@
       margin-right: line-height-times(1/2);
       font-style: italic;
     }
-
-    @include clearfix;
 
     .action-set {
       float: right;

@@ -141,8 +141,6 @@ group :assets do
   gem 'active-docs', path: 'vendor/active-docs'
 end
 
-gem 'compass-rails', '~> 3.0.2'
-
 gem 'after_commit_queue', '~> 1.1.0'
 gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.8'

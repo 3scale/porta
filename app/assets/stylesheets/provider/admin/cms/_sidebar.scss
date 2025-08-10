@@ -1,3 +1,23 @@
+$tab-width: 20%;
+$tab-content-width: 100% - $tab-width;
+$tab-min-height: line-height-times(21, true);
+
+#tab-content {
+  @include white-box-shadow;
+  border-left: $border-width solid $border-color;
+  border-right: none;
+  float: left;
+  margin-left: -$border-width;
+  min-height: $tab-min-height;
+  padding: 0 0 line-height-times(1) line-height-times(1);
+  position: relative;
+  width: $tab-content-width;
+
+  .formtastic {
+    box-shadow: none;
+  }
+}
+
 #cms-sidebar {
   @include white-box-shadow;
   font-size: $caption-font-size;
@@ -18,7 +38,7 @@
   }
 
   & + #tab-content {
-    @include border-bottom-left-radius(0);
+    border-bottom-left-radius: 0;
     background-color: $white;
     padding: line-height-times(1);
 
