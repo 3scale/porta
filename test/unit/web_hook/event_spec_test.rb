@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest_helper'
+require 'test_helper'
 
 # TODO: one day, partialy load rails and leave this on autoloader
 require 'app/models/web_hook/event'

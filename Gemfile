@@ -213,7 +213,7 @@ group :test do
   gem 'minitest-stub-const'
   gem 'rspec_junit_formatter'
 
-  # IMPORTANT: Load 'mocha' after 'shoulda'.
+  # IMPORTANT: Load 'mocha' after 'minitest' and 'shoulda'.
   gem 'mocha', require: 'mocha/minitest'
 
   gem 'database_cleaner', require: false
