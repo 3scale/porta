@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require 'minitest_helper'
 
-# TODO: one day, partialy load rails and leave this on autoloader
-require 'app/models/web_hook/event'
 require 'active_model'
 require 'nokogiri'
 

@@ -1,35 +1,7 @@
-ENV["RAILS_ENV"] ||= "test"
-
-$: << File.expand_path('..', File.dirname(__FILE__))
-$: << File.expand_path('../lib', File.dirname(__FILE__))
-
-require 'config/boot'
-
-if ENV['CI']
-  require 'simplecov'
-  require "simplecov_json_formatter"
-  require 'simplecov-cobertura'
-  formatters = [
-    SimpleCov::Formatter::SimpleFormatter,
-    SimpleCov::Formatter::JSONFormatter,
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::CoberturaFormatter
-  ]
-  SimpleCov.start do
-    formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
-  end
-end
-
-require 'minitest/autorun'
-if defined?(::Mocha)
-  ::Mocha::Integration::MiniTest.activate
-else
-  require 'mocha/setup'
-end
-
-require 'active_support/core_ext'
-
+require_relative 'test_helper.rb'
 require 'test_helpers/simple_mini_test'
+
+raise "RSpec should not be loaded" if defined?(RSpec)
 
 unless defined?(Rails)
   module Rails
