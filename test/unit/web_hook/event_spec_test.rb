@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest_helper'
+require 'minitest_spec_helper'
 
 require 'active_model'
 require 'nokogiri'

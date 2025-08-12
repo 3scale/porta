@@ -1,5 +1,4 @@
 require_relative 'test_helper.rb'
-require 'test_helpers/simple_mini_test'
 
 raise "RSpec should not be loaded" if defined?(RSpec)
 
