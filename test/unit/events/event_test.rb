@@ -1,6 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
 
-require 'events/event'
+require 'test_helper'
 
 class Events::EventTest < SimpleMiniTest
   def test_event_type
