@@ -77,8 +77,6 @@ namespace :multitenant do
       Rails.logger.error "Inconsistent tenant_ids for:\n#{inconsistent.map {_1.join(" ")}.join("\n")}"
     end
 
-    # NOTE: this task may cycle forever in case some unforeseen bug causes more tenants than
-    #       the number of desired concurrency to fail being deleted
     desc 'Schedule stale tenants background deletion.'
     task :stale_throttled_delete, %i[concurrency days_since_disabled iteration_wait] => :environment do |_task, args|
       require "progress_counter"
@@ -105,6 +103,8 @@ namespace :multitenant do
           progress.call(increment: scheduled)
           break if scheduled < to_schedule
         end
+        raise "Check Sidekiq logs for deletion failures." if progress.total * 1.1 < progress.index
+
         sleep iteration_wait
       end
 

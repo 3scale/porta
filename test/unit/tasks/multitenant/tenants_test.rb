@@ -281,6 +281,13 @@ module Tasks
           exec_task
         end
 
+        test "prevent infinite loop on failure to delete providers" do
+          DeleteObjectHierarchyWorker.expects(:delete_later).times(3)
+
+          err = assert_raise { exec_task(concurrency: 1, since: 1, wait: 0) }
+          assert_equal "Check Sidekiq logs for deletion failures.", err.message
+        end
+
         def exec_task(concurrency: 3, since: nil, wait: nil)
           raise ArgumentError if wait && !since
 
