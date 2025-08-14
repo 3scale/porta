@@ -13,9 +13,9 @@ module TestHelpers
           buyer = provider.buyers.take
           FactoryBot.create_list(:buyer_account, 2, provider_account: provider)
           service = FactoryBot.create(:service, account: provider)
-          FactoryBot.create(:account_contract, plan: FactoryBot.create(:account_plan, issuer: provider))
+          FactoryBot.create(:account_contract, plan: FactoryBot.create(:account_plan, issuer: provider).customize)
           FactoryBot.create(:application_contract, user_account: provider, service: provider.default_service)
-          FactoryBot.create(:service_contract, plan: service.service_plans.take, user_account: buyer)
+          FactoryBot.create(:service_contract, plan: service.service_plans.take.customize, user_account: buyer)
           FactoryBot.create(:api_docs_service, account: provider)
           ProviderConstraints.null(provider).save!
           FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw')
@@ -23,6 +23,8 @@ module TestHelpers
           FactoryBot.create(:annotation, annotated: provider.default_service)
           FactoryBot.create(:limit_alert, account: provider, cinstance: provider.application_contracts.take)
           app_plan = FactoryBot.create(:application_plan, issuer: service)
+          app_plan.customize
+          FactoryBot.create(:application_plan, name: "somehow_broken", original_id: app_plan.id, issuer: service).update(issuer_id: service.id + 100)
           metric = service.metrics.take
           FactoryBot.create(:usage_limit, plan: app_plan, metric:)
           FactoryBot.create(:plan_metric, plan: app_plan, metric:, visible: false, limits_only_text: false)

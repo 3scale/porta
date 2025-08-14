@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_07_134140) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_22_195407) do
   create_table "access_tokens", force: :cascade do |t|
     t.integer "owner_id", precision: 38, null: false
     t.text "scopes"
@@ -529,6 +529,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_07_134140) do
     t.integer "feature_id", precision: 38, null: false
     t.string "plan_type", null: false
     t.integer "tenant_id", precision: 38
+    t.index ["feature_id"], name: "index_features_plans_on_feature_id"
   end
 
   create_table "fields_definitions", force: :cascade do |t|
