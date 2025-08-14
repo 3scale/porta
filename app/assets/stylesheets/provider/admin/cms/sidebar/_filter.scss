@@ -1,8 +1,23 @@
 %toolbar {
-  @include horizontal-list;
-  //line-height: 2em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  list-style: none;
 
   li {
+    white-space: nowrap;
+    float: left;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    display: inline;
     margin: 0;
     padding: 0;
     text-align: center;
