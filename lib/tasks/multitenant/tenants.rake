@@ -89,21 +89,20 @@ namespace :multitenant do
       since = Integer(args.days_since_disabled).days.ago
       iteration_wait = Integer(args.iteration_wait)
 
-      deletion_scope = ->{ Account.tenants.deleted_since(since) }
+      stale_enum = Account.tenants.deleted_since(since).find_each
+      progress = ProgressCounter.new(stale_enum.size)
 
-      progress = ProgressCounter.new(deletion_scope.call.count)
       loop do
-        deletions = scheduled_or_running_background_deletions
-        to_schedule = target_concurrency - deletions.count
-        if to_schedule > 0
-          already_scheduled_providers = deletions.filter_map { provider_being_deleted(_1) }
-          scheduled = deletion_scope.call.limit(to_schedule).where.not(id: already_scheduled_providers).each do |provider|
-            DeleteObjectHierarchyWorker.delete_later(provider)
-          end.count
-          progress.call(increment: scheduled)
-          break if scheduled < to_schedule
+        current_deletion_jobs = scheduled_or_running_background_deletions
+        to_schedule = target_concurrency - current_deletion_jobs.count
+        already_scheduled_providers = current_deletion_jobs.filter_map { provider_being_deleted(_1) }
+
+        to_schedule.times do
+          provider = stale_enum.next # raises StopIteration which will break out of the outer loop
+          redo if already_scheduled_providers.include?(provider.id)
+          DeleteObjectHierarchyWorker.delete_later(provider)
+          progress.call
         end
-        raise "Check Sidekiq logs for deletion failures." if progress.total * 1.1 < progress.index
 
         sleep iteration_wait
       end
