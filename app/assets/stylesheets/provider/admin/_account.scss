@@ -1,5 +1,5 @@
 #account-column-wrapper {
-  @include clearfix;
+  overflow: hidden;
   margin-bottom: line-height-times(2);
 
   #account-overview,
