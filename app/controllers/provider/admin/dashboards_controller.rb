@@ -19,8 +19,8 @@ class Provider::Admin::DashboardsController < FrontendController
     #
     # but 'Cannot eagerly load the polymorphic association :sender'
     @services           = current_user.accessible_services
-    @messages_presenter = notification_presenter
-    @unread_messages_presenter = unread_messages_presenter
+    @notifications_presenter = notifications_presenter
+    @received_messages_presenter = received_messages_presenter
     @presenter = Provider::Admin::DashboardPresenter.new(user: current_user)
   end
 
@@ -29,16 +29,12 @@ class Provider::Admin::DashboardsController < FrontendController
 
   private
 
-  def notification_presenter
+  def notifications_presenter
     ::Dashboard::NotificationsPresenter.new(current_user.notifications)
   end
 
-  def messages_presenter
-    ::Dashboard::MessagesPresenter.new(current_account.received_messages)
-  end
-
-  def unread_messages_presenter
-    ::Dashboard::UnreadMessagesPresenter.new(current_account.received_messages.not_system)
+  def received_messages_presenter
+    ::Dashboard::ReceivedMessagesPresenter.new(current_account.received_messages.not_system)
   end
 
   def quickstarts_flash
