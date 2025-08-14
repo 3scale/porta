@@ -431,7 +431,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       attr_reader :provider
 
       setup do
-        @provider = FactoryBot.create(:provider_account)
+        @provider = FactoryBot.create(:provider_with_billing)
         ActionMailer::Base.deliveries.clear
       end
 
