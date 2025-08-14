@@ -86,4 +86,39 @@ module PatternflyComponentsHelper
       end
     end
   end
+
+  def pf_code_block(**options, &)
+    content_for :javascripts, javascript_packs_with_chunks_tag('code_block_copy_to_clipboard')
+
+    content = pf_code_block_content(&)
+
+    class_names = "pf-c-code-block #{options[:class]}"
+    actions = options[:actions].nil? || options[:actions]
+
+    tag.div class: class_names do
+      pf_code_block_header(actions:) + content
+    end
+  end
+
+  def pf_code_block_header(actions: true)
+    tag.div class: 'pf-c-code-block__header' do
+      tag.div class: 'pf-c-code-block__actions' do
+        if actions
+          tag.div class: 'pf-c-code-block__actions-item' do
+            tag.button class: 'pf-c-button pf-m-plain', type: 'button', aria: { label: 'Copy to clipboard' } do
+              tag.i class: 'fas fa-copy', aria: { hidden: true }
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def pf_code_block_content(&)
+    tag.div class: 'pf-c-code-block__content' do
+      tag.pre class: 'pf-c-code-block__pre' do
+        tag.code(class: 'pf-c-code-block__code', &)
+      end
+    end
+  end
 end
