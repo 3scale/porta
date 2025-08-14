@@ -16,6 +16,8 @@ gem 'rails', '~> 7.1.5'
 
 gem 'mail', '~> 2.8.1'
 
+gem 'csv'
+
 gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
