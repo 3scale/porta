@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require "three_scale/private_module"
+require "three_scale/domain_substitution"
+require "three_scale/middleware/presigned_downloads"
+require "three_scale/middleware/multitenant"
+require "three_scale/middleware/cors"
+require "three_scale/patterns/service"
+
 module ThreeScale
   class ConfigurationError < StandardError; end
 
