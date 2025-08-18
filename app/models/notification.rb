@@ -32,11 +32,11 @@ class Notification < ApplicationRecord
   end
 
   def parent_event
-    EventStore::Repository.find_event(parent_event_id)
+    @parent_event ||= EventStore::Repository.find_event(parent_event_id)
   end
 
   def should_deliver?
-    not_hidden_if_onprem_multitenancy? && subscribed? && permitted?
+    not_hidden_if_onprem_multitenancy? && subscribed? && category_enabled? && permitted?
   end
 
   def deliver_email_notification!
@@ -54,6 +54,11 @@ class Notification < ApplicationRecord
   def subscribed?
     user.notification_preferences.include?(system_name)
   end
+
+  def category_enabled?
+    user.notification_categories.enabled?(parent_event.class.category)
+  end
+
   def not_hidden_if_onprem_multitenancy?
     return true unless account.master_on_premises?
 

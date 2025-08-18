@@ -97,4 +97,45 @@ class NotificationsTest < ActiveSupport::TestCase
       assert_includes ActionMailer::Base.deliveries.map(&:to).flatten, buyer.first_admin.email
     end
   end
+
+  class NotificationCategoriesTest < NotificationsTest
+    disable_transactional_fixtures!
+    self.database_cleaner_strategy = :deletion
+    self.database_cleaner_clean_with_strategy = :deletion
+
+    def setup
+      super
+      @provider = FactoryBot.create(:provider_account)
+      @admin = @provider.admins.first
+      @admin.update(email: "provider-admin@example.com")
+      @admin.notification_preferences.update(enabled_notifications: %i[unsuccessfully_charged_invoice_provider])
+
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer, state: :pending, currency: 'EUR')
+      FactoryBot.create(:line_item, invoice: @invoice, cost: 50, quantity: 1)
+
+      ActionMailer::Base.deliveries.clear
+    end
+
+    test 'user is not notified when the notification category is disabled' do
+      with_sidekiq { @invoice.charge! }
+
+      notification = @provider.first_admin.notifications.find_by(system_name: :unsuccessfully_charged_invoice_provider)
+      mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == notification&.parent_event&.event_id }&.first
+
+      assert_nil mail
+    end
+
+    test 'user is notified when the notification category is enabled' do
+      @provider.billing_strategy= FactoryBot.create(:postpaid_billing, numbering_period: 'monthly')
+      @provider.save
+
+      with_sidekiq { @invoice.charge! }
+
+      notification = @provider.first_admin.notifications.find_by(system_name: :unsuccessfully_charged_invoice_provider)
+      mail = ActionMailer::Base.deliveries.select { _1.header["Event-ID"].to_s == notification&.parent_event&.event_id }&.first
+
+      assert_includes mail.to, @admin.email
+    end
+  end
 end
