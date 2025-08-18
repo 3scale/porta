@@ -37,7 +37,12 @@ module Provider::Admin::DashboardsHelper
   end
 
   def dashboard_collection_link(singular_name, collection, path, options = {})
-    link_text = pluralize(number_to_human(collection.size), singular_name, options.fetch(:plural, nil))
+    limit = options.fetch(:limit, nil)
+    collection_size = collection.count
+    collection_size = limit if limit && collection_size > limit
+    human_size = number_to_human(collection_size)
+    human_size += "+" if collection_size == limit
+    link_text = pluralize(human_size, singular_name, options.fetch(:plural, nil))
     dashboard_navigation_link(link_text, path, options)
   end
 
