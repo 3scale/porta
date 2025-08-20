@@ -1084,7 +1084,7 @@ DEPENDENCIES
   redcarpet (~> 3.5.1)
   redis
   redlock
-  reek (= 6.01)
+  reek
   reform (~> 2.3.0)
   reform-rails (~> 0.2.2)
   rest-client (~> 2.0.2)
@@ -1093,7 +1093,7 @@ DEPENDENCIES
   rspec-rails (~> 7.1)
   rspec_api_documentation
   rspec_junit_formatter
-  rubocop (= 1.39)
+  rubocop
   rubocop-performance
   rubocop-rails
   ruby-oci8
