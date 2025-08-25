@@ -7,7 +7,7 @@ class Provider::Admin::User::AccessTokensNewPresenter
   end
 
   def provider_timezone_offset
-    @timezone.utc_offset
+    @timezone.now.utc_offset
   end
 
   def date_picker_props
