@@ -77,6 +77,39 @@ namespace :multitenant do
       Rails.logger.error "Inconsistent tenant_ids for:\n#{inconsistent.map {_1.join(" ")}.join("\n")}"
     end
 
+    desc 'Schedule stale tenants background deletion.'
+    task :stale_throttled_delete, %i[concurrency days_since_disabled iteration_wait] => :environment do |_task, args|
+      require "progress_counter"
+
+      # Not using Account::States::PERIOD_BEFORE_DELETION because customers using this task
+      # will probably have FindAndDeleteScheduledAccountsWorker disabled. To err on the safe side
+      # we only delete ancient stuff by default.
+      args.with_defaults(:concurrency => 3, :days_since_disabled => 30*6, :iteration_wait => 60)
+      target_concurrency = Integer(args.concurrency)
+      since = Integer(args.days_since_disabled).days.ago
+      iteration_wait = Integer(args.iteration_wait)
+
+      stale_enum = Account.tenants.deleted_since(since).find_each
+      progress = ProgressCounter.new(stale_enum.size)
+
+      loop do
+        current_deletion_jobs = scheduled_or_running_background_deletions
+        to_schedule = target_concurrency - current_deletion_jobs.count
+        already_scheduled_providers = current_deletion_jobs.filter_map { provider_being_deleted(_1) }
+
+        to_schedule.times do
+          provider = stale_enum.next # raises StopIteration which will break out of the outer loop
+          redo if already_scheduled_providers.include?(provider.id)
+          DeleteObjectHierarchyWorker.delete_later(provider)
+          progress.call
+        end
+
+        sleep iteration_wait
+      end
+
+      Rails.logger.info "all stale tenants should be deleted or scheduled now, quitting"
+    end
+
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
       query = args[:table_name].constantize.joining(&association_block).where.has(&condition)
       puts "------ Updating #{args[:table_name]} ------"
@@ -97,6 +130,22 @@ namespace :multitenant do
 
     def condition_update_tenant_id(time_start, time_end)
       proc { |object| (object.tenant_id == nil) | ((object.created_at >= Time.strptime(time_start, '%m/%d/%Y %H:%M %Z')) & (object.created_at <= Time.strptime(time_end, '%m/%d/%Y %H:%M %Z'))) }
+    end
+
+    def scheduled_or_running_background_deletions
+      [
+        # I was thinking that future schedules shouldn't count towards concurrency
+        # *Sidekiq::ScheduledSet.new.select { job.queue == "deletion" },
+        *Sidekiq::Queue.new("deletion").to_a,
+        *Sidekiq::Workers.new.filter_map { |_pid, _tid, work| work.job if work.job.queue == "deletion" },
+      ]
+    end
+
+    def provider_being_deleted(job)
+      if job.is_a?(Sidekiq::JobRecord) && job["wrapped"] == DeleteObjectHierarchyWorker.name
+        id = job.args.first["arguments"].first.sub("Plain-Account-", "").to_i
+        id unless id.zero?
+      end
     end
   end
 end
