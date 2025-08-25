@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import moment from 'moment'
 
-import { ExpirationDatePicker } from 'AccessTokens/components/ExpirationDatePicker'
+import { ExpirationDatePicker, TIMESTAMP_FORMAT } from 'AccessTokens/components/ExpirationDatePicker'
 
 import type { ExpirationItem, Props } from 'AccessTokens/components/ExpirationDatePicker'
 import type { ReactWrapper } from 'enzyme'
@@ -53,7 +54,7 @@ const pickDate = (wrapper: ReactWrapper<any, Readonly<object>>) => {
 }
 
 const dateFormatter = Intl.DateTimeFormat('en-US', {
-  month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
+  month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false, timeZoneName: 'short'
 })
 
 it('should render itself', () => {
@@ -82,8 +83,9 @@ describe('select a period', () => {
     selectItem(wrapper, targetItem)
     const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
     const inputDate = new Date(inputValue)
+    const expectedInputValue = moment(inputDate).utc().format(TIMESTAMP_FORMAT)
 
-    expect(inputValue).toEqual(inputDate.toISOString())
+    expect(inputValue).toEqual(expectedInputValue)
     expect(inputDate).toBeWithinSecondsFrom(targetDate)
   })
 })
@@ -119,8 +121,9 @@ describe('select "Custom"', () => {
       const targetDate = pickDate(wrapper)
       const inputValue = wrapper.find(`input#${defaultProps.id}`).prop('value') as string
       const inputDate = new Date(inputValue)
+      const expectedInputValue = moment(inputDate).utc().format(TIMESTAMP_FORMAT)
 
-      expect(inputValue).toEqual(inputDate.toISOString())
+      expect(inputValue).toEqual(expectedInputValue)
       expect(inputDate).toBeWithinSecondsFrom(targetDate)
     })
   })
