@@ -140,7 +140,7 @@ class AccessToken < ApplicationRecord
   def expires_at=(value)
     return if value.blank?
 
-    DateTime.parse(value)
+    DateTime.strptime(value, TIMESTAMP_FORMAT)
 
     super value
   rescue StandardError
@@ -152,7 +152,7 @@ class AccessToken < ApplicationRecord
 
     return true if expires_at > Time.now.utc
 
-    errors.add :expires_at, :invalid, message: "Date must follow ISO8601 format and be future. Example: #{1.week.from_now.utc.iso8601}"
+    errors.add :expires_at, :invalid, message: "Date must follow ISO8601 format and be future. Example: #{1.week.from_now.utc.iso8601}."
   end
 
   def generate_value
