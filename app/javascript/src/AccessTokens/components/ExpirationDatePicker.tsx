@@ -183,4 +183,4 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
 const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker {...props} />, containerId) }
 
 export type { ExpirationItem, Props }
-export { ExpirationDatePicker, ExpirationDatePickerWrapper }
+export { ExpirationDatePicker, ExpirationDatePickerWrapper, TIMESTAMP_FORMAT }
