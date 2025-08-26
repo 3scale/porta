@@ -36,6 +36,10 @@ class NotificationTest < ActiveSupport::TestCase
     notification = FactoryBot.build_stubbed(:notification_with_parent_event)
 
     notification.expects(:permitted?).returns(true).at_least_once
+    notification.expects(:category_enabled?).returns(false).at_least_once
+    assert_not notification.should_deliver?
+
+    notification.expects(:category_enabled?).returns(true).at_least_once
     assert notification.should_deliver?
 
     notification.account.master = true
@@ -43,7 +47,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification.should_deliver?
 
     notification.expects(:hidden_onprem_multitenancy).returns([notification.system_name.to_sym]).at_least_once
-    refute notification.should_deliver?
+    assert_not notification.should_deliver?
   end
 
   CustomEvent = Class.new(RailsEventStore::Event)
