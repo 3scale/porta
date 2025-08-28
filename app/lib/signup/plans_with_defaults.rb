@@ -67,7 +67,6 @@ module Signup
       provider.settings.service_plans_ui_visible?
     end
 
-    # CodeClimate says that this method smells very much, but it is hard and risky to change, to I just set it there as "won't fix"
     def add_default_plans_to_service(service)
       # returns nil when there is no default plan and no plan given
       # that means that there is no service plan and cannot be application plan
@@ -80,6 +79,7 @@ module Signup
       return unless contract_first_published_service_plan?
 
       return if has_service_plan || !(first_service_plan = service.service_plans.published.first)
+
       service_plans << first_service_plan
     end
 
@@ -96,12 +96,14 @@ module Signup
       account_plan = account_plans.first
       human_model_name = AccountPlan.model_name.human
       return ["#{human_model_name} is required"] unless account_plan
+
       account_plan.issuer == provider ? [] : ["Issuer of #{human_model_name} must be #{provider.org_name}"]
     end
 
     def application_plan_errors
       application_plans.group_by(&:issuer).keys.each_with_object([]) do |issuer, errors|
         next if any_plan_for?(issuer: issuer, plan_type: ServicePlan)
+
         errors << "Couldn't find a Service Plan for #{issuer.name}. Please contact the API administrator to fix this."
       end
     end
