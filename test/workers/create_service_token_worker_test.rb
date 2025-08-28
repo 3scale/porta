@@ -51,7 +51,7 @@ class CreateServiceTokenWorkerTest < ActiveSupport::TestCase
     attr_reader :service, :user, :event
 
     def test_perform_deserialization_error_no_service
-      expected_log_message = /CreateServiceTokenWorker#perform raised ActiveJob::DeserializationError with message: Error while trying to deserialize arguments: Couldn't find Service with 'id'=#{service.id}/
+      expected_log_message = /CreateServiceTokenWorker#perform raised ActiveJob::DeserializationError with message: Error while trying to deserialize arguments: Couldn't find Service with 'id'="#{service.id}"/
       Rails.logger.stubs(:info) # There can be other logs as well :)
       Rails.logger.expects(:info).with { |message| message.match(expected_log_message) }
 
