@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { useState } from 'react'
 import {
   Alert,
@@ -14,6 +15,8 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { FunctionComponent } from 'react'
 
 import './ExpirationDatePicker.scss'
+
+const TIMESTAMP_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ'
 
 interface ExpirationItem {
   id: string;
@@ -51,7 +54,7 @@ const computeFormattedDateValue = (selectedDate: Date | null) => {
   if (!selectedDate) return ''
 
   const formatter = Intl.DateTimeFormat('en-US', {
-    month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false
+    month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false, timeZoneName: 'short'
   })
 
   return formatter.format(selectedDate)
@@ -78,7 +81,7 @@ const computeTzMismatchIcon = (tzMismatch: boolean) => {
       bodyContent={(
         <p>
             Your local time zone differs from the account settings.
-            The token will expire at the time you selected in your local time zone.
+            The selected date might be reported in the account time zone.
         </p>
       )}
       headerContent={(
@@ -97,6 +100,12 @@ const computeTzMismatchIcon = (tzMismatch: boolean) => {
   )
 }
 
+const computeInputDateValue = (selectedDate: Date | null) => {
+  if (!selectedDate) return ''
+
+  return moment(selectedDate).utc().format(TIMESTAMP_FORMAT)
+}
+
 interface Props {
   id: string;
   label: string | null;
@@ -113,7 +122,7 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
   const fieldHint = computeFieldHint(formattedDateValue)
   const tzMismatch = computeTzMismatch(tzOffset)
   const tzMismatchIcon = computeTzMismatchIcon(tzMismatch)
-  const inputDateValue = selectedDate ? selectedDate.toISOString() : ''
+  const inputDateValue = computeInputDateValue(selectedDate)
   const fieldName = `human_${id}`
   const fieldLabel = label ?? 'Expires in'
 
@@ -174,4 +183,4 @@ const ExpirationDatePicker: FunctionComponent<Props> = ({ id, label, tzOffset })
 const ExpirationDatePickerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ExpirationDatePicker {...props} />, containerId) }
 
 export type { ExpirationItem, Props }
-export { ExpirationDatePicker, ExpirationDatePickerWrapper }
+export { ExpirationDatePicker, ExpirationDatePickerWrapper, TIMESTAMP_FORMAT }
