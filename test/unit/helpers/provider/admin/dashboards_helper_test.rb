@@ -35,6 +35,11 @@ class Provider::Admin::DashboardsHelperTest < ActionView::TestCase
       dashboard_collection_link('Singular', [1,2], '/path', { plural: 'Plural' })
   end
 
+  test 'dashboard_collection_link accepts a limit of elements' do
+    assert_equal '<a class="DashboardNavigation-link" href="/path">100+ Elements</a>',
+                 dashboard_collection_link('Element', Array.new(100, 0), '/path', { limit: 100 })
+  end
+
   test 'dashboard_network_link and dashboard_navigation_link are equivalent' do
     navigation_link = dashboard_navigation_link('1 Number', '/path')
     collection_link = dashboard_collection_link('Number', [1], '/path')

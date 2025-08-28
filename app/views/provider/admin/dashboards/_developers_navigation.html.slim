@@ -52,14 +52,14 @@ nav.DashboardNavigation
 
     // Messages
     li.DashboardNavigation-list-item
-      = dashboard_collection_link 'Message',
-                                  current_account.received_messages.not_system,
+      - if  received_messages_presenter.unread_exist?
+        - messages = received_messages_presenter.unread_messages
+        - name =  'Unread message'
+      - else
+        - messages = received_messages_presenter.visible_messages
+        - name = 'Message'
+      = dashboard_collection_link name,
+                                  messages,
                                   provider_admin_messages_root_path,
-                                  icon_name: 'envelope'
-
-      - if unread_messages_presenter.show_counter?
-        '
-        | (
-        span.u-notice
-          = unread_messages_presenter.unread_messages_size
-        | )
+                                  icon_name: 'envelope',
+                                  limit: ::Dashboard::ReceivedMessagesPresenter::MAX_VISIBLE_MESSAGES
