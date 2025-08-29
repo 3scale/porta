@@ -1,11 +1,3 @@
-// compass css basics
-@import "compass/utilities/general/clearfix";
-@import "compass/typography/lists/inline-block-list";
-@import "compass/css3";
-@import "compass/reset/utilities";
-@import "compass/typography/text/ellipsis";
-@include reset-html5;
-
 @import 'provider/typography';
 
 // vendored styles
@@ -26,7 +18,6 @@
 
 @import 'provider/links';
 @import 'provider/footer';
-@import 'provider/sidetabs';
 @import 'provider/services';
 @import 'provider/plans';
 
