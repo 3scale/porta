@@ -11,7 +11,8 @@
 // HACK: Patternfly 4 uses Font Awesome 5. Icons are now separated in sets (regular, solid, brand)
 // and github belongs to brand. As a workaround, force its font-family so that it comes from FA 4.
 // font-awesome-rails (FA 4) can't be updated to font-awesome-sass, it is not compatible with
-// our sass-rails. And recent sass-rails is not compatible with compass-sass, which is EOL.
+// our sass-rails.
+// TODO: Upgrade sass-rails, which we couldn't do before we got rid of compass
 i.fa.fa-github.fa-fw {
   font-family: FontAwesome;
 }

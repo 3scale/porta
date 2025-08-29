@@ -13,9 +13,6 @@ linters:
     Comment:
         enabled: false
 
-    Compass::*:
-        enabled: false
-
     DebugStatement:
         enabled: true
 
