@@ -16,7 +16,6 @@ module DeveloperPortal::Admin::Account
         flash[:error] = 'Invalid merchant id'
         redirect_to action: :show
       end
-      @errors = params[:errors]
     end
 
     def hosted_success
@@ -26,9 +25,9 @@ module DeveloperPortal::Admin::Account
       if @payment_result
         update_user_and_perform_action!(braintree_response)
       else
-        @errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
-        flash[:notice] = 'Credit card details could not be stored.'
-        redirect_to action: 'edit', errors: @errors
+        errors = braintree_response ? braintree_blue_crypt.errors(braintree_response) : ['Invalid Credentials']
+        flash[:error] = "Credit card details could not be stored: #{errors.to_sentence}"
+        redirect_to action: 'edit'
       end
     end
 
