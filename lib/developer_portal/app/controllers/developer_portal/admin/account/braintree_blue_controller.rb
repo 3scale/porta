@@ -38,7 +38,8 @@ module DeveloperPortal::Admin::Account
         flash[:notice] = 'Credit card details were successfully stored.'
         redirect_to after_hosted_success_path
       else
-        flash[:notice] = 'Credit Card details could not be stored.'
+        errors = braintree_blue_crypt.account.errors.full_messages.to_sentence
+        flash[:error] = "Credit Card details could not be stored: #{errors}"
         render template: 'accounts/payment_gateways/edit'
       end
     end
