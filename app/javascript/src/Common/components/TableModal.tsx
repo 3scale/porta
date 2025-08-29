@@ -33,6 +33,7 @@ import './TableModal.scss'
 interface Props<T extends IRecord> {
   title: string;
   selectedItem: T | null;
+  disabledItems?: T[];
   pageItems?: T[];
   itemsCount: number;
   onSelect: (selected: T | null) => void;
@@ -65,6 +66,7 @@ const TableModal = <T extends IRecord>({
   isOpen,
   isLoading = false,
   selectedItem,
+  disabledItems,
   pageItems = emptyArray,
   itemsCount,
   onSelect,
@@ -123,6 +125,7 @@ const TableModal = <T extends IRecord>({
 
   const rows: IRow[] = pageItems.map((i) => ({
     selected: i.id === selected?.id,
+    disableSelection: disabledItems?.some(disabled => disabled.id === i.id),
     cells: cells.map(({ propName }) => i[propName]) as IRowCell[]
   }))
 
@@ -139,7 +142,7 @@ const TableModal = <T extends IRecord>({
     <Button
       key="Select"
       data-testid="select"
-      isDisabled={selected === null || isLoading}
+      isDisabled={selected === null || isLoading || disabledItems?.includes(selected)}
       variant="primary"
       onClick={onAccept}
     >
