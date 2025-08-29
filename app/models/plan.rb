@@ -101,9 +101,15 @@ class Plan < ApplicationRecord
     end
   end
 
-  has_many :customizations, :foreign_key => :original_id, :class_name => "Plan", :dependent => :destroy
+  # The added scope is not really needed for the functionality, the idea is to use the
+  # existing index on ["issuer_id", "issuer_type", "type", "original_id"] and avoid
+  # searching for the associated custom plans without an index. Presently seems to be
+  # mostly used during deletion so this should be good enough. We use the fact that
+  # a custom plan must have the same issuer and will be of the same type.
+  # Although probably makes most sense to have separate indices on issuer, type and original_id.
+  has_many :customizations, ->(plan) { where(type: plan.type, issuer_id: plan.issuer_id, issuer_type: plan.issuer_type) }, :foreign_key => :original_id, :class_name => "Plan", inverse_of: :original, :dependent => :destroy
 
-  belongs_to :original, :class_name => self.name
+  belongs_to :original, :class_name => self.name, inverse_of: :customizations
 
   scope :latest, -> { limit(5).order(created_at: :desc) }
 
