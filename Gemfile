@@ -69,7 +69,7 @@ gem 'braintree', '~> 4.25.0'
 gem 'libxml-ruby', '~> 5.0' # Optional, makes braintree faster
 gem 'bugsnag', '~> 6.26'
 gem 'cancancan', '~> 3.6.0'
-gem 'formtastic', '~> 4.0'
+gem 'formtastic', '~> 5.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
 gem 'inherited_resources', '~> 1.14.0'

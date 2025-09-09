@@ -397,8 +397,8 @@ GEM
       rake
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
-    formtastic (4.0.0)
-      actionpack (>= 5.2.0)
+    formtastic (5.0.0)
+      actionpack (>= 6.0.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -1050,7 +1050,7 @@ DEPENDENCIES
   fakefs
   faraday (~> 2.0, <= 2.9)
   font-awesome-rails (~> 4.7.0.5)
-  formtastic (~> 4.0)
+  formtastic (~> 5.0)
   hashie
   hiredis-client
   html-pipeline (~> 2.14.3)
