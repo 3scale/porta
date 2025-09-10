@@ -195,8 +195,7 @@
   }
 
   &-values{
-    @include transition-property(opacity);
-    @include transition-duration(0.5s);
+    transition: opacity 0.5s;
     opacity: 1;
     float: left;
 
@@ -365,14 +364,6 @@
     float: right;
   }
 
-  &-list {
-    @include horizontal-list();
-
-    li {
-      padding: 0;
-    }
-  }
-
   &-list-item {
     @include ellipsis;
     border-left: line-height-times(1.5) solid transparent;
@@ -383,6 +374,18 @@
 
     &:first-child {
       border-left: 0;
+    }
+  }
+
+  &-list {
+    border: 0;
+    overflow: hidden;
+
+    li {
+      margin-left: 0;
+      white-space: nowrap;
+      float: left;
+      padding: 0;
     }
   }
 

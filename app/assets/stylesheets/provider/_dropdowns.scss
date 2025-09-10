@@ -10,7 +10,7 @@ $dropdown-bg-color: lighten(black, 85%);
 
   &.expanded {
     display: block !important;
-    @include box-shadow(0 0 6px $box-shadow-color);
+    box-shadow: 0 0 6px $box-shadow-color;
     background-color: $white;
     border: $border-width solid $border-color;
     border-radius: $border-radius;
@@ -46,7 +46,7 @@ $dropdown-bg-color: lighten(black, 85%);
       padding: line-height-times(1/2) !important;
       font-size: $font-size-base !important;
       width: 100% !important;
-      @include border-radius(0);
+      border-radius: 0;
       border: none;
       cursor: pointer;
       border-bottom: $border-width solid $border-color;

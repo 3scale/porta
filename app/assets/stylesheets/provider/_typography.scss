@@ -143,3 +143,9 @@ $border-radius:                  line-height-times(1/8);
 $border-radius-sm:               line-height-times(1/8);
 
 $layout-wrapper-min-width: line-height-times(50);
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

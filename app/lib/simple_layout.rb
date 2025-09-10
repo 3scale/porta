@@ -1,5 +1,4 @@
 require 'sprockets'
-require 'compass-rails'
 require 'sass'
 
 class SimpleLayout
