@@ -1,12 +1,31 @@
 // library
+
+html, body, header, div, span,
+h1, p, a, code, strong, ul, ol, li,
+form, fieldset, input, button, label {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+html {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+header, main {
+  display: block;
+}
+
 @import "provider/typography";
-@import "compass";
-@import "compass/reset";
 @import "font-awesome";
 @import "provider/logo";
-@import "compass/css3/box-sizing";
-
-
 
 // typography
 @function calculateRem($size) {
@@ -61,23 +80,14 @@ $color-brand-secondary: $highlight-color; // blue
 $color-link: $color-brand-secondary;
 $color-link-hover: $color-text-primary;
 
-// vertical rythm
-$base-font-size: $font-size;
-$base-line-height: $line-height;
-$default-rhythm-border-width: 2px;
-$rhythm-unit: "rem";
-$rem-with-px-fallback: true;
-
 // elements
 
 html {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   font-family: $font-family-text;
-  font-size: adjust-font-size-to($font-size);
+  font-size: $font-size;
   line-height: $line-height;
   color: $color-text-primary;
-  @include establish-baseline;
-  //@include debug-vertical-alignment;
 }
 
 body {
@@ -85,7 +95,7 @@ body {
 }
 
 hr {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   height: 24px;
   margin: 0 0 0 0;
   border: none;
@@ -113,23 +123,24 @@ a, .link {
   }
 }
 header {
-  @include leader(1);
-  @include trailer(2);
+  margin-top: line-height-times(1);
+  margin-bottom: line-height-times(2);
 }
 
 h1 {
-  @include adjust-font-size-to($font-size-x-large);
+  font-size: 1.5rem;
+  line-height: 3rem;
   font-weight: $font-weight-normal;
-  @include trailer(1);
+  margin-bottom: line-height-times(1);
 }
 
 p {
-  @include leader(0);
-  @include trailer(1);
+  margin-top: 0;
+  margin-bottom: line-height-times(1);
 }
 
 h1 + p {
-  @include leader(-1);
+  margin-top: -(line-height-times(1));
 }
 
 .wizard-close {
@@ -137,7 +148,7 @@ h1 + p {
   top: 0;
   right: 0;
   z-index: 30;
-  @include adjust-font-size-to($font-size-xx-large);
+  font-size: 2rem;
   line-height: 0;
   color: $color-border;
 }
@@ -156,18 +167,20 @@ $button-color: $button-color-border;
 $button-color-hover: white;
 
 .button {
-  @include box-sizing(border-box);
-  @include leader(1);
-  @include trailer(1);
+  box-sizing: border-box;
+  margin-top: line-height-times(1);
+  margin-bottom: line-height-times(1);
   text-decoration: none;
   color: $button-color;
   line-height: 0;
-  @include border-radius(6px);
+  border-radius: 6px;
   float: right;
   background-color: white;
   cursor: pointer;
   font-size: $font-size;
-  @include rhythm-borders;
+  border-width: 0.125rem;
+  border-style: solid;
+  padding: 1.375rem;
   border-color: $button-color-border;
 
   &:hover {
@@ -194,7 +207,7 @@ $button-color-hover: white;
 }
 
 // button nudge animation
-@include keyframes(button-nudge) {
+@keyframes button-nudge {
   0%, 100% {
     background-color: $button-color-hover;
     color: $button-color;
@@ -212,32 +225,31 @@ input {
 }
 
 input[type="text"] {
-  @include input-placeholder {
+  ::placeholder {
     color: $color-text-tertiary;
     font-style: italic;
     height: 1.5rem;
 
-    &:before {
-      content: 'e.g. '
-    }
+    /* TODO: Add the following somewhere else:
+      &:before {
+        content: 'e.g. '
+      }
+    */
   }
 }
 
-
-
 input[type="text"] {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   text-decoration: none;
   color: $button-color;
   //line-height: 24px;
   height: 3.125rem;
-  //@include border-radius(6px);
   float: right;
   background-color: white;
   font-size: $font-size;
   border: none;
-  @include padding-leader;
-  @include trailing-border;
+  padding-top: line-height-times(1);
+  border-bottom: 0.125rem solid $color-border;
   padding: 0 0 0 0;
   border-color: $color-border;
   width: 60%;
@@ -270,12 +282,12 @@ form li {
   width: 100%;
   float: left;
   clear: both;
-  @include trailer(1);
+  margin-bottom: line-height-times(1);
 
 
   &.slim {
     display: inline;
-    @include trailer(-0.5);
+    margin-bottom: -(line-height-times(0.5));
     max-width: 80%;
 
     label {
@@ -288,7 +300,6 @@ form li {
       float: left;
     }
   }
-
 
   &.hidden { display: none; }
 
@@ -303,14 +314,16 @@ fieldset {
 }
 
 label {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   display: block;
   width: 40%;
   float: left;
   text-align: right;
   line-height: 0;
   height: $line-height;
-  @include rhythm-borders;
+  border-width: 0.125rem;
+  border-style: solid;
+  padding: 1.375rem;
   border-color: transparent;
 }
 
@@ -331,104 +344,104 @@ label {
 }
 
 .explain {
-  @include leader;
+  margin-top: line-height-times(1);
 
   .text {
-    @include padding-leader(0.5);
+    padding-top: line-height-times(0.5);
   }
 
 
   .text--down {
-    @include padding-leader(1);
+    padding-top: line-height-times(1);
   }
 
   .text--up {
-    @include padding-leader(0);
+    padding-top: 0;
   }
 
   .is-transparent {
-    @include opacity(0);
+    opacity: 0;
   }
 
   .explain__step--1 {
-    @include animation( focus 1s ease-out 1s forwards,
-                        focus_border 1s ease-out 1s forwards,
-                        unfocus 1s ease-out 5s forwards,
-                        unfocus_border 1s ease-out 5s forwards,
-                        success 1s ease-out 15s forwards,
-                        success_border 1s ease-out 15s forwards );
+    animation: focus 1s ease-out 1s forwards,
+               focus_border 1s ease-out 1s forwards,
+               unfocus 1s ease-out 5s forwards,
+               unfocus_border 1s ease-out 5s forwards,
+               success 1s ease-out 15s forwards,
+               success_border 1s ease-out 15s forwards;
 
     .icon {
-      @include animation( focus 1s ease-out 1s forwards,
-                          unfocus 1s ease-out 5s forwards,
-                          success 1s ease-out 15s forwards );
+      animation: focus 1s ease-out 1s forwards,
+                 unfocus 1s ease-out 5s forwards,
+                 success 1s ease-out 15s forwards;
     }
 
     .text {
-      @include animation( reveal 1s ease-out 1s forwards );
+      animation: reveal 1s ease-out 1s forwards;
     }
 
     .code-example {
-      @include animation( reveal 1s ease-out 1s forwards );
+      animation: reveal 1s ease-out 1s forwards;
 
       * {
-        @include animation( unfocus 1s ease-out 5s forwards );
+        animation: unfocus 1s ease-out 5s forwards;
       }
 
       &:hover {
         * {
-          @include animation( clean 0.2s ease-out 0 forwards );
+          animation: clean 0.2s ease-out 0 forwards;
         }
       }
     }
   }
 
   .explain__step--2 {
-    @include animation( focus 1s ease-out 5s forwards,
-                        focus_border 1s ease-out 5s forwards,
-                        unfocus 1s ease-out 10s forwards,
-                        unfocus_border 1s ease-out 10s forwards,
-                        success 1s ease-out 15s forwards,
-                        success_border 1s ease-out 15s forwards );
+    animation: focus 1s ease-out 5s forwards,
+               focus_border 1s ease-out 5s forwards,
+               unfocus 1s ease-out 10s forwards,
+               unfocus_border 1s ease-out 10s forwards,
+               success 1s ease-out 15s forwards,
+               success_border 1s ease-out 15s forwards;
 
     .icon {
-      @include animation( focus 1s ease-out 5s forwards,
-                          unfocus 1s ease-out 10s forwards,
-                          success 1s ease-out 15s forwards );
+      animation: focus 1s ease-out 5s forwards,
+                 unfocus 1s ease-out 10s forwards,
+                 success 1s ease-out 15s forwards;
     }
 
     .text {
-      @include animation( reveal 1s ease-out 5s forwards );
+       animation: reveal 1s ease-out 5s forwards;
     }
 
     .code-example {
-      @include animation( reveal 1s ease-out 5s forwards );
+      animation: reveal 1s ease-out 5s forwards;
 
       * {
-        @include animation( unfocus 1s ease-out 10s forwards );
+        animation: unfocus 1s ease-out 10s forwards;
       }
 
       &:hover {
         * {
-          @include animation( clean 0.2s ease-out 0 forwards );
+          animation: clean 0.2s ease-out 0 forwards;
         }
       }
     }
   }
 
   .explain__step--3 {
-    @include animation( focus 1s ease-out 10s forwards,
-                        unfocus 1s ease-out 15s forwards,
-                        success 1s ease-out 15s forwards );
+    animation: focus 1s ease-out 10s forwards,
+               unfocus 1s ease-out 15s forwards,
+               success 1s ease-out 15s forwards;
 
     .icon {
-      @include animation( focus 1s ease-out 10s forwards,
-                          unfocus 1s ease-out 15s forwards,
-                          success 1s ease-out 15s forwards );
+      animation: focus 1s ease-out 10s forwards,
+                unfocus 1s ease-out 15s forwards,
+                success 1s ease-out 15s forwards;
     }
 
     .text {
-      @include animation( reveal 1s ease-out 10s forwards );
+      animation: reveal 1s ease-out 10s forwards;
     }
   }
 }
@@ -444,7 +457,8 @@ $code-color-params: $color-brand-primary;
 
 .code-example {
   display: block;
-  @include adjust-font-size-to(14px);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   color: $color-text-secondary;
 
   .code-example__base {
@@ -505,15 +519,14 @@ $feedback-color-inactive: $color-text-secondary;
   padding-left: 72px;
   margin-left: 24px;
   border-color: transparent;
-  //position: relative;
-  @include padding-trailer(3);
+  padding-bottom: 4.5rem;
   min-height: $line-height * 2;
-  @include adjust-font-size-to($font-size-large);
+  font-size: 1.125rem;
+  line-height: 1.5rem;
 
   .code-example {
     //position: absolute;
     //top: $line-height * 3;
-    //@include padding-leader(6);
     //margin-left: $line-height * -2;
     //@extend %vertical-align;
 
@@ -527,7 +540,7 @@ $feedback-color-inactive: $color-text-secondary;
   }
 
   &.feedback--sec {
-    @include padding-trailer(0);
+    padding-bottom: 0;
     min-height: auto;
   }
 
@@ -600,57 +613,57 @@ $feedback-color-inactive: $color-text-secondary;
 
 
 // reveal animation
-@include keyframes(reveal) {
+@keyframes reveal {
   0%, 100% {
     visibility: visible;
-    @include opacity(1);
+    opacity: 1;
   }
 }
 
 // focus animation
-@include keyframes(focus) {
+@keyframes focus {
   0%, 100% {
     color: $color-brand-secondary;
   }
 }
 
 // unfocus animation
-@include keyframes(unfocus) {
+@keyframes unfocus {
   0%, 100% {
     color: $color-text-secondary;
   }
 }
 
 // focus border animation
-@include keyframes(focus_border) {
+@keyframes focus_border {
   0%, 100% {
     border-color: $color-brand-secondary;
   }
 }
 
 // unfocus border animation
-@include keyframes(unfocus_border) {
+@keyframes unfocus_border {
   0%, 100% {
     border-color: $color-text-secondary;
   }
 }
 
 // success animation
-@include keyframes(success) {
+@keyframes success {
   0%, 100% {
     color: $color-success;
   }
 }
 
 // success border animation
-@include keyframes(success_border) {
+@keyframes success_border {
   0%, 100% {
     border-color: $color-success;
   }
 }
 
 // clean animation
-@include keyframes(clean) {
+@keyframes clean {
   0%, 100% {
     color: auto;
   }
@@ -667,7 +680,7 @@ $feedback-color-inactive: $color-text-secondary;
 
 .response {
   overflow-y: auto;
-  max-height: $base-line-height * 20;
+  max-height: $line-height * 20;
   display: block;
 }
 

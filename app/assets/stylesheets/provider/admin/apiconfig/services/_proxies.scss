@@ -78,7 +78,8 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
     background-color: $integration-tab-active-bg-color;
     border: $integration-tab-active-border;
     border-top: none;
-    @include border-bottom-radius(5px);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 
   .ui-tabs-hide {
