@@ -4,7 +4,7 @@
 
   #account-overview,
   #plan-overview {
-    @extend div.left;
+    @extend .left-column;
 
     table tr {
       border-bottom: $border-width solid $border-color;
@@ -12,7 +12,7 @@
   }
 
   #plan-overview {
-    @extend div.right;
+    @extend .right-column;
   }
 
   .overview-box {

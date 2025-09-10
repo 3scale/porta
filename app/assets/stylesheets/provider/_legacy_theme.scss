@@ -24,13 +24,12 @@ div.dashboard_card {
   }
 }
 
-div.left {
+.left-column {
   float: left;
   width: calc(50% - #{line-height-times(1)});
 }
 
-div.right,
-div.right_narrow {
+.right-column {
   float: right;
   width: calc(50% - #{line-height-times(1)});
 }

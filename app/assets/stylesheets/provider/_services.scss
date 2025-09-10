@@ -130,11 +130,11 @@
     }
 
     &[name='settings'] {
-      @extend div.left;
+      @extend .left-column;
     }
 
     &[name='activity'] {
-      @extend div.right;
+      @extend .right-column;
     }
   }
 

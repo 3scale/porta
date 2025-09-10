@@ -92,7 +92,7 @@
 }
 
 #open-portal-to-public {
-  @extend div.right;
+  @extend .right-column;
 
   .button {
     margin-left: 0;

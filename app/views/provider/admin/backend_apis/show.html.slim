@@ -19,10 +19,10 @@ section.Section
 section class="overview-widget"
   div
 
-    div.left
+    div.left-column
       = render 'provider/admin/backend_apis/cards/products_used_list', products: @backend_api.decorate.products_table_data(current_user)
 
-    div.right
+    div.right-column
       h2 Methods & mapping rules
       ul.listing#backend_metrics_and_mapping_rules
         li.item
