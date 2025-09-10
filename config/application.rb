@@ -152,8 +152,6 @@ module System
     config.autoload_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
     config.eager_load_paths += [Rails.root.join('lib', 'developer_portal', 'app'), Rails.root.join('lib', 'developer_portal', 'lib')]
 
-    config.add_autoload_paths_to_load_path = true # TODO: default value in 7.1 is false, but it requires significant refactoring
-
     config.eager_load = true
 
     # Only load the plugins named here, in the order given (default is alphabetical).
@@ -307,11 +305,7 @@ module System
     Rails.application.deprecators[:threescale] = ActiveSupport::Deprecation.new('future version', '3scale')
     Rails.application.deprecators[:threescale].silenced = %w[test production].include?(Rails.env)
 
-    require 'three_scale/domain_substitution'
-    require 'three_scale/middleware/presigned_downloads'
-    require 'three_scale/middleware/multitenant'
-    require 'three_scale/middleware/cors'
-    require 'three_scale/patterns/service'
+    require "three_scale"
 
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before ActionDispatch::Static, ThreeScale::Middleware::PresignedDownloads
@@ -348,8 +342,6 @@ module System
       (Rails.application.config.logger || Rails.logger).formatter = Rails.application.config.log_formatter
 
       Paperclip::Attachment.default_options[:s3_options] = CMS::S3.options # Paperclip does not accept s3_options set as a Proc
-
-      require 'three_scale'
     end
 
     config.after_initialize do

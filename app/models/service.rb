@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'backend_client'
-
 class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Searchable
   include Backend::ModelExtensions::Service

@@ -22,7 +22,7 @@ end
 
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 
-require 'minitest/unit'
+require 'minitest/autorun'
 
 require 'rails/test_help'
 require "paperclip/matchers"

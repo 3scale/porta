@@ -1,7 +1,4 @@
-require 'minitest_helper'
-
-require 'test/test_helpers/xml_assertions'
-require 'active_support/json/encoding'
+require 'minitest_spec_helper'
 
 describe ThreeScale::XML::Builder do
   include TestHelpers::XmlAssertions
