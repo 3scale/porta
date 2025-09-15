@@ -1,5 +1,5 @@
-@import "provider/typography";
-@import "provider/buttons";
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
 
 $website-background-color: #f4f4f4;
 
