@@ -6,7 +6,7 @@
 # It is not a generic purpose wrapper.
 ###################################################################
 
-CONTAINER_NAME=manticore-porta
+CONTAINER_NAME=manticore-"${RAILS_ENV:-development}"
 
 set -e
 
@@ -54,13 +54,16 @@ done
 porta_root="$(dirname "$(dirname "$(readlink -f "$conf_file")")")"
 conf_internal=/tmp/manticore.conf
 conf_mod=$(mktemp /tmp/manticore.XXXXXX.conf)
-sed -E -e 's#pid_file ?= ?(.*)$#pid_file = /tmp/searchd.pid#' -e 's/127.0.0.1/0.0.0.0/' "$conf_file" > "$conf_mod"
+sed -E -e 's#pid_file ?= ?(.*)$#pid_file = /tmp/searchd.pid#' -e 's/127.0.0.1://' "$conf_file" > "$conf_mod"
 
 if [ "$mode" = stop ]; then
   set -x
   $crun exec $CONTAINER_NAME searchd --pidfile --config "$conf_internal" --stopwait
   exit
 fi
+
+readarray -d : -t listen_arr <<< $(grep -Pm 1 'listen ?=' "$conf_file")
+port="${listen_arr[-2]}"
 
 pid_file=$(grep -ohP '(?<= {,10}pid_file ?= ).*' "$conf_file")
 if [[ "$pid_file" ]]; then
@@ -76,6 +79,6 @@ set -x
 $crun run --rm --group-add keep-groups --user $user \
 	--security-opt=label=disable --userns=keep-id --passwd \
 	"-v=$porta_root:$porta_root" "-v=$conf_mod:$conf_internal" \
-	--name $CONTAINER_NAME -p 9306:9306 -p 9313:9313 $daemon $pid_opt\
+	--name $CONTAINER_NAME -p "$port:$port" $daemon $pid_opt\
 	manticoresearch/manticore:7.0.0 searchd \
 	-c "$conf_internal" --nodetach

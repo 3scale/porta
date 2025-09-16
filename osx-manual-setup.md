@@ -58,7 +58,7 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver gs pkg-config openssl geckodriver manticoresoftware/tap/manticoresearch@7.0.0 gd mysql@8.0 postgresql@13
+brew install chromedriver gs pkg-config openssl geckodriver manticoresearch gd mysql@8.0 postgresql@15
 ```
 
 * **Macs with M1** also require the following:
