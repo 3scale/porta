@@ -25,7 +25,8 @@ import type {
   IRow,
   IRowCell,
   ITransform,
-  SortByDirection
+  SortByDirection,
+  TableProps
 } from '@patternfly/react-table'
 
 import './TableModal.scss'
@@ -33,6 +34,7 @@ import './TableModal.scss'
 interface Props<T extends IRecord> {
   title: string;
   selectedItem: T | null;
+  disabledItems?: T[];
   pageItems?: T[];
   itemsCount: number;
   onSelect: (selected: T | null) => void;
@@ -65,6 +67,7 @@ const TableModal = <T extends IRecord>({
   isOpen,
   isLoading = false,
   selectedItem,
+  disabledItems,
   pageItems = emptyArray,
   itemsCount,
   onSelect,
@@ -123,8 +126,23 @@ const TableModal = <T extends IRecord>({
 
   const rows: IRow[] = pageItems.map((i) => ({
     selected: i.id === selected?.id,
+    disableSelection: disabledItems?.some(disabled => disabled.id === i.id),
     cells: cells.map(({ propName }) => i[propName]) as IRowCell[]
   }))
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Don't pass rowProps down to tr
+  const customRowWrapper: TableProps['rowWrapper'] = ({ trRef, className, row, rowProps, ...props }) => {
+    const classNames = row?.disableSelection ? `pf-c-table__disabled-row ${className ?? ''}` : className
+    return (
+      // @ts-expect-error: Type mismatch due to @patternfly/react-core being old probably.
+      <tr
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        className={classNames}
+        ref={trRef as React.LegacyRef<HTMLTableRowElement>}
+      />
+    )
+  }
 
   const onAccept = () => {
     onSelect(selected)
@@ -139,7 +157,7 @@ const TableModal = <T extends IRecord>({
     <Button
       key="Select"
       data-testid="select"
-      isDisabled={selected === null || isLoading}
+      isDisabled={selected === null || isLoading || disabledItems?.includes(selected)}
       variant="primary"
       onClick={onAccept}
     >
@@ -185,6 +203,7 @@ const TableModal = <T extends IRecord>({
         <Table
           aria-label={title}
           cells={cells}
+          rowWrapper={customRowWrapper}
           rows={rows}
           selectVariant="radio"
           sortBy={sortBy}
