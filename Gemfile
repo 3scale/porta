@@ -134,7 +134,7 @@ gem 'rack-utf8_sanitizer'
 gem 'jwt', '~> 1.5.2', require: false
 
 group :assets do
-  gem 'font-awesome-rails', '~> 4.7.0.5'
+  gem 'font-awesome-sass', '~> 5.15.1'
   gem 'jquery-rails', '4.6'
   gem 'uglifier'
 

@@ -19,11 +19,10 @@ a {
   }
 }
 
-@mixin iconic($content) {
-  font-family: FontAwesome;
-  font-weight: $font-weight-normal;
+@mixin iconic($content, $font-weight: $font-weight-normal) {
+  font-family: "Font Awesome 5 Free";
+  font-weight: $font-weight;
   font-style: normal;
-  display: inline-block;
   text-decoration: inherit;
   display: inline-block;
   text-decoration: none;
@@ -48,18 +47,18 @@ input[type='submit'].action {
     &:hover {
       color: $link-hover-color;
     }
-    // https://github.com/bokmann/font-awesome-rails/blob/master/vendor/assets/stylesheets/font-awesome.css.erb
-    // http://fortawesome.github.com/Font-Awesome/
-    &.undo:before, &.revert:before { @include iconic("\f0e2\0000a0"); }
+    // For reference:
+    // https://github.com/FortAwesome/font-awesome-sass/blob/5.15.1/assets/stylesheets/font-awesome/_variables.scss#L1319
+    &.undo:before, &.revert:before { @include iconic("\f2ea\0000a0"); }
     &.add:before, &.new:before  { @include iconic("\f055\0000a0"); }  // plus-sign
-    &.delete:before   { @include iconic("\f014\0000a0"); }  // trash
-    &.refresh:before   { @include iconic("\f021\0000a0"); } // resend
-    &.edit:before     { @include iconic("\f040\0000a0"); }  // pencil
+    &.delete:before   { @include iconic("\f2ed\0000a0"); }  // trash
+    &.refresh:before   { @include iconic("\f2f1\0000a0"); } // resend
+    &.edit:before     { @include iconic("\f303\0000a0"); }  // pencil
     &.bolt:before     { @include iconic("\f0e7\0000a0"); }  // bolt
     &.fire:before   { @include iconic("\f06d\0000a0"); }    // fire
     &.off:before, &.disable:before, &.suspend:before { @include iconic("\f28b\0000a0"); }     // off
     &.activate:before, &.enable:before, &.resume:before { @include iconic("\f144\0000a0"); }  // unlock
-    &.message:before { @include iconic("\f003\0000a0"); }   // unlock
+    &.message:before { @include iconic("\f0e0\0000a0"); }   // unlock <i class="far fa-envelope"></i>
     &.open:before { @include iconic("\f07b\0000a0"); }      // folder
     &.close:before   { @include iconic("\f057\0000a0"); }   // remove-sign
     &.approve:before,
@@ -99,7 +98,7 @@ input[type='submit'].action {
     &.more { background-image: image-url('dashboard_arrow.gif'); }
 }
 
-button.edit        { @include iconic("\f040\0000a0"); } // background-image: image-url('pencil.png');
+button.edit        { @include iconic("\f303\0000a0"); } // background-image: image-url('pencil.png');
 button.suspend     { background-image: image-url('cross.png'); }
 button.unsuspend   { background-image: image-url('tick.png'); }
 button.resume      { background-image: image-url('tick.png'); }
