@@ -1,5 +1,8 @@
+@use "provider/typography";
+@use "provider/colors";
+
 body {
-  min-width: $layout-wrapper-min-width;
+  min-width: typography.$layout-wrapper-min-width;
 }
 
 #wrapper {
@@ -15,11 +18,11 @@ body {
   padding-bottom: 1.5rem;
 
   &--callToAction {
-    min-height: calc(100vh - #{line-height-times(12)});
+    min-height: calc(100vh - #{typography.line-height-times(12)});
   }
 }
 
 @mixin white-box-shadow {
-  background-color: $white;
-  box-shadow: $whiteBoxShadow;
+  background-color: colors.$white;
+  box-shadow: colors.$whiteBoxShadow;
 }

@@ -188,22 +188,6 @@ module System
 
     config.assets.enabled = true
 
-    config.assets.precompile = []
-    config.assets.precompile << ->(filename, _path) do
-      basename = File.basename(filename)
-
-      extname = File.extname(basename)
-
-      # skip files that start with underscore, do not have extension or are sourcemap
-      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_')
-    end
-    config.assets.precompile += %w[
-      font-awesome.css
-      provider/signup_v2.js
-      provider/signup_form.js
-      provider/layout/provider.js
-    ]
-
     config.assets.compile = false
     config.assets.digest = true
     config.assets.initialize_on_precompile = false

@@ -1,4 +1,6 @@
-// library
+@use "provider/typography" as *;
+@use "provider/logo";
+@use "provider/colors";
 
 html, body, header, div, span,
 h1, p, a, code, strong, ul, ol, li,
@@ -22,10 +24,6 @@ ol, ul {
 header, main {
   display: block;
 }
-
-@import "provider/typography";
-@import "font-awesome";
-@import "provider/logo";
 
 // typography
 @function calculateRem($size) {
@@ -59,13 +57,13 @@ $font-weight-bold: 600;
 $font-family-text: $font-family-base;
 
 // colors
-$color-grey-1: $font-color;
-$color-grey-2: $label-color;
-$color-grey-3: $disabled-color;
-$color-grey-4: $border-color;
-$color-success: $success-color;
+$color-grey-1: colors.$font-color;
+$color-grey-2: colors.$label-color;
+$color-grey-3: colors.$disabled-color;
+$color-grey-4: colors.$border-color;
+$color-success: colors.$success-color;
 $success-color: $color-success;
-$color-failure: $error-color;
+$color-failure: colors.$error-color;
 $error-color: $color-failure;
 $color-disabled: $color-grey-3;
 
@@ -75,8 +73,8 @@ $color-text-secondary: $color-grey-2;
 $color-text-tertiary: $color-grey-3;
 
 $color-border: $color-grey-4;
-$color-brand-primary: $brand-orange;
-$color-brand-secondary: $highlight-color; // blue
+$color-brand-primary: colors.$brand-orange;
+$color-brand-secondary: colors.$highlight-color; // blue
 $color-link: $color-brand-secondary;
 $color-link-hover: $color-text-primary;
 

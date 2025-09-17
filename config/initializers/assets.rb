@@ -15,3 +15,14 @@ Rails.application.config.assets.version = "1.0"
 # folder are already added.
 
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
+
+Rails.application.config.assets.paths << Rails.root.join("app/assets/builds")
+
+Rails.application.config.assets.precompile += %w[
+  error.css
+  login.css
+  font-awesome.css
+  provider/signup_v2.js
+  provider/signup_form.js
+  provider/layout/provider.js
+]

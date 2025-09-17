@@ -1,3 +1,5 @@
+@use 'provider/typography' as *;
+
 .pagination {
   margin-top: line-height-times(1);
   text-align: right;
