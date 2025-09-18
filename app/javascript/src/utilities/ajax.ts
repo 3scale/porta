@@ -6,6 +6,8 @@ type FetchFunction = <T>(url: string, opts: RequestInit) => Promise<APIResponse<
 export interface FetchItemsRequestParams { page: number; perPage: number; query?: string }
 export type FetchItemsResponse<T> = Promise<{ items: T[]; count: number }>
 
+export type PatchResponse = Promise<{ success: boolean; message: string }>
+
 const _ajax = (headers: Record<string, string>) => {
   const meta = document.querySelector('meta[name="csrf-token"]')
   const token: string = meta?.getAttribute('content') ?? ''
@@ -46,4 +48,17 @@ async function fetchPaginated<T> (path: string, params: FetchItemsRequestParams)
     }))
 }
 
-export { ajax, ajaxJSON, fetchPaginated }
+/**
+ *
+ * @param path The full path to the endpoint (starts with a dash)
+ * @param record The hash that will be used by the controller to update the record (watch the case is correct!)
+ * @returns success state and a message to show in a toast
+ */
+async function patch (path: string, record: unknown): PatchResponse {
+  return ajaxJSON(path, {
+    method: 'PATCH',
+    body: JSON.stringify(record)
+  }).then(response => response.json() as PatchResponse)
+}
+
+export { ajax, ajaxJSON, fetchPaginated, patch }
