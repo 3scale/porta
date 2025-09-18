@@ -3,7 +3,7 @@ interface ResponseBody { redirect?: string }
 interface APIResponse<T> extends Response { json: () => Promise<ResponseBody & T> }
 type FetchFunction = <T>(url: string, opts: RequestInit) => Promise<APIResponse<T>>
 
-export interface FetchItemsRequestParams { page: number; perPage: number; query?: string }
+export type FetchPaginatedParams = Record<string, number | string> & { page: number; perPage: number; query?: string }
 export type FetchItemsResponse<T> = Promise<{ items: T[]; count: number }>
 
 export type PatchResponse = Promise<{ success: boolean; message: string }>
@@ -25,8 +25,8 @@ const _ajax = (headers: Record<string, string>) => {
 const ajax: FetchFunction = _ajax({ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' })
 const ajaxJSON: FetchFunction = _ajax({ 'Content-Type': 'application/json; charset=UTF-8', 'Accept': 'application/json; charset=UTF-8' })
 
-async function fetchPaginated<T> (path: string, params: FetchItemsRequestParams): FetchItemsResponse<T> {
-  const { page, perPage, query = '' } = params
+async function fetchPaginated<T> (path: string, params: FetchPaginatedParams): FetchItemsResponse<T> {
+  const { page, perPage, query = '', ...rest } = params
 
   const searchParams = new URLSearchParams({
     page: String(page),
@@ -36,6 +36,10 @@ async function fetchPaginated<T> (path: string, params: FetchItemsRequestParams)
   if (query !== '') {
     searchParams.append('search[query]', query)
     searchParams.append('utf8', '✓')
+  }
+
+  for (const param in rest) {
+    searchParams.append(param, String(rest[param]))
   }
 
   const url = `${path}?${searchParams.toString()}`

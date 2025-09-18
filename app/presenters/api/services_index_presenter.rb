@@ -6,15 +6,23 @@ class Api::ServicesIndexPresenter
   def initialize(user:, params: {})
     @user = user
     @ability = Ability.new(user)
+    @compact = params[:compact]
 
     pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     search = ThreeScale::Search.new(params[:search])
     sorting_params = "#{params[:sort].presence || 'updated_at'} #{params[:direction].presence || 'desc'}"
 
-    @products = user.accessible_services
-                    .order(sorting_params)
-                    .scope_search(search)
-                    .paginate(pagination_params)
+    accessible_services = user.accessible_services
+
+    products = if params[:without_support_emails]
+                 accessible_services.where(support_email: nil)
+               else
+                 accessible_services
+               end
+
+    @products = products.order(sorting_params)
+                         .scope_search(search)
+                         .paginate(pagination_params)
   end
 
   attr_reader :products
@@ -45,15 +53,35 @@ class Api::ServicesIndexPresenter
 
   # The JSON response of index endpoint is used to populate NewApplicationForm's ProductSelect
   def render_json
+    return compact_json if @compact
+
     {
       items: products.includes(:default_application_plan).map { |p| ServicePresenter.new(p).new_application_data.as_json }.to_json,
       count: total_entries
     }
   end
 
+  # # This JSON is used to populate CustomSupportEmails' Modal
+  # def services_without_support_email
+  #   {
+  #     items: products.where(support_email: nil)
+  #                    .decorate
+  #                    .to_json(only: %i[id name system_name updated_at], js: true),
+  #     count: total_products_without_support_email
+  #   }
+  # end
+
   private
 
   attr_reader :user, :ability
+
+  # TODO: make js a param
+  def compact_json
+    {
+      items: products.decorate.to_json(only: %i[id name system_name updated_at], js: true),
+      count: total_entries
+    }
+  end
 
   delegate :can?, to: :ability
 

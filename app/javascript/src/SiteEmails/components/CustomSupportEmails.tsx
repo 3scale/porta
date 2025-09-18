@@ -19,7 +19,8 @@ import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { fetchPaginatedProducts as fetchItems } from 'NewApplication/data/Products'
-import { patch } from 'utilities/ajax'
+import type { FetchPaginatedParams } from 'utilities/ajax'
+import { fetchPaginated, patch } from 'utilities/ajax'
 import { toast } from 'utilities/toast'
 import { InlineEdit, InlineEditAction, InlineEditGroup } from 'Common/components/InlineEdit'
 
@@ -81,6 +82,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     }
   }
 
+  // Fetch new items when navigating to an empty page
   useEffect(() => {
     if (!modalOpen || !productsPath) {
       return
@@ -93,7 +95,10 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     if (pageIsEmpty && thereAreMoreItems) {
       setIsLoading(true)
 
-      fetchItems(productsPath, { page, perPage: PER_PAGE })
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const params: FetchPaginatedParams = { page, perPage: PER_PAGE, compact: 'true', without_support_emails: 'true' }
+
+      fetchPaginated<Product>(productsPath, params)
         .then(({ items: newItems, count: newCount }) => {
           setPageDictionary({ ...pageDictionary, [page]: newItems })
           setCount(newCount)
@@ -105,6 +110,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     }
   }, [page, modalOpen])
 
+  // Fetch items based on query search
   useEffect(() => {
     if (!productsPath) {
       return
