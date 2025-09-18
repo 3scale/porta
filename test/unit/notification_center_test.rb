@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 require 'notification_center'
 
 class NotificationCenterTest < SimpleMiniTest
