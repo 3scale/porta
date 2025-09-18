@@ -94,7 +94,7 @@ module PaymentGateways
     test '#update_user with correct customer.id' do
       result = successful_result
       account = Account.new
-      account.expects(:save!).returns(true)
+      account.expects(:save).returns(true)
       @braintree.stubs(:account).returns(account)
       @braintree.expects(:buyer_reference).returns(result.customer.id)
       assert @braintree.update_user(result)
