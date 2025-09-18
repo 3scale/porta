@@ -1,4 +1,4 @@
-# Manual setup on Fedora (36)
+# Manual setup on Fedora (42)
 
 ### Language and runtime version management
 
@@ -30,7 +30,7 @@ asdf install
 ### Dependencies
 
 ```
-sudo dnf install sphinx chromedriver postgresql-devel gd-devel mysql-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
+sudo dnf install chromedriver postgresql-devel gd-devel mysql-devel openssl-devel zlib-devel sqlite-devel readline-devel libyaml-devel libtool libffi-devel bison automake autoconf patch
 ```
 
 ### Database
@@ -50,7 +50,7 @@ podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mys
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 redis:6.2-alpine
+podman run -d -p 6379:6379 --name redis72 redis:7.2-alpine
 ```
 
 Alternatively, Redis can be run directly on your machine with `dnf`:
@@ -81,6 +81,19 @@ sudo systemctl restart memcached
 > development:
 >   - :null_store
 > ```
+
+Note: if you're using [porta-dev-tools](https://github.com/3scale-labs/porta-dev-tools), the service should be down before starting dependencies with it.
+
+### Manticore Search
+Manticore search is an open source full-text search engine. It started as a fork of Sphinx at the time its source code got closed.
+
+To install it, see https://manticoresearch.com/install/. It can be locally installed. Or if you prefer, you can link `bin/searchd` wrapper shell executable to your user's `PATH` to run it as a container.
+
+```
+ln -s /absolute/path/porta/bin/searchd ~/.local/bin/
+```
+
+This approach should also be compatible with [porta-dev-tools](https://github.com/3scale-labs/porta-dev-tools).
 
 ### Bundler
 

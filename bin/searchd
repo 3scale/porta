@@ -1,0 +1,84 @@
+#!/bin/env sh
+
+###################################################################
+# This is a wrapper to run Manticore search as a container in a
+# compatible way to how ThinkingSphinx would recognize it running.
+# It is not a generic purpose wrapper.
+###################################################################
+
+CONTAINER_NAME=manticore-"${RAILS_ENV:-development}"
+
+set -e
+
+# Decide whether to use Docker or Podman as container runtime
+if podman -v 2>&1 > /dev/null; then
+  crun=podman
+else
+  crun=docker
+fi
+
+# Process container options
+conf_file=""
+daemon="-d"
+
+while :; do
+  opt="$1"
+  case "$opt" in
+    "")
+      # no more parameters
+      break
+      ;;
+    "--stopwait")
+      mode=stop
+      ;;
+    "--pidfile")
+      :
+      ;;
+    "--config")
+      shift
+      conf_file="$1"
+      ;;
+    "--nodetach")
+      daemon=""
+      ;;
+    *)
+      echo "unhandled searchd option $opt" >&2
+      exit 1
+      ;;
+  esac
+  shift || break # we probably never should be breaking here but play safe
+done
+
+[ -f "$conf_file" ] || exit 1
+
+porta_root="$(dirname "$(dirname "$(readlink -f "$conf_file")")")"
+conf_internal=/tmp/manticore.conf
+conf_mod=$(mktemp /tmp/manticore.XXXXXX.conf)
+sed -E -e 's#pid_file ?= ?(.*)$#pid_file = /tmp/searchd.pid#' -e 's/127.0.0.1://' "$conf_file" > "$conf_mod"
+
+if [ "$mode" = stop ]; then
+  set -x
+  $crun exec $CONTAINER_NAME searchd --pidfile --config "$conf_internal" --stopwait
+  exit
+fi
+
+readarray -d : -t listen_arr <<< $(grep -Pm 1 'listen ?=' "$conf_file")
+port="${listen_arr[-2]}"
+
+pid_file=$(grep -ohP '(?<= {,10}pid_file ?= ).*' "$conf_file")
+if [[ "$pid_file" ]]; then
+  pid_opt="--pidfile=$pid_file"
+else
+  pid_opt=""
+fi
+
+user=$(id -u):$(id -g)
+
+set -x
+# FYI 9313 is the test server port and 9306 is the dev mode port
+$crun run --rm --group-add keep-groups --user $user \
+	--security-opt=label=disable --userns=keep-id --passwd \
+	"-v=$porta_root:$porta_root" "-v=$conf_mod:$conf_internal" \
+	--name $CONTAINER_NAME -p "$port:$port" $daemon $pid_opt\
+	manticoresearch/manticore:7.0.0 searchd \
+	-c "$conf_internal" --nodetach

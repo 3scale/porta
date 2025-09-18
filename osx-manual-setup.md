@@ -58,7 +58,7 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver gs pkg-config openssl geckodriver sphinx gd mysql@8.0 postgresql@13
+brew install chromedriver gs pkg-config openssl geckodriver manticoresearch gd mysql@8.0 postgresql@15
 ```
 
 * **Macs with M1** also require the following:
@@ -112,7 +112,7 @@ brew services start postgresql@13
 [Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
-podman run -d -p 6379:6379 redis:6.2-alpine
+podman run -d -p 6379:6379 redis:7.2-alpine
 ```
 
 Alternatively, Redis can be run directly on your machine with Homebrew:
