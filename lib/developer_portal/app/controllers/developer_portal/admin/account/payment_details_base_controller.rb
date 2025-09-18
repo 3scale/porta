@@ -29,7 +29,7 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperP
     if update_billing_address
       redirect_to payment_details_path, notice: 'Your billing address was successfully stored'
     else
-      flash[:notice] = 'Failed to update your billing address data. Check the required fields'
+      flash[:error] = 'Failed to update your billing address data. Check the required fields'
       assign_drops countries: Liquid::Drops::Country.wrap(Country.all)
       render template: 'accounts/payment_gateways/edit'
     end

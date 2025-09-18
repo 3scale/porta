@@ -58,6 +58,7 @@ module PaymentGateways
       payment_method.save
     rescue Stripe::StripeError => exception
       report_error("Failed to update billing address on Stripe: #{exception.message}")
+      false
     end
 
     private
