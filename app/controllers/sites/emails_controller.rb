@@ -45,7 +45,7 @@ class Sites::EmailsController < Sites::BaseController
 
   def props
     {
-      buttonLabel: total_products_without_support_email.positive? ? t('sites.emails.edit.add_exception') : nil,
+      buttonLabel: t('sites.emails.edit.add_exception'),
       removeConfirmation: t('.remove_confirmation'),
       exceptions: exceptions.decorate.as_json(only: %i[id name system_name updated_at support_email], js: true),
       products: products_without_support_email.paginate(page: 1, per_page: 20).decorate.as_json(only: %i[id name system_name updated_at], js: true),

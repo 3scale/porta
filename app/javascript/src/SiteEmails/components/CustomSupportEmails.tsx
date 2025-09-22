@@ -1,19 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { SortByDirection, sortable } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
-import {
-  Button,
-  FormGroup,
-  InputGroup,
-  InputGroupText,
-  Spinner,
-  TextInput
-} from '@patternfly/react-core'
-import PencilIcon from '@patternfly/react-icons/dist/js/icons/pencil-alt-icon'
+import { Button } from '@patternfly/react-core'
 import PlusCircle from '@patternfly/react-icons/dist/js/icons/plus-circle-icon'
-import TrashIcon from '@patternfly/react-icons/dist/js/icons/trash-icon'
-import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon'
-import TimesIcon from '@patternfly/react-icons/dist/js/icons/times-icon'
 
 import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
@@ -22,14 +11,15 @@ import { fetchPaginatedProducts as fetchItems } from 'NewApplication/data/Produc
 import type { FetchPaginatedParams } from 'utilities/ajax'
 import { fetchPaginated, patch } from 'utilities/ajax'
 import { toast } from 'utilities/toast'
-import { InlineEdit, InlineEditAction, InlineEditGroup } from 'Common/components/InlineEdit'
+import { Exception } from 'SiteEmails/components/Exception'
+import { useConfirmToLeave } from 'utilities/useConfirmToLeave'
 
-import type { KeyboardEventHandler } from 'react'
-import type { Product } from 'NewApplication/types'
+import type { RefObject } from 'react'
+import type { Product } from 'SiteEmails/types'
 import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 
 interface Props {
-  buttonLabel?: string;
+  buttonLabel: string;
   products: Product[];
   exceptions: Product[];
   productsCount: number;
@@ -59,12 +49,18 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
   const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(initialProducts, PER_PAGE))
 
   const [exceptions, setExceptions] = useState<Product[]>(initialExceptions)
-  const [exceptionBeingEditted, setExceptionBeingEditted] = useState<Product | undefined>()
+  const [exceptionBeingEdited, setExceptionBeingEdited] = useState<Product | undefined>()
   const [isEditLoading, setIsEditLoading] = useState(false)
   const [editError, setEditError] = useState<string | undefined>()
   const [isRemoveLoading, setIsRemoveLoading] = useState(false)
 
   const [exceptionBeingAdded, setExceptionBeingAdded] = useState<Product | undefined>()
+
+  // Memos
+  const unsavedChanges = useMemo(
+    () => exceptionBeingAdded !== undefined || exceptionBeingEdited !== undefined,
+    [exceptionBeingAdded, exceptionBeingEdited]
+  )
 
   // Sort by name ASC, see Sites::EmailsController#props
   const sortBy = { index: 1, direction: SortByDirection.asc } as const
@@ -77,7 +73,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
 
     if (selected) {
       setExceptionBeingAdded(selected)
-      setExceptionBeingEditted(selected)
+      setExceptionBeingEdited(selected)
       setExceptions([...exceptions, selected])
     }
   }
@@ -130,7 +126,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     }
   }, [query])
 
-  const beforeUnloadHandler = (e: Event) => { e.preventDefault() }
+  useConfirmToLeave(unsavedChanges)
 
   const setSearchResults = (items: Product[], newCount: number) => {
     setPageDictionary(paginateCollection(items, PER_PAGE))
@@ -144,8 +140,6 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
 
   const handleOnModalClose = () => {
     setModalOpen(false)
-    // TODO: abort any ongoing request? (using signal).
-    // This makes the component much more complex and it might not worth it.
   }
 
   const onLocalSearch = (value: string) => {
@@ -160,26 +154,27 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     { title: 'Last updated', propName: 'updatedAt' }
   ]
 
-  const inputId = (id: number) => `account_service_${id}_support_email`
-
-  const handleOnEdit = (exception: Product) => {
-    setExceptionBeingEditted(exception)
-    window.addEventListener('beforeunload', beforeUnloadHandler)
-    const input = document.getElementById(inputId(exception.id)) as HTMLInputElement
-    input.focus()
+  const handleOnEdit = (exception: Product, ref: RefObject<HTMLInputElement>) => {
+    setExceptionBeingEdited(exception)
+    ref.current?.focus()
   }
 
-  const saveEdit = () => {
-    if (!exceptionBeingEditted) {
+  const saveEdit = (ref: RefObject<HTMLInputElement>) => {
+    if (!exceptionBeingEdited) {
       return
     }
 
-    const { id } = exceptionBeingEditted
-    const input = document.getElementById(inputId(id)) as HTMLInputElement
+    const { id } = exceptionBeingEdited
+    const input = ref.current
+
+    if (!input) {
+      return
+    }
+
     const { value } = input
 
-    if (exceptionBeingEditted.supportEmail === value) {
-      setExceptionBeingEditted(undefined)
+    if (exceptionBeingEdited.supportEmail === value) {
+      setExceptionBeingEdited(undefined)
       setEditError(undefined)
       return
     }
@@ -197,10 +192,18 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       .then(({ success, message }) => {
         if (success) {
           toast(message, 'success')
-          setExceptionBeingEditted(undefined)
+          setExceptionBeingEdited(undefined)
           setEditError(undefined)
           if (exceptionBeingAdded) {
             setExceptionBeingAdded(undefined)
+          } else {
+            const newExceptions = exceptions.map(e => {
+              if (e.id === id) {
+                e.supportEmail = value
+              }
+              return e
+            })
+            setExceptions(newExceptions)
           }
         } else {
           toast(message, 'danger')
@@ -212,8 +215,8 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       })
   }
 
-  const cancelEdit = () => {
-    if (!exceptionBeingEditted) {
+  const cancelEdit = (ref: RefObject<HTMLInputElement>) => {
+    if (!exceptionBeingEdited) {
       return
     }
 
@@ -221,17 +224,18 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       setExceptionBeingAdded(undefined)
       setExceptions([...exceptions.slice(0, -1)])
     } else {
-      const { id, supportEmail } = exceptionBeingEditted
-      const input = document.getElementById(inputId(id)) as HTMLInputElement
-      input.value = supportEmail
+      const { supportEmail } = exceptionBeingEdited
+      const input = ref.current
+      if (input) {
+        input.value = supportEmail
+      }
     }
 
-    window.removeEventListener('beforeunload', beforeUnloadHandler)
-    setExceptionBeingEditted(undefined)
+    setExceptionBeingEdited(undefined)
     setEditError(undefined)
   }
 
-  const handleOnRemove = ({ id }: Product) => {
+  const handleOnRemove = (id: number) => {
     if (window.confirm(removeConfirmation)) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const body = { service: { support_email: null } }
@@ -252,99 +256,32 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
     }
   }
 
-  const saveOnEnter: KeyboardEventHandler = ({ key }) => {
-    if (key === 'Enter') {
-      saveEdit()
-    }
-  }
-
   return (
     <>
-      {exceptions.map(exception => {
-        const { id, name, supportEmail } = exception
-        const isBeingEdited = exception === exceptionBeingEditted
+      {exceptions.map(exception => (
+        <Exception
+          key={exception.id}
+          isBeingEdited={exception === exceptionBeingEdited}
+          isEditLoading={isEditLoading}
+          isEditable={exceptionBeingEdited === undefined && exceptionBeingAdded === undefined && !isRemoveLoading}
+          product={exception}
+          validated={exception === exceptionBeingEdited && editError !== undefined ? 'error' : undefined}
+          onCancel={cancelEdit}
+          onEdit={handleOnEdit}
+          onRemove={handleOnRemove}
+          onSave={saveEdit}
+        />
+      ))}
 
-        return (
-          <FormGroup key={id}>
-            <InputGroup>
-              <InputGroupText>
-                {name}
-              </InputGroupText>
-              <TextInput
-                isRequired
-                aria-label={`Support email for product ${name}`}
-                autoComplete="off"
-                defaultValue={supportEmail}
-                id={inputId(id)}
-                maxLength={255}
-                readOnly={!isBeingEdited}
-                type="email"
-                validated={isBeingEdited && editError !== undefined ? 'error' : undefined}
-                onKeyDown={saveOnEnter}
-              />
-              <InlineEdit>
-                <InlineEditGroup>
-                  {exceptionBeingEditted === exception ? (
-                    <>
-                      <InlineEditAction valid>
-                        <Button
-                          aria-label="Save"
-                          icon={isEditLoading ? <Spinner size="md" /> : <CheckIcon />}
-                          isDisabled={isEditLoading}
-                          variant="plain"
-                          onClick={saveEdit}
-                        />
-                      </InlineEditAction>
-                      <InlineEditAction>
-                        <Button
-                          aria-label="Cancel"
-                          icon={<TimesIcon />}
-                          isDisabled={isEditLoading}
-                          variant="plain"
-                          onClick={cancelEdit}
-                        />
-                      </InlineEditAction>
-                    </>
-                  ) : (
-                    <>
-                      <InlineEditAction>
-                        <Button
-                          aria-label="Edit"
-                          icon={<PencilIcon />}
-                          isDisabled={isRemoveLoading || exceptionBeingEditted !== undefined}
-                          variant="plain"
-                          onClick={() => { handleOnEdit(exception) }}
-                        />
-                      </InlineEditAction>
-                      <InlineEditAction>
-                        <Button
-                          aria-label="Remove"
-                          icon={<TrashIcon />}
-                          isDisabled={isRemoveLoading || exceptionBeingEditted !== undefined}
-                          variant="plain"
-                          onClick={() => { handleOnRemove(exception) }}
-                        />
-                      </InlineEditAction>
-                    </>
-                  )}
-                </InlineEditGroup>
-              </InlineEdit>
-            </InputGroup>
-          </FormGroup>
-        )
-      })}
-
-      {buttonLabel && (
-        <Button
-          isInline
-          icon={<PlusCircle />}
-          isDisabled={exceptionBeingAdded !== undefined || exceptionBeingEditted !== undefined}
-          variant="link"
-          onClick={() => { setModalOpen(true) }}
-        >
-          {buttonLabel}
-        </Button>
-      )}
+      <Button
+        isInline
+        icon={<PlusCircle />}
+        isDisabled={unsavedChanges}
+        variant="link"
+        onClick={() => { setModalOpen(true) }}
+      >
+        {buttonLabel}
+      </Button>
 
       <TableModal
         cells={cells}

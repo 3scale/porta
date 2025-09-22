@@ -29,7 +29,7 @@ div class="pf-l-flex pf-m-column"
             / support_email when blank
             = form.input :finance_support_email, as: :patternfly_input,
                                                  input_html: { type: :email,
-                                                               value: @account[:finance_support_email] }
+                                                               value: current_account[:finance_support_email] }
 
             div class="pf-c-content"
               p = t('.finance_support_email_description_html')
@@ -53,5 +53,6 @@ div class="pf-l-flex pf-m-column"
             div class="pf-c-form__group horizontal"
               div class="pf-c-form__group-label"
                 label class="pf-c-form__label"
-                  span class="pf-c-form__label-text" = t('.exceptions_label')
+                  span class="pf-c-form__label-text"
+                    = t('.exceptions_label')
               div id="custom-support-emails" class="pf-c-form__group-control pf-m-stack" data-props=props.to_json
