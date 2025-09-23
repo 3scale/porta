@@ -1,6 +1,6 @@
 - content_for :page_header_title do
   ' Customize
-  = link_to "#{icon(@authentication_provider.kind)} #{@authentication_provider.human_kind}".html_safe,
+  = link_to @authentication_provider.human_kind,
       provider_admin_authentication_provider_path(@authentication_provider)
 
 - content_for :javascripts
