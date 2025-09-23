@@ -2,6 +2,7 @@
 
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
+@use 'sass:math';
 
 // StatsSelector component
 
@@ -11,7 +12,7 @@ $dropdown-border-color: $border-color !default;
 $dropdown-border-width: $border-width !default;
 $dropdown-divider-bg: $border-color !default;
 $dropdown-link-color: $font-color;
-$caret-width: line-height-times(1 / 3) !default;
+$caret-width: line-height-times(math.div(1,3)) !default;
 $caret-width-lg: $caret-width !default;
 $zindex-dropdown: 1000 !default;
 
@@ -30,7 +31,7 @@ $zindex-dropdown: 1000 !default;
     font-size: $font-size-base;
     font-weight: $font-weight-normal;
     line-height: $line-height-base;
-    padding: line-height-times(1 / 8) line-height-times(1);
+    padding: line-height-times(.125) line-height-times(1);
     text-align: inherit;
     white-space: nowrap;
     width: 100%;
@@ -61,7 +62,7 @@ $zindex-dropdown: 1000 !default;
   &-toggle {
     border: $border-width solid $border-color;
     font-size: $font-size-base;
-    padding: line-height-times(1 / 2);
+    padding: line-height-times(.5);
     width: auto;
     color: $menu-active-color;
     height: auto;
@@ -73,8 +74,8 @@ $zindex-dropdown: 1000 !default;
       content: '';
       display: inline-block;
       height: 0;
-      margin-left: line-height-times(1 / 4);
-      margin-right: line-height-times(1 / 4);
+      margin-left: line-height-times(.25);
+      margin-right: line-height-times(.25);
       vertical-align: middle;
       width: 0;
     }
@@ -91,9 +92,9 @@ $zindex-dropdown: 1000 !default;
     left: 0;
     line-height: $line-height-base;
     list-style: none;
-    margin: line-height-times(1 / 8) 0 0;
+    margin: line-height-times(.125) 0 0;
     min-width: line-height-times(6);
-    padding: line-height-times(1 / 4) 0;
+    padding: line-height-times(.25) 0;
     position: absolute;
     text-align: left;
     top: 100%;

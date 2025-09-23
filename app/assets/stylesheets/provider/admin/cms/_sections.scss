@@ -1,5 +1,6 @@
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
+@use 'sass:color';
 
 $subsection-bg-color: rgba(0, 0, 0, 0.05);
 
@@ -19,8 +20,7 @@ $subsection-bg-color: rgba(0, 0, 0, 0.05);
 
   thead {
     background-color: transparent;
-    /* stylelint-disable-next-line scss/no-global-function-names -- TODO: remove or update this */
-    color: opacify($subsection-bg-color, 0.5);
+    color: color.adjust($subsection-bg-color, $alpha: 0.5);
     font-size: 18px;
 
     td {
@@ -30,7 +30,7 @@ $subsection-bg-color: rgba(0, 0, 0, 0.05);
 
   tbody {
     tr td {
-      padding-left: line-height-times(1 / 2);
+      padding-left: line-height-times(.5);
     }
 
     tr:nth-child(2n-1) {

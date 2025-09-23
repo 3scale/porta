@@ -10,7 +10,7 @@ th.collapsible {
     cursor: pointer;
 
     i {
-      margin-right: line-height-times(1 / 4);
+      margin-right: line-height-times(.25);
     }
   }
 
@@ -22,7 +22,7 @@ th.collapsible {
 }
 
 table.contract_table {
-  margin-bottom: line-height-times(1 / 2);
+	margin-bottom: line-height-times(.5);
 
   &#features {
     table-layout: fixed;
@@ -47,7 +47,7 @@ table.contract_table {
 
   td.selected strong {
     background: $light-background-color;
-    padding: line-height-times(1 / 8);
+    padding: line-height-times(0.125);
   }
 
   table.usage_table {

@@ -7,7 +7,7 @@ $call-to-action-background-color: $error-color;
 .CallToAction {
   background-color: $call-to-action-background-color;
   color: $call-to-action-color;
-  padding: line-height-times(1 / 2);
+  padding: line-height-times(.5);
   text-align: left;
   position: fixed;
   bottom: 0;
@@ -18,7 +18,7 @@ $call-to-action-background-color: $error-color;
     border: $border-width solid $call-to-action-color;
     border-radius: $border-radius-sm;
     color: $call-to-action-color;
-    padding: line-height-times(1 / 8) line-height-times(1 / 4);
+    padding: line-height-times(.125) line-height-times(.25);
 
     &:hover {
       border-color: $font-color;

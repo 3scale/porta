@@ -14,7 +14,7 @@
     float: right;
     font-size: $caption-font-size;
     margin-right: line-height-times(1);
-    padding: line-height-times(1 / 4);
+    padding: line-height-times(.25);
     position: relative;
     text-decoration: underline;
     z-index: 10;
@@ -58,7 +58,7 @@
   /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   &-section {
     border-bottom: $border-width $border-color solid;
-    padding-bottom: line-height-times(1 / 2);
+    padding-bottom: line-height-times(.5);
 
     &:last-child {
       border-bottom: 0;
@@ -99,16 +99,16 @@
   }
 
   &-backend-summary {
-    border-left: line-height-times(1 / 4) solid $border-color;
+    border-left: line-height-times(.25) solid $border-color;
     margin: line-height-times(1) 0 line-height-times(2);
     padding-left: line-height-times(1);
 
     dt.u-dl-term {
-      width: calc(40% - #{line-height-times(3 / 4)});
+      width: calc(40% - #{line-height-times(.75)});
     }
 
     dd.u-dl-definition {
-      padding-left: calc(40% - #{line-height-times(3 / 4)});
+      padding-left: calc(40% - #{line-height-times(.75)});
     }
   }
 

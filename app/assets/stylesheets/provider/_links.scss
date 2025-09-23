@@ -37,7 +37,7 @@ input[type='submit'].action {
   width: auto;
   white-space: nowrap;
   border-radius: $border-radius-sm;
-  padding: 0 line-height-times(1 / 8);
+  padding: 0 line-height-times(.125);
   cursor: pointer;
   border-bottom: 0;
   border: none;
@@ -145,7 +145,7 @@ button.resume { background-image: url('/assets/tick.png'); }
 
 button.publish,
 button.hide {
-  padding-left: line-height-times(1 / 4);
+  padding-left: line-height-times(.25);
 }
 
 button.up { background-image: url('/assets/up_green.png'); }
