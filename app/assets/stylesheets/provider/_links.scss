@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 p a:not(.pf-c-button) {
   text-decoration: underline;
   color: $font-color;

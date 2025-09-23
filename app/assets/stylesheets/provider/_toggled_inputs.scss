@@ -1,4 +1,6 @@
-fieldset[data-behavior~="toggle-inputs"] {
+@use 'provider/colors' as *;
+
+fieldset[data-behavior~=toggle-inputs] {
   border: 1px dashed $border-color;
   background-color: rgba(0, 0, 0, 0.05);
 

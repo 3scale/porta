@@ -1,3 +1,6 @@
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+
 ul#actions li form.button-to {
   @include white-box-shadow;
 

@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/layouts/main' as *;
+
 $fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
 
 /* stylelint-disable no-descending-specificity -- FIXME */
