@@ -168,7 +168,7 @@ $integration-tab-warning-color: color.adjust($dirty-color, $lightness: -60%);
     position: relative;
 
     .fa-puzzle-piece,
-    .fa-hdd-o {
+    .fa-hdd {
       color: $error-color;
     }
 
@@ -184,7 +184,7 @@ $integration-tab-warning-color: color.adjust($dirty-color, $lightness: -60%);
       border-color: $success-color;
 
       .fa-puzzle-piece,
-      .fa-hdd-o {
+      .fa-hdd {
         color: $success-color;
       }
     }
@@ -193,7 +193,7 @@ $integration-tab-warning-color: color.adjust($dirty-color, $lightness: -60%);
       border-color: $disabled-color;
 
       .fa-puzzle-piece,
-      .fa-hdd-o {
+      .fa-hdd {
         color: $disabled-color;
       }
     }
@@ -202,7 +202,7 @@ $integration-tab-warning-color: color.adjust($dirty-color, $lightness: -60%);
       border-color: transparent;
 
       .fa-puzzle-piece,
-      .fa-hdd-o {
+      .fa-hdd {
         color: $disabled-color;
       }
     }
@@ -221,7 +221,7 @@ $integration-tab-warning-color: color.adjust($dirty-color, $lightness: -60%);
     }
 
     /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    .fa-hdd-o {
+    .fa-hdd {
       margin-left: -65px;
     }
 

@@ -11,7 +11,7 @@ p
 = semantic_form_for [:provider, :admin, :onboarding, :wizard, @request] do |f|
   ol.explain.fa-ul
     li.feedback.feedback--inactive
-      i.icon.fa-li.fa.fa-mobile
+      i.icon.fa-li.fa.fa-mobile-alt
       .text
         = f.inputs do
           = f.input :path, label: '<strong>a GET method</strong> of your API',
@@ -22,7 +22,7 @@ p
         span.code-example__path = @request.path
         span.code-example__key.code-example__params = @request.proxy_auth_params
     li.feedback.feedback--inactive
-      i.icon.fa-li.fa.fa-hdd-o.icon
+      i.icon.fa-li.fa.fa-hdd.icon
       .text
         strong> 3scale
         ' will handle authentication and pass the request on to your API:
