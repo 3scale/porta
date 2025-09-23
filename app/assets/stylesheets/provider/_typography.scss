@@ -1,4 +1,5 @@
 @use 'provider/colors' as *;
+@use 'sass:math';
 
 $minScreen: 50rem;
 $maxScreen: 100rem;
@@ -26,7 +27,7 @@ $maxFont: 1rem;
 }
 
 @function strip-unit($value) {
-  @return $value / ($value * 0 + 1);
+	@return math.div($value, ($value * 0 + 1));
 }
 
 // For details on RedHatFont visit: https://github.com/RedHatOfficial/RedHatFont
@@ -39,20 +40,20 @@ $fontSize: 1rem;
 // TODO: use actual PF4 vars
 $main-title-font-size: 1.5rem; // --pf-c-content--h1--FontSize
 $secondary-title-font-size: 1.25rem; // --pf-c-content--h2--FontSize
-$sub-title-font-size: (5 / 4) * $fontSize;
-$caption-font-size: (7 / 8) * $fontSize;
+$sub-title-font-size: math.div(5,4) * $fontSize;
+$caption-font-size:  math.div(7,8) * $fontSize;
 $font-size-base: 1 * $fontSize;
-$font-size-lg: $font-size-base * (5 / 4);
-$font-size-sm: $font-size-base * (7 / 8);
+$font-size-lg: $font-size-base * math.div(5,4);
+$font-size-sm: $font-size-base * math.div(7,8);
 $font-size-base: 1 * $fontSize;
-$font-size-lg: $font-size-base * (5 / 4);
-$font-size-sm: $font-size-base * (7 / 8);
+$font-size-lg: $font-size-base * math.div(5,4);
+$font-size-sm: $font-size-base * math.div(7,8);
 
 // line-heights
 $lineHeight: 1.5;
-$line-height-sm: 2 / 3 * $lineHeight;
-$line-height-base: 3 / 3 * $lineHeight;
-$line-height-lg: 4 / 3 * $lineHeight;
+$line-height-sm: math.div(2,3) * $lineHeight;
+$line-height-base: math.div(3,3) * $lineHeight;
+$line-height-lg: math.div(4,3) * $lineHeight;
 
 // font weights
 
@@ -132,8 +133,8 @@ $spacer-2lh: line-height-times(2); // 32px;
   }
 }
 
-$border-radius: line-height-times(1 / 8);
-$border-radius-sm: line-height-times(1 / 8);
+$border-radius: line-height-times(.125);
+$border-radius-sm: line-height-times(.125);
 $layout-wrapper-min-width: line-height-times(50);
 
 @mixin ellipsis {

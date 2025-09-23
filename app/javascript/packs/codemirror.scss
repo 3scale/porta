@@ -70,7 +70,7 @@ $line-height-lg: calc(4 / 3 * $lineHeight);
   }
 }
 
-$border-radius: line-height-times(calc(1 / 8));
+$border-radius: line-height-times(calc(.125));
 $border-width-lg: 2.0 * $border-width;
 $font-weight-bold: 700;
 
