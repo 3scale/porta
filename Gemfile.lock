@@ -381,8 +381,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    font-awesome-rails (4.7.0.8)
-      railties (>= 3.2, < 8.0)
+    font-awesome-sass (5.15.1)
+      sassc (>= 1.11)
     formtastic (5.0.0)
       actionpack (>= 6.0.0)
     fugit (1.11.1)
@@ -1036,7 +1036,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   fakefs
   faraday (~> 2.0, <= 2.9)
-  font-awesome-rails (~> 4.7.0.5)
+  font-awesome-sass (~> 5.15.1)
   formtastic (~> 5.0)
   hashie
   hiredis-client

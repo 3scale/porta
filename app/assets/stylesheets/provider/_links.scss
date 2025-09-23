@@ -20,10 +20,9 @@ a {
 }
 
 @mixin iconic($content) {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
   font-weight: $font-weight-normal;
   font-style: normal;
-  display: inline-block;
   text-decoration: inherit;
   display: inline-block;
   text-decoration: none;
