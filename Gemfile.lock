@@ -409,8 +409,6 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    font-awesome-rails (4.7.0.8)
-      railties (>= 3.2, < 8.0)
     formtastic (5.0.0)
       actionpack (>= 6.0.0)
     fugit (1.11.1)
@@ -848,8 +846,6 @@ GEM
     sass-embedded (1.92.1)
       google-protobuf (~> 4.31)
       rake (>= 13)
-    sassc (2.4.0)
-      ffi (~> 1.9)
     secure_headers (6.3.0)
     securerandom (0.4.1)
     selenium-webdriver (4.25.0)
@@ -1071,7 +1067,6 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   fakefs
   faraday (~> 2.0, <= 2.9)
-  font-awesome-rails (~> 4.7.0.5)
   formtastic (~> 5.0)
   hashie
   hiredis-client
