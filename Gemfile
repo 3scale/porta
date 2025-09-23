@@ -28,11 +28,10 @@ gem 'strong_migrations', '~> 2.1.0'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'
-  gem 'non-stupid-digest-assets', '~> 1.0'
+  gem 'non-digest-assets', '~> 2.4.0'
   gem 'sprockets-rails'
+  gem 'dartsass-rails', '~> 0.5.1'
 end
-
-gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 2.0'

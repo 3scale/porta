@@ -1,5 +1,4 @@
 require 'sprockets'
-require 'sass'
 
 class SimpleLayout
 
