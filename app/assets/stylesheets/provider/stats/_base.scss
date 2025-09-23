@@ -1,4 +1,8 @@
-@import 'provider/typography'; // needed for dev portals that include this stylesheet directly
+// needed for dev portals that include this stylesheet directly
+
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
 
 .Stats {
   @include white-box-shadow;

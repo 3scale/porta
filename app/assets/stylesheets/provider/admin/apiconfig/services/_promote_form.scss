@@ -1,3 +1,5 @@
+@use 'provider/typography' as *;
+
 // TODO: remove this, not used!
 .PromoteForm {
   margin-top: line-height-times(-3) !important;

@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #header_table {
   margin-top: line-height-times(2);
 }

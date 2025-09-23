@@ -1,4 +1,4 @@
-@import 'provider/colors';
+@use 'provider/colors' as *;
 
 .swagger-section .swagger-ui-wrap {
   max-width: 100%;

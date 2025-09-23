@@ -1,3 +1,5 @@
+@use 'provider/typography' as *;
+
 .ConfigurationVersion {
   margin-top: -line-height-times(2);
 }

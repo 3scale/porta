@@ -1,3 +1,8 @@
+@use 'provider/admin/cms/sidebar/filter';
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+
 $tab-width: 20%;
 $tab-content-width: 100% - $tab-width;
 $tab-min-height: line-height-times(21, true);
@@ -165,6 +170,3 @@ $tab-min-height: line-height-times(21, true);
 .cms-sidebar-listing:not(#cms-sidebar-content) {
   padding-left: line-height-times(1 / 4);
 }
-
-/* stylelint-disable-next-line no-invalid-position-at-import-rule -- FIXME: combine both files? */
-@import 'provider/admin/cms/sidebar/filter';

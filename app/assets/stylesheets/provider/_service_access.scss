@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/links' as *;
+@use 'provider/typography' as *;
+
 #user-permissions-form {
   overflow: hidden;
 }

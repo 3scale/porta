@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 // WARNING: this is just a magic value, I do not know why it works
 $table-columns-width: line-height-times(11);
 $search-header-width: line-height-times(4);

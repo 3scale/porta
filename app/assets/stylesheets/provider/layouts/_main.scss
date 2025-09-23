@@ -1,3 +1,6 @@
+@use "provider/typography" as *;
+@use "provider/colors" as *;
+
 body {
   min-width: $layout-wrapper-min-width;
 }

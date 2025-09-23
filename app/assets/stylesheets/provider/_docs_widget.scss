@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #context-menu > li + li {
   display: inline-block !important;
   width: 100%;

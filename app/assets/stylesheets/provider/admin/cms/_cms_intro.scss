@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+
 @mixin cms-intro-coloring($name, $color2) {
   $color: $color2;
 

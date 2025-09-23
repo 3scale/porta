@@ -1,4 +1,4 @@
-@import 'provider/colors';
+@use 'provider/colors' as *;
 
 $minScreen: 50rem;
 $maxScreen: 100rem;

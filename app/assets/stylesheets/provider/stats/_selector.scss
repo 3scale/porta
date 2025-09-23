@@ -1,4 +1,7 @@
-@import 'provider/typography'; // needed for legacy dev portals that include this stylesheet directly
+// needed for legacy dev portals that include this stylesheet directly
+
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
 
 // StatsSelector component
 
