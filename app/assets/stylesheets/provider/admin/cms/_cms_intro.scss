@@ -7,12 +7,12 @@
 
   ul > li[aria-controls="#{$name}"] {
     a:hover {
-      border-bottom: line-height-times(1 / 4) $color solid;
+      border-bottom: line-height-times(.25) $color solid;
       color: $color;
     }
 
     &.ui-tabs-active a {
-      border-bottom: line-height-times(1 / 4) $color solid;
+      border-bottom: line-height-times(.25) $color solid;
       color: $color;
     }
   }
@@ -65,10 +65,10 @@
 
       a {
         min-width: line-height-times(4);
-        padding: line-height-times(1 / 2);
+        padding: line-height-times(.5);
         margin-right: line-height-times(1);
         padding-left: 0;
-        border-bottom: line-height-times(1 / 4) $border-color solid;
+        border-bottom: line-height-times(.25) $border-color solid;
         display: block;
       }
     }
