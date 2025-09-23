@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+
 #account-column-wrapper {
   overflow: hidden;
   margin-bottom: line-height-times(2);

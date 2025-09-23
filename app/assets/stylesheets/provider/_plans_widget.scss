@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/links' as *;
+@use 'provider/typography' as *;
+
 $upgrade-button-top: line-height-times(20);
 $upgrade-button-left: line-height-times(1);
 $upgrade-button-width: line-height-times(10);

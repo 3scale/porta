@@ -1,6 +1,6 @@
-@import "provider/typography";
-@import "font-awesome";
-@import "provider/logo";
+@use "provider/colors" as *;
+@use "provider/typography" as *;
+@use "provider/logo";
 
 html,
 body,
