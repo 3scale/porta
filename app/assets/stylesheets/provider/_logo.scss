@@ -1,4 +1,5 @@
-@import 'provider/layouts/main';
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
 
 .logo-3scale {
   position: relative;

@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 $call-to-action-color: $body-background;
 $call-to-action-background-color: $error-color;
 
