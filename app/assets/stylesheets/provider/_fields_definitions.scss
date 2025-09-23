@@ -10,13 +10,13 @@
   li {
     @include white-box-shadow;
 
-    background: $background-color-base no-repeat line-height-times(1 / 2) center url('/assets/drag-icon.png');
-    margin-bottom: line-height-times(1 / 2);
+    background: $background-color-base no-repeat line-height-times(.5) center url('/assets/drag-icon.png');
+    margin-bottom: line-height-times(.5);
     overflow: visible !important;
-    padding: line-height-times(1 / 2) 0 line-height-times(1 / 2) line-height-times(1);
+    padding: line-height-times(.5) 0 line-height-times(.5) line-height-times(1);
 
     &.ui-sortable-helper {
-      box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
+      box-shadow: 0 0 line-height-times(.5) $box-shadow-color;
     }
 
     .name {
@@ -26,13 +26,13 @@
     }
 
     .properties {
-      margin-right: line-height-times(1 / 2);
+      margin-right: line-height-times(.5);
       font-style: italic;
     }
 
     .action-set {
       float: right;
-      margin-right: line-height-times(1 / 2);
+      margin-right: line-height-times(.5);
     }
   }
 }

@@ -13,11 +13,11 @@ div.dashboard_card {
   }
 
   &> table.list:first-child {
-    margin-top: line-height-times(-1 / 2);
+    margin-top: line-height-times(-0.5);
   }
 
   &> table.list:last-child {
-    margin-bottom: line-height-times(-1 / 2);
+    margin-bottom: line-height-times(-0.5);
 
     tr:last-child th,
     tr:last-child td {
