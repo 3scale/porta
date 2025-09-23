@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/layouts/main' as *;
+
 .InfoBox {
   @include white-box-shadow;
 

@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+
 .SettingsBox {
   @include white-box-shadow;
 

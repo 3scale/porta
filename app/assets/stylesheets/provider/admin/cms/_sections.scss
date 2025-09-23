@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 $subsection-bg-color: rgba(0, 0, 0, 0.05);
 
 #subsections-container {

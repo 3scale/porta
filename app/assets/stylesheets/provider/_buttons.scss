@@ -1,3 +1,6 @@
+@use "provider/colors" as *;
+@use "provider/typography" as *;
+
 @mixin internal-potato-button($color, $bgcolor, $border-color) {
   font-size: $font-size-base;
   background-color: $bgcolor;

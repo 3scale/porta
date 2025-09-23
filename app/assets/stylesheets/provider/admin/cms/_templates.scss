@@ -1,3 +1,7 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+
 .formtastic.cms_template,
 .formtastic.cms_section,
 .formtastic.cms_file {

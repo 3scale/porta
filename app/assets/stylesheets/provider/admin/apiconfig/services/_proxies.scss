@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 $integration-tab-active-bg-color: white;
 $integration-tab-bg-color: transparent;
 $integration-tab-active-border: $border-width solid $border-color;
