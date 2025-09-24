@@ -127,7 +127,7 @@ ParameterType(
     return provider_by_name('master') if args[1].present?
 
     name = args[0].presence
-    name ? provider_by_name(name) : @provider
+    name ? provider_by_name(name) : @provider.reload
   end
 )
 
@@ -138,7 +138,7 @@ ParameterType(
   transformer: ->(*args) do
     return Service.find_by(name: args[0]) if args[0].present?
 
-    @product || @service || @provider.default_service
+    (@product || @service || @provider.default_service).reload
   end
 )
 
