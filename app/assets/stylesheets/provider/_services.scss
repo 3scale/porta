@@ -29,7 +29,7 @@
     font-weight: $font-weight-bold;
   }
 
-  ul.listing {
+  .listing {
     clear: left;
     list-style: none;
     background-color: $white;
@@ -130,16 +130,16 @@
     }
 
     &[name='settings'] {
-      @extend div.left;
+      @extend .left-column;
     }
 
     &[name='activity'] {
-      @extend div.right;
+      @extend .right-column;
     }
   }
 
   .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
-    @extend ul.listing;
+    @extend .listing;
     @include white-box-shadow;
     border: 0;
   }

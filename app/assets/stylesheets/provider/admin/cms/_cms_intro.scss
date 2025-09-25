@@ -124,7 +124,7 @@
 }
 
 #recent-templates{
-  @extend div.left;
+  @extend .left-column;
 
   a {
     max-width: 96%;
