@@ -107,7 +107,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
     assert_nil @account.credit_card_partial_number
     assert_nil @account.credit_card_expires_on
-    assert_redirected_to action: 'edit', errors: failed_result.errors.map(&:message)
+    assert_match 'Credit card number must be 12-19 digits.', flash[:error]
+    assert_match 'CVV is required.', flash[:error]
+    assert_redirected_to action: 'edit'
   end
 
   test '#hosted_success suspend account when failure count is higher than threshold' do
