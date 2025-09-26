@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 class ThreeScale::Analytics::AccountClassifierTest < SimpleMiniTest
 
