@@ -52,6 +52,10 @@ end
 # Then "there {is} a field {string}" do |present, field|
 # end
 
+Then "field {string} has value {string}" do |field, value|
+  assert_equal value, find_field(field)[:value]
+end
+
 And "field {string} {is} disabled" do |field, disabled|
   assert has_field?(field, disabled: disabled)
 end
