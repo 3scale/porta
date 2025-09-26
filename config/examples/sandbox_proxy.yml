@@ -3,6 +3,8 @@ base: &default
     - echo-api.3scale.net
   ignore_test_failures: []
   # Backend endpoint as visible by apicast (host.containers.internal in podman)
+  # but this should resolve from apicast through DNS as it doesn't read hosts.
+  # If not possible, then set BACKEND_ENDPOINT_OVERRIDE when starting apicast.
   backend_endpoint: <%= ENV.fetch('BACKEND_PUBLIC_URL', 'http://host.docker.internal:3001') %>
   verify_mode: <%= OpenSSL::SSL::VERIFY_NONE %>
   # APIcast endpoints as visible from the client
@@ -15,7 +17,9 @@ base: &default
 
 development:
   <<: *default
-  override: 'http://localhost:8091'
+  # apicast as seen from the running porta server for testing an API from UI
+  # you can use this to override the default if needed for whatever reason
+  # override: 'http://localhost:8091'
   debug: true
 
 test:
