@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/links' as *;
+@use 'provider/typography' as *;
+@use 'sass:math';
+
 $upgrade-button-top: line-height-times(20);
 $upgrade-button-left: line-height-times(1);
 $upgrade-button-width: line-height-times(10);
@@ -6,7 +11,7 @@ $upgrade-button-width: line-height-times(10);
   background: rgba($content-background, .99);
   border: $border-width solid $border-color;
   border-radius: $border-radius;
-  box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
+  box-shadow: 0 0 line-height-times(.5) $box-shadow-color;
   left: 50%;
   margin-left: line-height-times(-25);
   min-height: line-height-times(40);
@@ -14,7 +19,7 @@ $upgrade-button-width: line-height-times(10);
   padding: line-height-times(1);
   position: absolute;
   text-align: left;
-  top: line-height-times(5 / 2);
+  top: line-height-times(2.5);
   width: line-height-times(50);
   z-index: 599;
 
@@ -86,7 +91,7 @@ $upgrade-button-width: line-height-times(10);
     position: absolute;
     right: line-height-times(1);
     text-align: right;
-    top: line-height-times(2 / 3);
+    top: line-height-times(math.div(2,3));
     width: line-height-times(1);
 
     &::after {
