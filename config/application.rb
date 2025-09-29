@@ -124,6 +124,12 @@ module System
     # database.
     config.active_record.raise_on_assign_to_attr_readonly = false
 
+    # By default (from Rails 7.1), transaction callbacks will run in the order they are defined.
+    # Prior to 7.1 the order in which the callbacks were run was reversed.
+    # This change caused a bug in sending the usage limits to backend (see THREESCALE-11945)
+    # Setting this config to quickly fix the issue, and avoid having to review all callbacks throughout the code base
+    config.active_record.run_after_transaction_callbacks_in_order_defined = false
+
     config.active_job.queue_adapter = :sidekiq
 
     def try_config_for(*args)
