@@ -26,9 +26,8 @@ interface Props {
   onRemove: (id: number) => void;
   onCancel: (ref: RefObject<HTMLInputElement>) => void;
   onEdit: (exception: Product, ref: RefObject<HTMLInputElement>) => void;
-  validated: TextInputProps['validated'];
+  validated?: TextInputProps['validated'];
   isEditLoading?: boolean;
-  // isRemoveLoading?: boolean;
 }
 
 const Exception: React.FunctionComponent<Props> = ({
@@ -125,4 +124,5 @@ const Exception: React.FunctionComponent<Props> = ({
   )
 }
 
+export type { Props }
 export { Exception }

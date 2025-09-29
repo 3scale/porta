@@ -19,7 +19,7 @@ class Sites::EmailsController < Sites::BaseController
     if current_account.update(account_params)
       redirect_to({ action: :edit }, success: t('.success'))
     else
-      flash.now[:warning] = t('.warning')
+      flash.now[:error] = t('.error')
       render :edit
     end
   end

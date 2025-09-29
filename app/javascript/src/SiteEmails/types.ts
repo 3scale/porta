@@ -3,5 +3,5 @@ export interface Product {
   name: string;
   systemName: string;
   updatedAt: string;
-  supportEmail: string;
+  supportEmail?: string;
 }

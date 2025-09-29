@@ -7,7 +7,6 @@ import PlusCircle from '@patternfly/react-icons/dist/js/icons/plus-circle-icon'
 import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { fetchPaginatedProducts as fetchItems } from 'NewApplication/data/Products'
 import type { FetchPaginatedParams } from 'utilities/ajax'
 import { fetchPaginated, patch } from 'utilities/ajax'
 import { toast } from 'utilities/toast'
@@ -116,7 +115,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       isOnMountRef.current = false
     } else {
       // perPage 20 to get 4 pages
-      fetchItems(productsPath, { page: 1, perPage: 20, query })
+      fetchPaginated<Product>(productsPath, { page: 1, perPage: 20, query })
         .then(({ items: fetchedItems, count: newCount }) => {
           setSearchResults(fetchedItems, newCount)
         })
@@ -206,6 +205,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
               }
               return e
             })
+
             setExceptions(newExceptions)
           }
         } else {
@@ -227,7 +227,7 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       setExceptionBeingAdded(undefined)
       setExceptions([...exceptions.slice(0, -1)])
     } else {
-      const { supportEmail } = exceptionBeingEdited
+      const { supportEmail } = exceptionBeingEdited as WithRequiredProp<Product, 'supportEmail'>
       const input = ref.current
       if (input) {
         input.value = supportEmail

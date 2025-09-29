@@ -1092,7 +1092,7 @@ en:
           blank, the <b>primary support email</b> will be used instead. Use it in your Liquid
           templates as follows:
       update:
-        warning: There were errors saving some of your emails. Please review the marked fields
+        error: Couldn't update your support emails
         success: Your support emails have been updated
     forums:
       update:

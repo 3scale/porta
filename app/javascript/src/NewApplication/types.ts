@@ -12,7 +12,6 @@ export interface Product {
   servicePlans: Plan[];
   defaultAppPlan: Plan | null;
   defaultServicePlan: Plan | null;
-  supportEmail: string;
 }
 
 export interface ContractedProduct {
