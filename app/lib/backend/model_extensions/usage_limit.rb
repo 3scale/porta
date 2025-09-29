@@ -8,7 +8,8 @@ module Backend
           # cache associations
           before_destroy :preload_used_associations
 
-          # WARN: last callback is called first, gotcha!
+          # TODO: reverse the order of these callbacks, as the default has changed in Rails 7.1, and then remove the
+          # config.active_record.run_after_transaction_callbacks_in_order_defined setting
           after_commit :update_backend_usage_limit, :unless => :destroyed?
           after_commit :delete_backend_usage_limit
         end
