@@ -209,9 +209,9 @@ group :test do
   gem 'minitest-ci', require: false
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
-  gem 'rspec_junit_formatter'
+  gem 'rspec_junit_formatter', require: false
 
-  # IMPORTANT: Load 'mocha' after 'shoulda'.
+  # IMPORTANT: Load 'mocha' after 'minitest' and 'shoulda'.
   gem 'mocha', require: 'mocha/minitest'
 
   gem 'database_cleaner', require: false
