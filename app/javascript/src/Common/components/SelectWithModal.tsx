@@ -6,7 +6,7 @@ import { FancySelect } from 'Common/components/FancySelect'
 import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
 import type { IRecord } from 'utilities/patternfly-utils'
-import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
+import type { FetchPaginatedParams, FetchItemsResponse } from 'utilities/ajax'
 
 import type { ITransform } from '@patternfly/react-table'
 
@@ -28,7 +28,7 @@ interface Props<T extends IRecord> {
   searchPlaceholder?: string;
   footerLabel: string;
   helperTextInvalid?: string;
-  fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>;
+  fetchItems?: (params: FetchPaginatedParams) => FetchItemsResponse<T>;
 }
 
 const PER_PAGE = 5
