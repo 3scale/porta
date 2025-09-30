@@ -16,6 +16,8 @@ gem 'rails', '~> 7.1.5'
 
 gem 'mail', '~> 2.8.1'
 
+gem 'csv'
+
 gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
@@ -28,11 +30,11 @@ gem 'strong_migrations', '~> 2.1.0'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'
-  gem 'non-stupid-digest-assets', '~> 1.0'
+  gem 'non-digest-assets', '~> 2.4.0'
   gem 'sprockets-rails'
 end
 
-gem 'sass-rails', '~> 5.0.8'
+gem 'sass-rails', '~> 6.0.0'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 2.0'
@@ -232,7 +234,7 @@ group :development, :test do
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
-  gem 'pry-byebug', '>= 3.7.0'
+  gem 'pry-byebug', '>= 3.11.0'
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
