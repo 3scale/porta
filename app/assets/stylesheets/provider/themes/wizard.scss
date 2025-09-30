@@ -1,4 +1,6 @@
-// library
+@use "provider/colors" as *;
+@use "provider/typography" as *;
+@use "provider/logo";
 
 html, body, header, div, span,
 h1, p, a, code, strong, ul, ol, li,
@@ -22,10 +24,6 @@ ol, ul {
 header, main {
   display: block;
 }
-
-@import "provider/typography";
-@import "font-awesome";
-@import "provider/logo";
 
 // typography
 @function calculateRem($size) {

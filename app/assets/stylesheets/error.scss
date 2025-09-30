@@ -1,5 +1,6 @@
-@import "provider/typography";
-@import "provider/logo";
+@use 'provider/colors' as *;
+@use 'provider/logo';
+@use 'provider/typography' as *;
 
 $width: line-height-times(24);
 $wrapper-padding: line-height-times(1);
