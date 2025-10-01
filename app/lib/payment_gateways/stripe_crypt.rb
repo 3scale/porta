@@ -20,7 +20,10 @@ module PaymentGateways
       payment_detail.credit_card_partial_number = card.last4
       payment_detail.credit_card_auth_code      = payment_method.customer
       payment_detail.payment_method_id          = payment_method_id
-      payment_detail.save
+      payment_detail.save!
+    rescue StandardError
+      @errors = payment_detail.errors
+      false
     end
 
     def create_stripe_setup_intent
@@ -55,6 +58,7 @@ module PaymentGateways
       payment_method.save
     rescue Stripe::StripeError => exception
       report_error("Failed to update billing address on Stripe: #{exception.message}")
+      false
     end
 
     private
