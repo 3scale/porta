@@ -1,12 +1,315 @@
 @import 'vendor/c3';
-@import 'stats/chart';
-@import 'stats/menu';
-@import 'stats/selector';
-@import 'stats/messages';
-@import 'stats/logs';
-@import 'stats/applications_selector';
-@import 'stats/table';
-@import 'stats/methods_table';
+
+$stats-chart-border-color: #dfdfdf;
+$stats-chart-tooltip-shadow: rgba(68, 68, 68, .1);
+$stats-chart-tooltip-bg-color: #fff;
+$stats-chart-tooltip-color: #444;
+$stats-menu-border-color: #eee;
+$stats-menu-text-color: #333;
+$stats-menu-link-color: #333;
+$stats-menu-link-color-selected: #666;
+$stats-menu-help-color: #9b9b9b;
+$body-color: #333;
+$border-width: 1px !default;
+$border-color: #eee;
+$dropdown-bg: #fff !default;
+$dropdown-border-color: rgba(0, 0, 0, .15) !default;
+$dropdown-border-width: $border-width !default;
+$dropdown-divider-bg: #e5e5e5 !default;
+$dropdown-link-color: #333;
+$font-size: 12px;
+$shadow-color: rgba(0, 0, 0, .175);
+$dropdown-box-shadow: 0 6px 12px $shadow-color !default;
+$caret-width: .5em !default;
+$caret-width-lg: $caret-width !default;
+$zindex-dropdown: 1000 !default;
+
+.StatsChartContainer {
+  &.is-loading {
+    opacity: .5;
+
+    &::before {
+      background-image: image-url('spinner.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      bottom: 50%;
+      content: '';
+      height: 42px;
+      left: 50%;
+      position: absolute;
+      width: 42px;
+    }
+  }
+
+  /* c3.js customizations */
+  .c3 svg {
+    font: 10px 'Lucida Grande', verdana, sans-serif;
+  }
+
+  .c3-line {
+    stroke-width: 2px;
+  }
+
+  .c3-grid line.c3-ygrid,
+  .c3-axis-y .tick line {
+    stroke: $stats-chart-border-color;
+  }
+
+  .c3-ygrid {
+    stroke-dasharray: 0;
+  }
+
+  .c3-axis-y .domain {
+    display: none;
+  }
+
+  .c3-tooltip-container {
+    border: 1px solid $stats-chart-border-color;
+    border-radius: 6px;
+    -moz-box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    -webkit-box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    box-shadow: 0 0 6px $stats-chart-tooltip-shadow;
+    opacity: .98;
+  }
+
+  .c3-tooltip {
+    border: 0;
+    border-radius: 6px;
+    -moz-box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
+    box-shadow: 0 0 0 transparent;
+    opacity: 1;
+  }
+
+  .c3-tooltip th {
+    background-color: $stats-chart-tooltip-bg-color;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: $stats-chart-tooltip-color;
+    padding: 2px 10px;
+  }
+
+  .c3-tooltip tr {
+    border: 0;
+    border-bottom: 1px solid $stats-chart-border-color;
+
+    &:last-child {
+      border-bottom: 0;
+
+      td {
+
+        &:first-child {
+          border-bottom-left-radius: 6px;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: 6px;
+        }
+      }
+    }
+  }
+
+  .c3-tooltip td {
+    border-left: none;
+    padding: 0 10px;
+  }
+}
+
+.StatsMenu {
+  border: 1px solid $stats-menu-border-color;
+  color: $stats-menu-text-color;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 16px 24px 0;
+  padding: 16px;
+
+  &-period {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-periodItem {
+    display: inline-block;
+    margin: 0 4px;
+  }
+
+  &-custom {
+    border-left: 1px solid $stats-menu-border-color;
+    display: inline-block;
+    font-size: 10px;
+    font-style: italic;
+    margin-left: 4px;
+    padding-left: 4px;
+  }
+
+  &-link,
+  &-Link {
+    color: $stats-menu-link-color;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  &-periodLink,
+  &-customLink {
+    &.is-selected {
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+
+  &-customInput {
+    display: none;
+  }
+}
+
+.StatsSelector {
+  display: inline-block;
+  margin-bottom: 24px;
+  position: relative;
+
+  &-item {
+    background: none;
+    clear: both;
+    color: $dropdown-link-color;
+    cursor: pointer;
+    display: block;
+    font-weight: normal;
+    padding: 3px 20px;
+    text-align: inherit;
+    text-decoration: none !important;
+    white-space: nowrap;
+    width: 100%;
+
+    &.is-children {
+      font-style: italic;
+      padding-left: 30px;
+    }
+
+    &.is-children::before {
+      content: '- ';
+    }
+
+    &.is-selected {
+      font-weight: bold;
+    }
+  }
+
+  &-toggle {
+    border: $border-width solid $border-color;
+    font-size: 12px;
+    padding: 16px;
+    width: auto;
+
+    &::after {
+      border-left: $caret-width solid transparent;
+      border-right: $caret-width solid transparent;
+      border-top: $caret-width solid;
+      content: '';
+      display: inline-block;
+      height: 0;
+      margin-left: 4px;
+      margin-right: 4px;
+      vertical-align: middle;
+      width: 0;
+    }
+  }
+
+  &-menu {
+    background-clip: padding-box;
+    background-color: $dropdown-bg;
+    border: $border-width solid $border-color;
+    color: $body-color;
+    display: none;
+    float: left;
+    font-size: $font-size;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0;
+    min-width: 160px;
+    padding: 5px 0;
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    z-index: $zindex-dropdown;
+  }
+
+  &.is-open {
+    > .StatsSelector-menu {
+      display: block;
+    }
+  }
+}
+
+.StatsMessages {
+  &-list {
+    margin-bottom: 16px;
+    padding-left: 32px;
+  }
+
+  &-title {
+    margin-bottom: 16px;
+  }
+}
+
+.StatsLogs {
+  &.is-hidden {
+    display: none;
+  }
+
+  &-pagination-item {
+    display: inline-block;
+    padding: 0 2px;
+  }
+
+  &-pagination-link {
+    cursor: pointer;
+  }
+}
+
+.StatsApplicationsSelectorContainer {
+  float: right;
+}
+
+.StatsTable {
+  line-height: 2.6;
+  margin-bottom: 24px;
+  margin-top: 12px;
+  width: 100%;
+
+  td,
+  th {
+    border-bottom: 1px solid $stats-menu-border-color;
+  }
+}
+
+.u-amount {
+  text-align: right;
+}
+
+.u-tabular-number {
+  font-family: 'Source Code Pro', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Monaco', Courier, monospace;
+}
+
+.StatsMethodsTable {
+  line-height: 2.6;
+  margin-bottom: 24px;
+  margin-top: 12px;
+  width: 100%;
+
+  td,
+  th {
+    border-bottom: 1px solid $stats-menu-border-color;
+  }
+
+  &-name.is-children {
+    background-image: image-url('child_metric_background.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 24px;
+  }
+}
 
 .StatsMenuContainer,
 .StatsSelectorContainer {

@@ -1,7 +1,6 @@
 / Order matters! Base must go before any other pack:
 = stylesheet_packs_chunks_tag 'patternfly_base'
 = javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar'
-= stylesheet_link_tag "font-awesome" unless Rails.env.test?
 
 div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
   div class='pf-c-drawer__main'
@@ -12,7 +11,7 @@ div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
 
     - if @page.respond_to?(:draft) && draft
       button class="pf-c-button pf-m-plain" type="button" title="Toggle toolbar" id='cms-toolbar-toggle'
-        i class="fa fa-caret-square-o-right" aria-hidden="true"
+        i class="fa fa-caret-square-right" aria-hidden="true"
 
     div class="pf-c-drawer__panel" id="cms-toolbar"
       div class="pf-c-drawer__panel-main"
