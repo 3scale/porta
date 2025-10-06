@@ -219,7 +219,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       # ApplicationPlan setup
       @plan = FactoryBot.create(:application_plan)
       @contract = FactoryBot.create(:application_contract, plan: @plan)
-      @customized_plan = FactoryBot.create(:application_plan, original_id: @plan.id)
+      @customized_plan = @plan.customize
     end
 
     test "delete plan" do
@@ -246,7 +246,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       def setup
         @plan = FactoryBot.create(:account_plan)
         @contract = FactoryBot.create(:account_contract, plan: @plan)
-        @customized_plan = FactoryBot.create(:account_plan, original_id: @plan.id)
+        @customized_plan = @plan.customize
       end
     end
 
@@ -254,7 +254,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
       def setup
         @plan = FactoryBot.create(:service_plan)
         @contract = FactoryBot.create(:service_contract, plan: @plan)
-        @customized_plan = FactoryBot.create(:service_plan, original_id: @plan.id)
+        @customized_plan = @plan.customize
       end
     end
   end
