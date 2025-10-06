@@ -6,15 +6,9 @@ class Api::ServicesIndexPresenter
   def initialize(user:, params: {})
     @user = user
     @ability = Ability.new(user)
+    @params = params
 
-    pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
-    search = ThreeScale::Search.new(params[:search])
-    sorting_params = "#{params[:sort].presence || 'updated_at'} #{params[:direction].presence || 'desc'}"
-
-    @products = user.accessible_services
-                    .order(sorting_params)
-                    .scope_search(search)
-                    .paginate(pagination_params)
+    @products = build_products_query
   end
 
   attr_reader :products
@@ -23,7 +17,7 @@ class Api::ServicesIndexPresenter
 
   delegate :total_entries, to: :products
 
-  def data
+  def data # rubocop:disable Metrics/AbcSize
     {
       'new-product-path': can_create_service ? new_admin_service_path : nil,
       products: products.map do |product|
@@ -43,17 +37,56 @@ class Api::ServicesIndexPresenter
     }
   end
 
-  # The JSON response of index endpoint is used to populate NewApplicationForm's ProductSelect
   def render_json
+    return compact_json if params[:compact]
+
     {
       items: products.includes(:default_application_plan).map { |p| ServicePresenter.new(p).new_application_data.as_json }.to_json,
       count: total_entries
     }
   end
 
+
   private
 
-  attr_reader :user, :ability
+  attr_reader :user, :ability, :params
+
+  def build_products_query
+    filtered_products = filter_products(user.accessible_services)
+    filtered_products.order(sorting_params)
+                     .scope_search(search_params)
+                     .paginate(pagination_params)
+  end
+
+  def filter_products(accessible_services)
+    return accessible_services.where(support_email: nil) if params[:without_support_emails]
+
+    accessible_services
+  end
+
+  def pagination_params
+    {
+      page: params[:page] || 1,
+      per_page: params[:per_page] || 20
+    }
+  end
+
+  def search_params
+    ThreeScale::Search.new(params[:search])
+  end
+
+  def sorting_params
+    sort_field = params[:sort].presence || :updated_at
+    direction = params[:direction].presence || :desc
+    "#{sort_field} #{direction}"
+  end
+
+  def compact_json
+    {
+      items: products.decorate.to_json(only: %i[id name system_name updated_at], js: true),
+      count: total_entries
+    }
+  end
 
   delegate :can?, to: :ability
 

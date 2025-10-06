@@ -79,8 +79,8 @@ Then /^there should( not| n't)? be a link to ([^"]*)$/ do |invisible, page_name|
   assert_equal visible, has_link?(href: path, wait: visible)
 end
 
-Then(/^I should see button "([^"]*)"( disabled)?$/) do |label, disabled|
-  assert find_button(label, disabled: disabled.present?)
+Then(/^(?:|I |they )should see button "([^"]*)"( disabled| enabled)?$/) do |label, condition|
+  assert find_button(label, disabled: condition == ' disabled')
 end
 
 Then /^I should not see button "([^\"]*)"$/ do |label|
