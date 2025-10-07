@@ -79,6 +79,7 @@ class Month < Range
     # This looks too convoluted, but can't really use begin.to_time / end.to_time, because
     # that returns the time in the system local time zone, but Time.zone.local returns
     # it in Rails' local time zone (which can be different apparently).
+    # Update: #to_time should keep timezone now so we may consider using it.
     time_zone = Time.zone
     my_begin = self.begin
     my_end = self.end
