@@ -9,7 +9,6 @@ describe WebHook::Event do
   class ResourceModel
     extend ActiveModel::Naming
     include ActiveModel::AttributeMethods
-    # include ActiveRecord::AttributeMethods::Dirty
 
     attr_accessor :id, :web_hook, :created_at, :updated_at, :destroyed
     alias destroyed? destroyed
