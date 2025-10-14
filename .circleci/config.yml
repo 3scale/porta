@@ -75,12 +75,14 @@ use-example-config-files: &use-example-config-files
 disable-internet-access: &disable-internet-access
   run:
     name: Disable internet access
-    command: sudo sed -c -i".bak" 's/127\.0\.0\.11$/127.0.0.1/' /etc/resolv.conf
+    command: |
+      cat /etc/resolv.conf
+      sudo sed -c -i".bak" 's/^nameserver.*/nameserver 127.0.0.1/' /etc/resolv.conf
 
 enable-internet-access: &enable-internet-access
   run:
     name: Enabled internet access
-    command: sudo sed -c -i".bak" 's/127\.0\.0\.1$/127.0.0.11/' /etc/resolv.conf
+    command: sudo tee /etc/resolv.conf < /etc/resolv.conf.bak
     when: always
 
 attach-to-workspace: &attach-to-workspace
@@ -88,7 +90,7 @@ attach-to-workspace: &attach-to-workspace
     at: .
 
 system-builder-ruby31: &system-builder-ruby31
-  image: quay.io/3scale/system-builder:ps
+  image: quay.io/3scale/system-builder:5207de2
   environment:
     BUNDLE_FROZEN: true
     BUNDLE_PATH: 'vendor/bundle'
@@ -134,14 +136,20 @@ redis-container: &redis-container
 
 dnsmasq-container: &dnsmasq-container
   image: quay.io/3scale/dnsmasq
+  entrypoint:
+    - /bin/bash
+    - -c
   command:
-    - --user=root
-    - --keep-in-foreground
-    - --log-facility=-
-    - --log-queries
-    - --no-poll
-    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/circleci-binary-releases.s3.amazonaws.com/127.0.0.11
-    - --address=/#/127.0.0.1
+    - |
+      DEFAULT_DNS=$(sed -nEe 's/nameserver\s+(.*)/\1/p' /etc/resolv.conf | head -1)
+      /usr/sbin/dnsmasq \
+      --user=root \
+      --keep-in-foreground \
+      --log-facility=- \
+      --log-queries \
+      --no-poll \
+      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/$DEFAULT_DNS \
+      --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
   filters:
@@ -379,7 +387,7 @@ commands: # reusable commands with parameters
           command: |
             # see https://support.circleci.com/hc/en-us/articles/19306469418139-How-to-detect-when-a-process-is-killed-by-the-OOM-killer
             printf "OOM Control: "
-            cat /sys/fs/cgroup/memory/memory.oom_control | sed -n 3p | tee tmp/oom_num
+            cat /sys/fs/cgroup/memory.events | sed -n 5p | tee tmp/oom_num
             [ "oom_kill 0" = "$(<tmp/oom_num)" ] # fails when a proc was killed by OOM
           when: always
 
@@ -776,7 +784,7 @@ jobs:
 
   cucumber-oracle:
     <<: *build-envs-oracle
-    parallelism: 30
+    parallelism: 40
     parameters:
       executor:
         type: string
