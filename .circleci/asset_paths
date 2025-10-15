@@ -4,6 +4,7 @@ app/javascript
 app/assets
 app/lib/pdf/images
 public/dev-portal-assets
+config/compass.rb
 config/webpack
 lib/developer_portal/app/assets
 lib/developer_portal/app/views/developer_portal/css
