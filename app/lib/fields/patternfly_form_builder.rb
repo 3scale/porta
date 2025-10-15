@@ -35,9 +35,17 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
   end
 
   def inputs(*args, &block)
-    tag.section(class: 'pf-c-form__section', role: 'group') do
-      tag.div(args.first, class: 'pf-c-form__section-title') +
-        template.capture { yield block } # FIXME: Is this making the first render super slow?
+    options = args.extract_options!
+
+    class_names = ['pf-c-form__section'] << options.delete(:class)
+    tag.section(class: class_names, role: 'group', **options.slice(:id)) do
+      title = if (title = args.first)
+                tag.div(title, class: 'pf-c-form__section-title')
+              else
+                ''.html_safe
+              end
+
+      title + template.capture { yield block } # FIXME: Is this making the first render super slow?
     end
   end
 end

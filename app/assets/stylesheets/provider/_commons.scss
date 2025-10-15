@@ -79,7 +79,7 @@ dd p {
   margin: 0;
 }
 
-pre  {
+pre:not(.pf-c-code-block__pre) {
   margin: line-height-times(1/2) 0;
 }
 
@@ -162,7 +162,7 @@ a img {
   border: none;
 }
 
-pre code {
+pre code:not(.pf-c-code-block__code) {
   border-radius: $border-radius;
   margin: line-height-times(1/2) 0 line-height-times(1);
   overflow: hidden;

@@ -1,7 +1,6 @@
 import { mount } from 'enzyme'
 
 import type { Props } from 'utilities/CSRFToken'
-
 import type { FunctionComponent } from 'react'
 
 const CSRFToken = jest.requireActual('utilities/CSRFToken').CSRFToken as FunctionComponent<Props>

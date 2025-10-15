@@ -1062,15 +1062,37 @@ en:
         error: There were problems saving the settings
         success: Documentations settings updated
     emails:
+      remove_confirmation:
+        This product will use the primary support email. For this change to be effective click on
+        'Update'.
       edit:
-        outbound_emails_html: |
-          If you are on a 3scale Plus plan or higher, you may define a
-          custom outbound email address to send messages to your
-          developer community. Please follow the
-          <a href="%{docs_email_configuration_url}" target="_blank">
-          How-To guide</a> instructions to configure your DNS settings, etc.
+        exceptions_label: Custom support emails
+        add_exception: Add a custom support email
+        aria:
+          more_info: More information for support emails
+        custom_emails:
+          header: Support emails for products
+          description_html: |
+            Assign a custom support email to each of your Products. Products without a specific email will
+            use the <b>primary support email</b> instead. Use it in your Liquid templates as
+            follows:
+        page_title: Support emails
+        outbound_emails_title: Outbound Email Addresses
+        outbound_emails_html:
+          If you are on a 3scale Plus plan or higher, you may define a custom outbound email address
+          to send messages to your developer community. Please follow the
+          <a href="%{docs_base_url}/creating_the_developer_portal/email-configuration" target="_blank">How-To guide</a>
+          instructions to configure your DNS settings, etc.
+        support_email_description_html: |
+          You account must have a primary support email. This required address is your main contact
+          and will be used as the default for all inquiries. Use it in your Liquid templates as
+          follows:
+        finance_support_email_description_html: |
+          You can optionally provide a separate finance support email for billing questions. If left
+          blank, the <b>primary support email</b> will be used instead. Use it in your Liquid
+          templates as follows:
       update:
-        warning: There were errors saving some of your emails. Please review the marked fields
+        error: Couldn't update your support emails
         success: Your support emails have been updated
     forums:
       update:
@@ -1872,7 +1894,7 @@ en:
               charging_failed: 'Failed to charge the credit card.'
             period:
               invalid_range: 'must be between the provider account creation date and 12 months from now'
-              
+
         notification_preferences:
           attributes:
             preferences:
@@ -2038,7 +2060,6 @@ en:
           <span class="protocol-warn">For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss).</span>
       backend_api_config:
         path: Changing the Public Path will only affect this Product.
-
       finance/billing_strategy:
         numbering_period: It will only change the friendly ID in invoices, not the billing period.
         charging_enabled:
@@ -2170,6 +2191,8 @@ en:
       account:
         vat_zero_text: Text to show if VAT/Sales Tax is 0%
         payment_gateway_type: Gateway
+        support_email: Primary support email
+        finance_support_email: Finance support email
 
       backend_api:
         private_endpoint: Private Base URL

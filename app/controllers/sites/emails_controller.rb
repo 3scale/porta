@@ -1,44 +1,56 @@
+# frozen_string_literal: true
+
 class Sites::EmailsController < Sites::BaseController
+  include System::UrlHelpers.system_url_helpers
 
   provider_required
 
-  activate_menu :audience, :messages, :email
-
-  before_action :find_account
-  before_action :find_services
   prepend_before_action :deny_on_premises_for_master
 
-  def edit
-  end
+  helper_method :props
+
+  activate_menu :audience, :messages, :email
+
+  def edit; end
 
   def update
-    unless @account.update(params[:account])
-      not_saved = true
-    end
+    account_params = params.require(:account).permit(%i[support_email finance_support_email])
 
-    @services.each do |service|
-      unless service.update :support_email => params["service_#{service.id}_support_email"]
-        not_saved = true
-      end
-    end
-
-    if not_saved
-      flash.now[:warning] = t('.warning')
+    if current_account.update(account_params)
+      redirect_to({ action: :edit }, success: t('.success'))
     else
-      flash.now[:success] = t('.success')
+      flash.now[:error] = t('.error')
+      render :edit
     end
-
-    render 'edit'
   end
 
   private
 
-  def find_account
-    @account = current_account
+  def products
+    @products ||= current_user.accessible_services
+                              .order(name: :asc)
   end
 
-  def find_services
-    @services = @account.accessible_services
+  def products_without_support_email
+    @products_without_support_email ||= products.where(support_email: nil)
   end
 
+  def total_products_without_support_email
+    @total_products_without_support_email ||= products_without_support_email.size
+  end
+
+  def exceptions
+    @exceptions ||= products.where.not(support_email: nil)
+  end
+
+  def props
+    {
+      buttonLabel: t('sites.emails.edit.add_exception'),
+      removeConfirmation: t('.remove_confirmation'),
+      exceptions: exceptions.decorate.as_json(only: %i[id name system_name updated_at support_email], js: true),
+      products: products_without_support_email.paginate(page: 1, per_page: 20).decorate.as_json(only: %i[id name system_name updated_at], js: true),
+      productsCount: total_products_without_support_email,
+      productsPath: url_for(controller: 'api/services', only_path: true),
+    }
+  end
 end
