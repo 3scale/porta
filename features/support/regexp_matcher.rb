@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'rspec/expectations'
+
 RSpec::Matchers.define :have_regexp do |expected|
   match do |actual|
     stripped = actual.delete("\n")
@@ -6,5 +10,4 @@ RSpec::Matchers.define :have_regexp do |expected|
   end
 end
 
-require 'rspec/expectations'
 World(RSpec::Matchers)

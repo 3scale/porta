@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'admin_section'
-
 module User::Permissions
   extend ActiveSupport::Concern
 

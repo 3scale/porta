@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'minitest_helper'
+require 'minitest_spec_helper'
 
-# TODO: one day, partialy load rails and leave this on autoloader
-require 'app/models/web_hook/event'
 require 'active_model'
 require 'nokogiri'
 
@@ -21,8 +19,13 @@ describe WebHook::Event do
       end
     end
 
-    def created=(val)
-      @created_at = @updated_at = val
+    def just_created!
+      saved_changes["created_at"] = saved_changes["updated_at"] = [nil, Time.now]
+      self
+    end
+
+    def saved_changes
+      @saved_changes ||= {}
     end
 
     def to_xml(options = {})
@@ -32,7 +35,7 @@ describe WebHook::Event do
   end
 
   def mock_resource(options = {})
-    stub_everything('resource', options.merge(:class => ResourceModel))
+    stub_everything('resource', options.reverse_merge(class: ResourceModel, saved_changes: {}))
   end
 
   let(:web_hook) { stub_everything('web_hook', :enabled? => true) }
@@ -45,16 +48,17 @@ describe WebHook::Event do
   before { WebHook.stubs(:sanitized_url).returns('http://127.0.0.1/') }
 
   describe "valid event" do
-    let(:resource) { ResourceModel.new(:id => 16, :created => Time.now) }
+    let(:now) { Time.now }
+    let(:resource) { ResourceModel.new(:id => 16).just_created! }
 
     it { event.must_be :valid? }
 
     it "enqueues to sidekiq" do
       WebHookWorker.expects(:perform_async).returns(true).with do |webhook_id, options|
-        options[:provider_id].must_equal 16
-        options[:url].must_equal 'http://127.0.0.1/'
-        options[:content_type].must_equal event.content_type
-        options[:xml].must_equal event.to_xml
+        options["provider_id"].must_equal 16
+        options["url"].must_equal 'http://127.0.0.1/'
+        options["content_type"].must_equal event.content_type
+        options["xml"].must_equal event.to_xml
 
         true
       end
@@ -113,9 +117,9 @@ describe WebHook::Event do
 
     it { event.resource_type.must_equal 'resource_model' }
     it { event.wont_be :valid? }
-    it { assert_not event.push_event? }
+    it { refute event.push_event? }
 
-    it { assert_not enqueue }
+    it { refute enqueue }
   end
 
   describe "destroyed resource" do
@@ -129,7 +133,7 @@ describe WebHook::Event do
 
   describe "created resource" do
     let(:now) { Time.now }
-    let(:resource) { mock_resource(:created_at => now, :updated_at => now) }
+    let(:resource) { mock_resource(saved_changes: { "created_at" => [nil, now] })}
 
     it { event.event.must_equal 'created' }
     it { event.must_be :valid? }
@@ -148,7 +152,7 @@ describe WebHook::Event do
 
     it { event.event.must_be :nil? }
     it { event.wont_be :valid? }
-    it { assert_not enqueue }
+    it { refute enqueue }
   end
 
   describe "push_user?" do

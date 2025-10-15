@@ -1,6 +1,6 @@
-require 'minitest_helper'
+# frozen_string_literal: true
 
-require 'events/importer'
+require 'test_helper'
 
 class Events::ImporterTest < SimpleMiniTest
 

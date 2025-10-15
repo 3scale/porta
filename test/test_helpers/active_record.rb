@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "three_scale/models"
-
 module TestHelpers
   module ActiveRecord
 

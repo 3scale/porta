@@ -19,16 +19,3 @@ module TimeZoneHacks
 end
 
 ActiveSupport::TimeZone.send(:include, TimeZoneHacks)
-
-# backported from rails 3
-module TimeZoneSerialization
-  def encode_with(coder)
-    if coder.respond_to?(:represent_object)
-      coder.represent_object(nil, utc)
-    else
-      coder.represent_scalar(nil, utc.strftime("%Y-%m-%d %H:%M:%S.%9NZ"))
-    end
-  end
-end
-
-ActiveSupport::TimeWithZone.send(:include, TimeZoneSerialization)

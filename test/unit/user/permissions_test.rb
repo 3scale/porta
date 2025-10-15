@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'admin_section'
 
 class User::PermissionsTest < ActiveSupport::TestCase
   test 'has_permission' do
