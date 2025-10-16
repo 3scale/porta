@@ -12,7 +12,6 @@ module.exports = (_, _argv) => {
   webpackConfig.devtool = 'cheap-module-source-map';
 
   webpackConfig.devServer = {
-    https: false,
     host: 'localhost',
     port: devServerPort,
     hot: false,
