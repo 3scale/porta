@@ -79,7 +79,7 @@ module DeveloperPortal
 
       put admin_account_stripe_path, params: account_params
 
-      assert_match 'Failed to update your billing address data. Check the required fields', flash[:notice]
+      assert_match 'Failed to update your billing address data. Check the required fields', flash[:error]
       assert_template 'accounts/payment_gateways/edit'
       assert_equal original_address, buyer.reload.billing_address.to_s
     end
@@ -95,7 +95,7 @@ module DeveloperPortal
 
       put admin_account_stripe_path, params: account_params
 
-      assert_match 'Failed to update your billing address data. Check the required fields', flash[:notice]
+      assert_match 'Failed to update your billing address data. Check the required fields', flash[:error]
       assert_template 'accounts/payment_gateways/edit'
       assert_equal original_address, buyer.reload.billing_address.to_s
     end
