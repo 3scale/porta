@@ -36,21 +36,6 @@ class Sites::EmailsControllerTest < ActionController::TestCase
 
       assert_response :success
       assert_template :edit
-      assert assigns(:products)
-    end
-
-    test 'edit props' do
-      service1 = FactoryBot.create(:simple_service, account: @provider, name: 'Service 1')
-      service2 = FactoryBot.create(:simple_service, account: @provider, name: 'Service 2', support_email: 'custom@example.com')
-
-      get :edit
-
-      props = @controller.send(:props)
-      assert props
-      assert_equal 'Add a custom support email', props[:buttonLabel]
-      assert_includes props[:exceptions].pluck(:id), service2.id
-      assert_includes props[:products].pluck(:id), service1.id
-      assert_not_includes props[:products].pluck(:id), service2.id
     end
 
     test 'update account support email only' do
@@ -103,45 +88,54 @@ class Sites::EmailsControllerTest < ActionController::TestCase
       @provider.services = [@service1, @service2, @service3]
     end
 
-    test 'products without custom support email' do
-      get :edit
-
-      product_ids = @controller.send(:props)[:products].pluck(:id)
-
-      assert_equal product_ids, [@service1, @service3].pluck(:id)
-      assert_not_includes product_ids, @service2.id
-
-      assert_equal 2, @controller.send(:props)[:productsCount]
+    test 'edit props' do
+      props = @controller.send(:props)
+      assert props
+      assert_equal I18n.t('sites.emails.edit.add_exception'), props[:buttonLabel]
+      assert_equal I18n.t('sites.emails.remove_confirmation'), props[:removeConfirmation]
+      assert_same_elements props[:exceptions].pluck(:id), [@service2.id]
+      assert_same_elements props[:products].pluck(:id), [@service1.id, @service3.id]
+      assert_equal 2, props[:productsCount]
+      assert_not_empty props[:productsPath]
     end
 
-    test 'products with custom support emails' do
-      get :edit
-
-      exception_ids = @controller.send(:props)[:exceptions].pluck(:id)
-
-      assert_equal exception_ids, [@service2.id]
-      assert_not_includes exception_ids, [@service1, @service3].pluck(:id)
-    end
-
-    test 'products path when >20 products' do
-      @controller.stubs(:total_products_without_support_email).returns(21)
-
-      get :edit
+    test 'products are paginated to 20 per page' do
+      FactoryBot.create_list(:simple_service, 25, account: @provider)
 
       props = @controller.send(:props)
-      assert_equal 21, props[:productsCount]
-      assert_not_nil props[:productsPath]
-      assert_match %r{/apiconfig/services}, props[:productsPath]
+      assert_equal 20, props[:products].size
+      assert_equal 27, props[:productsCount] # 25 + 2 from setup
     end
 
-    test 'products path when <20 products' do
-      @controller.stubs(:total_products_without_support_email).returns(20)
-
-      get :edit
+    test 'products are ordered by name' do
+      FactoryBot.create(:simple_service, account: @provider, name: 'Z Service')
+      FactoryBot.create(:simple_service, account: @provider, name: 'A Service')
+      FactoryBot.create(:simple_service, account: @provider, name: 'M Service')
 
       props = @controller.send(:props)
-      assert_equal 20, props[:productsCount]
-      assert_nil props[:productsPath]
+      product_names = props[:products].pluck(:name)
+
+      assert_equal 'A Service', product_names.first
+      assert product_names.index('M Service') < product_names.index('Z Service')
+    end
+
+    test 'only exceptions include support_email in JSON' do
+      props = @controller.send(:props)
+      assert props[:exceptions].pluck(:supportEmail).all?
+      assert props[:products].pluck(:supportEmail).none?
+    end
+
+    test 'only accessible services are included' do
+      other_provider = FactoryBot.create(:provider_account)
+      other_service = FactoryBot.create(:simple_service, account: other_provider,
+                                                         name: 'Other Provider Service')
+
+      props = @controller.send(:props)
+      product_ids = props[:products].pluck(:id)
+      exception_ids = props[:exceptions].pluck(:id)
+
+      assert_not_includes product_ids, other_service.id
+      assert_not_includes exception_ids, other_service.id
     end
   end
 end
