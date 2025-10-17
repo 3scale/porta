@@ -181,7 +181,7 @@ module VerticalNavHelper
 
     if can?(:manage, :settings) && !master_on_premises?
       items << { title: 'Settings', subItems: [
-        { id: :email,     title: 'Support Emails',  path: edit_admin_site_emails_path },
+        { id: :email,     title: 'Support emails',  path: edit_admin_site_emails_path },
         { id: :templates, title: 'Email Templates', path: provider_admin_cms_email_templates_path }
       ]}
     end

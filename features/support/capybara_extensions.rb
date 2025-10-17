@@ -14,6 +14,10 @@ module CapybaraExtensions
       else
         control.find('input, textarea').set with
       end
+    elsif page.has_css?('.pf-c-input-group', text: field, wait: 0)
+      page.find('.pf-c-input-group', text: field)
+          .find('input.pf-c-form-control')
+          .set with
     else
       ActiveSupport::Deprecation.warn "[cucumber] field not implemented with Patternfly: #{field}"
       super

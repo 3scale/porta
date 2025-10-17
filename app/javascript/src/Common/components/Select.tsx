@@ -7,8 +7,8 @@ import {
 } from '@patternfly/react-core'
 
 import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/patternfly-utils'
-import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
+import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 import type {
   FormGroupProps,
   SelectOptionObject as PFSelectOptionObject,

@@ -1,44 +1,30 @@
-class Sites::EmailsController < Sites::BaseController
+# frozen_string_literal: true
 
+class Sites::EmailsController < Sites::BaseController
   provider_required
+
+  prepend_before_action :deny_on_premises_for_master
+
+  helper_method :presenter
 
   activate_menu :audience, :messages, :email
 
-  before_action :find_account
-  before_action :find_services
-  prepend_before_action :deny_on_premises_for_master
-
-  def edit
-  end
+  def edit; end
 
   def update
-    unless @account.update(params[:account])
-      not_saved = true
-    end
+    account_params = params.require(:account).permit(%i[support_email finance_support_email])
 
-    @services.each do |service|
-      unless service.update :support_email => params["service_#{service.id}_support_email"]
-        not_saved = true
-      end
-    end
-
-    if not_saved
-      flash.now[:warning] = t('.warning')
+    if current_account.update(account_params)
+      redirect_to({ action: :edit }, success: t('.success'))
     else
-      flash.now[:success] = t('.success')
+      flash.now[:error] = t('.error')
+      render :edit
     end
-
-    render 'edit'
   end
 
   private
 
-  def find_account
-    @account = current_account
+  def presenter
+    @presenter ||= Sites::EmailsEditPresenter.new(user: current_user)
   end
-
-  def find_services
-    @services = @account.accessible_services
-  end
-
 end

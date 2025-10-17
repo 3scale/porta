@@ -86,4 +86,19 @@ module PatternflyComponentsHelper
       end
     end
   end
+
+  def pf_clipboard_copy(value)
+    content_for :javascripts, javascript_packs_with_chunks_tag('clipboard_copy')
+
+    input = tag.input(class: 'pf-c-form-control', value:, readonly: true, type: :text)
+    button = tag.button(class: 'pf-c-button pf-m-control', type: :button, aria: { label: 'Copy to clipboard' }) do
+               tag.i class: 'fas fa-copy', aria: { hidden: "true" }
+             end
+
+    tag.div class: 'pf-c-clipboard-copy' do
+      tag.div class: 'pf-c-clipboard-copy__group' do
+         input + button
+      end
+    end
+  end
 end

@@ -25,6 +25,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   const [searchText, setSearchText] = useState<string>(query ?? '')
   const [showPopover, setShowPopover] = useState<boolean>(false)
 
+  // TODO: review this. It seems it only runs on mount because it does not depend on showPopover.
   useEffect(() => {
     if (showPopover) {
       setShowPopover(false)

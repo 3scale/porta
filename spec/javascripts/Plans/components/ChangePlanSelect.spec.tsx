@@ -3,8 +3,8 @@ import { Select } from '@patternfly/react-core'
 
 import { ChangePlanSelect } from 'Plans/components/ChangePlanSelect'
 import { openSelect } from 'utilities/test-utils'
-import type { SelectOptionObject } from 'utilities/patternfly-utils'
 
+import type { SelectOptionObject } from 'utilities/patternfly-utils'
 import type { Props } from 'Plans/components/ChangePlanSelect'
 
 const plan = { id: 0, name: 'I am a plan' }

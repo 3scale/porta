@@ -1,0 +1,42 @@
+@import 'app/javascript/packs/pf_form.scss';
+
+@import '~@patternfly/patternfly/components/ClipboardCopy/clipboard-copy.css';
+@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
+@import '~@patternfly/patternfly/components/InlineEdit/inline-edit.css';
+
+@import '~@patternfly/patternfly/utilities/Spacing/spacing.css';
+
+.pf-c-clipboard-copy input {
+  font-family: var(--pf-global--FontFamily--monospace);
+  font-size: var(--pf-global--FontSize--sm);
+}
+
+.pf-c-form__group-control#custom-support-emails {
+  .pf-c-form__group {
+    &.to-be-removed {
+      pointer-events: none;
+
+      .pf-c-input-group__text,
+      .pf-c-form-control {
+        text-decoration: line-through;
+      }
+
+      .pf-c-button {
+        visibility: hidden;
+      }
+    }
+
+    .pf-c-input-group__text {
+      width: 45%;
+    }
+  }
+}
+
+// TODO: remove this
+.pf-c-modal-box {
+  .pf-c-table {
+    .pf-c-table__disabled-row {
+      --pf-c-table--cell--Color: var(--pf-global--disabled-color--300);
+    }
+  }
+}

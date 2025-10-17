@@ -8,8 +8,8 @@ import {
 } from '@patternfly/react-core'
 
 import { toSelectOption, toSelectOptionObject, handleOnFilter } from 'utilities/patternfly-utils'
-import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
+import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 import type { ReactElement } from 'react'
 import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
 

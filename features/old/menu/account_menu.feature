@@ -63,7 +63,8 @@ Feature: Menu of the Account screen
 
   Scenario: Account menu structure with sso enforced
     Given the provider has "multiple_users" switch allowed
-    Given provider "foo.3scale.localhost" has "enforce_sso" set to "true"
+    And the provider has the following setting:
+      | enforce sso | true |
     When I go to the provider account page
     And I should see menu items under "Users"
       | Listing          |

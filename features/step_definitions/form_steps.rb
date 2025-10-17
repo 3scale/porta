@@ -49,8 +49,6 @@ Then /^there is (a|no) (required )?(readonly )?field "(.*)"$/ do |presence, requ
            %("#{field}" exists, but it's not required)
   end
 end
-# Then "there {is} a field {string}" do |present, field|
-# end
 
 And "field {string} {is} disabled" do |field, disabled|
   assert has_field?(field, disabled: disabled)
@@ -147,5 +145,12 @@ Then /there is a select "([^"]*)" (that includes|with) options:/ do |label, incl
     expected_options.each do |option|
       assert_includes actual_options, option
     end
+  end
+end
+
+When "(they )select the product {string}" do |product|
+  within '[aria-label="Select a product"]' do
+    find('td', text: product).click
+    click_on 'Select'
   end
 end

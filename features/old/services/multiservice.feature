@@ -10,7 +10,8 @@ Feature: Multiservice feature
     And a default service of provider "foo.3scale.localhost" has name "Fancy API"
 
   Scenario: Can create new service setting
-    And provider "foo.3scale.localhost" has "can create service" set to "true"
+    Given the provider has the following setting:
+      | can create service | true |
     When I am on the provider dashboard
     Then I should see "Create Product"
     Then I should see "Create Backend"
@@ -62,9 +63,9 @@ Feature: Multiservice feature
     And service discovery is not enabled
     When I am on the provider dashboard
     And I follow "Create Backend"
-    # And I fill in "Name" with "Less fancy Backend"
-    # And I press "Add Backend"
-    # Then I should see "Less fancy Backend"
+  # And I fill in "Name" with "Less fancy Backend"
+  # And I press "Add Backend"
+  # Then I should see "Less fancy Backend"
 
   Scenario: Edit service
     And I am on the edit page for service "Fancy API" of provider "foo.3scale.localhost"

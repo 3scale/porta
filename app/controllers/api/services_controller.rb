@@ -64,12 +64,18 @@ class Api::ServicesController < Api::BaseController
     end
   end
 
-  def update
-    if integration_settings_updater_service.call(service_attributes: service_params.to_h, proxy_attributes: proxy_params.to_h)
-      redirect_back_or_to({ action: "settings" }, success: t('.success'))
-    else
-      flash.now[:danger] = t('.error')
-      render action: params[:update_settings].present? ? :settings : :edit # edit page is only page with free form fields. other forms are less probable to have errors
+  def update # rubocop:disable Metrics/AbcSize
+    respond_to do |format|
+      if integration_settings_updater_service.call(service_attributes: service_params.to_h, proxy_attributes: proxy_params.to_h)
+        message = t('.success')
+        format.html { redirect_back_or_to({ action: "settings" }, success: message) }
+        format.json { render json: { success: true, message: } }
+      else
+        message = t('.error')
+        flash.now[:danger] = message
+        format.html { render action: params[:update_settings].present? ? :settings : :edit } # edit page is only page with free form fields. other forms are less probable to have errors
+        format.json { render json: { success: false, message: } }
+      end
     end
   end
 
