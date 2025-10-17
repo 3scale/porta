@@ -1,4 +1,8 @@
-@import 'provider/typography'; // needed for dev portals that include this stylesheet directly
+// needed for dev portals that include this stylesheet directly
+
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
 
 .Stats {
   @include white-box-shadow;
@@ -26,8 +30,8 @@ $stats-menu-help-color: $label-color;
   border-radius: $border-radius;
   color: $stats-menu-text-color;
   display: inline-block;
-  margin: 0 line-height-times(1/2) line-height-times(1) 0;
-  padding: line-height-times(1/2);
+  margin: 0 line-height-times(.5) line-height-times(1) 0;
+  padding: line-height-times(.5);
   height: auto;
 
   &-period {
@@ -39,18 +43,18 @@ $stats-menu-help-color: $label-color;
 
   &-periodItem {
     display: inline-block;
-    margin: 0 line-height-times(1/4);
+    margin: 0 line-height-times(.25);
   }
 
   &-custom {
     border-left: $border-width solid $stats-menu-border-color;
     display: inline-block;
     font-style: italic;
-    padding-left: line-height-times(1/4);
+    padding-left: line-height-times(.25);
 
     select {
       width: auto;
-      margin: line-height-times(-1/4) 0;
+      margin: line-height-times(-0.25) 0;
     }
   }
 
@@ -100,7 +104,7 @@ $stats-menu-help-color: $label-color;
 /* StatsLogs Pagination */
 .StatsLogs-pagination-item {
   display: inline-block;
-  padding: 0 line-height-times(1/8);
+  padding: 0 line-height-times(.125);
 }
 
 .StatsLogs-pagination-link {
@@ -109,12 +113,12 @@ $stats-menu-help-color: $label-color;
 
 /* StatsMessages Components */
 .StatsMessages-list {
-  margin-bottom: line-height-times(1/2);
+  margin-bottom: line-height-times(.5);
   padding-left: line-height-times(1);
 }
 
 .StatsMessages-title {
-  margin-bottom: line-height-times(1/2);
+  margin-bottom: line-height-times(.5);
 }
 
 /* StatsCVSLink */
@@ -181,7 +185,7 @@ $stats-chart-tooltip-color: $label-color;
   .c3-tooltip-container {
     border: $border-width solid $stats-chart-border-color;
     border-radius: $border-radius;
-    box-shadow: 0 0 line-height-times(1/2) $stats-chart-tooltip-shadow;
+    box-shadow: 0 0 line-height-times(.5) $stats-chart-tooltip-shadow;
     background: rgba($content-background, .99);
     //opacity: .98;
   }
@@ -200,7 +204,7 @@ $stats-chart-tooltip-color: $label-color;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     color: $stats-chart-tooltip-color;
-    padding: line-height-times(1/8) line-height-times(1/2);
+    padding: line-height-times(.125) line-height-times(.5);
   }
 
   .c3-tooltip tr {
@@ -225,7 +229,7 @@ $stats-chart-tooltip-color: $label-color;
 
   .c3-tooltip td {
     border-left: none;
-    padding: 0 line-height-times(1/2);
+    padding: 0 line-height-times(.5);
   }
 }
 
@@ -248,7 +252,7 @@ $stats-chart-tooltip-color: $label-color;
 .StatsMethodsTable {
   //line-height: 2.6;
   margin-bottom: line-height-times(1);
-  margin-top: line-height-times(1/2);
+  margin-top: line-height-times(.5);
   width: 100%;
 
   td,

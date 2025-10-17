@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 p a {
   text-decoration: underline;
   color: $font-color;
@@ -17,10 +20,9 @@ a {
 }
 
 @mixin iconic($content) {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
   font-weight: $font-weight-normal;
   font-style: normal;
-  display: inline-block;
   text-decoration: inherit;
   display: inline-block;
   text-decoration: none;
@@ -34,7 +36,7 @@ input[type='submit'].action {
     width: auto;
     white-space: nowrap;
     border-radius: $border-radius-sm;
-    padding: 0 line-height-times(1/8);
+    padding: 0 line-height-times(.125);
     cursor: pointer;
     border-bottom: 0;
     border: none;
@@ -102,7 +104,7 @@ button.unsuspend   { background-image: image-url('tick.png'); }
 button.resume      { background-image: image-url('tick.png'); }
 
 button.publish, button.hide {
-    padding-left: line-height-times(1/4);
+    padding-left: line-height-times(.25);
 }
 
 button.up          { background-image: image-url('up_green.png'); }
