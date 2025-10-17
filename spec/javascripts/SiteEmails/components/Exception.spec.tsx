@@ -120,7 +120,7 @@ describe('when being edited', () => {
     expect(defaultProps.onCancel).toHaveBeenCalledTimes(1)
   })
 
-  it('can neither be editted nor removed', () => {
+  it('can neither be edited nor removed', () => {
     const wrapper = mountWrapper(props)
 
     expect(wrapper.exists('button[aria-label^="Edit"]')).toEqual(false)
