@@ -50,10 +50,6 @@ Then /^there is (a|no) (required )?(readonly )?field "(.*)"$/ do |presence, requ
   end
 end
 
-Then "field {string} has value {string}" do |field, value|
-  assert_equal value, find_field(field)[:value]
-end
-
 And "field {string} {is} disabled" do |field, disabled|
   assert has_field?(field, disabled: disabled)
 end

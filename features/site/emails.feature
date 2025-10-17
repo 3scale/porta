@@ -20,8 +20,8 @@ Feature: Audience > Messages > Settings > Support emails
 
   Scenario: Update support and finance support emails
     Given they go to the emails settings page
-    And field "Support email" has value "support@api.test"
-    And field "Finance support email" has value "finance-support@api.test"
+    And the "Support email" field should contain "support@api.test"
+    And the "Finance support email" field should contain "finance-support@api.test"
     When the form is submitted with:
       | Support email         | foo@api.test         |
       | Finance support email | finance-foo@api.test |
@@ -100,17 +100,14 @@ Feature: Audience > Messages > Settings > Support emails
     Then they should see the following custom support emails:
       | Bananas | help@bananas.org    |
       | Oranges | support@oranges.com |
-    When they press "Add a custom support email"
-    And they should see "API" within the modal
-    And they should not see "Bananas" within the modal
-    And they should not see "Oranges" within the modal
 
   Scenario: Cannot add duplicate custom support email for same product
     Given a product "Bananas"
     And product "Bananas" has support email set to "help@bananas.org"
     And they go to the emails settings page
     When they press "Add a custom support email"
-    Then they should not see "Bananas" within the modal
+    Then they should see "API" within the modal
+    But they should not see "Bananas" within the modal
 
   Scenario: Validation error for invalid custom product support email
     Given a product "Bananas"
@@ -145,7 +142,7 @@ Feature: Audience > Messages > Settings > Support emails
     And press "Cancel edit of support email for Bananas"
     Then they should see button "Add a custom support email" enabled
     And there is a readonly field "Bananas"
-    And field "Bananas" has value "help@bananas.org"
+    And the "Bananas" field should contain "help@bananas.org"
 
   Scenario: Finance support email shows only when provider has finance switch on
     Given they go to the emails settings page
