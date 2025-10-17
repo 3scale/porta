@@ -4,6 +4,16 @@ ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
 
+    # in 6.0.6 automatic detection of max identifier length was introduced
+    # see https://github.com/rsim/oracle-enhanced/pull/1703
+    # but it was incomplete, proposed full fix is not merged yet
+    # see https://github.com/rsim/oracle-enhanced/pull/2128
+    # once it is merged, this should fail on remove_const so we will notice
+    ActiveRecord::ConnectionAdapters::OracleEnhanced::DatabaseLimits.class_eval do
+      remove_const(:IDENTIFIER_MAX_LENGTH)
+      const_set(:IDENTIFIER_MAX_LENGTH, 128)
+    end
+
     ENV['SCHEMA'] = 'db/oracle_schema.rb'
     Rails.configuration.active_record.schema_format = ActiveRecord.schema_format = :ruby
 
