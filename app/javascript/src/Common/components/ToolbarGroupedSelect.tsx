@@ -5,9 +5,9 @@ import {
   SelectOption
 } from '@patternfly/react-core'
 
+import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 import { toSelectOptionObject } from 'utilities/patternfly-utils'
 
-import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 import type { SelectProps } from '@patternfly/react-core'
 
 interface Item {

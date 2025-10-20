@@ -19,8 +19,8 @@ import {
 
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { NoMatchFound } from 'Common/components/NoMatchFound'
-
 import type { IRecord } from 'utilities/patternfly-utils'
+
 import type {
   IRow,
   IRowCell,
@@ -33,7 +33,6 @@ import './TableModal.scss'
 interface Props<T extends IRecord> {
   title: string;
   selectedItem: T | null;
-  disabledItems?: T[];
   pageItems?: T[];
   itemsCount: number;
   onSelect: (selected: T | null) => void;
@@ -66,7 +65,6 @@ const TableModal = <T extends IRecord>({
   isOpen,
   isLoading = false,
   selectedItem,
-  disabledItems,
   pageItems = emptyArray,
   itemsCount,
   onSelect,
@@ -123,18 +121,10 @@ const TableModal = <T extends IRecord>({
     />
   )
 
-  const rows: IRow[] = pageItems.map((i) => {
-    const isSelected = i.id === selected?.id
-    const isDisabled = disabledItems?.some(disabled => disabled.id === i.id)
-
-    return {
-      selected: isSelected,
-      isRowSelected: isSelected,
-      isHoverable: !isDisabled,
-      disableSelection: isDisabled,
-      cells: cells.map(({ propName }) => i[propName]) as IRowCell[]
-    }
-  })
+  const rows: IRow[] = pageItems.map((i) => ({
+    selected: i.id === selected?.id,
+    cells: cells.map(({ propName }) => i[propName]) as IRowCell[]
+  }))
 
   const onAccept = () => {
     onSelect(selected)
@@ -149,7 +139,7 @@ const TableModal = <T extends IRecord>({
     <Button
       key="Select"
       data-testid="select"
-      isDisabled={selected === null || isLoading || disabledItems?.includes(selected)}
+      isDisabled={selected === null || isLoading}
       variant="primary"
       onClick={onAccept}
     >
@@ -201,12 +191,7 @@ const TableModal = <T extends IRecord>({
           onSelect={handleOnSelect}
         >
           <TableHeader />
-          <TableBody onRowClick={(_e, row, rowProps) => {
-            if (rowProps.rowIndex !== undefined) {
-              handleOnSelect(undefined, undefined, rowProps.rowIndex)
-            }
-          }}
-          />
+          <TableBody />
         </Table>
       )}
       <Toolbar>

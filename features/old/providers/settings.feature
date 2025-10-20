@@ -25,14 +25,12 @@ Feature: Settings management
 
   Scenario: Account approval required checkbox is disabled
     Given the provider has multiple account plans
-    And the provider has the following setting:
-      | Account plans UI visible | true |
+    And the provider has "Account plans UI visible" set to "true"
     When I go to the usage rules settings page
     Then field "Account approval required" is disabled
 
   Scenario: Account approval required checkbox is not visible
     Given the provider has multiple account plans
-    And the provider has the following setting:
-      | Account plans UI visible | false |
+    And the provider has "Account plans UI visible" set to "false"
     When I go to the usage rules settings page
     Then I should not see "Account approval required"

@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
 
 import type { Props } from 'utilities/ReCaptchaV3'
+
 import type { FunctionComponent } from 'react'
 
 const ReCaptchaV3 = jest.requireActual('utilities/ReCaptchaV3').ReCaptchaV3 as FunctionComponent<Props>

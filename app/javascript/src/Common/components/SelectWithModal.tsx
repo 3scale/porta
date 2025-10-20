@@ -4,10 +4,10 @@ import escapeRegExp from 'lodash.escaperegexp'
 
 import { FancySelect } from 'Common/components/FancySelect'
 import { TableModal } from 'Common/components/TableModal'
-import { ModalTableCollection } from 'utilities/ModalTableCollection'
-
+import { paginateCollection } from 'utilities/paginateCollection'
 import type { IRecord } from 'utilities/patternfly-utils'
-import type { FetchPaginatedParams, FetchItemsResponse } from 'utilities/ajax'
+import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
+
 import type { ITransform } from '@patternfly/react-table'
 
 import './SelectWithModal.scss'
@@ -28,7 +28,7 @@ interface Props<T extends IRecord> {
   searchPlaceholder?: string;
   footerLabel: string;
   helperTextInvalid?: string;
-  fetchItems?: (params: FetchPaginatedParams) => FetchItemsResponse<T>;
+  fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>;
 }
 
 const PER_PAGE = 5
@@ -57,7 +57,7 @@ const SelectWithModal = <T extends IRecord>({
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [query, setQuery] = useState('')
-  const [paginatedCollection, setPaginatedCollection] = useState(() => new ModalTableCollection(initialItems))
+  const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(initialItems, PER_PAGE))
 
   const shouldHaveModal = itemsCount > MAX_ITEMS
 
@@ -79,7 +79,7 @@ const SelectWithModal = <T extends IRecord>({
       return
     }
 
-    const pageItems = paginatedCollection.get(page)
+    const pageItems = pageDictionary[page]
     const pageIsEmpty = pageItems === undefined || pageItems.length === 0
     const thereAreMoreItems = itemsCount > (page - 1) * PER_PAGE
 
@@ -88,7 +88,7 @@ const SelectWithModal = <T extends IRecord>({
 
       fetchItems({ page, perPage: PER_PAGE, query })
         .then(({ items: newItems, count: newCount }) => {
-          paginatedCollection.set(page, newItems)
+          setPageDictionary({ ...pageDictionary, [page]: newItems })
           setCount(newCount)
         })
         .catch(() => {
@@ -120,7 +120,7 @@ const SelectWithModal = <T extends IRecord>({
   }, [query])
 
   const setSearchResults = (items: T[], newCount: number) => {
-    setPaginatedCollection(new ModalTableCollection(items))
+    setPageDictionary(paginateCollection(items, PER_PAGE))
     setCount(newCount)
     setPage(1)
   }
@@ -173,7 +173,7 @@ const SelectWithModal = <T extends IRecord>({
           isOpen={modalOpen}
           itemsCount={count}
           page={page}
-          pageItems={paginatedCollection.get(page)}
+          pageItems={pageDictionary[page]}
           searchPlaceholder={searchPlaceholder}
           searchQuery={query}
           selectedItem={item}

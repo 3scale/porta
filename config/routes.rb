@@ -1033,11 +1033,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
         resource :forum, only: [:edit, :update]
         resource :spam_protection, only: [:edit, :update]
-        resource :emails, only: [ :edit, :update ] do
-          member do
-            get :fetch_services, constraints: { format: :json }, defaults: { format: :json }
-          end
-        end
+        resource :emails, only: [ :edit, :update ]
       end
     end
     scope as: :admin, &admin_module

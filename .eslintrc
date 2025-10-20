@@ -54,11 +54,6 @@
     "@typescript-eslint/no-magic-numbers": "off",
     "@typescript-eslint/parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
-    "@typescript-eslint/lines-between-class-members": ["error", {
-      "enforce": [
-        { "blankLine": "never", "prev": "field", "next": "field" }
-      ]
-    }],
     "@typescript-eslint/promise-function-async": "off",
     "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of lines-around-comment
     "@typescript-eslint/no-namespace": ["error", { "allowDeclarations": true }], // to allow `declare global { namespace jest { ... } }` for custom Jest matchers
@@ -117,7 +112,6 @@
         "pattern": "**/*.scss",
         "group": "sibling",
       }],
-      "pathGroupsExcludedImportTypes": ["type"],
       "newlines-between": "always",
       // "distinctGroup": "false" // TODO: config not yet available.
     }],

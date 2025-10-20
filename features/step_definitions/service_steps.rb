@@ -102,10 +102,6 @@ When "an admin is reviewing services index page" do
   visit admin_services_path
 end
 
-Then "{product}'s {} should (still )be {string}" do |product, name, value|
-  assert_equal value, product.send(underscore_spaces(name))
-end
-
 def backends_used_table
   find('#backends-used-list-container')
 end

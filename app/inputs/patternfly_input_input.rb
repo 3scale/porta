@@ -19,8 +19,6 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
   end
 
   def label
-    return ''.html_safe unless render_label?
-
     tag.div(class: 'pf-c-form__group-label') do
       tag.label(class: 'pf-c-form__label', for: input_html_options[:id]) do
         tag.span(label_text, class: 'pf-c-form__label-text')
@@ -36,14 +34,8 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
   def input_group
     tag.div(class: "pf-c-input-group") do
-      prefix + input + action
+      input + action
     end
-  end
-
-  def prefix
-    return ''.html_safe unless (text = options.delete(:prefix))
-
-    tag.span text, class: 'pf-c-input-group__text'
   end
 
   def input
@@ -52,22 +44,11 @@ class PatternflyInputInput < Formtastic::Inputs::StringInput
 
   def action
     action_html_options = options.delete(:action)
-    return ''.html_safe if action_html_options.nil?
+    return nil if action_html_options.nil?
 
-    if action_html_options.is_a?(Symbol)
-      case action_html_options
-      when :remove
-        tag.button(class: 'pf-c-button pf-m-plain', type: 'button', aria: { label: 'Remove' }) do
-          tag.i(class: 'fas fa-minus-circle', aria: { hidden: 'true' })
-        end
-      else
-        raise ArgumentError, "'#{action_html_options}' is not a valid action. Did you mean 'remove'?"
-      end
-    else
-      action_title = action_html_options.delete(:title)
-      action_html_options.reverse_merge!(class: 'pf-c-button pf-m-primary')
-      tag.button(action_title, **action_html_options)
-    end
+    action_title = action_html_options.delete(:title)
+    action_html_options.reverse_merge!(class: 'pf-c-button pf-m-primary')
+    tag.button(action_title, **action_html_options)
   end
 
   def helper_text

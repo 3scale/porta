@@ -70,12 +70,6 @@ class ServiceDecorator < ApplicationDecorator
            .size
   end
 
-  def as_json(options = {})
-    return super unless options[:js]
-
-    super.deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
-  end
-
   private
 
   def backend_api?

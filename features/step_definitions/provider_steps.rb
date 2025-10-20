@@ -238,19 +238,6 @@ Given(/^a provider( is logged in)? with a product "([^"]*)"$/) do |login, name|
   @service = @provider.services.create!(name: name, mandatory_app_key: false)
 end
 
-# Set up a provider with specific data. Example:
-#
-# Given a provider with:
-#   | org_name      | Bananas          |
-#   | support_email | support@api.test |
-#
-Given "a provider with:" do |table|
-  setup_provider(false)
-
-  parameterize_headers(table)
-  @provider.update! table.rows_hash
-end
-
 def setup_provider(login)
   create_provider_with_plan("foo.3scale.localhost", ApplicationPlan.first)
   set_current_domain(@provider.external_admin_domain)
@@ -260,14 +247,6 @@ def setup_provider(login)
 
   try_provider_login('foo.3scale.localhost', 'supersecret')
   assert user_is_logged_in('foo.3scale.localhost')
-end
-
-Given "{provider} has {} set to {string}" do |provider, name, value|
-  provider.update_attribute(underscore_spaces(name), value) # rubocop:disable Rails/SkipsModelValidations
-end
-
-Then "{provider}'s {} should (still )be {string}" do |provider, name, value|
-  assert_equal value, provider.send(underscore_spaces(name))
 end
 
 def create_provider_with_plan(name, plan) # TODO: RENAME THIS NOWWW
