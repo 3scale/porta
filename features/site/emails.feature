@@ -43,7 +43,7 @@ Feature: Audience > Messages > Settings > Support emails
     And fill in "Bananas" with "help@bananas.org"
     And press "Save support email for Bananas"
     And 1 second pass
-    Then they should see a toast alert with text "Product information updated"
+    Then they should see a toast alert with text "Support email updated successfully"
     And the product's support email should be "help@bananas.org"
 
   Scenario: Edit a custom support email of a product
@@ -54,7 +54,7 @@ Feature: Audience > Messages > Settings > Support emails
     And fill in "Bananas" with "new-help@bananas.org"
     And press "Save support email for Bananas"
     And 1 second pass
-    Then they should see a toast alert with text "Product information updated"
+    Then they should see a toast alert with text "Support email updated successfully"
     And the product's support email should be "new-help@bananas.org"
 
   Scenario: Remove a custom support email of a product
@@ -64,7 +64,7 @@ Feature: Audience > Messages > Settings > Support emails
     When they press "Remove support email for Bananas"
     And confirm the dialog
     And 1 second pass
-    Then they should see a toast alert with text "Product information updated"
+    Then they should see a toast alert with text "Custom support email removed from product"
     And the product's support email should be "support@api.test"
 
   Scenario: DNS domains are readonly
@@ -117,7 +117,7 @@ Feature: Audience > Messages > Settings > Support emails
     And fill in "Bananas" with "invalid@email"
     And press "Save support email for Bananas"
     And 1 second pass
-    Then they should see a danger toast alert with text "Couldn't update Product"
+    Then they should see a danger toast alert with text "Couldn't update support email"
     And the product's support email should still be "support@api.test"
 
   Scenario: Cancel adding custom support email

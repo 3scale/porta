@@ -1339,6 +1339,10 @@ en:
       update:
         success: Product information updated
         error: Couldn't update Product
+      support_email:
+        remove_success: Custom support email removed from product
+        update_success: Support email updated successfully
+        error: Couldn't update support email
     supports:
       update:
         success: Support information was updated

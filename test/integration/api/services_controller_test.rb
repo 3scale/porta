@@ -362,6 +362,29 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  class SupportEmailTest < self
+    test 'updates support email successfully' do
+      service.update_column(:support_email, nil) # Ensure it starts as nil
+
+      patch support_email_admin_service_path(service), params: { support_email: 'support@example.com' }
+
+      assert_response :success
+      json_response = JSON.parse(response.body)
+      assert json_response['success']
+      assert_equal 'Support email updated successfully', json_response['message']
+      assert_equal 'support@example.com', service.reload.support_email
+    end
+
+    test 'returns error for invalid email' do
+      patch support_email_admin_service_path(service), params: { support_email: 'invalid-email' }
+
+      assert_response :success
+      json_response = JSON.parse(response.body)
+      assert_not json_response['success']
+      assert_equal "Couldn't update support email", json_response['message']
+    end
+  end
+
   class MemberPermissions < self
     def setup
       super
