@@ -1,5 +1,9 @@
 require "active_support/core_ext/integer/time"
 
+# Needed by Unicorn to disable redundant logging and processing
+# see THREESCALE-12007 and https://github.com/defunkt/unicorn/blob/e9862718a7e98d3cbec74fc92ffc17a1023e18da/lib/unicorn.rb#L79-L86
+ENV["RACK_ENV"] = "deployment"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
