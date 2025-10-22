@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# IMPORTANT: make sure this hook is defined **before** the one that saves screenshots,
+# because the After hooks run in the reverse order in which they are defined.
+After("@javascript") do
+  Capybara.page&.driver&.quit
+end
+
 Around '@security' do |scenario, block|
   with_forgery_protection(&block)
 end
@@ -198,10 +204,6 @@ After do |scenario| # rubocop:disable Metrics/BlockLength
   rescue Capybara::NotSupportedByDriverError
     # and that is fine! rack-test does not support screenshots
   end
-end
-
-After("@javascript") do
-  Capybara.page&.driver&.quit
 end
 
 After do |scenario|
