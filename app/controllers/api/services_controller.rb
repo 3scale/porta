@@ -47,6 +47,7 @@ class Api::ServicesController < Api::BaseController
     render :settings
   end
 
+  # Smells of :reek:NilCheck and it's OK
   def support_email
     support_email = params[:support_email]
     if @service.update(support_email:)
