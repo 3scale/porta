@@ -39,6 +39,7 @@ exclude_patterns = [
   "lib/developer_portal/app/views/developer_portal/css/*",
   "lib/developer_portal/app/views/developer_portal/javascripts/*",
   "public/**",
+  "app/javascript/src/utilities/animate.css"
 ]
 
 test_patterns = [
@@ -87,7 +88,6 @@ version = "6.5.0"
 
 [[plugin]]
 name = "rubocop"
-extra_packages = ["rubocop-rails@2.33.3", "rubocop-performance@1.25.0"]
 package_file = "Gemfile"
 package_filters = ["rubocop"]
 version = "1.79.2"
