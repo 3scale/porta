@@ -234,8 +234,8 @@ describe('when there are products with custom support emails', () => {
     act(() => { onSave({ current: input }) })
     await waitForPromises(wrapper)
 
-    expect(patch).toHaveBeenCalledWith(`/apiconfig/services/${exception.id}`, {
-      service: { support_email: newEmail }
+    expect(patch).toHaveBeenCalledWith(`/apiconfig/services/${exception.id}/support_email`, {
+      support_email: newEmail
     })
     expect(toast).toHaveBeenCalledTimes(1)
     expect(toast).toHaveBeenCalledWith(message, 'success')
@@ -292,8 +292,8 @@ describe('when there are products with custom support emails', () => {
     act(() => { wrapper.find(Exception).find('[aria-label^="Remove"]').first().simulate('click') })
     await waitForPromises(wrapper)
 
-    expect(patch).toHaveBeenCalledWith(`/apiconfig/services/${exception.id}`, {
-      service: { support_email: null }
+    expect(patch).toHaveBeenCalledWith(`/apiconfig/services/${exception.id}/support_email`, {
+      support_email: null
     })
     expect(toast).toHaveBeenCalledWith(message, 'danger')
   })

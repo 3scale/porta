@@ -791,6 +791,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           member do
             get :settings
             get :usage_rules
+            patch :support_email
           end
           resource :support, :only => [:edit, :update]
           resource :content, :only => [:edit, :update]

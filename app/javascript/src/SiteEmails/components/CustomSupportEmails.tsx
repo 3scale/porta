@@ -127,16 +127,12 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
       return
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const body = { service: { support_email: value } }
-
     const { id } = exceptionBeingEdited
 
     setIsEditLoading(true)
-    void patch(`/apiconfig/services/${id}`, body)
-      .then(({ success, message }) => {
+    void patchSupportEmail(id, value)
+      .then((success) => {
         if (success) {
-          toast(message, 'success')
           setExceptionBeingEdited(undefined)
           setEditError(undefined)
           setExceptions(exceptions.map(e => e.id === id ? { ...e, supportEmail: value } : e))
@@ -145,7 +141,6 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
             paginatedCollection.clear()
           }
         } else {
-          toast(message, 'danger')
           setEditError('error')
         }
       })
@@ -172,22 +167,28 @@ const CustomSupportEmails: React.FunctionComponent<Props> = ({
 
   const handleOnRemove = (id: number) => {
     if (window.confirm(removeConfirmation)) {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const body = { service: { support_email: null } }
-
       setIsRemoveLoading(true)
-      void patch(`/apiconfig/services/${id}`, body)
-        .then(({ success, message }) => {
+      void patchSupportEmail(id, null)
+        .then((success) => {
           if (success) {
-            toast(message, 'success')
             setExceptions(exceptions.filter(e => e.id !== id))
-            paginatedCollection.clear()
-          } else {
-            toast(message, 'danger')
           }
         })
         .finally(() => { setIsRemoveLoading(false) })
     }
+  }
+
+  const patchSupportEmail = (id: number, newEmail: string | null) => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return patch(`/apiconfig/services/${id}/support_email`, { support_email: newEmail })
+      .then(({ success, message }) => {
+        if (success) {
+          toast(message, 'success')
+        } else {
+          toast(message, 'danger')
+        }
+        return success
+      })
   }
 
   return (
