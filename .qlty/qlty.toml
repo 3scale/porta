@@ -96,5 +96,11 @@ version = "1.79.2"
 name = "shellcheck"
 
 [[plugin]]
+name = "eslint"
+version = "7.32.0"
+package_file = "package.json"
+package_filters = ["eslint"]
+
+[[plugin]]
 name = "stylelint"
 extra_packages = ["stylelint-config-recommended@latest"]
