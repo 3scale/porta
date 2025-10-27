@@ -3,22 +3,26 @@
 
   ul > li[aria-controls="#{$name}"] {
     a:hover {
-      border-bottom: line-height-times(1/4) $color solid;
+      border-bottom: line-height-times(1 / 4) $color solid;
       color: $color;
     }
 
     &.ui-tabs-active a {
-      border-bottom: line-height-times(1/4) $color solid;
+      border-bottom: line-height-times(1 / 4) $color solid;
       color: $color;
     }
   }
 
   & > div[id="#{$name}"] {
-    i.fa { color: $color; }
-    h1 { color: $color }
+    i.fa {
+      color: $color;
+    }
+
+    h1 {
+      color: $color
+    }
   }
 }
-
 
 #cms-intro-tabs {
   $icon-height: $line-height-base;
@@ -57,10 +61,10 @@
 
       a {
         min-width: line-height-times(4);
-        padding: line-height-times(1/2);
+        padding: line-height-times(1 / 2);
         margin-right: line-height-times(1);
         padding-left: 0;
-        border-bottom: line-height-times(1/4) $border-color solid;
+        border-bottom: line-height-times(1 / 4) $border-color solid;
         display: block;
       }
     }
@@ -73,23 +77,25 @@
     ul {
       list-style: none outside;
 
+      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
       li {
         margin-left: 0;
-     }
+      }
     }
 
     p {
 
-     em[id] {
-       cursor: help;
-       border-bottom: $border-width dashed $border-color;
-       font-weight: $font-weight-bold;
-       font-type: normal;
-     }
+      em[id] {
+        cursor: help;
+        border-bottom: $border-width dashed $border-color;
+        font-weight: $font-weight-bold;
+        /* stylelint-disable-next-line property-no-unknown -- FIXME: this is probably just wrong */
+        font-type: normal;
+      }
 
-     a {
-       text-decoration: underline;
-     }
+      a {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -100,7 +106,8 @@
 
 
 #cms-sidebar {
-  li.glowing.active, li.glowing {
+  li.glowing.active,
+  li.glowing {
     background-color: $glow-background-color;
   }
 
@@ -108,30 +115,25 @@
     background-color: $glow-background-color;
     color: $glow-color !important;
 
-    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-      background-color: $glow-background-color;
-      color: $glow-color !important;
-    }
-    &::-moz-placeholder { /* Firefox 19+ */
-      background-color: $glow-background-color;
-      color: $glow-color !important;
-    }
-    &:-moz-placeholder { /* Firefox 18- */
+    /* stylelint-disable-next-line selector-no-vendor-prefix -- FIXME: probably deprecated */
+    &::-webkit-input-placeholder, &::-moz-placeholder, &:-moz-placeholder {
+      /* Chrome/Opera/Safari/Firefox 19+/Firefox 18- */
       background-color: $glow-background-color;
       color: $glow-color !important;
     }
   }
 }
 
-#recent-templates{
+#recent-templates {
   @extend .left-column;
 
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   a {
     max-width: 96%;
     display: inline-block;
-    @include ellipsis();
+
+    @include ellipsis;
+
     padding-right: 4%;
-
-
   }
 }

@@ -1,123 +1,36 @@
-extends: stylelint-config-recommended
+extends: stylelint-config-standard-scss
 
 rules:
-  alpha-value-notation:
-    - percentage
-    - exceptProperties:
-        - opacity
-        - fill-opacity
-        - flood-opacity
-        - stop-opacity
-        - stroke-opacity
+  scss/at-extend-no-missing-placeholder: false
+  scss/dollar-variable-pattern: false
+  scss/at-function-pattern: false # TODO: we should standardize function names
 
-  at-rule-empty-line-before:
-    - always
-    - except:
-        - blockless-after-same-name-blockless
-        - first-nested
-      ignore:
-        - after-comment
+  alpha-value-notation: number # TODO: Sass is too old, this should be percentage
 
-  at-rule-no-vendor-prefix: true
-  block-no-redundant-nested-style-rules: true
-  color-function-alias-notation: without-alpha
-  color-function-notation: modern
-  color-hex-length: short
-
-  comment-empty-line-before:
-    - always
-    - except:
-        - first-nested
-      ignore:
-        - stylelint-commands
-
-  comment-whitespace-inside: always
-
-  container-name-pattern:
-    - '^(--)?([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected container name "${name}" to be kebab-case'
-
-  custom-property-empty-line-before:
-    - always
-    - except:
-        - after-custom-property
-        - first-nested
-      ignore:
-        - after-comment
-        - inside-single-line-block
-
-  custom-media-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected custom media query name "${name}" to be kebab-case'
+  color-function-alias-notation: false # TODO: make it 'without-alpha'
+  color-function-notation: legacy # TODO: make it 'modern'
 
   custom-property-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected custom property name "${name}" to be kebab-case'
+    - '[a-z]+(-{1,2}[a-zA-z0-9]+)+$'
+    - message: 'Expected custom property name "${name}" to follow PatternFly convention'
 
-  declaration-block-no-redundant-longhand-properties: true
-  declaration-block-single-line-max-declarations: 1
-
-  declaration-empty-line-before:
-    - always
-    - except:
-        - after-declaration
-        - first-nested
-      ignore:
-        - after-comment
-        - inside-single-line-block
-
-  font-family-name-quotes: always-where-recommended
-  function-name-case: lower
-  function-url-quotes: always
-  hue-degree-notation: angle
-  import-notation: url
-  keyframe-selector-notation: percentage-unless-within-keyword-only-block
-
-  keyframes-name-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected keyframe name "${name}" to be kebab-case'
-
-  layer-name-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected layer name "${name}" to be kebab-case'
-
-  length-zero-no-unit:
+  font-family-no-missing-generic-family-keyword:
     - true
-    - ignore:
-        - custom-properties
+    - ignoreFontFamilies:
+      - FontAwesome
 
-  lightness-notation: percentage
-  media-feature-name-no-vendor-prefix: true
-  media-feature-range-notation: context
-  number-max-precision: 4
-  property-no-vendor-prefix: true
+  media-feature-range-notation: prefix
 
   rule-empty-line-before:
     - always-multi-line
     - except:
-        - first-nested
-      ignore:
-        - after-comment
+      - first-nested
+      - after-first-line-comment
+    - ignore:
+      - after-comment
 
-  selector-attribute-quotes: always
+  selector-class-pattern: false # TODO: we should standardize class names
 
-  selector-class-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected class selector "${selector}" to be kebab-case'
+  selector-id-pattern: false # TODO: we should standardize id names
 
-  selector-id-pattern:
-    - '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
-    - message: 'Expected id selector "${selector}" to be kebab-case'
-
-  selector-no-vendor-prefix: true
-  selector-not-notation: complex
-  selector-pseudo-element-colon-notation: double
-  selector-type-case: lower
-  shorthand-property-no-redundant-values: true
   value-keyword-case: lower
-
-  value-no-vendor-prefix:
-    - true
-    - ignoreValues:
-        - box
-        - inline-box

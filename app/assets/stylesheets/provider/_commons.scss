@@ -1,12 +1,9 @@
-@import 'provider/layouts/main';
-
 html {
-  @include typography-base();
+  @include typography-base;
 }
 
 body {
   text-align: center;
-  //@include debug-vertical-rhythm;
 }
 
 main > h1,
@@ -22,22 +19,26 @@ main > h2:first-child {
   padding: line-height-times(1);
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 h1 {
   font-size: $main-title-font-size;
   font-weight: $font-weight-light;
-  padding-top: line-height-times(1/3);
-  margin-bottom: line-height-times(2/3);
+  padding-top: line-height-times(1 / 4);
+  margin-bottom: line-height-times(2 / 3);
 
   a {
     text-decoration: none;
   }
 }
 
-h2, h3 {
-  margin-bottom: line-height-times(1/2);
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
+h2,
+h3 {
+  margin-bottom: line-height-times(1 / 2);
 }
 
 #cboxWrapper h2,
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 .pf-c-page__main-section h2 {
   font-weight: $font-weight-bold;
   font-size: $secondary-title-font-size;
@@ -53,7 +54,7 @@ h2, h3 {
 }
 
 p {
-  margin: line-height-times(1/2) 0 line-height-times(1) 0;
+  margin: line-height-times(1 / 2) 0 line-height-times(1);
 }
 
 // HACK: this gives card-like style to all pre-existing divs
@@ -66,6 +67,7 @@ p {
 
 main > p:not(:first-child) {
   @include white-box-shadow;
+
   padding: line-height-times(1);
 }
 
@@ -75,51 +77,50 @@ main > h2:first-child + p {
   margin: line-height-times(-2) line-height-times(-1) line-height-times(1);
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 dd p {
   margin: 0;
 }
 
 pre:not(.pf-c-code-block__pre) {
-  margin: line-height-times(1/2) 0;
+  margin: line-height-times(1 / 2) 0;
 }
 
 * {
   margin: 0;
 }
 
-ul, p, ol, dl {
+ul,
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
+p,
+ol,
+dl {
   padding: 0;
 }
 
 p + ul {
   list-style: none;
-  padding-left: line-height-times(2/3);
+  padding-left: line-height-times(2 / 3);
 }
 
 %dl {
   padding: 0;
-  margin-top: line-height-times(1/2);
-  margin-bottom: line-height-times(1/2);
+  margin-top: line-height-times(1 / 2);
+  margin-bottom: line-height-times(1 / 2);
   display: block;
 }
 
 %dt {
-  //color: $label-color;
   float: left;
   margin: 0;
-  //text-align: right;
-  width: 40%;;
+  width: 40%;
   clear: left;
-  padding-top: line-height-times(1/2);
-
-  &::after {
-    //content: ':';
-  }
+  padding-top: line-height-times(1 / 2);
 }
 
 %dd {
   min-height: line-height-times(2);
-  padding: line-height-times(1/2) 0 line-height-times(1/2) 40%;
+  padding: line-height-times(1 / 2) 0 line-height-times(1 / 2) 40%;
   border-bottom: $border-width solid $border-color;
   list-style: none;
 }
@@ -142,6 +143,7 @@ p + ul {
 }
 
 .u-dl-definition {
+  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- FIXME: update Sass */
   word-break: break-word;
 }
 
@@ -164,9 +166,9 @@ a img {
 
 pre code:not(.pf-c-code-block__code) {
   border-radius: $border-radius;
-  margin: line-height-times(1/2) 0 line-height-times(1);
+  margin: line-height-times(1 / 2) 0 line-height-times(1);
   overflow: hidden;
-  padding: line-height-times(1/2);
+  padding: line-height-times(1 / 2);
   background-color: $light-background-color;
   border: $border-width solid $border-color;
 
@@ -178,7 +180,7 @@ pre code:not(.pf-c-code-block__code) {
 
 .u-divider {
   height: line-height-times(1);
-  margin: line-height-times(1/2) 0;
+  margin: line-height-times(1 / 2) 0;
 }
 
 .u-subtle {
@@ -190,16 +192,12 @@ pre code:not(.pf-c-code-block__code) {
 }
 
 .u-hr,
-hr, {
+hr {
   border: 0;
   border-bottom: $border-width solid $border-color;
 }
 
 ::selection {
-  background: $select-color;
-}
-
-::-moz-selection {
   background: $select-color;
 }
 
@@ -209,5 +207,5 @@ hr, {
 }
 
 .pf-m-force-float-right {
-  float: right !important; /* scss-lint:disable ImportantRule */
+  float: right !important;
 }

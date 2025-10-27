@@ -1,14 +1,18 @@
 .InfoBox {
   @include white-box-shadow;
+
   display: block;
-  margin: line-height-times(1/2) 0;
+  margin: line-height-times(1 / 2) 0;
   padding: line-height-times(1);
 
   &--notice {
     background: $dirty-color;
   }
 
-  p, form, form li, fieldset {
+  p,
+  form,
+  form li,
+  fieldset {
     max-width: 100% !important;
   }
 
@@ -24,6 +28,6 @@
 
 .api-docs-wrap {
   @include white-box-shadow;
+
   padding: line-height-times(1);
 }
-

@@ -35,7 +35,7 @@
 
 .apiContainer {
   display: grid;
-  grid-gap: 16px;
+  gap: 16px;
   grid-template-columns: 1fr 1fr;
 }
 
@@ -53,6 +53,7 @@ button.pf-c-button.pf-m-primary.pf-c-button__float-button {
     position: absolute;
     right: 0;
     transform: rotate(-90deg);
+
     a {
       text-decoration: none;
       color: inherit;

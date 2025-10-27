@@ -1,7 +1,6 @@
 #integration-tabs {
-  .staging, .production {
-    //margin: 0 -25px 0 -25px;
-    //padding: 25px 25px 0 25px;
+  .staging,
+  .production {
 
     h1 {
       margin-bottom: 2em;
@@ -40,8 +39,9 @@
   }
 
 
-  .proxy-on-premise, .proxy-hosted-3scale {
-    margin: 25px 0 0 0;
+  .proxy-on-premise,
+  .proxy-hosted-3scale {
+    margin: 25px 0 0;
     border-top: 1px solid $border-color;
     padding: 0;
   }

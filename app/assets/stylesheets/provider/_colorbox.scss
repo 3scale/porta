@@ -1,10 +1,12 @@
-#colorbox, #cboxOverlay, #cboxWrapper{
-  position:absolute;
+#colorbox,
+#cboxOverlay,
+#cboxWrapper {
+  position: absolute;
   top: 0;
-  left:0;
+  left: 0;
   z-index: 599;
-  overflow:hidden;
-  -webkit-transform: translate3d(0,0,0);
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
   min-width: line-height-times(20);
 }
 
@@ -13,7 +15,7 @@
 }
 
 #colorbox {
-  box-shadow: 0 0 line-height-times(1/2) $box-shadow-color;
+  box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
   background: rgba($body-background, .99);
   border: $border-width solid $border-color;
   text-align: left;
@@ -32,7 +34,9 @@
       margin-left: 0 !important;
     }
 
-    table, tr, td {
+    table,
+    tr,
+    td {
       height: auto;
 
       label {
@@ -46,26 +50,27 @@
   }
 }
 
-#cboxOverlay{
-  position:fixed;
-  width:100%;
-  height:100%;
+#cboxOverlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
   background: rgba($content-background, .8);
 }
 
-#cboxMiddleLeft, #cboxBottomLeft {
-  clear:left;
+#cboxMiddleLeft,
+#cboxBottomLeft {
+  clear: left;
 }
 
-#cboxContent{
-  position:relative;
+#cboxContent {
+  position: relative;
   padding: line-height-times(2) line-height-times(1) line-height-times(1);
   width: auto !important;
   min-width: line-height-times(20);
 }
 
-#cboxLoadedContent{
-  overflow:auto;
+#cboxLoadedContent {
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 
   h1 {
@@ -83,16 +88,16 @@
   }
 }
 
-#cboxTitle{
-  position:absolute;
+#cboxTitle {
+  position: absolute;
   top: line-height-times(1);
   left: line-height-times(1);
   color: $label-color;
 }
 
-#cboxClose{
+#cboxClose {
   position: absolute;
-  top: line-height-times(2/3);
+  top: line-height-times(2 / 3);
   right: line-height-times(1);
   width: line-height-times(1);
   height: line-height-times(2);
@@ -101,8 +106,9 @@
   background-color: transparent;
   cursor: pointer;
 
-  &:after {
+  &::after {
     @include iconic("\f057\0000a0");
+
     position: absolute;
     top: 0;
     right: -0.2rem;

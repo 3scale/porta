@@ -30,10 +30,13 @@
     }
 
     i.fa {
-      i.fa { color: $link-color; }
+      i.fa {
+        color: $link-color;
+      }
     }
 
-    &.active, &:hover {
+    &.active,
+    &:hover {
       color: $menu-active-color;
 
       i.fa {
@@ -42,13 +45,14 @@
     }
   }
 
-  [data-filter-type], [data-filter-origin] {
+  [data-filter-type],
+  [data-filter-origin] {
     cursor: pointer;
   }
 }
 
 *:focus {
-    outline: none;
+  outline: none;
 }
 
 @mixin cms-sidebar-toolbar {
@@ -60,6 +64,7 @@
 
   input {
     width: 100%;
+    /* stylelint-disable-next-line property-no-vendor-prefix -- FIXME: probably outdated */
     -webkit-appearance: textfield; // makes it not round
     border: 0;
     border-top: $border-width solid $border-color;
@@ -70,32 +75,32 @@
 
 #cms-sidebar-filter-origin {
   @include cms-sidebar-toolbar;
+
   border-bottom: $border-width solid $border-color;
 
   li {
-   box-sizing: border-box;
-   height: line-height-times(2);
-   vertical-align: middle;
-   padding-top: line-height-times(1/2);
-   $items: 3;
-   width: 100% / $items;
-   border-left: $border-width solid $border-color;
+    box-sizing: border-box;
+    height: line-height-times(2);
+    vertical-align: middle;
+    padding-top: line-height-times(1 / 2);
+    width: 100% / 3;
+    border-left: $border-width solid $border-color;
 
-   &.active {
-    font-weight: $font-weight-bold;
-   }
+    &.active {
+      font-weight: $font-weight-bold;
+    }
   }
 }
 
 
 #cms-sidebar-filter-type {
   @include cms-sidebar-toolbar;
+
   margin-bottom: -$border-width;
 
   li {
     box-sizing: border-box;
-    $items: 7;
-    width: 100% / $items;
+    width: 100% / 7;
     border-left: $border-width solid $border-color;
   }
 }

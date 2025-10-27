@@ -1,22 +1,8 @@
-.form-control::-moz-placeholder {
-  color: #999999;
-}
-
-.form-control::-moz-placeholder {
-  color: #999999;
-}
-
-.form-control::-ms-input-placeholder {
-  color: #999999;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: #999999;
+.form-control::placeholder {
+  color: #999;
 }
 
 .form-control {
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   font-size: 1rem;
   border: 1px solid #d1d1d1;

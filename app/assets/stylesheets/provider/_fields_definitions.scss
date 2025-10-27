@@ -5,13 +5,14 @@
 
   li {
     @include white-box-shadow;
-    background: $background-color-base no-repeat line-height-times(1/2) center image-url("drag-icon.png");
-    margin-bottom: line-height-times(1/2);
+
+    background: $background-color-base no-repeat line-height-times(1 / 2) center image-url("drag-icon.png");
+    margin-bottom: line-height-times(1 / 2);
     overflow: visible !important;
-    padding: line-height-times(1/2) 0 line-height-times(1/2) line-height-times(1);
+    padding: line-height-times(1 / 2) 0 line-height-times(1 / 2) line-height-times(1);
 
     &.ui-sortable-helper {
-      box-shadow: 0 0 line-height-times(1/2) $box-shadow-color;
+      box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
     }
 
     .name {
@@ -21,17 +22,18 @@
     }
 
     .properties {
-      margin-right: line-height-times(1/2);
+      margin-right: line-height-times(1 / 2);
       font-style: italic;
     }
 
     .action-set {
       float: right;
-      margin-right: line-height-times(1/2);
+      margin-right: line-height-times(1 / 2);
     }
   }
 }
-  a.new-field-definition.add {
-    float: right;
-    margin-top: line-height-times(-1);
+
+a.new-field-definition.add {
+  float: right;
+  margin-top: line-height-times(-1);
 }
