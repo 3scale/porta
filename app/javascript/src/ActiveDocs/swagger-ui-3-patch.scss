@@ -9,10 +9,7 @@ $opblock-summary-bg: #e7f0f7;
 
   .wrapper {
     background-color: $wrapper-bg;
-    padding-bottom: 4em;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 2em;
+    padding-top: 2em 30px 4em 30px;
   }
 
   .information-container {
@@ -25,6 +22,7 @@ $opblock-summary-bg: #e7f0f7;
         font-family: Futura, "Trebuchet MS", Arial, sans-serif;
         font-size: 25px;
       }
+
       .main {
         small,
         pre,
@@ -52,7 +50,7 @@ $opblock-summary-bg: #e7f0f7;
 
     .opblock-tag-section {
       .nostyle {
-        font-family: Droid Sans, sans-serif;
+        font-family: "Droid Sans", sans-serif;
         font-size: 1.6rem;
         font-weight: 700;
       }
@@ -86,8 +84,8 @@ $opblock-summary-bg: #e7f0f7;
     }
 
     .opblock-tag {
-      a,
-      small,
+      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
+      a, small,
       div {
         display: inline-block;
       }

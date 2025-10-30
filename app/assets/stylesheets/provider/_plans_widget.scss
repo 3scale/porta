@@ -74,7 +74,7 @@ $upgrade-button-width: line-height-times(10);
   }
 
   // MEGA HACK HACK HACK
-  .select-plan-button[data-can-upgrade=false] {
+  .select-plan-button[data-can-upgrade="false"] {
     display: none;
   }
 

@@ -1,11 +1,6 @@
 $fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
 
-form.formtastic:not(.pf-c-form) {
-  ol, ul, li {
-    list-style: none;
-  }
-}
-
+/* stylelint-disable no-descending-specificity -- FIXME */
 input[type='text']:not(.pf-c-form-control, .pf-c-text-input-group__text-input),
 input[type='search']:not(.pf-c-form-control),
 input[type='number'],
@@ -21,16 +16,14 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='tel'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='email'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='url'],
 form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   font-size: $font-size-base;
   border: $border-width solid $border-color;
   color: $font-color;
   background-color: $background-color-base;
   width: 100%;
-  padding: line-height-times(1/4);
-  height: line-height-times(3/2);
+  padding: line-height-times(1 / 4);
+  height: line-height-times(3 / 2);
   border-radius: $border-radius;
   line-height: $line-height-base;
 
@@ -76,20 +69,20 @@ form + hr {
 }
 
 td.delta {
-  //td.delta input[type='text'] {
   max-width: line-height-times(2);
 }
 
 td.delta input[type='text'] {
-  //width: line-height-times(1) !important;
   min-width: 0;
 }
 
 table tr.search {
+
   th input[type='text'],
   th select,
   td input[type='text'],
   td select {
+
     &#search_month_number,
     &#search_year {
       width: 45%;
@@ -103,27 +96,25 @@ th input[type='submit'] {
 
 fieldset ol li input[type='text'] + a {
   float: right;
-  margin-top: line-height-times(-3/2, true);
+  margin-top: line-height-times(-3 / 2, true);
   position: relative;
   z-index: 1000;
-  padding: line-height-times(1/4);
+  padding: line-height-times(1 / 4);
 }
 
 select:not(.pf-c-form-control) {
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:#{$border-color};'/> \
       </svg>");
-  background-position: right line-height-times(1/3) center;
+  background-position: right line-height-times(1 / 4) center;
   background-repeat: no-repeat;
-  background-size: line-height-times(1/3) auto;
+  background-size: line-height-times(1 / 4) auto;
   box-shadow: 0 0 0 transparent;
-  margin: 0 line-height-times(1/4) 0 0;
+  margin: 0 line-height-times(1 / 4) 0 0;
   max-width: calc(100% - #{$border-width}) !important;
-  padding-right: line-height-times(1/2);
+  padding-right: line-height-times(1 / 2);
 
   &:hover,
   &:focus {
@@ -147,7 +138,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox']:active,
 form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   position: relative;
   top: -$border-width; // to make it more or less ok in chrome, firefox and safari
-  margin: 0 line-height-times(1/4) 0 $border-width;
+  margin: 0 line-height-times(1 / 4) 0 $border-width;
   vertical-align: baseline;
   border-radius: $border-radius;
 }
@@ -160,7 +151,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   }
 
   &-inline {
-    margin: line-height-times(1/2) 0;
+    margin: line-height-times(1 / 2) 0;
   }
 
   border-top: 0;
@@ -174,8 +165,8 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
 form.formtastic:not(.pf-c-form) fieldset.actions ol {
 
   li {
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    padding: 0;
+    margin: 0;
 
     &.commit {
       text-align: right;
@@ -183,7 +174,7 @@ form.formtastic:not(.pf-c-form) fieldset.actions ol {
   }
 
   .delete {
-    margin-top: line-height-times(1/4);
+    margin-top: line-height-times(1 / 4);
     float: left;
   }
 }
@@ -196,11 +187,13 @@ form + form .action.delete {
   z-index: 1000;
 }
 
-form.formtastic:not(.pf-c-form) ol > li#api_docs_service_body_input {
-    max-width: 100%;
-}
-
 form.formtastic:not(.pf-c-form) {
+  ol,
+  ul,
+  li {
+    list-style: none;
+  }
+
   #settings,
   #staging {
     .inputs ol {
@@ -210,8 +203,8 @@ form.formtastic:not(.pf-c-form) {
 }
 
 form.formtastic:not(.pf-c-form) ol > li {
-  padding: 0 0 0 0;
-  margin: 0 0 line-height-times(1) 0;
+  padding: 0;
+  margin: 0 0 line-height-times(1);
   max-width: line-height-times(32);
   position: relative;
 
@@ -229,29 +222,34 @@ form.formtastic:not(.pf-c-form) .button-bar fieldset > ol > li {
 }
 
 form.formtastic:not(.pf-c-form) table fieldset > ol > li {
-  margin: 0 0 line-height-times(1/2) 0;
+  margin: 0 0 line-height-times(1 / 2);
   min-width: 0;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li {
-  margin: 0 0 line-height-times(1/4) 0;
+  margin: 0 0 line-height-times(1 / 4);
 }
 
 /* -------------------------------------------------------------------------------------------------
 Load this stylesheet after formtastic.css in your layouts to override the CSS to suit your needs.
---------------------------------------------------------------------------------------------------*/
+-------------------------------------------------------------------------------------------------- */
 
+/* stylelint-disable-next-line no-duplicate-selectors -- FIXME: we need to treat this carefully */
 form.formtastic:not(.pf-c-form) {
   @include white-box-shadow;
+
   min-width: line-height-times(20);
   padding: line-height-times(1);
-  text-align: left; /* overriding legacy_theme text-align: center*/
+  text-align: left;
+
+  /* overriding legacy_theme text-align: center */
   width: 100%;
+
   &:first-of-type {
     margin: 0;
   }
 
-  fieldset.inputs[data-behavior~=toggle-inputs] {
+  fieldset.inputs[data-behavior~="toggle-inputs"] {
     border: $border-width $border-color solid;
     border-radius: $border-radius;
     margin-left: 0;
@@ -263,7 +261,7 @@ form.formtastic:not(.pf-c-form) {
     }
 
     .fa-caret-down {
-      margin: 0 line-height-times(1/4) 0 line-height-times(-1/4);
+      margin: 0 line-height-times(1 / 4) 0 line-height-times(-1 / 4);
     }
 
     &.packed {
@@ -285,27 +283,29 @@ form.formtastic:not(.pf-c-form) {
     }
   }
 
-  p.instruction { margin: 10px 0;  }
+  p.instruction {
+    margin: 10px 0;
+  }
 
   fieldset > ol > li label {
     width: auto !important;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    padding: 0;
+    margin: 0;
     display: block;
   }
 
   legend {
-
     i.fa {
       display: inline-block;
 
       &.fa-caret-right {
-        width: line-height-times(1/4);
-        top: line-height-times(1/24);
+        width: line-height-times(1 / 4);
+        top: line-height-times(1 / 24);
         position: relative;
       }
+
       &.fa-caret-down {
-        width: line-height-times(1/4);
+        width: line-height-times(1 / 4);
       }
     }
   }
@@ -318,8 +318,6 @@ form.formtastic:not(.pf-c-form) {
   :not(.form-group) > fieldset {
     &:not(.policies-fieldset) {
       position: relative;
-      -moz-appearance: none;
-      -webkit-appearance: none;
       appearance: none;
 
       fieldset {
@@ -346,6 +344,7 @@ form.formtastic:not(.pf-c-form) {
     border: 0;
   }
 
+  // TODO: use the actual PF vars here
   legend:not(.label) {
     color: rgb(21, 21, 21); // --pf-c-content--Color
     font-size: 18px; // --pf-c-form__section-title--FontSize
@@ -354,11 +353,11 @@ form.formtastic:not(.pf-c-form) {
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
-  padding: 0 0 0 0;
+  padding: 0;
 }
 
 form#new_post.formtastic fieldset > ol > li.boolean label {
-  padding: 0 0 0 0;
+  padding: 0;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li.text textarea {
@@ -399,33 +398,33 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li.password input {
   max-width: none;
 }
 
-form.formtastic:not(.pf-c-form) fieldset > ol > li.price   input,
+form.formtastic:not(.pf-c-form) fieldset > ol > li.price input,
 form.formtastic:not(.pf-c-form) fieldset > ol > li.numeric input {
   max-width: 25%;
 }
 
 form.formtastic:not(.pf-c-form) fieldset fieldset fieldset {
   margin: line-height-times(1) 0 line-height-times(1) line-height-times(1);
-  padding: 0 0 0 0;
+  padding: 0;
 }
 
 form.formtastic:not(.pf-c-form) table fieldset {
-  margin: 0 0 0 0;
-  padding: 0 0 0 0;
+  margin: 0;
+  padding: 0;
 }
 
 form.formtastic:not(.pf-c-form) .radio fieldset {
-  margin: 0 0 line-height-times(1/4) 0;
+  margin: 0 0 line-height-times(1 / 4);
 }
 
-.dashboard_card form.formtastic:not(.pf-c-form) fieldset>ol>li.boolean label {
-  padding-left:0;
+.dashboard_card form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
+  padding-left: 0;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints,
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
-  padding: 0 0 0 0;
-  margin: 0 0 0 0;
+  padding: 0;
+  margin: 0;
   color: $hint-color;
   font-size: $font-size-sm;
   max-width: line-height-times(36);
@@ -449,8 +448,7 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   }
 }
 
-/*** FancyBox Adjustmets  ***/
-/****************************/
+/*** FancyBox Adjustments ***/
 
 #fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li label {
   float: none;
@@ -458,13 +456,12 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
 }
 
 #fancybox-inner form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints {
- margin: 0;
+  margin: 0;
 }
 
 #fancybox-inner form.formtastic:not(.pf-c-form) fieldset.actions {
   padding: 0;
 }
-
 
 form.formtastic:not(.pf-c-form) fieldset > ol li.text > textarea.source_code {
   width: 80em;
@@ -488,15 +485,16 @@ form.formtastic:not(.pf-c-form) .radio.required abbr {
   opacity: 1;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+/* stylelint-disable-next-line selector-no-vendor-prefix -- FIXME: probably outdated */
+::-webkit-input-placeholder, ::-moz-placeholder {
+  /* Chrome/Opera/Safari/Firefox 19+ */
   @include placeholder;
 }
 
-::-moz-placeholder { /* Firefox 19+ */
-  @include placeholder;
-}
-
-form.button-to, form.button-to div, form.inline, form.inline div {
+form.button-to,
+form.button-to div,
+form.inline,
+form.inline div {
   display: inline;
 }
 
@@ -513,9 +511,8 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li fieldset legend.label label {
 .errorExplanation {
   border: $border-width $error-color solid;
   border-radius: $border-radius;
-  padding: line-height-times(1/2);
+  padding: line-height-times(1 / 2);
   margin-bottom: line-height-times(1);
-  background-color:
 
   h2 {
     color: $error-color;
@@ -561,6 +558,7 @@ li.hidden {
 
     &.staging-settings {
       @include white-box-shadow;
+
       padding: line-height-times(1);
     }
   }
@@ -603,8 +601,10 @@ form.formtastic#new_metric {
 // HACK: this class needs ot be under a pf-c-form but most forms are still very old and would break
 // if we add this class directly. This is to give the required "star" its styles. Remove when all
 // forms use pf-c-form
+// TODO: use actual PF vars
 form:not(.pf-c-form) .pf-c-form__label-required {
   margin-left: 0.25rem; // --pf-c-form__label-required--MarginLeft
   font-size: 0.875rem; // --pf-c-form__label-required--FontSize
   color: #c9190b; // --pf-c-form__label-required--Color
 }
+/* stylelint-enable no-descending-specificity */

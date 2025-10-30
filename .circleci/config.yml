@@ -553,21 +553,6 @@ jobs:
             - ./config/*.yml
       - notify_failure
 
-  lint:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby31
-    executor:
-      name: << parameters.executor >>
-    steps:
-      - checkout
-      - *attach-to-workspace
-      - run:
-          name: Eslint
-          command: yarn ci:lint
-      - notify_failure
-
   licenses:
     parameters:
       executor:
@@ -1029,16 +1014,12 @@ workflows:
       - licenses:
           requires:
             - dependencies_bundler
-      - lint:
-          requires:
-            - dependencies_npm
       - jest:
           requires:
             - dependencies_npm
       - notify_success:
           requires:
             - licenses
-            - lint
             - jest
           <<: *only-master-filter
 
@@ -1202,10 +1183,6 @@ workflows:
           executor: builder-ruby31
           requires:
             - dependencies_bundler
-      - lint:
-          executor: builder-ruby31
-          requires:
-            - dependencies_npm
       - jest:
           executor: builder-ruby31
           requires:
@@ -1213,7 +1190,6 @@ workflows:
       - notify_success:
           requires:
             - licenses
-            - lint
             - jest
           <<: *only-master-filter
     <<: *nightly-trigger

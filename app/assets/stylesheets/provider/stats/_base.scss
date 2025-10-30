@@ -2,6 +2,7 @@
 
 .Stats {
   @include white-box-shadow;
+
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
 }
@@ -26,8 +27,8 @@ $stats-menu-help-color: $label-color;
   border-radius: $border-radius;
   color: $stats-menu-text-color;
   display: inline-block;
-  margin: 0 line-height-times(1/2) line-height-times(1) 0;
-  padding: line-height-times(1/2);
+  margin: 0 line-height-times(1 / 2) line-height-times(1) 0;
+  padding: line-height-times(1 / 2);
   height: auto;
 
   &-period {
@@ -39,18 +40,18 @@ $stats-menu-help-color: $label-color;
 
   &-periodItem {
     display: inline-block;
-    margin: 0 line-height-times(1/4);
+    margin: 0 line-height-times(1 / 4);
   }
 
   &-custom {
     border-left: $border-width solid $stats-menu-border-color;
     display: inline-block;
     font-style: italic;
-    padding-left: line-height-times(1/4);
+    padding-left: line-height-times(1 / 4);
 
     select {
       width: auto;
-      margin: line-height-times(-1/4) 0;
+      margin: line-height-times(-1 / 4) 0;
     }
   }
 
@@ -100,7 +101,7 @@ $stats-menu-help-color: $label-color;
 /* StatsLogs Pagination */
 .StatsLogs-pagination-item {
   display: inline-block;
-  padding: 0 line-height-times(1/8);
+  padding: 0 line-height-times(1 / 8);
 }
 
 .StatsLogs-pagination-link {
@@ -109,12 +110,12 @@ $stats-menu-help-color: $label-color;
 
 /* StatsMessages Components */
 .StatsMessages-list {
-  margin-bottom: line-height-times(1/2);
+  margin-bottom: line-height-times(1 / 2);
   padding-left: line-height-times(1);
 }
 
 .StatsMessages-title {
-  margin-bottom: line-height-times(1/2);
+  margin-bottom: line-height-times(1 / 2);
 }
 
 /* StatsCVSLink */
@@ -181,16 +182,13 @@ $stats-chart-tooltip-color: $label-color;
   .c3-tooltip-container {
     border: $border-width solid $stats-chart-border-color;
     border-radius: $border-radius;
-    box-shadow: 0 0 line-height-times(1/2) $stats-chart-tooltip-shadow;
+    box-shadow: 0 0 line-height-times(1 / 2) $stats-chart-tooltip-shadow;
     background: rgba($content-background, .99);
-    //opacity: .98;
   }
 
   .c3-tooltip {
     border: 0;
     border-radius: $border-radius;
-    -moz-box-shadow: 0 0 0 transparent;
-    -webkit-box-shadow: 0 0 0 transparent;
     box-shadow: 0 0 0 transparent;
     opacity: 1;
   }
@@ -200,7 +198,7 @@ $stats-chart-tooltip-color: $label-color;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     color: $stats-chart-tooltip-color;
-    padding: line-height-times(1/8) line-height-times(1/2);
+    padding: line-height-times(1 / 8) line-height-times(1 / 2);
   }
 
   .c3-tooltip tr {
@@ -211,7 +209,6 @@ $stats-chart-tooltip-color: $label-color;
       border-bottom: 0;
 
       td {
-
         &:first-child {
           border-bottom-left-radius: $border-radius;
         }
@@ -223,9 +220,10 @@ $stats-chart-tooltip-color: $label-color;
     }
   }
 
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   .c3-tooltip td {
     border-left: none;
-    padding: 0 line-height-times(1/2);
+    padding: 0 line-height-times(1 / 2);
   }
 }
 
@@ -246,18 +244,16 @@ $stats-chart-tooltip-color: $label-color;
 }
 
 .StatsMethodsTable {
-  //line-height: 2.6;
   margin-bottom: line-height-times(1);
-  margin-top: line-height-times(1/2);
+  margin-top: line-height-times(1 / 2);
   width: 100%;
 
-  td,
-  th {
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
+  td, th {
     border-bottom: $border-width solid $stats-menu-border-color;
   }
 }
 
-// scss-lint:disable ImportantRule -- Force jQuery datepicker to have popover z-index https://github.com/patternfly/patternfly-elements/blob/933a0d6dd06c33d43291e5ed0ab87914fefd9a67/elements/pf-popover/pf-popover.css#L7
 .ui-datepicker {
   z-index: 9999 !important;
 }

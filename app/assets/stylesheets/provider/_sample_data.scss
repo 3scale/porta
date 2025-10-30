@@ -1,5 +1,6 @@
 code.sample-data {
   display: block;
+  /* stylelint-disable-next-line property-no-deprecated -- FIXME: we need to upgrade sass */
   word-wrap: break-word;
 
   & + & {

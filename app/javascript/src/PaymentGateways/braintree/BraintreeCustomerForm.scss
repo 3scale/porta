@@ -20,7 +20,6 @@
 .list-unstyled {
   .form-control.col-md-6 {
     // Hack: needed because Braintree styles are colliding with ours
-    // scss-lint:disable ImportantRule
     width: 50% !important;
   }
 }

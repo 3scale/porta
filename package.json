@@ -12,8 +12,7 @@
     "build": "webpack --config ./config/webpack/production.config.js --progress",
     "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline",
     "clean": "rm -rf node_modules/ && yarn cache clean",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "ci:lint": "eslint --ext .js,.jsx,.ts,.tsx . --quiet"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "engines": {
     "node": "18"

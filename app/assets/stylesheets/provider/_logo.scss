@@ -5,8 +5,8 @@
   float: left;
   clear: left;
   z-index: 20;
-  margin:  0 line-height-times(-1) line-height-times(-2) line-height-times(-1);
-  padding: line-height-times(4/3) line-height-times(1) line-height-times(2/3) line-height-times(1);
+  margin: 0 line-height-times(-1) line-height-times(-2);
+  padding: line-height-times(4 / 3) line-height-times(1) line-height-times(2 / 3);
 
   img {
     min-width: line-height-times(2);
@@ -17,7 +17,7 @@
 
 .logo-3scale--boxed {
   float: none;
-  margin: 0 0 0 0;
+  margin: 0;
 }
 
 .logo-3scale--svg {
@@ -35,13 +35,14 @@
   display: inline-block;
   height: auto;
   width: line-height-times(3);
-  margin: 0 0 0 0;
+  margin: 0;
   padding: 0;
   float: none;
 }
 
 #logo_container {
   @include white-box-shadow;
+
   padding: line-height-times(1);
 
   .delete {

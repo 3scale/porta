@@ -3,24 +3,25 @@
 // Descriptive color names
 // based on color names with main color attached for clarity if needed http://chir.ag/projects/name-that-color/
 
+/* TODO: can we use actual PF vars? */
 // greys
 $alabasterWhite: #fafafa; // pf-black-100
-$altoGray:       #d2d2d2; // pf-black-300
-$black:          #030303; // pf-black
-$osloGray:       #8a8d90; // pf-black-500
+$altoGray: #d2d2d2; // pf-black-300
+$black: #030303; // pf-black
+$osloGray: #8a8d90; // pf-black-500
 $outerSpaceGray: #3c3f42; // pf-black-800
-$gallery:        #f0f0f0; // pf-black-200
-$white:          #fff;
-$whiteBoxShadowColor: rgba(3, 3, 3, .2);
+$gallery: #f0f0f0; // pf-black-200
+$white: #fff;
+$whiteBoxShadowColor: rgba(3, 3, 3, 0.2);
 $whiteBoxShadow: $whiteBoxShadowColor 0 1px 2px 0;
-$wildSandGray:   #f5f5f5; // pf-black-150
+$wildSandGray: #f5f5f5; // pf-black-150
 
 // colors
-$curiousBlue:    #2b9af3; // pf-blue-300
-$lochMaraBlue:   #0066cc; //pf-blue-400
-$appleGreen:     #3f9c35;
-$guardsmanRed:   #cc0000;
-$tahitiGold:     #ec7a08;
+$curiousBlue: #2b9af3; // pf-blue-300
+$lochMaraBlue: #06c; // pf-blue-400
+$appleGreen: #3f9c35;
+$guardsmanRed: #c00;
+$tahitiGold: #ec7a08;
 
 // brand colors
 $brand-orange: #ff7314;
@@ -31,27 +32,21 @@ $facebook-color: #3b5998;
 $body-background: $white;
 $content-background: $gallery;
 $background-color-base: $body-background;
-
 $font-color: $outerSpaceGray;
 $color-base: $font-color;
-
 $light-background-color: $alabasterWhite;
 $label-color: $osloGray;
 $highlight-color: $lochMaraBlue;
 $border-color: $altoGray;
 $select-color: $border-color;
 $focus-color: $alabasterWhite;
-
 $brand-blue: $lochMaraBlue;
-$light-color:  $osloGray;
-
+$light-color: $osloGray;
 $form-background-color: $white;
 $hint-color: $osloGray;
-
 $link-color: $highlight-color;
 $link-hover-color: $outerSpaceGray;
 $icon-hover-color: $lochMaraBlue;
-
 $dirty-color: $alabasterWhite;
 $success-color: $appleGreen;
 $error-color: $guardsmanRed;
@@ -59,22 +54,16 @@ $error-background-color: rgba($error-color, 0.1);
 $disabled-color: $osloGray;
 $disabled-background-color: $wildSandGray;
 $placeholder-color: $osloGray;
-
 $create-color: $success-color;
 $delete-color: $error-color;
 $delete-background-color: $error-background-color;
-
 $warning-color: $tahitiGold;
-
 $table-search-background-color: $light-background-color;
 $tr-odd-color: transparent;
 $tr-even-color: transparent;
-
 $wrapper-color: none;
-
 $header-background-color: $black;
 $header-border-color: $curiousBlue;
-
 $tab-menu-active-color: $lochMaraBlue;
 $tab-menu-active-background-color: $content-background;
 $tab-content-color: $content-background;
@@ -82,39 +71,31 @@ $tab-content-color: $content-background;
 // view specific colors
 $overview-widget-border: $border-color;
 $overview-widget-background: $tab-content-color;
-
 $box-shadow-color: rgba($font-color, .1);
-
 $menu-background-color: $content-background;
 $menu-color: $outerSpaceGray;
 $menu-active-color: $lochMaraBlue;
 $menu-hover-color: $lochMaraBlue;
-
 $submenu-color: $menu-color;
 $submenu-hover-color: $menu-hover-color;
 $submenu-active-color: $menu-active-color;
 $submenu-border-color: $border-color;
-
 $chart-background-color: $white;
-
 $sample-data-color: $white;
 $sample-data-bg-color: $lochMaraBlue;
 $sample-data-border-color: $lochMaraBlue;
-
 $important-button-color: $white;
 $important-button-bg-color: $lochMaraBlue;
 $important-button-border-color: $lochMaraBlue;
-
 $secondary-button-color: $white;
 $secondary-button-bg-color: $osloGray;
 $secondary-button-border-color: $osloGray;
-
 $disabled-button-color: $white;
 $disabled-button-bg-color: $altoGray;
 $disabled-button-border-color: $altoGray;
-
 $glow-color: $highlight-color;
 $glow-background-color: $wildSandGray;
+
 /// --- login ---
 
 $login-content-color: $font-color;

@@ -1,4 +1,4 @@
-$subsection-bg-color: rgba(0,0,0,0.05);
+$subsection-bg-color: rgba(0, 0, 0, 0.05);
 
 #subsections-container {
   background-color: transparent;
@@ -11,24 +11,27 @@ $subsection-bg-color: rgba(0,0,0,0.05);
   width: 100%;
 
   &.subsection-hover {
-     border-color: $border-color;
+    border-color: $border-color;
   }
 
   thead {
     background-color: transparent;
+    /* stylelint-disable-next-line scss/no-global-function-names -- TODO: remove or update this */
     color: opacify($subsection-bg-color, 0.5);
     font-size: 18px;
-    td { text-align: center; }
+
+    td {
+      text-align: center;
+    }
   }
 
   tbody {
     tr td {
       padding-left: line-height-times(1 / 2);
     }
-   tr:nth-child(2n-1) {
-     background-color: rgb(243, 243, 243);
-   }
+
+    tr:nth-child(2n-1) {
+      background-color: rgb(243, 243, 243);
+    }
   }
-
-
 }

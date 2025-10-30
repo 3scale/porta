@@ -1,7 +1,7 @@
-// scss-lint:disable SelectorFormat
-
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
 .PolicyConfiguration {
+  /* stylelint-disable no-invalid-position-at-import-rule, scss/load-no-partial-leading-underscore, scss/load-partial-extension */
   @import "~bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss";
 
   // Utilities
@@ -35,6 +35,7 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 
   // Components
   @import "~bootstrap-sass/assets/stylesheets/bootstrap/_button-groups.scss";
+  /* stylelint-enable no-invalid-position-at-import-rule, scss/load-no-partial-leading-underscore, scss/load-partial-extension */
 }
 
 $body-background: #fff;
@@ -71,8 +72,8 @@ fieldset.policies-fieldset {
     max-width: 880px; // --pf-c-form--m-limit-width--MaxWidth)
 
     &-name {
-      margin: 0 0 0 0;
-      padding: 0.5rem 0 0 0;
+      margin: 0;
+      padding: 0.5rem 0 0;
       font-size: 1rem;
       line-height: 1.5;
       font-weight: normal;
@@ -80,6 +81,7 @@ fieldset.policies-fieldset {
 
     &-cancel {
       @extend .u-do;
+
       margin-left: auto;
     }
 
@@ -167,6 +169,7 @@ fieldset.policies-fieldset {
   }
 }
 
+/* stylelint-disable no-descending-specificity -- FIXME */
 .PoliciesWidget .Policy,
 .Policy {
   display: flex;
@@ -193,7 +196,9 @@ fieldset.policies-fieldset {
   &-article {
     order: 1;
     flex: 5;
+
     @extend .u-link;
+
     min-width: 0; // needed for the overflow ellipsis to work.
 
     &:hover * {
@@ -205,7 +210,7 @@ fieldset.policies-fieldset {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 0 0 0 0;
+    margin: 0;
 
     span {
       line-height: 1.5;
@@ -280,14 +285,17 @@ fieldset.policies-fieldset {
     color: $color;
   }
 }
+/* stylelint-enable no-descending-specificity */
 
 .u-do {
   @extend .u-link;
+
   color: $doColor;
 }
 
 .PolicySchema {
   $PolicySchema-color: #0088ce;
+
   margin-right: 2rem;
 
   .cm-s-default .cm-string {

@@ -5,7 +5,7 @@ $width: line-height-times(24);
 $wrapper-padding: line-height-times(1);
 
 html {
-  @include typography-base();
+  @include typography-base;
 }
 
 body {
@@ -42,10 +42,12 @@ body {
   }
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 .powered-by-3scale {
   font-size: $caption-font-size;
   text-decoration: none;
 
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   a {
     text-decoration: none;
     color: $label-color;
@@ -55,5 +57,5 @@ body {
 .logo-3scale {
   float: none;
   padding: 0;
-  margin: 0 0 0 0;
+  margin: 0;
 }

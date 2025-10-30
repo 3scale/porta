@@ -7,7 +7,7 @@ th.collapsible {
     cursor: pointer;
 
     i {
-      margin-right: line-height-times(1/4);
+      margin-right: line-height-times(1 / 4);
     }
   }
 
@@ -19,7 +19,7 @@ th.collapsible {
 }
 
 table.contract_table {
-	margin-bottom: line-height-times(1/2);
+  margin-bottom: line-height-times(1 / 2);
 
   &#features {
     table-layout: fixed;
@@ -44,16 +44,24 @@ table.contract_table {
 
   td.selected strong {
     background: $light-background-color;
-    padding: line-height-times(1/8);
+    padding: line-height-times(1 / 8);
   }
 
   table.usage_table {
-    th, td {
+    th,
+    td {
       background-color: transparent;
     }
 
     td {
       border: $border-width solid $border-color;
+    }
+
+    border: 0;
+    border-collapse: collapse;
+
+    thead tr.table_title th {
+      position: relative;
     }
   }
 
@@ -94,7 +102,6 @@ table.contract_table {
         }
       }
     }
-
   }
 
   .usage_limits {
@@ -110,21 +117,14 @@ table.contract_table {
   }
 
   tbody tr td {
+    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     &:last-child {
       border-top: 1px solid $altoGray;
       padding-right: line-height-times(1);
     }
+
     &.operations:last-child {
       padding-right: line-height-times(1);
-    }
-  }
-
-  table.usage_table {
-    border: 0;
-    border-collapse: collapse;
-
-    thead tr.table_title th {
-      position: relative;
     }
   }
 

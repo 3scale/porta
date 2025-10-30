@@ -1,27 +1,28 @@
-.formtastic.cms_template, .formtastic.cms_section, .formtastic.cms_file {
-
+.formtastic.cms_template,
+.formtastic.cms_section,
+.formtastic.cms_file {
   #cms_template_published_input {
-   .cm-s-neat {
-     background-color: $codemirror-bg-readonly;
-     color: $codemirror-color-readonly;
+    .cm-s-neat {
+      background-color: $codemirror-bg-readonly;
+      color: $codemirror-color-readonly;
 
-     .CodeMirror-cursor {
-       border-left: none !important;
-     }
+      .CodeMirror-cursor {
+        border-left: none !important;
+      }
 
-     &:after {
-       transform: rotate(35deg);
-       opacity: 0.1;
-       content: "Published";
-       top: -0.5rem;
-       left: -2rem;
-       text-align: center;
-       font-size: 14rem;
-       color: $label-color;
-       position: absolute;
-       transform-origin: 0 0;
-     }
-   }
+      &::after {
+        transform: rotate(35deg);
+        opacity: 0.1;
+        content: "Published";
+        top: -0.5rem;
+        left: -2rem;
+        text-align: center;
+        font-size: 14rem;
+        color: $label-color;
+        position: absolute;
+        transform-origin: 0 0;
+      }
+    }
   }
 
   .codemirror {
@@ -29,7 +30,8 @@
 
     // we have labels before codemirror inputs, this hides them
     // labels are there because of cucumber
-    label[for=cms_template_draft], label[for=cms_template_published] {
+    label[for="cms_template_draft"],
+    label[for="cms_template_published"] {
       display: none;
     }
   }
@@ -60,7 +62,7 @@
 
       a {
         display: inline-block;
-        padding: line-height-times(1/3) line-height-times(1/2);
+        padding: line-height-times(1 / 3) line-height-times(1 / 2);
       }
 
       &.ui-state-active {
@@ -75,13 +77,15 @@
     }
   }
 
-  .ui-tabs-hide { display: none; }
+  .ui-tabs-hide {
+    display: none;
+  }
 
   ul.links {
     position: absolute;
     right: 0;
     top: 0;
-    margin-top: line-height-times(1/4);
+    margin-top: line-height-times(1 / 4);
 
     li {
       display: inline-block;

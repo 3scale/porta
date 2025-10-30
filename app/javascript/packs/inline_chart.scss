@@ -13,14 +13,11 @@
 
     .loading {
       background: white;
-      bottom: 0;
+      inset: 0;
       color: #393f44;
-      left: 0;
       padding-top: 1.5rem;
       position: absolute;
-      right: 0;
       text-align: center;
-      top: 0;
       z-index: 1000;
     }
 
@@ -50,7 +47,6 @@
 
     .inline-chart-graph {
       height: calc(1.5rem * 3.5);
-      // max-height: 84px;
       max-height: calc(1.5rem * 12);
       position: relative;
       width: 80%;

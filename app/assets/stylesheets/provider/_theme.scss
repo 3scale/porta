@@ -1,4 +1,6 @@
 @import 'provider/typography';
+@import 'provider/layouts/commons';
+@import 'provider/layouts/main';
 
 // vendored styles
 @import 'vendor/jquery.ui';
@@ -11,16 +13,10 @@
 // modules and constants
 @import "provider/commons";
 @import 'provider/buttons';
-
-@import 'provider/layouts/commons';
-@import 'provider/layouts/main';
-
-
 @import 'provider/links';
 @import 'provider/footer';
 @import 'provider/services';
 @import 'provider/plans';
-
 @import 'provider/fields_definitions';
 @import 'provider/tables';
 @import 'provider/utilization';
@@ -38,7 +34,6 @@
 @import 'provider/metrics';
 @import 'provider/authentication_providers';
 @import 'provider/section';
-
 @import 'provider/liquid_docs';
 @import 'provider/docs_widget';
 @import 'provider/create_application';
@@ -54,7 +49,6 @@
 @import 'provider/admin/cms/templates/versions';
 @import 'provider/admin/cms/switches';
 @import 'provider/admin/cms/sidebar';
-
 @import 'provider/admin/buyers/plans/listing';
 @import 'provider/admin/dashboard';
 @import 'provider/settings_box';
@@ -63,10 +57,7 @@
 @import 'provider/admin/apiconfig/services/promote_form';
 @import 'provider/admin/apiconfig/services/promote_button';
 @import 'provider/admin/apiconfig/services/configuration_version';
-
 @import 'provider/sites/usage_rules';
-
 @import 'provider/colorbox';
 @import 'provider/pagination';
-
 @import 'provider/print';

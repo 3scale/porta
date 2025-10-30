@@ -2,7 +2,7 @@
   margin-bottom: line-height-times(-2);
   font-weight: $font-weight-bold;
   float: right;
-  padding-bottom: line-height-times(1/8);
+  padding-bottom: line-height-times(1 / 8);
   position: relative;
   z-index: 100;
 }
@@ -11,20 +11,21 @@
 
   .title {
     @extend h2;
+
     margin-bottom: 0;
 
     a {
       color: $font-color;
       text-decoration: underline;
-      margin-bottom: line-height-times(1/2);
+      margin-bottom: line-height-times(1 / 2);
     }
 
     .button-to {
-      margin-top: line-height-times(1/2);
+      margin-top: line-height-times(1 / 2);
     }
   }
 
-  // BUTTONS
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   .button-to {
     font-weight: $font-weight-bold;
   }
@@ -44,7 +45,7 @@
     li {
       border-bottom: $border-width solid $border-color;
       margin-left: 0;
-      padding: line-height-times(1/2) 0;
+      padding: line-height-times(1 / 2) 0;
       position: relative;
 
       .name {
@@ -61,18 +62,13 @@
       }
 
       ul {
-        -moz-column-count: 2;
-        -webkit-column-count: 2;
         column-count: 2;
-        -moz-column-gap: line-height-times(3);
-        -webkit-column-gap: line-height-times(3);
         column-gap: line-height-times(3);
-        -moz-column-rule: $border-width solid $border-color;
-        -webkit-column-rule: $border-width solid $border-color;
         column-rule: $border-width solid $border-color;
         list-style: none;
         padding: line-height-times(2 / 3) line-height-times(1 / 2);
 
+        /* stylelint-disable-next-line no-descending-specificity -- FIXME */
         li {
           border-bottom: none;
           display: inline-block;
@@ -106,6 +102,7 @@
       margin-top: line-height-times(2);
     }
 
+    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     h2 {
       margin-top: line-height-times(2);
       position: relative;
@@ -138,9 +135,15 @@
     }
   }
 
-  .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
+  .latest-alerts,
+  .latest-apps,
+  .service-settings,
+  .service-plans,
+  .application-plans,
+  #mini-charts {
     @extend .listing;
     @include white-box-shadow;
+
     border: 0;
   }
 

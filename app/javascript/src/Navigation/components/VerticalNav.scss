@@ -1,5 +1,4 @@
 .pf-c-page__sidebar {
-
   // HACK: text-align: center is inherited from body app/assets/stylesheets/provider/_commons.scss:8
   .pf-c-nav__section-title {
     text-align: left;
@@ -8,8 +7,7 @@
   // This mimics .pf-c-nav__link for the first element of the nav, when in service context
   .pf-c-nav__current-api {
     position: relative;
-    margin-top: var(--pf-c-nav__item--MarginTop);
-    margin: 0;
+    margin: var(--pf-c-nav__item--MarginTop) 0 0;
     text-align: left;
     display: flex;
     align-items: baseline;
@@ -17,17 +15,19 @@
     font-size: var(--pf-c-nav__link--FontSize);
     font-weight: var(--pf-c-nav__link--FontWeight);
     color: #fff;
-    background-color: var(--pf-c-nav__link--BackgroundColor);outline-offset: var(--pf-c-nav__link--OutlineOffset);
-
+    background-color: var(--pf-c-nav__link--BackgroundColor);
+    outline-offset: var(--pf-c-nav__link--OutlineOffset);
     min-height: 45px;
     border-bottom: 1px solid #3c3f42;
   }
 
   // HACK: hidden doesn't work in pf-c-nav even tho display is not being overridden apparently anywhere
-  [hidden] { display: none !important; }
+  [hidden] {
+    display: none !important;
+  }
 
   .outdated-config {
-    &:not(.pf-m-expanded) > .pf-c-nav__link:before,
+    &:not(.pf-m-expanded) > .pf-c-nav__link::before,
     &.pf-m-expanded .pf-c-nav__item:first-child .pf-c-nav__link::before {
       content: '\f071';
       font-family: FontAwesome;

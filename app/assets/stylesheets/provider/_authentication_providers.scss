@@ -1,8 +1,8 @@
-.fa-auth0:before {
+.fa-auth0::before {
   @extend .fa-star;
 }
 
-.fa-keycloak:before {
+.fa-keycloak::before {
   content: '❮❯';
   white-space: nowrap;
   font-size: $font-size-sm;
@@ -13,6 +13,7 @@
 // font-awesome-rails (FA 4) can't be updated to font-awesome-sass, it is not compatible with
 // our sass-rails.
 // TODO: Upgrade sass-rails, which we couldn't do before we got rid of compass
-i.fa.fa-github.fa-fw {
+i.fa.fa-github {
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
   font-family: FontAwesome;
 }

@@ -1,8 +1,25 @@
-// library
+@import "provider/typography";
+@import "font-awesome";
+@import "provider/logo";
 
-html, body, header, div, span,
-h1, p, a, code, strong, ul, ol, li,
-form, fieldset, input, button, label {
+html,
+body,
+header,
+div,
+span,
+h1,
+p,
+a,
+code,
+strong,
+ul,
+ol,
+li,
+form,
+fieldset,
+input,
+button,
+label {
   margin: 0;
   padding: 0;
   border: 0;
@@ -11,34 +28,34 @@ form, fieldset, input, button, label {
   vertical-align: baseline;
 }
 
-html {
-  line-height: 1;
-}
-
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-header, main {
+header,
+main {
   display: block;
+  margin: 0 auto;
+  text-align: left;
+  max-width: 50em;
+  min-width: 20em;
+  position: relative;
 }
-
-@import "provider/typography";
-@import "font-awesome";
-@import "provider/logo";
 
 // typography
 @function calculateRem($size) {
   $remSize: $size / 16px;
+
   @return $remSize * 1rem;
 }
 
 @mixin font-size($size) {
   font-size: $size;
-  font-size: calculateRem($size);
+  font-size: calculaterem($size);
 }
 
-//sizes
+// sizes
 $font-size-x-small: 12px;
 $font-size-small: 14px;
 $font-size: 16px;
@@ -50,12 +67,12 @@ $font-size-xxx-large: 48px;
 // line height
 $line-height: $font-size * 1.5;
 
-//weights
+// weights
 $font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-bold: 600;
 
-//families
+// families
 $font-family-text: $font-family-base;
 
 // colors
@@ -68,12 +85,9 @@ $success-color: $color-success;
 $color-failure: $error-color;
 $error-color: $color-failure;
 $color-disabled: $color-grey-3;
-
-//
 $color-text-primary: $color-grey-1;
 $color-text-secondary: $color-grey-2;
 $color-text-tertiary: $color-grey-3;
-
 $color-border: $color-grey-4;
 $color-brand-primary: $brand-orange;
 $color-brand-secondary: $highlight-color; // blue
@@ -83,10 +97,10 @@ $color-link-hover: $color-text-primary;
 // elements
 
 html {
+  line-height: 1;
   box-sizing: border-box;
   font-family: $font-family-text;
   font-size: $font-size;
-  line-height: $line-height;
   color: $color-text-primary;
 }
 
@@ -97,7 +111,7 @@ body {
 hr {
   box-sizing: border-box;
   height: 24px;
-  margin: 0 0 0 0;
+  margin: 0;
   border: none;
   border-bottom: 1px solid $color-border;
 }
@@ -106,15 +120,8 @@ strong {
   font-weight: $font-weight-bold;
 }
 
-header, main {
-  margin: 0 auto;
-  text-align: left;
-  max-width: 50em;
-  min-width: 20em;
-  position: relative;
-}
-
-a, .link {
+a,
+.link {
   color: $color-link;
   cursor: pointer;
 
@@ -122,6 +129,7 @@ a, .link {
     color: $color-link-hover;
   }
 }
+
 header {
   margin-top: line-height-times(1);
   margin-bottom: line-height-times(2);
@@ -189,7 +197,7 @@ $button-color-hover: white;
   }
 }
 
-.button--next:after {
+.button--next::after {
   content: " ›";
 }
 
@@ -197,7 +205,7 @@ $button-color-hover: white;
   color: $color-disabled;
   border-color: $color-disabled;
 
-  &:after {
+  &::after {
     content: normal;
   }
 
@@ -208,7 +216,8 @@ $button-color-hover: white;
 
 // button nudge animation
 @keyframes button-nudge {
-  0%, 100% {
+  0%,
+  100% {
     background-color: $button-color-hover;
     color: $button-color;
   }
@@ -229,28 +238,18 @@ input[type="text"] {
     color: $color-text-tertiary;
     font-style: italic;
     height: 1.5rem;
-
-    /* TODO: Add the following somewhere else:
-      &:before {
-        content: 'e.g. '
-      }
-    */
   }
-}
 
-input[type="text"] {
   box-sizing: border-box;
   text-decoration: none;
   color: $button-color;
-  //line-height: 24px;
   height: 3.125rem;
   float: right;
   background-color: white;
   font-size: $font-size;
   border: none;
-  padding-top: line-height-times(1);
+  padding: line-height-times(1) 0 0;
   border-bottom: 0.125rem solid $color-border;
-  padding: 0 0 0 0;
   border-color: $color-border;
   width: 60%;
 
@@ -261,9 +260,6 @@ input[type="text"] {
   &:focus {
     border-color: $color-brand-secondary;
   }
-
-  //border-color: $button-color-border;
-
 }
 
 .error input {
@@ -301,8 +297,9 @@ form li {
     }
   }
 
-  &.hidden { display: none; }
-
+  &.hidden {
+    display: none;
+  }
 }
 
 fieldset {
@@ -313,6 +310,7 @@ fieldset {
   }
 }
 
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 label {
   box-sizing: border-box;
   display: block;
@@ -332,10 +330,9 @@ label {
   margin-left: 0;
 }
 
-// logo
 .logo-3scale {
-  margin: 0 0 0 0;
-  padding: 0 0 0 0;
+  margin: 0;
+  padding: 0;
   float: none;
 }
 
@@ -365,16 +362,16 @@ label {
 
   .explain__step--1 {
     animation: focus 1s ease-out 1s forwards,
-               focus_border 1s ease-out 1s forwards,
-               unfocus 1s ease-out 5s forwards,
-               unfocus_border 1s ease-out 5s forwards,
-               success 1s ease-out 15s forwards,
-               success_border 1s ease-out 15s forwards;
+      focus-border 1s ease-out 1s forwards,
+      unfocus 1s ease-out 5s forwards,
+      unfocus-border 1s ease-out 5s forwards,
+      success 1s ease-out 15s forwards,
+      success-border 1s ease-out 15s forwards;
 
     .icon {
       animation: focus 1s ease-out 1s forwards,
-                 unfocus 1s ease-out 5s forwards,
-                 success 1s ease-out 15s forwards;
+        unfocus 1s ease-out 5s forwards,
+        success 1s ease-out 15s forwards;
     }
 
     .text {
@@ -398,25 +395,26 @@ label {
 
   .explain__step--2 {
     animation: focus 1s ease-out 5s forwards,
-               focus_border 1s ease-out 5s forwards,
-               unfocus 1s ease-out 10s forwards,
-               unfocus_border 1s ease-out 10s forwards,
-               success 1s ease-out 15s forwards,
-               success_border 1s ease-out 15s forwards;
+      focus-border 1s ease-out 5s forwards,
+      unfocus 1s ease-out 10s forwards,
+      unfocus-border 1s ease-out 10s forwards,
+      success 1s ease-out 15s forwards,
+      success-border 1s ease-out 15s forwards;
 
     .icon {
       animation: focus 1s ease-out 5s forwards,
-                 unfocus 1s ease-out 10s forwards,
-                 success 1s ease-out 15s forwards;
+        unfocus 1s ease-out 10s forwards,
+        success 1s ease-out 15s forwards;
     }
 
     .text {
-       animation: reveal 1s ease-out 5s forwards;
+      animation: reveal 1s ease-out 5s forwards;
     }
 
     .code-example {
       animation: reveal 1s ease-out 5s forwards;
 
+      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
       * {
         animation: unfocus 1s ease-out 10s forwards;
       }
@@ -431,13 +429,13 @@ label {
 
   .explain__step--3 {
     animation: focus 1s ease-out 10s forwards,
-               unfocus 1s ease-out 15s forwards,
-               success 1s ease-out 15s forwards;
+      unfocus 1s ease-out 15s forwards,
+      success 1s ease-out 15s forwards;
 
     .icon {
       animation: focus 1s ease-out 10s forwards,
-                unfocus 1s ease-out 15s forwards,
-                success 1s ease-out 15s forwards;
+        unfocus 1s ease-out 15s forwards,
+        success 1s ease-out 15s forwards;
     }
 
     .text {
@@ -446,8 +444,6 @@ label {
   }
 }
 
-
-
 // Block: code example
 
 // colors
@@ -455,6 +451,7 @@ $code-color-base: $color-success;
 $code-color-path: $color-brand-secondary;
 $code-color-params: $color-brand-primary;
 
+/* stylelint-disable-next-line no-descending-specificity -- FIXME */
 .code-example {
   display: block;
   font-size: 0.875rem;
@@ -472,47 +469,44 @@ $code-color-params: $color-brand-primary;
   .code-example__params {
     color: $code-color-params;
 
-    &:before {
+    &::before {
       content: '?';
       color: $color-text-secondary;
     }
   }
 
-  .code-example--slash:after {
+  .code-example--slash::after {
     content: '/';
     color: $color-brand-secondary;
   }
 
-  .feedback--inactive .code-example--slash:after {
+  .feedback--inactive .code-example--slash::after {
     color: $color-text-secondary;
   }
 
   .code-example--optional {
-
-    &:before {
+    &::before {
       content: '(';
       color: $color-text-secondary;
     }
 
-    &:after {
+    &::after {
       content: ')';
       color: $color-text-secondary;
     }
   }
 
   .code-example__params.code-example--optional {
-    &:before {
+    &::before {
       content: '(?';
     }
   }
 }
 
-
 $feedback-color-active: $color-brand-secondary;
 $feedback-color-success: $color-success;
 $feedback-color-failure: $color-failure;
 $feedback-color-inactive: $color-text-secondary;
-
 
 .feedback {
   border-left: 5px solid transparent;
@@ -524,12 +518,8 @@ $feedback-color-inactive: $color-text-secondary;
   font-size: 1.125rem;
   line-height: 1.5rem;
 
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   .code-example {
-    //position: absolute;
-    //top: $line-height * 3;
-    //margin-left: $line-height * -2;
-    //@extend %vertical-align;
-
     position: relative;
     top: $line-height * 2;
     left: $line-height * -2;
@@ -560,7 +550,7 @@ $feedback-color-inactive: $color-text-secondary;
     border-color: $feedback-color-inactive;
   }
 
-
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   .icon {
     color: $color-text-secondary;
   }
@@ -568,9 +558,9 @@ $feedback-color-inactive: $color-text-secondary;
   .icon--sec {
     color: $color-text-primary;
   }
+
   .icon--focus {
     color: $feedback-color-active;
-    //margin-top: 0 !important;
   }
 
   .icon--success {
@@ -584,12 +574,8 @@ $feedback-color-inactive: $color-text-secondary;
   &>[class*="fa-li"] {
     font-size: 40px;
     background-color: white;
-
-    //margin-left: -60px;
-
     margin-left: 59px;
-    padding: 4px 0 4px 0;
-    /* margin-right: 10px; */
+    padding: 4px 0;
     margin-top: -6px;
     width: 48px;
   }
@@ -598,23 +584,18 @@ $feedback-color-inactive: $color-text-secondary;
     font-size: 64px;
     margin-left: 111px;
     margin-top: -9px;
-    //margin-left: -57px;
-  }
-
-  .fa-hdd-o {
   }
 
   .fa-puzzle-piece {
     text-indent: 10px;
   }
-
-
 }
 
 
 // reveal animation
 @keyframes reveal {
-  0%, 100% {
+  0%,
+  100% {
     visibility: visible;
     opacity: 1;
   }
@@ -622,61 +603,59 @@ $feedback-color-inactive: $color-text-secondary;
 
 // focus animation
 @keyframes focus {
-  0%, 100% {
+  0%,
+  100% {
     color: $color-brand-secondary;
   }
 }
 
 // unfocus animation
 @keyframes unfocus {
-  0%, 100% {
+  0%,
+  100% {
     color: $color-text-secondary;
   }
 }
 
 // focus border animation
-@keyframes focus_border {
-  0%, 100% {
+@keyframes focus-border {
+  0%,
+  100% {
     border-color: $color-brand-secondary;
   }
 }
 
 // unfocus border animation
-@keyframes unfocus_border {
-  0%, 100% {
+@keyframes unfocus-border {
+  0%,
+  100% {
     border-color: $color-text-secondary;
   }
 }
 
 // success animation
 @keyframes success {
-  0%, 100% {
+  0%,
+  100% {
     color: $color-success;
   }
 }
 
 // success border animation
-@keyframes success_border {
-  0%, 100% {
+@keyframes success-border {
+  0%,
+  100% {
     border-color: $color-success;
   }
 }
 
 // clean animation
 @keyframes clean {
-  0%, 100% {
+  0%,
+  100% {
     color: auto;
   }
 }
-
-//icons grey
-//blue icon + text: step-1
-//blue to grey: step-1
-//blue icon + text: step-2
-//blue to grey: step-2
-//blue icon + text: step-3
-//all to green
-
 
 .response {
   overflow-y: auto;
