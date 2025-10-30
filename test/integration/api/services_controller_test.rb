@@ -364,22 +364,34 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   class SupportEmailTest < self
     test 'updates support email successfully' do
-      service.update_column(:support_email, nil) # Ensure it starts as nil
+      support_email = 'new-support@example.com'
 
-      patch support_email_admin_service_path(service), params: { support_email: 'support@example.com' }
+      patch support_email_admin_service_path(service), params: { support_email: }
 
       assert_response :success
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       assert json_response['success']
       assert_equal 'Support email updated successfully', json_response['message']
-      assert_equal 'support@example.com', service.reload.support_email
+      assert_equal support_email, service.reload.support_email
+    end
+
+    test 'removes support email successfully' do
+      service.update_column(:support_email, 'support@example.com') # rubocop:disable Rails/SkipsModelValidations
+
+      patch support_email_admin_service_path(service), params: { support_email: nil }
+
+      assert_response :success
+      json_response = response.parsed_body
+      assert json_response['success']
+      assert_equal 'Custom support email removed from product', json_response['message']
+      assert_nil service.reload[:support_email] # .support_email will return the provider's
     end
 
     test 'returns error for invalid email' do
       patch support_email_admin_service_path(service), params: { support_email: 'invalid-email' }
 
       assert_response :success
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       assert_not json_response['success']
       assert_equal "Couldn't update support email", json_response['message']
     end
