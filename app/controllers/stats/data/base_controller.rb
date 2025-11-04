@@ -9,7 +9,7 @@ class Stats::Data::BaseController < ApplicationController
 
   before_action :login_required
 
-  after_action :report_traffic, :if => :api_request?
+  after_action :report_traffic
 
   def usage
     #TODO: metrics can be hidden for buyers, this can be exploited
@@ -73,10 +73,6 @@ class Stats::Data::BaseController < ApplicationController
     end
 
     options
-  end
-
-  def api_request?
-    params[:provider_key].present?
   end
 
   def metric_to_report
