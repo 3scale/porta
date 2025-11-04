@@ -4,6 +4,7 @@ $tab-min-height: line-height-times(21, true);
 
 #tab-content {
   @include white-box-shadow;
+
   border-left: $border-width solid $border-color;
   border-right: none;
   float: left;
@@ -20,6 +21,7 @@ $tab-min-height: line-height-times(21, true);
 
 #cms-sidebar {
   @include white-box-shadow;
+
   font-size: $caption-font-size;
   float: left;
   width: 20%;
@@ -70,18 +72,18 @@ $tab-min-height: line-height-times(21, true);
     }
   }
 
-  .fa-folder-open:hover:before {
+  .fa-folder-open:hover::before {
     content: '\f07c';
   }
 
-  .fa-folder:hover:before {
+  .fa-folder:hover::before {
     content: '\f07b';
   }
 
   .fa {
     cursor: pointer;
-    margin-left: -line-height-times(1/2);
-    padding: line-height-times(1/2) 0 line-height-times(1/2) 0;
+    margin-left: -line-height-times(1 / 2);
+    padding: line-height-times(1 / 2) 0;
     position: relative;
     z-index: 100;
 
@@ -97,15 +99,11 @@ $tab-min-height: line-height-times(21, true);
     &:hover {
       color: $brand-blue;
     }
-
-    & + a {
-      //text-indent: line-height-times(1);
-      //vertical-align: top;
-    }
   }
 
   a {
     @include ellipsis;
+
     color: $font-color;
     display: inline-block;
     vertical-align: middle;
@@ -117,15 +115,16 @@ $tab-min-height: line-height-times(21, true);
     }
   }
 
+  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   li {
     border-top: $border-width solid $border-color;
 
     ul {
-      margin-left: line-height-times(1/2);
+      margin-left: line-height-times(1 / 2);
     }
 
     &.empty {
-      margin-left: line-height-times(1/2);
+      margin-left: line-height-times(1 / 2);
     }
 
     &.dragged {
@@ -140,7 +139,7 @@ $tab-min-height: line-height-times(21, true);
     &.cms-section {
       position: relative;
 
-      &:after {
+      &::after {
         background-image: image-url('/assets/tree-line.png');
         background-position: 0;
         background-repeat: repeat-y;
@@ -160,11 +159,12 @@ $tab-min-height: line-height-times(21, true);
 
 #cms-sidebar-error-empty {
   display: none;
-  margin: line-height-times(1/2);
+  margin: line-height-times(1 / 2);
 }
 
 .cms-sidebar-listing:not(#cms-sidebar-content) {
   padding-left: line-height-times(1 / 4);
 }
 
+/* stylelint-disable-next-line no-invalid-position-at-import-rule -- FIXME: combine both files? */
 @import 'provider/admin/cms/sidebar/filter';

@@ -1,0 +1,36 @@
+extends: stylelint-config-standard-scss
+
+rules:
+  scss/at-extend-no-missing-placeholder: false
+  scss/dollar-variable-pattern: false
+  scss/at-function-pattern: false # TODO: we should standardize function names
+
+  alpha-value-notation: number # TODO: Sass is too old, this should be percentage
+
+  color-function-alias-notation: false # TODO: make it 'without-alpha'
+  color-function-notation: legacy # TODO: make it 'modern'
+
+  custom-property-pattern:
+    - '[a-z]+(-{1,2}[a-zA-z0-9]+)+$'
+    - message: 'Expected custom property name "${name}" to follow PatternFly convention'
+
+  font-family-no-missing-generic-family-keyword:
+    - true
+    - ignoreFontFamilies:
+      - FontAwesome
+
+  media-feature-range-notation: prefix
+
+  rule-empty-line-before:
+    - always-multi-line
+    - except:
+      - first-nested
+      - after-first-line-comment
+    - ignore:
+      - after-comment
+
+  selector-class-pattern: false # TODO: we should standardize class names
+
+  selector-id-pattern: false # TODO: we should standardize id names
+
+  value-keyword-case: lower

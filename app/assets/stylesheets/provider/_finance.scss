@@ -1,5 +1,6 @@
 ul#actions li form.button-to {
   @include white-box-shadow;
+
   display: block;
   padding: line-height-times(1);
 }

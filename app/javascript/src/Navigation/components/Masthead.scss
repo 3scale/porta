@@ -1,7 +1,7 @@
 .pf-c-masthead {
 
   &--master {
-    &:before {
+    &::before {
       background-color: #39a5dc; // pf-blue-300;
       content: 'Master';
       grid-column: 1/-1;

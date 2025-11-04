@@ -1,7 +1,6 @@
-@import 'provider/layouts/main';
-
 div.dashboard_card {
   @include white-box-shadow;
+
   border: 0;
   padding: line-height-times(1);
   overflow: hidden;
@@ -11,11 +10,11 @@ div.dashboard_card {
   }
 
   &> table.list:first-child {
-    margin-top: line-height-times(-1/2);
+    margin-top: line-height-times(-1 / 2);
   }
 
   &> table.list:last-child {
-    margin-bottom: line-height-times(-1/2);
+    margin-bottom: line-height-times(-1 / 2);
 
     tr:last-child th,
     tr:last-child td {
@@ -39,6 +38,6 @@ div.dashboard_card {
 }
 
 .clearfix {
-  display:inline-table;
+  display: inline-table;
   width: 100%;
 }

@@ -40,8 +40,8 @@
     font-weight: $font-weight-bold;
     color: $font-color;
     float: left;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+    margin: 0;
+    padding: 0;
     cursor: pointer;
     margin-right: line-height-times(1 / 2);
   }
@@ -68,6 +68,7 @@
   }
 }
 
+/* stylelint-disable no-descending-specificity -- FIXME */
 // DashboardWidget
 // this should be encapsulated within individual widget.
 .DashboardSection--wide .DashboardWidget {
@@ -76,10 +77,11 @@
 
 .DashboardWidget {
   @include white-box-shadow;
+
   float: left;
   height: line-height-times(10);
   overflow: hidden;
-  padding: line-height-times(1/2);
+  padding: line-height-times(1 / 2);
   position: relative;
   width: 50%;
 
@@ -88,17 +90,7 @@
     z-index: 1;
     padding: 0;
     max-height: none !important;
-    left: 8px;
-    right: 9px;
-    top: calc(#{line-height-times(3)} - 4px);
-    bottom: 5px;
-
-    // testing purposes
-    // .c3-event-rect {
-    //   fill: $brand-blue !important;
-    //   fill-opacity: 1 !important;
-    //   stroke: $brand-blue !important;
-    // }
+    inset: calc(#{line-height-times(3)} - 4px) 9px 5px 8px;
 
     .c3-bar._expanded_,
     .c3-bar._expanded_:last-child {
@@ -109,6 +101,7 @@
 
     .c3-bar:last-child {
       fill: transparent !important;
+      /* stylelint-disable-next-line value-keyword-case -- TODO: check this */
       shape-rendering: geometricPrecision;
       stroke: $border-color !important;
       stroke-width: $border-width;
@@ -123,8 +116,8 @@
 
   &-spinner {
     position: absolute;
-    top: calc(50% - #{line-height-times(1/2)});
-    left: calc(50% - #{line-height-times(1/2)});
+    top: calc(50% - #{line-height-times(1 / 2)});
+    left: calc(50% - #{line-height-times(1 / 2)});
   }
 
   &-title {
@@ -155,11 +148,12 @@
 
   &-intro {
     @include ellipsis;
+
     display: block;
     font-size: $font-size-sm;
     font-style: italic;
     color: $light-color;
-    margin-bottom: line-height-times(1/2);
+    margin-bottom: line-height-times(1 / 2);
     clear: both;
 
     &--primary {
@@ -173,7 +167,7 @@
     }
   }
 
-  &+ script + .DashboardWidget {
+  & + script + .DashboardWidget {
     border-left: 0;
   }
 
@@ -194,7 +188,7 @@
     }
   }
 
-  &-values{
+  &-values {
     transition: opacity 0.5s;
     opacity: 1;
     float: left;
@@ -241,7 +235,7 @@
 
 .DashboardWidgetList {
   list-style: none inside;
-  margin: 0 0 0 0;
+  margin: 0;
   font-size: $font-size-sm;
 
   &-position {
@@ -255,9 +249,10 @@
 
   &-link {
     @include ellipsis;
+
     display: block;
     color: $font-color;
-    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    padding: line-height-times(1 / 4, true) 0 line-height-times(1 / 4);
     border-bottom: $border-width solid $border-color;
 
     &:hover,
@@ -291,7 +286,7 @@
 .DashboardStream {
   width: 20%;
   float: right;
-  margin: line-height-times(1) 0 line-height-times(1);
+  margin: line-height-times(1) 0;
 
   &-title {
     text-transform: uppercase;
@@ -306,24 +301,25 @@
     list-style: none outside;
     color: $light-color;
 
-    &+ .DashboardStream-title {
+    & + .DashboardStream-title {
       margin-top: line-height-times(1);
     }
   }
 
   &-listItem {
     border-top: $border-width solid $border-color;
-    padding: line-height-times(1/4, true) 0 line-height-times(1/4) 0;
+    padding: line-height-times(1 / 4, true) 0 line-height-times(1 / 4);
     font-size: $font-size-sm;
 
     &--empty {
       font-style: italic;
-      padding: 0 0;
+      padding: 0;
     }
   }
 
   &-link {
     @include ellipsis;
+
     display: block;
     color: $light-color;
 
@@ -357,7 +353,7 @@
   float: right;
 
   #api_filter + &--services {
-    margin-top: line-height-times(2/3);
+    margin-top: line-height-times(2 / 3);
   }
 
   &--services ul li:last-child {
@@ -366,10 +362,13 @@
 
   &-list-item {
     @include ellipsis;
+
     border-left: line-height-times(1.5) solid transparent;
+
     @media (max-width: 1235px) {
       border-left: line-height-times(1) solid transparent;
     }
+
     color: $light-color;
 
     &:first-child {
@@ -398,7 +397,6 @@
       font-size: $font-size-sm;
       position: relative;
       top: -$border-width;
-      //display: none;
     }
 
     &:hover {
@@ -412,7 +410,7 @@
 }
 
 // utility classes
-.u-plus:before {
+.u-plus::before {
   content: '+';
 }
 
@@ -423,3 +421,4 @@
 a:hover .u-notice {
   color: $link-color;
 }
+/* stylelint-enable no-descending-specificity */
