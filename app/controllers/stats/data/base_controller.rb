@@ -5,9 +5,10 @@ class Stats::Data::BaseController < ApplicationController
   include ApiAuthentication::ByProviderKey
   include ErrorHandling::Handlers
 
-  self.access_token_scopes = :stats
+  extend ::Filters::ProviderRequired
+  provider_required
 
-  before_action :login_required
+  self.access_token_scopes = :stats
 
   after_action :report_traffic
 
