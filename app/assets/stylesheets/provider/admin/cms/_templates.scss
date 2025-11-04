@@ -3,45 +3,6 @@
 @use 'provider/legacy_theme';
 @use 'sass:math';
 
-.formtastic.cms_template,
-.formtastic.cms_section,
-.formtastic.cms_file {
-  #cms_template_published_input {
-    .cm-s-neat {
-      background-color: $codemirror-bg-readonly;
-      color: $codemirror-color-readonly;
-
-      .CodeMirror-cursor {
-        border-left: none !important;
-      }
-
-      &::after {
-        transform: rotate(35deg);
-        opacity: 0.1;
-        content: "Published";
-        top: -0.5rem;
-        left: -2rem;
-        text-align: center;
-        font-size: 14rem;
-        color: $label-color;
-        position: absolute;
-        transform-origin: 0 0;
-      }
-    }
-  }
-
-  .codemirror {
-    list-style: none;
-
-    // we have labels before codemirror inputs, this hides them
-    // labels are there because of cucumber
-    label[for="cms_template_draft"],
-    label[for="cms_template_published"] {
-      display: none;
-    }
-  }
-}
-
 #cms-template-editor {
   position: relative;
 

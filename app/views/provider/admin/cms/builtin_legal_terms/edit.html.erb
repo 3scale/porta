@@ -12,7 +12,7 @@
       </li>
     </ul>
 
-    <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+    <%= f.input :draft, as: :codemirror, label: false, value: f.object.current %>
   </div>
 
   <%= render 'buttons', f: f %>
