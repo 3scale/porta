@@ -27,7 +27,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
 
     assert_response :forbidden
     assert_media_type 'application/json'
-    assert_json 'status' => 'Forbidden'
+    assert_json 'error' => 'Access denied'
   end
 
   # Regression test - DoubleRender error
