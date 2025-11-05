@@ -9976,6 +9976,10 @@
                   "change_service_plan_permission": {
                     "type": "string",
                     "description": "Service Plans changing"
+                  },
+                  "enforce_sso": {
+                    "type": "boolean",
+                    "description": "Enforce SSO authentication of the admin portal and disable password-based authentication for all users of this account"
                   }
                 },
                 "required": [
