@@ -61,17 +61,25 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
 
     put admin_api_settings_path(format: :json), params: { access_token: token, enforce_sso: true }
 
-    assert_response :unprocessable_entity
-    error = JSON.parse(response.body)['errors']['enforce_sso']
+    assert_response :unprocessable_entity, "should not be able to enable enforce_sso if there are no published auth providers"
+    error = response.parsed_body['errors']['enforce_sso']
     assert_equal ["Password-based authentication could not be disabled. No published authentication providers."], error
 
-    FactoryBot.create(:self_authentication_provider, account: settings.provider, kind: 'base', published: true)
+    auth_provider = FactoryBot.create(:self_authentication_provider, account: settings.provider, kind: 'base', published: true)
 
     put admin_api_settings_path(format: :json), params: { access_token: token, enforce_sso: true }
 
-    assert_response :success
-    assert JSON.parse(response.body)['settings']['enforce_sso']
+    assert_response :success, "should be able to enable enforce_sso if there are published auth providers"
+    assert response.parsed_body['settings']['enforce_sso']
     assert settings.reload.enforce_sso
+
+    auth_provider.update(published: false)
+
+    put admin_api_settings_path(format: :json), params: { access_token: token, enforce_sso: false }
+
+    assert_response :success, "should be able to disable enforce_sso regardless of published auth providers"
+    assert_not response.parsed_body['settings']['enforce_sso']
+    assert_not settings.reload.enforce_sso
   end
 
   test 'update account_approval_required' do
