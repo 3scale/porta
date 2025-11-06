@@ -41,5 +41,5 @@
 
 <%= form_tag master_provider_plan_path(@provider), :method => :put, :remote => true do %>
   <%= hidden_field_tag :plan_id, @new_plan.id %>
-  <%= submit_tag "Yes, change the plan to #{@new_plan.name}", :class => 'important-button' %>
+  <%= submit_tag "Yes, change the plan to #{@new_plan.name}", class: 'pf-c-button pf-m-primary' %>
 <% end %>

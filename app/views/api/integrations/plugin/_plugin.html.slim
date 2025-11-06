@@ -8,4 +8,4 @@
 
     #traffic-check-widget
       = render 'stats/inlinechart', metrics: @service.metrics.hits
-      = link_to [ 'Are we there yet?', 'Is it working yet?', 'Success?', 'HTTP 200 OK?' ].sample, '#traffic-check-trigger', class: 'important-button'
+      = link_to [ 'Are we there yet?', 'Is it working yet?', 'Success?', 'HTTP 200 OK?' ].sample, '#traffic-check-trigger', class: 'pf-c-button pf-m-primary'
