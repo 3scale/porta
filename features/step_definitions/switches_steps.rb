@@ -22,7 +22,7 @@ Given "{provider} has {switch} hidden" do |provider, switch|
 end
 
 Then /^I should see the invitation to upgrade my plan$/ do
-  assert find('a#change-plan.important-button', text: 'Upgrade to')
+  assert find('a#change-plan', text: 'Upgrade to')
 end
 
 Then /^I should see upgrade notice for "(.+?)"$/ do |switch|

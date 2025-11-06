@@ -54,7 +54,10 @@
   <% if current_account.site_access_code.present? %>
     <div id="open-portal-to-public">
 
-      <%= link_to 'Open your Portal to the world', open_portal_admin_site_dns_path, class: 'button important-button', method: :put,  remote: true, data: { confirm: 'Are you sure?'} %>
+      <%= link_to 'Open your Portal to the world', open_portal_admin_site_dns_path, class: 'pf-c-button pf-m-primary',
+                                                                                    method: :put,
+                                                                                    remote: true,
+                                                                                    data: { confirm: 'Are you sure?' } %>
 
       <p>
         Removes the

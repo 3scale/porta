@@ -1,4 +1,4 @@
-p a {
+p a:not(.pf-c-button) {
   text-decoration: underline;
   color: $font-color;
 

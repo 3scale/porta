@@ -43,7 +43,7 @@
       </p>
     <% elsif current_account.can_upgrade_to?(plan) %>
       <% if current_account.credit_card_stored? %>
-      <a href="#" class="select-plan-button plan-selector important-button"
+      <a href="#" class="select-plan-button plan-selector pf-c-button pf-m-primary"
          data-plan-name='<%= plan.name %>'
          data-plan-id='<%= plan.id %>'
          data-can-upgrade='true'>
@@ -51,7 +51,7 @@
       </a>
       <% else %>
         <p id="credit-card-status">
-          <%= link_to('Add your billing details & upgrade', edit_provider_admin_account_braintree_blue_path, class: "important-button") %>
+          <%= link_to('Add your billing details & upgrade', edit_provider_admin_account_braintree_blue_path, class: 'pf-c-button pf-m-primary') %>
         </p>
       <% end %>
     <% end %>

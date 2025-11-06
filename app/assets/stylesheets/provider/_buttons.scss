@@ -35,12 +35,6 @@ table [type='submit']:not(.action, .pf-c-button, .pf-c-dropdown__menu-item) {
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
 }
 
-table .important-button,
-.important-button,
-.formtastic .important-button {
-  @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
-}
-
 table .disabled-button,
 /* stylelint-disable-next-line no-descending-specificity -- FIXME */
 .disabled-button {

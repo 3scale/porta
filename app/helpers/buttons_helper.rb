@@ -5,10 +5,6 @@ module ButtonsHelper
   DATA_ATTRIBUTES = [:confirm, :method, :remote, :'disable-with', :disabled]
   #TODO: refactoring: move buttons helpers to own helper
 
-  def important_icon_link(title, icon_name, link, options = {:class => 'important-button'})
-    link_to "#{icon(icon_name)} #{title}".html_safe, link, options
-  end
-
   def action_link_to(action, url, options = {})
     label = options.delete(:label) || action.to_s.titleize
     options[:class] = join_dom_classes(options[:class], action.to_s.presence)
