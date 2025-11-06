@@ -71,8 +71,5 @@ class Stats::Api::BaseController < ApplicationController
     options
   end
 
-  def metric_to_report
-    :analytics
-  end
 
 end
