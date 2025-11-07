@@ -1,0 +1,18 @@
+- content_for :page_header_title, 'Message'
+
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_description_list'
+
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    dl class="pf-c-description-list pf-m-horizontal"
+      - [['Date Received', @message.created_at.to_fs(:long)],
+         ['From', message_sender(@message)],
+         ['To', message_receiver(@message)],
+         ['Subject', @message.subject],
+         ['Body', simple_format(hyperlink_urls(@message.body))]].each do |term, description|
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text" = term
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text" = description
