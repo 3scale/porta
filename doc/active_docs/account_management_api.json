@@ -9979,7 +9979,7 @@
                   },
                   "enforce_sso": {
                     "type": "boolean",
-                    "description": "Enforce SSO authentication of the admin portal and disable password-based authentication for all users of this account"
+                    "description": "Enforce SSO authentication on the admin portal and disable password-based authentication for all users of this account by setting `enforce_sso` to `true`. Enforcing SSO is only allowed when there is at least one published SSO integration for the admin portal.\nTo enable password-based authentication, set `enforce_sso` to `false`"
                   }
                 },
                 "required": [
