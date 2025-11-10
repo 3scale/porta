@@ -5,11 +5,12 @@ class Stats::Data::BaseController < ApplicationController
   include ApiAuthentication::ByProviderKey
   include ErrorHandling::Handlers
 
+  extend ::Filters::ProviderRequired
+  provider_required
+
   self.access_token_scopes = :stats
 
-  before_action :login_required
-
-  after_action :report_traffic, :if => :api_request?
+  after_action :report_traffic
 
   def usage
     #TODO: metrics can be hidden for buyers, this can be exploited
@@ -73,10 +74,6 @@ class Stats::Data::BaseController < ApplicationController
     end
 
     options
-  end
-
-  def api_request?
-    params[:provider_key].present?
   end
 
   def metric_to_report
