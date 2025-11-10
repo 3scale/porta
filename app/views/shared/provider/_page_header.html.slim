@@ -8,6 +8,9 @@
         = annotation
     - if (alert = content_for(:page_header_alert).presence)
       = alert
+    - if @service&.plugin_deployment?
+      br
+      = pf_inline_alert t('shared.plugins_deprecation'), variant: :warning
 
 / TODO: this is only a temporary workaround for those page headers not using PF4, all pages should
 / have the same page header

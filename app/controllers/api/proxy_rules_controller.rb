@@ -8,8 +8,6 @@ class Api::ProxyRulesController < Api::BaseController
 
   activate_menu :serviceadmin, :integration, :mapping_rules
 
-  sublayout 'api/service'
-
   def index
     @presenter = Api::ProxyRulesIndexPresenter.new(service: service, params: params)
   end

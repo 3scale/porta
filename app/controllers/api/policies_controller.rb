@@ -6,8 +6,6 @@ class Api::PoliciesController < Api::BaseController
 
   activate_menu :serviceadmin, :integration, :policies
 
-  sublayout 'api/service'
-
   def edit
     render status: status_from_error(:ok)
   end

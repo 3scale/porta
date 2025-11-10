@@ -8,7 +8,6 @@ class Api::IntegrationsController < Api::BaseController
   before_action :disable_client_cache
 
   activate_menu :serviceadmin, :integration, :configuration
-  sublayout 'api/service'
 
   PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 

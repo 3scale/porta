@@ -8,7 +8,6 @@ class Api::MetricsController < Api::BaseController
   before_action :find_metric, only: %i[edit update destroy]
 
   activate_menu :serviceadmin, :integration, :methods_metrics
-  sublayout 'api/service'
 
   helper_method :presenter
 

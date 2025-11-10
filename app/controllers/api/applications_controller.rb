@@ -17,8 +17,6 @@ class Api::ApplicationsController < FrontendController
 
   activate_menu :serviceadmin, :applications, :listing
 
-  sublayout 'api/service'
-
   def new; end
 
   def create

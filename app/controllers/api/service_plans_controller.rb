@@ -4,7 +4,6 @@ class Api::ServicePlansController < Api::PlansBaseController
   before_action :authorize_service_plans!
 
   activate_menu :serviceadmin, :subscriptions, :service_plans
-  sublayout 'api/service'
 
   helper_method :plans_index_data
   delegate :plans_index_data, to: :presenter

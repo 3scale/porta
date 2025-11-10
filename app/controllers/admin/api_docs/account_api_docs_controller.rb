@@ -2,7 +2,6 @@
 
 class Admin::ApiDocs::AccountApiDocsController < Admin::ApiDocs::BaseController
   activate_menu :audience, :cms, :ActiveDocs
-  sublayout 'api/service'
 
   before_action :disable_client_cache, only: %i[preview]
 

@@ -1,11 +1,10 @@
-- if @service.deployment_option.include?('plugin_')
-  #plugin
-    div data-lang=(plugin_language_name)
-      - begin
-        = render "api/integrations/plugin/plugins/#{plugin_language_name}"
-      - rescue ActionView::MissingTemplate
-        = render 'api/integrations/plugin/plugins/generic'
+#plugin
+  div data-lang=(plugin_language_name)
+    - begin
+      = render "api/integrations/plugin/plugins/#{plugin_language_name}"
+    - rescue ActionView::MissingTemplate
+      = render 'api/integrations/plugin/plugins/generic'
 
-    #traffic-check-widget
-      = render 'stats/inlinechart', metrics: @service.metrics.hits
-      = link_to [ 'Are we there yet?', 'Is it working yet?', 'Success?', 'HTTP 200 OK?' ].sample, '#traffic-check-trigger', class: 'pf-c-button pf-m-primary'
+  #traffic-check-widget
+    = render 'stats/inlinechart', metrics: @service.metrics.hits
+    = link_to [ 'Are we there yet?', 'Is it working yet?', 'Success?', 'HTTP 200 OK?' ].sample, '#traffic-check-trigger', class: 'pf-c-button pf-m-primary'

@@ -4,7 +4,6 @@ class Admin::ApiDocs::ServiceApiDocsController < Admin::ApiDocs::BaseController
   prepend_before_action :find_service
 
   activate_menu :serviceadmin, :ActiveDocs
-  sublayout 'api/service'
 
   before_action :disable_client_cache, only: :preview
 

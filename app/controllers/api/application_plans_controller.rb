@@ -2,7 +2,6 @@
 
 class Api::ApplicationPlansController < Api::PlansBaseController
   activate_menu :serviceadmin, :applications, :application_plans
-  sublayout 'api/service'
 
   helper_method :plans_index_data
   delegate :plans_index_data, to: :presenter
