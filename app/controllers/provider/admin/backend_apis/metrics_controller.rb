@@ -6,7 +6,6 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   before_action :find_metric, except: %i[new create index]
 
   activate_menu :backend_api, :methods_metrics
-  sublayout 'api/service'
 
   helper_method :presenter
 

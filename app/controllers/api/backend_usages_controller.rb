@@ -10,7 +10,6 @@ class Api::BackendUsagesController < Api::BaseController
   before_action :ensure_same_account_backend_api, only: :create
 
   activate_menu :serviceadmin, :integration, :backend_api_configs
-  sublayout 'api/service'
 
   helper_method :service, :toolbar_props
 

@@ -2300,3 +2300,4 @@ en:
       session. Please upgrade your browser and sign in again.
     nav:
       earnings: Earnings by month
+    plugins_deprecation: This product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.

@@ -27,9 +27,7 @@ html[lang="en" class="pf-m-redhat-font"]
           main.Main#content class=('Main--callToAction' if call_to_action?)
             = render 'shared/provider/page_header' unless active_menu == :dashboard
             section class="pf-c-page__main-section"
-              / TODO: remove sublayouts. cms and api/service are the only ones left.
-              / CMS is probably as easy a transform into a partial
-              / api/service is used only for deprecated_plugin_warning, maybe it can be removed
+              / TODO: THREESCALE-12067 remove cms sublayout (and sublayouts)
               - if controller.sublayout
                 = render partial: "/layouts/#{controller.sublayout.to_s}"
               - else

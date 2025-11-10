@@ -4,7 +4,6 @@ class Api::ProxyConfigsController < Api::BaseController
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services
 
   activate_menu :serviceadmin, :integration, :configuration
-  sublayout 'api/service'
 
   def index
     configs = params[:environment].to_s.casecmp?('production') ? proxy_configs.production : proxy_configs.sandbox

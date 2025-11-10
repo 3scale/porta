@@ -4,7 +4,6 @@ class Stats::ApplicationsController < Stats::BaseController
   before_action :find_buyer_account
 
   activate_menu :serviceadmin, :applications, :listing
-  sublayout 'api/service'
 
   def show
     @metrics = @service.metrics.top_level

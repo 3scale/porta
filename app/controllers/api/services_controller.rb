@@ -16,10 +16,6 @@ class Api::ServicesController < Api::BaseController
 
   helper_method :presenter
 
-  with_options only: %i[edit update settings usage_rules] do |actions|
-    actions.sublayout 'api/service'
-  end
-
   def index
     activate_menu :products
 
