@@ -98,7 +98,7 @@ dl {
   padding: 0;
 }
 
-p + ul {
+p + ul:not(.pf-c-list) {
   list-style: none;
   padding-left: line-height-times(2 / 3);
 }
@@ -169,7 +169,7 @@ pre code:not(.pf-c-code-block__code) {
   margin: line-height-times(1 / 2) 0 line-height-times(1);
   overflow: hidden;
   padding: line-height-times(1 / 2);
-  background-color: $light-background-color;
+  background-color: var(--pf-global--BackgroundColor--light-200);
   border: $border-width solid $border-color;
 
 
@@ -198,7 +198,7 @@ hr {
 }
 
 ::selection {
-  background: $select-color;
+  background: $border-color;
 }
 
 .ui-sortable-handler {

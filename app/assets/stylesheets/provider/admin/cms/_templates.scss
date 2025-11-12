@@ -29,7 +29,7 @@
       &.ui-state-active {
         font-weight: $font-weight-bold;
         border-color: $border-color;
-        background-color: $codemirror-border;
+        background-color: var(--pf-global--BackgroundColor--200);
 
         a {
           color: $font-color;

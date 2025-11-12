@@ -1,9 +1,5 @@
 $integration-tab-active-bg-color: white;
-$integration-tab-bg-color: transparent;
 $integration-tab-active-border: $border-width solid $border-color;
-$integration-tab-warning-bg-color: $dirty-color;
-/* stylelint-disable-next-line scss/no-global-function-names -- FIXME: we need to update sass */
-$integration-tab-warning-color: darken($dirty-color, 60%);
 
 #integration-tabs fieldset {
   max-width: 100%;
@@ -122,14 +118,6 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
     }
   }
 
-  .warning-host-header {
-    color: $integration-tab-warning-color;
-    cursor: help;
-    float: right;
-    margin-top: line-height-times(-1.3);
-    margin-right: line-height-times(1 / 2);
-  }
-
   input.sandbox {
     border-style: dashed;
   }
@@ -205,7 +193,7 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
 
     &>[class^="fa fa-"] {
       font-size: 40px;
-      background-color: $white;
+      background-color: white;
       margin-left: -60px;
       padding: line-height-times(1 / 4);
       position: absolute;
@@ -237,85 +225,6 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
     /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     a {
       text-decoration: underline;
-    }
-  }
-
-}
-
-form.proxy {
-  .pending-changes-warning {
-    // hackish positioning trick
-    position: relative;
-    font-weight: $font-weight-bold;
-    margin: 0 auto;
-    text-align: center;
-    color: transparent;
-  }
-
-  table#backend_apis {
-    input.backend_usage_path {
-      margin-left: line-height-times(1 / 2);
-      width: auto;
-    }
-  }
-
-  table#backend_apis,
-  table#proxy-rules {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-    padding-left: 6px;
-    margin-bottom: 24px;
-
-    tbody#sortable {
-      overflow: auto;
-    }
-
-    tr {
-      &.deleted {
-        background-color: $delete-background-color;
-
-        input,
-        select {
-          background-color: rgba(255, 255, 255, 0.55);
-          border-color: $delete-color;
-        }
-      }
-    }
-
-    td {
-      padding-right: 12px;
-
-      &.pattern {
-        position: relative;
-      }
-    }
-
-    span.fa-exclamation-triangle {
-      position: absolute;
-      right: line-height-times(1);
-      top: line-height-times(9 / 10);
-      color: $warning-color;
-
-      &.disabled {
-        color: unset;
-      }
-
-      &.hidden {
-        display: none;
-      }
-    }
-
-    .action.add {
-      float: right;
-    }
-
-    input,
-    select {
-      &.error {
-        border: 1px solid $error-color;
-        background-color: $error-background-color !important;
-      }
     }
   }
 }

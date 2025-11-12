@@ -7,72 +7,57 @@
   width: 100%;
   clear: both;
 
-  &--audience + .DashboardSection--service {
-    margin-top: line-height-times(1.4);
-  }
+  &-header {
+    width: 100%;
+    text-transform: uppercase;
 
-  &--services {
-    border-top: 0;
-
-    .DashboardSection--service.hidden {
-      display: none;
+    .DashboardSection-title {
+      font-weight: $font-weight-bold;
+      float: left;
+      margin-right: var(--pf-global--spacer--md);
     }
 
-    #backends > table {
-      border-width: 0;
-      box-shadow: none;
-      table-layout: fixed;
-      width: 100%;
+    .DashboardNavigation {
+      float: right;
 
-      th {
-        text-align: left;
+      ul {
+        border: 0;
+        overflow: hidden;
 
-        &:first-child {
-          width: 60%;
+        .DashboardNavigation-list-item {
+          @include ellipsis;
+
+          margin-left: line-height-times(1.5);
+
+          @media (max-width: 1235px) {
+            margin-left: line-height-times(1);
+          }
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          float: left;
+
+          a.DashboardNavigation-link {
+            color: var(--pf-global--Color--100);
+
+            &:hover {
+              color: $link-hover-color;
+            }
+
+            &.u-notice {
+              color: $warning-color;
+            }
+
+            &.u-notice:hover {
+              color: $warning-color-hover;
+            }
+          }
         }
       }
     }
   }
-
-  &-title {
-    text-transform: uppercase;
-    font-size: $font-size-base;
-    font-weight: $font-weight-bold;
-    color: $font-color;
-    float: left;
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-    margin-right: line-height-times(1 / 2);
-  }
-
-  &.is-closed {
-    border-bottom: $border-width solid $border-color;
-    height: auto;
-
-    .DashboardSection-title {
-      color: $light-color;
-    }
-  }
-
-  &--toggleable.is-closed {
-
-    .DashboardWidget,
-    .DashboardNavigation-list-item {
-      display: none;
-    }
-
-    .DashboardNavigation-list-item.u-notice {
-      display: list-item;
-    }
-  }
-}
-
-/* stylelint-disable no-descending-specificity -- FIXME */
-// DashboardWidget
-// this should be encapsulated within individual widget.
-.DashboardSection--wide .DashboardWidget {
-  width: 100%;
 }
 
 .DashboardWidget {
@@ -85,6 +70,17 @@
   position: relative;
   width: 50%;
 
+  &:only-of-type {
+    width: 100%;
+  }
+
+  &--spinner-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .Dashboard-chart {
     position: absolute !important;
     z-index: 1;
@@ -94,30 +90,17 @@
 
     .c3-bar._expanded_,
     .c3-bar._expanded_:last-child {
-      fill: $brand-blue !important;
+      fill: $link-color !important;
       fill-opacity: 1;
-      stroke: $brand-blue !important;
+      stroke: $link-color !important;
     }
 
     .c3-bar:last-child {
       fill: transparent !important;
-      /* stylelint-disable-next-line value-keyword-case -- TODO: check this */
       shape-rendering: geometricPrecision;
       stroke: $border-color !important;
       stroke-width: $border-width;
     }
-  }
-
-  i {
-    font-size: $font-size-base;
-    color: $light-color;
-    float: right;
-  }
-
-  &-spinner {
-    position: absolute;
-    top: calc(50% - #{line-height-times(1 / 2)});
-    left: calc(50% - #{line-height-times(1 / 2)});
   }
 
   &-title {
@@ -140,10 +123,6 @@
     width: 50%;
     margin-bottom: 0;
     line-height: $line-height-sm;
-
-    a {
-      color: $brand-blue;
-    }
   }
 
   &-intro {
@@ -167,85 +146,14 @@
     }
   }
 
-  & + script + .DashboardWidget {
-    border-left: 0;
-  }
-
-  &-badge {
-    width: 100%;
-    top: 1em;
-    left: 0;
-    z-index: 2;
-    background-color: rgba(white, 0.5);
-  }
-
-  .Dashboard-chart:hover + &-badge {
-    background-color: rgba(white, 0);
-    z-index: 0;
-
-    .DashboardWidget-values {
-      opacity: 0;
-    }
-  }
-
-  &-values {
-    transition: opacity 0.5s;
-    opacity: 1;
-    float: left;
-
-    &:nth-of-type(2) {
-      text-align: right;
-      margin-left: 3em;
-    }
-  }
-
-  &-label {
-    color: $light-color;
-    font-style: italic;
-    white-space: nowrap;
-  }
-
-  &-value {
-    font-size: 48px;
-    min-height: 48px;
-
-    strong {
-      color: $brand-blue;
-    }
-
-    i {
-      font-size: $font-size-base;
-      color: $light-color;
-    }
-  }
-
-  &-link {
-    color: $brand-blue;
-
-    &--infoOnly {
-      color: $font-color;
-    }
-  }
-
-  &-link:hover,
-  &-link:hover strong {
-    color: $link-color;
+  &-link--infoOnly {
+    color: $font-color;
   }
 }
 
 .DashboardWidgetList {
-  list-style: none inside;
-  margin: 0;
+  list-style: none;
   font-size: $font-size-sm;
-
-  &-position {
-    display: inline-block;
-    width: 20%;
-  }
-
-  &-item:nth-of-type(5) .DashboardWidgetList-link {
-    border-bottom: 0;
-  }
 
   &-link {
     @include ellipsis;
@@ -261,44 +169,31 @@
     }
   }
 
-  &-change {
-    color: $light-color;
-    display: inline-block;
-    text-align: right;
-    width: 30%;
-  }
-
-  // tmp hide out list
-  &-item--left {
-    display: none;
+  &-item:last-of-type .DashboardWidgetList-link {
+    border-bottom: 0;
   }
 }
 
-
-// Layout of widgets and stream
 .Dashboard-widgets {
-  width: 80%;
-  padding-right: line-height-times(2);
   float: left;
+  padding-right: line-height-times(2);
+  width: 80%;
 }
 
-// DashboardStream
 .DashboardStream {
-  width: 20%;
   float: right;
   margin: line-height-times(1) 0;
+  width: 20%;
 
   &-title {
     text-transform: uppercase;
     color: $light-color;
     font-weight: $font-weight-normal;
     font-size: $font-size-base;
-    margin-bottom: 0;
-    padding-top: 0;
   }
 
   &-list {
-    list-style: none outside;
+    list-style: none;
     color: $light-color;
 
     & + .DashboardStream-title {
@@ -317,6 +212,7 @@
     }
   }
 
+  /* TODO: probably never used. Check Dashboard::MessagesPresenter */
   &-link {
     @include ellipsis;
 
@@ -331,94 +227,12 @@
       color: $link-color;
     }
   }
-
-  &-notification {
-    color: $font-color;
-  }
 }
 
-.DashboardSection-header {
-  width: 100%;
-  float: left;
-
-  &--extended {
-    background-color: $gallery;
-    border-bottom: $border-width solid $border-color;
-    box-shadow: $gallery -1px -1px 2px 0;
-    margin-bottom: line-height-times(1);
-  }
-}
-
-.DashboardNavigation {
-  float: right;
-
-  #api_filter + &--services {
-    margin-top: line-height-times(2 / 3);
-  }
-
-  &--services ul li:last-child {
-    float: right;
-  }
-
-  &-list-item {
-    @include ellipsis;
-
-    border-left: line-height-times(1.5) solid transparent;
-
-    @media (max-width: 1235px) {
-      border-left: line-height-times(1) solid transparent;
-    }
-
-    color: $light-color;
-
-    &:first-child {
-      border-left: 0;
-    }
-  }
-
-  &-list {
-    border: 0;
-    overflow: hidden;
-
-    li {
-      margin-left: 0;
-      white-space: nowrap;
-      float: left;
-      padding: 0;
-    }
-  }
-
-  &-link {
-    text-transform: uppercase;
-    font-style: normal;
-    color: $menu-color;
-
-    .fa {
-      font-size: $font-size-sm;
-      position: relative;
-      top: -$border-width;
-    }
-
-    &:hover {
-      color: $menu-hover-color;
-    }
-
-    &--alert {
-      color: $error-color;
-    }
-  }
-}
-
-// utility classes
 .u-plus::before {
   content: '+';
 }
 
-.u-notice {
-  color: $warning-color;
+.u-minus::before {
+  content: '-';
 }
-
-a:hover .u-notice {
-  color: $link-color;
-}
-/* stylelint-enable no-descending-specificity */

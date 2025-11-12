@@ -9,7 +9,7 @@
   font-style: italic;
   color: $label-color;
   margin: 0;
-  background: $content-background;
+  background: #f0f0f0;
   padding: 2px;
 }
 
@@ -35,10 +35,10 @@
   padding: 10px;
   top: 0;
   left: 0;
-  box-shadow: 0 0 6px $box-shadow-color;
+  box-shadow: var(--pf-global--BoxShadow--sm);
   font-size: 12px;
   color: $font-color;
-  background: rgba($content-background, .99);
+  background: rgba(#f0f0f0, .99);
   border: 1px solid $border-color;
   border-radius: 6px;
 }

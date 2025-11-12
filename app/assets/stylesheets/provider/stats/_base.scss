@@ -1,5 +1,3 @@
-@import 'provider/typography'; // needed for dev portals that include this stylesheet directly
-
 .Stats {
   @include white-box-shadow;
 
@@ -13,8 +11,6 @@
 .StatsSelectorContainer {
   display: inline-block;
 }
-
-/* Stats Menu Component */
 
 $stats-menu-border-color: $border-color;
 $stats-menu-text-color: $font-color;
@@ -90,7 +86,6 @@ $stats-menu-help-color: $label-color;
   }
 }
 
-/* Stats Logs Component */
 .StatsLogs,
 .StatsLogs-loading {
   &.is-hidden {
@@ -98,7 +93,6 @@ $stats-menu-help-color: $label-color;
   }
 }
 
-/* StatsLogs Pagination */
 .StatsLogs-pagination-item {
   display: inline-block;
   padding: 0 line-height-times(1 / 8);
@@ -108,7 +102,6 @@ $stats-menu-help-color: $label-color;
   cursor: pointer;
 }
 
-/* StatsMessages Components */
 .StatsMessages-list {
   margin-bottom: line-height-times(1 / 2);
   padding-left: line-height-times(1);
@@ -118,34 +111,8 @@ $stats-menu-help-color: $label-color;
   margin-bottom: line-height-times(1 / 2);
 }
 
-/* StatsCVSLink */
-
-.StatsCSVLink-container {
-  padding-bottom: line-height-times(1);
-}
-
-.StatsCSVLink {
-  color: $link-color;
-  cursor: pointer;
-  display: inline-block;
-  float: right;
-
-  &:hover {
-    color: $font-color;
-  }
-}
-
-.StatsCSVLink-disabled {
-  color: $disabled-color;
-  cursor: not-allowed;
-  display: inline-block;
-  float: right;
-}
-
-/* Stats Chart Component */
 $stats-chart-border-color: $border-color;
-$stats-chart-tooltip-shadow: $box-shadow-color;
-$stats-chart-tooltip-bg-color: $content-background;
+$stats-chart-tooltip-shadow: var(--pf-global--palette--black-800);
 $stats-chart-tooltip-color: $label-color;
 
 .StatsChart-container {
@@ -183,7 +150,7 @@ $stats-chart-tooltip-color: $label-color;
     border: $border-width solid $stats-chart-border-color;
     border-radius: $border-radius;
     box-shadow: 0 0 line-height-times(1 / 2) $stats-chart-tooltip-shadow;
-    background: rgba($content-background, .99);
+    background: rgba(#f0f0f0, .99);
   }
 
   .c3-tooltip {
@@ -194,7 +161,7 @@ $stats-chart-tooltip-color: $label-color;
   }
 
   .c3-tooltip th {
-    background-color: $stats-chart-tooltip-bg-color;
+    background-color: #f0f0f0;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     color: $stats-chart-tooltip-color;
@@ -233,8 +200,6 @@ $stats-chart-tooltip-color: $label-color;
     display: none;
   }
 }
-
-// StatsMethodsTable
 
 .StatsMethodsTable-name.is-children {
   background-image: image-url('child_metric_background.png');

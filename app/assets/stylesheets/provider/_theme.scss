@@ -24,11 +24,9 @@
 @import 'provider/upgrade_notice';
 @import 'provider/admin/account';
 @import 'provider/service_access';
-@import 'provider/plans_widget';
 @import 'vendor/c3';
 @import 'provider/stats/base';
 @import 'provider/stats/selector';
-@import 'provider/sample_data';
 @import 'provider/invoices';
 @import 'provider/finance';
 @import 'provider/metrics';
@@ -38,7 +36,6 @@
 @import 'provider/docs_widget';
 @import 'provider/create_application';
 @import 'provider/logo';
-@import 'provider/info_box';
 @import 'provider/call_to_action';
 
 // view specific stylesheets placed in the controller paths
@@ -57,7 +54,6 @@
 @import 'provider/admin/apiconfig/services/promote_form';
 @import 'provider/admin/apiconfig/services/promote_button';
 @import 'provider/admin/apiconfig/services/configuration_version';
-@import 'provider/sites/usage_rules';
 @import 'provider/colorbox';
 @import 'provider/pagination';
 @import 'provider/print';
