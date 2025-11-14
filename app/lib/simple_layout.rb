@@ -46,7 +46,7 @@ class SimpleLayout
     javascripts = Pathname.glob(DeveloperPortal::VIEW_PATH.join('javascripts/*.js'))
     styles = Pathname.glob(DeveloperPortal::VIEW_PATH.join('css/*.css'))
 
-    [ javascripts, styles ].flatten.each do |file|
+    [javascripts, styles].flatten.each do |file|
       content = file.read.strip_heredoc
 
       case file.extname[1..-1]
@@ -76,7 +76,7 @@ class SimpleLayout
     icons = Pathname.glob(DeveloperPortal::VIEW_PATH.join('favicon.ico'))
     images_section = find_or_create_section('images', '/images')
 
-    [ images, icons ].flatten.each do |path|
+    [images, icons].flatten.each do |path|
       provider.files.create!(attachment: File.new(path), path: path.to_s.gsub(DeveloperPortal::VIEW_PATH.to_s,''), section: images_section)
     end
   end
@@ -271,7 +271,7 @@ class SimpleLayout
     if error_layout.published == "error"
       content = DeveloperPortal::VIEW_PATH.join('layouts/error.html.liquid').read
       error_layout.update(draft: content,
-                                     title: 'Error layout', liquid_enabled: true)
+                          title: 'Error layout', liquid_enabled: true)
       error_layout.publish!
     else
       Rails.logger.info "--> Error layout was changed."
@@ -281,9 +281,9 @@ class SimpleLayout
   def create_error_layout!
     content = DeveloperPortal::VIEW_PATH.join('layouts/error.html.liquid').read
     provider.layouts.create!(system_name: 'error',
-                            draft: content,
-                            title: 'Error layout',
-                            liquid_enabled: true).publish!
+                             draft: content,
+                             title: 'Error layout',
+                             liquid_enabled: true).publish!
   end
 
   def builtin_static_pages
