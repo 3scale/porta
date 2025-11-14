@@ -27,7 +27,7 @@ $maxFont: 1rem;
 }
 
 @function strip-unit($value) {
-	@return math.div($value, ($value * 0 + 1));
+  @return math.div($value, ($value * 0 + 1));
 }
 
 // For details on RedHatFont visit: https://github.com/RedHatOfficial/RedHatFont
@@ -41,7 +41,7 @@ $fontSize: 1rem;
 $main-title-font-size: 1.5rem; // --pf-c-content--h1--FontSize
 $secondary-title-font-size: 1.25rem; // --pf-c-content--h2--FontSize
 $sub-title-font-size: math.div(5,4) * $fontSize;
-$caption-font-size:  math.div(7,8) * $fontSize;
+$caption-font-size: math.div(7,8) * $fontSize;
 $font-size-base: 1 * $fontSize;
 $font-size-lg: $font-size-base * math.div(5,4);
 $font-size-sm: $font-size-base * math.div(7,8);
