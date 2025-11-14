@@ -257,7 +257,7 @@
 
     display: block;
     color: $font-color;
-    padding: line-height-times(.25, true) 0 line-height-times(.25) 0;
+    padding: line-height-times(.25, true) 0 line-height-times(.25);
     border-bottom: $border-width solid $border-color;
 
     &:hover,
@@ -313,7 +313,7 @@
 
   &-listItem {
     border-top: $border-width solid $border-color;
-    padding: line-height-times(.25, true) 0 line-height-times(.25) 0;
+    padding: line-height-times(.25, true) 0 line-height-times(.25);
     font-size: $font-size-sm;
 
     &--empty {
