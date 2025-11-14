@@ -319,6 +319,18 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       }
       assert_equal 'Users invalid', flash[:danger]
     end
+
+    # This situation is not normal, but can happen in case some account data is corrupted (maybe an incomplete deletion).
+    # The idea is that the index page should not throw a 500 Internal Server Error when a single account is broken
+    test 'load the index page successfully when an account has no admin users' do
+      @invalid_buyer = FactoryBot.create(:buyer_account, name: 'invalid', provider_account: @provider)
+      @invalid_buyer.users.first.make_member
+      assert @invalid_buyer.reload.users.first.member?
+
+      get admin_buyers_accounts_path
+      assert_response :success
+      assert_xpath "//tr[@id='account_#{@invalid_buyer.id}']//td[contains(@class,'actions')]//i[contains(@class,'fa-exclamation-triangle')]", 1
+    end
   end
 
   class MasterLoggedInTest < Buyers::AccountsControllerTest

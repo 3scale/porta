@@ -98,6 +98,9 @@ module ButtonsHelper
 
   def link_to_activate_buyer_user(user)
     action_link_to('activate', activate_admin_buyers_account_user_path(user.account, user), method: :post, class: 'action')
+  rescue StandardError => exception
+    System::ErrorReporting.report_error(exception)
+    icon("exclamation-triangle", title: "This account is invalid (e.g. missing admin user)")
   end
 
   def button_activate_or_suspend(user)
