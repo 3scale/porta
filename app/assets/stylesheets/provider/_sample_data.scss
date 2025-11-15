@@ -1,3 +1,5 @@
+@use 'provider/buttons' as *;
+
 code.sample-data {
   display: block;
   /* stylelint-disable-next-line property-no-deprecated -- FIXME: we need to upgrade sass */

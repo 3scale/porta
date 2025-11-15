@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/links' as *;
+@use 'sass:math';
+
 #colorbox,
 #cboxOverlay,
 #cboxWrapper {
@@ -15,7 +20,7 @@
 }
 
 #colorbox {
-  box-shadow: 0 0 line-height-times(1 / 2) $box-shadow-color;
+  box-shadow: 0 0 line-height-times(.5) $box-shadow-color;
   background: rgba($body-background, .99);
   border: $border-width solid $border-color;
   text-align: left;
@@ -97,7 +102,7 @@
 
 #cboxClose {
   position: absolute;
-  top: line-height-times(2 / 3);
+  top: line-height-times(math.div(2,3));
   right: line-height-times(1);
   width: line-height-times(1);
   height: line-height-times(2);

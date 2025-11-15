@@ -1,3 +1,5 @@
+@use 'provider/colors' as *;
+
 @mixin upgrade-column {
   width: 45%;
 
