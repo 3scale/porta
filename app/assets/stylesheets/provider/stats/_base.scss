@@ -154,7 +154,7 @@ $stats-chart-tooltip-color: $label-color;
 
 .StatsChart-container {
   &.is-loading {
-    background-image: image-url('spinner.svg');
+    background-image: url('/assets/spinner.svg');
     background-position: center;
     background-repeat: no-repeat;
     content: '';
@@ -241,7 +241,7 @@ $stats-chart-tooltip-color: $label-color;
 // StatsMethodsTable
 
 .StatsMethodsTable-name.is-children {
-  background-image: image-url('child_metric_background.png');
+  background-image: url('/assets/child_metric_background.png');
   background-position: left center;
   background-repeat: no-repeat;
   padding-left: line-height-times(1);

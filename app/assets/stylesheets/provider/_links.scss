@@ -130,32 +130,32 @@ input[type='submit'].action {
     }
   }
 
-  &.view { background-image: image-url('xmag_16.png'); }
+  &.view { background-image: url('/assets/xmag_16.png'); }
 
-  &.more { background-image: image-url('dashboard_arrow.gif'); }
+  &.more { background-image: url('/assets/dashboard_arrow.gif'); }
 }
 
 button.edit { @include iconic("\f040\0000a0"); }
 
-button.suspend { background-image: image-url('cross.png'); }
+button.suspend { background-image: url('/assets/cross.png'); }
 
-button.unsuspend { background-image: image-url('tick.png'); }
+button.unsuspend { background-image: url('/assets/tick.png'); }
 
-button.resume { background-image: image-url('tick.png'); }
+button.resume { background-image: url('/assets/tick.png'); }
 
 button.publish,
 button.hide {
   padding-left: line-height-times(1 / 4);
 }
 
-button.up { background-image: image-url('up_green.png'); }
+button.up { background-image: url('/assets/up_green.png'); }
 
-button.down { background-image: image-url('down_green.png'); }
+button.down { background-image: url('/assets/down_green.png'); }
 
-button.reset { background-image: image-url('clear-left.png'); }
+button.reset { background-image: url('/assets/clear-left.png'); }
 
 button.create_key {
-  background-image: image-url('key.png');
+  background-image: url('/assets/key.png');
   padding-left: line-height-times(1);
 }
 
