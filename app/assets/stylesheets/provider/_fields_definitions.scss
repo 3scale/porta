@@ -10,7 +10,7 @@
   li {
     @include white-box-shadow;
 
-    background: $background-color-base no-repeat line-height-times(1 / 2) center image-url("drag-icon.png");
+    background: $background-color-base no-repeat line-height-times(1 / 2) center url('/assets/drag-icon.png');
     margin-bottom: line-height-times(1 / 2);
     overflow: visible !important;
     padding: line-height-times(1 / 2) 0 line-height-times(1 / 2) line-height-times(1);

@@ -69,7 +69,7 @@ table.contract_table {
   }
 
   table#metrics tr.child td.title {
-    background-image: image-url('child_metric_background.png');
+    background-image: url('/assets/child_metric_background.png');
     background-position: left center;
     background-repeat: no-repeat;
     color: $font-color;
