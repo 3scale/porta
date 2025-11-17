@@ -20,7 +20,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
   font-size: $font-size-base;
   border: $border-width solid $border-color;
   color: $font-color;
-  background-color: $background-color-base;
+  background-color: $body-background;
   width: 100%;
   padding: line-height-times(1 / 4);
   height: line-height-times(3 / 2);
@@ -32,6 +32,15 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
     border-color: $highlight-color;
     box-shadow: 0;
     color: $highlight-color;
+  }
+
+  &:disabled,
+  &[readonly="readonly"] {
+    outline: none !important;
+    background: var(--pf-global--disabled-color--300);
+    color: $disabled-color;
+    border: $border-width solid $border-color;
+    -webkit-text-fill-color: $disabled-color;
   }
 }
 
@@ -266,12 +275,12 @@ form.formtastic:not(.pf-c-form) {
 
     &.packed {
       background-color: transparent;
-      border-color: $background-color-base;
+      border-color: $body-background;
       border-top-color: $border-color;
     }
 
     &> legend {
-      background-color: $background-color-base;
+      background-color: $body-background;
       color: $highlight-color;
       cursor: pointer;
       margin-left: line-height-times(-1, true);
@@ -376,11 +385,9 @@ form.formtastic:not(.pf-c-form) fieldset.inputs label.disabled {
   color: $disabled-color;
 }
 
-select:disabled,
-form.formtastic:not(.pf-c-form) fieldset.inputs input:disabled,
-form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
+select:disabled {
   outline: none !important;
-  background: $disabled-background-color;
+  background: var(--pf-global--palette--black-150) !important;
   color: $disabled-color;
   border: $border-width solid $border-color;
   -webkit-text-fill-color: $disabled-color;
@@ -425,7 +432,7 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-hints,
 form.formtastic:not(.pf-c-form) fieldset > ol > li p.inline-errors {
   padding: 0;
   margin: 0;
-  color: $hint-color;
+  color: var(--pf-global--palette--black-500);
   font-size: $font-size-sm;
   max-width: line-height-times(36);
   display: inline-block;
@@ -477,18 +484,6 @@ form.formtastic:not(.pf-c-form) strong small {
 
 form.formtastic:not(.pf-c-form) .radio.required abbr {
   display: none;
-}
-
-@mixin placeholder {
-  color: $placeholder-color;
-  font-style: italic;
-  opacity: 1;
-}
-
-/* stylelint-disable-next-line selector-no-vendor-prefix -- FIXME: probably outdated */
-::-webkit-input-placeholder, ::-moz-placeholder {
-  /* Chrome/Opera/Safari/Firefox 19+ */
-  @include placeholder;
 }
 
 form.button-to,

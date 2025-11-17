@@ -104,26 +104,6 @@
   }
 }
 
-
-#cms-sidebar {
-  li.glowing.active,
-  li.glowing {
-    background-color: $glow-background-color;
-  }
-
-  input.glowing {
-    background-color: $glow-background-color;
-    color: $glow-color !important;
-
-    /* stylelint-disable-next-line selector-no-vendor-prefix -- FIXME: probably deprecated */
-    &::-webkit-input-placeholder, &::-moz-placeholder, &:-moz-placeholder {
-      /* Chrome/Opera/Safari/Firefox 19+/Firefox 18- */
-      background-color: $glow-background-color;
-      color: $glow-color !important;
-    }
-  }
-}
-
 #recent-templates {
   @extend .left-column;
 

@@ -2,7 +2,7 @@ $subsection-bg-color: rgba(0, 0, 0, 0.05);
 
 #subsections-container {
   background-color: transparent;
-  border: 1px solid $altoGray;
+  border: 1px solid var(--pf-global--BorderColor--100);
   box-shadow: none;
   margin-bottom: 10px;
   margin-top: 10px;

@@ -1,46 +1,8 @@
-@mixin internal-potato-button($color, $bgcolor, $border-color) {
-  font-size: $font-size-base;
-  background-color: $bgcolor;
-  border-radius: $border-radius-sm;
-  display: inline-block;
-  vertical-align: top;
-  margin: 0;
-  padding: line-height-times(1 / 4) line-height-times(1 / 2) !important;
-  border: $border-width solid $border-color;
-  color: $color;
-  text-decoration: none;
-  width: auto !important;
-  min-width: line-height-times(3);
-  cursor: pointer;
-  white-space: nowrap;
-  text-align: center !important;
-  height: line-height-times(1.5);
-  line-height: $line-height-sm;
-  appearance: none;
-
-  &.big {
-    font-size: $font-size-lg;
-  }
-
-  &:hover {
-    color: $bgcolor;
-    background-color: transparent;
-  }
-
-}
-
 table [type='submit']:not(.action, .pf-c-button, .pf-c-dropdown__menu-item) {
   float: right;
-
-  @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
-}
-
-table .disabled-button,
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-.disabled-button {
-  @include internal-potato-button($disabled-button-color, $disabled-button-bg-color, $disabled-button-border-color);
-
-  cursor: default;
+  // TODO: make sure no "important" buttons remain
+  // @extend .pf-m-primary;
+  // @extend .pf-c-button;
 }
 
 .button.next,

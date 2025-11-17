@@ -54,6 +54,7 @@ class Dashboard::MessagesPresenter
     t("no_messages_#{index}")
   end
 
+  # TODO: looks like this is overridden by NotificationsPresenter and never called.
   def link_tag(message)
     h.content_tag(:a, h.message_subject(message), class: message_class(message),
                                                   href: h.provider_admin_messages_inbox_path(message))
@@ -61,10 +62,6 @@ class Dashboard::MessagesPresenter
 
   def message_class(message)
     "DashboardStream-link DashboardStream-link--#{message.state}"
-  end
-
-  def notification_class(_message)
-    'DashboardStream-notification'
   end
 
   def t(key)

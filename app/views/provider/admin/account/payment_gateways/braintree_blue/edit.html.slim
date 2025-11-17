@@ -8,15 +8,16 @@
   ' service. You'll be charged monthly around the 7th of the following month and
   | receive email notification about a successful payment along with the invoice.
 
-- if @errors
-  .InfoBox.InfoBox--notice
-    h2 Your payment details could not be saved
-    p There were problems with the following fields:
-    ul.no_style
-      - @errors.each do |error|
-        li = error
-
 = semantic_form_for current_account.customer, as: :customer, url: hosted_success_provider_admin_account_braintree_blue_path(next_step: params[:next_step]), id: 'customer_form' do |form|
+  - if @errors
+    = pf_inline_alert t('.error_alert'), variant: :danger do
+      div.pf-c-alert__description
+        p = t('.error_description')
+        ul.pf-c-list
+          - @errors.each do |error|
+            li = error
+    <br>
+
   = form.inputs "Personal Details" do
     = form.input :first_name, required: true
     = form.input :last_name, required: true

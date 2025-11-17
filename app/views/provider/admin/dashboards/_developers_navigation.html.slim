@@ -1,5 +1,5 @@
 nav.DashboardNavigation
-  ul.DashboardNavigation-list
+  ul
     // Acounts, Pending Accounts & Account Plans
     - if can?(:manage, :partners)
       li.DashboardNavigation-list-item
@@ -44,7 +44,7 @@ nav.DashboardNavigation
                                     provider_admin_cms_root_path,
                                     icon_name: 'sitemap'
 
-        - if current_account.templates.with_draft
+        - if current_account.templates.with_draft.any?
           == dashboard_secondary_collection_link 'Draft',
                                                   current_account.templates.with_draft,
                                                   provider_admin_cms_changes_path,

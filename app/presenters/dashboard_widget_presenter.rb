@@ -76,7 +76,11 @@ class DashboardWidgetPresenter
   end
 
   def spinner
-    h.content_tag(:i, ''.freeze, class: 'fa fa-spinner fa-spin fa-3x DashboardWidget-spinner'.freeze)
+    h.content_tag(:div, class: 'DashboardWidget--spinner-container') do
+      h.content_tag(:svg, class: 'pf-c-spinner', role: 'progressbar', viewBox: '0 0 100 100', aria: { label: 'Loading...' }) do
+        h.content_tag(:circle, nil, class: 'pf-c-spinner__path', cx: '50', cy: '50', r: '45', fill: 'none')
+      end
+    end
   end
 
   def locals

@@ -14,7 +14,7 @@
   div.Dashboard-widgets
     // account level
     - if presenter.can_see_audience_section?
-      section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
+      section#audience.DashboardSection.DashboardSection--audience
         header.DashboardSection-header
           h1.DashboardSection-title title="Audience"
             i.fa.fa-bullseye>
@@ -26,12 +26,11 @@
                                           applications: current_user.accessible_cinstances.not_bought_by(current_account),
                                           alerts: current_account.buyer_alerts.unread
 
-
         // Account Level Widgets
         = dashboard_widget :new_accounts if can?(:manage, :partners)
         = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
-    section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
+    section#apis.DashboardSection.DashboardSection--services
       div.pf-c-content
         h1 APIs
       - if presenter.access_to_products? || presenter.access_to_backends?

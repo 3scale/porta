@@ -20,6 +20,6 @@ body {
 }
 
 @mixin white-box-shadow {
-  background-color: $white;
-  box-shadow: $whiteBoxShadow;
+  background-color: white;
+  box-shadow: var(--pf-global--BoxShadow--sm);
 }

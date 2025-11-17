@@ -503,11 +503,16 @@ en:
           braintree_blue:
             destroy:
               success: Your credit card was successfully removed
+            edit:
+              error_alert: 'Your payment details could not be saved'
+              error_description: 'There were problems with the following fields:'
             invalid_merchant: Invalid merchant id
             hosted_success:
               billing_address_error: Something went wrong and billing information could not be stored
               credit_card_error: Credit Card details could not be stored
               success: Credit card details were successfully stored
+            show:
+              add_payment_details: Add payment details
 
           update:
             success: Credit card details were successfully stored

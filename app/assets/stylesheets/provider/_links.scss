@@ -11,11 +11,6 @@ p a:not(.pf-c-button) {
 a {
   text-decoration: none;
   color: $link-color;
-
-  /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-  &:hover {
-    color: $link-hover-color;
-  }
 }
 
 @mixin iconic($content) {
@@ -96,7 +91,7 @@ input[type='submit'].action {
   &.ok,
   &.enable,
   &.resume {
-    color: $create-color;
+    color: $success-color;
 
     &:hover {
       color: $link-hover-color;
@@ -120,7 +115,7 @@ input[type='submit'].action {
   &.eye-slash,
   &.suspend,
   &.disable {
-    color: $delete-color;
+    color: $error-color;
 
     &:hover {
       color: $link-hover-color;
