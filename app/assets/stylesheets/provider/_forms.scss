@@ -5,7 +5,7 @@ input[type='text']:not(.pf-c-form-control, .pf-c-text-input-group__text-input),
 input[type='search']:not(.pf-c-form-control),
 input[type='number'],
 textarea,
-select,
+select:not(.pf-c-form-control),
 form.button-to button:not(.pf-c-button),
 form.formtastic:not(.pf-c-form) button:not(.pf-c-button, .btn-add, .btn-danger,
   .pf-c-data-list__item-draggable-button, .pf-c-dropdown__toggle-button, .pf-c-dropdown__menu-item),
@@ -208,10 +208,6 @@ form.formtastic:not(.pf-c-form) ol > li {
   max-width: line-height-times(32);
   position: relative;
 
-  &.full-width {
-    max-width: 100%;
-  }
-
   &.hidden {
     margin: 0;
   }
@@ -376,7 +372,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs label.disabled {
   color: $disabled-color;
 }
 
-select:disabled,
+select:disabled:not(.pf-c-form-control),
 form.formtastic:not(.pf-c-form) fieldset.inputs input:disabled,
 form.formtastic:not(.pf-c-form) fieldset.inputs input[readonly="readonly"] {
   outline: none !important;
@@ -594,7 +590,7 @@ form.formtastic#new_metric {
 
 // HACK: first pf-c-section in a form don't have margin-top. However, formtastic adds hidden fields
 // before and therefore the section is not a first element and margin-top is maintained.
-.pf-c-form.formtastic > input[type="hidden"] + .pf-c-form__section {
+.pf-c-form > input[type="hidden"] + .pf-c-form__section {
   margin-top: 0;
 }
 

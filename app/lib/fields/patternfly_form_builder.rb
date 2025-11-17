@@ -48,4 +48,19 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
       title + template.capture { yield block } # FIXME: Is this making the first render super slow?
     end
   end
+
+  def input(method, options = {}, &block)
+    if block_given?
+      input_class = namespaced_input_class(options[:as])
+
+      supports_blocks = input_class.respond_to?(:block_compatible?) &&
+                        input_class.block_compatible?
+
+      raise ArgumentError, "Input type :#{input_type} does not support blocks" unless supports_blocks
+
+      options[:block] = block
+    end
+
+    super(method, options)
+  end
 end
