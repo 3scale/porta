@@ -729,7 +729,7 @@ jobs:
 
   cucumber:
     <<: *build-envs-mysql
-    parallelism: 40
+    parallelism: 30
     parameters:
       executor:
         type: string
@@ -742,7 +742,7 @@ jobs:
 
   cucumber-postgres:
     <<: *build-envs-postgresql
-    parallelism: 40
+    parallelism: 30
     parameters:
       executor:
         type: string
