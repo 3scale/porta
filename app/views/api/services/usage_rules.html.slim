@@ -1,23 +1,87 @@
-- # TODO: When APIAP is default, adjust the old settings cukes to usage rules
+- content_for :title, 'Usage Rules'
 - content_for :page_header_title, 'Usage Rules'
 
-/ TODO: is this ever used? If so, replace with a DefaultPlanSelect (React) and forget about autosubmit
-- if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
-  = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), :method => :post, :class => 'service autosubmit formtastic', :remote => true do
-    fieldset.inputs
-      legend Default Service Plan
-      ol
-        li.string.optional
-          label for="default_plan"  Default plan
-          - service_plans_exists = @service.service_plans.exists?
-          = select_tag :id, options_from_collection_for_select(@service.service_plans.not_custom, "id", "name", lambda { |p| p.master? }),
-            :include_blank => true, :id => "default_plan", disabled: !service_plans_exists
-          - if service_plans_exists
-            p.inline-hints= @service.service_plans.first.class.human_attribute_name 'default_plan_hint'
-          - else
-            p.inline-hints Please create a service plan first.
+- content_for :javascripts do
+  = stylesheet_packs_chunks_tag 'pf_form', 'usage_rules'
 
-= semantic_form_for @service, :url => admin_service_path(@service) do |form|
-  = render :partial => 'api/services/forms/usage_rules', :locals => { :form => form }
-  = form.actions do
-    = form.commit_button 'Update Product'
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    / TODO: THREESCALE-12093: remove autosubmit
+    - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible? || true
+      = form_tag polymorphic_path([:masterize, :admin, @service, ServicePlan]), method: :post,
+                                                                                class: 'autosubmit pf-c-form pf-m-limit-width',
+                                                                                remote: true
+        section class="pf-c-form__section" role="group" aria-labelledby="settings-section-users"
+          div class="pf-c-form__section-title" id="settings-section-users" aria-hidden="true" Default service plan
+          div class="pf-c-form__group"
+            div class="pf-c-form__group-control"
+              - service_plans_exists = @service.service_plans.exists?
+              = select_tag :id, options_from_collection_for_select(@service.service_plans.not_custom, "id", "name", lambda { |p| p.master? }),
+                                prompt: '',
+                                class: "pf-c-form-control #{'pf-m-warning' unless service_plans_exists}",
+                                id: 'default_plan',
+                                disabled: !service_plans_exists
+              - if service_plans_exists
+                p class="pf-c-form__helper-text"
+                  = @service.service_plans.first.class.human_attribute_name('default_plan_hint')
+              - else
+                p class="pf-c-form__helper-text pf-m-warning"
+                  | Please create a service plan first
+
+    = semantic_form_for @service, url: admin_service_path(@service),
+                                  builder: Fields::PatternflyFormBuilder,
+                                  html: { class: "pf-c-form pf-m-limit-width" } do |form|
+      - multiple_applications = current_account.multiple_applications_allowed? && false
+      = form.inputs multiple_applications ? 'Application Requirements' : 'Signup & Use' do
+        / very old TODO: remove intentions_required and make it an extra_field? Or how about just remove it?
+        - unless multiple_applications
+          = form.input :intentions_required, as: :patternfly_checkbox
+
+        = form.input :buyers_manage_apps, as: :patternfly_checkbox
+
+        - if @service.backend_version.v2?
+          = form.input :buyers_manage_keys, as: :patternfly_checkbox
+          = form.input :mandatory_app_key, as: :patternfly_checkbox
+
+        - if @service.oauth?
+          = form.input :buyer_key_regenerate_enabled, as: :patternfly_checkbox
+
+        = form.input :referrer_filters_required, as: :patternfly_checkbox
+        = form.input :custom_keys_enabled, as: :patternfly_checkbox
+
+      = form.inputs "Application Plans" do
+        = form.input :buyer_can_select_plan, as: :patternfly_checkbox
+
+      = form.inputs "Application Plan Changing" do
+        p = t('sites.usage_rules.edit.plans_info')
+        div class="pf-c-form__group" role="radiogroup" aria-labelledby="change-plan-radio-group"
+          div class="pf-c-form__group-label" id="change-plan-radio-group"
+            label class="pf-c-form__label"
+              span class="pf-c-form__label-text"
+                = t('sites.usage_rules.edit.plans_label')
+          = render 'shared/plan_change_settings', setting: :buyer_plan_change_permission,
+                                                  current: @service.buyer_plan_change_permission.to_sym
+
+      = form.inputs 'Alerts' do
+        div class="pf-c-content"
+          p
+            ' Here you can set at which utilization levels you want to trigger alerts, whom you want to send these alerts to (admins and/or developers) and by which means (web and/or email).
+            em In order for an application to trigger usage alerts, usage limit(s) need to be set up in the Application Plan to which the application is subscribed.
+
+        table class="pf-c-table pf-m-grid-lg" role="grid"
+          thead
+            tr role="row"
+              th
+              - alert_limits.each do |level|
+                th role="columnheader" scope="col"
+                  = level
+                  | %
+
+          tbody
+            = row_for_alert_levels 'Show Web Alerts to Admins of this Account', :web_provider
+            = row_for_alert_levels 'Send Email Alerts to Admins of this Account', :email_provider
+            = row_for_alert_levels 'Show Web Alerts to Admins of the Developer Account', :web_buyer
+            = row_for_alert_levels 'Send Email Alerts to Admins of the Developer Account', :email_buyer
+
+      = form.actions do
+        = form.commit_button 'Update product'

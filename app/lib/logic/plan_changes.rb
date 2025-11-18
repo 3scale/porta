@@ -20,12 +20,7 @@
 module Logic
   module PlanChanges
 
-    PERMISSIONS = [[ "Request a plan change", :request ],
-                   [ "Change the plan directly", :direct ],
-                   [ "Only request a plan change", :credit_card],
-                   [ "Request Credit Card entry for paid plans", :request_credit_card],
-                   [ "Don't allow plan changes", :none ]]
-
+    PERMISSIONS = %i[request direct credit_card request_credit_card none].freeze
 
     module Contract
       # Returns true, if +Buyer+ is able to ask for some kind of
