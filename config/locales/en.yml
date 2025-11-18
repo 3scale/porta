@@ -1339,6 +1339,10 @@ en:
       update:
         success: Product information updated
         error: Couldn't update Product
+      usage_rules:
+        plans_info:
+          When 'Request plan change' is selected you will be informed about users' requests by
+          email - you can then execute it in administration interface.
       support_email:
         remove_success: Custom support email removed from product
         update_success: Support email updated successfully

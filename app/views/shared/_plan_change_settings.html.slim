@@ -1,19 +1,11 @@
-- current_setting = settings.send(permission)
+- allowed_permissions = can?(:see, :finance) ? Logic::PlanChanges::PERMISSIONS : Logic::PlanChanges::PERMISSIONS[0..1]
 
 div class="pf-c-form__group-control pf-m-stack"
-  = render 'plan_change_radio', permission: permission,
-                                value: 'request',
-                                checked: current_setting == 'request'
-  = render 'plan_change_radio', permission: permission,
-                                value: 'direct',
-                                checked: current_setting == 'direct'
-  - if can?(:see, :finance)
-    = render 'plan_change_radio', permission: permission,
-                                  value: 'credit_card',
-                                  checked: current_setting == 'credit_card'
-    = render 'plan_change_radio', permission: permission,
-                                  value: 'request_credit_card',
-                                  checked: current_setting == 'request_credit_card'
-    = render 'plan_change_radio', permission: permission,
-                                  value: 'none',
-                                  checked: current_setting == 'none'
+  - allowed_permissions.each do |permission|
+    - id = "settings_#{setting}_#{permission}"
+    - checked = current == permission
+
+    div class="pf-c-radio"
+      input class="pf-c-radio__input" name="settings[#{setting}]" id=id type="radio" value=permission checked=checked
+      label class="pf-c-radio__label" for=id
+        = t("formtastic.labels.settings.change_plan_permission.#{permission}")

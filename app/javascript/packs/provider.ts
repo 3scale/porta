@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach(form => {
       form.addEventListener('change', () => {
         if (form.dataset.remote) {
-          void window.Rails.handleRemote(jQuery1(form))
+          void window.Rails.handleRemote.call(form, jQuery1(form))
         } else {
           form.submit()
         }

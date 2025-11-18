@@ -3,11 +3,17 @@
 class PatternflyCheckboxInput < Formtastic::Inputs::BooleanInput
   delegate :tag, to: :template
 
+  def self.block_compatible?
+    true
+  end
+
   def to_html
     tag.div(class: 'pf-c-form__group') do
       tag.div(class: 'pf-c-form__group-control') do
         tag.div(class: 'pf-c-check') do
-          hidden_field_html + input + label + description
+          content = hidden_field_html + input + label + description
+          content += template.capture(&options[:block]) if options[:block]
+          content
         end
       end
     end

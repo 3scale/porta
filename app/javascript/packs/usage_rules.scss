@@ -1,1 +1,17 @@
 @import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/utilities/Spacing/spacing.css';
+
+.use-service-plans,
+.use-account-plans {
+  grid-column: 2;
+  display: none;
+}
+
+#settings_account_plans_ui_visible:checked ~ .use-account-plans,
+#settings_service_plans_ui_visible:checked ~ .use-service-plans {
+  display: block;
+}
+
+.pf-c-form + .pf-c-form {
+  margin-top: var(--pf-global--spacer--xl) !important;
+}

@@ -73,7 +73,7 @@ Feature: Multiservice feature
     And I press "Update Product"
     And I go to the usage rules of service "Less fancy API"
     And I uncheck "Developers can manage applications"
-    And I press "Update Product"
+    And I press "Update product"
     And I go to the overview page of product "Less fancy API"
     And I follow "Product Overview"
     Then I should see "Less fancy API"
