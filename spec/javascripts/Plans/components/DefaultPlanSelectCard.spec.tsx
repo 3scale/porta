@@ -1,11 +1,11 @@
 import { mount } from 'enzyme'
 
-import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelect'
+import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
 import { Select } from 'Common/components/Select'
 import { openSelect, selectOption } from 'utilities/test-utils'
 
 import type { IRecord } from 'Types'
-import type { Props } from 'Plans/components/DefaultPlanSelect'
+import type { Props } from 'Plans/components/DefaultPlanSelectCard'
 
 const plan = { id: 1, name: 'My Plan' }
 const plans = [plan]

@@ -8,11 +8,11 @@ import {
   HelperTextItem
 } from '@patternfly/react-core'
 
-import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelect'
+import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
 import { PlansTable } from 'Plans/components/PlansTable'
 
 import type { FunctionComponent } from 'react'
-import type { Props as DefaultPlanSelectProps } from 'Plans/components/DefaultPlanSelect'
+import type { Props as DefaultPlanSelectProps } from 'Plans/components/DefaultPlanSelectCard'
 import type { Props as PlansTableProps } from 'Plans/components/PlansTable'
 
 interface Props {
