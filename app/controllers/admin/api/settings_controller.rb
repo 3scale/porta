@@ -9,7 +9,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
 
   representer ::Settings
 
-  before_action :enforce_sso_allowed?, only: [:update], if: -> { settings_params[:enforce_sso] }
+  before_action :validate_enforcing_sso_allowed, only: [:update]
 
   ALLOWED_PARAMS = %i[
     useraccountarea_enabled hide_service signups_enabled account_approval_required strong_passwords_enabled
@@ -40,7 +40,11 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
     @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS)
   end
 
-  def enforce_sso_allowed?
+  def validate_enforcing_sso_allowed
+    return unless settings_params.key?(:enforce_sso)
+
+    return unless Settings.type_for_attribute('enforce_sso').cast(settings_params[:enforce_sso])
+
     sso_validator = EnforceSSOValidator.new(account: current_account)
 
     return if sso_validator.valid?
