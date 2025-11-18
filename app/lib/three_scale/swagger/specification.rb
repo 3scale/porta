@@ -4,13 +4,11 @@ module ThreeScale
   module Swagger
     class Specification
       class VBase
-
-        attr_reader :doc, :errors, :validator
+        attr_reader :doc, :errors
 
         def initialize(spec)
           @doc = spec.doc
           @errors = spec.errors
-          @validator = JSONValidator.new(@doc)
         end
 
         # The base path of the specification. This is needed to have it whitelisted on api_docs_proxy.
@@ -75,7 +73,31 @@ module ThreeScale
 
       class V30 < V3x; end
 
-      class V20 < VBase
+      class Swagger < VBase
+        def self.json_schema_path
+          raise "#{self} should implement #{__method__}"
+        end
+
+        def self.json_schema
+          @json_schema ||= JSON.parse(Rails.root.join(json_schema_path).read).freeze
+        end
+
+        DRAFT4_RESOLVER = {
+          JSONSchemer::Draft4::BASE_URI.dup.tap { |uri| uri.fragment = nil } => JSONSchemer::Draft4::SCHEMA
+        }.to_proc
+
+        def validate
+          JSONSchemer.schema(self.class.json_schema, ref_resolver: DRAFT4_RESOLVER).validate(doc).to_a.map { _1.fetch('error') }.each do |error|
+            errors.add(:base, error)
+          end
+        end
+
+        def swagger?
+          true
+        end
+      end
+
+      class V20 < Swagger
         # NOTE:
         #   * "If the schemes is not included, the default scheme to be used is the one used to access the specification."
         #   * "If the host is not included, the host serving the documentation is to be used (including the port)."
@@ -88,30 +110,14 @@ module ThreeScale
           (schema && host)? [schema, host].join("://") : ""
         end
 
-        JSON_SCHEMA = {'$ref' => 'http://swagger.io/v2/schema.json#'}.freeze
-
-        def validate
-          validator.fully_validate(JSON_SCHEMA).each do |error|
-            errors.add(:base, error)
-          end
-        end
-
-        def swagger?
-          true
+        def self.json_schema_path
+          'app/lib/three_scale/swagger/schemas/swagger-2.0.schema.json'
         end
       end
 
-      class V12 < VBase
-        JSON_SCHEMA = {'$ref' => 'http://swagger-api.github.io/schemas/v1.2/apiDeclaration.json#'}.freeze
-
-        def validate
-          validator.fully_validate(JSON_SCHEMA).each do |error|
-            errors.add(:base, error)
-          end
-        end
-
-        def swagger?
-          true
+      class V12 < Swagger
+        def self.json_schema_path
+          'app/lib/three_scale/swagger/schemas/swagger-1.2.schema.json'
         end
       end
 
