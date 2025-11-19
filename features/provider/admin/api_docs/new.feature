@@ -57,8 +57,8 @@ Feature: Audience new ActiveDocs page
     And field "API JSON Spec" has inline error "<error>"
 
     Examples:
-      | swagger version         | error                               |
-      | invalid Swagger 1.2     | did not contain a required property |
-      | invalid Swagger 2       | did not contain a required property |
-      | invalid OAS 3.0         | is missing required properties      |
-      | invalid OAS 3.1         | is missing required properties      |
+      | swagger version         | error                          |
+      | invalid Swagger 1.2     | is missing required properties |
+      | invalid Swagger 2       | is missing required properties |
+      | invalid OAS 3.0         | is missing required properties |
+      | invalid OAS 3.1         | is missing required properties |

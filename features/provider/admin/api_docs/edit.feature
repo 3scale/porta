@@ -95,7 +95,7 @@ Feature: Audience edit ActiveDocs page
 
     Examples:
       | swagger version | invalid swagger version | error |
-      | Swagger 1.2     | invalid Swagger 1.2     | did not contain a required property |
-      | Swagger 2       | invalid Swagger 2       | did not contain a required property |
+      | Swagger 1.2     | invalid Swagger 1.2     | is missing required properties |
+      | Swagger 2       | invalid Swagger 2       | is missing required properties |
       | OAS 3.0         | invalid OAS 3.0         | is missing required properties |
       | OAS 3.1         | invalid OAS 3.1         | is missing required properties |

@@ -1,0 +1,37 @@
+{
+  "apis": [
+    {
+      "path": "/pet/{petId}",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Get pet by ID",
+          "nickname": "getPetById",
+          "parameters": [
+            {
+              "name": "petId",
+              "description": "ID of pet",
+              "required": true,
+              "type": "integer",
+              "paramType": "path"
+            },
+            {
+              "name": "filter",
+              "description": "Query filter",
+              "required": false,
+              "type": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "body",
+              "description": "Request body",
+              "required": false,
+              "type": "string",
+              "paramType": "body"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
