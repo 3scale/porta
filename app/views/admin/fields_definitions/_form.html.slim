@@ -1,0 +1,18 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'fields_definitions_form'
+  = stylesheet_packs_chunks_tag 'pf_form'
+
+- is_edit = local_assigns[:edit].presence
+
+= form.input :target, as: :hidden
+= form.input :name, as: :patternfly_input, readonly: is_edit, required: !is_edit
+= form.input :label , as: :patternfly_input
+
+- unless @fields_definition.required_field_on_target?
+  - required_checked = @fields_definition.required
+  = form.input :required, as: :patternfly_checkbox
+  = form.input :hidden, as: :patternfly_checkbox, input_html: { disabled: required_checked }
+  = form.input :read_only, as: :patternfly_checkbox, input_html: { disabled: required_checked }
+  = form.input :choices_for_views, label: 'Choices',
+                                   as: :patternfly_textarea,
+                                   input_html: { rows: 4 }

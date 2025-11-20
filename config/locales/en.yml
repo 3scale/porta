@@ -174,8 +174,35 @@ en:
       update:
         success: ActiveDocs Spec was successfully updated
     fields_definitions:
+      edit:
+        commit_button: Update
+        page_header_title: Editing field %{name} for %{target}
+        page_header_body:
+          Here you can add a field to store information about your partners and make it Hidden, Read
+          Only, Required, or provide a different label. The label is the text your partners will see
+          when viewing or entering their data.
+        page_header_body_note:
+          This specific field is of internal use for the app, so you can only change its Label.
+      index:
+        page_header_body:
+          Here you can manage all the information you gather from your users. You can add new fields
+          and change the existing ones; making them Hidden, Read Only, or Required. You can change
+          the text your users see when viewing or entering data (shown here between quotes). Drag
+          and drop the fields to set the order in which they will be shown.
+        page_header_title: Fields Definitions
+        page_title: Fields Definitions
       create:
         success: Field was successfully created
+      new:
+        commit_button: Create
+        page_header_title: New field definition for %{target}
+        page_header_body:
+          Add a field to store information about your developers on signup or at any other time.
+          Make the fields Hidden, Read Only, Required. The label is the text developers will see
+          when viewing or entering their data.
+        select:
+          label: Field
+          helper_text: Create a new field from scratch or based on an existing one
     user_confirmations:
       create:
         already_active: User is already confirmed
@@ -2125,6 +2152,7 @@ en:
         required: "Makes the field required for developers."
         read_only: "Developers won't be able to change this field."
         hidden: "Developers won't be able to see this field."
+        choices_for_views: Separate the predefined options for this field by commas or enter each option on a new line.
 
       web_hook:
         active: On/off switch for triggering webhooks

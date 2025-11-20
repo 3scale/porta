@@ -1,109 +1,64 @@
-import $ from 'jquery'
-
 document.addEventListener('DOMContentLoaded', () => {
-  function enableCheckboxes () {
-    checkboxesDisabled(false)
-  }
+  const select = document.querySelector<HTMLSelectElement>('#fields_definition_fieldname')
 
-  function disableCheckboxes () {
-    checkboxesDisabled(true)
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-non-null-assertion
+  const { requiredFields } = (document.querySelector<HTMLFormElement>('form.fields_definition')!).dataset
 
-  function checkboxesDisabled (action: boolean) {
-    $<HTMLInputElement>('#fields_definition_hidden').attr('disabled', action ? 'true' : null)
-    $<HTMLInputElement>('#fields_definition_read_only').attr('disabled', action ? 'true' : null)
-    $<HTMLInputElement>('#fields_definition_required').attr('disabled', action ? 'true' : null)
-  }
+  const nameInput = document.getElementById('fields_definition_name') as HTMLInputElement
+  const checkboxes = document.querySelectorAll<HTMLInputElement>('input.pf-c-check__input')
+  const choices = document.getElementById('fields_definition_choices_for_views') as HTMLTextAreaElement
 
-  function disableNameField () {
-    $<HTMLInputElement>('#fields_definition_name')[0].value = $<HTMLInputElement>('#fields_definition_fieldname')[0].value
-    $<HTMLInputElement>('#fields_definition_name').attr('readonly', 'true')
-  }
+  select?.addEventListener('change', () => {
+    if (isThereUnsavedChanges() && !window.confirm('Changes will be lost.')) {
+      // TODO: select previous value and don't erase anything
+      // return
+    }
 
-  function clearCheckboxes () {
-    $<HTMLInputElement>('#fields_definition_hidden')[0].checked = false
-    $<HTMLInputElement>('#fields_definition_read_only')[0].checked = false
-    $<HTMLInputElement>('#fields_definition_required')[0].checked = false
-  }
+    const selectedOption = select.selectedOptions[0].value
 
-  function clearChoices () {
-    $<HTMLInputElement>('#fields_definition_choices_for_views')[0].value = ''
-  }
+    checkboxes.forEach(input => { input.checked = false })
+    choices.value = ''
+    choices.readOnly = false
 
-  function readOnlyChoices (action: boolean) {
-    $('#fields_definition_choices_for_views').attr('readonly', action ? 'true' : null)
-  }
+    if (selectedOption === '[new field]') {
+      nameInput.readOnly = false
+      nameInput.value = ''
+      checkboxes.forEach(input => { input.disabled = false })
+      disableCheckboxes(false)
 
-  function enableChoices () {
-    readOnlyChoices(false)
-  }
-
-  // new view
-  const $fieldname = $<HTMLInputElement>('#fields_definition_fieldname')
-  const requiredFields = $<HTMLInputElement>('#required_fields')[0].value.split(',')
-
-  const fieldNameValue = $fieldname[0].value
-
-  if ($fieldname.length !== 0) {
-    $fieldname.on('change', () => {
-      if (fieldNameValue === '[new field]') {
-        const $name = $<HTMLInputElement>('#fields_definition_name')
-        $name.attr('readonly', null)
-        $name[0].value = ''
-        clearCheckboxes()
-        enableCheckboxes()
-        clearChoices()
-        enableChoices()
-
-      } else if (requiredFields.includes(fieldNameValue)) {
-        //non_modifiable fields
-        disableNameField()
-        clearCheckboxes()
-        disableCheckboxes()
-        clearChoices()
-        enableChoices()
-
-      } else {
-        disableNameField()
-        clearCheckboxes()
-        enableCheckboxes()
-        clearChoices()
-        enableChoices()
-      }
-    })
-  }
-
-  const $required = $<HTMLInputElement>('#fields_definition_required')
-
-  if ($required.length > 0 && $required[0].checked) {
-    const $hidden = $<HTMLInputElement>('#fields_definition_hidden')
-    $hidden[0].checked = false
-    $hidden.attr('disabled', 'true')
-
-    const $readonly = $<HTMLInputElement>('#fields_definition_read_only')
-    $readonly[0].checked = false
-    $readonly.attr('disabled', 'true')
-  }
-
-  //edit view
-  if (document.getElementById('fields-definitions-edit-view') !== null) {
-    const $name = $('#fields_definition_name')
-    $name.attr('readonly', 'true')
-    $name.attr('disabled', 'true')
-  }
-
-  $required.on('change', () => {
-    const $hidden = $<HTMLInputElement>('#fields_definition_hidden')
-    const $readonly = $<HTMLInputElement>('#fields_definition_read_only')
-
-    if ($required[0].checked) {
-      $hidden[0].checked = false
-      $readonly[0].checked = false
-      $hidden.attr('disabled', 'true')
-      $readonly.attr('disabled', 'true')
     } else {
-      $hidden.attr('disabled', null)
-      $readonly.attr('disabled', null)
+      nameInput.readOnly = true
+      nameInput.value = selectedOption
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-non-null-assertion
+      disableCheckboxes(requiredFields!.includes(selectedOption))
+    }
+  })
+
+  function disableCheckboxes (disable = true) {
+    checkboxes.forEach(input => { input.disabled = disable })
+  }
+
+  function isThereUnsavedChanges (): boolean {
+    return document.querySelector('input.pf-c-check__input:checked') !== null
+      || choices.value !== ''
+  }
+
+  const requiredCheckbox = document.getElementById('fields_definition_required') as HTMLInputElement | null
+  const hiddenCheckbox = document.getElementById('fields_definition_hidden') as HTMLInputElement
+  const readOnlyCheckbox = document.getElementById('fields_definition_read_only') as HTMLInputElement
+
+  requiredCheckbox?.addEventListener('change', () => {
+    const { checked } = requiredCheckbox
+
+    hiddenCheckbox.disabled = checked
+    void (hiddenCheckbox.nextElementSibling as HTMLLabelElement).classList.toggle('pf-m-disabled', checked)
+
+    readOnlyCheckbox.disabled = checked
+    void (readOnlyCheckbox.nextElementSibling as HTMLLabelElement).classList.toggle('pf-m-disabled', checked)
+
+    if (checked) {
+      hiddenCheckbox.checked = false
+      readOnlyCheckbox.checked = false
     }
   })
 })

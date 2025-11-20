@@ -1,0 +1,23 @@
+@import '~@patternfly/patternfly/layouts/Level/level.css';
+@import '~@patternfly/patternfly/components/DataList/data-list.css';
+@import '~@patternfly/patternfly/components/DragDrop/drag-drop.css';
+@import '~@patternfly/patternfly/components/Panel/panel.css';
+
+.pf-c-data-list.ui-sortable-disabled {
+  /* HACK: can't @extend .pf-m-ghost-row, so copied from components/DataList/data-list.css */
+  .pf-c-data-list__item::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    content: "";
+    background-color: var(--pf-c-data-list__item--m-ghost-row--after--BackgroundColor);
+    opacity: var(--pf-c-data-list__item--m-ghost-row--after--Opacity);
+  }
+}
+
+.pf-c-data-list__item.ui-sortable-placeholder {
+  /* HACK: jquery-ui/sortable hides the row being sorted */
+  visibility: unset !important;
+}
