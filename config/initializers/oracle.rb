@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# Disable array fetching in OCI8 to avoid memory bloat
+# This must be patched before any database connections are made
+# See: https://github.com/kubo/ruby-oci8/issues/230
+if Gem.loaded_specs.key?('ruby-oci8')
+  require "oci8"
+
+  module OCI8CursorMemoryPatch
+    private
+
+    def define_one_column(pos, param)
+      @fetch_array_size = nil # disable array fetching anytime
+      super # call original
+    end
+  end
+
+  OCI8::Cursor.prepend(OCI8CursorMemoryPatch)
+end
+
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
