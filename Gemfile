@@ -265,7 +265,7 @@ gem 'unicorn', require: false, group: %i[production]
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
   gem 'activerecord-oracle_enhanced-adapter', '~> 7.0.3', install_if: oracle
-  gem 'ruby-oci8', require: false, install_if: oracle
+  gem 'ruby-oci8', '2.2.6.1', require: false, install_if: oracle
 end
 
 gem 'kubeclient'
