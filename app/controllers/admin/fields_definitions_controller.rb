@@ -10,10 +10,6 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
     respond_with(field_definitions)
   end
 
-  def show
-    respond_with(field_definition)
-  end
-
   def new
     @fields_definition = field_definitions.build(field_definition_params)
 

@@ -21,7 +21,17 @@ class PatternflyTextareaInput < Formtastic::Inputs::TextInput
 
   def control
     content_tag :div, class: 'pf-c-form__group-control' do
-      builder.text_area(method, input_html_options.merge(class: 'pf-c-form-control pf-m-resize-vertical'))
+      textarea + helper_text
+    end
+  end
+
+  def textarea
+    builder.text_area(method, input_html_options.merge(class: 'pf-c-form-control pf-m-resize-vertical'))
+  end
+
+  def helper_text
+    if hint? # rubocop:disable Style/GuardClause, Style/IfUnlessModifier
+      content_tag :p, hint_text, class: 'pf-c-form__helper-text'
     end
   end
 end

@@ -1,0 +1,6 @@
+form#new_fields_definition {
+  select.pf-c-form-control {
+    /* HACK: this padding makes the select look like the text input */
+    --pf-c-form-control--PaddingLeft: var(--pf-c-form-control--inset--base);
+  }
+}

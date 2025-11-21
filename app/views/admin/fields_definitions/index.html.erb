@@ -1,45 +1,67 @@
-<% content_for(:title) do %>
-  Fields Definitions
-<% end %>
+<% content_for :title, t('.page_title') %>
 
-<% content_for :page_header_title, 'Fields Definitions' %>
-<% content_for :page_header_body do %>
-  Here you can manage all the information you gather from your users. You can add new fields and
-  change the existing ones; making them Hidden, Read Only, or Required. You can change the text your
-  users see when viewing or entering data (shown here between quotes). Drag and drop the fields to
-  set the order in which they will be shown.
-<% end %>
+<% content_for :page_header_title, t('.page_header_title') %>
+<% content_for :page_header_body, t('.page_header_body') %>
 
 <% content_for :javascripts do %>
   <%= javascript_packs_with_chunks_tag 'fields_definitions' %>
 <% end %>
 
-<%= javascript_tag do %>
-  var AUTH_TOKEN ='<%= form_authenticity_token.to_s -%>';
-<% end if protect_against_forgery? -%>
+<div class="pf-c-panel pf-m-raised">
+  <% @possible_targets.each do |class_name| %>
+    <div class="pf-c-panel__header">
+      <div class="pf-l-level">
+        <div class="pf-l-level__item">
+          <h2><%= class_name.constantize.model_name.human %></h2>
+        </div>
+        <div class="pf-l-level__item">
+          <a class="pf-c-button pf-m-link" href=<%= new_admin_fields_definition_path(fields_definition: { target: class_name }) %>>
+            <span class="pf-c-button__icon pf-m-start">
+              <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            </span>
+            Create
+          </a>
+        </div>
+      </div>
+    </div>
 
-<% @possible_targets.each do |class_name| %>
-  <h2>
-    <%= class_name.constantize.model_name.human %>
-  </h2>
-  <%= fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition=> {:target => class_name}),
-    :title => "Create new field for #{class_name.constantize.model_name.human}", :class => 'new-field-definition new
-    action add' %>
-
-  <% if @fields_definitions.by_target(class_name).blank? %>
-    <i>No extra fields for this element.</i>
-  <% end -%>
-
-  <ol id="<%= class_name %>-list" class="fields-definitions-list ui-sortable">
-    <% @fields_definitions.by_target(class_name).sort_by(&:pos).each do |fields_definition| %>
-      <li id="<%=dom_id(fields_definition)%>">
-        <span class="name"><%=h fields_definition.name %></span>
-        <span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
-        <span class="action-set">
-          <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-          <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
-        </span>
-      </li>
-    <% end %>
-  </ol>
-<% end %>
+    <div class="pf-c-panel__main">
+      <div class="pf-c-panel__main-body">
+        <ul role="list" class="ui-sortable pf-c-data-list pf-m-compact">
+          <% fields = @fields_definitions.by_target(class_name) %>
+          <% fields.sort_by(&:pos).each do |field| %>
+            <li id="<%=dom_id(field)%>" class="pf-c-data-list__item">
+              <div class="pf-c-data-list__item-row">
+                <div class="pf-c-data-list__item-control">
+                  <button class="pf-c-data-list__item-draggable-button <%= 'pf-m-disabled' if fields.length == 1 %>" type="button">
+                    <span class="pf-c-data-list__item-draggable-icon">
+                      <i class="fas fa-grip-vertical"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="pf-c-data-list__item-content">
+                  <div class="pf-c-data-list__cell">
+                    <span><%= field.name %></span>
+                  </div>
+                  <div class="pf-c-data-list__cell">
+                    <span>"<%= field.label %>"</span>
+                  </div>
+                  <div class="pf-c-data-list__cell">
+                    <span><%= retrieve_properties_of(field) %></span>
+                  </div>
+                </div>
+                <div class="pf-c-data-list__item-action">
+                  <div class="pf-c-data-list__action">
+                    <a class="pf-c-button pf-m-link" href=<%= edit_admin_fields_definition_path(field) %> title="Edit">
+                      <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>
