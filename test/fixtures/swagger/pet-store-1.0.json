@@ -1,0 +1,46 @@
+{
+  "apis": [
+    {
+      "path": "/pet/findByStatus",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Finds Pets by status",
+          "notes": "Multiple status values can be provided with comma separated strings",
+          "nickname": "findPetsByStatus",
+          "parameters": [
+            {
+              "name": "status",
+              "description": "Status values that need to be considered for filter",
+              "required": true,
+              "type": "string",
+              "paramType": "query",
+              "allowMultiple": true,
+              "defaultValue": "available"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/pet/{petId}",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find pet by ID",
+          "notes": "Returns a pet when ID < 10",
+          "nickname": "getPetById",
+          "parameters": [
+            {
+              "name": "petId",
+              "description": "ID of pet that needs to be fetched",
+              "required": true,
+              "type": "integer",
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

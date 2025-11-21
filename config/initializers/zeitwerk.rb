@@ -8,7 +8,6 @@ Rails.autoloaders.main.inflector.inflect(
   'oauth2_base' => 'OAuth2Base',
   'xml' => 'XML',
   'json_representer' => 'JSONRepresenter',
-  'json_validator' => 'JSONValidator',
   'by_sso_token' => 'BySSOToken'
 )
 

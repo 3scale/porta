@@ -369,7 +369,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     service = account.api_docs_services.new name: 'MyAPI', body: json
 
     refute service.valid?
-    assert_includes service.errors[:body], %q{The property '#/' did not contain a required property of 'paths' in schema http://swagger.io/v2/schema.json#}
+    assert_includes service.errors[:body], 'object at root is missing required properties: paths'
   end
 
   test 'unsuported swaggerVersion' do
