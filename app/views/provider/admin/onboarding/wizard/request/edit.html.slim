@@ -8,7 +8,7 @@ p Make sure the base URL of your API is correct & public and the method we're se
 
   ol.explain.fa-ul
     li.feedback.feedback--success
-      i.icon.fa-li.fa.fa-mobile.icon--success
+      i.icon.fa-li.fa.fa-mobile-alt.icon--success
       .text
         = f.inputs do
           = f.input :path, label: 'The <strong>a GET request</strong>',
@@ -20,7 +20,7 @@ p Make sure the base URL of your API is correct & public and the method we're se
         span.code-example__path = @request.path_without_slash
         span.code-example__key.code-example__params = @request.proxy_auth_params
     li.feedback.feedback--failure
-      i.icon.fa-li.fa.fa-hdd-o.icon--success
+      i.icon.fa-li.fa.fa-hdd.icon--success
       .text
         ' was authenticated by
         strong> 3scale

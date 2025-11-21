@@ -30,7 +30,7 @@
     &:not(.pf-m-expanded) > .pf-c-nav__link::before,
     &.pf-m-expanded .pf-c-nav__item:first-child .pf-c-nav__link::before {
       content: '\f071';
-      font-family: FontAwesome;
+      font-family: "Font Awesome 5 Free";
       font-weight: normal;
       text-align: center;
     }

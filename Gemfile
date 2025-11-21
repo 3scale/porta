@@ -28,11 +28,10 @@ gem 'strong_migrations', '~> 2.1.0'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'
-  gem 'non-stupid-digest-assets', '~> 1.0'
+  gem 'dartsass-rails', '~> 0.5.1'
+  gem 'non-digest-assets', '~> 2.4.0'
   gem 'sprockets-rails'
 end
-
-gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 2.0'
@@ -133,7 +132,6 @@ gem 'rack-utf8_sanitizer'
 gem 'jwt', '~> 1.5.2', require: false
 
 group :assets do
-  gem 'font-awesome-rails', '~> 4.7.0.5'
   gem 'jquery-rails', '4.6'
   gem 'uglifier'
 

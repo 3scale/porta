@@ -1,12 +1,14 @@
-@import 'provider/layouts/main';
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+@use 'sass:math';
 
 .logo-3scale {
   position: relative;
   float: left;
   clear: left;
   z-index: 20;
-  margin: 0 line-height-times(-1) line-height-times(-2);
-  padding: line-height-times(4 / 3) line-height-times(1) line-height-times(2 / 3);
+  margin:  0 line-height-times(-1) line-height-times(-2);
+  padding: line-height-times(math.div(4,3)) line-height-times(1) line-height-times(math.div(2,3)) line-height-times(1);
 
   img {
     min-width: line-height-times(2);

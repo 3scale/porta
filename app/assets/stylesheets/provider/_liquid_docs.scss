@@ -1,10 +1,14 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+
 #liquid-docs {
   @include white-box-shadow;
 
   padding: line-height-times(1);
 
   hr {
-    margin: line-height-times(2) 0 line-height-times(1 / 2);
+    margin: line-height-times(2) 0 line-height-times(.5);
   }
 
   ul {

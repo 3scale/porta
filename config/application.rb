@@ -186,33 +186,8 @@ module System
       expansions[:defaults] = %w[]
     end
 
-    config.assets.paths << Rails.root.join('assets')
-    config.assets.paths << Rails.root.join("lib", "liquid", "template", "buyer_side")
-    config.assets.paths << Rails.root.join("vendor", "assets", "images")
-
     config.assets.enabled = true
-
-    config.assets.precompile = []
-    config.assets.precompile << ->(filename, _path) do
-      basename = File.basename(filename)
-
-      extname = File.extname(basename)
-
-      # skip files that start with underscore, do not have extension or are sourcemap
-      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_')
-    end
-    config.assets.precompile += %w[
-      font-awesome.css
-      provider/signup_v2.js
-      provider/signup_form.js
-      provider/layout/provider.js
-    ]
-
-    config.assets.compile = false
-    config.assets.digest = true
-    config.assets.initialize_on_precompile = false
-
-    config.assets.version = '1437647386' # unix timestamp
+    config.assets.quiet = true
 
     config.public_file_server.enabled = false
 
@@ -354,8 +329,6 @@ module System
       ThreeScale.validate_settings!
       System.redis = System::RedisPool.new(System::Application.config.redis)
     end
-
-    config.assets.quiet = true
 
     console do
       if sandbox?

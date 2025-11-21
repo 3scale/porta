@@ -8,7 +8,9 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "webpack serve --config ./config/webpack/development.config.js --progress",
+    "dev": "concurrently --kill-others --names \"WEBPACK,SASS\" -c \"blue,magenta\" \"webpack serve --config ./config/webpack/development.config.js\" \"bundle exec rake dartsass:watch\"",
+    "dev:webpack": "webpack serve --config ./config/webpack/development.config.js --progress",
+    "dev:sass": "bundle exec rake dartsass:watch",
     "build": "webpack --config ./config/webpack/production.config.js --progress",
     "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline",
     "clean": "rm -rf node_modules/ && yarn cache clean",
@@ -24,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
+    "concurrently": "^9.2.1",
     "empty": "^0.10.1",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.4.2",
