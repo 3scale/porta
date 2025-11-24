@@ -9,7 +9,7 @@ Feature: Fields Definitions
 
   Scenario: Required fields can't be deleted
     When I go to the fields definitions index page
-    Then I should see "Edit"
+    Then there should be a link to "Edit"
     But I should not see "Delete"
 
   # TODO: Test CRUD for real, this is just making sure the page displays ok

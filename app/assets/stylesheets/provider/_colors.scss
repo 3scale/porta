@@ -123,3 +123,7 @@ $codemirror-liquid-markup-delim-color: $highlight-color;
 $codemirror-liquid-string-color: $success-color;
 $codemirror-gutter-color: $border-color;
 $codemirror-gutter-background-color: $codemirror-bg;
+
+:root {
+  --body-background-color: white;
+}

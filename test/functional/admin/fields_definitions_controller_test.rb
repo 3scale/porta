@@ -19,12 +19,6 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'show' do
-    get :show, params: { id: field_definition }
-
-    assert_response :success
-  end
-
   test 'edit' do
     get :edit, params: { id: field_definition }
 

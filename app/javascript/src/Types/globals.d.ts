@@ -48,6 +48,11 @@ declare global {
   // will be available hence the optional nature.
   interface JQuery {
     sortable?: (opts: string | {
+      cancel?: string;
+      cursor?: string;
+      handle?: string;
+      helper?: string;
+      items?: string;
       update: (event: Event, ui: { item: JQuery }) => void;
     }) => string | undefined;
     tabs?: (opts?: Partial<{

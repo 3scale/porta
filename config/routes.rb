@@ -494,7 +494,7 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
     end
     resource :user_confirmation, :only => :create
-    resources :fields_definitions do
+    resources :fields_definitions, except: :show do
       collection do
         post :sort
       end

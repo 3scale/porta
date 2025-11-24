@@ -1,0 +1,19 @@
+- content_for :page_header_title, t('.page_header_title', name: @fields_definition.name, target: @fields_definition.target.constantize.model_name.human)
+- content_for :page_header_body do
+  = t('.page_header_body')
+  - if @fields_definition.required_field_on_target?
+    em = t('.page_header_body_note')
+
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    = semantic_form_for @fields_definition, builder: Fields::PatternflyFormBuilder,
+                                            url: admin_fields_definition_path ,
+                                            method: :put,
+                                            data: { 'required-fields': @required_fields.join(',') },
+                                            html: { class: 'pf-c-form pf-m-limit-width' } do |form|
+      = render 'form', form:, edit: true
+
+      = form.actions do
+        = form.commit_button t('.commit_button')
+        - unless @fields_definition.required_field_on_target?
+          = delete_link_for(admin_fields_definition_path(@fields_definition), confirm: 'Are you sure?', class: 'pf-c-button pf-m-danger')
