@@ -65,7 +65,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 4.25.0'
-gem 'libxml-ruby', '~> 5.0' # Optional, makes braintree faster
+gem 'libxml-ruby', '~> 5.0.5' # Optional, makes braintree faster
 gem 'bugsnag', '~> 6.26'
 gem 'cancancan', '~> 3.6.0'
 gem 'formtastic', '~> 5.0'
@@ -229,7 +229,7 @@ group :development, :test do
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
-  gem 'pry-byebug', '>= 3.7.0'
+  gem 'pry-byebug', '>= 3.11.0'
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
@@ -254,5 +254,5 @@ group :oracle do
 end
 
 gem 'kubeclient'
-
+gem 'nkf'
 gem 'pg', '~> 1.3.5'
