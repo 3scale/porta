@@ -1,3 +1,6 @@
+@use 'provider/typography' as *;
+@use 'provider/layouts/main' as *;
+
 .Section {
   h2 {
     margin: line-height-times(1) 0 0;

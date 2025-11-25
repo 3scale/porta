@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 p a:not(.pf-c-button) {
   text-decoration: underline;
   color: $font-color;
@@ -19,7 +22,7 @@ a {
 }
 
 @mixin iconic($content) {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
   font-weight: $font-weight-normal;
   font-style: normal;
   display: inline-block;
@@ -34,7 +37,7 @@ input[type='submit'].action {
   width: auto;
   white-space: nowrap;
   border-radius: $border-radius-sm;
-  padding: 0 line-height-times(1 / 8);
+  padding: 0 line-height-times(.125);
   cursor: pointer;
   border-bottom: 0;
   border: none;
@@ -47,47 +50,47 @@ input[type='submit'].action {
   }
 
   // https://github.com/bokmann/font-awesome-rails/blob/master/vendor/assets/stylesheets/font-awesome.css.erb
-  // http://fortawesome.github.com/Font-Awesome/
+  // https://fontawesome.com/v5/search
   &.undo::before,
   &.revert::before {
-    @include iconic("\f0e2\0000a0");
+    @include iconic("\f0e2\0000a0");  /* fa-undo */
   }
 
   &.add::before,
-  &.new::before { @include iconic("\f055\0000a0"); } /* plus-sign */
+  &.new::before { @include iconic("\f055\0000a0"); } /* fa-plus-circle */
 
-  &.delete::before { @include iconic("\f014\0000a0"); } /* trash */
+  &.delete::before { @include iconic("\f1f8\0000a0"); } /* fa-trash */
 
-  &.refresh::before { @include iconic("\f021\0000a0"); } /* resend */
+  &.refresh::before { @include iconic("\f021\0000a0"); } /* fa-sync */
 
-  &.edit::before { @include iconic("\f040\0000a0"); } /* pencil */
+  &.edit::before { @include iconic("\f303\0000a0"); } /* fa-pencil-alt */
 
-  &.bolt::before { @include iconic("\f0e7\0000a0"); } /* bolt */
+  &.bolt::before { @include iconic("\f0e7\0000a0"); } /* fa-bolt */
 
-  &.fire::before { @include iconic("\f06d\0000a0"); } /* fire */
+  &.fire::before { @include iconic("\f06d\0000a0"); } /* fa-fire */
 
   &.off::before,
   &.disable::before,
-  &.suspend::before { @include iconic("\f28b\0000a0"); } /* off */
+  &.suspend::before { @include iconic("\f28b\0000a0"); } /* fa-pause-circle */
 
   &.activate::before,
   &.enable::before,
-  &.resume::before { @include iconic("\f144\0000a0"); } /* unlock */
+  &.resume::before { @include iconic("\f144\0000a0"); } /* fa-play-circle */
 
-  &.message::before { @include iconic("\f003\0000a0"); } /* unlock */
+  &.message::before { @include iconic("\f0e0\0000a0"); } /* fa-envelope */
 
-  &.open::before { @include iconic("\f07b\0000a0"); } /* folder */
+  &.open::before { @include iconic("\f07b\0000a0"); } /* fa-folder */
 
-  &.close::before { @include iconic("\f057\0000a0"); } /* remove-sign */
+  &.close::before { @include iconic("\f057\0000a0"); } /* fa-times-circle */
 
   &.approve::before,
-  &.ok::before { @include iconic("\f00c\0000a0"); } /* ok */
+  &.ok::before { @include iconic("\f00c\0000a0"); } /* fa-check */
 
-  &.reject::before { @include iconic("\f00d\0000a0"); } /* remove */
+  &.reject::before { @include iconic("\f00d\0000a0"); } /* fa-times */
 
-  &.eye::before { @include iconic("\f06e\0000a0"); }
+  &.eye::before { @include iconic("\f06e\0000a0"); } /* fa-eye */
 
-  &.eye-slash::before { @include iconic("\f070\0000a0"); }
+  &.eye-slash::before { @include iconic("\f070\0000a0"); } /* fa-eye-slash */
 
   &.add,
   &.new,
@@ -127,32 +130,32 @@ input[type='submit'].action {
     }
   }
 
-  &.view { background-image: image-url('xmag_16.png'); }
+  &.view { background-image: url('/assets/xmag_16.png'); }
 
-  &.more { background-image: image-url('dashboard_arrow.gif'); }
+  &.more { background-image: url('/assets/dashboard_arrow.gif'); }
 }
 
-button.edit { @include iconic("\f040\0000a0"); }
+button.edit { @include iconic("\f303\0000a0"); } /* fa-pencil-alt */
 
-button.suspend { background-image: image-url('cross.png'); }
+button.suspend { background-image: url('/assets/cross.png'); }
 
-button.unsuspend { background-image: image-url('tick.png'); }
+button.unsuspend { background-image: url('/assets/tick.png'); }
 
-button.resume { background-image: image-url('tick.png'); }
+button.resume { background-image: url('/assets/tick.png'); }
 
 button.publish,
 button.hide {
-  padding-left: line-height-times(1 / 4);
+  padding-left: line-height-times(.25);
 }
 
-button.up { background-image: image-url('up_green.png'); }
+button.up { background-image: url('/assets/up_green.png'); }
 
-button.down { background-image: image-url('down_green.png'); }
+button.down { background-image: url('/assets/down_green.png'); }
 
-button.reset { background-image: image-url('clear-left.png'); }
+button.reset { background-image: url('/assets/clear-left.png'); }
 
 button.create_key {
-  background-image: image-url('key.png');
+  background-image: url('/assets/key.png');
   padding-left: line-height-times(1);
 }
 

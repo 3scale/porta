@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/links' as *;
+@use 'provider/typography' as *;
+
 #user-permissions-form {
   overflow: hidden;
 }
@@ -123,7 +128,7 @@ form.formtastic fieldset > ol > li fieldset {
       width: auto;
       display: block;
       margin-bottom: line-height-times(1);
-      padding: line-height-times(1 / 2) 2%;
+      padding: line-height-times(.5) 2%;
       border: $border-width dotted $border-color;
       margin-left: -2%;
       border-radius: $border-radius;

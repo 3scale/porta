@@ -1,6 +1,6 @@
-@import "provider/typography";
-@import "font-awesome";
-@import "provider/logo";
+@use "provider/colors" as *;
+@use "provider/typography" as *;
+@use "provider/logo";
 
 html,
 body,
@@ -97,7 +97,7 @@ $color-link-hover: $color-text-primary;
 // elements
 
 html {
-  line-height: 1;
+  line-height: 1.5;
   box-sizing: border-box;
   font-family: $font-family-text;
   font-size: $font-size;
@@ -248,7 +248,6 @@ input[type="text"] {
   background-color: white;
   font-size: $font-size;
   border: none;
-  padding: line-height-times(1) 0 0;
   border-bottom: 0.125rem solid $color-border;
   border-color: $color-border;
   width: 60%;
@@ -572,18 +571,17 @@ $feedback-color-inactive: $color-text-secondary;
   }
 
   &>[class*="fa-li"] {
-    font-size: 40px;
+    font-size: 36px;
     background-color: white;
-    margin-left: 59px;
-    padding: 4px 0;
-    margin-top: -6px;
+    margin-left: 46px;
+    padding: 16px 0 48px;
     width: 48px;
+    height: 56px;
   }
 
-  .fa-mobile {
-    font-size: 64px;
-    margin-left: 111px;
-    margin-top: -9px;
+  .fa-mobile-alt {
+    font-size: 48px;
+    margin-left: 70px;
   }
 
   .fa-puzzle-piece {

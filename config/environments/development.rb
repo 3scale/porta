@@ -15,7 +15,6 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.assets.compile = true
   config.assets.digest = false
-  config.assets.precompile += %w( spec_helper.js )
 
   config.asset_host = config.three_scale.asset_host.presence
 

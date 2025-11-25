@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #header_table {
   margin-top: line-height-times(2);
 }
@@ -7,7 +10,7 @@ th.collapsible {
     cursor: pointer;
 
     i {
-      margin-right: line-height-times(1 / 4);
+      margin-right: line-height-times(.25);
     }
   }
 
@@ -19,7 +22,7 @@ th.collapsible {
 }
 
 table.contract_table {
-  margin-bottom: line-height-times(1 / 2);
+	margin-bottom: line-height-times(.5);
 
   &#features {
     table-layout: fixed;
@@ -44,7 +47,7 @@ table.contract_table {
 
   td.selected strong {
     background: $light-background-color;
-    padding: line-height-times(1 / 8);
+    padding: line-height-times(0.125);
   }
 
   table.usage_table {
@@ -66,7 +69,7 @@ table.contract_table {
   }
 
   table#metrics tr.child td.title {
-    background-image: image-url('child_metric_background.png');
+    background-image: url('/assets/child_metric_background.png');
     background-position: left center;
     background-repeat: no-repeat;
     color: $font-color;

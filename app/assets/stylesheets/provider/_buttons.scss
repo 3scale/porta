@@ -1,3 +1,7 @@
+@use "provider/colors" as *;
+@use "provider/typography" as *;
+@use 'sass:math';
+
 @mixin internal-potato-button($color, $bgcolor, $border-color) {
   font-size: $font-size-base;
   background-color: $bgcolor;
@@ -5,7 +9,7 @@
   display: inline-block;
   vertical-align: top;
   margin: 0;
-  padding: line-height-times(1 / 4) line-height-times(1 / 2) !important;
+  padding: line-height-times(math.div(1,3)) line-height-times(.5) !important;
   border: $border-width solid $border-color;
   color: $color;
   text-decoration: none;
@@ -76,7 +80,7 @@ form.formtastic .button-bar,
     /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     &.actions:first-child {
       float: left;
-      margin: line-height-times(1 / 2) 0 0;
+      margin: line-height-times(.5) 0 0;
       padding: 0;
       text-align: left !important;
 
@@ -89,7 +93,7 @@ form.formtastic .button-bar,
     /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     &.actions:last-child:not(:first-child) {
       float: right;
-      margin: line-height-times(1 / 2) 0 0;
+      margin: line-height-times(.5) 0 0;
       padding: 0;
 
       /* stylelint-disable-next-line no-descending-specificity -- FIXME */
@@ -119,8 +123,8 @@ form.formtastic .button-bar,
   border: $border-width solid $border-color;
   border-radius: $border-radius-sm;
   margin-top: -$border-width;
-  padding: line-height-times(1 / 4) line-height-times(1 / 2);
-  height: line-height-times(3 / 2);
+  padding: line-height-times(math.div(1,3)) line-height-times(.5);
+  height: line-height-times(1.5);
   background-color: transparent;
   cursor: pointer;
 
@@ -137,20 +141,20 @@ form.formtastic .button-bar,
 .outline-button-thin {
   @include outline-button;
 
-  padding: line-height-times(1 / 4) !important;
-  height: line-height-times(5 / 4);
+  padding: line-height-times(.25) line-height-times(math.div(1,3)) !important;
+  height: line-height-times(1.25);
 }
 
 .outline-button-thin--negative {
   @include outline-button($error-color, $error-color);
 
-  padding: line-height-times(1 / 4) !important;
-  height: line-height-times(5 / 4);
+  padding: line-height-times(.25) !important;
+  height: line-height-times(1.25);
 }
 
 .outline-button-thin--positive {
   @include outline-button($success-color, $success-color);
 
-  padding: line-height-times(1 / 4) !important;
-  height: line-height-times(5 / 4);
+  padding: line-height-times(.25) !important;
+  height: line-height-times(1.25);
 }

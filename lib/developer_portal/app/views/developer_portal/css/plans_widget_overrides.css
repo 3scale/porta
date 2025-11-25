@@ -44,14 +44,13 @@
   top: 0;
   right: 0;
   padding-top: 10px;
-  display: block;
   width: 30px;
   height: 30px;
   background-image: none;
   cursor: pointer;
 
   display: inline-block;
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
   font-style: normal;
   font-weight: normal;
   line-height: 1;

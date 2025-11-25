@@ -1,4 +1,4 @@
-@import 'vendor/c3';
+@use 'vendor/c3';
 
 div.stats {
   font-family: 'Lucida Grande',verdana,sans-serif;
@@ -384,7 +384,7 @@ div.stats-support {
 .detail-selector div.selector span.item-name  {
   padding-right: 30px;
   display: block;
-  background: image-url('down-arrow.png') no-repeat 100% 50%;
+  background: url('/assets/down-arrow.png') no-repeat 100% 50%;
 }
 
 .detail-selector span.item-name:hover {

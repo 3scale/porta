@@ -41,6 +41,7 @@ C:\\nppdf32Log\\debuglog.txt
 !/assets/jspm_packages/system-polyfills.js
 /public/assets/
 /lib/developer_portal/app/assets/javascripts/*.map
+/app/assets/builds/*
 
 /junit/
 /coverage/

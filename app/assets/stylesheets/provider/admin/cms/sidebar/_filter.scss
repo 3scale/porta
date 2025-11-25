@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 %toolbar {
   margin: 0;
   padding: 0;
@@ -82,8 +85,8 @@
     box-sizing: border-box;
     height: line-height-times(2);
     vertical-align: middle;
-    padding-top: line-height-times(1 / 2);
-    width: 100% / 3;
+    padding-top: line-height-times(.5);
+    width: calc(100% / 3);
     border-left: $border-width solid $border-color;
 
     &.active {
@@ -100,7 +103,7 @@
 
   li {
     box-sizing: border-box;
-    width: 100% / 7;
+    width: calc(100% / 7);
     border-left: $border-width solid $border-color;
   }
 }

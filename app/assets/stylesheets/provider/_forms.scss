@@ -1,3 +1,8 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/layouts/main' as *;
+@use 'sass:math';
+
 $fieldset-margin-bottom: 32px; // --pf-c-form__group--m-action--MarginTop
 
 /* stylelint-disable no-descending-specificity -- FIXME */
@@ -22,8 +27,8 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='password'] {
   color: $font-color;
   background-color: $background-color-base;
   width: 100%;
-  padding: line-height-times(1 / 4);
-  height: line-height-times(3 / 2);
+  padding: line-height-times(.25);
+  height: line-height-times(1.5);
   border-radius: $border-radius;
   line-height: $line-height-base;
 
@@ -96,10 +101,10 @@ th input[type='submit'] {
 
 fieldset ol li input[type='text'] + a {
   float: right;
-  margin-top: line-height-times(-3 / 2, true);
+  margin-top: line-height-times(-1.5, true);
   position: relative;
   z-index: 1000;
-  padding: line-height-times(1 / 4);
+  padding: line-height-times(.25);
 }
 
 select:not(.pf-c-form-control) {
@@ -108,13 +113,13 @@ select:not(.pf-c-form-control) {
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:#{$border-color};'/> \
       </svg>");
-  background-position: right line-height-times(1 / 4) center;
+  background-position: right line-height-times(math.div(1,3)) center;
   background-repeat: no-repeat;
-  background-size: line-height-times(1 / 4) auto;
+  background-size: line-height-times(math.div(1,3)) auto;
   box-shadow: 0 0 0 transparent;
-  margin: 0 line-height-times(1 / 4) 0 0;
+  margin: 0 line-height-times(.25) 0 0;
   max-width: calc(100% - #{$border-width}) !important;
-  padding-right: line-height-times(1 / 2);
+  padding-right: line-height-times(.5);
 
   &:hover,
   &:focus {
@@ -138,7 +143,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs input[type='checkbox']:active,
 form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   position: relative;
   top: -$border-width; // to make it more or less ok in chrome, firefox and safari
-  margin: 0 line-height-times(1 / 4) 0 $border-width;
+  margin: 0 line-height-times(.25) 0 $border-width;
   vertical-align: baseline;
   border-radius: $border-radius;
 }
@@ -151,7 +156,7 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   }
 
   &-inline {
-    margin: line-height-times(1 / 2) 0;
+    margin: line-height-times(.5) 0;
   }
 
   border-top: 0;
@@ -174,7 +179,7 @@ form.formtastic:not(.pf-c-form) fieldset.actions ol {
   }
 
   .delete {
-    margin-top: line-height-times(1 / 4);
+    margin-top: line-height-times(.25);
     float: left;
   }
 }
@@ -183,7 +188,7 @@ form + form .action.delete {
   display: inline-block;
   left: line-height-times(1);
   position: relative;
-  top: line-height-times(-7 / 2);
+  top: line-height-times(-3.5);
   z-index: 1000;
 }
 
@@ -218,12 +223,12 @@ form.formtastic:not(.pf-c-form) .button-bar fieldset > ol > li {
 }
 
 form.formtastic:not(.pf-c-form) table fieldset > ol > li {
-  margin: 0 0 line-height-times(1 / 2);
+  margin: 0 0 line-height-times(.5);
   min-width: 0;
 }
 
 form.formtastic:not(.pf-c-form) fieldset > ol > li.radio fieldset ol li {
-  margin: 0 0 line-height-times(1 / 4);
+  margin: 0 0 line-height-times(.25);
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -257,7 +262,7 @@ form.formtastic:not(.pf-c-form) {
     }
 
     .fa-caret-down {
-      margin: 0 line-height-times(1 / 4) 0 line-height-times(-1 / 4);
+      margin: 0 line-height-times(.25) 0 line-height-times(-0.25);
     }
 
     &.packed {
@@ -295,13 +300,13 @@ form.formtastic:not(.pf-c-form) {
       display: inline-block;
 
       &.fa-caret-right {
-        width: line-height-times(1 / 4);
-        top: line-height-times(1 / 24);
+        width: line-height-times(.25);
+        top: line-height-times(math.div(1,24));
         position: relative;
       }
 
       &.fa-caret-down {
-        width: line-height-times(1 / 4);
+        width: line-height-times(.25);
       }
     }
   }
@@ -410,7 +415,7 @@ form.formtastic:not(.pf-c-form) table fieldset {
 }
 
 form.formtastic:not(.pf-c-form) .radio fieldset {
-  margin: 0 0 line-height-times(1 / 4);
+  margin: 0 0 line-height-times(.25);
 }
 
 .dashboard_card form.formtastic:not(.pf-c-form) fieldset > ol > li.boolean label {
@@ -507,7 +512,7 @@ form.formtastic:not(.pf-c-form) fieldset > ol > li fieldset legend.label label {
 .errorExplanation {
   border: $border-width $error-color solid;
   border-radius: $border-radius;
-  padding: line-height-times(1 / 2);
+  padding: line-height-times(.5);
   margin-bottom: line-height-times(1);
 
   h2 {
@@ -527,7 +532,7 @@ li.hidden {
   }
 
   .new-service-source-input {
-    padding: 0 line-height-times(5 / 10);
+    padding: 0 line-height-times(0.5);
   }
 }
 

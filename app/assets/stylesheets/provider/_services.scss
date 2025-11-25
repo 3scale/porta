@@ -1,8 +1,14 @@
+@use 'provider/colors' as *;
+@use 'provider/layouts/main' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+@use 'sass:math';
+
 .button-to.action.new.service {
   margin-bottom: line-height-times(-2);
   font-weight: $font-weight-bold;
   float: right;
-  padding-bottom: line-height-times(1 / 8);
+  padding-bottom: line-height-times(.125);
   position: relative;
   z-index: 100;
 }
@@ -17,11 +23,11 @@
     a {
       color: $font-color;
       text-decoration: underline;
-      margin-bottom: line-height-times(1 / 2);
+      margin-bottom: line-height-times(.5);
     }
 
     .button-to {
-      margin-top: line-height-times(1 / 2);
+      margin-top: line-height-times(.5);
     }
   }
 
@@ -45,7 +51,7 @@
     li {
       border-bottom: $border-width solid $border-color;
       margin-left: 0;
-      padding: line-height-times(1 / 2) 0;
+      padding: line-height-times(.5) 0;
       position: relative;
 
       .name {
@@ -66,7 +72,7 @@
         column-gap: line-height-times(3);
         column-rule: $border-width solid $border-color;
         list-style: none;
-        padding: line-height-times(2 / 3) line-height-times(1 / 2);
+        padding: line-height-times(math.div(2,3)) line-height-times(.5);
 
         /* stylelint-disable-next-line no-descending-specificity -- FIXME */
         li {
