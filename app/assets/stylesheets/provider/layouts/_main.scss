@@ -1,3 +1,6 @@
+@use "provider/typography" as *;
+@use "provider/colors" as *;
+
 body {
   min-width: $layout-wrapper-min-width;
 }
@@ -17,9 +20,4 @@ body {
   &--callToAction {
     min-height: calc(100vh - #{line-height-times(12)});
   }
-}
-
-@mixin white-box-shadow {
-  background-color: $white;
-  box-shadow: $whiteBoxShadow;
 }

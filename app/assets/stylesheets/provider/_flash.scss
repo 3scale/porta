@@ -1,10 +1,14 @@
+@use 'sass:math';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #flashWrapper {
   animation: fadeInRight 0.5s ease-in-out;
   background-color: $white;
   box-shadow: 0 0 line-height-times(1) 0 $whiteBoxShadowColor;
   display: block;
   margin-top: line-height-times(1);
-  padding: line-height-times(1 / 2);
+  padding: line-height-times(math.div(1, 2));
   position: fixed;
   right: line-height-times(1);
   z-index: 2000;

@@ -1,8 +1,13 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+@use 'sass:math';
+
 .button-to.action.new.service {
   margin-bottom: line-height-times(-2);
   font-weight: $font-weight-bold;
   float: right;
-  padding-bottom: line-height-times(1/8);
+  padding-bottom: line-height-times(math.div(1, 8));
   position: relative;
   z-index: 100;
 }
@@ -10,17 +15,16 @@
 @mixin overview-widget {
 
   .title {
-    @extend h2;
     margin-bottom: 0;
 
     a {
       color: $font-color;
       text-decoration: underline;
-      margin-bottom: line-height-times(1/2);
+      margin-bottom: line-height-times(math.div(1, 2));
     }
 
     .button-to {
-      margin-top: line-height-times(1/2);
+      margin-top: line-height-times(math.div(1, 2));
     }
   }
 
@@ -29,7 +33,8 @@
     font-weight: $font-weight-bold;
   }
 
-  ul.listing {
+  ul.listing,
+  %service-listing {
     clear: left;
     list-style: none;
     background-color: $white;
@@ -44,7 +49,7 @@
     li {
       border-bottom: $border-width solid $border-color;
       margin-left: 0;
-      padding: line-height-times(1/2) 0;
+      padding: line-height-times(math.div(1, 2)) 0;
       position: relative;
 
       .name {
@@ -71,7 +76,7 @@
         -webkit-column-rule: $border-width solid $border-color;
         column-rule: $border-width solid $border-color;
         list-style: none;
-        padding: line-height-times(2 / 3) line-height-times(1 / 2);
+        padding: line-height-times(math.div(2, 3)) line-height-times(.5);
 
         li {
           border-bottom: none;
@@ -130,16 +135,16 @@
     }
 
     &[name='settings'] {
-      @extend div.left;
+      @extend %left-column;
     }
 
     &[name='activity'] {
-      @extend div.right;
+      @extend %right-column;
     }
   }
 
   .latest-alerts, .latest-apps, .service-settings, .service-plans, .application-plans, #mini-charts {
-    @extend ul.listing;
+    @extend %service-listing;
     @include white-box-shadow;
     border: 0;
   }

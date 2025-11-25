@@ -1,3 +1,8 @@
+@use 'sass:math';
+@use 'sass:meta';
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 $tab-width: 20%;
 $tab-content-width: 100% - $tab-width;
 $tab-min-height: line-height-times(21, true);
@@ -33,7 +38,7 @@ $tab-min-height: line-height-times(21, true);
   }
 
   li {
-    padding-left: line-height-times(1 / 4);
+    padding-left: line-height-times(.25);
     white-space: nowrap;
   }
 
@@ -81,7 +86,7 @@ $tab-min-height: line-height-times(21, true);
   .fa {
     cursor: pointer;
     margin-left: -line-height-times(1/2);
-    padding: line-height-times(1/2) 0 line-height-times(1/2) 0;
+    padding: line-height-times(math.div(1, 2)) 0 line-height-times(math.div(1, 2)) 0;
     position: relative;
     z-index: 100;
 
@@ -121,11 +126,11 @@ $tab-min-height: line-height-times(21, true);
     border-top: $border-width solid $border-color;
 
     ul {
-      margin-left: line-height-times(1/2);
+      margin-left: line-height-times(math.div(1, 2));
     }
 
     &.empty {
-      margin-left: line-height-times(1/2);
+      margin-left: line-height-times(math.div(1, 2));
     }
 
     &.dragged {
@@ -141,7 +146,7 @@ $tab-min-height: line-height-times(21, true);
       position: relative;
 
       &:after {
-        background-image: image-url('/assets/tree-line.png');
+        background-image: url('/assets/tree-line.png');
         background-position: 0;
         background-repeat: repeat-y;
         bottom: $border-width;
@@ -160,11 +165,11 @@ $tab-min-height: line-height-times(21, true);
 
 #cms-sidebar-error-empty {
   display: none;
-  margin: line-height-times(1/2);
+  margin: line-height-times(math.div(1, 2));
 }
 
 .cms-sidebar-listing:not(#cms-sidebar-content) {
-  padding-left: line-height-times(1 / 4);
+  padding-left: line-height-times(.25);
 }
 
-@import 'provider/admin/cms/sidebar/filter';
+@include meta.load-css('provider/admin/cms/sidebar/filter');

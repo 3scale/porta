@@ -1,3 +1,6 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
 #actions form.button-to.remote {
   @include white-box-shadow;
   display: block;

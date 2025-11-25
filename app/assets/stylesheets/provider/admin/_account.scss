@@ -1,10 +1,14 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'provider/legacy_theme';
+
 #account-column-wrapper {
   overflow: hidden;
   margin-bottom: line-height-times(2);
 
   #account-overview,
   #plan-overview {
-    @extend div.left;
+    @extend %left-column;
 
     table tr {
       border-bottom: $border-width solid $border-color;
@@ -12,7 +16,7 @@
   }
 
   #plan-overview {
-    @extend div.right;
+    @extend %right-column;
   }
 
   .overview-box {
@@ -52,7 +56,7 @@
   .key {
       background-repeat: no-repeat;
       background-position: 10px 20px;
-      background-image: image-url('provider/key-background.png');
+      background-image: url('provider/key-background.png');
 
       text-align: center;
       vertical-align: middle;

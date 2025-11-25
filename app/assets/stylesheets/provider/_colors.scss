@@ -143,3 +143,8 @@ $codemirror-liquid-markup-delim-color: $highlight-color;
 $codemirror-liquid-string-color: $success-color;
 $codemirror-gutter-color: $border-color;
 $codemirror-gutter-background-color: $codemirror-bg;
+
+@mixin white-box-shadow {
+  background-color: $white;
+  box-shadow: $whiteBoxShadow;
+}
