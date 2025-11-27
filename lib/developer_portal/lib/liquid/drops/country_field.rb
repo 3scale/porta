@@ -18,6 +18,8 @@ module Liquid
         @object.field_value(name) || EMPTY_VALUE
       end
 
+      alias to_s to_str
+
       def input_name
         "#{object_name}[country_id]"
       end
