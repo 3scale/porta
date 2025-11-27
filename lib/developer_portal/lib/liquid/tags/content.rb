@@ -7,7 +7,7 @@ module Liquid
       desc 'Renders body of a page. Use this only inside a layout.'
 
       def render(context)
-        content = context['content'] || context['content_for_layout']
+        content = (context['content'] || context['content_for_layout']).to_s
         surround_by_comments( context,'PAGE CONTENT', nil, content)
       end
     end
