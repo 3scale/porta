@@ -88,6 +88,8 @@ module Liquid
         def to_str
           @errors.full_message(@attribute, @message)
         end
+
+        alias to_s to_str
       end
 
     end
