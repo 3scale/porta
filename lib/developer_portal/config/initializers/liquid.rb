@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 require 'liquid'
 
-# allow calling present? in {% if %}
-Liquid::Expression::LITERALS['present'] = :present?
-
 Rails.application.config.to_prepare do
   # Hacks
 
