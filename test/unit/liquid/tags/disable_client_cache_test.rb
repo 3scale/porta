@@ -7,7 +7,9 @@ class Liquid::Tags::DisableClientCacheTest < ActiveSupport::TestCase
     @context = Liquid::Context.new
     @context.registers[:controller] = ApplicationController.new
     @context.registers[:controller].response = ActionDispatch::Response.new
-    @disable_client_cache = Liquid::Tags::DisableClientCache.parse 'disable_client_cache', '', [], {}
+    template = Liquid::Template.parse('{% disable_client_cache %}')
+    @disable_client_cache = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::DisableClientCache, @disable_client_cache
   end
 
   test "page should not cache" do
