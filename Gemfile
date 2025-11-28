@@ -26,11 +26,12 @@ gem 'rails-observers'
 
 gem 'strong_migrations', '~> 2.1.0'
 
+gem 'sprockets-rails'
+
 group :assets do
   gem 'coffee-rails', '~> 5.0'
   gem 'dartsass-rails', '~> 0.5.1'
   gem 'non-digest-assets', '~> 2.4.0'
-  gem 'sprockets-rails'
 end
 
 gem 'bcrypt', '~> 3.1.7'
