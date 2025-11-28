@@ -29,7 +29,8 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
-    tag = Liquid::Tags::SortLink.parse('th', '{% sort_link column: "foo" label: "Foo"  %}', [], {})
+    template = Liquid::Template.parse('{% sort_link column: "foo" label: "Foo" %}')
+    tag = template.root.nodelist.first
 
     rendered = tag.render(context)
     assert_match 'direction=asc', rendered
@@ -46,9 +47,10 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
-    tag = Liquid::Tags::SortLink.parse('th', '{% sort_link column: "foo" label: "Foo"  %}', [], {})
+    template = Liquid::Template.parse('{% sort_link column: "foo" label: "Foo" %}')
+    tag = template.root.nodelist.first
 
     rendered = tag.render(context)
-    assert_nil rendered
+    assert_equal '', rendered
   end
 end
