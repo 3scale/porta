@@ -112,7 +112,7 @@ mysql-container: &mysql-container
     MYSQL_DATABASE: circleci
 
 postgres-container: &postgres-container
-  image: cimg/postgres:14.12
+  image: cimg/postgres:15.14
   environment:
     POSTGRES_USER: postgres
 
