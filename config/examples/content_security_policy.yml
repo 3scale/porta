@@ -1,0 +1,36 @@
+base: &default
+  enabled: true
+
+  # Global CSP settings
+  report_only: false
+  report_uri: null
+  nonce_generator: true  # Enable nonce for inline scripts/styles
+  nonce_directives:
+    - script-src
+    - style-src
+
+  # CSP Policy Directives
+  policy:
+    default_src: ["'self'"]
+    script_src: ["'self'", "'unsafe-eval'", "'unsafe-inline'"]
+    style_src: ["'self'", "'unsafe-inline'"]
+    img_src: ["'self'", "data:", "https:"]
+    font_src: ["'self'", "data:"]
+    connect_src: ["'self'"]
+    frame_src: ["'self'"] # Needed for Swagger/ActiveDocs iframes
+    frame_ancestors: ["'self'"] # Modern replacement for X-Frame-Options: SAMEORIGIN
+    object_src: ["'none'"]
+    base_uri: ["'self'"]
+    form_action: ["'self'"]
+
+development:
+  <<: *default
+  enabled: false
+
+test:
+  <<: *default
+  enabled: false
+
+production:
+  <<: *default
+  enabled: true

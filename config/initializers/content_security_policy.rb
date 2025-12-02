@@ -1,31 +1,57 @@
-# Be sure to restart your server when you modify this file.
+# frozen_string_literal: true
 
-# Define an application-wide content security policy.
-# See the Securing Rails Applications Guide for more information:
-# https://guides.rubyonrails.org/security.html#content-security-policy-header
+# Configure Content Security Policy headers
+# See: https://guides.rubyonrails.org/security.html#content-security-policy-header
 
-Rails.application.config.to_prepare do
-  Rails.application.config.content_security_policy do |policy|
-    policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+require_dependency 'three_scale/content_security_policy'
+
+if ThreeScale::ContentSecurityPolicy.enabled?
+  # Apply configurable CSP from YAML
+  Rails.application.configure do
+    # Configure nonce generation if enabled
+    if ThreeScale::ContentSecurityPolicy.nonce_enabled?
+      config.content_security_policy_nonce_generator = ->(request) {
+        SecureRandom.base64(16)
+      }
+
+      nonce_directives = ThreeScale::ContentSecurityPolicy.nonce_directives
+      config.content_security_policy_nonce_directives = nonce_directives unless nonce_directives.empty?
+    end
+
+    # Set report-only mode if configured
+    if ThreeScale::ContentSecurityPolicy.report_only?
+      config.content_security_policy_report_only = true
+    end
+  end
+
+  # Apply global CSP policy from configuration
+  Rails.application.config.to_prepare do
+    policy_config = ThreeScale::ContentSecurityPolicy.policy_config
+
+    if policy_config.present?
+      Rails.application.config.content_security_policy do |policy|
+        # Apply each directive from YAML config
+        policy_config.each do |directive, sources|
+          next unless sources.is_a?(Array)
+
+          method_name = directive.to_s
+          if policy.respond_to?(method_name)
+            policy.public_send(method_name, *sources)
+          end
+        end
+
+        # Add report-uri if configured
+        if (uri = ThreeScale::ContentSecurityPolicy.report_uri)
+          policy.report_uri uri
+        end
+      end
+    end
+  end
+else
+  # Fallback to permissive policy when config is disabled
+  Rails.application.config.to_prepare do
+    Rails.application.config.content_security_policy do |policy|
+      policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+    end
   end
 end
-
-# Rails.application.configure do
-#   config.content_security_policy do |policy|
-#     policy.default_src :self, :https
-#     policy.font_src    :self, :https, :data
-#     policy.img_src     :self, :https, :data
-#     policy.object_src  :none
-#     policy.script_src  :self, :https
-#     policy.style_src   :self, :https
-#     # Specify URI for violation reports
-#     # policy.report_uri "/csp-violation-report-endpoint"
-#   end
-#
-#   # Generate session nonces for permitted importmap, inline scripts, and inline styles.
-#   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-#   config.content_security_policy_nonce_directives = %w(script-src style-src)
-#
-#   # Report violations without enforcing the policy.
-#   # config.content_security_policy_report_only = true
-# end

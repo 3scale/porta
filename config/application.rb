@@ -256,6 +256,10 @@ module System
     config.three_scale.cors.enabled = false
     config.three_scale.cors.merge!(try_config_for(:cors) || {})
 
+    config.three_scale.content_security_policy = ActiveSupport::OrderedOptions.new
+    config.three_scale.content_security_policy.enabled = false
+    config.three_scale.content_security_policy.merge!(try_config_for(:content_security_policy) || {})
+
     three_scale = config_for(:settings)
 
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
