@@ -18,30 +18,15 @@ class ThreeScale::ContentSecurityPolicyTest < ActiveSupport::TestCase
     assert_kind_of Hash, policy_hash
     assert policy_hash.present?
 
-    # Verify it contains expected directives
+    # Verify it contains the permissive default_src directive
     assert policy_hash.key?(:default_src)
-    assert policy_hash.key?(:script_src)
-    assert policy_hash.key?(:frame_ancestors)
+    assert_includes policy_hash[:default_src], '*'
+    assert_includes policy_hash[:default_src], "'unsafe-inline'"
+    assert_includes policy_hash[:default_src], "'unsafe-eval'"
   end
 
   test 'report_only? returns false from YAML config' do
     assert_equal false, ThreeScale::ContentSecurityPolicy.report_only?
-  end
-
-  test 'report_uri returns nil from YAML config' do
-    assert_nil ThreeScale::ContentSecurityPolicy.report_uri
-  end
-
-  test 'nonce_enabled? returns true from YAML config' do
-    assert_equal true, ThreeScale::ContentSecurityPolicy.nonce_enabled?
-  end
-
-  test 'nonce_directives returns array from YAML config' do
-    directives = ThreeScale::ContentSecurityPolicy.nonce_directives
-
-    assert_kind_of Array, directives
-    assert_includes directives, 'script-src'
-    assert_includes directives, 'style-src'
   end
 
   test 'policy_config returns empty hash when config.policy is nil' do
@@ -80,47 +65,12 @@ class ThreeScale::ContentSecurityPolicyWithoutYAMLTest < ActiveSupport::TestCase
     end
   end
 
-  test 'report_uri returns nil when config is missing' do
-    empty_config = ActiveSupport::OrderedOptions.new
-
-    ThreeScale::ContentSecurityPolicy.stub :config, empty_config do
-      assert_nil ThreeScale::ContentSecurityPolicy.report_uri
-    end
-  end
-
-  test 'nonce_enabled? returns false when config is missing' do
-    empty_config = ActiveSupport::OrderedOptions.new
-
-    ThreeScale::ContentSecurityPolicy.stub :config, empty_config do
-      assert_equal false, ThreeScale::ContentSecurityPolicy.nonce_enabled?
-    end
-  end
-
-  test 'nonce_directives returns empty array when config is missing' do
-    empty_config = ActiveSupport::OrderedOptions.new
-
-    ThreeScale::ContentSecurityPolicy.stub :config, empty_config do
-      directives = ThreeScale::ContentSecurityPolicy.nonce_directives
-
-      assert_equal [], directives
-    end
-  end
-
   test 'enabled? handles nil config values gracefully' do
     config = ActiveSupport::OrderedOptions.new
     config.enabled = nil
 
     ThreeScale::ContentSecurityPolicy.stub :config, config do
       assert_equal false, ThreeScale::ContentSecurityPolicy.enabled?
-    end
-  end
-
-  test 'nonce_enabled? handles nil config values gracefully' do
-    config = ActiveSupport::OrderedOptions.new
-    config.nonce_generator = nil
-
-    ThreeScale::ContentSecurityPolicy.stub :config, config do
-      assert_equal false, ThreeScale::ContentSecurityPolicy.nonce_enabled?
     end
   end
 
