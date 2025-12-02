@@ -52,6 +52,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/cache_store.yml
 /config/core.yml
 /config/cors.yml
+/config/content_security_policy.yml
 /config/currencies.yml
 /config/database.yml
 /config/domain_substitution.yml

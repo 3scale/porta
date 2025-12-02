@@ -23,6 +23,7 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'GitHub'
   inflect.acronym 'SSO'
   inflect.acronym 'OIDC' # OpenID Connect
+  inflect.acronym 'CSP' # Content Security Policy
 end
 
 # These inflection rules are supported but not enabled by default:
