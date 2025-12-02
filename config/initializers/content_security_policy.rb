@@ -8,20 +8,8 @@ require_dependency 'three_scale/content_security_policy'
 if ThreeScale::ContentSecurityPolicy.enabled?
   # Apply configurable CSP from YAML
   Rails.application.configure do
-    # Configure nonce generation if enabled
-    if ThreeScale::ContentSecurityPolicy.nonce_enabled?
-      config.content_security_policy_nonce_generator = ->(request) {
-        SecureRandom.base64(16)
-      }
-
-      nonce_directives = ThreeScale::ContentSecurityPolicy.nonce_directives
-      config.content_security_policy_nonce_directives = nonce_directives unless nonce_directives.empty?
-    end
-
     # Set report-only mode if configured
-    if ThreeScale::ContentSecurityPolicy.report_only?
-      config.content_security_policy_report_only = true
-    end
+    config.content_security_policy_report_only = true if ThreeScale::ContentSecurityPolicy.report_only?
   end
 
   # Apply global CSP policy from configuration
@@ -31,18 +19,16 @@ if ThreeScale::ContentSecurityPolicy.enabled?
     if policy_config.present?
       Rails.application.config.content_security_policy do |policy|
         # Apply each directive from YAML config
-        policy_config.each do |directive, sources|
-          next unless sources.is_a?(Array)
-
+        policy_config.each do |directive, value|
           method_name = directive.to_s
-          if policy.respond_to?(method_name)
-            policy.public_send(method_name, *sources)
-          end
-        end
+          next unless policy.respond_to?(method_name)
 
-        # Add report-uri if configured
-        if (uri = ThreeScale::ContentSecurityPolicy.report_uri)
-          policy.report_uri uri
+          # Handle directives with sources (arrays) vs boolean directives
+          if value.is_a?(Array)
+            policy.public_send(method_name, *value)
+          else
+            policy.public_send(method_name, value)
+          end
         end
       end
     end

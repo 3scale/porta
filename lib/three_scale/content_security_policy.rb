@@ -18,18 +18,6 @@ module ThreeScale
       def report_only?
         config&.report_only == true
       end
-
-      def report_uri
-        config&.report_uri.presence
-      end
-
-      def nonce_enabled?
-        config&.nonce_generator == true
-      end
-
-      def nonce_directives
-        config&.nonce_directives&.map(&:to_s) || []
-      end
     end
   end
 end
