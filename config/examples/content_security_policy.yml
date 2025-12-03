@@ -5,16 +5,19 @@ base: &default
   # Permissive default policy - same as when CSP is disabled
   # Allows everything to prevent breaking changes when deploying
   # Override in specific environments to tighten security
-  policy:
+  admin_portal_policy:
     default_src: ["*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'"]
+
+  developer_portal_policy:
+    default_src: [ "*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'" ]
 
 development:
   <<: *default
-  enabled: false
+  enabled: true
 
 test:
   <<: *default
-  enabled: false
+  enabled: true
 
 production:
   <<: *default
