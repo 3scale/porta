@@ -25,6 +25,10 @@ Given /^the asset host is set to "(.*)"$/ do |asset_host|
   policy_with_cdn[:style_src] = (policy_with_cdn[:style_src] || []) + [cdn_url]
   policy_with_cdn[:font_src] = (policy_with_cdn[:font_src] || []) + [cdn_url]
 
+  # Stub policy_config to return our modified config with CDN URL
+  # This ensures that any code reading the policy gets our test version
+  ThreeScale::ContentSecurityPolicy::AdminPortal.stubs(:policy_config).returns(policy_with_cdn)
+
   # Reconfigure CSP with CDN URL included
   Rails.application.config.content_security_policy do |policy|
     ThreeScale::ContentSecurityPolicy::AdminPortal.add_policy_config(policy, policy_with_cdn)
