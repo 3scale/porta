@@ -11,12 +11,16 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
     @cc = "{% cc 'just@me.com' %}"
     @reply_to = "{% reply_to 'over@lord.com' %}"
     @from = "{% from 'secret@mail.com' %}"
-    @end = "{% endemail %}"
-    @email = subject.parse('email', '', [@subject, @header, @bcc, @cc, @reply_to, @from, @end], {})
+
+    template_string = "{% email %}#{@subject}#{@header}#{@bcc}#{@cc}#{@reply_to}#{@from}{% endemail %}"
+    template = Liquid::Template.parse(template_string)
+    @email = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Email, @email
   end
 
   test "email without liquid tags" do
-    email = subject.parse('email', 'some params', ["some content", @end], {})
+    template = Liquid::Template.parse("{% email some params %}some content{% endemail %}")
+    email = template.root.nodelist.first
     context = stub(:registers => {})
     assert_equal '', email.render(context)
   end
@@ -28,8 +32,9 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
 
   test "do_not_send" do
     context = stub(:registers => {})
-    subject.parse('email', '', ['{% do_not_send %}', @end], {})
-    assert_equal '', @email.render(context)
+    template = Liquid::Template.parse("{% email %}{% do_not_send %}{% endemail %}")
+    email = template.root.nodelist.first
+    assert_equal '', email.render(context)
   end
 
   test "assign all tags to message" do
@@ -69,10 +74,12 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
   end
 
   test "assign do_not_send header to mailer" do
-    mail = subject.parse('email', '', ['{% do_not_send %}', @end], {})
+    template = Liquid::Template.parse("{% email %}{% do_not_send %}{% endemail %}")
+    mail_tag = template.root.nodelist.first
+    mail = stub_everything('mail')
     mail.expects(:headers).with({ ::Message::DO_NOT_SEND_HEADER => true })
 
     context = stub(:registers => {mail: mail})
-    mail.render(context)
+    mail_tag.render(context)
   end
 end

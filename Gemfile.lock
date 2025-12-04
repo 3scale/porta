@@ -47,7 +47,7 @@ PATH
   remote: lib/developer_portal
   specs:
     developer_portal (1.0.0)
-      liquid (~> 3.0.6)
+      liquid (~> 5.4.0)
       railties (>= 3.2)
 
 PATH
@@ -500,7 +500,7 @@ GEM
       with_env (= 1.1.0)
       xml-simple (~> 1.1.9)
     lint_roller (1.1.0)
-    liquid (3.0.6)
+    liquid (5.4.0)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)

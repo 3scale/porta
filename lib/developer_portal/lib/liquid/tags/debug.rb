@@ -22,6 +22,8 @@ module Liquid
       def render(context)
         if @mode == 'help'
           render_help(context)
+        else
+          ''
         end
       end
 

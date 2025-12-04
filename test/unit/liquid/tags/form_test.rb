@@ -8,23 +8,31 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   end
 
   test "non-existent form application" do
-    @tag = Liquid::Tags::Form.parse('form', "'application'", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'application' %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_equal "<!-- form_tag error: Liquid error: Unknown form 'application' -->",  @tag.render(@context)
   end
 
   test "missing not supplied" do
-    @tag = Liquid::Tags::Form.parse('form', "'application.create'", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'application.create' %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match 'no object specified', @tag.render(@context)
   end
 
   test "variable not assigned" do
-    @tag = Liquid::Tags::Form.parse('form', "'application.create', not_here", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'application.create', not_here %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match "variable 'not_here' is missing", @tag.render(@context)
   end
 
   test "application.create form" do
     @context['app'] = Liquid::Drops::Application.new(FactoryBot.create(:application))
-    @tag = Liquid::Tags::Form.parse('form', "'application.create', app", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'application.create', app %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match %r{<form.*>.*</form>}, @tag.render(@context)
   end
 
@@ -32,7 +40,9 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
     account = Liquid::Drops::Account.new(FactoryBot.create(:simple_buyer))
     @context['my_account'] = account
     @context['site_account'] = account
-    @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'signup', my_account %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match %r{<form.*id="signup_form".*>.*</form>}, @tag.render(@context)
   end
 
@@ -43,7 +53,9 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
     @context['site_account'] = account
     @context.registers[:request] = stub(params: { plan_ids: [ 1,2,42 ]})
 
-    @tag = Liquid::Tags::Form.parse('form', "'signup', my_account", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'signup', my_account %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     html = @tag.render(@context)
     hidden_inputs = Nokogiri.parse(html).css('form input[name="plan_ids[]"]')
 
@@ -53,13 +65,17 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
 
   test "user.personal_details" do
     @context['user'] = Liquid::Drops::User.new(FactoryBot.create(:active_user))
-    @tag = Liquid::Tags::Form.parse('form', "'user.personal_details', user", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'user.personal_details', user %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match %r{<form.*id="edit_personal_details".*>.*</form>}, @tag.render(@context)
     assert_match %r{<form.*class=.*personal_details.*>.*</form>}, @tag.render(@context)
     assert_match %r{<input.*type="hidden".*name="origin".*/>}, @tag.render(@context)
 
     @context.registers[:controller] = stub_everything(params: {origin: 'foo'})
-    @tag = Liquid::Tags::Form.parse('form', "'user.personal_details', user", ["CONTENT", '{% endform %}'], {})
+    template = Liquid::Template.parse("{% form 'user.personal_details', user %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match %r{<form.*id="edit_personal_details".*>.*</form>}, @tag.render(@context)
     assert_match %r{<form.*class=.*personal_details.*>.*</form>}, @tag.render(@context)
     assert_match %r{<input.*type="hidden".*name="origin".*value="foo".*/>}, @tag.render(@context)
@@ -68,8 +84,9 @@ class Liquid::Tags::FormTest < ActiveSupport::TestCase
   test "user.edit" do
     user = FactoryBot.create(:active_user)
     @context['user'] = Liquid::Drops::User.new(user)
-    @tag = Liquid::Tags::Form.parse('form', "'user.edit', user", ["CONTENT", '{% endform %}'], {})
-
+    template = Liquid::Template.parse("{% form 'user.edit', user %}CONTENT{% endform %}")
+    @tag = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Form, @tag
     assert_match %r{<form.*id="edit_user_#{user.id}".*>.*</form>}, @tag.render(@context)
     assert_match %r{<form.*class=.*edit-user-form.*>.*</form>}, @tag.render(@context)
   end

@@ -12,7 +12,7 @@ module Liquid::Tags
 
     desc "Returns the page section of the current url."
     def render(context)
-      context.registers[:controller].controller_name
+      context.registers[:controller].controller_name.to_s
     end
   end
 
