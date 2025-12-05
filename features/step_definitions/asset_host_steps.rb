@@ -8,6 +8,7 @@ Given /^the asset host is unset$/ do
   policy_config = ThreeScale::ContentSecurityPolicy::AdminPortal.policy_config
   Rails.application.config.content_security_policy do |policy|
     ThreeScale::ContentSecurityPolicy::AdminPortal.add_policy_config(policy, policy_config)
+    Rails.application.instance_variable_get(:@app_env_config)&.[]=('action_dispatch.content_security_policy', policy)
   end
 end
 
@@ -26,8 +27,11 @@ Given /^the asset host is set to "(.*)"$/ do |asset_host|
   policy_with_cdn[:font_src] = (policy_with_cdn[:font_src] || []) + [cdn_url]
 
   # Reconfigure CSP with CDN URL included
+  # Rails set the CSP configuration just once during initialization,
+  # This hack is needed to make it change between tests
   Rails.application.config.content_security_policy do |policy|
     ThreeScale::ContentSecurityPolicy::AdminPortal.add_policy_config(policy, policy_with_cdn)
+    Rails.application.instance_variable_get(:@app_env_config)&.[]=('action_dispatch.content_security_policy', policy)
   end
 end
 
