@@ -29,6 +29,11 @@ Given /^the asset host is set to "(.*)"$/ do |asset_host|
   Rails.application.config.content_security_policy do |policy|
     ThreeScale::ContentSecurityPolicy::AdminPortal.add_policy_config(policy, policy_with_cdn)
   end
+
+  # DEBUG: Log what we just set
+  built_csp = Rails.application.config.content_security_policy.build
+  puts "DEBUG: Set global CSP to: #{built_csp[0..200]}"
+  puts "DEBUG: CDN URL in CSP: #{built_csp.include?(cdn_url)}"
 end
 
 Then /^(?:javascript\s)?assets should be loaded from the asset host$/ do
