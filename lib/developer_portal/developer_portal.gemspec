@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "railties", ">= 3.2"
-  s.add_dependency 'liquid', '~>3.0.6'
+  s.add_dependency 'liquid', '~>5.4.0'
 
 
   # s.add_dependency "jquery-rails"

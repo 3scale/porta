@@ -8,6 +8,8 @@ module Liquid
         @model.name
       end
 
+      alias to_s to_str
+
       def code
         @model.code
       end

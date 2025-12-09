@@ -3,7 +3,9 @@ require 'test_helper'
 class Liquid::Tags::DebugTest < ActiveSupport::TestCase
 
   def setup
-    @debug = Liquid::Tags::Debug.parse('debug', ':help', [], {})
+    template = Liquid::Template.parse('{% debug :help %}')
+    @debug = template.root.nodelist.first
+    assert_instance_of Liquid::Tags::Debug, @debug
   end
 
   test "render help" do

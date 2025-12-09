@@ -30,6 +30,8 @@ module Liquid
           liquid_options = { :template => partial }
           content = renderer(context).render( partial, {}, liquid_options)
           surround_by_comments( context, 'PARTIAL', partial.system_name, content)
+        else
+          ''
         end
       end
 

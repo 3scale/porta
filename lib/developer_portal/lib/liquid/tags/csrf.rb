@@ -15,7 +15,7 @@ module Liquid
         controller = context.registers[:controller].dup
         controller.extend(ActionView::Helpers::TagHelper)
         controller.extend(ActionView::Helpers::CsrfHelper)
-        controller.csrf_meta_tag
+        controller.csrf_meta_tag.to_s
       end
     end
   end

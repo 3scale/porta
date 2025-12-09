@@ -17,6 +17,8 @@ module Liquid
           liquid_options = portlet.liquid_options.merge(:registers => {:template => portlet})
           content = renderer(context).send(:render, portlet, portlet.assigns_for_liquid, liquid_options)
           surround_by_comments(context, 'PORTLET', portlet.system_name, content)
+        else
+          ''
         end
       end
 

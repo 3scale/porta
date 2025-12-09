@@ -14,6 +14,8 @@ module Liquid
         @timezone
       end
 
+      alias to_s to_str
+
       def identifier
         ActiveSupport::TimeZone.new(@timezone).tzinfo.name
       end
