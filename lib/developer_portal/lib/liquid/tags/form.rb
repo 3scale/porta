@@ -104,7 +104,7 @@ module Liquid
           if html_options
             html_options.scan(TagAttributes) do | key, value |
               next unless HTML_FORM_ATTRIBUTES.include?(key)
-              @html_attributes[key] = Variable.new(value)
+              @html_attributes[key] = Variable.new(value, parse_context)
             end
           end
 
@@ -123,7 +123,7 @@ module Liquid
 
         context.stack do
           context.registers[:form] = form
-          content = render_all(@nodelist, context).html_safe
+          content = @body.render(context).html_safe
           form.render(content)
         end
       rescue Liquid::Forms::Error

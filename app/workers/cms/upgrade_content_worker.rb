@@ -62,8 +62,9 @@ class CMS::UpgradeContentWorker
     return content if matches.count.zero?
 
     matches.each do |block|
-      match = block.match(Liquid::Block::FullToken) or raise 'invalid liquid block'
-      params = match[2]
+      match = block.match(Liquid::BlockBody::FullToken) or raise 'invalid liquid block'
+      # FullToken captures: [full_match, whitespace_before, tag_name, whitespace_after, params]
+      params = match[4]
 
       include = params.match(Liquid::Include::Syntax) or raise 'invalid include syntax'
 

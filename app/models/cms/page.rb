@@ -72,7 +72,7 @@ class CMS::Page < CMS::BasePage
 
     when liquid_enabled?
       template = Liquid::Template.parse(published)
-      nodelist = template.instance_variable_get("@root").instance_variable_get("@nodelist")
+      nodelist = template.root.nodelist
 
       nodelist.none?{ |i| i.is_a?(Liquid::Tag) and not i.is_a?(Liquid::Include) }
 

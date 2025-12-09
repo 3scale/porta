@@ -13,7 +13,7 @@ module Liquid
       desc "Adds HTTP headers to disable the browser cache for the current screen."
       def render(context)
         context.registers[:controller].disable_client_cache
-        nil
+        ''
       end
     end
   end

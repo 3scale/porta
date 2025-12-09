@@ -56,6 +56,7 @@ module Liquid
         @errors.full_message(@attribute, @message)
       end
 
+      alias to_s to_str
     end
   end
 end

@@ -12,7 +12,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
 
     request = ActionDispatch::TestRequest.create
     request.stubs(scheme:'https')
-    context.registers.merge!(request: @request = request)
+    context.registers[:request] = @request = request
   end
 
   test '#name' do

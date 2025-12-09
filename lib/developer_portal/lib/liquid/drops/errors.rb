@@ -58,7 +58,7 @@ module Liquid
 
       hidden
 
-      def before_method(attribute)
+      def liquid_method_missing(attribute)
         name = attribute.to_s
         errors = @errors[name]
         errors.map{ |message| field(name, message) }
@@ -88,6 +88,8 @@ module Liquid
         def to_str
           @errors.full_message(@attribute, @message)
         end
+
+        alias to_s to_str
       end
 
     end
