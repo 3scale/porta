@@ -2,7 +2,7 @@
 
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
-    require 'arel/visitors/oracle12_hack'
+    require 'arel/visitors/oracle12_hack' || next # once done, we can skip setup
 
     # in 6.0.6 automatic detection of max identifier length was introduced
     # see https://github.com/rsim/oracle-enhanced/pull/1703
@@ -30,9 +30,20 @@ ActiveSupport.on_load(:active_record) do
       end
     end)
 
-    ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8'
+    # clean-up prepared statements/cursors on connection return to pool
+    module OracleStatementCleanup
+      def self.included(base)
+        base.set_callback :checkin, :after, :close_and_clear_statements
+      end
+
+      def close_and_clear_statements
+        @statements&.clear
+      end
+    end
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      include OracleStatementCleanup
+
       # Fixing OCIError: ORA-01741: illegal zero-length identifier
       # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
       # the value of `columns` is  [ "\"ACCOUNTS\".\"ID\"" ] which forms an incorrect query
@@ -273,5 +284,19 @@ ActiveSupport.on_load(:active_record) do
     end
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend OracleEnhancedAdapterSchemaIssue2276
+
+    # see https://github.com/kubo/ruby-oci8/pull/271
+    module OCI8DisableArrayFetch
+      private
+      def define_one_column(pos, param)
+        @fetch_array_size = nil # disable memory array fetching anytime
+        super # call original
+      end
+    end
+
+    OCI8::Cursor.prepend(OCI8DisableArrayFetch)
+
+    OCI8::BindType::Mapping[:clob] = OCI8::BindType::Long
+    OCI8::BindType::Mapping[:blob] = OCI8::BindType::LongRaw
   end
 end

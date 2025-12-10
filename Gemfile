@@ -250,6 +250,8 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
+  # ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.AL32UTF8' if oracle
+  ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8' if oracle
   gem 'activerecord-oracle_enhanced-adapter', '~> 7.1.0', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
