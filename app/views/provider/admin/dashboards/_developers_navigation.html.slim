@@ -1,65 +1,40 @@
-nav.DashboardNavigation
-  ul.DashboardNavigation-list
-    // Acounts, Pending Accounts & Account Plans
-    - if can?(:manage, :partners)
-      li.DashboardNavigation-list-item
-        // Accounts
-        => dashboard_collection_link 'Account',
-                                      buyers,
-                                      admin_buyers_accounts_path,
-                                      icon_name: 'briefcase'
+- presenter = Provider::Admin::Dashboards::DevelopersNavigationPresenter.new(current_user)
 
-        // Pending Accounts
-        - if show_pending_accounts_on_dashboard?
-          == dashboard_secondary_collection_link 'Pending',
-                                                  pending_buyers,
-                                                  admin_buyers_accounts_path(search: {state: 'pending'}),
-                                                  plural: 'Pending',
-                                                  notice: true
+nav class="dashboard-developers-navigation pf-l-flex__item"
+  h1
+    i class="fa fa-bullseye"
+    b = ' Audience'
+  div
+    ul class="pf-c-list pf-m-inline"
+      - if can?(:manage, :partners)
+        li
+          = presenter.link_to :account, admin_buyers_accounts_path,
+                                        count: presenter.buyers.count
+          - if presenter.pending_buyers.exists?
+            = presenter.secondary_link_to :pending, admin_buyers_accounts_path(search: { state: :pending }),
+                                                    plural: t('.pending'),
+                                                    count: presenter.pending_buyers.count
 
-    - if can? :manage, :partners
-      li.DashboardNavigation-list-item
-        = dashboard_collection_link 'Application',
-                                    applications,
-                                    provider_admin_applications_path,
-                                    icon_name: 'cubes'
+      - if can?(:manage, :partners)
+        li
+          = presenter.link_to :application, provider_admin_applications_path,
+                                            count: presenter.applications.count
+          - if can?(:manage, :monitoring) && presenter.alerts.any?
+            = presenter.secondary_link_to :alert, admin_alerts_path,
+                                                  count: presenter.alerts.count
 
-        - if can?(:manage, :monitoring) && alerts.any?
-          == dashboard_secondary_collection_link 'Alert',
-                                                  alerts,
-                                                  admin_alerts_path,
-                                                  notice: true
+      - if can?(:manage, :finance)
+        li
+          = presenter.link_to :billing, admin_finance_root_path
 
-    // Billing
-    - if can?(:manage, :finance)
-      li.DashboardNavigation-list-item
-        = dashboard_navigation_link 'Billing',
-                                    admin_finance_root_path,
-                                    icon_name: 'credit-card'
+      - if can?(:manage, :portal)
+        li
+          = presenter.link_to :dev_portal, provider_admin_cms_root_path
+          - if presenter.drafts.any?
+            = presenter.secondary_link_to :draft, provider_admin_cms_changes_path,
+                                                  count: presenter.drafts.count
 
-    // Dev Portal
-    - if can?(:manage, :portal)
-      li.DashboardNavigation-list-item
-        = dashboard_navigation_link 'Developer Portal',
-                                    provider_admin_cms_root_path,
-                                    icon_name: 'sitemap'
-
-        - if current_account.templates.with_draft
-          == dashboard_secondary_collection_link 'Draft',
-                                                  current_account.templates.with_draft,
-                                                  provider_admin_cms_changes_path,
-                                                  notice: true
-
-    // Messages
-    li.DashboardNavigation-list-item
-      - if  received_messages_presenter.unread_exist?
-        - messages = received_messages_presenter.unread_messages
-        - name =  'Unread message'
-      - else
-        - messages = received_messages_presenter.visible_messages
-        - name = 'Message'
-      = dashboard_collection_link name,
-                                  messages,
-                                  provider_admin_messages_root_path,
-                                  icon_name: 'envelope',
-                                  limit: ::Dashboard::ReceivedMessagesPresenter::MAX_VISIBLE_MESSAGES
+      li
+        = presenter.link_to presenter.messages_name, provider_admin_messages_root_path,
+                                                     count: presenter.messages_count,
+                                                     limited: presenter.messages_limited?

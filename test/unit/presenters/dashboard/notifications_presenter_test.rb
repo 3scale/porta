@@ -1,7 +1,49 @@
 require 'test_helper'
-require_relative 'messages_presenter_test'
 
-class Dashboard::NotificationsPresenterTest < Dashboard::MessagesPresenterTest
+class Dashboard::MessagesPresenterTest < Draper::TestCase
+
+  LIMIT = Dashboard::MessagesPresenter::LIMIT
+
+  def setup
+    travel_to(DateTime.now.midday)
+  end
+
+  def test_render_no_messages
+    html = html_from_presenter(Notification.none)
+
+    # we have no messages
+    # we should see both titles
+    assert_match title(:today), html
+    assert_match title(:older), html
+  end
+
+  def test_render_only_todays_messages
+    messages = create_messages
+    html     = html_from_presenter(messages)
+
+    # we have only today's messages
+    # we should see only today title
+    assert_match title(:today), html
+    assert_not_match title(:older), html
+
+    LIMIT.times do |n|
+      assert html =~ /Alaska_#{n}/
+    end
+  end
+
+  def test_render_older_messages
+    messages = create_messages(DateTime.yesterday)
+    html     = html_from_presenter(messages)
+
+    # we have only yesterday's messages
+    # we should see both titles
+    assert_match title(:today), html
+    assert_match title(:older), html
+
+    LIMIT.times do |n|
+      assert_match /Alaska_#{n}/, html
+    end
+  end
 
   def test_ignores_certain_notifications
     FactoryBot.create(:notification, system_name: 'csv_data_export')
@@ -11,12 +53,12 @@ class Dashboard::NotificationsPresenterTest < Dashboard::MessagesPresenterTest
     first = FactoryBot.create(:notification, title: 'something', created_at: 1.day.ago)
     second = FactoryBot.create(:notification, title: 'other')
 
-    notifications = presenter.new(Notification).all_messages
+    notifications = Dashboard::MessagesPresenter.new(Notification).all_messages
 
     assert_equal [second, first], notifications.to_a
   end
 
-  protected
+  private
 
   def create_messages(created_at = DateTime.now)
     ids = Array.new(LIMIT) do |n|
@@ -24,5 +66,15 @@ class Dashboard::NotificationsPresenterTest < Dashboard::MessagesPresenterTest
     end
 
     Notification.where(id: ids)
+  end
+
+  def html_from_presenter(messages)
+    html = Dashboard::MessagesPresenter.new(messages).render
+
+    CGI.unescapeHTML(html.to_str)
+  end
+
+  def title(key)
+    I18n.t("provider.admin.dashboards.show.#{key}")
   end
 end

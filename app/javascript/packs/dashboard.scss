@@ -1,5 +1,11 @@
+@import '@patternfly/patternfly/components/Divider/divider.css';
 @import '@patternfly/patternfly/components/Page/page.css';
-@import '@patternfly/patternfly/layouts/Flex/flex.css';
+@import '@patternfly/patternfly/components/Panel/panel.css';
+@import '@patternfly/patternfly/components/Truncate/truncate.css';
+@import '@patternfly/patternfly/layouts/Grid/grid.css';
+@import '@patternfly/patternfly/layouts/Level/level.css';
+@import '@patternfly/patternfly/utilities/Spacing/spacing.css';
+@import '@patternfly/patternfly/utilities/Text/text.css';
 
 .dashboard-list-icon-title-layout {
   display: flex;
@@ -31,12 +37,6 @@
 .dashboard-list-item-action > button.pf-c-dropdown__toggle {
   height: 29px;
   margin-top: -6px;
-}
-
-.apiContainer {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr 1fr;
 }
 
 button.pf-c-button.pf-m-primary.pf-c-button__float-button {

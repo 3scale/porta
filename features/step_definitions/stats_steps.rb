@@ -1,6 +1,6 @@
 Then /^I should see a sparkline for "([^\"]*)"$/ do |metric|
-  within(".DashboardSection--audience") do
-    assert_selector 'div.Dashboard-chart'
+  within("section#audience") do
+    assert_selector 'div.new-accounts-chart'
   end
 end
 

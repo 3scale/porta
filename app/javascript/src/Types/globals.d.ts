@@ -23,10 +23,6 @@ declare global {
     analytics: {
       trackLink: (container: HTMLElement, msg: string) => void;
     };
-    dashboardWidget: {
-      loadAudienceWidget: (widgetPath: string) => void;
-    };
-    renderChartWidget: (widget: string, data: unknown) => void;
   }
 
   // This is jQuery v1 that is loaded from app/assets/javascript and exported to window.$

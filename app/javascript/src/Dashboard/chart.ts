@@ -9,24 +9,23 @@ import moment, { utc } from 'moment'
 import numeral from 'numeral'
 import { generate } from 'c3'
 
+import type { ChartData } from 'Types/threescale'
 import type { MomentInput, MomentInputObject } from 'moment'
 
-export function render (widget: string, data: unknown): void {
+export function render (widget: HTMLElement, data: ChartData): void {
   const options = chartOptions(widget, data)
-  $('[data-chart]', widget).each(function (_, chart) {
+  $('.new-accounts-chart', widget).each(function (_, chart) {
     generate(($ as any).extend(true, {}, options, { bindto: chart }))
   })
 }
 
-function chartOptions (widget: string, data: any) {
+function chartOptions (widget: HTMLElement, data: ChartData) {
   const $widget = $(widget)
   const values = timeline(data.values)
   const seriesData = [['date', ...values[0]], ['hits', ...values[1]]]
-  const countLabel = $widget.find('[data-title-count]')
+  const countLabel = $widget.find('.new-accounts-title-count')
   const lastSerieIndex = seriesData[1].length - 1
   const introLabel = $widget.find('[data-title-intro]')
-  const elementsToHide = $widget.find('[data-toggle-visibility]')
-  const countLabelLink = countLabel.closest('a')
   const defaultCount = countLabel.text()
   const defaultIntro = introLabel.text()
 
@@ -60,15 +59,15 @@ function chartOptions (widget: string, data: any) {
         countLabel.text(value)
         introLabel.text(getIntroLabel(timestamp))
 
-        elementsToHide.stop().fadeOut(100)
-        countLabelLink.toggleClass('DashboardWidget-link--infoOnly')
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        document.querySelector<HTMLElement>('[data-toggle-visibility]')!.style.setProperty('visibility', 'hidden')
       },
       onmouseout: function () {
         countLabel.text(defaultCount)
         introLabel.text(defaultIntro)
 
-        elementsToHide.stop().fadeIn(100)
-        countLabelLink.toggleClass('DashboardWidget-link--infoOnly')
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        document.querySelector<HTMLElement>('[data-toggle-visibility]')!.style.removeProperty('visibility')
       }
     }
   }

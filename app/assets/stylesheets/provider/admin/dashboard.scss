@@ -1,0 +1,101 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
+/* Grid gutter space defined by --pf-l-grid--m-gutter--GridGap, default is 1rem. */
+
+section#audience {
+  .dashboard-widget {
+    height: 18rem;
+
+    &:only-of-type {
+      width: 100%;
+    }
+  }
+
+  .dashboard-widgets > div {
+    align-self: flex-start;
+  }
+
+  #new-accounts-widget {
+    .pf-c-panel__main {
+      width: 100%;
+
+      .pf-l-level {
+        align-items: baseline;
+      }
+    }
+
+    .inline-title {
+      display: inline;
+    }
+
+    .new-accounts-chart {
+      position: absolute !important;
+      inset: calc(#{line-height-times(3)} - 4px) 9px 5px 8px;
+
+      .c3-bar._expanded_,
+      .c3-bar._expanded_:last-child {
+        fill: $link-color !important;
+        fill-opacity: 1;
+        stroke: $link-color !important;
+      }
+
+      .c3-bar:last-child {
+        fill: transparent !important;
+        shape-rendering: geometricPrecision;
+        stroke: $border-color !important;
+        stroke-width: $border-width;
+      }
+    }
+  }
+
+  #dashboard-widget-potential_upgrades .pf-c-content > h2 {
+    margin-bottom: 0;
+  }
+}
+
+.pf-m-flex-8 {
+  flex: 8 0 0;
+}
+
+.dashboard-developers-navigation {
+  width: 100%;
+  text-transform: uppercase;
+
+  h1 {
+    float: left;
+    margin-right: var(--pf-global--spacer--md);
+  }
+
+  ul {
+    float: right;
+
+    li {
+      .dashboard-navigation-link {
+        color: var(--pf-global--Color--100);
+
+        &:hover {
+          color: $link-hover-color;
+        }
+      }
+
+      .dashboard-navigation-secondary-link {
+        color: $warning-color;
+
+        &:hover {
+          color: $warning-color-hover;
+        }
+      }
+    }
+  }
+}
+
+section#messages {
+  h4 {
+    text-transform: uppercase;
+  }
+
+  .messages-empty {
+    font-style: italic;
+  }
+}
