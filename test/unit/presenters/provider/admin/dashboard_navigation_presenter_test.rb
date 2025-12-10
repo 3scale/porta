@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCase
-  Presenter = Provider::Admin::DashboardNavigationPresenter
+  Presenter = Provider::Admin::Dashboards::DevelopersNavigationPresenter
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
@@ -15,9 +15,9 @@ class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCas
     assert_instance_of Presenter, @presenter
   end
 
-  test 'link_to creates basic link with DashboardNavigation-link class' do
+  test 'link_to creates basic link with dashboard-navigation-link class' do
     link = @presenter.link_to(:message, '/path')
-    assert_match(%r{class="DashboardNavigation-link" href="/path"}, link)
+    assert_match(%r{class="dashboard-navigation-link" href="/path"}, link)
   end
 
   test 'link_to includes count when provided' do
@@ -35,19 +35,19 @@ class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCas
     assert_match(/1\.5K Messages/, link)
   end
 
-  test 'link_to merges custom classes with DashboardNavigation-link' do
+  test 'link_to merges custom classes with dashboard-navigation-link' do
     link = @presenter.link_to(:message, '/path', class: 'custom-class')
-    assert_match(/class="DashboardNavigation-link custom-class"/, link)
+    assert_match(/class="dashboard-navigation-link custom-class"/, link)
   end
 
-  test 'secondary_link_to wraps link with parenthesis and adds DashboardNavigation-link-secondary class' do
+  test 'secondary_link_to wraps link with parenthesis and adds dashboard-navigation-secondary-link class' do
     link = @presenter.secondary_link_to(:message, '/path')
-    assert_match(/^ \(.*class="DashboardNavigation-link DashboardNavigation-link-secondary".*\)$/m, link)
+    assert_match(/^ \(.*class="dashboard-navigation-link dashboard-navigation-secondary-link".*\)$/m, link)
   end
 
   test 'secondary_link_to support custom classes' do
     link = @presenter.secondary_link_to(:message, '/path', class: 'custom-class')
-    assert_match(/class="DashboardNavigation-link DashboardNavigation-link-secondary custom-class"/m, link)
+    assert_match(/class="dashboard-navigation-link dashboard-navigation-secondary-link custom-class"/m, link)
   end
 
   test 'show unread_message when unread messages exist' do

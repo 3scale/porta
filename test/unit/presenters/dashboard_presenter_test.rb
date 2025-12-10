@@ -7,7 +7,7 @@ class DashboardPresenterTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
     user = FactoryBot.create(:admin, account: provider)
 
-    @presenter = Provider::Admin::DashboardPresenter.new(user: user)
+    @presenter = Provider::Admin::Dashboards::DashboardPresenter.new(user: user)
   end
 
   attr_reader :presenter

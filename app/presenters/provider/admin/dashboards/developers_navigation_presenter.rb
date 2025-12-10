@@ -16,7 +16,7 @@ class Provider::Admin::Dashboards::DevelopersNavigationPresenter
     all_messages = user.account.received_messages
                                .not_system
 
-    if (count = all_messages.unread.count)
+    if (count = all_messages.unread.count) && count.positive?
       @messages_name = :unread_message
       @messages_limited = count > MAX_VISIBLE_MESSAGES
     else

@@ -30,9 +30,8 @@ nav class="dashboard-developers-navigation pf-l-flex__item"
       - if can?(:manage, :portal)
         li
           = presenter.link_to :dev_portal, provider_admin_cms_root_path
-          - if presenter.drafts.any?
-            = presenter.secondary_link_to :draft, provider_admin_cms_changes_path,
-                                                  count: presenter.drafts.count
+          = presenter.secondary_link_to :draft, provider_admin_cms_changes_path,
+                                                count: presenter.drafts.count
 
       li
         = presenter.link_to presenter.messages_name, provider_admin_messages_root_path,

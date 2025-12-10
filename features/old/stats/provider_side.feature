@@ -10,7 +10,6 @@ Feature: Provider stats
     Given a provider is logged in
     And the provider has "multiple_applications" visible
     And all the rolling updates features are off
-    And All Dashboard widgets are loaded
 
   Scenario: Stats access
     And I follow "API"
