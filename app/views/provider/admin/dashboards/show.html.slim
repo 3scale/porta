@@ -46,7 +46,7 @@ div class="Dashboard pf-l-flex"
                                            body: t('shared.service_access.body_html', org_name: current_account.org_name, mail_to_admin: link )
 
   section id="messages" class="pf-l-flex__item pf-m-flex-2 pf-u-ml-xl pf-m-align-self-stretch"
-    div class="pf-c-content pf-u-color-400"
+    div class="pf-c-content"
       = render 'message_list', title: t('.today'),
                                messages: [],
                                empty: -> { presenter.no_messages_message }

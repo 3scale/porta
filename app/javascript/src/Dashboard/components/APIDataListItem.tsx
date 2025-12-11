@@ -73,7 +73,6 @@ const APIDataListItem: FunctionComponent<Props> = ({ api: { id, name, updated_at
           <div ref={ref}>
             <Dropdown
               isPlain
-              className="dashboard-list-item-action"
               dropdownItems={links.map(({ name: n, path }) => (
                 <DropdownItem key={n} href={path}>{n}</DropdownItem>
               ))}

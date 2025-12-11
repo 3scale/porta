@@ -3,6 +3,28 @@
 
 /* Grid gutter space defined by --pf-l-grid--m-gutter--GridGap, default is 1rem. */
 
+button.pf-c-button.pf-m-primary.pf-c-button__float-button {
+  display: none;
+}
+
+@media screen and (min-width: 1200px) {
+  button.pf-c-button.pf-m-primary.pf-c-button__float-button {
+    display: block;
+    background-color: #b1b1e6;
+    top: 0;
+    color:black;
+    margin: 470px -50px 0 0;
+    position: absolute;
+    right: 0;
+    transform: rotate(-90deg);
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+}
+
 section#audience {
   .dashboard-widget {
     height: 18rem;
@@ -97,5 +119,33 @@ section#messages {
 
   .messages-empty {
     font-style: italic;
+  }
+}
+
+section#apis {
+  #products-widget,
+  #backends-widget {
+    .dashboard-list-icon-title-layout {
+      display: flex;
+      align-items: center;
+    }
+
+    .dashboard-list-secondary {
+      color: var(--pf-global--disabled-color--100);
+      font-size: var(--pf-global--FontSize--sm);
+    }
+
+    button.pf-c-dropdown__toggle {
+      height: 29px;
+      margin-top: -6px;
+    }
+
+    .pf-c-card__footer {
+      margin-left: auto;
+    }
+
+    .pf-c-data-list__item-row {
+      --pf-c-data-list__item-row--PaddingLeft: 0;
+    }
   }
 }
