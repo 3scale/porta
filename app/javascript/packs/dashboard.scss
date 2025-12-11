@@ -1,62 +1,8 @@
+@import '@patternfly/patternfly/components/Divider/divider.css';
 @import '@patternfly/patternfly/components/Page/page.css';
-@import '@patternfly/patternfly/layouts/Flex/flex.css';
-
-.dashboard-list-icon-title-layout {
-  display: flex;
-  align-items: center;
-}
-
-.dashboard-list-icon-title-layout svg {
-  font-size: 28px;
-  margin-right: 8px;
-}
-
-.dashboard-list-subtitle {
-  margin-top: 8px;
-}
-
-.pf-c-card__footer {
-  margin-left: auto;
-}
-
-.pf-c-data-list__item-row {
-  --pf-c-data-list__item-row--PaddingLeft: 0;
-}
-
-.dashboard-list-secondary {
-  color: var(--pf-global--disabled-color--100);
-  font-size: var(--pf-global--FontSize--sm);
-}
-
-.dashboard-list-item-action > button.pf-c-dropdown__toggle {
-  height: 29px;
-  margin-top: -6px;
-}
-
-.apiContainer {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr 1fr;
-}
-
-button.pf-c-button.pf-m-primary.pf-c-button__float-button {
-  display: none;
-}
-
-@media screen and (min-width: 1200px) {
-  button.pf-c-button.pf-m-primary.pf-c-button__float-button {
-    display: block;
-    background-color: #b1b1e6;
-    top: 0;
-    color:black;
-    margin: 470px -50px 0 0;
-    position: absolute;
-    right: 0;
-    transform: rotate(-90deg);
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-  }
-}
+@import '@patternfly/patternfly/components/Panel/panel.css';
+@import '@patternfly/patternfly/components/Truncate/truncate.css';
+@import '@patternfly/patternfly/layouts/Grid/grid.css';
+@import '@patternfly/patternfly/layouts/Level/level.css';
+@import '@patternfly/patternfly/utilities/Spacing/spacing.css';
+@import '@patternfly/patternfly/utilities/Text/text.css';

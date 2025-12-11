@@ -1,1 +1,12 @@
-$(document.getElementById(<%= json widget.id %>)).replaceWith(<%= json widget.render %>);
+(function () {
+  const container = document.getElementById(<%= json widget.id %>);
+  container.innerHTML = ''; <%# Removes spinner %>
+
+  $(container).append(<%= json widget.render %>);
+
+  <%# The following block is for the 'new accounts' widget %>
+  <% if widget.respond_to?(:chart) %>
+    const chartData = JSON.parse('<%= json widget.chart %>');
+    ThreeScale.renderChartWidget(container, chartData);
+  <% end %>
+})();
