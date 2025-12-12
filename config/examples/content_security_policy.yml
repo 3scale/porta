@@ -1,6 +1,5 @@
 base: &default
   enabled: true
-  report_only: false
 
   # Admin portal policy - restrictive but allows unsafe-inline/eval for existing code
   # Dynamically includes RAILS_ASSET_HOST for CDN assets if configured
@@ -15,19 +14,18 @@ base: &default
     frame_ancestors: ["'none'"]
     object_src: ["'none'"]
     base_uri: ["'self'"]
+  admin_portal_report_only: false
 
   # Developer portal policy - permissive defaults for customization
   developer_portal_policy:
     default_src: [ "*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'" ]
+  developer_portal_report_only: false
 
 development:
   <<: *default
-  enabled: true
 
 test:
   <<: *default
-  enabled: true
 
 production:
   <<: *default
-  enabled: true

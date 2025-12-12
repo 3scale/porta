@@ -17,7 +17,7 @@ module ThreeScale
         end
 
         def report_only?
-          config&.report_only == true
+          raise NoMethodError, "#{__method__} not implemented in #{self.class}"
         end
 
         # Builds an ActionDispatch::ContentSecurityPolicy object from a policy configuration hash
@@ -49,6 +49,10 @@ module ThreeScale
         def policy_config
           config&.admin_portal_policy&.to_h || {}
         end
+
+        def report_only?
+          config&.admin_portal_report_only == true
+        end
       end
     end
 
@@ -56,6 +60,10 @@ module ThreeScale
       class << self
         def policy_config
           config&.developer_portal_policy&.to_h || {}
+        end
+
+        def report_only?
+          config&.developer_portal_report_only == true
         end
       end
     end
