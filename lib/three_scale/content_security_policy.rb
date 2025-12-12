@@ -9,7 +9,7 @@ module ThreeScale
         end
 
         def enabled?
-          config&.enabled == true
+          raise NoMethodError, "#{__method__} not implemented in #{self.class}"
         end
 
         def policy_config
@@ -46,24 +46,32 @@ module ThreeScale
 
     class AdminPortal < Base
       class << self
+        def enabled?
+          config&.admin_portal&.enabled == true
+        end
+
         def policy_config
-          config&.admin_portal_policy&.to_h || {}
+          config&.admin_portal&.policy || {}
         end
 
         def report_only?
-          config&.admin_portal_report_only == true
+          config&.admin_portal&.report_only == true
         end
       end
     end
 
     class DeveloperPortal < Base
       class << self
+        def enabled?
+          config&.developer_portal&.enabled == true
+        end
+
         def policy_config
-          config&.developer_portal_policy&.to_h || {}
+          config&.developer_portal&.policy || {}
         end
 
         def report_only?
-          config&.developer_portal_report_only == true
+          config&.developer_portal&.report_only == true
         end
       end
     end

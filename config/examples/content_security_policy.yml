@@ -1,25 +1,27 @@
 base: &default
-  enabled: true
-
   # Admin portal policy - restrictive but allows unsafe-inline/eval for existing code
   # Dynamically includes RAILS_ASSET_HOST for CDN assets if configured
-  admin_portal_policy:
-    default_src: ["'self'"]
-    script_src: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "<%= ENV['RAILS_ASSET_HOST'] %>"]
-    style_src: ["'self'", "'unsafe-inline'", "<%= ENV['RAILS_ASSET_HOST'] %>"]
-    font_src: ["'self'", "data:", "<%= ENV['RAILS_ASSET_HOST'] %>"]
-    img_src: ["'self'", "data:", "blob:", "https:"]
-    connect_src: ["'self'"]
-    frame_src: ["'self'"]
-    frame_ancestors: ["'none'"]
-    object_src: ["'none'"]
-    base_uri: ["'self'"]
-  admin_portal_report_only: false
+  admin_portal:
+    enabled: true
+    report_only: false
+    policy:
+      default_src: ["'self'"]
+      script_src: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "<%= ENV['RAILS_ASSET_HOST'] %>"]
+      style_src: ["'self'", "'unsafe-inline'", "<%= ENV['RAILS_ASSET_HOST'] %>"]
+      font_src: ["'self'", "data:", "<%= ENV['RAILS_ASSET_HOST'] %>"]
+      img_src: ["'self'", "data:", "blob:", "https:"]
+      connect_src: ["'self'"]
+      frame_src: ["'self'"]
+      frame_ancestors: ["'none'"]
+      object_src: ["'none'"]
+      base_uri: ["'self'"]
 
   # Developer portal policy - permissive defaults for customization
-  developer_portal_policy:
-    default_src: [ "*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'" ]
-  developer_portal_report_only: false
+  developer_portal:
+    enabled: true
+    report_only: false
+    policy:
+      default_src: [ "*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'" ]
 
 development:
   <<: *default
