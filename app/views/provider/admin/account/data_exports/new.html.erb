@@ -1,26 +1,26 @@
-<% content_for :page_header_title, 'Export' %>
-<%= form_tag provider_admin_account_data_exports_path, :method => :post do %>
-  <div class="dashboard_card left-column">
-    <table>
-      <tbody>
-        <tr>
-          <th>Data:</th>
-          <td><%= select_tag(:data, options_for_select(@targets)) %></td>
-        </tr>
-        <tr>
-          <th>Period:</th>
-          <td><%= select_tag(:period, options_for_select(@periods)) %></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="pf-c-form"><%# TODO: remove div and move class to form element %>
-      <div class="pf-c-form__group pf-m-action">
-        <div class="pf-c-form__actions">
-          <button class="pf-c-button pf-m-primary" type="submit" data-disable-with="Exporting CSV...">
-            Export CSV
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+<% content_for :page_header_title, t('.page_header_title') %>
+
+<% content_for :javascripts do %>
+  <%= stylesheet_packs_chunks_tag 'pf_form' %>
 <% end %>
+
+<div class="pf-c-card">
+  <div class="pf-c-card__body">
+    <%= semantic_form_for :export, builder: Fields::PatternflyFormBuilder,
+                                   url: provider_admin_account_data_exports_path,
+                                   remote: true,
+                                   html: { class: 'pf-c-form pf-m-limit-width pf-m-horizontal' } do |form| %>
+      <%= form.input :data, as: :patternfly_select,
+                            collection: options_for_select(@targets),
+                            include_blank: false,
+                            placeholder: 'Select one' %>
+      <%= form.input :period, as: :patternfly_select,
+                              collection: options_for_select(@periods),
+                              include_blank: false %>
+
+      <%= form.actions do %>
+        <%= form.commit_button t('.export'), 'data-disable-with': t('.exporting') %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

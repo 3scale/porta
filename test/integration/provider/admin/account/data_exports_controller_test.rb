@@ -14,37 +14,43 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
   test 'invoices is present only if finance is allowed' do
     assert_not provider.settings.finance.allowed?
     get new_provider_admin_account_data_exports_path
-    assert_select 'select#data option[value="invoices"]', false
+    assert_select 'select#export_data option[value="invoices"]', false
 
     provider.settings.finance.allow
     assert provider.settings.finance.allowed?
     get new_provider_admin_account_data_exports_path
-    assert_select 'select#data option[value="invoices"]'
+    assert_select 'select#export_data option[value="invoices"]'
   end
 
   test 'for: today/this_week/period not given' do
-    post provider_admin_account_data_exports_path, params: { period: 'today', data: 'messages' }
-    assert_redirected_to new_provider_admin_account_data_exports_path
+    post provider_admin_account_data_exports_path, params: { export: { period: 'today', data: 'messages' } },
+                                                   xhr: true
+    assert_response :success
 
-    post provider_admin_account_data_exports_path, params: { period: 'this_week', data: 'messages' }
-    assert_redirected_to new_provider_admin_account_data_exports_path
+    post provider_admin_account_data_exports_path, params: { export: { period: 'this_week', data: 'messages' } },
+                                                   xhr: true
+    assert_response :success
 
-    post provider_admin_account_data_exports_path, params: { data: 'messages' }
-    assert_redirected_to new_provider_admin_account_data_exports_path
+    post provider_admin_account_data_exports_path, params: { export: { data: 'messages' } },
+                                                   xhr: true
+    assert_response :success
   end
 
   test 'invalid params to export submitted redirect to new action on empty/invalid params' do
-    post provider_admin_account_data_exports_path, params: { data: '' }
-    assert_redirected_to new_provider_admin_account_data_exports_path
+    post provider_admin_account_data_exports_path, params: { export: { data: '' } },
+                                                   xhr: true
+    assert_response :success
 
-    post provider_admin_account_data_exports_path, params: { data: 'invalid' }
-    assert_redirected_to new_provider_admin_account_data_exports_path
+    post provider_admin_account_data_exports_path, params: { export: { data: 'invalid' } },
+                                                   xhr: true
+    assert_response :success
   end
 
   test 'with correct params enqueue sidekiq'  do
     DataExportsWorker.jobs.clear
     assert_difference 'DataExportsWorker.jobs.size' do
-      post provider_admin_account_data_exports_path, params: { period: 'this_week', data: 'applications' }
+      post provider_admin_account_data_exports_path, params: { export: { period: 'this_week', data: 'applications' } },
+                                                     xhr: true
     end
     DataExportsWorker.jobs.clear
   end

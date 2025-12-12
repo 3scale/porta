@@ -40,6 +40,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
   end
 
+  # FIXME: turn this into a cucumber
   test 'renders index page without export option for members' do
     login_as @member
     get :index

@@ -1,21 +1,19 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Account::DataExportsController < Provider::Admin::Account::BaseController
   before_action :authorize_data_export
-  before_action :set_selects_collections,         :only => :new
-  before_action :redirect_to_new_on_invalid_data, :only => :create
+  before_action :set_selects_collections, only: :new
 
   activate_menu :account, :export
 
   EXPORTS_LABELS = {
-    users: 'Accounts & Admin',
-    applications: 'Applications',
-    invoices: 'Invoices',
-    messages: 'Messages'
+    users: I18n.t('provider.admin.account.data_exports.labels.users'),
+    applications: I18n.t('provider.admin.account.data_exports.labels.applications'),
+    invoices: I18n.t('provider.admin.account.data_exports.labels.invoices'),
+    messages: I18n.t('provider.admin.account.data_exports.labels.messages')
   }.freeze
 
-  EXPORTS_TARGETS = EXPORTS_LABELS.keys.map(&:to_s).freeze
-
-  def new
-  end
+  def new; end
 
   def create
     recipient = current_user
@@ -23,7 +21,11 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
                                     recipient.id,
                                     permitted_params[:data],
                                     permitted_params[:period])
-    redirect_to({ action: :new }, success: t('.success', email: recipient.email))
+
+    flash.now[:success] = t('.success', email: recipient.email)
+    respond_to do |format|
+      format.js { render template: 'shared/_flash_alerts' }
+    end
   end
 
   protected
@@ -32,21 +34,18 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
     authorize! :export, :data
   end
 
-  def redirect_to_new_on_invalid_data
-    #TODO: test this behaviour
-    redirect_to :action => :new unless EXPORTS_TARGETS.include?(permitted_params[:data])
-  end
-
   def set_selects_collections
     @targets = EXPORTS_LABELS.except(current_account.settings.finance.allowed? ? nil : :invoices).map(&:reverse)
 
-    @periods = [['All', ''], ['Today', 'today'], ['This Week', 'this_week'],
-                ['This Month', 'this_month'], ['This Year', 'this_year'],
-                ['Previous Year', 'last_year']]
+    @periods = [[t('provider.admin.account.data_exports.periods.all'), ''],
+                [t('provider.admin.account.data_exports.periods.today'), 'today'],
+                [t('provider.admin.account.data_exports.periods.this_week'), 'this_week'],
+                [t('provider.admin.account.data_exports.periods.this_month'), 'this_month'],
+                [t('provider.admin.account.data_exports.periods.this_year'), 'this_year'],
+                [t('provider.admin.account.data_exports.periods.last_year'), 'last_year']]
   end
 
   def permitted_params
-    params.permit(:data, :period)
+    params.fetch(:export).permit(:data, :period)
   end
-
 end

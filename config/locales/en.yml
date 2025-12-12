@@ -485,6 +485,22 @@ en:
             success: The plan change has been requested
 
         data_exports:
+          labels:
+            users: Accounts & Admin
+            applications: Applications
+            invoices: Invoices
+            messages: Message
+          periods:
+            all: All
+            today: Today
+            this_week: This Week
+            this_month: This Month
+            this_year: This Year
+            last_year: Previous Year
+          new:
+            page_header_title: Export
+            export: Export CSV
+            exporting: Exporting CSV...
           create:
             success: Report will be mailed to %{email}
 
