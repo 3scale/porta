@@ -56,7 +56,8 @@ class ApplicationsIndexPresenter
         collection: states_for_filter,
         placeholder: 'State',
         chip: search.state&.capitalize
-      }]
+      }],
+      overflow: []
     }
 
     if buyer.nil?
@@ -104,6 +105,13 @@ class ApplicationsIndexPresenter
                                                      { id: :paid, title: 'Paid' }],
                                         placeholder: 'Plan type',
                                         chip: search.plan_type&.capitalize })
+    end
+
+    if can?(:export, :data) && buyer.nil?
+      props[:overflow].append({ href: new_provider_admin_account_data_exports_path,
+                                label: 'Export to CSV',
+                                isShared: false,
+                                variant: :secondary })
     end
 
     props
