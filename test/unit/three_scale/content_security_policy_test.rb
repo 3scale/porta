@@ -29,8 +29,10 @@ class ThreeScale::ContentSecurityPolicy::AdminPortalTest < ActiveSupport::TestCa
     assert_equal false, ThreeScale::ContentSecurityPolicy::AdminPortal.report_only?
   end
 
-  test 'policy_config returns empty hash when config.admin_portal_policy is nil' do
-    ThreeScale::ContentSecurityPolicy::AdminPortal.config.stubs(:admin_portal_policy).returns(nil)
+  test 'policy_config returns empty hash when config.admin_portal.policy is nil' do
+    admin_portal_config = ActiveSupport::OrderedOptions.new
+    admin_portal_config.policy = nil
+    ThreeScale::ContentSecurityPolicy::AdminPortal.config.stubs(:admin_portal).returns(admin_portal_config)
     policy_hash = ThreeScale::ContentSecurityPolicy::AdminPortal.policy_config
 
     assert_equal({}, policy_hash)
@@ -66,8 +68,10 @@ class ThreeScale::ContentSecurityPolicy::DeveloperPortalTest < ActiveSupport::Te
     assert_equal false, ThreeScale::ContentSecurityPolicy::DeveloperPortal.report_only?
   end
 
-  test 'policy_config returns empty hash when config.developer_portal_policy is nil' do
-    ThreeScale::ContentSecurityPolicy::DeveloperPortal.config.stubs(:developer_portal_policy).returns(nil)
+  test 'policy_config returns empty hash when config.developer_portal.policy is nil' do
+    developer_portal_config = ActiveSupport::OrderedOptions.new
+    developer_portal_config.policy = nil
+    ThreeScale::ContentSecurityPolicy::DeveloperPortal.config.stubs(:developer_portal).returns(developer_portal_config)
     policy_hash = ThreeScale::ContentSecurityPolicy::DeveloperPortal.policy_config
 
     assert_equal({}, policy_hash)
@@ -100,7 +104,9 @@ class ThreeScale::ContentSecurityPolicyWithoutYAMLTest < ActiveSupport::TestCase
 
   test 'AdminPortal enabled? handles nil config values gracefully' do
     config = ActiveSupport::OrderedOptions.new
-    config.enabled = nil
+    admin_portal_config = ActiveSupport::OrderedOptions.new
+    admin_portal_config.enabled = nil
+    config.admin_portal = admin_portal_config
     ThreeScale::ContentSecurityPolicy::AdminPortal.stubs(:config).returns(config)
 
     assert_equal false, ThreeScale::ContentSecurityPolicy::AdminPortal.enabled?
@@ -108,7 +114,9 @@ class ThreeScale::ContentSecurityPolicyWithoutYAMLTest < ActiveSupport::TestCase
 
   test 'AdminPortal report_only? handles nil config values gracefully' do
     config = ActiveSupport::OrderedOptions.new
-    config.admin_portal_report_only = nil
+    admin_portal_config = ActiveSupport::OrderedOptions.new
+    admin_portal_config.report_only = nil
+    config.admin_portal = admin_portal_config
     ThreeScale::ContentSecurityPolicy::AdminPortal.stubs(:config).returns(config)
 
     assert_equal false, ThreeScale::ContentSecurityPolicy::AdminPortal.report_only?
