@@ -41,8 +41,53 @@ ActiveSupport.on_load(:active_record) do
       end
     end
 
+    ActiveRecord::Base.skip_callback(:update, :after, :enhanced_write_lobs)
+
+    # We need to patch Oracle Adapter quoting to actually serialize CLOB columns.
+    # https://github.com/rsim/oracle-enhanced/issues/1588#issue-272289146
+    # The default behaviour is to serialize them to 'empty_clob()' basically wiping out the data.
+    # The team behind it believes `Table.update_all(column: 'text')`
+    # should wipe all your data in that column: https://github.com/rsim/oracle-enhanced/issues/1588#issuecomment-343353756
+    # So we try to convert the text to using `to_clob` function.
+    module OracleEnhancedSmartQuoting
+      CLOB_INLINE_LIMIT = 32767  # 32KB - 1
+      BLOB_INLINE_LIMIT = 16383  # 16KB - 1 (hex encoding doubles size)
+
+      def quote(value)
+        case value
+        when ActiveModel::Type::Binary::Data, ActiveRecord::Type::OracleEnhanced::Text::Data
+          raise ArgumentError, "trying to prove that we never reach here"
+        when ActiveModel::Type::Binary::Data
+          raw = value.to_s
+          size = raw.bytesize
+
+          if size == 0
+            "empty_blob()"
+          elsif size <= BLOB_INLINE_LIMIT
+            "hextoraw('#{raw.unpack1('H*')}')"
+          else
+            raise ArgumentError, "BLOB too large for inline quoting (#{size} bytes, max #{BLOB_INLINE_LIMIT} bytes). Use bind parameters instead."
+          end
+        when ActiveRecord::Type::OracleEnhanced::Text::Data
+          text = value.to_s
+          size = text.bytesize
+
+          if size == 0
+            "empty_clob()"
+          elsif size <= CLOB_INLINE_LIMIT
+            "to_clob(#{super(text)})"
+          else
+            raise ArgumentError, "CLOB too large for inline quoting (#{size} bytes, max #{CLOB_INLINE_LIMIT} bytes). Use bind parameters instead."
+          end
+        else
+          super
+        end
+      end
+    end
+
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
       include OracleStatementCleanup
+      prepend OracleEnhancedSmartQuoting
 
       # Fixing OCIError: ORA-01741: illegal zero-length identifier
       # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
@@ -76,24 +121,6 @@ ActiveSupport.on_load(:active_record) do
           end
         end
 
-        # We need to patch Oracle Adapter quoting to actually serialize CLOB columns.
-        # https://github.com/rsim/oracle-enhanced/issues/1588#issue-272289146
-        # The default behaviour is to serialize them to 'empty_clob()' basically wiping out the data.
-        # The team behind it believes `Table.update_all(column: 'text')`
-        # should wipe all your data in that column: https://github.com/rsim/oracle-enhanced/issues/1588#issuecomment-343353756
-        # So we try to convert the text to using `to_clob` function.
-        def _quote(value)
-          case value
-          when ActiveModel::Type::Binary::Data
-            # I know this looks ugly, but that just modified copy paste of what the adapter does (minus the rescue).
-            # It is a bit improved in next version due to ActiveRecord Attributes API.
-            %{to_blob(#{quote(value.to_s)})}
-          when ActiveRecord::Type::OracleEnhanced::Text::Data
-            %{to_clob(#{quote(value.to_s)})}
-          else
-            super
-          end
-        end
       end)
     end
 
@@ -296,6 +323,10 @@ ActiveSupport.on_load(:active_record) do
 
     OCI8::Cursor.prepend(OCI8DisableArrayFetch)
 
+    # see https://github.com/kubo/ruby-oci8/pull/271
+    # Enable piecewise retrieval for both CLOBs and BLOBs
+    # With the OCIConnectionCursorLobFix above, we can safely use both mappings
+    # because LOBs are bound as OCI8::CLOB/BLOB objects, not LONG data
     OCI8::BindType::Mapping[:clob] = OCI8::BindType::Long
     OCI8::BindType::Mapping[:blob] = OCI8::BindType::LongRaw
   end
