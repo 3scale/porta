@@ -108,7 +108,7 @@ class ThreeScale::ContentSecurityPolicyWithoutYAMLTest < ActiveSupport::TestCase
 
   test 'AdminPortal report_only? handles nil config values gracefully' do
     config = ActiveSupport::OrderedOptions.new
-    config.report_only = nil
+    config.admin_portal_report_only = nil
     ThreeScale::ContentSecurityPolicy::AdminPortal.stubs(:config).returns(config)
 
     assert_equal false, ThreeScale::ContentSecurityPolicy::AdminPortal.report_only?
