@@ -40,15 +40,6 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
   end
 
-  # FIXME: turn this into a cucumber
-  test 'renders index page without export option for members' do
-    login_as @member
-    get :index
-    assert_response :success
-    assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
-    assert_select '#export-to-csv', false, 'Export all Messages'
-  end
-
   test 'creates valid reply' do
     login_as(@admin)
     post :reply, params: { message: { subject: "Valid Message", body: "message with subject" }, id: @message.id }
