@@ -502,7 +502,9 @@ en:
             export: Export CSV
             exporting: Exporting CSV...
           create:
-            success: Report will be mailed to %{email}
+            invalid_data: Requested data can't be exported.
+            invalid_period: Can't export data for the selected period.
+            success: Report will be mailed to %{email}.
 
         email_configurations:
           create:

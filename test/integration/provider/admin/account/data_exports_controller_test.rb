@@ -36,22 +36,38 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
     assert_response :success
   end
 
-  test 'invalid params to export submitted redirect to new action on empty/invalid params' do
-    post provider_admin_account_data_exports_path, params: { export: { data: '' } },
+  test 'invalid data params show error message' do
+    post provider_admin_account_data_exports_path, params: { export: { data: '', period: 'today' } },
                                                    xhr: true
     assert_response :success
+    assert_equal flash[:danger], "Requested data can't be exported."
 
-    post provider_admin_account_data_exports_path, params: { export: { data: 'invalid' } },
+    post provider_admin_account_data_exports_path, params: { export: { data: 'invalid', period: 'today' } },
                                                    xhr: true
     assert_response :success
+    assert_equal flash[:danger], "Requested data can't be exported."
   end
 
-  test 'with correct params enqueue sidekiq'  do
+  test 'invalid period params show error message' do
+    post provider_admin_account_data_exports_path, params: { export: { data: 'messages', period: '' } },
+                                                   xhr: true
+    assert_response :success
+    assert_equal flash[:danger], "Can't export data for the selected period."
+
+    post provider_admin_account_data_exports_path, params: { export: { data: 'messages', period: 'invalid' } },
+                                                   xhr: true
+    assert_response :success
+    assert_equal flash[:danger], "Can't export data for the selected period."
+  end
+
+  test 'with correct params enqueue sidekiq and show success message'  do
     DataExportsWorker.jobs.clear
     assert_difference 'DataExportsWorker.jobs.size' do
       post provider_admin_account_data_exports_path, params: { export: { period: 'this_week', data: 'applications' } },
                                                      xhr: true
     end
+    assert_response :success
+    assert_equal flash[:success], "Report will be mailed to #{current_user.email}."
     DataExportsWorker.jobs.clear
   end
 end
