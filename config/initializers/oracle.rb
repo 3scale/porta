@@ -43,20 +43,18 @@ ActiveSupport.on_load(:active_record) do
 
     ActiveRecord::Base.skip_callback(:update, :after, :enhanced_write_lobs)
 
-    # We need to patch Oracle Adapter quoting to actually serialize CLOB columns.
+    # Supposedly in the past `update_all` and `where` used this with issues.
     # https://github.com/rsim/oracle-enhanced/issues/1588#issue-272289146
     # The default behaviour is to serialize them to 'empty_clob()' basically wiping out the data.
     # The team behind it believes `Table.update_all(column: 'text')`
     # should wipe all your data in that column: https://github.com/rsim/oracle-enhanced/issues/1588#issuecomment-343353756
-    # So we try to convert the text to using `to_clob` function.
+    # Might be dead code now.
     module OracleEnhancedSmartQuoting
       CLOB_INLINE_LIMIT = 32767  # 32KB - 1
       BLOB_INLINE_LIMIT = 16383  # 16KB - 1 (hex encoding doubles size)
 
       def quote(value)
         case value
-        when ActiveModel::Type::Binary::Data, ActiveRecord::Type::OracleEnhanced::Text::Data
-          raise ArgumentError, "trying to prove that we never reach here"
         when ActiveModel::Type::Binary::Data
           raw = value.to_s
           size = raw.bytesize
