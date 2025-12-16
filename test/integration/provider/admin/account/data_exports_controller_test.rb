@@ -67,7 +67,16 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
                                                      xhr: true
     end
     assert_response :success
-    assert_equal flash[:success], "Report will be mailed to #{current_user.email}."
+    assert_equal flash[:success], "Report will be mailed to #{provider.first_admin.email}."
     DataExportsWorker.jobs.clear
+  end
+
+  test "members can't access export page" do
+    member = FactoryBot.create(:member, account: @provider)
+    member.activate!
+    login!(@provider, user: member)
+
+    get new_provider_admin_account_data_exports_path
+    assert_response :forbidden
   end
 end

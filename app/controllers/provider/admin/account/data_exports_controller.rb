@@ -63,11 +63,15 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
   end
 
   def data
-    @data ||= params.require(:export).require(:data)
+    @data ||= permitted_params.require(:data)
   end
 
   def period
-    @period ||= params.require(:export).require(:period)
+    @period ||= permitted_params.require(:period)
+  end
+
+  def permitted_params
+    params.require(:export).permit(:data, :period)
   end
 
   def permitted_types

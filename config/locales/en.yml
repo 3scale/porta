@@ -489,7 +489,7 @@ en:
             users: Accounts & Admin
             applications: Applications
             invoices: Invoices
-            messages: Message
+            messages: Messages
           periods:
             all: All
             today: Today
