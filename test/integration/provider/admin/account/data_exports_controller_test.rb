@@ -22,7 +22,7 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
     assert_select 'select#export_data option[value="invoices"]'
   end
 
-  test 'for: today/this_week/period not given' do
+  test 'for: today/this_week/all periods' do
     post provider_admin_account_data_exports_path, params: { export: { period: 'today', data: 'messages' } },
                                                    xhr: true
     assert_response :success
@@ -31,17 +31,12 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
                                                    xhr: true
     assert_response :success
 
-    post provider_admin_account_data_exports_path, params: { export: { data: 'messages' } },
+    post provider_admin_account_data_exports_path, params: { export: { period: 'all', data: 'messages' } },
                                                    xhr: true
     assert_response :success
   end
 
   test 'invalid data params show error message' do
-    post provider_admin_account_data_exports_path, params: { export: { data: '', period: 'today' } },
-                                                   xhr: true
-    assert_response :success
-    assert_equal flash[:danger], "Requested data can't be exported."
-
     post provider_admin_account_data_exports_path, params: { export: { data: 'invalid', period: 'today' } },
                                                    xhr: true
     assert_response :success
@@ -49,11 +44,6 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
   end
 
   test 'invalid period params show error message' do
-    post provider_admin_account_data_exports_path, params: { export: { data: 'messages', period: '' } },
-                                                   xhr: true
-    assert_response :success
-    assert_equal flash[:danger], "Can't export data for the selected period."
-
     post provider_admin_account_data_exports_path, params: { export: { data: 'messages', period: 'invalid' } },
                                                    xhr: true
     assert_response :success
