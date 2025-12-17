@@ -896,7 +896,7 @@ en:
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
-        developers_navigation:
+        audience_navigation:
           account:
             one: 1 Account
             other: '%{human_count} Accounts'

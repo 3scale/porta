@@ -15,7 +15,4 @@ declare global {
   }
 }
 
-interface ChartData {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  values: Record<string, { value: number; formatted_value: string }>;
-}
+type ChartData = [date: string, value: string][]

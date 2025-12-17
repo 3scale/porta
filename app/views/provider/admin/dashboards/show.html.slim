@@ -16,7 +16,7 @@ div class="Dashboard pf-l-flex"
   div class="pf-l-flex__item pf-m-flex-8 pf-l-flex pf-m-column pf-m-align-self-stretch"
     - if presenter.can_see_audience_section?
       section id="audience" class="pf-l-flex__item pf-l-flex pf-m-column pf-m-space-items-none"
-        = render 'developers_navigation'
+        = render 'audience_navigation'
 
         div class="dashboard-widgets pf-l-flex pf-m-flex-1 pf-l-flex__item pf-m-space-items-none"
           - if can?(:manage, :partners)

@@ -1,6 +1,6 @@
 div class="pf-c-panel__main"
   div class="pf-c-panel__main-body"
-    - if widget.current_sum == 0 && widget.current == 0 && !widget.history?
+    - if widget.no_signups?
       div class="pf-c-content"
         h2 = t('.title')
         p = t('.sign_up_info_html', href: provider_admin_cms_root_path)
@@ -13,8 +13,8 @@ div class="pf-c-panel__main"
           h2 class="pf-l-level__item"
             = link_to admin_buyers_accounts_path(search: { created_within: [current_range.first, current_range.last] }) do
                 strong class="new-accounts-title-count pf-u-mr-xs"
-                  = number_to_human(widget.current_sum)
-                = t('.title', count: widget.current_sum)
+                  = number_to_human(widget.rest_days_signups)
+                = t('.title', count: widget.rest_days_signups)
           span class="pf-l-level__item" data-title-intro='true'
             = t('.last_days')
           div class="pf-l-level__item" data-toggle-visibility='true'
@@ -24,7 +24,7 @@ div class="pf-c-panel__main"
                   = widget.title_with_history
               - else
                 = link_to admin_buyers_accounts_path(search: { created_within: [current_range.last, current_range.last] })
-                  = number_to_human(widget.current)
+                  = number_to_human(widget.todays_signups)
             = widget.history? ? t('.previous') : t('.today')
 
       div class="new-accounts-chart"

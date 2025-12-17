@@ -7,28 +7,22 @@ class Provider::Admin::Dashboards::NewAccountsPresenter
   ID = 'new-accounts-widget'
   NAME = :new_accounts
 
-  attr_reader :chart, :current_sum, :current
+  attr_reader :rest_days_signups, :todays_sinups, :chart_data
 
-  def initialize(data) # rubocop:disable Metrics/AbcSize
-    current_data = data.delete(:new_accounts)
-    previous_data = data.delete(:previous_accounts)
+  def initialize(data)
+    new_accounts = data.delete(:new_accounts)
+    old_accounts = data.delete(:previous_accounts)
 
-    current_data_keys = current_data.keys
-    incomplete_slice = current_data.slice(current_data_keys.pop)
-    current_slice = current_data.slice(*current_data_keys)
-    current_sum = get_sum_from_values(current_slice.values)
-    previous_sum = get_sum_from_values(previous_data.values)
+    *rest_days, today = new_accounts.to_a
+    @rest_days_signups = rest_days.sum(&:last)
+    @todays_sinups = today.last
 
-    @current_sum = current_sum
-    @current = incomplete_slice.values.first&.fetch(:formatted_value, '0')
-    @history = previous_sum.positive?
-    @percentage_change = ((current_sum.to_f - previous_sum.to_f) / previous_sum.to_f) * 100
-    @chart = {
-      values: current_data,
-      complete: current_slice,
-      incomplete: incomplete_slice,
-      previous: previous_data
-    }
+    old_signups = old_accounts.values.sum.to_f
+    @history = old_signups.positive?
+    @percentage_change = history? ? ((rest_days_signups.to_f - old_signups) / old_signups) * 100 : 0
+    @chart_data = new_accounts.map do |date, value|
+      [date, number_to_human(value)]
+    end
   end
 
   def id
@@ -47,9 +41,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenter
     format('%+d', @percentage_change)
   end
 
-  private
-
-  def get_sum_from_values(values)
-    values.sum { |value| value[:value] }
+  def no_signups?
+    rest_days_signups.zero? && todays_signups.zero? && !history?
   end
 end

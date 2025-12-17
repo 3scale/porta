@@ -27,18 +27,7 @@ class Provider::Admin::Dashboard::NewAccountsController < Provider::Admin::Dashb
   end
 
   def accounts_within_timeframe(range)
-    new_accounts_query.within_timeframe(range: range).map do |(date, value)|
-
-      value_data = {
-        value:           value,
-        formatted_value: number_to_human(value)
-      }
-
-      [date, value_data]
-    end.to_h
-  end
-
-  def new_accounts_query
     NewAccountsQuery.new(current_account)
+                    .within_timeframe(range:)
   end
 end

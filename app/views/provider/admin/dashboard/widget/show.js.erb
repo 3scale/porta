@@ -4,9 +4,8 @@
 
   $(container).append(<%= json widget.render %>);
 
-  <%# The following block is for the 'new accounts' widget %>
-  <% if widget.respond_to?(:chart) %>
-    const chartData = JSON.parse('<%= json widget.chart %>');
+  <% if widget.is_a?(Provider::Admin::Dashboards::NewAccountsPresenter) %>
+    const chartData = <%= json widget.chart_data %>;
     ThreeScale.renderChartWidget(container, chartData);
   <% end %>
 })();

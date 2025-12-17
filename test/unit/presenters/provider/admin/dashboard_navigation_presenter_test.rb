@@ -3,16 +3,12 @@
 require 'test_helper'
 
 class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCase
-  Presenter = Provider::Admin::Dashboards::DevelopersNavigationPresenter
+  Presenter = Provider::Admin::Dashboards::AudienceNavigationPresenter
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
     @user = FactoryBot.create(:admin, account: @provider)
     @presenter = Presenter.new(@user)
-  end
-
-  test 'initializes with user' do
-    assert_instance_of Presenter, @presenter
   end
 
   test 'link_to creates basic link with dashboard-navigation-link class' do
@@ -51,13 +47,7 @@ class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCas
   end
 
   test 'show unread_message when unread messages exist' do
-    all_messages = mock('all_messages')
-    unread_messages = mock('unread_messages')
-
-    @provider.received_messages.stubs(:not_system).returns(all_messages)
-    all_messages.stubs(:unread).returns(unread_messages)
-    unread_messages.stubs(:count).returns(1)
-    all_messages.stubs(:count).returns(200)
+    setup_messages_mocks(unread_count: 1, all_count: 50)
 
     presenter = Presenter.new(@user)
 
@@ -66,13 +56,7 @@ class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCas
   end
 
   test 'show all messages when no unread messages exist' do
-    all_messages = mock('all_messages')
-    unread_messages = mock('unread_messages')
-
-    @provider.received_messages.stubs(:not_system).returns(all_messages)
-    all_messages.stubs(:unread).returns(unread_messages)
-    all_messages.stubs(:count).returns(50)
-    unread_messages.stubs(:count).returns(0)
+    setup_messages_mocks(unread_count: 0, all_count: 50)
 
     presenter = Presenter.new(@user)
 
@@ -80,47 +64,41 @@ class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCas
     assert_equal 50, presenter.messages_count
   end
 
-  test 'messages_count caps at MAX_VISIBLE_MESSAGES when count exceeds limit' do
-    all_messages = mock('all_messages')
-    unread_messages = mock('unread_messages')
+  test 'messages_count caps at MESSAGES_QUERY_LIMIT when count reaches limit' do
+    setup_messages_mocks(unread_count: Presenter::MESSAGES_QUERY_LIMIT)
 
-    @provider.received_messages.stubs(:not_system).returns(all_messages)
-    all_messages.stubs(:unread).returns(unread_messages)
-    unread_messages.stubs(:count).returns(9999)
-
-    assert_equal Presenter::MAX_VISIBLE_MESSAGES, Presenter.new(@user).messages_count
+    assert_equal Presenter::MESSAGES_QUERY_LIMIT, Presenter.new(@user).messages_count
   end
 
-  test 'messages_limited? returns true when messages exceed MAX_VISIBLE_MESSAGES' do
-    all_messages = mock('all_messages')
-    unread_messages = mock('unread_messages')
-
-    @provider.received_messages.stubs(:not_system).returns(all_messages)
-    all_messages.stubs(:unread).returns(unread_messages)
-    unread_messages.stubs(:count).returns(150)
+  test 'messages_limited? returns true when messages equal MESSAGES_QUERY_LIMIT' do
+    setup_messages_mocks(unread_count: Presenter::MESSAGES_QUERY_LIMIT)
 
     assert Presenter.new(@user).messages_limited?
   end
 
-  test 'messages_limited? returns false when messages do not exceed MAX_VISIBLE_MESSAGES' do
-    all_messages = mock('all_messages')
-    unread_messages = mock('unread_messages')
-
-    @provider.received_messages.stubs(:not_system).returns(all_messages)
-    all_messages.stubs(:unread).returns(unread_messages)
-    unread_messages.stubs(:count).returns(50)
+  test 'messages_limited? returns false when messages do not reach MESSAGES_QUERY_LIMIT' do
+    setup_messages_mocks(unread_count: 50)
 
     assert_not Presenter.new(@user).messages_limited?
   end
 
-  test 'messages_limited? returns false when messages equal MAX_VISIBLE_MESSAGES' do
+  private
+
+  def setup_messages_mocks(unread_count:, all_count: nil)
     all_messages = mock('all_messages')
+    all_messages_limited = mock('all_messages_limited')
     unread_messages = mock('unread_messages')
+    unread_messages_limited = mock('unread_messages_limited')
 
     @provider.received_messages.stubs(:not_system).returns(all_messages)
+    all_messages.stubs(:limit)
+                .with(Presenter::MESSAGES_QUERY_LIMIT)
+                .returns(all_messages_limited)
     all_messages.stubs(:unread).returns(unread_messages)
-    unread_messages.stubs(:count).returns(100)
-
-    assert_not Presenter.new(@user).messages_limited?
+    unread_messages.stubs(:limit)
+                   .with(Presenter::MESSAGES_QUERY_LIMIT)
+                   .returns(unread_messages_limited)
+    unread_messages_limited.stubs(:count).returns(unread_count)
+    all_messages_limited.stubs(:count).returns(all_count) if all_count
   end
 end

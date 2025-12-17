@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-class Provider::Admin::Dashboards::DevelopersNavigationPresenter
+class Provider::Admin::Dashboards::AudienceNavigationPresenter
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::TextHelper
 
   attr_reader :messages_name, :messages_count
 
-  MAX_VISIBLE_MESSAGES = 100
+  # Do not remove the following limit. See https://github.com/3scale/porta/pull/4120.
+  MESSAGES_QUERY_LIMIT = 100
 
   def initialize(user)
     @user = user
@@ -15,17 +16,21 @@ class Provider::Admin::Dashboards::DevelopersNavigationPresenter
 
     all_messages = user.account.received_messages
                                .not_system
+                               .limit(MESSAGES_QUERY_LIMIT)
+    unread_messages = user.account.received_messages
+                                  .not_system
+                                  .unread
+                                  .limit(MESSAGES_QUERY_LIMIT)
 
-    if (count = all_messages.unread.count) && count.positive?
+    if (count = unread_messages.count) && count.positive?
       @messages_name = :unread_message
-      @messages_limited = count > MAX_VISIBLE_MESSAGES
     else
       count = all_messages.count
       @messages_name = :message
     end
 
-    @messages_limited = count > MAX_VISIBLE_MESSAGES
-    @messages_count = [count, MAX_VISIBLE_MESSAGES].min
+    @messages_limited = count == MESSAGES_QUERY_LIMIT
+    @messages_count = count
   end
 
   def drafts
@@ -75,6 +80,6 @@ class Provider::Admin::Dashboards::DevelopersNavigationPresenter
   private
 
   def t(str, opts)
-    I18n.t("provider.admin.dashboards.developers_navigation.#{str}", **opts)
+    I18n.t("provider.admin.dashboards.audience_navigation.#{str}", **opts)
   end
 end

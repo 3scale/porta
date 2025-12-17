@@ -10,7 +10,7 @@ import numeral from 'numeral'
 import { generate } from 'c3'
 
 import type { ChartData } from 'Types/threescale'
-import type { MomentInput, MomentInputObject } from 'moment'
+import type { MomentInput } from 'moment'
 
 export function render (widget: HTMLElement, data: ChartData): void {
   const options = chartOptions(widget, data)
@@ -21,8 +21,8 @@ export function render (widget: HTMLElement, data: ChartData): void {
 
 function chartOptions (widget: HTMLElement, data: ChartData) {
   const $widget = $(widget)
-  const values = timeline(data.values)
-  const seriesData = [['date', ...values[0]], ['hits', ...values[1]]]
+  const [x, y] = parseData(data)
+  const seriesData = [['date', ...x], ['hits', ...y]]
   const countLabel = $widget.find('.new-accounts-title-count')
   const lastSerieIndex = seriesData[1].length - 1
   const introLabel = $widget.find('[data-title-intro]')
@@ -73,18 +73,10 @@ function chartOptions (widget: HTMLElement, data: ChartData) {
   }
 }
 
-/**
- * Converts object where keys are string dates to array with real date objects
- */
-function timeline (data: MomentInputObject) {
-  const dates = Object.keys(data)
-  const x: string[] = []
-  const y: string[] = []
+function parseData (data: ChartData) {
+  const x = data.flatMap(pair => utc(pair[0]).toISOString())
+  const y = data.flatMap(pair => pair[1])
 
-  dates.forEach(date => {
-    x.push(utc(date).toISOString())
-    y.push((data as any)[date].value)
-  })
   return [x, y]
 }
 
