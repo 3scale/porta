@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Provider::Admin::DashboardNavigationPresenterTest < ActiveSupport::TestCase
+class Provider::Admin::Dashboards::AudienceNavigationPresenterTest < ActiveSupport::TestCase
   Presenter = Provider::Admin::Dashboards::AudienceNavigationPresenter
 
   def setup
