@@ -30,7 +30,7 @@ gem 'sprockets-rails'
 
 group :assets do
   gem 'coffee-rails', '~> 5.0'
-  gem 'dartsass-rails', '~> 0.5.1'
+  gem 'cssbundling-rails', '~> 1.4.3'
   gem 'non-digest-assets', '~> 2.4.0'
 end
 
