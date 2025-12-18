@@ -12,6 +12,6 @@ class Provider::Admin::Dashboard::WidgetBaseController < Provider::Admin::BaseCo
   end
 
   def widget
-    @widget ||= presenter.new(widget_data)
+    raise NoMethodError, "#{__method__} not implemented in #{self.class}"
   end
 end

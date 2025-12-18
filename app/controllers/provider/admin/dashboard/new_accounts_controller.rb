@@ -1,19 +1,13 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Dashboard::NewAccountsController < Provider::Admin::Dashboard::WidgetBaseController
-  protected
-
   include ActiveSupport::NumberHelper
 
-  def presenter
-    Provider::Admin::Dashboards::NewAccountsPresenter
-  end
-
-  def widget_data
-    {
+  def widget
+    @widget ||= Provider::Admin::Dashboards::NewAccountsPresenter.new(
       new_accounts: new_accounts,
       previous_accounts: previous_accounts
-    }
+    )
   end
 
   private

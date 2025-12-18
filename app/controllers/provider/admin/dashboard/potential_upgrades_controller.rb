@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Dashboard::PotentialUpgradesController < Provider::Admin::Dashboard::WidgetBaseController
-  protected
-
-  def presenter
-    Provider::Admin::Dashboards::PotentialUpgradesPresenter
-  end
-
-  def widget_data
-    {
+  def widget
+    @widget ||= Provider::Admin::Dashboards::PotentialUpgradesPresenter.new(
       upgrades: current_upgrades,
       set_up_correctly: set_up_correctly?
-    }
+    )
   end
 
   private
@@ -23,10 +17,12 @@ class Provider::Admin::Dashboard::PotentialUpgradesController < Provider::Admin:
   end
 
   def set_up_correctly?
-    usage_limits = current_account
-      .application_plans.joins(:usage_limits)
-      .grouping { issuer_id }.unscope(:order)
-      .references(:usage_limits).count
+    usage_limits = current_account.application_plans
+                                  .joins(:usage_limits)
+                                  .grouping(&:issuer_id)
+                                  .unscope(:order)
+                                  .references(:usage_limits)
+                                  .count
 
     usage_notifications = current_user.accessible_services.pluck(:id, :notification_settings).to_h
 

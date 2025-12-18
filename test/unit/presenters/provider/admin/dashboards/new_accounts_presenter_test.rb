@@ -29,7 +29,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenterTest < Draper::TestCase
   test 'sets todays_sinups to today value' do
     presenter = Provider::Admin::Dashboards::NewAccountsPresenter.new(@data.dup)
 
-    assert_equal 7, presenter.todays_sinups
+    assert_equal 7, presenter.todays_signups
   end
 
   test 'generates correct chart_data' do
@@ -84,7 +84,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenterTest < Draper::TestCase
     presenter = Provider::Admin::Dashboards::NewAccountsPresenter.new(data)
 
     assert_equal 0, presenter.rest_days_signups
-    assert_equal 5, presenter.todays_sinups
+    assert_equal 5, presenter.todays_signups
   end
 
   test 'handles empty current data' do
