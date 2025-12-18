@@ -38,7 +38,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenter
   end
 
   def title_with_history
-    format('%+d', @percentage_change)
+    number_to_human(@percentage_change, format: "#{@percentage_change.negative? ? '-' : '+'}%n%u%")
   end
 
   def no_signups?
