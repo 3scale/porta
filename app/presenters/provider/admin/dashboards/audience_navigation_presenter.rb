@@ -14,23 +14,22 @@ class Provider::Admin::Dashboards::AudienceNavigationPresenter
     @user = user
     @account = user.account
 
-    all_messages = user.account.received_messages
-                               .not_system
-                               .limit(MESSAGES_QUERY_LIMIT)
-    unread_messages = user.account.received_messages
-                                  .not_system
-                                  .unread
-                                  .limit(MESSAGES_QUERY_LIMIT)
+    messages = @account.received_messages
+                       .not_system
 
-    if (count = unread_messages.count) && count.positive?
+    unread_messages_count = messages.unread
+                                    .limit(MESSAGES_QUERY_LIMIT)
+                                    .count
+
+    if unread_messages_count.positive?
       @messages_name = :unread_message
+      @messages_count = unread_messages_count
     else
-      count = all_messages.count
+      all_messages_count = messages.limit(MESSAGES_QUERY_LIMIT)
+                                   .count
       @messages_name = :message
+      @messages_count = all_messages_count
     end
-
-    @messages_limited = count == MESSAGES_QUERY_LIMIT
-    @messages_count = count
   end
 
   def drafts
@@ -38,7 +37,7 @@ class Provider::Admin::Dashboards::AudienceNavigationPresenter
   end
 
   def messages_limited?
-    @messages_limited
+    @messages_count == MESSAGES_QUERY_LIMIT
   end
 
   def pending_buyers
