@@ -7,7 +7,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenter
   ID = 'new-accounts-widget'
   NAME = :new_accounts
 
-  attr_reader :rest_days_signups, :todays_sinups, :chart_data
+  attr_reader :rest_days_signups, :todays_signups, :chart_data
 
   def initialize(data)
     new_accounts = data.delete(:new_accounts)
@@ -15,7 +15,7 @@ class Provider::Admin::Dashboards::NewAccountsPresenter
 
     *rest_days, today = new_accounts.to_a
     @rest_days_signups = rest_days.sum(&:last)
-    @todays_sinups = today.last
+    @todays_signups = today.last
 
     old_signups = old_accounts.values.sum.to_f
     @history = old_signups.positive?
