@@ -3,6 +3,7 @@ class UsageLimitViolationsQuery
     @account = account
   end
 
+  # FIXME: this is being called 6 times, why?
   def usage_limit_violations
     alerts.violations
         .joins(:user_account)

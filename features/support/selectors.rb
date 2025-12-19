@@ -15,9 +15,6 @@ module HtmlSelectorsHelper
     when /^the main menu's section (.*)$/
       find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
 
-    when /the apis dashboard widget/
-      '.DashboardSection--services'
-
     when /the secondary nav/
       'nav.pf-c-nav.pf-m-horizontal'
 
@@ -29,6 +26,8 @@ module HtmlSelectorsHelper
     #
     when /the audience dashboard widget/
       '#audience'
+    when /the apis dashboard widget/
+      '#apis'
     when /the products widget/
       '#products-widget'
     when /the backends widget/

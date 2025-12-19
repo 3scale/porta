@@ -1,1 +1,11 @@
-$(document.getElementById(<%= json widget.id %>)).replaceWith(<%= json widget.render %>);
+(function () {
+  const container = document.getElementById(<%= json widget.id %>);
+  container.innerHTML = ''; <%# Removes spinner %>
+
+  $(container).append(<%= json widget.render %>);
+
+  <% if widget.is_a?(Provider::Admin::Dashboards::NewAccountsPresenter) %>
+    const chartData = <%= json widget.chart_data %>;
+    ThreeScale.renderChartWidget(container, chartData);
+  <% end %>
+})();
