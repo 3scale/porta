@@ -302,7 +302,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :builtin_sections, controller: 'sections', except: [ :show, :destroy ]
 
-        resources :sections, :except => [:show] do
+        resources :sections, except: %i[index show] do
           resources :changes
         end
 
@@ -332,9 +332,8 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resources :switches, :only => [ :index, :update, :destroy ]
-        resources :files, :except => [:show]
+        resources :files, except: %i[index show]
         resources :redirects, :except => [:show]
-        resources :sections, :except => [:show]
         resources :groups, :except => [:show]
         resources :changes do
           collection do

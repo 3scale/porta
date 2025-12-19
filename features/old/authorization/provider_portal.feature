@@ -14,8 +14,6 @@ Feature: Provider portal section authorization
     Then there should be a link to "Developer Portal"
     Then they should be able to go to the following pages:
       | the CMS Templates page |
-      | the CMS Sections page  |
-      | the CMS Files page     |
 
   Scenario: Provider admin can access portal groups
     When I log in as provider "foo.3scale.localhost"
@@ -31,8 +29,6 @@ Feature: Provider portal section authorization
     And there should not be a link to "Developer Portal"
     And they should see an error when going to the following pages:
       | the CMS Templates page |
-      | the CMS Sections page  |
-      | the CMS Files page     |
       | the groups page        |
 
   Scenario: Members of portal group can not access portal groups area
@@ -49,5 +45,3 @@ Feature: Provider portal section authorization
     And there should be a link to "Developer Portal" within the audience dashboard widget
     Then they should be able to go to the following pages:
       | the CMS Templates page |
-      | the CMS Sections page  |
-      | the CMS Files page     |
