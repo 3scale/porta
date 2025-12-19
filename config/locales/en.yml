@@ -485,8 +485,26 @@ en:
             success: The plan change has been requested
 
         data_exports:
+          labels:
+            users: Accounts & Admin
+            applications: Applications
+            invoices: Invoices
+            messages: Messages
+          periods:
+            all: All
+            today: Today
+            this_week: This Week
+            this_month: This Month
+            this_year: This Year
+            last_year: Previous Year
+          new:
+            page_header_title: Export
+            export: Export CSV
+            exporting: Exporting CSV...
           create:
-            success: Report will be mailed to %{email}
+            invalid_data: Requested data can't be exported.
+            invalid_period: Can't export data for the selected period.
+            success: Report will be mailed to %{email}.
 
         email_configurations:
           create:

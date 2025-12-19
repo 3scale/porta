@@ -325,13 +325,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
       ( object.respond_to?(:can_be_destroyed?) && object.can_be_destroyed? )
   end
 
-  def link_to_export_widget_for(collection)
-    return unless can?(:export, :data)
-    link_to(new_provider_admin_account_data_exports_path, id: 'export-to-csv', class: 'ExportLink', title: 'Export to CSV') do
-      content_tag(:i, '', class: 'fa fa-file-excel-o') + ' Export all ' + collection.capitalize
-    end
-  end
-
   def impersonating?
     current_user.impersonation_admin? && !current_account.master?
   end

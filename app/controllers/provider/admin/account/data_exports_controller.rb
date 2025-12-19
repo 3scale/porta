@@ -1,29 +1,42 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Account::DataExportsController < Provider::Admin::Account::BaseController
   before_action :authorize_data_export
-  before_action :set_selects_collections,         :only => :new
-  before_action :redirect_to_new_on_invalid_data, :only => :create
+  before_action :set_selects_collections, only: :new
 
   activate_menu :account, :export
 
-  EXPORTS_LABELS = {
-    users: 'Accounts & Admin',
-    applications: 'Applications',
-    invoices: 'Invoices',
-    messages: 'Messages'
+  TYPES = {
+    users: I18n.t('provider.admin.account.data_exports.labels.users'),
+    applications: I18n.t('provider.admin.account.data_exports.labels.applications'),
+    invoices: I18n.t('provider.admin.account.data_exports.labels.invoices'),
+    messages: I18n.t('provider.admin.account.data_exports.labels.messages')
   }.freeze
 
-  EXPORTS_TARGETS = EXPORTS_LABELS.keys.map(&:to_s).freeze
+  PERIODS = {
+    all: I18n.t('provider.admin.account.data_exports.periods.all'),
+    today: I18n.t('provider.admin.account.data_exports.periods.today'),
+    this_week: I18n.t('provider.admin.account.data_exports.periods.this_week'),
+    this_month: I18n.t('provider.admin.account.data_exports.periods.this_month'),
+    this_year: I18n.t('provider.admin.account.data_exports.periods.this_year'),
+    last_year: I18n.t('provider.admin.account.data_exports.periods.last_year')
+  }.freeze
 
-  def new
-  end
+  def new; end
 
   def create
-    recipient = current_user
-    DataExportsWorker.perform_async(current_account.id,
-                                    recipient.id,
-                                    permitted_params[:data],
-                                    permitted_params[:period])
-    redirect_to({ action: :new }, success: t('.success', email: recipient.email))
+    if valid_params?
+      DataExportsWorker.perform_async(current_account.id,
+                                      current_user.id,
+                                      data,
+                                      period)
+
+      flash.now[:success] = t('.success', email: current_user.email)
+    end
+
+    respond_to do |format|
+      format.js { render template: 'shared/_flash_alerts' }
+    end
   end
 
   protected
@@ -32,21 +45,36 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
     authorize! :export, :data
   end
 
-  def redirect_to_new_on_invalid_data
-    #TODO: test this behaviour
-    redirect_to :action => :new unless EXPORTS_TARGETS.include?(permitted_params[:data])
+  def set_selects_collections
+    @targets = permitted_types.map(&:reverse)
+    @periods = PERIODS.map(&:reverse)
   end
 
-  def set_selects_collections
-    @targets = EXPORTS_LABELS.except(current_account.settings.finance.allowed? ? nil : :invoices).map(&:reverse)
+  def valid_params?
+    if permitted_types.keys.exclude?(data.to_sym)
+      flash.now[:danger] = t('.invalid_data')
+      false
+    elsif PERIODS.keys.exclude?(period.to_sym)
+      flash.now[:danger] = t('.invalid_period')
+      false
+    else
+      true
+    end
+  end
 
-    @periods = [['All', ''], ['Today', 'today'], ['This Week', 'this_week'],
-                ['This Month', 'this_month'], ['This Year', 'this_year'],
-                ['Previous Year', 'last_year']]
+  def data
+    @data ||= permitted_params.require(:data)
+  end
+
+  def period
+    @period ||= permitted_params.require(:period)
   end
 
   def permitted_params
-    params.permit(:data, :period)
+    params.require(:export).permit(:data, :period)
   end
 
+  def permitted_types
+    @permitted_types ||= TYPES.except(current_account.settings.finance.allowed? ? nil : :invoices)
+  end
 end

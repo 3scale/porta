@@ -56,7 +56,8 @@ class ApplicationsIndexPresenter
         collection: states_for_filter,
         placeholder: 'State',
         chip: search.state&.capitalize
-      }]
+      }],
+      overflow: []
     }
 
     if buyer.nil?
@@ -64,6 +65,12 @@ class ApplicationsIndexPresenter
                                         name: 'search[account_query]',
                                         placeholder: 'Search by account',
                                         chip: search.account_query })
+      if can?(:export, :data)
+        props[:overflow].append({ href: new_provider_admin_account_data_exports_path,
+                                  label: 'Export to CSV',
+                                  isShared: false,
+                                  variant: :secondary })
+      end
     end
 
     if service_column_visible
