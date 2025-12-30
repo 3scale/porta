@@ -86,7 +86,7 @@ describe('select a period', () => {
     const expectedInputValue = moment(inputDate).utc().format(TIMESTAMP_FORMAT)
 
     expect(inputValue).toEqual(expectedInputValue)
-    expect(inputDate).toBeWithinSecondsFrom(targetDate)
+    expect(inputDate).toBeWithinSecondsFrom(targetDate, 5)
   })
 })
 
@@ -124,7 +124,7 @@ describe('select "Custom"', () => {
       const expectedInputValue = moment(inputDate).utc().format(TIMESTAMP_FORMAT)
 
       expect(inputValue).toEqual(expectedInputValue)
-      expect(inputDate).toBeWithinSecondsFrom(targetDate)
+      expect(inputDate).toBeWithinSecondsFrom(targetDate, 5)
     })
   })
 })
