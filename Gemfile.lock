@@ -766,7 +766,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.4.2)
+    rexml (3.4.4)
     riddle (2.4.3)
     roar (1.1.1)
       representable (~> 3.0)
@@ -874,10 +874,10 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (2.1.0)
+    simplecov-cobertura (3.1.0)
       rexml
       simplecov (~> 0.19)
-    simplecov-html (0.12.3)
+    simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     slim (4.0.1)
@@ -1146,7 +1146,7 @@ DEPENDENCIES
   sidekiq-cron
   sidekiq-throttled (~> 1.4.0)
   simplecov (~> 0.22.0)
-  simplecov-cobertura (~> 2.1)
+  simplecov-cobertura (~> 3.1)
   slim-rails (~> 3.2)
   sorted_set (~> 1.0)
   sprockets-rails

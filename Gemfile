@@ -175,7 +175,7 @@ group :test do
   gem 'rack-no_animations', '~> 1.0.3'
   gem 'rails-controller-testing', '~> 1.0.4'
   gem 'simplecov', '~> 0.22.0', require: false
-  gem 'simplecov-cobertura', '~> 2.1'
+  gem 'simplecov-cobertura', '~> 3.1', require: false
 
   gem 'capybara', '~>3.40.0'
   gem 'xpath', '~>3.2.0'
