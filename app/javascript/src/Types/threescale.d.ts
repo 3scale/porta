@@ -7,9 +7,12 @@ declare global {
       activeAjaxRequests: () => number;
       toast: (message: string, type?: IAlertType) => void;
       hideToast: (alert: HTMLLIElement) => void;
+      renderChartWidget: (widget: HTMLElement, data: ChartData) => void;
       spinnerId: string;
       showSpinner: () => void;
       hideSpinner: () => void;
     };
   }
 }
+
+type ChartData = [date: string, value: string][]

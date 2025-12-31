@@ -1,11 +1,13 @@
 import $ from 'jquery'
 
+import { render } from 'Dashboard/chart'
 import { toast, hideToast } from 'utilities/toast'
 
 window.ThreeScale = {
   activeAjaxRequests: () => $.active + window.$.active,
   toast,
   hideToast,
+  renderChartWidget: render,
   spinnerId: 'ajax-in-progress',
   showSpinner: () => {
     if (document.getElementById(window.ThreeScale.spinnerId) === null) {
