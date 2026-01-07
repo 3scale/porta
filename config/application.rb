@@ -262,7 +262,7 @@ module System
     # Convert nested portal configurations to OrderedOptions
     [:admin_portal, :developer_portal].each do |portal|
       portal_config = ActiveSupport::OrderedOptions.new
-      portal_config.merge!(config.three_scale.content_security_policy.send(portal))
+      portal_config.merge!(config.three_scale.content_security_policy.send(portal) || {})
       config.three_scale.content_security_policy.send("#{portal}=", portal_config)
     end
 
