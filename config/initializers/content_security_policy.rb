@@ -19,7 +19,10 @@ Rails.application.configure do
     config.content_security_policy_report_only = true if ThreeScale::ContentSecurityPolicy::AdminPortal.report_only?
   else
     config.content_security_policy do |policy|
-      policy.default_src '*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline
+      ThreeScale::ContentSecurityPolicy::AdminPortal.add_policy_config(
+        policy,
+        ThreeScale::ContentSecurityPolicy::AdminPortal::DEFAULT_POLICY
+      )
     end
   end
 end

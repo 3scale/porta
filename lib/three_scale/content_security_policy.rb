@@ -3,6 +3,11 @@
 module ThreeScale
   module ContentSecurityPolicy
     class Base
+
+      DEFAULT_POLICY = {
+        default_src: ['*', :data, :mediastream, :blob, :filesystem, :ws, :wss, :unsafe_eval, :unsafe_inline]
+      }.freeze
+
       class << self
         def config
           @config ||= Rails.configuration.three_scale.content_security_policy

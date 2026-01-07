@@ -38,7 +38,17 @@ module ThreeScale
       def compute_csp_header
         # Only compute if enabled and there's a policy configured
         policy_config = ThreeScale::ContentSecurityPolicy::DeveloperPortal.policy_config
-        return [nil, nil] unless ThreeScale::ContentSecurityPolicy::DeveloperPortal.enabled? && policy_config.present?
+
+        unless ThreeScale::ContentSecurityPolicy::DeveloperPortal.enabled? && policy_config.present?
+          policy = ThreeScale::ContentSecurityPolicy::DeveloperPortal.build_policy(
+            ThreeScale::ContentSecurityPolicy::DeveloperPortal::DEFAULT_POLICY
+          )
+
+          return [
+            ActionDispatch::Constants::CONTENT_SECURITY_POLICY,
+            policy.build
+          ]
+        end
 
         # Build the policy once at initialization
         policy = ThreeScale::ContentSecurityPolicy::DeveloperPortal.build_policy(policy_config)
