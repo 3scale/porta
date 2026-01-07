@@ -24,31 +24,34 @@ class ThreeScale::Middleware::DeveloperPortalCSPTest < ActiveSupport::TestCase
     assert_header_value_includes middleware, "default-src *"
   end
 
-  test 'initializes with no header when CSP is disabled' do
+  test 'initializes with permissive default policy when CSP is disabled' do
     stub_csp_config(enabled: false, report_only: false, policy: default_policy)
 
     middleware = ThreeScale::Middleware::DeveloperPortalCSP.new(mock_app)
 
-    assert_header_name middleware, nil
-    assert_header_value middleware, nil
+    assert_header_name middleware, 'Content-Security-Policy'
+    assert_header_value_present middleware
+    assert_header_value_includes middleware, "default-src *"
   end
 
-  test 'initializes with no header when policy_config is nil' do
+  test 'initializes with permissive default policy when policy_config is nil' do
     stub_csp_config(enabled: true, report_only: false, policy: nil)
 
     middleware = ThreeScale::Middleware::DeveloperPortalCSP.new(mock_app)
 
-    assert_header_name middleware, nil
-    assert_header_value middleware, nil
+    assert_header_name middleware, 'Content-Security-Policy'
+    assert_header_value_present middleware
+    assert_header_value_includes middleware, "default-src *"
   end
 
-  test 'initializes with no header when policy_config is empty' do
+  test 'initializes with permissive default policy when policy_config is empty' do
     stub_csp_config(enabled: true, report_only: false, policy: {})
 
     middleware = ThreeScale::Middleware::DeveloperPortalCSP.new(mock_app)
 
-    assert_header_name middleware, nil
-    assert_header_value middleware, nil
+    assert_header_name middleware, 'Content-Security-Policy'
+    assert_header_value_present middleware
+    assert_header_value_includes middleware, "default-src *"
   end
 
   test 'initializes with custom policy directives' do
