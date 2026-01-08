@@ -2,12 +2,10 @@
 
 class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseController
   before_action :available_sections, only: %i[edit new]
-  before_action :find_section, only: %i[show edit update destroy]
-  before_action :find_children, only: %i[show edit update]
+  before_action :find_section, only: %i[edit update destroy]
+  before_action :find_children, only: %i[edit update]
 
   activate_menu :audience, :cms, :content
-
-  def show; end
 
   def new
     @section = current_account.sections.build
