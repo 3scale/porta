@@ -23,6 +23,8 @@ class User < ApplicationRecord
   include ProvidedAccessTokens
   include Indices::AccountIndex::ForDependency
 
+  self.ignored_columns = %i[crypted_password salt]
+
   self.background_deletion = %i[
     user_sessions
     access_tokens
@@ -33,11 +35,10 @@ class User < ApplicationRecord
   ].freeze
 
   audited except: %i[salt posts_count janrain_identifier cas_identifier
-                     authentication_id open_id last_login_at last_login_ip crypted_password].freeze,
+                     authentication_id open_id last_login_at last_login_ip].freeze,
           redacted: %i[password_digest].freeze
 
   before_validation :trim_white_space_from_username
-  # after_validation :reset_lost_password_token
 
   after_create :set_default_notification_preferences
 
@@ -94,31 +95,11 @@ class User < ApplicationRecord
   validates :email, format: { :with => RE_EMAIL_OK, :allow_blank => false,
                               :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
 
-  # strong passwords
-  special_characters = '-+=><_$#.:;!?@&*()~][}{|'
-  RE_STRONG_PASSWORD = %r{
-    \A
-      (?=.*\d) # number
-      (?=.*[a-z]) # lowercase
-      (?=.*[A-Z]) # uppercase
-      (?=.*[#{Regexp.escape(special_characters)}]) # special char
-      (?!.*\s) # does not end with space
-      .{8,} # at least 8 characters
-    \z
-  }x
-  STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{special_characters}."
-
-  validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
-                                 :if => :provider_requires_strong_passwords? }
-  validates :password, length: { minimum: 6, allow_blank: true,
-                                 if: -> { validate_password? && !provider_requires_strong_passwords? } }
-
   validates :extra_fields, length: { maximum: 65535 }
-  validates :crypted_password, :salt, :remember_token, :activation_code,
-            length: { maximum: 40 }
-  validates :state, :role, :lost_password_token, :first_name, :last_name, :signup_type,
-            :job_role, :last_login_ip, :email_verification_code, :title, :cas_identifier,
-            :authentication_id, :open_id, :password_digest,
+  validates :remember_token, :activation_code, length: { maximum: 40 }
+  validates :state, :role, :first_name, :last_name, :signup_type,
+            :job_role, :last_login_ip, :email_verification_code, :title,
+            :cas_identifier, :authentication_id, :open_id,
             length: { maximum: 255 }
 
   validates :conditions, acceptance: { :on => :create }
@@ -128,9 +109,9 @@ class User < ApplicationRecord
   validate :username_is_unique
   validates :open_id, uniqueness: { case_sensitive: true }, allow_nil: true
 
-  attr_accessible :title, :username, :email, :first_name, :last_name, :password,
-                  :password_confirmation, :conditions, :cas_identifier, :open_id,
-                  :service_conditions, :job_role, :extra_fields, as: %i[default member admin]
+  attr_accessible :title, :username, :email, :first_name, :last_name,
+                  :conditions, :cas_identifier, :open_id, :service_conditions,
+                  :job_role, :extra_fields, as: %i[default member admin]
 
   attr_accessible :member_permission_service_ids, :member_permission_ids, as: %i[admin]
 
@@ -152,16 +133,11 @@ class User < ApplicationRecord
   scope :admins, -> { where(role: 'admin') }
 
   scope :active, -> { where(state: 'active') }
-  scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
   def self.find_by_username_or_email(value)
     find_by(['users.username = ? OR users.email = ?', value, value])
   rescue TypeError
     nil
-  end
-
-  def self.find_with_valid_password_token(token)
-    with_valid_password_token.find_by(lost_password_token: token)
   end
 
   def self.impersonation_admin!
@@ -232,45 +208,6 @@ class User < ApplicationRecord
     (active? || email_unverified?) && account && (account.provider? || account.approved?)
   end
 
-  def expire_password_token
-    update_columns(lost_password_token_generated_at: nil)
-  end
-
-  def generate_lost_password_token
-    attributes = {
-      lost_password_token: token = SecureRandom.hex(32),
-      lost_password_token_generated_at: Time.current
-    }
-    assign_attributes(attributes, without_protection: true)
-
-    token if save(validate: true)
-  end
-
-  def generate_lost_password_token!
-    if generate_lost_password_token
-      if account.provider?
-        ProviderUserMailer.lost_password(self).deliver_later
-      else
-        UserMailer.lost_password(self).deliver_later
-      end
-    end
-  end
-
-  def update_password(new_password, new_password_confirmation)
-    self.password              = new_password
-    self.password_confirmation = new_password_confirmation
-    reset_lost_password_token if valid?
-    save
-  end
-
-  def using_password?
-    password_digest.present? || crypted_password.present?
-  end
-
-  def can_set_password?
-    account.password_login_allowed? && !using_password?
-  end
-
   def kill_user_sessions( but = UserSession.new)
     sessions_to_destroy = user_sessions
     sessions_to_destroy = sessions_to_destroy.where.not(id: but.id) if but.persisted?
@@ -305,10 +242,6 @@ class User < ApplicationRecord
 
   def created_by_provider_signup?
     signup.created_by_provider?
-  end
-
-  def password_required?
-    signup.by_user? && super
   end
 
   def recently_activated?
@@ -392,17 +325,9 @@ class User < ApplicationRecord
     xml.to_xml
   end
 
-  def special_fields
-    [:password, :password_confirmation]
-  end
-
   #TODO: do this with an association
   def sections
     account.accessible_sections if account
-  end
-
-  def validate_password?
-    password_required? && password_changed?
   end
 
   def unique?(attribute)
@@ -422,7 +347,7 @@ class User < ApplicationRecord
   def provider_requires_strong_passwords?
     # use fields definitons source (instance variable) as backup when creating new record
     # and there is no provider account (its still new record and not set through association.build)
-    if validate_password? && (source = fields_definitions_source_root)
+    if source = fields_definitions_source_root
       source.settings.strong_passwords_enabled?
     end
   end
@@ -452,10 +377,6 @@ class User < ApplicationRecord
 
   def trim_white_space_from_username
     self.username= self.username.strip if self.username
-  end
-
-  def reset_lost_password_token
-    self.lost_password_token = nil
   end
 
   def uniqueness_condition_for(attribute)
