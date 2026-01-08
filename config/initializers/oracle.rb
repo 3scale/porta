@@ -37,7 +37,26 @@ ActiveSupport.on_load(:active_record) do
       end
 
       def close_and_clear_statements
+        start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        statement_count = @statements&.length || 0
         @statements&.clear
+
+        # Query V$OPEN_CURSOR to see current cursor count for this session
+        # Count application cursors (OPEN for regular SQL, PL/SQL for stored procs/funcs)
+        # Exclude Oracle's internal cursors (DICTIONARY LOOKUP, OPEN RECURSIVE, etc.)
+        begin
+          cursor_count = select_value(<<~SQL)
+            SELECT COUNT(*)
+            FROM V$OPEN_CURSOR
+            WHERE SID = SYS_CONTEXT('USERENV', 'SID')
+              AND CURSOR_TYPE IN ('OPEN', 'PL/SQL')
+              AND (SQL_TEXT IS NULL OR SQL_TEXT NOT LIKE '%V$OPEN_CURSOR%')
+          SQL
+          duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time
+          Rails.logger.info "#{statement_count} statements cleared from AR pool on checkin in #{duration.round(3)}s (Oracle reports #{cursor_count} cursors in session)"
+        rescue => e
+          Rails.logger.warn "Failed to query V$OPEN_CURSOR: #{e.message}"
+        end
       end
     end
 
