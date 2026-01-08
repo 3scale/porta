@@ -300,7 +300,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
         end
 
-        resources :builtin_sections, controller: 'sections', except: [ :show, :destroy ]
+        resources :builtin_sections, controller: :sections, except: %i[index show destroy]
 
         resources :sections, except: %i[index show] do
           resources :changes
