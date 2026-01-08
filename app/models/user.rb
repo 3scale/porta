@@ -95,23 +95,22 @@ class User < ApplicationRecord
                               :message => MSG_EMAIL_BAD, :unless => :minimal_signup? }
 
   # strong passwords
-  special_characters = '-+=><_$#.:;!?@&*()~][}{|'
+  STRONG_PASSWORD_SPECIAL_CHARS = '-+=><_$#.:;!?@&*()~][}{|'
+  STRONG_PASSWORD_MIN_SIZE = 16
   RE_STRONG_PASSWORD = %r{
     \A
       (?=.*\d) # number
       (?=.*[a-z]) # lowercase
       (?=.*[A-Z]) # uppercase
-      (?=.*[#{Regexp.escape(special_characters)}]) # special char
+      (?=.*[#{Regexp.escape(STRONG_PASSWORD_SPECIAL_CHARS)}]) # special char
       (?!.*\s) # does not end with space
-      .{8,} # at least 8 characters
+      .{#{STRONG_PASSWORD_MIN_SIZE},} # at least STRONG_PASSWORD_MIN_SIZE characters
     \z
   }x
-  STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{special_characters}."
+  STRONG_PASSWORD_FAIL_MSG = "Password must be at least #{STRONG_PASSWORD_MIN_SIZE} characters long, and contain both upper and lowercase letters, a digit and one special character of #{STRONG_PASSWORD_SPECIAL_CHARS}."
 
   validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
-                                 :if => :provider_requires_strong_passwords? }
-  validates :password, length: { minimum: 6, allow_blank: true,
-                                 if: -> { validate_password? && !provider_requires_strong_passwords? } }
+                                 if: -> { password_required? } }
 
   validates :extra_fields, length: { maximum: 65535 }
   validates :remember_token, :activation_code, length: { maximum: 40 }
@@ -307,7 +306,7 @@ class User < ApplicationRecord
   end
 
   def password_required?
-    signup.by_user? && super
+    (signup.by_user? || using_password?) && super
   end
 
   def recently_activated?
@@ -416,14 +415,6 @@ class User < ApplicationRecord
 
   def provider_id_for_audits
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
-  end
-
-  def provider_requires_strong_passwords?
-    # use fields definitons source (instance variable) as backup when creating new record
-    # and there is no provider account (its still new record and not set through association.build)
-    if validate_password? && (source = fields_definitions_source_root)
-      source.settings.strong_passwords_enabled?
-    end
   end
 
   protected
