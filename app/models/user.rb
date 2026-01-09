@@ -33,7 +33,7 @@ class User < ApplicationRecord
   ].freeze
 
   audited except: %i[salt posts_count janrain_identifier cas_identifier
-                     authentication_id open_id last_login_at last_login_ip crypted_password].freeze,
+                     authentication_id open_id last_login_at last_login_ip].freeze,
           redacted: %i[password_digest].freeze
 
   before_validation :trim_white_space_from_username
@@ -114,8 +114,7 @@ class User < ApplicationRecord
                                  if: -> { validate_password? && !provider_requires_strong_passwords? } }
 
   validates :extra_fields, length: { maximum: 65535 }
-  validates :crypted_password, :salt, :remember_token, :activation_code,
-            length: { maximum: 40 }
+  validates :remember_token, :activation_code, length: { maximum: 40 }
   validates :state, :role, :lost_password_token, :first_name, :last_name, :signup_type,
             :job_role, :last_login_ip, :email_verification_code, :title, :cas_identifier,
             :authentication_id, :open_id, :password_digest,
@@ -264,7 +263,7 @@ class User < ApplicationRecord
   end
 
   def using_password?
-    password_digest.present? || crypted_password.present?
+    password_digest.present?
   end
 
   def can_set_password?
@@ -402,7 +401,7 @@ class User < ApplicationRecord
   end
 
   def validate_password?
-    password_required? && password_changed?
+    password_required? && password_digest_changed?
   end
 
   def unique?(attribute)
