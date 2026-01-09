@@ -905,15 +905,64 @@ en:
 
       dashboards:
         show:
-          today: "Today"
-          older: "Before Today"
+          quick_starts: Quick starts
+          today: Today
+          older: Before Today
           no_messages_1: "Nothing much really"
           no_messages_2: "Running on empty."
           no_messages_3: "No news, good news."
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
+        audience_navigation:
+          account:
+            one: 1 Account
+            other: '%{human_count} Accounts'
+          alert:
+            one: 1 Alert
+            other: '%{human_count} Alerts'
+          application:
+            one: 1 Application
+            other: '%{human_count} Applications'
+          billing: Billing
+          dev_portal: Developer Portal
+          draft:
+            one: 1 Draft
+            other: '%{human_count} Drafts'
+          message:
+            one: 1 Message
+            other: '%{human_count} Messages'
+          pending:
+            one: 1 Pending
+            other: '%{human_count} Pending'
+          unread_message:
+            one: 1 Unread message
+            other: '%{human_count} Unread messages'
         quick_starts_html: "You can use quick starts to learn about 3scale features step by step. <a href='%{link}'>Take tour</a>"
+        widgets:
+          new_accounts:
+            title:
+              one: Signup
+              other: Signups
+            sign_up_info_html: Make it easy for developers to sign up using your <a href=%{href}>Developer Portal</a>.
+            open_portal_info_html: When you're ready to open to the world, remember to <a href=%{href}>remove the Access Code</a>.
+            previous: vs. previous 30 days
+            today: today
+            last_days: last 30 days
+          potential_upgrades:
+            instruction_1_html:
+              In order to show Potential Upgrades, add 1 or more usage limits to your
+              <a class="pf-c-button pf-m-link pf-m-inline" href="%{href}">Application Plans</a>.
+            instruction_2_html:
+              Furthermore, <a class="pf-c-button pf-m-link pf-m-inline" href="%{href}">Web Alerts
+              for Admins of this Account of 100% (and up)</a> should be enabled for service(s) with
+              usage limits.
+            title: Potential Upgrades
+            subtitle: Accounts that hit their usage limits in the last 30 days
+            list_item:
+              one: "%{name} has 1 Usage limit alert"
+              other: "%{name} has %{count} Usage limit alerts"
+            no_upgrades: No Potential Upgrades. Yet…
 
       webhooks:
         create:

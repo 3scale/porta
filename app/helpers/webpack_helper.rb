@@ -70,7 +70,7 @@ module WebpackHelper
   #
   # ⚠️ This method smells of :reek:TooManyStatements
   #
-  def stylesheet_packs_chunks_tag(*packs) # rubocop:disable, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def stylesheet_packs_chunks_tag(*packs)
     @packs ||= []
     tags = ''
     entrypoints = webpack_manifest['entrypoints']

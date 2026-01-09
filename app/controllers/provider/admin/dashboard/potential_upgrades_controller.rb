@@ -1,38 +1,35 @@
-class Provider::Admin::Dashboard::PotentialUpgradesController < Provider::Admin::Dashboard::WidgetController
+# frozen_string_literal: true
 
-  def show
-    respond_with widget
+class Provider::Admin::Dashboard::PotentialUpgradesController < Provider::Admin::Dashboard::WidgetBaseController
+  def widget
+    @widget ||= Provider::Admin::Dashboards::PotentialUpgradesPresenter.new(
+      upgrades: current_upgrades,
+      set_up_correctly: set_up_correctly?
+    )
   end
 
-  protected
-
-  def widget_data
-    { items: current_items,
-      value: is_set_up_correctly?
-    }
-  end
-
-  def current_items
-    current_upgrades.limit(5)
-  end
+  private
 
   def current_upgrades
-    usage_limit_violations = UsageLimitViolationsQuery.new(current_account)
-    usage_limit_violations.in_range(current_range)
+    UsageLimitViolationsQuery.new(current_account)
+                             .in_range(current_range)
+                             .limit(5)
   end
 
-  def is_set_up_correctly?
-    usage_limits = current_account
-      .application_plans.joins(:usage_limits)
-      .grouping { issuer_id }.unscope(:order)
-      .references(:usage_limits).select { id }.count
+  def set_up_correctly?
+    usage_limits = current_account.application_plans
+                                  .joins(:usage_limits)
+                                  .grouping { issuer_id }
+                                  .unscope(:order)
+                                  .references(:usage_limits)
+                                  .count
 
     usage_notifications = current_user.accessible_services.pluck(:id, :notification_settings).to_h
 
     usage_notifications.any? do |service_id, settings|
-      web_provider = settings && settings[:web_provider] || []
+      web_provider = (settings && settings[:web_provider]) || []
 
-      usage_limits.key?(service_id) && web_provider.any?{ |level| level >= Alert::VIOLATION_LEVEL }
+      usage_limits.key?(service_id) && web_provider.any? { |level| level >= Alert::VIOLATION_LEVEL }
     end
   end
 end
