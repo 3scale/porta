@@ -1,5 +1,22 @@
 import validate from 'validate.js'
 
+// IMPORTANT: These STRONG_PASSWORD_* constants are duplicated from the backend.
+// The source of truth is app/models/user.rb. If those constants change in Ruby,
+// you must update them here as well. Do not modify these without updating the backend first.
+const STRONG_PASSWORD_SPECIAL_CHARS = '-+=><_$#.:;!?@&*()~][}{|'
+const STRONG_PASSWORD_MIN_SIZE = 16
+const RE_STRONG_PASSWORD = new RegExp(
+  '^' +
+  '(?=.*\\d)' +                                           // at least one digit
+  '(?=.*[a-z])' +                                         // at least one lowercase
+  '(?=.*[A-Z])' +                                         // at least one uppercase
+  `(?=.*[${STRONG_PASSWORD_SPECIAL_CHARS.replace(/[[\]\\]/g, '\\$&')}])` + // at least one special char
+  '(?!.*\\s)' +                                           // no whitespace
+  `.{${STRONG_PASSWORD_MIN_SIZE},}` +                     // minimum length
+  '$'
+)
+const STRONG_PASSWORD_FAIL_MSG = `Password must be at least ${STRONG_PASSWORD_MIN_SIZE} characters long, and contain both upper and lowercase letters, a digit and one special character of ${STRONG_PASSWORD_SPECIAL_CHARS}.`
+
 const loginConstraints = {
   username: { presence: { allowEmpty: false, message: 'Email or username is mandatory' } },
   password: { presence: { allowEmpty: false, message: 'Password is mandatory' } }
@@ -12,7 +29,7 @@ function validateLogin (fields: Record<keyof typeof loginConstraints, string>): 
 const changePasswordConstraints = {
   password: {
     presence: { allowEmpty: false, message: 'Password is mandatory' },
-    length: { minimum: 6 }
+    format: { pattern: RE_STRONG_PASSWORD, message: STRONG_PASSWORD_FAIL_MSG }
   },
   passwordConfirmation: {
     presence: { allowEmpty: false, message: 'Password confirmation is mandatory' },
