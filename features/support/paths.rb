@@ -633,12 +633,6 @@ World(Module.new do
     when 'the CMS changes'
       provider_admin_cms_changes_path
 
-    ## DELETE THESE & FIX CUKES
-    when /^the CMS Sections page$/
-      provider_admin_cms_sections_path
-    when /^the CMS Files page$/
-      provider_admin_cms_files_path
-
     #
     # Advanced CMS (BrowserCMS)
     #

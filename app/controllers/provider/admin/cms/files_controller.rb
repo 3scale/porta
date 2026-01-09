@@ -1,13 +1,10 @@
-class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseController
+# frozen_string_literal: true
 
+class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseController
   activate_menu :audience, :cms, :content
 
-  def index
-    @files = files
-  end
-
   def new
-    @file = current_account.files.new
+    @file = files.new
   end
 
   def edit
@@ -50,11 +47,10 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   end
 
   def files
-    @_files ||= current_account.files
+    @files ||= current_account.files
   end
 
   def file
-    @_file ||= files.find(params[:id])
+    @file ||= files.find(params[:id])
   end
-
 end
