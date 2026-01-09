@@ -2,10 +2,12 @@
   <%= form.user_defined_form %>
 <% end %>
 
-<%= form.inputs :name => "Change Password" do %>
-  <%= form.input :password, :required => true %>
-  <%= form.input :password_confirmation, :required => true %>
-<% end -%>
+<% if @user.using_password? %>
+  <%= form.inputs :name => "Change Password" do %>
+    <%= form.input :password, :required => true %>
+    <%= form.input :password_confirmation, :required => true %>
+  <% end -%>
+<% end %>
 
 <% if can? :update_role, @user %>
   <%= content_tag :div, id: 'user-permissions-form',
