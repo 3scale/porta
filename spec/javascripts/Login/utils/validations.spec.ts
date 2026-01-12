@@ -54,6 +54,10 @@ describe('#validateChangePassword', () => {
     expect(validateChangePassword({
       password: 'aaaaaa',
       passwordConfirmation: 'aaaaaa'
+    })).not.toBeUndefined()
+    expect(validateChangePassword({
+      password: '0000ooooOOOO!!!!',
+      passwordConfirmation: '0000ooooOOOO!!!!'
     })).toBeUndefined()
   })
 })
@@ -92,8 +96,8 @@ describe('#validateSignup', () => {
       firstName: '',
       lastName: '',
       email: 'pepe@example.com',
-      password: '******',
-      passwordConfirmation: '******'
+      password: '0000ooooOOOO!!!!',
+      passwordConfirmation: '0000ooooOOOO!!!!'
     })).toBeUndefined()
   })
 })
