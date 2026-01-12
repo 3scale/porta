@@ -13,7 +13,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
 
   ALLOWED_PARAMS = %i[
     useraccountarea_enabled hide_service signups_enabled account_approval_required public_search
-    account_plans_ui_visible change_account_plan_permission service_plans_ui_visiblechange_service_plan_permission
+    account_plans_ui_visible change_account_plan_permission service_plans_ui_visible change_service_plan_permission
     enforce_sso
   ].freeze
 
