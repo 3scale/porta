@@ -12,12 +12,12 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
 
   test "put update should redirect to users" do
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'}, origin: 'users' }
+    put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', username: 'test', email: 'test@example.com'}, origin: 'users' }
     assert_redirected_to provider_admin_account_users_path
   end
 
   test "put update should redirect to edit personal details" do
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'} }
+    put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', username: 'test', email: 'test@example.com'} }
     assert_redirected_to edit_provider_admin_user_personal_details_path
   end
 
@@ -30,7 +30,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
   test 'changing password is audited' do
     assert_difference(Audited.audit_class.method(:count)) do
       User.with_synchronous_auditing do
-        put :update, params: { user: {current_password: 'supersecret', password: 'new_password', password_confirmation: 'new_password'} }
+        put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', password: 'new_password', password_confirmation: 'new_password'} }
       end
     end
 

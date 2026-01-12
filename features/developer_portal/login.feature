@@ -20,7 +20,7 @@ Feature: Login feature
   @security
   Scenario: Provider cannot login in buyer domain
     Given the current domain is foo.3scale.localhost
-    When I try to log in as "foo.3scale.localhost" with password "supersecret"
+    When I try to log in as "foo.3scale.localhost" with password "Super$ecr3t!!!!!"
     Then I should not be logged in
     And I should see "Incorrect email or password. Please try again"
 

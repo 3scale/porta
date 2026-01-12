@@ -12,7 +12,7 @@ Feature: Personal Details
     When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "Email" with "john.doe@foo.3scale.localhost"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     Then I should see "User was successfully updated"
     And I should be on the provider personal details page
@@ -23,12 +23,12 @@ Feature: Personal Details
     And I follow "foo.3scale.localhost"
     Then I should be on the provider personal details page
     When I fill in "Email" with "john.doe@foo.3scale.localhost"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     Then I should be on the provider users page
     When I follow "foo.3scale.localhost" within the table
     And I fill in "Email" with ""
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     And I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
@@ -40,7 +40,7 @@ Feature: Personal Details
     When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "Username" with "u"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     Then field "Username" has inline error "is too short (minimum is 3 characters)"
 
@@ -74,7 +74,7 @@ Feature: Personal Details
       | User extra required |
     When I fill in "First name" with "dude"
     And I fill in "User extra required" with "whatever"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     Then I should see "User was successfully updated"
     Then the "First name" field should contain "dude"
@@ -85,6 +85,6 @@ Feature: Personal Details
     When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "New password" with "hi"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "Super$ecr3t!!!!!"
     And I press "Update Details"
     Then field "New password" has inline error "is too short (minimum is 6 characters)"

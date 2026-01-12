@@ -42,8 +42,8 @@ Feature: Sign Up of enterprise buyers
      And I fill in the following:
       | Email                   | foobar@example.net |
       | Username                | bar           |
-      | Password                | supersecret      |
-      | Password confirmation   | supersecret      |
+      | Password                | Super$ecr3t!!!!!      |
+      | Password confirmation   | Super$ecr3t!!!!!      |
       | Organization/Group Name | Planet eXpress   |
      And I press "Sign up"
      And I should see the registration succeeded
@@ -55,8 +55,8 @@ Feature: Sign Up of enterprise buyers
       And I fill in the following:
       | Email                   | foobar@example.net |
       | Username                | bar           |
-      | Password                | supersecret      |
-      | Password confirmation   | supersecret      |
+      | Password                | Super$ecr3t!!!!!      |
+      | Password confirmation   | Super$ecr3t!!!!!      |
       | Organization/Group Name | Planet eXpress   |
     Then I should see error in fields:
       | account errors |
@@ -69,8 +69,8 @@ Feature: Sign Up of enterprise buyers
       And I fill in the following:
       | Email                   | bar@3scale.localhost |
       | Username                | notExistent        |
-      | Password                | supersecret        |
-      | Password confirmation   | supersecret        |
+      | Password                | Super$ecr3t!!!!!        |
+      | Password confirmation   | Super$ecr3t!!!!!        |
       | Organization/Group Name | Planet eXpress   |
     Then I should see error in fields:
       | account errors |

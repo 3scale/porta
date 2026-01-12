@@ -2,7 +2,7 @@ FactoryBot.define do
   factory(:pending_user, :class => :user) do
     sequence(:email) { |n| "foo#{n}@example.net" }
     sequence(:username) { |n| "dude#{n}" }
-    password { 'supersecret' }
+    password { 'Super$ecr3t!!!!!' }
     signup_type { 'new_signup' } # means the user signed up for a plan
   end
 

@@ -20,7 +20,7 @@ Feature: Internal authentication
     And I go to the provider login page
     Then I should feel secure
     When I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "Super$ecr3t!!!!!"
     And I press "Sign in"
     Then I should be logged in as "foo.3scale.localhost"
     And I should be on the provider dashboard
@@ -56,7 +56,7 @@ Feature: Internal authentication
   Scenario: Successful sign in as a provider on their domain
     When I go to the login page on foo.3scale.localhost
     And I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "Super$ecr3t!!!!!"
     And I press "Sign in"
     Then I should be logged in as "foo.3scale.localhost"
     And I should be on the homepage
@@ -67,7 +67,7 @@ Feature: Internal authentication
     When the current domain is foo.3scale.localhost
     And I go to the login page
     And I fill in "Username" with "alice"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "Super$ecr3t!!!!!"
     And I press "Sign in"
     Then I should be logged in as "alice"
 
@@ -89,7 +89,7 @@ Feature: Internal authentication
     When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "Super$ecr3t!!!!!"
     And I press "Sign in"
     Then user "foo.3scale.localhost" should have last login on 8th October 2010 at 11:10 from 100.101.102.103
 
