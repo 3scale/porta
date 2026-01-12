@@ -223,7 +223,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     host! @provider.external_admin_domain
     user = @provider.admins.first
 
-    provider_login_with user.username, 'Super$ecr3t!!!!!'
+    provider_login_with user.username, 'Supersecret123+!!'
     assert_equal 1, user.user_sessions.count
 
     assert_no_difference '@provider.reload.updated_at' do
@@ -244,10 +244,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user.user_sessions.create
 
     host! @provider.external_admin_domain
-    provider_login_with user.username, 'Super$ecr3t!!!!!'
+    provider_login_with user.username, 'Supersecret123+!!'
     assert_equal 2, user.user_sessions.count
     put provider_admin_user_personal_details_path, params: { user: {
-      current_password: 'Super$ecr3t!!!!!',
+      current_password: 'Supersecret123+!!',
       password: 'newpwd',
       username: 'test',
       email: 'test2@example.com'
@@ -261,10 +261,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user.user_sessions.create
 
     host! @provider.internal_domain
-    login_with user.username, 'Super$ecr3t!!!!!'
+    login_with user.username, 'Supersecret123+!!'
     assert_equal 2, user.user_sessions.count
     put System::UrlHelpers.cms_url_helpers.admin_account_personal_details_path, params: { user: {
-      current_password: 'Super$ecr3t!!!!!',
+      current_password: 'Supersecret123+!!',
       password: 'newpwd',
       username: 'test',
       email: 'test2@example.com'

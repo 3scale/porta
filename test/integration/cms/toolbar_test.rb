@@ -19,7 +19,7 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
     get '/api_docs/login'
     assert_response :success
 
-    login_with @buyer.admins.first.username, "Super$ecr3t!!!!!"
+    login_with @buyer.admins.first.username, "Supersecret123+!!"
 
     get '/admin'
     assert_response :success

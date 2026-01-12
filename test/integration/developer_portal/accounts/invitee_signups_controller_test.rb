@@ -68,6 +68,6 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
   private
 
   def user_params
-    { username: 'admin', password: 'Super$ecr3t!!!!!' }
+    { username: 'admin', password: 'Supersecret123+!!' }
   end
 end

@@ -12,12 +12,12 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
 
   test "put update should redirect to users" do
-    put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', username: 'test', email: 'test@example.com'}, origin: 'users' }
+    put :update, params: { user: {current_password: 'Supersecret123+!!', username: 'test', email: 'test@example.com'}, origin: 'users' }
     assert_redirected_to provider_admin_account_users_path
   end
 
   test "put update should redirect to edit personal details" do
-    put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', username: 'test', email: 'test@example.com'} }
+    put :update, params: { user: {current_password: 'Supersecret123+!!', username: 'test', email: 'test@example.com'} }
     assert_redirected_to edit_provider_admin_user_personal_details_path
   end
 
@@ -30,7 +30,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
   test 'changing password is audited' do
     assert_difference(Audited.audit_class.method(:count)) do
       User.with_synchronous_auditing do
-        put :update, params: { user: {current_password: 'Super$ecr3t!!!!!', password: 'new_password', password_confirmation: 'new_password'} }
+        put :update, params: { user: {current_password: 'Supersecret123+!!', password: 'Supersecret321+!!', password_confirmation: 'Supersecret321+!!'} }
       end
     end
 
@@ -40,7 +40,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
   test 'failed password change creates an audit log' do
     AuditLogService.expects(:call).with { |msg| msg.start_with? "User tried to change password" }
-    put :update, params: { user: {current_password: 'wrong_password', password: 'new_password', password_confirmation: 'new_password'} }
+    put :update, params: { user: {current_password: 'wrong_password', password: 'Supersecret123+!!', password_confirmation: 'Supersecret123+!!'} }
   end
 
 end

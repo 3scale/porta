@@ -5,7 +5,7 @@ Feature: Impersonate
   I want to impersonate them
 
   Background:
-    Given the master account admin has username "master" and password "Super$ecr3t!!!!!"
+    Given the master account admin has username "master" and password "Supersecret123+!!"
     And a provider "foo.3scale.localhost" with impersonation_admin admin
     And a provider "bar.3scale.localhost"
 

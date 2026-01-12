@@ -11,7 +11,7 @@ class Authentication::ByHasSecurePasswordTest < ActiveSupport::TestCase
   end
 
   test 'new user with password_digest' do
-    assert @user.authenticate('Super$ecr3t!!!!!')
-    assert @user.authenticated?('Super$ecr3t!!!!!')
+    assert @user.authenticate('Supersecret123+!!')
+    assert @user.authenticated?('Supersecret123+!!')
   end
 end

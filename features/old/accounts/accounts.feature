@@ -70,7 +70,7 @@ Feature: Account management
     And I navigate to the Account Settings
     And I go to the provider personal details page
     When I fill in "Email" with "invalid"
-     And I fill in "Current password" with "Super$ecr3t!!!!!"
+     And I fill in "Current password" with "Supersecret123+!!"
     And I press "Update Details"
     Then I should see "should look like an email address"
 

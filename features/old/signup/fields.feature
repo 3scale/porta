@@ -58,8 +58,8 @@ Feature: Signup with defined fields
    When I fill in the following:
       | Email                   | bender@planet.ex |
       | Username                | bender           |
-      | Password                | Super$ecr3t!!!!!      |
-      | Password confirmation   | Super$ecr3t!!!!!      |
+      | Password                | Supersecret123+!!      |
+      | Password confirmation   | Supersecret123+!!      |
       | User extra required     | MustBe           |
       | Organization/Group Name | Planet eXpress   |
       | Account extra required  | foo              |
