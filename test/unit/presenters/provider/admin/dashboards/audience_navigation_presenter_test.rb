@@ -66,7 +66,9 @@ class Provider::Admin::Dashboards::AudienceNavigationPresenterTest < ActiveSuppo
 
   test 'messages_count caps at MESSAGES_QUERY_LIMIT when count reaches limit' do
     setup_messages_mocks(unread_count: Presenter::MESSAGES_QUERY_LIMIT)
+    assert_equal Presenter::MESSAGES_QUERY_LIMIT, Presenter.new(@user).messages_count
 
+    setup_messages_mocks(unread_count: 0, all_count: Presenter::MESSAGES_QUERY_LIMIT)
     assert_equal Presenter::MESSAGES_QUERY_LIMIT, Presenter.new(@user).messages_count
   end
 
@@ -80,6 +82,25 @@ class Provider::Admin::Dashboards::AudienceNavigationPresenterTest < ActiveSuppo
     setup_messages_mocks(unread_count: 50)
 
     assert_not Presenter.new(@user).messages_limited?
+  end
+
+  test 'messages_count sql queries' do
+    skip 'Not available for Oracle' if System::Database.oracle?
+
+    buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    messages = FactoryBot.create_list(:message, 5, sender: buyer, state: 'sent')
+    messages.each do |message|
+      FactoryBot.create_list(:received_message, 5, receiver: @provider, message: message,
+                                                   state: 'unread')
+    end
+
+    # Assert no unexpected SELECT queries (except the ones we expect)
+    assert_number_of_queries(0, matching: /SELECT(?!.*LIMIT)/) do
+      # Assert we get exactly the queries we expect
+      assert_number_of_queries(1, matching: /SELECT.+LIMIT/) do
+        Presenter.new(@user)
+      end
+    end
   end
 
   private
