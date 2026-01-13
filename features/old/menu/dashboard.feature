@@ -6,7 +6,6 @@ Feature: Dashboard
 
   Background:
     Given a provider is logged in
-    And All Dashboard widgets are loaded
 
   Scenario: Audience widget
     And I go to the provider dashboard

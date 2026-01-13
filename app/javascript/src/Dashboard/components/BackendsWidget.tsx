@@ -40,7 +40,7 @@ const BackendsWidget: FunctionComponent<Props> = ({
   <Card>
     <CardTitle>
       <div className="dashboard-list-icon-title-layout">
-        <CubeIcon />
+        <CubeIcon className="pf-u-mr-sm" size="lg" />
         <Title headingLevel="h1" size="xl">
           Backends
         </Title>
@@ -57,7 +57,7 @@ const BackendsWidget: FunctionComponent<Props> = ({
           )}
         </CardActions>
       </div>
-      <div className="dashboard-list-subtitle">
+      <div className="pf-u-mt-sm">
         Last updated
       </div>
     </CardTitle>

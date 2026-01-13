@@ -1,0 +1,8 @@
+h4 class="pf-u-color-400" = title
+- if messages.any?
+  ol class="pf-c-list pf-m-plain pf-m-bordered pf-u-font-size-sm pf-u-color-300"
+    - messages.each do |message|
+      li = message.title
+- else
+  span class="messages-empty pf-u-color-400"
+    = empty.call

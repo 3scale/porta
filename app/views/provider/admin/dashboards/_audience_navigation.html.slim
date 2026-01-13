@@ -1,0 +1,39 @@
+- presenter = Provider::Admin::Dashboards::AudienceNavigationPresenter.new(current_user)
+
+nav class="dashboard-audience-navigation pf-l-flex__item"
+  h1
+    i class="fa fa-bullseye"
+    b = ' Audience'
+  div
+    ul class="pf-c-list pf-m-inline"
+      - if can?(:manage, :partners)
+        li
+          = presenter.link_to :account, admin_buyers_accounts_path,
+                                        count: presenter.buyers.count
+          - if presenter.pending_buyers.exists?
+            = presenter.secondary_link_to :pending, admin_buyers_accounts_path(search: { state: :pending }),
+                                                    plural: t('.pending'),
+                                                    count: presenter.pending_buyers.count
+
+      - if can?(:manage, :partners)
+        li
+          = presenter.link_to :application, provider_admin_applications_path,
+                                            count: presenter.applications.count
+          - if can?(:manage, :monitoring) && presenter.alerts.any?
+            = presenter.secondary_link_to :alert, admin_alerts_path,
+                                                  count: presenter.alerts.count
+
+      - if can?(:manage, :finance)
+        li
+          = presenter.link_to :billing, admin_finance_root_path
+
+      - if can?(:manage, :portal)
+        li
+          = presenter.link_to :dev_portal, provider_admin_cms_root_path
+          = presenter.secondary_link_to :draft, provider_admin_cms_changes_path,
+                                                count: presenter.drafts.count
+
+      li
+        = presenter.link_to presenter.messages_name, provider_admin_messages_root_path,
+                                                     count: presenter.messages_count,
+                                                     limited: presenter.messages_limited?

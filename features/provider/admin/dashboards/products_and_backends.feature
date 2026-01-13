@@ -1,6 +1,5 @@
 @javascript
-Feature: Dashboard Widgets
-  In order to navigate easily to products and backends
+Feature: Products and Backends widgets
 
   Background:
     Given a provider

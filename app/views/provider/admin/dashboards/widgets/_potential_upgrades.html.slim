@@ -1,27 +1,22 @@
-article.DashboardWidget id = widget.id
-  h1.DashboardWidget-title Potential Upgrades
-  span.DashboardWidget-intro Accounts that hit their Usage Limits in the last 30 days
-  - if widget.loaded?
-      - if widget.items.present?
-        ol.DashboardWidgetList
-          - widget.items.each do |item|
-            li.DashboardWidgetList-item
-              = link_to admin_alerts_path(search: {level: 100, timestamp: [current_range.begin,current_range.end], account_id: item.account}), class: "DashboardWidgetList-link" do
-                => item.account_name
-                ' has
-                = pluralize(item.alerts_count, "Usage Limit alert")
-      - elsif !widget.value && current_account.accessible_services.any?
-        - service = current_account.accessible_services.first
-        p
-          ' In order to show Potential Upgrades, add 1 or more usage limits to your
-          = link_to 'Application Plans', admin_service_application_plans_path(service)
-          ' .
-        p
-          ' Furthermore,
-          => link_to 'Web Alerts for Admins of this Account of 100% (and up)', settings_admin_service_path(service, anchor: 'web_provider')
-          | should be enabled for service(s) with usage limits.
-      - else
-        p No Potential Upgrades. Yet…
-  - else
-    = widget.spinner
+div class="pf-c-panel__main"
+  div class="pf-c-panel__main-body"
+    div class="pf-c-content"
+      h2 = t('.title')
+      small
+        em = t('.subtitle')
 
+      - if widget.upgrades.present? && widget.upgrades.any?
+        ol class="pf-c-list pf-m-plain pf-m-bordered"
+          - widget.upgrades.each do |upgrade|
+            li
+              = link_to admin_alerts_path(search: { level: 100, account_id: upgrade.account }), class: 'pf-c-button pf-m-link pf-m-inline' do
+                span class="pf-c-truncate"
+                  span class="pf-c-truncate__start"
+                    = t('.list_item', name: upgrade.account_name, count: upgrade.alerts_count)
+
+      - elsif !widget.set_up_correctly && current_account.accessible_services.any?
+        - service = current_account.accessible_services.first
+        p = t('.instruction_1_html', href: admin_service_application_plans_path(service))
+        p = t('.instruction_2_html', href: settings_admin_service_path(service, anchor: 'web_provider'))
+      - else
+        p = t('.no_upgrades')

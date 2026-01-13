@@ -56,11 +56,6 @@ Given "the service of {provider} has {string} set to {string}" do |account, name
   account.first_service!.update_attribute(underscore_spaces(name), value)
 end
 
-Given "the service of {provider} has traffic" do |account|
-  # TODO: stop using "the service of provider" use "product" instead
-  Service.any_instance.stubs(:has_traffic?).returns(true)
-end
-
 Given "{product} uses the following backends:" do |product, table|
   transform_table(table).hashes.each do |hash|
     name, path, endpoint = hash.values_at(:name, :path, :private_endpoint)

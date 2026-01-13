@@ -24,6 +24,10 @@ When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When /^(?:|I |they )request the url "([^"]*)"$/ do |url|
+  visit url
+end
+
 When /^(?:|I |they )press( invisible)? "([^"]*)"$/ do |invisible, button|
   click_button(button, visible: !invisible)
 end

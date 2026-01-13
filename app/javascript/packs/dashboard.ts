@@ -1,5 +1,4 @@
-import * as dashboardWidget from 'Dashboard/ajax-widget'
-import { render as renderChartWidget } from 'Dashboard/chart'
+import { widget as renderWidget } from 'Dashboard'
 import { ProductsWidgetWrapper } from 'Dashboard/components/ProductsWidget'
 import { BackendsWidgetWrapper } from 'Dashboard/components/BackendsWidget'
 import { safeFromJsonString } from 'utilities/json-utils'
@@ -7,14 +6,24 @@ import { safeFromJsonString } from 'utilities/json-utils'
 import type { Props as ProductsWidgetProps } from 'Dashboard/components/ProductsWidget'
 import type { Props as BackendsWidgetProps } from 'Dashboard/components/BackendsWidget'
 
-import './dashboard.scss'
-
+const newAccountsContainerId = 'new-accounts-widget'
+const potentialUpgradesContainerId = 'potential-upgrades-widget'
 const productsContainerId = 'products-widget'
 const backendsContainerId = 'backends-widget'
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.dashboardWidget = dashboardWidget
-  window.renderChartWidget = renderChartWidget
+  const newAccountsContainer = document.getElementById(newAccountsContainerId)
+  const potentialUpgradesContainer = document.getElementById(potentialUpgradesContainerId)
+
+  if (newAccountsContainer) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- path should be there
+    renderWidget(newAccountsContainer.dataset.path!)
+  }
+
+  if (potentialUpgradesContainer) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- path should be there
+    renderWidget(potentialUpgradesContainer.dataset.path!)
+  }
 
   const productsContainer = document.getElementById(productsContainerId)
   const backendsContainer = document.getElementById(backendsContainerId)

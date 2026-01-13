@@ -1,9 +1,3 @@
-Then /^I should see a sparkline for "([^\"]*)"$/ do |metric|
-  within(".DashboardSection--audience") do
-    assert_selector 'div.Dashboard-chart'
-  end
-end
-
 Then /^I should see a chart called "([^\"]*)"$/ do |chart|
   within("##{chart}") do
     assert_selector(:css, "svg")

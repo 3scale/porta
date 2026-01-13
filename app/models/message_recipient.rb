@@ -109,11 +109,6 @@ class MessageRecipient < ApplicationRecord
     hidden_at?
   end
 
-
-  def self.number_of_unread_for user
-    user.received_messages.where(:state => :unread).count
-  end
-
   # TODO: remove after position column is removed from the database
   class << self
     def instance_method_already_implemented?(method_name)

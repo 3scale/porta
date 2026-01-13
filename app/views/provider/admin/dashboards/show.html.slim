@@ -1,5 +1,6 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
+  = stylesheet_link_tag 'provider/admin/dashboard'
 
 - content_for :javascripts do
   = javascript_packs_with_chunks_tag 'dashboard'
@@ -8,45 +9,47 @@
   button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"
     span class="pf-c-button__icon pf-m-start"
       i class="fas fa-info-circle" aria-hidden="true"
-    a href=provider_admin_quickstarts_path Quick starts
+    a href=provider_admin_quickstarts_path
+      = t('.quick_starts')
 
-.Dashboard
-  div.Dashboard-widgets
-    // account level
+div class="Dashboard pf-l-flex"
+  div class="pf-l-flex__item pf-m-flex-8 pf-l-flex pf-m-column pf-m-align-self-stretch"
     - if presenter.can_see_audience_section?
-      section#audience.DashboardSection.DashboardSection--audience class=('DashboardSection--wide' unless can?(:manage, :plans))
-        header.DashboardSection-header
-          h1.DashboardSection-title title="Audience"
-            i.fa.fa-bullseye>
-            | Audience
-          = render 'developers_navigation', buyers: current_account.buyer_accounts.not_master,
-                                          pending_buyers: current_account.buyers.pending,
-                                          account_plans: current_account.account_plans.not_custom,
-                                          received_messages_presenter: @received_messages_presenter,
-                                          applications: current_user.accessible_cinstances.not_bought_by(current_account),
-                                          alerts: current_account.buyer_alerts.unread
+      section id="audience" class="pf-l-flex__item pf-l-flex pf-m-column pf-m-space-items-none"
+        = render 'audience_navigation'
 
+        div class="dashboard-widgets pf-l-flex pf-m-flex-1 pf-l-flex__item pf-m-space-items-none"
+          - if can?(:manage, :partners)
+            div id=Provider::Admin::Dashboards::NewAccountsPresenter::ID class="dashboard-widget pf-c-panel pf-l-flex__item pf-l-flex pf-m-flex-1" data-path=provider_admin_dashboard_new_accounts_path
+              = render 'provider/admin/dashboards/widgets/spinner'
+            div class="pf-c-divider pf-m-vertical pf-m-inset-md" role="separator"
 
-        // Account Level Widgets
-        = dashboard_widget :new_accounts if can?(:manage, :partners)
-        = dashboard_widget :potential_upgrades if can?(:manage, :plans)
+          - if can?(:manage, :plans)
+            div id=Provider::Admin::Dashboards::PotentialUpgradesPresenter::ID class="dashboard-widget pf-c-panel pf-l-flex__item pf-l-flex pf-m-flex-1" data-path=provider_admin_dashboard_potential_upgrades_path
+              = render 'provider/admin/dashboards/widgets/spinner'
 
-    section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      div.pf-c-content
+    section id="apis" class="pf-l-flex__item"
+      div class="pf-c-content"
         h1 APIs
       - if presenter.access_to_products? || presenter.access_to_backends?
-        div.apiContainer
+        div class="pf-l-grid pf-m-gutter"
           - if presenter.access_to_products?
-            div id="products-widget" data-products-widget=presenter.products_widget_data.to_json
+            div id="products-widget" class="pf-l-grid__item pf-m-6-col" data-products-widget=presenter.products_widget_data.to_json
           - if presenter.access_to_backends?
-            div id="backends-widget" data-backends-widget=presenter.backends_widget_data.to_json
+            div id="backends-widget" class="pf-l-grid__item pf-m-6-col" data-backends-widget=presenter.backends_widget_data.to_json
       - else
-        div.pf-c-card
-          - link = mail_to(current_account.admin_user_email, "contact #{current_account.admin_user_display_name}")
-          = render 'shared/empty_state', icon: :lock,
-                                         title: t('shared.service_access.title'),
-                                         body: t('shared.service_access.body_html', org_name: current_account.org_name, mail_to_admin: link )
+        div class="pf-c-panel"
+          div class="pf-c-panel__body"
+            - link = mail_to(current_account.admin_user_email, "contact #{current_account.admin_user_display_name}")
+            = render 'shared/empty_state', icon: :lock,
+                                           title: t('shared.service_access.title'),
+                                           body: t('shared.service_access.body_html', org_name: current_account.org_name, mail_to_admin: link )
 
-  div.Dashboard-events
-    section.DashboardStream
-      = raw(@notifications_presenter.render)
+  section id="messages" class="pf-l-flex__item pf-m-flex-2 pf-u-ml-xl pf-m-align-self-stretch"
+    div class="pf-c-content"
+      = render 'message_list', title: t('.today'),
+                               messages: presenter.todays_messages,
+                               empty: -> { presenter.no_messages_message }
+      = render 'message_list', title: t('.older'),
+                               messages: presenter.older_messages,
+                               empty: -> { presenter.no_messages_message }
