@@ -68,10 +68,17 @@ class Provider::Admin::Dashboards::NewAccountsPresenterTest < Draper::TestCase
     assert_in_delta expected_percentage, presenter.instance_variable_get(:@percentage_change), 0.01
   end
 
-  test 'title_with_history formats percentage correctly' do
+  test 'title_with_history formats percentage with correct sign' do
     presenter = Provider::Admin::Dashboards::NewAccountsPresenter.new(@data.dup)
 
-    assert_match(/^[+-]\d+$/, presenter.title_with_history)
+    presenter.instance_variable_set(:@percentage_change, 25.5)
+    assert_equal '+25.5%', presenter.title_with_history
+
+    presenter.instance_variable_set(:@percentage_change, -33.7)
+    assert_equal '-33.7%', presenter.title_with_history
+
+    presenter.instance_variable_set(:@percentage_change, 0)
+    assert_equal '+0%', presenter.title_with_history
   end
 
   test 'handles single day current data' do

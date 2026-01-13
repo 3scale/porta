@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+Given "the provider {has} signups" do |has_signups|
+  Provider::Admin::Dashboards::NewAccountsPresenter.any_instance.stubs(:no_signups?).returns(!has_signups)
+end
+
+Then "they {should} see the new accounts chart" do |should|
+  within '.dashboard-widgets' do
+    assert_equal has_css?('#new-accounts-widget .new-accounts-chart.c3'), should
+  end
+end
+
 def service_id_for_name(name)
   page.find_by_id('apis').find('section', text: /#{name}/i)[:id][/\d+/]
 end

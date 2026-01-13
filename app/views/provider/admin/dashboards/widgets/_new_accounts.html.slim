@@ -2,7 +2,7 @@ div class="pf-c-panel__main"
   div class="pf-c-panel__main-body"
     - if widget.no_signups?
       div class="pf-c-content"
-        h2 = t('.title')
+        h2 = t('.title', count: 0)
         p = t('.sign_up_info_html', href: provider_admin_cms_root_path)
         - if current_account.site_access_code.present?
           p = t('.open_portal_info_html', href: admin_site_dns_path)
