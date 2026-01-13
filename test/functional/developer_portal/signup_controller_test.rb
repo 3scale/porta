@@ -146,8 +146,8 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     { account: { org_name: "bar",
                  user: { username: "foobar",
                          email: "email@email.com",
-                         password: "Supersecret123+!!",
-                         password_confirmation: "Supersecret123+!!" }
+                         password: "Supersecret123+!",
+                         password_confirmation: "Supersecret123+!" }
     }}.merge(hash)
   end
 end

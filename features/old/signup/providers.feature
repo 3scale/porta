@@ -21,7 +21,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
      | Email                   | tom@monsterapi.com |
      | First name              | quentin            |
      | Organization/Group Name | foo                |
-     | Password                | godzilla           |
+     | Password                | Supersecret123+!   |
    And I press "Sign up"
    Then I should see "Hi quentin, thank you for signing up"
    And the domain of provider "foo" should be "foo.3scale.localhost"
@@ -36,7 +36,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   When I follow the activation link in an email sent to "tom@monsterapi.com"
    And I fill in the following:
     | Email or Username | tom@monsterapi.com |
-    | Password          | godzilla           |
+    | Password          | Supersecret123+!   |
    And I press "Sign in"
   Then I should be logged in as "admin"
   And I should be on the provider onboarding wizard page
@@ -69,8 +69,8 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
      | Username                | bob                   |
      | Email                   | bob@customer.net      |
      | Organization/Group Name | bob's enterprise      |
-     | Password                | ie4ever               |
-     | Password confirmation   | ie4ever               |
+     | Password                | Supersecret123+!      |
+     | Password confirmation   | Supersecret123+!      |
     And I press "Sign up"
     And I wait a moment
    Then I should see "Thank you"
@@ -78,8 +78,8 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   # --- Buyer logs in ---
   When I follow the activation link in an email sent to "bob@customer.net"
   And I fill in the following:
-    | Username or Email | bob     |
-    | Password          | ie4ever |
+    | Username or Email | bob              |
+    | Password          | Supersecret123+! |
   And I press "Sign in"
   Then I should see "Signed in successfully"
   Then I should be on the homepage

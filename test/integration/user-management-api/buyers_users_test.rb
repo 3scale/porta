@@ -282,10 +282,10 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create also sets user password' do
-    post admin_api_account_users_path(account_id: @buyer.id, format: :xml), params: { username: 'chuck', email: 'chuck@norris.us', password: "posted-password", password_confirmation: "posted-password", provider_key: @provider.api_key }
+    post admin_api_account_users_path(account_id: @buyer.id, format: :xml), params: { username: 'chuck', email: 'chuck@norris.us', password: "Supersecret321+!", password_confirmation: "Supersecret321+!", provider_key: @provider.api_key }
 
     chuck = User.last
-    assert chuck.authenticate("posted-password")
+    assert chuck.authenticate("Supersecret321+!")
     assert_not_empty chuck.password_digest
   end
 
@@ -369,17 +369,17 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @buyer, role: "member")
     assert_not_empty chuck.password_digest
-    assert chuck.authenticate('Supersecret123+!!')
+    assert chuck.authenticate('Supersecret123+!')
 
     put admin_api_account_user_path(account_id: @buyer.id,
                                          format: :xml, id: chuck.id,
-                                         password: "updated-password",
-                                         password_confirmation: "updated-password"),
+                                         password: "Supersecret321+!",
+                                         password_confirmation: "Supersecret321+!"),
         params: { provider_key: @provider.api_key }
 
     chuck.reload
     assert_response :success
-    assert chuck.authenticate('updated-password')
+    assert chuck.authenticate('Supersecret321+!')
   end
 
   test 'update also updates extra fields' do

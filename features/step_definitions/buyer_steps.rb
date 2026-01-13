@@ -204,7 +204,7 @@ When "the developer tries to log in" do
   set_current_domain("foo.3scale.localhost")
   visit path_to('the login page')
   fill_in('Username or Email', with:  username)
-  fill_in('Password', with: "Supersecret123+!!")
+  fill_in('Password', with: "Supersecret123+!")
   click_button('Sign in')
 end
 

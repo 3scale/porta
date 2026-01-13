@@ -63,6 +63,6 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
   private
 
   def user_params
-    { username: 'admin', password: 'Supersecret123+!!' }
+    { username: 'admin', password: 'Supersecret123+!' }
   end
 end

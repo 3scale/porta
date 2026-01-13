@@ -13,7 +13,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     user: {
       email:    ACCOUNT_EMAIL,
       username: 'supertramp',
-      password: 'westisthebest'
+      password: 'Supersecret123+!'
     }
   }.freeze
 

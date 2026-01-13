@@ -41,10 +41,10 @@ Feature: Sign Up of enterprise buyers
      And I go to the sign up page
      And I fill in the following:
       | Email                   | foobar@example.net |
-      | Username                | bar           |
-      | Password                | Supersecret123+!!      |
-      | Password confirmation   | Supersecret123+!!      |
-      | Organization/Group Name | Planet eXpress   |
+      | Username                | bar                |
+      | Password                | Supersecret123+!   |
+      | Password confirmation   | Supersecret123+!   |
+      | Organization/Group Name | Planet eXpress     |
      And I press "Sign up"
      And I should see the registration succeeded
 
@@ -54,10 +54,10 @@ Feature: Sign Up of enterprise buyers
       And I go to the sign up page
       And I fill in the following:
       | Email                   | foobar@example.net |
-      | Username                | bar           |
-      | Password                | Supersecret123+!!      |
-      | Password confirmation   | Supersecret123+!!      |
-      | Organization/Group Name | Planet eXpress   |
+      | Username                | bar                |
+      | Password                | Supersecret123+!   |
+      | Password confirmation   | Supersecret123+!   |
+      | Organization/Group Name | Planet eXpress     |
     Then I should see error in fields:
       | account errors |
       | Username       |
@@ -68,10 +68,10 @@ Feature: Sign Up of enterprise buyers
       And I go to the sign up page
       And I fill in the following:
       | Email                   | bar@3scale.localhost |
-      | Username                | notExistent        |
-      | Password                | Supersecret123+!!        |
-      | Password confirmation   | Supersecret123+!!        |
-      | Organization/Group Name | Planet eXpress   |
+      | Username                | notExistent          |
+      | Password                | Supersecret123+!     |
+      | Password confirmation   | Supersecret123+!     |
+      | Organization/Group Name | Planet eXpress       |
     Then I should see error in fields:
       | account errors |
       | Email          |
