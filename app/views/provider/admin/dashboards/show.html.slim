@@ -48,7 +48,7 @@ div class="Dashboard pf-l-flex"
   section id="messages" class="pf-l-flex__item pf-m-flex-2 pf-u-ml-xl pf-m-align-self-stretch"
     div class="pf-c-content"
       = render 'message_list', title: t('.today'),
-                               messages: [],
+                               messages: presenter.todays_messages,
                                empty: -> { presenter.no_messages_message }
       = render 'message_list', title: t('.older'),
                                messages: presenter.older_messages,
