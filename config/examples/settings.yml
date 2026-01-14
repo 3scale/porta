@@ -6,7 +6,6 @@ base: &default
   bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
   bugsnag_release_stage: <%= ENV.fetch('BUGSNAG_RELEASE_STAGE', Rails.env) %>
   daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
-  db_secret: <%= ENV.fetch('DB_SECRET', 'db_secret') %>
   email_sanitizer:
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', '0') == '1' %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
@@ -70,7 +69,6 @@ production:
   apicast_custom_url: true
   apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   daily_weekly_reports_pref: false
-  db_secret:
   force_ssl: true
   hide_basic_switches: true
   janitor_worker_enabled: true ## same
