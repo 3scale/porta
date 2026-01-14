@@ -323,8 +323,6 @@ class User < ApplicationRecord
     xml.to_xml
   end
 
-
-
   #TODO: do this with an association
   def sections
     account.accessible_sections if account
