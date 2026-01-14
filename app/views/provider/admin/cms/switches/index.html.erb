@@ -9,7 +9,8 @@
 <% end %>
 
 <% content_for :javascripts do %>
-  <%= javascript_packs_with_chunks_tag 'switches' %>
+  <%= stylesheet_link_tag 'provider/admin/cms/versions' %>
+  <%= stylesheet_packs_chunks_tag 'pf_table' %>
 <% end %>
 
 <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Switches table" id="switches">
@@ -24,7 +25,7 @@
 
   <tbody role="rowgroup">
     <% @allowed.each do |name, switch| %>
-      <tr role="row" class="<%= switch.hidden? ? 'switch-inactive' : '' %>">
+      <tr role="row">
         <td role="cell" data-label="Feature">
           <%= t("switches.#{name}.name") %>
         </td>

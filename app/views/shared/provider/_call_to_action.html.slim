@@ -1,4 +1,5 @@
-div.CallToAction
-  ' in order to be able to open a support case, please
-  => link_to "connect your Red Hat Account", @redhat_customer_portal_verification_presenter.authorize_url, class: "CallToAction-link"
-  | to this 3scale account.
+/ Can't content_for this:
+= stylesheet_packs_chunks_tag 'call_to_action'
+
+div class="pf-c-banner pf-m-sticky pf-m-red"
+  = t('layouts.provider.call_to_action_html', href: '@redhat_customer_portal_verification_presenter.authorize_url')

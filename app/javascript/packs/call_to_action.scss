@@ -1,0 +1,9 @@
+@import '~@patternfly/patternfly/components/Banner/banner.css';
+
+/* HACK: for pf-c-banner to work out of the box, we need to change the whole layout */
+.pf-c-banner.pf-m-sticky {
+  bottom: 0;
+  position: fixed;
+  top: unset;
+  width: 100%;
+}

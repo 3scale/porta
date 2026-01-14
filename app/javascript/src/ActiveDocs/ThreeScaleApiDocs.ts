@@ -17,11 +17,15 @@ const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
 }
 
 const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
-  const div = document.createElement('div')
-  div.setAttribute('class',  'api-docs-wrap')
-  div.setAttribute('id', id)
+  const cardDiv = document.createElement('div')
+  cardDiv.setAttribute('class', 'pf-c-card api-docs-wrap')
+  cardDiv.setAttribute('id', id)
 
-  container.appendChild(div)
+  const flexItemDiv = document.createElement('div')
+  flexItemDiv.classList.add('pf-l-flex__item')
+  flexItemDiv.appendChild(cardDiv)
+
+  container.appendChild(flexItemDiv)
 }
 
 /**

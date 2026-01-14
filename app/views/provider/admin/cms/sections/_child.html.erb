@@ -1,20 +1,17 @@
-<% section = if child.respond_to?(:parent)
-               child.parent
-             else
-               child.section
-             end
- %>
-<% name = child.class.model_name -%>
+<% section = child.respond_to?(:parent) ? child.parent : child.section %>
+<% name = child.class.model_name %>
 
-<tr id="<%= dom_id(child) %>">
-  <td>
+<tr id="<%= dom_id(child) %>" role="row" class="pf-m-hoverable">
+  <td role="cell">
     <%= link_to child.title, polymorphic_path([:edit, :provider, :admin, child]) %>
   </td>
-  <td><%= name.human %></td>
-  <td>
-    <% unless section.root?  %>
+  <td role="cell">
+    <%= name.human %>
+  </td>
+  <td role="cell">
+    <% unless section.root? %>
       <a href="#" class="remove-from-section">Remove</a>
-    <% end -%>
+    <% end %>
   </td>
   <input type="hidden" name="cms_section[<%= name.param_key %>_ids][]" value="<%= child.id %>">
 </tr>

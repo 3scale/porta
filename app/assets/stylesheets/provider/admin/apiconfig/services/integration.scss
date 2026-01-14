@@ -1,0 +1,139 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+@use 'utils';
+
+#integration-tabs .integration .SettingsBox {
+  box-shadow: none;
+}
+
+#integration-tabs {
+  form.formtastic:not(.pf-c-form) {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  fieldset {
+    max-width: 100%;
+  }
+
+  .ui-tabs-panel {
+    padding: 2em;
+    background-color: white;
+    border: $border-width solid $border-color;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .ui-tabs-hide {
+    display: none;
+  }
+
+  // sandbox or not
+  .undo {
+    display: none;
+    cursor: pointer;
+    float: right;
+    font-size: $font-size-sm;
+    color: $link-color;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  input.sandbox {
+    border-style: dashed;
+  }
+
+  .curl {
+    border: none;
+    color: black;
+    background: rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    padding: line-height-times(.25);
+    overflow: auto;
+    margin: line-height-times(-1) 0;
+    max-width: 800px; // weird stuff happens with non-breaking spaces if no limit
+
+    .error,
+    .error a {
+      color: $error-color;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  .feedback {
+    border-left: 5px solid transparent;
+    padding-left: 40px;
+    margin-left: 20px;
+    border-color: $error-color;
+    position: relative;
+
+    .fa-hdd {
+      margin-left: -65px;
+    }
+
+    .fa-puzzle-piece,
+    .fa-hdd {
+      color: $error-color;
+    }
+
+    fieldset {
+      max-width: 100%;
+    }
+
+    &.success {
+      border-color: $success-color;
+
+      .fa-puzzle-piece,
+      .fa-hdd {
+        color: $success-color;
+      }
+    }
+
+    &.no-test {
+      border-color: $disabled-color;
+
+      .fa-puzzle-piece,
+      .fa-hdd {
+        color: $disabled-color;
+      }
+    }
+
+    &.never-test {
+      border-color: transparent;
+
+      .fa-puzzle-piece,
+      .fa-hdd {
+        color: $disabled-color;
+      }
+    }
+
+    &>[class^="fa fa-"] {
+      font-size: 40px;
+      background-color: white;
+      margin-left: -60px;
+      padding: line-height-times(.25);
+      position: absolute;
+      top: line-height-times(-0.5);
+    }
+
+    .fa-link {
+      padding-top: 10px;
+    }
+
+    &.client {
+      border-left: 1px solid $border-color;
+    }
+  }
+
+  .oauth .feedback {
+    border-left: none;
+  }
+
+  .production .feedback.client {
+    border-left: none;
+  }
+}
