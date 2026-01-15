@@ -10,7 +10,7 @@ base: &default
       style_src: ["'self'", "'unsafe-inline'", "<%= ENV['RAILS_ASSET_HOST'] %>"]
       font_src: ["'self'", "data:", "<%= ENV['RAILS_ASSET_HOST'] %>"]
       img_src: ["'self'", "data:", "blob:", "https:", "<%= ENV['RAILS_ASSET_HOST'] %>"]
-      connect_src: ["'self'"]
+      connect_src: ["*"]
       frame_src: ["'self'"]
       frame_ancestors: ["'none'"]
       object_src: ["'none'"]
@@ -21,7 +21,7 @@ base: &default
     enabled: true
     report_only: false
     policy:
-      default_src: [ "*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'"]
+      default_src: ["*", "data:", "mediastream:", "blob:", "filesystem:", "ws:", "wss:", "'unsafe-eval'", "'unsafe-inline'"]
 
 development:
   <<: *default
@@ -30,11 +30,11 @@ development:
     report_only: false
     policy:
       <<: *default_admin_policy # Overwrite default policy in development to add webpack as source
-      script_src: [ "'self'", "'unsafe-inline'", "'unsafe-eval'", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
-      style_src: [ "'self'", "'unsafe-inline'", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
+      script_src: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
+      style_src: ["'self'", "'unsafe-inline'", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
       font_src: ["'self'", "data:", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
       img_src: ["'self'", "data:", "blob:", "https:", "<%= ENV['RAILS_ASSET_HOST'] %>", "localhost:3035", "ws://localhost:3035"]
-      connect_src: ["'self'", "localhost:3035", "ws://localhost:3035"]
+      connect_src: ["*", "localhost:3035", "ws://localhost:3035"]
 
 test:
   <<: *default
