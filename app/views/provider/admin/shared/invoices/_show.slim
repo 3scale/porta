@@ -1,0 +1,11 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'invoices_show'
+
+- content_for :page_header_title do
+  = "Invoice for #{ @invoice.period ? l(@invoice.period, format: :month) : 'undefined period' } (#{ t(@invoice.creation_type, scope: 'invoices.creation_type') })"
+
+div class="pf-l-grid pf-m-gutter"
+  = render 'provider/admin/shared/invoices/header', edit_link_scope:
+  = render 'provider/admin/shared/invoices/line_items', editable:
+  = render 'provider/admin/shared/invoices/payment_transactions'
+  = render 'provider/admin/shared/invoices/actions' if actionable
