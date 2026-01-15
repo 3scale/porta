@@ -53,8 +53,6 @@ Install Xcode from the App Store. Then run the following command from your termi
 xcode-select -—install
 ```
 
-* In **Macs with M1**, recent versions of xcode are incompatible with older versions of ruby. You need to install Command Line Tools for Xcode 13.4. The installation file can be found at https://developer.apple.com/download/all/?q=command%20line%20tools%2013.4. It may be required to reboot your machine after installing it.
-
 ### Dependencies
 
 ```
@@ -79,12 +77,12 @@ The application requires a database that can either be [PostgreSQL](https://www.
 We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
-podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:8.0
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 mysql:8.0
 ```
 * **Macs with M1** require the flag `--platform linux/x86_64`:
 
   ```
-  podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:8.0
+  podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql80 --platform linux/x86_64 mysql:8.0
   ```
 
 Alternatively it can be run by Homebrew:
