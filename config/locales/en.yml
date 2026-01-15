@@ -983,6 +983,22 @@ en:
           error: Webhooks settings could not be updated
           success: Webhooks settings were successfully updated
 
+      shared:
+        invoices:
+          actions:
+            cancel:
+              button: Cancel invoice
+            change:
+              button: Charge
+            confirm: Are you sure?
+            generate:
+              button: Generate PDF
+              button_re: Regenerate PDF
+            issue:
+              button: Issue invoice
+            pay:
+              button: Mark as paid
+
   buyers:
     account_contracts:
       update:
