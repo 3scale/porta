@@ -16,108 +16,108 @@ class Authentication::Strategy::InternalTest < ActiveSupport::TestCase
 
   test 'authenticate authenticates buyer user' do
     buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
-    buyer_user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
+    buyer_user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'Supersecret123+!')
     buyer_user.activate!
 
     user = FactoryBot.create(:user, :account  => @provider_account,
                           :username => 'dave',
-                          :password => 'kangaroo')
+                          :password => 'Supersecret123+!')
     user.activate!
 
     assert_equal buyer_user, @strategy.authenticate(:username => buyer_user.username,
-                                                    :password => 'kangaroo')
+                                                    :password => 'Supersecret123+!')
 
-    assert_nil @strategy.authenticate(:username => 'dave', :password => 'kangaroo')
+    assert_nil @strategy.authenticate(:username => 'dave', :password => 'Supersecret123+!')
   end
 
   test 'authenticate returns nil if the password is incorrect' do
-    user = FactoryBot.create(:user, :account => @provider_account, :password => 'foobar')
+    user = FactoryBot.create(:user, :account => @provider_account, :password => 'Supersecret123+!')
     user.activate!
 
     assert_nil @strategy.authenticate(:username => user.username, :password => 'wrong!')
   end
 
   test 'authenticate returns nil if the user is pending' do
-    user = FactoryBot.create(:user, :account => @provider_account, :password => 'foobar')
+    user = FactoryBot.create(:user, :account => @provider_account, :password => 'Supersecret123+!')
     assert_nil @strategy.authenticate(:username => user.username,
-                                      :password => 'foobar')
+                                      :password => 'Supersecret123+!')
   end
 
   test 'authenticate returns nil if the user is suspended' do
-    user = FactoryBot.create(:user, :password => 'foobar')
+    user = FactoryBot.create(:user, :password => 'Supersecret123+!')
     user.activate!
     user.suspend!
 
     assert_nil @strategy.authenticate(:username => user.username,
-                                      :password => 'foobar')
+                                      :password => 'Supersecret123+!')
   end
 
   test 'authenticate authenticates user by username in buyer side' do
     buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
-    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
+    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'Supersecret123+!')
 
     user.activate!
 
     assert_equal user, @strategy.authenticate(:username => user.username,
-                                              :password => 'kangaroo')
+                                              :password => 'Supersecret123+!')
   end
 
 
   test 'authenticate authenticates user by email in buyer domain' do
     buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
-    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'kangaroo')
+    user          = FactoryBot.create(:user, :account  => buyer_account, :password => 'Supersecret123+!')
     user.activate!
 
     assert_equal user, @strategy.authenticate(:username => user.email,
-                                              :password => 'kangaroo')
+                                              :password => 'Supersecret123+!')
   end
 
   test 'authenticate returns nil if the account of the user is pending' do
     account = FactoryBot.create(:account, :provider_account => @provider_account)
-    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
+    user    = FactoryBot.create(:user, :account => account, :password => 'Supersecret123+!')
 
     user.activate!
     account.make_pending!
 
     assert_nil @strategy.authenticate(:username => user.username,
-                                      :password => 'foobar')
+                                      :password => 'Supersecret123+!')
   end
 
   test 'authenticate returns nil if the account of the user is rejected' do
     account = FactoryBot.create(:account, :provider_account => @provider_account)
-    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
+    user    = FactoryBot.create(:user, :account => account, :password => 'Supersecret123+!')
 
     user.activate!
     account.reject!
 
     assert_nil @strategy.authenticate(:username => user.username,
-                                      :password => 'foobar')
+                                      :password => 'Supersecret123+!')
   end
 
   test 'authenticate authenticates user with approved account' do
     account = FactoryBot.create(:account, :provider_account => @provider_account)
-    user    = FactoryBot.create(:user, :account => account, :password => 'foobar')
+    user    = FactoryBot.create(:user, :account => account, :password => 'Supersecret123+!')
 
     user.activate!
 
     assert_equal user, @strategy.authenticate(:username => user.username,
-                                              :password => 'foobar')
+                                              :password => 'Supersecret123+!')
   end
 
   test 'authenticates provider side' do
     provider_strategy = Authentication::Strategy::Internal.new(@provider_account, true)
     user = FactoryBot.create(:user, :account  => @provider_account,
                           :username => 'dave',
-                          :password => 'kangaroo')
+                          :password => 'Supersecret123+!')
 
     account = FactoryBot.create(:account, :provider_account => @provider_account)
-    buyer_pass = 'foobar'
+    buyer_pass = 'Supersecret123+!'
     buyer_user    = FactoryBot.create(:user, :account => account, :password => buyer_pass)
 
     user.activate!
     buyer_user.activate!
 
-    assert_equal user, provider_strategy.authenticate(:username => 'dave', :password => 'kangaroo')
+    assert_equal user, provider_strategy.authenticate(:username => 'dave', :password => 'Supersecret123+!')
     assert_nil provider_strategy.authenticate(:username => buyer_user.username, :password => buyer_pass)
   end
 

@@ -24,7 +24,7 @@ div class="pf-c-card"
           = form.input :password, as: :patternfly_input,
                                   label: t('.new_password_label'),
                                   required: current_user.password_required?,
-                                  input_html: { value: '', required: current_user.password_required? }
+                                  input_html: { value: '', type: 'password', required: current_user.password_required? }
 
       - if using_password
         = form.inputs "Provide your current password and update your personal details" do

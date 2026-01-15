@@ -301,12 +301,12 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'chuck',
                                              email: 'chuck@norris.us',
-                                             password: 'posted-password',
-                                             password_confirmation: 'posted-password',
+                                             password: 'Supersecret123+!',
+                                             password_confirmation: 'Supersecret123+!',
                                              provider_key: @provider.api_key }
 
     chuck = User.last
-    assert chuck.authenticated?('posted-password')
+    assert chuck.authenticated?('Supersecret123+!')
   end
 
   test 'create errors' do
@@ -390,13 +390,13 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    assert chuck.authenticated?('supersecret')
+    assert chuck.authenticated?('Supersecret123+!')
 
-    put admin_api_user_path(format: :xml, id: chuck.id, password: "updated-password", password_confirmation: "updated-password"), params: { provider_key: @provider.api_key }
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "Supersecret321+!", password_confirmation: "Supersecret321+!"), params: { provider_key: @provider.api_key }
 
     chuck.reload
     assert_response :success
-    assert chuck.authenticated?('updated-password')
+    assert chuck.authenticated?('Supersecret321+!')
   end
 
   test 'update does not updates state nor role' do

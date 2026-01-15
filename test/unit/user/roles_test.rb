@@ -4,7 +4,7 @@ require 'test_helper'
 
 class User::RolesTest < ActiveSupport::TestCase
   test 'default role is :member' do
-    user = User.create!(username: 'bob', email: 'bob@example.com', password: 'monkey')
+    user = User.create!(username: 'bob', email: 'bob@example.com', password: 'Supersecret123+!')
     assert_equal :member, user.role
   end
 

@@ -57,6 +57,6 @@ class SignupServiceTest < ActiveSupport::TestCase
   def valid_user_params
     index =  User.maximum(:id)
 
-    { username: "Alex_#{index}", email: "foo_#{index}@example.net", password: 'wild123' }
+    { username: "Alex_#{index}", email: "foo_#{index}@example.net", password: 'Supersecret123+!' }
   end
 end

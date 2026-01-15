@@ -52,7 +52,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
   test 'update should succeed with current password' do
     login_as @buyer.admins.first
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'}}
+    put :update, params: { user: {current_password: 'Supersecret123+!', username: 'test', email: 'test@example.com'}}
     assert_redirected_to admin_account_users_path
     assert_equal flash[:notice], 'User was successfully updated.'
   end
@@ -70,7 +70,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
     assert_difference(Audited.audit_class.method(:count)) do
       User.with_synchronous_auditing do
-        put :update, params: { user: {current_password: 'supersecret', password: 'new_password', password_confirmation: 'new_password'} }
+        put :update, params: { user: {current_password: 'Supersecret123+!', password: 'Supersecret321+!', password_confirmation: 'Supersecret321+!'} }
       end
     end
 
@@ -81,6 +81,6 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
   test 'failed password change creates an audit log' do
     login_as @buyer.admins.first
     AuditLogService.expects(:call).with { |msg| msg.start_with? "User tried to change password" }
-    put :update, params: { user: {current_password: 'wrong_password', password: 'new_password', password_confirmation: 'new_password'} }
+    put :update, params: { user: {current_password: 'wrong_password', password: 'Supersecret321+!', password_confirmation: 'Supersecret321+!'} }
   end
 end
