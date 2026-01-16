@@ -1,9 +1,9 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
+@use 'utils';
 
 .SettingsBox {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   position: relative;
 
@@ -45,7 +45,7 @@
   }
 
   & + .integration {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
 
     overflow: hidden;
     padding: line-height-times(1);
@@ -65,10 +65,6 @@
       padding-bottom: 0;
     }
   }
-}
-
-#integration-tabs .integration .SettingsBox {
-  box-shadow: none;
 }
 
 .Environment,
@@ -119,4 +115,12 @@
   &-title {
     margin: 0 !important;
   }
+}
+
+*[data-state="closed"] {
+  display: none;
+}
+
+*[data-state="open"] {
+  display: inherit;
 }

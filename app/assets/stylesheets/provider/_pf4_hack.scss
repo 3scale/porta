@@ -15,7 +15,7 @@ a.action.pf-c-button {
   &.ok,
   &.enable,
   &.resume {
-    color: $create-color;
+    color: $success-color;
 
     &:hover {
       color: $link-hover-color;
@@ -39,7 +39,7 @@ a.action.pf-c-button {
   &.eye-slash,
   &.suspend,
   &.disable {
-    color: $delete-color;
+    color: $error-color;
 
     &:hover {
       color: $link-hover-color;

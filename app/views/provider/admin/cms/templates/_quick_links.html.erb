@@ -1,68 +1,60 @@
-<div class="cms-intro-page" id="quick-links" style="display:none" data-title="Quick Links">
-  <ul class="links fa-ul">
+<div class="pf-l-grid pf-m-gutter" id="quick-links" style="display:none" data-title="Quick Links">
+  <ul class="fa-ul">
     <li>
       <p>
-        <%= icon('info-circle fa-li') %>
-        You can switch between
-        <em id="origin-glow">your own and 3scale</em>
-        content or filter by
-        <em id="filter-glow">arbitrary string</em>
-        or
-        <em id="type-glow">content type</em>.
+        <%= icon('info-circle fa-li') %>You can switch between <b><em id="origin-glow">your own and
+        3scale</em></b> content or filter by <b><em id="filter-glow">arbitrary string</em></b> or
+        <b><em id="type-glow">content type</em></b>.
       </p>
     </li>
     <li>
       <p>
-        <%= icon('question-circle fa-li') %>
-        Follow the documentation on
-        <%= link_to 'Creating the Developer Portal', I18n.t('docs.hero_api_portal', docs_base_url: docs_base_url), target:'_blank' %>.
+        <%= icon('question-circle fa-li') %>Follow the documentation on
+        <%= link_to 'Creating the Developer Portal', "#{docs_base_url}/creating_the_developer_portal/index", target:'_blank' %>.
       </p>
     </li>
     <li>
       <p>
-        <%= icon('file fa-li') %>
-        <%= link_to 'Write pages', new_provider_admin_cms_page_path %>
-        using <b>Markdown</b>, <b>Textile</b> or plain <b>HTML</b>.
-        Use <em id="layouts-glow">layouts</em> and <em id="partials-glow">partials</em>.
+        <%= icon('file fa-li') %><%= link_to 'Write pages', new_provider_admin_cms_page_path %> using
+        <b>Markdown</b>, <b>Textile</b> or plain <b>HTML</b>. Use <b><em id="layouts-glow">layouts</em></b>
+        and <b><em id="partials-glow">partials</em></b>.
       </p>
     </li>
     <li>
       <p>
-        <%= icon('book fa-li') %>
-        <%= link_to 'Liquid reference', provider_admin_liquid_docs_path %> is here to help you out
-          covering all the <em>drops</em>, <em>tags</em> and <em>filters</em> that you can use.
+        <%= icon('book fa-li') %><%= link_to 'Liquid reference', provider_admin_liquid_docs_path %>
+        is here to help you out covering all the <em>drops</em>, <em>tags</em> and <em>filters</em>
+        that you can use.
       </p>
     </li>
     <li>
       <p>
-        <%= icon('paperclip fa-li') %>
-        <%= link_to 'Upload files', new_provider_admin_cms_file_path %> of any type (i.e. <b>images</b>, <b>documents</b> or <b>MP3s</b>).
+        <%= icon('paperclip fa-li') %><%= link_to 'Upload files', new_provider_admin_cms_file_path %>
+        of any type (i.e. <b>images</b>, <b>documents</b> or <b>MP3s</b>).
       </p>
     </li>
   </ul>
-  <section id="recent-templates">
+
+  <section class="pf-l-grid__item pf-m-6-col" id="recent-templates">
     <h2>Recent Items</h2>
     <ul>
       <% current_account.templates.recents.limit(10).each do |template| %>
         <li>
-          <%= link_to "#{template.human_type} '#{template.name}'",  polymorphic_path([:edit, :provider, :admin, template]), title: "updated at #{template.updated_at}" %>
+          <%= link_to "#{template.human_type} '#{template.name}'", polymorphic_path([:edit, :provider, :admin, template]),
+                                                                   title: "updated at #{template.updated_at}" %>
         </li>
       <% end %>
     </ul>
   </section>
 
   <% if current_account.site_access_code.present? %>
-    <div id="open-portal-to-public">
-
+    <div id="open-portal-to-public" class="pf-l-grid__item pf-m-6-col">
       <%= link_to 'Open your Portal to the world', open_portal_admin_site_dns_path, class: 'pf-c-button pf-m-primary',
                                                                                     method: :put,
                                                                                     remote: true,
                                                                                     data: { confirm: 'Are you sure?' } %>
-
       <p>
-        Removes the
-        <%= link_to "access code", admin_site_dns_path %>
-        from your Developer Portal.
+        Removes the <%= link_to "access code", admin_site_dns_path %> from your Developer Portal.
         <% if current_account.templates.with_draft.any? %>
           Make sure you published
           <%= link_to "your changes", provider_admin_cms_changes_path %>.
@@ -70,5 +62,4 @@
       </p>
     </div>
   <% end %>
-
 </div>

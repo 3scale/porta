@@ -1,7 +1,8 @@
 - content_for :page_header_title, t('.page_header_title')
 
 - content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'pf_form', 'expiration_date_picker'
+  = stylesheet_packs_chunks_tag 'pf_form', 'pf_addons'
+  = javascript_packs_with_chunks_tag 'expiration_date_picker'
 
 div class="pf-c-card"
   div class="pf-c-card__body"

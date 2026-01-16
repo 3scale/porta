@@ -37,8 +37,7 @@
 
   = link_to "Remove Payment Details", provider_admin_account_braintree_blue_path, method: :delete, data: {confirm: "Are you sure?", disable_with: "Deleting..."}, class: "action delete"
 - else
-  .SettingsBox
-    .SettingsBox-summary
-      = render partial: '/shared/legal_terms_for_cc_details'
-      .u-right
-        = link_to 'Add Payment Details', edit_provider_admin_account_braintree_blue_path, class: 'pf-c-button pf-m-primary'
+  = render 'shared/empty_state', icon: :rocket,
+                                 title: 'Payment details are not set',
+                                 body: render('/shared/legal_terms_for_cc_details'),
+                                 primary: { title: t('.add_payment_details'), href: edit_provider_admin_account_braintree_blue_path }

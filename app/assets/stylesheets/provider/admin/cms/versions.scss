@@ -1,0 +1,8 @@
+.diff {
+  .plus { color: var(--pf-global--palette--green-400); }
+  .minus { color: var(--pf-global--palette--red-100); }
+
+  .plus + .minus {
+    margin: 4px;
+  }
+}

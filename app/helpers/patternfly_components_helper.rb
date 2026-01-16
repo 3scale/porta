@@ -32,13 +32,13 @@ module PatternflyComponentsHelper
     end
   end
 
-  def pf_inline_alert(title, **options)
+  def pf_inline_alert(title, **options, &block)
     plain_class = options[:plain] ? 'pf-m-plain' : ''
     variant = options[:variant]
     variant_class = variant ? "pf-m-#{variant}" : ''
     classes = "pf-c-alert pf-m-inline #{plain_class} #{variant_class}"
     tag.div class: classes do
-      icon_tag(variant) + title_tag(title) + description_tag(options[:description])
+      icon_tag(variant) + title_tag(title) + description_tag(options[:description]) + capture(&block)
     end
   end
 
@@ -97,8 +97,17 @@ module PatternflyComponentsHelper
 
     tag.div class: 'pf-c-clipboard-copy' do
       tag.div class: 'pf-c-clipboard-copy__group' do
-         input + button
+        input + button
       end
     end
+  end
+
+  def pf_link_to(body, url, html_options = {})
+    html_options[:class] = "pf-c-button pf-m-link #{html_options.delete(:class)}"
+    html_options[:type] = :button
+
+    html_options[:class] << ' pf-m-inline' if html_options.delete(:inline)
+
+    link_to(body, url, html_options)
   end
 end

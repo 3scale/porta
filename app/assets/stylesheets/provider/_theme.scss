@@ -1,6 +1,5 @@
 @forward 'provider/typography';
 @forward 'provider/layouts/commons';
-@forward 'provider/layouts/main';
 
 // vendored styles
 @forward 'vendor/jquery.ui';
@@ -10,7 +9,7 @@
 @forward 'provider/legacy_theme';
 
 // modules and constants
-@forward "provider/commons";
+@forward 'provider/commons';
 @forward 'provider/buttons';
 @forward 'provider/links';
 @forward 'provider/footer';
@@ -22,37 +21,18 @@
 @forward 'provider/upgrade_notice';
 @forward 'provider/admin/account';
 @forward 'provider/service_access';
-@forward 'provider/plans_widget';
 @forward 'vendor/c3';
 @forward 'provider/stats/base';
 @forward 'provider/stats/selector';
-@forward 'provider/sample_data';
 @forward 'provider/invoices';
 @forward 'provider/finance';
 @forward 'provider/metrics';
 @forward 'provider/section';
 @forward 'provider/liquid_docs';
-@forward 'provider/docs_widget';
-@forward 'provider/create_application';
 @forward 'provider/logo';
-@forward 'provider/info_box';
-@forward 'provider/call_to_action';
 
 // view specific stylesheets placed in the controller paths
-@forward 'provider/admin/cms/templates';
-@forward 'provider/admin/cms/cms_intro';
-@forward 'provider/admin/cms/files';
-@forward 'provider/admin/cms/sections';
-@forward 'provider/admin/cms/templates/versions';
-@forward 'provider/admin/cms/switches';
-@forward 'provider/admin/cms/sidebar';
-@forward 'provider/admin/buyers/plans/listing';
 @forward 'provider/settings_box';
-@forward 'provider/admin/apiconfig/services/proxies';
-@forward 'provider/admin/apiconfig/services/hosted_proxy';
-@forward 'provider/admin/apiconfig/services/promote_form';
-@forward 'provider/admin/apiconfig/services/promote_button';
-@forward 'provider/admin/apiconfig/services/configuration_version';
 @forward 'provider/colorbox';
 @forward 'provider/pagination';
 @forward 'provider/print';

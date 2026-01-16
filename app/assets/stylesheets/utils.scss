@@ -1,0 +1,4 @@
+@mixin white-box-shadow {
+  background-color: white;
+  box-shadow: var(--pf-global--BoxShadow--sm);
+}

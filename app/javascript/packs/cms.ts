@@ -127,6 +127,7 @@ window.CMS = {
 function setUpSidebarDrag () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
   $('[data-behavior~=drag]').draggable!({
+    addClasses: false,
     handle: ':not(.cms-section > i:first-child)',
     helper: (event) => { // TODO: might be better to use built-in helper "clone".)
       const li = $(event.currentTarget as HTMLLIElement)
@@ -141,22 +142,38 @@ function setUpSidebarDrag () {
 }
 
 /**
- * Set up sections' Contents drop. It is set up every time a new section is selected.
+ * Set up sections' Contents droppable. It is only present in cms/sections/new and cms/sections/edit
  */
 function setUpSectionDrop () {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Imported on top
   $('#subsections-container').droppable!({
-    hoverClass: 'subsection-hover',
-    drop: (_event, ui) => {
+    addClasses: false,
+    activeClass: 'pf-m-dragging',
+    activate: ({ target }) => {
+      (target as HTMLDivElement).classList.add('pf-m-drag-outside')
+    },
+    deactivate: ({ target }) => {
+      (target as HTMLDivElement).classList.remove('pf-m-drag-outside')
+    },
+    out: ({ target }) => {
+      (target as HTMLDivElement).classList.toggle('pf-m-drag-outside', true)
+    },
+    over: ({ target }) => {
+      (target as HTMLDivElement).classList.toggle('pf-m-drag-outside', false)
+    },
+    // hoverClass: 'pf-m-dragging',
+    drop: (_, ui) => {
       const { type, id: value, param } = ui.helper[0].dataset as { type: string; id: string; param: string }
       const id = `${type.toLowerCase()}-${value}`
 
-      $('#subsections-container thead').remove()
+      // Must match app/views/provider/admin/cms/sections/_child.html.erb
       $('#subsections-container tbody').append(`
-        <tr id="${id}">
-          <td>${ui.helper.children('a').text()}</td>
-          <td>${type}</td>
-          <td><a href="#" onclick="$('#${id}').remove()">Remove</a></td>
+        <tr id="${id}" role="row" class="">
+          <td role="cell">${ui.helper.children('a').text()}</td>
+          <td role="cell">${type}</td>
+          <td role="cell">
+            <a href="#" onclick="$('#${id}').remove()">Remove</a>
+          </td>
           <input
             type="hidden"
             name="cms_section[${param.toLowerCase()}_ids][]"

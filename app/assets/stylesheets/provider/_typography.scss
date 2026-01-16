@@ -78,13 +78,13 @@ $spacer-2lh: line-height-times(2); // 32px;
 }
 
 @mixin colors-base() {
-  background-color: $background-color-base;
-  color: $color-base;
+  background-color: $body-background;
+  color: $font-color;
 }
 
 @mixin colors-inverted-base() {
-  background-color: $color-base;
-  color: $background-color-base;
+  background-color: $font-color;
+  color: $body-background;
 }
 
 @mixin debug-vertical-rhythm {
@@ -135,7 +135,6 @@ $spacer-2lh: line-height-times(2); // 32px;
 
 $border-radius: line-height-times(.125);
 $border-radius-sm: line-height-times(.125);
-$layout-wrapper-min-width: line-height-times(50);
 
 @mixin ellipsis {
   overflow: hidden;

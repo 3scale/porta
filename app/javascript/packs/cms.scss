@@ -1,4 +1,9 @@
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
+@import '~@patternfly/patternfly/components/Tabs/tabs.css';
+@import '~@patternfly/patternfly/components/DragDrop/drag-drop.css';
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Hint/hint.css';
+@import '~@patternfly/patternfly/layouts/Grid/grid.css';
 
 .pf-c-dropdown:not(.pf-m-expanded) .pf-c-dropdown__menu {
   display: none;

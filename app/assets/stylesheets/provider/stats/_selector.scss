@@ -1,13 +1,11 @@
-// needed for legacy dev portals that include this stylesheet directly
+/* needed for legacy dev portals that include this stylesheet directly */
 
 @use 'provider/colors' as *;
 @use 'provider/typography' as *;
 @use 'sass:math';
 
-// StatsSelector component
-
 $body-color: $font-color;
-$dropdown-bg: $content-background !default;
+$dropdown-bg: #f0f0f0 !default;
 $dropdown-border-color: $border-color !default;
 $dropdown-border-width: $border-width !default;
 $dropdown-divider-bg: $border-color !default;
@@ -38,7 +36,7 @@ $zindex-dropdown: 1000 !default;
     border-radius: $border-radius;
 
     &:hover {
-      color: $menu-hover-color;
+      color: $link-hover-color;
     }
 
     &.is-children {
@@ -64,7 +62,7 @@ $zindex-dropdown: 1000 !default;
     font-size: $font-size-base;
     padding: line-height-times(.5);
     width: auto;
-    color: $menu-active-color;
+    color: $link-color;
     height: auto;
 
     &::after {
@@ -83,7 +81,7 @@ $zindex-dropdown: 1000 !default;
 
   &-menu {
     background-clip: padding-box;
-    background-color: $white;
+    background-color: white;
     border: $border-width solid $border-color;
     color: $body-color;
     display: none;

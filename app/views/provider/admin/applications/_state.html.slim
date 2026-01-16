@@ -5,7 +5,7 @@ div class="pf-c-description-list__group" id="cinstance_state"
   dd class="pf-c-description-list__description"
     div class="pf-c-description-list__text"
       = h @cinstance.state.capitalize
-      span class="pf-m-force-float-right"
+      span class="pf-u-float-right"
         - if @cinstance.pending?
           = render :partial => 'accept_reject'
         - elsif @cinstance.live?

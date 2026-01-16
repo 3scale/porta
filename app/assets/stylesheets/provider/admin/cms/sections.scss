@@ -1,0 +1,5 @@
+#subsections-container {
+  table:has(tr) + .pf-c-hint {
+    display: none;
+  }
+}

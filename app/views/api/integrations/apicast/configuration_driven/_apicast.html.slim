@@ -1,3 +1,6 @@
+/ - content_for :stylesheets do
+/  = stylesheet_link_tag 'provider/admin/apiconfig/services/integrations/apicast'
+
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service))
   article.Configuration-summary data-state="open"
     h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'

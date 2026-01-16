@@ -1,54 +1,14 @@
 @import '~codemirror/lib/codemirror.css';
 @import '~codemirror/theme/neat.css';
 
-// Copied from _colors.scss
-$outerSpaceGray: #393f44; // pf-black-800
-$osloGray: #8b8d8f; // pf-black-500
-$gallery: #ededed; // pf-black-200
-$altoGray: #d1d1d1; // pf-black-300
-$lochMaraBlue: #0088ce; // pf-blue-400
-$tahitiGold: #ec7a08;
-$appleGreen: #3f9c35;
-$guardsmanRed: #c00;
-$alabasterWhite: #fafafa; // pf-black-100
-
-$font-color: $outerSpaceGray;
-$label-color: $osloGray;
-$content-background: $gallery;
-$codemirror-bg: $content-background;
-$highlight-color: $lochMaraBlue;
-$border-color: $altoGray;
-$select-color: $border-color;
-$success-color: $appleGreen;
-$link-color: $highlight-color;
-$warning-color: $tahitiGold;
-$error-color: $guardsmanRed;
-$login-content-color: $font-color;
-$codemirror-color: $label-color;
-$codemirror-border: $content-background;
-$codemirror-bg: $content-background;
-$codemirror-bg-readonly: $codemirror-bg;
-$codemirror-color-readonly: $codemirror-color;
-$codemirror-cursor-color: $highlight-color;
+$orange300: var(--pf-global--palette--orange-300);
+$background-color: var(--pf-global--BackgroundColor--200);
+$border-color: var(--pf-global--palette--black-300);
+$error-color: var(--pf-global--danger-color--100);
 $codemirror-vars-color: #00b9e4; // pf-light-blue-400
 $codemirror-vars2-color: #703fec; // pf-purple-400
-$codemirror-selected-bg: $select-color;
-$codemirror-meta-color: $tahitiGold;
-$codemirror-attr-color: $tahitiGold;
-$codemirror-number-color: $tahitiGold;
-$codemirror-comment-color: $label-color;
-$codemirror-keyword-color: $tahitiGold;
-$codemirror-builtin-color: $highlight-color;
-$codemirror-color-def: $tahitiGold;
-$codemirror-color-tag: $tahitiGold;
 $codemirror-liquid-bg-color: transparent;
-$codemirror-liquid-color: $highlight-color;
-$codemirror-liquid-tag-color: $label-color;
-$codemirror-liquid-markup-delim-color: $highlight-color;
-$codemirror-liquid-string-color: $success-color;
-$codemirror-gutter-color: $border-color;
-$codemirror-gutter-background-color: $codemirror-bg;
-$light-background-color: $alabasterWhite;
+$highlight-color: var(--pf-global--palette--blue-400);
 
 // Copied from _selector.scss
 $border-width: 1px !default;
@@ -70,18 +30,18 @@ $line-height-lg: calc(4 / 3 * $lineHeight);
   }
 }
 
-$border-radius: line-height-times(calc(.125));
+$border-radius: line-height-times(.125);
 $border-width-lg: 2.0 * $border-width;
 $font-weight-bold: 700;
 
 /* Everything Liquid (Copied from vendors/assets/styles/codemirror/liquid) */
 .CodeMirror .cm-liquid {
-  color: $codemirror-liquid-color;
+  color: $highlight-color;
   background-color: $codemirror-liquid-bg-color;
 }
 
 .cm-liquid.CodeMirror-searching {
-  background-color: $light-background-color;
+  background-color: var(--pf-global--BackgroundColor--light-200);
 }
 
 /* Number constants */
@@ -91,22 +51,22 @@ $font-weight-bold: 700;
 
 /* String constants */
 .CodeMirror .cm-liquid-string {
-  color: $codemirror-liquid-string-color;
+  color: var(--pf-global--success-color--100);
 }
 
 /* {{, }}, {%, %} */
 .CodeMirror .cm-liquid-markup-delimiter {
-  color: $codemirror-liquid-markup-delim-color;
+  color: $highlight-color;
 }
 
 /* The name of a Liquid tag (if, assign, for, ...) */
 .CodeMirror .cm-liquid-tag-name {
-  color: $codemirror-liquid-tag-color;
+  color: var(--pf-global--palette--black-500);
 }
 
 /* The closing name of a Liquid block tag (endif, endfor) */
 .CodeMirror .cm-liquid-endtag-name {
-  color: $codemirror-liquid-tag-color;
+  color: var(--pf-global--palette--black-500);
 }
 
 /* Keywords (in, reversed, with, ...) */
@@ -137,7 +97,7 @@ $font-weight-bold: 700;
 /* adjusted copy of the 'neat' theme which we are using (Copied from cms) */
 .CodeMirror-scroll {
   min-height: line-height-times(13);
-  border: line-height-times(calc(1 / 4)) solid $codemirror-border;
+  border: line-height-times(calc(1 / 4)) solid $background-color;
 }
 
 .CodeMirror-gutters {
@@ -151,80 +111,80 @@ $font-weight-bold: 700;
 }
 
 .cm-s-neat {
-  background-color: $codemirror-bg;
-  color: $codemirror-color;
+  background-color: $background-color;
+  color: var(--pf-global--palette--black-500);
   padding: line-height-times(1) 0;
 }
 
 .CodeMirror-focused .CodeMirror-selected {
-  background: $codemirror-selected-bg;
+  background: $border-color;
 }
 
 .CodeMirror-line::selection,
 .CodeMirror-line > span::selection,
 .CodeMirror-line > span > span::selection {
-  background: $codemirror-selected-bg;
+  background: $border-color;
 }
 
 .cm-s-neat .CodeMirror-linenumber {
-  color: $codemirror-gutter-color;
+  color: $border-color;
 }
 
 .cm-s-neat .CodeMirror-gutter {
-  background: $codemirror-gutter-background-color;
+  background: $background-color;
   border-right: 0;
 }
 
 .cm-s-neat .CodeMirror-gutter-text {
-  color: $codemirror-gutter-color;
+  color: $border-color;
 }
 
 .cm-s-neat .CodeMirror-cursor {
-  border-left: $border-width-lg solid $codemirror-cursor-color !important;
+  border-left: $border-width-lg solid $highlight-color !important;
 }
 
 .cm-s-neat span.cm-number,
 .cm-s-neat span.cm-atom {
-  color: $codemirror-number-color;
+  color: $orange300;
 }
 
 .cm-s-neat span.cm-meta {
-  color: $codemirror-meta-color;
+  color: $orange300;
 }
 
 .cm-s-neat span.cm-link {
-  color: $link-color;
+  color: $highlight-color;
 }
 
 .cm-s-neat span.cm-comment {
-  color: $codemirror-comment-color;
+  color: var(--pf-global--palette--black-500);
 }
 
 .cm-s-neat span.cm-keyword {
   line-height: 1em;
   font-weight: $font-weight-bold;
-  color: $codemirror-keyword-color
+  color: $orange300
 }
 
 .cm-s-neat span.cm-string {
-  color: $success-color;
+  color: var(--pf-global--success-color--100);
 }
 
 .cm-s-neat span.cm-builtin {
   line-height: 1em;
   font-weight: $font-weight-bold;
-  color: $codemirror-builtin-color;
+  color: $highlight-color;
 }
 
 .cm-s-neat span.cm-special {
   line-height: 1em;
   font-weight: $font-weight-bold;
-  color: $warning-color;
+  color: var(--pf-global--warning-color--100);
 }
 
 .cm-s-neat span.cm-property,
 .cm-s-neat span.cm-attribute {
-  color: $codemirror-attr-color;
+  color: $orange300;
 }
 
 .cm-s-neat span.cm-variable {
@@ -236,11 +196,11 @@ $font-weight-bold: 700;
 }
 
 .cm-s-neat span.cm-def {
-  color: $codemirror-color-def;
+  color: $orange300;
 }
 
 .cm-s-neat span.cm-tag {
-  color: $codemirror-color-tag;
+  color: $orange300;
 }
 
 .cm-s-neat .CodeMirror-matchingbracket {

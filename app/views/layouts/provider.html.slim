@@ -7,25 +7,26 @@ html[lang="en" class="pf-m-redhat-font"]
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
     = stylesheet_link_tag 'provider/themes/main', media: 'all'
+    = stylesheet_link_tag 'provider/layouts/provider'
     = yield :stylesheets
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
     / Order matters! Base must go before any other pack:
-    = stylesheet_packs_chunks_tag 'patternfly_base', 'toast'
+    = stylesheet_packs_chunks_tag 'patternfly_base', 'toast', 'pf_spacing'
     = javascript_packs_with_chunks_tag 'provider'
     = yield :javascripts
 
   body
     = render partial: 'shared/provider/quickstarts_container' if Features::QuickstartsConfig.enabled?
-    #wrapper.pf-c-page
+    div id="wrapper" class="pf-c-page"
       = render partial: 'shared/provider/header'
       = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
-      .pf-c-page__main role="main"
+      div class="pf-c-page__main" role="main"
         = yield :menu
         - if content_for(:main_section_with_react).present?
           = yield :main_section_with_react
         - else
-          main.Main#content class=('Main--callToAction' if call_to_action?)
+          main
             = render 'shared/provider/page_header' unless active_menu == :dashboard
             section class="pf-c-page__main-section"
               / TODO: THREESCALE-12067 remove cms sublayout (and sublayouts)

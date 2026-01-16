@@ -19,7 +19,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "engines": {
-    "node": "18"
+    "node": "18.20.4"
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
@@ -45,6 +45,8 @@
     "mockdate": "^3.0.5",
     "raf": "^3.4.1",
     "regenerator-runtime": "^0.13.1",
+    "stylelint": "16.12.0",
+    "stylelint-config-standard-scss": "14.0.0",
     "swagger-tools": "^0.10.4",
     "ts-jest": "^29.2.2",
     "typescript": "5.0.4",

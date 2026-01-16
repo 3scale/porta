@@ -1,27 +1,29 @@
+<% content_for :javascripts do %>
+  <%= stylesheet_link_tag 'provider/admin/cms/sections' %>
+<% end %>
+
 <%= f.inputs do %>
-
   <%= f.error_messages %>
-  <%= f.input :title, input_html: { required: true }  %>
+  <%= f.input :title, input_html: { required: true } %>
   <%= f.input :public %>
-  <%= f.input :parent, :as => :section, :include_blank => false , input_html: {class: 'cms-section-picker'}, paths: true %>
-  <%= f.input :partial_path , input_html: {class: 'cms-path-autocomplete'} %>
-
-  <table id="subsection-container">
-  </table>
+  <%= f.input :parent, as: :section, include_blank: false , input_html: { class: 'cms-section-picker' }, paths: true %>
+  <%= f.input :partial_path , input_html: { class: 'cms-path-autocomplete' } %>
 <% end %>
 
 <h3>Contents</h3>
 
-<table id="subsections-container">
-  <thead>
-    <tr>
-      <td colspan="3">Drag &amp; drop <b>pages</b>, <b>sections</b> and <b>files</b> here</td>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: 'child', collection: @attached_pages %>
-    <%= render partial: 'child', collection: @attached_builtins %>
-    <%= render partial: 'child', collection: @attached_files %>
-    <%= render partial: 'child', collection: @attached_sections %>
-  </tbody>
-</table>
+<div id="subsections-container" class="pf-c-droppable">
+  <table class="pf-c-table pf-m-striped">
+    <tbody>
+      <%= render partial: 'child', collection: @attached_pages %>
+      <%= render partial: 'child', collection: @attached_builtins %>
+      <%= render partial: 'child', collection: @attached_files %>
+      <%= render partial: 'child', collection: @attached_sections %>
+    </tbody>
+  </table>
+  <div class="pf-c-hint">
+    <div class="pf-c-hint__body">
+      Drag &amp; drop <b>pages</b>, <b>sections</b> and <b>files</b> here.
+    </div>
+  </div>
+</div>
