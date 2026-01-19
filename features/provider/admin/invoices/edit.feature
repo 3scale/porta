@@ -28,7 +28,11 @@ Feature: Edit Invoice
       | Billing Period | 2005-12 |
     Then field "Billing Period" has inline error "must be between the provider account creation date and 12 months from now"
 
-  Scenario: Id is not unique
-    When the form is submitted with:
+  Scenario: Use a duplicated id
+    Given they go to invoice "2011-01-00000001" admin portal page
+    And they should not see "This invoice id is already in use"
+    When they follow "Edit"
+    And the form is submitted with:
       | ID | 2011-02-00000001 |
-    Then field "ID" has inline error "This invoice id is already in use"
+    Then a toast alert is displayed with text "Invoice was successfully updated"
+    And they should see "This invoice id is already in use"
