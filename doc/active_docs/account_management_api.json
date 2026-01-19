@@ -8524,6 +8524,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page in the paginated list. Defaults to 1.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Number of results per page. Default and max is 500.",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
