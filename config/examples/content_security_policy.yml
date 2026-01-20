@@ -41,3 +41,7 @@ test:
 
 production:
   <<: *default
+  admin_portal:
+    enabled: false
+  developer_portal:
+    enabled: false
