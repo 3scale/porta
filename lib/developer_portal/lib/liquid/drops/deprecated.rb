@@ -29,7 +29,7 @@ module Liquid
 
       extend Liquid::Drops::Wrapper
 
-      delegate :respond_to?, :inspect, :is_a?, :context, :context=, :has_key?, :nil?, :to => :@drop
+      delegate :respond_to?, :inspect, :is_a?, :context, :context=, :key?, :nil?, :to => :@drop
 
 
       class DeprecationError < StandardError

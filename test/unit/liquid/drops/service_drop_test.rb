@@ -26,11 +26,15 @@ class Liquid::Drops::ServiceDropTest < ActiveSupport::TestCase
   end
 
   test 'api_specs' do
-    api_spec = FactoryBot.create(:api_docs_service, service: @service, account: @service.account)
+    api_spec = FactoryBot.create(:api_docs_service, service: @service, account: @service.account, name: 'spec_name')
     api_specs_collection_drop = @drop.api_specs
     assert_equal 1, api_specs_collection_drop.length
     api_spec_drop = api_specs_collection_drop.first
     assert_instance_of Liquid::Drops::ApiSpec, api_spec_drop
     assert_equal api_spec.system_name, api_spec_drop.system_name
+
+    expression = '{{ service.api_specs.spec_name.system_name }}'
+    rendered = Liquid::Template.parse(expression).render('service' => @drop)
+    assert_equal "spec_name", rendered
   end
 end

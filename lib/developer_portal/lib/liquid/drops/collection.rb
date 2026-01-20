@@ -26,10 +26,9 @@ module Liquid
         find { |o| o.respond_to?(:system_name) && o.system_name == key } || super
       end
 
-      def has_key?(key)
+      def key?(key)
         any? { |o| o.respond_to?(:system_name) && o.system_name == key }
       end
-
 
       def self.name
         if drop

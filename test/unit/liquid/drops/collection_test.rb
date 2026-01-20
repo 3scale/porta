@@ -11,6 +11,20 @@ class Liquid::Drops::CollectionTest < ActiveSupport::TestCase
     assert_equal collection['my_plan'].class, Liquid::Drops::ApplicationPlan
   end
 
+  test 'key?(system_name) finds elements by system_name' do
+    collection = Liquid::Drops::Collection.for_drop(Liquid::Drops::ApplicationPlan).new(@plans)
+    assert collection.key? 'my_plan'
+    assert_not collection.key? 'not_existing_plan'
+  end
+
+  test 'fetching an element by system_name' do
+    collection = Liquid::Drops::Collection.for_drop(Liquid::Drops::ApplicationPlan).new(@plans)
+
+    expression = "{{ collection.my_plan.system_name }} - {{ collection['my_plan'].system_name }}"
+    rendered = Liquid::Template.parse(expression).render('collection' => collection)
+    assert_equal "my_plan - my_plan", rendered
+  end
+
   test 'changes name with content' do
     c = Liquid::Drops::Collection.for_drop(Liquid::Drops::ApplicationPlan).new(@plans)
     assert_match /Collection *\(ApplicationPlan\)/, c.class.name
