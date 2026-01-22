@@ -208,8 +208,9 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
           "basePath": "#{invalid_url}"
         }
       EOJSON
-      refute service.valid?
-      refute service.errors[:base_path].empty?
+      assert_not service.valid?
+      assert_equal ["invalid"], service.errors[:base_path]
+      assert_equal ["Server URL in the specification is invalid"], service.errors[:body]
     end
   end
 

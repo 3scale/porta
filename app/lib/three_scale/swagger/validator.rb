@@ -29,6 +29,7 @@ module ThreeScale
       def valid_base_path?(record)
         return true if record.specification.servers.all? { |server| server.blank? || %w[https http wss ws].include?(parse_uri(server)&.scheme) }
         record.errors.add :base_path, :invalid
+        record.errors.add :body, :invalid_base_path
         false
       end
 
