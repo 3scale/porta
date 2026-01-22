@@ -1,120 +1,53 @@
 @use "provider/colors" as *;
 @use "provider/typography" as *;
-@use 'sass:math';
+@use "sass:math";
 
-@mixin internal-potato-button($color, $bgcolor, $border-color) {
-  font-size: $font-size-base;
-  background-color: $bgcolor;
-  border-radius: $border-radius-sm;
-  display: inline-block;
-  vertical-align: top;
-  margin: 0;
-  padding: line-height-times(math.div(1,3)) line-height-times(.5) !important;
-  border: $border-width solid $border-color;
-  color: $color;
-  text-decoration: none;
-  width: auto !important;
-  min-width: line-height-times(3);
-  cursor: pointer;
-  white-space: nowrap;
-  text-align: center !important;
-  height: line-height-times(1.5);
-  line-height: $line-height-sm;
-  appearance: none;
-
-  &.big {
-    font-size: $font-size-lg;
+.button,
+a {
+  &.next {
+    float: right;
   }
-
-  &:hover {
-    color: $bgcolor;
-    background-color: transparent;
-  }
-
 }
 
-table [type='submit']:not(.action, .pf-c-button, .pf-c-dropdown__menu-item) {
-  float: right;
-
-  @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
-}
-
-table .disabled-button,
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-.disabled-button {
-  @include internal-potato-button($disabled-button-color, $disabled-button-bg-color, $disabled-button-border-color);
-
-  cursor: default;
-}
-
-.button.next,
-a.next {
-  float: right;
-}
-
-.confirm-or-cancel {
-  .button.next,
-  a.next {
-    clear: none;
-  }
-
-  .button.cancel,
-  a.cancel {
-    float: left;
-    margin-top: line-height-times(2);
-  }
-
-}
-
-form.formtastic .button-bar fieldset {
-  margin: 0;
-}
-
-// Lame but functional, improvements welcomed.
-form.formtastic .button-bar,
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
+// TODO: remove this class
 .button-bar {
   position: relative;
 
+  fieldset {
+    margin: 0;
+  }
+
   & > fieldset {
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
+    & > ol > li {
+      display: inline-block;
+    }
+
     &.actions:first-child {
       float: left;
       margin: line-height-times(.5) 0 0;
       padding: 0;
       text-align: left !important;
 
-      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
       & > ol > li {
         margin-right: var(--pf-global--spacer--sm);
       }
     }
 
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
     &.actions:last-child:not(:first-child) {
       float: right;
       margin: line-height-times(.5) 0 0;
       padding: 0;
 
-      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
       & > ol > li {
         margin-left: var(--pf-global--spacer--sm);
       }
-
-    }
-
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    & > ol > li {
-      display: inline-block;
     }
   }
-}
 
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-.formtastic .button-bar {
   display: flow-root;
 }
 
+// TODO: remove outline-button
 @mixin outline-button($color: $font-color, $border-color: $border-color) {
   color: $color;
   display: inline-block;

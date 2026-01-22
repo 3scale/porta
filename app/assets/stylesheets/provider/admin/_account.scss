@@ -1,7 +1,7 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
 @use 'provider/legacy_theme';
+@use 'utils';
 
 #account-column-wrapper {
   overflow: hidden;
@@ -22,7 +22,7 @@
 
   .overview-box {
     table.list {
-      @include white-box-shadow;
+      @include utils.white-box-shadow;
 
       margin: 1px;
 
@@ -36,7 +36,7 @@
 
     #account-redhat-connect p,
     #account-cancellation p {
-      @include white-box-shadow;
+      @include utils.white-box-shadow;
 
       margin: 1px;
     }
@@ -53,7 +53,7 @@
   margin-bottom: line-height-times(2);
 
   .info {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
   }
 
   .key {

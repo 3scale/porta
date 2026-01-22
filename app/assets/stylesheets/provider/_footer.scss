@@ -1,6 +1,6 @@
 @use 'provider/colors' as *;
 
-$footer-link-color: $osloGray;
+$footer-link-color: var(--pf-global--palette--black-500);
 $footer-link-hover-color: $link-hover-color;
 
 footer {

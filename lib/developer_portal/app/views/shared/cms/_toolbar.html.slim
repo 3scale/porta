@@ -1,6 +1,6 @@
 / Order matters! Base must go before any other pack:
 = stylesheet_packs_chunks_tag 'patternfly_base'
-= javascript_packs_with_chunks_tag 'dev_portal_cms_toolbar'
+= javascript_packs_with_chunks_tag 'pf_addons', 'dev_portal_cms_toolbar'
 
 div class="pf-c-drawer pf-m-inline #{'pf-m-expanded' unless hidden}"
   div class='pf-c-drawer__main'

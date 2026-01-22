@@ -39,7 +39,6 @@ en:
   # start documentation links
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{docs_version}/html'
-    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating_the_developer_portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'
@@ -140,6 +139,13 @@ en:
         limit_violation_reached_provider: 'Application %{name} limit violation - usage of %{message} is above %{level}%'
         weekly_report: '%{name} weekly report'
         daily_report: '%{name} daily report'
+
+  layouts:
+    provider:
+      call_to_action_html:
+        In order to be able to open a support case, please <a href="%{href}">connect your Red Hat
+        Account</a> to this 3scale account.
+
   master:
     providers:
       plans:
@@ -548,11 +554,16 @@ en:
           braintree_blue:
             destroy:
               success: Your credit card was successfully removed
+            edit:
+              error_alert: 'Your payment details could not be saved'
+              error_description: 'There were problems with the following fields:'
             invalid_merchant: Invalid merchant id
             hosted_success:
               billing_address_error: Something went wrong and billing information could not be stored
               credit_card_error: Credit Card details could not be stored
               success: Credit card details were successfully stored
+            show:
+              add_payment_details: Add payment details
 
           update:
             success: Credit card details were successfully stored

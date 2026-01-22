@@ -3,7 +3,7 @@
   = stylesheet_link_tag 'provider/admin/dashboard'
 
 - content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'dashboard'
+  = javascript_packs_with_chunks_tag 'dashboard', 'pf_spacing'
 
 - if Features::QuickstartsConfig.enabled?
   button class="pf-c-button pf-m-primary pf-c-button__float-button" type="button"

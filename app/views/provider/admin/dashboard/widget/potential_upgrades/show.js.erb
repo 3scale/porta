@@ -1,0 +1,11 @@
+(function () {
+  const container = document.getElementById(<%= json widget.id %>);
+  container.innerHTML = ''; <%# Removes spinner %>
+
+  $(container).append(<%= json widget.render %>);
+
+  <% if widget.chart.presence %>
+    const chartData = JSON.parse('<%= json widget.chart %>');
+    ThreeScale.renderChartWidget(<%= json widget.id %>, chartData);
+  <% end %>
+})();

@@ -1,9 +1,9 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
 @use 'provider/typography' as *;
+@use 'utils';
 
 #liquid-docs {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   padding: line-height-times(1);
 

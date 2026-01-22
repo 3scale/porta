@@ -1,7 +1,7 @@
 @use 'provider/colors' as *;
-@use 'provider/layouts/main' as *;
+@use 'provider/legacy_theme' as *; /* TODO: remove */
 @use 'provider/typography' as *;
-@use 'provider/legacy_theme';
+@use 'utils';
 @use 'sass:math';
 
 .button-to.action.new.service {
@@ -39,7 +39,7 @@
   .listing {
     clear: left;
     list-style: none;
-    background-color: $white;
+    background-color: white;
     padding: line-height-times(1);
     border: $border-width solid $border-color;
     position: relative;
@@ -148,7 +148,7 @@
   .application-plans,
   #mini-charts {
     @extend .listing;
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
 
     border: 0;
   }

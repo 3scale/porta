@@ -74,16 +74,16 @@
               td role="cell" data-label="State" class="state"
                 = account_states_info(account)
               td role="cell" class="pf-c-table__action actions operations"
-                ul.Actions
+                ul
                   - if account.admin_user.try!(:pending?)
-                    li.Actions-item
+                    li
                       = link_to_activate_buyer_user(account.admins.first)
                   - elsif account.pending?
-                    li.Actions-item
+                    li
                       = action_link_to 'approve', approve_admin_buyers_account_path(account),
                                                   method: :post
                   - elsif can? :impersonate, account
-                    li.Actions-item
+                    li
                       = link_to "Act as", admin_buyers_account_impersonation_path(account),
                                           method: :post,
                                           target: '_blank',
