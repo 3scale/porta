@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody role="rowgroup">
-          <%= render 'payment_transaction', collection: @invoice.payment_transactions %>
+          <%= render partial: 'provider/admin/shared/invoices/payment_transaction', collection: @invoice.payment_transactions %>
         </tbody>
       <% else %>
         <tr role="row">

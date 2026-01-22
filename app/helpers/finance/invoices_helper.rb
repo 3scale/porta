@@ -56,7 +56,7 @@ module Finance::InvoicesHelper
   end
 
   def allow_edit?
-    !@invoice.buyer_account.nil?
+    @invoice.buyer_account.present?
   end
 
   private
