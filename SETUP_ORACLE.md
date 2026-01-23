@@ -4,8 +4,15 @@
 
 Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and install basic and SDK RPMs like this:
 
+On Fedora 43, because of required file digests, for version 19 you need:
 ```
-sudo dnf install https://download.oracle.com/otn_software/linux/instantclient/1918000/oracle-instantclient19.18-basic-19.18.0.0.0-2.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/1918000/oracle-instantclient19.18-devel-19.18.0.0.0-2.x86_64.rpm
+sudo dnf install -y libnsl
+sudo rpm -ivh --nodigest --nofiledigest https://download.oracle.com/otn_software/linux/instantclient/1930000/oracle-instantclient19.30-basic-19.30.0.0.0-1.el9.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/1930000/oracle-instantclient19.30-devel-19.30.0.0.0-1.x86_64.rpm
+```
+
+Earlier can do with dnf only:
+```
+sudo dnf install https://download.oracle.com/otn_software/linux/instantclient/1930000/oracle-instantclient19.30-basic-19.30.0.0.0-1.el9.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/1930000/oracle-instantclient19.30-devel-19.30.0.0.0-1.x86_64.rpm
 ```
 
 If you wish, you can also install SQLPLus client from same location as well.
