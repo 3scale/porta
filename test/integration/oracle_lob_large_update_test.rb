@@ -67,23 +67,42 @@ class OracleLobLargeUpdateTest < ActiveSupport::TestCase
     assert_equal large_binary_data, retrieved_value,"Updated service_ids should match new binary data"
   end
 
-  # practical max is 2GB - 8 bytes; can be increased with a OCI8::BLOB and CLOB fixes to write big data in chunks
-  test "update CLOB with multiple sizes to verify across internal thresholds" do
+  test "test large blobs inline quoting" do
     sizes = [
-      3.kilobytes,   # Smaller than Oracle VARCHAR2 limit
-      31.kilobytes,  # Larger than standard VARCHAR2, within EXTENDED limit
-      256.kilobytes  # Large size
+      15.kilobytes,  # within EXTENDED limit
+      160.kilobytes  # Large size
     ]
 
     sizes.each do |size|
-      large_data = generate_large_policies_config(size)
+      inline_data = Random.bytes(size)
+      blob_data = ActiveModel::Type::Binary::Data.new(inline_data)
+      ActiveRecord::Base.connection_pool.with_connection do |conn|
+        quoted = conn.quote(blob_data)
+        conn.execute("INSERT INTO member_permissions (id, service_ids) VALUES (member_permissions_seq.nextval, #{quoted})")
+        res =  conn.uncached { conn.select_all("SELECT service_ids FROM member_permissions") }
+        assert_equal inline_data, res.first["service_ids"]
+        conn.exec_delete("DELETE member_permissions")
+      end
+    end
+  end
 
-      # Update using ActiveRecord (this will trigger write_lobs)
-      @proxy.policies_config = large_data
-      @proxy.save!
+  # practical max is 2GB - 8 bytes; can be increased with a OCI8::BLOB and CLOB fixes to write big data in chunks
+  test "test large CLOBs inline quoting" do
+    sizes = [
+      8.kilobytes - 1,  # VARCHAR2 within EXTENDED limit
+      160.kilobytes  # Large size
+    ]
 
-      actual_policy = @proxy.reload.policies_config
-      assert_includes actual_policy, OpenStruct.new(JSON.parse(large_data).first)
+    sizes.each do |size|
+      description = "\u20AC" * size # 3 bytes character because we use UTF8 instead of AL32UTF8
+      # description = "\u{1F600}" * size # 3 bytes character because we use UTF8 instead of AL32UTF8
+      large_data = ActiveRecord::Type::OracleEnhanced::Text::Data.new(description)
+      conn = ActiveRecord::Base.connection
+      quoted = conn.quote(large_data)
+      conn.execute("update services SET description = #{quoted} where id=#{@service.id}")
+
+      actual_description = @service.reload.description
+      assert_equal description, actual_description, "CLOB size #{size} did not match"
     end
   end
 
