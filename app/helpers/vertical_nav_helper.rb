@@ -205,7 +205,7 @@ module VerticalNavHelper
 
     if can_manage_plans || can?(:manage, :policy_registry)
       # do not show out of date icon if the user can't promote (i.e. can't manage plans)
-      out_of_date = can_manage_plans ? has_out_of_date_configuration?(@service) : nil
+      out_of_date = can_manage_plans ? out_of_date_config?(@service) : nil
       sections << {id: :integration, title: 'Integration', items: service_integration_items, outOfDateConfig: out_of_date }
     end
 
@@ -245,7 +245,7 @@ module VerticalNavHelper
   def service_integration_items
     items = []
     if can?(:manage, :plans)
-      items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
+      items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: out_of_date_config?(@service)}
       items << {id: :methods_metrics,     title: 'Methods and Metrics', path: admin_service_metrics_path(@service)}
       items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
     end
@@ -277,6 +277,14 @@ module VerticalNavHelper
     sections << {id: :activedocs, title: 'ActiveDocs', path: admin_api_docs_services_path} if can? :manage, :partners
     sections << {id: :alerts,     title: 'Alerts',     path: admin_alerts_path }           if can?(:manage, :monitoring) && current_user.multiple_accessible_services?
     sections
+  end
+
+  private
+
+  def out_of_date_config?(service)
+    return false unless service
+
+    service.pending_affecting_changes?
   end
 end
 

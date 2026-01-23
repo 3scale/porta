@@ -20,15 +20,16 @@
       <th role="columnheader" scope="col">Download</th>
       <th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
         <%= fancy_link_to('Create invoice', admin_buyers_account_invoices_path(@account),
-                          :method => :post, :class => 'new',
-                          :disabled => create_invoice_disabled(@account)) -%>
+                                            method: :post,
+                                            class: 'new',
+                                            disabled: @account.current_invoice && t('buyers.invoices.create.open_invoice', name: @account.name)) %>
       </th>
     </tr>
   </thead>
   <tbody role="rowgroup">
     <% @invoices.each do |invoice| %>
       <%= content_tag :tr, id: dom_id(invoice), role: "row" do %>
-        <td role="cell" data-label="ID"><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice) , title: "Show #{invoice.friendly_id}" %></td>
+        <td role="cell" data-label="ID"><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice, @account) , title: "Show #{invoice.friendly_id}" %></td>
         <td role="cell" data-label="Month"><%= invoice.name %></td>
         <td role="cell" data-label="State"><%= h invoice.state %></td>
         <td role="cell" data-label="Amount"><%= price_tag(invoice.cost) %></td>
