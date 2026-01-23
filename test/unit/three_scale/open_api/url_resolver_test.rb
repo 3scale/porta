@@ -102,4 +102,31 @@ class ThreeScale::OpenApi::UrlResolverTest < ActiveSupport::TestCase
     ]
     assert_equal expected_servers, resolver.servers
   end
+
+  test 'url with variable that includes URL schema' do
+    json = <<~JSON
+      {
+        "servers": [
+          {
+            "url": "{baseURL}/some/path",
+            "variables": {
+              "baseURL": {
+                "enum": [
+                  "https://echo-api.3scale.net",
+                  "https://api.example.com"
+                ],
+                "default": "https://echo-api.3scale.net"
+              }
+            }
+          }
+        ]
+      }
+    JSON
+    resolver = UrlResolver.new(JSON.parse(json))
+    expected_servers = %w[
+      https://echo-api.3scale.net/some/path
+      https://api.example.com/some/path
+    ]
+    assert_equal expected_servers, resolver.servers
+  end
 end
