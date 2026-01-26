@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'test_helper'
 
 class ApiDocs::ServiceTest < ActiveSupport::TestCase
@@ -10,6 +11,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   attr_reader :account
+
   def teardown
     NotificationCenter.disabled = @notify
   end
@@ -374,47 +376,47 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'unsuported swaggerVersion' do
-    json = <<-EOJSON
+    json = <<~EOJSON
 
-{
-   "resourcePath" : "/api/v1/dataset",
-   "apiVersion" : "0.1",
-   "swaggerVersion" : "1.1",
-   "apis" : [
       {
-         "operations" : [
+         "resourcePath" : "/api/v1/dataset",
+         "apiVersion" : "0.1",
+         "swaggerVersion" : "1.1",
+         "apis" : [
             {
-               "parameters" : [
+               "operations" : [
                   {
-                     "required" : true,
-                     "paramType" : "path",
-                     "name" : "alias",
-                     "type" : "string",
-                     "allowMultiple" : false,
-                     "description" : "Dataset ID"
-                  },
-                  {
-                     "required" : true,
-                     "paramType" : "body",
-                     "name" : "ignored",
-                     "type" : "string",
-                     "allowMultiple" : false,
-                     "description" : "Ignored body",
-                     "defaultValue" : "{}"
+                     "parameters" : [
+                        {
+                           "required" : true,
+                           "paramType" : "path",
+                           "name" : "alias",
+                           "type" : "string",
+                           "allowMultiple" : false,
+                           "description" : "Dataset ID"
+                        },
+                        {
+                           "required" : true,
+                           "paramType" : "body",
+                           "name" : "ignored",
+                           "type" : "string",
+                           "allowMultiple" : false,
+                           "description" : "Ignored body",
+                           "defaultValue" : "{}"
+                        }
+                     ],
+                     "authorizations" : {},
+                     "httpMethod" : "DELETE",
+                     "summary" : "Remove a dataset alias",
+                     "nickname" : "removeAlias",
+                     "type" : "void"
                   }
                ],
-               "authorizations" : {},
-               "httpMethod" : "DELETE",
-               "summary" : "Remove a dataset alias",
-               "nickname" : "removeAlias",
-               "type" : "void"
+               "path" : "/api/v1/dataset/dataset/alias/{alias}"
             }
          ],
-         "path" : "/api/v1/dataset/dataset/alias/{alias}"
+         "basePath" : "https://connect-staging.simacan.com"
       }
-   ],
-   "basePath" : "https://connect-staging.simacan.com"
-}
     EOJSON
 
     service = account.api_docs_services.new name: 'Le My-my API', body: json
@@ -428,46 +430,46 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
 
   test 'valid swagger spec' do
 
-    json = <<-EOJSON
-{
-   "resourcePath" : "/api/v1/dataset",
-   "apiVersion" : "0.1",
-   "swaggerVersion" : "1.2",
-   "apis" : [
+    json = <<~EOJSON
       {
-         "operations" : [
+         "resourcePath" : "/api/v1/dataset",
+         "apiVersion" : "0.1",
+         "swaggerVersion" : "1.2",
+         "apis" : [
             {
-               "parameters" : [
+               "operations" : [
                   {
-                     "required" : true,
-                     "paramType" : "path",
-                     "name" : "alias",
-                     "type" : "string",
-                     "allowMultiple" : false,
-                     "description" : "Dataset ID"
-                  },
-                  {
-                     "required" : true,
-                     "paramType" : "body",
-                     "name" : "ignored",
-                     "type" : "string",
-                     "allowMultiple" : false,
-                     "description" : "Ignored body",
-                     "defaultValue" : "{}"
+                     "parameters" : [
+                        {
+                           "required" : true,
+                           "paramType" : "path",
+                           "name" : "alias",
+                           "type" : "string",
+                           "allowMultiple" : false,
+                           "description" : "Dataset ID"
+                        },
+                        {
+                           "required" : true,
+                           "paramType" : "body",
+                           "name" : "ignored",
+                           "type" : "string",
+                           "allowMultiple" : false,
+                           "description" : "Ignored body",
+                           "defaultValue" : "{}"
+                        }
+                     ],
+                     "authorizations" : {},
+                     "method" : "DELETE",
+                     "summary" : "Remove a dataset alias",
+                     "nickname" : "removeAlias",
+                     "type" : "void"
                   }
                ],
-               "authorizations" : {},
-               "method" : "DELETE",
-               "summary" : "Remove a dataset alias",
-               "nickname" : "removeAlias",
-               "type" : "void"
+               "path" : "/api/v1/dataset/dataset/alias/{alias}"
             }
          ],
-         "path" : "/api/v1/dataset/dataset/alias/{alias}"
+         "basePath" : "https://connect-staging.simacan.com"
       }
-   ],
-   "basePath" : "https://connect-staging.simacan.com"
-}
     EOJSON
 
     service = account.api_docs_services.new name: 'my API', body: json
