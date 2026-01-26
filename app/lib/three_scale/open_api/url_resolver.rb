@@ -17,7 +17,7 @@ module ThreeScale
         end.flatten
       end
 
-      # By default, the variable values are URL-encoded. The purpose of this processor is 
+      # By default, the variable values are URL-encoded. The purpose of this processor is
       # to skip URL-encoding, so that URL can be used in the variable, e.g.
       #   "servers": [
       #     {
@@ -30,8 +30,8 @@ module ThreeScale
       #     }
       #   ],
       class SkipURLEncodingProcessor
-        def self.transform(name, value)
-          return value
+        def self.transform(_, value)
+          value
         end
       end
 
