@@ -150,4 +150,8 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       raise ActiveRecord::RecordNotFound
     end
   end
+
+  def flat_params
+    super.except(:vat_rate, :id)
+  end
 end
