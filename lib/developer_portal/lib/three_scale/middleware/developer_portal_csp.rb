@@ -13,15 +13,6 @@ module ThreeScale
       def call(env)
         request = ActionDispatch::Request.new(env)
 
-        # We want to apply CSP only for HTML requests. However, we can't just return
-        # because Rails will add global CSP policy (admin portal policy) to the response
-        # if we don't do anything. We disable CSP for this request to prevent Rails middleware
-        # to interfere.
-        unless request.format.html?
-          request.content_security_policy = false
-          return @app.call(env)
-        end
-
         status, headers, _body = response = @app.call(env)
 
         # Don't apply CSP to 304 responses to avoid cache issues
