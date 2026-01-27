@@ -50,14 +50,19 @@ class DeveloperPortal::ContentSecurityPolicyTest < ActionDispatch::IntegrationTe
     end
   end
 
-  test 'does not apply CSP headers to non-HTML responses' do
+  # See https://discuss.rubyonrails.org/t/cve-2024-28103-permissions-policy-is-only-served-on-html-content-type/85948
+  test 'applies CSP headers to non-HTML responses' do
     with_test_routes do
       get '/test/csp/json', params: { format: :json }
 
       assert_response :success
-      # JSON responses should not have CSP headers
-      assert_nil response.headers['Content-Security-Policy']
-      assert_nil response.headers['Content-Security-Policy-Report-Only']
+      csp_header = response.headers['Content-Security-Policy']
+
+      # Verify it contains the permissive default_src directive from developer_portal_policy
+      assert_includes csp_header, "default-src"
+      assert_includes csp_header, "*"
+      assert_includes csp_header, "'unsafe-eval'"
+      assert_includes csp_header, "'unsafe-inline'"
     end
   end
 
