@@ -104,7 +104,8 @@ module PaymentDetailsHelper
     request&.remote_ip
   end
 
-  def boolean_status_img(enabled, opts = {})
+  # :reek:ControlParameter but it's OK
+  def boolean_status_img(enabled)
     if enabled
       '<i class="included fas fa-check-circle" title="Enabled"></i>'.html_safe
     else

@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module StatsHelper
+  # :reek:UncommunicativeVariableName
   def render_methods_pages(methods, page_size)
     result = ''
 
-    methods.each_slice(page_size).with_index do |page,i|
-      style = (i == 0) ? '' : "display:none;"
+    methods.each_slice(page_size).with_index do |page, i|
+      style = i.zero? ? '' : "display:none;"
 
-      result += content_tag( :ul, :class => 'panel', :id => "panel_#{i.to_i}", :style => style) do
-        page.inject('') do |memo,method|
-          memo + render(:partial => '/stats/method', :object => method)
-        end
+      result += content_tag(:ul, class: 'panel', id: "panel_#{i.to_i}", style: style) do
+        render_methods_panel(page)
       end
     end
 
@@ -27,5 +26,13 @@ module StatsHelper
                      name
                    end
     "Using time zone ".html_safe + name_or_link
+  end
+
+  private
+
+  def render_methods_panel(page)
+    page.inject('') do |memo,method|
+      memo + render(partial: '/stats/method', object: method)
+    end
   end
 end

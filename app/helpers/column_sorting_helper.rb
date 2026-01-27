@@ -2,8 +2,8 @@
 
 module ColumnSortingHelper
 
-  # This smells of :reek:DataClump but it is what it is
-  def th_sortable(column, title = nil, path = :url_for, opts: {}) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+  # This smells of :reek:DataClump, :reek:LongParameterList, :reek:TooManyStatements, :reek:ManualDispatch
+  def th_sortable(column, title = nil, path = :url_for, opts: {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
     title ||= column.titleize
 
     is_current_column = column.to_s == sort_column.to_s

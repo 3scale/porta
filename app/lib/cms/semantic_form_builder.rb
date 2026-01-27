@@ -45,7 +45,7 @@ module CMS
     private
 
     def object_can_be_destroyed?
-      !object.respond_to?(:can_be_destroyed?) || object.can_be_destroyed?
+      object.try(:can_be_destroyed?) != false
     end
 
     def disabled_delete_button

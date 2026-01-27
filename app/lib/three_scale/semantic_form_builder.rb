@@ -108,7 +108,8 @@ module ThreeScale
 
     private
 
-    def error_messages_for(*params) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+    # :reek:DuplicateMethodCall, :reek:FeatureEnvy, :reek:TooManyStatements
+    def error_messages_for(*params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       ignore_me = ['Account is invalid', 'Bought cinstances is invalid']
       options = params.extract_options!.symbolize_keys
 
@@ -142,7 +143,7 @@ module ThreeScale
                              locale.t :header, count: count, model: object_name
                            end
           message = options.include?(:message) ? options[:message] : locale.t(:body)
-          error_messages = objects.map {|object| object.errors.full_messages.map {|msg| content_tag(:li, msg) unless ignore_me.include?(msg) } }.join
+          error_messages = collect_error_messages(objects, ignore_me).join
 
           # rubocop:disable Rails/OutputSafety
           contents = ''
@@ -153,6 +154,12 @@ module ThreeScale
           # rubocop:enable Rails/OutputSafety
         end
       end
+    end
+
+    def collect_error_messages(objects, ignore_list)
+      all_messages = objects.flat_map { |object| object.errors.full_messages }
+      filtered_messages = all_messages.reject { |msg| ignore_list.include?(msg) }
+      filtered_messages.map { |msg| content_tag(:li, msg) }
     end
   end
 end

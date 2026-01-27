@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# :reek:TooManyStatements
+# :reek:ManualDispatch
 module DeveloperPortal::SortableHelper
   def sortable(column, title = nil, path = :url_for) # rubocop:disable Metrics/AbcSize
     title ||= column.titleize
@@ -21,18 +23,16 @@ module DeveloperPortal::SortableHelper
             { :class => css_class }
   end
 
+  ORDER_INDICATORS = {
+    asc: '▲',
+    up: '▲',
+    desc: '▼',
+    down: '▼'
+  }.freeze
+
   private
 
   def title_with_order_indicator(title, direction)
-    [h(title), order_indicator_for(direction)].compact.join(' ').html_safe
-  end
-
-  def order_indicator_for(order)
-    case order&.to_sym
-    when :asc, :up
-      '&#9650;'
-    when :desc, :down
-      '&#9660;'
-    end
+    safe_join([title, ORDER_INDICATORS[direction&.to_sym]].compact, ' ')
   end
 end
