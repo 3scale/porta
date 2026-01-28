@@ -26,7 +26,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 3.1.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 18](https://nodejs.org/download/release/v18.20.4/)**. To install them with `asdf` run:
+The project supports **[ruby 3.3.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 18](https://nodejs.org/download/release/v18.20.4/)**. To install them with `asdf` run:
 
 ```
 asdf plugin add ruby
