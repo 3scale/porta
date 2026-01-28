@@ -128,4 +128,10 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   def can_create
     head :forbidden unless current_account.can_create_user?
   end
+
+  private
+
+  def flat_params
+    super.except(:id)
+  end
 end
