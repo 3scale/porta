@@ -210,6 +210,7 @@ class Authentication::Strategy::OAuth2Test < ActiveSupport::TestCase
 
   class SsoSignupTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
+    include ActionMailer::TestHelper
 
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
@@ -319,19 +320,21 @@ class Authentication::Strategy::OAuth2Test < ActiveSupport::TestCase
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       assert_difference(User.method(:count), +1) do
-        result = authentication_strategy.authenticate({
-                                                        system_name: authentication_provider.system_name,
-                                                        code: '1234',
-                                                        request: mock_request,
-                                                        invitation: invitation
-                                                      }, procedure: Authentication::Strategy::OAuth2::CreateInvitedUser)
+        # Assert no emails are sent when creating an invited user (they're auto-activated)
+        assert_no_emails do
+          result = authentication_strategy.authenticate({
+                                                          system_name: authentication_provider.system_name,
+                                                          code: '1234',
+                                                          request: mock_request,
+                                                          invitation: invitation
+                                                        }, procedure: Authentication::Strategy::OAuth2::CreateInvitedUser)
 
-        assert_instance_of User, result
-        assert_equal result.email, user_data[:email]
-        assert_equal result.username, user_data[:username]
-        assert result.active?
-        assert authentication_strategy.error_message.blank?
-        assert_not_match 'confirmation', ActionMailer::Base.deliveries.last
+          assert_instance_of User, result
+          assert_equal result.email, user_data[:email]
+          assert_equal result.username, user_data[:username]
+          assert result.active?
+          assert authentication_strategy.error_message.blank?
+        end
       end
     end
 
