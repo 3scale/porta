@@ -29,7 +29,6 @@ module Authentication
       def authenticate_with_username_and_password username_or_email, password
         user = users.find_by_username_or_email username_or_email
         if user && user.authenticated?(password)
-          user.transparently_migrate_password(password)
           user if can_login?(user)
         else
           @error_message = invalid_credentials_message
