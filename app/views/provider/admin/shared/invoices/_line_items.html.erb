@@ -27,7 +27,8 @@
       </thead>
 
       <tbody role="rowgroup">
-        <%= render :partial => '/finance/provider/shared/line_item', :collection => @invoice.line_items, :locals => { :editable => editable } %>
+        <%= render partial: 'provider/admin/shared/invoices/line_item', collection: @invoice.line_items,
+                                                                        locals: { editable: } %>
       </tbody>
 
       <tfoot>

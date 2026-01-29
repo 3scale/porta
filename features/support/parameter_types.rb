@@ -497,3 +497,21 @@ ParameterType(
   regexp: /|default|info|success|warning|danger/,
   transformer: ->(type) { type || 'default' }
 )
+
+ParameterType(
+  name: 'invoice',
+  regexp: /invoice "([^"]*)"/,
+  transformer: ->(friendly_id) do
+    Invoice.find_by!(friendly_id:)
+  end
+)
+
+ParameterType(
+  name: 'table',
+  regexp: /the table|table "(.*)"/,
+  transformer: ->(id) do
+    return find('table') if id.nil?
+
+    find("table[id='#{id}'], table[aria-label='#{id}']")
+  end
+)

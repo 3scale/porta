@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 # TODO: differentiate this for buyer and provider
 module Finance::InvoicesHelper
-
   def mark_if_deleted(object, name)
     if object.nil?
       content_tag(:span, '(deleted)', :class => 'deleted')
@@ -13,7 +14,7 @@ module Finance::InvoicesHelper
 
   def account_header_optional_field(name, account)
     value = account.send(name)
-    return unless value.present?
+    return if value.blank?
 
     content_tag :tr do
       row =  content_tag :th, name.to_s.humanize
@@ -22,20 +23,18 @@ module Finance::InvoicesHelper
     end
   end
 
-  def current_invoice_link(buyer)
-    link_to 'Current invoice',
-            admin_finance_account_invoice_path(buyer, buyer.current_invoice.to_param),
-            :title => "Current invoice for #{h(buyer.org_name)}"
-  end
-
   def invoice_action_button(name, action, modifier)
-    fancy_button_to(name, send("#{action}_admin_finance_invoice_path", @invoice.id, format: :js),
-                          method: :put,
-                          remote: true,
-                          class: "pf-c-button pf-m-#{modifier}",
-                          confirm: t('.confirm'))
+    content_tag(:div, class: 'pf-c-action-list__item') do
+      fancy_button_to(name, send("#{action}_admin_finance_invoice_path", @invoice.id),
+                            method: :put,
+                            class: "pf-c-button pf-m-#{modifier}",
+                            confirm: t(".#{action}.confirm"))
+    end
   end
 
+  def generate_button_name
+    @invoice.pdf.file? ? t('.generate_pdf.button_re') : t('.generate_pdf.button')
+  end
 
   def invoice_pdf_link(invoice, options = {})
     label = options.delete(:label) || 'Download PDF'
@@ -56,6 +55,10 @@ module Finance::InvoicesHelper
 
   def years_by_provider(provider)
     Invoice.years_by_provider(provider.id).presence || [(ActiveSupport::TimeZone.new(provider.timezone) || Time.zone).now.year]
+  end
+
+  def allow_edit?
+    @invoice.buyer_account.present?
   end
 
   private

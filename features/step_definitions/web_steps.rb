@@ -140,6 +140,12 @@ And "confirm the dialog" do
   accept_confirm
 end
 
+# Assert some elements are included in a description list.
+#
+#  Then they should see the following details:
+#    | Phone number | 666-555-444 |
+#    | UUID         | 123         |
+#
 Then "(they )should see the following details(:)" do |table|
   table.rows_hash.all? do |key, value|
     dt = find('dl dt', text: key)

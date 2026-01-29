@@ -1,7 +1,5 @@
 <%
-  html = render(:partial => '/finance/provider/shared/line_item',
-                :object => @line_item,
-                :locals => { :editable => true })
+  html = render('/provider/admin/shared/invoices/line_item', line_item: @line_item, editable: true)
 %>
 
 void function () {

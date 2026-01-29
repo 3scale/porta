@@ -1,12 +1,3 @@
-<% content_for :javascripts do %>
-  <%= javascript_packs_with_chunks_tag 'invoices_show' %>
-<% end %>
-
-<%= render '/finance/provider/shared/invoice_title', invoice: @invoice %>
-
-<div class="pf-l-grid pf-m-gutter">
-  <%= render :partial => '/finance/provider/shared/invoice_header', :locals => { :editable => allow_edit?, edit_link_scope: [:finance] } %>
-  <%= render :partial => '/finance/provider/shared/line_items', :locals => { :editable => allow_edit? } %>
-  <%= render :partial => '/finance/provider/shared/payment_transactions' %>
-  <%= render :partial => '/finance/provider/invoices/actions' %>
-</div>
+<%= render 'provider/admin/shared/invoices/show', edit_link_scope: [:finance],
+                                                  editable: allow_edit?,
+                                                  actionable: true %>

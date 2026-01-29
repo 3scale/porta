@@ -1,0 +1,14 @@
+<%# TODO: move this to CanCan %>
+<% if @invoice.buyer %>
+  <div id="invoice_actions" class="pf-c-action-list">
+    <div class="pf-c-action-list__group">
+      <%= invoice_action_button(generate_button_name, :generate_pdf, :primary) %>
+      <%= invoice_action_button(t('.issue.button'),   :issue,        :primary) if @invoice.state_events.include?(:issue) %>
+      <%= invoice_action_button(t('.charge.button'),  :charge,       :primary) if @invoice.state_events.include?(:pay) %>
+      <%= invoice_action_button(t('.pay.button'),     :pay,          :primary) if @invoice.state_events.include?(:pay) %>
+    </div>
+    <div class="pf-c-action-list__group">
+      <%= invoice_action_button(t('.cancel.button'),  :cancel,       :danger)  if @invoice.state_events.include?(:cancel) %>
+    </div>
+  </div>
+<% end %>
