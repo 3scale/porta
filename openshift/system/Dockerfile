@@ -1,7 +1,7 @@
 FROM quay.io/centos/centos:stream9 as builder
 WORKDIR /opt/system
 ENV RUBY_MAJOR_VERSION=3 \
-    RUBY_MINOR_VERSION=1 \
+    RUBY_MINOR_VERSION=3 \
     RAILS_ENV=production \
     NODE_ENV=production
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}"
@@ -39,7 +39,7 @@ FROM quay.io/centos/centos:stream9 AS base
 USER root
 
 ENV RUBY_MAJOR_VERSION=3 \
-    RUBY_MINOR_VERSION=1 \
+    RUBY_MINOR_VERSION=3 \
     RAILS_ENV=production \
     SAFETY_ASSURED=1 \
     TZ=:/etc/localtime \
