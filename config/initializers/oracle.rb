@@ -2,7 +2,7 @@
 
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
-    require 'arel/visitors/oracle12_hack'
+    require 'arel/visitors/oracle12_hack' || next # once done, we can skip setup
 
     # in 6.0.6 automatic detection of max identifier length was introduced
     # see https://github.com/rsim/oracle-enhanced/pull/1703
@@ -30,9 +30,96 @@ ActiveSupport.on_load(:active_record) do
       end
     end)
 
-    ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8'
+    # clean-up prepared statements/cursors on connection return to pool
+    module OracleStatementCleanup
+      def self.included(base)
+        base.set_callback :checkin, :after, :close_and_clear_statements
+      end
+
+      def close_and_clear_statements
+        @statements&.clear
+      end
+    end
+
+    ActiveRecord::Base.skip_callback(:update, :after, :enhanced_write_lobs)
+
+    # For more information see https://github.com/rsim/oracle-enhanced/pull/2483
+    module OracleEnhancedSmartQuoting
+      SQL_UTF8_CHUNK_CHARS = 8191 # (32767÷4), 4 bytes max character; 1000 without MAX_STRING_SIZE=EXTENDED
+      BLOB_INLINE_LIMIT = 16383 # (32767÷2) 2000 without MAX_STRING_SIZE=EXTENDED
+      PLSQL_BASE64_CHUNK_SIZE = 24_573
+
+      def quote(value)
+        case value
+        when ActiveModel::Type::Binary::Data
+          data = value.to_s
+          if data.empty?
+            "empty_blob()"
+          elsif data.bytesize <= BLOB_INLINE_LIMIT
+            "to_blob(hextoraw('#{data.unpack1('H*')}'))"
+          else
+            quote_blob_as_subquery(data)
+          end
+        when ActiveRecord::Type::OracleEnhanced::Text::Data
+          text = value.to_s
+          text.empty? ? "empty_clob()" :
+            value.to_s.scan(/.{1,#{SQL_UTF8_CHUNK_CHARS}}/m)
+                 .map { |chunk| "to_clob('#{quote_string(chunk)}')" }
+                 .join(" || ")
+        else
+          super
+        end
+      end
+
+      # Generate a scalar subquery with PL/SQL function to build large BLOBs.
+      # Uses DBMS_LOB.WRITEAPPEND with base64-encoded chunks for efficiency.
+      # Testing showed hextoraw() unusable for being more than 100x slower.
+      def quote_blob_as_subquery(data)
+        out = +""
+        out << "(\n"
+        out << "  WITH FUNCTION make_blob RETURN BLOB IS\n"
+        out << "    l_blob BLOB;\n"
+        out << "  BEGIN\n"
+        out << "    DBMS_LOB.CREATETEMPORARY(l_blob, TRUE, DBMS_LOB.CALL);\n"
+        offset = 0
+        while offset < data.bytesize
+          chunk = data.byteslice(offset, PLSQL_BASE64_CHUNK_SIZE)
+          out << "    DBMS_LOB.WRITEAPPEND(l_blob, "
+          out << chunk.bytesize.to_s
+          out << ", UTL_ENCODE.BASE64_DECODE(UTL_RAW.CAST_TO_RAW('"
+          out << [chunk].pack("m0") # Base64 encoding without newlines
+          out << "')));\n"
+          offset += PLSQL_BASE64_CHUNK_SIZE
+        end
+        out << "    RETURN l_blob;\n"
+        out << "  END;\n"
+        out << "  SELECT make_blob() FROM dual\n"
+        out << ")"
+        out
+      end
+    end
+
+    # this is also needed for inline quoting of large BLOBs work
+    module OracleEnhancedSmartQuotingPreprocess
+      # Add /*+ WITH_PLSQL */ hint for INSERT/UPDATE statements containing
+      # PL/SQL function definitions. Oracle requires this hint for DML
+      # statements that use PL/SQL in a WITH clause.
+      # in Rails 8.0 this method was renamed to preprocess_query(sql)
+      def transform_query(sql)
+        sql = super
+        if sql =~ /\A\s*(INSERT|UPDATE)\b(?=.*\bBEGIN\b)/im
+          sql = sql.sub($1, "#{$1} /*+ WITH_PLSQL */")
+        end
+        sql
+      end
+    end
+
+    ActiveRecord::ConnectionAdapters::OracleEnhanced::DatabaseStatements.prepend OracleEnhancedSmartQuotingPreprocess
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      include OracleStatementCleanup
+      prepend OracleEnhancedSmartQuoting
+
       # Fixing OCIError: ORA-01741: illegal zero-length identifier
       # because of https://github.com/rails/rails/commit/c18a95e38e9860953236aed94c1bfb877fa3be84
       # the value of `columns` is  [ "\"ACCOUNTS\".\"ID\"" ] which forms an incorrect query
@@ -65,24 +152,6 @@ ActiveSupport.on_load(:active_record) do
           end
         end
 
-        # We need to patch Oracle Adapter quoting to actually serialize CLOB columns.
-        # https://github.com/rsim/oracle-enhanced/issues/1588#issue-272289146
-        # The default behaviour is to serialize them to 'empty_clob()' basically wiping out the data.
-        # The team behind it believes `Table.update_all(column: 'text')`
-        # should wipe all your data in that column: https://github.com/rsim/oracle-enhanced/issues/1588#issuecomment-343353756
-        # So we try to convert the text to using `to_clob` function.
-        def _quote(value)
-          case value
-          when ActiveModel::Type::Binary::Data
-            # I know this looks ugly, but that just modified copy paste of what the adapter does (minus the rescue).
-            # It is a bit improved in next version due to ActiveRecord Attributes API.
-            %{to_blob(#{quote(value.to_s)})}
-          when ActiveRecord::Type::OracleEnhanced::Text::Data
-            %{to_clob(#{quote(value.to_s)})}
-          else
-            super
-          end
-        end
       end)
     end
 
@@ -144,12 +213,12 @@ ActiveSupport.on_load(:active_record) do
             return default.new(model) if default
 
             adapter = adapter_type_for(model)
-            klass   = case adapter
-                      when :oracle
-                        ThinkingSphinx::ActiveRecord::DatabaseAdapters::OracleAdapter
-                      else
-                        super
-                      end
+            klass = case adapter
+                    when :oracle
+                      ThinkingSphinx::ActiveRecord::DatabaseAdapters::OracleAdapter
+                    else
+                      super
+                    end
             klass.new model
           end
 
@@ -178,10 +247,10 @@ ActiveSupport.on_load(:active_record) do
       # delta column being within the threshold. In the latter's case, no condition
       # is needed, so nil is returned.
       def clause(*args)
-        model    = (args.length >= 2 ? args[0] : nil)
+        model = (args.length >= 2 ? args[0] : nil)
         is_delta = (args.length >= 2 ? args[1] : args[0]) || false
 
-        table_name  = (model.nil? ? adapter.quoted_table_name   : model.quoted_table_name)
+        table_name = (model.nil? ? adapter.quoted_table_name : model.quoted_table_name)
         column_name = (model.nil? ? adapter.quote(@column.to_s) : model.connection.quote_column_name(@column.to_s))
 
         if is_delta
@@ -273,5 +342,25 @@ ActiveSupport.on_load(:active_record) do
     end
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend OracleEnhancedAdapterSchemaIssue2276
+
+    # see https://github.com/kubo/ruby-oci8/pull/271
+    module OCI8DisableArrayFetch
+      private
+
+      def define_one_column(pos, param)
+        @fetch_array_size = nil # disable memory array fetching anytime
+        super # call original
+      end
+    end
+
+    OCI8::Cursor.prepend(OCI8DisableArrayFetch)
+
+    # see https://github.com/kubo/ruby-oci8/pull/271
+    # Enable piecewise retrieval for both CLOBs and BLOBs
+    # With the OCIConnectionCursorLobFix above, we can safely use both mappings
+    # because LOBs are bound as OCI8::CLOB/BLOB objects, not LONG data
+    # Note: disable temporary for issues with NLS_LANG=AMERICAN_AMERICA.UTF8
+    # OCI8::BindType::Mapping[:clob] = OCI8::BindType::Long
+    # OCI8::BindType::Mapping[:blob] = OCI8::BindType::LongRaw
   end
 end
