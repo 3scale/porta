@@ -119,7 +119,7 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
       currentAccount: current_account.name,
       currentUser: current_user.decorate.display_name,
       documentationMenuItems: documentation_items.as_json,
-      impersonating: impersonating?,
+      impersonating: current_user.impersonation_admin? && !current_account.master?,
       signOutHref: provider_logout_path,
       verticalNavHidden: vertical_nav_hidden?
     }

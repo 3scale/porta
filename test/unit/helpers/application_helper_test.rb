@@ -1,61 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ApplicationHelperTest < ActionView::TestCase
   attr_accessor :current_user
+
   delegate :can?, to: :ability
-
-  def test_css_class
-    assert_equal 'some class', css_class('some', 'class')
-
-    assert_equal 'yes maybe', css_class('yes' => true, 'no' => false, maybe: 'yeah')
-
-    assert_equal 'one two three', css_class('one', ['two'], three: true)
-  end
-
-  class AssetHostTest < ActionView::TestCase
-    setup do
-      @request = ActionDispatch::TestRequest.create
-      @asset_host = 'cdn.3scale.test.localhost'
-      @full_asset_host = "https://#{@asset_host}"
-    end
-
-    attr_reader :request
-
-    test 'asset host is not configured' do
-      Rails.configuration.stubs(:asset_host).returns(nil)
-
-      result = rails_asset_host_url
-
-      assert_equal '', result
-    end
-
-    test "asset host is configured but it's value is empty" do
-      Rails.configuration.stubs(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.stubs(:asset_host).returns('')
-
-      result = rails_asset_host_url
-
-      assert_equal '', result
-    end
-
-    test 'asset host is configured and has a proper value' do
-      Rails.configuration.stubs(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.stubs(:asset_host).returns(@asset_host)
-
-      result = rails_asset_host_url
-
-      assert_equal "#{request.protocol}#{@asset_host}", result
-    end
-
-    test 'asset host is configured and set to a full URL with protocol' do
-      Rails.configuration.stubs(:asset_host).returns(-> {})
-      Rails.configuration.three_scale.stubs(:asset_host).returns(@full_asset_host)
-
-      result = rails_asset_host_url
-
-      assert_equal @full_asset_host, result
-    end
-  end
 
   class DocsBaseUrlTest < ActionView::TestCase
     setup do

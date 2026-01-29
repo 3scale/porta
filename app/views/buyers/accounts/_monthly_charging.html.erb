@@ -22,8 +22,11 @@
   </tr>
 
   <% if can?(:manage, :charging) -%>
-   <tr>
-      <td colspan="2"><%= credit_card_stored_status(account)%> </td>
+    <tr>
+      <td colspan="2">
+        <%= boolean_status_img(account.credit_card_stored?) %>
+        <%= credit_card_stored_status(account)%>
+      </td>
     </tr>
 
     <%

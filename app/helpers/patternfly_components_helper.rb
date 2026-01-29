@@ -101,4 +101,12 @@ module PatternflyComponentsHelper
       end
     end
   end
+
+  def pf_nav_item(text, url)
+    content_tag 'li', class: 'pf-c-nav__item' do
+      link_to_unless_current text, url, class: 'pf-c-nav__link' do |active_text|
+        content_tag 'a', active_text, class: 'pf-c-nav__link pf-m-current', 'aria-current': 'page'
+      end
+    end
+  end
 end

@@ -42,7 +42,7 @@ class VerticalNavHelperTest < ActionView::TestCase
       @service= FactoryBot.create(:service)
 
       # if permitted
-      VerticalNavHelperTest::ProviderTest.any_instance.stubs(:has_out_of_date_configuration?).returns(false)
+      VerticalNavHelperTest::ProviderTest.any_instance.stubs(:out_of_date_config?).returns(false)
       assert_equal(["Product Overview", "Analytics", "Applications", "ActiveDocs", "Integration"], service_nav_sections.pluck(:title))
 
       # if not permitted

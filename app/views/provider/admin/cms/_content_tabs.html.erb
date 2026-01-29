@@ -30,7 +30,7 @@
   <%= f.actions do %>
     <% if f.object.respond_to?(:destroy) %>
       <li id="cms-template-delete-button">
-        <%= can_be_destroyed?(f.object) ? f.delete_button : f.disabled_delete_button %>
+        <%= f.delete_button %>
       </li>
     <% end %>
 
