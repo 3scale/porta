@@ -15,6 +15,6 @@ module Admin::PaymentDetailsHelper
             'Credit Card details are not stored'
           end
 
-    (link_to_payment_gateway ? link_to(txt, provider_admin_account_braintree_blue_url) : txt).to_s
+    link_to_payment_gateway ? link_to(txt, provider_admin_account_braintree_blue_url) : txt
   end
 end
