@@ -988,16 +988,22 @@ en:
           actions:
             cancel:
               button: Cancel invoice
+              confirm: This will close the current invoice and mark is a cancelled. Are you sure?
             charge:
               button: Charge
-            confirm: Are you sure?
-            generate:
+              confirm: The organization's credit card will be charged. Continue?
+            generate_pdf:
               button: Generate PDF
               button_re: Regenerate PDF
+              confirm: This will generate a PDF document of the current invoice. Continue?
             issue:
               button: Issue invoice
+              confirm:
+                This will mark the invoice as pending and you won't be able to add any more items to
+                the current invoice. Are you sure?
             pay:
               button: Mark as paid
+              confirm: Are you sure?
 
   buyers:
     account_contracts:

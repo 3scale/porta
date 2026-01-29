@@ -24,14 +24,16 @@ module Finance::InvoicesHelper
   end
 
   def invoice_action_button(name, action, modifier)
-    fancy_button_to(name, send("#{action}_admin_finance_invoice_path", @invoice.id),
-                          method: :put,
-                          class: "pf-c-button pf-m-#{modifier}",
-                          confirm: t('.confirm'))
+    content_tag(:div, class: 'pf-c-action-list__item') do
+      fancy_button_to(name, send("#{action}_admin_finance_invoice_path", @invoice.id),
+                            method: :put,
+                            class: "pf-c-button pf-m-#{modifier}",
+                            confirm: t(".#{action}.confirm"))
+    end
   end
 
   def generate_button_name
-    @invoice.pdf.file? ? t('.generate.button_re') : t('.generate.button')
+    @invoice.pdf.file? ? t('.generate_pdf.button_re') : t('.generate_pdf.button')
   end
 
   def invoice_pdf_link(invoice, options = {})
