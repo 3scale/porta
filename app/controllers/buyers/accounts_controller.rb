@@ -26,14 +26,14 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def new
     @buyer = current_account.buyers.build
-    @user  = @buyer.users.build_with_fields :role => :admin
+    @user  = @buyer.users.build_with_fields
   end
 
   def update
     vat = account_params[:vat_rate]
     account.vat_rate = vat if vat # vat_rate is protected attribute
 
-    if account.update(account_params)
+    if account.update(account_params.except(:vat_rate))
       redirect_to admin_buyers_account_path(account), success: t('.success')
     else
       render :edit
