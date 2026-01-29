@@ -3,8 +3,7 @@
 module Admin::PaymentDetailsHelper
   # FIXME: :reek:BooleanParameter, :reek:ControlParameter
   def credit_card_stored_status(account, link_to_payment_gateway = false) # rubocop:disable Style/OptionalBooleanParameter
-    credit_card_stored = account.credit_card_stored?
-    txt = if credit_card_stored
+    txt = if account.credit_card_stored?
             ccexp = l account.credit_card_expires_on_with_default, format: :month
 
             if current_account.payment_gateway_type == :authorize_net
@@ -16,6 +15,6 @@ module Admin::PaymentDetailsHelper
             'Credit Card details are not stored'
           end
 
-    "#{boolean_status_img(credit_card_stored)} #{link_to_payment_gateway ? link_to(txt, provider_admin_account_braintree_blue_url) : txt}"
+    (link_to_payment_gateway ? link_to(txt, provider_admin_account_braintree_blue_url) : txt).to_s
   end
 end
