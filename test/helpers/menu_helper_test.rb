@@ -53,9 +53,8 @@ class MenuHelperTest < ActionView::TestCase
 
   test '#masthead_props' do
     expects(:context_selector_props).returns([])
-    expects(:current_user).returns(FactoryBot.create(:simple_user))
+    expects(:current_user).returns(FactoryBot.create(:simple_user)).twice
     expects(:documentation_items).returns([])
-    expects(:impersonating?).returns(false)
     expects(:vertical_nav_hidden?).returns(true)
 
     data = masthead_props.as_json

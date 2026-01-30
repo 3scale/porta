@@ -6,7 +6,6 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   activate_menu :audience, :finance, :invoices
 
   helper Finance::InvoicesHelper
-  helper ColumnSortingHelper
   helper_method :presenter
 
   before_action :find_buyer, only: :create

@@ -3,8 +3,7 @@ html[lang="en" class="pf-m-redhat-font"]
   head
     meta[charset="utf-8"]
     title
-      = content_for?(:title) ? yield(:title) : default_title
-      |  | Red Hat 3scale API Management
+      = page_title
     = csrf_meta_tag
     / Load PatternFly base for Font Awesome icons:
     = stylesheet_packs_chunks_tag 'patternfly_base'
