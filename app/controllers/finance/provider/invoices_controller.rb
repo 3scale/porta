@@ -6,10 +6,12 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
   activate_menu :audience, :finance, :invoices
 
   helper Finance::InvoicesHelper
-  helper_method :allow_edit?, :presenter
+  helper_method :presenter
 
-  before_action :find_buyer, only: [ :create ]
-  before_action :find_invoice, except: [ :index, :create ]
+  before_action :find_buyer, only: :create
+  before_action :find_invoice, except: %i[index create]
+
+  delegate :referrer, to: :request
 
   attr_reader :presenter
 
@@ -17,14 +19,6 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     @presenter = Finance::Provider::InvoicesIndexPresenter.new(provider: current_account,
                                                                params: params,
                                                                user: current_user)
-  end
-
-  def create
-    current_account.billing_strategy.create_invoice!(buyer_account: @buyer,
-                                                     period: Month.new(Time.now.utc))
-    respond_to do |format|
-      format.js { flash.now[:success] = t('.success') }
-    end
   end
 
   def show
@@ -37,7 +31,21 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
       format.html
       format.json { render json: @invoice.to_json }
       format.js   { render json: @invoice.to_json }
-      format.pdf  { redirect_to @invoice.pdf.url     }
+      format.pdf  { redirect_to @invoice.pdf.url }
+    end
+  end
+
+  def edit
+    return if @invoice.editable?
+
+    redirect_to admin_finance_invoice_url(@invoice), danger: t('.non_editable')
+  end
+
+  def create
+    current_account.billing_strategy.create_invoice!(buyer_account: @buyer,
+                                                     period: Month.new(Time.now.utc))
+    respond_to do |format|
+      format.js { flash.now[:success] = t('.success') }
     end
   end
 
@@ -52,18 +60,7 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
     end
   end
 
-  def edit
-    unless @invoice.editable?
-      redirect_to admin_finance_invoice_url(@invoice), danger: t('.non_editable')
-    end
-  end
-
   def update
-    # TODO: enable this when we permit to edit due on date
-    #if due = params[:invoice][:due_on].presence
-    #  @invoice.due_on = due
-    #end
-
     if @invoice.update(params[:invoice])
       redirect_to admin_finance_invoice_url(@invoice), success: t('.success')
     else
@@ -73,49 +70,23 @@ class Finance::Provider::InvoicesController < Finance::Provider::BaseController
 
   private
 
+  # Called via invoice_action_button from:
+  #  - buyers/invoices/show
+  #  - finance/provider/invoices/show
   def invoice_action(action, *action_params)
     if @invoice.transition_allowed?(action) && @invoice.send("#{action}!", *action_params)
-      @header = render_headers_to_string
-      @actions = render_actions_to_string
-      @line_items = render_line_items_to_string
-      flash.now[:success] = t('.success')
-
-      respond_to do |format|
-        format.js do
-          render :partial => '/finance/provider/shared/update_invoice',
-                           :locals => { :editable => allow_edit? }
-        end
-      end
+      redirect_to referrer, success: t('.success')
     else
-      flash.now[:danger] = t('.error')
-      render :partial => '/shared/flash_alerts'
+      redirect_to referrer, danger: t('.error')
     end
   end
 
-  def render_headers_to_string
-    render_to_string(:partial => "/finance/provider/shared/invoice_header",
-                                 :locals => { :editable => allow_edit?, edit_link_scope: [:finance] })
-  end
-
-  def render_line_items_to_string
-    render_to_string(:partial => "/finance/provider/shared/line_items",
-                                 :locals => { :editable => allow_edit? })
-  end
-
-  def render_actions_to_string
-    render_to_string(:partial => "/finance/provider/invoices/actions")
-  end
-
-  def allow_edit?
-    !@invoice.buyer_account.nil?
-  end
-
   def collection
-     @collection ||= if params[:account_id]
-                        find_buyer.invoices
-                     else
-                        current_account.buyer_invoices.includes(:provider_account)
-                      end
+    @collection ||= if params[:account_id]
+                      find_buyer.invoices
+                    else
+                      current_account.buyer_invoices.includes(:provider_account)
+                    end
   end
 
   def find_buyer(options = {})

@@ -128,8 +128,8 @@ Then "the table should be sorted by {string}" do |column|
   assert_selector(:css, '.pf-c-table .pf-c-table__sort.pf-m-selected', text: column)
 end
 
-Then "the table should have {int} row(s)" do |count|
-  assert_equal count, find_all('table tbody tr').length
+Then "{table} should have {int} row(s)" do |table, count|
+  table.assert_selector('tbody tr', count:)
 end
 
 Then "the actions of row {string} are:" do |row, table|

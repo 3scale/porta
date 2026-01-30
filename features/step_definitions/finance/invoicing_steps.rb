@@ -59,6 +59,14 @@ Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
 
+Given "{invoice} has no payment transactions" do |invoice|
+  invoice.payment_transactions.destroy! unless invoice.payment_transactions.empty?
+end
+
+Given "{invoice} has some payment transactions" do |invoice|
+  invoice.payment_transactions.create!(amount: 5) if invoice.payment_transactions.empty?
+end
+
 # TODO: add more actions if needed
 Given(/^I issue the invoice number "(.*?)"$/) do |number|
   invoice = Invoice.by_number(number).first

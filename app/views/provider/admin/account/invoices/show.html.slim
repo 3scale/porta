@@ -1,9 +1,0 @@
-= content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'invoices_show'
-
-= render '/finance/provider/shared/invoice_title', invoice: @invoice
-
-.pf-l-grid.pf-m-gutter
-  = render '/finance/provider/shared/invoice_header', editable: false
-  = render '/finance/provider/shared/line_items', editable: false
-  = render '/finance/provider/shared/payment_transactions'
