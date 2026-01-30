@@ -130,6 +130,9 @@ module HtmlSelectorsHelper
     when 'the line items card'
       '.pf-c-card#line_items'
 
+    when 'the transactions card'
+      '.pf-c-card .pf-c-table[aria-label="Transactions table"]'
+
     #
     # Dev portal
     #

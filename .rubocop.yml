@@ -5,6 +5,9 @@ plugins:
 Rails:
   Enabled: true
 
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
 Lint:
   Enabled: true
 

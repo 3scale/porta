@@ -1,0 +1,10 @@
+- content_for :javascripts do
+  = javascript_packs_with_chunks_tag 'invoices_show'
+
+= render 'provider/admin/shared/invoices/invoice_title', invoice: @invoice
+
+div class="pf-l-grid pf-m-gutter"
+  = render 'provider/admin/shared/invoices/header', edit_link_scope:
+  = render 'provider/admin/shared/invoices/line_items', editable:
+  = render 'provider/admin/shared/invoices/payment_transactions'
+  = render 'provider/admin/shared/invoices/actions' if actionable
