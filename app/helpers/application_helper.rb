@@ -266,10 +266,6 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def format_text(text)
-    RedCloth.new(text).to_html
-  end
-
   def chop(name, l = 15)
     name.length > l ? name[0...l]+'...' : name
   end
