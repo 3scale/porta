@@ -1843,6 +1843,10 @@ en:
           attributes:
             service:
               not_found: 'not found'
+            body:
+              invalid_swagger: "JSON Spec is invalid"
+              invalid_json: "Invalid JSON"
+              invalid_base_path: "Server URL in the specification is invalid"
 
         metric:
           attributes:
