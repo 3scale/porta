@@ -261,7 +261,7 @@ describe('validation', () => {
         currentTarget: {
           required: true,
           name: 'user[password]',
-          value: 'gary1234',
+          value: 'Supersecret123+!',
           type: 'password'
         }
       } as FormEvent<HTMLInputElement>)
@@ -273,7 +273,7 @@ describe('validation', () => {
         currentTarget: {
           required: true,
           name: 'user[password_confirmation]',
-          value: 'gary1234',
+          value: 'Supersecret123+!',
           type: 'password'
         }
       } as FormEvent<HTMLInputElement>)

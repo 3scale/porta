@@ -158,7 +158,7 @@ Given(/^a provider signs up and activates his account$/) do
 
   within signup_form do
     fill_in 'Email', with: user.email
-    fill_in 'Password', with: 'supersecret'
+    fill_in 'Password', with: 'Supersecret123+!'
 
     fill_in 'Organization/Group Name', with: 'provider'
     fill_in 'Developer Portal', with: 'foo'
@@ -177,7 +177,7 @@ Given(/^a provider signs up and activates his account$/) do
 
   within login_form do
     fill_in 'Email', with: user.email
-    fill_in 'Password', with: 'supersecret'
+    fill_in 'Password', with: 'Supersecret123+!'
 
     click_on 'Sign in'
   end
@@ -258,7 +258,7 @@ def setup_provider(login)
 
   return unless login
 
-  try_provider_login('foo.3scale.localhost', 'supersecret')
+  try_provider_login('foo.3scale.localhost', 'Supersecret123+!')
   assert user_is_logged_in('foo.3scale.localhost')
 end
 
@@ -289,7 +289,7 @@ Given(/^master admin( is logged in)?/) do |login|
   set_current_domain @master.external_domain
   stub_integration_errors_dashboard
   if login
-    try_provider_login(admin.username, 'supersecret')
+    try_provider_login(admin.username, 'Supersecret123+!')
     assert user_is_logged_in(admin.username)
   end
 end
