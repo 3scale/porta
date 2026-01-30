@@ -1,125 +1,100 @@
 require 'bcrypt'
 module Authentication
   module ByPassword
+    extend ActiveSupport::Concern
 
-    # Migrate to HasSecurePassword due to leak in https://github.com/3scale/system/issues/8111
-    module HasSecurePassword
-      extend ActiveSupport::Concern
+    # strong passwords
+    SPECIAL_CHARACTERS = '-+=><_$#.:;!?@&*()~][}{|'
+    RE_STRONG_PASSWORD = /
+      \A
+        (?=.*\d) # number
+        (?=.*[a-z]) # lowercase
+        (?=.*[A-Z]) # uppercase
+        (?=.*[#{Regexp.escape(SPECIAL_CHARACTERS)}]) # special char
+        (?!.*\s) # does not end with space
+        .{8,} # at least 8 characters
+      \z
+    /x
+    STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{SPECIAL_CHARACTERS}.".freeze
 
-      included do
-        # We only need length validations as they are already set in Authentication::ByPassword
-        has_secure_password validations: false
-        prepend AuthenticateWithHasSecurePassword
-      end
+    included do
+      # We only need length validations as they are already set in Authentication::ByPassword
+      has_secure_password validations: false
 
-      def password_required?
-        (password_digest.blank? || password_digest_changed?) && super
-      end
+      validates_presence_of :password, if: :password_required?
 
-      module AuthenticateWithHasSecurePassword
-        # Can't use `#authenticate` if the `password_digest` field is nil
-        def authenticate(*)
-          password_digest? && super
-        end
-      end
+      validates_confirmation_of :password, allow_blank: true
 
-      # If there is something set in password_digest then authenticate with has_secure_password
-      # Otherwise use the old authentication method
-      def authenticated?(unencrypted_password)
-        password_digest? ? authenticate(unencrypted_password) : super
-      end
+      validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
+                                     if: -> { password_required? && provider_requires_strong_passwords? } }
+      validates :password, length: { minimum: 6, allow_blank: true,
+                                     if: -> { password_required? && !provider_requires_strong_passwords? } }
 
-      # Migrate old password to new password_digest
-      # If the password_digest is already set, skip
-      def transparently_migrate_password(unencrypted_password)
-        return if unencrypted_password.blank? || password_digest.present?
-        self.password = unencrypted_password
-        ThreeScale::Analytics.user_tracking(self).track('Migrated to BCrypt')
-        update_columns(password_digest: password_digest, salt: nil, crypted_password: nil)
-      end
+      validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
-      def just_changed_password?
-        saved_change_to_password_digest? || super
-      end
+      attr_accessible :password, :password_confirmation
 
-      private
+      scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
-      def password_changed?
-        password_digest_changed? || super
+      alias_method :authenticated?, :authenticate
+    end
+
+    class_methods do
+      def find_with_valid_password_token(token)
+        with_valid_password_token.find_by(lost_password_token: token)
       end
     end
 
-    # Stuff directives into including module
-    def self.included( recipient )
-      recipient.extend( ModelClassMethods )
-      recipient.class_eval do
-        include ModelInstanceMethods
-        include HasSecurePassword
+    def password_required?
+      signup.by_user? && (password_digest.blank? || password_digest_changed?)
+    end
 
-        # Virtual attribute for the unencrypted password
-        #attr_accessor :password
+    def just_changed_password?
+      saved_change_to_password_digest?
+    end
 
-        validates_presence_of :password, if: :password_required?
+    def expire_password_token
+      update_columns(lost_password_token_generated_at: nil)
+    end
 
-        validates_confirmation_of :password, allow_blank: true
+    def generate_lost_password_token
+      token = SecureRandom.hex(32)
+      return unless update_columns(lost_password_token: token, lost_password_token_generated_at: Time.current)
+
+      token
+    end
+
+    def generate_lost_password_token!
+      return unless generate_lost_password_token
+
+      if account.provider?
+        ProviderUserMailer.lost_password(self).deliver_later
+      else
+        UserMailer.lost_password(self).deliver_later
       end
-    end # #included directives
+    end
 
-    #
-    # Class Methods
-    #
-    module ModelClassMethods
-      # This provides a modest increased defense against a dictionary attack if
-      # your db were ever compromised, but will invalidate existing passwords.
-      # See the README and the file config/initializers/site_keys.rb
-      #
-      # It may not be obvious, but if you set REST_AUTH_SITE_KEY to nil and
-      # REST_AUTH_DIGEST_STRETCHES to 1 you'll have backwards compatibility with
-      # older versions of restful-authentication.
-      def password_digest(password, salt)
-        digest = REST_AUTH_SITE_KEY
-        REST_AUTH_DIGEST_STRETCHES.times do
-          digest = secure_digest(digest, salt, password, REST_AUTH_SITE_KEY)
-        end
-        digest
-      end
-    end # class methods
+    def update_password(new_password, new_password_confirmation)
+      self.password              = new_password
+      self.password_confirmation = new_password_confirmation
+      reset_lost_password_token if valid?
+      save
+    end
 
-    #
-    # Instance Methods
-    #
-    module ModelInstanceMethods
+    def using_password?
+      password_digest.present?
+    end
 
-      # Encrypts the password with the user salt
-      def encrypt(password)
-        self.class.password_digest(password, salt)
-      end
+    def can_set_password?
+      account.password_login_allowed? && !using_password?
+    end
 
-      def authenticated?(password)
-        ActiveSupport::SecurityUtils.secure_compare(crypted_password.to_s, encrypt(password))
-      end
+    def special_fields
+      %i[password password_confirmation]
+    end
 
-      # FIXME: This method is not used anymore as we removed the callback
-      #   before_save :encrypt_password
-      # Keeping the method for backward compatibility tests. See test/unit/authentication/by_has_secure_password_test.rb
-      def encrypt_password
-        return if password.blank?
-        self.salt = self.class.make_token if new_record?
-        self.crypted_password = encrypt(password)
-      end
-
-      def password_required?
-        crypted_password.blank? || !password.blank?
-      end
-
-      def just_changed_password?
-        saved_change_to_crypted_password?
-      end
-
-      private
-      def password_changed?
-        encrypt(password) != crypted_password
-      end
-    end # instance methods
+    def reset_lost_password_token
+      self.lost_password_token = nil
+    end
   end
 end
