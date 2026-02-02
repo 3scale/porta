@@ -7,6 +7,7 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
   class Dummy
     extend ActiveModel::Naming
+    extend ActiveModel::Translation
 
     attr_reader :errors, :title, :author
 
@@ -115,8 +116,10 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     assert html_doc.css('#errorExplanation ul li').length.positive?
 
     error_texts = html_doc.css('#errorExplanation ul li').map(&:text)
-    assert_include error_texts, 'error 1'
-    assert_include error_texts, 'error 2'
+    assert_includes error_texts, 'Title error 1'
+    assert_includes error_texts, 'Title error 2'
+    assert_includes error_texts, 'Author error 1'
+    assert_includes error_texts, 'Author error 2'
   end
 
   test 'error_messages handles multiple objects with errors' do
@@ -150,9 +153,9 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     html_doc = Nokogiri::HTML4(buffer.output)
     error_texts = html_doc.css('#errorExplanation ul li').map(&:text)
 
-    assert_not_include error_texts, 'Account is invalid'
-    assert_not_include error_texts, 'Bought cinstances is invalid'
-    assert_include error_texts, 'cannot be blank'
+    assert_not_includes error_texts, 'Account is invalid'
+    assert_not_includes error_texts, 'Bought cinstances is invalid'
+    assert_includes error_texts, 'Name cannot be blank'
   end
 
   test 'error_messages preserves error message content and structure' do
