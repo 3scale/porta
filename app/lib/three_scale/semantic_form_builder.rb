@@ -105,5 +105,61 @@ module ThreeScale
     def recaptcha_action
       controller.controller_path
     end
+
+    private
+
+    # :reek:DuplicateMethodCall, :reek:FeatureEnvy, :reek:TooManyStatements
+    def error_messages_for(*params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      ignore_me = ['Account is invalid', 'Bought cinstances is invalid']
+      options = params.extract_options!.symbolize_keys
+
+      objects = if (object = options.delete(:object))
+                  [object].flatten
+                else
+                  params.filter_map {|object_name| instance_variable_get("@#{object_name}") }
+                end
+
+      count  = objects.inject(0) {|sum, object| sum + object.errors.count }
+      if count.zero?
+        ''
+      else
+        html = {}
+        %i[id class].each do |key|
+          if options.include?(key)
+            value = options[key]
+            html[key] = value if value.present?
+          else
+            html[key] = 'errorExplanation'
+          end
+        end
+        options[:object_name] ||= params.first
+
+        I18n.with_options :locale => options[:locale], scope: %i[activerecord errors template] do |locale|
+          header_message = if options.include?(:header_message)
+                             options[:header_message]
+                           else
+                             object_name = options[:object_name].to_s.tr('_', ' ')
+                             object_name = I18n.t(object_name, default: object_name, scope: %i[activerecord models], count: 1)
+                             locale.t :header, count: count, model: object_name
+                           end
+          message = options.include?(:message) ? options[:message] : locale.t(:body)
+          error_messages = collect_error_messages(objects, ignore_me).join
+
+          # rubocop:disable Rails/OutputSafety
+          contents = ''
+          contents << content_tag(options[:header_tag] || :h2, header_message.html_safe) if header_message.present?
+          contents << content_tag(:p, message.html_safe) if message.present?
+          contents << content_tag(:ul, error_messages.html_safe)
+          content_tag(:div, contents.html_safe, html)
+          # rubocop:enable Rails/OutputSafety
+        end
+      end
+    end
+
+    def collect_error_messages(objects, ignore_list)
+      all_messages = objects.flat_map { |object| object.errors.full_messages }
+      filtered_messages = all_messages.reject { |msg| ignore_list.include?(msg) }
+      filtered_messages.map { |msg| content_tag(:li, msg) }
+    end
   end
 end

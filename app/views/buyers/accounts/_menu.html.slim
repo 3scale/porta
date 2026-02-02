@@ -6,18 +6,18 @@ section class="pf-c-page__main-nav pf-m-limit-width"
     nav class="pf-c-nav pf-m-horizontal pf-m-tertiary" aria-label="Local"
       ul class="pf-c-nav__list"
         - if account && !account.new_record?
-          = pf4_nav_item "Account '#{account.name}'",
+          = pf_nav_item "Account '#{account.name}'",
             admin_buyers_account_path(account)
 
-        = pf4_nav_item pluralize(number_to_human(current_user.accessible_cinstances.bought_by(account).count), 'Application'),
+        = pf_nav_item pluralize(number_to_human(current_user.accessible_cinstances.bought_by(account).count), 'Application'),
           admin_buyers_account_applications_path(account)
 
-        = pf4_nav_item pluralize(number_to_human(account.users.count), 'User'),
+        = pf_nav_item pluralize(number_to_human(account.users.count), 'User'),
           admin_buyers_account_users_path(account)
 
         - if can?(:manage, Invitation)
           - if can?(:manage, :multiple_users)
-            = pf4_nav_item pluralize(number_to_human(account.invitations.count), 'Invitation'),
+            = pf_nav_item pluralize(number_to_human(account.invitations.count), 'Invitation'),
               admin_buyers_account_invitations_path(account)
           - else
             li class="pf-c-nav__item"
@@ -28,13 +28,13 @@ section class="pf-c-page__main-nav pf-m-limit-width"
                 class: 'pf-c-nav__link'
 
           - if can?(:update, account) and can?(:manage, :groups)
-            = pf4_nav_item pluralize(number_to_human(account.groups.count), 'Group Membership'),
+            = pf_nav_item pluralize(number_to_human(account.groups.count), 'Group Membership'),
               admin_buyers_account_groups_path(account)
 
           - if account.provider_account.settings.finance.allowed?
-            = pf4_nav_item pluralize(number_to_human(account.invoices.count), 'Invoice'),
+            = pf_nav_item pluralize(number_to_human(account.invoices.count), 'Invoice'),
               admin_buyers_account_invoices_path(account)
 
           - if can?(:manage, :service_contracts) && !master_on_premises?
-            = pf4_nav_item pluralize(number_to_human(account.bought_service_contracts.count), 'Service Subscription'),
+            = pf_nav_item pluralize(number_to_human(account.bought_service_contracts.count), 'Service Subscription'),
               admin_buyers_account_service_contracts_path(account)
