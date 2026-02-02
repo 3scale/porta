@@ -242,6 +242,40 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test 'invalid base URL' do
+    invalid_spec = {
+      openapi: '3.0.0',
+      info: {
+        title: 'test',
+        version: '1.0'
+      },
+      servers: [
+        {
+          url: '{baseURL}/some/path',
+          variables: {
+            baseURL: {
+              default: 'no-schema-url',
+              description: 'API root'
+            }
+          }
+        }
+      ],
+      paths: {}
+    }
+    service = account.api_docs_services.new name: 'test api', body: invalid_spec.to_json
+
+    assert_equal 'no-schema-url/some/path', service.base_path
+    assert_not service.valid?
+    assert_equal "Server URL in the specification is invalid", service.errors.messages_for(:body).first
+
+    invalid_spec[:servers].first[:url] = 'invalid-url'
+    service = account.api_docs_services.new name: 'test api', body: invalid_spec.to_json
+
+    assert_equal 'invalid-url', service.base_path
+    assert_not service.valid?
+    assert_equal "Server URL in the specification is invalid", service.errors.messages_for(:body).first
+  end
+
   test 'ip address validation' do
     service = account.api_docs_services.new name: 'my api'
 
