@@ -671,6 +671,14 @@ World(Module.new do
                 end
       admin_finance_invoice_path(invoice)
 
+    when /^(?:the invoice|invoice "(.*)") admin portal edit page$/
+      invoice = if $1.present?
+                  Invoice.find_by!(friendly_id: $1)
+                else
+                  @invoice
+                end
+      edit_admin_finance_invoice_path(invoice)
+
     when /^the invoices page of account "(.+?)"$/,
         /^buyer "(.*)" invoices page$/
       account = Account.find_by!(org_name: $1)

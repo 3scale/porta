@@ -21,6 +21,7 @@ Feature: Multiservice feature
     And service discovery is not enabled
     When I am on the provider dashboard
     And I follow "Create Product"
+    And the current page is the new service page
     And I fill in "Name" with "Less fancy API"
     And I press "Create Product"
     Then I should see "Less fancy API"
@@ -30,6 +31,7 @@ Feature: Multiservice feature
     And service discovery is not enabled
     When I am on the provider dashboard
     And I follow "Create Product"
+    And the current page is the new service page
     And I fill in "System name" with "Less fancy API"
     And I press "Create Product"
     Then I should see "Can't be blank"
@@ -39,6 +41,7 @@ Feature: Multiservice feature
     And service discovery is not enabled
     When I am on the provider dashboard
     And I follow "Create Product"
+    And the current page is the new service page
     And I fill in "Name" with "Less fancy API"
     And I fill in "System name" with "SystemName@123"
     And I press "Create Product"

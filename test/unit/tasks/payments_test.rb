@@ -37,7 +37,7 @@ module Tasks
 
       execute_rake_task 'payments.rake', 'payments:provider_data_payment_gateway_configured', 'stripe', file_path
 
-      assert File.exists?(file_path)
+      assert File.exist?(file_path)
 
       expected_line_values_format = ->(pgs) { "#{pgs.account_id};#{pgs.account.external_admin_domain};#{pgs.account.state}\n" }
       expected_provider_ids = providers_with_stripe_configured.map(&:id)

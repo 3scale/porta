@@ -77,26 +77,31 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     Invoice.any_instance.stubs('transition_allowed?').returns(true)
     Invoice.any_instance.expects(:charge!).with(false).returns(true)
 
-    put charge_admin_finance_invoice_path @invoice, params: { format: :js }
-    assert_response :success
+    referrer = admin_finance_invoice_path(@invoice)
+    put charge_admin_finance_invoice_path(@invoice), headers: { 'HTTP_REFERER' => referrer }
+    assert_response :redirect
+    assert_redirected_to referrer
   end
 
   %i[cancel pay generate_pdf charge].each do |action|
-    test "respond to AJAX action #{action}" do
+    test "#{action} action success redirects to referrer" do
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(true)
 
-      put url_for([action, :admin, :finance, @invoice, { format: 'js' }])
-      assert_response :success
+      referrer = admin_finance_invoice_path(@invoice)
+      put url_for([action, :admin, :finance, @invoice]), headers: { 'HTTP_REFERER' => referrer }
+      assert_response :redirect
+      assert_redirected_to referrer
     end
 
-    test "handle '#{action}' action failure" do
+    test "#{action} action failure redirects to referrer with error" do
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(false)
 
-      put url_for([action, :admin, :finance, @invoice, { format: 'js' }])
-      assert_response :success
-      # TODO: update error messages
+      referrer = admin_finance_invoice_path(@invoice)
+      put url_for([action, :admin, :finance, @invoice]), headers: { 'HTTP_REFERER' => referrer }
+      assert_response :redirect
+      assert_redirected_to referrer
     end
   end
 
@@ -122,5 +127,12 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     Invoice.any_instance.stubs(:editable?).returns(true)
     get admin_finance_invoice_path @invoice
     assert_response :success
+  end
+
+  test 'edit with non-editable invoice redirects' do
+    Invoice.any_instance.stubs(:editable?).returns(false)
+    get edit_admin_finance_invoice_path(@invoice)
+    assert_response :redirect
+    assert_redirected_to admin_finance_invoice_path(@invoice)
   end
 end
