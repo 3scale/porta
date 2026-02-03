@@ -27,7 +27,14 @@ module Finance
     end
 
     def call!
-      with_lock { call }
+      acquire_lock
+      call
+    rescue Finance::Payment::RateLimitError => error
+      # Rate limit errors should retry immediately via Sidekiq
+      # Release the lock so retries can proceed without waiting 1 hour
+      release_lock
+      report_error(error)
+      raise error
     rescue LockBillingError, SpuriousBillingError => error
       report_error(error)
       nil
@@ -62,6 +69,29 @@ module Finance
       options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
       options[:buyer_ids] = [account_id]
       options
+    end
+
+    def lock_key
+      @lock_key ||= "lock:billing:#{account_id}"
+    end
+
+    def lock_manager
+      @lock_manager ||= Redlock::Client.new([System::RedisClientPool.default], { retry_count: 0, redis_timeout: 1 })
+    end
+
+    def acquire_lock
+      # Acquire lock for 1 hour
+      # Normally we don't release it, but for rate limits we do (see rescue block)
+      @lock_info = lock_manager.lock(lock_key, 1.hour.in_milliseconds)
+      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless @lock_info
+    end
+
+    def release_lock
+      # Only called on rate limit errors to allow immediate retry
+      lock_manager.unlock(@lock_info) if @lock_info
+      @lock_info = nil
+    rescue => e
+      Rails.logger.warn("Failed to release billing lock for account #{account_id}: #{e.message}")
     end
 
     def with_lock

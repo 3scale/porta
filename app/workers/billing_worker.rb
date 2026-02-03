@@ -3,11 +3,21 @@
 class BillingWorker
   include Sidekiq::Job
 
-  sidekiq_options queue: :billing, retry: 3
+  sidekiq_options queue: :billing, retry: 5
 
-  sidekiq_retry_in do |_count|
-    # after lock has been released
-    1.hours + 10
+  sidekiq_retry_in do |count, exception|
+    case exception
+    when Finance::Payment::RateLimitError
+      # For rate limits: exponential backoff with jitter
+      # Retry schedule: ~15s, ~45s, ~135s, ~405s, ~1215s
+      # This prevents thundering herd when many jobs hit rate limit simultaneously
+      delay = (3 ** count) * 5
+      jitter = rand(0..5)
+      delay + jitter
+    else
+      # For other errors: wait for lock to be released (original behavior)
+      1.hours + 10
+    end
   end
 
   class Callback
