@@ -17,14 +17,6 @@ module AccountHelper
     content_tag(:address, h(shortened), :title => address_string)
   end
 
-  def label_for_customer_type(account)
-    if account.provider?
-      'Customer type'
-    else
-      "Which best describes your customers/users?"
-    end
-  end
-
   def account_name(account)
     if account
       h(account.org_name)
@@ -43,16 +35,6 @@ module AccountHelper
       "#{state_info} (#{account.deletion_date.to_date.to_fs(:long)})"
     else
       state_info
-    end
-  end
-
-  #TODO: test this helper
-  def path_to_personal_details
-    if current_account.provider?
-      host = current_account.external_admin_domain + request.port_string
-      edit_provider_admin_user_personal_details_url(host: host, protocol: 'https')
-    else
-      developer_portal.admin_account_personal_details_url(host: current_account.external_domain)
     end
   end
 
