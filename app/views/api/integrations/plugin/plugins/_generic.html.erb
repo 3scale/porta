@@ -1,4 +1,4 @@
-<p>We are working on a more detailed integration guide for the <%= t("plugins.#{plugin_language_name}") %> plugin.
+<p>We are working on a more detailed integration guide for the <%= t("plugins.#{plugin_language_name(@service)}") %> plugin.
 
-<%= render 'api/integrations/plugin/download_links', :language => plugin_language_name %>
+<%= render 'api/integrations/plugin/download_links', :language => plugin_language_name(@service) %>
 </p>
