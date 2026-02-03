@@ -89,6 +89,9 @@ class Finance::BillingStrategy < ApplicationRecord
         results.start(billing_strategy)
         ignoring_find_each_scope { billing_strategy.daily(now: now, buyer_ids: options[:buyer_ids], skip_notifications: skip_notifications) }
         results.success(billing_strategy)
+      rescue Finance::Payment::GatewayRateLimitError => exception
+        # Don't treat these as payment failures - rate limit errors should bubble up to be retried by Sidekiq
+        raise exception
       rescue => e
         results.failure(billing_strategy)
         name = billing_strategy.provider.try!(:name)
@@ -352,6 +355,9 @@ class Finance::BillingStrategy < ApplicationRecord
     buyer_accounts.find_each(:batch_size => 20) do |buyer|
       begin
         ignoring_find_each_scope { yield(buyer) }
+      rescue Finance::Payment::GatewayRateLimitError => exception
+        # Do NOT catch and swallow the exception - rate limit errors should bubble up to be retried by Sidekiq
+        raise exception
       rescue => exception
         name = buyer.name
         buyer_id = buyer.id
