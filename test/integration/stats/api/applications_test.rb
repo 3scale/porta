@@ -10,7 +10,7 @@ class Stats::Api::ApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'usage_response_code with no data as json' do
-    provider_login_with @admin, 'supersecret'
+    provider_login_with @admin, 'superSecret1234#'
     get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: {
       period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false
     }

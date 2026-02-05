@@ -37,23 +37,33 @@ describe('#validateChangePassword', () => {
     })).not.toBeUndefined()
 
     expect(validateChangePassword({
-      password: 'aaa',
+      password: 'aaaaaa',
       passwordConfirmation: ''
     })).not.toBeUndefined()
 
     expect(validateChangePassword({
       password: '',
-      passwordConfirmation: 'aaa'
-    })).not.toBeUndefined()
-
-    expect(validateChangePassword({
-      password: 'aaa',
-      passwordConfirmation: 'aaa'
+      passwordConfirmation: 'aaaaaa'
     })).not.toBeUndefined()
 
     expect(validateChangePassword({
       password: 'aaaaaa',
       passwordConfirmation: 'aaaaaa'
+    })).not.toBeUndefined()
+
+    expect(validateChangePassword({
+      password: 'superSecret1234#',
+      passwordConfirmation: ''
+    })).not.toBeUndefined()
+
+    expect(validateChangePassword({
+      password: '',
+      passwordConfirmation: 'superSecret1234#'
+    })).not.toBeUndefined()
+
+    expect(validateChangePassword({
+      password: 'superSecret1234#',
+      passwordConfirmation: 'superSecret1234#'
     })).toBeUndefined()
   })
 })
@@ -74,8 +84,8 @@ describe('#validateSignup', () => {
       firstName: '',
       lastName: '',
       email: 'pepe@example.com',
-      password: '******',
-      passwordConfirmation: '******'
+      password: 'superSecret1234#',
+      passwordConfirmation: 'superSecret1234#'
     })).not.toBeUndefined()
 
     expect(validateSignup({
@@ -83,8 +93,8 @@ describe('#validateSignup', () => {
       firstName: '',
       lastName: '',
       email: '',
-      password: '******',
-      passwordConfirmation: '******'
+      password: 'superSecret1234#',
+      passwordConfirmation: 'superSecret1234#'
     })).not.toBeUndefined()
 
     expect(validateSignup({
@@ -92,8 +102,8 @@ describe('#validateSignup', () => {
       firstName: '',
       lastName: '',
       email: 'pepe@example.com',
-      password: '******',
-      passwordConfirmation: '******'
+      password: 'superSecret1234#',
+      passwordConfirmation: 'superSecret1234#'
     })).toBeUndefined()
   })
 })

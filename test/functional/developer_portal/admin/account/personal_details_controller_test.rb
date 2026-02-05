@@ -52,7 +52,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
   test 'update should succeed with current password' do
     login_as @buyer.admins.first
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'}}
+    put :update, params: { user: {current_password: 'superSecret1234#', username: 'test', email: 'test@example.com'}}
     assert_redirected_to admin_account_users_path
     assert_equal flash[:notice], 'User was successfully updated.'
   end
@@ -70,7 +70,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
     assert_difference(Audited.audit_class.method(:count)) do
       User.with_synchronous_auditing do
-        put :update, params: { user: {current_password: 'supersecret', password: 'new_password', password_confirmation: 'new_password'} }
+        put :update, params: { user: {current_password: 'superSecret1234#', password: 'new_password_123', password_confirmation: 'new_password_123'} }
       end
     end
 

@@ -33,7 +33,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
       assert_equal session[:password_reset_token], regenerated_token
 
       # user updates his password
-      put provider_password_path(user: { password: 'alaska123',password_confirmation: 'alaska123' })
+      put provider_password_path(user: { password: 'new_password_123',password_confirmation: 'new_password_123' })
       assert_response :redirect
       assert_match 'password has been changed', flash[:success]
       assert_nil session[:password_reset_token]

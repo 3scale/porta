@@ -94,8 +94,53 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
     @create_params ||= {
       account: {
         name: 'organization name',
-        user: {email: 'email@example.com', password: '123456'}
+        user: {email: 'email@example.com', password: 'superSecret1234#'}
       }
     }.deep_merge(extra_params)
+  end
+end
+
+class Provider::SignupsControllerStrongPasswordsTest < ActionDispatch::IntegrationTest
+  STRONG_PASSWORD = 'superSecret1234#'
+  WEAK_PASSWORD = 'weakpwd'
+
+  setup do
+    host! master_account.external_admin_domain
+  end
+
+  def signup_params(password)
+    {
+      account: {
+        name: 'organization name',
+        user: { email: 'email@example.com', password: password }
+      }
+    }
+  end
+
+  test 'weak password rejected when strong passwords enabled' do
+    assert_no_difference(master_account.buyer_accounts.method(:count)) do
+      post provider_signup_path, params: signup_params(WEAK_PASSWORD)
+    end
+
+    assert_response :success
+    assert_match "is too short (minimum is 15 characters)", response.body
+  end
+
+  test 'strong password accepted when strong passwords enabled' do
+    assert_difference(master_account.buyer_accounts.method(:count)) do
+      post provider_signup_path, params: signup_params(STRONG_PASSWORD)
+    end
+
+    assert_redirected_to success_provider_signup_path
+  end
+
+  test 'weak password accepted when strong passwords disabled' do
+    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(true)
+
+    assert_difference(master_account.buyer_accounts.method(:count)) do
+      post provider_signup_path, params: signup_params(WEAK_PASSWORD)
+    end
+
+    assert_redirected_to success_provider_signup_path
   end
 end
