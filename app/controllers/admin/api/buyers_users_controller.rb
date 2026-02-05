@@ -37,7 +37,7 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   def update
     authorize! :update, user
 
-    user.update_with_flattened_attributes(flat_params)
+    user.update_with_flattened_attributes(flat_params, as: current_user.try(:role))
 
     respond_with(user)
   end
