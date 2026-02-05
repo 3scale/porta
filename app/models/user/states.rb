@@ -75,8 +75,8 @@ module User::States
     self.activation_code = self.class.make_token
   end
 
-  def activate_on_minimal_signup?
-    minimal_signup? && password.present? && !account.try!(:bought_account_plan).try!(:approval_required?)
+  def activate_on_minimal_or_sample_data?
+    (minimal_signup? || signup.sample_data?) && password.present? && !account.try!(:bought_account_plan).try!(:approval_required?)
   end
 
   def generate_email_verification_token
