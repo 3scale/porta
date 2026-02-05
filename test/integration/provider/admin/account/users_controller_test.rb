@@ -99,4 +99,22 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
 
     assert user.reload.admin?
   end
+
+  test 'edit page shows password fields for user with password' do
+    get edit_provider_admin_account_user_path(@user)
+
+    assert_response :success
+    assert_select 'input[name="user[password]"]'
+    assert_select 'input[name="user[password_confirmation]"]'
+  end
+
+  test 'edit page shows password fields for SSO user without password' do
+    @user.update_columns(password_digest: nil, authentication_id: 'sso-user-id')
+
+    get edit_provider_admin_account_user_path(@user)
+
+    assert_response :success
+    assert_select 'input[name="user[password]"]'
+    assert_select 'input[name="user[password_confirmation]"]'
+  end
 end

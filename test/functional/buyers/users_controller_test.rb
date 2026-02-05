@@ -73,4 +73,34 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     assert_response :redirect
   end
+
+  class EditPagePasswordFieldsTest < ActionController::TestCase
+    tests Buyers::UsersController
+
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @user = @buyer.admins.first
+      host! @provider.internal_admin_domain
+      login_provider @provider
+    end
+
+    test 'edit page shows password fields for user with password' do
+      get :edit, params: { account_id: @buyer.id, id: @user.id }
+
+      assert_response :success
+      assert_select 'input[name="user[password]"]'
+      assert_select 'input[name="user[password_confirmation]"]'
+    end
+
+    test 'edit page shows password fields for SSO user without password' do
+      @user.update_columns(password_digest: nil, authentication_id: 'sso-user-id')
+
+      get :edit, params: { account_id: @buyer.id, id: @user.id }
+
+      assert_response :success
+      assert_select 'input[name="user[password]"]'
+      assert_select 'input[name="user[password_confirmation]"]'
+    end
+  end
 end

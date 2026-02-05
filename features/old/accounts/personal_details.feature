@@ -81,10 +81,11 @@ Feature: Personal Details
     And the "User extra required" field should contain "whatever"
 
   Scenario: Update own password when the user was signed up with password
-    Given the user was signed up with password
+    Given Strong passwords are enabled
+    And the user was signed up with password
     When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "New password" with "hi"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then field "New password" has inline error "is too short (minimum is 6 characters)"
+    Then field "New password" has inline error "Password must be at least 16 characters long, and contain only valid characters"

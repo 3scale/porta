@@ -234,8 +234,18 @@ module Signup
         assert signup_result.account_approved?
       end
 
+      test 'create developer without account plan approval required and sample_data signup' do
+        @account_plan.update_attribute(:approval_required, false)
+        signup_result = signup_account_manager.create(signup_params(different_user_params: {signup_type: :sample_data}))
+
+        # the user is active and the account is approved
+        assert signup_result.persisted?
+        assert signup_result.user_active?
+        assert signup_result.account_approved?
+      end
+
       test 'create developer with account plan approval required and minimal signup' do
-        # The only difference is result.user_activate_on_minimal_signup? should return false, and it only happens if the contract_plans goes before this
+        # The only difference is result.user_activate_on_minimal_or_sample_data? should return false, and it only happens if the contract_plans goes before this
         @account_plan.update_attribute(:approval_required, true)
         signup_result = signup_account_manager.create(signup_params(different_user_params: {signup_type: :minimal}))
         account = signup_result.account
