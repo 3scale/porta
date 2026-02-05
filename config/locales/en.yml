@@ -452,7 +452,7 @@ en:
 
     invitee_signups:
       create:
-        error: There are some errors:\n%{errors}
+        error: "There are some errors:\n%{errors}"
         success: Thanks for signing up! You can now sign in
       already_logged_in: You are already signed up. Log out if you want to sign up again
 
@@ -897,7 +897,6 @@ en:
           edit:
             header_title: Personal Details
             submit_button_label: Update Details
-            set_password_html: You have no password set. If you'd like to set one use the <a href="%{href}">password reset form</a>.
             new_password_label: New password
           update:
             success: User was successfully updated

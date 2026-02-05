@@ -13,8 +13,8 @@
   <% end %>
 
   <%= form.inputs :name => "Change Password" do %>
-    <%= form.input :password, required: true, input_html: { autocomplete: 'off' } %>
-    <%= form.input :password_confirmation, required: true, input_html: { autocomplete: 'off' } %>
+    <%= form.input :password, required: false, input_html: { autocomplete: 'off' } %>
+    <%= form.input :password_confirmation, required: false, input_html: { autocomplete: 'off' } %>
   <% end -%>
 
   <% if can? :update_role, @user %>

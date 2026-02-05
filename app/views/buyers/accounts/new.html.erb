@@ -21,7 +21,7 @@
         </div>
         <%= form.fields_for [:user, @user ] do |user| %>
           <%= user.user_defined_form %>
-          <%= user.input :password, as: :patternfly_input, required: true %>
+          <%= user.input :password, as: :patternfly_input, input_html: { type: 'password' }, required: true %>
         <% end %>
       </section>
 
