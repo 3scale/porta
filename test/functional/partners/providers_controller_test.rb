@@ -86,6 +86,48 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert_equal body['success'], true
   end
 
+  test 'post without password creates user with no password' do
+    prepare_master_account
+    post :create, params: provider_params
+
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert_nil user.password_digest, 'User should have no password when not provided'
+    assert_not user.using_password?, 'User should not be using password'
+
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
+  end
+
+  test 'post with weak password rejected when strong passwords enabled' do
+    prepare_master_account
+    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
+
+    post :create, params: provider_params.merge(password: 'weakpwd')
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+
+    refute body['success']
+    assert body['errors']['user']['password'].present?
+  end
+
+  test 'post with strong password accepted when strong passwords enabled' do
+    prepare_master_account
+    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
+
+    post :create, params: provider_params.merge(password: 'superSecret1234#')
+
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert user.authenticated?('superSecret1234#')
+
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
+  end
+
   test 'post with an invalid email' do
     prepare_master_account
     post :create, params: provider_params.merge(email: 'invalid')

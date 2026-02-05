@@ -56,6 +56,34 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
       without_password_drop = Drops::User.new(FactoryBot.create(:user, account: @buyer, password_digest: nil))
       assert_not without_password_drop.using_password?
     end
+
+    test '#using_password? returns false when password is set but not persisted' do
+      new_user = @buyer.users.build(username: 'newuser', email: 'new@example.com', password: 'testpassword', password_confirmation: 'testpassword')
+      new_user_drop = Drops::User.new(new_user)
+
+      assert_not new_user_drop.using_password?
+    end
+
+    test '#password_required? returns true when signup is by_user' do
+      @user.signup_type = :new_signup
+
+      assert @user.signup.by_user?
+      assert @drop.password_required?
+    end
+
+    test '#password_required? returns false when signup is machine' do
+      @user.signup_type = :minimal
+
+      assert @user.signup.machine?
+      assert_not @drop.password_required?
+    end
+
+    test '#password_required? returns false for sample_data signup' do
+      @user.signup_type = :sample_data
+
+      assert @user.signup.sample_data?
+      assert_not @drop.password_required?
+    end
   end
 
   class BuyerUserTest < Liquid::Drops::UserDropTest

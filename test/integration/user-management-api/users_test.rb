@@ -399,6 +399,27 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     assert chuck.authenticated?('updated-password')
   end
 
+  test 'update with weak password rejected when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "weakpwd", password_confirmation: "weakpwd"), params: { provider_key: @provider.api_key }
+
+    assert_response :unprocessable_entity
+    assert_match User::STRONG_PASSWORD_FAIL_MSG, response.body
+  end
+
+  test 'update with strong password accepted when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "superSecret1234#", password_confirmation: "superSecret1234#"), params: { provider_key: @provider.api_key }
+
+    chuck.reload
+    assert_response :success
+    assert chuck.authenticated?('superSecret1234#')
+  end
+
   test 'update does not updates state nor role' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
     assert chuck.pending?

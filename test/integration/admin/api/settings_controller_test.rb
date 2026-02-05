@@ -19,7 +19,6 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
         useraccountarea_enabled: true,
         signups_enabled: true,
         account_approval_required: false,
-        strong_passwords_enabled: false,
         public_search: false,
         account_plans_ui_visible: true,
         change_account_plan_permission: 'request',
