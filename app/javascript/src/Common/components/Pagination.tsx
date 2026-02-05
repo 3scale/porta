@@ -1,5 +1,7 @@
 import { Pagination as PFPagination } from '@patternfly/react-core'
 
+import * as navigation from 'utilities/navigation'
+
 import type { PaginationProps, OnPerPageSelect } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 
@@ -13,12 +15,12 @@ const Pagination: FunctionComponent<Props> = ({ variant, itemCount }) => {
   const onPerPageSelect: OnPerPageSelect = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', String(selectedPerPage))
     url.searchParams.delete('page')
-    window.location.replace(url.toString())
+    navigation.replace(url.toString())
   }
 
   const goToPage = (_ev: unknown, page: number) => {
     url.searchParams.set('page', String(page))
-    window.location.replace(url.toString())
+    navigation.replace(url.toString())
   }
 
   return (

@@ -4,6 +4,8 @@ import {
   SelectOption
 } from '@patternfly/react-core'
 
+import * as navigation from 'utilities/navigation'
+
 import type { SelectProps } from '@patternfly/react-core'
 
 interface Props {
@@ -31,7 +33,7 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
   const clearSelection = () => {
     url.searchParams.delete('page')
     url.searchParams.delete(name)
-    window.location.replace(url.toString())
+    navigation.replace(url.toString())
   }
 
   const handleOnSelect: SelectProps['onSelect'] = (_e, value) => {
@@ -44,7 +46,7 @@ const ToolbarSelect: React.FunctionComponent<Props> = ({
     url.searchParams.set(INPUT_NAME_UTF8, '✓')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     url.searchParams.set(name, collection.find(i => i.title === value)!.id)
-    window.location.replace(url.toString())
+    navigation.replace(url.toString())
   }
 
   const options = collection.map(({ id, title }) => <SelectOption key={id} value={title} />)

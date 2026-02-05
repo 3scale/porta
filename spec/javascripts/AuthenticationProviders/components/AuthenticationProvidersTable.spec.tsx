@@ -1,14 +1,14 @@
 import { mount } from 'enzyme'
 
 import * as ajax from 'utilities/ajax'
-import * as toast from 'utilities/toast'
+import { toast } from 'utilities/toast'
+import * as navigation from 'utilities/navigation'
 import { AuthenticationProvidersTable } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
-import { mockLocation, waitForPromises } from 'utilities/test-utils'
+import { waitForPromises } from 'utilities/test-utils'
 
 import type { Props } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 
 const ajaxJSON = jest.spyOn(ajax, 'ajaxJSON')
-const toastSpy = jest.spyOn(toast, 'toast')
 
 const defaultProps = {
   count: 0,
@@ -30,7 +30,6 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<AuthenticationProvid
 
 beforeEach(() => {
   jest.resetAllMocks()
-  mockLocation('https://example.com')
 })
 
 afterAll(() => {
@@ -49,7 +48,7 @@ it('should be able to delete an authentication provider', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(window.location.replace).toHaveBeenCalledWith('/authentication_providers')
+  expect(ajaxJSON).toHaveBeenCalledWith('/delete/123', { method: 'Delete' })
 })
 
 it('should handle deletion errors gracefully', async () => {
@@ -64,7 +63,7 @@ it('should handle deletion errors gracefully', async () => {
     .find('Modal button.pf-m-danger').simulate('click')
 
   await waitForPromises(wrapper)
-  expect(toastSpy).toHaveBeenCalledWith(payload.message, 'danger')
+  expect(toast).toHaveBeenCalledWith(payload.message, 'danger')
 })
 
 it('should be able to edit an authentication provider', () => {
@@ -74,5 +73,5 @@ it('should be able to edit an authentication provider', () => {
   wrapper.find('tr button.pf-c-dropdown__toggle').at(target).simulate('click')
   wrapper.find('tr button.pf-c-dropdown__menu-item[data-ouia-component-id="edit"]').simulate('click')
 
-  expect(window.location.href).toEqual(defaultProps.items[target].editPath)
+  expect(navigation.navigate).toHaveBeenCalledWith(defaultProps.items[target].editPath)
 })

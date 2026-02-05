@@ -6,6 +6,7 @@
 
     // Modules
     "baseUrl": "./app/javascript/src",
+    "isolatedModules": true,
     "module": "ES6",
     "moduleResolution": "NodeNext",
     "typeRoots": ["app/javascript/src/Types"],

@@ -2,7 +2,8 @@ import { mount } from 'enzyme'
 import { Popover } from '@patternfly/react-core'
 
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
-import { mockLocation, updateInput } from 'utilities/test-utils'
+import { updateInput } from 'utilities/test-utils'
+import * as navigation from 'utilities/navigation'
 
 import type { Props } from 'Common/components/ToolbarSearch'
 
@@ -19,7 +20,6 @@ it('should render itself', () => {
 
 describe('before a search has been submitted', () => {
   const wrapper = mountWrapper()
-  mockLocation('http://example.com')
 
   it('should display the Popover if input has less than 3 characters', () => {
     const value = 'ab'
@@ -33,29 +33,28 @@ describe('before a search has been submitted', () => {
   it('should not replace when clearing the input if search is not submitted', () => {
     wrapper.find('button[aria-label="Reset"]').simulate('click')
 
-    expect(window.location.replace).not.toHaveBeenCalled()
+    expect(navigation.replace).not.toHaveBeenCalled()
   })
 })
 
 describe('when a search has been submitted', () => {
   it('should submit search and replace if input has more than 3 characters', () => {
     const value = 'abc'
-    mockLocation('http://example.com/')
     const wrapper = mountWrapper()
 
     updateInput(wrapper, value, 'SearchInput input')
     wrapper.find('button[type="submit"]').simulate('click')
 
     expect(wrapper.find(Popover).props().isVisible).toBe(false)
-    expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=${value}`)
+    expect(navigation.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=${value}`)
   })
 
   it('should replace with empty search when clearing the input if search is submitted', () => {
-    mockLocation('http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=abc')
+    jest.spyOn(URLSearchParams.prototype, 'get').mockReturnValueOnce('abc')
     const wrapper = mountWrapper()
 
     wrapper.find('button[aria-label="Reset"]').simulate('click')
 
-    expect(window.location.replace).toHaveBeenCalledWith('http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=')
+    expect(navigation.replace).toHaveBeenCalledWith('http://example.com/?utf8=%E2%9C%93&search%5Bquery%5D=')
   })
 })
