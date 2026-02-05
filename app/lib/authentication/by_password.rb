@@ -23,7 +23,7 @@ module Authentication
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
-      attr_accessible :password, :password_confirmation
+      attr_accessible :password, :password_confirmation, as: %i[default member admin]
 
       scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
