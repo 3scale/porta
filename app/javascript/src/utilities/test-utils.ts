@@ -28,30 +28,6 @@ function closeSelectWithModal (wrapper: ReactWrapper<unknown>): void {
 }
 
 /**
- * Mocks window.location allowing to spy on URL changes.
- * Useful to test links, pagination, search... anything that expects an update to window.location
- *
- * @example
- * mockLocation('https://example.org')
- * expect(window.location).toEqual('https://example.org')
- * expect(window.location).toHaveBeenCalledWith(...)
- *
- * @param href The URL to be expected
- */
-function mockLocation (href: string): void {
-  const location = {
-    href: href,
-    reload: jest.fn(),
-    replace: jest.fn(),
-    toString: () => href
-  } as unknown as Location
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- HACK: need to delete location
-  delete (window as any).location
-  window.location = location
-}
-
-/**
  * In a form, checks if the submit button is disabled
  * @param wrapper - The enzyme react wrapper
  */
@@ -104,7 +80,6 @@ export {
   assertInputs,
   closeSelectWithModal,
   isSubmitDisabled,
-  mockLocation,
   openSelect,
   openSelectWithModal,
   selectOption,

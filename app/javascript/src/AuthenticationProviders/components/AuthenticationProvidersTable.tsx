@@ -21,6 +21,7 @@ import { useState } from 'react'
 import { Pagination } from 'Common/components/Pagination'
 import { ajaxJSON } from 'utilities/ajax'
 import { toast } from 'utilities/toast'
+import * as navigation from 'utilities/navigation'
 import { getSortParams } from 'utilities/patternfly-utils'
 
 import type { IAlert } from 'Types'
@@ -71,7 +72,7 @@ const AuthenticationProvidersTable: FunctionComponent<Props> = ({
           toast(message, type)
           closeModal()
         } else if (redirect) {
-          window.location.replace(redirect)
+          navigation.replace(redirect)
         }
       })
   }
@@ -119,7 +120,7 @@ const AuthenticationProvidersTable: FunctionComponent<Props> = ({
                 <ActionsColumn items={[{
                   ouiaId: 'edit',
                   title: 'Edit',
-                  onClick: () => { window.location.href = item.editPath }
+                  onClick: () => { navigation.navigate(item.editPath) }
                 }, {
                   ouiaId: 'delete',
                   title: 'Delete',

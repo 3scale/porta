@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`should not render reset password button when disablePasswordReset is true 1`] = `
 <LoginPage
@@ -23,19 +23,73 @@ exports[`should not render reset password button when disablePasswordReset is tr
 >
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
-    backgroundImgSrc=""
+    backgroundImgSrc="test-file-stub"
     brandImgAlt="Red Hat 3scale API Management"
-    brandImgSrc=""
+    brandImgSrc="test-file-stub"
     forgotCredentials={false}
     loginTitle="Log in to your account"
   >
+    <BackgroundImage
+      alt="Red Hat 3scale API Management"
+      src="test-file-stub"
+    >
+      <div
+        alt="Red Hat 3scale API Management"
+        className="pf-c-background-image"
+        style={
+          {
+            "--pf-c-background-image--BackgroundImage": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--lg": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm-2x": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage-2x": "url(test-file-stub)",
+            "--pf-c-background-image--Filter": "url(#patternfly-background-image-filter-overlay2)",
+          }
+        }
+      >
+        <svg
+          className="pf-c-background-image__filter"
+          height="0"
+          width="0"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter
+            id="patternfly-background-image-filter-overlay2"
+          >
+            <feColorMatrix
+              type="matrix"
+              values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0"
+            />
+            <feComponentTransfer
+              colorInterpolationFilters="sRGB"
+              result="duotone"
+            >
+              <feFuncR
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncG
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncB
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncA
+                tableValues="0 1"
+                type="table"
+              />
+            </feComponentTransfer>
+          </filter>
+        </svg>
+      </div>
+    </BackgroundImage>
     <Login
       className=""
       footer={
         <LoginFooter>
-          <p>
-            
-          </p>
+          <p />
           <List />
         </LoginFooter>
       }
@@ -45,7 +99,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
             <React.Fragment>
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               />
             </React.Fragment>
           }
@@ -63,7 +117,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
               <React.Fragment>
                 <Brand
                   alt="Red Hat 3scale API Management"
-                  src=""
+                  src="test-file-stub"
                 />
               </React.Fragment>
             }
@@ -73,12 +127,12 @@ exports[`should not render reset password button when disablePasswordReset is tr
             >
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               >
                 <img
                   alt="Red Hat 3scale API Management"
                   className="pf-c-brand"
-                  src=""
+                  src="test-file-stub"
                 />
               </Brand>
             </header>
@@ -515,9 +569,9 @@ exports[`should render Login form and Authentication providers when available 1`
 >
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
-    backgroundImgSrc=""
+    backgroundImgSrc="test-file-stub"
     brandImgAlt="Red Hat 3scale API Management"
-    brandImgSrc=""
+    brandImgSrc="test-file-stub"
     forgotCredentials={
       <LoginMainFooterBandItem>
         <a
@@ -530,13 +584,67 @@ exports[`should render Login form and Authentication providers when available 1`
     }
     loginTitle="Log in to your account"
   >
+    <BackgroundImage
+      alt="Red Hat 3scale API Management"
+      src="test-file-stub"
+    >
+      <div
+        alt="Red Hat 3scale API Management"
+        className="pf-c-background-image"
+        style={
+          {
+            "--pf-c-background-image--BackgroundImage": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--lg": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm-2x": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage-2x": "url(test-file-stub)",
+            "--pf-c-background-image--Filter": "url(#patternfly-background-image-filter-overlay3)",
+          }
+        }
+      >
+        <svg
+          className="pf-c-background-image__filter"
+          height="0"
+          width="0"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter
+            id="patternfly-background-image-filter-overlay3"
+          >
+            <feColorMatrix
+              type="matrix"
+              values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0"
+            />
+            <feComponentTransfer
+              colorInterpolationFilters="sRGB"
+              result="duotone"
+            >
+              <feFuncR
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncG
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncB
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncA
+                tableValues="0 1"
+                type="table"
+              />
+            </feComponentTransfer>
+          </filter>
+        </svg>
+      </div>
+    </BackgroundImage>
     <Login
       className=""
       footer={
         <LoginFooter>
-          <p>
-            
-          </p>
+          <p />
           <List />
         </LoginFooter>
       }
@@ -546,7 +654,7 @@ exports[`should render Login form and Authentication providers when available 1`
             <React.Fragment>
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               />
             </React.Fragment>
           }
@@ -564,7 +672,7 @@ exports[`should render Login form and Authentication providers when available 1`
               <React.Fragment>
                 <Brand
                   alt="Red Hat 3scale API Management"
-                  src=""
+                  src="test-file-stub"
                 />
               </React.Fragment>
             }
@@ -574,12 +682,12 @@ exports[`should render Login form and Authentication providers when available 1`
             >
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               >
                 <img
                   alt="Red Hat 3scale API Management"
                   className="pf-c-brand"
-                  src=""
+                  src="test-file-stub"
                 />
               </Brand>
             </header>
@@ -1241,9 +1349,9 @@ exports[`should render itself 1`] = `
 >
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
-    backgroundImgSrc=""
+    backgroundImgSrc="test-file-stub"
     brandImgAlt="Red Hat 3scale API Management"
-    brandImgSrc=""
+    brandImgSrc="test-file-stub"
     forgotCredentials={
       <LoginMainFooterBandItem>
         <a
@@ -1256,13 +1364,67 @@ exports[`should render itself 1`] = `
     }
     loginTitle="Log in to your account"
   >
+    <BackgroundImage
+      alt="Red Hat 3scale API Management"
+      src="test-file-stub"
+    >
+      <div
+        alt="Red Hat 3scale API Management"
+        className="pf-c-background-image"
+        style={
+          {
+            "--pf-c-background-image--BackgroundImage": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--lg": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm-2x": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage-2x": "url(test-file-stub)",
+            "--pf-c-background-image--Filter": "url(#patternfly-background-image-filter-overlay0)",
+          }
+        }
+      >
+        <svg
+          className="pf-c-background-image__filter"
+          height="0"
+          width="0"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter
+            id="patternfly-background-image-filter-overlay0"
+          >
+            <feColorMatrix
+              type="matrix"
+              values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0"
+            />
+            <feComponentTransfer
+              colorInterpolationFilters="sRGB"
+              result="duotone"
+            >
+              <feFuncR
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncG
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncB
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncA
+                tableValues="0 1"
+                type="table"
+              />
+            </feComponentTransfer>
+          </filter>
+        </svg>
+      </div>
+    </BackgroundImage>
     <Login
       className=""
       footer={
         <LoginFooter>
-          <p>
-            
-          </p>
+          <p />
           <List />
         </LoginFooter>
       }
@@ -1272,7 +1434,7 @@ exports[`should render itself 1`] = `
             <React.Fragment>
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               />
             </React.Fragment>
           }
@@ -1290,7 +1452,7 @@ exports[`should render itself 1`] = `
               <React.Fragment>
                 <Brand
                   alt="Red Hat 3scale API Management"
-                  src=""
+                  src="test-file-stub"
                 />
               </React.Fragment>
             }
@@ -1300,12 +1462,12 @@ exports[`should render itself 1`] = `
             >
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               >
                 <img
                   alt="Red Hat 3scale API Management"
                   className="pf-c-brand"
-                  src=""
+                  src="test-file-stub"
                 />
               </Brand>
             </header>
@@ -1766,9 +1928,9 @@ exports[`should render reset password button when disablePasswordReset is false 
 >
   <LoginPage
     backgroundImgAlt="Red Hat 3scale API Management"
-    backgroundImgSrc=""
+    backgroundImgSrc="test-file-stub"
     brandImgAlt="Red Hat 3scale API Management"
-    brandImgSrc=""
+    brandImgSrc="test-file-stub"
     forgotCredentials={
       <LoginMainFooterBandItem>
         <a
@@ -1781,13 +1943,67 @@ exports[`should render reset password button when disablePasswordReset is false 
     }
     loginTitle="Log in to your account"
   >
+    <BackgroundImage
+      alt="Red Hat 3scale API Management"
+      src="test-file-stub"
+    >
+      <div
+        alt="Red Hat 3scale API Management"
+        className="pf-c-background-image"
+        style={
+          {
+            "--pf-c-background-image--BackgroundImage": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--lg": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage--sm-2x": "url(test-file-stub)",
+            "--pf-c-background-image--BackgroundImage-2x": "url(test-file-stub)",
+            "--pf-c-background-image--Filter": "url(#patternfly-background-image-filter-overlay1)",
+          }
+        }
+      >
+        <svg
+          className="pf-c-background-image__filter"
+          height="0"
+          width="0"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter
+            id="patternfly-background-image-filter-overlay1"
+          >
+            <feColorMatrix
+              type="matrix"
+              values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0"
+            />
+            <feComponentTransfer
+              colorInterpolationFilters="sRGB"
+              result="duotone"
+            >
+              <feFuncR
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncG
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncB
+                tableValues="0.086274509803922 0.43921568627451"
+                type="table"
+              />
+              <feFuncA
+                tableValues="0 1"
+                type="table"
+              />
+            </feComponentTransfer>
+          </filter>
+        </svg>
+      </div>
+    </BackgroundImage>
     <Login
       className=""
       footer={
         <LoginFooter>
-          <p>
-            
-          </p>
+          <p />
           <List />
         </LoginFooter>
       }
@@ -1797,7 +2013,7 @@ exports[`should render reset password button when disablePasswordReset is false 
             <React.Fragment>
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               />
             </React.Fragment>
           }
@@ -1815,7 +2031,7 @@ exports[`should render reset password button when disablePasswordReset is false 
               <React.Fragment>
                 <Brand
                   alt="Red Hat 3scale API Management"
-                  src=""
+                  src="test-file-stub"
                 />
               </React.Fragment>
             }
@@ -1825,12 +2041,12 @@ exports[`should render reset password button when disablePasswordReset is false 
             >
               <Brand
                 alt="Red Hat 3scale API Management"
-                src=""
+                src="test-file-stub"
               >
                 <img
                   alt="Red Hat 3scale API Management"
                   className="pf-c-brand"
-                  src=""
+                  src="test-file-stub"
                 />
               </Brand>
             </header>

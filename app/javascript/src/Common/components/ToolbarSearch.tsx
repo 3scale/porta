@@ -4,6 +4,8 @@ import {
   SearchInput
 } from '@patternfly/react-core'
 
+import * as navigation from 'utilities/navigation'
+
 import type { SearchInputProps } from '@patternfly/react-core'
 
 interface Props extends SearchInputProps {
@@ -36,7 +38,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     url.searchParams.delete('page')
     url.searchParams.set(INPUT_NAME_UTF8, '✓')
     url.searchParams.set(name, value)
-    window.location.replace(url.toString())
+    navigation.replace(url.toString())
   }
 
   const onSubmitSearchHandler = onSubmitSearch ?? reloadWithQuery

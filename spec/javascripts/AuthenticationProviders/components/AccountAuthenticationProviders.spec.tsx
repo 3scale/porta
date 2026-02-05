@@ -5,7 +5,7 @@ import { act } from 'react-dom/test-utils'
 import * as ajax from 'utilities/ajax'
 import * as toast from 'utilities/toast'
 import { AccountAuthenticationProviders } from 'AuthenticationProviders/components/AccountAuthenticationProviders'
-import { mockLocation, waitForPromises } from 'utilities/test-utils'
+import { waitForPromises } from 'utilities/test-utils'
 import { EnforceSSOSwitch } from 'AuthenticationProviders/components/EnforceSSOSwitch'
 import { AuthenticationProvidersTable } from 'AuthenticationProviders/components/AuthenticationProvidersTable'
 import { AuthenticationProvidersEmptyState } from 'AuthenticationProviders/components/AuthenticationProvidersEmptyState'
@@ -33,7 +33,6 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<AccountAuthenticatio
 
 beforeEach(() => {
   jest.resetAllMocks()
-  mockLocation('https://example.com')
 })
 
 afterAll(() => {

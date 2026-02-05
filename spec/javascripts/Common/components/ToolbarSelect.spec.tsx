@@ -1,7 +1,7 @@
 import { mount } from 'enzyme'
 
 import { ToolbarSelect } from 'Common/components/ToolbarSelect'
-import { mockLocation } from 'utilities/test-utils'
+import * as navigation from 'utilities/navigation'
 
 import type { Props } from 'Common/components/ToolbarSelect'
 
@@ -25,10 +25,6 @@ afterEach(() => {
 })
 
 describe('search is empty', () => {
-  beforeEach(() => {
-    mockLocation('http://example.com')
-  })
-
   it('should not have any option selected', () => {
     const wrapper = mountWrapper()
 
@@ -46,7 +42,7 @@ describe('search is empty', () => {
     wrapper.find(`SelectOption[value="${title}"] button`).simulate('click')
     wrapper.update()
 
-    expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${id}`)
+    expect(navigation.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${id}`)
   })
 })
 
@@ -54,7 +50,10 @@ describe('ongoing search', () => {
   const selectedOption = collection[0]
 
   beforeEach(() => {
-    mockLocation(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${selectedOption.id}`)
+    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation(key => {
+      if (key === 'search[plan_id]') return selectedOption.id
+      return null
+    })
   })
 
   it('should have an option selected', () => {
@@ -76,7 +75,7 @@ describe('ongoing search', () => {
     wrapper.find(`SelectOption[value="${title}"] button`).simulate('click')
     wrapper.update()
 
-    expect(window.location.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${id}`)
+    expect(navigation.replace).toHaveBeenCalledWith(`http://example.com/?utf8=%E2%9C%93&search%5B${attribute}%5D=${id}`)
   })
 
   it('should be close when selecting the same option', () => {
@@ -100,6 +99,7 @@ describe('ongoing search', () => {
     wrapper.find('.pf-c-select .pf-c-select__toggle-clear').simulate('click')
     wrapper.update()
 
-    expect(window.location.replace).toHaveBeenCalledWith('http://example.com/?utf8=%E2%9C%93')
+    expect(navigation.replace).toHaveBeenCalledWith(expect.not.stringContaining('page'))
+    expect(navigation.replace).toHaveBeenCalledWith(expect.not.stringContaining(defaultProps.name))
   })
 })

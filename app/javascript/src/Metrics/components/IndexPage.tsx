@@ -16,6 +16,7 @@ import {
 } from '@patternfly/react-core'
 
 import { MetricsTable } from 'Metrics/components/MetricsTable'
+import * as navigation from 'utilities/navigation'
 
 import type { TabsProps } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
@@ -48,7 +49,8 @@ const IndexPage: FunctionComponent<Props> = ({
     url.searchParams.delete('query')
     url.searchParams.delete('page')
     url.searchParams.delete('utf8')
-    window.location.replace(url.toString())
+
+    navigation.replace(url.toString())
   }
 
   return (

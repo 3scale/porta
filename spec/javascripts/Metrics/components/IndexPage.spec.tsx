@@ -1,7 +1,7 @@
 import { mount } from 'enzyme'
 
 import { IndexPage } from 'Metrics/components/IndexPage'
-import { mockLocation } from 'utilities/test-utils'
+import * as navigation from 'utilities/navigation'
 
 import type { Props } from 'Metrics/components/IndexPage'
 
@@ -35,7 +35,6 @@ it('should render itself', () => {
 })
 
 it('should be in Methods tab by default', () => {
-  mockLocation('https://foo.bar')
   const wrapper = mountWrapper()
   expect(wrapper.find('.pf-c-tabs__item.pf-m-current').text()).toBe('Methods')
 })
@@ -47,14 +46,14 @@ it('should have a table', () => {
 
 describe('when in Methods tab', () => {
   beforeEach(() => {
-    mockLocation('https://foo.bar?tab=methods')
+    jest.spyOn(URLSearchParams.prototype, 'get').mockReturnValueOnce('methods')
   })
 
   it('should change to tab Metrics', () => {
     const wrapper = mountWrapper()
     wrapper.find('.pf-c-tabs__item:not(.pf-m-current) button').simulate('click')
-    expect(window.location.replace).toHaveBeenCalledTimes(1)
-    expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('tab=metrics'))
+    expect(navigation.replace).toHaveBeenCalledTimes(1)
+    expect(navigation.replace).toHaveBeenCalledWith(expect.stringContaining('tab=metrics'))
   })
 
   it('should have a button to create new methods', () => {
@@ -66,14 +65,14 @@ describe('when in Methods tab', () => {
 
 describe('when in Metrics tab', () => {
   beforeEach(() => {
-    mockLocation('https://foo.bar?tab=metrics')
+    jest.spyOn(URLSearchParams.prototype, 'get').mockReturnValueOnce('metrics')
   })
 
   it('should change to tab Methods', () => {
     const wrapper = mountWrapper()
     wrapper.find('.pf-c-tabs__item:not(.pf-m-current) button').simulate('click')
-    expect(window.location.replace).toHaveBeenCalledTimes(1)
-    expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('tab=methods'))
+    expect(navigation.replace).toHaveBeenCalledTimes(1)
+    expect(navigation.replace).toHaveBeenCalledWith(expect.stringContaining('tab=methods'))
   })
 
   it('should have a button to create new methods', () => {
