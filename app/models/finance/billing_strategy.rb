@@ -89,6 +89,30 @@ class Finance::BillingStrategy < ApplicationRecord
         results.start(billing_strategy)
         ignoring_find_each_scope { billing_strategy.daily(now: now, buyer_ids: options[:buyer_ids], skip_notifications: skip_notifications) }
         results.success(billing_strategy)
+      rescue Finance::Payment::RateLimitError => e
+        # Rate limit hit - let it bubble up for Sidekiq retry with exponential backoff
+        # This is a transient error that will be retried, not a "failure"
+        # Don't mark as results.failure - the job will retry and (likely) succeed
+        name = billing_strategy.provider.try!(:name)
+        id = billing_strategy.id
+        buyer_ids = options[:buyer_ids]
+
+        # Note: We don't know which specific buyer hit the rate limit, only which buyers were being processed
+        buyer_context = if buyer_ids.present?
+                         "while processing #{buyer_ids.size} buyer(s): [#{buyer_ids.join(', ')}]"
+                       else
+                         "while processing all buyers"
+                       end
+
+        message = "BillingStrategy #{id}(#{name}) hit rate limit #{buyer_context} - will retry with exponential backoff"
+
+        Rails.logger.warn(message)
+
+        System::ErrorReporting.report_error(e, :error_message => message,
+                                            :error_class => 'RateLimitError',
+                                            :parameters => { billing_strategy_id: id, buyer_ids: buyer_ids })
+
+        raise e
       rescue => e
         results.failure(billing_strategy)
         name = billing_strategy.provider.try!(:name)
@@ -352,6 +376,10 @@ class Finance::BillingStrategy < ApplicationRecord
     buyer_accounts.find_each(:batch_size => 20) do |buyer|
       begin
         ignoring_find_each_scope { yield(buyer) }
+      rescue Finance::Payment::RateLimitError => exception
+        # Rate limit errors should bubble up to trigger Sidekiq retry with exponential backoff
+        # Do NOT catch and swallow - let the job fail and retry immediately
+        raise exception
       rescue => exception
         name = buyer.name
         buyer_id = buyer.id

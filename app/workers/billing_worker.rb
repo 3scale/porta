@@ -16,7 +16,7 @@ class BillingWorker
       delay + jitter
     else
       # For other errors: wait for lock to be released (original behavior)
-      1.hours + 10
+      (1.hours + 10).to_i
     end
   end
 
