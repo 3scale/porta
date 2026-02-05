@@ -109,7 +109,7 @@ module Liquid
         {{ endif }}
       }
       def password_required?
-        @user.password_required?
+        @user.signup.by_user?
       end
 
       desc "Returns the list of sections the user has access to."

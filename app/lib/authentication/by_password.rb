@@ -4,31 +4,22 @@ module Authentication
     extend ActiveSupport::Concern
 
     # strong passwords
-    SPECIAL_CHARACTERS = '-+=><_$#.:;!?@&*()~][}{|'
-    RE_STRONG_PASSWORD = /
-      \A
-        (?=.*\d) # number
-        (?=.*[a-z]) # lowercase
-        (?=.*[A-Z]) # uppercase
-        (?=.*[#{Regexp.escape(SPECIAL_CHARACTERS)}]) # special char
-        (?!.*\s) # does not end with space
-        .{8,} # at least 8 characters
-      \z
-    /x
-    STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{SPECIAL_CHARACTERS}.".freeze
+    STRONG_PASSWORD_MIN_SIZE = 16
+    # All printable characters in ASCII, from 'space' (32) to ~ (126)
+    # at least STRONG_PASSWORD_MIN_SIZE characters
+    RE_STRONG_PASSWORD = /\A[ -~]{#{STRONG_PASSWORD_MIN_SIZE},64}\z/
+    STRONG_PASSWORD_FAIL_MSG = "Password must be at least #{STRONG_PASSWORD_MIN_SIZE} characters long, and contain only valid characters.".freeze
 
     included do
       # We only need length validations as they are already set in Authentication::ByPassword
       has_secure_password validations: false
 
-      validates_presence_of :password, if: :password_required?
+      validates_presence_of :password, if: :validate_password?
 
       validates_confirmation_of :password, allow_blank: true
 
       validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
-                                     if: -> { password_required? && provider_requires_strong_passwords? } }
-      validates :password, length: { minimum: 6, allow_blank: true,
-                                     if: -> { password_required? && !provider_requires_strong_passwords? } }
+                                     if: -> { validate_strong_password? } }
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
@@ -45,8 +36,15 @@ module Authentication
       end
     end
 
-    def password_required?
-      signup.by_user? && (password_digest.blank? || password_digest_changed?)
+    def validate_password?
+      password_digest_changed? || (signup.by_user? && password_digest.blank?)
+    end
+
+    def validate_strong_password?
+      return false if Rails.configuration.three_scale.strong_passwords_disabled
+      return false if signup.sample_data?
+
+      validate_password?
     end
 
     def just_changed_password?
@@ -82,7 +80,7 @@ module Authentication
     end
 
     def using_password?
-      password_digest.present?
+      password_digest_in_database.present?
     end
 
     def can_set_password?
