@@ -2216,7 +2216,6 @@ en:
         approval_required_referer: "Set per account plan from %{link}."
         account_approval_required: "Approval is required by you before developer accounts are activated."
         useraccountarea_enabled: 'Only disable this if you provide another way to manage this information (e.g. via the User Management API).'
-        strong_passwords_enabled: "Require strong passwords from your users: %{strong_password_definition} Existing passwords will still work."
         public_search: >
           Allow anyone to search on your Developer Portal.
           If you have Restricted Pages your Developer Portal we advise you not to change this setting.
@@ -2356,7 +2355,6 @@ en:
         hide_service: 'Used a default service plan'
         signups_enabled: 'Developers are allowed sign up themselves'
         cas_server_url: 'CAS Server URL'
-        strong_passwords_enabled: 'Strong passwords'
         public_search: 'Enable public search on Developer Portal'
         cms_escape_draft_html: 'Use Automatic Escaping for draft content'
         cms_escape_published_html: 'Use Automatic Escaping for published content'
