@@ -344,14 +344,6 @@ class User < ApplicationRecord
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
   end
 
-  def provider_requires_strong_passwords?
-    # use fields definitons source (instance variable) as backup when creating new record
-    # and there is no provider account (its still new record and not set through association.build)
-    if source = fields_definitions_source_root
-      source.settings.strong_passwords_enabled?
-    end
-  end
-
   protected
 
   def account_for_sphinx
