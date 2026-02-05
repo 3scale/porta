@@ -1,0 +1,121 @@
+%% Billing Flow - Payment Error (Card Declined)
+%% Shows how regular payment errors are handled (NOT retried immediately)
+
+sequenceDiagram
+    participant BW as BillingWorker<br/>(Sidekiq)
+    participant BS as BillingService
+    participant Strategy as BillingStrategy<br/>(class method)
+    participant Instance as PostpaidBillingStrategy<br/>(instance)
+    participant Invoice as Invoice
+    participant Account as Account<br/>(Buyer)
+    participant PT as PaymentTransaction
+    participant Stripe as Stripe API
+    participant Mailer as InvoiceMessenger
+
+    Note over BW,Mailer: Buyer #123 has 2 invoices: #1, #2
+
+    BW->>BW: perform(buyer_id: 123, provider_id: 456)
+    activate BW
+
+    BW->>BS: call!(buyer_id: 123, provider_account_id: 456)
+    activate BS
+
+    BS->>BS: acquire_lock("billing:123")
+    Note over BS: Lock acquired ✓
+
+    BS->>Strategy: daily(only: [456], buyer_ids: [123])
+    activate Strategy
+
+    Strategy->>Instance: daily(buyer_ids: [123])
+    activate Instance
+
+    Instance->>Instance: charge_invoices(buyer, now)
+
+    rect rgb(200, 255, 200)
+        Note over Instance,Stripe: Invoice #1 - SUCCESS
+        Instance->>Invoice: charge! (Invoice #1)
+        activate Invoice
+        Invoice->>Account: charge!(100.00, invoice: #1)
+        Account->>PT: purchase!(100.00, ...)
+        PT->>Stripe: POST /v1/charges
+        Stripe-->>PT: 200 OK
+        PT-->>Account: success
+        Account-->>Invoice: true
+        Invoice->>Invoice: pay! → save!
+        Note over Invoice: State: paid ✓
+        Invoice-->>Instance: (success)
+        deactivate Invoice
+    end
+
+    rect rgb(255, 200, 200)
+        Note over Instance,Stripe: Invoice #2 - CARD DECLINED
+        Instance->>Invoice: charge! (Invoice #2)
+        activate Invoice
+        Invoice->>Account: charge!(200.00, invoice: #2)
+        activate Account
+        Account->>PT: purchase!(200.00, ...)
+        activate PT
+        PT->>Stripe: POST /v1/charges
+        Note over Stripe: 💳 Card declined<br/>Insufficient funds
+        Stripe-->>PT: 402 Payment Required<br/>(card_declined)
+
+        PT->>PT: rate_limit_error?(response)<br/>→ false (HTTP 402, not 429)
+        Note over PT: Raise CreditCardPurchaseFailed
+        PT-->>Account: ❌ CreditCardPurchaseFailed
+        deactivate PT
+        Account-->>Invoice: ❌ CreditCardPurchaseFailed
+        deactivate Account
+
+        Note over Invoice: Catch CreditCardError<br/>(parent of CreditCardPurchaseFailed)
+        Invoice->>Invoice: charging_retries_count += 1
+        Note over Invoice: charging_retries_count = 1/3
+        Invoice->>Invoice: last_charging_retry = now
+        Invoice->>Invoice: mark_as_unpaid!
+        Note over Invoice: State: pending → unpaid<br/>save! (COMMITTED to DB)
+
+        Invoice->>Mailer: unsuccessfully_charged_for_buyer(invoice)
+        Note over Mailer: Email buyer:<br/>"Payment failed"
+
+        Note over Invoice: Publish event:<br/>Invoices::UnsuccessfullyChargedInvoiceProviderEvent
+
+        Note over Invoice: Exception handled ✓<br/>DON'T re-raise
+        Invoice-->>Instance: (exception handled)
+        deactivate Invoice
+    end
+
+    Note over Instance: Loop continues to next invoice<br/>(if any)
+
+    Instance-->>Strategy: (success - no exception raised)
+    deactivate Instance
+
+    Strategy-->>BS: results (success: true, failed_buyers: [])
+    deactivate Strategy
+
+    Note over BS: Lock remains held<br/>(NOT released)
+
+    BS-->>BW: billing_results
+    deactivate BS
+
+    BW->>BW: store_summary(buyer_id, results)
+
+    BW-->>BW: Job complete ✓
+    deactivate BW
+
+    Note over BW,Mailer: Job completes successfully<br/>No Sidekiq retry
+
+    rect rgb(200, 200, 255)
+        Note over Invoice,Mailer: 3 days later...
+        Note over Invoice: chargeable scope:<br/>last_charging_retry < 3 days ago<br/>→ Invoice #2 becomes chargeable again
+
+        Note over BW: Next daily billing run
+        BW->>BS: call!(buyer_id: 123, ...)
+        BS->>Strategy: daily(...)
+        Strategy->>Instance: daily(...)
+        Instance->>Instance: charge_invoices(buyer)
+        Note over Instance: Query chargeable invoices:<br/>#1: paid → excluded<br/>#2: unpaid, 3 days old → included
+
+        Instance->>Invoice: charge! (Invoice #2, retry #2)
+        Note over Invoice: If fails again:<br/>charging_retries_count = 2/3<br/>Email sent again
+
+        Note over Invoice: If fails 3rd time:<br/>charging_retries_count = 3/3<br/>invoice.fail!<br/>State: unpaid → failed<br/>Final email sent
+    end

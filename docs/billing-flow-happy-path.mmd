@@ -1,0 +1,97 @@
+%% Billing Flow - Happy Path (Successful Billing)
+%% Render with: mmdc -i billing-flow-happy-path.mmd -o billing-flow-happy-path.png
+%% Or view in GitHub, VS Code, etc.
+
+sequenceDiagram
+    participant Cron as Daily Cron Job
+    participant BW as BillingWorker<br/>(Sidekiq)
+    participant BS as BillingService
+    participant Strategy as BillingStrategy<br/>(class method)
+    participant Instance as PostpaidBillingStrategy<br/>(instance)
+    participant Invoice as Invoice
+    participant Account as Account<br/>(Buyer)
+    participant PT as PaymentTransaction
+    participant Stripe as Stripe API
+
+    Note over Cron,Stripe: Daily billing run starts for Provider #456
+
+    Cron->>BW: enqueue(provider, billing_date)
+    Note over BW: Creates Sidekiq::Batch<br/>One job per buyer
+
+    BW->>BW: perform(buyer_id: 123, provider_id: 456)
+    activate BW
+
+    BW->>BS: call!(buyer_id: 123, provider_account_id: 456)
+    activate BS
+
+    BS->>BS: acquire_lock("billing:123")
+    Note over BS: Lock acquired for 1 hour<br/>Prevents concurrent billing
+
+    BS->>Strategy: daily(only: [456], buyer_ids: [123])
+    activate Strategy
+
+    Strategy->>Strategy: scope = where(account_id in [456])
+    Strategy->>Strategy: find_each (1 billing_strategy)
+
+    Strategy->>Instance: daily(buyer_ids: [123])
+    activate Instance
+
+    Instance->>Instance: bill_and_charge_each(buyer_ids: [123])
+    Note over Instance: Filters to buyer #123
+
+    Instance->>Instance: bill_expired_trials(buyer)
+    Instance->>Instance: bill_variable_costs(buyer)
+    Instance->>Instance: finalize_invoices_of(buyer)
+    Instance->>Instance: bill_fixed_costs(buyer)
+    Instance->>Instance: issue_invoices_of(buyer)
+
+    Instance->>Instance: charge_invoices(buyer, now)
+    Note over Instance: Loop through chargeable invoices
+
+    loop For each chargeable invoice
+        Instance->>Invoice: charge!
+        activate Invoice
+
+        Invoice->>Account: charge!(cost, invoice: invoice)
+        activate Account
+
+        Account->>PT: purchase!(cost, credit_card, options)
+        activate PT
+
+        PT->>Stripe: POST /v1/charges
+        Note over Stripe: Charge $100.00
+        Stripe-->>PT: 200 OK (charge succeeded)
+
+        PT-->>Account: response (success: true)
+        deactivate PT
+
+        Account-->>Invoice: true
+        deactivate Account
+
+        Invoice->>Invoice: pay!
+        Note over Invoice: State: pending → paid<br/>save! (COMMITTED to DB)
+
+        Invoice-->>Instance: (success)
+        deactivate Invoice
+    end
+
+    Instance-->>Strategy: (success)
+    deactivate Instance
+
+    Strategy-->>BS: results (success: true)
+    deactivate Strategy
+
+    Note over BS: Lock remains held<br/>(NOT released on success)
+
+    BS-->>BW: billing_results
+    deactivate BS
+
+    BW->>BW: store_summary(buyer_id, results)
+
+    BW-->>Cron: Job complete ✓
+    deactivate BW
+
+    Note over Cron,Stripe: After ALL buyer jobs complete,<br/>batch callback fires
+
+    BW->>BS: notify_billing_finished(status, results)
+    Note over BS: Sends provider notification<br/>"Billing complete"
