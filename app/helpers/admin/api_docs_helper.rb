@@ -27,7 +27,7 @@ module Admin::ApiDocsHelper
       action: data_url(api_docs_service)
     }
 
-    if requires_service(api_docs_service)
+    if requires_service?(api_docs_service)
       data[:collection] = current_user.accessible_services.as_json(only: %i[id name], root: false)
       data[:serviceId] = api_docs_service.service_id
     end
@@ -41,7 +41,7 @@ module Admin::ApiDocsHelper
     api_docs_service.new_record? ? create_api_docs_service_path : update_api_docs_service_path(api_docs_service)
   end
 
-  def requires_service(api_docs_service)
+  def requires_service?(api_docs_service)
     !current_scope.is_a?(Service) || !api_docs_service.new_record?
   end
 end

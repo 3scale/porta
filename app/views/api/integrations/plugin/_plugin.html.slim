@@ -1,7 +1,7 @@
 #plugin
-  div data-lang=(plugin_language_name)
+  div data-lang=(plugin_language_name(@service))
     - begin
-      = render "api/integrations/plugin/plugins/#{plugin_language_name}"
+      = render "api/integrations/plugin/plugins/#{plugin_language_name(@service)}"
     - rescue ActionView::MissingTemplate
       = render 'api/integrations/plugin/plugins/generic'
 

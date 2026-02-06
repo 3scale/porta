@@ -14,4 +14,8 @@ module Sites::UsageRulesHelper
 
     hint.html_safe # rubocop:disable Rails/OutputSafety
   end
+
+  def strong_password_definition
+    User::STRONG_PASSWORD_FAIL_MSG
+  end
 end

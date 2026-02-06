@@ -5,7 +5,7 @@ class FieldsDefinitionDecorator < ApplicationDecorator
 
   def new_application_data(provider)
     type = field_type(provider)
-    input_name = "#{target.downcase}#{type == 'extra' ? '[extra_fields]' : ''}[#{name}]"
+    input_name = "#{target.downcase}#{'[extra_fields]' if type == :extra}[#{name}]"
     {
       hidden: hidden,
       required: required,
@@ -27,5 +27,9 @@ class FieldsDefinitionDecorator < ApplicationDecorator
     else
       :builtin
     end
+  end
+
+  def properties
+    %w[hidden read_only required].select { |property| send(property) }.to_sentence.humanize
   end
 end
