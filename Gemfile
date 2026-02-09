@@ -95,7 +95,7 @@ gem 'hiredis-client'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json_schemer'
 gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
-gem 'kt-paperclip', '~> 7.2'
+gem 'kt-paperclip', '~> 7.3'
 gem 'matrix', '~> 0.4.2' # needed only until we upgrade capybara and prawn that list it as a dependency
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
