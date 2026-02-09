@@ -159,12 +159,13 @@ fieldset.policies-fieldset {
       display: none;
     }
 
+    input[type="checkbox"] {
+      top: auto;
+      margin-top: 0.375rem;
+    }
+
     .Policy-status input#policy-enabled[type="checkbox"][name="policy-enabled"] {
-      position: relative;
-      top: -1px;
       margin: 0 0.375rem 0 1px;
-      vertical-align: baseline;
-      border-radius: 0.1875rem;
     }
   }
 }
