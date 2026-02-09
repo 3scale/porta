@@ -260,7 +260,7 @@ GEM
     chronic (0.10.2)
     ci_reporter (2.0.0)
       builder (>= 2.1.2)
-    climate_control (0.2.0)
+    climate_control (1.2.0)
     coderay (1.1.3)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
@@ -474,12 +474,12 @@ GEM
     kgio (2.11.4)
     kramdown (2.5.1)
       rexml (>= 3.3.9)
-    kt-paperclip (7.2.1)
+    kt-paperclip (7.3.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       marcel (~> 1.0.1)
       mime-types
-      terrapin (~> 0.6.0)
+      terrapin (>= 0.6.0, < 2.0)
     kubeclient (4.9.3)
       http (>= 3.0, < 5.0)
       jsonpath (~> 1.0)
@@ -930,8 +930,8 @@ GEM
     sys-uname (1.2.3)
       ffi (~> 1.1)
     temple (0.8.1)
-    terrapin (0.6.0)
-      climate_control (>= 0.0.3, < 1.0)
+    terrapin (1.1.1)
+      climate_control
     test_xml (0.1.8)
       diffy (~> 3.0)
       nokogiri (>= 1.3.2)
@@ -1081,7 +1081,7 @@ DEPENDENCIES
   json (~> 2.7, >= 2.7.1)
   json_schemer
   jwt (~> 1.5.2)
-  kt-paperclip (~> 7.2)
+  kt-paperclip (~> 7.3)
   kubeclient
   launchy
   letter_opener
