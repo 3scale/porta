@@ -6,7 +6,6 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   rescue_from PaymentGatewayNotSupported, with: :handle_not_found
 
   helper Finance::InvoicesHelper
-  helper Accounts::InvoicesHelper
 
   before_action :authorize_finance
   before_action :find_provider

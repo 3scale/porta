@@ -2,7 +2,7 @@
 - title = local_assigns[:title] || t('.title')
 
 - content_for :javascripts do
-  = javascript_packs_with_chunks_tag 'empty_state'
+  = stylesheet_packs_chunks_tag 'empty_state'
 
 div class="pf-c-empty-state"
   div class="pf-c-empty-state__content"
@@ -14,5 +14,4 @@ div class="pf-c-empty-state"
         = body
     - if primary = local_assigns[:primary]
       div class="pf-c-empty-state__primary"
-        a class="pf-c-button pf-m-primary" type="button" href=primary[:href]
-          = primary[:title]
+        = link_to primary[:title], primary[:href], class: 'pf-c-button pf-m-primary', type: :button, **primary[:opts]

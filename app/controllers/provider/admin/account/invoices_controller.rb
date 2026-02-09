@@ -1,7 +1,6 @@
 class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::BaseController
 
   helper Finance::InvoicesHelper
-  helper Accounts::InvoicesHelper
 
   before_action :authorize_finance
   prepend_before_action :deny_on_premises
