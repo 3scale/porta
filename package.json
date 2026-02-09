@@ -19,7 +19,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "engines": {
-    "node": "18"
+    "node": "24"
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
