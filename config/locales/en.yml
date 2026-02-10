@@ -1126,7 +1126,7 @@ en:
           body: ''
           primary: Create an invoice
       toolbar:
-        primary: Create Invoice
+        primary: Create invoice
       update:
         success: Invoice was successfully updated
 
