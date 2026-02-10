@@ -19,7 +19,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "engines": {
-    "node": "18"
+    "node": "24"
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
@@ -102,7 +102,7 @@
     "sass": "^1.97.0",
     "sass-loader": "13.3.3",
     "showdown": "2.1.0",
-    "swagger-client": "^3.32.4",
+    "swagger-client": "^3.36.1",
     "swagger-ui": "~5.12.3",
     "validate.js": "^0.13.1",
     "virtual-dom": "^2.1.1",
@@ -113,7 +113,6 @@
   "resolutions": {
     "body-parser": "1.20.3",
     "express": "4.21.2",
-    "http-proxy-middleware": "2.0.7",
     "jquery-ui/jquery": "3.7.0"
   }
 }
