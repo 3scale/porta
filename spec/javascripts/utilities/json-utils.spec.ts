@@ -1,6 +1,6 @@
 import { fromJsonString, safeFromJsonString } from 'utilities/json-utils'
 
-const goodOlJsonString = '{"answer": "42"}'
+const goodOlJsonString = '{"answer": "4242"}'
 const badOlJsonString = "{answer': '42'}"
 
 describe('fromJsonString', () => {
