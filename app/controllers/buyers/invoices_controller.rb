@@ -10,7 +10,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   activate_menu :audience, :accounts, :listing
 
   def index
-    @presenter = Buyers::InvoicesIndexPresenter.new(account: @account, current_account:, params:)
+    @presenter = Buyers::InvoicesIndexPresenter.new(buyer: @account, params:)
   end
 
   def show

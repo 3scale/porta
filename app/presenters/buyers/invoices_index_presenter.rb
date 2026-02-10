@@ -4,9 +4,9 @@ class Buyers::InvoicesIndexPresenter
   include ::Draper::ViewHelpers
   include System::UrlHelpers.system_url_helpers
 
-  def initialize(account:, current_account:, params: {})
-    @account = account
-    @is_provider = current_account.provider?
+  # Ignore :reek:FeatureEnvy
+  def initialize(buyer:, params: {})
+    @buyer = buyer
     @sort_params = [
       params.fetch(:sort, :id),
       params.fetch(:direction, :desc)
@@ -17,24 +17,25 @@ class Buyers::InvoicesIndexPresenter
     }
   end
 
-  attr_reader :account, :is_provider, :sort_params, :pagination_params
+  attr_reader :is_provider, :sort_params, :pagination_params
 
   def invoices
-    @invoices ||= account.invoices
-                         .includes(:provider_account)
-                         .ordered
-                         .order_by(*sort_params)
-                         .paginate(pagination_params)
+    # Eager load provider_account to prevent N+1 queries when invoice.cost is called.
+    # Open/finalized invoices access provider.currency which requires the association.
+    @invoices ||= @buyer.invoices
+                        .includes(:provider_account)
+                        .ordered
+                        .order_by(*sort_params)
+                        .paginate(pagination_params)
   end
 
   def link_to_invoice(invoice)
-    path = invoice_path_for(invoice)
     friendly_id = invoice.friendly_id
-    h.link_to friendly_id, path, title: "Show #{friendly_id}"
+    h.link_to friendly_id, admin_buyers_account_invoice_path(@buyer, invoice), title: "Show #{friendly_id}"
   end
 
   def invoices_path
-    admin_buyers_account_invoices_path(account)
+    admin_buyers_account_invoices_path(@buyer)
   end
 
   def toolbar_props
@@ -43,8 +44,8 @@ class Buyers::InvoicesIndexPresenter
       variant: :primary,
     }
 
-    if account.current_invoice
-      create_button['data-disabled'] = I18n.t('buyers.invoices.create.open_invoice', name: account.name)
+    if @buyer.current_invoice
+      create_button['data-disabled'] = I18n.t('buyers.invoices.create.open_invoice', name: @buyer.name)
     else
       create_button['href'] = invoices_path
     end
@@ -57,14 +58,5 @@ class Buyers::InvoicesIndexPresenter
 
   def empty_state?
     invoices.empty?
-  end
-
-  private
-
-  # This method smells of :reek:ControlParameter but it's OK
-  def invoice_path_for(invoice)
-    return admin_account_invoice_path(invoice) unless is_provider && account
-
-    admin_buyers_account_invoice_path(account, invoice)
   end
 end
