@@ -13,5 +13,6 @@ div class="pf-c-empty-state"
       div class="pf-c-empty-state__body"
         = body
     - if primary = local_assigns[:primary]
+      - opts = primary[:opts] || {}
       div class="pf-c-empty-state__primary"
-        = link_to primary[:title], primary[:href], class: 'pf-c-button pf-m-primary', type: :button, **primary[:opts]
+        = link_to primary[:title], primary[:href], class: 'pf-c-button pf-m-primary', type: :button, **opts

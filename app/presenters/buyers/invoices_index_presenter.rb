@@ -4,28 +4,31 @@ class Buyers::InvoicesIndexPresenter
   include ::Draper::ViewHelpers
   include System::UrlHelpers.system_url_helpers
 
-  def initialize(account:, user:, params:)
+  def initialize(account:, current_account:, params: {})
     @account = account
-    @sort_params = [params[:sort] || 'id', params[:direction] || 'desc']
-    @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
-    @user = user
+    @is_provider = current_account.provider?
+    @sort_params = [
+      params.fetch(:sort, :id),
+      params.fetch(:direction, :desc)
+    ]
+    @pagination_params = {
+      page: params.fetch(:page, 1),
+      per_page: params.fetch(:per_page, 20)
+    }
   end
 
-  attr_reader :account, :sort_params, :pagination_params, :user
+  attr_reader :account, :is_provider, :sort_params, :pagination_params
 
   def invoices
-    @invoices ||= raw_invoices.order_by(*sort_params)
-                              .paginate(pagination_params)
+    @invoices ||= account.invoices
+                         .includes(:provider_account)
+                         .ordered
+                         .order_by(*sort_params)
+                         .paginate(pagination_params)
   end
 
-  # This method smells of :reek:ControlParameter but it's OK
-  def link_to_invoice(invoice, is_provider:)
-    path = if is_provider && account
-             admin_buyers_account_invoice_path(account, invoice)
-           else
-             admin_account_invoice_path(invoice)
-           end
-
+  def link_to_invoice(invoice)
+    path = invoice_path_for(invoice)
     friendly_id = invoice.friendly_id
     h.link_to friendly_id, path, title: "Show #{friendly_id}"
   end
@@ -58,8 +61,10 @@ class Buyers::InvoicesIndexPresenter
 
   private
 
-  def raw_invoices
-    @raw_invoices ||= account.invoices.includes(:provider_account)
-                                      .ordered
+  # This method smells of :reek:ControlParameter but it's OK
+  def invoice_path_for(invoice)
+    return admin_account_invoice_path(invoice) unless is_provider && account
+
+    admin_buyers_account_invoice_path(account, invoice)
   end
 end

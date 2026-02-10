@@ -11,14 +11,12 @@
                                               href: @presenter.invoices_path,
                                               opts: { 'data-method': :post } } %>
 <% else %>
-  <% content_for :javascripts do %>
-    <%= javascript_packs_with_chunks_tag 'table_toolbar' %>
-  <% end %>
+  <% content_for :javascripts, javascript_packs_with_chunks_tag('table_toolbar') %>
 
   <table class="pf-c-table pf-m-grid-lg"
-        role="grid"
-        aria-label="Invoices table"
-        data-toolbar-props="<%= @presenter.toolbar_props.to_json %>">
+         role="grid"
+         aria-label="Invoices table"
+         data-toolbar-props="<%= @presenter.toolbar_props.to_json %>">
     <thead>
       <tr role="row">
         <%= th_sortable('friendly_id', 'ID') %>
@@ -32,7 +30,7 @@
       <% @presenter.invoices.each do |invoice| %>
         <%= content_tag :tr, id: dom_id(invoice), role: "row" do %>
           <td role="cell" data-label="ID">
-            <%= @presenter.link_to_invoice(invoice, is_provider: current_account.provider?) %>
+            <%= @presenter.link_to_invoice(invoice) %>
           </td>
           <td role="cell" data-label="Month"><%= invoice.name %></td>
           <td role="cell" data-label="State"><%= h invoice.state %></td>
