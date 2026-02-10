@@ -1,6 +1,14 @@
 {
   "plugins": ["jest"],
   "extends": ["plugin:jest/recommended"],
+  // Setting an explicit version of jest, because the version cannot be determined when running in Qlty cloud
+  // See: https://github.com/qltysh/qlty/issues/2683
+  // This setting is described in the documentation https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
+  "settings": {
+    "jest": {
+      "version": 30
+    }
+  },
   "rules": {
     "react/jsx-key": "off",
     "react/jsx-props-no-spreading": "off",
