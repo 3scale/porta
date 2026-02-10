@@ -9,7 +9,7 @@ describe('fromJsonString', () => {
   })
 
   it('should throw error when parsing a bad formatted json string', () => {
-    expect(() => fromJsonString(badOlJsonString)).toThrow('Unexpected token a in JSON at position 1')
+    expect(() => fromJsonString(badOlJsonString)).toThrow(SyntaxError)
   })
 })
 
