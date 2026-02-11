@@ -70,14 +70,14 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
     end
 
     class ValidationsTest < StrongPasswordsTest
-      test 'should be valid with ASCII printable characters and longer than 16 characters' do
+      test 'should be valid with ASCII printable characters and longer than 15 characters' do
         user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
         user.valid?
 
         assert user.errors[:password].blank?
       end
 
-      test 'should be invalid if shorter than 16 characters' do
+      test 'should be invalid if shorter than 15 characters' do
         user = user_with_password.call('Pas$123')
         user.valid?
 

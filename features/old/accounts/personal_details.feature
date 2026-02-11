@@ -88,4 +88,4 @@ Feature: Personal Details
     And I fill in "New password" with "hi"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
-    Then field "New password" has inline error "Password must be at least 16 characters long, and contain only valid characters"
+    Then field "New password" has inline error "Password must be at least 15 characters long, and contain only valid characters"
