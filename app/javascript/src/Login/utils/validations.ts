@@ -4,7 +4,7 @@ import validate from 'validate.js'
 // The source of truth is app/lib/authentication/by_password.rb. If those constants change in Ruby,
 // you must update them here as well. Do not modify these without updating the backend first.
 const STRONG_PASSWORD_MIN_SIZE = 16
-const RE_STRONG_PASSWORD = new RegExp(`^[ -~]{${STRONG_PASSWORD_MIN_SIZE},64}$`)
+const RE_STRONG_PASSWORD = new RegExp(`^[ -~]{${STRONG_PASSWORD_MIN_SIZE},}$`)
 const STRONG_PASSWORD_FAIL_MSG = `Password must be at least ${STRONG_PASSWORD_MIN_SIZE} characters long, and contain only valid characters.`
 
 const loginConstraints = {
