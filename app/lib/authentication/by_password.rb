@@ -7,7 +7,7 @@ module Authentication
     STRONG_PASSWORD_MIN_SIZE = 16
     # All printable characters in ASCII, from 'space' (32) to ~ (126)
     # at least STRONG_PASSWORD_MIN_SIZE characters
-    RE_STRONG_PASSWORD = /\A[ -~]{#{STRONG_PASSWORD_MIN_SIZE},64}\z/
+    RE_STRONG_PASSWORD = /\A[ -~]{#{STRONG_PASSWORD_MIN_SIZE},}\z/
     STRONG_PASSWORD_FAIL_MSG = "Password must be at least #{STRONG_PASSWORD_MIN_SIZE} characters long, and contain only valid characters.".freeze
 
     included do
