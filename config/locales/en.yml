@@ -1101,7 +1101,7 @@ en:
         empty_state:
           body:
             Groups control access to protected sections in your developer portal.
-            Assign buyer accounts to groups to grant them access to specific content.
+            Assign accounts to groups to grant them access to specific content.
           title: No groups yet
           primary: Create a group
       update:
