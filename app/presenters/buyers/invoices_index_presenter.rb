@@ -48,6 +48,7 @@ class Buyers::InvoicesIndexPresenter
       create_button['data-disabled'] = I18n.t('buyers.invoices.create.open_invoice', name: @buyer.name)
     else
       create_button['href'] = invoices_path
+      create_button['data-method'] = :post
     end
 
     {
