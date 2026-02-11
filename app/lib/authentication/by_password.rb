@@ -57,9 +57,10 @@ module Authentication
 
     def generate_lost_password_token
       token = SecureRandom.hex(32)
-      return unless update_columns(lost_password_token: token, lost_password_token_generated_at: Time.current)
+      self.lost_password_token = token
+      self.lost_password_token_generated_at = Time.current
 
-      token
+      token if save(validate: false)
     end
 
     def generate_lost_password_token!
