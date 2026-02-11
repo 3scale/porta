@@ -43,6 +43,14 @@ When /^(?:|I |they |the buyer )follow( any)?( invisible)? "([^"]*)"(?: to ((?:.(
   click_link(link, exact: true, visible: !invisible)
 end
 
+# Click on anything containing 'text', regardless of its element.
+#
+#   When they click on "Create invoice"
+#
+When "they click on {string}" do |text|
+  find(:xpath, "//*[text()='#{text}']", wait: false).click
+end
+
 When "(they )switch {string} on" do |switch|
   check(switch, allow_label_click: true)
 end

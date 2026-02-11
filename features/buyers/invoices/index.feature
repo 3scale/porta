@@ -16,7 +16,7 @@ Feature: Audience > Accounts > Buyer > Invoices
     And they follow "0 Invoices"
     Then the current page is the invoices page of account "Bob"
 
-  Scenario: Create an invoice
+  Scenario: Create an invoice from an empty view
     Given the date is 1st January 2009
     When they go to the invoices page of account "Bob"
     And they follow "Create an invoice"
@@ -31,20 +31,26 @@ Feature: Audience > Accounts > Buyer > Invoices
     And they go to the invoices page of account "Bob"
     And the table should have 1 row
     Then there should not be a link to "Create invoice"
+    When they click on "Create invoice"
+    And confirm the dialog
+    Then the table should have 1 row
+    And they should see "1 Invoice"
 
-  Scenario: Can't create invoice when buyer already has a pending invoice
+  Scenario Outline: Can create invoice when buyer has a <state> invoice
     Given the following invoice:
       | Buyer | Month         | Friendly ID      | State   |
-      | Bob   | January, 2009 | 2011-02-00000002 | Pending |
+      | Bob   | January, 2009 | 2009-01-00000001 | <state> |
     And they go to the invoices page of account "Bob"
     And the table should have 1 row
-    Then there should be a link to "Create invoice"
+    When they follow "Create invoice"
+    Then the table should contain the following:
+      | Month         | State         |
+      | January, 2009 | open          |
+      | January, 2009 | <state_lower> |
+    And they should see "2 Invoices"
 
-  Scenario: Create invoice when buyer only have closed invoices
-    Given the following invoice:
-      | Buyer | Month         | Friendly ID      | State |
-      | Bob   | January, 2009 | 2009-01-00000001 | Paid  |
-      | Bob   | January, 2009 | 2009-01-00000002 | Paid  |
-    And they go to the invoices page of account "Bob"
-    And the table should have 2 row
-    Then there should be a link to "Create invoice"
+    Examples:
+      | state     | state_lower |
+      | Pending   | pending     |
+      | Cancelled | cancelled   |
+      | Paid      | paid        |
