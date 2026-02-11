@@ -4,7 +4,7 @@ module Authentication
     extend ActiveSupport::Concern
 
     # strong passwords
-    STRONG_PASSWORD_MIN_SIZE = 16
+    STRONG_PASSWORD_MIN_SIZE = 15
     # All printable characters in ASCII, from 'space' (32) to ~ (126)
     # at least STRONG_PASSWORD_MIN_SIZE characters
     RE_STRONG_PASSWORD = /\A[ -~]{#{STRONG_PASSWORD_MIN_SIZE},}\z/
