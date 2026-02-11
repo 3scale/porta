@@ -4,11 +4,11 @@
 - content_for :page_header_title, t('.page_title', org_name: @account.org_name)
 
 - if collection.empty?
-  div class="pf-c-card"
-    div class="pf-c-card__body"
-      = render 'shared/empty_state', title: t('.empty_state.title'),
-                                     primary: { title: t('.empty_state.primary'),
-                                                href: new_provider_admin_cms_group_path }
+  = render 'shared/empty_state', title: t('.empty_state.title'),
+                                 body: t('.empty_state.body'),
+                                 icon: :users,
+                                 primary: { title: t('.empty_state.primary'),
+                                            href: new_provider_admin_cms_group_path }
 - else
   - content_for :javascripts do
     = stylesheet_packs_chunks_tag 'pf_form'
