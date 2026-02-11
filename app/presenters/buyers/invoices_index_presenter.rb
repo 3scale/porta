@@ -17,7 +17,7 @@ class Buyers::InvoicesIndexPresenter
     }
   end
 
-  attr_reader :is_provider, :sort_params, :pagination_params
+  attr_reader :sort_params, :pagination_params
 
   def invoices
     # Eager load provider_account to prevent N+1 queries when invoice.cost is called.
