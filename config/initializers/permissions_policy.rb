@@ -1,13 +1,19 @@
-# Be sure to restart your server when you modify this file.
+# frozen_string_literal: true
 
-# Define an application-wide HTTP permissions policy. For further
-# information see: https://developers.google.com/web/updates/2018/06/feature-policy
+# Configure Permissions-Policy headers (formerly Feature-Policy)
+# See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
 
-# Rails.application.config.permissions_policy do |policy|
-#   policy.camera      :none
-#   policy.gyroscope   :none
-#   policy.microphone  :none
-#   policy.usb         :none
-#   policy.fullscreen  :self
-#   policy.payment     :self, "https://secure.example.com"
-# end
+require 'three_scale/permissions_policy'
+
+Rails.application.configure do
+  if ThreeScale::PermissionsPolicy::AdminPortal.enabled?
+    policy_config = ThreeScale::PermissionsPolicy::AdminPortal.policy_config
+
+    if policy_config.present?
+      config.permissions_policy do |policy|
+        ThreeScale::PermissionsPolicy::AdminPortal.add_policy_config(policy, policy_config)
+      end
+    end
+  end
+  # When disabled, no Permissions-Policy header is set (permissive by default)
+end

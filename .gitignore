@@ -60,6 +60,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/oauth2.yml
 /config/paperclip.yml
 /config/payments.yml
+/config/permissions_policy.yml
 /config/plan_rules.yml
 /config/redhat_customer_portal.yml
 /config/redis.yml

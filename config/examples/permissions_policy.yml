@@ -1,0 +1,44 @@
+# Permissions-Policy (formerly Feature-Policy) configuration
+# See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
+#
+# Available directives (Rails 7.1):
+#   accelerometer, ambient_light_sensor, autoplay, camera, encrypted_media,
+#   fullscreen, geolocation, gyroscope, hid, idle_detection, magnetometer,
+#   microphone, midi, payment, picture_in_picture, screen_wake_lock,
+#   serial, sync_xhr, usb, web_share
+#
+# Each directive accepts an array of allowed origins:
+#   - "'self'" - Allow the feature for the current origin
+#   - "'none'" - Disallow the feature entirely
+#   - "https://example.com" - Allow for a specific origin
+
+base: &default
+  # Admin portal policy - restrictive by default
+  admin_portal:
+    enabled: true
+    policy:
+      camera: ["'none'"]
+      microphone: ["'none'"]
+      geolocation: ["'none'"]
+      usb: ["'none'"]
+      payment: ["'none'"]
+      fullscreen: ["'self'"]
+
+  # Developer portal policy - permissive by default since we don't know what customers will publish
+  # When policy is empty, no Permissions-Policy header is set (browser defaults apply)
+  developer_portal:
+    enabled: true
+    policy: {}
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+  admin_portal:
+    enabled: false
+  developer_portal:
+    enabled: false
