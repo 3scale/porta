@@ -1,6 +1,4 @@
-<div class='button-bar'>
-  <%= f.actions do %>
-    <%= f.commit_button "Update legal terms for #{@page.title}" %>
-    <li><%= insert_legal_terms_snippet_button %>   </li>
-  <% end %>
-</div>
+<%= f.actions do %>
+  <%= f.commit_button "Update legal terms for #{@page.title}" %>
+  <%= insert_legal_terms_snippet_button %>
+<% end %>
