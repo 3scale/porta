@@ -14,11 +14,17 @@ class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'list all invoices for a buyer' do
+    total_invoices = 5
+    FactoryBot.create_list(:invoice, total_invoices, buyer_account: @buyer, provider_account: @provider_account)
+
     get admin_buyers_account_invoices_path(@buyer)
+
     assert_response :success
     assert_template 'buyers/invoices/index'
-    assert_not_nil assigns(:invoices)
     assert_active_menu(:buyers)
+
+    page = Nokogiri::HTML::Document.parse(response.body)
+    assert_equal total_invoices, page.css('[aria-label="Invoices table"] tbody tr').count
   end
 
   test 'create a new invoice for a buyer' do

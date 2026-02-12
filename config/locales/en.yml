@@ -1123,6 +1123,13 @@ en:
           new one.
       edit:
         error: Invoice is no longer editable
+      index:
+        empty_state:
+          title: No invoices for this account
+          body: ''
+          primary: Create an invoice
+      toolbar:
+        primary: Create invoice
       update:
         success: Invoice was successfully updated
 

@@ -4,39 +4,43 @@
 
 <% content_for :page_header_title, "Invoices for #{@account.org_name}" %>
 
-<% content_for :javascripts do %>
-  <%# HACK: temporary reuse css of existing pack "table_toolbar". Once toolbar is implemented,
-      import the whole pack with "javascript_packs_with_chunks_tag" %>
-  <%= stylesheet_packs_chunks_tag 'table_toolbar' %>
+<% if @presenter.empty_state? %>
+  <%= render 'shared/empty_state', title: t('.empty_state.title'),
+                                   body: t('.empty_state.body'),
+                                   primary: { title: t('.empty_state.primary'),
+                                              href: @presenter.invoices_path,
+                                              opts: { 'data-method': :post } } %>
+<% else %>
+  <% content_for :javascripts, javascript_packs_with_chunks_tag('table_toolbar') %>
+
+  <table class="pf-c-table pf-m-grid-lg"
+         role="grid"
+         aria-label="Invoices table"
+         data-toolbar-props="<%= @presenter.toolbar_props.to_json %>">
+    <thead>
+      <tr role="row">
+        <%= th_sortable('friendly_id', 'ID') %>
+        <%= th_sortable('period', 'Month') %>
+        <%= th_sortable('state', 'State') %>
+        <th role="columnheader" scope="col">Amount</th>
+        <th role="columnheader" scope="col">Download</th>
+      </tr>
+    </thead>
+    <tbody role="rowgroup">
+      <% @presenter.invoices.each do |invoice| %>
+        <%= content_tag :tr, id: dom_id(invoice), role: "row" do %>
+          <td role="cell" data-label="ID">
+            <%= @presenter.link_to_invoice(invoice) %>
+          </td>
+          <td role="cell" data-label="Month"><%= invoice.name %></td>
+          <td role="cell" data-label="State"><%= h invoice.state %></td>
+          <td role="cell" data-label="Amount"><%= price_tag(invoice.cost) %></td>
+          <td role="cell" data-label="Download" colspan="2">
+            <%= invoice_pdf_link(invoice, label: 'PDF') %>
+          </td>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
 
-<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Invoices table">
-  <thead>
-    <tr role="row">
-      <th role="columnheader" scope="col">ID</th>
-      <th role="columnheader" scope="col">Month</th>
-      <th role="columnheader" scope="col">State</th>
-      <th role="columnheader" scope="col">Amount</th>
-      <th role="columnheader" scope="col">Download</th>
-      <th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content">
-        <%= fancy_link_to('Create invoice', admin_buyers_account_invoices_path(@account),
-                                            method: :post,
-                                            class: 'new',
-                                            disabled: @account.current_invoice && t('buyers.invoices.create.open_invoice', name: @account.name)) %>
-      </th>
-    </tr>
-  </thead>
-  <tbody role="rowgroup">
-    <% @invoices.each do |invoice| %>
-      <%= content_tag :tr, id: dom_id(invoice), role: "row" do %>
-        <td role="cell" data-label="ID"><%= link_to invoice.friendly_id , admin_buyers_or_account_invoice_path(invoice, @account) , title: "Show #{invoice.friendly_id}" %></td>
-        <td role="cell" data-label="Month"><%= invoice.name %></td>
-        <td role="cell" data-label="State"><%= h invoice.state %></td>
-        <td role="cell" data-label="Amount"><%= price_tag(invoice.cost) %></td>
-        <td role="cell" data-label="Download" colspan="2">
-          <%= invoice_pdf_link(invoice, label: 'PDF') %>
-        </td>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>

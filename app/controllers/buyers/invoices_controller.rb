@@ -4,14 +4,13 @@ class Buyers::InvoicesController < Buyers::BaseController
   include Finance::ControllerRequirements
 
   helper Finance::InvoicesHelper
-  helper Accounts::InvoicesHelper
 
   before_action :authorize_finance
   before_action :find_account
   activate_menu :audience, :accounts, :listing
 
   def index
-    @invoices = @account.invoices.includes(:provider_account).ordered
+    @presenter = Buyers::InvoicesIndexPresenter.new(buyer: @account, params:)
   end
 
   def show
