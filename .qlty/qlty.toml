@@ -100,4 +100,5 @@ package_filters = ["eslint"]
 
 [[plugin]]
 name = "stylelint"
-extra_packages = ["stylelint-config-standard-scss@latest"]
+package_file = "package.json"
+package_filters = ["stylelint"]
