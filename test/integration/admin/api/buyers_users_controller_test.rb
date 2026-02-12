@@ -35,7 +35,6 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'update with weak password rejected when strong passwords enabled' do
     user = FactoryBot.create(:simple_user, account: buyer)
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'weakpwd' }
 
@@ -45,7 +44,6 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'update with strong password accepted when strong passwords enabled' do
     user = FactoryBot.create(:simple_user, account: buyer)
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'superSecret1234#' }
 

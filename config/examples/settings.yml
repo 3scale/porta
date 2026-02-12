@@ -62,7 +62,6 @@ test:
   readonly_custom_domains_settings: true
   report_traffic: false
   secure_cookie: false
-  strong_passwords_disabled: true
 
 production:
   <<: *default

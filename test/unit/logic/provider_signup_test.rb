@@ -9,8 +9,6 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
     end
 
     test 'John Doe user is created with weak password when strong passwords enabled' do
-      Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
       sample_data = Logic::ProviderSignup::SampleData.new(@provider)
       sample_data.create!
 

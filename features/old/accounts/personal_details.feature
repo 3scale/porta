@@ -81,8 +81,7 @@ Feature: Personal Details
     And the "User extra required" field should contain "whatever"
 
   Scenario: Update own password when the user was signed up with password
-    Given Strong passwords are enabled
-    And the user was signed up with password
+    Given the user was signed up with password
     When I navigate to the Account Settings
     And I go to the provider personal details page
     And I fill in "New password" with "hi"

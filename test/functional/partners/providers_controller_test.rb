@@ -102,7 +102,6 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with weak password rejected when strong passwords enabled' do
     prepare_master_account
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     post :create, params: provider_params.merge(password: 'weakpwd')
 
@@ -115,7 +114,6 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with strong password accepted when strong passwords enabled' do
     prepare_master_account
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     post :create, params: provider_params.merge(password: 'superSecret1234#')
 
