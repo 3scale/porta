@@ -37,7 +37,7 @@ module Authentication
     end
 
     def validate_password?
-      password_digest_changed? || (signup.by_user? && password_digest.blank?)
+      will_save_change_to_password_digest? || (signup.by_user? && password_digest.blank?)
     end
 
     def validate_strong_password?
