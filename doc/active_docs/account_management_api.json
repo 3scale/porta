@@ -9973,10 +9973,6 @@
                     "type": "boolean",
                     "description": "Approval is required by you before developer accounts are activated."
                   },
-                  "strong_passwords_enabled": {
-                    "type": "boolean",
-                    "description": "Require strong passwords from your users: Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of -+=><_$#.:;!?@&*()~][}{|. Existing passwords will still work. "
-                  },
                   "public_search": {
                     "type": "boolean",
                     "description": "Enables public search on Developer Portal"

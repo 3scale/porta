@@ -12,7 +12,7 @@ class StripeTest < ActionDispatch::IntegrationTest
   end
 
   test "checks that the correct link exists" do
-    login_with @buyer_account.admins.first.username, 'supersecret'
+    login_with @buyer_account.admins.first.username, 'superSecret1234#'
 
     get "/admin/account/"
     details_url = "/admin/account/stripe"

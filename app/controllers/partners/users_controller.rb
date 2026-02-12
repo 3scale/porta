@@ -22,7 +22,7 @@ class Partners::UsersController < Partners::BaseController
   def create
     @user = @account.users.build
     @user.email = params[:email]
-    @user.password = SecureRandom.hex
+    @user.password = params[:password].presence
     @user.first_name = params[:first_name].presence
     @user.last_name = params[:last_name].presence
     @user.open_id = params[:open_id].presence
@@ -30,11 +30,11 @@ class Partners::UsersController < Partners::BaseController
     @user.signup_type = :partner
     @user.role = :admin
     @user.activate!
-    if @user.save
-      render json: {id: @user.id, success: true}
-    else
-      render json: {errors: @user.errors, success: false}
-    end
+    @user.save!
+
+    render json: {id: @user.id, success: true}
+  rescue StandardError
+    render json: {errors: @user.errors, success: false}, status: :unprocessable_entity
   end
 
   private

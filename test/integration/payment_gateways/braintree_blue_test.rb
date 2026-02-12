@@ -13,7 +13,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
   end
 
   test "navigate to the correct link" do
-    login_with @buyer_account.admins.first.username, 'supersecret'
+    login_with @buyer_account.admins.first.username, 'superSecret1234#'
 
     get "/admin/account/"
     details_url = "/admin/account/braintree_blue"
@@ -26,14 +26,13 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
     @provider_account.payment_gateway_options[:merchant_id] = "my-payment-gw-mid"
     @provider_account.payment_gateway_options[:public_key] = "AnY-pUbLiC-kEy"
     @provider_account.payment_gateway_options[:private_key] = "a1b2c3d4e5"
-      login_with @buyer_account.admins.first.username, 'supersecret'
-      assert_nil @buyer_account.credit_card_partial_number
 
+    assert_nil @buyer_account.credit_card_partial_number
   end
 
   test "credit card not stored" do
     # stub BrainTreeBlueCrypt.new(current_user).confirm(request) to return struct that answers false to success
-    login_with @buyer_account.admins.first.username, 'supersecret'
+    login_with @buyer_account.admins.first.username, 'superSecret1234#'
     PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:confirm).returns(false)
     get "/admin/account/braintree_blue/hosted_success"
   end

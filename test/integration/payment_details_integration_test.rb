@@ -10,7 +10,7 @@ class PaymentDetailsIntegrationTest < ActionDispatch::IntegrationTest
     host! provider.internal_domain
 
     assert !provider.settings.finance.visible?
-    login_with buyer.admins.first.username, "supersecret"
+    login_with buyer.admins.first.username, "superSecret1234#"
 
     get developer_portal.admin_account_stripe_path
     assert_response 403

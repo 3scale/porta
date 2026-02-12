@@ -253,7 +253,7 @@ class UserTest < ActiveSupport::TestCase
     UserMailer.expects(:deliver_activation_notification).never
 
     user.username = 'liz'
-    user.password = 'foobar'
+    user.password = 'superSecret1234#'
     user.save!
   end
 
@@ -274,12 +274,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'reset password' do
-    user = FactoryBot.create(:simple_user, username: 'person', password: 'foobar')
+    user = FactoryBot.create(:simple_user, username: 'person', password: 'superSecret1234#')
     user.activate!
 
-    user.update(password: 'new password', password_confirmation: 'new password')
+    user.update(password: 'new_password_123', password_confirmation: 'new_password_123')
 
-    assert user.authenticated?('new password')
+    assert user.authenticated?('new_password_123')
   end
 
   class ExistingProviderUserTest < ActiveSupport::TestCase
@@ -300,7 +300,7 @@ class UserTest < ActiveSupport::TestCase
       @user = FactoryBot.create(:simple_user, account: account,
                                               username: 'person',
                                               email: 'person@example.org',
-                                              password: 'redpanda')
+                                              password: 'superSecret1234#')
       @user.activate!
     end
 
@@ -308,7 +308,7 @@ class UserTest < ActiveSupport::TestCase
       @user.update(username: 'person2')
       @user.reload
 
-      assert @user.authenticated?('redpanda')
+      assert @user.authenticated?('superSecret1234#')
     end
 
     test 'set remember_token' do
@@ -403,7 +403,7 @@ class UserTest < ActiveSupport::TestCase
     test 'with lost_password_token should reset lost_password_token when password is changed' do
       @user.generate_lost_password_token!
       @user = User.find(@user.id) # HACK: to reset stored passwords
-      @user.update_password('new_password', 'new_password')
+      @user.update_password('new_password_123', 'new_password_123')
       @user.save!
 
       assert_nil @user.lost_password_token
@@ -421,7 +421,7 @@ class UserTest < ActiveSupport::TestCase
     test 'with lost_password_token should not reset lost_password_token when user incorrectly confirms new password' do
       @user.generate_lost_password_token!
       @user = User.find(@user.id) # HACK: to reset stored passwords
-      @user.update_password('new_password', 'not_new_password')
+      @user.update_password('new_password_123', 'not_new_password_123')
       assert_not_nil @user.lost_password_token
     end
   end
@@ -750,127 +750,9 @@ class UserTest < ActiveSupport::TestCase
     assert_equal @user.sections, [@section]
   end
 
-  class PasswordStrengthTest < ActiveSupport::TestCase
-    setup do
-      provider = FactoryBot.create(:simple_provider)
-      @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-      @user_with_password = ->(password) do
-        @buyer.users.new username: 'user', email: 'user@example.com', password: password, password_confirmation: password
-      end
-    end
-
-    attr_reader :user_with_password
-
-    class WeakPasswordTest < PasswordStrengthTest
-      setup do
-        @buyer.provider_account.settings.update_attribute(:strong_passwords_enabled, false) # rubocop:disable Rails/SkipsModelValidations
-      end
-
-      test 'should by default allow weak ones' do
-        user = user_with_password.call('weakpassword')
-
-        assert user.valid?
-        assert user.errors[:password].blank?
-      end
-
-      test 'weak password must be 6 chars at least when password is required' do
-        user = user_with_password.call('weak')
-
-        assert_not user.valid?
-        assert_equal "is too short (minimum is 6 characters)", user.errors.messages[:password].first
-      end
-
-      test 'password is not validated when not required' do
-        user = user_with_password.call('weak')
-        user.signup_type = :api
-
-        assert user.valid?
-        assert user.errors[:password].blank?
-      end
-    end
-
-    class StrongPasswordsTest < PasswordStrengthTest
-      setup do
-        @buyer.provider_account.settings
-              .update_attribute(:strong_passwords_enabled, true) # rubocop:disable Rails/SkipsModelValidations
-      end
-
-      class ExistingUsersTest < StrongPasswordsTest
-        setup do
-          @user = @buyer.users.first
-          @user.reload
-        end
-
-        test 'should be valid if not updating the password' do
-          @user.last_name = "not updating password"
-
-          @user.valid?
-          assert @user.errors[:password].blank?
-        end
-
-        test 'should be invalid if updating the password' do
-          @user.password = "nononono"
-          @user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, @user.errors[:password].first
-        end
-      end
-
-      class ValidationsTest < StrongPasswordsTest
-        test 'should be valid with Uppercases, lowercases, digits and weird characters -+_!$#.@ and longer than 8 characters' do
-          user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
-          user.valid?
-
-          assert user.errors[:password].blank?
-        end
-
-        test 'should be invalid if shorter than 8 characters' do
-          user = @buyer.users.new password: "Pas$123", password_confirmation: "Pas$123"
-          user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-        end
-
-        test 'should be invalid if without digits' do
-          user = @buyer.users.new password: "StrongPass-+_!$#.@", password_confirmation: "StrongPass-+_!$#.@"
-          user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-        end
-
-        test 'should be invalid if without uppercases' do
-          user = @buyer.users.new password: "strongpass123-+_!$#.@", password_confirmation: "strongpass123-+_!$#.@"
-          user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-        end
-
-        test 'should be invalid if without lowercases' do
-          user = @buyer.users.new password: "STRONGPASS-+_!$#.@", password_confirmation: "STRONGPASS-+_!$#.@"
-          user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-        end
-
-        test 'should be invalid if has strange characters' do
-          user = @buyer.users.new password: "StrongPass|", password_confirmation: "StrongPass|"
-          user.valid?
-
-          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-        end
-
-        test 'when created from provider should be invalid if password and password confirmation do not match' do
-          @user = @buyer.users.first
-          @user.stubs(:password_required?).returns(false) #simulate created by provider
-          assert_not @buyer.users.first.update password: "hola12", password_confirmation: "hola123"
-        end
-      end
-    end
-  end
-
   test 'destroys its invitation' do
     invitation = FactoryBot.create(:invitation, email: "invited@example.com", account: FactoryBot.create(:provider_account))
-    user = invitation.make_user username: "username", password: "password"
+    user = invitation.make_user username: "username", password: "superSecret1234#"
     user.save!
 
     user.destroy
@@ -883,7 +765,7 @@ class UserTest < ActiveSupport::TestCase
     Invitation.any_instance.stubs(:destroy).returns(false)
 
     invitation = FactoryBot.create(:invitation)
-    user = invitation.make_user username: "username", password: "password"
+    user = invitation.make_user username: "username", password: "superSecret1234#"
     user.save!
 
     assert_not user.destroy

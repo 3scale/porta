@@ -20,7 +20,7 @@ module Signup
     attr_reader :user, :account
 
     delegate :approve, :approve!, :approved?, :approval_required?, :make_pending!,   to: :account, prefix: true
-    delegate :activate, :activate!, :active?, :activate_on_minimal_signup?,          to: :user,    prefix: true
+    delegate :activate, :activate!, :active?, :activate_on_minimal_or_sample_data?,  to: :user, prefix: true
     delegate :id, to: :account
 
     def valid?

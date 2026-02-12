@@ -5,7 +5,7 @@ require 'test_helper'
 class Account::FieldsTest < ActiveSupport::TestCase
   class BuyerTest < Account::FieldsTest
     def setup
-      @user_attrs = { username: 'buyer', email: 'email@buyer.com', password: 'password', password_confirmation: 'password' }
+      @user_attrs = { username: 'buyer', email: 'email@buyer.com', password: 'superSecret1234#', password_confirmation: 'superSecret1234#' }
 
       @provider = FactoryBot.create(:simple_provider)
       @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, org_name: 'buyer')

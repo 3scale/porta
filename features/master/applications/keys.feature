@@ -14,7 +14,7 @@ Feature: Application Keys management
     Given they are reviewing the provider's application details
     When follow "Regenerate"
     And confirm the dialog
-    And fill in "Current password" with "supersecret"
+    And fill in "Current password" with "superSecret1234#"
     And press "Confirm Password"
     And should see "You are now in super-user mode! Retry the action, please"
     And follow "Regenerate"
@@ -24,7 +24,7 @@ Feature: Application Keys management
   Scenario: Set a custom app key
     Given they are reviewing the provider's application details
     When follow "Set a custom User Key" within the API Credentials card
-    And fill in "Current password" with "supersecret"
+    And fill in "Current password" with "superSecret1234#"
     And press "Confirm Password"
     And fill in "User key" with "new-valid-key"
     And press "Save"

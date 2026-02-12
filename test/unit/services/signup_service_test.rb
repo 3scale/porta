@@ -16,7 +16,7 @@ class SignupServiceTest < ActiveSupport::TestCase
     service = new_instance_signup_service
     assert_difference(User.method(:count), 0) do
       user = service.create
-      refute user.persisted?
+      assert_not user.persisted?
     end
 
     service = new_instance_signup_service(valid_account_params, valid_user_params)
@@ -57,6 +57,6 @@ class SignupServiceTest < ActiveSupport::TestCase
   def valid_user_params
     index =  User.maximum(:id)
 
-    { username: "Alex_#{index}", email: "foo_#{index}@example.net", password: 'wild123' }
+    { username: "Alex_#{index}", email: "foo_#{index}@example.net", password: 'superSecret1234#' }
   end
 end

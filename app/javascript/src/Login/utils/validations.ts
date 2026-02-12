@@ -1,5 +1,14 @@
 import validate from 'validate.js'
 
+// IMPORTANT: These STRONG_PASSWORD_* constants are duplicated from the backend.
+// The source of truth is app/lib/authentication/by_password.rb. If those constants change in Ruby,
+// you must update them here as well. Do not modify these without updating the backend first.
+// The error message is also defined in config/locales/en.yml at:
+// activerecord.errors.models.user.attributes.password.weak
+const STRONG_PASSWORD_MIN_SIZE = 15
+const RE_STRONG_PASSWORD = new RegExp(`^[ -~]{${STRONG_PASSWORD_MIN_SIZE},}$`)
+const STRONG_PASSWORD_FAIL_MSG = `Password must be at least ${STRONG_PASSWORD_MIN_SIZE} characters long, and contain only valid characters.`
+
 const loginConstraints = {
   username: { presence: { allowEmpty: false, message: 'Email or username is mandatory' } },
   password: { presence: { allowEmpty: false, message: 'Password is mandatory' } }
@@ -12,7 +21,7 @@ function validateLogin (fields: Record<keyof typeof loginConstraints, string>): 
 const changePasswordConstraints = {
   password: {
     presence: { allowEmpty: false, message: 'Password is mandatory' },
-    length: { minimum: 6 }
+    format: { pattern: RE_STRONG_PASSWORD, message: STRONG_PASSWORD_FAIL_MSG }
   },
   passwordConfirmation: {
     presence: { allowEmpty: false, message: 'Password confirmation is mandatory' },

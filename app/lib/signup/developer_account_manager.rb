@@ -15,7 +15,7 @@ module Signup
 
       # TODO: Temporary here. A new object should have the responsability to activate and approve when needed
       # As part of THREESCALE-1317
-      result.user_activate! if result.user_activate_on_minimal_signup?
+      result.user_activate! if result.user_activate_on_minimal_or_sample_data?
     end
   end
 end

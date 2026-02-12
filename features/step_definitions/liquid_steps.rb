@@ -22,7 +22,7 @@ Given /^I'm logged in as a malicious buyer$/ do
   @account = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: buyer_name)
   @account.buy!(@provider.account_plans.default)
   @account.update_attribute(:org_name, 'malicious <script></script>buyer')
-  try_buyer_login_internal(buyer_name, 'supersecret')
+  try_buyer_login_internal(buyer_name, 'superSecret1234#')
 end
 
 When /^provider has xss protection enabled$/ do

@@ -64,7 +64,7 @@ module Logic
       def signup_user
         email_part = email.split('@')
         user_attributes = { email: "#{email_part[0]}+test@#{email_part[1]}", username: 'john', first_name: 'John',
-                            last_name: 'Doe', password: '123456', password_confirmation: '123456', signup_type: :minimal}
+                            last_name: 'Doe', password: '123456', password_confirmation: '123456', signup_type: :sample_data}
         signup_params = ::Signup::SignupParams.new(plans: [], user_attributes: user_attributes, account_attributes: { org_name: 'Developer' })
         ::Signup::DeveloperAccountManager.new(@provider).create(signup_params)
       end

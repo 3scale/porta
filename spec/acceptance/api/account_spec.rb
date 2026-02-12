@@ -106,7 +106,7 @@ resource "Account" do
       parameter :email, 'Email of the admin user'
       parameter :password, 'Password of the admin user'
 
-      let(:password) { 'password' }
+      let(:password) { 'superSecret1234#' }
       let(:email) { 'email@example.com' }
       let(:username) { 'new_user' }
       let(:org_name) { 'New Signup' }

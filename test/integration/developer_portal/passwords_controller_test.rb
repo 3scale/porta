@@ -26,12 +26,12 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
   def test_update_password
     user.generate_lost_password_token
 
-    put developer_portal.admin_account_password_path(user: { password: 'password123',
-      password_confirmation: 'password123' }, password_reset_token: user.lost_password_token)
+    put developer_portal.admin_account_password_path(user: { password: 'new_password_123',
+      password_confirmation: 'new_password_123' }, password_reset_token: user.lost_password_token)
     assert_match 'password has been changed', flash[:notice]
 
-    put developer_portal.admin_account_password_path(user: { password: '123password',
-      password_confirmation: '123password' }, password_reset_token: user.lost_password_token)
+    put developer_portal.admin_account_password_path(user: { password: '123_new_password',
+      password_confirmation: '123_new_password' }, password_reset_token: user.lost_password_token)
     assert_match 'password reset token is invalid', flash[:error]
   end
 

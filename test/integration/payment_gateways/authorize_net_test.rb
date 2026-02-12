@@ -23,7 +23,7 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
   end
 
   # test "new users get AddProfile link" do
-  #   login_with @buyer_account.admins.first.username, 'supersecret'
+  #   login_with @buyer_account.admins.first.username, 'superSecret1234#'
   #   @buyer_account.credit_card_auth_code = nil
   #   @buyer_account.credit_card_authorize_net_payment_profile_token = nil
 
@@ -33,14 +33,14 @@ class AuthorizeNetTest < ActionDispatch::IntegrationTest
   # end
 
   # test "old users without credit card get AddProfile link" do
-  #   login_with @buyer_account.admins.first.username, 'supersecret'
+  #   login_with @buyer_account.admins.first.username, 'superSecret1234#'
   #   @buyer_account.credit_card_auth_code= 'code'
   #   get "/admin/account/authorize_net"
   #   assert_select('form[action=?]', "https://test.authorize.net/profile//AddPayment")
   # end
 
   # test "old users with credit card get editProfile link" do
-  #   login_with @buyer_account.admins.first.username, 'supersecret'
+  #   login_with @buyer_account.admins.first.username, 'superSecret1234#'
   #   @buyer_account.credit_card_auth_code= 'code'
   #   get "/admin/account/authorize_net"
   #   assert_select('form[action=?]', "https://test.authorize.net/profile//editPayment")

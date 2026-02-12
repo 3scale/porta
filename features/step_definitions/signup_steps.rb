@@ -6,8 +6,8 @@ end
 
 When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
   fill_in("Username", :with => username)
-  fill_in("Password", :with => "supersecret")
-  fill_in("Password confirmation", :with => "supersecret")
+  fill_in("Password", :with => "superSecret1234#")
+  fill_in("Password confirmation", :with => "superSecret1234#")
   click_button "Sign up"
 end
 
@@ -19,8 +19,8 @@ def fill_in_signup_fields_as(name)
   fill_in('Username', with: name)
   fill_in('Email', with: "#{name}@3scale.localhost")
   fill_in('Organization/Group Name', with: "#{name}'s stuff")
-  fill_in('Password', with: 'supersecret')
-  fill_in('Password confirmation', with: 'supersecret')
+  fill_in('Password', with: 'superSecret1234#')
+  fill_in('Password confirmation', with: 'superSecret1234#')
 
   click_on 'Sign up'
 end
@@ -36,8 +36,8 @@ When /^(?:I|someone) (?:signup|signs up) with the email "([^"]*)"$/ do |email|
   fill_in "Username", :with => email.gsub(/[^\w]/, '-')
   fill_in "Email", :with => email
   fill_in "Organization/Group Name", :with => email.gsub(/[^\w]/, '-')
-  fill_in "Password", :with => "supersecret"
-  fill_in "Password confirmation", :with => "supersecret"
+  fill_in "Password", :with => "superSecret1234#"
+  fill_in "Password confirmation", :with => "superSecret1234#"
   click_button "Sign up"
 end
 
