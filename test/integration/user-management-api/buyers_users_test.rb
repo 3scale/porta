@@ -369,7 +369,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @buyer, role: "member")
     assert_not_empty chuck.password_digest
-    assert chuck.authenticate('supersecret')
+    assert chuck.authenticate('superSecret1234#')
 
     put admin_api_account_user_path(account_id: @buyer.id,
                                          format: :xml, id: chuck.id,

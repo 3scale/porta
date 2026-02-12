@@ -20,11 +20,11 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
   end
 
   class WeakPasswordTest < Authentication::ByPasswordTest
-    test 'should by default allow weak ones' do
+    test 'should by default forbid weak ones' do
       user = user_with_password.call('weakpassword')
 
-      assert user.valid?
-      assert user.errors[:password].blank?
+      assert_not user.valid?
+      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
     end
 
     test 'weak password must be present' do
@@ -79,17 +79,11 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
     end
 
-    test 'should be invalid if has strange characters' do
-      user = user_with_password.call('StrongPass|')
-      user.valid?
-
-      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-    end
-
     test 'should be invalid if password and password confirmation do not match' do
       @user = @buyer.users.first
 
       assert_not @buyer.users.first.update password: "superSecret1234#", password_confirmation: "superSecret12345#"
+      assert_equal "doesn't match Password", @buyer.users.first.errors[:password_confirmation].first
     end
   end
 
@@ -155,6 +149,8 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       end
 
       test 'returns false when strong_passwords_disabled is true' do
+        Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(true)
+
         @user.password = 'newpassword12345'
 
         assert_not @user.validate_strong_password?

@@ -12,12 +12,12 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
 
   test "put update should redirect to users" do
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'}, origin: 'users' }
+    put :update, params: { user: {current_password: 'superSecret1234#', username: 'test', email: 'test@example.com'}, origin: 'users' }
     assert_redirected_to provider_admin_account_users_path
   end
 
   test "put update should redirect to edit personal details" do
-    put :update, params: { user: {current_password: 'supersecret', username: 'test', email: 'test@example.com'} }
+    put :update, params: { user: {current_password: 'superSecret1234#', username: 'test', email: 'test@example.com'} }
     assert_redirected_to edit_provider_admin_user_personal_details_path
   end
 
@@ -30,7 +30,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
   test 'changing password is audited' do
     assert_difference(Audited.audit_class.method(:count)) do
       User.with_synchronous_auditing do
-        put :update, params: { user: {current_password: 'supersecret', password: 'new_password', password_confirmation: 'new_password'} }
+        put :update, params: { user: {current_password: 'superSecret1234#', password: 'new_password_123', password_confirmation: 'new_password_123'} }
       end
     end
 
@@ -110,7 +110,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
     end
 
     test 'user with password can update when providing correct current password' do
-      put :update, params: { user: { current_password: 'supersecret', username: 'newusername' } }
+      put :update, params: { user: { current_password: 'superSecret1234#', username: 'newusername' } }
 
       assert_redirected_to edit_provider_admin_user_personal_details_path
       assert_equal 'newusername', @user.reload.username
@@ -129,10 +129,10 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
     end
 
     test 'user can change password when enforce SSO is enabled' do
-      put :update, params: { user: { current_password: 'supersecret', password: 'superSecret1234#', password_confirmation: 'superSecret1234#' } }
+      put :update, params: { user: { current_password: 'superSecret1234#', password: 'new_password_123', password_confirmation: 'new_password_123' } }
 
       assert_redirected_to edit_provider_admin_user_personal_details_path
-      assert @user.reload.authenticated?('superSecret1234#')
+      assert @user.reload.authenticated?('new_password_123')
     end
 
     test 'SSO user without password can set password when enforce SSO is enabled' do

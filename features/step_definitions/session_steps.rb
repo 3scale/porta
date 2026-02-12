@@ -3,7 +3,7 @@
 Given "{provider} logs in" do |provider|
   set_current_domain(provider.external_admin_domain)
   username = provider.admins.first.username
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
   assert user_is_logged_in(username)
 end
 
@@ -12,21 +12,21 @@ end
 Given "{provider} tries to log in" do |provider|
   set_current_domain(provider.external_admin_domain)
   username = provider.admins.first.username
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
 end
 
 Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   if provider
-    try_provider_login(username, 'supersecret')
+    try_provider_login(username, 'superSecret1234#')
   else
-    try_buyer_login_internal(username, 'supersecret')
+    try_buyer_login_internal(username, 'superSecret1234#')
   end
   assert user_is_logged_in(username)
 end
 
 Given /^I am logged in as provider "([^\"]*)" on its admin domain$/ do |username|
   set_current_domain(Account.providers.find_by(org_name: username).external_admin_domain)
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
   assert user_is_logged_in(username)
 end
 
@@ -38,9 +38,9 @@ Given /^I am logged in as (provider )?"([^\"]*)" on (\S+)$/ do |provider,usernam
   set_current_domain(domain)
 
   if provider
-    try_provider_login(username, 'supersecret')
+    try_provider_login(username, 'superSecret1234#')
   else
-    try_buyer_login_internal(username, 'supersecret')
+    try_buyer_login_internal(username, 'superSecret1234#')
   end
 end
 
@@ -55,7 +55,7 @@ When /^I am logged in as master admin on master domain$/ do
   master = Account.master
   set_current_domain(master.external_domain)
   username = master.admins.first.username
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
   assert user_is_logged_in(username)
 end
 
@@ -76,9 +76,9 @@ end
 
 When /^I log in as (provider )?"([^"]*)"$/ do |provider,username|
   if provider
-    try_provider_login(username, 'supersecret')
+    try_provider_login(username, 'superSecret1234#')
   else
-    try_buyer_login_internal(username, 'supersecret')
+    try_buyer_login_internal(username, 'superSecret1234#')
   end
   assert user_is_logged_in(username)
 end
@@ -86,7 +86,7 @@ end
 When "{buyer} logs in" do |buyer|
   set_current_domain(buyer.provider_account.domain)
   user = buyer.users.first
-  try_buyer_login_internal(user.username, user.password || 'supersecret')
+  try_buyer_login_internal(user.username, user.password || 'superSecret1234#')
   assert user_is_logged_in(user.username)
 end
 
@@ -97,21 +97,21 @@ When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domai
 
   set_current_domain(domain)
   if provider
-    try_provider_login(username, 'supersecret')
+    try_provider_login(username, 'superSecret1234#')
   else
-    try_buyer_login_internal(username, 'supersecret')
+    try_buyer_login_internal(username, 'superSecret1234#')
   end
   assert user_is_logged_in(username)
 end
 
 When "I log in as {string} on the admin domain of {provider}" do |username, provider|
   set_current_domain(provider.internal_admin_domain)
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
   assert user_is_logged_in(username)
 end
 
 When "(I )(they )try to log in as (buyer ){string}" do |username|
-  try_buyer_login_internal(username, 'supersecret')
+  try_buyer_login_internal(username, 'superSecret1234#')
 end
 
 When "I try to log in as {string} with password {string}" do |username, password|
@@ -119,7 +119,7 @@ When "I try to log in as {string} with password {string}" do |username, password
 end
 
 When "(I )(they )try to log in as provider {string}" do |username|
-  try_provider_login(username, 'supersecret')
+  try_provider_login(username, 'superSecret1234#')
 end
 
 When "I try to log in as provider {string} with password {string}" do |username, password|
@@ -128,7 +128,7 @@ end
 
 When /^I fill in the "([^"]*)" login data$/ do |username|
   fill_in('Username or Email', :with => username)
-  fill_in('Password', :with => "supersecret")
+  fill_in('Password', :with => "superSecret1234#")
   click_button('Sign in')
 end
 
@@ -169,6 +169,6 @@ end
 
 When "{user} logs in" do |user|
   log_out
-  try_provider_login(user.username, 'supersecret')
+  try_provider_login(user.username, 'superSecret1234#')
   assert user_is_logged_in(user.username)
 end

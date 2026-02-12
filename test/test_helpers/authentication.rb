@@ -43,7 +43,7 @@ ActionDispatch::IntegrationTest.class_eval do
 
   def login!(provider, user: provider.admins.first)
     host! provider.external_admin_domain
-    provider_login_with user.username, 'supersecret'
+    provider_login_with user.username, 'superSecret1234#'
   end
 
   alias_method :login_provider, :login!
@@ -51,7 +51,7 @@ ActionDispatch::IntegrationTest.class_eval do
   def login_buyer(account)
     host! account.provider_account.internal_domain
     user = account.admins.first
-    login_with user.username, 'supersecret'
+    login_with user.username, 'superSecret1234#'
   end
 
   def provider_login_with(username, password)
