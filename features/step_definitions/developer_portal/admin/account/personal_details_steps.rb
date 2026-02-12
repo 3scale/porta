@@ -8,7 +8,7 @@ When "they edit their personal details" do
 end
 
 And "they change their password" do
-  @new_password = 'ultrasecret'
+  @new_password = 'ultraSecret1234#'
   fill_in('user[password]', with: @new_password)
   fill_in('user[password_confirmation]', with: @new_password)
 end

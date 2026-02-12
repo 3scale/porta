@@ -22,8 +22,8 @@ Feature: Provider accounts management
     When the form is submitted with:
       | Username                | usernamepro          |
       | Email                   | provider@example.com |
-      | Password                | 123456               |
-      | Password confirmation   | 123456               |
+      | Password                | superSecret1234#               |
+      | Password confirmation   | superSecret1234#               |
       | Organization/Group Name | The Provider         |
     Then they should see a toast alert with text "Tenant account was successfully created"
     And the current page is the overview page of account "The Provider"
@@ -33,8 +33,8 @@ Feature: Provider accounts management
     When the form is submitted with:
       | Username | u |
       | Email    | invalid |
-      | Password | 123456 |
-      | Password confirmation | 654321 |
+      | Password | superSecret1234# |
+      | Password confirmation | 1234superSecret# |
       | Organization/Group Name | Some Provider |
     Then field "Username" has inline error "is too short (minimum is 3 characters)"
     And field "Email" has inline error "should look like an email address"

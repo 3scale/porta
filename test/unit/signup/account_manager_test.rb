@@ -311,7 +311,7 @@ module Signup
 
     def valid_user_params(different_user_params: {})
       { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-        password: '123456', password_confirmation: '123456', signup_type: :minimal }.merge(different_user_params)
+        password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal }.merge(different_user_params)
     end
   end
 end

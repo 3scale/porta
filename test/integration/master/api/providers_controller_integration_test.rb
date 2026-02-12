@@ -250,7 +250,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       org_name: 'Alaska',
       username: 'person',
       email: 'person@example.com',
-      password: '123456',
+      password: 'superSecret1234#',
       user_extra_field: 'hi-user',
       account_extra_field: 'hi-account'
     }.merge(different_params)

@@ -97,7 +97,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     {
       account: {
         org_name: 'Alaska',
-        user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
+        user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: 'superSecret1234#', username: 'hello' }
       }
     }
   end

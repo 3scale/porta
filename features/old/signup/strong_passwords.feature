@@ -37,6 +37,7 @@ Feature: Signup with strong passwords
     Then I should see "Thank you"
 
   Scenario: Weak password is accepted when strong passwords are disabled
+    Given Strong passwords are disabled
     When I go to the sign up page
       And I fill in the following:
        | Email                   | bender@planet.ex |
