@@ -148,25 +148,6 @@ form.formtastic:not(.pf-c-form) fieldset.inputs > ol > li.select select {
   border-radius: $border-radius;
 }
 
-.button-bar fieldset.actions {
-  text-align: right;
-
-  li {
-    max-width: 100%;
-  }
-
-  &-inline {
-    margin: line-height-times(.5) 0;
-  }
-
-  border-top: 0;
-
-  .delete {
-    margin-top: 0 !important;
-    float: none !important;
-  }
-}
-
 form.formtastic:not(.pf-c-form) fieldset.actions ol {
 
   li {
@@ -216,10 +197,6 @@ form.formtastic:not(.pf-c-form) ol > li {
   &.hidden {
     margin: 0;
   }
-}
-
-form.formtastic:not(.pf-c-form) .button-bar fieldset > ol > li {
-  min-width: 0;
 }
 
 form.formtastic:not(.pf-c-form) table fieldset > ol > li {
