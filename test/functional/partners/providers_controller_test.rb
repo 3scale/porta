@@ -77,11 +77,11 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with specific password' do
     prepare_master_account
-    post :create, params: provider_params.merge(password: 'foobar123')
+    post :create, params: provider_params.merge(password: 'superSecret1234#')
     user = assigns(:user)
     account = assigns(:account)
     strategy = Authentication::Strategy::Internal.new(account, true)
-    assert strategy.authenticate(username: user.username, password: 'foobar123')
+    assert strategy.authenticate(username: user.username, password: 'superSecret1234#')
     body = JSON.parse(response.body)
     assert_equal body['success'], true
   end
