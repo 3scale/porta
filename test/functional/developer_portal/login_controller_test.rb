@@ -105,7 +105,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
   def create_user_and_account
     buyer_account = FactoryBot.create(:buyer_account, provider_account: provider_account)
-    FactoryBot.create(:user, account: buyer_account, password: 'kangaroo', state: 'active', authentication_id: 'oauth|1234')
+    FactoryBot.create(:user, account: buyer_account, password: 'superSecret1234#', state: 'active', authentication_id: 'oauth|1234')
   end
 
   def create_oauth2_provider_account

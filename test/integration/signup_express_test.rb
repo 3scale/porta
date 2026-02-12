@@ -58,7 +58,7 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
       org_name: 'company',
       username: 'quentin',
       email: 'quentin@example.com',
-      password: '12345678',
+      password: 'superSecret1234#',
       account_plan_id: @account_plan.id
     }.merge(custom_params)
   end

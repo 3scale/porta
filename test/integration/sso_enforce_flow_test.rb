@@ -4,7 +4,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @user = FactoryBot.create(:simple_admin, account: @provider, password: 'alaska1233')
+    @user = FactoryBot.create(:simple_admin, account: @provider, password: 'superSecret1234#')
     @user.activate!
 
     host! @provider.external_admin_domain
@@ -17,7 +17,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     assert_match 'id="pf-login-page-container', response.body
 
     # username & password login
-    post provider_sessions_path(username: @user.username, password: 'alaska1233')
+    post provider_sessions_path(username: @user.username, password: 'superSecret1234#')
     assert_match 'Signed in successfully', flash[:success]
     assert_not_nil User.current
 

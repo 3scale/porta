@@ -107,7 +107,7 @@ class InvitationTest < ActiveSupport::TestCase
 
   test 'creating invited user accepts the invitation' do
     invitation = @provider.invitations.create!(:email => 'bob@example.net')
-    user = invitation.make_user(:username => 'bob', :password => 'monkey')
+    user = invitation.make_user(:username => 'bob', :password => 'superSecret1234#')
 
     assert_change :of => -> { invitation.accepted? }, :from => false, :to => true do
       user.save!

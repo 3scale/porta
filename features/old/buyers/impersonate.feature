@@ -1,11 +1,11 @@
 @javascript
 Feature: Impersonate
-  In order to get the same user experience and posibilities as other users of the site
+  In order to get the same user experience and possibilities as other users of the site
   As a master account admin
   I want to impersonate them
 
   Background:
-    Given the master account admin has username "master" and password "supersecret"
+    Given the master account admin has username "master" and password "superSecret1234#"
     And a provider "foo.3scale.localhost" with impersonation_admin admin
     And a provider "bar.3scale.localhost"
 

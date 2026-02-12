@@ -19,7 +19,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       post admin_buyers_accounts_path, params: {
           account: {
               org_name: 'Alaska',
-              user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
+              user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: 'superSecret1234#', username: 'hello' }
           }
       }
 
@@ -45,7 +45,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         post admin_buyers_accounts_path, params: {
           account: {
             org_name: 'hello', org_legaladdress: 'address',
-            user: { username: 'hello', email: 'foo@example.com', password: 'password'}
+            user: { username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'}
           }
         }
         assert_equal 1, WebHookWorker.jobs.size
@@ -264,7 +264,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
             user: {
                 username: 'johndoe',
                 email: 'user@example.org',
-                password: 'secretpassword'
+                password: 'superSecret1234#'
             }
           }
         }

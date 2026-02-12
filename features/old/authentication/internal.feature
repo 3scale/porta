@@ -20,7 +20,7 @@ Feature: Internal authentication
     And I go to the provider login page
     Then I should feel secure
     When I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then I should be logged in as "foo.3scale.localhost"
     And I should be on the provider dashboard
@@ -32,11 +32,11 @@ Feature: Internal authentication
   @javascript
   Scenario: Redirects and keeps full url
     # legal terms's  url url has query_string
-    Given the admin of account "foo.3scale.localhost" has password "foobar"
+    Given the admin of account "foo.3scale.localhost" has password "superSecret1234#"
     When current domain is the admin domain of provider "foo.3scale.localhost"
       And I go to the legal terms settings page
     And I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "foobar"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then I should have the following query string:
     | system_name | signup_licence|
@@ -44,7 +44,7 @@ Feature: Internal authentication
 
   @javascript
   Scenario: Failed attempt to sign in as provider with invalid password
-    Given the admin of account "foo.3scale.localhost" has password "foobar"
+    Given the admin of account "foo.3scale.localhost" has password "superSecret1234#"
     When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Username" with "foo.3scale.localhost"
@@ -67,17 +67,17 @@ Feature: Internal authentication
     When the current domain is foo.3scale.localhost
     And I go to the login page
     And I fill in "Username" with "alice"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then I should be logged in as "alice"
 
   @wip @3D
   Scenario: Successful sign in as master account admin
-   Given the master account admin has username "admin" and password "supermonkey"
+   Given the master account admin has username "admin" and password "superSecret1234#"
     When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Username" with "admin"
-    And I fill in "Password" with "supermonkey"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then I should be logged in as "admin"
     And I should be on the provider dashboard
@@ -89,7 +89,7 @@ Feature: Internal authentication
     When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Username" with "foo.3scale.localhost"
-    And I fill in "Password" with "supersecret"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then user "foo.3scale.localhost" should have last login on 8th October 2010 at 11:10 from 100.101.102.103
 

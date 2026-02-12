@@ -70,13 +70,13 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'create user with password' do
-    post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron", password: "secretpass123" }
+    post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron", password: "superSecret1234#" }
 
     assert_response :success
     user = assigns(:user)
 
     assert user.valid?
-    assert user.authenticated?("secretpass123"), 'User should authenticate with provided password'
+    assert user.authenticated?("superSecret1234#"), 'User should authenticate with provided password'
 
     body = JSON.parse(response.body)
     assert body['success']
