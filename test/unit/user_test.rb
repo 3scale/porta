@@ -253,7 +253,7 @@ class UserTest < ActiveSupport::TestCase
     UserMailer.expects(:deliver_activation_notification).never
 
     user.username = 'liz'
-    user.password = 'foobar'
+    user.password = 'superSecret1234#'
     user.save!
   end
 
@@ -274,12 +274,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'reset password' do
-    user = FactoryBot.create(:simple_user, username: 'person', password: 'foobar')
+    user = FactoryBot.create(:simple_user, username: 'person', password: 'superSecret1234#')
     user.activate!
 
-    user.update(password: 'new password', password_confirmation: 'new password')
+    user.update(password: 'new_password_123', password_confirmation: 'new_password_123')
 
-    assert user.authenticated?('new password')
+    assert user.authenticated?('new_password_123')
   end
 
   class ExistingProviderUserTest < ActiveSupport::TestCase
@@ -300,7 +300,7 @@ class UserTest < ActiveSupport::TestCase
       @user = FactoryBot.create(:simple_user, account: account,
                                               username: 'person',
                                               email: 'person@example.org',
-                                              password: 'redpanda')
+                                              password: 'superSecret1234#')
       @user.activate!
     end
 
@@ -308,7 +308,7 @@ class UserTest < ActiveSupport::TestCase
       @user.update(username: 'person2')
       @user.reload
 
-      assert @user.authenticated?('redpanda')
+      assert @user.authenticated?('superSecret1234#')
     end
 
     test 'set remember_token' do
@@ -403,7 +403,7 @@ class UserTest < ActiveSupport::TestCase
     test 'with lost_password_token should reset lost_password_token when password is changed' do
       @user.generate_lost_password_token!
       @user = User.find(@user.id) # HACK: to reset stored passwords
-      @user.update_password('new_password', 'new_password')
+      @user.update_password('new_password_123', 'new_password_123')
       @user.save!
 
       assert_nil @user.lost_password_token
@@ -421,7 +421,7 @@ class UserTest < ActiveSupport::TestCase
     test 'with lost_password_token should not reset lost_password_token when user incorrectly confirms new password' do
       @user.generate_lost_password_token!
       @user = User.find(@user.id) # HACK: to reset stored passwords
-      @user.update_password('new_password', 'not_new_password')
+      @user.update_password('new_password_123', 'not_new_password_123')
       assert_not_nil @user.lost_password_token
     end
   end
@@ -752,7 +752,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'destroys its invitation' do
     invitation = FactoryBot.create(:invitation, email: "invited@example.com", account: FactoryBot.create(:provider_account))
-    user = invitation.make_user username: "username", password: "password"
+    user = invitation.make_user username: "username", password: "superSecret1234#"
     user.save!
 
     user.destroy
@@ -765,7 +765,7 @@ class UserTest < ActiveSupport::TestCase
     Invitation.any_instance.stubs(:destroy).returns(false)
 
     invitation = FactoryBot.create(:invitation)
-    user = invitation.make_user username: "username", password: "password"
+    user = invitation.make_user username: "username", password: "superSecret1234#"
     user.save!
 
     assert_not user.destroy

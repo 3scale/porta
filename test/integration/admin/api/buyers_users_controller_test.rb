@@ -58,7 +58,7 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
       access_token: token_value,
       username: 'testusername',
       email: 'test@example.com',
-      password: '123456',
+      password: 'superSecret1234#',
       first_name: 'testname',
       last_name: 'testsurname'
     }

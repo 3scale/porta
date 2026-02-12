@@ -134,7 +134,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     {
       email:    "foo_#{index}@example.net",
       username: "bar#{index}",
-      password: '123456'
+      password: 'superSecret1234#'
     }
   end
 end

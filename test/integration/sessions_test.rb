@@ -112,19 +112,19 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'redirect_url parameter is discarded if login is not via sso' do
-    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'wwwwww')
+    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'superSecret1234#')
     user.activate
 
     host! @provider.internal_domain
 
-    get developer_portal.create_session_url(username: user.username, password: 'wwwwww', redirect_url: forum_url(host: @provider.internal_domain))
+    get developer_portal.create_session_url(username: user.username, password: 'superSecret1234#', redirect_url: forum_url(host: @provider.internal_domain))
     follow_redirect!
 
     assert_equal root_path, path
   end
 
   test 'passing redirect_url with token' do
-    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'wwwwww')
+    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'superSecret1234#')
     user.activate
 
     Authentication::Strategy::Token.any_instance.expects(:authenticate_with_sso).with('yabadabado', '2016').returns(user)
@@ -138,37 +138,37 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'passing redirect_to to login form' do
-    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'password')
+    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'superSecret1234#')
     user.activate
 
     host! @provider.internal_domain
 
     get developer_portal.login_path(return_to: '/some-page')
-    post developer_portal.session_path(username: 'xi@example.net', password: 'password')
+    post developer_portal.session_path(username: 'xi@example.net', password: 'superSecret1234#')
 
     assert_redirected_to '/some-page'
     assert_equal user, User.current
   end
 
   test 'passing redirect_to to outside domain' do
-    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'password')
+    user = FactoryBot.create(:user, account: @buyer, username: 'xi@example.net', password: 'superSecret1234#')
     user.activate
 
     host! @provider.internal_domain
     get developer_portal.login_path(return_to: 'http://example.com/some-page')
-    post developer_portal.session_path(username: 'xi@example.net', password: 'password')
+    post developer_portal.session_path(username: 'xi@example.net', password: 'superSecret1234#')
 
     assert_redirected_to "http://#{@provider.external_domain}/some-page"
     assert_equal user, User.current
   end
 
   test 'current user is not persisted across domains' do
-    provider_user = FactoryBot.create(:user, account: @provider, username: 'provider', password: 'provider')
+    provider_user = FactoryBot.create(:user, account: @provider, username: 'provider', password: 'superSecret1234#')
     provider_user.activate!
 
     open_session do |session|
       session.host! @provider.external_admin_domain
-      session.post provider_sessions_path(username: 'provider', password: 'provider')
+      session.post provider_sessions_path(username: 'provider', password: 'superSecret1234#')
 
       session.assert_response :redirect
       session.assert_equal provider_user, User.current
@@ -184,10 +184,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'mixpanel event properties are not persisted across requests' do
-    provider_user = FactoryBot.create(:user, account: @provider, username: 'provider', password: 'provider')
+    provider_user = FactoryBot.create(:user, account: @provider, username: 'provider', password: 'superSecret1234#')
     provider_user.activate!
 
-    other_provider_user = FactoryBot.create(:user, account: @provider, username: 'other_provider', password: 'provider')
+    other_provider_user = FactoryBot.create(:user, account: @provider, username: 'other_provider', password: 'superSecret1234#')
     other_provider_user.activate!
 
     analytics = sequence('analytics calls')
@@ -201,7 +201,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
         .with { |params| params[:user_id] == provider_user.id }
 
       session.host! @provider.external_admin_domain
-      session.post provider_sessions_path(username: 'provider', password: 'provider')
+      session.post provider_sessions_path(username: 'provider', password: 'superSecret1234#')
 
       session.assert_response :redirect
     end
@@ -213,7 +213,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
         .with { |params| params[:user_id] == other_provider_user.id }
 
       session.host! @provider.external_admin_domain
-      session.post provider_sessions_path(username: 'other_provider', password: 'provider')
+      session.post provider_sessions_path(username: 'other_provider', password: 'superSecret1234#')
 
       session.assert_response :redirect
     end
@@ -223,7 +223,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     host! @provider.external_admin_domain
     user = @provider.admins.first
 
-    provider_login_with user.username, 'supersecret'
+    provider_login_with user.username, 'superSecret1234#'
     assert_equal 1, user.user_sessions.count
 
     assert_no_difference '@provider.reload.updated_at' do
@@ -244,11 +244,11 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user.user_sessions.create
 
     host! @provider.external_admin_domain
-    provider_login_with user.username, 'supersecret'
+    provider_login_with user.username, 'superSecret1234#'
     assert_equal 2, user.user_sessions.count
     put provider_admin_user_personal_details_path, params: { user: {
-      current_password: 'supersecret',
-      password: 'newpwd',
+      current_password: 'superSecret1234#',
+      password: 'new_password_123',
       username: 'test',
       email: 'test2@example.com'
     } }
@@ -261,11 +261,11 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user.user_sessions.create
 
     host! @provider.internal_domain
-    login_with user.username, 'supersecret'
+    login_with user.username, 'superSecret1234#'
     assert_equal 2, user.user_sessions.count
     put System::UrlHelpers.cms_url_helpers.admin_account_personal_details_path, params: { user: {
-      current_password: 'supersecret',
-      password: 'newpwd',
+      current_password: 'superSecret1234#',
+      password: 'new_password_123',
       username: 'test',
       email: 'test2@example.com'
     } }

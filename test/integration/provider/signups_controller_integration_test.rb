@@ -80,7 +80,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
     @create_params ||= {
       account: {
         name: 'organization name',
-        user: {email: 'email@example.com', password: '123456'}
+        user: {email: 'email@example.com', password: 'superSecret1234#'}
       }
     }.deep_merge(extra_params)
   end

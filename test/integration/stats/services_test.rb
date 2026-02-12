@@ -11,7 +11,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     Stats::Base.storage.flushdb
 
     host! @provider_account.internal_admin_domain
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
+    provider_login_with @provider_account.admins.first.username, 'superSecret1234#'
   end
 
   test 'usage_response_code with no data as json' do

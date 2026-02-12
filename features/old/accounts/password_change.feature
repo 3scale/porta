@@ -8,7 +8,7 @@ Feature: Password change
     Given a provider is logged in
     And I go to the provider personal details page
     And I fill in "New password" with "monkey"
-    And I fill in "Current password" with "supersecret"
+    And I fill in "Current password" with "superSecret1234#"
     And I press "Update Details"
     And I log out
     And I go to the provider login page

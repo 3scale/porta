@@ -390,7 +390,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    assert chuck.authenticated?('supersecret')
+    assert chuck.authenticated?('superSecret1234#')
 
     put admin_api_user_path(format: :xml, id: chuck.id, password: "updated-password", password_confirmation: "updated-password"), params: { provider_key: @provider.api_key }
 
