@@ -99,8 +99,6 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     end
 
     def test_weak_password_rejected_when_strong_passwords_enabled
-      Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
       post signup_path, params: account_params(WEAK_PASSWORD)
 
       assert_response :success
@@ -108,8 +106,6 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     end
 
     def test_strong_password_accepted_when_strong_passwords_enabled
-      Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
       post signup_path, params: account_params(STRONG_PASSWORD)
 
       assert_response :redirect

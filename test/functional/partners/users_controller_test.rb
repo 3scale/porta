@@ -93,8 +93,6 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'create user with weak password rejected when strong passwords enabled' do
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
     post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron", password: "weakpwd" }
 
     assert_response :unprocessable_entity
@@ -105,8 +103,6 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'create user with strong password accepted when strong passwords enabled' do
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
     post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron", password: "superSecret1234#" }
 
     assert_response :success

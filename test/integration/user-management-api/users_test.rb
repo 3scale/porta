@@ -401,7 +401,6 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update with weak password rejected when strong passwords enabled' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     put admin_api_user_path(format: :xml, id: chuck.id, password: "weakpwd", password_confirmation: "weakpwd"), params: { provider_key: @provider.api_key }
 
@@ -411,7 +410,6 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update with strong password accepted when strong passwords enabled' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
 
     put admin_api_user_path(format: :xml, id: chuck.id, password: "superSecret1234#", password_confirmation: "superSecret1234#"), params: { provider_key: @provider.api_key }
 

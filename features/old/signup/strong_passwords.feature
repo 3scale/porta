@@ -13,7 +13,6 @@ Feature: Signup with strong passwords
 
 
   Scenario: Strong password is required
-    Given Strong passwords are enabled
     When I go to the sign up page
       And I fill in the following:
        | Email                   | bender@planet.ex |
@@ -26,7 +25,6 @@ Feature: Signup with strong passwords
     Then I should see the error that the password is too weak
 
   Scenario: Strong password is accepted
-    Given Strong passwords are enabled
     When I go to the sign up page
       And I fill in the following:
        | Email                   | bender@planet.ex   |

@@ -35,67 +35,61 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
     end
   end
 
-  class StrongPasswordsTest < Authentication::ByPasswordTest
+  class ExistingUsersTest < Authentication::ByPasswordTest
     setup do
-      Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
+      @user = @buyer.users.first
+      @user.reload
     end
 
-    class ExistingUsersTest < StrongPasswordsTest
-      setup do
-        @user = @buyer.users.first
-        @user.reload
-      end
+    test 'should be valid if not updating the password' do
+      @user.last_name = "not updating password"
 
-      test 'should be valid if not updating the password' do
-        @user.last_name = "not updating password"
-
-        @user.valid?
-        assert @user.errors[:password].blank?
-      end
-
-      test 'should be invalid if updating the password' do
-        @user.password = "nononono"
-        @user.valid?
-
-        assert_equal User::STRONG_PASSWORD_FAIL_MSG, @user.errors[:password].first
-      end
-
-      test 'password is not validated when user is sample data' do
-        @user.password = "nononono"
-        @user.signup_type = :sample_data
-
-        assert @user.valid?
-        assert @user.errors[:password].blank?
-      end
+      @user.valid?
+      assert @user.errors[:password].blank?
     end
 
-    class ValidationsTest < StrongPasswordsTest
-      test 'should be valid with ASCII printable characters and longer than 15 characters' do
-        user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
-        user.valid?
+    test 'should be invalid if updating the password' do
+      @user.password = "nononono"
+      @user.valid?
 
-        assert user.errors[:password].blank?
-      end
+      assert_equal User::STRONG_PASSWORD_FAIL_MSG, @user.errors[:password].first
+    end
 
-      test 'should be invalid if shorter than 15 characters' do
-        user = user_with_password.call('Pas$123')
-        user.valid?
+    test 'password is not validated when user is sample data' do
+      @user.password = "nononono"
+      @user.signup_type = :sample_data
 
-        assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-      end
+      assert @user.valid?
+      assert @user.errors[:password].blank?
+    end
+  end
 
-      test 'should be invalid if has strange characters' do
-        user = user_with_password.call('StrongPass|')
-        user.valid?
+  class ValidationsTest < Authentication::ByPasswordTest
+    test 'should be valid with ASCII printable characters and longer than 15 characters' do
+      user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
+      user.valid?
 
-        assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
-      end
+      assert user.errors[:password].blank?
+    end
 
-      test 'should be invalid if password and password confirmation do not match' do
-        @user = @buyer.users.first
+    test 'should be invalid if shorter than 15 characters' do
+      user = user_with_password.call('Pas$123')
+      user.valid?
 
-        assert_not @buyer.users.first.update password: "superSecret1234#", password_confirmation: "superSecret12345#"
-      end
+      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+    end
+
+    test 'should be invalid if has strange characters' do
+      user = user_with_password.call('StrongPass|')
+      user.valid?
+
+      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+    end
+
+    test 'should be invalid if password and password confirmation do not match' do
+      @user = @buyer.users.first
+
+      assert_not @buyer.users.first.update password: "superSecret1234#", password_confirmation: "superSecret12345#"
     end
   end
 
@@ -174,7 +168,6 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       end
 
       test 'returns true when strong_passwords_disabled is false and not sample_data and validate_password? is true' do
-        Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
         @user.password = 'newpassword12345'
         @user.signup_type = :new_signup
 
@@ -183,7 +176,6 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       end
 
       test 'returns false when strong_passwords_disabled is false and not sample_data but validate_password? is false' do
-        Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
         @user.signup_type = :new_signup
 
         assert_not @user.validate_password?

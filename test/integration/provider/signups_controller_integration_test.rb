@@ -104,8 +104,6 @@ class Provider::SignupsControllerStrongPasswordsTest < ActionDispatch::Integrati
   end
 
   def test_weak_password_rejected_when_strong_passwords_enabled
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
     assert_no_difference(master_account.buyer_accounts.method(:count)) do
       post provider_signup_path, params: signup_params(WEAK_PASSWORD)
     end
@@ -115,8 +113,6 @@ class Provider::SignupsControllerStrongPasswordsTest < ActionDispatch::Integrati
   end
 
   def test_strong_password_accepted_when_strong_passwords_enabled
-    Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(false)
-
     assert_difference(master_account.buyer_accounts.method(:count)) do
       post provider_signup_path, params: signup_params(STRONG_PASSWORD)
     end
