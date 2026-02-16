@@ -196,8 +196,4 @@ module UsersHelper
       link_to_login_with_IP content_text, options
     end
   end
-
-  def strong_password_definition
-    User::STRONG_PASSWORD_FAIL_MSG
-  end
 end
