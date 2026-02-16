@@ -6,5 +6,5 @@ Given "Strong passwords are disabled" do
 end
 
 Then /^I should see the error that the password is too weak$/ do
-  assert has_content? User::STRONG_PASSWORD_FAIL_MSG
+  assert has_content? "is too short (minimum is 15 characters)"
 end
