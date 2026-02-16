@@ -5,10 +5,6 @@ module Authentication
 
     # strong passwords
     STRONG_PASSWORD_MIN_SIZE = 15
-    # All printable characters in ASCII, from 'space' (32) to ~ (126)
-    # at least STRONG_PASSWORD_MIN_SIZE characters
-    RE_STRONG_PASSWORD = /\A[ -~]{#{STRONG_PASSWORD_MIN_SIZE},}\z/
-    STRONG_PASSWORD_FAIL_MSG = I18n.t('activerecord.errors.models.user.attributes.password.weak', min_size: STRONG_PASSWORD_MIN_SIZE)
 
     included do
       # We only need length validations as they are already set in Authentication::ByPassword
@@ -18,8 +14,7 @@ module Authentication
 
       validates_confirmation_of :password, allow_blank: true
 
-      validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
-                                     if: -> { validate_strong_password? } }
+      validates :password, length: { minimum: STRONG_PASSWORD_MIN_SIZE }, if: :validate_strong_password?
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
