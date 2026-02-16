@@ -93,6 +93,10 @@ module Authentication
       self.lost_password_token = nil
     end
 
+    # To avoid all this logic, from Rails 8.1+ we can use
+    # `ActiveModel::Attributes::Normalization`, so `normalizes` method
+    # works with virtual attributes like `password` and `password_validation`
+    # and normalizes on assignment rather than before_validation
     def normalize_password
       if password.present?
         normalized = password.unicode_normalize(:nfc)
