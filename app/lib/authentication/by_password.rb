@@ -10,6 +10,8 @@ module Authentication
       # We only need length validations as they are already set in Authentication::ByPassword
       has_secure_password validations: false
 
+      before_validation :normalize_password, if: :validate_password?
+
       validates_presence_of :password, if: :validate_password?
 
       validates_confirmation_of :password, allow_blank: true
@@ -22,7 +24,7 @@ module Authentication
 
       scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
-      alias_method :authenticated?, :authenticate
+      alias_method :authenticate_without_normalization, :authenticate
     end
 
     class_methods do
@@ -90,5 +92,22 @@ module Authentication
     def reset_lost_password_token
       self.lost_password_token = nil
     end
+
+    def normalize_password
+      if password.present?
+        normalized = password.unicode_normalize(:nfc)
+        self.password = normalized unless password == normalized
+      end
+
+      if password_confirmation.present?
+        normalized_confirmation = password_confirmation.unicode_normalize(:nfc)
+        self.password_confirmation = normalized_confirmation unless password_confirmation == normalized_confirmation
+      end
+    end
+
+    def authenticate(password)
+      authenticate_without_normalization(password&.unicode_normalize(:nfc))
+    end
+    alias_method :authenticated?, :authenticate
   end
 end
