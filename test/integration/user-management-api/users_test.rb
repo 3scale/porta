@@ -405,7 +405,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     put admin_api_user_path(format: :xml, id: chuck.id, password: "weakpwd", password_confirmation: "weakpwd"), params: { provider_key: @provider.api_key }
 
     assert_response :unprocessable_entity
-    assert_match User::STRONG_PASSWORD_FAIL_MSG, response.body
+    assert_match "is too short (minimum is 15 characters)", response.body
   end
 
   test 'update with strong password accepted when strong passwords enabled' do

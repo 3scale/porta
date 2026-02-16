@@ -24,7 +24,7 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       user = user_with_password.call('weakpassword')
 
       assert_not user.valid?
-      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+      assert_equal "is too short (minimum is 15 characters)", user.errors[:password].first
     end
 
     test 'weak password must be present' do
@@ -52,7 +52,7 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       @user.password = "nononono"
       @user.valid?
 
-      assert_equal User::STRONG_PASSWORD_FAIL_MSG, @user.errors[:password].first
+      assert_equal "is too short (minimum is 15 characters)", @user.errors[:password].first
     end
 
     test 'password is not validated when user is sample data' do
@@ -66,9 +66,16 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
 
   class ValidationsTest < Authentication::ByPasswordTest
     test 'should be valid with ASCII printable characters and longer than 15 characters' do
-      user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
-      user.valid?
+      user = user_with_password.call('StrongPass123-+_!$#.@')
 
+      assert user.valid?
+      assert user.errors[:password].blank?
+    end
+
+    test 'should be valid with Unicode characters and longer than 15 characters' do
+      user = user_with_password.call('contraseña12345')
+
+      assert user.valid?
       assert user.errors[:password].blank?
     end
 
@@ -76,7 +83,7 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       user = user_with_password.call('Pas$123')
       user.valid?
 
-      assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+      assert_equal "is too short (minimum is 15 characters)", user.errors[:password].first
     end
 
     test 'should be invalid if password and password confirmation do not match' do
@@ -84,6 +91,41 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
 
       assert_not @buyer.users.first.update password: "superSecret1234#", password_confirmation: "superSecret12345#"
       assert_equal "doesn't match Password", @buyer.users.first.errors[:password_confirmation].first
+    end
+  end
+
+  class UnicodeNormalizationTest < Authentication::ByPasswordTest
+    test 'password is normalized to NFC before saving' do
+      # "café" with e + combining acute accent (NFD form)
+      password_nfd = "cafe\u0301_secretpass"
+      # "café" with precomposed é (NFC form)
+      password_nfc = "café_secretpass"
+
+      assert_not_equal password_nfd, password_nfc
+      assert_equal password_nfd.unicode_normalize(:nfc), password_nfc
+
+      user = user_with_password.call(password_nfd)
+      user.password_confirmation = password_nfd
+      user.save!
+
+      assert user.authenticated?(password_nfc), 'Should authenticate with NFC form'
+      assert user.authenticated?(password_nfd), 'Should authenticate with NFD form (normalized before comparison)'
+    end
+
+    test 'password length is counted after NFC normalization' do
+      # 15 characters in NFD (e + combining accent = 2 code points)
+      password_nfd = "contraseñas123".unicode_normalize(:nfd)
+      # 14 characters in NFC (ñ = 1 code point)
+      password_nfc = "contraseñas123".unicode_normalize(:nfc)
+
+      assert_equal 15, password_nfd.length
+      assert_equal 14, password_nfc.length
+
+      user = user_with_password.call(password_nfd)
+      user.password_confirmation = password_nfd
+
+      assert_not user.valid?, 'Should be invalid because NFC-normalized length is 14 (< 15)'
+      assert_equal "is too short (minimum is 15 characters)", user.errors[:password].first
     end
   end
 

@@ -39,7 +39,7 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
     put admin_api_account_user_path(buyer, user), params: { access_token: token_value, password: 'weakpwd' }
 
     assert_response :unprocessable_entity
-    assert_match User::STRONG_PASSWORD_FAIL_MSG, response.body
+    assert_match "is too short (minimum is 15 characters)", response.body
   end
 
   test 'update with strong password accepted when strong passwords enabled' do

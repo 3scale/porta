@@ -102,7 +102,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
       post signup_path, params: account_params(WEAK_PASSWORD)
 
       assert_response :success
-      assert_match User::STRONG_PASSWORD_FAIL_MSG, response.body
+      assert_match "is too short (minimum is 15 characters)", response.body
     end
 
     def test_strong_password_accepted_when_strong_passwords_enabled
