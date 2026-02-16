@@ -127,6 +127,52 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
       assert_not user.valid?, 'Should be invalid because NFC-normalized length is 14 (< 15)'
       assert_equal "is too short (minimum is 15 characters)", user.errors[:password].first
     end
+
+    test 'already NFC-normalized password does not trigger digest regeneration' do
+      password = 'superSecret1234#' # ASCII, already NFC
+
+      user = @buyer.users.build(
+        username: 'testuser',
+        email: 'test@example.com',
+        password: password,
+        password_confirmation: password
+      )
+
+      original_digest = user.password_digest
+      user.valid? # triggers before_validation callback
+
+      assert_equal original_digest, user.password_digest, 'Digest should not change for already-normalized password'
+    end
+
+    test 'NFD password triggers digest regeneration after normalization' do
+      password_nfd = "café_secretpass".unicode_normalize(:nfd)
+
+      user = @buyer.users.build(
+        username: 'testuser',
+        email: 'test@example.com',
+        password: password_nfd,
+        password_confirmation: password_nfd
+      )
+
+      original_digest = user.password_digest
+      user.valid? # triggers before_validation callback
+
+      assert_not_equal original_digest, user.password_digest, 'Digest should change after normalizing NFD to NFC'
+    end
+
+    test 'password confirmation is normalized independently' do
+      password_nfc = "café_secretpass".unicode_normalize(:nfc)
+      password_nfd = "café_secretpass".unicode_normalize(:nfd)
+
+      user = @buyer.users.build(
+        username: 'testuser',
+        email: 'test@example.com',
+        password: password_nfc,
+        password_confirmation: password_nfd
+      )
+
+      assert user.valid?, 'Should be valid because both password and confirmation normalize to same value'
+    end
   end
 
   class MethodsTest < Authentication::ByPasswordTest
