@@ -1929,7 +1929,6 @@ en:
               blank: "can't be blank"
             password:
               blank: "can't be blank"
-              weak: "Password must be at least %{min_size} characters long, and contain only valid characters."
           current_password_incorrect: "is incorrect"
           last_admin: "Can't delete last admin"
 
