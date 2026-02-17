@@ -49,7 +49,7 @@ Feature: Access code
   @javascript
   Scenario: Navigate from admin portal when access code is set
     Given the provider logs in
-    And they follow "Developer Portal"
+    And they follow any "Developer Portal"
     When they follow "Visit Portal"
     Then the current domain in a new window should be foo.3scale.localhost
     And they should not see field "Access code"
