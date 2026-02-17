@@ -34,7 +34,8 @@ module Authentication
     end
 
     def validate_password?
-      will_save_change_to_password_digest? || (signup.by_user? && password_digest.blank?)
+      # The password changed or it's a new record that must provide a password
+      will_save_change_to_password_digest? || (new_record? && signup.by_user?)
     end
 
     def validate_strong_password?
