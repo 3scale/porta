@@ -13,8 +13,9 @@ module Stats
         use_aggregated_values(range, granularity, prefix)
       when 6.hours
         resum_all_value(range, granularity, prefix)
-      when :hour
-        range = range.to_time_range.utc
+      when :hour, :year
+        range = range.to_time_range
+        range = range.utc if granularity == :hour
         keys = keys_for_range(range, granularity, prefix)
         if keys.empty?
           []
