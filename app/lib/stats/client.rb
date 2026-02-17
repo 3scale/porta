@@ -9,7 +9,7 @@ module Stats
     end
 
     def usage(options)
-      super
+      super.tap { |result| append_utilization(result) }
     end
 
     def client
@@ -22,6 +22,25 @@ module Stats
 
     def source_key
       [@cinstance.service, {:cinstance => @cinstance.application_id}]
+    end
+
+    private
+
+    def append_utilization(result)
+      metrics = @cinstance.service.metrics
+      records = @cinstance.backend_object.utilization(metrics)
+      return if records.error? || records.empty?
+
+      result[:utilization] = records.map do |record|
+        {
+          metric_name: record.system_name,
+          friendly_name: record.friendly_name,
+          period: record.period,
+          current_value: record.current_value,
+          max_value: record.max_value,
+          percentage: record.percentage
+        }
+      end
     end
   end
 end

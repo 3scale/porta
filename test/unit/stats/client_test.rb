@@ -65,6 +65,25 @@ class Stats::ClientTest < ActiveSupport::TestCase
     assert_equal 12345, @stats.total(:metric => @metric, :period => :eternity)
   end
 
+  test 'Client#usage with period eternity returns yearly values' do
+    @storage.set(stats_key(@metric, 'year:20090101'), 100)
+    @storage.set(stats_key(@metric, 'year:20100101'), 200)
+    @storage.set(stats_key(@metric, 'year:20110101'), 300)
+
+    stub_backend_utilization
+
+    travel_to(Time.utc(2011, 6, 15)) do
+      data = @stats.usage(:metric => @metric,
+                          :period => :eternity,
+                          :since  => Time.utc(2009, 1, 1),
+                          :timezone => 'UTC')
+
+      assert_equal [100, 200, 300], data[:values]
+      assert_equal 600, data[:total]
+      assert_equal :year, data[:period][:granularity]
+    end
+  end
+
   private
 
   def stats_key(metric, time)

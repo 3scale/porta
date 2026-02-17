@@ -78,6 +78,17 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     @dummy.usage(@options.merge(skip_change: false))
   end
 
+  test '#usage with period eternity uses yearly granularity and does not compute previous' do
+    @dummy.expects(:usage_values_in_range).once.returns([10, 20])
+
+    result = @dummy.usage(period: 'eternity', metric_name: 'foo', timezone: 'UTC', skip_change: false)
+
+    assert_equal :year, result[:period][:granularity]
+    assert_equal 'eternity', result[:period][:name]
+    assert_nil result[:previous_total]
+    assert_nil result[:change]
+  end
+
   test '#usage returns nil if application data does not exist' do
     @dummy.instance_variable_set(:@cinstance, nil)
 
