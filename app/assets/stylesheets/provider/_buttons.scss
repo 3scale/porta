@@ -66,55 +66,6 @@ a.next {
 
 }
 
-form.formtastic .button-bar fieldset {
-  margin: 0;
-}
-
-// Lame but functional, improvements welcomed.
-form.formtastic .button-bar,
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-.button-bar {
-  position: relative;
-
-  & > fieldset {
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    &.actions:first-child {
-      float: left;
-      margin: line-height-times(.5) 0 0;
-      padding: 0;
-      text-align: left !important;
-
-      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-      & > ol > li {
-        margin-right: var(--pf-global--spacer--sm);
-      }
-    }
-
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    &.actions:last-child:not(:first-child) {
-      float: right;
-      margin: line-height-times(.5) 0 0;
-      padding: 0;
-
-      /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-      & > ol > li {
-        margin-left: var(--pf-global--spacer--sm);
-      }
-
-    }
-
-    /* stylelint-disable-next-line no-descending-specificity -- FIXME */
-    & > ol > li {
-      display: inline-block;
-    }
-  }
-}
-
-/* stylelint-disable-next-line no-descending-specificity -- FIXME */
-.formtastic .button-bar {
-  display: flow-root;
-}
-
 @mixin outline-button($color: $font-color, $border-color: $border-color) {
   color: $color;
   display: inline-block;

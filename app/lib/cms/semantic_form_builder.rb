@@ -15,13 +15,15 @@ module CMS
     end
 
     def delete_button
-      return disabled_delete_button unless object_can_be_destroyed?
+      tag.div(class: 'pf-c-action-list__item') do
+        return disabled_delete_button unless object_can_be_destroyed?
 
-      template.link_to('Delete', template.url_for(action: :destroy),
-                       'data-method': :delete,
-                       class: 'delete pf-c-button pf-m-danger',
-                       title: "Delete this #{@object.class.model_name.human.downcase}",
-                       'data-confirm': "Do you really want to delete this #{@object.class.model_name.human.downcase}?")
+        template.link_to('Delete', template.url_for(action: :destroy),
+                         'data-method': :delete,
+                         class: 'delete pf-c-button pf-m-danger',
+                         title: "Delete this #{@object.class.model_name.human.downcase}",
+                         'data-confirm': "Do you really want to delete this #{@object.class.model_name.human.downcase}?")
+      end
     end
 
     def hide_button(*args)
@@ -37,9 +39,16 @@ module CMS
       template.tag.button('Hide', button_html)
     end
 
-    def actions(*args, &block)
-      # HACK: CMS design is too far away from the rest of the app so skip SemanticFormBuilder implementation
-      ::Formtastic::FormBuilder.instance_method(:actions).bind(self).call(*args, &block)
+    def actions(&block)
+      tag.div(class: 'pf-c-action-list pf-l-level pf-u-mt-md', &block)
+    end
+
+    def commit_button(title = nil, opts = {})
+      title ||= Formtastic::Actions::InputAction.new(self, template, @object, @object_name, :submit, {}).text
+
+      tag.div(class: 'pf-c-action-list__item') do
+        tag.button(title, type: :submit, class: 'pf-c-button pf-m-primary', **opts)
+      end
     end
 
     private
