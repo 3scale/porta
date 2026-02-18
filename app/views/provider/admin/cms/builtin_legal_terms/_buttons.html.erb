@@ -1,4 +1,6 @@
 <%= f.actions do %>
-  <%= f.commit_button "Update legal terms for #{@page.title}" %>
-  <%= insert_legal_terms_snippet_button %>
+  <div class="pf-c-action-list__group">  
+    <%= f.commit_button "Update legal terms for #{@page.title}" %>
+    <%= insert_legal_terms_snippet_button %>
+  </div>
 <% end %>
