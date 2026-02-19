@@ -15,13 +15,15 @@ module CMS
     end
 
     def delete_button
-      return disabled_delete_button unless object_can_be_destroyed?
+      tag.div(class: 'pf-c-action-list__item') do
+        return disabled_delete_button unless object_can_be_destroyed?
 
-      template.link_to('Delete', template.url_for(action: :destroy),
-                       'data-method': :delete,
-                       class: 'delete pf-c-button pf-m-danger',
-                       title: "Delete this #{@object.class.model_name.human.downcase}",
-                       'data-confirm': "Do you really want to delete this #{@object.class.model_name.human.downcase}?")
+        template.link_to('Delete', template.url_for(action: :destroy),
+                         'data-method': :delete,
+                         class: 'delete pf-c-button pf-m-danger',
+                         title: "Delete this #{@object.class.model_name.human.downcase}",
+                         'data-confirm': "Do you really want to delete this #{@object.class.model_name.human.downcase}?")
+      end
     end
 
     def hide_button(*args)
