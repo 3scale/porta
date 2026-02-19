@@ -8,7 +8,8 @@ module Stats
         include System::UrlHelpers.system_url_helpers
       end
 
-      GRANULARITIES = {:year  => :month,
+      GRANULARITIES = {:eternity => :year,
+                       :year  => :month,
                        :month => :day,
                        :week  => 6.hours,
                        :day   => :hour}.with_indifferent_access
@@ -60,6 +61,7 @@ module Stats
         end
 
         return result if options.fetch(:skip_change, true)
+        return result if granularity == :year # eternity period, no previous comparison
 
         if granularity.to_s == 'day'
           previous_range = range.class.new(range.previous.begin.midnight, range.previous.end.midnight) # this is to keep us from breaking in DST.......
@@ -144,13 +146,22 @@ module Stats
         if options[:period]
           period = sanitize_period(options[:period])
           granularity = options[:granularity] || GRANULARITIES[period]
-          length = 1.send(period)
 
-          timezone = extract_timezone(options)
-          range_since = to_time(options[:since].presence || timezone.now - length, timezone)
-          range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
+          if period.to_s == 'eternity'
+            timezone = extract_timezone(options)
+            range_since = to_time(options[:since].presence || source.first&.created_at&.beginning_of_year || '2008-01-01', timezone).beginning_of_year
+            range_until = timezone.now.end_of_year
+            granularity = Stats::Aggregation.normalize_granularity(granularity)
+            [range_since..range_until, granularity]
+          else
+            length = 1.send(period)
 
-          sanitize_range_and_granularity(range_since..range_until, granularity)
+            timezone = extract_timezone(options)
+            range_since = to_time(options[:since].presence || timezone.now - length, timezone)
+            range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
+
+            sanitize_range_and_granularity(range_since..range_until, granularity)
+          end
         else
           raise InvalidParameterError, "Missing parameter :granularity" unless options.key?(:granularity)
           # due to the unfortunate use of 21600 as a valid granularity  the parameter is required to a symbol or fixnum
