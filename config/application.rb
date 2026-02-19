@@ -111,7 +111,8 @@ module System
                                                           ActionController::Parameters,
                                                           ActiveSupport::TimeWithZone,
                                                           ActiveSupport::TimeZone,
-                                                          ActiveSupport::HashWithIndifferentAccess]
+                                                          ActiveSupport::HashWithIndifferentAccess,
+                                                          'HashWithIndifferentAccess']
 
     # Keeping the historic behavior by setting to `YAML`
     # It is recommended to explicitly define the serialization method for each column
