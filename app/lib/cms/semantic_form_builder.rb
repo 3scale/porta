@@ -37,9 +37,8 @@ module CMS
       template.tag.button('Hide', button_html)
     end
 
-    def actions(*args, &block)
-      # HACK: CMS design is too far away from the rest of the app so skip SemanticFormBuilder implementation
-      ::Formtastic::FormBuilder.instance_method(:actions).bind(self).call(*args, &block)
+    def actions(&)
+      tag.div(class: 'pf-c-action-list pf-l-level pf-u-mt-md', &)
     end
 
     private

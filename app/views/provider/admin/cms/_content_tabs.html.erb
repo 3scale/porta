@@ -26,25 +26,21 @@
   </div>
 </div>
 
-<div class='button-bar'>
-  <%= f.actions do %>
+<%= f.actions do %>
+  <div class="pf-c-action-list__group">
     <% if f.object.respond_to?(:destroy) %>
-      <li id="cms-template-delete-button">
-        <%= f.delete_button %>
-      </li>
+      <%= f.delete_button %>
     <% end %>
 
-    <li>
-      <a class="pf-c-button pf-m-secondary pf-m-danger"
-         href="#cms-template-revert"
-         title="Reverts draft to a currently published version.">
-        Revert
-      </a>
-    </li>
-  <% end %>
+    <a class="pf-c-button pf-m-secondary pf-m-danger"
+        href="#cms-template-revert"
+        title="Reverts draft to a currently published version.">
+      Revert
+    </a>
+  </div>
 
-  <%= f.actions do %>
+  <div class="pf-c-action-list__group">
     <%= render '/provider/admin/cms/preview_buttons', :f =>f %>
     <%= render '/provider/admin/cms/save_buttons', :f => f %>
-  <% end %>
-</div>
+  </div>
+<% end %>

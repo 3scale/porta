@@ -5,17 +5,15 @@
 <%= cms_form_for(@file, :html => { :multipart => true }) do |f| %>
   <%= render 'form', :f => f %>
 
-  <div class='button-bar'>
-    <%= f.actions do %>
+  <%= f.actions do %>
+    <div class="pf-c-action-list__group">
       <%= f.delete_button %>
-    <% end %>
-    <%= f.actions do %>
-      <li>
-        <%= link_to "Download", @file.url.to_s, :class => 'pf-c-button pf-m-secondary'  %>
-      </li>
+    </div>
+    <div class="pf-c-action-list__group">
+      <%= link_to "Download", @file.url.to_s, :class => 'pf-c-button pf-m-secondary'  %>
       <%= f.commit_button 'Save' %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 
   <% if @file.is_image? %>
     <div class='image-preview'>
