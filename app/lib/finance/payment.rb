@@ -18,5 +18,17 @@ module Finance
 
     CreditCardPurchaseFailed = Class.new(GatewayError)
 
+    # Rate limit error - should be retried immediately, not treated as payment failure
+    class RateLimitError < StandardError
+      attr_reader :response
+
+      def initialize(response = nil)
+        @response = response
+      end
+
+      def message
+        response.try!(:message) || 'Rate limit exceeded - too many requests to payment gateway'
+      end
+    end
   end
 end

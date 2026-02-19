@@ -40,6 +40,12 @@ class PaymentTransaction < ApplicationRecord
       self.message = response.message
       self.params = response.params
       self.test = response.test
+
+      # Check for rate limit errors and raise immediately for Sidekiq retry
+      if rate_limit_error?(response)
+        logger.warn("Rate limit detected (429) for PaymentTransaction - will retry with backoff")
+        raise Finance::Payment::RateLimitError.new(response)
+      end
     rescue ActiveMerchant::ActiveMerchantError => exception
       logger.info("Processing of PaymentTransaction threw an exception: #{exception.message}")
       self.success = false
@@ -111,5 +117,21 @@ class PaymentTransaction < ApplicationRecord
     end
 
     xml.to_xml
+  end
+
+  private
+
+  # Detects if the payment gateway returned a 429 rate limit error
+  # Checks both HTTP status code and error messages
+  def rate_limit_error?(response)
+    return false unless response
+
+    # Check for HTTP 429 status in params
+    http_code = response.params.dig('error', 'http_code') || response.params.dig('http_code')
+    return true if http_code == 429 || http_code == '429'
+
+    # Check for rate limit in error message (common patterns)
+    message = response.message.to_s.downcase
+    message.include?('rate limit') || message.include?('too many requests') || message.include?('429')
   end
 end
