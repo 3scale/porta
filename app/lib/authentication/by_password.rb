@@ -94,6 +94,7 @@ module Authentication
       self.lost_password_token = nil
     end
 
+    raise "FIXME" if Gem::Version.new(Rails.version) >= Gem::Version.new("8.1")
     # To avoid all this logic, from Rails 8.1+ we can use
     # `ActiveModel::Attributes::Normalization`, so `normalizes` method
     # works with virtual attributes like `password` and `password_validation`
