@@ -58,7 +58,7 @@ module Authentication
       self.lost_password_token = token
       self.lost_password_token_generated_at = Time.current
 
-      token if save(validate: false)
+      token if save
     end
 
     def generate_lost_password_token!
