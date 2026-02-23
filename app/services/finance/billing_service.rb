@@ -16,7 +16,7 @@ module Finance
       new(account_id, options).call
     end
 
-    attr_reader :account_id, :provider_account_id, :now, :skip_notifications
+    attr_reader :account_id, :provider_account_id, :now, :skip_notifications, :lock_service
 
     # @param account_id [Integer] either a provider account, or a buyer account with :provider_account_id in options
     def initialize(account_id, options = {})
@@ -24,19 +24,20 @@ module Finance
       @provider_account_id = options[:provider_account_id] || account_id
       @now = Time.zone.parse(options[:now].to_s) || Time.zone.now
       @skip_notifications = options[:skip_notifications]
+      @lock_service = Synchronization::BillingLockService.new(account_id.to_s)
     end
 
     def call!
-      acquire_lock
+      lock_service.lock
       call
-    rescue Finance::Payment::RateLimitError => error
+    rescue Finance::Payment::GatewayRateLimitError => exception
       # Rate limit errors should retry immediately via Sidekiq
       # Release the lock so retries can proceed without waiting 1 hour
-      release_lock
-      report_error(error)
-      raise error
-    rescue LockBillingError, SpuriousBillingError => error
-      report_error(error)
+      lock_service.unlock
+      report_error(exception)
+      raise exception
+    rescue LockBillingError, SpuriousBillingError => exception
+      report_error(exception)
       nil
     end
 
@@ -69,36 +70,6 @@ module Finance
       options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
       options[:buyer_ids] = [account_id]
       options
-    end
-
-    def lock_key
-      @lock_key ||= "lock:billing:#{account_id}"
-    end
-
-    def lock_manager
-      @lock_manager ||= Redlock::Client.new([System::RedisClientPool.default], { retry_count: 0, redis_timeout: 1 })
-    end
-
-    def acquire_lock
-      # Acquire lock for 1 hour
-      # Normally we don't release it, but for rate limits we do (see rescue block)
-      @lock_info = lock_manager.lock(lock_key, 1.hour.in_milliseconds)
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless @lock_info
-    end
-
-    def release_lock
-      # Only called on rate limit errors to allow immediate retry
-      lock_manager.unlock(@lock_info) if @lock_info
-      @lock_info = nil
-    rescue => e
-      Rails.logger.warn("Failed to release billing lock for account #{account_id}: #{e.message}")
-    end
-
-    def with_lock
-      # intentionally skip unlocking, no further billing of account within 1 hour allowed
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hour.in_milliseconds).result
-
-      yield
     end
 
     def report_error(error)

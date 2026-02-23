@@ -81,17 +81,18 @@ class BillingWorkerTest < ActiveSupport::TestCase
     assert_equal @provider.id, buyer_id
   end
 
-  test 'rate limit error uses exponential backoff retry' do
-    rate_limit_error = Finance::Payment::RateLimitError.new
+  test 'rate limit error uses Sidekiq default exponential backoff retry' do
+    response = stub(
+      success?: false,
+      params: { 'error' => { 'code' => 'rate_limit' } },
+      message: "Request rate limit exceeded. Learn more about rate limits here https://stripe.com/docs/rate-limits."
+    )
+    payment_metadata = { invoice_id: 123, buyer_id: 456 }
+    rate_limit_error = Finance::Payment::GatewayRateLimitError.new(response, payment_metadata)
 
-    # Verify exponential backoff timing for rate limits
-    retry_delay_1 = BillingWorker.sidekiq_retry_in_block.call(1, rate_limit_error)
-    assert_operator retry_delay_1, :>=, 15
-    assert_operator retry_delay_1, :<=, 25
-
-    retry_delay_2 = BillingWorker.sidekiq_retry_in_block.call(2, rate_limit_error)
-    assert_operator retry_delay_2, :>=, 45
-    assert_operator retry_delay_2, :<=, 55
+    # Should return nil to use Sidekiq's default exponential backoff
+    retry_delay = BillingWorker.sidekiq_retry_in_block.call(1, rate_limit_error)
+    assert_nil retry_delay, "Should return nil to use Sidekiq's default exponential backoff"
   end
 
   test 'regular errors use standard retry delay' do
