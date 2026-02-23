@@ -94,7 +94,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     user = assigns(:user)
     assert user.valid?
     assert_nil user.password_digest, 'User should have no password when not provided'
-    assert_not user.using_password?, 'User should not be using password'
+    assert_not user.already_using_password?, 'User should not be using password'
 
     body = JSON.parse(response.body)
     assert_equal true, body['success']

@@ -62,7 +62,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
 
     assert user.valid?
     assert_nil user.password_digest, 'User should have no password when not provided'
-    assert_not user.using_password?, 'User should not be using password'
+    assert_not user.already_using_password?, 'User should not be using password'
     assert_equal "sso-id", user.open_id
 
     body = JSON.parse(response.body)

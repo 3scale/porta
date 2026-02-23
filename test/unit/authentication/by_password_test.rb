@@ -275,20 +275,20 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
 
       test 'returns true when password is persisted in database' do
         assert @user.password_digest_in_database.present?
-        assert @user.using_password?
+        assert @user.already_using_password?
       end
 
       test 'returns false when password_digest is nil in database' do
         @user.update_column(:password_digest, nil)
 
-        assert_not @user.using_password?
+        assert_not @user.already_using_password?
       end
 
       test 'returns false when password is set but not yet persisted' do
         new_user = @buyer.users.build(username: 'newuser', email: 'new@example.com', password: 'testpassword', password_confirmation: 'testpassword')
 
         assert new_user.password_digest.present?
-        assert_not new_user.using_password?
+        assert_not new_user.already_using_password?
       end
     end
   end

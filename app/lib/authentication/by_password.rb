@@ -78,12 +78,12 @@ module Authentication
       save
     end
 
-    def using_password?
+    def already_using_password?
       password_digest_in_database.present?
     end
 
     def can_set_password?
-      account.password_login_allowed? && !using_password?
+      account.password_login_allowed? && !already_using_password?
     end
 
     def special_fields

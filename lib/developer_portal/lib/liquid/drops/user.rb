@@ -93,7 +93,7 @@ module Liquid
 
       desc "Returns true if user signed up with password"
       def using_password?
-        @user.using_password?
+        @user.already_using_password?
       end
 
       desc %{

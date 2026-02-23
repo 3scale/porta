@@ -18,7 +18,7 @@ div class="pf-c-card"
                                 required: false,
                                 input_html: { value: '', type: 'password', required: false }
 
-      - if current_user.using_password?
+      - if current_user.already_using_password?
         = form.inputs "Provide your current password and update your personal details" do
           = form.input :current_password, as: :patternfly_input,
                                           required: true,
