@@ -7,13 +7,10 @@ class BillingWorker
 
   sidekiq_retry_in do |count, exception|
     case exception
-    when Finance::Payment::RateLimitError
-      # For rate limits: exponential backoff with jitter
-      # Retry schedule: ~15s, ~45s, ~135s, ~405s, ~1215s
-      # This prevents thundering herd when many jobs hit rate limit simultaneously
-      delay = (3 ** count) * 5
-      jitter = rand(0..5)
-      delay + jitter
+    when Finance::Payment::StripeRateLimitError
+      # Use default exponential backoff delays that Sidekiq implements by returning nil
+      # see https://github.com/sidekiq/sidekiq/blob/v7.3.2/lib/sidekiq/job_retry.rb#L219-L220
+      nil
     else
       # For other errors: wait for lock to be released (original behavior)
       (1.hours + 10).to_i

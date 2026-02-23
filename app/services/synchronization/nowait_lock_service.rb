@@ -12,15 +12,19 @@ class Synchronization::NowaitLockService < ThreeScale::Patterns::Service
 
   # @return [Hash, NilClass, TrueClass, FalseClass] without block returns lock_info or nil, otherwise a boolean signifying whether it ran
   def call
-    manager.lock("lock:#{resource}", timeout, &block)
+    manager.lock(lock_key, timeout, &block)
   end
 
   private
 
   attr_accessor :resource, :block, :timeout
 
+  def lock_key
+    @lock_key ||= "lock:#{resource}"
+  end
+
   def manager
     # we may cache this as thread/fiber local variable but for now creating a new one seems good enough
-    Redlock::Client.new([System::RedisClientPool.default], { retry_count: 0, redis_timeout: 1 })
+    @manager ||= Redlock::Client.new([System::RedisClientPool.default], { retry_count: 0, redis_timeout: 1 })
   end
 end

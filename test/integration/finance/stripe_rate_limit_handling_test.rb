@@ -62,16 +62,16 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
   # ==================== Integration Tests for Invoice Charging ====================
 
   test 'Invoice charge re-raises RateLimitError when Stripe returns 429' do
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
 
     invoice = prepare_invoice
 
     # Should raise RateLimitError (to bubble up to BillingWorker)
-    error = assert_raises(Finance::Payment::RateLimitError) do
+    error = assert_raises(Finance::Payment::StripeRateLimitError) do
       invoice.charge!
     end
 
-    assert_instance_of Finance::Payment::RateLimitError, error
+    assert_instance_of Finance::Payment::StripeRateLimitError, error
 
     # Invoice should NOT be marked as unpaid
     invoice.reload
@@ -104,7 +104,7 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
   # ==================== BillingWorker Retry Logic Tests ====================
 
   test 'BillingWorker uses exponential backoff for rate limit errors' do
-    rate_limit_error = Finance::Payment::RateLimitError.new
+    rate_limit_error = Finance::Payment::StripeRateLimitError.new
 
     # First retry: ~15 seconds (3^1 * 5 = 15)
     retry_delay_1 = BillingWorker.sidekiq_retry_in_block.call(1, rate_limit_error)
@@ -135,16 +135,16 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
   # ==================== Job-Level Integration Tests ====================
 
   test 'BillingService re-raises rate limit error and releases lock' do
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
 
     invoice = prepare_invoice
 
     # Should raise RateLimitError and not suppress it
-    error = assert_raises(Finance::Payment::RateLimitError) do
+    error = assert_raises(Finance::Payment::StripeRateLimitError) do
       Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: invoice.due_on)
     end
 
-    assert_instance_of Finance::Payment::RateLimitError, error
+    assert_instance_of Finance::Payment::StripeRateLimitError, error
 
     # Lock should be released - we can acquire it again immediately
     assert_nothing_raised do
@@ -153,19 +153,19 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
   end
 
   test 'rate limit error flow through BillingWorker' do
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
 
     invoice = prepare_invoice
 
     # Perform billing worker job - should raise RateLimitError
     worker = BillingWorker.new
 
-    error = assert_raises(Finance::Payment::RateLimitError) do
+    error = assert_raises(Finance::Payment::StripeRateLimitError) do
       worker.perform(@buyer.id, @provider.id, invoice.due_on.to_fs(:iso8601))
     end
 
     # Verify the error is the one we expect
-    assert_instance_of Finance::Payment::RateLimitError, error
+    assert_instance_of Finance::Payment::StripeRateLimitError, error
 
     # Verify invoice state is unchanged
     assert_equal 'pending', invoice.reload.state
@@ -182,10 +182,10 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
     # First attempt: Invoice 1 succeeds, Invoice 2 hits rate limit
     call_sequence = sequence('charging')
     Account.any_instance.expects(:charge!).with(invoice1.cost, invoice: invoice1).returns(true).in_sequence(call_sequence)
-    Account.any_instance.expects(:charge!).with(invoice2.cost, invoice: invoice2).raises(Finance::Payment::RateLimitError.new).in_sequence(call_sequence)
+    Account.any_instance.expects(:charge!).with(invoice2.cost, invoice: invoice2).raises(Finance::Payment::StripeRateLimitError.new).in_sequence(call_sequence)
 
     # Job fails with rate limit
-    assert_raises(Finance::Payment::RateLimitError) do
+    assert_raises(Finance::Payment::StripeRateLimitError) do
       Finance::BillingService.call!(@buyer.id, provider_account_id: @provider.id, now: billing_time)
     end
 
@@ -214,13 +214,13 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
     invoice = prepare_invoice
 
     # First rate limit error
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
-    assert_raises(Finance::Payment::RateLimitError) { invoice.charge! }
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
+    assert_raises(Finance::Payment::StripeRateLimitError) { invoice.charge! }
     assert_equal 0, invoice.reload.charging_retries_count
 
     # Second rate limit error
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
-    assert_raises(Finance::Payment::RateLimitError) { invoice.charge! }
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
+    assert_raises(Finance::Payment::StripeRateLimitError) { invoice.charge! }
     assert_equal 0, invoice.reload.charging_retries_count
 
     # Invoice should still be in pending state, not failed
@@ -231,8 +231,8 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
     invoice = prepare_invoice
 
     # First attempt: rate limit
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
-    assert_raises(Finance::Payment::RateLimitError) { invoice.charge! }
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
+    assert_raises(Finance::Payment::StripeRateLimitError) { invoice.charge! }
 
     # Second attempt: success
     Account.any_instance.expects(:charge!).returns(true)
@@ -246,8 +246,8 @@ class Finance::StripeRateLimitHandlingTest < ActionDispatch::IntegrationTest
     invoice = prepare_invoice
 
     # First attempt: rate limit
-    Account.any_instance.expects(:charge!).raises(Finance::Payment::RateLimitError.new)
-    assert_raises(Finance::Payment::RateLimitError) { invoice.charge! }
+    Account.any_instance.expects(:charge!).raises(Finance::Payment::StripeRateLimitError.new)
+    assert_raises(Finance::Payment::StripeRateLimitError) { invoice.charge! }
     assert_equal 0, invoice.reload.charging_retries_count
 
     # Second attempt: card declined

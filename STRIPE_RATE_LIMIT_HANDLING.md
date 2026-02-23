@@ -64,7 +64,7 @@ def process!(credit_card_auth_code, gateway, options)
 
   if rate_limit_error?(response)
     Rails.logger.warn("Rate limit detected (429)")
-    raise Finance::Payment::RateLimitError.new(response)
+    raise Finance::Payment::StripeRateLimitError.new(response)
   end
 end
 ```
@@ -74,7 +74,7 @@ end
 ```ruby
 def charge!(automatic = true)
   # ... charge logic ...
-rescue Finance::Payment::RateLimitError => e
+rescue Finance::Payment::StripeRateLimitError => e
   # Re-raise to bubble up to BillingWorker
   logger.warn("Rate limit error for invoice #{id} - will retry via Sidekiq")
   raise e
@@ -92,7 +92,7 @@ end
 def call!
   acquire_lock
   call
-rescue Finance::Payment::RateLimitError => error
+rescue Finance::Payment::StripeRateLimitError => error
   # Release lock so retry can proceed immediately
   release_lock
   report_error(error)
@@ -111,7 +111,7 @@ end
 buyer_accounts.find_each(:batch_size => 20) do |buyer|
   begin
     ignoring_find_each_scope { yield(buyer) }
-  rescue Finance::Payment::RateLimitError => exception
+  rescue Finance::Payment::StripeRateLimitError => exception
     # CRITICAL: Re-raise immediately - do NOT swallow!
     # This exception needs to bubble up to trigger Sidekiq retry
     raise exception
@@ -133,7 +133,7 @@ end
 **IMPORTANT**: The class method `Finance::BillingStrategy.daily` has a catch-all exception handler that would log "BillingStrategy N failed utterly" for ANY error. This is misleading for rate limits (which are temporary), so we add a specific rescue:
 
 ```ruby
-rescue Finance::Payment::RateLimitError => e
+rescue Finance::Payment::StripeRateLimitError => e
   # Rate limit hit - log clearly and re-raise for Sidekiq retry
   # DON'T call results.failure() - this is a transient error, not a failure
   # The job will retry and (likely) succeed
@@ -185,7 +185,7 @@ sidekiq_options queue: :billing, retry: 5
 
 sidekiq_retry_in do |count, exception|
   case exception
-  when Finance::Payment::RateLimitError
+  when Finance::Payment::StripeRateLimitError
     # Exponential backoff: ~15s, ~45s, ~135s, ~405s, ~1215s
     delay = (3 ** count) * 5
     jitter = rand(0..5)  # Prevent thundering herd
@@ -375,7 +375,7 @@ Releasing the lock for rate limits is safe because:
 
 ### What to Monitor
 
-1. **Rate limit frequency**: `Finance::Payment::RateLimitError` count
+1. **Rate limit frequency**: `Finance::Payment::StripeRateLimitError` count
 2. **Retry success rate**: How many succeed vs. fail after 5 attempts
 3. **Affected buyers**: Track which buyers encounter rate limits
 

@@ -121,7 +121,7 @@ sequenceDiagram
 
 | Aspect | Rate Limit Error | Payment Error |
 |--------|------------------|---------------|
-| **Exception** | `Finance::Payment::RateLimitError` | `Finance::Payment::CreditCardPurchaseFailed` |
+| **Exception** | `Finance::Payment::StripeRateLimitError` | `Finance::Payment::CreditCardPurchaseFailed` |
 | **HTTP Code** | 429 | 402 |
 | **Caught where?** | NOT caught in Invoice#charge! | Caught in Invoice#charge! |
 | **Invoice state** | Remains "pending" | Changed to "unpaid" |

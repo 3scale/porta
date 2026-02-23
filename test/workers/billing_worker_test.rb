@@ -82,7 +82,7 @@ class BillingWorkerTest < ActiveSupport::TestCase
   end
 
   test 'rate limit error uses exponential backoff retry' do
-    rate_limit_error = Finance::Payment::RateLimitError.new
+    rate_limit_error = Finance::Payment::StripeRateLimitError.new
 
     # Verify exponential backoff timing for rate limits
     retry_delay_1 = BillingWorker.sidekiq_retry_in_block.call(1, rate_limit_error)

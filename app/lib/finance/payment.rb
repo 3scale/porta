@@ -19,11 +19,12 @@ module Finance
     CreditCardPurchaseFailed = Class.new(GatewayError)
 
     # Rate limit error - should be retried immediately, not treated as payment failure
-    class RateLimitError < StandardError
-      attr_reader :response
+    class StripeRateLimitError < ActiveMerchant::ActiveMerchantError
+      attr_reader :response, :payment_metadata
 
-      def initialize(response = nil)
+      def initialize(response, payment_metadata)
         @response = response
+        @payment_metadata = payment_metadata
       end
 
       def message
