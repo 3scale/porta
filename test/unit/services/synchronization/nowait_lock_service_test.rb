@@ -46,4 +46,17 @@ class Synchronization::NowaitLockServiceTest < ActionDispatch::IntegrationTest
     sleep 0.12
     assert Synchronization::NowaitLockService.call(lock_key, timeout: 100).result
   end
+
+  test "lock_key prefixes resource with 'lock:'" do
+    service = Synchronization::NowaitLockService.new("billing:123", timeout: 10000)
+
+    assert_equal "lock:billing:123", service.send(:lock_key)
+  end
+
+  test "accepts timeout as keyword argument" do
+    timeout_ms = 5000
+    service = Synchronization::NowaitLockService.new(lock_key, timeout: timeout_ms)
+
+    assert_equal timeout_ms, service.send(:timeout)
+  end
 end
