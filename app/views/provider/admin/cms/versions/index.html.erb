@@ -1,10 +1,17 @@
-<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Archived Versions of #{@page.class.model_name.human} #{@page.name}",
-                                                                      body: @versions.blank? ? 'There are no archived versions for this page. Remember that a version is archived only if you publish your changes, not just when you save.' : nil } %>
+<% content_for :javascripts do %>
+  <%= stylesheet_link_tag 'provider/admin/cms/versions' %>
+  <%= javascript_packs_with_chunks_tag 'table_toolbar' %>
+<% end %>
 
-<section class="pf-c-page__main-section pf-m-light">
-  <% unless @versions.blank? -%>
-    <%= will_paginate @versions %>
-    <table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Versions table">
+<%= render 'provider/admin/cms/tab_content_title', header: t('.title.header', class: @page.class.model_name.human, name: @page.name),
+                                                   body: @presenter.versions.blank? ? t('.title.body') : nil %>
+
+<% unless @presenter.versions.blank? %>
+  <section class="pf-c-page__main-section pf-m-light">
+    <table class="pf-c-table pf-m-no-border-rows pf-m-compact"
+           role="grid"
+           aria-label="Versions table"
+           data-toolbar-props="<%= @presenter.toolbar_props.to_json %>">
       <thead>
         <tr>
           <th role="columnheader" scope="col">Created On</th>
@@ -16,38 +23,33 @@
       </thead>
 
       <tbody role="rowgroup">
-        <%- @versions.each.with_index do |version, index| %>
+        <% @presenter.versions.each.with_index do |version, index| %>
           <tr>
             <td role="cell" data-label="Created On">
               <%= link_to l(version.created_at), provider_admin_cms_template_version_path(@page, version),
-                                                 title: "Show #{version.created_at}" %>
+                                                 title: t('.link_title', name: version.created_at) %>
             </td>
             <td role="cell" data-label="Author"><%= version.updated_by || '' %></td>
-            <td role="cell" data-label="Type of Version" class="<%= version.state %>"><%= version.state %></td>
-            <td role="cell" data-label="Changes" class="stats">
-              <% if next_version = @versions[index + 1] %>
-                <%= diff_widget(version.diff(next_version))  %>
-              <% end %>
-            </td>
+            <td role="cell" data-label="Type of Version"><%= version.state %></td>
+            <td role="cell" data-label="Changes"><%= @presenter.changes_of(version, index) %></td>
             <td role="cell" class="pf-c-table__action actions">
               <div class="pf-c-overflow-menu">
                 <div class="pf-c-overflow-menu__content">
                   <div class="pf-c-overflow-menu__group pf-m-button-group">
                     <div class="pf-c-overflow-menu__item">
-                      <%= link_to 'Revert', revert_provider_admin_cms_template_version_path(@page, version),
-                                            class: 'action revert',
-                                            :'data-method' => :post,
-                                            :'data-confirm' => "Do you really want to revert #{@page.name} to version from #{l version.created_at}?\nIt will remove current #{version.state} version." %>
+                      <%= @presenter.revert_button_to(version) %>
                     </div>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
-        <%- end %>
+        <% end %>
       </tbody>
     </table>
-    <%= will_paginate @versions %>
 
-  <% end -%>
-</section>
+    <div class="pf-c-action-list">
+      <%= @presenter.back_button %>
+    </div>
+  </section>
+<% end %>

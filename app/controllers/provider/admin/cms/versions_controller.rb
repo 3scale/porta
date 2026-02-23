@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseController
-
   activate_menu :audience, :cms, :content
 
   def index
-    @page = page
-    @versions = @page.versions.order('created_at DESC, id ASC').paginate(:page => params[:page])
+    @presenter = Provider::Admin::CMS::VersionsIndexPresenter.new(page:, params:)
   end
 
   def show
-    @page = page
-    @version  = version
+    @presenter = Provider::Admin::CMS::VersionsShowPresenter.new(page:, version:)
   end
 
   def destroy
@@ -22,9 +19,9 @@ class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseContr
 
   def revert
     if page.revert_to(version).save
-      redirect_to polymorphic_path([:edit, :provider, :admin, @page]), success: t('.success', date: l(version.created_at))
+      redirect_to polymorphic_path([:edit, :provider, :admin, page]), success: t('.success', date: l(version.created_at))
     else
-      redirect_back_or_to provider_admin_cms_template_version_path(@page, version), danger: t('.error')
+      redirect_back_or_to provider_admin_cms_template_version_path(page, version), danger: t('.error')
     end
   end
 
@@ -37,5 +34,4 @@ class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseContr
   def page
     @page ||= current_account.templates.find(params[:template_id])
   end
-
 end

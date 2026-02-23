@@ -18,13 +18,17 @@ When(/^I follow "([^"]*)" from the CMS "([^"]*)" dropdown$/) do |link, dropdown_
   wait_for_requests if %w[Publish Save].include?(link)
 end
 
-When "fill the template draft with {}" do |value|
+When "(they )fill the template draft with {}" do |value|
   fill_in_codemirror('cms-template-draft', value)
 end
 
 And "save it as version" do
-  find('button[value=Save]').sibling('.dropdown-toggle').click
+  find('button[value=Save]').sibling('.dropdown-toggle').click unless has_button?('Save as Version', wait: 0)
   click_button('Save as Version')
+end
+
+Then /^the (draft|published|version) template should contain "([^"]*)"?/ do |type, text|
+  has_css?("textarea#cms_template_#{type}", visible: false, text:, wait: 0)
 end
 
 # TODO: compbine this with features/support/helpers/api_docs_service_helper.rb

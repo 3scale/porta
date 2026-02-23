@@ -28,7 +28,7 @@ class CMS::Template::Version < ApplicationRecord
   end
 
   def diff(other)
-    ThreeScale::Diff.new(current, other.current)
+    ThreeScale::Diff.new(other&.current, current)
   end
 
   def revert_attributes
