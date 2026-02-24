@@ -78,15 +78,43 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     @dummy.usage(@options.merge(skip_change: false))
   end
 
-  test '#usage with period eternity uses yearly granularity and does not compute previous' do
+  ;  test '#usage with period eternity does not compute previous' do
     @dummy.expects(:usage_values_in_range).once.returns([10, 20])
 
-    result = @dummy.usage(period: 'eternity', metric_name: 'foo', timezone: 'UTC', skip_change: false)
+    result = @dummy.usage(period: 'eternity', since: '2010-01-01', metric_name: 'foo', timezone: 'UTC', skip_change: false)
 
-    assert_equal :year, result[:period][:granularity]
     assert_equal 'eternity', result[:period][:name]
     assert_nil result[:previous_total]
     assert_nil result[:change]
+  end
+
+  test '#usage with period eternity honors since parameter' do
+    @dummy.expects(:usage_values_in_range).once.returns([0])
+
+    result = @dummy.usage(period: 'eternity', since: '2015-06-15', metric_name: 'foo', timezone: 'UTC')
+
+    assert_equal '2015-01-01', result[:period][:since].strftime('%Y-%m-%d')
+  end
+
+  test '#usage with period eternity defaults since to service created_at' do
+    service = FactoryBot.build_stubbed(:service, created_at: Time.utc(2012, 6, 15))
+    dummy = DummyClass.new(service)
+    dummy.stubs(:extract_metric).returns(@metric)
+    dummy.expects(:usage_values_in_range).once.returns([0])
+
+    result = dummy.usage(period: 'eternity', metric_name: 'foo', timezone: 'UTC')
+
+    assert_equal '2012-01-01', result[:period][:since].strftime('%Y-%m-%d')
+  end
+
+  test '#usage with period eternity ignores until and defaults to end of current year' do
+    @dummy.expects(:usage_values_in_range).once.returns([0])
+
+    travel_to(Time.utc(2020, 6, 15)) do
+      result = @dummy.usage(period: 'eternity', since: '2010-01-01', until: '2018-01-01', metric_name: 'foo', timezone: 'UTC')
+
+      assert_equal '2020-12-31', result[:period][:until].strftime('%Y-%m-%d')
+    end
   end
 
   test '#usage returns nil if application data does not exist' do

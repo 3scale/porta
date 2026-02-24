@@ -9,13 +9,12 @@ module Stats
     def values_in_range(range, granularity, prefix)
       # TODO: - refactor, isolate to strategies?
       case granularity
-      when :day, :month
+      when :day, :month, :year
         use_aggregated_values(range, granularity, prefix)
       when 6.hours
         resum_all_value(range, granularity, prefix)
-      when :hour, :year
-        range = range.to_time_range
-        range = range.utc if granularity == :hour
+      when :hour
+        range = range.to_time_range.utc
         keys = keys_for_range(range, granularity, prefix)
         if keys.empty?
           []
