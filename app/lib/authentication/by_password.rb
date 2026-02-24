@@ -4,7 +4,7 @@ module Authentication
     extend ActiveSupport::Concern
 
     # strong passwords
-    STRONG_PASSWORD_MIN_SIZE = Rails.configuration.three_scale.password_min_size
+    STRONG_PASSWORD_MIN_SIZE = 15
 
     included do
       # We only need length validations as they are already set in Authentication::ByPassword

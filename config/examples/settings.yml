@@ -19,7 +19,6 @@ base: &default
   janitor_worker_enabled: true
   onpremises: false
   onpremises_api_docs_version: false
-  password_min_size: <%= ENV.fetch('THREESCALE_PASSWORD_MIN_SIZE', '15') %>
   readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '0') == '1' %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
