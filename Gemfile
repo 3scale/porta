@@ -226,7 +226,7 @@ group :development, :test do
   gem 'active_record_query_trace'
 
   gem 'bootsnap', '~> 1.16'
-  gem 'bullet', '~> 7.1.6'
+  gem 'bullet', '~> 7.2.0'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
 
