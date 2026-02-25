@@ -78,7 +78,7 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     @dummy.usage(@options.merge(skip_change: false))
   end
 
-  ;  test '#usage with period eternity does not compute previous' do
+  test '#usage with period eternity does not compute previous' do
     @dummy.expects(:usage_values_in_range).once.returns([10, 20])
 
     result = @dummy.usage(period: 'eternity', since: '2010-01-01', metric_name: 'foo', timezone: 'UTC', skip_change: false)
