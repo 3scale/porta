@@ -420,7 +420,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "eternity",
                 "year",
                 "month",
                 "week",
