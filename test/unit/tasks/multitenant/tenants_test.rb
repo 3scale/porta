@@ -164,6 +164,8 @@ module Tasks
       end
 
       class StaleThrottledDeleteTest < ActiveSupport::TestCase
+        include UsesSidekiqAdapter
+
         setup do
           @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
           @provider2 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 5.months.ago)
@@ -267,6 +269,8 @@ module Tasks
         end
 
         test "jobs scheduled but not yet queued are not taken into account" do
+          
+          
           DeleteObjectHierarchyWorker.set(wait: 2.days).perform_later("Plain-Account-#{@provider1.id}")
           assert_equal 1, Sidekiq::ScheduledSet.new.to_a.size
 
