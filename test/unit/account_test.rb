@@ -775,7 +775,10 @@ class AccountTest < ActiveSupport::TestCase
       ActiveMerchant::Billing::BogusGateway.any_instance.expects(:unstore).never
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be emailed about events related to schduled_for_deletion providers
@@ -788,7 +791,10 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
@@ -801,7 +807,10 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
