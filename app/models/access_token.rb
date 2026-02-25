@@ -180,7 +180,7 @@ class AccessToken < ApplicationRecord
   end
 
   def self.random_id
-    SecureRandom.hex(32)
+    SecureRandom.hex(48)
   end
 
   def expired?
