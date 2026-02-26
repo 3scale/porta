@@ -23,13 +23,13 @@ module Provider
         def edit; end
 
         def create
-          @presenter = AccessTokensNewPresenter.new(current_account)
           @access_token = access_tokens.build(access_token_params)
 
           if @access_token.save
-            flash[:token] = @access_token.id
-            redirect_to provider_admin_user_access_tokens_path, success: t('.success')
+            flash.now[:success] = t('.success')
+            render :show, locals: { token: @access_token }
           else
+            @presenter = AccessTokensNewPresenter.new(current_account)
             render :new
           end
         end
