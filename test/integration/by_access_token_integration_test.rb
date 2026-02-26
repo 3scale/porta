@@ -24,12 +24,12 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     assert_response :forbidden
 
     # valid token
-    get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: @token.plaintext_value }
     assert_response :success
 
     # token belongs to a different admin domain
     host! provider_2.internal_admin_domain
-    get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: @token.plaintext_value }
     assert_response :forbidden
 
     host! @provider.external_admin_domain
@@ -41,7 +41,7 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     @token.save!
 
     # invalid scope
-    get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: @token.plaintext_value }
     assert_response :forbidden
 
     @token.scopes = ['account_management']
@@ -50,26 +50,26 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     @user.save!
 
     # user does not have a permission
-    get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: @token.plaintext_value }
     assert_response :forbidden
   end
 
   test 'validates the scope using HttpBasicAuth' do
-    auth_headers = {'Authorization' => "Basic #{Base64.encode64(":#{@token.value}")}"}
+    auth_headers = {'Authorization' => "Basic #{Base64.encode64(":#{@token.plaintext_value}")}"}
     get admin_api_registry_policies_path(format: :json), headers: auth_headers
     assert_response :forbidden
   end
 
   test 'the token has no expiration date' do
-      get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: @token.plaintext_value }
 
-      assert_response :success
-    end
+    assert_response :success
+  end
 
   test 'the token has a future expiration date' do
     token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management', expires_at: 1.day.from_now.utc.iso8601)
 
-    get admin_api_accounts_path(format: :xml), params: { access_token: token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: token.plaintext_value }
 
     assert_response :success
   end
@@ -78,7 +78,49 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
     token.update_columns(expires_at: 1.minute.ago)
 
-    get admin_api_accounts_path(format: :xml), params: { access_token: token.value }
+    get admin_api_accounts_path(format: :xml), params: { access_token: token.plaintext_value }
+
+    assert_response :forbidden
+  end
+
+  test 'authentication with legacy unmigrated token succeeds' do
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
+    legacy_value = 'legacy_plaintext_token_for_integration'
+    token.update_columns(value: legacy_value)
+
+    get admin_api_accounts_path(format: :xml), params: { access_token: legacy_value }
+
+    assert_response :success
+    # Token should be migrated to hashed value
+    assert_equal AccessToken::HASHED_TOKEN_LENGTH, token.reload.read_attribute(:value).length
+  end
+
+  test 'authentication with legacy unmigrated token migrates the token' do
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
+    legacy_value = 'legacy_plaintext_token_for_integration'
+    token.update_columns(value: legacy_value)
+
+    get admin_api_accounts_path(format: :xml), params: { access_token: legacy_value }
+
+    assert_equal AccessToken::HASHED_TOKEN_LENGTH, token.reload.read_attribute(:value).length
+  end
+
+  test 'authentication with leaked database hash fails' do
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
+    plaintext = token.plaintext_value
+
+    # Verify the token works with plaintext
+    get admin_api_accounts_path(format: :xml), params: { access_token: plaintext }
+    assert_response :success
+
+    # Get the actual hash stored in the database
+    leaked_hash = token.reload.read_attribute(:value)
+
+    # Verify we have a 96-char hash
+    assert_equal AccessToken::HASHED_TOKEN_LENGTH, leaked_hash.length
+
+    # An attacker trying to use the leaked hash directly should be blocked
+    get admin_api_accounts_path(format: :xml), params: { access_token: leaked_hash }
 
     assert_response :forbidden
   end
