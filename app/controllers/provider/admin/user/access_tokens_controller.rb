@@ -18,11 +18,14 @@ module Provider
         end
 
         def create
-          @presenter = AccessTokensNewPresenter.new(current_account)
-          create! do |success, _failure|
+          create! do |success, failure|
             success.html do
-              flash[:token] = @access_token.id
-              redirect_to collection_url, success: t('.success')
+              flash.now[:success] = t('.success')
+              render :show, locals: { token: @access_token }
+            end
+            failure.html do
+              @presenter = AccessTokensNewPresenter.new(current_account)
+              super
             end
           end
         end
@@ -34,11 +37,6 @@ module Provider
               super
             end
           end
-        end
-
-        def index
-          index!
-          @last_access_key = flash[:token]
         end
 
         def update

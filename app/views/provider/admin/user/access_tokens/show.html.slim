@@ -1,0 +1,50 @@
+- content_for :javascripts
+= javascript_packs_with_chunks_tag 'access_tokens'
+
+- content_for :page_header_title, 'Copy the new token and store it somewhere safe'
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    div class="pf-c-content"
+      p Make sure to copy your new personal access token now. You won't be able to see it again as it isn't stored for security reasons.
+    br
+    dl class="pf-c-description-list pf-m-horizontal"
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Name
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.name
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Scopes
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.human_scopes.to_sentence
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Permission
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+           = token.human_permission
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Expires at
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            | Token
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+           = token.plaintext_value
+
+div class="pf-c-page__main-section"
+  div class="pf-l-flex"
+    div class="pf-l-flex__item pf-m-align-right"
+      = link_to 'I have copied the token', provider_admin_user_access_tokens_path, class: 'pf-c-button pf-m-primary'
