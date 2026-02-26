@@ -9,7 +9,7 @@ class Admin::Api::MetricMethodsControllerTest < ActionDispatch::IntegrationTest
     @service = FactoryBot.create(:service, account: provider)
     @metric  = @service.metrics.first
     @method_metric  = FactoryBot.create(:metric, owner: @service, parent_id: @metric.id, friendly_name: 'my method')
-    @access_token_value = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').value
+    @access_token_value = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management], permission: 'rw').plaintext_value
 
     host! provider.external_admin_domain
   end

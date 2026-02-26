@@ -21,14 +21,14 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     end
 
     attr_reader :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'index' do
       FactoryBot.create_list(:proxy_rule, 2, owner: backend_api, proxy: nil) # two more of the same backend api
       FactoryBot.create(:proxy_rule, owner: FactoryBot.create(:backend_api, account: provider), proxy: nil) # other backend api
       FactoryBot.create(:proxy_rule, proxy: FactoryBot.create(:simple_service, account: provider).proxy) # owned by a proxy, not a backend api
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value }
 
       assert_response :success
       assert(response_mapping_rules = JSON.parse(response.body)['mapping_rules'])
@@ -38,7 +38,7 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     end
 
     test 'show' do
-      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
 
       assert_response :success
       assert_equal mapping_rule.id, JSON.parse(response.body).dig('mapping_rule', 'id')
@@ -46,7 +46,7 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
 
     test 'create' do
       assert_difference(ProxyRule.method(:count)) do
-        post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, **mapping_rule_params }
+        post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
         assert_response :created
       end
 
@@ -58,14 +58,14 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
 
     test 'create without metric_id gives an error' do
       assert_no_difference(ProxyRule.method(:count)) do
-        post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, **mapping_rule_params.except(:metric_id) }
+        post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, **mapping_rule_params.except(:metric_id) }
         assert_response :unprocessable_entity
         assert_contains JSON.parse(response.body).dig('errors', 'metric_id'), 'can\'t be blank'
       end
     end
 
     test 'update' do
-      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value, **mapping_rule_params }
+      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :success
       mapping_rule.reload
       mapping_rule_params.each do |field_name, expected_value|
@@ -74,13 +74,13 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     end
 
     test 'update with errors in the model' do
-      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value, http_method: 'invalid' }
+      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value, http_method: 'invalid' }
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'http_method'), 'is not included in the list'
     end
 
     test 'destroy' do
-      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :success
       assert_raises(ActiveRecord::RecordNotFound) { mapping_rule.reload }
     end
@@ -88,7 +88,7 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     test 'index can be paginated' do
       FactoryBot.create_list(:proxy_rule, 5, owner: backend_api, proxy_id: nil)
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, per_page: 3, page: 2 }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, per_page: 3, page: 2 }
 
       assert_response :success
       response_ids = JSON.parse(response.body)['mapping_rules'].map { |response| response.dig('mapping_rule', 'id') }
@@ -99,19 +99,19 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
       backend_api = FactoryBot.create(:backend_api, account: provider, state: :deleted)
       mapping_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
 
-      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
 
-      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, **mapping_rule_params }
+      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :not_found
 
-      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value, **mapping_rule_params }
+      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :not_found
 
-      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
     end
 
@@ -124,7 +124,7 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
       rule_1.move_to_top
       rule_3.move_to_bottom
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value }
 
       assert_response :success
       assert(response_mapping_rules = JSON.parse(response.body)['mapping_rules'])
@@ -144,42 +144,42 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     end
 
     attr_reader :member, :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'member with permission' do
       member.admin_sections = %w[partners plans]
       member.save!
 
-      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :success
 
-      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value, **mapping_rule_params }
+      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :success
 
-      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :success
 
-      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, **mapping_rule_params }
+      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :success
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value }
       assert_response :success
     end
 
     test 'member without permission' do
-      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
 
-      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value, **mapping_rule_params }
+      put admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :forbidden
 
-      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_value }
+      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
 
-      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value, **mapping_rule_params }
+      post admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value, **mapping_rule_params }
       assert_response :forbidden
 
-      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_value }
+      get admin_api_backend_api_mapping_rules_path(backend_api), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
     end
   end

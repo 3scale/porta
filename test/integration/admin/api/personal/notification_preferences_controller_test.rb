@@ -6,7 +6,7 @@ class Admin::Api::Personal::NotificationPreferencesControllerTest < ActionDispat
   def setup
     provider = FactoryBot.create(:provider_account)
     @user = provider.admin_users.first!
-    @token = FactoryBot.create(:access_token, owner: @user, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: @user, scopes: %w[account_management]).plaintext_value
     host! provider.external_admin_domain
   end
 

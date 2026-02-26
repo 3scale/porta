@@ -28,10 +28,10 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
     get(admin_api_account_application_referrer_filters_path(@buyer, app))
     assert_response :forbidden
-    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.value })
+    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.plaintext_value })
     assert_response :not_found
     user.update(member_permission_service_ids: [app.issuer.id])
-    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.value })
+    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.plaintext_value })
     assert_response :success
   end
 
