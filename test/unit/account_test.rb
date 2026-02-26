@@ -106,7 +106,9 @@ class AccountTest < ActiveSupport::TestCase
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
-    buyer.update(nil)
+    assert_nothing_raised do
+      buyer.update(nil)
+    end
   end
 
   test 'should validate self_domain uniqueness' do
@@ -154,7 +156,10 @@ class AccountTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
     @named_scoped_provider = provider
 
-    @named_scoped_provider.update(org_name: 'account is not readonly')
+    new_org_name = 'account is not readonly'
+    @named_scoped_provider.update(org_name: new_org_name)
+
+    assert_equal new_org_name, @named_scoped_provider.reload.org_name
   end
 
   test 'deleted buyer account have working #to_xml' do
