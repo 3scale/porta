@@ -17,14 +17,14 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     # show
     get(admin_api_service_proxy_path(access_token_params))
     assert_response :forbidden
-    get(admin_api_service_proxy_path(access_token_params(token.value)))
+    get(admin_api_service_proxy_path(access_token_params(token.plaintext_value)))
     assert_response :not_found
     user.update(member_permission_service_ids: [@service.id])
-    get(admin_api_service_proxy_path(access_token_params(token.value)))
+    get(admin_api_service_proxy_path(access_token_params(token.plaintext_value)))
     assert_response :success
 
     # update
-    params = access_token_params(token.value).merge(proxy: { endpoint: 'https://alaska.wild' })
+    params = access_token_params(token.plaintext_value).merge(proxy: { endpoint: 'https://alaska.wild' })
     put(admin_api_service_proxy_path(params))
     assert_response :success
   end

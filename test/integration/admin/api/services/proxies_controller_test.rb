@@ -14,11 +14,11 @@ module Admin::Api::Services
     attr_reader :service, :token
 
     def test_show
-      get admin_api_service_proxy_path(service_id: service.id, format: :xml, access_token: token.value)
+      get admin_api_service_proxy_path(service_id: service.id, format: :xml, access_token: token.plaintext_value)
       assert_response :success
       xml = Hash.from_xml(response.body).fetch('proxy').except('created_at', 'updated_at')
 
-      get admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.value)
+      get admin_api_service_proxy_path(service_id: service.id, format: :json, access_token: token.plaintext_value)
       assert_response :success
       json = JSON.parse(response.body).fetch('proxy').except('created_at', 'updated_at')
 
@@ -29,7 +29,7 @@ module Admin::Api::Services
     end
 
     def test_update
-      put admin_api_service_proxy_path(service_id: service.id, format: :xml, access_token: token.value), params: { proxy: { credentials_location: 'headers' } }
+      put admin_api_service_proxy_path(service_id: service.id, format: :xml, access_token: token.plaintext_value), params: { proxy: { credentials_location: 'headers' } }
 
       assert_response :success
 

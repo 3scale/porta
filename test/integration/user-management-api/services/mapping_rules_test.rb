@@ -19,29 +19,29 @@ class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
     # index
     get(admin_api_service_proxy_mapping_rules_path(access_token_params))
     assert_response :forbidden
-    get(admin_api_service_proxy_mapping_rules_path(access_token_params(token.value)))
+    get(admin_api_service_proxy_mapping_rules_path(access_token_params(token.plaintext_value)))
     assert_response :not_found
     user.update(member_permission_service_ids: [@service.id])
-    get(admin_api_service_proxy_mapping_rules_path(access_token_params(token.value)))
+    get(admin_api_service_proxy_mapping_rules_path(access_token_params(token.plaintext_value)))
     assert_response :success
 
     # show
-    params = access_token_params(token.value).merge(id: @proxy_rule.id)
+    params = access_token_params(token.plaintext_value).merge(id: @proxy_rule.id)
     get(admin_api_service_proxy_mapping_rule_path(params))
     assert_response :success
 
     # create
-    params = access_token_params(token.value).merge(mapping_rule_params)
+    params = access_token_params(token.plaintext_value).merge(mapping_rule_params)
     post(admin_api_service_proxy_mapping_rules_path(params))
     assert_response :success
 
     # update
-    params = access_token_params(token.value).merge(id: @proxy_rule.id).merge(mapping_rule_params)
+    params = access_token_params(token.plaintext_value).merge(id: @proxy_rule.id).merge(mapping_rule_params)
     put(admin_api_service_proxy_mapping_rule_path(params))
     assert_response :success
 
     # destroy
-    params = access_token_params(token.value).merge(id: @proxy_rule.id)
+    params = access_token_params(token.plaintext_value).merge(id: @proxy_rule.id)
     delete(admin_api_service_proxy_mapping_rule_path(params))
     assert_response :success
   end

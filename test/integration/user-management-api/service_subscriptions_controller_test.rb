@@ -15,7 +15,7 @@ class Admin::Api::ServiceSubscriptionsControllerTest < ActionDispatch::Integrati
 
     @buyer.buy! @application_plan
 
-    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: 'account_management').value
+    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: 'account_management').plaintext_value
     host! current_account.internal_admin_domain
   end
 
