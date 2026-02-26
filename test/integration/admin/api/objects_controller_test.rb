@@ -6,7 +6,7 @@ class Admin::Api::ObjectsControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management])
-    @token = @access_token.value
+    @token = @access_token.plaintext_value
 
     host! @provider.external_admin_domain
   end

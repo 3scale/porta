@@ -90,7 +90,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   test "forgery protection is skipped for API requests with access token" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').plaintext_value
     host! provider.external_admin_domain
 
     ApplicationController.any_instance.expects(:verify_authenticity_token).never
@@ -107,7 +107,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   test "forgery protection is skipped for API requests with basic auth and access token" do
     provider = FactoryBot.create(:provider_account)
     user = provider.admins.first
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').plaintext_value
     host! provider.external_admin_domain
 
     ApplicationController.any_instance.expects(:verify_authenticity_token).never
