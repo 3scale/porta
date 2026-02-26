@@ -269,8 +269,6 @@ module Tasks
         end
 
         test "jobs scheduled but not yet queued are not taken into account" do
-          
-          
           DeleteObjectHierarchyWorker.set(wait: 2.days).perform_later("Plain-Account-#{@provider1.id}")
           assert_equal 1, Sidekiq::ScheduledSet.new.to_a.size
 
