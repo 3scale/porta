@@ -10,7 +10,7 @@ class AuthenticationProvider < ApplicationRecord
 
   include SystemName
 
-  enum account_type: {developer: 'developer', provider: 'provider'}
+  enum :account_type, { developer: 'developer', provider: 'provider' }
 
   has_system_name uniqueness_scope: [:account_id]
   validates :kind, uniqueness: { scope: %i[account_id account_type], case_sensitive: true }, if: :developer?
