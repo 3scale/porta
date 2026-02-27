@@ -28,7 +28,7 @@ And "save it as version" do
 end
 
 Then /^the (draft|published|version) template should contain "([^"]*)"?/ do |type, text|
-  has_css?("textarea#cms_template_#{type}", visible: false, text:, wait: 0)
+  assert has_css?("textarea#cms_template_#{type}", visible: false, text:, wait: 0)
 end
 
 # TODO: compbine this with features/support/helpers/api_docs_service_helper.rb

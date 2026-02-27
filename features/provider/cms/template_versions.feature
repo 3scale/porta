@@ -25,10 +25,11 @@ Feature: CMS Template versions
   Scenario: Revert to version from the list of versions
     Given they fill the template draft with "<div>Dammit, I Changed Again</div>"
     And press "Save"
+    And they should see a toast alert with text "Template saved"
     And they go to the CMS Page "/my-page" page
     And the draft template should contain "Dammit, I Changed Again"
     When they follow "Versions"
-    And follow "Revert"
+    And follow "Revert" in the 1st row
     And confirm the dialog
     Then a success toast alert is displayed with text "Reverted to version from 24 Dec 2012 12:00:00 UTC"
     Then the draft template should contain "Original Prankster"
