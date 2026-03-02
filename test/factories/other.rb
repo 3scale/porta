@@ -95,7 +95,7 @@ FactoryBot.define do
     description { "" }
   end
 
-  factory(:settings)
+  # Settings is no longer an AR model; use Settings.new(account) or account.settings instead
 
   factory(:webhook, :class => WebHook) do
     account { |wh| wh.association(:provider_account) }

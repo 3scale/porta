@@ -164,7 +164,6 @@ module Switches
   included do
     SWITCHES.each do |name|
       attr_name = "#{name}_switch"
-      attr_protected attr_name
 
       # Switches State Machine
       #
@@ -190,6 +189,10 @@ module Switches
           unless settings.account.provider?
             raise Account::ProviderOnlyMethodCalledError, "cannot change state of #{name} of #{settings.inspect}"
           end
+        end
+
+        after_transition do |settings|
+          settings.persist_switch_setting!(name)
         end
 
         state :denied, :hidden, :visible
