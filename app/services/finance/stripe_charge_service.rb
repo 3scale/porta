@@ -20,7 +20,19 @@ class Finance::StripeChargeService
 
   def charge(amount)
     payment_intent = latest_pending_payment_intent
-    payment_intent ? confirm_payment_intent(payment_intent) : create_payment_intent(amount)
+    response = payment_intent ? confirm_payment_intent(payment_intent) : create_payment_intent(amount)
+
+    if rate_limit_error? response
+      payment_metadata = {
+        invoice_id: @invoice&.id,
+        buyer_id: @invoice&.buyer_account&.id,
+        payment_method_id: @payment_method_id,
+        gateway_options: @gateway_options
+      }
+      raise Finance::Payment::StripeRateLimitError.new(response, payment_metadata)
+    end
+
+    response
   end
 
   protected
@@ -85,5 +97,20 @@ class Finance::StripeChargeService
     return PAYMENT_DESCRIPTION if invoice.blank?
 
     "#{invoice.from.name} #{PAYMENT_DESCRIPTION} #{invoice.friendly_id}".strip
+  end
+
+  # Response body in case of Rate Limit error:
+  # {
+  #   "error": {
+  #     "message": "Request rate limit exceeded. Learn more about rate limits here https://stripe.com/docs/rate-limits.",
+  #     "type": "invalid_request_error",
+  #     "code": "rate_limit",
+  #     "doc_url": "https://stripe.com/docs/error-codes/rate-limit"
+  #   }
+  # }
+  def rate_limit_error?(response)
+    return false if response.success?
+
+    response.params.dig("error","code") == 'rate_limit'
   end
 end

@@ -16,7 +16,7 @@ module Finance
       new(account_id, options).call
     end
 
-    attr_reader :account_id, :provider_account_id, :now, :skip_notifications
+    attr_reader :account_id, :provider_account_id, :now, :skip_notifications, :lock_service
 
     # @param account_id [Integer] either a provider account, or a buyer account with :provider_account_id in options
     def initialize(account_id, options = {})
@@ -24,10 +24,18 @@ module Finance
       @provider_account_id = options[:provider_account_id] || account_id
       @now = Time.zone.parse(options[:now].to_s) || Time.zone.now
       @skip_notifications = options[:skip_notifications]
+      @lock_service = Synchronization::BillingLockService.new(account_id.to_s)
     end
 
     def call!
-      with_lock { call }
+      lock_service.lock
+      call
+    rescue Finance::Payment::StripeRateLimitError => error
+      # Rate limit errors should retry immediately via Sidekiq
+      # Release the lock so retries can proceed without waiting 1 hour
+      lock_service.unlock
+      report_error(error)
+      raise error
     rescue LockBillingError, SpuriousBillingError => error
       report_error(error)
       nil
@@ -62,13 +70,6 @@ module Finance
       options = { only: [provider_account_id], now: now, skip_notifications: skip_notifications }
       options[:buyer_ids] = [account_id]
       options
-    end
-
-    def with_lock
-      # intentionally skip unlocking, no further billing of account within 1 hour allowed
-      raise LockBillingError, "Concurrent billing job already running for account #{account_id}" unless Synchronization::NowaitLockService.call("billing:#{account_id}", timeout: 1.hour.in_milliseconds).result
-
-      yield
     end
 
     def report_error(error)

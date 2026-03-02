@@ -80,4 +80,25 @@ class BillingWorkerTest < ActiveSupport::TestCase
     assert_equal master_account.id, provider_id
     assert_equal @provider.id, buyer_id
   end
+
+  test 'rate limit error uses Sidekiq default exponential backoff retry' do
+    response = stub(
+      success?: false,
+      params: { 'error' => { 'code' => 'rate_limit' } }
+    )
+    payment_metadata = { invoice_id: 123, buyer_id: 456 }
+    rate_limit_error = Finance::Payment::StripeRateLimitError.new(response, payment_metadata)
+
+    # Should return nil to use Sidekiq's default exponential backoff
+    retry_delay = BillingWorker.sidekiq_retry_in_block.call(1, rate_limit_error)
+    assert_nil retry_delay, "Should return nil to use Sidekiq's default exponential backoff"
+  end
+
+  test 'regular errors use standard retry delay' do
+    regular_error = StandardError.new('Something went wrong')
+
+    # Regular errors should wait 1 hour for lock release
+    retry_delay = BillingWorker.sidekiq_retry_in_block.call(1, regular_error)
+    assert_equal 1.hour + 10, retry_delay
+  end
 end
