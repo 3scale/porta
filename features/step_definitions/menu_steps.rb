@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-Then /^(?:|I |they )should see menu sections$/ do |items|
+Then "the sidebar should have (only )the following section(s):" do |items|
   sections = page_sidebar.find_all('.pf-c-nav > .pf-c-nav__list > .pf-c-nav__item > .pf-c-nav__link')
 
   assert_equal items.raw.flatten, sections.map(&:text)
 end
 
-Then "(I )(they )should see menu items under {string}" do |section, items|
+Then "the sidebar should have the following item(s) in section {string}:" do |section, items|
   button = page_sidebar.find('.pf-c-nav__item.pf-m-expandable button.pf-c-nav__link', text: section)
   button.click if button['aria-expanded'] == 'false'
 
@@ -22,24 +22,7 @@ Then "the help menu should have the following items:" do |table|
   assert_same_elements table.raw.flatten, find(help_menu_selector).find_all('ul li').map(&:text)
 end
 
-# TODO: replace this with with more generic step?!
-Then /^I should still be in the "(.+?)"$/ do |menu_item|
-  assert_selector(:css, '.pf-c-nav__item.pf-m-current', text: menu_item)
-end
-
-Then "the name of the product can be seen on top of the menu" do
-  within page_sidebar do
-    assert_selector(:css, '.pf-c-nav__current-api', text: @provider.default_service.name)
-  end
-end
-
-Then "the name of the backend can be seen on top of the menu" do
-  within page_sidebar do
-    assert_selector(:css, '.pf-c-nav__current-api', text: @backend.name)
-  end
-end
-
-Then /^I should see there is no current API/ do
+Then "the sidebar should not display a current API" do
   within page_sidebar do
     assert_not has_css? '.pf-c-nav__current-api'
   end
@@ -59,18 +42,10 @@ Given "the sidebar navigation is collapsible" do
   assert sidebar[:class].match?('.pf-m-collapsed')
 end
 
-def features_current_api?
-  page_sidebar.has_css?('.pf-c-nav__section')
-end
-
 def help_menu_selector
   'header .pf-c-dropdown[title="Documentation"]'
 end
 
 def open_help_menu
   find("#{help_menu_selector} .pf-c-dropdown__toggle", wait: false).click
-end
-
-def page_sidebar
-  find('.pf-c-page__sidebar')
 end

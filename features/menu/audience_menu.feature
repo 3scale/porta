@@ -18,4 +18,4 @@ Feature: Audience menu
   @javascript
   Scenario: Application overview
     When they go to the application's admin page
-    Then I should see there is no current API
+    Then the sidebar should not display a current API
