@@ -5,7 +5,7 @@ module ThreeScale
   class Diff
     attr_reader :base, :changed
 
-    def initialize(base, changed)
+    def initialize(base = nil, changed = nil)
       @base = base || ""
       @changed = changed || ""
     end

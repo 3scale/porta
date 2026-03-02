@@ -8,8 +8,6 @@ module CMS
       options[:url] ||= polymorphic_path([:provider, :admin, template])
       options[:as] ||= base_name(template)
 
-      content_for :javascripts, javascript_packs_with_chunks_tag('cms_form', 'pf_spacing')
-
       semantic_form_for(template, options, &)
     end
 

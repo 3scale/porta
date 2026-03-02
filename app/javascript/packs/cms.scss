@@ -1,3 +1,5 @@
+@import '@patternfly/patternfly/layouts/Level/level.css';
+@import '@patternfly/patternfly/components/ActionList/action-list.css';
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
 
 .pf-c-dropdown:not(.pf-m-expanded) .pf-c-dropdown__menu {

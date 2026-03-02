@@ -1,12 +1,20 @@
-<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: "Version of #{@page.class.model_name.human} #{@page.title}",
-                                                                      body: "Showing #{@version.state} version from #{l @version.updated_at}." } %>
+<%= render partial: 'provider/admin/cms/tab_content_title', locals: { header: t('.title.header', class: @page.class.model_name.human, name: @page.title),
+                                                                      body: t('.title.body_html', state: @version.state, date: l(@version.updated_at)) } %>
 
 <section class="pf-c-page__main-section pf-m-light">
   <%= text_area_tag "cms_template_version", @version.current %>
+
+  <div class="pf-c-action-list pf-l-level pf-u-mt-md">
+    <div class="pf-c-action-list__group">
+      <%= pf_link_to 'Back', provider_admin_cms_template_versions_path(@page), variant: :primary %>
+    </div>
+    <div class="pf-c-action-list__group">
+      <%= @presenter.revert_button %>
+    </div>
+  </div>
 </section>
 
-<%= render '/provider/admin/cms/codemirror',
-           :html_id => :cms_template_version,
-           :content_type => @page.content_type,
-           :liquid_enabled => @page.liquid_enabled,
-           :options => {:readOnly => true} %>
+<%= render '/provider/admin/cms/codemirror', html_id: :cms_template_version,
+                                             content_type: @page.content_type,
+                                             liquid_enabled: @page.liquid_enabled,
+                                             options: { readOnly: true} %>

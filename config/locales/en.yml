@@ -860,9 +860,22 @@ en:
         versions:
           destroy:
             success: Version was destroyed
+          index:
+            link_title: Show %{name}
+            title:
+              header: Archived Versions of %{class} %{name}
+              body: There are no archived versions for this page. Remember that a version is archived only if you publish your changes, not just when you save.
           revert:
+            confirm:
+              Do you want to replace %{name}'s current %{state} template with this version?
+              Unsaved changes will be lost.
+            title: Revert
             error: Problem reverting version
             success: Reverted to version from %{date}
+          show:
+            title:
+              header: Version of %{class} %{name}
+              body_html: Showing <b>%{state}</b> version from <b>%{date}</b>.
 
       user:
         access_tokens:
