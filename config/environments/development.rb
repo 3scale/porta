@@ -18,7 +18,7 @@ Rails.application.configure do
 
   config.asset_host = config.three_scale.asset_host.presence
 
-  # Enable server timing
+  # Enable server timing.
   config.server_timing = true
 
   # Match custom domains on development
@@ -34,12 +34,13 @@ Rails.application.configure do
 
   # when we don't set this, the default from application config is used
   # config.cache_store = :memory_store
-  config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{2.days.to_i}"
-  }
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=#{2.days.to_i}" }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
+
+  # Disable caching for Action Mailer templates even if Action Controller
+  # caching is enabled.
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method =
@@ -84,7 +85,7 @@ Rails.application.configure do
   # WARNING: we can't enable it because it breaks some views that use `render_to_js_string`
   # config.action_view.annotate_rendered_view_with_filenames = true
 
-  # Raise error when a before_action's only/except options reference missing actions
+  # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = false # TODO: fix controllers and enable
 
   # Use an evented file watcher to asynchronously detect changes in source code,

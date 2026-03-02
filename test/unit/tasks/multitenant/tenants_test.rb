@@ -164,6 +164,8 @@ module Tasks
       end
 
       class StaleThrottledDeleteTest < ActiveSupport::TestCase
+        include UsesSidekiqAdapter
+
         setup do
           @provider1 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 7.months.ago)
           @provider2 = FactoryBot.create(:simple_provider, state: "scheduled_for_deletion", state_changed_at: 5.months.ago)

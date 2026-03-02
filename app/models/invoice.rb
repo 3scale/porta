@@ -11,9 +11,10 @@ class Invoice < ApplicationRecord
   DECIMALS   = 2
   CHARGE_PRECISION   = 2
 
-  enum creation_type: {manual: 'manual', background: 'background'}
+  enum :creation_type, { manual: 'manual', background: 'background' }
 
   include AfterCommitQueue
+
   audited :allow_mass_assignment => true
   has_associated_audits
 
@@ -118,7 +119,7 @@ class Invoice < ApplicationRecord
 
   include ThreeScale::Search::Scopes
 
-  self.allowed_sort_columns = %w{ friendly_id accounts.org_name period state }
+  self.allowed_sort_columns = %w{friendly_id accounts.org_name period state}
   self.sort_columns_joins = {'accounts.org_name' => :buyer_account}
   self.allowed_search_scopes = [:number, :month, :month_number, :year, :state, :buyer_query]
 
@@ -161,7 +162,7 @@ class Invoice < ApplicationRecord
       end
     end
 
-    state all - [ :open, :finalized ] do
+    state all - [:open, :finalized] do
       def from
         self.from_address
       end
@@ -230,11 +231,11 @@ class Invoice < ApplicationRecord
       bought_plan = account.bought_plan
 
       ThreeScale::Analytics.track_account(account, 'Charged Invoice',
-                                  {
-                                      plan: bought_plan.name,
-                                      period: invoice.period.to_s,
-                                      revenue: invoice.cost.to_f
-                                  })
+                                          {
+                                            plan: bought_plan.name,
+                                              period: invoice.period.to_s,
+                                              revenue: invoice.cost.to_f
+                                          })
     end
 
     after_transition if: master_invoice do |invoice, _|
@@ -247,7 +248,7 @@ class Invoice < ApplicationRecord
     end
 
     event :issue do
-      transition [ :open, :finalized ] => :pending
+      transition [:open, :finalized] => :pending
     end
 
     event :mark_as_unpaid do
@@ -255,7 +256,7 @@ class Invoice < ApplicationRecord
     end
 
     event :pay do
-      transition [ :unpaid, :pending, :failed ] => :paid
+      transition [:unpaid, :pending, :failed] => :paid
     end
 
     event :fail do
@@ -263,7 +264,7 @@ class Invoice < ApplicationRecord
     end
 
     event :cancel do
-      transition [ :open, :finalized, :pending, :unpaid, :failed ] => :cancelled
+      transition [:open, :finalized, :pending, :unpaid, :failed] => :cancelled
     end
 
   end
@@ -422,14 +423,13 @@ class Invoice < ApplicationRecord
   def transition_allowed?(event)
     allowed = case event
               when :charge
-                 [ :pending, :failed, :unpaid ].include?(self.state.to_sym)
+                [:pending, :failed, :unpaid].include?(self.state.to_sym)
               when :generate_pdf
                 true
               else
                 state_events.include?(event)
               end
   end
-
 
   # REFACTOR: charging should not happen here
   # When charging is successful, the invoice is marked as paid (method
@@ -516,7 +516,7 @@ class Invoice < ApplicationRecord
 
   def self.opened_by_buyer(buyer)
     opened.by_provider(buyer.provider_account)
-           .where(['invoices.buyer_account_id = ?', buyer.id ])
+           .where(['invoices.buyer_account_id = ?', buyer.id])
            .reorder('period DESC, created_at DESC').first
   end
 
@@ -550,11 +550,13 @@ class Invoice < ApplicationRecord
 
   def id_prefix
     return if friendly_id.blank?
+
     friendly_id.sub(/(-[^-]+?)$/, '')
   end
 
   def id_sufix
     return if friendly_id.blank?
+
     friendly_id.sub(/(.+)-/, '')
   end
 
@@ -563,6 +565,7 @@ class Invoice < ApplicationRecord
 
   def set_friendly_id
     return unless persisted?
+
     self.friendly_id = InvoiceFriendlyIdService.call(self)
   end
 
@@ -570,6 +573,7 @@ class Invoice < ApplicationRecord
 
   def update_counter
     return unless saved_change_to_friendly_id?
+
     counter.update_count(id_sufix.to_i)
   end
 

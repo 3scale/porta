@@ -106,7 +106,9 @@ class AccountTest < ActiveSupport::TestCase
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
-    buyer.update(nil)
+    assert_nothing_raised do
+      buyer.update(nil)
+    end
   end
 
   test 'should validate self_domain uniqueness' do
@@ -154,7 +156,10 @@ class AccountTest < ActiveSupport::TestCase
     provider = FactoryBot.create(:simple_provider)
     @named_scoped_provider = provider
 
-    @named_scoped_provider.update(org_name: 'account is not readonly')
+    new_org_name = 'account is not readonly'
+    @named_scoped_provider.update(org_name: new_org_name)
+
+    assert_equal new_org_name, @named_scoped_provider.reload.org_name
   end
 
   test 'deleted buyer account have working #to_xml' do
@@ -755,7 +760,10 @@ class AccountTest < ActiveSupport::TestCase
       ActiveMerchant::Billing::BogusGateway.any_instance.expects(:unstore).never
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be emailed about events related to schduled_for_deletion providers
@@ -768,7 +776,10 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
@@ -781,7 +792,10 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        provider.destroy!
+        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
+        suppress(ActiveJob::DeserializationError) do
+          provider.destroy!
+        end
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
