@@ -83,10 +83,10 @@ class Logic::BuyerTest < ActiveSupport::TestCase
     bought_plans = [false, false, true].map{|b| m = mock; m.stubs(paid?: b); m}
     @account.stubs(bought_plans: bought_plans)
 
-    @provider.settings.require_cc_on_signup_switch = 'hidden'
+    @provider.settings.allow_require_cc_on_signup!
     refute @account.requires_credit_card_now?
 
-    @provider.settings.require_cc_on_signup_switch = 'visible'
+    @provider.settings.show_require_cc_on_signup!
     assert @account.requires_credit_card_now?
 
     bought_plans.pop

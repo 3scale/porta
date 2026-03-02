@@ -71,7 +71,7 @@
               <div class="pf-c-overflow-menu__content">
                 <div class="pf-c-overflow-menu__group pf-m-button-group">
                   <div class="pf-c-overflow-menu__item">
-                    <% if new_plan = current_account.first_plan_with_switch(switch.name) %>
+                    <% if new_plan = current_account.first_plan_with_switch(switch.setting_name) %>
                       <%= render '/admin/upgrade_notices/provider_upgrade_button', plan: new_plan %>
                     <% end %>
                   </div>

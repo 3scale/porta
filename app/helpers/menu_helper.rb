@@ -85,7 +85,7 @@ module MenuHelper # rubocop:disable Metrics/ModuleLength
 
   def forcibly_denied_switch?(switch)
     account = current_account.provider? ? current_account : current_account.provider_account
-    account.settings.public_send(switch).is_a?(Settings::SwitchDenied)
+    account.settings.public_send(switch).globally_denied?
   end
 
   def audience_link

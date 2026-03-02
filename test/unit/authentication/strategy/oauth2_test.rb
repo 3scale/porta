@@ -4,7 +4,7 @@ class Authentication::Strategy::OAuth2Test < ActiveSupport::TestCase
 
   setup do
     @provider = FactoryBot.create(:simple_provider)
-    @provider.settings.update_column(:authentication_strategy, 'oauth2')
+    @provider.settings.update_attribute(:authentication_strategy, 'oauth2')
     @authentication_provider = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
     @strategy = Authentication::Strategy.build(@provider)
   end
@@ -344,7 +344,7 @@ class Authentication::Strategy::OAuth2Test < ActiveSupport::TestCase
       @oauth2_provider ||= begin
                              provider = FactoryBot.create(:provider_account)
 
-                             provider.settings.update_column(:authentication_strategy, 'oauth2')
+                             provider.settings.update_attribute(:authentication_strategy, 'oauth2')
 
                              provider
                            end

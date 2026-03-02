@@ -48,7 +48,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
 
     post admin_api_services_path, params: { provider_key: @provider.api_key, format: :xml, name: 'service foo' }
 

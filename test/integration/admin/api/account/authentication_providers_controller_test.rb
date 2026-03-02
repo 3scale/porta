@@ -68,8 +68,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#create ensures provider can use provider_sso' do
-    Logic::RollingUpdates.stubs(:enabled?).returns(true)
-    @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
+    rolling_update(:provider_sso, enabled: false)
     post admin_api_account_authentication_providers_path(authentication_provider_params)
     assert_response :not_found
   end
@@ -90,7 +89,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   test '#update is forbidden if enforce_sso and already published' do
     authentication_provider = create_authentication_provider
-    @provider.settings.update_column(:enforce_sso, true)
+    @provider.settings.update_attribute(:enforce_sso, true)
     authentication_provider.update_column(:published, true)
     put admin_api_account_authentication_provider_path(authentication_provider, authentication_provider_params)
     assert_response :forbidden
@@ -98,8 +97,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   test '#update ensures provider can use provider_sso' do
     authentication_provider = create_authentication_provider
-    Logic::RollingUpdates.stubs(:enabled?).returns(true)
-    @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
+    rolling_update(:provider_sso, enabled: false)
     put admin_api_account_authentication_provider_path(authentication_provider, authentication_provider_params)
     assert_response :not_found
   end
@@ -128,8 +126,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#index ensures provider can use provider_sso' do
-    Logic::RollingUpdates.stubs(:enabled?).returns(true)
-    @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
+    rolling_update(:provider_sso, enabled: false)
     get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.value)
     assert_response :not_found
   end
@@ -142,8 +139,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   test '#show ensures provider can use provider_sso' do
-    Logic::RollingUpdates.stubs(:enabled?).returns(true)
-    @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
+    rolling_update(:provider_sso, enabled: false)
     authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.value)
     assert_response :not_found
