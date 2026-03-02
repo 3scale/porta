@@ -30,8 +30,8 @@ Feature: Groups and permissions
       And provider "two.3scale.localhost" has a published page with the title "Duck of two" and path "/ducks" of section "Ducks"
 
     # Given one provider has granted access to his restricted page, while the other has not
-    Given the buyer "one_buyer" has access to the section "Ducks" of provider "one.3scale.localhost"
-    Given the buyer "one_buyer" has access to the section "Ducks" of provider "two.3scale.localhost"
+    Given the buyer has access to section "Ducks" of provider "one.3scale.localhost"
+    Given the buyer has access to section "Ducks" of provider "two.3scale.localhost"
 
   # non logged users
   Scenario: Public sections are public even when there is another restricted one with same path that iss restricted

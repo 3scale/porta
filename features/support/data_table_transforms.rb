@@ -95,6 +95,18 @@ module DataTableTransforms
     table
   end
 
+  def transform_cms_pages_table(table, provider:)
+    parameterize_headers(table)
+    table.map_column!(:section, false) { |title| provider.sections.find_by!(title:) } # Also system_name?
+    table
+  end
+
+  def transform_cms_sections_table(table)
+    parameterize_headers(table)
+    table.map_column!(:public, false) { |default| default.casecmp?('true') }
+    table
+  end
+
   def transform_table(table)
     parameterize_headers(table)
     table

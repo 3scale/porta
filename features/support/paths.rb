@@ -603,7 +603,8 @@ World(Module.new do
       usage_stats_api_applications_path provider_first_service!.cinstances.first, *args
 
     #
-    # Potato CMS
+    # CMS
+    #
     when 'the CMS new partial page'
       new_provider_admin_cms_partial_path
 
@@ -632,6 +633,15 @@ World(Module.new do
 
     when 'the CMS changes'
       provider_admin_cms_changes_path
+
+    when "the new CMS file page"
+      new_provider_admin_cms_file_path
+
+    when "the CMS file's edit page"
+      edit_provider_admin_cms_file_path(@cms_file)
+
+    when /^the CMS edit page of section "([^"]*)"$/
+      edit_provider_admin_cms_section_path(CMS::Section.find_by!(title: $1))
 
     #
     # Advanced CMS (BrowserCMS)

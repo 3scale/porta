@@ -2,18 +2,18 @@
 
 # Create CMS groups in bulk for a provider account.
 #
-# And the provider has the following CMS groups:
+# And the provider has the following dev portal groups:
 #   | Name        |
 #   | BuyerGroup1 |
 #
-Given "{provider} has the following CMS groups:" do |provider, table|
+Given "{provider} has the following dev portal groups:" do |provider, table|
   parameterize_headers(table)
   table.hashes.each do |hash|
     FactoryBot.create(:cms_group, name: hash['name'], provider: provider)
   end
 end
 
-Given "{provider} has no CMS groups" do |provider|
+Given "{provider} has no dev portal groups" do |provider|
   provider.provided_groups.destroy_all
   assert_empty provider.provided_groups
 end

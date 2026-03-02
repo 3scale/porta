@@ -6,12 +6,13 @@ Feature: Creating layout for CMS pages
   Background:
     Given a provider is logged in
     And I go to the CMS page
+    And wait a moment
 
   Scenario: Layout
-    When I follow "New Layout" from the CMS "New Page" dropdown
+    Given they select "New Layout" from the CMS new content dropdown
     And I fill in the following:
       | System name | potato |
-    And I fill in the draft with:
+    And fill in the draft with:
       """
       {% content %}
       """

@@ -8,8 +8,14 @@ Feature: Groups and Sections
       And provider "foo.3scale.localhost" has "multiple_applications" visible
       And an approved buyer "alice" signed up to provider "foo.3scale.localhost"
 
-      And provider "foo.3scale.localhost" has a public section "Docs" with path "/docs"
-      And provider "foo.3scale.localhost" has a published page with the title "First" of section "Docs"
+    And the provider has the following section:
+      | Title  | Partial path | Public |
+      | Docs   | /docs        | True   |
+      | Secret | /secret      | False  |
+    And the provider has the following page:
+      | Title | Section | Path          | System name   | Published |
+      | First | Docs    | /docs/first   | first_public  | First     |
+      | First | Secret  | /secret/first | first_private | First     |
 
   Scenario: Public sections can be visited without being logged in
     Given the current domain is "foo.3scale.localhost"
@@ -30,21 +36,18 @@ Feature: Groups and Sections
   @allow-rescue
   Scenario: Access restricted sections are access denied for not logged in users
     Given the current domain is "foo.3scale.localhost"
-      And the section "Docs" of provider "foo.3scale.localhost" is access restricted
-     When I request the url "/docs/first"
+     When I request the url "/secret/first"
      Then I should see "Not found"
 
 
   @allow-rescue
   Scenario: Access restricted sections are access denied to not-allowed users
-    Given the section "Docs" of provider "foo.3scale.localhost" is access restricted
       And I am logged in as "alice" on foo.3scale.localhost
-     When I request the url "/docs/first"
+     When I request the url "/secret/first"
      Then I should see "Not found"
 
   Scenario: Access restricted sections are access granted to allowed users
-    Given the section "Docs" of provider "foo.3scale.localhost" is access restricted
-      And the buyer "alice" has access to the section "Docs" of provider "foo.3scale.localhost"
+    And buyer "alice" has access to section "Secret" of the provider
     Given I am logged in as "alice" on foo.3scale.localhost
-     When I request the url "/docs/first"
+     When I request the url "/secret/first"
     Then I should see "First"

@@ -16,7 +16,7 @@ Feature: Buyer account group memberships
 
   Rule: Provider has no groups
     Background:
-      Given the provider has no CMS groups
+      Given the provider has no dev portal groups
 
     Scenario: Empty state
       When they go to the buyer account "Bob buyer" groups page
@@ -24,7 +24,7 @@ Feature: Buyer account group memberships
 
   Rule: Provider has some groups
     Background:
-      And the provider has the following CMS groups:
+      And the provider has the following dev portal groups:
         | Name  |
         | Alpha |
         | Beta  |
@@ -53,7 +53,7 @@ Feature: Buyer account group memberships
       Given another provider "nfp.3scale.localhost"
       And an approved buyer "Lesley" signed up to the provider
       And the provider has "groups" switch allowed
-      And the provider has the following CMS groups:
+      And the provider has the following dev portal groups:
         | Name    |
         | Group A |
         | Group B |

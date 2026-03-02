@@ -5,10 +5,14 @@ Feature: Search
 
   Background:
     Given a provider "foo.3scale.localhost"
-    Given provider "foo.3scale.localhost" has a private section "priv" with path "/priv"
-      And provider "foo.3scale.localhost" has a public section "pub" with path "/pub"
-      And provider "foo.3scale.localhost" has a published page with the title "title foo" and path "/foo" of section "pub"
-      And provider "foo.3scale.localhost" has a published page with the title "title bar" and path "/bar" of section "priv"
+    And the provider has the following sections:
+      | Title   | Public |
+      | Public  | True   |
+      | Private | False  |
+    And the provider has the following pages:
+      | Title     | Path | Section | Published |
+      | title bar | /bar | Private | title bar |
+      | title foo | /foo | Public  | title foo |
       And the current domain is "foo.3scale.localhost"
     And a product "My API"
     And the following application plan:

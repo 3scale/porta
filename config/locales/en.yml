@@ -824,6 +824,8 @@ en:
             success: Created new file
           destroy:
             success: File %{path} deleted
+          update:
+            success: File updated
 
         groups:
           create:
@@ -2426,6 +2428,13 @@ en:
   action_controller:
     errors:
       unknown_format: 'The server does not understand "%{request_format}" request.'
+
+  layouts:
+    cms:
+      filter:
+        all: Show all content
+        own: Show only my content
+        builtin: Show only 3scale content
 
   shared:
     annotations:

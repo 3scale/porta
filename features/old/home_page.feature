@@ -7,8 +7,7 @@ Feature: Home page
     Given a provider "foo.3scale.localhost"
 
   Scenario: On buyer side with advanced CMS enabled
-  Given there are no pages
-    And provider "foo.3scale.localhost" has a public page at "/" with content
+    Given the template of dev portal's "homepage" of the provider is
       """
       This is advanced CMS page
       """

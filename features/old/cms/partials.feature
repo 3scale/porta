@@ -6,12 +6,13 @@ Feature: CMS Partials
   Background:
     Given a provider is logged in
     And I go to the CMS page
+    And wait a moment
 
   Scenario: Partial
-    When I follow "New Partial" from the CMS "New Page" dropdown
+    Given they select "New Partial" from the CMS new content dropdown
     And I fill in the following:
       | System name | potato |
-    And I fill in the draft with:
+    And fill in the draft with:
       """
       awesomeness builtin
       """
@@ -21,15 +22,14 @@ Feature: CMS Partials
       | System name | brand-new-potato |
     And I press "Save"
     Then I should see "Template saved"
-    And CMS Partial "brand-new-potato" should have:
-      | Draft       | awesomeness builtin |
-      | System name | brand-new-potato    |
+    Then field "System name" should be "brand-new-potato"
+    And the draft template should contain "awesomeness builtin"
 
   Scenario: Builtin partial
     Given provider "foo.3scale.localhost" has all the templates setup
     When I go to the CMS page
-    And I choose builtin page "submenu" in the CMS sidebar
-    And I fill in the draft with:
+    And follow "submenu" within the CMS sidebar
+    And fill in the draft with:
       """
       awesomeness builtin
       """

@@ -134,6 +134,12 @@ module HtmlSelectorsHelper
       '.pf-c-card .pf-c-table[aria-label="Transactions table"]'
 
     #
+    # CMS
+    #
+    when 'the CMS sidebar'
+      '#cms-sidebar'
+
+    #
     # Dev portal
     #
     when 'the pagination'

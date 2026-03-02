@@ -47,8 +47,8 @@ end
 #
 #   When they click on "Create invoice"
 #
-When "they click on {string}" do |text|
-  find(:xpath, "//*[text()='#{text}']", wait: false).click
+When "(they )click on {string}" do |text|
+  find(:xpath, "//*[text()='#{text}' or @title='#{text}']", wait: false).click
 end
 
 When "(they )switch {string} on" do |switch|
