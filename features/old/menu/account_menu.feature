@@ -9,22 +9,22 @@ Feature: Menu of the Account screen
 
   Scenario: Current API title
     When I go to the provider account page
-    Then I should see there is no current API
+    Then the sidebar should not display a current API
 
   Scenario: Account menu structure
     When I go to the provider account page
     Then I should see "foo.3scale.localhost"
-    And I should see menu sections
+    And the sidebar should have the following sections:
       | Overview  |
       | Personal  |
       | Users     |
       | Billing   |
       | Integrate |
       | Export    |
-    Then I should see menu items under "Users"
+    Then the sidebar should have the following items in section "Users":
       | Listing          |
       | SSO Integrations |
-    And I should see menu items under "Billing"
+    And the sidebar should have the following items in section "Billing":
       | 3scale Invoices |
       | Payment Details |
 
@@ -32,18 +32,18 @@ Feature: Menu of the Account screen
     Given the provider has "branding" switch allowed
     Given the provider has "multiple_users" switch allowed
     When I go to the provider account page
-    Then I should see menu items under "Users"
+    Then the sidebar should have the following items in section "Users":
       | Listing          |
       | Invitations      |
       | SSO Integrations |
-    And I should see menu items under "Billing"
+    And the sidebar should have the following items in section "Billing":
       | 3scale Invoices |
       | Payment Details |
 
   Scenario: finance disabled should not disable 3scale invoices
     Given provider "foo.3scale.localhost" has "finance" switch denied
     When I go to the provider account page
-    Then I should see menu items under "Billing"
+    Then the sidebar should have the following items in section "Billing":
       | 3scale Invoices |
       | Payment Details |
     And I go to the 3scale invoices page
@@ -52,7 +52,7 @@ Feature: Menu of the Account screen
   Scenario: Account menu when master is billing
     Given master is billing tenants
     When I go to the provider account page
-    Then I should see menu items under "Billing"
+    Then the sidebar should have the following items in section "Billing":
       | 3scale Invoices |
       | Payment Details |
 
@@ -66,13 +66,13 @@ Feature: Menu of the Account screen
     And the provider has the following setting:
       | enforce sso | true |
     When I go to the provider account page
-    And I should see menu items under "Users"
+    And the sidebar should have the following items in section "Users":
       | Listing          |
       | SSO Integrations |
 
   Scenario: Personal menu structure
     When I go to the provider personal page
-    And I should see menu items under "Personal"
+    And the sidebar should have the following items in section "Personal":
       | Personal Details         |
       | Tokens                   |
       | Notification Preferences |

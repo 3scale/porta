@@ -17,6 +17,10 @@ module VerticalNavHelpers
   def css_selector
     '#vertical-nav-wrapper'
   end
+
+  def page_sidebar
+    find('.pf-c-page__sidebar')
+  end
 end
 
 World(VerticalNavHelpers)

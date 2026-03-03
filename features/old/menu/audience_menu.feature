@@ -9,23 +9,23 @@ Feature: Audience menu
     And go to the accounts admin page
 
   Scenario: Current API title
-    Then I should see there is no current API
+    Then the sidebar should not display a current API
 
   Scenario: Audience menu structure
-    Then I should see menu sections
+    Then the sidebar should have the following sections:
       | Accounts         |
       | Applications     |
       | Developer Portal |
       | Messages         |
 
   Scenario: Accounts sub menu structure
-    Then I should see menu items under "Accounts"
+    Then the sidebar should have the following items in section "Accounts":
       | Listing            |
       | Usage Rules        |
       | Fields Definitions |
 
   Scenario: Portal sub menu structure
-    Then I should see menu items under "Developer Portal"
+    Then the sidebar should have the following items in section "Developer Portal":
       | Content              |
       | Drafts               |
       | Redirects            |
@@ -43,7 +43,7 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure with account plans enabled
     When the provider has "account_plans" visible
     And I go to the accounts admin page
-    Then I should see menu items under "Accounts"
+    Then the sidebar should have the following items in section "Accounts":
       | Listing            |
       | Account Plans      |
       | Usage Rules        |
@@ -52,7 +52,7 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure with account plans disabled
     When the provider has "account_plans" denied
     And I go to the accounts admin page
-    Then I should see menu items under "Accounts"
+    Then the sidebar should have the following items in section "Accounts":
       | Listing            |
       | Usage Rules        |
       | Fields Definitions |
@@ -60,7 +60,7 @@ Feature: Audience menu
   Scenario: Accounts sub menu structure with service plans enabled
     When the provider has "service_plans" visible
     And I go to the accounts admin page
-    Then I should see menu items under "Accounts"
+    Then the sidebar should have the following items in section "Accounts":
       | Listing            |
       | Subscriptions      |
       | Usage Rules        |
@@ -70,7 +70,7 @@ Feature: Audience menu
     When the provider has "groups" switch allowed
     And I go to the provider dashboard
     And I follow "0 Accounts"
-    Then I should see menu items under "Developer Portal"
+    Then the sidebar should have the following items in section "Developer Portal":
       | Content              |
       | Drafts               |
       | Redirects            |

@@ -5,10 +5,10 @@ Feature: Backend API overview page
     Given a provider is logged in
 
   Scenario: Vertical navigation structure
-    Given a backend
+    Given a backend "Backend API"
     When an admin is in the backend overview page
-    Then the name of the backend can be seen on top of the menu
-    And I should see menu sections
+    Then they should see "Backend API" within the main menu
+    And the sidebar should have the following sections:
       | Backend Overview            |
       | Analytics           |
       | Methods and Metrics |

@@ -10,10 +10,10 @@ module HtmlSelectorsHelper
     # Page sections
     #
     when /^the main menu$/
-      '#mainmenu'
+      '#vertical-nav-wrapper'
 
     when /^the main menu's section (.*)$/
-      find('#mainmenu button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
+      find('#vertical-nav-wrapper button', text: $1).sibling('.pf-c-nav__subnav', visible: false)
 
     when /the secondary nav/
       'nav.pf-c-nav.pf-m-horizontal'
