@@ -3,10 +3,7 @@ module DeveloperPortal
 
     before_action :ensure_buyer_domain
     before_action :authorize_multiple_users
-
-    inherit_resources
-    defaults :route_prefix => 'admin_account'
-    actions :index, :new, :create, :destroy
+    before_action :load_invitation, only: [:destroy, :resend]
 
     authorize_resource
 
@@ -22,21 +19,31 @@ module DeveloperPortal
       assign_drops invitations: invitations, pagination: pagination
     end
 
-    create! do |success, failure|
-      success.html { redirect_to return_path }
-      failure.html do
+    def new
+      @invitation = invitations.build
+      assign_drops invitation: @invitation
+    end
+
+    def create
+      @invitation = invitations.build(invitation_params)
+
+      if @invitation.save
+        redirect_to return_path
+      else
         assign_drops invitation: @invitation
         render 'new'
       end
     end
 
-    destroy! do |success, failure|
-      success.html { redirect_to return_path }
-      success.xml  { head :ok }
+    def destroy
+      @invitation.destroy
+      respond_to do |format|
+        format.html { redirect_to return_path }
+        format.xml  { head :ok }
+      end
     end
 
     def resend
-      @invitation = current_account.invitations.find params[:id]
       @invitation.resend
       flash[:notice] = "Invitation was resent"
       redirect_to return_path
@@ -48,12 +55,20 @@ module DeveloperPortal
       authorize! :see, :multiple_users
     end
 
-    def collection
-      @invitations ||= end_of_association_chain.paginate(:page => params[:page])
+    def invitations
+      @invitations ||= current_account.invitations
     end
 
-    def begin_of_association_chain
-      current_account
+    def collection
+      @collection ||= invitations.paginate(page: params[:page])
+    end
+
+    def load_invitation
+      @invitation = invitations.find(params[:id])
+    end
+
+    def invitation_params
+      params.require(:invitation).permit(:email)
     end
 
     def return_path
