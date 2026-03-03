@@ -5,7 +5,14 @@ module Logic
     module Master
       def signup_provider_possible?
         ensure_master
+
         !!(services.default && account_plans.default && services.default.service_plans.default)
+      end
+
+      def provider_signup_form_enabled?
+        return false unless ThreeScale.config.provider_signup_form_enabled
+
+        signup_provider_possible?
       end
     end
 
