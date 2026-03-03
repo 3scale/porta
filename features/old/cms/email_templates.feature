@@ -38,6 +38,9 @@ Feature: Email templates management
 
   Scenario: Updating template
     Given the provider has email template "account_approved"
+      """
+      {% email %}Foo{% endemail %}
+      """
     When I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
     When I go to the email templates page

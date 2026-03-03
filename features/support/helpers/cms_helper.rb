@@ -9,3 +9,5 @@ module CMSHelper
     end
   end
 end
+
+World(CMSHelper)

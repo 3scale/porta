@@ -8,3 +8,5 @@ module CodeMirrorHelper
     find('.pf-c-page').click # HACK: need to click outside to lose focus
   end
 end
+
+World(CodeMirrorHelper)

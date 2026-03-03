@@ -35,7 +35,6 @@ Given "{provider} has the following page(s):" do |provider, table|
   end
 end
 
-
 Given "a dev portal {word} {string} has unpublished changes" do |type, title|
   FactoryBot.create("cms_#{type}", provider: @provider,
                                    title:,

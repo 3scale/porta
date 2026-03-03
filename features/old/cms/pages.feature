@@ -58,7 +58,7 @@ Feature: CMS Pages
     Given provider "foo.3scale.localhost" has all the templates setup
 
     When I go to the CMS page
-     And follow "Show only 3scale content" within the CMS sidebar
+     And select "dashboards/show" from the CMS sidebar
      And fill in the draft with:
       """
         awesomeness builtin

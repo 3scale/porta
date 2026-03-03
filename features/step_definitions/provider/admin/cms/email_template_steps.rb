@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "{provider} has email template {string}" do |provider, system_name, content = nil|
+Given "{provider} has email template {string}" do |provider, system_name, content|
   attrs = {}
 
   attrs[:published] = content if content.present?
