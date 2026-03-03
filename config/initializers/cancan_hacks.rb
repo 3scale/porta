@@ -59,7 +59,8 @@ module CanCanHacks
     private
 
     def inherits_resources?
-      included_modules.include?(InheritedResources::BaseHelpers)
+      # inherited_resources gem has been removed
+      false
     end
   end
 

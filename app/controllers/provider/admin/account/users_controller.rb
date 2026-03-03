@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Account::UsersController < Provider::Admin::Account::BaseController
-  inherit_resources
-  defaults :route_prefix => 'provider_admin_account'
-  actions :edit, :update, :destroy
-
   before_action :load_services, only: %i[edit update]
+  before_action :load_user, only: %i[edit update destroy]
 
   authorize_resource
 
@@ -16,28 +13,32 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
   attr_reader :presenter
 
   def index
-    users = end_of_association_chain.but_impersonation_admin
+    users = current_account.users.but_impersonation_admin
     @presenter = Provider::Admin::Account::UsersIndexPresenter.new(current_user: current_user,
                                                                    users: users,
                                                                    params: params)
   end
 
-  def destroy
-    destroy! do |success|
-      success.html do
-        flash[:success] = t('.success')
-        super
-      end
-    end
+  def edit
+    # Renders edit view
   end
 
   def update
-    resource.validate_fields!
+    @user.validate_fields!
 
-    update! do |success, failure|
-      success.html do
-        redirect_to collection_url, success: t('.success')
-      end
+    if update_resource(@user, [user_params])
+      redirect_to provider_admin_account_users_path, success: t('.success')
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    if @user.destroy
+      flash[:success] = t('.success')
+      redirect_to provider_admin_account_users_path
+    else
+      redirect_back fallback_location: provider_admin_account_users_path, alert: t('.error')
     end
   end
 
@@ -47,8 +48,12 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
     @services ||= current_account.accessible_services
   end
 
-  def begin_of_association_chain
-    current_account
+  def load_user
+    @user = users.find(params[:id])
+  end
+
+  def users
+    @users ||= current_account.users
   end
 
   def update_resource(user, attributes)
@@ -70,5 +75,13 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
       user.save
     end
+  end
+
+  def user_params
+    params.fetch(:user, {}).permit(
+      :username, :email, :password, :password_confirmation,
+      :role, member_permission_ids: [], member_permission_service_ids: [],
+      extra_fields: {}
+    )
   end
 end
