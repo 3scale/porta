@@ -4,6 +4,9 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
   before_action :authorize_multiple_users
   before_action :set_resource
   before_action :load_invitation, only: [:destroy, :resend]
+
+  authorize_resource
+
   activate_menu :account, :users, :invitations
 
   def index

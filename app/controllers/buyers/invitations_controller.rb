@@ -3,6 +3,8 @@ class Buyers::InvitationsController < Buyers::BaseController
   before_action :find_account
   before_action :load_invitation, only: [:destroy, :resend]
 
+  authorize_resource
+
   activate_menu :audience, :accounts, :listing
 
   def index

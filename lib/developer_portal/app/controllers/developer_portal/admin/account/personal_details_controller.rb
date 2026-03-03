@@ -4,6 +4,8 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   before_action :ensure_buyer_domain
   before_action :deny_unless_can_update, :only => [:update, :show]
 
+  authorize_resource class: User, instance_name: 'user'
+
   liquify prefix: 'user'
 
   before_action :verify_current_password, only: :update
