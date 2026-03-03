@@ -9,5 +9,3 @@ Rails.application.config.filter_parameters += %i[activation_code credit_card cre
                                                  password_digest payment_gateway_options payment_service_reference salt
                                                  site_access_code sso_key user_key access_token service_token provider_key
                                                  app_key authenticity_token access_code token]
-
-Rails.application.config.filter_redirect = Rails.application.config.filter_parameters
