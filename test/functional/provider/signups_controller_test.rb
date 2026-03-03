@@ -4,7 +4,6 @@ class Provider::SignupsControllerTest < ActionController::TestCase
 
   def setup
     host! master_account.external_domain
-    Account.any_instance.stubs(:signup_provider_possible?).returns(true)
     extra_fields = [
       {name: 'API_Status_3s__c', target: "Account", label: "At What Stage is your API Project?"},
       {name: 'API_Purpose_3s__c', target: "Account", label: "What is the purpose of your API?"},
