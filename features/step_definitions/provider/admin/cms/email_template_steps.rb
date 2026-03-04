@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 Given "{provider} has email template {string}" do |provider, system_name, content|
-  attrs = {}
-
-  attrs[:published] = content if content.present?
-
-  FactoryBot.create(:cms_email_template, provider:, system_name:, **attrs)
+  FactoryBot.create(:cms_email_template, provider:, system_name:, published: content)
 end
 
 Then "I should see default content of email template {string}" do |name|
