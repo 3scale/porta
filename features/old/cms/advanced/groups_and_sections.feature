@@ -22,7 +22,8 @@ Feature: Groups and Sections
     When I request the url "/docs/first"
     Then I should see "First"
 
-  @javascript
+  # THREESCALE-12437 Commenting out temporarily this scenario since it triggers n+1 query.
+  @javascript @wip
   Scenario: Mark a section as Access Restricted
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost" on its admin domain

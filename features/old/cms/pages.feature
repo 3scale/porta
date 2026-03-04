@@ -24,7 +24,7 @@ Feature: CMS Pages
       When I check "Liquid enabled"
        And I select "Markdown" from "Handler"
        And I press "Create Page"
-       Then I should see "Template created"
+       Then they should see a success toast alert with text "Template create"
        And fill in the draft with:
         """
         # Potato is public!
