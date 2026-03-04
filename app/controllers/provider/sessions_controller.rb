@@ -86,7 +86,7 @@ class Provider::SessionsController < FrontendController
   end
 
   def session_return_to
-    return_to_params = params.permit(:return_to)[:return_to]
+    return_to_params = params[:return_to]
 
     return unless return_to_params
 
