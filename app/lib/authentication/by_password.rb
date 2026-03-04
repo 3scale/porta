@@ -4,39 +4,27 @@ module Authentication
     extend ActiveSupport::Concern
 
     # strong passwords
-    SPECIAL_CHARACTERS = '-+=><_$#.:;!?@&*()~][}{|'
-    RE_STRONG_PASSWORD = /
-      \A
-        (?=.*\d) # number
-        (?=.*[a-z]) # lowercase
-        (?=.*[A-Z]) # uppercase
-        (?=.*[#{Regexp.escape(SPECIAL_CHARACTERS)}]) # special char
-        (?!.*\s) # does not end with space
-        .{8,} # at least 8 characters
-      \z
-    /x
-    STRONG_PASSWORD_FAIL_MSG = "Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of #{SPECIAL_CHARACTERS}.".freeze
+    STRONG_PASSWORD_MIN_SIZE = 15
 
     included do
       # We only need length validations as they are already set in Authentication::ByPassword
       has_secure_password validations: false
 
-      validates_presence_of :password, if: :password_required?
+      before_validation :normalize_password, if: :validate_password?
+
+      validates_presence_of :password, if: :validate_password?
 
       validates_confirmation_of :password, allow_blank: true
 
-      validates :password, format: { :with => RE_STRONG_PASSWORD, :message => STRONG_PASSWORD_FAIL_MSG,
-                                     if: -> { password_required? && provider_requires_strong_passwords? } }
-      validates :password, length: { minimum: 6, allow_blank: true,
-                                     if: -> { password_required? && !provider_requires_strong_passwords? } }
+      validates :password, length: { minimum: STRONG_PASSWORD_MIN_SIZE }, if: :validate_strong_password?
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
-      attr_accessible :password, :password_confirmation
+      attr_accessible :password, :password_confirmation, as: %i[default member admin]
 
       scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
-      alias_method :authenticated?, :authenticate
+      alias_method :authenticate_without_normalization, :authenticate
     end
 
     class_methods do
@@ -45,8 +33,16 @@ module Authentication
       end
     end
 
-    def password_required?
-      signup.by_user? && (password_digest.blank? || password_digest_changed?)
+    def validate_password?
+      # The password changed or it's a new record that must provide a password
+      will_save_change_to_password_digest? || (new_record? && signup.by_user?)
+    end
+
+    def validate_strong_password?
+      return false if Rails.configuration.three_scale.strong_passwords_disabled
+      return false if signup.sample_data?
+
+      validate_password?
     end
 
     def just_changed_password?
@@ -59,9 +55,10 @@ module Authentication
 
     def generate_lost_password_token
       token = SecureRandom.hex(32)
-      return unless update_columns(lost_password_token: token, lost_password_token_generated_at: Time.current)
+      self.lost_password_token = token
+      self.lost_password_token_generated_at = Time.current
 
-      token
+      token if save
     end
 
     def generate_lost_password_token!
@@ -81,12 +78,12 @@ module Authentication
       save
     end
 
-    def using_password?
-      password_digest.present?
+    def already_using_password?
+      password_digest_in_database.present?
     end
 
     def can_set_password?
-      account.password_login_allowed? && !using_password?
+      account.password_login_allowed? && !already_using_password?
     end
 
     def special_fields
@@ -96,5 +93,27 @@ module Authentication
     def reset_lost_password_token
       self.lost_password_token = nil
     end
+
+    raise "FIXME" if Gem::Version.new(Rails.version) >= Gem::Version.new("8.1")
+    # To avoid all this logic, from Rails 8.1+ we can use
+    # `ActiveModel::Attributes::Normalization`, so `normalizes` method
+    # works with virtual attributes like `password` and `password_validation`
+    # and normalizes on assignment rather than before_validation
+    def normalize_password
+      if password.present?
+        normalized = password.unicode_normalize(:nfc)
+        self.password = normalized unless password == normalized
+      end
+
+      if password_confirmation.present?
+        normalized_confirmation = password_confirmation.unicode_normalize(:nfc)
+        self.password_confirmation = normalized_confirmation unless password_confirmation == normalized_confirmation
+      end
+    end
+
+    def authenticate(password)
+      authenticate_without_normalization(password&.unicode_normalize(:nfc))
+    end
+    alias_method :authenticated?, :authenticate
   end
 end

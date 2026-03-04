@@ -27,10 +27,6 @@ div class="pf-c-card"
                                                    input_html: { disabled: settings.approval_required_disabled? },
                                                    hint: account_approval_required_hint(current_account)
 
-      = form.inputs 'Users'
-        = form.input :strong_passwords_enabled, as: :patternfly_checkbox,
-                                                hint: t("formtastic.hints.settings.strong_passwords_enabled", strong_password_definition: strong_password_definition)
-
       = form.inputs 'Search'
         = form.input :public_search, as: :patternfly_checkbox
 

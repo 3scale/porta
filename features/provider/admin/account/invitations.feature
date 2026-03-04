@@ -82,8 +82,8 @@ Feature: Provider Account Settings User Invitations
       And the form is submitted with:
         | Email                 | peter@example.com |
         | Username              | peter             |
-        | Password              | 123456            |
-        | Password confirmation | 123456            |
+        | Password              | superSecret1234#  |
+        | Password confirmation | superSecret1234#  |
       And they log out
       When the provider logs in
       And they go to the provider users page

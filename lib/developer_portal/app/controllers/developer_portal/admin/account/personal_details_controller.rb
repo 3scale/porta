@@ -50,7 +50,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def verify_current_password
-    return unless current_user.using_password?
+    return unless current_user.already_using_password?
     return if current_user.authenticated?(user_params[:current_password])
 
     resource.errors.add(:current_password, t('activerecord.errors.models.user.current_password_incorrect'))

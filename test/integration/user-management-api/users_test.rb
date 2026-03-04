@@ -390,13 +390,32 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'update also updates password' do
     chuck = FactoryBot.create(:user, account: @provider, role: 'member')
-    assert chuck.authenticated?('supersecret')
+    assert chuck.authenticated?('superSecret1234#')
 
     put admin_api_user_path(format: :xml, id: chuck.id, password: "updated-password", password_confirmation: "updated-password"), params: { provider_key: @provider.api_key }
 
     chuck.reload
     assert_response :success
     assert chuck.authenticated?('updated-password')
+  end
+
+  test 'update with weak password rejected when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "weakpwd", password_confirmation: "weakpwd"), params: { provider_key: @provider.api_key }
+
+    assert_response :unprocessable_entity
+    assert_match "is too short (minimum is 15 characters)", response.body
+  end
+
+  test 'update with strong password accepted when strong passwords enabled' do
+    chuck = FactoryBot.create(:user, account: @provider, role: 'member')
+
+    put admin_api_user_path(format: :xml, id: chuck.id, password: "superSecret1234#", password_confirmation: "superSecret1234#"), params: { provider_key: @provider.api_key }
+
+    chuck.reload
+    assert_response :success
+    assert chuck.authenticated?('superSecret1234#')
   end
 
   test 'update does not updates state nor role' do

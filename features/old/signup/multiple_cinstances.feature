@@ -19,8 +19,8 @@ Feature: Buyer signup to service allowing multiple applications per buyer
     When I fill in "Username" with "hugo"
     And I fill in "Email" with "hugo@stuff.com"
     And I fill in "Organization/Group Name" with "hugo's stuff"
-    And I fill in "Password" with "donkey"
-    And I fill in "Password confirmation" with "donkey"
+    And I fill in "Password" with "superSecret1234#"
+    And I fill in "Password confirmation" with "superSecret1234#"
     And I press "Sign up"
     Then I should see "Please click the link in the email and you can directly login!"
     When I follow the activation link in an email sent to "hugo@stuff.com"
@@ -30,7 +30,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
     When buyer "hugo's stuff" is approved
 
     And I fill in "Username" with "hugo"
-    And I fill in "Password" with "donkey"
+    And I fill in "Password" with "superSecret1234#"
     And I press "Sign in"
     Then I should be logged in as "hugo"
 

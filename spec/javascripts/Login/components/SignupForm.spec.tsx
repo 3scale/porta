@@ -18,7 +18,23 @@ const defaultProps: Props = {
   path: 'bikini-bottom'
 }
 
+const validPassword = 'superSecret1234#'
+
 const mountWrapper = (props: Partial<Props> = {}) => mount(<SignupForm {...{ ...defaultProps, ...props }} />)
+
+const fillPasswordFields = (wrapper: ReturnType<typeof mountWrapper>) => {
+  act(() => {
+    wrapper.find('input#user_password').props().onChange!({
+      currentTarget: { required: true, name: 'user[password]', value: validPassword, type: 'password' }
+    } as FormEvent<HTMLInputElement>)
+  })
+
+  act(() => {
+    wrapper.find('input#user_password_confirmation').props().onChange!({
+      currentTarget: { required: true, name: 'user[password_confirmation]', value: validPassword, type: 'password' }
+    } as FormEvent<HTMLInputElement>)
+  })
+}
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -31,6 +47,17 @@ it('should render six Form Groups', () => {
 })
 
 describe('validation', () => {
+  let wrapper: ReturnType<typeof mountWrapper>
+
+  beforeEach(() => {
+    wrapper = mountWrapper()
+    fillPasswordFields(wrapper)
+  })
+
+  it('should enable the button when all required fields are valid', () => {
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+  })
+
   it('should set username and validation state to true', () => {
     const event = {
       currentTarget: {
@@ -41,9 +68,8 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_username').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should set validation state to false when username is invalid', () => {
@@ -56,7 +82,6 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_username').props().onChange!(event) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
@@ -71,9 +96,8 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_email').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should set validation state to false when email is invalid', () => {
@@ -86,8 +110,7 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => {  wrapper.find('input#user_email').props().onChange!(event) })
+    act(() => { wrapper.find('input#user_email').props().onChange!(event) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
 
@@ -100,9 +123,8 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_first_name').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should have validation state set to true even with no First name', () => {
@@ -114,9 +136,8 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_first_name').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should set lastname and validation state to true', () => {
@@ -128,9 +149,8 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
     act(() => { wrapper.find('input#user_last_name').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should have validation state true even with no Last name', () => {
@@ -142,13 +162,36 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => { wrapper.find('input#user_first_name').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    act(() => { wrapper.find('input#user_last_name').props().onChange!(event) })
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
   it('should set password and validation state to true', () => {
-    const event = {
+    const passwordEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password]',
+        value: validPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    const confirmationEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password_confirmation]',
+        value: validPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+  })
+
+  it('should set validation state to false when password is weak', () => {
+    const passwordEvent = {
       currentTarget: {
         required: true,
         name: 'user[password]',
@@ -157,13 +200,22 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => { wrapper.find('input#user_password').props().onChange!(event) })
+    const confirmationEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password_confirmation]',
+        value: 'gary1234',
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
 
-  it('should set validation state to false when password is invalid', () => {
-    const event = {
+  it('should set validation state to false when password is empty', () => {
+    const passwordEvent = {
       currentTarget: {
         required: true,
         name: 'user[password]',
@@ -172,28 +224,55 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => { wrapper.find('input#user_password').props().onChange!(event) })
+    const confirmationEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password_confirmation]',
+        value: '',
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
 
   it('should set passwordConfirmation and validation state to true', () => {
-    const event = {
+    const passwordEvent = {
       currentTarget: {
         required: true,
-        name: 'user[password_confirmation]',
-        value: 'gary1234',
+        name: 'user[password]',
+        value: validPassword,
         type: 'password'
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(event) })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
+    const confirmationEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password_confirmation]',
+        value: validPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
-  it('should set validation state to false when password confirmation is invalid', () => {
-    const event = {
+  it('should set validation state to false when password confirmation is empty', () => {
+    const passwordEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password]',
+        value: validPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    const confirmationEvent = {
       currentTarget: {
         required: true,
         name: 'user[password_confirmation]',
@@ -202,83 +281,35 @@ describe('validation', () => {
       }
     } as FormEvent<HTMLInputElement>
 
-    const wrapper = mountWrapper()
-    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(event) })
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
 
-  it('should enable the button after filling up required fields', () => {
-    const wrapper = mountWrapper()
+  it('should set validation state to false when password and confirmation do not match', () => {
+    const anotherValidPassword = 'anotherSecret1234#'
 
-    act(() => {
-      wrapper.find('input#user_username').props().onChange!({
-        currentTarget: {
-          required: true,
-          name: 'user[username]',
-          value: 'Sandy',
-          type: 'text'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
+    const passwordEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password]',
+        value: validPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    const confirmationEvent = {
+      currentTarget: {
+        required: true,
+        name: 'user[password_confirmation]',
+        value: anotherValidPassword,
+        type: 'password'
+      }
+    } as FormEvent<HTMLInputElement>
+
+    act(() => { wrapper.find('input#user_password').props().onChange!(passwordEvent) })
+    act(() => { wrapper.find('input#user_password_confirmation').props().onChange!(confirmationEvent) })
     expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-    act(() => {
-      wrapper.find('input#user_email').props().onChange!({
-        currentTarget: {
-          required: true,
-          name: 'user[email]',
-          value: 'bob@sponge.com',
-          type: 'email'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-    act(() => {
-      wrapper.find('input#user_first_name').props().onChange!({
-        currentTarget: {
-          name: 'user[first_name]',
-          value: '',
-          type: 'text'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-    act(() => {
-      wrapper.find('input#user_first_name').props().onChange!({
-        currentTarget: {
-          name: 'user[last_name]',
-          value: '',
-          type: 'text'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-    act(() => {
-      wrapper.find('input#user_password').props().onChange!({
-        currentTarget: {
-          required: true,
-          name: 'user[password]',
-          value: 'gary1234',
-          type: 'password'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
-    expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-    act(() => {
-      wrapper.find('input#user_password_confirmation').props().onChange!({
-        currentTarget: {
-          required: true,
-          name: 'user[password_confirmation]',
-          value: 'gary1234',
-          type: 'password'
-        }
-      } as FormEvent<HTMLInputElement>)
-    })
-    expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 })
 
