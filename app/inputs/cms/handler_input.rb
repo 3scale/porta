@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-# CMS
-class HandlerInput < Formtastic::Inputs::SelectInput
+class CMS::HandlerInput < Formtastic::Inputs::SelectInput
   def options
-    super.merge(collection: handlers)
-  end
-
-  def include_blank
-    true
+    super.merge(collection: handlers, include_blank: '')
   end
 
   private

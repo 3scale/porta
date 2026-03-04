@@ -41,6 +41,10 @@ module CMS
       tag.div(class: 'pf-c-action-list pf-l-level pf-u-mt-md', &)
     end
 
+    def input_namespaces
+      [::CMS, *super]
+    end
+
     private
 
     def object_can_be_destroyed?
