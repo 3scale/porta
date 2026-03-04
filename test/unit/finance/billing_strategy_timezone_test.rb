@@ -19,8 +19,7 @@ class Finance::BillingStrategyTimezoneTest < ActiveSupport::TestCase
     buyer.settings.update_attribute(:monthly_billing_enabled, true)
     @contract = FactoryBot.create(:cinstance, user_account: buyer, service: @provider.first_service!, created_at: Time.utc(2025, 1, 1))
     # Set variable_cost_paid_until and trial_period_expires_at to nil so we can bill for January
-    Cinstance.where(id: @contract.id).update_all(variable_cost_paid_until: nil, trial_period_expires_at: nil)
-    @contract.reload
+    @contract.update_columns(variable_cost_paid_until: nil, trial_period_expires_at: nil)
     @metric = @contract.service.metrics.hits
 
     # Add pricing rule so there's something to bill
@@ -74,7 +73,9 @@ class Finance::BillingStrategyTimezoneTest < ActiveSupport::TestCase
     assert_not_empty invoices, 'Should create invoice when billing_time is in UTC (day 1)'
 
     invoice = invoices.last
+    assert_equal 1, invoice.period.begin.month, 'Invoice period should start in January'
     assert_equal 1, invoice.period.begin.day, 'Invoice period should start on the 1st'
+    assert_equal 1, invoice.period.end.month, 'Invoice period should end in January'
     assert_equal 31, invoice.period.end.day, 'Invoice period should end on the 31st'
 
     # Verify only January UTC hits are billed (Hit 2: 50 + Hit 3: 100 = 150)

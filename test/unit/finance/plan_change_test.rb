@@ -90,6 +90,7 @@ module Finance
       @provider.save!
       @provider.billing_strategy.update!(charging_enabled: true)
 
+      # there is no way for buyers to set their timezone but make sure it doesn't affect the logic
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, created_at: Time.utc(2025, 1, 1), timezone: 'Pacific Time (US & Canada)')
       @buyer.settings.update!(monthly_billing_enabled: true)
 
@@ -114,12 +115,13 @@ module Finance
     end
 
     def enable_instant_bill_plan_change
-      # in testing all rolling updates are true it seems
+      rolling_updates_on
+      rolling_update(:instant_bill_plan_change, enabled: true)
     end
 
     def disable_instant_bill_plan_change
-      Account.any_instance.stubs(:provider_can_use?).returns(true) # this is default tests setting but need to stub
-      Account.any_instance.stubs(:provider_can_use?).with(:instant_bill_plan_change).returns(false)
+      rolling_updates_on
+      rolling_update(:instant_bill_plan_change, enabled: false)
     end
 
     # Helper to create a contract with specific trial settings
