@@ -19,6 +19,7 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
   end
 
   test 'create' do
+    FieldsDefinition.create_defaults!(provider.provider_account)
     assert_difference(provider.users.method(:count)) do
       post provider_invitee_signup_path(invitation_token: invitation.token, user: user_params)
     end

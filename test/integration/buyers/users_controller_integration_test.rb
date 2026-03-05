@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
+  include FieldsDefinitionsHelpers
+
   def setup
     @provider = FactoryBot.create(:provider_account)
     login! provider
@@ -69,6 +71,31 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal 'Japan', user.field_value('country')
   end
 
+  test 'only update optional fields that are enabled through fields definitions' do
+    field_defined(provider, { target: 'User', name: 'first_name' })
+    field_defined(provider, { target: 'User', name: 'last_name' })
+    provider.reload
+    user = FactoryBot.create(:member, account: buyer)
+    assert_same_elements %w(username email first_name last_name), user.defined_fields_names
+
+    optional_fields = {
+      title: 'Ms.', first_name: 'fn', last_name: 'ln', job_role: 'manager'
+    }
+
+    optional_fields.each_key do |field|
+      assert_nil user.public_send(field), "Field '#{field}' should not be set"
+    end
+
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), params: { user: optional_fields }
+
+    user.reload
+
+    assert_equal 'fn', user.first_name
+    assert_equal 'ln', user.last_name
+    assert_nil user.job_role
+    assert_nil user.title
+  end
+
   test "#activate" do
     user = FactoryBot.create(:pending_user, account: buyer)
     assert_not user.active?
@@ -77,6 +104,66 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_response :ok
+    assert user.reload.active?
+  end
+
+  test "update password" do
+    user = buyer.admin_user
+    new_password = SecureRandom.hex(8)
+    assert_not user.authenticated?(new_password)
+
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), params: {
+      user: {
+        password: new_password,
+        password_confirmation: new_password
+      }
+    }
+
+    user.reload
+    assert user.reload.authenticated?(new_password)
+  end
+
+  test "do not update password in does not match password confirmation" do
+    user = buyer.admin_user
+    new_password = SecureRandom.hex(8)
+    assert_not user.authenticated?(new_password)
+
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), params: {
+      user: {
+        password: new_password,
+        password_confirmation: new_password.reverse
+      }
+    }
+
+    assert_not user.reload.authenticated?(new_password)
+
+    page = Nokogiri::HTML::Document.parse(response.body)
+    password_confirmation_error = page.at_xpath("//input[@id='user_password_confirmation']/following-sibling::p[@class='inline-errors']")
+    assert password_confirmation_error
+    assert_equal "doesn't match Password", password_confirmation_error.text
+  end
+
+  test "update user role" do
+    member = FactoryBot.create(:member, account: buyer)
+    assert member.member?
+
+    put admin_buyers_account_user_path(account_id: buyer.id, id: member.id), params: {
+      user: {
+        role: "admin"
+      }
+    }
+
+    assert member.reload.admin?
+  end
+
+  test "suspend and unsuspend user" do
+    user = buyer.admin_user
+    assert user.active?
+
+    post suspend_admin_buyers_account_user_path(buyer, user)
+    assert user.reload.suspended?
+
+    post unsuspend_admin_buyers_account_user_path(buyer, user)
     assert user.reload.active?
   end
 end
