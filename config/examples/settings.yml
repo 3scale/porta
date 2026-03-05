@@ -18,6 +18,7 @@ base: &default
     username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
   janitor_worker_enabled: true
   onpremises: false
+  provider_signup_form_enabled: <%= ENV.fetch('PROVIDER_SIGNUP_FORM_ENABLED', '0') == '1' %>
   onpremises_api_docs_version: false
   readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '0') == '1' %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
@@ -58,6 +59,7 @@ test:
   <<: *default
   force_ssl: false
   janitor_worker_enabled: false
+  provider_signup_form_enabled: true
   readonly_custom_domains_settings: true
   report_traffic: false
   secure_cookie: false

@@ -76,6 +76,20 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
     assert_equal 'selfsubdomain-admin', provider.self_subdomain
   end
 
+  test 'GET signup form returns not found when provider_signup_form_enabled is false' do
+    ThreeScale.config.stubs(provider_signup_form_enabled: false)
+    get provider_signup_path
+    assert_response :not_found
+  end
+
+  test 'POST signup returns not found when provider_signup_form_enabled is false' do
+    ThreeScale.config.stubs(provider_signup_form_enabled: false)
+    assert_no_difference(master_account.buyer_accounts.method(:count)) do
+      post provider_signup_path, params: create_params
+    end
+    assert_response :not_found
+  end
+
   def create_params(extra_params = {})
     @create_params ||= {
       account: {

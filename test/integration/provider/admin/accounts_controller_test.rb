@@ -80,6 +80,13 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     switches.each { |_name, switch| assert_not switch.allowed? }
   end
 
+  test '#create succeeds when provider_signup_form_enabled is false' do
+    ThreeScale.config.stubs(provider_signup_form_enabled: false)
+    post provider_admin_accounts_path, params: valid_params
+    user = User.find_by!(email: valid_params[:account][:user][:email])
+    assert user.account.present?
+  end
+
   test '#create approves the account when the account plan does not require approval' do
     account_plan.update(approval_required: true)
     post provider_admin_accounts_path, params: valid_params
