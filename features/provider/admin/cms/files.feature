@@ -16,9 +16,8 @@ Feature: CMS files
   Scenario: Uploading new files
 
   Scenario: Uploading file that is not an image
-    Given a local file "test/fixtures/countries.yml"
-    When they go to the new CMS file page
-    And fill in "Path" with "countries"
+    Given they go to the new CMS file page
+    When they fill in "Path" with "countries"
     And attach the file located at "test/fixtures/countries.yml"
     And press "Create File"
     Then a success toast alert is displayed with text "Created new file"
