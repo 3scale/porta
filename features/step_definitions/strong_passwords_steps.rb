@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# When RAILS_ENV=test, strong passwords are disabled by default
 Given "Strong passwords are disabled" do
   Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(true)
 end
