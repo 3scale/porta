@@ -2,6 +2,10 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   representer User
 
   before_action :can_create, only: :create
+  before_action :build_new_user, only: %i[create]
+  before_action :find_user, except: %i[create index]
+
+  attr_reader :user
 
   # User List (provider account)
   # GET /admin/api/users.xml
@@ -14,11 +18,9 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   # User Create (provider account)
   # POST /admin/api/users.xml
   def create
-    user = new_user
-
     authorize! :create, user
 
-    user.unflattened_attributes = flat_params
+    user.unflattened_attributes = user_params
     user.signup_type = :api
 
     user.save
@@ -39,7 +41,7 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   def update
     authorize! :update, user
 
-    user.update_with_flattened_attributes(flat_params, as: current_user.try(:role))
+    user.update_with_flattened_attributes(user_params)
 
     respond_with(user)
   end
@@ -110,10 +112,6 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     current_user ? super : logged_in?
   end
 
-  def new_user
-    @new_user ||= current_account.users.new
-  end
-
   def users
     @users ||= begin
       conditions = params.slice(:state, :role)
@@ -121,8 +119,12 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     end
   end
 
-  def user
-    @user ||= current_account.users.but_impersonation_admin.find(params[:id])
+  def build_new_user
+    @user = current_account.users.new
+  end
+
+  def find_user
+    @user = current_account.users.but_impersonation_admin.find(params[:id])
   end
 
   def can_create
@@ -133,5 +135,15 @@ class Admin::Api::UsersController < Admin::Api::BaseController
 
   def flat_params
     super.except(:id)
+  end
+
+  def user_params
+    @user_params ||= begin
+                       allowed_attrs = user.defined_fields_names | %i(password password_confirmation cas_identifier)
+                       allowed_attrs |= [member_permission_service_ids: [], member_permission_ids: [], allowed_sections: [], allowed_service_ids: []] if (provider_key.present? || current_user.admin?)
+                       # TODO: are these parameters needed?
+                       # allowed_attrs |= %i(conditions open_id service_conditions)
+                       flat_params.permit(*allowed_attrs)
+                     end
   end
 end

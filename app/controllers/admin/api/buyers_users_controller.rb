@@ -1,6 +1,11 @@
 class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   representer User
 
+  before_action :find_user, except: %i[create index]
+  before_action :build_new_user, only: %i[create]
+
+  attr_reader :user
+
   # User List
   # GET /admin/api/accounts/{account_id}/users.xml
   def index
@@ -12,11 +17,9 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   # User Create
   # POST /admin/api/accounts/{account_id}/users.xml
   def create
-    user = new_user
-
     authorize! :create, user
 
-    user.unflattened_attributes = flat_params
+    user.unflattened_attributes = user_params
     user.signup_type = :api
 
     user.save
@@ -37,7 +40,7 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   def update
     authorize! :update, user
 
-    user.update_with_flattened_attributes(flat_params)
+    user.update_with_flattened_attributes(user_params)
 
     respond_with(user)
   end
@@ -108,10 +111,6 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
     current_user ? super : logged_in?
   end
 
-  def new_user
-    @new_user ||= buyer.users.new
-  end
-
   def users
     @users ||= begin
       conditions = params.slice(:state, :role)
@@ -119,8 +118,23 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
     end
   end
 
-  def user
-    @user ||= buyer.users.find(params[:id])
+  private
+
+  def build_new_user
+    @user = buyer.users.new
+  end
+
+  def find_user
+    @user = buyer.users.find(params[:id])
+  end
+
+  def user_params
+    @user_params ||= begin
+                       allowed_attrs = user.defined_fields_names | %i(password password_confirmation)
+                       # TODO: are these parameters needed?
+                       # allowed_attrs |= %i(conditions cas_identifier open_id service_conditions)
+                       flat_params.permit(*allowed_attrs)
+                     end
   end
 
 end
