@@ -1,12 +1,10 @@
 class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPortal::BaseController
-  inherit_resources
-
   activate_menu :account, :personal_details
 
-  defaults :singleton => true, :instance_name => 'user', :route_prefix => 'admin_account'
-  actions :show, :update
   before_action :ensure_buyer_domain
   before_action :deny_unless_can_update, :only => [:update, :show]
+
+  authorize_resource class: User, instance_name: 'user'
 
   liquify prefix: 'user'
 
