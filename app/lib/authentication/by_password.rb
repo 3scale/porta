@@ -32,8 +32,6 @@ module Authentication
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
-      attr_accessible :password, :password_confirmation
-
       scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
       alias_method :authenticated?, :authenticate

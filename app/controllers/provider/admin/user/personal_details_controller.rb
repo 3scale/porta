@@ -5,7 +5,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   def edit; end
 
   def update
-    if current_user.update(user_params.except(:current_password))
+    if current_user.update(permitted_user_params)
       if current_user.just_changed_password?
         current_user.kill_user_sessions(user_session)
       end
@@ -26,7 +26,16 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   end
 
   def user_params
-    params.require(:user)
+    @user_params ||= params.require(:user)
+  end
+
+  def permitted_user_params
+    @permitted_user_params ||= begin
+                                 allowed_attrs = current_user.defined_builtin_fields_names | %i(password)
+                                 # TODO: are these parameters needed?
+                                 # allowed_attrs |= %i(conditions cas_identifier open_id service_conditions)
+                                 user_params.permit(*allowed_attrs, extra_fields: current_user.defined_extra_fields_names)
+                               end
   end
 
   def current_password_verification

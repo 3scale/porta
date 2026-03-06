@@ -160,6 +160,19 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     assert_equal admin_sections, @member.admin_sections
   end
 
+  test 'set member permissions with provider key' do
+    service = @provider.services.default
+    admin_sections = @member.admin_sections
+
+    put admin_api_user_path(format: :xml, id: @member.id), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring], provider_key: @provider.api_key }
+
+    assert_response :success
+
+    assert @member.reload
+    assert_equal [service.id], @member.member_permission_service_ids
+    assert_equal Set[ :services, :monitoring ], @member.admin_sections
+  end
+
   test 'suspend/unsuspend with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
