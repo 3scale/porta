@@ -195,7 +195,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
   end
 
   def access_token_value(user:)
-    FactoryBot.create(:access_token, owner: user, scopes: %w[account_management]).value
+    FactoryBot.create(:access_token, owner: user, scopes: %w[account_management]).plaintext_value
   end
 
   def response_proxy_config_ids

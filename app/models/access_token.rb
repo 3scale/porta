@@ -1,9 +1,13 @@
 class AccessToken < ApplicationRecord
+  HASHED_TOKEN_LENGTH = 96
+
   TIMESTAMP_FORMAT = '%FT%T%:z'.freeze
   PAST_TIME = Time.at(0).utc.freeze
   private_constant :PAST_TIME
 
   belongs_to :owner, class_name: 'User', inverse_of: :access_tokens
+
+  attr_reader :plaintext_value
 
   validates :name, length: { maximum: 255 }
 
@@ -98,16 +102,43 @@ class AccessToken < ApplicationRecord
   validate :validate_scope_exists
   validate :validate_expiration_date, on: %i[create]
 
-  after_initialize :generate_value
+  after_initialize :generate_value, if: :new_record?
 
   attr_accessible :owner, :name, :scopes, :permission, :expires_at
 
-  attr_readonly :value
+  def self.compute_digest(plaintext_value)
+    return nil if plaintext_value.blank?
 
-  def self.find_from_value(value)
-    find_by(value: value.to_s.scrub)
+    OpenSSL::HMAC.hexdigest('SHA384', Rails.application.secret_key_base, plaintext_value.to_s)
+  end
+
+  def self.find_from_value(plaintext_value)
+    return nil if plaintext_value.blank?
+
+    scrubbed = plaintext_value.to_s.scrub
+    digest = compute_digest(scrubbed)
+
+    # Fast path: find by digest (new/migrated tokens)
+    token = find_by(value: digest)
+    return token if token
+
+    # Legacy tokens can't be exactly 96 chars (that's our hash length)
+    # This prevents using a leaked hash directly as a token
+    return nil if scrubbed.length == HASHED_TOKEN_LENGTH
+
+    # Slow path: find by plaintext (legacy tokens)
+    token = find_by(value: scrubbed)
+    return nil unless token
+
+    # Migrate on use: replace plaintext with hash
+    token.migrate_to_hashed!(scrubbed)
+    token
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
+  end
+
+  def migrate_to_hashed!(plaintext_value)
+    update_columns(value: self.class.compute_digest(plaintext_value))
   end
 
   def self.find_from_id_or_value!(id_or_value)
@@ -156,7 +187,11 @@ class AccessToken < ApplicationRecord
   end
 
   def generate_value
-    self.value ||= self.class.random_id
+    return if persisted?
+    return if @plaintext_value.present?
+
+    @plaintext_value = self.class.random_id
+    self.value = self.class.compute_digest(@plaintext_value)
   end
 
   def available_permissions
@@ -167,8 +202,8 @@ class AccessToken < ApplicationRecord
     PERMISSIONS.key(permission)
   end
 
-  def show_value?(*)
-    saved_changes.include?(:value)
+  def show_plaintext_value?(*)
+    @plaintext_value.present?
   end
 
   def available_scopes
@@ -180,7 +215,7 @@ class AccessToken < ApplicationRecord
   end
 
   def self.random_id
-    SecureRandom.hex(32)
+    SecureRandom.hex(48)
   end
 
   def expired?

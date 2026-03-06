@@ -9,7 +9,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
     @service  = FactoryBot.create(:service, account: provider)
     @plan    = FactoryBot.create(:application_plan, issuer: @service)
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
-    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
 
     host! provider.external_admin_domain
   end
@@ -100,7 +100,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
     private
 
     def request_plan_change(new_plan = create_new_plan_same_service)
-      params = { access_token: @access_token.value, plan_id: new_plan.id }
+      params = { access_token: @access_token.plaintext_value, plan_id: new_plan.id }
       put change_plan_admin_api_account_application_path(account_id: @buyer.id, id: @application.id, format: :xml), params: params
     end
 

@@ -4,12 +4,13 @@ require 'rails_helper'
 
 resource 'AccessToken' do
   let(:resource) { FactoryBot.build(:access_token) }
-  let(:expected_properties) { %w[id name scopes permission value] }
+  let(:expected_properties) { %w[id name scopes permission] }
 
   json(:resource) do
     let(:root) { 'access_token' }
 
     it { subject.should have_properties(expected_properties).from(resource) }
+    it { should include('value' => resource.plaintext_value) }
   end
 
   json(:collection) do
@@ -20,6 +21,7 @@ resource 'AccessToken' do
         subject.each do |subject_access_token|
           subject_access_token.should include('access_token')
           subject_access_token.fetch('access_token').should have_properties(expected_properties).from(resource)
+          subject_access_token.fetch('access_token').should include('value' => resource.plaintext_value)
         end
       end
     end
