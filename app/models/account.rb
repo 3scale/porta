@@ -52,7 +52,7 @@ class Account < ApplicationRecord
   # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
   self.background_deletion = %i[
     configuration_values
-    settings
+    account_settings
     forum
     users
     mail_dispatch_rules
@@ -224,8 +224,14 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
-  lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
+  has_many :account_settings, class_name: 'AccountSetting', dependent: :delete_all
+  lazy_initialization_for :profile, if: :should_not_be_deleted?
+
+  before_save :autosave_settings
+
+  def settings
+    @settings_facade ||= Settings.for_account(self)
+  end
   accepts_nested_attributes_for :profile
 
   belongs_to :country
@@ -425,6 +431,7 @@ class Account < ApplicationRecord
     @buyer_attribute_descriptors = nil
     @signup_form_fields = nil
     @_first_admin = nil
+    @settings_facade = nil
 
     super
   end
@@ -568,6 +575,12 @@ class Account < ApplicationRecord
     scope = persisted? ? scope.where.not(id: id) : scope
 
     errors.add :master, 'can be only one' if scope.exists?(master: true)
+  end
+
+  def autosave_settings
+    return unless @settings_facade
+    return if @settings_facade.changes.empty?
+    @settings_facade.save
   end
 
   protected

@@ -76,7 +76,7 @@ module Switches
     private
 
     def update_status
-      @status = @settings.read_attribute("#{@name}_switch").to_s
+      @status = @settings.read_setting("#{@name}_switch").to_s
     end
   end
 
@@ -164,7 +164,6 @@ module Switches
   included do
     SWITCHES.each do |name|
       attr_name = "#{name}_switch"
-      attr_protected attr_name
 
       # Switches State Machine
       #
@@ -190,6 +189,10 @@ module Switches
           unless settings.account.provider?
             raise Account::ProviderOnlyMethodCalledError, "cannot change state of #{name} of #{settings.inspect}"
           end
+        end
+
+        after_transition do |settings|
+          settings.persist_switch_setting!(name)
         end
 
         state :denied, :hidden, :visible
@@ -292,9 +295,9 @@ module Switches
   end
 
   def visible_ui?(switch)
-    attribute = "#{switch}_ui_visible"
-    if has_attribute?(attribute)
-      self[attribute]
+    setting_name = "#{switch}_ui_visible"
+    if respond_to?(setting_name)
+      send(setting_name)
     elsif switch == :require_cc_on_signup # visible only for existing providers as of 2016-07-05
       account.provider_can_use?(switch)
     else
