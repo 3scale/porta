@@ -121,8 +121,10 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   end
 
   def build_user
-    allowed_attrs = @invitation.account.users.new.defined_fields_names | %i(password password_confirmation)
-    @user = @invitation.make_user(filter_readonly_params(params[:user], User).permit(*allowed_attrs))
+    @user = @invitation.make_user
+    allowed_attrs = @user.defined_fields_names | %i(password password_confirmation)
+    user_params = filter_readonly_params(params[:user], User).permit(*allowed_attrs)
+    @user.assign_attributes(user_params)
   end
 
   def invitation_token

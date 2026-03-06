@@ -53,9 +53,10 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def build_user
-    allowed_attrs = @invitation.account.users.new.defined_fields_names | %i(password password_confirmation)
+    @user = @invitation.make_user
+    allowed_attrs = @user.defined_fields_names | %i(password password_confirmation)
     user_params = params.fetch(:user, ActionController::Parameters.new).permit(*allowed_attrs)
-    @user = @invitation.make_user(user_params)
+    @user.assign_attributes(user_params)
 
     # This is just a sanity guard added when splitting invitation
     # controllers. Remove when SURE.
