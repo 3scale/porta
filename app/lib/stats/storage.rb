@@ -9,7 +9,7 @@ module Stats
     def values_in_range(range, granularity, prefix)
       # TODO: - refactor, isolate to strategies?
       case granularity
-      when :day, :month
+      when :day, :month, :year
         use_aggregated_values(range, granularity, prefix)
       when 6.hours
         resum_all_value(range, granularity, prefix)
