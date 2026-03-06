@@ -280,7 +280,7 @@ class AccountTest < ActiveSupport::TestCase
     account = Account.new
 
     assert_not_nil account.settings
-    assert account.settings.new_record?
+    assert_instance_of Settings, account.settings
   end
 
   test 'profile is lazily created' do

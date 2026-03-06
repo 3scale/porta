@@ -117,8 +117,8 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   def test_service_plans_visible_ui_switch
-   assert @settings.has_attribute?(:service_plans_switch)
-   assert @settings.has_attribute?(:service_plans_ui_visible)
+   assert @settings.respond_to?(:service_plans_switch)
+   assert @settings.respond_to?(:service_plans_ui_visible)
    @settings.service_plans_ui_visible = true
    assert @settings.visible_ui?(:service_plans)
    @settings.service_plans_ui_visible = false
@@ -128,8 +128,8 @@ class SettingsTest < ActiveSupport::TestCase
   def test_require_cc_on_signup_visible_ui_switch_on_rolling_updates
     Logic::RollingUpdates.stubs(:enabled? => true)
 
-    assert @settings.has_attribute?(:require_cc_on_signup_switch)
-    refute @settings.has_attribute?(:require_cc_on_signup_ui_visible)
+    assert @settings.respond_to?(:require_cc_on_signup_switch)
+    refute @settings.respond_to?(:require_cc_on_signup_ui_visible)
 
     Account.any_instance.stubs(:provider_can_use?).with(:require_cc_on_signup).returns(false)
     refute @settings.visible_ui?(:require_cc_on_signup)

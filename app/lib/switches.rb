@@ -76,7 +76,7 @@ module Switches
     private
 
     def update_status
-      @status = @settings.read_attribute("#{@name}_switch").to_s
+      @status = @settings.read_setting("#{@name}_switch").to_s
     end
   end
 
@@ -295,9 +295,9 @@ module Switches
   end
 
   def visible_ui?(switch)
-    attribute = "#{switch}_ui_visible"
-    if has_attribute?(attribute)
-      self[attribute]
+    setting_name = "#{switch}_ui_visible"
+    if respond_to?(setting_name)
+      send(setting_name)
     elsif switch == :require_cc_on_signup # visible only for existing providers as of 2016-07-05
       account.provider_can_use?(switch)
     else

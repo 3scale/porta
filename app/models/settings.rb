@@ -259,25 +259,11 @@ class Settings
     persist_attribute!(attr_name)
   end
 
-  # --- Compatibility methods ---
-
-  def read_attribute(name)
+  # Read a setting value directly from the attributes hash,
+  # bypassing any method overrides (e.g. switch methods).
+  def read_setting(name)
     name = name.to_sym
-    if ALL_SETTINGS.key?(name)
-      @attributes[name]
-    end
-  end
-
-  def has_attribute?(name)
-    ALL_SETTINGS.key?(name.to_sym)
-  end
-
-  def [](name)
-    read_attribute(name)
-  end
-
-  def []=(name, value)
-    send("#{name}=", value) if respond_to?("#{name}=", true)
+    @attributes[name] if ALL_SETTINGS.key?(name)
   end
 
   def changes
@@ -286,14 +272,6 @@ class Settings
 
   def previous_changes
     @previous_changes.dup
-  end
-
-  def persisted?
-    account&.persisted? || false
-  end
-
-  def new_record?
-    !persisted?
   end
 
   def updated_at
