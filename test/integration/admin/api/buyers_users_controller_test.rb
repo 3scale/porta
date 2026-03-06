@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
+  include FieldsDefinitionsHelpers
+
   def setup
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
@@ -13,6 +15,9 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :buyer
 
   test 'creates a user for its buyer' do
+    field_defined(provider, { target: 'User', name: 'first_name' })
+    field_defined(provider, { target: 'User', name: 'last_name' })
+
     assert_difference(buyer.users.method(:count)) do
       post admin_api_account_users_path(buyer), params: params
     end
