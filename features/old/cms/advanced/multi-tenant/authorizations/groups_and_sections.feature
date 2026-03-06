@@ -12,26 +12,29 @@ Feature: Groups and permissions
     Given a provider "two.3scale.localhost"
       And provider "two.3scale.localhost" has "multiple_applications" visible
 
-    # Given both providers have a page with path "/docs", but one is restricted, while the other is not
-    Given provider "one.3scale.localhost" has a private section "Docs" with path "/docs"
-      And provider "one.3scale.localhost" has a published page with the title "First of one" and path "/first" of section "Docs"
-    #
-    Given provider "two.3scale.localhost" has a public section "Docs" with path "/docs"
-      And provider "two.3scale.localhost" has a published page with the title "First of two" and path "/first" of section "Docs"
+    Given provider "one.3scale.localhost" has the following sections:
+      | Title | Partial path | Public |
+      | Docs  | /docs        | False  |
+      | Ducks | /ducks       | False  |
+    And provider "one.3scale.localhost" has the following pages:
+      | Title        | Section | Path   | Published    |
+      | First of one | Docs    | /first | First of one |
+      | Duck of one  | Ducks   | /ducks | Duck of one  |
+
+    Given provider "two.3scale.localhost" has the following sections:
+      | Title | Partial path | Public |
+      | Docs  | /docs        | True   |
+      | Ducks | /ducks       | False  |
+    And provider "two.3scale.localhost" has the following pages:
+      | Title        | Section | Path   | Published    |
+      | First of two | Docs    | /first | First of two |
+      | Duck of two  | Ducks   | /ducks | Duck of two  |
 
     Given an approved buyer "one_buyer" signed up to provider "one.3scale.localhost"
+    And the buyer has access to section "Ducks" of provider "one.3scale.localhost"
+
     Given an approved buyer "one_buyer" signed up to provider "two.3scale.localhost"
-
-    # Given both providers have restricted pages "/ducks"
-    Given provider "one.3scale.localhost" has a private section "Ducks" with path "/ducks"
-      And provider "one.3scale.localhost" has a published page with the title "Duck of one" and path "/ducks" of section "Ducks"
-    #
-    Given provider "two.3scale.localhost" has a private section "Ducks" with path "/ducks"
-      And provider "two.3scale.localhost" has a published page with the title "Duck of two" and path "/ducks" of section "Ducks"
-
-    # Given one provider has granted access to his restricted page, while the other has not
-    Given the buyer "one_buyer" has access to the section "Ducks" of provider "one.3scale.localhost"
-    Given the buyer "one_buyer" has access to the section "Ducks" of provider "two.3scale.localhost"
+    And the buyer has access to section "Ducks" of provider "two.3scale.localhost"
 
   # non logged users
   Scenario: Public sections are public even when there is another restricted one with same path that iss restricted

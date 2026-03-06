@@ -5,8 +5,7 @@ Feature: Content access in liquid
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has "multiple_applications" visible
-      And the template "main_layout" of provider "foo.3scale.localhost" is
+    And the provider has cms page "/protected" with:
         """
         {% if current_user.sections contains "/protected-section" %}
           Protected Content Access GRANTED
@@ -36,19 +35,21 @@ Feature: Content access in liquid
 
 
   Scenario: Not logged in user has access denied to protected content in page
-    When I go to the homepage
+    When they request the url "/protected"
     Then I should see "Protected Content Access DENIED"
 
   Scenario: Buyer without access cannot see protected content
     Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
       And I am logged in as "buyer"
-    When I go to the homepage
+    When they request the url "/protected"
     Then I should see "Protected Content Access DENIED"
 
   Scenario: Buyer with access granted can see protected content
-      And provider "foo.3scale.localhost" has a private section "protected-section"
     Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
-      And the buyer "buyer" has access to the section "protected-section" of provider "foo.3scale.localhost"
+    And the provider has the following section:
+      | Title             | Public |
+      | protected-section | False  |
+    And the buyer has access to section "protected-section" of the provider
       And I am logged in as "buyer"
-    When I go to the homepage
+    When they request the url "/protected"
     Then I should see "Protected Content Access GRANTED"

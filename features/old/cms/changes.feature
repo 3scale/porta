@@ -7,14 +7,23 @@ Feature: CMS Changes
     Given a provider is logged in
 
   Scenario: Changes
-    Given I have changed CMS page "page"
-    And I have changed CMS partial "partial"
+    Given a dev portal page "My Page" has unpublished changes
+    And a dev portal partial "My partial" has unpublished changes
+    And a dev portal layout "My Layout" has unpublished changes
     And I go to the CMS changes
-    Then I should see 2 CMS changes
+    Then the table should contain the following:
+      | Type    | Name       |
+      | Page    | My Page    |
+      | Partial | My partial |
+      | Layout  | My Layout  |
 
   Scenario: Revert page
-    Given I have changed CMS page "Users"
+    Given a dev portal page "My Page" has unpublished changes
     When I go to the CMS changes
+    And the table should contain the following:
+      | Type | Name |
+      | Page | My Page |
     And I follow "Revert"
     Then they should see a toast alert with text "Template reverted"
-    And the CMS page "Users" should be reverted
+    And the table should contain the following:
+      | Type | Name |

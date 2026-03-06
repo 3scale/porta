@@ -6,10 +6,15 @@ Feature: Section
 
   Background:
     Given a provider "withsections.3scale.localhost"
-    And provider "withsections.3scale.localhost" has section "lolsection"
+    And the provider has the following section:
+      | Title      |
+      | lolsection |
     Given a provider "foo.3scale.localhost"
 
   Scenario: Update section
     Given I am logged in as provider "withsections.3scale.localhost" on its admin domain
-    When I update "lolsection" section title to "waterfall"
+    And they go to the CMS edit page of section "lolsection"
+    And the form is submitted with:
+      | Title | waterfall |
     Then I should see "waterfall"
+    And a success toast alert is displayed with text "Section saved successfully"

@@ -28,7 +28,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   def update
     @file = file
     if @file.update(file_params)
-      redirect_to edit_provider_admin_cms_file_path(@file)
+      redirect_to edit_provider_admin_cms_file_path(@file), success: t('.success')
     else
       render :edit
     end

@@ -18,6 +18,7 @@
     }
   } %>
   <%= render partial: "/provider/admin/cms/dropdown", locals: {
+    id: "cms-publish-button",
     toggle_button: publish_button,
     menu_items: [ hide_button, publish_button ] } %>
 <% else %>
@@ -44,6 +45,7 @@
   }
 } %>
 <%= render partial: "/provider/admin/cms/dropdown", locals: {
+  id: "cms-save-button",
   type: :primary,
   toggle_button: save_button,
   menu_items: [ save_button, save_as_version_button ] } %>

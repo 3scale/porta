@@ -6,9 +6,10 @@ Feature: CMS Portlets
   Background:
     Given a provider is logged in
     And I go to the CMS page
+    And wait a moment
 
   Scenario: Portlet
-    When I follow "New Portlet" from the CMS "New Page" dropdown
+    When they select "New Portlet" from the CMS new content dropdown
     When I follow "External RSS Feed"
     When I fill in the following:
       | Title       | Patatas Bravas                  |

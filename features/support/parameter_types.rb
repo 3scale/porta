@@ -188,20 +188,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'cms_page',
-  type: CMS::Page,
-  regexp: /CMS Page "(.+?)"/,
-  transformer: ->(path) { CMS::Page.find_by!(path: path) }
-)
-
-ParameterType(
-  name: 'cms_partial',
-  type: CMS::Partial,
-  regexp: /CMS Partial "(.+?)"/,
-  transformer: ->(path) { CMS::Partial.find_by!(system_name: path) }
-)
-
-ParameterType(
   name: 'section_of_provider',
   regexp: /section "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(name, provider_name) do
@@ -277,24 +263,12 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'legal_terms',
-  regexp: /legal terms "([^"]*)"/,
-  transformer: ->(name) { CMS::LegalTerm.find_by!(title: name) }
-)
-
-ParameterType(
   name: 'service_of_provider',
   regexp: /service "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(service_name, provider_name) do
     provider_by_name(provider_name).services
                                    .find_by!(name: service_name)
   end
-)
-
-ParameterType(
-  name: 'email_template',
-  regexp: /email template "(.+?)"/,
-  transformer: ->(name) { CMS::EmailTemplate.find_by!(system_name: name) }
 )
 
 ParameterType(

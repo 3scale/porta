@@ -8,12 +8,12 @@ Feature: Multitenanted liquid
     And a provider "another-liquid.3scale.localhost"
 
   Scenario: Liquid layouts are multitenant
-    Given the template "main_layout" of provider "liquid.3scale.localhost" is
+    Given the template of dev portal's "main_layout" of provider "liquid.3scale.localhost" is
       """
       ONE liquid provider
       {% container main %}
       """
-    And the template "main_layout" of provider "another-liquid.3scale.localhost" is
+    And the template of dev portal's "main_layout" of provider "another-liquid.3scale.localhost" is
       """
       ANOTHER liquid provider
       {% container main %}
@@ -28,21 +28,21 @@ Feature: Multitenanted liquid
     Then I should see "ANOTHER liquid provider"
 
   Scenario: Liquid partial inclusions are multitenant
-    Given the partial "partial" of provider "liquid.3scale.localhost" is
+    Given provider "liquid.3scale.localhost" has a partial "partial" with the following content:
       """
       partial ONE
       """
-    And the partial "partial" of provider "another-liquid.3scale.localhost" is
+    And provider "another-liquid.3scale.localhost" has a partial "partial" with the following content:
       """
       partial ANOTHER
       """
 
-    Given the template "main_layout" of provider "liquid.3scale.localhost" is
+    Given the template of dev portal's "main_layout" of provider "liquid.3scale.localhost" is
       """
       {% include "partial" %}
       {% container main %}
       """
-    And the template "main_layout" of provider "another-liquid.3scale.localhost" is
+    And the template of dev portal's "main_layout" of provider "another-liquid.3scale.localhost" is
       """
       {% include "partial" %}
       {% container main %}
@@ -58,29 +58,29 @@ Feature: Multitenanted liquid
 
 
   Scenario: Liquid partial nested inclusions are multitenant
-    Given the partial "partial" of provider "liquid.3scale.localhost" is
+    Given provider "liquid.3scale.localhost" has a partial "partial" with the following content:
       """
       {% include "included" %}
       """
-    And the partial "partial" of provider "another-liquid.3scale.localhost" is
+    And provider "another-liquid.3scale.localhost" has a partial "partial" with the following content:
       """
       {% include "included" %}
       """
-    Given the partial "included" of provider "liquid.3scale.localhost" is
+    Given provider "liquid.3scale.localhost" has a partial "included" with the following content:
       """
       included ONE
       """
-    And the partial "included" of provider "another-liquid.3scale.localhost" is
+    And provider "another-liquid.3scale.localhost" has a partial "included" with the following content:
       """
       included ANOTHER
       """
 
-    Given the template "main_layout" of provider "liquid.3scale.localhost" is
+    Given the template of dev portal's "main_layout" of provider "liquid.3scale.localhost" is
       """
       {% include "partial" %}
       {% container main %}
       """
-    And the template "main_layout" of provider "another-liquid.3scale.localhost" is
+    And the template of dev portal's "main_layout" of provider "another-liquid.3scale.localhost" is
       """
       {% include "partial" %}
       {% container main %}

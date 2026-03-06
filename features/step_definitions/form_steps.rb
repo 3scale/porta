@@ -154,3 +154,15 @@ When "(they )select the product {string}" do |product|
     click_on 'Select'
   end
 end
+
+Then "field {string} should be {string}" do |field, expected|
+  field = find_field(field)
+  actual = case field.tag_name
+           when 'select'
+             field.find('option[selected]').text
+           else
+             field[:value]
+           end
+
+  assert_equal expected, actual
+end

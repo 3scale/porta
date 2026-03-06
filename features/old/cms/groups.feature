@@ -5,7 +5,9 @@ Feature: CMS groups
   Background:
     Given a provider is logged in
     And the provider has "groups" switch allowed
-    And provider "foo.3scale.localhost" has a private section "nothing-to-see-here"
+    And the provider has the following section:
+      | Title               | Public |
+      | nothing-to-see-here | False  |
     When I go to the groups page
 
   Scenario: Only display private sections

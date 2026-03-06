@@ -9,6 +9,6 @@ Feature: CMS Sections
 
   Scenario: Show Root section
     When I go to the CMS page
-    And I switch to 3scale content in the CMS sidebar
-    And I follow "Root" in the CMS sidebar
+    And click on "Show only 3scale content"
+    And I follow "Root" within the CMS sidebar
     Then I should see "Section 'Root'"

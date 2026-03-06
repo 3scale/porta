@@ -28,7 +28,10 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       And I am logged in as provider "foo.3scale.localhost"
       When I go to the email templates page
       And I follow "Sign up notification for buyer"
-      And I fill in the draft with "provider custom account notification email"
+      And fill in the draft with:
+        """
+        provider custom account notification email
+        """
       And I press "Create Email Template"
 
     Given the current domain is foo.3scale.localhost
@@ -44,11 +47,17 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       When I go to the email templates page
 
       And I follow "Sign up notification for buyer"
-      And I fill in the draft with "provider custom account notification email"
+      And fill in the draft with:
+        """
+        provider custom account notification email
+        """
       And I press "Create Email Template"
 
       And I follow "Sign up notification for buyer"
-      And I fill in the draft with "another version of account notification email"
+      And fill in the draft with:
+        """
+        another version of account notification email
+        """
       And I press "Save"
 
     Given the current domain is foo.3scale.localhost

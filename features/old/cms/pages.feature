@@ -11,7 +11,7 @@ Feature: CMS Pages
 
   @allow-rescue
   Scenario: Page
-      Given a CMS Layout "new-layout" of provider "foo.3scale.localhost"
+    Given a dev portal layout "new-layout"
       When I press "New Page"
        And I toggle "Advanced options"
       And I fill in the following:
@@ -21,25 +21,24 @@ Feature: CMS Pages
         | Content type | text/css      |
 
        And I select "new-layout" from "Layout"
-       And I press "Create Page"
-      Then I should see "Template created"
       When I check "Liquid enabled"
        And I select "Markdown" from "Handler"
-       And I fill in the draft with:
+       And I press "Create Page"
+       Then they should see a success toast alert with text "Template create"
+       And fill in the draft with:
         """
         # Potato is public!
         """
 
        And I press "Save"
       Then I should see "Template saved"
-      And CMS Page "/potato" should have:
-        | Title          | Potato        |
-        | Layout         | new-layout    |
-        | Liquid enabled | true          |
-        | Path           | /potato       |
-        | Content type   | text/css      |
-        | Handler        | markdown      |
-      Then I should see the tags "potato, salad"
+      And field "Title" should be "Potato"
+      And field "Layout" should be "new-layout"
+      And the "Liquid enabled" checkbox should be checked
+      And field "Path" should be "/potato"
+      And field "Content type" should be "text/css"
+      And field "Handler" should be "Markdown"
+      Then field "Tag list" should be "potato, salad"
 
        And I press "Publish"
       Then I should see "Template saved and published"
@@ -49,7 +48,7 @@ Feature: CMS Pages
 
      When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to the CMS Page "/potato" page
-      And I follow "Hide" from the CMS "Publish" dropdown
+      And unpublish the template
      Then I should see "Template has been hidden"
 
      When I hit "/potato" on foo.3scale.localhost
@@ -59,8 +58,8 @@ Feature: CMS Pages
     Given provider "foo.3scale.localhost" has all the templates setup
 
     When I go to the CMS page
-     And I choose builtin page "dashboards/show" in the CMS sidebar
-     And I fill in the draft with:
+     And select "dashboards/show" from the CMS sidebar
+     And fill in the draft with:
       """
         awesomeness builtin
       """
@@ -71,7 +70,7 @@ Feature: CMS Pages
      And I press "Publish"
     Then I should see "Template saved and published"
 
-     And I follow "Hide" from the CMS "Publish" dropdown
+     And unpublish the template
     Then I should see "Template has been hidden"
 
   @allow-rescue
@@ -84,7 +83,7 @@ Feature: CMS Pages
     And I fill in "Path" with "/hattori"
     And I press "Publish"
     And I should see "Template saved and published"
-    Then preview draft link should link to "/hattori"
+    And the button Preview should link to "/hattori"
 
   Scenario: Update page after unsuccessful validation
     Given the provider has cms page "/some-path" with:

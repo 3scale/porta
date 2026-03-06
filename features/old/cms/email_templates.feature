@@ -14,7 +14,10 @@ Feature: Email templates management
     And I follow "Buyer Account approved"
     Then I should see default content of email template "account_approved"
 
-    When I fill in the draft with "new content for account approved"
+    When they fill in the draft with:
+      """
+      new content for account approved
+      """
     And I fill the form with following:
       | Subject | Bcc | Cc | From |
       | subj3ct | dcc | c! | strange@3scale.localhost |
@@ -27,18 +30,17 @@ Feature: Email templates management
       | subj3ct | some@email.com | "Example" <other@3scale.localhost> | My Company |
     And I press "Create Email Template"
     Then they should see a toast alert with text "Email Template overridden"
-    And the content of the email template "account_approved" should be
-      """
-      new content for account approved
-      """
-    And the headers of email template "account_approved" should be following:
-      | subject | bcc | cc |
-      | subj3ct | some@email.com | "Example" <other@3scale.localhost> |
+    When they follow "Buyer Account approved"
+    And the draft template should contain "new content for account approved"
+    And field "Subject" should be "subj3ct"
+    And field "Bcc" should be "some@email.com"
+    And field "Cc" should be "\"Example\" <other@3scale.localhost>"
 
   Scenario: Updating template
-    When I have following email template of provider "foo.3scale.localhost":
-      | System Name      |
-      | account_approved |
+    Given the provider has email template "account_approved"
+      """
+      {% email %}Foo{% endemail %}
+      """
     When I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
     When I go to the email templates page
@@ -48,9 +50,10 @@ Feature: Email templates management
       | subj3ct | bcc@3scale.localhost | cc@3scale.localhost |
     And I press "Save"
     Then I should see "Template updated"
-    And the headers of email template "account_approved" should be following:
-      | subject | bcc | cc |
-      | subj3ct | bcc@3scale.localhost | cc@3scale.localhost |
+    When they follow "Buyer Account approved"
+    And field "Subject" should be "subj3ct"
+    And field "Bcc" should be "bcc@3scale.localhost"
+    And field "Cc" should be "cc@3scale.localhost"
 
   Scenario: New signup email template
     Given admin of account "foo.3scale.localhost" has email "foo@3scale.localhost"
@@ -61,7 +64,7 @@ Feature: Email templates management
      And I fill the form with following:
       | Bcc          | From |
       | test@bcc.com | "Some Really Long String" <api@example.com> |
-     And I fill in the draft with:
+     And fill in the draft with:
       """
       Email: {{user.email}}
       Org: {{account.name}}
@@ -79,7 +82,7 @@ Feature: Email templates management
       """
 
     When I follow "Sign up notification for buyer"
-     And I fill in the draft with:
+     And fill in the draft with:
       """
       {% email %}
         {% bcc 'bcc@mail.com' %}
