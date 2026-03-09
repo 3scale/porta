@@ -12,4 +12,11 @@ class AccountSetting::BooleanSetting < AccountSetting
   def typed_value
     self.class.cast(value)
   end
+
+  def toggle_value!
+    new_value = !typed_value
+    self.value = self.class.serialize(new_value)
+    save!
+    new_value
+  end
 end

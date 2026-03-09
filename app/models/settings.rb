@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Settings
-  include ActiveModel::API
+  include ActiveModel::Validations
 
   attr_accessor :account
   alias provider account
@@ -188,8 +188,7 @@ class Settings
     @changes = {}
     @previous_changes = {}
     @new_settings = false
-    super()
-    load_from_db if account&.persisted?
+    load_from_account_settings if account&.persisted?
     @changes = {}
   end
 
@@ -241,9 +240,12 @@ class Settings
 
   def toggle!(name)
     name = name.to_sym
-    new_value = !send(name)
-    send("#{name}=", new_value)
-    persist_attribute!(name)
+    klass = SETTING_CLASS_MAP[name].constantize
+    record = klass.find_or_initialize_by(account: account)
+    record.tenant_id = account.tenant_id
+    record.value ||= AccountSetting::BooleanSetting.serialize(BOOLEAN_SETTINGS[name])
+    new_value = record.toggle_value!
+    @attributes[name] = new_value
     new_value
   end
 
@@ -285,7 +287,8 @@ class Settings
     @not_custom_account_plans = nil
     if account&.persisted?
       account.association(:default_account_plan).reset
-      load_from_db(force_reload: true)
+      account.account_settings.reload if account.association(:account_settings).loaded?
+      load_from_account_settings
     end
     @changes = {}
     self
@@ -380,8 +383,8 @@ class Settings
     attrs.to_h.symbolize_keys
   end
 
-  def load_from_db(force_reload: false)
-    records = force_reload ? account.account_settings.reload : account.account_settings.to_a
+  def load_from_account_settings
+    records = account.account_settings
     if records.empty?
       @new_settings = true
       return
