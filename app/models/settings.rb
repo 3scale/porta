@@ -114,9 +114,10 @@ class Settings
   # --- Define accessor methods for non-switch settings ---
 
   BOOLEAN_SETTINGS.each_key do |name|
-    define_method(name) { @attributes[name] }
-    define_method("#{name}?") { !!@attributes[name] }
+    define_method(name) { ensure_loaded; @attributes[name] }
+    define_method("#{name}?") { ensure_loaded; !!@attributes[name] }
     define_method("#{name}=") do |value|
+      ensure_loaded
       casted = ActiveModel::Type::Boolean.new.cast(value)
       track_change(name, @attributes[name], casted)
       @attributes[name] = casted
@@ -124,8 +125,9 @@ class Settings
   end
 
   STRING_SETTINGS.each_key do |name|
-    define_method(name) { @attributes[name] }
+    define_method(name) { ensure_loaded; @attributes[name] }
     define_method("#{name}=") do |value|
+      ensure_loaded
       casted = value.nil? ? nil : value.to_s
       track_change(name, @attributes[name], casted)
       @attributes[name] = casted
@@ -133,8 +135,9 @@ class Settings
   end
 
   TEXT_SETTINGS.each_key do |name|
-    define_method(name) { @attributes[name] }
+    define_method(name) { ensure_loaded; @attributes[name] }
     define_method("#{name}=") do |value|
+      ensure_loaded
       casted = value.nil? ? nil : value.to_s
       track_change(name, @attributes[name], casted)
       @attributes[name] = casted
@@ -145,9 +148,11 @@ class Settings
 
   SWITCH_SETTINGS.each_key do |attr_name|
     define_method(attr_name) do
+      ensure_loaded
       @attributes[attr_name]
     end
     define_method("#{attr_name}=") do |value|
+      ensure_loaded
       new_val = value.to_s
       track_change(attr_name, @attributes[attr_name], new_val)
       @attributes[attr_name] = new_val
@@ -184,11 +189,10 @@ class Settings
 
   def initialize(account = nil)
     @account = account
-    @attributes = self.class.defaults.dup
     @changes = {}
     @previous_changes = {}
     @new_settings = false
-    load_from_account_settings if account&.persisted?
+    ensure_loaded
     @changes = {}
   end
 
@@ -264,6 +268,7 @@ class Settings
   # Read a setting value directly from the attributes hash,
   # bypassing any method overrides (e.g. switch methods).
   def read_setting(name)
+    ensure_loaded
     name = name.to_sym
     @attributes[name] if ALL_SETTINGS.key?(name)
   end
@@ -280,23 +285,24 @@ class Settings
     account&.account_settings&.maximum(:updated_at)
   end
 
-  def reload
-    @attributes = self.class.defaults.dup
+  def reset
+    @attributes = nil
     @changes = {}
     @previous_changes = {}
     @not_custom_account_plans = nil
-    if account&.persisted?
-      account.association(:default_account_plan).reset
-      account.account_settings.reload if account.association(:account_settings).loaded?
-      load_from_account_settings
-    end
-    @changes = {}
+    self
+  end
+
+  def reload
+    reset
+    account.account_settings.reload if account&.persisted? && account.association(:account_settings).loaded?
+    ensure_loaded
     self
   end
 
   def initialize_copy(source)
     super
-    @attributes = source.instance_variable_get(:@attributes).dup
+    @attributes = source.instance_variable_get(:@attributes)&.dup
     @changes = source.instance_variable_get(:@changes).dup
     @previous_changes = source.instance_variable_get(:@previous_changes).dup
   end
@@ -381,6 +387,13 @@ class Settings
 
   def normalize_attrs(attrs)
     attrs.to_h.symbolize_keys
+  end
+
+  def ensure_loaded
+    return if @attributes
+
+    @attributes = self.class.defaults.dup
+    load_from_account_settings if account&.persisted?
   end
 
   def load_from_account_settings

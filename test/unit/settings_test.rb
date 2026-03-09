@@ -96,9 +96,10 @@ class SettingsTest < ActiveSupport::TestCase
     plan.hide!
 
     plan.update_attribute(:approval_required, true)
-    assert @settings.reload.account_approval_required
+    @provider.reload
+    assert @provider.settings.account_approval_required
 
-    @settings.update(account_approval_required: false)
+    @provider.settings.update(account_approval_required: false)
     refute @provider.account_plans.first.approval_required
   end
 
