@@ -33,7 +33,6 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
       redirect_to strategy.redirect_to_on_successful_login
     else
       user_data = strategy.user_data || {}
-      # TODO: verify that this is the right thing to do
       user_attributes = user_data.to_hash.compact.slice(:username, :email)
       @user.assign_attributes(user_attributes)
       session[:invitation_sso_uid] = user_data[:uid]

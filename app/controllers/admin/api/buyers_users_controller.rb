@@ -131,8 +131,6 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   def user_params
     @user_params ||= begin
                        allowed_attrs = user.defined_fields_names | %i(password password_confirmation)
-                       # TODO: are these parameters needed?
-                       # allowed_attrs |= %i(conditions cas_identifier open_id service_conditions)
                        flat_params.permit(*allowed_attrs)
                      end
   end

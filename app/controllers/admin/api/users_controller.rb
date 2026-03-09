@@ -141,8 +141,6 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     @user_params ||= begin
                        allowed_attrs = user.defined_fields_names | %i(password password_confirmation cas_identifier)
                        allowed_attrs |= [member_permission_service_ids: [], member_permission_ids: [], allowed_sections: [], allowed_service_ids: []] if (provider_key.present? || current_user.admin?)
-                       # TODO: are these parameters needed?
-                       # allowed_attrs |= %i(conditions open_id service_conditions)
                        flat_params.permit(*allowed_attrs)
                      end
   end
