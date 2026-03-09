@@ -271,9 +271,11 @@ class AccountTest < ActiveSupport::TestCase
       @account = Account.create!(org_name: 'Organization')
     end
 
-    assert_difference 'AccountSetting.count' do
+    assert_no_difference 'AccountSetting.count' do
       @account.settings
     end
+
+    assert_instance_of Settings, @account.settings
   end
 
   test 'settings be build lazily for new account' do

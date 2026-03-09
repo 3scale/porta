@@ -152,7 +152,7 @@ class Settings
       record&.value || 'denied'
     end
     define_method("#{attr_name}=") do |value|
-      find_or_build_setting(attr_name).value = value.to_s
+      find_or_build_setting(attr_name).transition_to(value)
     end
   end
 
@@ -181,14 +181,6 @@ class Settings
 
   def initialize(account = nil)
     @account = account
-  end
-
-  def self.for_account(account)
-    settings = new(account)
-    if account.persisted? && account.account_settings.empty?
-      settings.send(:run_initialization_callbacks)
-    end
-    settings
   end
 
   def self.defaults
@@ -267,15 +259,6 @@ class Settings
     ALL_SETTINGS.keys.map(&:to_s)
   end
 
-  def self.type_for_attribute(name)
-    name = name.to_sym
-    if BOOLEAN_SETTINGS.key?(name)
-      ActiveModel::Type::Boolean.new
-    else
-      ActiveModel::Type::String.new
-    end
-  end
-
   def self.non_null_columns_names
     NON_NULL_SETTINGS
   end
@@ -318,15 +301,6 @@ class Settings
     @account_approval_required = value
   end
 
-  def generate_sso_key
-    self.sso_key = ThreeScale::SSO.generate_sso_key if account && account.provider?
-  end
-
-  def set_forum_enabled
-    self.forum_public = false if account
-    true
-  end
-
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   private
@@ -360,30 +334,11 @@ class Settings
     attrs.to_h.symbolize_keys
   end
 
-  def setting_name_from_type(type_name)
-    return nil unless type_name&.start_with?("AccountSetting::")
-    type_name.sub("AccountSetting::", "").underscore.to_sym
-  end
-
-  def deserialize_value(name, raw_value)
-    if BOOLEAN_SETTINGS.key?(name)
-      ActiveModel::Type::Boolean.new.cast(raw_value)
-    else
-      raw_value
-    end
-  end
-
   def save_dirty_records!
     return unless account&.persisted?
     account.account_settings.each do |record|
       record.save! if record.changed? || record.new_record?
     end
-  end
-
-  def run_initialization_callbacks
-    generate_sso_key
-    set_forum_enabled
-    save
   end
 
   def not_custom_account_plans

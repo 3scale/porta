@@ -31,6 +31,21 @@ class AccountSetting::SwitchSetting < AccountSetting
     end
   end
 
+  def transition_to(target)
+    target = target.to_s
+    return if value == target
+
+    case target
+    when 'denied'
+      deny!
+    when 'hidden'
+      value == 'denied' ? allow! : hide!
+    when 'visible'
+      allow! if value == 'denied'
+      show!
+    end
+  end
+
   def self.cast(value)
     value&.to_s
   end

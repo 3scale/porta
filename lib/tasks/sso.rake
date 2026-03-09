@@ -33,8 +33,7 @@ namespace :sso do
   task :generate_sso_key, [:account_id] => :environment do | t, args |
     settings= Account.providers_with_master.find(args[:account_id]).settings
     puts "** overwriting sso_key: `#{settings.sso_key}' for provider: #{args[:account_id]}."
-    settings.generate_sso_key
-    settings.save!
+    settings.update_attribute(:sso_key, ThreeScale::SSO.generate_sso_key)
     puts "** generated a new sso_key: `#{settings.sso_key}' for provider #{args[:account_id]}."
   end
 end

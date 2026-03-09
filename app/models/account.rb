@@ -8,6 +8,7 @@ class Account < ApplicationRecord
 
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
+  after_create :generate_sso_key, if: :provider?
 
 
   include Fields::Fields
@@ -230,7 +231,7 @@ class Account < ApplicationRecord
   before_save :autosave_settings
 
   def settings
-    @settings_facade ||= Settings.for_account(self)
+    @settings_facade ||= Settings.new(self)
   end
   accepts_nested_attributes_for :profile
 
@@ -580,6 +581,10 @@ class Account < ApplicationRecord
   def autosave_settings
     return unless @settings_facade
     @settings_facade.save if @settings_facade.dirty?
+  end
+
+  def generate_sso_key
+    settings.update_attribute(:sso_key, ThreeScale::SSO.generate_sso_key)
   end
 
   protected
