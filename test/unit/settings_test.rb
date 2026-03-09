@@ -188,16 +188,13 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.reload.public_search
 
     settings.update(public_search: "")
-    assert_not settings.previous_changes[:public_search]
-    assert settings.reload.public_search
+    assert settings.reload.public_search, "empty string should not change non-null setting"
 
     settings.update(public_search: nil)
-    assert_not settings.previous_changes[:public_search]
-    assert settings.reload.public_search
+    assert settings.reload.public_search, "nil should not change non-null setting"
 
     settings.update(public_search: "false")
-    assert settings.previous_changes[:public_search]
-    assert_not settings.reload.public_search
+    assert_not settings.reload.public_search, "explicit 'false' should change the setting"
   end
 
   test "validate change plan permission values" do

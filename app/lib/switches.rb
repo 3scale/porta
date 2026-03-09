@@ -22,9 +22,8 @@ module Switches
     end
 
     def status
-      # it has to be read_attribute - calling the method would cause
-      # return a Switch object
-      ActiveSupport::StringInquirer.new(@status || update_status)
+      record = @settings.send(:setting_record_for, :"#{@name}_switch")
+      ActiveSupport::StringInquirer.new(record&.value || 'denied')
     end
 
     def hideable?
@@ -36,47 +35,31 @@ module Switches
     end
 
     def hide!
-      if visible?
-        @settings.send("hide_#{@name}!")
-      end
-    ensure
-      update_status
+      record = @settings.send(:find_or_build_switch, @name)
+      record.hide! if visible?
     end
 
     def show!
-      if hidden?
-        @settings.send("show_#{@name}!")
-      end
-    ensure
-      update_status
+      record = @settings.send(:find_or_build_switch, @name)
+      record.show! if hidden?
     end
 
     def allow
-      @settings.send("allow_#{@name}")
-    ensure
-      update_status
+      record = @settings.send(:find_or_build_switch, @name)
+      record.allow && record.save!
     end
 
     def deny
-      @settings.send("deny_#{@name}")
-    ensure
-      update_status
+      record = @settings.send(:find_or_build_switch, @name)
+      record.deny && record.save!
     end
 
     def reload
-      @settings = @settings.clone.reload
-      update_status
       self
     end
 
     def globally_denied?
       false
-    end
-
-    private
-
-    def update_status
-      @status = @settings.read_setting("#{@name}_switch").to_s
     end
   end
 
@@ -147,7 +130,7 @@ module Switches
     end
 
     def reload
-      @settings = settings.clone.reload
+      settings.reload
       assign_switches(*keys)
       self
     end
@@ -159,62 +142,9 @@ module Switches
     end
   end
 
-  MULTISERVICES_MAX_SERVICES = 3
-
   included do
     SWITCHES.each do |name|
-      attr_name = "#{name}_switch"
-
-      # Switches State Machine
-      #
-      #
-      #    +--------------+	                         +--------------+
-      #    |              +                          |              |
-      #    | Visible      |                          |   DENIED     |
-      #    |              |       deny               |              |
-      #    |              o------------------------->+              |
-      #    +---+-----+----+			                     +-----+--------+
-      # 	   |	 |				                               ^  |
-      # 	   |	 | hide/show		                         |  |
-      # 	   |	 |			                                 |  |
-      # 	+--+-----+----+	         deny          	       |  |
-      # 	|             |-------------------------------    |
-      # 	|  Hidden     |          allow                    |
-      # 	|             |<-----------------------------------
-      # 	|             |
-      # 	+-------------+
-      #
-      state_machine attr_name, initial: :denied, namespace: name do
-        before_transition do |settings|
-          unless settings.account.provider?
-            raise Account::ProviderOnlyMethodCalledError, "cannot change state of #{name} of #{settings.inspect}"
-          end
-        end
-
-        after_transition do |settings|
-          settings.persist_switch_setting!(name)
-        end
-
-        state :denied, :hidden, :visible
-
-        event :hide do
-          transition visible: :hidden
-        end
-
-        event :show do
-          transition hidden: :visible
-        end
-
-        event :deny do
-          transition [:hidden, :visible] => :denied
-        end
-
-        event :allow do
-          transition denied: :hidden
-        end
-      end
-
-      # Overrides the model's attribute reader
+      # Switch object getter (e.g., settings.finance returns Switch object)
       define_method(name) do
         if globally_denied_switches.include?(name.to_sym)
           SwitchDenied.new(self, name)
@@ -222,37 +152,13 @@ module Switches
           Switch.new(self, name)
         end
       end
-    end
 
-    finance_state_machine = state_machines['finance_switch']
-
-    finance_state_machine.after_transition to: :denied, from: %i[hidden visible] do |settings|
-      settings.account.billing_strategy.destroy if settings.account.billing_strategy
-    end
-
-    finance_state_machine.after_transition to: %i[visible hidden], from: [:denied] do |settings|
-      unless settings.account.billing_strategy
-        account = settings.account
-        account.billing_strategy = Finance::PostpaidBillingStrategy.create(account: account, currency: 'USD')
-        account.save!
+      # State transition delegations (e.g., settings.allow_finance!)
+      %w[allow show hide deny].each do |event|
+        define_method("#{event}_#{name}!") do
+          find_or_build_switch(name).send("#{event}!")
+        end
       end
-    end
-
-    state_machines['multiple_applications_switch'].after_transition to: %i[visible hidden], from: [:denied] do |settings|
-      SimpleLayout.new(settings.account).create_multiapp_builtin_pages!
-    end
-
-    state_machines['multiple_services_switch'].after_transition to: %i[visible hidden], from: [:denied] do |settings|
-      SimpleLayout.new(settings.account).create_multiservice_builtin_pages!
-
-      settings.account.update_provider_constraints_to(
-        { max_services: MULTISERVICES_MAX_SERVICES },
-        'Upgrading max_services because of switch is enabled.'
-      )
-    end
-
-    state_machines['service_plans_switch'].after_transition to: %i[visible hidden], from: [:denied] do |settings|
-      SimpleLayout.new(settings.account).create_service_plans_builtin_pages!
     end
   end
 
@@ -283,7 +189,6 @@ module Switches
   end
 
   def switches
-    # Hash[SWITCHES.map{ |switch_name| [ switch_name, send(switch_name) ] }]
     Collection.new(self)
   end
 

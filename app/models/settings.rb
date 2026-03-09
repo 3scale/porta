@@ -100,7 +100,7 @@ class Settings
     hash[name] = "AccountSetting::#{name.to_s.camelize}"
   end.freeze
 
-  # --- Validations (same as original) ---
+  # --- Validations ---
 
   validates :product, inclusion: { in: %w[connect enterprise].freeze }
   validates :change_account_plan_permission, :change_service_plan_permission,
@@ -111,77 +111,69 @@ class Settings
             :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cas_server_url, :sso_key,
             :admin_bot_protection_level, :sso_login_url, length: { maximum: 255 }
 
-  # --- Define accessor methods for non-switch settings ---
+  # --- Define accessor methods that delegate to AccountSetting records ---
 
   BOOLEAN_SETTINGS.each_key do |name|
-    define_method(name) { ensure_loaded; @attributes[name] }
-    define_method("#{name}?") { ensure_loaded; !!@attributes[name] }
+    define_method(name) do
+      record = setting_record_for(name)
+      record ? record.typed_value : BOOLEAN_SETTINGS[name]
+    end
+    define_method("#{name}?") { !!send(name) }
     define_method("#{name}=") do |value|
-      ensure_loaded
       casted = ActiveModel::Type::Boolean.new.cast(value)
-      track_change(name, @attributes[name], casted)
-      @attributes[name] = casted
+      find_or_build_setting(name).value = AccountSetting::BooleanSetting.serialize(casted)
     end
   end
 
   STRING_SETTINGS.each_key do |name|
-    define_method(name) { ensure_loaded; @attributes[name] }
+    define_method(name) do
+      record = setting_record_for(name)
+      record ? record.typed_value : STRING_SETTINGS[name]
+    end
     define_method("#{name}=") do |value|
-      ensure_loaded
-      casted = value.nil? ? nil : value.to_s
-      track_change(name, @attributes[name], casted)
-      @attributes[name] = casted
+      find_or_build_setting(name).value = value.nil? ? nil : value.to_s
     end
   end
 
   TEXT_SETTINGS.each_key do |name|
-    define_method(name) { ensure_loaded; @attributes[name] }
+    define_method(name) do
+      record = setting_record_for(name)
+      record ? record.typed_value : TEXT_SETTINGS[name]
+    end
     define_method("#{name}=") do |value|
-      ensure_loaded
-      casted = value.nil? ? nil : value.to_s
-      track_change(name, @attributes[name], casted)
-      @attributes[name] = casted
+      find_or_build_setting(name).value = value.nil? ? nil : value.to_s
     end
   end
 
-  # --- Define accessor methods for switch settings (needed before include Switches) ---
-
+  # Switch value getters/setters (e.g., finance_switch returns 'denied')
   SWITCH_SETTINGS.each_key do |attr_name|
     define_method(attr_name) do
-      ensure_loaded
-      @attributes[attr_name]
+      record = setting_record_for(attr_name)
+      record&.value || 'denied'
     end
     define_method("#{attr_name}=") do |value|
-      ensure_loaded
-      new_val = value.to_s
-      track_change(attr_name, @attributes[attr_name], new_val)
-      @attributes[attr_name] = new_val
+      find_or_build_setting(attr_name).value = value.to_s
     end
   end
-
-  # --- Include Switches (state machines) ---
 
   include Switches
 
   # --- Override special attribute accessors ---
 
-  # authentication_strategy returns a StringInquirer
   def authentication_strategy
-    val = @attributes[:authentication_strategy]
+    val = setting_value(:authentication_strategy, STRING_SETTINGS)
     val ? ActiveSupport::StringInquirer.new(val) : val
   end
 
-  # spam_protection_level returns a symbol; :auto → :captcha
   def spam_protection_level
-    val = @attributes[:spam_protection_level]
+    val = setting_value(:spam_protection_level, STRING_SETTINGS)
     return :none if val.blank?
     level = val.to_sym
     level == :auto ? :captcha : level
   end
 
-  # admin_bot_protection_level returns a symbol; default :none
   def admin_bot_protection_level
-    val = @attributes[:admin_bot_protection_level]
+    val = setting_value(:admin_bot_protection_level, STRING_SETTINGS)
     val.present? ? val.to_sym : :none
   end
 
@@ -189,16 +181,11 @@ class Settings
 
   def initialize(account = nil)
     @account = account
-    @changes = {}
-    @previous_changes = {}
-    @new_settings = false
-    ensure_loaded
-    @changes = {}
   end
 
   def self.for_account(account)
     settings = new(account)
-    if account.persisted? && settings.instance_variable_get(:@new_settings)
+    if account.persisted? && account.account_settings.empty?
       settings.send(:run_initialization_callbacks)
     end
     settings
@@ -212,9 +199,7 @@ class Settings
 
   def save
     return false unless valid?
-    @previous_changes = @changes.dup
-    persist_changes!
-    @changes = {}
+    save_dirty_records!
     true
   end
 
@@ -238,19 +223,16 @@ class Settings
 
   def update_attribute(name, value)
     send("#{name}=", value)
-    persist_attribute!(name.to_sym)
+    record = setting_record_for(name.to_sym)
+    record.save! if record
     true
   end
 
   def toggle!(name)
     name = name.to_sym
-    klass = SETTING_CLASS_MAP[name].constantize
-    record = klass.find_or_initialize_by(account: account)
-    record.tenant_id = account.tenant_id
+    record = find_or_build_setting(name)
     record.value ||= AccountSetting::BooleanSetting.serialize(BOOLEAN_SETTINGS[name])
-    new_value = record.toggle_value!
-    @attributes[name] = new_value
-    new_value
+    record.toggle_value!
   end
 
   def assign_attributes(attrs)
@@ -260,25 +242,8 @@ class Settings
   end
   alias attributes= assign_attributes
 
-  def persist_switch_setting!(switch_name)
-    attr_name = :"#{switch_name}_switch"
-    persist_attribute!(attr_name)
-  end
-
-  # Read a setting value directly from the attributes hash,
-  # bypassing any method overrides (e.g. switch methods).
-  def read_setting(name)
-    ensure_loaded
-    name = name.to_sym
-    @attributes[name] if ALL_SETTINGS.key?(name)
-  end
-
-  def changes
-    @changes.dup
-  end
-
-  def previous_changes
-    @previous_changes.dup
+  def dirty?
+    account&.account_settings&.any? { |r| r.changed? || r.new_record? }
   end
 
   def updated_at
@@ -286,25 +251,14 @@ class Settings
   end
 
   def reset
-    @attributes = nil
-    @changes = {}
-    @previous_changes = {}
     @not_custom_account_plans = nil
     self
   end
 
   def reload
     reset
-    account.account_settings.reload if account&.persisted? && account.association(:account_settings).loaded?
-    ensure_loaded
+    account.account_settings.reload if account&.persisted?
     self
-  end
-
-  def initialize_copy(source)
-    super
-    @attributes = source.instance_variable_get(:@attributes)&.dup
-    @changes = source.instance_variable_get(:@changes).dup
-    @previous_changes = source.instance_variable_get(:@previous_changes).dup
   end
 
   # --- Class methods ---
@@ -370,7 +324,6 @@ class Settings
 
   def set_forum_enabled
     self.forum_public = false if account
-
     true
   end
 
@@ -378,46 +331,36 @@ class Settings
 
   private
 
-  def track_change(name, old_value, new_value)
-    return unless @changes
-    if old_value != new_value
-      @changes[name] = [old_value, new_value]
+  def setting_value(name, defaults)
+    record = setting_record_for(name)
+    record ? record.typed_value : defaults[name]
+  end
+
+  def setting_record_for(name)
+    type = SETTING_CLASS_MAP[name.to_sym]
+    return nil unless type && account
+    account.account_settings.find { |r| r.type == type && !r.marked_for_destruction? }
+  end
+
+  def find_or_build_setting(name)
+    setting_record_for(name) || begin
+      type = SETTING_CLASS_MAP[name.to_sym]
+      klass = type.constantize
+      klass.new(account: account, tenant_id: account.tenant_id).tap do |record|
+        account.association(:account_settings).add_to_target(record)
+      end
     end
+  end
+
+  def find_or_build_switch(name)
+    find_or_build_setting(:"#{name}_switch")
   end
 
   def normalize_attrs(attrs)
     attrs.to_h.symbolize_keys
   end
 
-  def ensure_loaded
-    return if @attributes
-
-    @attributes = self.class.defaults.dup
-    load_from_account_settings if account&.persisted?
-  end
-
-  def load_from_account_settings
-    records = account.account_settings
-    if records.empty?
-      @new_settings = true
-      return
-    end
-    records.each do |record|
-      name = setting_name_from_type(record.type)
-      next unless name && ALL_SETTINGS.key?(name)
-      @attributes[name] = deserialize_value(name, record.value)
-    end
-  end
-
-  def run_initialization_callbacks
-    generate_sso_key
-    set_forum_enabled
-    save
-    @new_settings = false
-  end
-
   def setting_name_from_type(type_name)
-    # "AccountSetting::ForumEnabled" → :forum_enabled
     return nil unless type_name&.start_with?("AccountSetting::")
     type_name.sub("AccountSetting::", "").underscore.to_sym
   end
@@ -430,34 +373,17 @@ class Settings
     end
   end
 
-  def serialize_value(name, value)
-    if BOOLEAN_SETTINGS.key?(name)
-      value ? "1" : "0"
-    else
-      value.to_s
-    end
-  end
-
-  def persist_changes!
-    @changes.each_key do |name|
-      persist_attribute!(name)
-    end
-  end
-
-  def persist_attribute!(name)
+  def save_dirty_records!
     return unless account&.persisted?
-    value = @attributes[name]
-    setting_type = SETTING_CLASS_MAP[name]
-    return unless setting_type
-
-    if value.nil?
-      account.account_settings.where(type: setting_type).delete_all
-    else
-      record = account.account_settings.find_or_initialize_by(type: setting_type)
-      record.value = serialize_value(name, value)
-      record.tenant_id = account.tenant_id
-      record.save!
+    account.account_settings.each do |record|
+      record.save! if record.changed? || record.new_record?
     end
+  end
+
+  def run_initialization_callbacks
+    generate_sso_key
+    set_forum_enabled
+    save
   end
 
   def not_custom_account_plans

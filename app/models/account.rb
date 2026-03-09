@@ -579,8 +579,7 @@ class Account < ApplicationRecord
 
   def autosave_settings
     return unless @settings_facade
-    return if @settings_facade.changes.empty?
-    @settings_facade.save
+    @settings_facade.save if @settings_facade.dirty?
   end
 
   protected
