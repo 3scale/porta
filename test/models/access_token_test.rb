@@ -110,7 +110,7 @@ class AccessTokenTest < ActiveSupport::TestCase
     found = AccessToken.find_from_value(@token.plaintext_value)
 
     assert_equal @token.id, found&.id
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, @token.reload.read_attribute(:value).length
+    assert @token.reload.read_attribute(:value).start_with?(AccessToken::DIGEST_PREFIX)
   end
 
   def test_find_from_value_finds_legacy_token
@@ -120,26 +120,18 @@ class AccessTokenTest < ActiveSupport::TestCase
     found = AccessToken.find_from_value(legacy_value)
 
     assert_equal @token.id, found&.id
-  end
-
-  def test_find_from_value_migrates_legacy_token_to_hash
-    legacy_value = 'legacy_plaintext_token_value_64chars'
-    @token.update_columns(value: legacy_value)
-
-    AccessToken.find_from_value(legacy_value)
-
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, @token.reload.read_attribute(:value).length
-    assert_equal AccessToken.compute_digest(legacy_value), @token.read_attribute(:value)
+    # No migration: DB value remains unchanged
+    assert_equal legacy_value, @token.reload.read_attribute(:value)
   end
 
   def test_find_from_value_rejects_leaked_hash_as_token
-    leaked_hash = @token.reload.read_attribute(:value)
+    stored_hash = @token.reload.read_attribute(:value)
 
-    # Verify the hash is 96 chars (our security boundary)
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, leaked_hash.length
+    # Verify the DB value has our prefix
+    assert stored_hash.start_with?(AccessToken::DIGEST_PREFIX)
 
     # An attacker with access to the DB hash should NOT be able to authenticate
-    found = AccessToken.find_from_value(leaked_hash)
+    found = AccessToken.find_from_value(stored_hash)
 
     assert_nil found, "Security vulnerability: leaked hash was accepted as a valid token"
   end
