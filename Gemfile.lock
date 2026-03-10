@@ -419,9 +419,6 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hana (1.3.7)
-    has_scope (0.8.2)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
     hashdiff (1.1.1)
     hashery (2.1.2)
     hashie (3.6.0)
@@ -443,11 +440,6 @@ GEM
       ffi-compiler (>= 1.0, < 2.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    inherited_resources (1.14.0)
-      actionpack (>= 6.0)
-      has_scope (>= 0.6)
-      railties (>= 6.0)
-      responders (>= 2)
     injectedlogger (0.0.13)
     innertube (1.1.0)
     io-console (0.5.11)
@@ -768,9 +760,9 @@ GEM
       uber (< 0.2.0)
     request_store (1.7.0)
       rack (>= 1.4)
-    responders (3.1.1)
-      actionpack (>= 5.2)
-      railties (>= 5.2)
+    responders (3.2.0)
+      actionpack (>= 7.0)
+      railties (>= 7.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -1076,7 +1068,6 @@ DEPENDENCIES
   htmlentities (~> 4.3, >= 4.3.4)
   httpclient!
   i18n
-  inherited_resources (~> 1.14.0)
   jquery-rails (= 4.6)
   json (~> 2.7, >= 2.7.1)
   json_schemer
@@ -1135,6 +1126,7 @@ DEPENDENCIES
   reek
   reform (~> 2.3.0)
   reform-rails (~> 0.2.2)
+  responders (~> 3.2)
   rest-client (~> 2.0.2)
   roar-rails
   rspec-html-matchers!
