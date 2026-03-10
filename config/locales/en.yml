@@ -569,6 +569,7 @@ en:
             unlimited_access: Unlimited access
           destroy:
             success: User was successfully deleted
+            error: User could not be deleted
           form:
             submit_button_label: Update User
           update:
@@ -885,6 +886,7 @@ en:
             success: Access token was successfully created
           destroy:
             success: Access token was successfully deleted
+            error: Access token could not be deleted
           edit:
             page_header_title: Edit Access Token
             submit_button_label: Update Access Token
