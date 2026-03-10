@@ -225,10 +225,8 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_many :account_settings, class_name: 'AccountSetting', dependent: :delete_all
+  has_many :account_settings, class_name: 'AccountSetting', dependent: :delete_all, inverse_of: :account, autosave: true
   lazy_initialization_for :profile, if: :should_not_be_deleted?
-
-  before_save :autosave_settings
 
   def settings
     @settings_facade ||= Settings.new(self)
@@ -576,11 +574,6 @@ class Account < ApplicationRecord
     scope = persisted? ? scope.where.not(id: id) : scope
 
     errors.add :master, 'can be only one' if scope.exists?(master: true)
-  end
-
-  def autosave_settings
-    return unless @settings_facade
-    @settings_facade.save if @settings_facade.dirty?
   end
 
   def generate_sso_key

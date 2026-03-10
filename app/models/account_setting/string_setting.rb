@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AccountSetting::StringSetting < AccountSetting
+  validates :value, length: { maximum: 255 }
+
   def self.cast(value)
     value&.to_s
   end

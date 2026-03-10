@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Settings
-  include ActiveModel::Validations
-
   attr_accessor :account
   alias provider account
 
@@ -100,17 +98,6 @@ class Settings
     hash[name] = "AccountSetting::#{name.to_s.camelize}"
   end.freeze
 
-  # --- Validations ---
-
-  validates :product, inclusion: { in: %w[connect enterprise].freeze }
-  validates :change_account_plan_permission, :change_service_plan_permission,
-            inclusion: { in: %w[request none credit_card request_credit_card direct].freeze }
-  validates :bg_colour, :link_colour, :text_colour, :menu_bg_colour, :link_label, :link_url, :menu_link_colour, :token_api,
-            :content_bg_colour, :tracker_code, :favicon, :plans_tab_bg_colour, :plans_bg_colour, :content_border_colour,
-            :cc_privacy_path, :cc_terms_path, :cc_refunds_path, :change_service_plan_permission, :spam_protection_level,
-            :authentication_strategy, :janrain_api_key, :janrain_relying_party, :cas_server_url, :sso_key,
-            :admin_bot_protection_level, :sso_login_url, length: { maximum: 255 }
-
   # --- Define accessor methods that delegate to AccountSetting records ---
 
   BOOLEAN_SETTINGS.each_key do |name|
@@ -131,7 +118,11 @@ class Settings
       record ? record.typed_value : STRING_SETTINGS[name]
     end
     define_method("#{name}=") do |value|
-      find_or_build_setting(name).value = value.nil? ? nil : value.to_s
+      if value.nil?
+        clear_setting(name)
+      else
+        find_or_build_setting(name).value = value.to_s
+      end
     end
   end
 
@@ -141,7 +132,11 @@ class Settings
       record ? record.typed_value : TEXT_SETTINGS[name]
     end
     define_method("#{name}=") do |value|
-      find_or_build_setting(name).value = value.nil? ? nil : value.to_s
+      if value.nil?
+        clear_setting(name)
+      else
+        find_or_build_setting(name).value = value.to_s
+      end
     end
   end
 
@@ -190,13 +185,23 @@ class Settings
   # --- Persistence ---
 
   def save
-    return false unless valid?
-    save_dirty_records!
+    save!
     true
+  rescue ActiveRecord::RecordInvalid
+    false
   end
 
   def save!
-    save || raise(ActiveModel::ValidationError.new(self))
+    return unless account&.persisted?
+    AccountSetting.transaction do
+      account.account_settings.each do |record|
+        if record.marked_for_destruction?
+          record.destroy!
+        elsif record.changed? || record.new_record?
+          record.save!
+        end
+      end
+    end
   end
 
   def update(attrs)
@@ -235,7 +240,7 @@ class Settings
   alias attributes= assign_attributes
 
   def dirty?
-    account&.account_settings&.any? { |r| r.changed? || r.new_record? }
+    account&.account_settings&.any? { |r| r.changed? || r.new_record? || r.marked_for_destruction? }
   end
 
   def updated_at
@@ -334,10 +339,13 @@ class Settings
     attrs.to_h.symbolize_keys
   end
 
-  def save_dirty_records!
-    return unless account&.persisted?
-    account.account_settings.each do |record|
-      record.save! if record.changed? || record.new_record?
+  def clear_setting(name)
+    record = setting_record_for(name)
+    return unless record
+    if record.new_record?
+      account.account_settings.delete(record)
+    else
+      record.mark_for_destruction
     end
   end
 
