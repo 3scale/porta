@@ -71,9 +71,8 @@ gem 'bugsnag', '~> 6.26'
 gem 'cancancan', '~> 3.6.0'
 gem 'formtastic', '~> 5.0'
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
-# TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
-gem 'inherited_resources', '~> 1.14.0'
 gem 'json', '~> 2.7', '>= 2.7.1'
+gem 'responders', '~> 3.0' # For respond_with support
 
 gem 'mysql2', '~> 0.5.3'
 
