@@ -91,18 +91,8 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     get admin_api_accounts_path(format: :xml), params: { access_token: legacy_value }
 
     assert_response :success
-    # Token should be migrated to hashed value
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, token.reload.read_attribute(:value).length
-  end
-
-  test 'authentication with legacy unmigrated token migrates the token' do
-    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
-    legacy_value = 'legacy_plaintext_token_for_integration'
-    token.update_columns(value: legacy_value)
-
-    get admin_api_accounts_path(format: :xml), params: { access_token: legacy_value }
-
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, token.reload.read_attribute(:value).length
+    # No migration: DB value remains unchanged
+    assert_equal legacy_value, token.reload.read_attribute(:value)
   end
 
   test 'authentication with leaked database hash fails' do
@@ -116,8 +106,8 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     # Get the actual hash stored in the database
     leaked_hash = token.reload.read_attribute(:value)
 
-    # Verify we have a 96-char hash
-    assert_equal AccessToken::HASHED_TOKEN_LENGTH, leaked_hash.length
+    # Verify the stored value has our prefix
+    assert leaked_hash.start_with?(AccessToken::DIGEST_PREFIX)
 
     # An attacker trying to use the leaked hash directly should be blocked
     get admin_api_accounts_path(format: :xml), params: { access_token: leaked_hash }
