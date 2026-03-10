@@ -8,6 +8,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   before_action :deny_unless_can_update, :only => [:update, :edit]
   before_action :check_provider_signup_possible, :only => %i[new create]
   before_action :disable_client_cache
+  before_action :init_signup_account_manager, only: %i[create]
 
   def new
     activate_menu :buyers, :accounts, :listing
@@ -17,7 +18,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
   end
 
   def create
-    signup_result = Signup::ProviderAccountManager.new(current_account).create(signup_params)
+    signup_result = @account_manager.create(signup_params)
     @provider = signup_result.account
     @user = signup_result.user
 
@@ -42,7 +43,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
     check_require_billing_information
     respond_to do |format|
       # FIXME: Always false if account does not have billing address. Billing address is set in the next page.
-      if @account.update(account_params)
+      if @account.update(update_account_params)
         format.html { redirect_to_success }
         format.js do
           flash.now[:success] = t('.success')
@@ -58,18 +59,36 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
 
   private
 
+  def init_signup_account_manager
+    @account_manager = Signup::ProviderAccountManager.new(current_account)
+    @account = @account_manager.account
+    @user = @account_manager.user
+  end
+
   def signup_params
-    params_required = params.require(:account)
-    account_params = params_required.except(:user)
-    user_params = params_required.fetch(:user, {}).merge(signup_type: :created_by_provider)
-    Signup::SignupParams.new(plans: [], user_attributes: user_params, account_attributes: account_params, validate_fields: false)
+    Signup::SignupParams.new(plans: [], user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, validate_fields: false)
+  end
+
+  def account_params
+    @account_params ||= begin
+      allowed_attrs = @account.defined_builtin_fields_names - %i(billing_address country) + %i(country_id)
+      params.require(:account).permit(*allowed_attrs, extra_fields: @account.defined_extra_fields_names)
+    end
+  end
+
+  def user_params
+    @user_params ||= begin
+      allowed_attrs = @user.defined_builtin_fields_names | %i(password password_confirmation signup_type)
+      params.require(:account).fetch(:user, ActionController::Parameters.new)
+            .permit(*allowed_attrs, extra_fields: @user.defined_extra_fields_names)
+    end
   end
 
   def check_provider_signup_possible
     redirect_to admin_buyers_accounts_path, info: t('.not_possible') unless current_account.signup_provider_possible?
   end
 
-  def account_params
+  def update_account_params
     allowed_fields = current_account.editable_defined_fields_for(current_user).map do |field|
       field_name = field.name
       field_name == 'country' ? 'country_id' : field_name

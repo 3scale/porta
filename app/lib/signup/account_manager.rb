@@ -4,13 +4,17 @@ module Signup
   class AccountManager
     def initialize(manager_account)
       @manager_account = manager_account
+      @account = manager_account.buyers.new
+      @user = @account.users.new
     end
 
-    attr_reader :manager_account
+    attr_reader :manager_account, :account, :user
 
     def create(signup_params, signup_result_class = ::Signup::Result)
       transaction do
-        signup_result = build_signup_result(signup_params, signup_result_class)
+        assign_attributes_for_account(signup_params)
+        assign_attributes_for_user(signup_params)
+        signup_result = build_signup_result(signup_result_class)
         yield(signup_result) if block_given?
         save_result_with_plans(signup_result, signup_params) if signup_result.valid?
         signup_result
@@ -44,21 +48,22 @@ module Signup
       raise NotImplementedError, 'persist! should be implemented in subclasses'
     end
 
-    def build_signup_result(signup_params, signup_result_class)
-      account = build_account(signup_params)
-      signup_result_class.new(user: build_user(signup_params, account), account: account)
+    def build_signup_result(signup_result_class)
+      signup_result_class.new(user: user, account: account)
     end
 
-    def build_user(signup_params, account)
-      user             = signup_params.build_user_with_attributes_for_account(account)
-      user.role        = :admin
-      user
-    end
-
-    def build_account(signup_params)
-      account = signup_params.build_account_with_attributes_for_provider_account(manager_account)
+    def assign_attributes_for_account(signup_params)
+      account.validate_fields! if signup_params.validate_fields
+      account_attributes = signup_params.attributes[:account]
+      account_attributes.delete('name') if account_attributes['org_name'].present?
+      account.assign_attributes(account_attributes)
       account_builder.call(account)
-      account
+    end
+
+    def assign_attributes_for_user(signup_params)
+      user.validate_fields! if signup_params.validate_fields
+      user.assign_attributes(signup_params.attributes[:user])
+      user.role = :admin
     end
 
     def create_contract_plans_for_account!(account, plans, defaults)
