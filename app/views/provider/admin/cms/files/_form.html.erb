@@ -1,5 +1,5 @@
 <%= f.inputs do %>
-  <%= f.input :section, :as => :section, :default => current_account.sections.root, :paths => true, input_html: {class: 'cms-section-picker'} %>
+  <%= f.input :section, :as => :section, :default => current_account.sections.root %>
   <%= f.input :path, input_html: {class: 'cms-path-autocomplete'}  %>
   <%= f.input :downloadable, :hint => "Checked sets the content-disposition to 'attachment.'" %>
   <%= f.input :attachment, :as => :file %>

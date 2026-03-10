@@ -3,7 +3,7 @@
   <%= f.error_messages %>
   <%= f.input :title, input_html: { required: true }  %>
   <%= f.input :public %>
-  <%= f.input :parent, :as => :section, :include_blank => false , input_html: {class: 'cms-section-picker'}, paths: true %>
+  <%= f.input :parent, :as => :section %>
   <%= f.input :partial_path , input_html: {class: 'cms-path-autocomplete'} %>
 
   <table id="subsection-container">
