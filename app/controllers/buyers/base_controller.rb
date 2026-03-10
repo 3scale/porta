@@ -5,9 +5,6 @@ class Buyers::BaseController < FrontendController
   before_action :ensure_provider_domain
   before_action :authorize_section
 
-  inherit_resources
-  defaults :route_prefix => 'admin_buyers'
-
   activate_menu :buyers
 
   protected

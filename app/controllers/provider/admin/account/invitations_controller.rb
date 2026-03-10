@@ -3,21 +3,37 @@
 class Provider::Admin::Account::InvitationsController < Provider::Admin::Account::BaseController
   before_action :authorize_multiple_users
   before_action :set_resource
+  before_action :load_invitation, only: [:destroy, :resend]
+
+  helper_method :presenter
+  attr_reader :presenter
+
   activate_menu :account, :users, :invitations
 
-  inherit_resources
-  belongs_to :account
-
-  create! do |success, failure|
-    success.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
+  def index
+    @presenter = Provider::Admin::Account::InvitationsIndexPresenter.new(invitations, current_user, params)
   end
 
-  destroy! do |success, failure|
-    success.html { redirect_to provider_admin_account_invitations_path, success: t('.success') }
+  def new
+    @invitation = invitations.build
+  end
+
+  def create
+    @invitation = invitations.build(invitation_params)
+
+    if @invitation.save
+      redirect_to provider_admin_account_invitations_path, success: t('.success')
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    @invitation.destroy
+    redirect_to provider_admin_account_invitations_path, success: t('.success')
   end
 
   def resend
-    @invitation = @account.invitations.find(params[:id])
     @invitation.resend
 
     respond_to do |format|
@@ -32,11 +48,19 @@ class Provider::Admin::Account::InvitationsController < Provider::Admin::Account
     authorize! :manage, :multiple_users
   end
 
-  def collection
-    @collection ||= end_of_association_chain
+  def invitations
+    @invitations ||= @account.invitations
+  end
+
+  def load_invitation
+    @invitation = invitations.find(params[:id])
   end
 
   def set_resource
     @account = current_account
+  end
+
+  def invitation_params
+    params.require(:invitation).permit(:email)
   end
 end

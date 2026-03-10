@@ -1,24 +1,34 @@
 class Buyers::InvitationsController < Buyers::BaseController
   before_action :authorize_multiple_users
   before_action :find_account
+  before_action :load_invitation, only: [:destroy, :resend]
 
   activate_menu :audience, :accounts, :listing
 
-  #actions :index, :new, :create, :destroy, :resend
-  #defaults :route_prefix => 'admin_buyers' #FIXME inherited_resource makes us repeat this
-  #I'm starting to believe this controller belongs to a deeper nesting under buyers
-  belongs_to :account
-
-  create! do |success, failure|
-    success.html { redirect_to admin_buyers_account_invitations_path(@account), success: t('.success') }
+  def index
+    @invitations = invitations.paginate(page: params[:page])
   end
 
-  destroy! do |success, failure|
-    success.html { redirect_to admin_buyers_account_invitations_path(@account), success: t('.success') }
+  def new
+    @invitation = invitations.build
+  end
+
+  def create
+    @invitation = invitations.build(invitation_params)
+
+    if @invitation.save
+      redirect_to admin_buyers_account_invitations_path(@account), success: t('.success')
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    @invitation.destroy
+    redirect_to admin_buyers_account_invitations_path(@account), success: t('.success')
   end
 
   def resend
-    @invitation = Invitation.find(params[:id])
     @invitation.resend
 
     respond_to do |format|
@@ -33,11 +43,19 @@ class Buyers::InvitationsController < Buyers::BaseController
     authorize! :manage, :multiple_users
   end
 
-  def collection
-    @invitations ||= end_of_association_chain.paginate(:page => params[:page])
-  end
-
   def find_account
     @account = Account.find params[:account_id] unless params[:account_id].empty?
+  end
+
+  def load_invitation
+    @invitation = invitations.find(params[:id])
+  end
+
+  def invitations
+    @invitations ||= @account.invitations
+  end
+
+  def invitation_params
+    params.require(:invitation).permit(:email)
   end
 end

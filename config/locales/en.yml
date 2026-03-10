@@ -569,6 +569,7 @@ en:
             unlimited_access: Unlimited access
           destroy:
             success: User was successfully deleted
+            error: User could not be deleted
           form:
             submit_button_label: Update User
           update:
