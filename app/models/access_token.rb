@@ -1,5 +1,5 @@
 class AccessToken < ApplicationRecord
-  HASHED_TOKEN_LENGTH = 96
+  DIGEST_PREFIX = 'SHA384|'.freeze
 
   TIMESTAMP_FORMAT = '%FT%T%:z'.freeze
   PAST_TIME = Time.at(0).utc.freeze
@@ -109,7 +109,8 @@ class AccessToken < ApplicationRecord
   def self.compute_digest(plaintext_value)
     return nil if plaintext_value.blank?
 
-    OpenSSL::HMAC.hexdigest('SHA384', Rails.application.secret_key_base, plaintext_value.to_s)
+    hash = OpenSSL::Digest::SHA384.hexdigest(plaintext_value.to_s)
+    "#{DIGEST_PREFIX}#{hash}"
   end
 
   def self.find_from_value(plaintext_value)
@@ -118,27 +119,17 @@ class AccessToken < ApplicationRecord
     scrubbed = plaintext_value.to_s.scrub
     digest = compute_digest(scrubbed)
 
-    # Fast path: find by digest (new/migrated tokens)
+    # Fast path: find by digest (new tokens)
     token = find_by(value: digest)
     return token if token
 
-    # Legacy tokens can't be exactly 96 chars (that's our hash length)
-    # This prevents using a leaked hash directly as a token
-    return nil if scrubbed.length == HASHED_TOKEN_LENGTH
+    # Reject if the input looks like a stored hash (has our prefix)
+    return nil if scrubbed.start_with?(DIGEST_PREFIX)
 
-    # Slow path: find by plaintext (legacy tokens)
-    token = find_by(value: scrubbed)
-    return nil unless token
-
-    # Migrate on use: replace plaintext with hash
-    token.migrate_to_hashed!(scrubbed)
-    token
+    # Slow path: find by plaintext (legacy tokens, no migration)
+    find_by(value: scrubbed)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
-  end
-
-  def migrate_to_hashed!(plaintext_value)
-    update_columns(value: self.class.compute_digest(plaintext_value))
   end
 
   def self.find_from_id_or_value!(id_or_value)
