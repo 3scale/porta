@@ -4,47 +4,51 @@ module Provider
   module Admin
     module User
       class AccessTokensController < BaseController
-        inherit_resources
-        defaults route_prefix: 'provider_admin_user', resource_class: AccessToken
-        actions :index, :new, :create, :edit, :update, :destroy
-
         authorize_resource
+
         activate_menu :account, :personal, :tokens
         before_action :authorize_access_tokens
         before_action :disable_client_cache
+        before_action :load_access_token, only: %i[edit update destroy]
+
+        def index
+          @access_tokens = access_tokens
+        end
 
         def new
           @presenter = AccessTokensNewPresenter.new(current_account)
+          @access_token = access_tokens.build
         end
 
         def create
-          create! do |success, failure|
-            success.html do
-              flash.now[:success] = t('.success')
-              render :show, locals: { token: @access_token }
-            end
-            failure.html do
-              @presenter = AccessTokensNewPresenter.new(current_account)
-              super
-            end
+
+          @access_token = access_tokens.build(access_token_params)
+
+          if @access_token.save
+            flash.now[:success] = t('.success')
+            render :show, locals: { token: @access_token }
+          else
+            @presenter = AccessTokensNewPresenter.new(current_account)
+            render :new
+          end
+        end
+
+        def edit
+          # Renders edit view
+        end
+
+        def update
+          if @access_token.update(access_token_params)
+            redirect_to provider_admin_user_access_tokens_path, success: t('.success')
+          else
+            render :edit
           end
         end
 
         def destroy
-          destroy! do |success|
-            success.html do
-              flash[:success] = t('.success')
-              super
-            end
-          end
-        end
-
-        def update
-          update! do |success, _failure|
-            success.html do
-              redirect_to collection_url, success: t('.success')
-            end
-          end
+          @access_token.destroy
+          flash[:success] = t('.success')
+          redirect_to provider_admin_user_access_tokens_path
         end
 
         private
@@ -53,8 +57,16 @@ module Provider
           authorize! :manage, :access_tokens, current_user
         end
 
-        def begin_of_association_chain
-          current_user
+        def access_tokens
+          @access_tokens ||= current_user.access_tokens
+        end
+
+        def load_access_token
+          @access_token = access_tokens.find(params[:id])
+        end
+
+        def access_token_params
+          params.require(:access_token).permit(:name, :permission, :expires_at, scopes: [])
         end
       end
     end
