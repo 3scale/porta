@@ -28,25 +28,28 @@ class CMS::SectionInput < Formtastic::Inputs::SelectInput
     @sections ||= template.current_account.sections
   end
 
+  # :reek:TooManyStatements
   def collection
     all_sections = sections.to_a
-    root = all_sections.find(&:root?)
     children_map = all_sections.group_by(&:parent_id)
 
-    build_section_options(root, children_map, 0)
-  end
+    result = []
+    stack = [[all_sections.find(&:root?), 0]]
 
-  def build_section_options(section, children_map, level)
-    prefix = if section.root?
-               '. '
-             else
-               "|#{'&mdash;' * level} "
-             end
+    while (section, level = stack.pop)
+      result << section_option(section, level)
 
-    children = children_map.fetch(section.id, []).flat_map do |child|
-      build_section_options(child, children_map, level + 1)
+      children_map.fetch(section.id, []).reverse_each do |child|
+        stack.push([child, level + 1])
+      end
     end
 
-    [[prefix.html_safe + h(section.title), section.id], *children]
+    result
+  end
+
+  # :reek:FeatureEnvy
+  def section_option(section, level)
+    prefix = section.root? ? '. ' : "|#{'&mdash;' * level} "
+    [prefix.html_safe + h(section.title), section.id] # rubocop:disable Rails/OutputSafety
   end
 end
