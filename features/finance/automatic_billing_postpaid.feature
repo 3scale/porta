@@ -16,7 +16,7 @@ Feature: Automatic billing with plan changes on POSTPAID
       | My API  | Paid      | 31             |
       | My API  | Expensive | 3100           |
 
-  Scenario: Monthly fee on application plan upgrading the same day
+  Scenario: Monthly fee on application plan upgrading the same second
     Given all the rolling updates features are off
     And the date is 1st January 2017
     And the buyer is signed up to plan "Paid"
@@ -30,7 +30,7 @@ Feature: Automatic billing with plan changes on POSTPAID
       | Fixed fee ('Expensive')     |          | 3,100.00  |
       | Total cost                  |          | 3,100.00  |
 
-  Scenario: Monthly fee on application plan downgrading the same day
+  Scenario: Monthly fee on application plan downgrading the same second
     Given all the rolling updates features are off
     And the date is 1st January 2017
     And the buyer is signed up to plan "Expensive"
