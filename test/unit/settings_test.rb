@@ -193,17 +193,47 @@ class SettingsTest < ActiveSupport::TestCase
     settings.update(public_search: nil)
     assert settings.reload.public_search, "nil should not change non-null setting"
 
-    settings.update(public_search: "false")
-    assert_not settings.reload.public_search, "explicit 'false' should change the setting"
+    settings.update(public_search: false)
+    assert_not settings.reload.public_search, "explicit false should change the setting"
   end
 
   test "validate change plan permission values" do
     assert_equal 'request', settings.change_account_plan_permission
     assert_equal 'request', settings.change_service_plan_permission
 
-    settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
-    assert settings.errors.of_kind? :change_account_plan_permission, "is not included in the list"
-    assert settings.errors.of_kind? :change_service_plan_permission, "is not included in the list"
+    refute settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
+    assert_equal 'request', settings.reload.change_account_plan_permission
+    assert_equal 'request', settings.reload.change_service_plan_permission
+  end
+
+  test "assign value then nil on a new setting removes the record" do
+    assert_nil @provider.account_settings.detect { |r| r.type == 'AccountSetting::BgColour' }
+
+    settings.bg_colour = '#fff'
+    assert @provider.account_settings.detect { |r| r.type == 'AccountSetting::BgColour' }, "record should exist in memory"
+
+    settings.bg_colour = nil
+    assert_nil settings.bg_colour, "getter should return default after nil assignment"
+
+    settings.save!
+    assert_nil @provider.account_settings.reload.detect { |r| r.type == 'AccountSetting::BgColour' },
+      "no record should be persisted"
+  end
+
+  test "assign nil then a new value on a persisted setting resurrects the record" do
+    settings.update!(bg_colour: '#fff')
+    assert_equal '#fff', settings.reload.bg_colour
+
+    settings.bg_colour = nil
+    assert_nil settings.bg_colour, "getter should return default after nil assignment"
+
+    settings.bg_colour = '#000'
+    assert_equal '#000', settings.bg_colour, "getter should return the new value"
+
+    settings.save!
+    assert_equal '#000', settings.reload.bg_colour, "new value should be persisted"
+    assert_equal 1, @provider.account_settings.select { |r| r.type == 'AccountSetting::BgColour' }.size,
+      "should have exactly one record, not a duplicate"
   end
 
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase

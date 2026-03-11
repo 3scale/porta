@@ -46,6 +46,10 @@ class AccountSetting::SwitchSetting < AccountSetting
     end
   end
 
+  def assign_casted(raw_value)
+    transition_to(raw_value)
+  end
+
   def self.cast(value)
     value&.to_s
   end

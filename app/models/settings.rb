@@ -100,55 +100,22 @@ class Settings
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
+  ALL_SETTINGS.each do |name, default|
+    define_method(name) do
+      record = setting_record_for(name)
+      record ? record.typed_value : default
+    end
+    define_method("#{name}=") do |value|
+      if value.nil?
+        clear_setting(name)
+      else
+        find_or_build_setting(name).assign_casted(value)
+      end
+    end
+  end
+
   BOOLEAN_SETTINGS.each_key do |name|
-    define_method(name) do
-      record = setting_record_for(name)
-      record ? record.typed_value : BOOLEAN_SETTINGS[name]
-    end
     define_method("#{name}?") { !!send(name) }
-    define_method("#{name}=") do |value|
-      casted = ActiveModel::Type::Boolean.new.cast(value)
-      find_or_build_setting(name).value = AccountSetting::BooleanSetting.serialize(casted)
-    end
-  end
-
-  STRING_SETTINGS.each_key do |name|
-    define_method(name) do
-      record = setting_record_for(name)
-      record ? record.typed_value : STRING_SETTINGS[name]
-    end
-    define_method("#{name}=") do |value|
-      if value.nil?
-        clear_setting(name)
-      else
-        find_or_build_setting(name).value = value.to_s
-      end
-    end
-  end
-
-  TEXT_SETTINGS.each_key do |name|
-    define_method(name) do
-      record = setting_record_for(name)
-      record ? record.typed_value : TEXT_SETTINGS[name]
-    end
-    define_method("#{name}=") do |value|
-      if value.nil?
-        clear_setting(name)
-      else
-        find_or_build_setting(name).value = value.to_s
-      end
-    end
-  end
-
-  # Switch value getters/setters (e.g., finance_switch returns 'denied')
-  SWITCH_SETTINGS.each_key do |attr_name|
-    define_method(attr_name) do
-      record = setting_record_for(attr_name)
-      record&.value || 'denied'
-    end
-    define_method("#{attr_name}=") do |value|
-      find_or_build_setting(attr_name).transition_to(value)
-    end
   end
 
   include Switches
@@ -322,12 +289,17 @@ class Settings
   end
 
   def find_or_build_setting(name)
-    setting_record_for(name) || begin
-      type = SETTING_CLASS_MAP[name.to_sym]
-      klass = type.constantize
-      klass.new(account: account, tenant_id: account.tenant_id).tap do |record|
-        account.association(:account_settings).add_to_target(record)
-      end
+    type = SETTING_CLASS_MAP[name.to_sym]
+    return nil unless type && account
+
+    record = account.account_settings.find { |r| r.type == type }
+    if record
+      record.instance_variable_set(:@marked_for_destruction, false) if record.marked_for_destruction?
+      return record
+    end
+
+    type.constantize.new(account: account, tenant_id: account.tenant_id).tap do |record|
+      account.association(:account_settings).add_to_target(record)
     end
   end
 

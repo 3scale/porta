@@ -8,4 +8,8 @@ class AccountSetting < ApplicationRecord
   validates :value, presence: true
 
   delegate :provider_id_for_audits, to: :account, allow_nil: true
+
+  def assign_casted(raw_value)
+    self.value = self.class.serialize(raw_value)
+  end
 end
