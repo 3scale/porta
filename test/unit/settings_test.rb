@@ -207,16 +207,16 @@ class SettingsTest < ActiveSupport::TestCase
   end
 
   test "assign value then nil on a new setting removes the record" do
-    assert_nil @provider.account_settings.detect { |r| r.type == 'AccountSetting::BgColour' }
+    assert_nil @provider.account_settings.detect { |r| r.type == 'BgColour' }
 
     settings.bg_colour = '#fff'
-    assert @provider.account_settings.detect { |r| r.type == 'AccountSetting::BgColour' }, "record should exist in memory"
+    assert @provider.account_settings.detect { |r| r.type == 'BgColour' }, "record should exist in memory"
 
     settings.bg_colour = nil
     assert_nil settings.bg_colour, "getter should return default after nil assignment"
 
     settings.save!
-    assert_nil @provider.account_settings.reload.detect { |r| r.type == 'AccountSetting::BgColour' },
+    assert_nil @provider.account_settings.reload.detect { |r| r.type == 'BgColour' },
       "no record should be persisted"
   end
 
@@ -232,7 +232,7 @@ class SettingsTest < ActiveSupport::TestCase
 
     settings.save!
     assert_equal '#000', settings.reload.bg_colour, "new value should be persisted"
-    assert_equal 1, @provider.account_settings.select { |r| r.type == 'AccountSetting::BgColour' }.size,
+    assert_equal 1, @provider.account_settings.select { |r| r.type == 'BgColour' }.size,
       "should have exactly one record, not a duplicate"
   end
 

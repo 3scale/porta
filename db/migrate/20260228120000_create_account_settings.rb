@@ -78,7 +78,7 @@ class CreateAccountSettings < ActiveRecord::Migration[7.1]
 
     # Migrate boolean settings
     boolean_settings.each do |col, _default|
-      type_name = "AccountSetting::#{col.to_s.camelize}"
+      type_name = col.to_s.camelize
       execute <<~SQL.squish
         INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
         SELECT account_id,
@@ -94,7 +94,7 @@ class CreateAccountSettings < ActiveRecord::Migration[7.1]
 
     # Migrate string settings
     string_settings.each do |col|
-      type_name = "AccountSetting::#{col.to_s.camelize}"
+      type_name = col.to_s.camelize
       execute <<~SQL.squish
         INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
         SELECT account_id,
@@ -110,7 +110,7 @@ class CreateAccountSettings < ActiveRecord::Migration[7.1]
 
     # Migrate text settings
     text_settings.each do |col|
-      type_name = "AccountSetting::#{col.to_s.camelize}"
+      type_name = col.to_s.camelize
       execute <<~SQL.squish
         INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
         SELECT account_id,
@@ -126,7 +126,7 @@ class CreateAccountSettings < ActiveRecord::Migration[7.1]
 
     # Migrate switch settings
     switch_settings.each do |col|
-      type_name = "AccountSetting::#{col.to_s.camelize}"
+      type_name = col.to_s.camelize
       execute <<~SQL.squish
         INSERT INTO account_settings (account_id, type, value, tenant_id, created_at, updated_at)
         SELECT account_id,

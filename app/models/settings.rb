@@ -95,7 +95,7 @@ class Settings
   ].freeze
 
   SETTING_CLASS_MAP = ALL_SETTINGS.each_with_object({}) do |(name, _), hash|
-    hash[name] = "AccountSetting::#{name.to_s.camelize}"
+    hash[name] = "AccountSetting::#{name.to_s.camelize}".constantize
   end.freeze
 
   # --- Define accessor methods that delegate to AccountSetting records ---
@@ -109,7 +109,7 @@ class Settings
       if value.nil?
         clear_setting(name)
       else
-        find_or_build_setting(name).assign_casted(value)
+        find_or_build_setting(name).typed_assign(value)
       end
     end
   end
@@ -283,24 +283,24 @@ class Settings
   end
 
   def setting_record_for(name)
-    type = SETTING_CLASS_MAP[name.to_sym]
-    return nil unless type && account
-    account.account_settings.find { |r| r.type == type && !r.marked_for_destruction? }
+    klass = SETTING_CLASS_MAP[name.to_sym]
+    return nil unless klass && account
+    sti_name = klass.sti_name
+    account.account_settings.find { |r| r.type == sti_name && !r.marked_for_destruction? }
   end
 
   def find_or_build_setting(name)
-    type = SETTING_CLASS_MAP[name.to_sym]
-    return nil unless type && account
+    klass = SETTING_CLASS_MAP[name.to_sym]
+    return nil unless klass && account
+    sti_name = klass.sti_name
 
-    record = account.account_settings.find { |r| r.type == type }
+    record = account.account_settings.find { |r| r.type == sti_name }
     if record
       record.instance_variable_set(:@marked_for_destruction, false) if record.marked_for_destruction?
       return record
     end
 
-    type.constantize.new(account: account, tenant_id: account.tenant_id).tap do |record|
-      account.association(:account_settings).add_to_target(record)
-    end
+    account.account_settings.build(type: sti_name, tenant_id: account.tenant_id)
   end
 
   def find_or_build_switch(name)

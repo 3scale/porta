@@ -225,7 +225,7 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_many :account_settings, class_name: 'AccountSetting', dependent: :delete_all, inverse_of: :account, autosave: true
+  has_many :account_settings, dependent: :delete_all, inverse_of: :account, autosave: true
   lazy_initialization_for :profile, if: :should_not_be_deleted?
 
   def settings
