@@ -19,10 +19,7 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   def create
     authorize! :create, user
 
-    user.unflattened_attributes = user_params
-    user.signup_type = :api
-
-    user.save
+    user.update(user_params.merge(signup_type: :api))
 
     respond_with(user)
   end
@@ -40,7 +37,7 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   def update
     authorize! :update, user
 
-    user.update_with_flattened_attributes(user_params)
+    user.update(user_params)
 
     respond_with(user)
   end
@@ -130,9 +127,9 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
 
   def user_params
     @user_params ||= begin
-                       allowed_attrs = user.defined_fields_names | %i(password password_confirmation)
-                       flat_params.permit(*allowed_attrs)
-                     end
+      allowed_attrs = user.defined_fields_names | %i(password password_confirmation signup_type)
+      flat_params.permit(*allowed_attrs)
+    end
   end
 
 end

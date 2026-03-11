@@ -39,8 +39,7 @@ class Partners::UsersController < Partners::BaseController
   end
 
   def user_params
-    # Partners controller only allows a subset of common attributes
-    allowed = [:email, :first_name, :last_name, :open_id, :username]
-    params.permit(*allowed)
+    allowed_attrs = %i(email first_name last_name open_id username)
+    params.permit(*allowed_attrs)
   end
 end

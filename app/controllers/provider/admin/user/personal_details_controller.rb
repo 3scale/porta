@@ -31,9 +31,9 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
 
   def permitted_user_params
     @permitted_user_params ||= begin
-                                 allowed_attrs = current_user.defined_builtin_fields_names | %i(password)
-                                 user_params.permit(*allowed_attrs, extra_fields: current_user.defined_extra_fields_names)
-                               end
+      allowed_attrs = current_user.defined_builtin_fields_names | %i(password)
+      user_params.permit(*allowed_attrs, extra_fields: current_user.defined_extra_fields_names)
+    end
   end
 
   def current_password_verification

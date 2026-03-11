@@ -86,9 +86,9 @@ class Buyers::UsersController < Buyers::BaseController
 
   def permitted_user_params
     @permitted_user_params ||= begin
-                                 allowed_attrs = user.defined_builtin_fields_names | %i(password password_confirmation)
-                                 user_params.permit(*allowed_attrs, extra_fields: user.defined_extra_fields_names)
-                               end
+      allowed_attrs = user.defined_builtin_fields_names | %i(password password_confirmation)
+      user_params.permit(*allowed_attrs, extra_fields: user.defined_extra_fields_names)
+    end
   end
 
   def redirect_back_or_show_detail(**opts)

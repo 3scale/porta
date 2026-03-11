@@ -27,6 +27,7 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
       assert_equal expected_value, user.public_send(attr_name),
                    "#{attr_name} expected to be #{expected_value} but is #{user.public_send(attr_name)}"
     end
+    assert_equal :api, user.signup_type
   end
 
   private

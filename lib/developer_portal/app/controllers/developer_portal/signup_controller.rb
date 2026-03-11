@@ -145,7 +145,7 @@ module DeveloperPortal
       @user_params ||= begin
         user = @signup_service.account_manager.user
         allowed_attrs = user.defined_fields_names | %i(password signup_type)
-        filter_readonly_params(params.fetch(:account, {})[:user], User).permit(*allowed_attrs).merge({ signup_type: :minimal })
+        filter_readonly_params(params.fetch(:account, {})[:user], User).permit(*allowed_attrs).merge(signup_type: :minimal)
       end
     end
   end

@@ -95,16 +95,6 @@ class User::RolesTest < ActiveSupport::TestCase
     assert_not account.admins.first.provider_admin?
   end
 
-  # TODO: remove this test, because it's not relevant anymore, as all attributes protection is handled by
-  # strong params in the controllers
-  # test 'role is not mass assignable' do
-  #   user = FactoryBot.create(:user)
-  #
-  #   assert_no_change :of => -> { user.role } do
-  #     user.update(role: :admin)
-  #   end
-  # end
-
   test 'role accepts also string' do
     user = FactoryBot.create(:user)
     user.role = "admin"

@@ -22,7 +22,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
   def user_params
     @user_params ||= begin
       allowed_attrs = account_manager.user.defined_fields_names | %i(password signup_type)
-      flat_params.permit(*allowed_attrs).merge({signup_type: :minimal})
+      flat_params.permit(*allowed_attrs).merge(signup_type: :minimal)
     end
   end
 
