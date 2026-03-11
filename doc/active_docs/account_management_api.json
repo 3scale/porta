@@ -1771,7 +1771,6 @@
                 },
                 "required": [
                   "access_token",
-                  "id",
                   "credit_card_token",
                   "credit_card_expiration_year",
                   "credit_card_expiration_month",

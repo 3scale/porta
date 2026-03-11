@@ -71,6 +71,8 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful api signup with country' do
+    field_defined(@provider, { target: 'Account', name: 'country' })
+
     post admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona', country: 'Spain' }
 
     assert_response :created
@@ -113,6 +115,8 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     UserMailer.expects(:deliver_signup_notification).never
 
     field_defined(@provider, { target: 'Account', name: 'account_extra_field' })
+    field_defined(@provider, { target: 'Account', name: 'org_legaladdress' })
+    field_defined(@provider, { target: 'Account', name: 'vat_rate' })
     field_defined(@provider, { target: 'User', name: 'user_extra_field' })
 
     post admin_api_signup_path, params: { format: :xml,
