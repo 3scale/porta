@@ -10,6 +10,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
+    FieldsDefinition.create_defaults!(master_account)
     FactoryBot.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
     FactoryBot.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
 
@@ -197,14 +198,15 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     provider.schedule_for_deletion!
 
-    update_params = { account: { from_email: 'from@email.com', state_event: 'resume'},
+    update_params = { account: { from_email: 'from@email.com', state_event: 'resume', org_name: 'new-org-name' },
                       access_token: token.plaintext_value, format: :json }
     put master_api_provider_path(provider, update_params)
     assert_response :ok
 
     provider.reload
+    assert_equal 'approved', provider.state
     assert_not_equal update_params[:account][:from_email], provider.from_email
-    assert_equal 'approved',                           provider.state
+    assert_not_equal 'new-org-name', provider.org_name
   end
 
   test '#destroy' do
@@ -260,7 +262,9 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       email: 'person@example.com',
       password: 'superSecret1234#',
       user_extra_field: 'hi-user',
-      account_extra_field: 'hi-account'
+      account_extra_field: 'hi-account',
+      from_email: 'from@example.com',
+      support_email: 'support@example.com'
     }.merge(different_params)
   end
 

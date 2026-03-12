@@ -4,15 +4,19 @@ module Signup
   class AccountManager
     def initialize(manager_account)
       @manager_account = manager_account
+      @account = manager_account.buyers.new
+      @user = @account.users.new
     end
 
-    attr_reader :manager_account
+    attr_reader :manager_account, :account, :user
 
-    def create(signup_params, signup_result_class = ::Signup::Result)
+    def create(user_params: {}, account_params: {}, plans: [], defaults: {}, validate_fields: true, signup_result_class: ::Signup::Result)
       transaction do
-        signup_result = build_signup_result(signup_params, signup_result_class)
+        assign_attributes_for_account(account_params, validate_fields)
+        assign_attributes_for_user(user_params, validate_fields)
+        signup_result = build_signup_result(signup_result_class)
         yield(signup_result) if block_given?
-        save_result_with_plans(signup_result, signup_params) if signup_result.valid?
+        save_result_with_plans(signup_result, plans, defaults) if signup_result.valid?
         signup_result
       end
     end
@@ -24,12 +28,13 @@ module Signup
     class_attribute :account_builder, default: proc {}
 
     # This method smells of :reek:TooManyStatements and :reek:DuplicateMethodCall
-    def save_result_with_plans(result, params)
-      plans = plans_with_defaults(result, params.plans)
-      return if plans.errors.any?
+    def save_result_with_plans(result, plans, defaults)
+      signup_plans = plans_with_defaults(result, plans)
+      return if signup_plans.errors.any?
+
       transaction do
         begin
-          persist!(result, plans, params.defaults)
+          persist!(result, signup_plans, defaults)
           publish_related_event(result)
         rescue ActiveRecord::RecordInvalid
           raise ActiveRecord::Rollback
@@ -44,21 +49,21 @@ module Signup
       raise NotImplementedError, 'persist! should be implemented in subclasses'
     end
 
-    def build_signup_result(signup_params, signup_result_class)
-      account = build_account(signup_params)
-      signup_result_class.new(user: build_user(signup_params, account), account: account)
+    def build_signup_result(signup_result_class)
+      signup_result_class.new(user: user, account: account)
     end
 
-    def build_user(signup_params, account)
-      user             = signup_params.build_user_with_attributes_for_account(account)
-      user.role        = :admin
-      user
-    end
-
-    def build_account(signup_params)
-      account = signup_params.build_account_with_attributes_for_provider_account(manager_account)
+    def assign_attributes_for_account(account_params, validate_fields)
+      account.validate_fields! if validate_fields
+      account_params.delete(:name) if account_params[:org_name].present?
+      account.assign_attributes(account_params)
       account_builder.call(account)
-      account
+    end
+
+    def assign_attributes_for_user(user_params, validate_fields)
+      user.validate_fields! if validate_fields
+      user.assign_attributes(user_params)
+      user.role = :admin
     end
 
     def create_contract_plans_for_account!(account, plans, defaults)
