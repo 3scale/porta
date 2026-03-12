@@ -23,7 +23,8 @@ module Authentication
           signup_result = new_user_created = nil
 
           Account.transaction do
-            signup_result = SignupService.create(**signup_service_params(session))
+            signup_service = SignupService.new(provider: site_account, plans: [], session: session)
+            signup_result = signup_service.create(account_params: { org_name: user_data.org_name }, user_params: user_data.to_hash)
             if new_user_created = signup_result.persisted?
               if authentication_provider.automatically_approve_accounts? && !signup_result.account_approved?
                 signup_result.account_approve!
@@ -36,11 +37,6 @@ module Authentication
           end
 
           signup_result.user if new_user_created
-        end
-
-        def signup_service_params(session)
-          { provider: site_account, plans: [], session: session,
-            account_params: { org_name: user_data.org_name }, user_params: user_data.to_hash }
         end
 
         def session
