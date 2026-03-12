@@ -66,7 +66,7 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
     user.class.transaction do
       user.assign_attributes(attributes)
-      user.assign_attributes(protected_attributes, without_protection: can?(:update_role, user))
+      user.assign_attributes(protected_attributes) if can?(:update_role, user)
 
       user.save
     end

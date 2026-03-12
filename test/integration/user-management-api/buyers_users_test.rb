@@ -9,6 +9,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @provider.default_account_plan = @provider.account_plans.first
+    @token = FactoryBot.create(:access_token, owner: @provider.first_admin, scopes: ['account_management'])
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @provider.default_account_plan
@@ -22,7 +23,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
   class AccessTokenWithCallbacks < ActionDispatch::IntegrationTest
     def setup
-      @provider = FactoryBot.create(:simple_provider)
+      @provider = FactoryBot.create(:provider_account)
       @buyer    = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
       host! @provider.external_admin_domain
@@ -529,6 +530,32 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
     chuck.reload
     assert chuck.active?
+  end
+
+  test 'only update optional fields that are enabled through fields definitions' do
+    field_defined(@provider, { target: 'User', name: 'first_name' })
+    field_defined(@provider, { target: 'User', name: 'last_name' })
+    assert_same_elements %w[username email first_name last_name], @member.reload.defined_fields_names
+
+    optional_fields = {
+      title: 'Ms.', first_name: 'fn', last_name: 'ln', job_role: 'manager'
+    }
+
+    optional_fields.each_key do |field|
+      assert_nil @member.public_send(field), "Field '#{field}' should not be set"
+    end
+
+    put admin_api_account_user_path(account_id: @buyer.id, format: :xml, id: @member.id), params: {
+      access_token: @token.value,
+      **optional_fields
+    }
+
+    @member.reload
+
+    assert_equal 'fn', @member.first_name
+    assert_equal 'ln', @member.last_name
+    assert_nil @member.job_role
+    assert_nil @member.title
   end
 
   protected

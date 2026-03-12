@@ -53,11 +53,17 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def build_user
-    @user = @invitation.make_user(params[:user] || {})
+    @user = @invitation.make_user
+    @user.assign_attributes(user_params(@user))
 
     # This is just a sanity guard added when splitting invitation
     # controllers. Remove when SURE.
     raise 'Developer invitation used and worked on provider side!' unless @user.account.provider?
+  end
+
+  def user_params(user)
+    allowed_attrs = user.defined_fields_names + %w[password password_confirmation]
+    params.fetch(:user, {}).permit(*allowed_attrs)
   end
 
   def invitation_token
