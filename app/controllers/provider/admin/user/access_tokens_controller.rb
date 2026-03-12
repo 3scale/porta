@@ -58,6 +58,10 @@ module Provider
         def begin_of_association_chain
           current_user
         end
+
+        def access_token_params
+          params.require(:access_token).permit(:name, :permission, :expires_at, scopes: [])
+        end
       end
     end
   end
