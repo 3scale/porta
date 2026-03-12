@@ -275,6 +275,14 @@ module Fields::Fields
     defined_extra_fields.map(&:name)
   end
 
+  def defined_fields_names
+    defined_fields.map(&:name)
+  end
+
+  def defined_builtin_fields_names
+    defined_builtin_fields.map(&:name)
+  end
+
   def defined_fields_hash
     @defined_fields_hash ||= Hash[defined_fields.map { |f| [f.name.to_sym, f]}]
   end
