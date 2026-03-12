@@ -30,7 +30,7 @@ class UsageLimitViolationsQuery
     end
 
     def account
-      ::Account.new { |a| a.assign_attributes(account_attributes, without_protection: true) }
+      ::Account.new { |a| a.assign_attributes(account_attributes) }
     end
 
     protected
