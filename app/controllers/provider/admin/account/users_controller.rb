@@ -76,9 +76,9 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
 
   def user_params
     params.require(:user).permit(
-      *@user.required_fields, *@user.optional_fields, *@user.special_fields,
+      *@user.defined_builtin_fields.map(&:name), *@user.special_fields,
       :role, member_permission_ids: [], member_permission_service_ids: [],
-      extra_fields: {}
+      extra_fields: @user.defined_extra_fields_names
     )
   end
 end

@@ -60,7 +60,7 @@ class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::Base
   end
 
   def user_params
-    params.require(:user).permit(*@user.required_fields, *@user.optional_fields, :role,
-                                 *@user.special_fields, *@user.defined_fields.map(&:name))
+    params.require(:user).permit(*@user.defined_fields.map(&:name), :role,
+                                 *@user.special_fields, *@user.defined_extra_fields_names)
   end
 end
