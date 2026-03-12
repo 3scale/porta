@@ -21,7 +21,7 @@ class DeveloperPortal::Admin::AccountsController < DeveloperPortal::BaseControll
     current_account.validate_fields!
 
     respond_to do |format|
-      if current_account.update_with_flattened_attributes(account_params)
+      if current_account.update(account_params)
         flash[:notice] = 'The account information was updated.'.freeze
         format.html { redirect_to admin_account_url }
         format.js   { render js: "jQuery.flash.notice('#{flash[:notice]}')" }
@@ -35,7 +35,8 @@ class DeveloperPortal::Admin::AccountsController < DeveloperPortal::BaseControll
   private
 
   def account_params
-    filter_readonly_params(params.require(:account), Account)
+    allowed_attrs = current_account.defined_fields_names - %w[country vat_rate] + %w[country_id]
+    filter_readonly_params(params.require(:account), Account).permit(*allowed_attrs)
   end
 
   def find_countries

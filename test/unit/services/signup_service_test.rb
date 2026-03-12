@@ -19,34 +19,32 @@ class SignupServiceTest < ActiveSupport::TestCase
       refute user.persisted?
     end
 
-    service = new_instance_signup_service(valid_account_params, valid_user_params)
+    service = new_instance_signup_service
     assert_difference(User.method(:count), +1) do
-      user = service.create
+      user = service.create(account_params: valid_account_params, user_params: valid_user_params)
       assert user.persisted?
     end
 
-    service = new_instance_signup_service(valid_account_params, valid_user_params)
+    service = new_instance_signup_service
     assert_difference(User.method(:count), +1) do
-      signup = service.create { |_signup| [] }
+      signup = service.create(account_params: valid_account_params, user_params: valid_user_params) { |_signup| [] }
       assert signup.persisted?
     end
 
-    service = new_instance_signup_service(valid_account_params, valid_user_params)
+    service = new_instance_signup_service
     assert_difference(User.method(:count), 0) do
-      service.create { |signup| @signup = signup; break }
+      service.create(account_params: valid_account_params, user_params: valid_user_params) { |signup| @signup = signup; break }
       refute @signup.persisted?
     end
   end
 
   private
 
-  def new_instance_signup_service(account_params = {}, user_params = {})
+  def new_instance_signup_service
     SignupService.new(
       provider:       @provider,
       plans:          [],
-      session:        @session,
-      account_params: account_params,
-      user_params:    user_params
+      session:        @session
     )
   end
 

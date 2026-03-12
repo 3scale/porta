@@ -8,7 +8,9 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
   authenticate_access_token plain: 'unauthorized'
   self.access_token_scopes = :account_management
+
   before_action :ensure_master_with_plans, only: :create
+  before_action :init_signup_account_manager, only: :create
 
   before_action :find_plan_for_upgrade, only: :plan_upgrade
 
@@ -35,7 +37,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   # Tenant Create
   # POST /master/api/providers.xml
   def create
-    signup_result = Signup::ProviderAccountManager.new(current_account).create(create_params, ::Signup::ResultWithAccessToken)
+    signup_result = @account_manager.create(create_params, ::Signup::ResultWithAccessToken)
 
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
@@ -48,9 +50,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   # Tenant Update
   # PUT /master/api/providers/{id}.xml
   def update
-    provider_account.assign_attributes(update_params, without_protection: true)
-    provider_account.assign_unflattened_attributes(params.require(:account))
-    provider_account.save
+    provider_account.update(update_params)
 
     respond_with signup_result_with_nil_token
   end
@@ -91,6 +91,12 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params[:id])
   end
 
+  def init_signup_account_manager
+    @account_manager = Signup::ProviderAccountManager.new(current_account)
+    @provider_account = @account_manager.account
+    @user = @account_manager.user
+  end
+
   def signup_result_with_nil_token
     signup_result = Signup::ResultWithAccessToken.new(account: provider_account, user: provider_account.admin_users.first)
 
@@ -118,13 +124,28 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   end
 
   def update_params
-    permitted_params = provider_account.scheduled_for_deletion? ? %i[state_event] : UPDATE_PARAMS
-    params.require(:account).permit(permitted_params)
+    allowed_attrs = provider_account.scheduled_for_deletion? ? %i[state_event] : permitted_account_attrs
+    flat_params.require(:account).permit(*allowed_attrs)
   end
 
   def create_params
     defaults = { ApplicationPlan => { :name => 'API signup', :description => 'API signup', :create_origin => 'api' } }
-    Signup::SignupParams.new(plans: plans, user_attributes: flat_params.merge(signup_type: :created_by_provider), account_attributes: flat_params, defaults: defaults)
+    Signup::SignupParams.new(plans: plans, user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, defaults: defaults)
+  end
+
+  def user_params
+    @user_params ||= begin
+      allowed_attrs = @user.defined_fields_names | %i[password signup_type]
+      flat_params.permit(*allowed_attrs)
+    end
+  end
+
+  def permitted_account_attrs
+    @permitted_account_attrs ||= @provider_account.defined_fields_names | UPDATE_PARAMS
+  end
+
+  def account_params
+    @account_params ||= flat_params.permit(*permitted_account_attrs)
   end
 
   def plans
