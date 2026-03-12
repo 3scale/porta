@@ -8,8 +8,6 @@ module User::Permissions
   included do
     has_many :member_permissions, dependent: :destroy, autosave: true
 
-    attr_accessible :member_permission_service_ids, :member_permission_ids, :allowed_sections, :allowed_service_ids
-
     alias_method :allowed_sections, :member_permission_ids
     alias_method :allowed_sections=, :member_permission_ids=
     alias_method :allowed_service_ids, :member_permission_service_ids

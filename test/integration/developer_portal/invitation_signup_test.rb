@@ -103,6 +103,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   end
 
   def test_create
+    FieldsDefinition.create_defaults!(@provider)
     OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
 
     assert_difference '@buyer.users.count' do

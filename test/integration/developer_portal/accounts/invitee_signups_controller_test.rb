@@ -4,6 +4,7 @@ require 'test_helper'
 
 class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
+  include FieldsDefinitionsHelpers
 
   def setup
     @buyer = FactoryBot.create(:buyer_account)
@@ -63,6 +64,44 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
 
     assert_equal I18n.t('errors.messages.invitation_already_accepted'), flash[:error]
     assert_redirected_to login_path
+  end
+
+  test 'create sets custom fields that are not read-only' do
+    field_defined(buyer.provider_account, { target: 'User', name: 'department' })
+    field_defined(buyer.provider_account, { target: 'User', name: 'employee_id', read_only: true })
+
+    invitation = FactoryBot.create(:invitation, account: buyer)
+
+    assert_difference(buyer.users.method(:count), +1) do
+      post invitee_signup_path(invitation_token: invitation.token, user: user_params.merge(
+        department: 'Engineering',
+        employee_id: 'EMP-12345'
+      ))
+    end
+
+    assert_equal I18n.t('developer_portal.accounts.invitee_signups.create.success'), flash[:notice]
+    assert_redirected_to login_path
+
+    created_user = invitation.reload.user
+    assert_equal 'Engineering', created_user.extra_fields['department']
+    assert_nil created_user.extra_fields['employee_id']
+  end
+
+  test 'do not set unpermitted attributes' do
+    invitation = FactoryBot.create(:invitation, account: buyer)
+
+    assert_difference(buyer.users.method(:count), +1) do
+      post invitee_signup_path(invitation_token: invitation.token, user: user_params.merge(
+        role: 'superadmin'
+      ))
+    end
+
+    assert_equal I18n.t('developer_portal.accounts.invitee_signups.create.success'), flash[:notice]
+    assert_redirected_to login_path
+
+    created_user = invitation.reload.user
+    assert_equal :member, created_user.role
+    assert_equal 'admin', created_user.username
   end
 
   private
