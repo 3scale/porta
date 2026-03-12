@@ -7,11 +7,7 @@ resource "User" do
   let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
   let(:user) { FactoryBot.build(:user, account: buyer) }
 
-  let(:resource) do
-    FieldsDefinition.create_defaults!(master)
-    provider.reload
-    user
-  end
+  let(:resource) { user }
 
   let(:account_id) { buyer.id }
 

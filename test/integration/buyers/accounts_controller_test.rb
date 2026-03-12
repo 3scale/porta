@@ -32,9 +32,9 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'hi', user.extra_fields['created_by']
     end
 
-    test 'billing address extra field and webhooks' do
+    test 'legal address extra field and webhooks' do
       FactoryBot.create(:fields_definition, account: @provider,
-                         target: 'Account', name: 'billing_address', read_only: true)
+                         target: 'Account', name: 'org_legaladdress')
 
       @provider.settings.allow_web_hooks!
       WebHook.delete_all

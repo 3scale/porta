@@ -40,7 +40,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   def update
     @invoice = @account.invoices.find(params[:id])
 
-    if @invoice.update(params[:invoice])
+    if @invoice.update(invoice_params)
       redirect_to admin_buyers_account_invoice_url(@account, @invoice), success: t('.success')
     else
       render :edit
@@ -51,5 +51,9 @@ class Buyers::InvoicesController < Buyers::BaseController
 
   def find_account
     @account = current_account.buyers.find(params[:account_id])
+  end
+
+  def invoice_params
+    params.require(:invoice).permit(:period)
   end
 end

@@ -2,19 +2,18 @@
 
 class SignupService
 
-  attr_reader :provider, :plans, :session, :account_params, :user_params, :authentication_provider
+  attr_reader :provider, :plans, :session, :authentication_provider, :account_manager
 
-  def initialize(provider:, plans:, session:, account_params:, user_params:, authentication_provider: nil)
+  def initialize(provider:, plans:, session:, authentication_provider: nil)
     @provider       = provider
     @plans          = plans
     @session        = session
-    @account_params = account_params
-    @user_params    = user_params.merge(signup_type: :new_signup)
     @authentication_provider = authentication_provider
+    @account_manager = Signup::DeveloperAccountManager.new(provider)
   end
 
-  def create
-    signup_result = Signup::DeveloperAccountManager.new(provider).create(signup_params) do |signup|
+  def create(account_params: {}, user_params: {})
+    signup_result = account_manager.create(signup_params(account_params:, user_params:)) do |signup|
       strategy.on_new_user(signup.user, session)
       yield(signup) if block_given?
     end
@@ -40,8 +39,8 @@ class SignupService
     authentication_provider.automatically_approve_accounts? && !signup_result.account_approved?
   end
 
-  def signup_params
-    Signup::SignupParams.new(plans: plans, user_attributes: user_params, account_attributes: account_params)
+  def signup_params(account_params:, user_params:)
+    Signup::SignupParams.new(plans: plans, user_attributes: user_params.merge(signup_type: :new_signup), account_attributes: account_params)
   end
 
   def push_webhooks(user)

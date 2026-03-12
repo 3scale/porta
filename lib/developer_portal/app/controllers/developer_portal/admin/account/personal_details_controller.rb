@@ -18,7 +18,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
 
   def update
     resource.validate_fields!
-    if resource.errors.empty? && resource.update(user_params)
+    if resource.errors.empty? && resource.update(permitted_user_params)
       resource.kill_user_sessions(user_session) if resource.just_changed_password?
 
       redirect_to admin_account_users_path, notice: 'User was successfully updated.'
@@ -44,9 +44,12 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def user_params
-    filter_readonly_params(params.require(:user), User).permit([:current_password] +
-                                   resource.special_fields +
-                                   resource.defined_fields.map(&:name))
+    @user_params ||= params.require(:user)
+  end
+
+  def permitted_user_params
+    @permitted_user_params ||= filter_readonly_params(user_params, User).permit(resource.special_fields +
+                                                                                resource.defined_fields.map(&:name))
   end
 
   def verify_current_password

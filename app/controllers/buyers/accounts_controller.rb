@@ -9,6 +9,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   before_action :set_plans, :only => %i[new create]
   before_action :find_account, except: %i[index new create]
+  before_action :init_signup_account_manager, only: %i[create]
 
   activate_menu :buyers, :accounts, :listing
 
@@ -41,7 +42,7 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def create
-    signup_result = Signup::DeveloperAccountManager.new(current_account).create(signup_params)
+    signup_result = @account_manager.create(signup_params)
     @buyer = signup_result.account
 
     if signup_result.persisted?
@@ -84,7 +85,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   protected
 
-  attr_reader :account
+  attr_reader :account, :user
 
   def find_account
     with_deleted = %w[show resume].include?(action_name)
@@ -109,13 +110,19 @@ class Buyers::AccountsController < Buyers::BaseController
     Signup::SignupParams.new(plans: [], user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, validate_fields: false)
   end
 
-  # TODO: using `permit` later
   def account_params
-    @account_params ||= params.require(:account).except(:user)
+    @account_params ||= begin
+      allowed_attrs = account.defined_builtin_fields_names - %i(billing_address country) + %i(country_id)
+      params.require(:account).permit(*allowed_attrs, extra_fields: account.defined_extra_fields_names)
+    end
   end
 
   def user_params
-    params.require(:account).fetch(:user, {})
+    @user_params ||= begin
+      allowed_attrs = user.defined_builtin_fields_names | %i(password signup_type)
+      params.require(:account).fetch(:user, ActionController::Parameters.new)
+            .permit(*allowed_attrs, extra_fields: user.defined_extra_fields_names)
+    end
   end
 
   def set_plans
@@ -130,5 +137,11 @@ class Buyers::AccountsController < Buyers::BaseController
     @presenter ||= Buyers::AccountsIndexPresenter.new(provider: current_account,
                                                       user: current_user,
                                                       params: params)
+  end
+
+  def init_signup_account_manager
+    @account_manager = Signup::DeveloperAccountManager.new(current_account)
+    @account = @account_manager.account
+    @user = @account_manager.user
   end
 end

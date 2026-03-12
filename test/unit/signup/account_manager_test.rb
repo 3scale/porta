@@ -8,6 +8,11 @@ module Signup
     include TestHelpers::Events
 
     class ProviderAccountManagerTest < Signup::AccountManagerTest
+
+      setup do
+        FieldsDefinition.create_defaults!(manager_account)
+      end
+
       test 'create provider with right params' do
         org_name_param     = 'Alaska'
         signup_result      = signup_account_manager.create(signup_params(different_account_params: {org_name: org_name_param}))

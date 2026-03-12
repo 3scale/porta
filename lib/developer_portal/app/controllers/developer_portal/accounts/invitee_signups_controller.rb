@@ -33,7 +33,8 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
       redirect_to strategy.redirect_to_on_successful_login
     else
       user_data = strategy.user_data || {}
-      @user.assign_attributes(user_data.to_hash.compact)
+      user_attributes = user_data.to_hash.compact.slice(:username, :email)
+      @user.assign_attributes(user_attributes)
       session[:invitation_sso_uid] = user_data[:uid]
       session[:invitation_sso_system_name] = strategy.authentication_provider.system_name
       build_sso_authorization
@@ -119,7 +120,10 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   end
 
   def build_user
-    @user = @invitation.make_user(filter_readonly_params(params[:user], User))
+    @user = @invitation.make_user
+    allowed_attrs = @user.defined_fields_names | %i(password password_confirmation)
+    user_params = filter_readonly_params(params[:user], User).permit(*allowed_attrs)
+    @user.assign_attributes(user_params)
   end
 
   def invitation_token
