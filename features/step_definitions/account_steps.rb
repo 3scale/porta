@@ -37,14 +37,19 @@ Then /^the provider time zone is "([^"]*)"$/ do |time_zone|
 end
 
 Then "new accounts with {plan} will be pending for approval" do |plan|
-  params = Signup::SignupParams.new(plans: [plan], user_attributes: {
-    password: 'password',
-    username: 'pepe',
-    email: 'pepe@example.com'
-  }, account_attributes: {
-    org_name: 'Banana API'
-  }, defaults: {})
-  signup = Signup::DeveloperAccountManager.new(current_account).create(params)
+  params = {
+    plans: [plan],
+    user_params: {
+      password: 'password',
+      username: 'pepe',
+      email: 'pepe@example.com'
+    },
+    account_params: {
+      org_name: 'Banana API'
+    },
+    defaults: {}
+  }
+  signup = Signup::DeveloperAccountManager.new(current_account).create(**params)
   assert signup.account_approval_required?
 end
 

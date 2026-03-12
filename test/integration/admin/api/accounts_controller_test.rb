@@ -56,6 +56,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
     test '#update from a member with service_permissions is updated correctly' do
       rolling_updates_on
       rolling_update(:service_permissions, enabled: true)
+      assert_not buyer.settings.monthly_billing_enabled
 
       put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_response :ok
@@ -70,10 +71,17 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'my_field')
 
-      put admin_api_account_path(buyer, format: :xml), params: update_params.merge({ extra_fields: { my_field: 4 } }), as: :json
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge(extra_fields: { my_field: 4 }), as: :json
       assert_response :ok
 
-      assert buyer.reload.extra_fields['my_field'].is_a?(String)
+      my_field = buyer.reload.extra_fields['my_field']
+      assert my_field.is_a?(String)
+      assert_equal "4", my_field
+
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge(my_field: 'another value'), as: :json
+      assert_response :ok
+
+      assert_equal 'another value', buyer.reload.extra_fields['my_field']
     end
 
     test '#update from a member without service_permissions returns error message in xml' do

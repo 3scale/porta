@@ -5,6 +5,7 @@ require 'test_helper'
 class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     login! master_account
+    FieldsDefinition.create_defaults!(master_account)
   end
 
   test 'disables x_frame_options header' do

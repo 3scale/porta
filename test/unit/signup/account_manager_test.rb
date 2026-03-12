@@ -8,9 +8,28 @@ module Signup
     include TestHelpers::Events
 
     class ProviderAccountManagerTest < Signup::AccountManagerTest
+
+      setup do
+        FieldsDefinition.create_defaults!(manager_account)
+      end
+
+      test 'validate_fields parameter controls field validation' do
+        # With validate_fields: true (default), fields are validated
+        manager_with_validation = signup_account_manager
+        manager_with_validation.account.expects(:validate_fields!).once
+        manager_with_validation.user.expects(:validate_fields!).once
+        manager_with_validation.create(**signup_params, validate_fields: true)
+
+        # With validate_fields: false, fields are not validated
+        manager_without_validation = signup_account_manager
+        manager_without_validation.account.expects(:validate_fields!).never
+        manager_without_validation.user.expects(:validate_fields!).never
+        manager_without_validation.create(**signup_params, validate_fields: false)
+      end
+
       test 'create provider with right params' do
         org_name_param     = 'Alaska'
-        signup_result      = signup_account_manager.create(signup_params(different_account_params: {org_name: org_name_param}))
+        signup_result      = signup_account_manager.create(**signup_params(different_account_params: {org_name: org_name_param}))
         account            = signup_result.account
         user               = signup_result.user
         imp_config         = ThreeScale.config.impersonation_admin
@@ -71,7 +90,7 @@ module Signup
       end
 
       test 'enqueues signup job' do
-        signup_account_manager.create(signup_params) do |signup_result|
+        signup_account_manager.create(**signup_params) do |signup_result|
           SignupWorker.expects(:enqueue).with(signup_result.account)
         end
       end
@@ -84,7 +103,7 @@ module Signup
 
         # On-prem
         ThreeScale.config.stubs(onpremises: true)
-        signup_result    = signup_account_manager.create(signup_params)
+        signup_result    = signup_account_manager.create(**signup_params)
         account          = signup_result.account
         # account has the right plans
         assert_equal account_plan, account.bought_account_plan
@@ -95,7 +114,7 @@ module Signup
 
         # Saas
         ThreeScale.config.stubs(onpremises: false)
-        signup_result    = signup_account_manager.create(signup_params)
+        signup_result    = signup_account_manager.create(**signup_params)
         account          = signup_result.account
         # account has the right plans
         assert_equal account_plan, account.bought_account_plan
@@ -106,7 +125,7 @@ module Signup
       end
 
       test 'create provider with wrong params does not create correctly without org_name' do
-        signup_result = signup_account_manager.create(signup_params(different_account_params: { org_name: '' }))
+        signup_result = signup_account_manager.create(**signup_params(different_account_params: { org_name: '' }))
 
         refute signup_result.valid?
         refute signup_result.persisted?
@@ -119,14 +138,14 @@ module Signup
       test 'creating a provider will create contract only 1 contract with the default application plan' do
         enterprise_plan = manager_account.default_application_plans.first!
         enterprise_plan.update_attribute(:system_name, 'enterprise')
-        account = signup_account_manager.create(signup_params).account
+        account = signup_account_manager.create(**signup_params).account
         assert account.signup? # assert signup_mode instance variable to true, which skips the application_plan callback
         assert_equal [enterprise_plan], account.bought_application_plans
         assert_equal 'API', account.first_service!.name
       end
 
       test 'first service has a complete backend api' do
-        account = signup_account_manager.create(signup_params).account
+        account = signup_account_manager.create(**signup_params).account
         assert_equal 1, account.backend_apis.count
         assert (service = account.default_service)
         assert_equal 1, service.backend_apis.count
@@ -136,6 +155,28 @@ module Signup
         assert_equal "#{service.name} Backend", backend_api.name
         assert_equal "Backend of #{service.name}", backend_api.description
         assert_equal service.account_id, backend_api.account_id
+      end
+
+      test "'name' is an alias for 'org_name', but the 'org_name' has priority" do
+        user_params = { user_params: valid_user_params }
+
+        # only name provided
+        params = user_params.merge({ account_params: ActionController::Parameters.new({ name: 'name' }).permit!})
+        signup_result = signup_account_manager.create(**params)
+        account = signup_result.account
+
+        assert signup_result.valid?
+        assert signup_result.persisted?
+        assert_equal 'name', account.name
+
+        # both org_name and name (in this order) provided
+        params = user_params.merge({ account_params: ActionController::Parameters.new({ org_name: 'org_name', name: 'name' }).permit!})
+        signup_result = signup_account_manager.create(**params)
+        account = signup_result.account
+
+        assert signup_result.valid?
+        assert signup_result.persisted?
+        assert_equal 'org_name', account.name
       end
 
       private
@@ -166,7 +207,7 @@ module Signup
         signup = []
 
         2.times do
-          signup << signup_account_manager.create(signup_params)
+          signup << signup_account_manager.create(**signup_params)
         end
 
         assert signup[0].persisted?
@@ -181,14 +222,14 @@ module Signup
       end
 
       test 'create does not create correctly without username' do
-        signup_result = signup_account_manager.create(signup_params(different_user_params: {username: ''}))
+        signup_result = signup_account_manager.create(**signup_params(different_user_params: {username: ''}))
         refute signup_result.valid?
         refute signup_result.persisted?
         assert_match /User Username is too short/, signup_result.errors.full_messages.to_sentence
       end
 
       test 'create developer with the right params' do
-        signup_result = signup_account_manager.create(signup_params)
+        signup_result = signup_account_manager.create(**signup_params)
         account = signup_result.account
 
         # persisted correctly
@@ -226,7 +267,7 @@ module Signup
 
       test 'create developer without account plan approval required and minimal signup' do
         @account_plan.update_attribute(:approval_required, false)
-        signup_result = signup_account_manager.create(signup_params(different_user_params: {signup_type: :minimal}))
+        signup_result = signup_account_manager.create(**signup_params(different_user_params: {signup_type: :minimal}))
 
         # the user is active and the account is approved
         assert signup_result.persisted?
@@ -237,13 +278,55 @@ module Signup
       test 'create developer with account plan approval required and minimal signup' do
         # The only difference is result.user_activate_on_minimal_signup? should return false, and it only happens if the contract_plans goes before this
         @account_plan.update_attribute(:approval_required, true)
-        signup_result = signup_account_manager.create(signup_params(different_user_params: {signup_type: :minimal}))
+        signup_result = signup_account_manager.create(**signup_params(different_user_params: {signup_type: :minimal}))
         account = signup_result.account
 
         # the user is pending and the account is created
         assert signup_result.persisted?
         assert_equal 'pending', signup_result.user.state
         assert_equal 'created', account.state
+      end
+
+      test 'plan validation errors are added to signup result' do
+        # Remove default plans to trigger validation errors
+        manager_account.update_attribute(:default_account_plan, nil)
+
+        signup_result = signup_account_manager.create(**signup_params)
+
+        refute signup_result.persisted?
+        refute signup_result.valid?
+        assert_includes signup_result.errors.full_messages.join, 'Account plan is required'
+      end
+
+      test 'custom signup_result_class can be used' do
+        custom_result_class = Class.new(Signup::Result) do
+          def custom_method
+            'custom'
+          end
+        end
+
+        signup_result = signup_account_manager.create(**signup_params, signup_result_class: custom_result_class)
+
+        assert_instance_of custom_result_class, signup_result
+        assert_equal 'custom', signup_result.custom_method
+        assert signup_result.persisted?
+      end
+
+      test 'transaction rollback prevents partial saves on record invalid' do
+        # Test that when save! raises RecordInvalid, the transaction rolls back
+        # and nothing is persisted
+        manager = signup_account_manager
+        result_double = manager.instance_variable_get(:@account).users.first || manager.user
+
+        # Stub the result.save! to raise RecordInvalid
+        Signup::Result.any_instance.stubs(:save!).raises(ActiveRecord::RecordInvalid.new(result_double))
+
+        signup_result = manager.create(**signup_params)
+
+        # Neither account nor user should be persisted due to rollback
+        assert_not signup_result.persisted?
+        assert signup_result.account.new_record?
+        assert signup_result.user.new_record?
       end
 
       private
@@ -263,10 +346,10 @@ module Signup
       setup do
         @provider_account = FactoryBot.create(:provider_account)
 
-        buyer_params = { org_name: 'My company' }
-        user_params = { username: 'new_user', email: 'new.user@company.com', signup_type: :minimal }
+        buyer_params = ActionController::Parameters.new({ org_name: 'My company' }).permit!
+        user_params = ActionController::Parameters.new({ username: 'new_user', email: 'new.user@company.com', signup_type: :minimal }).permit!
         plan_defaults = { ApplicationPlan => { :name => 'API signup', :description => 'API signup', :create_origin => 'api' } }
-        @signup_params = Signup::SignupParams.new(account_attributes: buyer_params, user_attributes: user_params, defaults: plan_defaults)
+        @signup_params = { account_params: buyer_params, user_params: user_params, defaults: plan_defaults}
       end
 
       test 'records are correctly saved after deadlock retry' do
@@ -276,7 +359,7 @@ module Signup
           .raises(ActiveRecord::StatementInvalid, 'Deadlock found when trying to get lock')
           .then.returns(true)
 
-        result = manager.create(@signup_params)
+        result = manager.create(**@signup_params)
 
         assert result.persisted?
 
@@ -292,16 +375,19 @@ module Signup
     private
 
     def signup_params(different_account_params: {}, different_user_params: {})
-      Signup::SignupParams.new(user_attributes: valid_user_params(different_user_params: different_user_params), account_attributes: valid_account_params(different_account_params: different_account_params))
+      {
+        user_params: valid_user_params(different_user_params: different_user_params),
+        account_params: valid_account_params(different_account_params: different_account_params)
+      }
     end
 
     def valid_account_params(different_account_params: {})
-      { org_name: 'Alaska', vat_rate: 33 }.merge(different_account_params)
+      ActionController::Parameters.new({ org_name: 'Alaska', vat_rate: 33 }.merge(different_account_params)).permit!
     end
 
     def valid_user_params(different_user_params: {})
-      { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-        password: '123456', password_confirmation: '123456', signup_type: :minimal }.merge(different_user_params)
+      ActionController::Parameters.new({ email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
+        password: '123456', password_confirmation: '123456', signup_type: :minimal }.merge(different_user_params)).permit!
     end
   end
 end
