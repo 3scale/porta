@@ -4,7 +4,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   before_action :redirect_if_logged_in
   before_action :find_invitation
   before_action :check_invitation!
-  before_action :build_user
+  before_action :build_new_user
 
   liquify prefix: 'accounts/invitee_signups'.freeze
 
@@ -47,7 +47,7 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
   def create
     build_sso_authorization
 
-    if @user.save
+    if @user.update(user_params)
       # we are activating users directly on signup so no activation email
       @user.activate!
       session.delete(:invitation_sso_uid)
@@ -65,12 +65,6 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
 
   def sso_attributes_provided?
     sso_attributes.all? { |_key, value| value.present? }
-  end
-
-  def create_sso_authorization
-    return unless sso_attributes_provided?
-    build_sso_authorization
-    @user.save
   end
 
   def authentication_provider
@@ -118,8 +112,13 @@ class DeveloperPortal::Accounts::InviteeSignupsController < DeveloperPortal::Bas
     end
   end
 
-  def build_user
-    @user = @invitation.make_user(filter_readonly_params(params[:user], User))
+  def build_new_user
+    @user = @invitation.make_user
+  end
+
+  def user_params
+    allowed_attrs = @user.defined_fields_names + %w[password password_confirmation]
+    filter_readonly_params(params[:user], User).permit(*allowed_attrs)
   end
 
   def invitation_token
