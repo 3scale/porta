@@ -1,69 +1,67 @@
-- content_for :page_header_title, 'Tokens'
+- content_for :page_header_title, t('.page_header_title')
 = javascript_packs_with_chunks_tag 'access_tokens'
 
 section id="access-tokens"
-  h2 Access Tokens
+  h2 = t('.access_tokens.title')
   p
-    ' Access tokens are personal tokens that let you authenticate against the Account Management API, the Analytics API and the Billing API through HTTP Basic Auth. You can create multiple access tokens with custom scopes and permissions. We suggest you create tokens with the minimal scopes & permissions needed for the task at hand. Use Access Tokens from within the
-    = link_to '3scale API docs', provider_admin_api_docs_path
+    = t('.access_tokens.description_html', link: link_to(t('.api_docs_link'), provider_admin_api_docs_path))
     | .
 
-  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Access tokens table"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="#{t('.access_tokens.table_aria_label')}"
     - allowed_scopes = current_user.allowed_access_token_scopes
     thead
       tr role="row"
-        th role="columnheader" scope="col" Name
-        th role="columnheader" scope="col" Scopes
-        th role="columnheader" scope="col" Expiration
-        th role="columnheader" scope="col" Permission
+        th role="columnheader" scope="col" = t('.access_tokens.columns.name')
+        th role="columnheader" scope="col" = t('.access_tokens.columns.scopes')
+        th role="columnheader" scope="col" = t('.access_tokens.columns.expiration')
+        th role="columnheader" scope="col" = t('.access_tokens.columns.permission')
         th role="columnheader" scope="col" class="pf-c-table__action pf-m-fit-content"
-          = fancy_link_to 'Add Access Token', new_provider_admin_user_access_token_path, class: 'new' if allowed_scopes.any?
+          = fancy_link_to t('.access_tokens.add_button'), new_provider_admin_user_access_token_path, class: 'new' if allowed_scopes.any?
     tbody role="rowgroup"
       - if @access_tokens.any? && allowed_scopes.any?
         - @access_tokens.each do |token|
           tr role="row"
-            td role="cell" data-label="Name" = token.name
-            td role="cell" data-label="Scopes" = token.human_scopes.to_sentence
-            td role="cell" data-label="Expiration" = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
-            td role="cell" data-label="Permission" = token.human_permission
+            td role="cell" data-label="#{t('.access_tokens.columns.name')}" = token.name
+            td role="cell" data-label="#{t('.access_tokens.columns.scopes')}" = token.human_scopes.to_sentence
+            td role="cell" data-label="#{t('.access_tokens.columns.expiration')}" = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
+            td role="cell" data-label="#{t('.access_tokens.columns.permission')}" = token.human_permission
             td role="cell" class="pf-c-table__action"
               div class="pf-c-overflow-menu"
                 div class="pf-c-overflow-menu__content"
                   div class="pf-c-overflow-menu__group pf-m-button-group"
                     div class="pf-c-overflow-menu__item"
-                      = link_to 'Edit', edit_provider_admin_user_access_token_path(token), class: 'action edit'
+                      = link_to t('.access_tokens.edit_button'), edit_provider_admin_user_access_token_path(token), class: 'action edit'
       - else
         tr role="row"
           td role="cell" colspan='4'
             - if allowed_scopes.any?
-              | No access tokens yet…
+              = t('.access_tokens.empty')
             - else
-              | You can't create access tokens because you don't have access to the Account Management API, the Analytics API, and/or the Billing API. Please contact an administrator of this account.
+              = t('.access_tokens.no_scopes')
 
 section#service-tokens.Section
-  h2 Service Tokens
+  h2 = t('.service_tokens.title')
   p
-    ' Service tokens let you authenticate against the Service Management API. Service tokens are auto generated, unique per service and shared between the users of this account. Use Service Tokens from within the
-    = link_to '3scale API docs', provider_admin_api_docs_path
+    = t('.service_tokens.description_html', link: link_to(t('.api_docs_link'), provider_admin_api_docs_path))
     | .
 
-  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="Service tokens table"
+  table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="#{t('.service_tokens.table_aria_label')}"
     thead
       tr role="row"
-        th role="columnheader" scope="col" class="pf-m-fit-content" Service name
-        th role="columnheader" scope="col" Scope
-        th role="columnheader" scope="col" Permission
-        th role="columnheader" scope="col" Token
+        th role="columnheader" scope="col" class="pf-m-fit-content" = t('.service_tokens.columns.service_name')
+        th role="columnheader" scope="col" = t('.service_tokens.columns.scope')
+        th role="columnheader" scope="col" = t('.service_tokens.columns.permission')
+        th role="columnheader" scope="col" = t('.service_tokens.columns.token')
     tbody
       - accessible_service_tokens = current_user.accessible_service_tokens
       - if accessible_service_tokens.any?
         - accessible_service_tokens.each do |service_token|
           tr role="row"
-            td role="cell" data-label="Service name" = service_token.service.name
-            td role="cell" data-label="Scope" Service management API
-            td role="cell" data-label="Permission" Read & Write
-            td role="cell" data-label="Token"
+            td role="cell" data-label="#{t('.service_tokens.columns.service_name')}" = service_token.service.name
+            td role="cell" data-label="#{t('.service_tokens.columns.scope')}" = t('.service_tokens.scope_value')
+            td role="cell" data-label="#{t('.service_tokens.columns.permission')}" = t('.service_tokens.permission_value')
+            td role="cell" data-label="#{t('.service_tokens.columns.token')}"
               code.u-code = service_token.value
       - else
         tr role="row"
-          td colspan='4' You don't have access to any service. Contact an admin of this account to request access if needed.
+          td colspan='4' = t('.service_tokens.empty')
