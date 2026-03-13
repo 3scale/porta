@@ -40,9 +40,9 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     preload_to_present(buyer_account)
 
-    buyer_account.vat_rate = params[:vat_rate].to_f if params[:vat_rate]
     buyer_account.settings.attributes = billing_params
-    buyer_account.update_with_flattened_attributes(flat_params)
+    buyer_account.billing_address = params[:billing_address] if params[:billing_address].present?
+    buyer_account.update(account_params)
 
     respond_with(buyer_account)
   end
@@ -151,7 +151,19 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     end
   end
 
-  def flat_params
-    super.except(:vat_rate, :id)
+  def account_params
+    @account_params ||= begin
+      defined_fields_names = buyer_account.defined_fields_names
+      allowed_attrs = defined_fields_names - %w[billing_address] + %w[name]
+      nested_params = { extra_fields: buyer_account.defined_extra_fields_names }
+
+      if defined_fields_names.include?('billing_address')
+        allowed_attrs += %w[billing_address_name billing_address_address1 billing_address_address2 billing_address_city
+                            billing_address_country billing_address_state billing_address_zip billing_address_phone]
+        nested_params[:billing_address] = %i[name address1 address2 city country state zip phone]
+      end
+
+      flat_params.permit(*allowed_attrs, **nested_params)
+    end
   end
 end

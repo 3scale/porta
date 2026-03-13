@@ -3,11 +3,13 @@
 require 'test_helper'
 
 class Provider::Admin::Account::UsersControllerTest < ActionDispatch::IntegrationTest
+  include FieldsDefinitionsHelpers
 
   def setup
     @provider    = FactoryBot.create :provider_account
     @default_ids = [:partners]
     @user        = FactoryBot.create :simple_user, account: @provider, member_permission_ids: @default_ids
+    FieldsDefinition.create_defaults!(@provider.provider_account)
 
     login! @provider
   end
@@ -98,5 +100,40 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
     put provider_admin_account_user_path(user), params: { user: {role: 'member'} }
 
     assert user.reload.admin?
+  end
+
+  test 'update user fields including optional and custom ones' do
+    field_defined(@provider.provider_account, { target: 'User', name: 'job_role' })
+    field_defined(@provider.provider_account, { target: 'User', name: 'custom_field' })
+
+    put provider_admin_account_user_path(@user), params: 
+      {
+        user: {
+          username: 'new_username',
+          job_role: 'developer',
+          extra_fields: {
+            custom_field: 'custom value'
+          }
+        }
+      }
+
+    @user.reload
+
+    assert_equal 'new_username', @user.username
+    assert_equal 'developer', @user.job_role
+    assert_equal 'custom value', @user.extra_fields['custom_field']
+  end
+
+  test 'update password' do
+    put provider_admin_account_user_path(@user), params: { user: { password: 'supersecretpassword', password_confirmation: 'not-matching' } }
+
+    assert_template :edit
+    assert_select 'p.inline-errors', text: "doesn't match Password"
+
+    put provider_admin_account_user_path(@user), params: { user: { password: 'supersecretpassword', password_confirmation: 'supersecretpassword' } }
+
+    assert_redirected_to provider_admin_account_users_path
+    assert_equal "User was successfully updated", flash[:success]
+    assert @user.reload.authenticated?('supersecretpassword')
   end
 end

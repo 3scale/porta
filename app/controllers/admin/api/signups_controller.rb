@@ -7,7 +7,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
   def create
     authorize!(:create, Account) if current_user
 
-    @signup_result = Signup::DeveloperAccountManager.new(current_account).create(signup_params)
+    @signup_result = account_manager.create(signup_params)
 
     check_creation_errors
     respond_with(@signup_result.account, user_options: { with_apps: true })
@@ -15,8 +15,22 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
 
   private
 
+  def account_manager
+    @account_manager ||= Signup::DeveloperAccountManager.new(current_account)
+  end
+
   def user_params
-    flat_params.merge({signup_type: :minimal})
+    @user_params ||= begin
+      allowed_attrs = account_manager.user.defined_fields_names + %w[password signup_type]
+      flat_params.permit(*allowed_attrs).merge(signup_type: :minimal)
+    end
+  end
+
+  def account_params
+    @account_params ||= begin
+      allowed_attrs = account_manager.account.defined_fields_names - %w[billing_address]
+      flat_params.permit(*allowed_attrs)
+    end
   end
 
   def check_creation_errors
@@ -31,7 +45,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
   end
 
   def signup_params
-    Signup::SignupParams.new(plans: plans, user_attributes: user_params, account_attributes: flat_params, defaults: defaults)
+    Signup::SignupParams.new(plans: plans, user_attributes: user_params, account_attributes: account_params, defaults: defaults)
   end
 
   def defaults

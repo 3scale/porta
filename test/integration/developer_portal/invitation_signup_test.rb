@@ -4,6 +4,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
 
   OAuth2 = Authentication::Strategy::OAuth2
+  UserData = ThreeScale::OAuth2::UserData
 
   def setup
     @provider   = FactoryBot.create(:simple_provider)
@@ -24,7 +25,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     # sso attributes do exist, sso authorization object should be built
     # and therefore, user password should not be required
     OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
-    OAuth2.any_instance.expects(:user_data).returns({ uid: '12345' })
+    OAuth2.any_instance.expects(:user_data).returns(UserData.new({ uid: '12345' }))
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     get invitee_signup_path(invitation_token: @invitation.token)
@@ -77,7 +78,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert session[:invitation_sso_uid].blank?
     refute assigns(:user).valid?
 
-    OAuth2.any_instance.expects(:user_data).returns({ uid: '12345' })
+    OAuth2.any_instance.expects(:user_data).returns(UserData.new({ uid: '12345' }))
     get "/auth/invitations/#{@invitation.token}/github/callback"
     assert_response :success
     assert_equal '12345', session[:invitation_sso_uid]
@@ -103,6 +104,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
   end
 
   def test_create
+    FieldsDefinition.create_defaults!(@provider)
     OAuth2.any_instance.stubs(:authentication_provider).returns(@auth_provider)
 
     assert_difference '@buyer.users.count' do

@@ -104,11 +104,6 @@ class Account < ApplicationRecord
   before_validation(on: :create, if: :provider?) { generate_domains }
   before_create :generate_site_access_code
 
-  attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data, :default_service_id, :s3_prefix,
-                 :provider_account_id, :paid_at, :paid, :signs_legal_terms, :tenant_id, :default_account_plan_id,
-                 :default_service_id, :domain, :subdomain, :self_subdomain, :self_domain,:audit_ids, :partner,
-                 :hosted_proxy_deployed_at
-
   belongs_to :partner
   has_many :users, inverse_of: :account, dependent: :destroy
   has_many :admin_users, -> { admins }, class_name: 'User', inverse_of: :account

@@ -75,13 +75,9 @@ resource "User" do
 
     let(:account_id) { buyer.id }
 
-    let (:user) { FactoryBot.build(:user, account: buyer) }
+    let(:user) { FactoryBot.build(:user, account: buyer) }
 
-    let(:resource) do
-      FieldsDefinition.create_defaults!(master)
-      provider.reload
-      user
-    end
+    let(:resource) { user }
 
     get '/admin/api/accounts/:account_id/users/:id.:format', action: :show
     delete '/admin/api/accounts/:account_id/users/:id', action: :destroy
@@ -147,12 +143,7 @@ resource "User" do
 
     let(:user) { FactoryBot.create(:user, account: provider) }
 
-    # creating new db records for fields that are in db is pathetic as it can get
-    let(:resource) do
-      FieldsDefinition.create_defaults!(master)
-      provider.reload
-      user
-    end
+    let(:resource) { user }
 
     it { should include('id' => user.id, 'state' => user.state, 'role' => user.role.to_s) }
     it { should include('email' => user.email, 'username' => user.username) }
