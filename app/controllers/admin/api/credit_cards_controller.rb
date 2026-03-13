@@ -23,6 +23,8 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
       @buyer.credit_card_authorize_net_payment_profile_token =
         params[:credit_card_authorize_net_payment_profile_token]
 
+      @buyer.payment_detail.payment_method_id = params[:payment_method_id]
+
       @buyer.billing_address_name = params[:billing_address_name]
       @buyer.billing_address_address1 = params[:billing_address_address]
 

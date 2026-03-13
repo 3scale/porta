@@ -16,6 +16,7 @@ resource "Account" do
       parameter :billing_address_address, "Address associated to the credit card"
       parameter :billing_address_city, "Billing address city"
       parameter :billing_address_country, "Billing address country"
+      parameter :payment_method_id, "The Payment Method ID from the payment gateway (required for Stripe)"
 
       let(:credit_card_token) { '12324354' }
       let(:credit_card_expiration_year) { '2013' }
@@ -24,17 +25,23 @@ resource "Account" do
       let(:billing_address_address) { 'Area 51' }
       let(:billing_address_city) { 'Nevada' }
       let(:billing_address_country) { 'Arizona' }
+      let(:payment_method_id) { 'pm_12345678' }
 
       request "Store Credit Card" do
         resource.reload.credit_card_stored?.should == true
+        resource.reload.payment_detail.payment_method_id.should == 'pm_12345678'
       end
     end
 
     delete '/admin/api/accounts/:account_id/credit_card.xml' do
-      before { resource.update_attribute(:credit_card_auth_code, true) }
+      before do
+        resource.update_attribute(:credit_card_auth_code, true)
+        resource.payment_detail.update!(payment_method_id: 'pm_12345678')
+      end
 
       request "Destroy stored Credit Card", body: false do
         resource.reload.credit_card_stored?.should == false
+        resource.reload.payment_detail.payment_method_id.should be_nil
       end
     end
   end
