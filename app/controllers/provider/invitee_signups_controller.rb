@@ -5,7 +5,7 @@ class Provider::InviteeSignupsController < FrontendController
   before_action :ask_for_upgrade
 
   before_action :find_invitation
-  before_action :build_user
+  before_action :build_new_user
   before_action :instantiate_sessions_presenter
 
   layout 'provider/login'
@@ -14,6 +14,7 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def create
+    @user.assign_attributes(user_params)
     @user.admin_sections = domain_account.provider_can_use?(:service_permissions) ? [] : ['monitoring']
 
     if can_create? && @user.save
@@ -52,18 +53,13 @@ class Provider::InviteeSignupsController < FrontendController
     account.provider_constraints.can_create_user?
   end
 
-  def build_user
+  def build_new_user
     @user = @invitation.make_user
-    @user.assign_attributes(user_params(@user))
-
-    # This is just a sanity guard added when splitting invitation
-    # controllers. Remove when SURE.
-    raise 'Developer invitation used and worked on provider side!' unless @user.account.provider?
   end
 
-  def user_params(user)
-    allowed_attrs = user.defined_fields_names + %w[password password_confirmation]
-    params.fetch(:user, {}).permit(*allowed_attrs)
+  def user_params
+    allowed_attrs = @user.defined_fields_names + %w[password password_confirmation]
+    params.require(:user).permit(*allowed_attrs)
   end
 
   def invitation_token
