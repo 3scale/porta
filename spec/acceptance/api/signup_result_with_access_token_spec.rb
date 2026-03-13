@@ -11,7 +11,7 @@ resource 'Signup::ResultWithAccessToken' do
     result
   end
   let(:expected_account_properties) { %w[id created_at updated_at admin_domain domain from_email state] }
-  let(:expected_access_token_properties) { %w[id name scopes permission value] }
+  let(:expected_access_token_properties) { %w[id name scopes permission] }
 
   json(:resource) do
     let(:root) { 'signup' }
@@ -19,6 +19,7 @@ resource 'Signup::ResultWithAccessToken' do
     it do
       subject.fetch('account').should have_properties(expected_account_properties).from(resource.account)
       subject.fetch('access_token').should have_properties(expected_access_token_properties).from(resource.access_token)
+      subject.fetch('access_token').should include('value' => resource.access_token.plaintext_value)
     end
 
     it { should_not include('errors') }
@@ -46,6 +47,7 @@ resource 'Signup::ResultWithAccessToken' do
     context 'access_token' do
       subject { xml.root.xpath('./access_token') }
       it { should have_tags(expected_access_token_properties).from(resource.access_token) }
+      it { should have_tag('value', text: resource.access_token.plaintext_value) }
     end
 
     it { should_not have_tag('errors') }

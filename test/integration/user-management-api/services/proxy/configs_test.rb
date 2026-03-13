@@ -89,16 +89,16 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     _proxy_config_old = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v1.example.com'))
     proxy_config_new  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v2.example.com'))
 
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v1.example.com', access_token: @token.value }
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v1.example.com', access_token: @token.plaintext_value }
     assert_empty proxy_config_ids
 
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v2.example.com', access_token: @token.value }
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v2.example.com', access_token: @token.plaintext_value }
     assert_equal [proxy_config_new.id], proxy_config_ids
 
 
     _proxy_config_old, proxy_config_new = FactoryBot.create_list(:proxy_config, 2, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
 
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'foo.example.com', access_token: @token.value }
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'foo.example.com', access_token: @token.plaintext_value }
     assert_equal [proxy_config_new.id], proxy_config_ids
   end
 
@@ -133,7 +133,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
   def host_valid_params
     {
       host:         @config.hosts.first,
-      access_token: @token.value,
+      access_token: @token.plaintext_value,
     }
   end
 
@@ -141,7 +141,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     {
       service_id:   @service.id,
       environment:  ProxyConfig::ENVIRONMENTS.first,
-      access_token: @token.value,
+      access_token: @token.plaintext_value,
       format:       :json
     }
   end

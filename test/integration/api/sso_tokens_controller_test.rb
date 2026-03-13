@@ -5,7 +5,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     provider = FactoryBot.create(:provider_account)
     @admin = FactoryBot.create(:simple_admin, account: provider, username: 'alaska123')
     @admin.activate!
-    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'rw').value
+    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'rw').plaintext_value
 
     host! provider.external_admin_domain
   end
@@ -39,7 +39,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
 
     test 'provider_create' do
       FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin[:username])
-      post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value }
+      post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.plaintext_value }
       assert_response :success
 
       assert sso_token = JSON.parse(response.body)['sso_token']
@@ -51,7 +51,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin[:username])
 
       freeze_time do
-        post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value, expires_in: 60 }
+        post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.plaintext_value, expires_in: 60 }
         assert_response :success
 
         assert_equal (Time.now.utc + 60).httpdate, response.headers['Expires']

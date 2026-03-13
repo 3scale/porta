@@ -888,9 +888,47 @@ en:
           edit:
             page_header_title: Edit Access Token
             submit_button_label: Update Access Token
+          index:
+            page_header_title: Tokens
+            api_docs_link: 3scale API docs
+            access_tokens:
+              title: Access Tokens
+              description_html: "Access tokens are personal tokens that let you authenticate against the Account Management API, the Analytics API and the Billing API through HTTP Basic Auth. You can create multiple access tokens with custom scopes and permissions. We suggest you create tokens with the minimal scopes & permissions needed for the task at hand. Use Access Tokens from within the %{link}"
+              table_aria_label: Access tokens table
+              add_button: Add Access Token
+              edit_button: Edit
+              empty: No access tokens yet…
+              no_scopes: "You can't create access tokens because you don't have access to the Account Management API, the Analytics API, and/or the Billing API. Please contact an administrator of this account."
+              columns:
+                name: Name
+                scopes: Scopes
+                expiration: Expiration
+                permission: Permission
+            service_tokens:
+              title: Service Tokens
+              description_html: "Service tokens let you authenticate against the Service Management API. Service tokens are auto generated, unique per service and shared between the users of this account. Use Service Tokens from within the %{link}"
+              table_aria_label: Service tokens table
+              scope_value: Service management API
+              permission_value: Read & Write
+              empty: You don't have access to any service. Contact an admin of this account to request access if needed.
+              columns:
+                service_name: Service name
+                scope: Scope
+                permission: Permission
+                token: Token
           new:
             page_header_title: New Access Token
             submit_button_label: Create Access Token
+          show:
+            page_header_title: Copy the new token and store it somewhere safe
+            copy_warning: Make sure to copy your new personal access token now. You won't be able to see it again as it isn't stored for security reasons.
+            copied_button: I have copied the token
+            fields:
+              name: Name
+              scopes: Scopes
+              permission: Permission
+              expires_at: Expires at
+              token: Token
           update:
             success: Access token was successfully updated
         notification_preferences:

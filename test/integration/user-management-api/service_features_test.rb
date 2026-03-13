@@ -19,10 +19,10 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
     get admin_api_service_feature_path(@service, feature)
     assert_response :forbidden
-    get admin_api_service_feature_path(@service, feature), params: { access_token: token.value }
+    get admin_api_service_feature_path(@service, feature), params: { access_token: token.plaintext_value }
     assert_response :not_found
     user.update(member_permission_service_ids: [@service.id])
-    get admin_api_service_feature_path(@service, feature), params: { access_token: token.value }
+    get admin_api_service_feature_path(@service, feature), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 

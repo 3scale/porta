@@ -42,7 +42,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       buyer_user = FactoryBot.create(:admin, account: buyer)
       buyer_user.update(email: nil)
 
-      get find_admin_api_accounts_path(format: :json, access_token: token.value)
+      get find_admin_api_accounts_path(format: :json, access_token: token.plaintext_value)
       assert_response :not_found
     end
   end
@@ -138,13 +138,13 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       buyer.payment_detail.destroy!
 
       assert_difference(PaymentDetail.method(:count), 0) do
-        get admin_api_account_path(buyer, format: :xml, access_token: token.value)
+        get admin_api_account_path(buyer, format: :xml, access_token: token.plaintext_value)
         assert_response :success
       end
 
       buyer.settings.destroy!
       assert_difference(Settings.method(:count), 0) do
-        get admin_api_account_path(buyer, format: :xml, access_token: token.value)
+        get admin_api_account_path(buyer, format: :xml, access_token: token.plaintext_value)
         assert_response :success
       end
 
@@ -165,7 +165,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.value }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.plaintext_value }
         assert_response :success
       end
     end
@@ -185,7 +185,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_deleted_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        delete admin_api_account_path(buyer, access_token: token.value)
+        delete admin_api_account_path(buyer, access_token: token.plaintext_value)
         assert_response :success
       end
     end
@@ -210,7 +210,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def update_params
-    @update_params ||= { monthly_billing_enabled: true, access_token: token.value }
+    @update_params ||= { monthly_billing_enabled: true, access_token: token.plaintext_value }
   end
 
   def token(user: provider.admin_user)
