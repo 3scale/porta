@@ -37,12 +37,12 @@ class AccountSetting::SwitchSetting < AccountSetting
 
     case target
     when 'denied'
-      deny!
+      deny
     when 'hidden'
-      value == 'denied' ? allow! : hide!
+      value == 'denied' ? allow : hide
     when 'visible'
-      allow! if value == 'denied'
-      show!
+      allow if value == 'denied'
+      show
     end
   end
 
