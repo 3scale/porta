@@ -2,7 +2,7 @@ class HashAccessTokenValues < ActiveRecord::Migration[7.1]
   disable_ddl_transaction! if System::Database.postgres?
 
   BATCH_SIZE = 1000
-  DIGEST_PREFIX = 'SHA384|'.freeze
+  DIGEST_PREFIX = 'SHA384$'.freeze
 
   def up
     say "Hashing legacy access token values..."
