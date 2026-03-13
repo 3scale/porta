@@ -1,0 +1,159 @@
+%% Billing Flow - Rate Limit Error (429)
+%% Shows how rate limit errors trigger immediate retry with exponential backoff
+
+sequenceDiagram
+    participant BW as BillingWorker<br/>(Sidekiq)
+    participant BS as BillingService
+    participant Strategy as BillingStrategy<br/>(class method)
+    participant Instance as PostpaidBillingStrategy<br/>(instance)
+    participant Invoice as Invoice
+    participant Account as Account<br/>(Buyer)
+    participant PT as PaymentTransaction
+    participant Stripe as Stripe API
+    participant Sidekiq as Sidekiq Retry
+
+    Note over BW,Sidekiq: Buyer #123 has 3 invoices: #1, #2, #3
+
+    BW->>BW: perform(buyer_id: 123, provider_id: 456)
+    activate BW
+
+    BW->>BS: call!(buyer_id: 123, provider_account_id: 456)
+    activate BS
+
+    BS->>BS: acquire_lock("billing:123")
+    Note over BS: Lock acquired ✓
+
+    BS->>Strategy: daily(only: [456], buyer_ids: [123])
+    activate Strategy
+
+    Strategy->>Instance: daily(buyer_ids: [123])
+    activate Instance
+
+    Instance->>Instance: charge_invoices(buyer, now)
+    Note over Instance: Loop: Invoice #1, #2, #3
+
+    rect rgb(200, 255, 200)
+        Note over Instance,Stripe: Invoice #1 - SUCCESS
+        Instance->>Invoice: charge! (Invoice #1)
+        activate Invoice
+        Invoice->>Account: charge!(100.00, invoice: #1)
+        Account->>PT: purchase!(100.00, ...)
+        PT->>Stripe: POST /v1/charges
+        Stripe-->>PT: 200 OK
+        PT-->>Account: success
+        Account-->>Invoice: true
+        Invoice->>Invoice: pay! → save!
+        Note over Invoice: State: paid ✓<br/>COMMITTED to DB
+        Invoice-->>Instance: (success)
+        deactivate Invoice
+    end
+
+    rect rgb(255, 200, 200)
+        Note over Instance,Stripe: Invoice #2 - RATE LIMIT!
+        Instance->>Invoice: charge! (Invoice #2)
+        activate Invoice
+        Invoice->>Account: charge!(200.00, invoice: #2)
+        Account->>PT: purchase!(200.00, ...)
+        PT->>Stripe: POST /v1/charges
+        Note over Stripe: ⚠️ Rate limit exceeded
+        Stripe-->>PT: 429 Too Many Requests
+
+        PT->>PT: rate_limit_error?(response)<br/>→ true (HTTP 429)
+        Note over PT: Raise RateLimitError
+        PT-->>Account: ❌ RateLimitError
+        Account-->>Invoice: ❌ RateLimitError
+
+        Note over Invoice: DON'T catch RateLimitError<br/>Re-raise immediately
+        Invoice-->>Instance: ❌ RateLimitError
+        deactivate Invoice
+
+        Note over Instance: Loop exits<br/>Invoice #3 NOT attempted
+    end
+
+    Note over Instance: bill_and_charge_each<br/>catches RateLimitError
+    Instance-->>Strategy: ❌ RateLimitError
+    deactivate Instance
+
+    Note over Strategy: Separate rescue for RateLimitError<br/>Log: "hit rate limit while processing 1 buyer(s): [123]"
+    Strategy->>Strategy: Rails.logger.warn(...)
+    Strategy->>Strategy: System::ErrorReporting.report_error(e, class: 'RateLimitError')
+    Strategy-->>BS: ❌ RateLimitError (re-raised)
+    deactivate Strategy
+
+    Note over BS: Catch RateLimitError
+    BS->>BS: release_lock("billing:123")
+    Note over BS: ⚠️ Lock released!<br/>Allows immediate retry
+    BS->>BS: report_error(e)
+    BS-->>BW: ❌ RateLimitError (re-raised)
+    deactivate BS
+
+    Note over BW: Job fails with RateLimitError
+    BW-->>Sidekiq: ❌ Job failed
+    deactivate BW
+
+    rect rgb(255, 255, 200)
+        Note over Sidekiq: sidekiq_retry_in do |count, exception|<br/>when RateLimitError<br/>delay = (3 ** 1) * 5 = 15s + jitter
+        Note over Sidekiq: ⏰ Schedule retry in ~15 seconds
+    end
+
+    Note over BW,Sidekiq: ~15 seconds pass...
+
+    Sidekiq->>BW: Retry attempt #1
+    activate BW
+
+    BW->>BS: call!(buyer_id: 123, provider_id: 456)
+    activate BS
+
+    BS->>BS: acquire_lock("billing:123")
+    Note over BS: Lock acquired ✓<br/>(was released earlier)
+
+    BS->>Strategy: daily(only: [456], buyer_ids: [123])
+    activate Strategy
+
+    Strategy->>Instance: daily(buyer_ids: [123])
+    activate Instance
+
+    Instance->>Instance: charge_invoices(buyer, now)
+    Note over Instance: Query chargeable invoices:<br/>#1: paid → excluded ✓<br/>#2: pending → included<br/>#3: pending → included
+
+    rect rgb(200, 255, 200)
+        Note over Instance,Stripe: Invoice #2 - SUCCESS (retry)
+        Instance->>Invoice: charge! (Invoice #2)
+        Invoice->>Account: charge!(200.00, invoice: #2)
+        Account->>PT: purchase!(200.00, ...)
+        PT->>Stripe: POST /v1/charges
+        Stripe-->>PT: 200 OK
+        PT-->>Account: success
+        Account-->>Invoice: true
+        Invoice->>Invoice: pay! → save!
+        Note over Invoice: State: paid ✓
+        Invoice-->>Instance: (success)
+    end
+
+    rect rgb(200, 255, 200)
+        Note over Instance,Stripe: Invoice #3 - SUCCESS
+        Instance->>Invoice: charge! (Invoice #3)
+        Invoice->>Account: charge!(50.00, invoice: #3)
+        Account->>PT: purchase!(50.00, ...)
+        PT->>Stripe: POST /v1/charges
+        Stripe-->>PT: 200 OK
+        PT-->>Account: success
+        Account-->>Invoice: true
+        Invoice->>Invoice: pay! → save!
+        Note over Invoice: State: paid ✓
+        Invoice-->>Instance: (success)
+    end
+
+    Instance-->>Strategy: (success)
+    deactivate Instance
+
+    Strategy-->>BS: results (success: true)
+    deactivate Strategy
+
+    BS-->>BW: billing_results
+    deactivate BS
+
+    BW-->>Sidekiq: Job complete ✓
+    deactivate BW
+
+    Note over BW,Sidekiq: ✓ All 3 invoices charged successfully<br/>Total time: ~15 seconds for retry

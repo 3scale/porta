@@ -451,6 +451,10 @@ class Invoice < ApplicationRecord
       logger.info("Invoice #{id} (buyer #{buyer_account_id}) was not charged")
       false
     end
+  rescue Finance::Payment::StripeRateLimitError => e
+    # Rate limit errors should bubble up to Sidekiq for immediate retry with exponential backoff
+    # Don't treat these as payment failures - they are temporary gateway issues
+    raise e
   rescue Finance::Payment::CreditCardError, ActiveMerchant::ActiveMerchantError
     provider.billing_strategy&.error("Error when charging invoice #{id} (buyer #{buyer_account_id})", buyer)
 

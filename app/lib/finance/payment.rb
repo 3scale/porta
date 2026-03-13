@@ -18,5 +18,18 @@ module Finance
 
     CreditCardPurchaseFailed = Class.new(GatewayError)
 
+    # Rate limit error - should be retried immediately, not treated as payment failure
+    class StripeRateLimitError < ActiveMerchant::ActiveMerchantError
+      attr_reader :response, :payment_metadata
+
+      def initialize(response, payment_metadata)
+        @response = response
+        @payment_metadata = payment_metadata
+      end
+
+      def message
+        response.try!(:message) || 'Rate limit exceeded - too many requests to payment gateway'
+      end
+    end
   end
 end
