@@ -52,23 +52,19 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
   end
 
   def update_resource(user, attributes)
-    # FIXME: in rails 3, we're getting an array
-    attributes = attributes.first
+    allowed_attrs = user.defined_builtin_fields_names + %w[password password_confirmation]
 
-    # After the rails 5.1 upgrade, attributes comes as ActionController::Parameters except when they are empty
-    attributes = attributes.permit!.to_h unless attributes.is_a?(Hash)
-
-    protected_attributes = attributes.extract!(*User::Permissions::ATTRIBUTES)
-
-    unless current_account.provider_can_use?(:service_permissions)
-      protected_attributes.except!(:member_permission_service_ids)
+    if can?(:update_role, user)
+      allowed_attrs += [:role, member_permission_ids: []]
+      allowed_attrs += [:member_permission_service_ids, member_permission_service_ids: []] if current_account.provider_can_use?(:service_permissions)
     end
 
-    user.class.transaction do
-      user.assign_attributes(attributes)
-      user.assign_attributes(protected_attributes) if can?(:update_role, user)
+    permitted_attributes = attributes.permit(*allowed_attrs, extra_fields: user.defined_extra_fields_names)
 
-      user.save
-    end
+    user.update(permitted_attributes)
+  end
+
+  def resource_params
+    params.fetch(:user, {})
   end
 end
