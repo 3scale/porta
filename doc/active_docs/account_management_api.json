@@ -1767,6 +1767,10 @@
                   "credit_card_partial_number": {
                     "type": "string",
                     "description": "Last four digits on the credit card"
+                  },
+                  "payment_method_id": {
+                    "type": "string",
+                    "description": "The Payment Method ID from the payment gateway. Required for Stripe (e.g. pm_xxxxxxxxxxxxxxxx)."
                   }
                 },
                 "required": [
