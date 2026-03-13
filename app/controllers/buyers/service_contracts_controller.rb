@@ -78,7 +78,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def approve
-    if resource.accept
+    if @service_contract.accept
       flash[:success] = t('.success')
     else
       flash[:danger] = t('.error')

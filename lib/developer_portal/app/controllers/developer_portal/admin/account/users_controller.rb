@@ -1,9 +1,6 @@
 class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::BaseController
   before_action :ensure_buyer_domain
-
-  inherit_resources
-  defaults :route_prefix => 'admin_account'
-  actions :index, :edit, :update, :destroy
+  before_action :load_user, only: [:edit, :update, :destroy]
 
   authorize_resource
 
@@ -24,38 +21,46 @@ class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::Base
   def update
     @user.validate_fields!
 
-    update! do |success, failure|
-      success.html do
-        flash[:notice] = 'User was successfully updated.'
-        redirect_to(collection_url)
-      end
-
-      failure.html do
-        assign_liquid_drops
-        render action: 'edit'
-      end
+    if update_resource(@user, user_params)
+      flash[:notice] = 'User was successfully updated.'
+      redirect_to admin_account_users_path
+    else
+      assign_liquid_drops
+      render action: 'edit'
     end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to admin_account_users_path
   end
 
   private
 
-  def assign_liquid_drops
-    assign_drops user: resource
+  def load_user
+    @user = users.find(params[:id])
   end
 
-  def begin_of_association_chain
-    current_account
+  def users
+    @users ||= current_account.users
   end
 
   def collection
-    @users ||= end_of_association_chain.paginate(:page => params[:page])
+    @collection ||= users.paginate(page: params[:page])
+  end
+
+  def assign_liquid_drops
+    assign_drops user: @user
   end
 
   def update_resource(user, attributes)
-    attributes.each do |attrs|
-      user.attributes = filter_readonly_params(attrs, User)
-      user.role = attrs[:role] if can? :update_role, user
-    end
+    user.attributes = filter_readonly_params(attributes, User)
+    user.role = attributes[:role] if can? :update_role, user
     user.save
+  end
+
+  def user_params
+    params.require(:user).permit(*@user.defined_fields.map(&:name), :role,
+                                 *@user.special_fields, *@user.defined_extra_fields_names)
   end
 end
