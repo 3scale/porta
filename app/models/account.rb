@@ -8,6 +8,7 @@ class Account < ApplicationRecord
 
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
+  after_create :generate_sso_key, if: :provider?
 
 
   include Fields::Fields
@@ -52,7 +53,7 @@ class Account < ApplicationRecord
   # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
   self.background_deletion = %i[
     configuration_values
-    settings
+    account_settings
     forum
     users
     mail_dispatch_rules
@@ -224,8 +225,12 @@ class Account < ApplicationRecord
   #TODO: check if the comment below still holds
   # profile is using acts_as_audited and it will not work if :dependent => :destroy
   has_one :profile, dependent: :delete
-  has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
-  lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
+  has_many :account_settings, dependent: :delete_all, inverse_of: :account, autosave: true
+  lazy_initialization_for :profile, if: :should_not_be_deleted?
+
+  def settings
+    @settings_facade ||= Settings.new(self)
+  end
   accepts_nested_attributes_for :profile
 
   belongs_to :country
@@ -425,6 +430,7 @@ class Account < ApplicationRecord
     @buyer_attribute_descriptors = nil
     @signup_form_fields = nil
     @_first_admin = nil
+    @settings_facade = nil
 
     super
   end
@@ -568,6 +574,10 @@ class Account < ApplicationRecord
     scope = persisted? ? scope.where.not(id: id) : scope
 
     errors.add :master, 'can be only one' if scope.exists?(master: true)
+  end
+
+  def generate_sso_key
+    settings.update_attribute(:sso_key, ThreeScale::SSO.generate_sso_key)
   end
 
   protected
