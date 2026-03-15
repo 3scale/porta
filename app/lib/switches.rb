@@ -153,10 +153,21 @@ module Switches
         end
       end
 
+      # State query delegations (e.g., settings.multiple_applications_visible?)
+      %w[visible hidden denied allowed].each do |state|
+        define_method("#{name}_#{state}?") do
+          send(name).send("#{state}?")
+        end
+      end
+
       # State transition delegations (e.g., settings.allow_finance!)
       %w[allow show hide deny].each do |event|
         define_method("#{event}_#{name}!") do
           find_or_build_switch(name).send("#{event}!")
+        end
+
+        define_method("can_#{event}_#{name}?") do
+          find_or_build_switch(name).send("can_#{event}?")
         end
       end
     end
