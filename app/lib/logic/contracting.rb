@@ -28,7 +28,7 @@ module Logic
     end
 
     module Provider
-      def provider_builds_application_for(buyer, application_plan, application_attrs = {}, service_plan = nil)
+      def provider_builds_application_for(buyer, application_plan, service_plan = nil, application_attrs: {})
         service_contracted = buyer.bought_service_contracts.map(&:service).include?(application_plan.service)
 
         service_contract = unless service_contracted
