@@ -23,6 +23,10 @@ module Fields
       end
     end
 
+    def defined_fields_names_for(klass)
+      fields_definitions.by_target(klass.name.underscore).map(&:name)
+    end
+
     def fields
       @provider_fields ||= ProviderFields.new(self)
     end

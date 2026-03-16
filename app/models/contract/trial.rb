@@ -6,8 +6,6 @@ module Contract::Trial
   included do
     before_create :set_trial_period_expires_at, :set_setup_fee
 
-    attr_protected :trial_period_expires_at
-
     sifter :trial_period_expires_on do |date|
       sift(:date, trial_period_expires_at) == sift(:to_date, quoted(date.to_date))
     end

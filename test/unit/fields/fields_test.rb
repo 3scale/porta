@@ -86,4 +86,15 @@ class Fields::FieldsTest < ActiveSupport::TestCase
     model.stubs(:defined_builtin_fields).returns([field1, field2])
     assert_same_elements %w[field1 field2], model.defined_builtin_fields_names
   end
+
+  def test_provider_fields
+    provider = FactoryBot.create :provider_account
+    FactoryBot.create(:fields_definition, account: provider, target: 'Account', name: 'custom_account')
+    FactoryBot.create(:fields_definition, account: provider, target: 'User', name: 'custom_user')
+    FactoryBot.create(:fields_definition, account: provider, target: 'Cinstance', name: 'custom_application')
+
+    assert_same_elements %w[org_name custom_account], provider.defined_fields_names_for(Account)
+    assert_same_elements %w[username email custom_user], provider.defined_fields_names_for(User)
+    assert_same_elements %w[name description custom_application], provider.defined_fields_names_for(Cinstance)
+  end
 end
