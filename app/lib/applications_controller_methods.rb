@@ -23,7 +23,7 @@ module ApplicationsControllerMethods
 
   # TODO: this should be done by buy! method
   def initialize_cinstance
-    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, params[:cinstance], @service_plan)
+    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, @service_plan)
     @cinstance.validate_human_edition!
   end
 
@@ -74,15 +74,24 @@ module ApplicationsControllerMethods
 
   def find_service_plan
     service_plans = @service.service_plans
-    @service_plan = if (service_plan_id = params[:cinstance].delete(:service_plan_id))
+    @service_plan = if (service_plan_id = cinstance_params[:service_plan_id])
                       service_plans.find(service_plan_id)
                     else
                       @service.default_service_plan || service_plans.first
                     end
   end
 
+  def cinstance_params
+    @cinstance_params ||= params.require(:cinstance)
+  end
+
+  def application_params
+    allowed_attrs = @cinstance.defined_builtin_fields_names
+    cinstance_params.permit(*allowed_attrs, extra_fields: @cinstance.defined_extra_fields_names)
+  end
+
   def plan_id
-    @plan_id ||= params.require(:cinstance).permit(:plan_id).tap { |plan_params| plan_params.require(:plan_id) }[:plan_id]
+    @plan_id ||= cinstance_params.require(:plan_id)
   end
 
   def accessible_services
