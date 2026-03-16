@@ -24,10 +24,10 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
   end
 
   def test_hideable_switches
-    Settings::Switch.any_instance.stubs(:hideable?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:hideable?).returns(true)
     assert_not_empty @provider.hideable_switches
 
-    Settings::Switch.any_instance.stubs(:hideable?).returns(false)
+    AccountSetting::SwitchSetting.any_instance.stubs(:hideable?).returns(false)
     assert_empty @provider.hideable_switches
   end
 

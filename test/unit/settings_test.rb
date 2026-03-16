@@ -14,7 +14,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert Settings.hide_basic_switches?
 
     Rails.configuration.three_scale.stubs(:hide_basic_switches).returns(nil)
-    refute Settings.hide_basic_switches?
+    assert_not Settings.hide_basic_switches?
   end
 
   def test_basic_switches
@@ -34,36 +34,36 @@ class SettingsTest < ActiveSupport::TestCase
 
     Settings.stubs(:basic_hidden_switches).returns([])
     switch.expects(:globally_denied?).returns(true)
-    refute switch.hideable?
+    assert_not switch.hideable?
 
     switch.expects(:globally_denied?).returns(false)
     assert switch.hideable?
 
     Settings.stubs(:basic_hidden_switches).returns([name])
     switch.expects(:globally_denied?).returns(true)
-    refute switch.hideable?
+    assert_not switch.hideable?
 
     switch.expects(:globally_denied?).returns(false)
-    refute switch.hideable?
+    assert_not switch.hideable?
   end
 
   def test_approval_required
     @settings.expects(:not_custom_account_plans).returns([]).at_least_once
 
-    refute @settings.approval_required_editable?
-    refute @settings.approval_required_disabled?
+    assert_not @settings.approval_required_editable?
+    assert_not @settings.approval_required_disabled?
 
     account_plan_1 = FactoryBot.build_stubbed(:simple_account_plan)
     @settings.expects(:not_custom_account_plans).returns([account_plan_1]).at_least_once
 
     assert @settings.approval_required_editable?
-    refute @settings.approval_required_disabled?
+    assert_not @settings.approval_required_disabled?
 
     account_plan_2 = FactoryBot.build_stubbed(:simple_account_plan)
     @settings.expects(:not_custom_account_plans).returns([account_plan_1, account_plan_2]).at_least_once
     @settings.expects(:account_plans_ui_visible?).returns(true).at_least_once
 
-    refute @settings.approval_required_editable?
+    assert_not @settings.approval_required_editable?
     assert @settings.approval_required_disabled?
   end
 
@@ -87,7 +87,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert plan.reload.approval_required
 
     @settings.update(account_approval_required: false)
-    refute plan.reload.approval_required
+    assert_not plan.reload.approval_required
   end
 
   test "accessing account_approval_required with hidden plan" do
@@ -100,7 +100,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert @provider.settings.account_approval_required
 
     @provider.settings.update(account_approval_required: false)
-    refute @provider.account_plans.first.approval_required
+    assert_not @provider.account_plans.first.approval_required
   end
 
   test "account_approval_required ignores empty values" do
@@ -123,17 +123,17 @@ class SettingsTest < ActiveSupport::TestCase
    @settings.service_plans_ui_visible = true
    assert @settings.visible_ui?(:service_plans)
    @settings.service_plans_ui_visible = false
-   refute @settings.visible_ui?(:service_plans)
+   assert_not@settings.visible_ui?(:service_plans)
   end
 
   def test_require_cc_on_signup_visible_ui_switch_on_rolling_updates
     Logic::RollingUpdates.stubs(:enabled? => true)
 
     assert @settings.respond_to?(:require_cc_on_signup_switch)
-    refute @settings.respond_to?(:require_cc_on_signup_ui_visible)
+    assert_not@settings.respond_to?(:require_cc_on_signup_ui_visible)
 
     Account.any_instance.stubs(:provider_can_use?).with(:require_cc_on_signup).returns(false)
-    refute @settings.visible_ui?(:require_cc_on_signup)
+    assert_not@settings.visible_ui?(:require_cc_on_signup)
 
     Account.any_instance.stubs(:provider_can_use?).with(:require_cc_on_signup).returns(true)
     assert @settings.visible_ui?(:require_cc_on_signup)
@@ -142,7 +142,7 @@ class SettingsTest < ActiveSupport::TestCase
   test 'enabling multi services sets limit to 3 services' do
     constraints = @provider.create_provider_constraints
 
-    refute constraints.max_services
+    assert_notconstraints.max_services
     @settings.allow_multiple_services!
 
     constraints.reload
@@ -150,27 +150,26 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal 3, constraints.max_services
   end
 
-  test 'finance is a subclass of Switch' do
+  test 'finance globally denied on on-premises master' do
     account = Account.new
     settings = Settings.new
     settings.account = account
 
     ThreeScale.config.stubs(onpremises: false)
-    refute settings.finance.globally_denied?
-    assert_instance_of Settings::Switch, settings.finance
+    assert_notsettings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: true)
-    assert_instance_of Settings::Switch, settings.finance
+    assert_notsettings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: false)
     account.master = true
-    refute settings.finance.globally_denied?
-    assert_instance_of Settings::Switch, settings.finance
+    assert_notsettings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: true)
     assert settings.finance.globally_denied?
-    assert_instance_of Settings::SwitchDenied, settings.finance
-
+    assert settings.finance.denied?
+    assert_notsettings.finance.visible?
+    assert_notsettings.finance.allowed?
   end
 
   test 'settings autosaved if account saved' do
@@ -201,7 +200,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal 'request', settings.change_account_plan_permission
     assert_equal 'request', settings.change_service_plan_permission
 
-    refute settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
+    assert_notsettings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
     assert_equal 'request', settings.reload.change_account_plan_permission
     assert_equal 'request', settings.reload.change_service_plan_permission
   end
@@ -239,39 +238,19 @@ class SettingsTest < ActiveSupport::TestCase
   class FinanceDisabledSwitchTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.build_stubbed(:simple_provider)
-      @finance = Settings::SwitchDenied.new(@provider.settings, :finance)
     end
 
-    test 'finance is denied' do
-      refute @finance.allow
-      refute @finance.allowed?
+    test 'finance is denied when globally denied' do
+      @provider.stubs(master_on_premises?: true)
+      finance = @provider.settings.finance
 
-      refute @finance.show!
-      refute @finance.visible?
-
-      assert @finance.deny
-      assert @finance.denied?
-
-      refute @finance.hide!
-      refute @finance.hidden?
-
-      assert @finance.globally_denied?
+      assert finance.globally_denied?
+      assert finance.denied?
+      assert_notfinance.allowed?
+      assert_notfinance.visible?
+      assert_notfinance.hidden?
+      assert_notfinance.allow
     end
 
-    test '::globally_denied_switches for finance' do
-      @provider.stubs(master?: true)
-      ThreeScale.config.stubs(onpremises: false)
-      assert_equal [], @provider.settings.globally_denied_switches
-
-      ThreeScale.config.stubs(onpremises: true)
-      assert_equal [:finance], @provider.settings.globally_denied_switches
-
-      @provider.unstub(:master?)
-      ThreeScale.config.stubs(onpremises: false)
-      assert_equal [], @provider.settings.globally_denied_switches
-
-      ThreeScale.config.stubs(onpremises: true)
-      assert_equal [], @provider.settings.globally_denied_switches
-    end
   end
 end

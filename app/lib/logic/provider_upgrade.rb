@@ -11,7 +11,7 @@ module Logic
         available_plans? ? PlanRulesCollection.all_plan_rules_with_switches : {}
       end
 
-      # @return [::Array<::Settings::Switch>]
+      # @return [::Array<::AccountSetting::SwitchSetting>]
       def available_switches
         settings.switches.values
       end

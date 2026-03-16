@@ -29,7 +29,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     end
 
     test 'create action should not logout a current user' do
-      Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+      AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
       user  = FactoryBot.create(:admin, account: @provider)
       token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -43,7 +43,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'index (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider)
     token = FactoryBot.create(:access_token, owner: user)
 
@@ -62,7 +62,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'show (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -76,7 +76,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -90,7 +90,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -104,7 +104,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update/activate (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -122,7 +122,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'admin/member (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -140,7 +140,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
@@ -156,7 +156,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'suspend/unsuspend (access_token)' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 

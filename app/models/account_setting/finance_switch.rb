@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AccountSetting::FinanceSwitch < AccountSetting::SwitchSetting
-  state_machine :value do
+  state_machine :state do
     after_transition to: 'denied', from: %w[hidden visible] do |record|
       record.account.billing_strategy&.destroy
     end
@@ -13,5 +13,9 @@ class AccountSetting::FinanceSwitch < AccountSetting::SwitchSetting
         account.save!
       end
     end
+  end
+
+  def globally_denied?
+    account&.master_on_premises?
   end
 end

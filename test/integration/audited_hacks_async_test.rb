@@ -11,7 +11,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :admin, :audit_class, :access_token
 
   setup do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
 
     @provider = FactoryBot.create(:simple_provider)
     @provider.create_settings # prevent creating settings lazily, as this triggers an Audit creation

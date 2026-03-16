@@ -3,7 +3,7 @@
 class AccountSetting::MultipleServicesSwitch < AccountSetting::SwitchSetting
   MULTISERVICES_MAX_SERVICES = 3
 
-  state_machine :value do
+  state_machine :state do
     after_transition to: %w[visible hidden], from: ['denied'] do |record|
       SimpleLayout.new(record.account).create_multiservice_builtin_pages!
 

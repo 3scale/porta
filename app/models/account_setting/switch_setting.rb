@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 
 class AccountSetting::SwitchSetting < AccountSetting
-  VALID_VALUES = %w[denied hidden visible].freeze
+  def state
+    return 'denied' if globally_denied? || !value
 
-  validates :value, inclusion: { in: VALID_VALUES }
+    value
+  end
 
-  state_machine :value, initial: 'denied' do
+  def state=(new_state)
+    self.value = new_state
+  end
+
+  state_machine :state, initial: 'denied' do
     before_transition do |record|
+      throw :halt if record.globally_denied?
       unless record.account.provider?
         raise Account::ProviderOnlyMethodCalledError, "cannot change state of #{record.type}"
       end
@@ -31,23 +38,27 @@ class AccountSetting::SwitchSetting < AccountSetting
     end
   end
 
-  def transition_to(target)
-    target = target.to_s
-    return if value == target
+  def typed_assign(raw_value)
+    target = raw_value.to_s
+    return if state == target
 
     case target
-    when 'denied'
-      deny
-    when 'hidden'
-      value == 'denied' ? allow : hide
-    when 'visible'
-      allow if value == 'denied'
-      show
+    when 'denied' then deny
+    when 'hidden' then state == 'denied' ? allow : hide
+    when 'visible' then show
     end
   end
 
-  def typed_assign(raw_value)
-    transition_to(raw_value)
+  def allowed?
+    !denied?
+  end
+
+  def hideable?
+    !globally_denied? && Settings.basic_hidden_switches.exclude?(setting_name)
+  end
+
+  def globally_denied?
+    false
   end
 
   def self.cast(value)
@@ -60,5 +71,11 @@ class AccountSetting::SwitchSetting < AccountSetting
 
   def typed_value
     value
+  end
+
+  private
+
+  def setting_name
+    self.class.sti_name.delete_suffix('Switch').underscore.to_sym
   end
 end

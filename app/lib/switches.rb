@@ -11,96 +11,6 @@ module Switches
     finance branding groups skip_email_engagement_footer web_hooks require_cc_on_signup
   ].freeze
 
-  class Switch
-    delegate :hidden?, :visible?, :denied?, to: :status
-
-    attr_reader :name, :settings
-
-    def initialize(settings, name)
-      @settings = settings
-      @name = name
-    end
-
-    def status
-      record = @settings.send(:setting_record_for, :"#{@name}_switch")
-      ActiveSupport::StringInquirer.new(record&.value || 'denied')
-    end
-
-    def hideable?
-      !globally_denied? && Settings.basic_hidden_switches.exclude?(name.to_sym)
-    end
-
-    def allowed?
-      not denied?
-    end
-
-    def hide!
-      record = @settings.send(:find_or_build_switch, @name)
-      record.hide! if visible?
-    end
-
-    def show!
-      record = @settings.send(:find_or_build_switch, @name)
-      record.show! if hidden?
-    end
-
-    def allow
-      record = @settings.send(:find_or_build_switch, @name)
-      record.allow && record.save!
-    end
-
-    def deny
-      record = @settings.send(:find_or_build_switch, @name)
-      record.deny && record.save!
-    end
-
-    def reload
-      self
-    end
-
-    def globally_denied?
-      false
-    end
-  end
-
-  class SwitchDenied < Switch
-    def allowed?
-      false
-    end
-
-    def hidden?
-      false
-    end
-
-    def visible?
-      false
-    end
-
-    def denied?
-      true
-    end
-
-    def hide!
-      false
-    end
-
-    def show!
-      false
-    end
-
-    def allow
-      false
-    end
-
-    def deny
-      true
-    end
-
-    def globally_denied?
-      true
-    end
-  end
-
   class Collection
     def initialize(settings, switch_names = SWITCHES)
       @settings = settings
@@ -144,17 +54,13 @@ module Switches
 
   included do
     SWITCHES.each do |name|
-      # Switch object getter (e.g., settings.finance returns Switch object)
+      # Switch record getter (e.g., settings.finance returns the SwitchSetting record)
       define_method(name) do
-        if globally_denied_switches.include?(name.to_sym)
-          SwitchDenied.new(self, name)
-        else
-          Switch.new(self, name)
-        end
+        find_or_build_switch(name)
       end
 
       # State query delegations (e.g., settings.multiple_applications_visible?)
-      %w[visible hidden denied allowed].each do |state|
+      %w[visible hidden denied allowed hideable].each do |state|
         define_method("#{name}_#{state}?") do
           send(name).send("#{state}?")
         end
@@ -201,13 +107,6 @@ module Switches
 
   def switches
     Collection.new(self)
-  end
-
-  # Using a constant here seems weird as it depends on some parameters
-  def globally_denied_switches
-    [
-      account.master_on_premises? ? :finance : nil
-    ].compact
   end
 
   def visible_ui?(switch)

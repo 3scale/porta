@@ -30,11 +30,11 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'index with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
     get admin_api_users_path(format: :xml), params: { access_token: token.value }
     assert_response :forbidden
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     get admin_api_users_path(format: :xml), params: { access_token: token.value }
     assert_response :success
   end
@@ -44,7 +44,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     impersonation_admin = Signup::ImpersonationAdminBuilder.build(account: @provider)
     impersonation_admin.save!
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     get admin_api_users_path(format: :xml), params: { access_token: token.value }
     assert_response :success
     refute_xpath ".//username", /impersonation_admin/
@@ -73,11 +73,11 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'create with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
     post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value }
     assert_response :forbidden
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value }
     assert_response :success
   end
@@ -246,7 +246,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   pending_test 'index returns fields defined'
 
   test 'create defaults is pending member' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'chuck', email: 'chuck@norris.us', provider_key: @provider.api_key }
 
     assert_response :success
@@ -257,7 +257,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create with extra fields' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     field_defined(@master, { target: 'User', name: 'some_extra_field' })
 
     post admin_api_users_path(format: :xml), params: { username: 'chuck', email: 'chuck@norris.us', some_extra_field: 'extra value', provider_key: @provider.api_key }
@@ -270,7 +270,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test "create sends no email" do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
       post admin_api_users_path(format: :xml), params: { username: 'chuck', email: 'chuck@norris.us', provider_key: @provider.api_key }
     end
@@ -279,7 +279,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test "create with cas_identifier" do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'luis', email: 'luis@norris.us', cas_identifier: 'luis', provider_key: @provider.api_key }
 
     assert_response :success
@@ -287,7 +287,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create does not creates admins nor active users' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'chuck', role: 'admin', email: 'chuck@norris.us', state: 'active', provider_key: @provider.api_key }
 
     assert_response :success
@@ -298,7 +298,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create also sets user password' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'chuck',
                                              email: 'chuck@norris.us',
                                              password: 'posted-password',
@@ -310,7 +310,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'create errors' do
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     post admin_api_users_path(format: :xml), params: { username: 'chuck', role: "admin", provider_key: @provider.api_key }
 
     assert_response :unprocessable_entity
