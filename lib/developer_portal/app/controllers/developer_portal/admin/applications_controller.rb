@@ -63,7 +63,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
       application.validate_fields!
     end
 
-    application.update(application_params)
+    application.update(permitted_application_params)
     assign_drops application: application
     # make sure to prevent xss on js rendering if this notice is changed to include e.g. application name
     if application.valid?
@@ -127,7 +127,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def new_application
-    @cinstance ||= applications.build_with_fields(application_params) do |application|
+    @cinstance ||= applications.build_with_fields(permitted_application_params) do |application|
       application.plan = application.can_change_plan?(service) ? plan : default_plan
     end
   end
@@ -148,10 +148,6 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
     end
   end
 
-  def application_params
-    @application_params ||= accepted_application_params
-  end
-
   def authorize_new_app
     if service
       authorize! :create_application, service
@@ -168,13 +164,14 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
     authorize! :update, application
   end
 
-  def accepted_application_params
+  def application_params
     # cinstance[*] naming is present for legacy reasons
-    application_attributes = params[:application] || params[:cinstance]
-    return {} unless application_attributes
+    @application_params ||= params[:application] || params.fetch(:cinstance, {})
+  end
 
-    permitted_params = fields_definitions + %i[plan_id redirect_url]
-    application_attributes.permit(*permitted_params)
+  def permitted_application_params
+    permitted_params = fields_definitions + %i[redirect_url]
+    application_params.permit(*permitted_params)
   end
 
   def fields_definitions

@@ -20,6 +20,7 @@ class Api::ApplicationsController < FrontendController
   def new; end
 
   def create
+    @cinstance.assign_attributes(application_params)
     if @cinstance.save
       redirect_to provider_admin_application_path(@cinstance), success: t('.success')
     else
