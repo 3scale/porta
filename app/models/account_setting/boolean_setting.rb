@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AccountSetting::BooleanSetting < AccountSetting
+  self.non_null = true
+
   def self.cast(value)
     ActiveModel::Type::Boolean.new.cast(value)
   end

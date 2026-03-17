@@ -3,9 +3,10 @@
 module Switches
   extend ActiveSupport::Concern
 
-  SWITCHES = %i[account_plans service_plans finance require_cc_on_signup
-                multiple_services multiple_applications multiple_users skip_email_engagement_footer
-                groups branding web_hooks iam_tools].freeze
+  SWITCHES = Settings::SETTING_CLASSES
+    .select { |k| k < AccountSetting::SwitchSetting }
+    .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
+    .freeze
 
   THREESCALE_VISIBLE_SWITCHES = %i[
     finance branding groups skip_email_engagement_footer web_hooks require_cc_on_signup

@@ -142,7 +142,7 @@ class SettingsTest < ActiveSupport::TestCase
   test 'enabling multi services sets limit to 3 services' do
     constraints = @provider.create_provider_constraints
 
-    assert_notconstraints.max_services
+    assert_not constraints.max_services
     @settings.allow_multiple_services!
 
     constraints.reload
@@ -156,20 +156,20 @@ class SettingsTest < ActiveSupport::TestCase
     settings.account = account
 
     ThreeScale.config.stubs(onpremises: false)
-    assert_notsettings.finance.globally_denied?
+    assert_not settings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: true)
-    assert_notsettings.finance.globally_denied?
+    assert_not settings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: false)
     account.master = true
-    assert_notsettings.finance.globally_denied?
+    assert_not settings.finance.globally_denied?
 
     ThreeScale.config.stubs(onpremises: true)
     assert settings.finance.globally_denied?
     assert settings.finance.denied?
-    assert_notsettings.finance.visible?
-    assert_notsettings.finance.allowed?
+    assert_not settings.finance.visible?
+    assert_not settings.finance.allowed?
   end
 
   test 'settings autosaved if account saved' do
@@ -200,7 +200,7 @@ class SettingsTest < ActiveSupport::TestCase
     assert_equal 'request', settings.change_account_plan_permission
     assert_equal 'request', settings.change_service_plan_permission
 
-    assert_notsettings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
+    assert_not settings.update(change_account_plan_permission: 'invalid', change_service_plan_permission: 'invalid')
     assert_equal 'request', settings.reload.change_account_plan_permission
     assert_equal 'request', settings.reload.change_service_plan_permission
   end
@@ -246,10 +246,10 @@ class SettingsTest < ActiveSupport::TestCase
 
       assert finance.globally_denied?
       assert finance.denied?
-      assert_notfinance.allowed?
-      assert_notfinance.visible?
-      assert_notfinance.hidden?
-      assert_notfinance.allow
+      assert_not finance.allowed?
+      assert_not finance.visible?
+      assert_not finance.hidden?
+      assert_not finance.allow
     end
 
   end

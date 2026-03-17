@@ -191,10 +191,10 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     provider =  FactoryBot.create(:simple_provider, partner: partner)
 
     partner.system_name = 'redhat'
-    assert_includes provider.available_switches.map(&:name), :multiple_users
+    assert_includes provider.available_switches.map(&:setting_name), :multiple_users
 
     partner.system_name = ''
-    assert_includes provider.available_switches.map(&:name), :multiple_users
+    assert_includes provider.available_switches.map(&:setting_name), :multiple_users
   end
 
   test 'settings on after contracting a plan depending on having a partner or not' do

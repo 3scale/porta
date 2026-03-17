@@ -4,99 +4,14 @@ class Settings
   attr_accessor :account
   alias provider account
 
-  BOOLEAN_SETTINGS = {
-    forum_enabled: true,
-    app_gallery_enabled: false,
-    anonymous_posts_enabled: false,
-    signups_enabled: true,
-    documentation_enabled: true,
-    useraccountarea_enabled: true,
-    documentation_public: true,
-    forum_public: true,
-    hide_service: nil,
-    monthly_charging_enabled: true,
-    monthly_billing_enabled: true,
-    strong_passwords_enabled: false,
-    can_create_service: false,
-    public_search: false,
-    account_plans_ui_visible: false,
-    service_plans_ui_visible: false,
-    setup_fee_enabled: false,
-    cms_escape_draft_html: true,
-    cms_escape_published_html: true,
-    enforce_sso: false
-  }.freeze
+  # Eager-load all AccountSetting subclasses so we can discover them
+  Rails.autoloaders.main.eager_load_dir(Rails.root.join('app/models/account_setting'))
 
-  STRING_SETTINGS = {
-    bg_colour: nil,
-    link_colour: nil,
-    text_colour: nil,
-    menu_bg_colour: nil,
-    menu_link_colour: nil,
-    content_bg_colour: nil,
-    plans_tab_bg_colour: nil,
-    plans_bg_colour: nil,
-    content_border_colour: nil,
-    link_label: nil,
-    link_url: nil,
-    favicon: nil,
-    token_api: "default",
-    cms_token: nil,
-    cc_terms_path: "/termsofservice",
-    cc_privacy_path: "/privacypolicy",
-    cc_refunds_path: "/refundpolicy",
-    change_account_plan_permission: "request",
-    change_service_plan_permission: "request",
-    authentication_strategy: "oauth2",
-    janrain_api_key: nil,
-    janrain_relying_party: nil,
-    cas_server_url: nil,
-    sso_key: nil,
-    sso_login_url: nil,
-    spam_protection_level: "none",
-    admin_bot_protection_level: "none",
-    product: "connect",
-    tracker_code: nil
-  }.freeze
+  # Build maps from discovered STI leaf classes
+  SETTING_CLASSES = AccountSetting.descendants.select { |klass| klass.descendants.empty? }.freeze
 
-  TEXT_SETTINGS = {
-    welcome_text: nil,
-    refund_policy: nil,
-    privacy_policy: nil
-  }.freeze
-
-  SWITCH_SETTINGS = {
-    account_plans_switch: "denied",
-    service_plans_switch: "denied",
-    finance_switch: "denied",
-    require_cc_on_signup_switch: "denied",
-    multiple_services_switch: "denied",
-    multiple_applications_switch: "denied",
-    multiple_users_switch: "denied",
-    skip_email_engagement_footer_switch: "denied",
-    groups_switch: "denied",
-    branding_switch: "denied",
-    web_hooks_switch: "denied",
-    iam_tools_switch: "denied"
-  }.freeze
-
-  ALL_SETTINGS = {}.merge(BOOLEAN_SETTINGS, STRING_SETTINGS, TEXT_SETTINGS, SWITCH_SETTINGS).freeze
-
-  # Settings that should reject empty/nil assignment (were NOT NULL in old schema)
-  NON_NULL_SETTINGS = %w[
-    documentation_public forum_public monthly_billing_enabled can_create_service
-    public_search cms_escape_draft_html cms_escape_published_html enforce_sso
-    change_account_plan_permission change_service_plan_permission
-    authentication_strategy spam_protection_level product
-    account_plans_switch service_plans_switch finance_switch
-    require_cc_on_signup_switch multiple_services_switch multiple_applications_switch
-    multiple_users_switch skip_email_engagement_footer_switch groups_switch
-    branding_switch web_hooks_switch iam_tools_switch
-  ].freeze
-
-  SETTING_CLASS_MAP = ALL_SETTINGS.each_with_object({}) do |(name, _), hash|
-    hash[name] = "AccountSetting::#{name.to_s.camelize}".constantize
-  end.freeze
+  SETTING_CLASS_MAP = SETTING_CLASSES.each_with_object({}) { |klass, hash| hash[klass.setting_name] = klass }.freeze
+  ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
@@ -114,8 +29,8 @@ class Settings
     end
   end
 
-  BOOLEAN_SETTINGS.each_key do |name|
-    define_method("#{name}?") { !!send(name) }
+  SETTING_CLASSES.select { |k| k < AccountSetting::BooleanSetting }.each do |klass|
+    define_method("#{klass.setting_name}?") { !!send(klass.setting_name) }
   end
 
   include Switches
@@ -123,19 +38,22 @@ class Settings
   # --- Override special attribute accessors ---
 
   def authentication_strategy
-    val = setting_value(:authentication_strategy, STRING_SETTINGS)
+    record = setting_record_for(:authentication_strategy)
+    val = record ? record.typed_value : ALL_SETTINGS[:authentication_strategy]
     val ? ActiveSupport::StringInquirer.new(val) : val
   end
 
   def spam_protection_level
-    val = setting_value(:spam_protection_level, STRING_SETTINGS)
+    record = setting_record_for(:spam_protection_level)
+    val = record ? record.typed_value : ALL_SETTINGS[:spam_protection_level]
     return :none if val.blank?
     level = val.to_sym
     level == :auto ? :captcha : level
   end
 
   def admin_bot_protection_level
-    val = setting_value(:admin_bot_protection_level, STRING_SETTINGS)
+    record = setting_record_for(:admin_bot_protection_level)
+    val = record ? record.typed_value : ALL_SETTINGS[:admin_bot_protection_level]
     val.present? ? val.to_sym : :none
   end
 
@@ -195,7 +113,7 @@ class Settings
   def toggle!(name)
     name = name.to_sym
     record = find_or_build_setting(name)
-    record.value ||= AccountSetting::BooleanSetting.serialize(BOOLEAN_SETTINGS[name])
+    record.value ||= AccountSetting::BooleanSetting.serialize(ALL_SETTINGS[name])
     record.toggle_value!
   end
 
@@ -231,8 +149,8 @@ class Settings
     ALL_SETTINGS.keys.map(&:to_s)
   end
 
-  def self.non_null_columns_names
-    NON_NULL_SETTINGS
+  def self.non_null?(name)
+    SETTING_CLASS_MAP[name.to_sym]&.non_null
   end
 
   def self.setting_class_for(name)
@@ -276,11 +194,6 @@ class Settings
   delegate :provider_id_for_audits, to: :account, allow_nil: true
 
   private
-
-  def setting_value(name, defaults)
-    record = setting_record_for(name)
-    record ? record.typed_value : defaults[name]
-  end
 
   def setting_record_for(name)
     klass = SETTING_CLASS_MAP[name.to_sym]
@@ -335,6 +248,6 @@ class Settings
   end
 
   def sanitize_attributes(attrs)
-    attrs.reject { |key, value| self.class.non_null_columns_names.include?(key.to_s) && value.to_s.empty? }
+    attrs.reject { |key, value| self.class.non_null?(key) && value.to_s.empty? }
   end
 end

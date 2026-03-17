@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class AccountSetting::SwitchSetting < AccountSetting
+  self.default_value = 'denied'
+  self.non_null = true
+
   def state
     return 'denied' if globally_denied? || !value
 
@@ -72,8 +75,6 @@ class AccountSetting::SwitchSetting < AccountSetting
   def typed_value
     value
   end
-
-  private
 
   def setting_name
     self.class.sti_name.delete_suffix('Switch').underscore.to_sym
