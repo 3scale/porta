@@ -3,6 +3,7 @@
 class AccountSetting::SwitchSetting < AccountSetting
   self.default_value = 'denied'
   self.non_null = true
+  class_attribute :provider_visible, instance_writer: false, default: false
 
   def state
     return 'denied' if globally_denied? || !value
@@ -20,6 +21,10 @@ class AccountSetting::SwitchSetting < AccountSetting
       unless record.account.provider?
         raise Account::ProviderOnlyMethodCalledError, "cannot change state of #{record.type}"
       end
+    end
+
+    before_transition on: :show do |record|
+      throw :halt unless record.class.provider_visible
     end
 
     state 'denied', 'hidden', 'visible'

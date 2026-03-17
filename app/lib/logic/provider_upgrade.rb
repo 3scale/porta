@@ -120,7 +120,7 @@ module Logic
 
       def show_switch!(switch)
         return if switch == :require_cc_on_signup && provider_can_use?(switch)
-        return unless Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+        return unless Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
         settings.public_method("show_#{switch}!").call
       end
 
@@ -132,7 +132,7 @@ module Logic
         switches_off = Switches::SWITCHES - switches_on
         switches_off.each do |switch|
           next if settings.send(switch).denied?
-          settings.send("hide_#{switch}!") if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+          settings.send("hide_#{switch}!") if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
           settings.send("deny_#{switch}!")
         end
       end

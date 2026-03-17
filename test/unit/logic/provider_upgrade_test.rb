@@ -91,7 +91,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
 
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
     end
 
     plan = @base
@@ -109,7 +109,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     end
 
     switches_on.each do |switch|
-      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::THREESCALE_VISIBLE_SWITCHES.include?(switch)
+      assert settings.send(switch).visible?, "#{switch} switch is not visible" if Switches::PROVIDER_VISIBLE_SWITCHES.include?(switch)
     end
   end
 

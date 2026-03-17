@@ -8,9 +8,10 @@ module Switches
     .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
     .freeze
 
-  THREESCALE_VISIBLE_SWITCHES = %i[
-    finance branding groups skip_email_engagement_footer web_hooks require_cc_on_signup
-  ].freeze
+  PROVIDER_VISIBLE_SWITCHES = Settings::SETTING_CLASSES
+    .select { |k| k < AccountSetting::SwitchSetting && k.provider_visible }
+    .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
+    .freeze
 
   class Collection
     def initialize(settings, switch_names = SWITCHES)

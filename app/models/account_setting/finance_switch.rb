@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AccountSetting::FinanceSwitch < AccountSetting::SwitchSetting
+  self.provider_visible = true
   state_machine :state do
     after_transition to: 'denied', from: %w[hidden visible] do |record|
       record.account.billing_strategy&.destroy
