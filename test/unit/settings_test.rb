@@ -182,18 +182,16 @@ class SettingsTest < ActiveSupport::TestCase
     assert settings.monthly_billing_enabled
   end
 
-  test 'empty values are skipped for non-null columns' do
+  test 'boolean setting assignment semantics' do
     settings.update(public_search: true)
     assert settings.reload.public_search
 
-    settings.update(public_search: "")
-    assert settings.reload.public_search, "empty string should not change non-null setting"
-
-    settings.update(public_search: nil)
-    assert settings.reload.public_search, "nil should not change non-null setting"
-
     settings.update(public_search: false)
     assert_not settings.reload.public_search, "explicit false should change the setting"
+
+    settings.update(public_search: true)
+    settings.update(public_search: nil)
+    assert_nil settings.reload.public_search, "nil clears the setting back to default"
   end
 
   test "validate change plan permission values" do

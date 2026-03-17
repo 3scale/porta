@@ -37,7 +37,7 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   end
 
   def settings_params
-    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS)
+    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
   end
 
   def validate_enforcing_sso_allowed

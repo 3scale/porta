@@ -118,7 +118,7 @@ class Settings
   end
 
   def assign_attributes(attrs)
-    sanitize_attributes(normalize_attrs(attrs)).each do |key, value|
+    normalize_attrs(attrs).each do |key, value|
       send("#{key}=", value) if respond_to?("#{key}=", true)
     end
   end
@@ -147,10 +147,6 @@ class Settings
 
   def self.attribute_names
     ALL_SETTINGS.keys.map(&:to_s)
-  end
-
-  def self.non_null?(name)
-    SETTING_CLASS_MAP[name.to_sym]&.non_null
   end
 
   def self.setting_class_for(name)
@@ -247,7 +243,4 @@ class Settings
     default_account_plan.update_attribute(:approval_required, value) unless value.to_s.empty?
   end
 
-  def sanitize_attributes(attrs)
-    attrs.reject { |key, value| self.class.non_null?(key) && value.to_s.empty? }
-  end
 end
