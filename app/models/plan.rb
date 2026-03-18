@@ -31,8 +31,6 @@ class Plan < ApplicationRecord
   validates :state, inclusion: { in: %w(hidden published) }
   before_validation(:on => :create) { set_state_to_hidden_if_nil } # otherwise the validation above fails as state machine hasnt kicked in yet (ugly)
 
-  attr_protected :issuer_id, :original_id, :type, :issuer_type, :tenant_id, :audit_ids, :state
-
   state_machine :initial => :hidden do
     state :hidden
     state :published
