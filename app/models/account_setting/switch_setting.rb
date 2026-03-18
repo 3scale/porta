@@ -46,17 +46,6 @@ class AccountSetting::SwitchSetting < AccountSetting
     end
   end
 
-  def typed_assign(raw_value)
-    target = raw_value.to_s
-    return if state == target
-
-    case target
-    when 'denied' then deny
-    when 'hidden' then state == 'denied' ? allow : hide
-    when 'visible' then show
-    end
-  end
-
   def allowed?
     !denied?
   end

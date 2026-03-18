@@ -3,13 +3,10 @@
 module Switches
   extend ActiveSupport::Concern
 
-  SWITCHES = Settings::SETTING_CLASSES
-    .select { |k| k < AccountSetting::SwitchSetting }
-    .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
-    .freeze
+  SWITCHES = Settings::SWITCH_CLASSES.map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }.freeze
 
-  PROVIDER_VISIBLE_SWITCHES = Settings::SETTING_CLASSES
-    .select { |k| k < AccountSetting::SwitchSetting && k.provider_visible }
+  PROVIDER_VISIBLE_SWITCHES = Settings::SWITCH_CLASSES
+    .select(&:provider_visible)
     .map { |k| k.setting_name.to_s.delete_suffix('_switch').to_sym }
     .freeze
 

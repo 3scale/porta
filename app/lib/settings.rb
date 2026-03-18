@@ -9,16 +9,18 @@ class Settings
 
   # Build maps from discovered STI leaf classes
   SETTING_CLASSES = AccountSetting.descendants.select { |klass| klass.descendants.empty? }.freeze
+  SWITCH_CLASSES, VALUE_CLASSES = SETTING_CLASSES.partition { |k| k < AccountSetting::SwitchSetting }.map(&:freeze)
 
   SETTING_CLASS_MAP = SETTING_CLASSES.each_with_object({}) { |klass, hash| hash[klass.setting_name] = klass }.freeze
   ALL_SETTINGS = SETTING_CLASS_MAP.transform_values(&:default_value).freeze
 
   # --- Define accessor methods that delegate to AccountSetting records ---
 
-  ALL_SETTINGS.each do |name, default|
+  VALUE_CLASSES.each do |klass|
+    name = klass.setting_name
     define_method(name) do
       record = setting_record_for(name)
-      record ? record.typed_value : default
+      record ? record.typed_value : klass.default_value
     end
     define_method("#{name}=") do |value|
       if value.nil?
