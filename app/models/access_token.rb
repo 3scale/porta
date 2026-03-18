@@ -100,8 +100,6 @@ class AccessToken < ApplicationRecord
 
   after_initialize :generate_value
 
-  attr_accessible :owner, :name, :scopes, :permission, :expires_at
-
   attr_readonly :value
 
   def self.find_from_value(value)
