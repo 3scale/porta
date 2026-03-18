@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include AccessControl
-  include InheritedResources::DSL
   include LayoutlessAjaxRendering
   # include DomainSupport
   include ErrorHandling

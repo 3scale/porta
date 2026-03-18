@@ -4,8 +4,6 @@
   <%= javascript_packs_with_chunks_tag 'table_toolbar' %>
 <% end %>
 
-<% presenter = Provider::Admin::Account::InvitationsIndexPresenter.new(collection, current_user, params) %>
-
 <% if presenter.empty_state? %>
   <%= render partial: 'shared/empty_state', locals: { icon: 'plus-circle',
                                                       title: t('.empty_state_title'),

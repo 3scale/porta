@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Account::UsersController < Provider::Admin::Account::BaseController
-  inherit_resources
-  defaults :route_prefix => 'provider_admin_account'
-  actions :edit, :update, :destroy
-
   before_action :load_services, only: %i[edit update]
+  before_action :load_user, only: %i[edit update destroy]
 
   authorize_resource
 
@@ -16,28 +13,32 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
   attr_reader :presenter
 
   def index
-    users = end_of_association_chain.but_impersonation_admin
+    users = current_account.users.but_impersonation_admin
     @presenter = Provider::Admin::Account::UsersIndexPresenter.new(current_user: current_user,
                                                                    users: users,
                                                                    params: params)
   end
 
-  def destroy
-    destroy! do |success|
-      success.html do
-        flash[:success] = t('.success')
-        super
-      end
+  def edit; end
+
+  def update
+    @user.validate_fields!
+
+    @user.assign_attributes(user_params)
+    @user.role = user_params.fetch(:role, @user.role)
+
+    if @user.save
+      redirect_to provider_admin_account_users_path, success: t('.success')
+    else
+      render :edit
     end
   end
 
-  def update
-    resource.validate_fields!
-
-    update! do |success, failure|
-      success.html do
-        redirect_to collection_url, success: t('.success')
-      end
+  def destroy
+    if @user.destroy
+      redirect_to provider_admin_account_users_path, success: t('.success')
+    else
+      redirect_to provider_admin_account_users_path, danger: t('.error')
     end
   end
 
@@ -47,28 +48,22 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
     @services ||= current_account.accessible_services
   end
 
-  def begin_of_association_chain
-    current_account
+  def load_user
+    @user = users.find(params[:id])
   end
 
-  def update_resource(user, attributes)
-    # FIXME: in rails 3, we're getting an array
-    attributes = attributes.first
+  def users
+    @users ||= current_account.users
+  end
 
-    # After the rails 5.1 upgrade, attributes comes as ActionController::Parameters except when they are empty
-    attributes = attributes.permit!.to_h unless attributes.is_a?(Hash)
+  def user_params
+    allowed_attrs = @user.defined_builtin_fields.map(&:name) + @user.special_fields
 
-    protected_attributes = attributes.extract!(*User::Permissions::ATTRIBUTES)
-
-    unless current_account.provider_can_use?(:service_permissions)
-      protected_attributes.except!(:member_permission_service_ids)
+    if can?(:update_role, @user)
+      allowed_attrs += [:role, { member_permission_ids: [] }]
+      allowed_attrs += [:member_permission_service_ids, { member_permission_service_ids: [] }] if current_account.provider_can_use?(:service_permissions)
     end
 
-    user.class.transaction do
-      user.assign_attributes(attributes)
-      user.assign_attributes(protected_attributes, without_protection: can?(:update_role, user))
-
-      user.save
-    end
+    params.require(:user).permit(*allowed_attrs, extra_fields: @user.defined_extra_fields_names)
   end
 end

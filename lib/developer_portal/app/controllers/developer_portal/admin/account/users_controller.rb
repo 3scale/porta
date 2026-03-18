@@ -1,9 +1,6 @@
 class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::BaseController
   before_action :ensure_buyer_domain
-
-  inherit_resources
-  defaults :route_prefix => 'admin_account'
-  actions :index, :edit, :update, :destroy
+  before_action :load_user, only: %i[edit update destroy]
 
   authorize_resource
 
@@ -24,38 +21,42 @@ class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::Base
   def update
     @user.validate_fields!
 
-    update! do |success, failure|
-      success.html do
-        flash[:notice] = 'User was successfully updated.'
-        redirect_to(collection_url)
-      end
+    @user.attributes = filter_readonly_params(user_params, User)
+    @user.role = params.fetch(:user, {}).fetch(:role, @user.role) if can?(:update_role, @user)
 
-      failure.html do
-        assign_liquid_drops
-        render action: 'edit'
-      end
+    if @user.save
+      flash[:notice] = 'User was successfully updated.'
+      redirect_to admin_account_users_path
+    else
+      assign_liquid_drops
+      render action: 'edit'
     end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to admin_account_users_path
   end
 
   private
 
-  def assign_liquid_drops
-    assign_drops user: resource
+  def load_user
+    @user = users.find(params[:id])
   end
 
-  def begin_of_association_chain
-    current_account
+  def users
+    @users ||= current_account.users
   end
 
   def collection
-    @users ||= end_of_association_chain.paginate(:page => params[:page])
+    @collection ||= users.paginate(page: params[:page])
   end
 
-  def update_resource(user, attributes)
-    attributes.each do |attrs|
-      user.attributes = filter_readonly_params(attrs, User)
-      user.role = attrs[:role] if can? :update_role, user
-    end
-    user.save
+  def assign_liquid_drops
+    assign_drops user: @user
+  end
+
+  def user_params
+    params.require(:user).permit(*@user.defined_fields.map(&:name), *@user.special_fields)
   end
 end

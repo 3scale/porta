@@ -48,9 +48,8 @@ ActionDispatch::IntegrationTest.class_eval do
 
   alias_method :login_provider, :login!
 
-  def login_buyer(account)
+  def login_buyer(account, user = account.admins.first)
     host! account.provider_account.internal_domain
-    user = account.admins.first
     login_with user.username, 'supersecret'
   end
 
