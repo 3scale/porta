@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Admin::Api::SSOTokensController < Admin::Api::BaseController
 
-  wrap_parameters :sso_token, :include => [:user_id, :username, :expires_in, :redirect_url, :protocol], :format => [ :url_encoded_form ]
+  wrap_parameters :sso_token, :include => %i[user_id username expires_in redirect_url protocol], :format => [:url_encoded_form]
 
   # parameters:
   #   * user_id
@@ -8,7 +10,7 @@ class Admin::Api::SSOTokensController < Admin::Api::BaseController
   #   * provider_key
   #   * protocol
   def create
-    sso_token = SSOToken.new **sso_token_params.to_h
+    sso_token = SSOToken.new(sso_token_params)
     sso_token.account = domain_account
     sso_token.save
 
