@@ -5,8 +5,6 @@ class AuthenticationProvider::RedhatCustomerPortal < AuthenticationProvider::Key
   CONFIG_ATTRIBUTES = %i[client_id client_secret realm system_name skip_ssl_certificate_verification].freeze
   private_constant :CONFIG_ATTRIBUTES
 
-  attr_accessible(*CONFIG_ATTRIBUTES, :account)
-
   def self.build(options = {})
     config = ThreeScale.config.redhat_customer_portal.to_h
                .slice(*CONFIG_ATTRIBUTES)
