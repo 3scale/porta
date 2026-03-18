@@ -18,7 +18,7 @@ class Admin::ApiDocs::BaseController < FrontendController
   end
 
   def create
-    @api_docs_service = api_docs_services.new(api_docs_params(:system_name), without_protection: true)
+    @api_docs_service = api_docs_services.new(api_docs_params(:system_name))
     if @api_docs_service.save
       redirect_to preview_admin_api_docs_service_path(@api_docs_service), success: t('admin.api_docs.create.success')
     else
@@ -72,7 +72,7 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def update
     respond_to do |format|
-      if api_docs_service.update(api_docs_params, without_protection: true)
+      if api_docs_service.update(api_docs_params)
         msg = t('admin.api_docs.update.success')
         format.html { redirect_to preview_admin_api_docs_service_path(api_docs_service), success: msg }
         format.js do
