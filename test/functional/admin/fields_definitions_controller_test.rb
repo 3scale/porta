@@ -19,6 +19,22 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'new' do
+    default_target = FieldsDefinition.targets.first
+
+    get :new
+
+    assert_response :success
+    assert_select('h1', text: "New field definition for #{default_target}")
+    assert_select 'input#fields_definition_target', type: 'hidden', value: 'Account'
+
+    get :new, params: { fields_definition: { target: 'User' } }
+
+    assert_response :success
+    assert_select('h1', text: "New field definition for User")
+    assert_select 'input#fields_definition_target', type: 'hidden', value: 'Account'
+  end
+
   test 'edit' do
     get :edit, params: { id: field_definition }
 
