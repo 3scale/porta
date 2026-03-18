@@ -69,8 +69,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :default_service_plan, class_name: 'ServicePlan'
   belongs_to :default_application_plan, class_name: 'ApplicationPlan'
 
-  attr_protected :account_id, :tenant_id, :audit_ids
-
   # LEGACY
   alias plans application_plans
 
