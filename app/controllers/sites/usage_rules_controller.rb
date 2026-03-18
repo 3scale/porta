@@ -7,7 +7,7 @@ class Sites::UsageRulesController < Sites::BaseController
   end
 
   def update
-    if @settings.update(params[:settings])
+    if @settings.update(settings_params)
       redirect_back_or_to admin_site_settings_url, success: t('.success')
     else
       render :edit
@@ -20,4 +20,12 @@ class Sites::UsageRulesController < Sites::BaseController
     @settings = current_account.settings
   end
 
+  def settings_params
+    allowed_attrs = %i[
+      useraccountarea_enabled signups_enabled strong_passwords_enabled public_search
+      account_plans_ui_visible change_account_plan_permission
+      service_plans_ui_visible change_service_plan_permission
+    ]
+    params.require(:settings).permit(*allowed_attrs)
+  end
 end

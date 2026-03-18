@@ -27,4 +27,43 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test 'update credit card policies paths successfully' do
+    provider = FactoryBot.create(:provider_account)
+    login_provider provider
+
+    put admin_site_settings_path, params: {
+      settings: {
+        cc_terms_path: '/terms',
+        cc_privacy_path: '/privacy',
+        cc_refunds_path: '/refunds'
+      }
+    }
+
+    assert_redirected_to edit_admin_site_settings_path
+    assert_equal 'Settings updated', flash[:success]
+
+    provider.settings.reload
+    assert_equal '/terms', provider.settings.cc_terms_path
+    assert_equal '/privacy', provider.settings.cc_privacy_path
+    assert_equal '/refunds', provider.settings.cc_refunds_path
+  end
+
+  test 'update with empty values clears settings' do
+    provider = FactoryBot.create(:provider_account)
+    provider.settings.update(cc_terms_path: '/terms', cc_privacy_path: '/privacy')
+    login_provider provider
+
+    put admin_site_settings_path, params: {
+      settings: {
+        cc_terms_path: '',
+        cc_privacy_path: ''
+      }
+    }
+
+    assert_redirected_to edit_admin_site_settings_path
+
+    provider.settings.reload
+    assert_equal '', provider.settings.cc_terms_path
+    assert_equal '', provider.settings.cc_privacy_path
+  end
 end
