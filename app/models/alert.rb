@@ -15,8 +15,6 @@ class Alert < ApplicationRecord
 
   has_one :user_account, through: :cinstance
 
-  attr_protected :account_id, :cinstance_id, :tenant_id
-
   validates :account, :timestamp, :state, presence: true
   validates :utilization, :level, :alert_id, :cinstance, presence: true
   validates :alert_id, uniqueness: { scope: :account_id, case_sensitive: true }

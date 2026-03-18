@@ -29,8 +29,6 @@ class MessageRecipient < ApplicationRecord
   validates :message_id, :kind, :receiver_id, :receiver_type, presence: true
   validates :receiver_type, :kind, :state, length: { maximum: 255 }
 
-  attr_protected :message_id, :receiver_id, :receiver_type, :tenant_id
-
   # Make this class look like the actual message
   delegate  :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at, :sender_name,
             :to => :message
