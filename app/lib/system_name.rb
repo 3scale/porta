@@ -20,7 +20,6 @@ module SystemName
     end
 
     def has_system_name(opts = {})
-      attr_protected :system_name if opts.delete(:protected)
       self._system_human_name = opts.delete(:human_name) || :name
       validates_system_name(opts)
     end
