@@ -27,7 +27,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   # ActiveDocs Spec Create
   # POST /admin/api/active_docs.json
   def create
-    @api_docs_service = current_account.api_docs_services.create(api_docs_params(:system_name), without_protection: true)
+    @api_docs_service = current_account.api_docs_services.create(api_docs_params(:system_name))
     respond_with(@api_docs_service)
   end
 
@@ -40,7 +40,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   # ActiveDocs Spec Update
   # PUT /admin/api/active_docs/{id}.json
   def update
-    @api_docs_service.update(api_docs_params, without_protection: true)
+    @api_docs_service.update(api_docs_params)
     respond_with(@api_docs_service)
   end
 
