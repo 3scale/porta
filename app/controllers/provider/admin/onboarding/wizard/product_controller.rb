@@ -26,6 +26,6 @@ class  Provider::Admin::Onboarding::Wizard::ProductController < Provider::Admin:
   private
 
   def service_params
-    params.require(:service)
+    params.require(:service).permit(:name)
   end
 end
