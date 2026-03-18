@@ -65,30 +65,29 @@ class Settings
     @account = account
   end
 
-  def self.defaults
-    @defaults ||= ALL_SETTINGS.dup
-  end
-
   # --- Persistence ---
 
   def save
-    save!
-    true
-  rescue ActiveRecord::RecordInvalid
-    false
+    return true unless account&.persisted?
+    AccountSetting.transaction do
+      success = account.account_settings.all? do |record|
+        if record.marked_for_destruction?
+          record.destroy
+        elsif record.changed? || record.new_record?
+          record.save
+        else
+          true
+        end
+      end
+      raise ActiveRecord::Rollback unless success
+      success
+    end
   end
 
   def save!
-    return unless account&.persisted?
-    AccountSetting.transaction do
-      account.account_settings.each do |record|
-        if record.marked_for_destruction?
-          record.destroy!
-        elsif record.changed? || record.new_record?
-          record.save!
-        end
-      end
-    end
+    save || raise(ActiveRecord::RecordInvalid.new(
+      account.account_settings.detect { |r| r.errors.any? }
+    ))
   end
 
   def update(attrs)
