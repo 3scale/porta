@@ -25,7 +25,6 @@ class CMS::PortletTest < ActiveSupport::TestCase
 
   class CustomPortlet < CMS::Portlet::Base
     attributes :fancyness
-    attr_accessible :fancyness
     validates_presence_of :fancyness
   end
 
