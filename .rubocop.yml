@@ -17,6 +17,10 @@ Performance:
 Metrics:
   Enabled: true
 
+Metrics/BlockLength:
+  Exclude:
+  - 'test/**/*_test.rb'
+
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
 
