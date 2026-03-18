@@ -79,6 +79,6 @@ class Api::UsageLimitsController < FrontendController
   end
 
   def usage_limit_params
-    params.require(:usage_limit)
+    params.require(:usage_limit).permit(:period, :value)
   end
 end
