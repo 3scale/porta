@@ -20,8 +20,8 @@
   <tbody role="rowgroup">
     <% @redirects.each do |redirect| %>
       <tr role="row">
-        <td td role="cell" data-label="From"><%= link_to h(redirect.source), edit_provider_admin_cms_redirect_path(redirect) %></>
-        <td td role="cell" data-label="To"><%= redirect.target %></>
+        <td role="cell" data-label="From"><%= link_to h(redirect.source), edit_provider_admin_cms_redirect_path(redirect) %></td>
+        <td role="cell" data-label="To"><%= redirect.target %></td>
         <td role="cell" class="pf-c-table__action actions">
           <div class="pf-c-overflow-menu">
             <div class="pf-c-overflow-menu__content">
