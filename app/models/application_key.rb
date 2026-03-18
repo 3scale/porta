@@ -7,8 +7,6 @@ class ApplicationKey < ApplicationRecord
 
   belongs_to :application, :class_name => 'Cinstance', :inverse_of => :application_keys
 
-  attr_accessible :application, :value
-
   validates :application, presence: true
 
   # The following characters are accepted:

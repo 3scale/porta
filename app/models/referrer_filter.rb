@@ -12,8 +12,6 @@ class ReferrerFilter < ApplicationRecord
 
   validate :keys_limit_reached
 
-  attr_accessible :application, :value
-
   attr_readonly :value
 
   after_commit :destroy_backend_value, on: :destroy, unless: :destroyed_by_association
