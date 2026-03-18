@@ -39,7 +39,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   def create
-    @webhook ||= current_account.build_web_hook(params[:web_hook])
+    @webhook ||= current_account.build_web_hook(webhook_params)
 
     if @webhook.save
       redirect_to({ action: :edit }, success: t('.success'))
@@ -49,7 +49,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   def update
-    if @webhook.update(params[:web_hook])
+    if @webhook.update(webhook_params)
       redirect_to({ action: :edit }, success: t('.success'))
     else
       flash.now[:danger] = t('.error')
@@ -58,6 +58,10 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   protected
+
+  def webhook_params
+    params.require(:web_hook).permit(%w[url active provider_actions] + WebHook.switchable_attributes)
+  end
 
   def find_webhook
     @webhook = current_account.web_hook
