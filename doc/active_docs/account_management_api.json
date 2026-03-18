@@ -6640,7 +6640,11 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                    "description": "System Name of the feature."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
                   }
                 },
                 "required": [
@@ -6724,11 +6728,18 @@
                   "name": {
                     "type": "string",
                     "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the feature."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
                   }
                 },
                 "required": [
-                  "access_token",
-                  "name"
+                  "access_token"
                 ]
               }
             }
@@ -9736,7 +9747,7 @@
                   },
                   "system_name": {
                     "type": "string",
-                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                    "description": "System Name of the feature."
                   },
                   "description": {
                     "type": "string",
@@ -9851,6 +9862,10 @@
                   "name": {
                     "type": "string",
                     "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the feature."
                   },
                   "description": {
                     "type": "string",

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
+class Admin::Api::ServiceFeaturesTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
@@ -114,6 +114,21 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
     feature.reload
     assert_equal "new name", feature.name
     assert_equal "new_system_name", feature.system_name
+  end
+
+  test 'updating scope is not allowed' do
+    feature = FactoryBot.create(:feature, featurable: @service)
+
+    assert_equal 'ApplicationPlan', feature.scope
+
+    put admin_api_service_feature_path(@service, id: feature.id), params: {
+      provider_key: @provider.api_key,
+      format: :xml,
+      scope: 'ServicePlan'
+    }
+
+    assert_response :success
+    assert_equal 'ApplicationPlan', feature.reload.scope
   end
 
   pending_test 'update with wrong id'

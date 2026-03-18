@@ -18,8 +18,6 @@ class FeaturesPlan < ApplicationRecord
     [self.class, feature_id, plan_id].hash
   end
 
-  attr_protected :plan_id, :feature_id, :plan_type, :tenant_id
-
   private
 
   def feature_scope_matches_plan_class?

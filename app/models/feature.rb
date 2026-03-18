@@ -23,8 +23,6 @@ class Feature < ApplicationRecord
     where(:scope => object.class.model_name.to_s)
   end
 
-  attr_protected :featurable_id, :featurable_type, :tenant_id, :audit_ids
-
   validates :system_name, uniqueness: { scope: [:featurable_id, :featurable_type], case_sensitive: true }
   validates :system_name, :name, length: { maximum: 255 }
 
