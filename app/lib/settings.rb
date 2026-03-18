@@ -106,9 +106,7 @@ class Settings
 
   def update_attribute(name, value)
     send("#{name}=", value)
-    record = setting_record_for(name.to_sym)
-    record.save! if record
-    true
+    setting_record_for(name.to_sym).save(validate: false)
   end
 
   def toggle!(name)
