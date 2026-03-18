@@ -53,28 +53,18 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
     redirect_to({ action: :index }, success: t('.success'))
   end
 
-
-
   protected
 
   def sections_params
-    params[:cms_group].dup.tap do |params|
-      if section_ids = params[:section_ids].presence
-        section_ids.reject!(&:empty?)
-        params[:sections] = section_ids.map do  |sec_id|
-          current_account.sections.find(sec_id.to_i)
-        end
-      end
-    end
-
+    params.require(:cms_group).permit(:name, section_ids: [])
   end
 
   def available_groups
-    @available_groups= current_account.provided_groups
+    @available_groups = current_account.provided_groups
   end
 
   def available_sections
-    @available_sections= current_account.provided_sections
+    @available_sections = current_account.provided_sections
   end
 
   def authorize_groups
