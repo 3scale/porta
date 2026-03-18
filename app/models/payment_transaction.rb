@@ -13,8 +13,6 @@ class PaymentTransaction < ApplicationRecord
   validates :currency, length: {maximum: 4}
   validates :message, :reference, :action, length: {maximum: 255}
 
-  attr_protected :account_id, :invoice_id, :success, :test, :tenant_id
-
   scope :failed, -> { where(:success => false) }
   scope :succeeded, -> { where(:success => true) }
   scope :oldest_first, -> { order(:created_at) }

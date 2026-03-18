@@ -164,7 +164,6 @@ module Switches
   included do
     SWITCHES.each do |name|
       attr_name = "#{name}_switch"
-      attr_protected attr_name
 
       # Switches State Machine
       #
