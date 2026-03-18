@@ -5,18 +5,21 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   activate_menu :audience, :accounts, :fields_definitions
 
   def index
-    @possible_targets = FieldsDefinition.targets
+    @possible_targets = available_targets
 
     respond_with(field_definitions)
   end
 
   def new
-    @fields_definition = field_definitions.build(field_definition_params)
+    target = field_definition_params[:target]
+    target = available_targets.first unless available_targets.include?(target)
 
-    @optional_fields = @fields_definition.target_class.builtin_fields -
-      current_account.fields_definitions.by_target(target).map{ |f|f.name }
+    @fields_definition = field_definitions.build(target: target)
+    target_class = @fields_definition.target_class
 
-    @required_fields = @fields_definition.target_class.required_fields
+    @optional_fields = target_class.builtin_fields - existing_fields_names_by_target(target)
+
+    @required_fields = target_class.required_fields
 
     @optional_fields.unshift "[new field]"
 
@@ -61,9 +64,9 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   end
 
   def sort
-    fields = current_account.fields_definitions.find(field_definition_params).index_by(&:id)
+    fields = current_account.fields_definitions.find(sort_params).index_by(&:id)
 
-    field_definition_params.each_with_index do |field_id, index|
+    sort_params.each_with_index do |field_id, index|
       fields.fetch(field_id.to_i).update_attribute(:pos, index + 1)
     end
 
@@ -73,11 +76,11 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   private
 
   def field_definition_params
-    params[:fields_definition] || {}
+    params.fetch(:fields_definition, {}).permit(:target, :name, :label, :required, :hidden, :read_only, :choices_for_views)
   end
 
-  def target
-    field_definition_params[:target]
+  def sort_params
+    @sort_params = params.fetch(:fields_definition, [])
   end
 
   def field_definitions
@@ -86,5 +89,13 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   def field_definition
     @fields_definition ||= field_definitions.find(params[:id])
+  end
+
+  def available_targets
+    @available_targets ||= FieldsDefinition.targets
+  end
+
+  def existing_fields_names_by_target(target)
+    current_account.fields_definitions.by_target(target).map(&:name)
   end
 end
