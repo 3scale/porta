@@ -19,7 +19,7 @@ class Admin::Api::WebHooksController < Admin::Api::BaseController
   end
 
   def allowed_params
-    %w(url active provider_actions) + WebHook.switchable_attributes
+    %w[url active provider_actions] + WebHook.switchable_attributes
   end
 
   def webhook_params
