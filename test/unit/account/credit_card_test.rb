@@ -60,20 +60,18 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     provider_account = FactoryBot.create(:simple_provider)
     account = FactoryBot.create(:simple_account, :provider_account => provider_account)
     account.credit_card_auth_code = 'code'
-    account.payment_detail.payment_method_id = 'pm_test123'
     assert account.credit_card_stored?
     account.delete_cc_details
 
     account.reload
     account.save!
     refute account.credit_card_stored?
-    assert_nil account.payment_detail.payment_method_id
   end
 
   test 'unstore credit card is callable from outside the class' do
     provider = FactoryBot.create(:simple_account, :payment_gateway_type => :bogus, :credit_card_auth_code => "fdsa",
-                       :credit_card_expires_on => Date.new(2020, 4, 2), :credit_card_partial_number => "0989")
-    provider.payment_detail.update!(payment_method_id: 'pm_test123')
+                       :credit_card_expires_on => Date.new(2020, 4, 2), :credit_card_partial_number => "0989",
+                       :payment_method_id => 'pm_test123')
 
     assert_nothing_raised do
       provider.unstore_credit_card!
@@ -82,7 +80,7 @@ class Account::CreditCardTest < ActiveSupport::TestCase
     assert_nil provider.credit_card_auth_code
     assert_equal Time.zone.today.change(:day => 1), provider.credit_card_expires_on_with_default
     assert_nil provider.credit_card_partial_number
-    assert_nil provider.payment_detail.payment_method_id
+    assert_nil provider.payment_method_id
   end
 
   test 'unstore credit card succeeds if gateway settings are invalid' do

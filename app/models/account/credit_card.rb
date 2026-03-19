@@ -93,7 +93,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
     self.credit_card_expires_on = nil
     self.credit_card_partial_number = nil
     self.credit_card_authorize_net_payment_profile_token = nil
-    payment_detail.payment_method_id = nil
+    self.payment_method_id = nil
   end
 
   def unstore_credit_card!
@@ -107,7 +107,7 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
       self.credit_card_auth_code = nil
       self.credit_card_expires_on = nil
       self.credit_card_partial_number = nil
-      payment_detail.payment_method_id = nil
+      self.payment_method_id = nil
     end
 
     response

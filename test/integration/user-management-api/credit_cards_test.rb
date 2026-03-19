@@ -167,6 +167,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
       billing_address_country: 'spain',
       credit_card_expiration_year: '2013',
       credit_card_expiration_month: '12',
+      payment_method_id: 'pm_12345678',
       provider_key: @provider.api_key }
     @buyer.reload
 
@@ -178,6 +179,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     assert_equal 'sin city', @buyer.billing_address_city
     assert_equal 'spain', @buyer.billing_address_country
     assert_equal Date.parse('2013/12'), @buyer.credit_card_expires_on_with_default
+    assert_equal 'pm_12345678', @buyer.payment_method_id
   end
 
   test 'ok store_credit_card_info for authorize_net' do
@@ -212,13 +214,17 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   test 'delete_credit_card_info' do
     @buyer.payment_detail.delete
     FactoryBot.create(:payment_detail, account: @buyer)
-    assert @buyer.reload.credit_card_stored?
+    @buyer.reload
+    @buyer.payment_method_id = 'pm_12345678'
+    @buyer.save!
+    assert @buyer.credit_card_stored?
 
     delete admin_api_account_credit_card_path(@buyer, format: :xml), params: { provider_key: @provider.api_key }
     @buyer.reload
 
     assert_not @buyer.credit_card_stored?
     assert_not @buyer.billing_address?
+    assert_nil @buyer.payment_method_id
   end
 
   private

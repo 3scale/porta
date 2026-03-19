@@ -10,7 +10,8 @@ module Account::PaymentDetails
       :credit_card_auth_code,
       :credit_card_partial_number,
       :credit_card_expires_on,
-      :credit_card_authorize_net_payment_profile_token
+      :credit_card_authorize_net_payment_profile_token,
+      :payment_method_id
     ].freeze
 
     delegate(
