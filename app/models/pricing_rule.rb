@@ -1,6 +1,6 @@
 class PricingRule < ApplicationRecord
   DECIMALS = 4
-  audited :allow_mass_assignment => true
+  audited
 
   belongs_to :plan
   belongs_to :metric
