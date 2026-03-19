@@ -1,7 +1,7 @@
 class ProviderConstraints < ApplicationRecord
   NO_LIMIT = Float::INFINITY
 
-  audited allow_mass_assignment: true
+  audited
 
   belongs_to :provider, class_name: 'Account'
 

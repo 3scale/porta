@@ -2,7 +2,7 @@ class Feature < ApplicationRecord
 
   self.background_deletion = [:features_plans]
 
-  audited :allow_mass_assignment => true
+  audited
 
   #TODO: these need tests
   #OPTIMIZE subclassing a better solution for these 2

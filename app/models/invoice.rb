@@ -14,7 +14,7 @@ class Invoice < ApplicationRecord
   enum creation_type: {manual: 'manual', background: 'background'}
 
   include AfterCommitQueue
-  audited :allow_mass_assignment => true
+  audited
   has_associated_audits
 
   class InvalidInvoiceStateException < RuntimeError; end
