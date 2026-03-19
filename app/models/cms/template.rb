@@ -94,7 +94,7 @@ class CMS::Template < ApplicationRecord
 
   def build_version(attrs = {})
     version = versions.build
-    version.assign_attributes(version_attributes.merge(attrs), :without_protection => true)
+    version.assign_attributes(version_attributes.merge(attrs))
     version
   end
 
