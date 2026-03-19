@@ -618,8 +618,6 @@ GEM
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    protected_attributes_continued (1.9.0)
-      activemodel (>= 5.0)
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -1103,7 +1101,6 @@ DEPENDENCIES
   prawn
   prawn-svg
   prawn-table!
-  protected_attributes_continued (~> 1.9.0)
   pry-byebug (>= 3.11.0)
   pry-doc (>= 0.8)
   pry-rails

@@ -34,7 +34,7 @@ module ForumSupport::Topics
 
   def create
     @topic = @forum.topics.build(topic_params)
-    set_protected_attributes
+    set_attributes
 
     if spam_check_save(@topic)
       flash[:notice] = "Thread was successfully created."
@@ -50,7 +50,7 @@ module ForumSupport::Topics
 
   def update
     @topic.attributes = topic_params
-    set_protected_attributes
+    set_attributes
 
     if spam_check_save(@topic)
       flash[:notice] = "Thread was successfully updated."
@@ -87,7 +87,7 @@ module ForumSupport::Topics
     @topic = @forum.topics.find_by!(permalink: params[:id])
   end
 
-  def set_protected_attributes
+  def set_attributes
     @topic.user   = current_user
     @topic.category = category
 
