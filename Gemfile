@@ -20,8 +20,6 @@ gem "activejob-uniqueness"
 # Needed for XML serialization of ActiveRecord::Base
 gem 'activemodel-serializers-xml'
 
-gem 'protected_attributes_continued', '~> 1.9.0'
-
 gem 'rails-observers'
 
 gem 'strong_migrations', '~> 2.1.0'

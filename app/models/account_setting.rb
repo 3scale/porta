@@ -11,9 +11,6 @@ class AccountSetting < ApplicationRecord
     self
   end
 
-  # TODO: remove attr_accessible once protected_attributes_continued gem is removed
-  attr_accessible :type, :value, :account, :tenant_id
-
   belongs_to :account, inverse_of: :account_settings
 
   audited associated_with: :account
