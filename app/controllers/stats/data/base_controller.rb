@@ -42,7 +42,6 @@ class Stats::Data::BaseController < ApplicationController
     options = slice_and_use_defaults(usage_params(parameter), parameter,
                                      :period, :since, :timezone, :granularity, :until, :skip_change)
     @data = @source.usage(options)
-    @data[:utilization] = @source.utilization if @source.respond_to?(:utilization)
 
     respond_to do |format|
       format.json { render :json => @data.to_json }

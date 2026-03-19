@@ -2,7 +2,6 @@ module Stats
   class Client < Base
     include Views::Usage
     include Views::Total
-    include Views::Utilization
 
     def initialize(cinstance)
       @cinstance = cinstance
