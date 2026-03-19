@@ -8,7 +8,7 @@ module Finance
 
     def create_line_item(params)
       bill do
-        @invoice.line_items.create(params, {without_protection: true})
+        @invoice.line_items.create(params)
       end
     rescue Invoice::InvalidInvoiceStateException
       line_item_with_error(params, :invalid_invoice_state)
@@ -18,7 +18,7 @@ module Finance
 
     def create_line_item!(params)
       bill do
-        @invoice.line_items.create!(params, {without_protection: true})
+        @invoice.line_items.create!(params)
       end
     end
 
@@ -37,7 +37,7 @@ module Finance
     end
 
     def line_item_with_error(params, error_type)
-      LineItem.new(params, {without_protection: true}).tap do |line_item|
+      LineItem.new(params).tap do |line_item|
         line_item.errors.add(:base, error_type.to_sym)
       end
     end

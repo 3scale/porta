@@ -238,8 +238,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     def perform_expectations
       DeleteObjectHierarchyWorker.stubs(:perform_later)
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new({ id: customized_plan.id }, without_protection: true), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new(id: contract.id), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Plan.new(id: customized_plan.id), anything, 'destroy')
     end
 
     class AccountPlanTest < DeletePlanTest
@@ -555,7 +555,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         buyer.save!
         topic = FactoryBot.create(:topic, user: buyer.admin_user, forum: provider.forum)
         before_objects << topic
-        topic_subscription = UserTopic.create({user: buyer.admin_user, topic:}, {without_protection: true})
+        topic_subscription = UserTopic.create(user: buyer.admin_user, topic: topic)
 
         perform_enqueued_jobs(queue: "deletion") do
           DeleteObjectHierarchyWorker.delete_later buyer

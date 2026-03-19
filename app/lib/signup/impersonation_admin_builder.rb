@@ -6,14 +6,12 @@ module Signup
       config = ThreeScale.config.impersonation_admin
       username = config[:username]
       impersonation_admin = account.users.new(
-        {
-          username: username,
-          email: "#{username}+#{account.internal_domain}@#{config[:domain]}",
-          first_name: '3scale',
-          last_name: 'Admin',
-          state: 'active'
-        },
-        without_protection: true)
+        username: username,
+        email: "#{username}+#{account.internal_domain}@#{config[:domain]}",
+        first_name: '3scale',
+        last_name: 'Admin',
+        state: 'active'
+      )
       impersonation_admin.role = :admin
       impersonation_admin.signup_type = :minimal
       impersonation_admin

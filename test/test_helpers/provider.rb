@@ -80,15 +80,15 @@ module TestHelpers
           FactoryBot.create(:keycloak_self_authentication_provider, account: provider)
           FactoryBot.create(:github_authentication_provider, account: provider)
           FactoryBot.create(:redhat_customer_portal_authentication_provider, account: provider)
-          provider.authentication_providers.create!({ type: "AuthenticationProvider::Custom", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider }, { without_protection: true })
-          provider.authentication_providers.create!({ type: "AuthenticationProvider::ServiceDiscoveryProvider", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider }, {without_protection: true })
+          provider.authentication_providers.create!(type: "AuthenticationProvider::Custom", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider)
+          provider.authentication_providers.create!(type: "AuthenticationProvider::ServiceDiscoveryProvider", client_id: 'id', client_secret: 'secret', site: 'http://example.com', account: provider)
 
           forum = FactoryBot.create(:forum, account: provider)
           topic = FactoryBot.create(:topic, user: provider.admin_user, forum:)
           FactoryBot.create(:topic_category, forum:)
           FactoryBot.create(:post, user: provider.admin_user, forum:, topic:)
-          UserTopic.create({user: provider.admin_user, topic:}, {without_protection: true})
-          Moderatorship.create({user: provider.admin_user, forum:}, {without_protection: true})
+          UserTopic.create(user: provider.admin_user, topic: topic)
+          Moderatorship.create(user: provider.admin_user, forum: forum)
 
           Configuration::Value.create(configurable: provider, name: "foo", value: "bar")
 
@@ -96,7 +96,7 @@ module TestHelpers
           LatestForumPostsPortlet.create!(provider:, portlet_type: 'LatestForumPostsPortlet', system_name: 'name', posts: forum.posts.count)
           TableOfContentsPortlet.create!(provider:, portlet_type: 'TableOfContentsPortlet', system_name: 'name', section_id: provider.provided_sections.first.id)
           CMS::Redirect.new.tap do |redirect|
-            redirect.assign_attributes({source: "a", target: "b", provider:}, {without_protection: true})
+            redirect.assign_attributes(source: "a", target: "b", provider: provider)
           end.save!
 
           provider
