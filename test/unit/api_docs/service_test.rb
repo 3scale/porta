@@ -574,7 +574,7 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
     refute api_doc.valid?
     assert_includes api_doc.errors[:service], 'not found'
 
-    api_doc = account.api_docs_services.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
+    api_doc = account.api_docs_services.new(valid_attributes.merge(service_id: service.id + 1000))
     refute api_doc.valid?
     assert_includes api_doc.errors[:service], 'not found'
   end

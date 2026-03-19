@@ -16,7 +16,7 @@ module Tasks
       default_service = FactoryBot.create(:simple_service)
       account = default_service.account
       another_service = FactoryBot.create(:simple_service, account: account)
-      account.update!({default_service_id: default_service.id}, without_protection: true)
+      account.update!({default_service_id: default_service.id})
       default_service.reload
 
       ThreeScale::Core::Service.expects(:make_default).with(another_service.backend_id)
@@ -35,9 +35,9 @@ module Tasks
 
     test 'destroy_service raises ActiveRecord::RecordNotFound or StateMachines::InvalidTransition when the Account does not have another active Service' do
       default_service = FactoryBot.create(:simple_service)
-      default_service.account.update!({default_service_id: default_service.id}, without_protection: true)
+      default_service.account.update!({default_service_id: default_service.id})
       non_default_service = FactoryBot.create(:simple_service)
-      non_default_service.account.update!({default_service_id: nil}, without_protection: true)
+      non_default_service.account.update!({default_service_id: nil})
 
       assert_raise(ActiveRecord::RecordNotFound) do
         execute_rake_task 'services.rake', 'services:destroy_service', default_service.account.id, default_service.id
@@ -62,7 +62,7 @@ module Tasks
       default_service = FactoryBot.create(:simple_service)
       account = default_service.account
       non_default_service = FactoryBot.create(:simple_service, account: account)
-      account.update!({default_service_id: default_service.id}, without_protection: true)
+      account.update!({default_service_id: default_service.id})
       default_service.reload
 
       ThreeScale::Core::Service.expects(:make_default).never
