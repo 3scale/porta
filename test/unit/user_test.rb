@@ -8,15 +8,6 @@ class UserTest < ActiveSupport::TestCase
   subject { @user || FactoryBot.create(:user) }
 
   should belong_to :account
-  should allow_mass_assignment_of :username
-  should allow_mass_assignment_of :email
-  should allow_mass_assignment_of :first_name
-  should allow_mass_assignment_of :last_name
-  should allow_mass_assignment_of :password
-  should allow_mass_assignment_of :password_confirmation
-  should allow_mass_assignment_of :conditions
-  should allow_mass_assignment_of :service_conditions
-  should allow_mass_assignment_of :job_role
 
   setup do
     ActionMailer::Base.deliveries = []

@@ -2,7 +2,7 @@ class Settings < ApplicationRecord
   include Symbolize
   belongs_to :account, inverse_of: :settings
 
-  audited allow_mass_assignment: true
+  audited
 
   validates :product, inclusion: { in: %w[connect enterprise].freeze }
   validates :change_account_plan_permission, :change_service_plan_permission, inclusion: { in: %w[request none credit_card request_credit_card direct].freeze }
