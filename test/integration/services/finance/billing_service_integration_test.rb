@@ -48,7 +48,7 @@ class Finance::BillingServiceIntegrationTest < ActionDispatch::IntegrationTest
       Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
       assert_equal "unpaid", invoice.reload.state
 
-      invoice.update({ last_charging_retry: invoice.last_charging_retry - 4.days }, without_protection: true)
+      invoice.update(last_charging_retry: invoice.last_charging_retry - 4.days)
       Finance::BillingService.call!(buyer.id, provider_account_id: provider.id, now: invoice.due_on)
       assert_equal "unpaid", invoice.reload.state
 
