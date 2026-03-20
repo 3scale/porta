@@ -79,6 +79,10 @@ FactoryBot.define do
     association(:account, :factory => :simple_provider)
     after(:create) do |record|
       record.service_tokens.first_or_create!(value: 'token')
+      # Proxy validation during service creation calls account.backend_apis.build(...),
+      # which adds an unpersisted BackendApi to the association. Remove it to prevent
+      # validation failures in later operations on the account.
+      record.account.backend_apis.target.delete_if { |ba| !ba.persisted? }
     end
 
     trait :with_default_backend_api do

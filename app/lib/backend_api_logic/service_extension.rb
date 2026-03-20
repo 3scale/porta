@@ -33,7 +33,11 @@ module BackendApiLogic
       end
 
       def backend_api
-        @backend_api ||= backend_api_configs.first&.backend_api || account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
+        return @backend_api if @backend_api&.persisted?
+
+        @backend_api = backend_api_configs.first&.backend_api ||
+                       @backend_api
+        @backend_api ||= account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
       end
 
       def update!(attrs = {})
