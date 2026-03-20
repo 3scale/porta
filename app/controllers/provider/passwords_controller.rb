@@ -7,7 +7,7 @@ class Provider::PasswordsController < FrontendController
   before_action :passwords_allowed?
 
   def new
-    return redirect_back_or_to(root_path), danger: t('.has_password') if current_user.using_password?
+    return redirect_back_or_to(root_path), danger: t('.has_password') if current_user.already_using_password?
 
     reset_session_password_token
     token = current_user.generate_lost_password_token
