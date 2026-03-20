@@ -65,10 +65,14 @@ module Switches
         end
       end
 
-      # State transition delegations (e.g., settings.allow_finance!)
+      # State transition delegations (e.g., settings.allow_finance!, settings.allow_finance)
       %w[allow show hide deny].each do |event|
         define_method("#{event}_#{name}!") do
           find_or_build_switch(name).send("#{event}!")
+        end
+
+        define_method("#{event}_#{name}") do
+          find_or_build_switch(name).send("#{event}")
         end
 
         define_method("can_#{event}_#{name}?") do

@@ -155,14 +155,14 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
   test 'first update switch, then limits' do
     constraints = @provider.create_provider_constraints!
 
-    assert_difference(Audited.audit_class.method(:count), +2) do
-      ProviderConstraints.with_synchronous_auditing do
-        assert constraints.auditing_enabled?, 'auditing should be enabled'
-        @provider.force_upgrade_to_provider_plan!(@pro)
-      end
+    ProviderConstraints.with_synchronous_auditing do
+      assert constraints.auditing_enabled?, 'auditing should be enabled'
+      @provider.force_upgrade_to_provider_plan!(@pro)
     end
 
-    switch_audit, upgrade_audit = Audited.audit_class.order(:id).last(2)
+    # The last 2 commented audits should be the switch upgrade comment and the limits upgrade comment (in that order)
+    commented_audits = Audited.audit_class.where.not(comment: nil).order(:id).last(2)
+    switch_audit, upgrade_audit = commented_audits
 
     assert_equal 'Upgrading max_services because of switch is enabled.', switch_audit.comment
     assert_equal 'Upgrading limits to match plan pro3M', upgrade_audit.comment

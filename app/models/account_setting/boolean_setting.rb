@@ -2,6 +2,7 @@
 
 class AccountSetting::BooleanSetting < AccountSetting
   self.non_null = true
+  self.default_value = false
 
   def self.cast(value)
     ActiveModel::Type::Boolean.new.cast(value)

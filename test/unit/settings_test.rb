@@ -191,7 +191,7 @@ class SettingsTest < ActiveSupport::TestCase
 
     settings.update(public_search: true)
     settings.update(public_search: nil)
-    assert_nil settings.reload.public_search, "nil clears the setting back to default"
+    assert_equal false, settings.reload.public_search, "nil clears the setting back to default (false)"
   end
 
   test "validate change plan permission values" do

@@ -26,7 +26,7 @@ class Settings
       if value.nil?
         clear_setting(name)
       else
-        find_or_build_setting(name).typed_assign(value)
+        find_or_build_setting(name).typed_assign(klass.cast(value))
       end
     end
   end
@@ -69,8 +69,9 @@ class Settings
 
   def save
     return true unless account&.persisted?
+    results = nil
     AccountSetting.transaction do
-      success = account.account_settings.all? do |record|
+      results = account.account_settings.map do |record|
         if record.marked_for_destruction?
           record.destroy
         elsif record.changed? || record.new_record?
@@ -79,9 +80,9 @@ class Settings
           true
         end
       end
-      raise ActiveRecord::Rollback unless success
-      success
+      raise ActiveRecord::Rollback unless results.all?
     end
+    results.all?
   end
 
   def save!
@@ -122,6 +123,16 @@ class Settings
     end
   end
   alias attributes= assign_attributes
+
+  def errors
+    errors = ActiveModel::Errors.new(self)
+    account&.account_settings&.each do |record|
+      record.errors.each do |error|
+        errors.add(record.class.setting_name, error.message)
+      end
+    end
+    errors
+  end
 
   def dirty?
     account&.account_settings&.any? { |r| r.changed? || r.new_record? || r.marked_for_destruction? }

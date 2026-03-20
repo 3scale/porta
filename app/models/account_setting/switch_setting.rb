@@ -23,10 +23,6 @@ class AccountSetting::SwitchSetting < AccountSetting
       end
     end
 
-    before_transition on: :show do |record|
-      throw :halt unless record.class.provider_visible
-    end
-
     state 'denied', 'hidden', 'visible'
 
     event :allow do

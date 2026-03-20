@@ -17,6 +17,7 @@ class Admin::Api::SettingsControllerTest < ActionDispatch::IntegrationTest
     expected_response = {
       settings: {
         useraccountarea_enabled: true,
+        hide_service: false,
         signups_enabled: true,
         account_approval_required: false,
         strong_passwords_enabled: false,

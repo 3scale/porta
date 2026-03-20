@@ -19,7 +19,7 @@ class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTes
     put master_provider_switch_path(provider.id, 'web_hooks')
     assert_response :found
 
-    assert switch.reload.allowed?
+    assert settings.reload.web_hooks.allowed?
   end
 
   test 'should disable the switch when hidden' do
