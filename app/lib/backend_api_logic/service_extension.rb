@@ -33,7 +33,11 @@ module BackendApiLogic
       end
 
       def backend_api
-        @backend_api ||= backend_api_configs.first&.backend_api || account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
+        # Return early if we already have a persisted backend_api
+        return @backend_api if @backend_api&.persisted?
+
+        # Try to get backend_api from backend_api_configs, or keep the memoized unpersisted one, or build a new one
+        @backend_api = backend_api_configs.first&.backend_api || @backend_api || build_backend_api
       end
 
       def update!(attrs = {})
@@ -51,6 +55,18 @@ module BackendApiLogic
         update!(attrs)
       rescue ActiveRecord::RecordInvalid
         false
+      end
+
+      private
+
+      def build_backend_api
+        # Build without adding to association to avoid polluting it with unpersisted records
+        BackendApi.new(
+          account: account,
+          system_name: service_system_name,
+          name: "#{service_name} Backend",
+          description: "Backend of #{service_name}"
+        )
       end
     end
 
