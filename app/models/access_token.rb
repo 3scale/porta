@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AccessToken < ApplicationRecord
-  DIGEST_PREFIX = 'SHA384$'.freeze
+  DIGEST_PREFIX = 'SHA384$'
 
   TIMESTAMP_FORMAT = '%FT%T%:z'.freeze
   PAST_TIME = Time.at(0).utc.freeze
