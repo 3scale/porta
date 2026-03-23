@@ -93,6 +93,10 @@ module TestHelpers
           Configuration::Value.create(configurable: provider, name: "foo", value: "bar")
 
           FactoryBot.create(:cms_portlet, provider:)
+
+          AccountSetting::PermissionsPolicyHeaderAdmin.create!(account: provider, value: "picture-in-picture=(), geolocation=(self https://example.com/), camera=*")
+          AccountSetting::PermissionsPolicyHeaderDeveloper.create!(account: provider, value: "picture-in-picture=(), geolocation=(self https://example.com/), camera=*")
+
           LatestForumPostsPortlet.create!(provider:, portlet_type: 'LatestForumPostsPortlet', system_name: 'name', posts: forum.posts.count)
           TableOfContentsPortlet.create!(provider:, portlet_type: 'TableOfContentsPortlet', system_name: 'name', section_id: provider.provided_sections.first.id)
           CMS::Redirect.new.tap do |redirect|

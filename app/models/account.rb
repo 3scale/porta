@@ -11,6 +11,7 @@ class Account < ApplicationRecord
 
 
   include Fields::Fields
+
   required_fields_are :org_name
   optional_fields_are :org_legaladdress, :org_legaladdress_cont,
                       :telephone_number, :vat_code, :vat_rate, :fiscal_code,
@@ -52,6 +53,7 @@ class Account < ApplicationRecord
   # historically seems like buyers should be deleted after payment_gateway_setting, not sure if still needed
   self.background_deletion = %i[
     configuration_values
+    account_settings
     settings
     forum
     users
@@ -98,6 +100,7 @@ class Account < ApplicationRecord
   after_destroy :destroy_all_contracts
 
   include WebHooksHelpers #TODO: make this inclusion more dsl-ish
+
   fires_human_web_hooks_on_events
 
   before_validation(on: :create, if: :provider?) { generate_s3_prefix }
@@ -143,6 +146,7 @@ class Account < ApplicationRecord
 
   def smart_destroy
     return if master?
+
     if buyer?
       first_admin # needs to be cached before destroying
       destroy
@@ -226,6 +230,8 @@ class Account < ApplicationRecord
   has_one :profile, dependent: :delete
   has_one :settings, dependent: :destroy, inverse_of: :account, autosave: true
   lazy_initialization_for :profile, :settings, if: :should_not_be_deleted?
+  has_many :account_settings, dependent: :delete_all, inverse_of: :account, autosave: true
+
   accepts_nested_attributes_for :profile
 
   belongs_to :country
@@ -282,6 +288,7 @@ class Account < ApplicationRecord
   validate :master_uniqueness, if: :master?
 
   include Authentication
+
   validates :support_email,         format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
                                               allow_blank: true, unless: :buyer? }
   validates :finance_support_email, format: { with: RE_EMAIL_OK, message: MSG_EMAIL_BAD,
@@ -412,6 +419,7 @@ class Account < ApplicationRecord
   # Decides if the email sent from this provider should have the viral email footer appended.
   def should_apply_email_engagement_footer?
     return false if master?
+
     if buyer? && !provider? # no idea what I'm doing.
       provider_account.settings.skip_email_engagement_footer.denied?
     else
@@ -439,6 +447,7 @@ class Account < ApplicationRecord
   # don't freak out, this is a legacy naming
   def multiple_applications_allowed?
     return false unless settings
+
     settings.multiple_applications.visible?
   end
 
