@@ -8,6 +8,13 @@ Rails:
 Rails/RequestReferer:
   EnforcedStyle: referrer
 
+Rails/ActionOrder:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+  - 'test/**/*_test.rb'
+
 Lint:
   Enabled: true
 
@@ -20,6 +27,7 @@ Metrics:
 Metrics/BlockLength:
   Exclude:
   - 'test/**/*_test.rb'
+  - 'spec/**/*_spec.rb'
 
 Lint/AssignmentInCondition:
   AllowSafeAssignment: true
@@ -75,12 +83,16 @@ Layout/LineLength:
 
 Metrics/AbcSize:
   Max: 20
+  Exclude:
+  - 'test/**/*_test.rb'
 
 Metrics/MethodLength:
   Max: 20
 
 Metrics/ClassLength:
   Max: 200
+  Exclude:
+  - 'test/**/*_test.rb'
 
 AllCops:
   NewCops: enable

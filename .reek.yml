@@ -42,3 +42,7 @@ directories:
   "test":
     InstanceVariableAssumption:
       enabled: false
+    DuplicateMethodCall:
+      enabled: false
+    UncommunicativeVariableName:
+      enabled: false
