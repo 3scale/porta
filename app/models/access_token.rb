@@ -104,7 +104,7 @@ class AccessToken < ApplicationRecord
   validate :validate_scope_exists
   validate :validate_expiration_date, on: %i[create]
 
-  after_initialize :generate_value, if: :new_record?
+  after_initialize :generate_if_missing, if: :new_record?
 
   attr_accessible :owner, :name, :scopes, :permission, :expires_at
 
@@ -179,7 +179,7 @@ class AccessToken < ApplicationRecord
     errors.add :expires_at, :invalid, message: "Date must follow ISO8601 format and be future. Example: #{1.week.from_now.utc.iso8601}."
   end
 
-  def generate_value
+  def generate_if_missing
     return if persisted?
     return if @plaintext_value.present?
 
