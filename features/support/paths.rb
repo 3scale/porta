@@ -696,10 +696,6 @@ World(Module.new do
     when 'the edit webhooks page'
       edit_provider_admin_webhooks_path
 
-    #Previous routes still used.
-    when 'the provider access rules page'
-      '/admin/settings/accessrules'
-
     when 'the terms of service page'
       '/termsofservice'
     when 'the privacy policy page'
