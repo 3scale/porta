@@ -80,7 +80,7 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   end
 
   def sort_params
-    @sort_params = params.fetch(:fields_definition, [])
+    @sort_params ||= params.fetch(:fields_definition, [])
   end
 
   def field_definitions
