@@ -93,7 +93,7 @@ module Liquid
 
       desc "Returns true if user signed up with password"
       def using_password?
-        @user.using_password?
+        @user.already_using_password?
       end
 
       desc %{
@@ -109,7 +109,7 @@ module Liquid
         {{ endif }}
       }
       def password_required?
-        @user.password_required?
+        @user.signup.by_user?
       end
 
       desc "Returns the list of sections the user has access to."

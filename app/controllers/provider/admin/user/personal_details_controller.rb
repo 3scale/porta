@@ -30,7 +30,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   end
 
   def current_password_verification
-    return true unless current_user.using_password?
+    return true unless current_user.already_using_password?
 
     unless current_user.authenticated?(user_params[:current_password])
       flash.now[:danger] = t('.wrong')

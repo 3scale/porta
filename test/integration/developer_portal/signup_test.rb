@@ -13,7 +13,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     user: {
       email:    ACCOUNT_EMAIL,
       username: 'supertramp',
-      password: 'westisthebest'
+      password: 'superSecret1234#'
     }
   }.freeze
 
@@ -78,6 +78,45 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
       end
 
       include BypassForm
+    end
+  end
+
+  class StrongPasswordsTest < DeveloperPortal::SignupTest
+    STRONG_PASSWORD = 'superSecret1234#'
+    WEAK_PASSWORD = 'weakpwd'
+
+    def account_params(password)
+      {
+        account: {
+          org_name: 'alaska',
+          user: {
+            email: 'foo@example.edu',
+            username: 'supertramp',
+            password: password
+          }
+        }
+      }
+    end
+
+    def test_weak_password_rejected_when_strong_passwords_enabled
+      post signup_path, params: account_params(WEAK_PASSWORD)
+
+      assert_response :success
+      assert_match "is too short (minimum is 15 characters)", response.body
+    end
+
+    def test_strong_password_accepted_when_strong_passwords_enabled
+      post signup_path, params: account_params(STRONG_PASSWORD)
+
+      assert_response :redirect
+    end
+
+    def test_weak_password_accepted_when_strong_passwords_disabled
+      Rails.configuration.three_scale.stubs(:strong_passwords_disabled).returns(true)
+
+      post signup_path, params: account_params(WEAK_PASSWORD)
+
+      assert_response :redirect
     end
   end
 

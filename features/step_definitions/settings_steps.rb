@@ -11,10 +11,6 @@ Given "{provider} has the following setting(s):" do |account, table|
   account.settings.update!(attributes)
 end
 
-Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
-  assert provider.settings.reload.strong_passwords_enabled == enabled
-end
-
 Given "{provider} has {count} account plan(s)" do |provider, count|
   current_size = provider.account_plans.size
   if count > current_size

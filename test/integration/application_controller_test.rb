@@ -64,7 +64,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       post admin_buyers_accounts_path, params: {
         account: {
           org_name: 'Alaska',
-          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+          user: { email: 'foo@example.com', password: 'superSecret1234#', username: 'hello' }
         }
       }
     end
@@ -81,7 +81,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
 
     with_forgery_protection do
       post admin_api_signup_path(format: :json), params: {
-        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'
       }
     end
     assert_response :forbidden
@@ -98,7 +98,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     with_forgery_protection do
       post admin_api_signup_path(format: :json), params: {
         access_token: token, org_name: 'Alaska',
-        username: 'hello', email: 'foo@example.com', password: '123456'
+        username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'
       }
     end
     assert_response :created
@@ -116,7 +116,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       post admin_api_signup_path(format: :json), headers: {
         Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
       }, params: {
-        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'
       }
     end
     assert_response :created
@@ -133,7 +133,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       post admin_api_signup_path(format: :json), headers: {
         Authorization: ActionController::HttpAuthentication::Basic.encode_credentials(token, '')
       }, params: {
-        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: '123456'
+        org_name: 'Alaska', username: 'hello', email: 'foo@example.com', password: 'superSecret1234#'
       }
     end
     assert_response :created

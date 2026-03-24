@@ -51,22 +51,22 @@ Feature: Provider password reset
     Scenario: Set a new password
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
-      And they fill in "Password confirmation" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
+      And they fill in "Password confirmation" with "superSecret1234#"
       And press "Change Password"
       Then they should see "The password has been changed"
       And the current page is the provider login page
-      And the user is now able to sign in with password "monkey"
+      And the user is now able to sign in with password "superSecret1234#"
 
     Scenario: New password form validation
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
       And they fill in "Password confirmation" with ""
       Then the submit button is disabled
-      When they fill in "Password confirmation" with "donkey"
+      When they fill in "Password confirmation" with "superSecret1234#5"
       Then the submit button is disabled
-      When they fill in "Password confirmation" with "monkey"
+      When they fill in "Password confirmation" with "superSecret1234#"
       Then the submit button is enabled
 
     Scenario: Invalid password reset token
@@ -83,8 +83,8 @@ Feature: Provider password reset
     Scenario: Reuse a password reset token
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
-      And they fill in "Password" with "monkey"
-      And they fill in "Password confirmation" with "monkey"
+      And they fill in "Password" with "superSecret1234#"
+      And they fill in "Password confirmation" with "superSecret1234#"
       When press "Change Password"
       Then they should see "The password has been changed"
       When follow the link found in the provider password reset email send to "pepe@example.com"

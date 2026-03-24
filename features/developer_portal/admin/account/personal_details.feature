@@ -62,7 +62,7 @@ Feature: Dev Portal Buyer Personal Details
       | User extra read only |
       | User extra hidden    |
 
-    And fill in "Current Password" with "supersecret"
+    And fill in "Current Password" with "superSecret1234#"
     And they press "Update Personal Details"
     Then they should see error in fields:
       | errors              |

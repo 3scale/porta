@@ -19,7 +19,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     # and therefore, user password should be required
     get invitee_signup_path(invitation_token: @invitation.token)
     assert_response :success
-    assert assigns(:user).password_required?
+    assert assigns(:user).validate_password?
 
     # sso attributes do exist, sso authorization object should be built
     # and therefore, user password should not be required
@@ -29,7 +29,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert_response :success
     get invitee_signup_path(invitation_token: @invitation.token)
     assert_response :success
-    refute assigns(:user).password_required?
+    refute assigns(:user).validate_password?
     sso_authorization = assigns(:user).sso_authorizations.first
     assert_equal '12345', sso_authorization.uid
     assert_equal @auth_provider.id, sso_authorization.authentication_provider_id
@@ -134,7 +134,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     {
       email:    "foo_#{index}@example.net",
       username: "bar#{index}",
-      password: '123456'
+      password: 'superSecret1234#'
     }
   end
 end

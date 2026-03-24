@@ -111,7 +111,7 @@ FactoryBot.define do
   factory(:simple_user, :class => User) do
     sequence(:email) { |n| "simple#{n}@example.net" }
     sequence(:username) { |n| "simpledude#{n}" }
-    password { 'supersecret' }
+    password { 'superSecret1234#' }
     association(:account, :factory => :simple_provider)
     # TODO: maybe activate it?
   end
