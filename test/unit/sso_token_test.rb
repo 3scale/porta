@@ -21,6 +21,20 @@ class SSOTokenTest < ActiveSupport::TestCase
     assert_not_nil sso_token.expires_at
   end
 
+  test "SSOToken rejects unpermitted parameters" do
+    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+    user_id = buyer.users.first.id
+    params = ActionController::Parameters.new({ user_id: user_id, expires_in: 6000 })
+
+    assert_raises ActiveModel::ForbiddenAttributesError do
+      SSOToken.new params
+    end
+
+    sso_token = SSOToken.new params.permit(:user_id, :expires_in)
+    assert_equal user_id, sso_token.user_id
+    assert_equal 6000, sso_token.expires_in
+  end
+
   test "creating a valid sso token using username" do
     buyer     = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
