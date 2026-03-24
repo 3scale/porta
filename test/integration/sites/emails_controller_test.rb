@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
+class Sites::EmailsControllerTest < ActionDispatch::IntegrationTest
 
   test 'show emails tab if not master account' do
     provider = FactoryBot.create(:provider_account)
