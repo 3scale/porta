@@ -16,7 +16,8 @@ class Sites::SettingsController < Sites::BaseController
     if @settings.update(settings_params)
       redirect_to edit_admin_site_settings_path, success: t('.success')
     else
-      redirect_to edit_admin_site_settings_path, danger: t('.error')
+      flash.now[:danger] = t('.error')
+      render action: 'edit'
     end
   end
 
