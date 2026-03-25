@@ -152,34 +152,42 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     assert_not @buyer.credit_card_stored?
   end
 
-  test 'ok store_credit_card_info' do
-    assert_not @buyer.credit_card_stored?
-    @provider.payment_gateway_type = :braintree_blue
-    @provider.save!
-    @provider.reload
+  %i[braintree_blue stripe].each do |gateway_type|
+    test "ok store_credit_card_info for #{gateway_type}" do
+      assert_not @buyer.credit_card_stored?
+      @provider.payment_gateway_type = gateway_type
+      @provider.save!
+      @provider.reload
 
-    put admin_api_account_credit_card_path(@buyer, format: :xml), params: {
-      credit_card_token: 'secret',
-      credit_card_partial_number: '1234',
-      billing_address_name: 'foo',
-      billing_address_address: 'elm street',
-      billing_address_city: 'sin city',
-      billing_address_country: 'spain',
-      credit_card_expiration_year: '2013',
-      credit_card_expiration_month: '12',
-      payment_method_id: 'pm_12345678',
-      provider_key: @provider.api_key }
-    @buyer.reload
+      payment_method_id = gateway_type == :stripe ? 'pm_12345678' : nil
 
-    assert @buyer.credit_card_stored?
-    assert_equal 'secret', @buyer.credit_card_auth_code
-    assert_equal '1234', @buyer.credit_card_partial_number
-    assert_equal 'foo', @buyer.billing_address_name
-    assert_equal 'elm street', @buyer.billing_address_address1
-    assert_equal 'sin city', @buyer.billing_address_city
-    assert_equal 'spain', @buyer.billing_address_country
-    assert_equal Date.parse('2013/12'), @buyer.credit_card_expires_on_with_default
-    assert_equal 'pm_12345678', @buyer.payment_method_id
+      put admin_api_account_credit_card_path(@buyer, format: :xml), params: {
+        credit_card_token: 'secret',
+        credit_card_partial_number: '1234',
+        billing_address_name: 'foo',
+        billing_address_address: 'elm street',
+        billing_address_city: 'sin city',
+        billing_address_country: 'spain',
+        credit_card_expiration_year: '2013',
+        credit_card_expiration_month: '12',
+        payment_method_id: payment_method_id,
+        provider_key: @provider.api_key }
+      @buyer.reload
+
+      assert @buyer.credit_card_stored?
+      assert_equal 'secret', @buyer.credit_card_auth_code
+      assert_equal '1234', @buyer.credit_card_partial_number
+      assert_equal 'foo', @buyer.billing_address_name
+      assert_equal 'elm street', @buyer.billing_address_address1
+      assert_equal 'sin city', @buyer.billing_address_city
+      assert_equal 'spain', @buyer.billing_address_country
+      assert_equal Date.parse('2013/12'), @buyer.credit_card_expires_on_with_default
+      if gateway_type == :stripe
+        assert_equal 'pm_12345678', @buyer.payment_method_id
+      else
+        assert_nil @buyer.payment_method_id
+      end
+    end
   end
 
   test 'ok store_credit_card_info for authorize_net' do
