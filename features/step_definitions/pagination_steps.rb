@@ -2,7 +2,7 @@
 
 Then "(I )(they )should see {int} pages" do |count|
   if has_css?('.pagination', wait: 0)
-    ActiveSupport::Deprecation.warn 'Implement table toolbar instead'
+    ActiveSupport.deprecator.warn 'Implement table toolbar instead'
     links = within(".pagination") do
       all("a:not(.next_page), em.current")
     end
@@ -17,7 +17,7 @@ end
 
 When "they look at the {ordinal} page" do |page|
   if has_css?('.pagination', wait: 0)
-    ActiveSupport::Deprecation.warn 'Implement table toolbar instead'
+    ActiveSupport.deprecator.warn 'Implement table toolbar instead'
     within ".pagination" do
       click_link page
     end

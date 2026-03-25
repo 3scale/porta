@@ -12,7 +12,7 @@ module TableHelpers
   #
   def extract_table(table, rows, cells = nil)
     table = find(*table)
-    ActiveSupport::Deprecation.warn '[Cucumber] Table not implemented with Patternfly' unless table[:class].include?('pf-c-table')
+    ActiveSupport.deprecator.warn '[Cucumber] Table not implemented with Patternfly' unless table[:class].include?('pf-c-table')
     table.all(*rows).map do |row|
       if cells.respond_to?(:call)
         cells.call(row)
