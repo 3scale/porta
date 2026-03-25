@@ -40,7 +40,7 @@
     "/admin/api/accounts.xml": {
       "get": {
         "summary": "Account List",
-        "description": "Returns the list of buyer accounts (the accounts that consume your API). Filters by state are available and the results can be paginated.",
+        "description": "Returns the list of developer accounts (the accounts that consume your API). Filters by state are available and the results can be paginated.",
         "tags": [
           "Accounts"
         ],
@@ -97,7 +97,7 @@
     "/admin/api/accounts/{id}.xml": {
       "get": {
         "summary": "Account Read",
-        "description": "Returns a buyer account.",
+        "description": "Returns a developer account.",
         "tags": [
           "Accounts"
         ],
@@ -131,7 +131,7 @@
       },
       "put": {
         "summary": "Account Update",
-        "description": "Updates a buyer account by ID. You can modify all the fields on the account, including custom fields defined in the fields definition section of your admin portal. Additional fields have to be defined by name and value (i.e &name=value).",
+        "description": "Updates a developer account by ID. You can modify all the fields on the account, including custom fields defined in the fields definition section of your admin portal. Additional fields have to be defined by name and value (i.e &name=value).",
         "tags": [
           "Accounts"
         ],
@@ -139,7 +139,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -166,7 +166,7 @@
       },
       "delete": {
         "summary": "Account Delete",
-        "description": "Deletes a buyer account. Deleting an account removes all users, applications and service subscriptions to the account.",
+        "description": "Deletes a developer account. Deleting an account removes all users, applications and service subscriptions to the account.",
         "tags": [
           "Accounts"
         ],
@@ -1603,7 +1603,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1640,7 +1640,7 @@
     "/admin/api/accounts/{id}/change_plan.xml": {
       "put": {
         "summary": "Account Change Plan",
-        "description": "Changes the account plan for the buyer account.",
+        "description": "Changes the account plan for the developer account.",
         "tags": [
           "Accounts"
         ],
@@ -1883,7 +1883,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the fields definition.",
+            "description": "ID of the account.",
             "required": true,
             "schema": {
               "type": "integer"
