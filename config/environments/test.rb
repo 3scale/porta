@@ -69,6 +69,8 @@ Rails.application.configure do
 
   config.active_support.test_order = :random
 
+  config.active_job.queue_adapter = :test
+
   config.three_scale.payments.merge!(enabled: true, active_merchant_mode: :test, active_merchant_logging: false)
 
   config.three_scale.rolling_updates.raise_error_unknown_features = true

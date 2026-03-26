@@ -79,6 +79,7 @@ Feature: Buyer accounts bulk operations
       And press "Send"
       Then "alice@example.com" should receive no emails
 
+    @emails
     Scenario: Send email in bulk
       Given they go to the buyer accounts page
       And "alice@example.com" should receive no emails
