@@ -57,6 +57,7 @@ Feature: Audience > Accounts > Service subscriptions bulk operations
     And press "Send"
     Then "jane@example.com" should receive no emails
 
+  @emails
   Scenario: Send email in bulk
     Given "jane@example.com" should receive no emails
     And "bob@example.com" should receive no emails
