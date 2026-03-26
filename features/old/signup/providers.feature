@@ -1,4 +1,4 @@
-@audit @javascript
+@audit @javascript @emails
 Feature: Signup
   In order to use Red Hat 3scale API management infrastructure
   As a wanna-be API provider
