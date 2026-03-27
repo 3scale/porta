@@ -34,13 +34,13 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
 
     user.update(member_permission_ids: [:partners], member_permission_service_ids: [])
 
-    get admin_api_account_application_plans_path(@buyer, access_token: token.value, format: :json)
+    get admin_api_account_application_plans_path(@buyer, access_token: token.plaintext_value, format: :json)
     assert_response :success
     assert_equal 0, JSON.parse(response.body)['plans'].count
 
     user.update(member_permission_service_ids: [@provider.default_service.id])
 
-    get admin_api_account_application_plans_path(@buyer, access_token: token.value, format: :json)
+    get admin_api_account_application_plans_path(@buyer, access_token: token.plaintext_value, format: :json)
     assert_response :success
     assert_equal 1, JSON.parse(response.body)['plans'].count
   end

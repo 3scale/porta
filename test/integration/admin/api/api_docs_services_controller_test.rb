@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
     host! current_account.internal_admin_domain
   end
 
@@ -33,7 +33,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
       @provider = FactoryBot.create(:provider_account)
       @service = @provider.default_service
       @api_docs_service = FactoryBot.create(:api_docs_service, account: @provider, service: nil)
-      @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+      @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
     end
 
     BOOLEAN_API_DOCS_SERVICE_PARAMS = %i[published skip_swagger_validations].freeze
@@ -191,7 +191,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
       protected
 
       def path_params
-        { access_token: access_token.value, format: :json }
+        { access_token: access_token.plaintext_value, format: :json }
       end
 
       def api_doc_params(**extra_params)

@@ -14,7 +14,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
 
   class ActionsOnAnAccessToken < Admin::Api::Personal::AccessTokensTest
     test 'using a non-existent ID or value responds with not_found' do
-      perform_request(id: 'wrong', access_token: admin_access_token.value)
+      perform_request(id: 'wrong', access_token: admin_access_token.plaintext_value)
       assert_response :not_found
     end
 
@@ -22,20 +22,20 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
       another_admin = FactoryBot.create(:admin, account: provider, admin_sections: [:partners])
       another_admins_token = FactoryBot.create(:access_token, scopes: %w[account_management], owner: another_admin)
 
-      perform_request(id: admin_access_token.id, access_token: another_admins_token.value)
+      perform_request(id: admin_access_token.id, access_token: another_admins_token.plaintext_value)
       assert_response :not_found
 
-      perform_request(id: admin_access_token.value, access_token: another_admins_token.value)
+      perform_request(id: admin_access_token.id, access_token: another_admins_token.plaintext_value)
       assert_response :not_found
     end
 
     test 'using the token ID works well' do
-      perform_request(id: admin_access_token.id, access_token: admin_access_token.value)
+      perform_request(id: admin_access_token.id, access_token: admin_access_token.plaintext_value)
       assert_it_worked
     end
 
     test 'using the token value works well' do
-      perform_request(id: admin_access_token.value, access_token: admin_access_token.value)
+      perform_request(id: admin_access_token.plaintext_value, access_token: admin_access_token.plaintext_value)
       assert_it_worked
     end
 
@@ -72,7 +72,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
   class Admin::Api::Personal::CreateAccessTokenTest < Admin::Api::Personal::AccessTokensTest
     test 'POST creates an access token for the admin user of the access token' do
       assert_difference admin.access_tokens.method(:count) do
-        create_access_token(access_token: admin_access_token.value, params: access_token_params)
+        create_access_token(access_token: admin_access_token.plaintext_value, params: access_token_params)
         assert_response :created
         assert JSON.parse(response.body).dig('access_token', 'value')
       end
@@ -81,7 +81,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     test 'POST does not accept a custom value' do
       value = 'foobar'
       assert_difference @admin.access_tokens.method(:count) do
-        create_access_token(access_token: admin_access_token.value, params: access_token_params({ value: value }))
+        create_access_token(access_token: admin_access_token.plaintext_value, params: access_token_params({ value: value }))
         assert_response :created
         assert_not_equal value, JSON.parse(response.body).dig('access_token', 'value')
       end
@@ -89,7 +89,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
 
     test 'POST does not accept a wrong scope' do
       assert_no_difference(AccessToken.method(:count)) do
-        create_access_token(access_token: admin_access_token.value, params: access_token_params({ scopes: %w[wrong] }))
+        create_access_token(access_token: admin_access_token.plaintext_value, params: access_token_params({ scopes: %w[wrong] }))
         assert_response :unprocessable_entity
         assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'scopes')
       end
@@ -98,7 +98,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     test 'POST accepts an expiration time' do
       expires_at = 1.day.from_now.utc.iso8601
       assert_difference @admin.access_tokens.method(:count) do
-        create_access_token(access_token: admin_access_token.value, params: access_token_params({ expires_at: }))
+        create_access_token(access_token: admin_access_token.plaintext_value, params: access_token_params({ expires_at: }))
         assert_response :created
         assert_equal expires_at, JSON.parse(response.body).dig('access_token', 'expires_at')
       end
@@ -152,7 +152,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     end
 
     def get_access_tokens(**query_params)
-      get admin_api_personal_access_tokens_path(access_token: admin_access_token.value, **query_params)
+      get admin_api_personal_access_tokens_path(access_token: admin_access_token.plaintext_value, **query_params)
     end
 
     alias perform_request get_access_tokens
@@ -182,7 +182,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     unauthorized_access_token = FactoryBot.create(:access_token, owner: unauthorized_member, scopes: %w[account_management])
 
     assert_no_difference(AccessToken.method(:count)) do
-      perform_request(id: 'any', access_token: unauthorized_access_token.value)
+      perform_request(id: 'any', access_token: unauthorized_access_token.plaintext_value)
       assert_response :forbidden
     end
   end
@@ -202,7 +202,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     authorized_member_access_token = FactoryBot.create(:access_token, owner: authorized_member, scopes: %w[account_management])
     access_token = FactoryBot.create(:access_token, owner: authorized_member)
 
-    perform_request(id: access_token.id, access_token: authorized_member_access_token.value)
+    perform_request(id: access_token.id, access_token: authorized_member_access_token.plaintext_value)
     assert_it_worked(access_token)
   end
 

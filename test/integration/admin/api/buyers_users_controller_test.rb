@@ -65,6 +65,6 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   def token_value
-    @token_value ||= FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw').value
+    @token_value ||= FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw').plaintext_value
   end
 end
