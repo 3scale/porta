@@ -4,6 +4,7 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
   # The routes will take care of that.
   before_action :ensure_buyer_domain
   before_action :finish_signup_for_paid_plan
+  after_action :set_permissions_policy_header
 
   layout 'main_layout'
 
@@ -31,5 +32,26 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
 
     read_only_fields = FieldsDefinition.by_provider(site_account).by_target(resource_class.name).read_only.pluck(:name)
     params.except(*read_only_fields)
+  end
+
+  private
+
+  def set_permissions_policy_header
+    # site_account is the provider account, works before user login
+    account = site_account
+    cache_key = "account:#{account.id}:permission_policy_dev_portal"
+    
+    # Cache for 10 minutes, load all account_settings when cache misses
+    header_value = Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
+      # Load all account_settings to prepare for future Settings → AccountSettings migration
+      settings = account.account_settings.to_a
+      setting = settings.find { |s| s.type == 'AccountSetting::PermissionsPolicyHeaderDeveloper' }
+      
+      setting&.value || AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
+    end
+    
+    return if header_value.blank?
+    
+    response.headers['Permissions-Policy'] = header_value
   end
 end

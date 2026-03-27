@@ -697,6 +697,21 @@ en:
 
       keys:
         create:
+
+      account:
+        security:
+          edit:
+            description: Configure security headers for the admin portal using Permissions-Policy.
+          update:
+            error: There were problems saving the security settings
+            success: Security settings updated
+        securities:
+          edit:
+            description: Configure security headers for the admin portal using Permissions-Policy.
+          update:
+            error: There were problems saving the security settings
+            success: Security settings updated
+
           success: A new key has been added
         destroy:
           error: At least one application key is required
@@ -1199,6 +1214,12 @@ en:
       update:
         error: There were problems saving the settings
         success: Developer Portal settings updated
+    securities:
+      edit:
+        description: Configure security headers for the developer portal using Permissions-Policy.
+      update:
+        error: There were problems saving the security settings
+        success: Security settings updated
     documentations:
       update:
         error: There were problems saving the settings
@@ -1254,6 +1275,14 @@ en:
         success: Bot protection settings updated
     usage_rules:
       edit:
+
+    security:
+      edit:
+        description: Configure security headers for the developer portal using Permissions-Policy.
+      update:
+        error: There were problems saving the security settings
+        success: Security settings updated
+
         plans_label: 'Developers are allowed to:'
         plans_info: |
           The following options define whether the developers are allowed to change the plan
