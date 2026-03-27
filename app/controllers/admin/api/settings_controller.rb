@@ -37,13 +37,14 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   end
 
   def settings_params
-    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS)
+    @settings_params ||= params.require(:settings).permit(*ALLOWED_PARAMS).reject { |_, v| v.to_s.empty? }
   end
 
   def validate_enforcing_sso_allowed
     return unless settings_params.key?(:enforce_sso)
 
-    return unless Settings.type_for_attribute('enforce_sso').cast(settings_params[:enforce_sso])
+    settings.enforce_sso = settings_params[:enforce_sso]
+    return unless settings.enforce_sso?
 
     sso_validator = EnforceSSOValidator.new(account: current_account)
 

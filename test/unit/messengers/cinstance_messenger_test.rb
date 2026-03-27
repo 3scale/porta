@@ -33,7 +33,8 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
    end
 
   test "application accept with multiple_applications_allowed" do
-    @app.provider_account.settings.update_attribute(:multiple_applications_switch, 'visible')
+    @app.provider_account.settings.allow_multiple_applications!
+    @app.provider_account.settings.show_multiple_applications!
 
     CinstanceMessenger.accept(@app).deliver
 
@@ -43,7 +44,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
   end
 
   test "application accept without multiple_applications_allowed" do
-    @app.provider_account.settings.update_attribute(:multiple_applications_switch, 'hidden')
+    @app.provider_account.settings.allow_multiple_applications!
 
     CinstanceMessenger.accept(@app).deliver
 
@@ -53,7 +54,8 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
   end
 
   test "application reject with multiple_applications_allowed" do
-    @app.provider_account.settings.update_attribute(:multiple_applications_switch, 'visible')
+    @app.provider_account.settings.allow_multiple_applications!
+    @app.provider_account.settings.show_multiple_applications!
 
     CinstanceMessenger.reject(@app).deliver
 
@@ -63,7 +65,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
   end
 
   test "application reject without multiple_applications_allowed" do
-    @app.provider_account.settings.update_attribute(:multiple_applications_switch, 'hidden')
+    @app.provider_account.settings.allow_multiple_applications!
 
     CinstanceMessenger.reject(@app).deliver
 
@@ -73,10 +75,9 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
   end
 
   # settings should not be missing at this point but could in edge cases during deletion
-  test "application reject without a settings object" do
+  test "application reject without settings records" do
     @provider_account.schedule_for_deletion!
-    @provider_account.settings.delete
-    assert_nil @provider_account.reload.settings
+    @provider_account.account_settings.delete_all
 
     CinstanceMessenger.reject(@app).deliver
 

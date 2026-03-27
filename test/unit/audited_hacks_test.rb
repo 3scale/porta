@@ -95,7 +95,7 @@ class AuditedHacksTest < ActiveSupport::TestCase
 
     test 'obfuscated audit' do
       provider_id = provider.id
-      settings = Settings.new(account_id: provider_id)
+      settings = Settings.new(provider)
       audit = FactoryBot.build(:audit, auditable_type: settings.class.name, auditable_id: 123, provider_id: provider_id, audited_changes: { 'welcome_text' => 'hello', 'sso_key' => 'sensitive' })
       audit_obfuscated = audit.obfuscated
       assert_not_equal audit.object_id, audit_obfuscated.object_id

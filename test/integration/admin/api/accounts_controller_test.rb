@@ -129,30 +129,23 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
   class ReadOnlyTokenTest < Admin::Api::AccountsControllerTest
     disable_transactional_fixtures!
 
-    def test_show
+    test "no write side-effects like lazy_initialization on show"
       token(user: member)
       token.permission = 'ro'
       token.save!
 
       buyer.update_columns(credit_card_auth_code: 'abcd', credit_card_expires_on: Date.new(2020, 4, 2), credit_card_partial_number: '0989')
       buyer.payment_detail.destroy!
+      buyer.account_settings.delete_all
 
       assert_difference(PaymentDetail.method(:count), 0) do
-        get admin_api_account_path(buyer, format: :xml, access_token: token.value)
-        assert_response :success
-      end
-
-      buyer.settings.destroy!
-      assert_difference(Settings.method(:count), 0) do
-        get admin_api_account_path(buyer, format: :xml, access_token: token.value)
-        assert_response :success
+          get admin_api_account_path(buyer, format: :xml, access_token: token.value)
+          assert_response :success
       end
 
       assert_difference(PaymentDetail.method(:count), 1) do
-        assert_difference(Settings.method(:count), 1) do
           get admin_api_account_path(buyer, format: :xml, provider_key: provider.provider_key)
           assert_response :success
-        end
       end
     end
   end

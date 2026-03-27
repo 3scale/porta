@@ -16,7 +16,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     user = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
     # member should not be able to work with webhooks at all
     get admin_api_webhooks_failures_path, params: { access_token: token.value }
     assert_response :forbidden
@@ -26,7 +26,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     get admin_api_webhooks_failures_path, params: { access_token: token.value }
     assert_response :success
 
-    Settings::Switch.any_instance.stubs(:allowed?).returns(false)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(false)
     get admin_api_webhooks_failures_path, params: { access_token: token.value }
     assert_response :forbidden
   end
@@ -34,7 +34,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   test 'destroy (access_token)' do
     user = FactoryBot.create(:admin, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+    AccountSetting::SwitchSetting.any_instance.stubs(:allowed?).returns(true)
 
     delete admin_api_webhooks_failures_path, params: { access_token: token.value }
     assert_response :success

@@ -13,8 +13,6 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     FactoryBot.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
     FactoryBot.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
 
-    master_account.stubs(:provider_can_use?).with(:service_permissions).returns(true)
-
     host! master_account.internal_admin_domain
   end
 
