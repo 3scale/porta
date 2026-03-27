@@ -277,7 +277,262 @@ ActiveSupport.on_load(:active_record) do
       end
     end)
 
+    # Performance patches for the oracle-enhanced adapter.
+    #
+    # The adapter fires expensive data-dictionary queries (4-way UNION across
+    # all_tables/all_views/all_synonyms, multi-join on all_indexes, etc.) on
+    # every DDL operation and for every table during schema dump.  On Oracle XE
+    # this makes DDL ~12x slower and schema dumps ~100x slower than needed.
+    #
+    # DDL fixes:
+    #   - Cache describe() per connection (avoids repeated UNION queries)
+    #   - Simplify data_source_exists? to skip the describe() UNION
+    #   - Skip table_exists?/index_name_exists? in add_index_options (Oracle
+    #     raises ORA-00955 on duplicates anyway)
+    #
+    # Schema dump fix:
+    #   - Prefetch columns, indexes, primary keys, table comments, and foreign
+    #     keys in bulk before iterating tables, replacing ~450 per-table queries
+    #     with 5 batch queries.
+
+    # Cache describe() results per connection
+    ActiveRecord::ConnectionAdapters::OracleEnhanced::Connection.prepend(Module.new do
+      private
+
+      def describe(name)
+        @describe_cache ||= {}
+        key = name.to_s.upcase
+        return @describe_cache[key] if @describe_cache.key?(key)
+
+        @describe_cache[key] = super
+      end
+    end)
+
     ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaStatements.module_eval do
+      # A single all_tables query suffices — no need for the describe() UNION.
+      def data_source_exists?(table_name)
+        table_exists?(table_name)
+      end
+
+      # Skip table_exists? + index_name_exists? validation — Oracle will raise
+      # ORA-00955 if the index name already exists.
+      def add_index_options(table_name, column_name, comment: nil, **options)
+        column_names = Array(column_name)
+        index_name   = index_name(table_name, column: column_names)
+
+        options.assert_valid_keys(:unique, :order, :name, :where, :length, :internal, :tablespace, :options, :using)
+
+        index_type = options[:unique] ? "UNIQUE" : ""
+        index_name = options[:name].to_s if options.key?(:name)
+        tablespace = tablespace_for(:index, options[:tablespace])
+        index_options = options[:options]
+
+        validate_index_length!(table_name, index_name, options.fetch(:internal, false))
+
+        quoted_column_names = column_names.map { |e| quote_column_name_or_expression(e) }.join(", ")
+        [index_name, index_type, quoted_column_names, tablespace, index_options]
+      end
+
+      # --- Schema dump prefetch: batch queries replacing per-table lookups ---
+
+      def indexes_with_prefetch(table_name)
+        return @prefetched_indexes[table_name.to_s.downcase] || [] if @prefetched_indexes
+
+        indexes_without_prefetch(table_name)
+      end
+
+      alias_method :indexes_without_prefetch, :indexes
+      alias_method :indexes, :indexes_with_prefetch
+
+      def table_comment_with_prefetch(table_name)
+        return @prefetched_table_comments[table_name.to_s.upcase] if @prefetched_table_comments
+
+        table_comment_without_prefetch(table_name)
+      end
+
+      alias_method :table_comment_without_prefetch, :table_comment
+      alias_method :table_comment, :table_comment_with_prefetch
+
+      def foreign_keys_with_prefetch(table_name)
+        return @prefetched_foreign_keys[table_name.to_s.downcase] || [] if @prefetched_foreign_keys
+
+        foreign_keys_without_prefetch(table_name)
+      end
+
+      alias_method :foreign_keys_without_prefetch, :foreign_keys
+      alias_method :foreign_keys, :foreign_keys_with_prefetch
+
+      def prefetch_schema_dump!
+        prefetch_schema_dump_columns!
+        prefetch_schema_dump_indexes!
+        prefetch_schema_dump_primary_keys!
+        prefetch_schema_dump_table_comments!
+        prefetch_schema_dump_foreign_keys!
+      end
+
+      private
+
+      def prefetch_schema_dump_columns!
+        owner = current_schema
+        rows = select_all(<<~SQL.squish, "SCHEMA", [bind_string("owner", owner)])
+          SELECT cols.table_name,
+                 cols.column_name AS name, cols.data_type AS sql_type,
+                 cols.data_default, cols.nullable, cols.virtual_column, cols.hidden_column,
+                 cols.data_type_owner AS sql_type_owner,
+                 DECODE(cols.data_type, 'NUMBER', data_precision,
+                                   'FLOAT', data_precision,
+                                   'VARCHAR2', DECODE(char_used, 'C', char_length, data_length),
+                                   'RAW', DECODE(char_used, 'C', char_length, data_length),
+                                   'CHAR', DECODE(char_used, 'C', char_length, data_length),
+                                    NULL) AS limit,
+                 DECODE(data_type, 'NUMBER', data_scale, NULL) AS scale,
+                 comments.comments as column_comment
+            FROM all_tab_cols cols, all_col_comments comments
+           WHERE cols.owner      = :owner
+             AND cols.hidden_column = 'NO'
+             AND cols.owner = comments.owner
+             AND cols.table_name = comments.table_name
+             AND cols.column_name = comments.column_name
+           ORDER BY cols.table_name, cols.column_id
+        SQL
+
+        rows.group_by { |r| r["table_name"] }.each do |table_name, definitions|
+          table_lower = oracle_downcase(table_name)
+          @columns_cache[table_lower] = definitions.map do |field|
+            new_column_from_field(table_lower, field, definitions)
+          end
+        end
+      end
+
+      def prefetch_schema_dump_indexes!
+        default_tablespace_name = default_tablespace
+
+        result = select_all(<<~SQL.squish, "SCHEMA")
+          SELECT LOWER(i.table_name) AS table_name, LOWER(i.index_name) AS index_name, i.uniqueness,
+            i.index_type, i.ityp_owner, i.ityp_name, i.parameters,
+            LOWER(i.tablespace_name) AS tablespace_name,
+            LOWER(c.column_name) AS column_name, e.column_expression,
+            atc.virtual_column
+          FROM all_indexes i
+            JOIN all_ind_columns c ON c.index_name = i.index_name AND c.index_owner = i.owner
+            LEFT OUTER JOIN all_ind_expressions e ON e.index_name = i.index_name AND
+              e.index_owner = i.owner AND e.column_position = c.column_position
+            LEFT OUTER JOIN all_tab_cols atc ON i.table_name = atc.table_name AND
+              c.column_name = atc.column_name AND i.owner = atc.owner AND atc.hidden_column = 'NO'
+          WHERE i.owner = SYS_CONTEXT('userenv', 'current_schema')
+             AND i.table_owner = SYS_CONTEXT('userenv', 'current_schema')
+             AND NOT EXISTS (SELECT uc.index_name FROM all_constraints uc
+              WHERE uc.index_name = i.index_name AND uc.owner = i.owner AND uc.constraint_type = 'P')
+          ORDER BY i.table_name, i.index_name, c.column_position
+        SQL
+
+        @prefetched_indexes = Hash.new { |h, k| h[k] = [] }
+        current_index = nil
+
+        result.each do |row|
+          if current_index != row["index_name"]
+            statement_parameters = nil
+            if row["index_type"] == "DOMAIN" && row["ityp_owner"] == "CTXSYS" && row["ityp_name"] == "CONTEXT"
+              procedure_name = default_datastore_procedure(row["index_name"])
+              source = select_values(<<~SQL2.squish, "SCHEMA", [bind_string("procedure_name", procedure_name.upcase)]).join
+                SELECT text FROM all_source
+                WHERE owner = SYS_CONTEXT('userenv', 'current_schema')
+                  AND name = :procedure_name
+                ORDER BY line
+              SQL2
+              if source =~ /-- add_context_index_parameters (.+)\n/
+                statement_parameters = $1
+              end
+            end
+            idx = ActiveRecord::ConnectionAdapters::OracleEnhanced::IndexDefinition.new(
+              row["table_name"],
+              row["index_name"],
+              row["uniqueness"] == "UNIQUE",
+              [],
+              {},
+              row["index_type"] == "DOMAIN" ? "#{row['ityp_owner']}.#{row['ityp_name']}" : nil,
+              row["parameters"],
+              statement_parameters,
+              row["tablespace_name"] == default_tablespace_name ? nil : row["tablespace_name"])
+            @prefetched_indexes[row["table_name"]] << idx
+            current_index = row["index_name"]
+          end
+
+          if row["column_expression"] && row["virtual_column"] != "YES"
+            @prefetched_indexes[row["table_name"]].last.columns << row["column_expression"]
+          else
+            @prefetched_indexes[row["table_name"]].last.columns << row["column_name"].downcase
+          end
+        end
+      end
+
+      def prefetch_schema_dump_primary_keys!
+        result = select_all(<<~SQL.squish, "SCHEMA")
+          SELECT c.table_name, cc.column_name, cc.position
+            FROM all_constraints c, all_cons_columns cc
+           WHERE c.owner = SYS_CONTEXT('userenv', 'current_schema')
+             AND c.constraint_type = 'P'
+             AND cc.owner = c.owner
+             AND cc.constraint_name = c.constraint_name
+           ORDER BY c.table_name, cc.position
+        SQL
+
+        @prefetched_primary_keys = Hash.new { |h, k| h[k] = [] }
+        result.each do |row|
+          @prefetched_primary_keys[row["table_name"]] << oracle_downcase(row["column_name"])
+        end
+      end
+
+      def prefetch_schema_dump_table_comments!
+        result = select_all(<<~SQL.squish, "SCHEMA")
+          SELECT table_name, comments FROM all_tab_comments
+          WHERE owner = SYS_CONTEXT('userenv', 'current_schema')
+            AND table_type = 'TABLE'
+            AND comments IS NOT NULL
+        SQL
+
+        @prefetched_table_comments = {}
+        result.each do |row|
+          @prefetched_table_comments[row["table_name"]] = row["comments"]
+        end
+      end
+
+      def prefetch_schema_dump_foreign_keys!
+        result = select_all(<<~SQL.squish, "SCHEMA")
+          SELECT LOWER(c.table_name) AS from_table,
+                 r.table_name to_table
+                ,rc.column_name references_column
+                ,cc.column_name
+                ,c.constraint_name name
+                ,c.delete_rule
+            FROM all_constraints c, all_cons_columns cc,
+                 all_constraints r, all_cons_columns rc
+           WHERE c.owner = SYS_CONTEXT('userenv', 'current_schema')
+             AND c.constraint_type = 'R'
+             AND cc.owner = c.owner
+             AND cc.constraint_name = c.constraint_name
+             AND r.constraint_name = c.r_constraint_name
+             AND r.owner = c.owner
+             AND rc.owner = r.owner
+             AND rc.constraint_name = r.constraint_name
+             AND rc.position = cc.position
+          ORDER BY c.table_name, name, to_table, column_name, references_column
+        SQL
+
+        @prefetched_foreign_keys = Hash.new { |h, k| h[k] = [] }
+        result.each do |row|
+          options = {
+            column: oracle_downcase(row["column_name"]),
+            name: oracle_downcase(row["name"]),
+            primary_key: oracle_downcase(row["references_column"])
+          }
+          options[:on_delete] = extract_foreign_key_action(row["delete_rule"])
+          @prefetched_foreign_keys[row["from_table"]] <<
+            ActiveRecord::ConnectionAdapters::ForeignKeyDefinition.new(
+              row["from_table"], oracle_downcase(row["to_table"]), options)
+        end
+      end
+
       def add_index(table_name, column_name, **options) #:nodoc:
         # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
         # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
@@ -331,6 +586,16 @@ ActiveSupport.on_load(:active_record) do
       end
     end
 
+    # Hook into the schema dumper to trigger prefetch before iterating tables.
+    ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaDumper.prepend(Module.new do
+      private
+
+      def tables(stream)
+        @connection.prefetch_schema_dump!
+        super
+      end
+    end)
+
     # see https://github.com/rsim/oracle-enhanced/issues/2276
     module OracleEnhancedAdapterSchemaIssue2276
       def column_definitions(table_name)
@@ -342,6 +607,17 @@ ActiveSupport.on_load(:active_record) do
     end
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend OracleEnhancedAdapterSchemaIssue2276
+
+    # Patch 4 (continued): Bulk-load primary keys for schema dump.
+    # primary_keys() is defined on the adapter class, not on SchemaStatements.
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.prepend(Module.new do
+      def primary_keys(table_name)
+        if @prefetched_primary_keys
+          return @prefetched_primary_keys[table_name.to_s.upcase] || []
+        end
+        super
+      end
+    end)
 
     # see https://github.com/kubo/ruby-oci8/pull/271
     module OCI8DisableArrayFetch
