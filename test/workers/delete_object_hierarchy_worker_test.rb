@@ -55,7 +55,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         Plain-PricingRule-#{pricing_rule.id}
         Association-Metric-#{metric.id}:pricing_rules
         Plain-Metric-#{metric.id}
-        ]
+      ]
 
       assert_equal exp, TracingDeleteObjectHierarchyWorker.trace
     end
@@ -600,7 +600,7 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
         case object
         when Account, InvoiceCounter, Invoice
           object.provider_account_id == master_account.id
-        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum
+        when Service, User, Invitation, Finance::BillingStrategy, CMS::Permission, PaymentTransaction, MailDispatchRule, GoLiveState, Settings, PaymentGatewaySetting, Forum, AccountSetting
           object_of_master?(Account.find(object.account_id))
         when Feature
           object_of_master?(object.featurable_type.constantize.find(object.featurable_id))
