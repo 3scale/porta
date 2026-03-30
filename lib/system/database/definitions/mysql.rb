@@ -19,6 +19,12 @@ System::Database::MySQL.define do
     SQL
   end
 
+  trigger 'account_settings' do
+    <<~SQL
+      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND tenant_id <> master_id);
+    SQL
+  end
+
   trigger 'alerts' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND (NOT master OR master is NULL));
@@ -565,7 +571,7 @@ System::Database::MySQL.define do
     end
 
     <<~SQL
-      IF #{definitions.map{ _1.join(" THEN\n") }.join("\nELSEIF ")}
+      IF #{definitions.map { _1.join(" THEN\n") }.join("\nELSEIF ")}
       END IF;
     SQL
   end

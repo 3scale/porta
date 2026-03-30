@@ -23,6 +23,16 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
     t.datetime "expires_at"
   end
 
+  create_table "account_settings", force: :cascade do |t|
+    t.integer "account_id", limit: 19, precision: 19, null: false
+    t.string "type", null: false
+    t.text "value", null: false
+    t.integer "tenant_id", limit: 19, precision: 19
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "type"], name: "index_account_settings_on_account_id_and_type", unique: true
+  end
+
   create_table "accounts", force: :cascade do |t|
     t.string "org_name", default: "", null: false
     t.string "org_legaladdress", default: ""

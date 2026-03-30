@@ -25,6 +25,16 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
     t.index ["value", "owner_id"], name: "idx_value_auth_tokens_of_user", unique: true
   end
 
+  create_table "account_settings", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "type", null: false
+    t.text "value", size: :medium, null: false
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "type"], name: "index_account_settings_on_account_id_and_type", unique: true
+  end
+
   create_table "accounts", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.string "org_name", default: "", null: false
     t.string "org_legaladdress", default: ""
