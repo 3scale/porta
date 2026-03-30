@@ -564,8 +564,12 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
-    when 'the bot protection page'
-      edit_admin_site_spam_protection_path
+    when 'the security settings page',
+         'the developer portal security settings page'
+      edit_admin_site_security_path
+
+    when 'the provider security settings page'
+      edit_provider_admin_security_path
 
     when 'the xss protection page'
       edit_admin_site_developer_portal_path
@@ -577,7 +581,7 @@ World(Module.new do
       admin_fields_definitions_path
 
     when 'the settings page'
-     admin_apiconfig_root_path
+      admin_apiconfig_root_path
 
     when 'the documentation settings page'
       edit_admin_site_documentation_path

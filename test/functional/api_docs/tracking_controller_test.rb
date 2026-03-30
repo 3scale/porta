@@ -4,11 +4,9 @@ class ApiDocs::TrackingControllerTest < ActionController::TestCase
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
-    buyer     = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
-    host! @provider.internal_domain
-
-    login_as buyer.first_admin
+    # No login needed — controller skips login_required
+    host! @provider.internal_admin_domain
   end
 
   def test_update

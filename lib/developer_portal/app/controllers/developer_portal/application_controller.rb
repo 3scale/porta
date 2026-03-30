@@ -12,5 +12,17 @@ module DeveloperPortal
         handle_buyer_side(:not_found)
       end
     end
+
+    private
+
+    def set_permissions_policy_header
+      header_value = AccountSettings::CachedRetrievalService.call(
+        account: site_account,
+        setting_name: 'permissions_policy_header_developer'
+      ).result
+
+      # Set header only if value is present (even if only whitespaces)
+      response.headers['Permissions-Policy'] = header_value if header_value&.size&.nonzero?
+    end
   end
 end

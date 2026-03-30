@@ -242,16 +242,6 @@ module System
     config.three_scale.cors.enabled = false
     config.three_scale.cors.merge!(try_config_for(:cors) || {})
 
-    config.three_scale.permissions_policy = ActiveSupport::OrderedOptions.new
-    config.three_scale.permissions_policy.merge!(try_config_for(:permissions_policy) || {})
-
-    # Convert nested portal configurations to OrderedOptions for permissions_policy
-    [:admin_portal, :developer_portal].each do |portal|
-      portal_config = ActiveSupport::OrderedOptions.new
-      portal_config.merge!(config.three_scale.permissions_policy.send(portal) || {})
-      config.three_scale.permissions_policy.send("#{portal}=", portal_config)
-    end
-
     three_scale = config_for(:settings)
 
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
@@ -284,6 +274,7 @@ module System
 
     require "three_scale"
 
+    config.middleware.delete ActionDispatch::PermissionsPolicy::Middleware # set by callbacks
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before ActionDispatch::Static, ThreeScale::Middleware::PresignedDownloads
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer

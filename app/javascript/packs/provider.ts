@@ -27,4 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       })
     })
+
+  // Toggle target input disabled state via [data-toggle-target] checkboxes
+  document.addEventListener('change', (event) => {
+    const el = event.target as HTMLInputElement
+    const targetId = el.getAttribute('data-toggle-target')
+    if (targetId) {
+      const target = document.getElementById(targetId) as HTMLInputElement | null
+      if (target) target.disabled = !el.checked
+    }
+  })
 })
