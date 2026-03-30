@@ -15,7 +15,7 @@ class AccountSettingTest < ActiveSupport::TestCase
 
   test 'setting_name <-> class_for_setting roundtrip' do
     # Eager load all AccountSetting subclasses
-    Rails.autoloaders.main.eager_load_dir(File.join(Rails.root, 'app', 'models', 'account_setting'))
+    Rails.autoloaders.main.eager_load_dir(Rails.root.join('app', 'models', 'account_setting'))
 
     # Get all leaf classes (concrete implementations without further subclasses)
     leaf_classes = AccountSetting.descendants.select { |klass| klass.descendants.empty? }
