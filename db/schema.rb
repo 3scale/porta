@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_23_130000) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
   create_table "access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
     t.text "scopes"
@@ -136,7 +136,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_130000) do
     t.string "value"
     t.string "annotated_type", null: false
     t.bigint "annotated_id", null: false
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["annotated_type", "annotated_id", "name"], name: "index_annotations_on_annotated_type_and_annotated_id_and_name", unique: true
@@ -470,7 +470,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_130000) do
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
     t.boolean "enabled", default: true
     t.index ["code"], name: "index_countries_on_code"
   end
@@ -1324,7 +1324,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_23_130000) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "pos"
-    t.integer "tenant_id"
+    t.bigint "tenant_id"
   end
 
   create_table "taggings", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
