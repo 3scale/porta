@@ -1,6 +1,6 @@
 class Provider::Admin::BaseController < FrontendController
   before_action :ensure_provider_domain
-  after_action :set_permissions_policy_header
+  before_action :set_permissions_policy_header
 
   private
 

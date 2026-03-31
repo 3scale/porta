@@ -1,7 +1,7 @@
 class Sites::BaseController < FrontendController
 
   before_action :authorize_settings
-  after_action :set_permissions_policy_header
+  before_action :set_permissions_policy_header
   activate_menu :settings
 
   protected

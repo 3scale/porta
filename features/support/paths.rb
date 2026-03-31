@@ -565,7 +565,7 @@ World(Module.new do
       admin_site_dns_path
 
     when 'the bot protection page'
-      edit_admin_site_spam_protection_path
+      edit_admin_site_security_path
 
     when 'the xss protection page'
       edit_admin_site_developer_portal_path

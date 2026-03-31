@@ -687,24 +687,18 @@ en:
             error: The %{metric_type} could not be updated
             success: The %{metric_type} was updated
 
-      bot_protections:
+      securities:
         edit:
           selector_label: Protection against bots on the admin portal
           description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the admin portal.
         update:
           error: There were problems saving the settings
-          success: Bot protection settings updated
+          success: Security settings updated
 
       keys:
         create:
 
       account:
-        security:
-          edit:
-            description: Configure security headers for the admin portal using Permissions-Policy.
-          update:
-            error: There were problems saving the security settings
-            success: Security settings updated
         securities:
           edit:
             description: Configure security headers for the admin portal using Permissions-Policy.
@@ -1264,7 +1258,7 @@ en:
     settings:
       update:
         success: Settings updated
-    spam_protections:
+    securities:
       edit:
         selector_label: Protection against bots on the developer portal
         description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the developer portal.
@@ -1272,11 +1266,8 @@ en:
         captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
       update:
         error: There were problems saving the settings
-        success: Bot protection settings updated
+        success: Security settings updated
     usage_rules:
-      edit:
-
-    security:
       edit:
         description: Configure security headers for the developer portal using Permissions-Policy.
       update:

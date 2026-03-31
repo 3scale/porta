@@ -15,7 +15,7 @@ Given('the provider has developer portal Permissions-Policy {string}') do |polic
 end
 
 When('I visit the provider security settings page') do
-  visit edit_provider_admin_account_security_path
+  visit edit_provider_admin_security_path
 end
 
 When('I visit the developer portal security settings page') do
@@ -23,12 +23,12 @@ When('I visit the developer portal security settings page') do
 end
 
 Then('the admin portal should have Permissions-Policy header {string}') do |expected_value|
-  visit edit_provider_admin_bot_protection_path
+  visit edit_provider_admin_security_path
   assert_equal expected_value, page.response_headers['Permissions-Policy']
 end
 
 Then('the admin portal should not have Permissions-Policy header') do
-  visit edit_provider_admin_bot_protection_path
+  visit edit_provider_admin_security_path
   assert_nil page.response_headers['Permissions-Policy']
 end
 
