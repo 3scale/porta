@@ -8,7 +8,7 @@ module Stats
         include System::UrlHelpers.system_url_helpers
       end
 
-      GRANULARITIES = {:eternity => :year,
+      GRANULARITIES = {:eternity => :eternity,
                        :year  => :month,
                        :month => :day,
                        :week  => 6.hours,
@@ -150,8 +150,13 @@ module Stats
           timezone = extract_timezone(options)
 
           if period.to_sym == :eternity
-            range_since = to_time(options[:since].presence || source.first&.created_at, timezone).beginning_of_year
-            range_until = timezone.now.end_of_year
+            if options[:granularity].present? && options[:granularity].to_sym != :eternity
+              raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'"
+            end
+            utc = ActiveSupport::TimeZone['UTC']
+            range_since = utc.parse('1970-01-01')
+            range_until = utc.now.end_of_day
+            return [range_since..range_until, :eternity]
           else
             length = 1.send(period)
             range_since = to_time(options[:since].presence || timezone.now - length, timezone)

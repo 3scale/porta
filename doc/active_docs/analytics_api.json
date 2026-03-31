@@ -64,8 +64,8 @@
           {
             "name": "since",
             "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
+            "description": "Time range start. Required for all periods except 'eternity'. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -88,7 +88,7 @@
           {
             "name": "until",
             "in": "query",
-            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "description": "Time range end. Not applicable for period 'eternity'. Format YYYY-MM-DD HH:MM:SS",
             "schema": {
               "type": "string"
             }
@@ -96,12 +96,13 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity.",
+            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
             "required": true,
             "schema": {
               "type": "string",
               "default": "month",
               "enum": [
+                "eternity",
                 "month",
                 "day",
                 "hour"
@@ -171,8 +172,8 @@
           {
             "name": "since",
             "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
+            "description": "Time range start. Required for all periods except 'eternity'. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -195,7 +196,7 @@
           {
             "name": "until",
             "in": "query",
-            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "description": "Time range end. Not applicable for period 'eternity'. Format YYYY-MM-DD HH:MM:SS",
             "schema": {
               "type": "string"
             }
@@ -203,12 +204,13 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity.",
+            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
             "required": true,
             "schema": {
               "type": "string",
               "default": "month",
               "enum": [
+                "eternity",
                 "month",
                 "day",
                 "hour"
@@ -294,8 +296,8 @@
           {
             "name": "since",
             "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
+            "description": "Time range start. Required for all periods except 'eternity'. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -318,7 +320,7 @@
           {
             "name": "until",
             "in": "query",
-            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "description": "Time range end. Not applicable for period 'eternity'. Format YYYY-MM-DD HH:MM:SS",
             "schema": {
               "type": "string"
             }
@@ -326,12 +328,13 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity.",
+            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
             "required": true,
             "schema": {
               "type": "string",
               "default": "month",
               "enum": [
+                "eternity",
                 "month",
                 "day",
                 "hour"
