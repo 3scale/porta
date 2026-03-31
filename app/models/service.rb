@@ -251,14 +251,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     active_service_token.try(:value)
   end
 
-  def latest_applications
-    cinstances.latest
-  end
-
-  def has_traffic?
-    cinstances.where.not(first_traffic_at: nil).exists?
-  end
-
   def proxiable?
     backend_version.is?(1, 2, :oauth)
   end

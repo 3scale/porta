@@ -1,0 +1,21 @@
+- all_plans = service.service_plans
+- plans = all_plans.published
+
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    - if all_plans.empty?
+      a class="pf-c-button pf-m-link pf-m-inline" type="button" href=new_admin_service_service_plan_path(service)
+        span class="pf-c-button__icon pf-m-start"
+          i class="fas fa-plus-circle" aria-hidden="true"
+        = t('.create_first_plan')
+    - else
+      ul class="pf-c-list pf-m-plain pf-m-bordered"
+        - plans.each do |plan|
+          li == "<b>#{link_to plan.name, edit_admin_service_plan_path(plan)}</b> - #{pluralize(plan.contracts.size, 'contract')}"
+  - unless all_plans.empty?
+    div class="pf-c-card__footer"
+      = t('.footer_html', plans: link_to(pluralize(all_plans.size, 'service plan'), admin_service_service_plans_path(service)),
+                          published: plans.size,
+                          contracts: pluralize(service.contracts.service.size, 'contract'))

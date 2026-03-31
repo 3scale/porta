@@ -1478,6 +1478,56 @@ en:
           refresh_confirmation:
             This action will overwrite the API's Private URL and automatically created ActiveDocs.
             Are you sure you want to proceed?
+      cards:
+        analytics:
+          title: Analytics
+          view_more: View more stats for this service
+        application_plans:
+          title: Published Application Plans
+          footer_html: 'You have %{plans} with a total of %{apps}.'
+          create_first_plan: Create your first application plan
+        details:
+          title: Details
+          edit: Edit
+        latest_alerts:
+          title: Latest Alerts
+          no_alerts: There are no alerts
+          view_more: View all limit alerts for this service
+        latest_apps:
+          create: Create an application
+          title: Latest Apps
+          view_more: View all applications for this service
+        service_plans:
+          title: Published Service Plans
+          footer_html: You have %{plans} (%{published} published) with a total of %{contracts}.
+          create_first_plan: Create your first service plan
+        settings:
+          configuration: Edit integration settings for this service
+          methods: Manage metrics and method for this service
+          settings: Edit settings for this service
+          title: Configuration and Settings
+          friendly_service_setting:
+            buyers_manage_keys:
+              enabled: "Users <strong>can</strong> manage application keys"
+              disabled: "Users <strong>cannot</strong> manage application keys"
+            buyer_can_select_plan:
+              enabled: "Users <strong>can select a plan</strong> when creating an application"
+              disabled: "Users <strong>cannot select a plan</strong> when creating an application"
+            buyer_plan_change_permission:
+              request: "Users can <strong>request plan change</strong>"
+              direct: "Users can <strong>directly change plans</strong>"
+              none: "Users can <strong>not change plans</strong>"
+            buyers_manage_apps:
+              enabled: "Users <strong>can</strong> manage applications"
+              disabled: "Users <strong>can't</strong> manage applications"
+          view_more_html: View all %{integration_link}, %{metrics_link} and %{settings_link} options.
+      show:
+        create_service_plan: Create service plan
+        page_header_title: Product %{name}
+      support_email:
+        remove_success: Custom support email removed from product
+        update_success: Support email updated successfully
+        error: Couldn't update support email
       update:
         success: Product information updated
         error: Couldn't update Product
@@ -1485,10 +1535,6 @@ en:
         plans_info:
           When 'Request plan change' is selected you will be informed about users' requests by
           email - you can then execute it in administration interface.
-      support_email:
-        remove_success: Custom support email removed from product
-        update_success: Support email updated successfully
-        error: Couldn't update support email
     supports:
       update:
         success: Support information was updated
@@ -2457,3 +2503,4 @@ en:
     nav:
       earnings: Earnings by month
     plugins_deprecation: This product currently uses a plugin as the deployment option. Your integration will keep on working but we no longer support plugins.
+    view_more: View more

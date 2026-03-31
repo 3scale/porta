@@ -59,6 +59,19 @@ class ServiceDecoratorTest < Draper::TestCase
     assert_nil decorator.link
   end
 
+  # :reek:DuplicateMethodCall
+  def test_traffic?
+    service = FactoryBot.create(:simple_service)
+    plan = FactoryBot.create(:simple_application_plan, issuer: service)
+    app = FactoryBot.create(:simple_cinstance, plan: plan)
+    decorator = ServiceDecorator.decorate(service)
+
+    refute decorator.traffic?
+
+    app.update(first_traffic_at: Time.zone.now)
+    assert decorator.traffic?
+  end
+
   private
 
   def stub_can(action, object)

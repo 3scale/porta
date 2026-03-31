@@ -3,6 +3,7 @@ import {
   ButtonVariant,
   Card,
   CardBody,
+  CardTitle,
   InputGroup,
   TextInput
 } from '@patternfly/react-core'
@@ -68,6 +69,9 @@ const CompactListCard: React.FunctionComponent<Props> = ({
 
   return (
     <Card>
+      <CardTitle>
+        Backends used in this product
+      </CardTitle>
       <CardBody>
         <Table
           aria-label={tableAriaLabel}

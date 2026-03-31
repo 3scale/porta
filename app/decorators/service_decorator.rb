@@ -76,6 +76,58 @@ class ServiceDecorator < ApplicationDecorator
     super.deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
   end
 
+  def top_metrics
+    @top_metrics ||= metrics.top_level.limit(5)
+  end
+
+  def refresh_service_discovery_link
+    url = service_discovery_usable? ? h.provider_admin_service_discovery_service_path(self) : service_discovery_presenter.authorize_url
+
+    confirm = t('.refresh_service.confirm', name: name)
+    label = t('.refresh_service.label')
+    action_link_to(:refresh, url, label:,
+                                  data: { confirm: },
+                                  method: :put)
+  end
+
+  def latest_alerts
+    @latest_alerts ||= account.alerts.by_service(self).latest.decorate
+  end
+
+  def latest_applications
+    @latest_applications ||= cinstances.latest
+  end
+
+  def traffic?
+    cinstances.where.not(first_traffic_at: nil).exists?
+  end
+
+  def human_backend
+    {
+      "1" => "API key",
+      "2" => "App Id",
+      "oauth" => "OAuth",
+      "oidc" => "OpenID Connect"
+    }[service.proxy_authentication_method]
+  end
+
+  # :reek:NilCheck
+  def friendly_service_settings
+    %i[buyers_manage_keys buyers_manage_apps buyer_plan_change_permission buyer_can_select_plan].map do |setting|
+      value = object.send(setting)
+      next if value.nil?
+
+      subkey = case setting
+               when :buyer_plan_change_permission
+                 value.to_sym
+               else
+                 value ? :enabled : :disabled
+               end
+
+      I18n.t("api.services.cards.settings.friendly_service_setting.#{setting}.#{subkey}").html_safe
+    end.compact
+  end
+
   private
 
   def backend_api?

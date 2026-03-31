@@ -1,0 +1,35 @@
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+    div class="pf-c-card__actions pf-m-no-offset"
+      a class="pf-c-button pf-m-link pf-m-inline" type="button" href=edit_admin_service_path(service)
+        span class="pf-c-button__icon pf-m-start"
+          i class="fas fa-pencil-alt" aria-hidden="true"
+        = t('.edit')
+  div class="pf-c-card__body"
+    dl class="pf-c-description-list pf-m-horizontal pf-m-2-col"
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text" Name
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text" = service.name
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text" System name
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text" = service.system_name
+      - if service.description.present?
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text" Description
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text" = service.description
+      - if service_discovery_accessible? && service.discovered?
+        div class="pf-c-description-list__group"
+          dt class="pf-c-description-list__term"
+            span class="pf-c-description-list__text" Source
+          dd class="pf-c-description-list__description"
+            div class="pf-c-description-list__text"
+              div class="pf-l-flex pf-m-space-items-sm"
+                div class="pf-l-flex__item" OpenShift
+                div class="pf-l-flex__item" = service.refresh_service_discovery_link
