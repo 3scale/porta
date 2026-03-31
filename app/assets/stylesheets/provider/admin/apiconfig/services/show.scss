@@ -1,0 +1,6 @@
+.pf-c-card {
+  /* Custom class. PF4 don't offer md sized icons in pf-list */
+  .pf-c-list.pf-m-icon-md {
+    --pf-c-list__item-icon--FontSize: var(--pf-c-card__body--FontSize);
+  }
+}

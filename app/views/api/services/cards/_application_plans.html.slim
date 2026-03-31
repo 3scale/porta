@@ -1,0 +1,20 @@
+- all_plans = service.application_plans.stock
+- published_plans = service.published_application_plans
+
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    - if all_plans.empty?
+      a class="pf-c-button pf-m-link pf-m-inline" type="button" href=new_admin_service_application_plan_path(service)
+        span class="pf-c-button__icon pf-m-start"
+          i class="fas fa-plus-circle" aria-hidden="true"
+        = t('.create_first_plan')
+    - else
+      ul class="pf-c-list pf-m-plain pf-m-bordered"
+        - published_plans.each do |plan|
+          li == "<b>#{plan.link_to_edit}</b> - #{plan.link_to_applications}"
+  - unless all_plans.empty?
+    div class="pf-c-card__footer"
+      = t('.footer_html', plans: service.link_to_application_plans,
+                          apps: service.link_to_live_applications)

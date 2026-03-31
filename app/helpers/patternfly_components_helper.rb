@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 module PatternflyComponentsHelper
+  # :reek:ControlParameter
+  def icon_color(variant)
+    case variant&.to_sym
+    when :danger then 'pf-u-danger-color-100'
+    when :info then 'pf-u-info-color-100'
+    when :success then 'pf-u-success-color-100'
+    when :warning then 'pf-u-warning-color-100'
+    else 'pf-u-default-color-200'
+    end
+  end
 
   def icon_name(variant)
     case variant&.to_sym
@@ -14,8 +24,14 @@ module PatternflyComponentsHelper
 
   def icon_tag(variant)
     tag.div class: 'pf-c-alert__icon' do
-      tag.i class: "fas fa-fw fa-#{icon_name(variant)}", 'aria-hidden': 'true'
+      pf_alert_icon variant
     end
+  end
+
+  # :reek:BooleanParameter, :reek:ControlParameter
+  def pf_alert_icon(variant, colored: false)
+    color_class = colored ? icon_color(variant) : ''
+    tag.i class: "fas fa-fw fa-#{icon_name(variant)} #{color_class}", 'aria-hidden': 'true'
   end
 
   def title_tag(title)

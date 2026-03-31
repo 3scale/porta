@@ -265,3 +265,7 @@ Naming/RescuedExceptionsVariableName:
 
 Rails/RakeEnvironment:
   Enabled: false
+
+Rails/TimeZone:
+  Exclude:
+    - 'test/**/*'
