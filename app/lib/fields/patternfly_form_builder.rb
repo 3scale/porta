@@ -19,6 +19,11 @@ class Fields::PatternflyFormBuilder < Fields::FormBuilder
     typed_input_field.input(self, builder_options)
   end
 
+  def cancel_link(href, opts = {})
+    opts.reverse_merge!(class: 'pf-c-button pf-m-link', type: :button)
+    template.link_to(I18n.t('shared.cancel_button'), href, **opts)
+  end
+
   def commit_button(title, opts = {})
     raise ArgumentError, 'button_html prop will be ignored, use standard html attributes' if opts.key?(:button_html)
 

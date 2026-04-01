@@ -88,19 +88,6 @@ class UserTest < ActiveSupport::TestCase
     assert user.any_sso_authorizations?
   end
 
-  def test_accessible_service_tokens
-    provider = FactoryBot.create(:simple_provider)
-    service = FactoryBot.create(:service, account: provider)
-    member = FactoryBot.build_stubbed(:member, account: provider)
-
-    service.service_tokens.create!(value: 'money-makes-people-cautious')
-
-    assert_equal 0, member.accessible_service_tokens.count
-
-    member.member_permission_ids = ['plans']
-    assert_equal 1, member.accessible_service_tokens.count
-  end
-
   def test_accessible_services
     provider = FactoryBot.create(:simple_provider)
     service = FactoryBot.create(:service, account: provider)

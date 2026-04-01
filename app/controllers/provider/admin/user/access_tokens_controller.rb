@@ -11,9 +11,9 @@ module Provider
         before_action :disable_client_cache
         before_action :load_access_token, only: %i[edit update destroy]
 
-        def index
-          @access_tokens = access_tokens
-        end
+        helper_method :access_tokens, :service_tokens
+
+        def index; end
 
         def new
           @presenter = AccessTokensNewPresenter.new(current_account)
@@ -58,6 +58,10 @@ module Provider
 
         def access_tokens
           @access_tokens ||= current_user.access_tokens
+        end
+
+        def service_tokens
+          @service_tokens ||= current_user.decorate.accessible_services_with_token
         end
 
         def load_access_token

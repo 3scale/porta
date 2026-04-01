@@ -12,4 +12,11 @@ class UserDecorator < ApplicationDecorator
   def informal_name
     first_name.presence || last_name.presence || username
   end
+
+  def accessible_services_with_token
+    return Service.none unless has_permission?(:plans)
+
+    accessible_services.joins(:service_tokens)
+                       .includes(:service_tokens)
+  end
 end

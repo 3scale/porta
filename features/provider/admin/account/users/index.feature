@@ -67,7 +67,7 @@ Feature: Account Settings > Users > Listing
 
     Scenario: Admin can delete users from then table
       Given they go to the provider users page
-      When they select action "Delete" of "hunk"
+      When they press "Delete user hunk"
       And confirm the dialog
       Then they should see a toast alert with text "User was successfully deleted"
       And they should see the following table:
@@ -77,7 +77,7 @@ Feature: Account Settings > Users > Listing
 
     Scenario: Admin can edit users from the table
       Given they go to the provider users page
-      And they select action "Edit" of "hunk"
+      And they follow "hunk"
       When the form is submitted with:
         | Username | honk               |
         | Email    | honk@umbrella.corp |
@@ -93,8 +93,7 @@ Feature: Account Settings > Users > Listing
         | Username | First name | Last name | Role  | Email               |
         | ospen    | Oswell     | Spencer   | admin | ospen@umbrella.corp |
       When they go to the provider users page
-      Then the actions of row "Oswell Spencer" are:
-        | Edit   |
-        | Delete |
-      But the actions of row "Albert Wesker" are:
-        | Personal details |
+      Then there should be a link to "Oswell Spencer"
+      And there should be a button to "Delete user Oswell Spencer"
+      And there should be a link to "Personal details"
+      But there should not be a button to "Delete user Albert Wesker"
