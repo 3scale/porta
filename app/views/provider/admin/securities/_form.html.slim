@@ -2,7 +2,7 @@
   = form.inputs selector_label do
     = form.input field,
             label: false,
-            hint: t("sites.spam_protections.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
+            hint: t("sites.securities.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
             as: :radio,
             collection: ThreeScale::BotProtection::LEVELS,
             input_html: { disabled: !Recaptcha.captcha_configured? }
