@@ -2502,7 +2502,7 @@ en:
       managed_title: Managed by %{value}
       managed_description: This resource is managed externally and any modifications may be overwritten.
     cancel_button: Cancel
-    delete_button_confirm: It will be permanently delete. Are you sure?
+    delete_button_confirm: It will be permanently deleted. Are you sure?
     delete_button_title: Delete
     empty_search_state:
       title: No results
