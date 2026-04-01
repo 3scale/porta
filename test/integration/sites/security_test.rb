@@ -30,14 +30,17 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
 
   test 'updates Permissions-Policy header' do
     policy_value = 'camera=(), geolocation=()'
-    
+
     put admin_site_security_path, params: {
-      settings: { spam_protection_level: 'none' },
-      account_setting: { value: policy_value }
+      settings: {
+        spam_protection_level: 'none',
+        account_setting_attributes: { value: policy_value }
+      }
     }
-    
+
     assert_redirected_to edit_admin_site_security_path
-    
+
+    @provider.reload
     setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
     assert_equal policy_value, setting.value
   end
@@ -47,14 +50,14 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
       value: 'camera=(), geolocation=()'
     )
-    
+
     buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     user = FactoryBot.create(:user, account: buyer)
     user.activate!
-    
+
     host! @provider.internal_domain
     login_with user.username, 'superSecret1234#'
-    
+
     get '/admin'
     assert_response :success
     assert_equal 'camera=(), geolocation=()', response.headers['Permissions-Policy']
@@ -64,10 +67,10 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     user = FactoryBot.create(:user, account: buyer)
     user.activate!
-    
+
     host! @provider.internal_domain
     login_with user.username, 'superSecret1234#'
-    
+
     get '/admin'
     assert_response :success
     # Default for developer portal is empty (no restrictions)
@@ -79,14 +82,14 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
       value: ''
     )
-    
+
     buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     user = FactoryBot.create(:user, account: buyer)
     user.activate!
-    
+
     host! @provider.internal_domain
     login_with user.username, 'superSecret1234#'
-    
+
     get '/admin'
     assert_response :success
     assert_nil response.headers['Permissions-Policy']

@@ -4,17 +4,7 @@
   p Configure security settings for the admin portal.
   p The bot protection level controls spam prevention, and the Permissions-Policy header controls which browser features can be used.
 
-= render partial: 'form', locals: { url: provider_admin_security_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label') }
-
-.well
-  h3 Permissions-Policy Header
-  
-  = semantic_form_for @permission_policy_admin_portal, as: :account_setting, url: provider_admin_security_path, method: :put, html: { class: 'formtastic' } do |f|
-    = f.inputs do
-      = f.input :value, label: 'Permissions-Policy Header', hint: 'Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)', input_html: { placeholder: AccountSetting::PermissionsPolicyHeaderAdmin.default_value }
-    
-    = f.actions do
-      = f.action :submit, label: 'Update Permissions Policy', button_html: { class: 'btn btn-primary' }
+= render partial: 'form', locals: { url: provider_admin_security_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label'), permission_policy_setting: @permission_policy_admin_portal, permission_policy_default: AccountSetting::PermissionsPolicyHeaderAdmin.default_value }
 
 .well
   h4 Available Directives
@@ -45,5 +35,5 @@
     code (self)
     |  = same origin only
   p
-    | Leave empty to use default: 
+    | Default: 
     code= AccountSetting::PermissionsPolicyHeaderAdmin.default_value

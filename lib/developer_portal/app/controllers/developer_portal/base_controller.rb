@@ -40,18 +40,18 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
     # site_account is the provider account, works before user login
     account = site_account
     cache_key = "account:#{account.id}:permission_policy_dev_portal"
-    
+
     # Cache for 10 minutes, load all account_settings when cache misses
     header_value = Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
       # Load all account_settings to prepare for future Settings → AccountSettings migration
       settings = account.account_settings.to_a
       setting = settings.find { |s| s.type == 'AccountSetting::PermissionsPolicyHeaderDeveloper' }
-      
+
       setting&.value || AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
     end
-    
+
     return if header_value.blank?
-    
+
     response.headers['Permissions-Policy'] = header_value
   end
 end

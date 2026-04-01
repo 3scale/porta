@@ -10,9 +10,12 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
   def edit; end
 
   def update
+    # Extract permission policy params before updating settings
+    policy_params = params[:settings]&.delete(:account_setting_attributes)
+
     settings_updated = @settings.update(params[:settings])
-    policy_updated = update_permission_policy_setting
-    
+    policy_updated = update_permission_policy_setting(policy_params)
+
     if settings_updated && policy_updated
       redirect_to edit_provider_admin_security_url, success: t('.success')
     else
@@ -33,9 +36,10 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
     )
   end
 
-  def update_permission_policy_setting
-    return true unless params[:account_setting]
-    @permission_policy_admin_portal.update(params[:account_setting].permit(:value))
-  end
+  def update_permission_policy_setting(policy_params)
+    return true unless policy_params
 
+    @permission_policy_admin_portal.assign_attributes(policy_params.permit(:value))
+    @permission_policy_admin_portal.save
+  end
 end

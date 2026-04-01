@@ -33,14 +33,17 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
 
   test 'updates Permissions-Policy header' do
     policy_value = 'camera=(), microphone=()'
-    
+
     put provider_admin_security_path, params: {
-      settings: { admin_bot_protection_level: 'none' },
-      account_setting: { value: policy_value }
+      settings: {
+        admin_bot_protection_level: 'none',
+        account_setting_attributes: { value: policy_value }
+      }
     }
-    
+
     assert_redirected_to edit_provider_admin_security_path
-    
+
+    @provider.reload
     setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
     assert_equal policy_value, setting.value
   end
@@ -54,14 +57,16 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
 
   test 'updates Permissions-Policy header setting' do
     policy_value = 'camera=(), microphone=()'
-    
+
     put provider_admin_security_path, params: {
-      settings: { admin_bot_protection_level: 'none' },
-      account_setting: { value: policy_value }
+      settings: {
+        admin_bot_protection_level: 'none',
+        account_setting_attributes: { value: policy_value }
+      }
     }
-    
+
     assert_redirected_to edit_provider_admin_security_path
-    
+
     @provider.reload
     setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
     assert_not_nil setting

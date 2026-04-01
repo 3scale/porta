@@ -1,4 +1,4 @@
-= semantic_form_for settings, url: url, html: {:id => 'bot-protection-settings' } do |form|
+= semantic_form_for settings, url: url, html: {:id => 'security-settings' } do |form|
   = form.inputs selector_label do
     = form.input field,
             label: false,
@@ -7,5 +7,12 @@
             collection: ThreeScale::BotProtection::LEVELS,
             input_html: { disabled: !Recaptcha.captcha_configured? }
 
-    = form.actions do
-      = form.commit_button 'Update Settings'
+  = form.inputs 'Permissions-Policy Header' do
+    = form.semantic_fields_for :account_setting, permission_policy_setting do |policy_form|
+      = policy_form.input :value,
+              label: 'Permissions-Policy Header',
+              hint: 'Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)',
+              input_html: { placeholder: permission_policy_default }
+
+  = form.actions do
+    = form.commit_button 'Update Security Settings'
