@@ -28,7 +28,7 @@ Feature: Provider Admin Access tokens
         | Potato | Analytics API | Never expires  | Read Only    |
         | Banana | Billing API   | Never expires  | Read & Write |
 
-    Scenario: Delete access token directly from then table
+    Scenario: Delete access token directly from the table
       Given the table should contain the following:
         | Name   | Scopes        | Expiration     | Permission   |
         | Potato | Analytics API | Never expires  | Read Only    |

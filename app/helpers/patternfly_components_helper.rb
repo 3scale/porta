@@ -62,8 +62,6 @@ module PatternflyComponentsHelper
     end
   end
 
-  # TODO: this action button is used only in app/views/provider/admin/account/users/index.html.slim
-  # right now, but could be used in other tables. Eliminate existing repetition by using this helper
   def pf_delete_table_action(url, button_options = {})
     confirm = button_options.delete(:confirm) || I18n.t('shared.delete_button_confirm')
     title = button_options.delete(:title) || I18n.t('shared.delete_button_title')
