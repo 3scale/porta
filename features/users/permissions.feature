@@ -9,13 +9,13 @@ Feature: Member permissions
       And provider "foo.3scale.localhost" has "groups" switch allowed
 
   Scenario: Enable and disable billing section
-    When I have opened edit page for the active member
+    When go to the provider user edit page for "alex"
       Then no permissions should be checked
     When I check "Setup and manage customer billing"
       And I press "Update User"
-      And I have opened edit page for the active member
+      And go to the provider user edit page for "alex"
       Then the "Setup and manage customer billing" checkbox should be checked
     When I uncheck "Setup and manage customer billing"
       And I press "Update User"
-      And I have opened edit page for the active member
+      And go to the provider user edit page for "alex"
       Then no permissions should be checked

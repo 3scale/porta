@@ -45,7 +45,7 @@ class AccessToken < ApplicationRecord
   class Scopes
     extend Forwardable
 
-    delegate %i(each count select any? map) => :scopes
+    delegate %i[each empty? count select any? map] => :scopes
 
     def initialize(scopes)
       @scopes = scopes
