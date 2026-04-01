@@ -564,7 +564,7 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
-    when 'the bot protection page'
+    when 'the security settings page'
       edit_admin_site_security_path
 
     when 'the xss protection page'
