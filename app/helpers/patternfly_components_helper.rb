@@ -65,24 +65,19 @@ module PatternflyComponentsHelper
   # TODO: this action button is used only in app/views/provider/admin/account/users/index.html.slim
   # right now, but could be used in other tables. Eliminate existing repetition by using this helper
   def pf_delete_table_action(url, button_options = {})
-    form_attributes = { method: :delete }
-
-    button_class = 'pf-c-button pf-m-link pf-m-danger'
-
-    confirm = button_options.delete(:confirm) || 'It will be permanently delete. Are you sure?'
+    confirm = button_options.delete(:confirm) || I18n.t('shared.delete_button_confirm')
+    title = button_options.delete(:title) || I18n.t('shared.delete_button_title')
 
     button_attributes = { type: :submit,
-                          class: button_class.strip,
+                          class: 'pf-c-button pf-m-link pf-m-danger',
+                          title:,
                           'data-confirm': confirm }.merge(button_options)
 
-    span = tag.span class: 'pf-c-button__icon pf-m-start' do
-      tag.i class: "fas fa-trash", 'aria-hidden': 'true'
-    end
-    label = 'Delete'
-
-    form_tag(url, form_attributes) do
+    form_tag(url, method: :delete) do
       tag.button(**button_attributes) do
-        span + label
+        tag.span class: 'pf-c-button__icon pf-m-start' do
+          tag.i class: 'fas fa-trash', 'aria-hidden': 'true'
+        end
       end
     end
   end

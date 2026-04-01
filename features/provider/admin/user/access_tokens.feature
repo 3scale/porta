@@ -28,6 +28,18 @@ Feature: Provider Admin Access tokens
         | Potato | Analytics API | Never expires  | Read Only    |
         | Banana | Billing API   | Never expires  | Read & Write |
 
+    Scenario: Delete access token directly from then table
+      Given the table should contain the following:
+        | Name   | Scopes        | Expiration     | Permission   |
+        | Potato | Analytics API | Never expires  | Read Only    |
+        | Banana | Billing API   | Never expires  | Read & Write |
+      When they press "Delete token Potato"
+      And confirm the dialog
+      Then they should see a toast alert with text "Access token was successfully deleted"
+      And the table should contain the following:
+        | Name   | Scopes        | Expiration     | Permission   |
+        | Banana | Billing API   | Never expires  | Read & Write |
+
   Rule: New page
     Background:
       Given they go to the new access token page
@@ -77,7 +89,7 @@ Feature: Provider Admin Access tokens
 
     Scenario: Navigation to edit page
       Given they go to the personal tokens page
-      When they follow "Edit" in the 1st row within the access tokens table
+      When they follow "LeToken" in the 1st row within the access tokens table
       Then the current page is the access token's edit page
 
     Scenario: Edit access token
@@ -86,7 +98,7 @@ Feature: Provider Admin Access tokens
         | Billing API | No             |
         | Permission  | Read & Write   |
       Then they should see a toast alert with text "Access token was successfully updated"
-      Then the table should contain the following:
+      And the table should contain the following:
         | Name           | Scopes        | Permission   |
         | New Token Name | Analytics API | Read & Write |
 
@@ -97,7 +109,7 @@ Feature: Provider Admin Access tokens
 
     Scenario: Delete access token
       Given the current page is access token "LeToken" edit page
-      When they follow "Delete"
+      When they follow "Delete this access token"
       And confirm the dialog
       Then the current page is the personal tokens page
       And they should see a toast alert with text "Access token was successfully deleted"

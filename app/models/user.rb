@@ -182,15 +182,6 @@ class User < ApplicationRecord
     AccessToken.scopes.allowed_for(self)
   end
 
-  def accessible_service_tokens
-    if has_permission?(:plans)
-      accessible_services.joins(:service_tokens)
-        .includes(:service_tokens).map(&:active_service_token)
-    else
-      []
-    end
-  end
-
   def accessible_cinstances
     account.provided_cinstances.permitted_for(self)
 

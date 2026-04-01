@@ -1,3 +1,4 @@
+@import '~@patternfly/patternfly/components/ActionList/action-list.css';
 @import '~@patternfly/patternfly/components/Button/button.css';
 @import '~@patternfly/patternfly/components/Check/check.css';
 @import '~@patternfly/patternfly/components/Form/form.css';
@@ -6,5 +7,11 @@
 .pf-c-form__group-control {
   .pf-c-check + .pf-c-check__check_boxes-custom_spacing {
     margin-top: var(--pf-c-check__body--MarginTop);
+  }
+}
+
+.pf-c-form__actions {
+  .pf-c-button.pf-m-danger {
+    margin-left: auto;
   }
 }
