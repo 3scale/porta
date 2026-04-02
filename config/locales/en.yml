@@ -690,22 +690,13 @@ en:
       securities:
         edit:
           selector_label: Protection against bots on the admin portal
-          description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the admin portal.
+          description: Configure security settings for the admin portal. Bot protection uses Google reCAPTCHA to detect bots, and the Permissions-Policy header controls which browser features can be used.
         update:
           error: There were problems saving the settings
           success: Security settings updated
 
       keys:
         create:
-
-      account:
-        securities:
-          edit:
-            description: Configure security headers for the admin portal using Permissions-Policy.
-          update:
-            error: There were problems saving the security settings
-            success: Security settings updated
-
           success: A new key has been added
         destroy:
           error: At least one application key is required
@@ -1261,7 +1252,7 @@ en:
     securities:
       edit:
         selector_label: Protection against bots on the developer portal
-        description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the developer portal.
+        description: Configure security settings for the developer portal. Bot protection uses Google reCAPTCHA to detect bots, and the Permissions-Policy header controls which browser features can be used.
         captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
         captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
       update:
@@ -1269,11 +1260,6 @@ en:
         success: Security settings updated
     usage_rules:
       edit:
-        description: Configure security headers for the developer portal using Permissions-Policy.
-      update:
-        error: There were problems saving the security settings
-        success: Security settings updated
-
         plans_label: 'Developers are allowed to:'
         plans_info: |
           The following options define whether the developers are allowed to change the plan
