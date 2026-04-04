@@ -13,7 +13,9 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
     settings_params = params[:settings]&.dup || {}
     policy_params = settings_params.delete(:account_setting_attributes)
 
-    settings_updated = @settings.update(settings_params)
+    # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
+    # instead of separating legacy Settings model updates from AccountSettings updates
+    settings_updated = @settings.update(settings_params.permit(:spam_protection_level))
     policy_updated = update_permission_policy_setting(policy_params)
 
     if settings_updated && policy_updated
