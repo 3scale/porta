@@ -2,7 +2,7 @@
   = form.inputs selector_label do
     = form.input field,
             label: false,
-            hint: t("sites.securities.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
+            hint: t("provider.admin.securities.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}"),
             as: :radio,
             collection: ThreeScale::BotProtection::LEVELS,
             input_html: { disabled: !Recaptcha.captcha_configured? }
@@ -11,7 +11,7 @@
     = form.semantic_fields_for :account_setting, permission_policy_setting do |policy_form|
       = policy_form.input :value,
               label: 'Permissions-Policy Header',
-              hint: 'Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)',
+              hint: t('provider.admin.securities.edit.permissions_policy_hint'),
               input_html: { placeholder: permission_policy_default }
 
   = form.actions do

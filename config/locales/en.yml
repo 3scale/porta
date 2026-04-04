@@ -690,7 +690,9 @@ en:
       securities:
         edit:
           selector_label: Protection against bots on the admin portal
-          description: Configure security settings for the admin portal. Bot protection uses Google reCAPTCHA to detect bots, and the Permissions-Policy header controls which browser features can be used.
+          captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
+          captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
+          permissions_policy_hint: "Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)"
         update:
           error: There were problems saving the settings
           success: Security settings updated
@@ -1252,9 +1254,9 @@ en:
     securities:
       edit:
         selector_label: Protection against bots on the developer portal
-        description: Configure security settings for the developer portal. Bot protection uses Google reCAPTCHA to detect bots, and the Permissions-Policy header controls which browser features can be used.
         captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
         captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
+        permissions_policy_hint: "Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)"
       update:
         error: There were problems saving the settings
         success: Security settings updated

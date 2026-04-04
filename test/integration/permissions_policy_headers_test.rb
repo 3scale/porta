@@ -14,7 +14,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
     Provider::Admin::BaseController.any_instance.stubs(:site_account).returns(provider)
 
     login_provider provider
-    get edit_provider_admin_bot_protection_path
+    get edit_provider_admin_security_path
 
     assert_response :success
     assert_equal 'camera=(), microphone=()', response.headers['Permissions-Policy']
@@ -26,7 +26,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
     Provider::Admin::BaseController.any_instance.stubs(:site_account).returns(provider)
 
     login_provider provider
-    get edit_provider_admin_bot_protection_path
+    get edit_provider_admin_security_path
 
     assert_response :success
     assert_equal AccountSetting::PermissionsPolicyHeaderAdmin.default_value,
@@ -43,7 +43,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
     Provider::Admin::BaseController.any_instance.stubs(:site_account).returns(provider)
 
     login_provider provider
-    get edit_provider_admin_bot_protection_path
+    get edit_provider_admin_security_path
 
     assert_response :success
     assert_nil response.headers['Permissions-Policy']

@@ -27,7 +27,7 @@ class PermissionsPolicyCacheTest < ActionDispatch::IntegrationTest
     login_provider provider
 
     # First request - should cache the value
-    get edit_provider_admin_bot_protection_path
+    get edit_provider_admin_security_path
     assert_response :success
     assert_equal 'camera=(), microphone=()', response.headers['Permissions-Policy']
 

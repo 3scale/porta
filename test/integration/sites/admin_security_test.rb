@@ -72,4 +72,26 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     assert_not_nil setting
     assert_equal policy_value, setting.value
   end
+
+  test 'setting header to space results in header being present in response' do
+    policy_value = ' '
+
+    put provider_admin_security_path, params: {
+      settings: {
+        admin_bot_protection_level: 'none',
+        account_setting_attributes: { value: policy_value }
+      }
+    }
+
+    assert_redirected_to edit_provider_admin_security_path
+
+    @provider.reload
+    setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
+    assert_equal policy_value, setting.value
+
+    # Verify the header is present in the response
+    get edit_provider_admin_security_path
+    assert_response :success
+    assert response.headers.key?('Permissions-Policy'), 'Permissions-Policy header should be present'
+  end
 end

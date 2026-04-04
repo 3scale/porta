@@ -1,8 +1,5 @@
 - content_for :title, 'Security'
 - content_for :page_header_title, 'Security'
-- content_for :page_header_body do
-  p Configure security settings for the admin portal.
-  p The bot protection level controls spam prevention, and the Permissions-Policy header controls which browser features can be used.
 
 = render partial: 'form', locals: { url: provider_admin_security_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label'), permission_policy_setting: @permission_policy_admin_portal, permission_policy_default: AccountSetting::PermissionsPolicyHeaderAdmin.default_value }
 

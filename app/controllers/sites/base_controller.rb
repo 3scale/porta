@@ -23,7 +23,7 @@ class Sites::BaseController < FrontendController
       setting ? setting.value : AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
     end
 
-    response.headers['Permissions-Policy'] = header_value unless header_value.nil?
+    response.headers['Permissions-Policy'] = header_value if header_value.present?
   end
 
 end
