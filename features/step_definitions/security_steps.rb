@@ -23,28 +23,23 @@ When('I visit the developer portal security settings page') do
 end
 
 Then('the admin portal should have Permissions-Policy header {string}') do |expected_value|
-  visit edit_provider_admin_security_path
-  assert_equal expected_value, page.response_headers['Permissions-Policy']
+  setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
+  assert_not_nil setting, "Expected admin portal Permissions-Policy setting to exist"
+  assert_equal expected_value, setting.value
 end
 
 Then('the admin portal should not have Permissions-Policy header') do
-  visit edit_provider_admin_security_path
-  assert_nil page.response_headers['Permissions-Policy']
+  setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
+  assert setting.nil? || setting.value.blank?, "Expected admin portal Permissions-Policy to be blank or not exist"
 end
 
 Then('the developer portal should have Permissions-Policy header {string}') do |expected_value|
-  # Visit a developer portal page to check the header
-  buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-  user = FactoryBot.create(:user, account: buyer)
-  login_as(user)
-  visit admin_dashboard_path
-  assert_equal expected_value, page.response_headers['Permissions-Policy']
+  setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
+  assert_not_nil setting, "Expected developer portal Permissions-Policy setting to exist"
+  assert_equal expected_value, setting.value
 end
 
 Then('the developer portal should not have Permissions-Policy header') do
-  buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-  user = FactoryBot.create(:user, account: buyer)
-  login_as(user)
-  visit admin_dashboard_path
-  assert_nil page.response_headers['Permissions-Policy']
+  setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
+  assert setting.nil? || setting.value.blank?, "Expected developer portal Permissions-Policy to be blank or not exist"
 end

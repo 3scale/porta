@@ -8,7 +8,7 @@
             input_html: { disabled: !Recaptcha.captcha_configured? }
 
   = form.inputs 'Permissions-Policy Header' do
-    = form.semantic_fields_for :account_setting, permission_policy_setting do |policy_form|
+    = form.semantic_fields_for :account_setting_attributes, permission_policy_setting do |policy_form|
       = policy_form.input :value,
               label: 'Permissions-Policy Header',
               hint: t('provider.admin.securities.edit.permissions_policy_hint'),

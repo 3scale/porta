@@ -8,10 +8,10 @@ class Sites::SecuritiesController < Sites::BaseController
   end
 
   def update
-    # Extract permission policy params before updating settings
-    policy_params = params[:settings]&.delete(:account_setting_attributes)
+    settings_params = params[:settings]&.dup || {}
+    policy_params = settings_params.delete(:account_setting_attributes)
 
-    settings_updated = @settings.update(params[:settings])
+    settings_updated = @settings.update(settings_params)
     policy_updated = update_permission_policy_setting(policy_params)
 
     if settings_updated && policy_updated
