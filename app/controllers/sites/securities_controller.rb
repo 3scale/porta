@@ -2,19 +2,19 @@ class Sites::SecuritiesController < Sites::BaseController
   activate_menu :audience, :cms, :security
 
   before_action :find_settings
-  before_action :find_permission_policy_setting
+  before_action :find_permissions_policy_setting
 
   def edit
   end
 
   def update
-    settings_params = params[:settings]&.dup || {}
-    policy_params = settings_params.delete(:account_setting_attributes)
+    settings_params = params.fetch(:settings, {}).dup
+    permissions_policy_value = settings_params.delete(:permissions_policy_header)
 
     # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
     # instead of separating legacy Settings model updates from AccountSettings updates
     settings_updated = @settings.update(settings_params.permit(:spam_protection_level))
-    policy_updated = update_permission_policy_setting(policy_params)
+    policy_updated = update_permissions_policy_setting(permissions_policy_value)
 
     if settings_updated && policy_updated
       redirect_to edit_admin_site_security_url, success: t('.success')
@@ -30,16 +30,16 @@ class Sites::SecuritiesController < Sites::BaseController
     @settings = current_account.settings
   end
 
-  def find_permission_policy_setting
-    @permission_policy_developer_portal = current_account.account_settings.find_or_initialize_by(
+  def find_permissions_policy_setting
+    @permissions_policy_developer_portal = current_account.account_settings.find_or_initialize_by(
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper'
     )
   end
 
-  def update_permission_policy_setting(policy_params)
-    return true unless policy_params
+  def update_permissions_policy_setting(permissions_policy_value)
+    return true if permissions_policy_value.nil?
 
-    @permission_policy_developer_portal.assign_attributes(policy_params.permit(:value))
-    @permission_policy_developer_portal.save
+    @permissions_policy_developer_portal.value = permissions_policy_value
+    @permissions_policy_developer_portal.save
   end
 end

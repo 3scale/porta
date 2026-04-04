@@ -1,7 +1,7 @@
 - content_for :title, 'Security'
 - content_for :page_header_title, 'Security'
 
-= render partial: 'form', locals: { url: provider_admin_security_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label'), permission_policy_setting: @permission_policy_admin_portal, permission_policy_default: AccountSetting::PermissionsPolicyHeaderAdmin.default_value }
+= render partial: 'form', locals: { url: provider_admin_security_path, settings: @settings, field: :admin_bot_protection_level, selector_label: t('.selector_label'), permissions_policy_setting: @permissions_policy_admin_portal, permissions_policy_default: AccountSetting::PermissionsPolicyHeaderAdmin.default_value }
 
 .well
   h4 Available Directives

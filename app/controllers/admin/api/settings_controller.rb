@@ -12,8 +12,8 @@ class Admin::Api::SettingsController < Admin::Api::BaseController
   before_action :validate_enforcing_sso_allowed, only: [:update]
 
   # TODO: Add support for Permissions-Policy headers via AccountSettings:
-  #   - permission_policy_admin_portal
-  #   - permission_policy_dev_portal
+  #   - permissions_policy_admin_portal
+  #   - permissions_policy_dev_portal
   # These should be virtual attributes in Settings model that delegate to AccountSettings
   ALLOWED_PARAMS = %i[
     useraccountarea_enabled hide_service signups_enabled account_approval_required public_search

@@ -8,11 +8,10 @@
             input_html: { disabled: !Recaptcha.captcha_configured? }
 
   = form.inputs 'Permissions-Policy Header' do
-    = form.semantic_fields_for :account_setting_attributes, permission_policy_setting do |policy_form|
-      = policy_form.input :value,
-              label: 'Permissions-Policy Header',
-              hint: t('provider.admin.securities.edit.permissions_policy_hint'),
-              input_html: { placeholder: permission_policy_default }
+    = form.input :permissions_policy_header,
+            label: 'Permissions-Policy Header',
+            hint: t('provider.admin.securities.edit.permissions_policy_hint'),
+            input_html: { placeholder: permissions_policy_default, value: permissions_policy_setting.value }
 
   = form.actions do
     = form.commit_button 'Update Security Settings'

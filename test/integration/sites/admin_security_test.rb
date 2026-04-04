@@ -37,7 +37,7 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     put provider_admin_security_path, params: {
       settings: {
         admin_bot_protection_level: 'none',
-        account_setting_attributes: { value: policy_value }
+        permissions_policy_header: policy_value
       }
     }
 
@@ -61,7 +61,7 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     put provider_admin_security_path, params: {
       settings: {
         admin_bot_protection_level: 'none',
-        account_setting_attributes: { value: policy_value }
+        permissions_policy_header: policy_value
       }
     }
 
@@ -79,7 +79,7 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     put provider_admin_security_path, params: {
       settings: {
         admin_bot_protection_level: 'none',
-        account_setting_attributes: { value: policy_value }
+        permissions_policy_header: policy_value
       }
     }
 
