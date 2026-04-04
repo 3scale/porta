@@ -13,15 +13,10 @@ class Sites::BaseController < FrontendController
   private
 
   def set_permissions_policy_header
-    cache_key = "account:#{site_account.id}:permission_policy_developer_portal"
-
-    # Cache for 10 minutes, load all account_settings when cache misses
-    header_value = Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
-      settings = site_account.account_settings.to_a
-      setting = settings.find { |s| s.type == 'AccountSetting::PermissionsPolicyHeaderDeveloper' }
-
-      setting ? setting.value : AccountSetting::PermissionsPolicyHeaderDeveloper.default_value
-    end
+    header_value = AccountSettings::CachedRetrievalService.call(
+      account: site_account,
+      setting_name: 'permissions_policy_header_developer'
+    ).result
 
     response.headers['Permissions-Policy'] = header_value if header_value.present?
   end
