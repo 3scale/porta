@@ -32,7 +32,7 @@ class PermissionsPolicyCacheTest < ActionDispatch::IntegrationTest
     assert_equal 'camera=(), microphone=()', response.headers['Permissions-Policy']
 
     # Verify cache was set
-    cache_key = "account:#{provider.id}:permission_policy_admin_portal"
+    cache_key = "account:#{provider.id}:permissions_policy_header_admin"
     assert_equal 'camera=(), microphone=()', Rails.cache.read(cache_key)
   end
 
@@ -47,18 +47,17 @@ class PermissionsPolicyCacheTest < ActionDispatch::IntegrationTest
       value: 'camera=(), geolocation=()'
     )
 
-    DeveloperPortal::BaseController.any_instance.stubs(:site_account).returns(provider)
+    Sites::BaseController.any_instance.stubs(:site_account).returns(provider)
 
-    host! provider.internal_domain
-    login_with user.username, 'superSecret1234#'
+    login_provider provider
 
     # First request - should cache the value
-    get '/admin'
+    get edit_admin_site_security_path
     assert_response :success
     assert_equal 'camera=(), geolocation=()', response.headers['Permissions-Policy']
 
     # Verify cache was set
-    cache_key = "account:#{provider.id}:permission_policy_dev_portal"
+    cache_key = "account:#{provider.id}:permissions_policy_header_developer"
     assert_equal 'camera=(), geolocation=()', Rails.cache.read(cache_key)
   end
 end
