@@ -16,10 +16,13 @@ class AccountSetting < ApplicationRecord
 
   class_attribute :default_value, instance_writer: false, default: nil
 
-  # Derives setting name from class: AccountSetting::BgColour -> :bg_colour
+  # Derives setting name from class: AccountSetting::BgColour -> 'bg_colour'
   def self.setting_name
-    sti_name.underscore.to_sym
+    sti_name.underscore
   end
+
+  # Instance method that delegates to class method
+  delegate :setting_name, to: :class
 
   # Look up a setting class by its snake_case name
   # Dynamically constantizes the setting name under AccountSetting namespace

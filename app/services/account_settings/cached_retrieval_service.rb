@@ -7,7 +7,7 @@ module AccountSettings
     # @param expires_in [ActiveSupport::Duration] cache expiration time (default: 10 minutes)
     def initialize(account:, setting_name:, expires_in: 10.minutes)
       @account = account
-      @setting_name = setting_name
+      @setting_name = setting_name.to_s
       @expires_in = expires_in
     end
 
