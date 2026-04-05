@@ -11,7 +11,7 @@
     = form.input :permissions_policy_header,
             label: 'Permissions-Policy Header',
             hint: t('provider.admin.securities.edit.permissions_policy_hint'),
-            input_html: { placeholder: permissions_policy_default, value: permissions_policy_setting.value }
+            input_html: { placeholder: permissions_policy_setting.default_value, value: permissions_policy_setting.value }
 
   = form.actions do
     = form.commit_button 'Update Security Settings'

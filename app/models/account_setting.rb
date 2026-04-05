@@ -21,8 +21,8 @@ class AccountSetting < ApplicationRecord
     sti_name.underscore
   end
 
-  # Instance method that delegates to class method
-  delegate :setting_name, to: :class
+  # Instance methods that delegate to class methods
+  delegate :setting_name, :default_value, to: :class
 
   # Look up a setting class by its snake_case name
   # Dynamically constantizes the setting name under AccountSetting namespace
