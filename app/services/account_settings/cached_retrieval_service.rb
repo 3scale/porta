@@ -17,20 +17,16 @@ module AccountSettings
 
       Rails.cache.fetch(cache_key, expires_in: @expires_in) do
         settings = @account.account_settings.to_a
-        setting = settings.find { |s| s.type == setting_type }
+        setting = settings.find { |s| s.setting_name == @setting_name }
 
-        setting ? setting.value : default_value_class.default_value
+        setting ? setting.value : setting_class.default_value
       end
     end
 
     private
 
-    def setting_type
-      @setting_type ||= "AccountSetting::#{@setting_name.camelize}"
-    end
-
-    def default_value_class
-      @default_value_class ||= AccountSetting.class_for_setting(@setting_name)
+    def setting_class
+      @setting_class ||= AccountSetting.class_for_setting(@setting_name)
     end
   end
 end
