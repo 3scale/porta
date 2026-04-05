@@ -11,7 +11,8 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
   def update
     settings_params = params.fetch(:settings, {}).dup
-    permissions_policy_value = settings_params.delete(:permissions_policy_header)
+    setting_name = @permissions_policy_admin_portal.setting_name
+    permissions_policy_value = settings_params.delete(setting_name)
 
     # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
     # instead of separating legacy Settings model updates from AccountSettings updates

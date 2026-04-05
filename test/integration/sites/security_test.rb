@@ -34,7 +34,7 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     put admin_site_security_path, params: {
       settings: {
         spam_protection_level: 'none',
-        permissions_policy_header: policy_value
+        permissions_policy_header_developer: policy_value
       }
     }
 
