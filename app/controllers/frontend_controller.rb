@@ -34,6 +34,7 @@ class FrontendController < ApplicationController
 
   before_action :login_required
   before_action :set_display_currency
+  before_action :set_permissions_policy_header
 
   include RedhatCustomerPortalSupport::ControllerMethods::Banner
 
@@ -171,6 +172,23 @@ class FrontendController < ApplicationController
 
   def set_display_currency
     ThreeScale::MoneyHelper.display_currency = current_account.currency if current_account
+  end
+
+  def set_permissions_policy_header
+    # Determine which header to use based on controller namespace
+    # Sites:: controllers manage developer portal, everything else is admin portal
+    setting_name = if self.class.name.start_with?('Sites::')
+                     'permissions_policy_header_developer'
+                   else
+                     'permissions_policy_header_admin'
+                   end
+
+    header_value = AccountSettings::CachedRetrievalService.call(
+      account: site_account,
+      setting_name: setting_name
+    ).result
+
+    response.headers['Permissions-Policy'] = header_value if header_value.present?
   end
 
   def quickstarts_presenter
