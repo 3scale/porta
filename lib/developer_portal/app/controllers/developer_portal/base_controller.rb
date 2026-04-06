@@ -32,5 +32,4 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
     read_only_fields = FieldsDefinition.by_provider(site_account).by_target(resource_class.name).read_only.pluck(:name)
     params.except(*read_only_fields)
   end
-
 end
