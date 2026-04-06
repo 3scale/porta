@@ -175,26 +175,23 @@ class FrontendController < ApplicationController
   end
 
   def set_permissions_policy_header
-    # site_account is domain-based and works even without logged-in user (e.g., login pages)
-    # It resolves the provider account based on the hostname being accessed
-    return unless respond_to?(:site_account, true) && site_account.present?
-
-    # Determine which header setting to use based on controller namespace
-    # Sites:: controllers = developer portal
-    # Everything else = admin portal
-    setting_name = if self.class.name.start_with?('Sites::')
-                     'permissions_policy_header_developer'
-                   else
-                     'permissions_policy_header_admin'
-                   end
+    account = permissions_policy_header_account
 
     header_value = AccountSettings::CachedRetrievalService.call(
-      account: site_account,
-      setting_name: setting_name
+      account: account,
+      setting_name: permissions_policy_header_setting_name
     ).result
 
-    # Set header if value exists (even if whitespace but not empty)
+    # Set header if value exists (even if only a whitespace)
     response.headers['Permissions-Policy'] = header_value unless header_value&.size&.zero?
+  end
+
+  def permissions_policy_header_account
+    domain_account
+  end
+
+  def permissions_policy_header_setting_name
+    'permissions_policy_header_admin'
   end
 
   def quickstarts_presenter
