@@ -175,19 +175,31 @@ class FrontendController < ApplicationController
   end
 
   def set_permissions_policy_header
-    # Determine which header to use based on controller namespace
-    # Sites:: controllers manage developer portal, everything else is admin portal
-    setting_name = if self.class.name.start_with?('Sites::')
-                     'permissions_policy_header_developer'
-                   else
-                     'permissions_policy_header_admin'
-                   end
+    # Skip if current_account is not available (e.g., login pages, API calls)
+    return unless respond_to?(:current_account, true) && current_account.present?
+
+    # Determine which header to use and which account's settings to fetch
+    # Sites:: controllers = developer portal (use provider's settings)
+    # Everything else = admin portal (use current provider's settings)
+    if self.class.name.start_with?('Sites::')
+      setting_name = 'permissions_policy_header_developer'
+      # For developer portal, use the provider's settings (site_account)
+      account = site_account
+    else
+      setting_name = 'permissions_policy_header_admin'
+      # For admin portal, use the current logged-in provider's settings
+      account = current_account
+    end
+
+    return unless account.present?
 
     header_value = AccountSettings::CachedRetrievalService.call(
-      account: site_account,
+      account: account,
       setting_name: setting_name
     ).result
 
+    # Set header if value exists (even if blank/whitespace)
+    # This allows explicitly clearing the header by setting it to empty/space
     response.headers['Permissions-Policy'] = header_value if header_value.present?
   end
 
