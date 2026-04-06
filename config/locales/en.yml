@@ -1247,9 +1247,6 @@ en:
     securities:
       edit:
         selector_label: Protection against bots on the developer portal
-        captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
-        captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
-
       update:
         error: There were problems saving the settings
         success: Security settings updated
