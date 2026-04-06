@@ -4,7 +4,6 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
   # The routes will take care of that.
   before_action :ensure_buyer_domain
   before_action :finish_signup_for_paid_plan
-  before_action :set_permissions_policy_header
 
   layout 'main_layout'
 
