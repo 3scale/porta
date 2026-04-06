@@ -181,7 +181,7 @@ class FrontendController < ApplicationController
     ).result
 
     # Set header if value exists (even if only a whitespace)
-    response.headers['Permissions-Policy'] = header_value unless header_value&.size&.zero?
+    response.headers['Permissions-Policy'] = header_value if header_value&.size&.nonzero?
   end
 
   def quickstarts_presenter
