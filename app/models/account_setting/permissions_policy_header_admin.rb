@@ -3,5 +3,5 @@
 class AccountSetting::PermissionsPolicyHeaderAdmin < AccountSetting::HttpHeaders
   # Default restrictive policy for admin portal
   # Format: "directive1=(value1 value2), directive2=(value3)"
-  self.default_value = "camera=(), microphone=(), geolocation=(), usb=(), fullscreen=(self)"
+  self.default_value = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), fullscreen=(self)"
 end
