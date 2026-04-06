@@ -692,7 +692,6 @@ en:
           selector_label: Protection against bots on the admin portal
           captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
           captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
-          permissions_policy_hint: "Format: directive1=(), directive2=(self). Example: camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)"
         update:
           error: There were problems saving the settings
           success: Security settings updated

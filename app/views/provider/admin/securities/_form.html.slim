@@ -10,7 +10,7 @@
   = form.inputs 'Permissions-Policy Header' do
     = form.input permissions_policy_setting.setting_name.to_sym,
             label: 'Permissions-Policy Header',
-            hint: t('provider.admin.securities.edit.permissions_policy_hint'),
+            hint: "Format: directive1=(), directive2=(self). Default: #{permissions_policy_setting.default_value.presence || 'none (permissive)'}",
             input_html: { placeholder: permissions_policy_setting.default_value, value: permissions_policy_setting.value }
 
   = form.actions do
