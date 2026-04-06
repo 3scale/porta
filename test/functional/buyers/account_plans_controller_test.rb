@@ -9,7 +9,7 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
   class ProviderAccountPlansTest < Buyers::AccountPlansControllerTest
     def setup
       @provider = FactoryBot.create :provider_account
-      host! @provider.external_domain
+      host! @provider.internal_admin_domain
 
       login_as(@provider.admins.first)
 
@@ -19,13 +19,13 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
     test 'forbid new' do
       get :new
       assert_equal 403, response.status
-      assert_template 'errors/forbidden'
+      assert_template 'errors/provider/forbidden'
     end
 
     test 'forbid create' do
       post :create
       assert_equal 403, response.status
-      assert_template 'errors/forbidden'
+      assert_template 'errors/provider/forbidden'
     end
 
     test 'render index' do

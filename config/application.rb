@@ -274,7 +274,7 @@ module System
 
     require "three_scale"
 
-    config.middleware.delete ActionDispatch::PermissionsPolicy # set by callbacks
+    config.middleware.delete ActionDispatch::PermissionsPolicy::Middleware # set by callbacks
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id unless ENV["DEBUG_DISABLE_TENANT_CHECK"] == "1"
     config.middleware.insert_before ActionDispatch::Static, ThreeScale::Middleware::PresignedDownloads
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
