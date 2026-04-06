@@ -42,6 +42,7 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
       setting_name: 'permissions_policy_header_developer'
     ).result
 
-    response.headers['Permissions-Policy'] = header_value if header_value.present?
+    # Set header only if value is present (even if only whitespaces)
+    response.headers['Permissions-Policy'] = header_value unless header_value&.size&.zero?
   end
 end

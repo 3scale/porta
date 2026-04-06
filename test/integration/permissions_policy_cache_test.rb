@@ -47,12 +47,13 @@ class PermissionsPolicyCacheTest < ActionDispatch::IntegrationTest
       value: 'camera=(), geolocation=()'
     )
 
-    Sites::BaseController.any_instance.stubs(:site_account).returns(provider)
+    DeveloperPortal::BaseController.any_instance.stubs(:site_account).returns(provider)
 
-    login_provider provider
+    host! provider.internal_domain
+    login_with user.username, 'superSecret1234#'
 
     # First request - should cache the value
-    get edit_admin_site_security_path
+    get '/admin'
     assert_response :success
     assert_equal 'camera=(), geolocation=()', response.headers['Permissions-Policy']
 

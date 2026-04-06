@@ -9,12 +9,4 @@ class Sites::BaseController < FrontendController
     authorize! :manage, :settings
   end
 
-  def permissions_policy_header_account
-    site_account
-  end
-
-  def permissions_policy_header_setting_name
-    'permissions_policy_header_developer'
-  end
-
 end

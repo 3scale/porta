@@ -175,23 +175,13 @@ class FrontendController < ApplicationController
   end
 
   def set_permissions_policy_header
-    account = permissions_policy_header_account
-
     header_value = AccountSettings::CachedRetrievalService.call(
-      account: account,
-      setting_name: permissions_policy_header_setting_name
+      account: domain_account,
+      setting_name: 'permissions_policy_header_admin'
     ).result
 
     # Set header if value exists (even if only a whitespace)
     response.headers['Permissions-Policy'] = header_value unless header_value&.size&.zero?
-  end
-
-  def permissions_policy_header_account
-    domain_account
-  end
-
-  def permissions_policy_header_setting_name
-    'permissions_policy_header_admin'
   end
 
   def quickstarts_presenter
