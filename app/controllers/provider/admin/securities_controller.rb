@@ -16,7 +16,7 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
     # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
     # instead of separating legacy Settings model updates from AccountSettings updates
-    settings_updated = @settings.update(settings_params.permit(:spam_protection_level))
+    settings_updated = @settings.update(settings_params.permit(:admin_bot_protection_level))
     policy_updated = update_permissions_policy_setting(permissions_policy_value)
 
     if settings_updated && policy_updated
