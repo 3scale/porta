@@ -175,32 +175,26 @@ class FrontendController < ApplicationController
   end
 
   def set_permissions_policy_header
-    # Skip if current_account is not available (e.g., login pages, API calls)
-    return unless respond_to?(:current_account, true) && current_account.present?
+    # site_account is domain-based and works even without logged-in user (e.g., login pages)
+    # It resolves the provider account based on the hostname being accessed
+    return unless respond_to?(:site_account, true) && site_account.present?
 
-    # Determine which header to use and which account's settings to fetch
-    # Sites:: controllers = developer portal (use provider's settings)
-    # Everything else = admin portal (use current provider's settings)
-    if self.class.name.start_with?('Sites::')
-      setting_name = 'permissions_policy_header_developer'
-      # For developer portal, use the provider's settings (site_account)
-      account = site_account
-    else
-      setting_name = 'permissions_policy_header_admin'
-      # For admin portal, use the current logged-in provider's settings
-      account = current_account
-    end
-
-    return unless account.present?
+    # Determine which header setting to use based on controller namespace
+    # Sites:: controllers = developer portal
+    # Everything else = admin portal
+    setting_name = if self.class.name.start_with?('Sites::')
+                     'permissions_policy_header_developer'
+                   else
+                     'permissions_policy_header_admin'
+                   end
 
     header_value = AccountSettings::CachedRetrievalService.call(
-      account: account,
+      account: site_account,
       setting_name: setting_name
     ).result
 
-    # Set header if value exists (even if blank/whitespace)
-    # This allows explicitly clearing the header by setting it to empty/space
-    response.headers['Permissions-Policy'] = header_value if header_value.present?
+    # Set header if value exists (even if whitespace but not empty)
+    response.headers['Permissions-Policy'] = header_value unless header_value&.size&.zero?
   end
 
   def quickstarts_presenter
