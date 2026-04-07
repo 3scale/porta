@@ -618,8 +618,7 @@ en:
             error: Password-based authentication could not be enabled
 
       accounts:
-        check_provider_signup_possible:
-          not_possible: Please, create an Account Plan and a Service Plan first
+        not_possible: Please, create an Account Plan and a Service Plan first
         create:
           success: Tenant account was successfully created
         update:
