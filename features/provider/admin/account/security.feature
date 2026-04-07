@@ -1,8 +1,7 @@
 @javascript
 Feature: Provider admin security settings
   As a provider admin
-  I want to configure Permissions-Policy headers
-  So that I can control browser features in the admin portal
+  I want to configure Permissions-Policy headers in my admin portal 
 
   Background:
     Given a provider is logged in

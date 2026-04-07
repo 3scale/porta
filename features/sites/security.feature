@@ -1,8 +1,7 @@
 @javascript
 Feature: Developer portal security settings
   As a provider admin
-  I want to configure Permissions-Policy headers for the developer portal
-  So that I can control browser features available to my developers
+  I want to configure Permissions-Policy headers for my developer portal
 
   Background:
     Given a provider is logged in
