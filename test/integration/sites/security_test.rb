@@ -45,6 +45,20 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     assert_equal policy_value, setting.value
   end
 
+  test 'updates spam protection level setting' do
+    put admin_site_security_path, params: {
+      settings: {
+        spam_protection_level: 'captcha'
+      }
+    }
+
+    assert_redirected_to edit_admin_site_security_path
+
+    @provider.settings.reload
+    assert_equal :captcha, @provider.settings.spam_protection_level
+  end
+
+  # REMOVE: Duplicate of PermissionsPolicyHeadersTest 'developer portal sets Permissions-Policy header from AccountSetting'.
   test 'shows Permissions-Policy header in developer portal' do
     @provider.account_settings.create!(
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
@@ -63,6 +77,7 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     assert_equal 'camera=(), geolocation=()', response.headers['Permissions-Policy']
   end
 
+  # REMOVE: Duplicate of PermissionsPolicyHeadersTest 'developer portal does not set header when setting is blank (default)'.
   test 'uses default (empty) Permissions-Policy for developer portal when no setting exists' do
     buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     user = FactoryBot.create(:user, account: buyer)
@@ -77,6 +92,8 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     assert_nil response.headers['Permissions-Policy']
   end
 
+  # REMOVE: Duplicate of PermissionsPolicyHeadersTest 'developer portal does not set header when setting is blank (default)'.
+  # Also nearly identical to 'uses default (empty)' test above.
   test 'does not set header when value is blank' do
     @provider.account_settings.create!(
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',

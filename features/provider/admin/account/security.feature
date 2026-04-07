@@ -29,4 +29,4 @@ Feature: Provider admin security settings
 
   Scenario: View default value hint
     When I visit the provider security settings page
-    Then I should see "camera=(), microphone=(), geolocation=(), usb=(), payment=(), fullscreen=(self)"
+    Then I should see "camera=(), microphone=(), geolocation=(), payment=(), usb=(), fullscreen=(self)"

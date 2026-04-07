@@ -29,4 +29,4 @@ Feature: Developer portal security settings
 
   Scenario: View permissive default hint
     When I visit the developer portal security settings page
-    Then I should see "Leave empty for permissive policy"
+    Then I should see "none (permissive)"

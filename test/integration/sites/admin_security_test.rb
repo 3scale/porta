@@ -48,6 +48,8 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     assert_equal policy_value, setting.value
   end
 
+  # REMOVE: Weak test — asserts header not nil without checking specific value.
+  # Covered better by PermissionsPolicyHeadersTest 'admin portal uses default' and 'admin portal sets header'.
   test 'shows Permissions-Policy header in response' do
     get edit_provider_admin_security_path
     assert_response :success
@@ -55,6 +57,7 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     # Header should be set (either default or custom value from test helper)
   end
 
+  # REMOVE: Duplicate of 'updates Permissions-Policy header' test above — same params and assertions.
   test 'updates Permissions-Policy header setting' do
     policy_value = 'camera=(), microphone=()'
 
@@ -71,6 +74,19 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
     assert_not_nil setting
     assert_equal policy_value, setting.value
+  end
+
+  test 'updates admin bot protection level setting' do
+    put provider_admin_security_path, params: {
+      settings: {
+        admin_bot_protection_level: 'captcha'
+      }
+    }
+
+    assert_redirected_to edit_provider_admin_security_path
+
+    @provider.settings.reload
+    assert_equal :captcha, @provider.settings.admin_bot_protection_level
   end
 
   test 'setting header to space results in header being present in response' do
