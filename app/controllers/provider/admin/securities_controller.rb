@@ -10,14 +10,10 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
   def edit; end
 
   def update
-    settings_params = params.fetch(:settings, {}).dup
-    setting_name = @permissions_policy_admin_portal.setting_name
-    permissions_policy_value = settings_params.delete(setting_name)
-
     # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
     # instead of separating legacy Settings model updates from AccountSettings updates
-    settings_updated = @settings.update(settings_params.permit(:admin_bot_protection_level))
-    policy_updated = update_permissions_policy_setting(permissions_policy_value)
+    settings_updated = @settings.update(settings_params)
+    policy_updated = update_permissions_policy_setting
 
     if settings_updated && policy_updated
       redirect_to edit_provider_admin_security_url, success: t('.success')
@@ -29,20 +25,25 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
   private
 
+  def settings_params
+    params.permit(settings: [:admin_bot_protection_level]).fetch(:settings, {})
+  end
+
   def find_settings
     @settings = current_account.settings
   end
 
   def find_permissions_policy_setting
-    @permissions_policy_admin_portal = current_account.account_settings.find_or_initialize_by(
+    @permissions_policy = current_account.account_settings.find_or_initialize_by(
       type: 'AccountSetting::PermissionsPolicyHeaderAdmin'
     )
   end
 
-  def update_permissions_policy_setting(permissions_policy_value)
-    return true if permissions_policy_value.nil?
+  def update_permissions_policy_setting
+    value = params.dig(:settings, @permissions_policy.setting_name)
+    return true if value.nil?
 
-    @permissions_policy_admin_portal.value = permissions_policy_value
-    @permissions_policy_admin_portal.save
+    @permissions_policy.value = value
+    @permissions_policy.save
   end
 end

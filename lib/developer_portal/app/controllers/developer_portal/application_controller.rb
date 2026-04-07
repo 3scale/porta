@@ -5,6 +5,14 @@ module DeveloperPortal
 
     before_action :disable_for_suspended_provider_account
 
+    protected
+
+    def disable_for_suspended_provider_account
+      if site_account && site_account.suspended?
+        handle_buyer_side(:not_found)
+      end
+    end
+
     private
 
     def set_permissions_policy_header
@@ -15,14 +23,6 @@ module DeveloperPortal
 
       # Set header only if value is present (even if only whitespaces)
       response.headers['Permissions-Policy'] = header_value if header_value&.size&.nonzero?
-    end
-
-    protected
-
-    def disable_for_suspended_provider_account
-      if site_account && site_account.suspended?
-        handle_buyer_side(:not_found)
-      end
     end
   end
 end
