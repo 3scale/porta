@@ -6,6 +6,7 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     login_provider @provider
     host! @provider.external_admin_domain
+    Rails.cache.clear
   end
 
   test 'edit without captcha' do

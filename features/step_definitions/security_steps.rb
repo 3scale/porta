@@ -14,14 +14,6 @@ Given('the provider has developer portal Permissions-Policy {string}') do |polic
   )
 end
 
-When('I visit the provider security settings page') do
-  visit edit_provider_admin_security_path
-end
-
-When('I visit the developer portal security settings page') do
-  visit edit_admin_site_security_path
-end
-
 Then('the admin portal should have Permissions-Policy header {string}') do |expected_value|
   setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
   assert_not_nil setting, "Expected admin portal Permissions-Policy setting to exist"

@@ -8,12 +8,12 @@ Feature: Developer portal security settings
     Given a provider is logged in
 
   Scenario: View developer portal security settings page
-    When I visit the developer portal security settings page
+    When I go to the developer portal security settings page
     Then I should see "Security"
     And I should see "Permissions-Policy Header"
 
   Scenario: Update developer portal Permissions-Policy header
-    When I visit the developer portal security settings page
+    When I go to the developer portal security settings page
     And I fill in "Permissions-Policy Header" with "camera=(), fullscreen=(self)"
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
@@ -21,12 +21,12 @@ Feature: Developer portal security settings
 
   Scenario: Clear developer portal Permissions-Policy header (permissive)
     Given the provider has developer portal Permissions-Policy "camera=()"
-    When I visit the developer portal security settings page
+    When I go to the developer portal security settings page
     And I fill in "Permissions-Policy Header" with ""
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
     And the developer portal should not have Permissions-Policy header
 
   Scenario: View permissive default hint
-    When I visit the developer portal security settings page
+    When I go to the developer portal security settings page
     Then I should see "none (permissive)"

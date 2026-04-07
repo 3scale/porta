@@ -4,8 +4,6 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
 
   setup do
     @provider = FactoryBot.create(:provider_account)
-    # Remove default settings created by test helper
-    @provider.account_settings.where(type: 'AccountSetting::PermissionsPolicyHeaderAdmin').delete_all
     login_provider @provider
     host! @provider.external_admin_domain
     Rails.cache.clear
