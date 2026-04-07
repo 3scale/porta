@@ -147,21 +147,18 @@ module Stats
           period = sanitize_period(options[:period])
           granularity = options[:granularity] || GRANULARITIES[period]
 
-          timezone = extract_timezone(options)
-
           if period.to_sym == :eternity
-            if options[:granularity].present? && options[:granularity].to_sym != :eternity
-              raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'"
-            end
-            utc = ActiveSupport::TimeZone['UTC']
-            range_since = utc.parse('1970-01-01')
-            range_until = utc.now.end_of_day
+            raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'" if options[:granularity].present? && options[:granularity].to_sym != :eternity
+
+            range_since = Time.utc(1970)
+            range_until = Time.current.utc.end_of_day
             return [range_since..range_until, :eternity]
-          else
-            length = 1.send(period)
-            range_since = to_time(options[:since].presence || timezone.now - length, timezone)
-            range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
           end
+
+          timezone = extract_timezone(options)
+          length = 1.send(period)
+          range_since = to_time(options[:since].presence || timezone.now - length, timezone)
+          range_until = (range_since + length - 1.second).end_of_minute # taking a second away means excluding the extra day in case of a month, etc
 
           sanitize_range_and_granularity(range_since..range_until, granularity)
         else
