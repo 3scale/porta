@@ -1475,9 +1475,11 @@ en:
       forms:
         definition_settings:
           delete_confirmation: Are you sure you want to delete the service '%{name}'?
-          refresh_confirmation:
-            This action will overwrite the API's Private URL and automatically created ActiveDocs.
-            Are you sure you want to proceed?
+          refresh:
+            confirmation:
+              This action will overwrite the API's Private URL and automatically created ActiveDocs.
+              Are you sure you want to proceed?
+            label: Refresh
       cards:
         analytics:
           title: Analytics
@@ -1501,6 +1503,9 @@ en:
           title: Published Service Plans
           footer_html: You have %{plans} (%{published} published) with a total of %{contracts}.
           create_first_plan: Create your first service plan
+          contracts:
+            one: '%{count} subscription'
+            other: '%{count} subscriptions'
         settings:
           configuration: Edit integration settings for this service
           methods: Manage metrics and method for this service

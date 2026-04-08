@@ -35,6 +35,10 @@ class ServiceDecorator < ApplicationDecorator
     ApplicationPlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
   end
 
+  def published_service_plans
+    ServicePlanDecorator.decorate_collection(service_plans.published)
+  end
+
   def service_path
     if h.can?(:manage, :plans)
       h.admin_service_path(object)
@@ -81,13 +85,13 @@ class ServiceDecorator < ApplicationDecorator
   end
 
   def refresh_service_discovery_link
-    url = service_discovery_usable? ? h.provider_admin_service_discovery_service_path(self) : service_discovery_presenter.authorize_url
+    url = h.service_discovery_usable? ? h.provider_admin_service_discovery_service_path(self) : h.service_discovery_presenter.authorize_url
 
-    confirm = t('.refresh_service.confirm', name: name)
-    label = t('.refresh_service.label')
-    action_link_to(:refresh, url, label:,
-                                  data: { confirm: },
-                                  method: :put)
+    confirm = I18n.t('api.services.forms.definition_settings.refresh.confirmation', name: name)
+    label = I18n.t('api.services.forms.definition_settings.refresh.label')
+    h.action_link_to(:refresh, url, label:,
+                                    data: { confirm: },
+                                    method: :put)
   end
 
   def latest_alerts

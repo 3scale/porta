@@ -13,7 +13,7 @@ div class="pf-c-card"
     - else
       ul class="pf-c-list pf-m-plain pf-m-bordered"
         - published_plans.each do |plan|
-          li == "<b>#{plan.link_to_edit}</b> - #{plan.link_to_applications}"
+          li == "#{plan.link_to_edit} - #{plan.link_to_applications}"
   - unless all_plans.empty?
     div class="pf-c-card__footer"
       = t('.footer_html', plans: service.link_to_application_plans,

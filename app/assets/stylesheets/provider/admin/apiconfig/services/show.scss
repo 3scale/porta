@@ -3,4 +3,8 @@
   .pf-c-list.pf-m-icon-md {
     --pf-c-list__item-icon--FontSize: var(--pf-c-card__body--FontSize);
   }
+
+  .pf-c-list li a:first-child {
+    font-weight: var(--pf-global--FontWeight--bold);
+  }
 }

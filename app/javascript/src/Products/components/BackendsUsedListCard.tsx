@@ -8,9 +8,10 @@ import type { CompactListItem } from 'Common/components/CompactListCard'
 
 interface Props {
   backends: CompactListItem[];
+  title: string;
 }
 
-const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
+const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends, title }) => {
   const [page, setPage] = useState(1)
   const [filteredBackends, setFilteredBackends] = useState(backends)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -33,7 +34,8 @@ const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
       searchInputPlaceholder="Find a backend"
       searchInputRef={searchInputRef}
       setPage={setPage}
-      tableAriaLabel="Backends used in this product"
+      tableAriaLabel={title}
+      title={title}
       onSearch={handleOnSearch}
     />
   )
