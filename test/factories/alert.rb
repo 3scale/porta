@@ -7,6 +7,6 @@ FactoryBot.define do
     sequence(:alert_id) { |n| "alert-#{n}" }
     level { 50 }
     utilization { 0.5 }
-    timestamp { Time.now }
+    timestamp { Time.zone.now }
   end
 end
