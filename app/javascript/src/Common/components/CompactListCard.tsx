@@ -25,6 +25,7 @@ interface Props {
   onSearch: (term?: string) => void;
   page: number;
   setPage: (page: number) => void;
+  title?: string;
   perPage?: number;
   searchInputPlaceholder?: string;
   tableAriaLabel?: string;
@@ -39,6 +40,7 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   onSearch,
   page,
   setPage,
+  title,
   perPage = PER_PAGE,
   searchInputPlaceholder,
   tableAriaLabel
@@ -70,7 +72,7 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   return (
     <Card>
       <CardTitle>
-        Backends used in this product
+        {title}
       </CardTitle>
       <CardBody>
         <Table
