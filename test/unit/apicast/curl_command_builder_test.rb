@@ -5,7 +5,9 @@ require 'test_helper'
 module Apicast
   class CurlCommandBuilderTest < ActiveSupport::TestCase
     def setup
+      service = FactoryBot.create(:simple_service, :with_default_backend_api)
       @proxy = FactoryBot.create(:proxy,
+        service: service,
         auth_app_key: 'app_key',
         auth_app_id: 'app_id',
         auth_user_key: 'user_key',

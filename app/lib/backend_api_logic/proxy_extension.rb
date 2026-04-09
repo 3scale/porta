@@ -24,11 +24,12 @@ module BackendApiLogic
     protected
 
     def validate_backend_api?
-      backend_api.private_endpoint_changed?
+      backend_api&.private_endpoint_changed?
     end
 
     def save_backend_api
-      backend_api_private_endpoint && backend_api_proxy.update!(private_endpoint: backend_api_private_endpoint)
+      private_endpoint = backend_api&.private_endpoint
+      private_endpoint && backend_api_proxy&.update!(private_endpoint: private_endpoint)
     end
   end
 end

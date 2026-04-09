@@ -5,7 +5,8 @@ class Api::IntegrationsShowPresenterTest < ActiveSupport::TestCase
   Presenter = Api::IntegrationsShowPresenter
 
   def setup
-    @proxy = FactoryBot.create(:simple_proxy)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
+    @proxy = FactoryBot.create(:simple_proxy, service: service)
   end
 
   def test_initialize

@@ -22,7 +22,8 @@ class ProxyTestServiceTest < ActiveSupport::TestCase
   end
 
   test '#api_test_path with backend api config path' do
-    proxy = FactoryBot.create(:proxy)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
+    proxy = FactoryBot.create(:proxy, service: service)
     proxy.service.backend_api_configs.first.update(path: '/echo')
     proxy.sandbox_endpoint = 'http://example.com'
     proxy.api_test_path = 'hello'
