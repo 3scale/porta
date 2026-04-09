@@ -132,6 +132,15 @@ class User < ApplicationRecord
 
   scope :admins, -> { where(role: 'admin') }
 
+  JOHN_DOE_ATTRS = { username: 'john', first_name: 'John', last_name: 'Doe', role: :admin }.freeze
+  JOHN_DOE_ORG_NAME = 'Developer'
+
+  scope :sample_developer_john_doe, -> { where(JOHN_DOE_ATTRS).joins(:account).where(accounts: { org_name: JOHN_DOE_ORG_NAME }) }
+
+  def sample_developer_john_doe?
+    JOHN_DOE_ATTRS.all? { |attr, value| send(attr) == value } && account.org_name == JOHN_DOE_ORG_NAME
+  end
+
   scope :active, -> { where(state: 'active') }
 
   def self.find_by_username_or_email(value)
