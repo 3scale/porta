@@ -34,16 +34,16 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
   end
 
   def find_permissions_policy_setting
-    @permissions_policy = current_account.account_settings.find_or_initialize_by(
+    @permissions_policy_setting = current_account.account_settings.find_or_initialize_by(
       type: 'AccountSetting::PermissionsPolicyHeaderAdmin'
     )
   end
 
   def update_permissions_policy_setting
-    value = params.dig(:settings, @permissions_policy.setting_name)
+    value = params.dig(:settings, @permissions_policy_setting.setting_name)
     return true if value.nil?
 
-    @permissions_policy.value = value
-    @permissions_policy.save
+    @permissions_policy_setting.value = value
+    @permissions_policy_setting.save
   end
 end

@@ -32,16 +32,16 @@ class Sites::SecuritiesController < Sites::BaseController
   end
 
   def find_permissions_policy_setting
-    @permissions_policy_developer_portal = current_account.account_settings.find_or_initialize_by(
+    @permissions_policy_setting = current_account.account_settings.find_or_initialize_by(
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper'
     )
   end
 
   def update_permissions_policy_setting
-    value = params.dig(:settings, @permissions_policy_developer_portal.setting_name)
+    value = params.dig(:settings, @permissions_policy_setting.setting_name)
     return true if value.nil?
 
-    @permissions_policy_developer_portal.value = value
-    @permissions_policy_developer_portal.save
+    @permissions_policy_setting.value = value
+    @permissions_policy_setting.save
   end
 end
