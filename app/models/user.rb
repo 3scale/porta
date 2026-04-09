@@ -437,11 +437,6 @@ class User < ApplicationRecord
       signup_type == :minimal
     end
 
-    def sample_data?
-      # This is true only for John Doe
-      signup_type == :sample_data
-    end
-
     def api?
       signup_type == :api
     end
@@ -463,7 +458,7 @@ class User < ApplicationRecord
     end
 
     def machine?
-      minimal? || sample_data? || api? || created_by_provider? || open_id? || cas? || oauth2?
+      minimal? || api? || created_by_provider? || open_id? || cas? || oauth2?
     end
 
     def by_user?
