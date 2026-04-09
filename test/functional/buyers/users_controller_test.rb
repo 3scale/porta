@@ -74,6 +74,47 @@ class Buyers::UsersControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  class ShowPageSampleDeveloperTest < ActionController::TestCase
+    tests Buyers::UsersController
+
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      Logic::ProviderSignup::SampleData.new(@provider).create!
+      @buyer = @provider.buyers.find_by(org_name: 'Developer')
+      @john = @buyer.admins.find_by(username: 'john')
+      host! @provider.internal_admin_domain
+      login_provider @provider
+    end
+
+    test 'show page displays sample password for John Doe with unchanged password' do
+      get :show, params: { account_id: @buyer.id, id: @john.id }
+
+      assert_response :success
+      assert_select 'th', text: 'Generated password (please change)'
+      assert_select 'code', text: Logic::SampleDeveloperPassword.for(@provider)
+    end
+
+    test 'show page does not display sample password after John Doe password is changed' do
+      new_password = 'aNewStrongPassword1'
+      @john.update!(password: new_password, password_confirmation: new_password)
+
+      get :show, params: { account_id: @buyer.id, id: @john.id }
+
+      assert_response :success
+      assert_select 'th', text: 'Sample Password', count: 0
+    end
+
+    test 'show page does not display sample password for a regular buyer user' do
+      regular_user = @buyer.users.find { |u| u != @john }
+      regular_user ||= FactoryBot.create(:user, account: @buyer, email: 'regular@example.com')
+
+      get :show, params: { account_id: @buyer.id, id: regular_user.id }
+
+      assert_response :success
+      assert_select 'th', text: 'Sample Password', count: 0
+    end
+  end
+
   class EditPagePasswordFieldsTest < ActionController::TestCase
     tests Buyers::UsersController
 
