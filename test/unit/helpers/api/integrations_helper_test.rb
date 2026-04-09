@@ -19,7 +19,8 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
 
   class CurlCommand < ActionView::TestCase
     setup do
-      @proxy = FactoryBot.create(:proxy)
+      @service = FactoryBot.create(:simple_service, :with_default_backend_api)
+      @proxy = FactoryBot.create(:proxy, service: @service)
     end
 
     attr_reader :proxy
@@ -33,7 +34,7 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
     end
 
     test 'data-credentials' do
-      @proxy = FactoryBot.create(:proxy, auth_user_key: 'my_cool_name_for_user_key')
+      @proxy = FactoryBot.create(:proxy, auth_user_key: 'my_cool_name_for_user_key', service: @service)
       create_proxy_config
       res = api_test_curl(proxy)
       assert_match(/my_cool_name_for_user_key=USER_KEY/, res)

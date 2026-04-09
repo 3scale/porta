@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ProxyTest < ActiveSupport::TestCase
   def setup
-    @proxy = FactoryBot.create(:simple_proxy, api_backend: nil)
+    @service = FactoryBot.create(:simple_service, :with_default_backend_api)
+    @proxy = FactoryBot.create(:simple_proxy, service: @service, api_backend: nil)
     @proxy.update!(apicast_configuration_driven: false)
-    @service = @proxy.service
     @account = @service.account
   end
 

@@ -220,6 +220,11 @@ FactoryBot.define do
       application_plan = FactoryBot.create(:application_plan, issuer: service, state: 'published')
       account_plan = FactoryBot.create(:account_plan, issuer: account, state: 'published')
 
+      # Remove unpersisted backend_apis that prevent account from saving
+      # (service creation builds but doesn't save a backend_api, and Rails now validates
+      # associated records even with validate: false after protected_attributes removal)
+      # account.backend_apis.target.delete_if { |ba| !ba.persisted? }
+
       service.update_attribute :default_application_plan, application_plan
       service.update_attribute :default_service_plan, service.service_plans.first
       account.update_attribute :default_account_plan, account_plan

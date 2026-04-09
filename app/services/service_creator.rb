@@ -38,6 +38,7 @@ class ServiceCreator
 
   def save_default_backend_api(params)
     return true if %i[path private_endpoint].none? { |key| params.key?(key) }
+
     backend_api_proxy.update!(params)
   end
 

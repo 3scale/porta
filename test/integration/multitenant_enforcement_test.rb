@@ -96,7 +96,8 @@ class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
   end
 
   test "multitenant master retrieve from multiple tenants in master API by api_key in query" do
-    proxies = FactoryBot.create_list(:proxy, 2)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @provider)
+    proxies = FactoryBot.create_list(:proxy, 2, service: service)
     proxies.each do |proxy|
       FactoryBot.create_list(:proxy_config, 1, proxy: proxy, environment: 'sandbox')
       FactoryBot.create_list(:proxy_config, 1, proxy: proxy, environment: 'production')

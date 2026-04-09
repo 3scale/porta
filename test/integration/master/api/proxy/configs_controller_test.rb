@@ -12,7 +12,8 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
 
   test '#index get all latest proxy_configs' do
     production_current_versions = []
-    proxies = FactoryBot.create_list(:proxy, 3)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @provider)
+    proxies = FactoryBot.create_list(:proxy, 3, service: service)
     proxies.each do |proxy|
       FactoryBot.create_list(:proxy_config, 5, proxy: proxy, environment: 'sandbox')
       production_current_versions << FactoryBot.create_list(:proxy_config, 3, proxy: proxy, environment: 'production').last
@@ -26,7 +27,8 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
   end
 
   test '#index filter by host (among the latest versions)' do
-    proxy = FactoryBot.create(:proxy)
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @provider)
+    proxy = FactoryBot.create(:proxy, service: service)
     FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', content: content_hosts('v1.example.com'))
     latest_proxy_config = FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', content: content_hosts('v2.example.com'))
 

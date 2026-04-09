@@ -9,13 +9,22 @@ module BackendApiLogic
       has_many :backend_apis, through: :backend_api_configs
 
       delegate :backend_api, to: :backend_api_proxy
-      delegate :api_backend, :api_backend=, to: :backend_api
 
       has_many :backend_api_metrics, through: :backend_api_configs
 
       has_many :all_metrics, ->(object) do
         unscope(:where).where('(owner_type = ? AND owner_id = ?) OR (owner_type = ? AND owner_id IN (?))', 'Service', object.id, 'BackendApi', object.backend_apis.pluck(:id))
       end, class_name: 'Metric'
+
+      def api_backend
+        backend_api_proxy.backend_api&.api_backend
+      end
+
+      def api_backend=(backend)
+        return unless backend_api_proxy.backend_api
+
+        backend_api_proxy.backend_api.api_backend = backend
+      end
     end
 
     class BackendApiProxy
@@ -28,22 +37,26 @@ module BackendApiLogic
       end
 
       def backend_api_config
-        @backend_api_config ||= backend_api_configs.first ||
-                                backend_api_configs.build(path: '/', backend_api: backend_api)
+        @backend_api_config ||= backend_api_configs.first
       end
 
       def backend_api
-        @backend_api ||= backend_api_configs.first&.backend_api || account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
+        @backend_api ||= backend_api_configs.first&.backend_api
+      end
+
+      def build_default_backend_api
+        account.backend_apis.build(system_name: service_system_name, name: "#{service_name} Backend", description: "Backend of #{service_name}")
       end
 
       def update!(attrs = {})
         BackendApi.transaction do
-          backend_api.private_endpoint = attrs[:private_endpoint] if attrs.key?(:private_endpoint)
-          backend_api.save!
+          api = backend_api || build_default_backend_api
+          api.private_endpoint = attrs[:private_endpoint] if attrs.key?(:private_endpoint)
+          api.save!
 
-          backend_api_config.path = attrs[:path] if attrs.key?(:path)
-          backend_api_config.backend_api = backend_api
-          backend_api_config.save!
+          api_config = backend_api_config || backend_api_configs.build(path: '/', backend_api: api)
+          api_config.path = attrs[:path] if attrs.key?(:path)
+          api_config.save!
         end
       end
 
