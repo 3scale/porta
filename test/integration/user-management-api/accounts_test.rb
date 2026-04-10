@@ -82,6 +82,97 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
         assert_response :success
       end
+
+      test '#find returns 304 when account has not been modified' do
+        buyer_user = @buyer.users.last!
+
+        # First request - get the account and capture headers
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id })
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Second request with If-None-Match and If-Modified-Since headers
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        assert_response :not_modified
+      end
+
+      test '#find returns 200 (not 304) when account has been modified' do
+        buyer_user = @buyer.users.last!
+
+        # First request - get the account and capture headers
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id })
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        assert 'approved', @buyer.state
+
+        # Bump updated_at manually, because otherwise it could be the same as last-modified timestamp
+        @buyer.update(state: 'suspended', updated_at: @buyer.updated_at + 1.second)
+
+        # Second request with old ETag and Last-Modified headers
+        # Should return 200 with new content, NOT 304
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get find_admin_api_accounts_path(format: :json), params: params.merge({ user_id: buyer_user.id }), headers: headers
+        assert_response :success, 'Should return 200 because account was modified'
+
+        assert_equal 'suspended', response.parsed_body["account"]["state"]
+      end
+
+      test '#index returns 304 when accounts have not been modified' do
+        get admin_api_accounts_path(format: :json), params: params
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Second request with If-None-Match and If-Modified-Since headers
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get admin_api_accounts_path(format: :json), params: params, headers: headers
+        assert_response :not_modified
+      end
+
+      test '#index returns 200 (not 304) when accounts have been modified' do
+        get admin_api_accounts_path(format: :json), params: params
+        assert_response :success
+        etag = response.header['ETag']
+        last_modified = response.header['Last-Modified']
+
+        assert_not_nil etag, 'ETag header should be present'
+        assert_not_nil last_modified, 'Last-Modified header should be present'
+
+        # Bump updated_at manually, because otherwise it could be the same as last-modified timestamp
+        @buyer.update(org_name: 'Modified Organization', updated_at: @buyer.updated_at + 1.second)
+
+        # Second request with old ETag and Last-Modified headers
+        # Should return 200 with new content, NOT 304
+        headers = {
+          'HTTP_IF_NONE_MATCH' => etag,
+          'HTTP_IF_MODIFIED_SINCE' => last_modified
+        }
+        get admin_api_accounts_path(format: :json), params: params, headers: headers
+        assert_response :success
+        assert_not_equal etag, response.header['ETag'], 'ETag should be different after modification'
+      end
     end
 
     class MemberUserTest < AccessTokenTest

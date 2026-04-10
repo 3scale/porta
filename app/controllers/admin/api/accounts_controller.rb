@@ -6,7 +6,10 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   # Account List
   # GET /admin/api/accounts.xml
   def index
-    accounts = buyer_accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) # :issuer is polymorphic
+    accounts = buyer_accounts
+
+    # Only eager load for XML format which uses Account#to_xml that accesses these associations
+    accounts = accounts.includes(:users, :settings, :payment_detail, :country, :annotations, bought_plans: [:original]) if request.format.xml?
 
     if state = params[:state].presence
       accounts = accounts.where(:state => state.to_s)
@@ -116,7 +119,9 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def preload_to_present(accounts)
-    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, {bought_plans: %i[original]}]).call
+    # Only preload for XML format which uses Account#to_xml that accesses these associations
+    ActiveRecord::Associations::Preloader.new(records: Array(accounts), associations: [:annotations, bought_plans: [:original]]).call if request.format.xml?
+
     accounts
   end
 
