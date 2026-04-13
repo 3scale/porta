@@ -644,7 +644,7 @@ GEM
     public_suffix (7.0.2)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.20)
+    rack (2.2.23)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-no_animations (1.0.3)
