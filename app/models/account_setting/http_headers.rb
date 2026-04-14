@@ -8,4 +8,13 @@ class AccountSetting::HttpHeaders < AccountSetting
               message: 'RFC 7230 allows only printable ASCII header values',
               allow_blank: true
             }
+
+  after_commit :refresh_cache
+
+  private
+
+  def refresh_cache
+    cached_value = destroyed? ? default_value : value
+    AccountSettings::CachedRetrievalService.call(account: account, setting_name: setting_name, value: cached_value)
+  end
 end

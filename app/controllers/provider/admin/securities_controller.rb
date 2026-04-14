@@ -4,8 +4,10 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
   activate_menu! :account, :integrate, :security
 
+  ACCOUNT_SETTING_TYPES = %w[AccountSetting::PermissionsPolicyHeaderAdmin].freeze
+
   before_action :find_settings
-  before_action :find_permissions_policy_setting
+  before_action :find_account_settings
 
   def edit; end
 
@@ -13,9 +15,9 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
     # TODO: Once Settings is fully migrated to AccountSettings, handle all settings uniformly
     # instead of separating legacy Settings model updates from AccountSettings updates
     settings_updated = @settings.update(settings_params)
-    policy_updated = update_permissions_policy_setting
+    account_settings_updated = update_account_settings
 
-    if settings_updated && policy_updated
+    if settings_updated && account_settings_updated
       redirect_to edit_provider_admin_security_url, success: t('.success')
     else
       flash.now[:danger] = t('.error')
@@ -33,17 +35,22 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
     @settings = current_account.settings
   end
 
-  def find_permissions_policy_setting
-    @permissions_policy_setting = current_account.account_settings.find_or_initialize_by(
-      type: 'AccountSetting::PermissionsPolicyHeaderAdmin'
-    )
+  def find_account_settings
+    @account_settings = ACCOUNT_SETTING_TYPES.map do |type|
+      current_account.account_settings.find_or_initialize_by(type: type)
+    end
   end
 
-  def update_permissions_policy_setting
-    value = params.dig(:settings, @permissions_policy_setting.setting_name)
-    return true if value.nil?
+  def update_account_settings
+    @account_settings.all? do |setting|
+      value = params.dig(:settings, setting.setting_name)
 
-    @permissions_policy_setting.value = value
-    @permissions_policy_setting.save
+      if value.nil?
+        setting.persisted? ? setting.destroy : true
+      else
+        setting.value = value
+        setting.save
+      end
+    end
   end
 end

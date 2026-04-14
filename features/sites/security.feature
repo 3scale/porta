@@ -13,6 +13,7 @@ Feature: Developer portal security settings
 
   Scenario: Update developer portal Permissions-Policy header
     When I go to the developer portal security settings page
+    And I check "override_permissions_policy_header_developer"
     And I fill in "Permissions-Policy Header" with "camera=(), fullscreen=(self)"
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
@@ -26,6 +27,14 @@ Feature: Developer portal security settings
     Then I should see "Security settings updated"
     And the developer portal should not have Permissions-Policy header
 
+  Scenario: Uncheck override deletes existing Permissions-Policy setting
+    Given the provider has developer portal Permissions-Policy "camera=()"
+    When I go to the developer portal security settings page
+    And I uncheck "override_permissions_policy_header_developer"
+    And I press "Update Security Settings"
+    Then I should see "Security settings updated"
+    And the developer portal should not have Permissions-Policy header
+
   Scenario: View permissive default hint
     When I go to the developer portal security settings page
-    Then I should see "none (permissive)"
+    Then I should see "Default: none"

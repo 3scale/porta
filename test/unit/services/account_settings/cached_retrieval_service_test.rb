@@ -50,26 +50,22 @@ class AccountSettings::CachedRetrievalServiceTest < ActiveSupport::TestCase
     assert_equal 'camera=(), geolocation=()', Rails.cache.read(cache_key)
   end
 
-  test 'serves subsequent calls from cache' do
-    @provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
-      value: 'camera=()'
-    )
-
-    # First call populates cache
+  test 'writes provided value directly to cache' do
     AccountSettings::CachedRetrievalService.call(
-      account: @provider, setting_name: :permissions_policy_header_admin
+      account: @provider, setting_name: :permissions_policy_header_admin, value: 'geolocation=()'
     )
 
-    # Change the DB value behind the cache
-    @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
-            .update!(value: 'microphone=()')
+    cache_key = "account:#{@provider.id}:permissions_policy_header_admin"
+    assert_equal 'geolocation=()', Rails.cache.read(cache_key)
+  end
 
-    # Second call should return cached (stale) value
-    result = AccountSettings::CachedRetrievalService.call(
-      account: @provider, setting_name: :permissions_policy_header_admin
+  test 'writes nil value to cache when explicitly provided' do
+    AccountSettings::CachedRetrievalService.call(
+      account: @provider, setting_name: :permissions_policy_header_admin, value: nil
     )
 
-    assert_equal 'camera=()', result.result
+    cache_key = "account:#{@provider.id}:permissions_policy_header_admin"
+    assert_nil Rails.cache.read(cache_key)
+    assert Rails.cache.exist?(cache_key)
   end
 end

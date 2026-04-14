@@ -59,6 +59,30 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     assert_equal :captcha, @provider.settings.admin_bot_protection_level
   end
 
+  test 'omitting header field deletes existing setting' do
+    @provider.account_settings.create!(
+      type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
+      value: 'camera=()'
+    )
+
+    # Submit without permissions_policy_header_admin param (checkbox unchecked)
+    put provider_admin_security_path, params: {
+      settings: { admin_bot_protection_level: 'none' }
+    }
+
+    assert_redirected_to edit_provider_admin_security_path
+    assert_nil @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
+  end
+
+  test 'omitting header field when no setting exists does not break' do
+    put provider_admin_security_path, params: {
+      settings: { admin_bot_protection_level: 'none' }
+    }
+
+    assert_redirected_to edit_provider_admin_security_path
+    assert_nil @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
+  end
+
   test 'setting header to space results in header being present in response' do
     policy_value = ' '
 

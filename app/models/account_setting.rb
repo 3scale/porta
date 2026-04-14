@@ -21,8 +21,12 @@ class AccountSetting < ApplicationRecord
     sti_name.underscore
   end
 
+  def self.display_name
+    setting_name.titleize
+  end
+
   # Instance methods that delegate to class methods
-  delegate :setting_name, :default_value, to: :class
+  delegate :setting_name, :default_value, :display_name, to: :class
 
   # Look up a setting class by its snake_case name
   # Dynamically constantizes the setting name under AccountSetting namespace
@@ -33,4 +37,5 @@ class AccountSetting < ApplicationRecord
   rescue NameError
     nil
   end
+
 end

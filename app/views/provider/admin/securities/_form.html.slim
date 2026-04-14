@@ -7,11 +7,17 @@
             collection: ThreeScale::BotProtection::LEVELS,
             input_html: { disabled: !Recaptcha.captcha_configured? }
 
-  = form.inputs 'Permissions-Policy Header' do
-    = form.input @permissions_policy_setting.setting_name.to_sym,
-            label: 'Permissions-Policy Header',
-            hint: "Format: directive1=(), directive2=(self). Default: #{@permissions_policy_setting.default_value.presence || 'none (permissive)'}",
-            input_html: { placeholder: @permissions_policy_setting.default_value, value: @permissions_policy_setting.value }
+  - @account_settings.each do |account_setting|
+    - setting_name = account_setting.setting_name
+    = form.inputs account_setting.display_name do
+      li
+        label
+          input type="checkbox" id="override_#{setting_name}" data-toggle-target=setting_name checked=account_setting.persisted?
+          |  Override default
+      = form.input setting_name.to_sym,
+              label: account_setting.display_name,
+              hint: "Default: #{account_setting.default_value.presence || 'none'}",
+              input_html: { id: setting_name, placeholder: account_setting.default_value, value: account_setting.value, disabled: account_setting.new_record? }
 
   = form.actions do
     = form.commit_button 'Update Security Settings'

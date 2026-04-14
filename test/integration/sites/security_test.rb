@@ -46,6 +46,29 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     assert_equal policy_value, setting.value
   end
 
+  test 'omitting header field deletes existing setting' do
+    @provider.account_settings.create!(
+      type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
+      value: 'camera=()'
+    )
+
+    put admin_site_security_path, params: {
+      settings: { spam_protection_level: 'none' }
+    }
+
+    assert_redirected_to edit_admin_site_security_path
+    assert_nil @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
+  end
+
+  test 'omitting header field when no setting exists does not break' do
+    put admin_site_security_path, params: {
+      settings: { spam_protection_level: 'none' }
+    }
+
+    assert_redirected_to edit_admin_site_security_path
+    assert_nil @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
+  end
+
   test 'updates spam protection level setting' do
     put admin_site_security_path, params: {
       settings: {
