@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sites::SecuritiesController < Sites::BaseController
   activate_menu :audience, :cms, :security
 
