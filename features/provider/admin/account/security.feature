@@ -17,23 +17,23 @@ Feature: Provider admin security settings
     And I fill in "Permissions-Policy Header" with "camera=(), microphone=(), geolocation=()"
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
-    And the admin portal should have Permissions-Policy header "camera=(), microphone=(), geolocation=()"
+    And the admin portal should have configured Permissions-Policy header "camera=(), microphone=(), geolocation=()"
 
   Scenario: Clear admin portal Permissions-Policy header
-    Given the provider has admin portal Permissions-Policy "camera=(), microphone=()"
+    Given the provider has configured admin portal Permissions-Policy "camera=(), microphone=()"
     When I go to the provider security settings page
     And I fill in "Permissions-Policy Header" with ""
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
-    And the admin portal should not have Permissions-Policy header
+    And the admin portal should not have configured Permissions-Policy header
 
   Scenario: Uncheck override deletes existing Permissions-Policy setting
-    Given the provider has admin portal Permissions-Policy "camera=(), microphone=()"
+    Given the provider has configured admin portal Permissions-Policy "camera=(), microphone=()"
     When I go to the provider security settings page
     And I uncheck "override_permissions_policy_header_admin"
     And I press "Update Security Settings"
     Then I should see "Security settings updated"
-    And the admin portal should not have Permissions-Policy header
+    And the admin portal should not have configured Permissions-Policy header
 
   Scenario: View default value hint
     When I go to the provider security settings page
