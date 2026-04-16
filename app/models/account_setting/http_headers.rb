@@ -15,6 +15,6 @@ class AccountSetting::HttpHeaders < AccountSetting
 
   def refresh_cache
     cached_value = destroyed? ? default_value : value
-    AccountSettings::CachedRetrievalService.call(account: account, setting_name: setting_name, value: cached_value)
+    AccountSettings::SettingCache.set(account: account, setting_name: setting_name, value: cached_value)
   end
 end

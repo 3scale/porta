@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class AccountSettings::CachedRetrievalServiceTest < ActiveSupport::TestCase
+class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
 
   setup do
     @original_cache = Rails.cache
@@ -15,34 +15,34 @@ class AccountSettings::CachedRetrievalServiceTest < ActiveSupport::TestCase
     Rails.cache = @original_cache
   end
 
-  test 'returns setting value when it exists' do
+  test 'fetch returns setting value when it exists' do
     @provider.account_settings.create!(
       type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
       value: 'camera=(), microphone=()'
     )
 
-    result = AccountSettings::CachedRetrievalService.call(
+    result = AccountSettings::SettingCache.fetch(
       account: @provider, setting_name: :permissions_policy_header_admin
     )
 
-    assert_equal 'camera=(), microphone=()', result.result
+    assert_equal 'camera=(), microphone=()', result
   end
 
-  test 'returns default value when no setting exists' do
-    result = AccountSettings::CachedRetrievalService.call(
+  test 'fetch returns default value when no setting exists' do
+    result = AccountSettings::SettingCache.fetch(
       account: @provider, setting_name: :permissions_policy_header_admin
     )
 
-    assert_equal AccountSetting::PermissionsPolicyHeaderAdmin.default_value, result.result
+    assert_equal AccountSetting::PermissionsPolicyHeaderAdmin.default_value, result
   end
 
-  test 'caches the value after first call' do
+  test 'fetch caches the value after first call' do
     @provider.account_settings.create!(
       type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
       value: 'camera=(), geolocation=()'
     )
 
-    AccountSettings::CachedRetrievalService.call(
+    AccountSettings::SettingCache.fetch(
       account: @provider, setting_name: :permissions_policy_header_developer
     )
 
@@ -50,8 +50,8 @@ class AccountSettings::CachedRetrievalServiceTest < ActiveSupport::TestCase
     assert_equal 'camera=(), geolocation=()', Rails.cache.read(cache_key)
   end
 
-  test 'writes provided value directly to cache' do
-    AccountSettings::CachedRetrievalService.call(
+  test 'set writes provided value directly to cache' do
+    AccountSettings::SettingCache.set(
       account: @provider, setting_name: :permissions_policy_header_admin, value: 'geolocation=()'
     )
 
@@ -59,8 +59,8 @@ class AccountSettings::CachedRetrievalServiceTest < ActiveSupport::TestCase
     assert_equal 'geolocation=()', Rails.cache.read(cache_key)
   end
 
-  test 'writes nil value to cache when explicitly provided' do
-    AccountSettings::CachedRetrievalService.call(
+  test 'set writes nil value to cache when explicitly provided' do
+    AccountSettings::SettingCache.set(
       account: @provider, setting_name: :permissions_policy_header_admin, value: nil
     )
 

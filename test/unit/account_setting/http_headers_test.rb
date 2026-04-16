@@ -62,13 +62,13 @@ class AccountSetting::HttpHeadersTest < ActiveSupport::TestCase
     account = FactoryBot.create(:simple_provider)
     service_args = { account: account, setting_name: 'permissions_policy_header_admin' }
 
-    AccountSettings::CachedRetrievalService.expects(:call).with(**service_args, value: 'camera=()')
+    AccountSettings::SettingCache.expects(:set).with(**service_args, value: 'camera=()')
     setting = AccountSetting::PermissionsPolicyHeaderAdmin.create!(account: account, value: 'camera=()')
 
-    AccountSettings::CachedRetrievalService.expects(:call).with(**service_args, value: 'microphone=()')
+    AccountSettings::SettingCache.expects(:set).with(**service_args, value: 'microphone=()')
     setting.update!(value: 'microphone=()')
 
-    AccountSettings::CachedRetrievalService.expects(:call).with(**service_args, value: AccountSetting::PermissionsPolicyHeaderAdmin.default_value)
+    AccountSettings::SettingCache.expects(:set).with(**service_args, value: AccountSetting::PermissionsPolicyHeaderAdmin.default_value)
     setting.destroy!
   end
 
