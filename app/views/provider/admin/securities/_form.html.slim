@@ -21,7 +21,7 @@
       div class="pf-c-form__section-title" aria-hidden="true" = account_setting.display_name
       label
         input type="checkbox" id="override_#{setting_name}" data-toggle-target=setting_name checked=account_setting.persisted?
-        |  Override default
+        |  Use custom value instead of server default
       = form.input setting_name.to_sym,
               as: :patternfly_input,
               label: account_setting.display_name,
