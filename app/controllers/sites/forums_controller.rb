@@ -8,7 +8,7 @@ class Sites::ForumsController < Sites::BaseController
   end
 
   def update
-    if @settings.update(params[:settings])
+    if @settings.update(settings_params)
       redirect_to edit_admin_site_forum_url, success: t('.success')
     else
       flash.now[:danger] = t('.error')
@@ -28,5 +28,9 @@ class Sites::ForumsController < Sites::BaseController
 
   def active_settings_menu
     activate_menu :audience, :cms, :forum_settings
+  end
+  
+  def settings_params
+    params.require(:settings).permit(:forum_enabled, :forum_public, :anonymous_posts_enabled)
   end
 end
