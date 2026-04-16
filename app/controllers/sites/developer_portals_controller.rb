@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sites::DeveloperPortalsController < Sites::BaseController
   activate_menu :audience, :cms
 
@@ -17,7 +19,7 @@ class Sites::DeveloperPortalsController < Sites::BaseController
   private
 
   def settings_params
-    params[:settings]
+    params.require(:settings).permit(:cms_escape_draft_html, :cms_escape_published_html)
   end
 
   def settings
