@@ -1,6 +1,5 @@
 = semantic_form_for settings, url: url, builder: Fields::PatternflyFormBuilder, html: { id: 'security-settings', class: 'pf-c-form pf-m-limit-width' } do |form|
-  section class="pf-c-form__section" role="group"
-    div class="pf-c-form__section-title" aria-hidden="true" = selector_label
+  = form.inputs selector_label do
     div class="pf-c-form__group" role="radiogroup" aria-labelledby="bot-protection-radio-group"
       div class="pf-c-form__group-label" id="bot-protection-radio-group"
         p class="pf-c-form__helper-text"
@@ -17,8 +16,7 @@
 
   - @account_settings.each do |account_setting|
     - setting_name = account_setting.setting_name
-    section class="pf-c-form__section" role="group"
-      div class="pf-c-form__section-title" aria-hidden="true" = account_setting.display_name
+    = form.inputs account_setting.display_name do
       label
         input type="checkbox" id="override_#{setting_name}" data-toggle-target=setting_name checked=account_setting.persisted?
         |  Use custom value instead of server default
