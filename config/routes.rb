@@ -792,9 +792,6 @@ without fake Core server your after commit callbacks will crash and you might ge
             get :usage_rules
             patch :support_email
           end
-          resource :support, :only => [:edit, :update]
-          resource :content, :only => [:edit, :update]
-          resource :terms, :only => [:edit, :update]
           resources :metrics, :except => [:show] do
             resources :children, :controller => 'metrics', :only => [:new, :create]
           end
@@ -1020,8 +1017,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resource :applications, only: [:edit, :update]
-        resource :documentation, only: [:edit, :update]
-
 
         resource :developer_portal, only: [:edit, :update]
 

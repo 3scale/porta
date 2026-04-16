@@ -579,9 +579,6 @@ World(Module.new do
     when 'the settings page'
      admin_apiconfig_root_path
 
-    when 'the documentation settings page'
-      edit_admin_site_documentation_path
-
     when 'the emails settings page'
       edit_admin_site_emails_path
 
