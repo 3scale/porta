@@ -1,0 +1,30 @@
+= semantic_form_for settings, url: url, builder: Fields::PatternflyFormBuilder, html: { id: 'security-settings', class: 'pf-c-form pf-m-limit-width' } do |form|
+  = form.inputs selector_label do
+    div class="pf-c-form__group" role="radiogroup" aria-labelledby="bot-protection-radio-group"
+      div class="pf-c-form__group-label" id="bot-protection-radio-group"
+        p class="pf-c-form__helper-text"
+          = t("provider.admin.securities.edit.captcha_hint_#{Recaptcha.captcha_configured?.to_s}")
+      div class="pf-c-form__group-control pf-m-stack"
+        - disabled = !Recaptcha.captcha_configured?
+        - ThreeScale::BotProtection::LEVELS.each do |label, value|
+          - id = "settings_#{field}_#{value}"
+          - checked = settings[field].to_sym == value
+          div class="pf-c-radio"
+            input class="pf-c-radio__input" name="settings[#{field}]" id=id type="radio" value=value checked=checked disabled=disabled
+            label class="pf-c-radio__label #{'pf-m-disabled' if disabled}" for=id
+              = label
+
+  - @account_settings.each do |account_setting|
+    - setting_name = account_setting.setting_name
+    = form.inputs account_setting.display_name do
+      label
+        input type="checkbox" id="override_#{setting_name}" data-toggle-target=setting_name checked=account_setting.persisted?
+        |  Use custom value instead of server default
+      = form.input setting_name.to_sym,
+              as: :patternfly_input,
+              label: account_setting.display_name,
+              hint: "Default: #{account_setting.default_value.presence || 'none'}",
+              input_html: { id: setting_name, placeholder: account_setting.default_value, value: account_setting.value, disabled: account_setting.new_record? }
+
+  = form.actions do
+    = form.commit_button 'Update Security Settings'
