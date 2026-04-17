@@ -78,6 +78,8 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   # Providing a non-existent section ID, or the one that belongs to another provider results in a Not Found error
   def validate_section_ids
     section_ids = group_params[:section_ids]
+    return if section_ids.blank?
+
     section_ids.reject!(&:empty?)
     exising_section_ids = current_account.section_ids.map(&:to_s)
 
