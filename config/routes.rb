@@ -792,9 +792,6 @@ without fake Core server your after commit callbacks will crash and you might ge
             get :usage_rules
             patch :support_email
           end
-          resource :support, :only => [:edit, :update]
-          resource :content, :only => [:edit, :update]
-          resource :terms, :only => [:edit, :update]
           resources :metrics, :except => [:show] do
             resources :children, :controller => 'metrics', :only => [:new, :create]
           end
@@ -992,24 +989,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
       end # end namespace :finance
 
-      scope :module => 'forums' do
-        scope :module => 'admin' do
-          resource :forum do
-            resources :categories
-            resources :posts, :only => [:index, :edit, :update, :destroy]
-            resources :topics, :except => :index do
-              collection do
-                get :my
-              end
-
-              resources :posts, :only => :create
-            end
-
-            resources :subscriptions, :controller => 'user_topics', :only => [:index, :create, :destroy]
-          end
-        end
-      end # end scope :forums
-
       namespace :site, :module => 'sites' do # the controller is in the sites module, not site *sigh*
 
         resource :usage_rules, only: [:edit, :update]
@@ -1020,8 +999,6 @@ without fake Core server your after commit callbacks will crash and you might ge
         end
 
         resource :applications, only: [:edit, :update]
-        resource :documentation, only: [:edit, :update]
-
 
         resource :developer_portal, only: [:edit, :update]
 
@@ -1066,23 +1043,6 @@ without fake Core server your after commit callbacks will crash and you might ge
   end
 
   constraints BuyerDomainConstraint do
-
-    scope :module => 'forums' do
-      scope :module => 'public' do
-        resource :forum, :only => "show" do
-          resources :categories, only: [:index, :show]
-          resources :posts, :only => [:index, :edit, :update, :destroy]
-          resources :topics, :except => :index do
-            collection do
-              get :my
-            end
-            resources :posts, :only => [:create]
-          end
-          resources :subscriptions, :controller => 'user_topics', :only => [:index, :create, :destroy]
-        end
-      end
-    end
-
     mount DeveloperPortal::Engine, at: "/", as: :developer_portal
   end
 
