@@ -105,7 +105,7 @@
     "sass-loader": "13.3.3",
     "showdown": "2.1.0",
     "swagger-client": "^3.36.1",
-    "swagger-ui": "5.27.1",
+    "swagger-ui": "5.32.4",
     "validate.js": "^0.13.1",
     "virtual-dom": "^2.1.1",
     "webpack-assets-manifest": "5.2.1",
