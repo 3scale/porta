@@ -32,6 +32,17 @@ class Provider::Admin::CMS::GroupsControllerTest < ActionDispatch::IntegrationTe
     assert_equal [another_section.id], group.sections.pluck(:id)
   end
 
+  test '#update when no sections selected' do
+    group = @provider.provided_groups.create(name: 'Group')
+    group.sections << @section
+    assert_equal ['Group'], @provider.provided_groups.pluck(:name)
+    assert_equal [@section.id], group.sections.pluck(:id)
+
+    put provider_admin_cms_group_path(group), params: { cms_group: { name: 'Group', section_ids: [''] } }
+
+    assert_empty group.sections.to_a
+  end
+
   test '#update allowed sections with invalid IDs' do
     group = @provider.provided_groups.create(name: 'Group')
     group.sections << @section
