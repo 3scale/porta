@@ -47,7 +47,6 @@ Feature: Provider settings authorization
       | the fields definitions index page                |
       | the edit site settings page                      |
       | the finance settings page                        |
-      | the forum settings page                          |
       | the emails settings page                         |
       | the email templates page                         |
       | the site settings page                           |
