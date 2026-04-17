@@ -1,14 +1,30 @@
-name: 'Close stale issues and PRs'
+name: 'Test Print Action'
+
 on:
-  schedule:
-    - cron: '30 3 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  stale:
+  test-print:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v10
-        with:
-          stale-pr-message: 'This PR is stale because it has not received activity for more than 30 days. Remove stale label or comment or this will be closed in 15 days.'
-          days-before-stale: 30
-          days-before-close: 15
+      - name: Print test message
+        run: |
+          echo "========================================="
+          echo "This is a test GitHub Action!"
+          echo "========================================="
+          echo "Current date and time: $(date)"
+          echo "Running on: $(uname -a)"
+          echo "GitHub CLI version: $(gh --version)"
+          echo "GitHub Actor: ${{ github.actor }}"
+          echo "GitHub Repository: ${{ github.repository }}"
+          echo "GitHub Event: ${{ github.event_name }}"
+          echo "GitHub Run ID: ${{ github.run_id }}"
+          echo "GitHub Run Number: ${{ github.run_number }}"
+          echo "GitHub Run Attempt: ${{ github.run_attempt }}"
+          echo "========================================="
+          echo "Test completed successfully!"
+
+# Made with Bob
