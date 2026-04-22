@@ -48,9 +48,8 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
 
   test 'update with valid params' do
     @settings.update(strong_passwords_enabled: true, public_search: true)
-    %i[useraccountarea_enabled signups_enabled
-       account_plans_ui_visible service_plans_ui_visible
-       strong_passwords_enabled public_search].each do |setting|
+    %i[useraccountarea_enabled signups_enabled public_search
+       account_plans_ui_visible service_plans_ui_visible].each do |setting|
       assert @settings.send(setting), "#{setting} setting is not true as expected"
     end
 
@@ -61,7 +60,6 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
       settings: {
         useraccountarea_enabled: '0',
         signups_enabled: '0',
-        strong_passwords_enabled: '0',
         public_search: '0',
         account_plans_ui_visible: '0',
         service_plans_ui_visible: '0',
@@ -77,7 +75,7 @@ class Sites::UsageRulesControllerTest < ActionController::TestCase
 
     %i[useraccountarea_enabled signups_enabled
        account_plans_ui_visible service_plans_ui_visible
-       strong_passwords_enabled public_search].each do |setting|
+       hide_service public_search].each do |setting|
       assert_not @settings.send(setting), "#{setting} setting is not false as expected"
     end
     assert_equal "credit_card", @settings.change_account_plan_permission
