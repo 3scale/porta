@@ -18,6 +18,32 @@ class PoliciesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'updates policies config when policies_config is a JSON string' do
+    config = [
+      { name: 'apicast', version: 'builtin', configuration: {}, enabled: true }
+    ]
+
+    put admin_api_service_proxy_policies_path(@service, access_token: @access_token, format: :json), params: {
+      proxy: { policies_config: config.to_json }
+    }, as: :json
+
+    assert_response :success
+    assert_equal config.map(&:stringify_keys), @service.reload.proxy.policies_config.as_json
+  end
+
+  test 'updates policies config when policies_config is not a JSON string' do
+    config = [
+      { name: 'apicast', version: 'builtin', configuration: {}, enabled: true }
+    ]
+
+    put admin_api_service_proxy_policies_path(@service, access_token: @access_token, format: :json), params: {
+      proxy: { policies_config: config }
+    }, as: :json
+
+    assert_response :success
+    assert_equal config.map(&:stringify_keys), @service.reload.proxy.policies_config.as_json
+  end
+
   test 'prints chain level errors' do
     valid_config = { name: 'apicast', configuration: {}, version: 'builtin', enabled: true, removable: false }
 
