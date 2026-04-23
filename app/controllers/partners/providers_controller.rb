@@ -1,27 +1,20 @@
+# frozen_string_literal: true
+
 class Partners::ProvidersController < Partners::BaseController
 
-  before_action :find_account, only: [:destroy, :update]
+  before_action :find_account, only: %i[destroy update]
 
   def create
-    partner_system_name = partner.system_name
-
-    signup_result = Signup::ProviderAccountManager.new(Account.master).create(signup_params) do |result|
-      account = result.account
-      account.signup_mode!
-      account.subdomain = "#{permitted_params[:subdomain]}-#{partner_system_name}"
-      account.generate_domains!
-      account.partner = partner
-      account.extra_fields['partner'] = partner_system_name
-      account.settings.monthly_charging_enabled = false
+    account_manager = Signup::ProviderAccountManager.new(Account.master)
+    signup_result = account_manager.create(**signup_params) do |result|
+      assign_account_attributes(result)
     end
     @account = signup_result.account
     @user = signup_result.user
 
     if signup_result.persisted?
       signup_result.user_activate!
-      tracking = ThreeScale::Analytics.user_tracking(@user)
-      tracking.identify({})
-      tracking.track('Signup', {})
+      track_user
       render json: {id: @account.id, provider_key: @account.api_key, end_point: @account.external_admin_domain, success: true}
     else
       render json: {errors: {user: @user.errors, account: @account.errors}, success: false}, status: :unprocessable_entity
@@ -41,7 +34,9 @@ class Partners::ProvidersController < Partners::BaseController
   private
 
   def signup_params
-    Signup::SignupParams.new(plans: [selected_plan], user_attributes: user_params, account_attributes: account_params, validate_fields: true)
+    {
+      plans: [selected_plan], user_params: user_params, account_params: account_params, validate_fields: true
+    }
   end
 
   def account_params
@@ -85,5 +80,22 @@ class Partners::ProvidersController < Partners::BaseController
 
   def permitted_params
     params.permit(%i[application_plan open_id last_name first_name email password id subdomain org_name])
+  end
+
+  def assign_account_attributes(result)
+    partner_system_name = partner.system_name
+    account = result.account
+    account.signup_mode!
+    account.subdomain = "#{permitted_params[:subdomain]}-#{partner_system_name}"
+    account.generate_domains!
+    account.partner = partner
+    account.extra_fields['partner'] = partner_system_name
+    account.settings.monthly_charging_enabled = false
+  end
+
+  def track_user
+    tracking = ThreeScale::Analytics.user_tracking(@user)
+    tracking.identify({})
+    tracking.track('Signup', {})
   end
 end

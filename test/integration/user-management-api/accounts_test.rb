@@ -62,12 +62,31 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       end
 
       test 'update billing_address' do
+        field_defined(@provider, { target: "Account", name: "billing_address", read_only: true })
+
         put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain' })
         assert_response :unprocessable_entity
 
-        billing_address = { name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain' }.transform_keys { |k| "billing_address[#{k}]" }
-        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address).merge({ org_name: 'alaska' })
+        billing_address = { name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain' }
+
+        billing_address_params_nested = billing_address.transform_keys { |k| "billing_address[#{k}]" }
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address_params_nested)
         assert_response :success
+
+        @buyer.reload
+        assert_equal 'Barcelona', @buyer.billing_address_city
+        assert_equal 'Calle Napoles 187', @buyer.billing_address_address1
+
+        # reset to empty to test with another format
+        @buyer.update(billing_address_name: '', billing_address_address1: '', billing_address_city: '', billing_address_country: '')
+
+        billing_address_params_strings = billing_address.transform_keys { |k| "billing_address_#{k}" }
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address_params_strings)
+        assert_response :success
+
+        @buyer.reload
+        assert_equal 'Barcelona', @buyer.billing_address_city
+        assert_equal 'Calle Napoles 187', @buyer.billing_address_address1
       end
 
       test '#update' do
@@ -515,6 +534,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     test 'update with extra fields' do
       field_defined(@provider, { target: "Account", name: "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "vat_rate" })
 
       put admin_api_account_path(@buyer, format: :xml), params: params.merge({ some_extra_field: "stuff", vat_rate: 33 })
 
@@ -523,7 +543,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
       @buyer.reload
       assert_equal "stuff", @buyer.extra_fields["some_extra_field"]
-      assert_equal 33, @buyer.vat_rate
+      assert_equal 33.0, @buyer.vat_rate.to_f
     end
 
     test 'destroy' do

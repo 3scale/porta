@@ -12,10 +12,7 @@ class Buyers::UsersController < Buyers::BaseController
   end
 
   def update
-    # TODO: I think this controller is used only on provider side
-    user.validate_fields! if current_account.buyer?
-
-    user.attributes = user_params
+    user.assign_attributes(permitted_user_params)
     user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
 
     if user.save
@@ -80,10 +77,13 @@ class Buyers::UsersController < Buyers::BaseController
     @user = @account.users.find(params[:id]).decorate
   end
 
-  DEFAULT_PARAMS = %i[username email password password_confirmation role].freeze
-
   def user_params
-    @user_params ||= params.require(:user).permit(*DEFAULT_PARAMS, extra_fields: [*user.defined_extra_fields_names])
+    @user_params ||= params.require(:user)
+  end
+
+  def permitted_user_params
+    user_params.permit(*user.defined_builtin_fields_names, :password, :password_confirmation,
+                       extra_fields: user.defined_extra_fields_names)
   end
 
   def redirect_back_or_show_detail(**opts)

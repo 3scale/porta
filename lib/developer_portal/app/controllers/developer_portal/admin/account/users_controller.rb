@@ -57,6 +57,6 @@ class DeveloperPortal::Admin::Account::UsersController < ::DeveloperPortal::Base
   end
 
   def user_params
-    params.require(:user).permit(*@user.defined_fields.map(&:name), *@user.special_fields)
+    params.require(:user).permit(*@user.defined_fields_names, :password, :password_confirmation)
   end
 end

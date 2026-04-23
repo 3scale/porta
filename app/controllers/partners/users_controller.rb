@@ -20,13 +20,7 @@ class Partners::UsersController < Partners::BaseController
   end
 
   def create
-    @user = @account.users.build
-    @user.email = params[:email]
-    @user.password = params[:password].presence
-    @user.first_name = params[:first_name].presence
-    @user.last_name = params[:last_name].presence
-    @user.open_id = params[:open_id].presence
-    @user.username = params[:username]
+    @user = @account.users.build(user_params)
     @user.signup_type = :partner
     @user.role = :admin
     @user.activate!
@@ -41,5 +35,10 @@ class Partners::UsersController < Partners::BaseController
 
   def find_account
     @account = @partner.providers.find(params[:provider_id])
+  end
+
+  def user_params
+    allowed_attrs = %i[email password first_name last_name open_id username]
+    params.permit(*allowed_attrs)
   end
 end

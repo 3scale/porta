@@ -3,11 +3,15 @@
 require 'test_helper'
 
 class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::TestCase
+  include FieldsDefinitionsHelpers
 
   def setup
     @provider = FactoryBot.create(:provider_account)
+    @master = @provider.provider_account
+    FieldsDefinition.create_defaults!(@master)
     host! @provider.external_admin_domain
-    login_as @provider.admins.first
+    @user = @provider.admins.first
+    login_as @user
   end
 
 
@@ -43,11 +47,69 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
     put :update, params: { user: {current_password: 'wrong_password', password: 'new_password', password_confirmation: 'new_password'} }
   end
 
+  test 'user can update permitted builtin and custom fields' do
+    field_defined(@master, { target: 'User', name: 'first_name' })
+    field_defined(@master, { target: 'User', name: 'last_name' })
+    field_defined(@master, { target: 'User', name: 'title' })
+    field_defined(@master, { target: 'User', name: 'job_role' })
+    field_defined(@master, { target: 'User', name: 'custom' })
+
+    put :update, params: { user: {
+      current_password: 'superSecret1234#',
+      username: 'newusername',
+      email: 'newemail@example.com',
+      first_name: 'NewFirstName',
+      last_name: 'NewLastName',
+      title: 'NewTitle',
+      job_role: 'NewJobRole',
+      extra_fields: { custom: 'custom value' }
+    } }
+
+    assert_redirected_to edit_provider_admin_user_personal_details_path
+    @user.reload
+    assert_equal 'newusername', @user.username
+    assert_equal 'newemail@example.com', @user.email
+    assert_equal 'NewFirstName', @user.first_name
+    assert_equal 'NewLastName', @user.last_name
+    assert_equal 'NewTitle', @user.title
+    assert_equal 'NewJobRole', @user.job_role
+    assert_equal 'custom value', @user.extra_fields['custom']
+  end
+
+  test 'user cannot update role attribute' do
+    original_role = @user.role
+
+    put :update, params: { user: {
+      current_password: 'superSecret1234#',
+      username: 'newusername',
+      role: 'member'
+    } }
+
+    assert_redirected_to edit_provider_admin_user_personal_details_path
+    @user.reload
+    assert_equal 'newusername', @user.username
+    assert_equal original_role, @user.role, 'Role should not be updated'
+  end
+
+  test 'user cannot update builtin and custom fields not defined explicitly' do
+    put :update, params: { user: {
+      current_password: 'superSecret1234#',
+      first_name: 'New Name',
+      extra_fields: { custom: 'some_value' }
+    } }
+
+    assert_redirected_to edit_provider_admin_user_personal_details_path
+    @user.reload
+    assert_nil @user.first_name, 'Undefined builtin field should not be set'
+    assert_nil @user.extra_fields['custom'], 'Undefined custom field should not be set'
+  end
+
   class SSOUserWithoutPasswordTest < ActionController::TestCase
     tests Provider::Admin::User::PersonalDetailsController
 
     def setup
       @provider = FactoryBot.create(:provider_account)
+      FieldsDefinition.create_defaults!(@provider.provider_account)
       @user = @provider.admins.first
       # Simulate an SSO user: no password and has authentication_id (makes oauth2? return true)
       @user.update_columns(password_digest: nil, authentication_id: 'sso-user-id')
@@ -89,6 +151,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
     def setup
       @provider = FactoryBot.create(:provider_account)
+      FieldsDefinition.create_defaults!(@provider.provider_account)
       @user = @provider.admins.first
       host! @provider.external_admin_domain
       login_as @user

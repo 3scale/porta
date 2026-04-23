@@ -10,7 +10,7 @@ class Buyers::GroupsController < Buyers::BaseController
   def show; end
 
   def update
-    flash[:success] = t('.success') if @account.update(params[:account])
+    flash[:success] = t('.success') if @account.update(groups_params)
 
     redirect_to action: :show, id: @account.id
   end
@@ -27,5 +27,9 @@ class Buyers::GroupsController < Buyers::BaseController
 
   def find_account
     @account = current_account.buyer_accounts.find(params[:account_id])
+  end
+
+  def groups_params
+    params.require(:account).permit(group_ids: [])
   end
 end

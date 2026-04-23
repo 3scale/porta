@@ -5,6 +5,7 @@ require 'test_helper'
 class MultitenantEnforcementTest < ActionDispatch::IntegrationTest
   setup do
     @provider = FactoryBot.create(:provider_account)
+    FieldsDefinition.create_defaults!(@provider.provider_account)
   end
 
   test "forbid retrieving objects from multiple tenants" do

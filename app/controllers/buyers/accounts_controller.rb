@@ -9,6 +9,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   before_action :set_plans, :only => %i[new create]
   before_action :find_account, except: %i[index new create]
+  before_action :init_signup_account_manager, only: %i[create]
 
   activate_menu :buyers, :accounts, :listing
 
@@ -30,10 +31,7 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def update
-    vat = account_params[:vat_rate]
-    account.vat_rate = vat if vat # vat_rate is protected attribute
-
-    if account.update(account_params.except(:vat_rate))
+    if account.update(account_params)
       redirect_to admin_buyers_account_path(account), success: t('.success')
     else
       render :edit
@@ -41,14 +39,11 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def create
-    signup_result = Signup::DeveloperAccountManager.new(current_account).create(signup_params)
+    signup_result = @account_manager.create(**signup_params)
     @buyer = signup_result.account
 
     if signup_result.persisted?
-      unless signup_result.user_active?
-        signup_result.account_approve!
-        signup_result.user_activate!
-      end
+      approve_account_user(signup_result)
       redirect_to admin_buyers_account_path(@buyer), success: t('.success')
     else
       @user = signup_result.user
@@ -84,7 +79,7 @@ class Buyers::AccountsController < Buyers::BaseController
 
   protected
 
-  attr_reader :account
+  attr_reader :account, :user
 
   def find_account
     with_deleted = %w[show resume].include?(action_name)
@@ -105,23 +100,27 @@ class Buyers::AccountsController < Buyers::BaseController
     redirect_to admin_buyers_account_path(account)
   end
 
-  def signup_params
-    Signup::SignupParams.new(plans: [], user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, validate_fields: false)
-  end
-
-  # TODO: using `permit` later
   def account_params
-    @account_params ||= params.require(:account).except(:user)
+    allowed_attrs = account.defined_builtin_fields_names - %w[billing_address country] + %w[country_id]
+    params.require(:account).permit(*allowed_attrs, extra_fields: account.defined_extra_fields_names)
   end
 
   def user_params
-    params.require(:account).fetch(:user, {})
+    allowed_attrs = user.defined_builtin_fields_names + %w[password]
+    params.require(:account).fetch(:user, {}).permit(*allowed_attrs, extra_fields: user.defined_extra_fields_names)
+  end
+
+  def signup_params
+    {
+      plans: [],
+      validate_fields: false,
+      account_params: account_params,
+      user_params: user_params.merge(signup_type: :created_by_provider)
+    }
   end
 
   def set_plans
-    unless current_account.create_buyer_possible?
-      redirect_to admin_buyers_account_plans_path, danger: t('buyers.accounts.set_plans_error')
-    end
+    redirect_to admin_buyers_account_plans_path, danger: t('buyers.accounts.set_plans_error') unless current_account.create_buyer_possible?
 
     @plans = [] # this is here only to make new_signups/form happy
   end
@@ -130,5 +129,18 @@ class Buyers::AccountsController < Buyers::BaseController
     @presenter ||= Buyers::AccountsIndexPresenter.new(provider: current_account,
                                                       user: current_user,
                                                       params: params)
+  end
+
+  def init_signup_account_manager
+    @account_manager = Signup::DeveloperAccountManager.new(current_account)
+    @account = @account_manager.account
+    @user = @account_manager.user
+  end
+
+  def approve_account_user(signup_result)
+    return if signup_result.user_active?
+
+    signup_result.account_approve!
+    signup_result.user_activate!
   end
 end

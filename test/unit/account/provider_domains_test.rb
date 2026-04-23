@@ -41,11 +41,6 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_nil account.dedicated_domain
   end
 
-  test 'domain is excluded from mass assignment ' do
-    account = Account.new(:domain => 'api.example.net')
-    assert_nil account.dedicated_domain
-  end
-
   test '#superdomain returns the domain without www striped' do
     account = Account.new
 

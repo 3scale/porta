@@ -19,6 +19,7 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
   end
 
   test 'create' do
+    FieldsDefinition.create_defaults!(provider.provider_account)
     assert_difference(provider.users.method(:count)) do
       post provider_invitee_signup_path(invitation_token: invitation.token, user: user_params)
     end
@@ -26,6 +27,25 @@ class Provider::InviteeSignupsControllerIntegrationTest < ActionDispatch::Integr
     assert_equal I18n.t('provider.invitee_signups.create.success'), flash[:success]
     assert_redirected_to provider_login_path
   end
+
+  test 'do not set unpermitted attributes' do
+    FieldsDefinition.create_defaults!(provider.provider_account)
+    invitation = FactoryBot.create(:invitation, account: provider)
+
+    assert_difference(provider.users.method(:count), +1) do
+      post provider_invitee_signup_path(invitation_token: invitation.token, user: user_params.merge(
+        role: 'superadmin'
+      ))
+    end
+
+    assert_equal I18n.t('provider.invitee_signups.create.success'), flash[:success]
+    assert_redirected_to provider_login_path
+
+    created_user = invitation.reload.user
+    assert_equal :member, created_user.role
+    assert_equal 'admin', created_user.username
+  end
+
 
   test 'get asks for upgrade' do
     provider.create_provider_constraints!(max_users: 0)
