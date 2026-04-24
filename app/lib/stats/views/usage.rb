@@ -143,6 +143,8 @@ module Stats
       end
 
       def extract_range_and_granularity(options)
+        raise InvalidParameterError, "Granularity 'eternity' is only supported for period 'eternity'" if options[:granularity].to_s == 'eternity' && options[:period].to_s != 'eternity'
+
         if options[:period]
           period = sanitize_period(options[:period])
           granularity = options[:granularity] || GRANULARITIES[period]

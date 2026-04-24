@@ -103,6 +103,18 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     end
   end
 
+  test '#usage rejects eternity granularity without eternity period' do
+    assert_raise Stats::InvalidParameterError do
+      @dummy.usage(period: 'month', granularity: :eternity, metric_name: 'foo', timezone: 'UTC')
+    end
+  end
+
+  test '#usage rejects eternity granularity when no period is given' do
+    assert_raise Stats::InvalidParameterError do
+      @dummy.usage(since: '2015-01-01', until: '2016-01-01', granularity: :eternity, metric_name: 'foo', timezone: 'UTC')
+    end
+  end
+
   test '#usage with period eternity ignores since and until parameters' do
     @dummy.expects(:usage_values_in_range).once.returns([100])
 
