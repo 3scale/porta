@@ -23,6 +23,8 @@ Rails.application.configure do
 
   # Match custom domains on development
   config.hosts << /.+\.localhost/
+  config.hosts << "host.docker.internal"
+  config.hosts << "host.containers.internal"
 
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
