@@ -150,7 +150,7 @@ module Stats
           granularity = options[:granularity] || GRANULARITIES[period]
 
           if period.to_sym == :eternity
-            raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'" if options[:granularity].present? && options[:granularity].to_sym != :eternity
+            raise InvalidParameterError, "Only 'eternity' granularity is supported for period 'eternity'" if granularity.to_sym != :eternity
 
             utc = ActiveSupport::TimeZone['UTC']
             range_since = utc.parse('1970-01-01')

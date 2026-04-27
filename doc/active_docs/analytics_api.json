@@ -96,8 +96,8 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
-            "required": true,
+            "description": "Granularity of results, each period has an associated granularity. Required if period is not provided. Only 'eternity' granularity is accepted for period 'eternity'.",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "month",
@@ -204,8 +204,8 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
-            "required": true,
+            "description": "Granularity of results, each period has an associated granularity. Required if period is not provided. Only 'eternity' granularity is accepted for period 'eternity'.",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "month",
@@ -328,8 +328,8 @@
           {
             "name": "granularity",
             "in": "query",
-            "description": "Granularity of results, each period has an associated granularity. Only 'eternity' granularity is accepted for period 'eternity'.",
-            "required": true,
+            "description": "Granularity of results, each period has an associated granularity. Required if period is not provided. Only 'eternity' granularity is accepted for period 'eternity'.",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "month",
