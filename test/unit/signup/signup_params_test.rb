@@ -42,7 +42,7 @@ module Signup
       FactoryBot.create(:fields_definition, account: provider_account, target: 'Account', name: 'extra_for_account')
 
       user_attributes = { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-                      password: '123456', password_confirmation: '123456', signup_type: :minimal, 'created_by': 'hi' }
+                      password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal, 'created_by': 'hi' }
       account_attributes = { org_name: 'Developer', vat_rate: 33, extra_fields: { extra_for_account: 'itWorks' } }
       signup_params =  Signup::SignupParams.new(user_attributes: user_attributes, account_attributes: account_attributes, plans: [], defaults: {})
 
@@ -73,7 +73,7 @@ module Signup
 
     def user_params
       { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-        password: '123456', password_confirmation: '123456', signup_type: :minimal }
+        password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal }
     end
 
     def account_params

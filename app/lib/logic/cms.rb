@@ -45,11 +45,15 @@ module Logic
         after_create :create_cms_assets, if: :provider?
       end
 
-      # TODO: cover by tests
+      def sample_developer_john_doe
+        buyer_users.sample_developer_john_doe.first
+      end
+
       def john_doe_still_here?
-        if john = self.buyer_users.find_by_username('john')
-          john.authenticated?('123456')
-        end
+        john = sample_developer_john_doe
+        return false unless john
+
+        john.authenticated?(Logic::SampleDeveloperPassword.for(self))
       end
 
       # TODO: cover by tests (and make it smarter)

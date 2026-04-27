@@ -54,7 +54,5 @@ Feature: CMS Toolbar
       When they visit the developer portal in CMS mode
       Then the cms toolbar should be visible
       And should see "Templates used on this page"
-      And should see the following details:
-        | Username | john   |
-        | Password | 123456 |
+      And should see the sample user credentials
       And should see "Color Theme"

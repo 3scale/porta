@@ -200,7 +200,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       post admin_buyers_accounts_path, params: {
         account: {
           org_name: 'Alaska',
-          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+          user: { email: 'foo@example.com', password: 'superSecret1234#', username: 'hello' }
         }
       }
 

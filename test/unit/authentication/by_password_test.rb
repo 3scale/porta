@@ -54,14 +54,6 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
 
       assert_equal "is too short (minimum is 15 characters)", @user.errors[:password].first
     end
-
-    test 'password is not validated when user is sample data' do
-      @user.password = "nononono"
-      @user.signup_type = :sample_data
-
-      assert @user.valid?
-      assert @user.errors[:password].blank?
-    end
   end
 
   class ValidationsTest < Authentication::ByPasswordTest
@@ -211,14 +203,6 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
         assert_not @user.validate_password?
       end
 
-      test 'returns true when password has changed and user signup is sample data' do
-        @user.password = 'newpassword12345'
-        @user.signup_type = :sample_data
-
-        assert @user.signup.sample_data?
-        assert @user.validate_password?
-      end
-
       test 'returns false when password has not changed and user has existing password regardless of signup type' do
         %i[new_signup minimal api created_by_provider].each do |signup_type|
           @user.signup_type = signup_type
@@ -244,23 +228,16 @@ class Authentication::ByPasswordTest < ActiveSupport::TestCase
         assert_not @user.validate_strong_password?
       end
 
-      test 'returns false when user signup is sample_data' do
+      test 'returns true when strong_passwords_disabled is false and validate_password? is true' do
         @user.password = 'newpassword12345'
-        @user.signup_type = :sample_data
-
-        assert_not @user.validate_strong_password?
-      end
-
-      test 'returns true when strong_passwords_disabled is false and not sample_data and validate_password? is true' do
-        @user.password = 'newpassword12345'
-        @user.signup_type = :new_signup
 
         assert @user.validate_password?
         assert @user.validate_strong_password?
       end
 
-      test 'returns false when strong_passwords_disabled is false and not sample_data but validate_password? is false' do
-        @user.signup_type = :new_signup
+      test 'returns false when strong_passwords_disabled is false but validate_password? is false' do
+        # Change anything except the password field
+        @user.last_name = "Smith"
 
         assert_not @user.validate_password?
         assert_not @user.validate_strong_password?

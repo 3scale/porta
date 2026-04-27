@@ -8,29 +8,29 @@ class Logic::ProviderSignupTest < ActiveSupport::TestCase
       @provider = FactoryBot.create(:provider_account)
     end
 
-    test 'John Doe user is created with weak password when strong passwords enabled' do
+    test 'John Doe user is created with a strong derived password' do
       sample_data = Logic::ProviderSignup::SampleData.new(@provider)
       sample_data.create!
 
       john_doe = @provider.buyer_users.find_by(username: 'john')
       assert john_doe.present?, 'John Doe user should be created'
-      assert john_doe.authenticate('123456'), 'John Doe should have weak password 123456'
+      assert john_doe.authenticate(Logic::SampleDeveloperPassword.for(@provider)), 'John Doe should authenticate with the derived password'
     end
 
-    test 'John Doe signup.machine? returns true' do
+    test 'John Doe is not created with the old weak password 123456' do
       sample_data = Logic::ProviderSignup::SampleData.new(@provider)
       sample_data.create!
 
       john_doe = @provider.buyer_users.find_by(username: 'john')
-      assert john_doe.signup.machine?, 'John Doe should be considered a machine signup'
+      assert_not john_doe.authenticate('123456'), 'John Doe should not authenticate with 123456'
     end
 
-    test 'John Doe signup.sample_data? returns true' do
+    test 'John Doe uses minimal signup type' do
       sample_data = Logic::ProviderSignup::SampleData.new(@provider)
       sample_data.create!
 
       john_doe = @provider.buyer_users.find_by(username: 'john')
-      assert john_doe.signup.sample_data?, 'John Doe should have sample_data? return true'
+      assert john_doe.signup.minimal?, 'John Doe should have minimal signup type'
     end
 
     test 'John Doe is active after creation' do
