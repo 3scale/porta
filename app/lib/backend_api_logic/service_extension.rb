@@ -33,6 +33,10 @@ module BackendApiLogic
       end
 
       def backend_api
+        # If memoized backend_api is not persisted, check if a config exists now
+        if @backend_api && !@backend_api.persisted?
+          @backend_api = backend_api_configs.first&.backend_api || @backend_api
+        end
         @backend_api ||= backend_api_configs.first&.backend_api || build_backend_api
       end
 
