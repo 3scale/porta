@@ -32,10 +32,8 @@ class CMS::Template::Version < ApplicationRecord
   end
 
   def revert_attributes
-    accessible = template.class.accessible_attributes.delete('draft').add('updated_at').add('updated_by')
-
-    accessible << state.to_s
-    attributes.slice *accessible
+    accessible = [:updated_at, :updated_by, state.to_s]
+    attributes.slice(*accessible)
   end
 
 end

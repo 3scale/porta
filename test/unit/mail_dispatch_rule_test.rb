@@ -9,7 +9,7 @@ class MailDispatchRuleTest < ActiveSupport::TestCase
       expected.save!
     end
 
-    assert_equal expected , rule
+    assert_equal expected, rule
   end
 
   test 'is unique' do

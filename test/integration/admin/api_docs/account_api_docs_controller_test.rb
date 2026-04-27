@@ -19,7 +19,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_account_active_docs_menus
 
-      api_docs_service.update({service_id: service.id}, without_protection: true)
+      api_docs_service.update({service_id: service.id})
       get preview_admin_api_docs_service_path(api_docs_service)
       assert_redirected_to preview_admin_service_api_doc_path(service, api_docs_service)
     end
@@ -28,7 +28,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       get edit_admin_api_docs_service_path(api_docs_service)
       assert_account_active_docs_menus
 
-      api_docs_service.update({service_id: service.id}, without_protection: true)
+      api_docs_service.update({service_id: service.id})
       get edit_admin_api_docs_service_path(api_docs_service)
       assert_redirected_to edit_admin_service_api_doc_path(service, api_docs_service)
     end

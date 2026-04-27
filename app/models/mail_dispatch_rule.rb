@@ -10,14 +10,15 @@ class MailDispatchRule < ApplicationRecord
     retries = 0
 
     begin
-      MailDispatchRule.find_or_create_by!(options, &block)
+      # Use find_by + create! directly to avoid transaction wrapper from create_or_find_by!
+      # This preserves the old behavior from protected_attributes_continued gem
+      # where records created in the block are committed even if the outer create fails
+      find_by(options) || create!(options, &block)
     rescue ActiveRecord::RecordNotUnique
-      if retries > 10
-        raise
-      else
-        retries += 1
-        retry
-      end
+      raise if retries > 10
+
+      retries += 1
+      retry
     end
   end
 end
