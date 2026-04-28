@@ -132,6 +132,15 @@ class User < ApplicationRecord
 
   scope :admins, -> { where(role: 'admin') }
 
+  JOHN_DOE_ATTRS = { username: 'john', first_name: 'John', last_name: 'Doe', role: :admin }.freeze
+  JOHN_DOE_ORG_NAME = 'Developer'
+
+  scope :sample_developer_john_doe, -> { where(JOHN_DOE_ATTRS).joins(:account).where(accounts: { org_name: JOHN_DOE_ORG_NAME }) }
+
+  def sample_developer_john_doe?
+    JOHN_DOE_ATTRS.all? { |attr, value| send(attr) == value } && account.org_name == JOHN_DOE_ORG_NAME
+  end
+
   scope :active, -> { where(state: 'active') }
 
   def self.find_by_username_or_email(value)
@@ -428,11 +437,6 @@ class User < ApplicationRecord
       signup_type == :minimal
     end
 
-    def sample_data?
-      # This is true only for John Doe
-      signup_type == :sample_data
-    end
-
     def api?
       signup_type == :api
     end
@@ -454,7 +458,7 @@ class User < ApplicationRecord
     end
 
     def machine?
-      minimal? || sample_data? || api? || created_by_provider? || open_id? || cas? || oauth2?
+      minimal? || api? || created_by_provider? || open_id? || cas? || oauth2?
     end
 
     def by_user?

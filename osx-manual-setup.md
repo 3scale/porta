@@ -37,7 +37,7 @@ asdf install
 
 ### Python (only macs with M1)
 
-The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. To install it with `asdf` run:
+The project requires Python 3.13.13. However, it is not included anymore in Apple macs with Silicon. To install it with `asdf` run:
 
 ```
 asdf plugin add python

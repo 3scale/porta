@@ -11,6 +11,16 @@ class Buyers::UsersController < Buyers::BaseController
     @users = @account.users.order(:id).paginate(page: params[:page]).decorate
   end
 
+  def show
+    return unless @user.sample_developer_john_doe?
+
+    # Show the password for John Doe only if the user is John Doe
+    password = Logic::SampleDeveloperPassword.for(current_account)
+    @sample_developer_password = password if @user.authenticated?(password)
+  end
+
+  def edit; end
+
   def update
     # TODO: I think this controller is used only on provider side
     user.validate_fields! if current_account.buyer?
@@ -24,10 +34,6 @@ class Buyers::UsersController < Buyers::BaseController
       render :edit
     end
   end
-
-  def show; end
-
-  def edit; end
 
   def destroy
     if user.destroy

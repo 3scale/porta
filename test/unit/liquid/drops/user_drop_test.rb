@@ -77,13 +77,6 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
       assert @user.signup.machine?
       assert_not @drop.password_required?
     end
-
-    test '#password_required? returns false for sample_data signup' do
-      @user.signup_type = :sample_data
-
-      assert @user.signup.sample_data?
-      assert_not @drop.password_required?
-    end
   end
 
   class BuyerUserTest < Liquid::Drops::UserDropTest

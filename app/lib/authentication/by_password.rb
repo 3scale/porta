@@ -45,7 +45,6 @@ module Authentication
 
     def validate_strong_password?
       return false if Rails.configuration.three_scale.strong_passwords_disabled
-      return false if signup.sample_data?
 
       validate_password?
     end

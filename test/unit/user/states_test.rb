@@ -92,7 +92,7 @@ class User::StatesTest < ActiveSupport::TestCase
     end
   end
 
-  class ActivateOnMinimalOrSampleDataTest < ActiveSupport::TestCase
+  class ActivateOnMinimalTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.create(:simple_provider)
       @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
@@ -102,35 +102,13 @@ class User::StatesTest < ActiveSupport::TestCase
     test 'returns true for minimal signup with password and no approval required' do
       @user.signup_type = :minimal
 
-      assert @user.activate_on_minimal_or_sample_data?
-    end
-
-    test 'returns true for sample_data signup with password and no approval required' do
-      @user.signup_type = :sample_data
-
-      assert @user.activate_on_minimal_or_sample_data?
-    end
-
-    test 'returns false for sample_data signup without password' do
-      @user.signup_type = :sample_data
-      @user.password = nil
-
-      assert_not @user.activate_on_minimal_or_sample_data?
-    end
-
-    test 'returns false for sample_data signup when approval required' do
-      @user.signup_type = :sample_data
-      account_plan = FactoryBot.create(:account_plan, issuer: @provider, approval_required: true)
-      @buyer.buy!(account_plan)
-
-      assert_not @user.activate_on_minimal_or_sample_data?
+      assert @user.activate_on_minimal?
     end
 
     test 'returns false for new_signup even with password' do
       @user.signup_type = :new_signup
 
-      assert_not @user.activate_on_minimal_or_sample_data?
+      assert_not @user.activate_on_minimal?
     end
   end
 end
-

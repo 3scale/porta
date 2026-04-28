@@ -123,22 +123,6 @@ World(Module.new do
       admin_messages_trash_path(message)
 
     #
-    # Forum
-    #
-    when 'forum settings',
-         'the forum settings page'
-      edit_admin_site_forum_path
-
-    when 'the forum page'
-      forum_path
-    when 'the new topic page'
-      new_forum_topic_path
-    when /^the "([^"]*)" topic page$/
-      forum_topic_path(Topic.find_by_title!($1))
-    when 'the forum subscriptions page'
-      forum_subscriptions_path
-
-    #
     # Logged in
     #
     when /the dashboard( page)?/
@@ -533,22 +517,6 @@ World(Module.new do
       new_admin_data_exports_path
 
     #
-    # Forum admin
-    #
-    when 'the admin portal forum page'
-      admin_forum_path
-    when 'the admin portal new topic page'
-      new_admin_forum_topic_path
-    when /^the admin portal "([^"]*)" topic page$/
-      admin_forum_topic_path(Topic.find_by_title!($1))
-    when /^the admin portal edit "([^"]*)" topic page$/
-      edit_admin_forum_topic_path(Topic.find_by_title!($1))
-    when 'the admin portal forum categories page'
-      admin_forum_categories_path
-    when 'the admin portal new forum category page'
-      new_admin_forum_category_path
-
-    #
     # Site settings
     #
     when 'the edit site settings page',
@@ -564,8 +532,12 @@ World(Module.new do
     when 'the dns settings page'
       admin_site_dns_path
 
-    when 'the bot protection page'
-      edit_admin_site_spam_protection_path
+    when 'the security settings page',
+         'the developer portal security settings page'
+      edit_admin_site_security_path
+
+    when 'the provider security settings page'
+      edit_provider_admin_security_path
 
     when 'the xss protection page'
       edit_admin_site_developer_portal_path
@@ -577,10 +549,7 @@ World(Module.new do
       admin_fields_definitions_path
 
     when 'the settings page'
-     admin_apiconfig_root_path
-
-    when 'the documentation settings page'
-      edit_admin_site_documentation_path
+      admin_apiconfig_root_path
 
     when 'the emails settings page'
       edit_admin_site_emails_path

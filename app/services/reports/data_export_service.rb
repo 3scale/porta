@@ -1,3 +1,5 @@
+require 'zip'
+
 class Reports::DataExportService
   attr_reader :provider, :type, :period
 

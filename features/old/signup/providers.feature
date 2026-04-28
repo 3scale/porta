@@ -87,9 +87,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I follow "Sign Out bob"
   Then I should see "You have been logged out"
   And I follow "Login"
-  And I fill in the following:
-  | Username or Email |   john |
-  | Password          | 123456 |
+  And I fill in the sample user credentials
   And I press "Sign in"
   Then I should see "Signed in successfully"
   Then I should be on the homepage

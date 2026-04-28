@@ -1,0 +1,40 @@
+@javascript
+Feature: Provider admin security settings
+  As a provider admin
+  I want to configure Permissions-Policy headers in my admin portal 
+
+  Background:
+    Given a provider is logged in
+
+  Scenario: View security settings page
+    When I go to the provider security settings page
+    Then I should see "Security"
+    And I should see "Permissions-Policy Header"
+
+  Scenario: Update admin portal Permissions-Policy header
+    When I go to the provider security settings page
+    And I check "override_permissions_policy_header_admin"
+    And I fill in "Permissions-Policy Header" with "camera=(), microphone=(), geolocation=()"
+    And I press "Update Security Settings"
+    Then I should see "Security settings updated"
+    And the admin portal should have configured Permissions-Policy header "camera=(), microphone=(), geolocation=()"
+
+  Scenario: Clear admin portal Permissions-Policy header
+    Given the provider has configured admin portal Permissions-Policy "camera=(), microphone=()"
+    When I go to the provider security settings page
+    And I fill in "Permissions-Policy Header" with ""
+    And I press "Update Security Settings"
+    Then I should see "Security settings updated"
+    And the admin portal should not have configured Permissions-Policy header
+
+  Scenario: Uncheck override deletes existing Permissions-Policy setting
+    Given the provider has configured admin portal Permissions-Policy "camera=(), microphone=()"
+    When I go to the provider security settings page
+    And I uncheck "override_permissions_policy_header_admin"
+    And I press "Update Security Settings"
+    Then I should see "Security settings updated"
+    And the admin portal should not have configured Permissions-Policy header
+
+  Scenario: View default value hint
+    When I go to the provider security settings page
+    Then I should see "camera=(), microphone=(), geolocation=(), payment=(), usb=(), fullscreen=(self)"

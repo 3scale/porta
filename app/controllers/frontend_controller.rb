@@ -34,6 +34,7 @@ class FrontendController < ApplicationController
 
   before_action :login_required
   before_action :set_display_currency
+  before_action :set_permissions_policy_header
 
   include RedhatCustomerPortalSupport::ControllerMethods::Banner
 
@@ -171,6 +172,16 @@ class FrontendController < ApplicationController
 
   def set_display_currency
     ThreeScale::MoneyHelper.display_currency = current_account.currency if current_account
+  end
+
+  def set_permissions_policy_header
+    header_value = AccountSettings::SettingCache.fetch(
+      account: domain_account,
+      setting_name: 'permissions_policy_header_admin'
+    )
+
+    # Set header if value exists (even if only a whitespace)
+    response.headers['Permissions-Policy'] = header_value if header_value&.size&.nonzero?
   end
 
   def quickstarts_presenter

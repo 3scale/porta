@@ -687,13 +687,14 @@ en:
             error: The %{metric_type} could not be updated
             success: The %{metric_type} was updated
 
-      bot_protections:
+      securities:
         edit:
           selector_label: Protection against bots on the admin portal
-          description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the admin portal.
+          captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
+          captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
         update:
           error: There were problems saving the settings
-          success: Bot protection settings updated
+          success: Security settings updated
 
       keys:
         create:
@@ -1243,15 +1244,12 @@ en:
     settings:
       update:
         success: Settings updated
-    spam_protections:
+    securities:
       edit:
         selector_label: Protection against bots on the developer portal
-        description: Bot protection uses Google reCAPTCHA to detect bots and prevent malicious attacks on the developer portal.
-        captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
-        captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
       update:
         error: There were problems saving the settings
-        success: Bot protection settings updated
+        success: Security settings updated
     usage_rules:
       edit:
         plans_label: 'Developers are allowed to:'

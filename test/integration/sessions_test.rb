@@ -59,8 +59,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
       format: :xml,
       provider_key: @provider.api_key,
       user_id: user_id,
-      username: user.username,
-      redirect_url: forum_path(host: @provider.internal_domain)
+      username: user.username
     }
 
     assert_response :created
@@ -117,7 +116,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.internal_domain
 
-    get developer_portal.create_session_url(username: user.username, password: 'superSecret1234#', redirect_url: forum_url(host: @provider.internal_domain))
+    get developer_portal.create_session_url(username: user.username, password: 'superSecret1234#', redirect_url: developer_portal.login_url(host: @provider.internal_domain))
     follow_redirect!
 
     assert_equal root_path, path
@@ -131,10 +130,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.internal_domain
 
-    get developer_portal.create_session_url(token: 'yabadabado', expires_at: '2016', redirect_url: forum_url(host: @provider.internal_domain))
+    get developer_portal.create_session_url(token: 'yabadabado', expires_at: '2016', redirect_url: developer_portal.login_url(host: @provider.internal_domain))
     follow_redirect!
 
-    assert_equal forum_path, path
+    assert_equal developer_portal.login_path, path
   end
 
   test 'passing redirect_to to login form' do
