@@ -401,4 +401,17 @@ class MetricTest < ActiveSupport::TestCase
 
     assert_same_elements [service.metrics.hits, service_metric, backend_api.metrics.hits, backend_metric], Metric.by_provider(provider)
   end
+
+  test '.by_provider with more than 1000 services handles Oracle limit' do
+    skip('Only relevant for Oracle database') unless System::Database.oracle?
+
+    provider = FactoryBot.create(:simple_provider)
+
+    # Create 1001 services to exceed Oracle's 1000 expression limit
+    FactoryBot.create_list(:simple_service, 1001, account: provider)
+
+    # Each service has a default 'hits' metric, so we should have at least 1001 metrics
+    # This would fail with ORA-01795 if the query uses IN with >1000 values
+    assert_operator Metric.by_provider(provider).count, :>=, 1001
+  end
 end

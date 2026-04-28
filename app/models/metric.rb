@@ -51,7 +51,7 @@ class Metric < ApplicationRecord
   scope :order_by_unit, -> { order('unit') }
 
   scope :by_provider, ->(provider) {
-    where.has { ((owner_type == 'Service') & owner_id.in(provider.services.pluck(:id))) | ((owner_type == 'BackendApi') & owner_id.in(provider.backend_apis.pluck(:id))) }
+    where(owner: provider.services).or(where(owner: provider.backend_apis))
   }
 
   # Create one of the predefined, default metrics.
