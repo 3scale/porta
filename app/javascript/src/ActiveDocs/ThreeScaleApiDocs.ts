@@ -10,7 +10,7 @@ import type { AccountDataResponse, ApiDocsServices, BackendApiReportBody, Backen
 import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 import type { Component } from 'react'
-import type { SwaggerUIContext, ParameterIncludeEmptyProperties } from 'swagger-ui-utils'
+import type { SwaggerUIContext, ParameterIncludeEmptyProperties, JsonSchemaFormProperties } from 'swagger-ui-utils'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
   return `${baseUrl.replace(/\/$/, '')}${specPath}`
@@ -133,6 +133,17 @@ const UncheckSendEmptyValuePlugin: SwaggerUIPlugin = () => {
   }
 }
 
+const ClearDefaultValuesPlugin: SwaggerUIPlugin = () => {
+  return {
+    wrapComponents: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention, react/no-multi-comp
+      JsonSchemaForm: (originalComponent: Component, { React }: SwaggerUIContext) => function JsonSchemaFormWrapped (props: JsonSchemaFormProperties) {
+        return React.createElement(originalComponent, { ...props, dispatchInitialValue: false })
+      }
+    }
+  }
+}
+
 export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, accountDataUrl: string): Promise<void> => {
   const apiSpecs: ApiDocsServices = await fetchData<ApiDocsServices>(apiDocsPath)
 
@@ -148,7 +159,7 @@ export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: strin
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin, ClearDefaultValuesPlugin
       ]
     })
   })
