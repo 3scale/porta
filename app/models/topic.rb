@@ -61,7 +61,6 @@ class Topic < ApplicationRecord
   end
 
   attr_accessor :body, :quiz, :quiz_id, :first_name, :last_name, :email, :human, :markup_type, :anonymous_user
-  attr_accessible :markup_type, :title, :body, :quiz, :quiz_id, :first_name, :last_name, :email, :tag_list, :anonymous_user, :tag_list
 
   attr_readonly :posts_count, :hits
 

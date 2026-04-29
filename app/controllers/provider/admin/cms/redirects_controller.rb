@@ -16,7 +16,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
   end
 
   def create
-    @redirect = redirects.build(params[:cms_redirect])
+    @redirect = redirects.build(redirect_params)
 
     if @redirect.save
       redirect_to({ action: :index }, success: t('.success'))
@@ -26,7 +26,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
   end
 
   def update
-    if redirect.update(params[:cms_redirect])
+    if redirect.update(redirect_params)
       redirect_to provider_admin_cms_redirects_path, success: t('.success')
     else
       render :edit
@@ -48,4 +48,7 @@ class Provider::Admin::CMS::RedirectsController < Provider::Admin::CMS::BaseCont
     @_redirects ||= current_account.redirects
   end
 
+  def redirect_params
+    @redirect_params ||= params.require(:cms_redirect).permit(:source, :target)
+  end
 end

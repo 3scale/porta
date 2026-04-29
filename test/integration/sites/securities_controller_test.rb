@@ -2,27 +2,58 @@
 
 require 'test_helper'
 
-class Sites::SecurityTest < ActionDispatch::IntegrationTest
+class Sites::SecuritiesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @provider = FactoryBot.create(:provider_account)
     login_provider @provider
-    host! @provider.external_admin_domain
     Rails.cache.clear
   end
 
-  test 'edit without captcha' do
+  test 'edit without captcha configured shows warning' do
     Recaptcha.expects(:captcha_configured?).returns(false).twice
+
     get edit_admin_site_security_path
+
     assert_response :success
     assert_match 'reCAPTCHA has not been configured correctly', response.body
   end
 
-  test 'edit with captcha' do
+  test 'edit with captcha configured shows hint' do
     Recaptcha.expects(:captcha_configured?).returns(true).twice
+
     get edit_admin_site_security_path
+
     assert_response :success
-    assert_not_match 'reCAPTCHA has not been configured correctly', response.body
+    assert_match 'reCAPTCHA v3 will invisibly verify interactions', response.body
+  end
+
+  test 'updates spam protection level setting' do
+    assert_equal :none, @provider.settings.spam_protection_level
+
+    put admin_site_security_path, params: {
+      settings: {
+        spam_protection_level: 'captcha'
+      }
+    }
+
+    assert_redirected_to edit_admin_site_security_path
+    assert_equal 'Security settings updated', flash[:success]
+
+    @provider.settings.reload
+    assert_equal :captcha, @provider.settings.spam_protection_level
+  end
+
+  test 'update spam protection with invalid value shows error' do
+    put admin_site_security_path, params: {
+      settings: {
+        spam_protection_level: 'x' * 256
+      }
+    }
+
+    assert_response :success
+    assert_template :edit
+    assert_equal 'There were problems saving the settings', flash[:danger]
   end
 
   test 'displays Permissions-Policy header field' do
@@ -71,17 +102,30 @@ class Sites::SecurityTest < ActionDispatch::IntegrationTest
     assert_nil @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderDeveloper')
   end
 
-  test 'updates spam protection level setting' do
+  test 'requires authentication' do
+    logout!
+
+    get edit_admin_site_security_path
+    assert_redirected_to provider_login_path
+
     put admin_site_security_path, params: {
-      settings: {
-        spam_protection_level: 'captcha'
-      }
+      settings: { spam_protection_level: 'captcha' }
     }
-
-    assert_redirected_to edit_admin_site_security_path
-
-    @provider.settings.reload
-    assert_equal :captcha, @provider.settings.spam_protection_level
+    assert_redirected_to provider_login_path
   end
 
+  test 'requires authorization to manage settings' do
+    member = FactoryBot.create(:member, account: @provider)
+    member.activate!
+    logout!
+    login_provider @provider, user: member
+
+    get edit_admin_site_security_path
+    assert_response :forbidden
+
+    put admin_site_security_path, params: {
+      settings: { spam_protection_level: 'captcha' }
+    }
+    assert_response :forbidden
+  end
 end

@@ -2,27 +2,58 @@
 
 require 'test_helper'
 
-class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
+class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @provider = FactoryBot.create(:provider_account)
     login_provider @provider
-    host! @provider.external_admin_domain
     Rails.cache.clear
   end
 
-  test 'edit without captcha' do
+  test 'edit without captcha configured shows warning' do
     Recaptcha.expects(:captcha_configured?).returns(false).twice
+
     get edit_provider_admin_security_path
+
     assert_response :success
     assert_match 'reCAPTCHA has not been configured correctly', response.body
   end
 
-  test 'edit with captcha' do
+  test 'edit with captcha configured shows hint' do
     Recaptcha.expects(:captcha_configured?).returns(true).twice
+
     get edit_provider_admin_security_path
+
     assert_response :success
-    assert_not_match 'reCAPTCHA has not been configured correctly', response.body
+    assert_match 'reCAPTCHA v3 will invisibly verify interactions', response.body
+  end
+
+  test 'updates admin bot protection level setting' do
+    assert_equal :none, @provider.settings.admin_bot_protection_level
+
+    put provider_admin_security_path, params: {
+      settings: {
+        admin_bot_protection_level: 'captcha'
+      }
+    }
+
+    assert_redirected_to edit_provider_admin_security_path
+    assert_equal 'Security settings updated', flash[:success]
+
+    @provider.settings.reload
+    assert_equal :captcha, @provider.settings.admin_bot_protection_level
+  end
+
+  test 'update with invalid value shows error' do
+    put provider_admin_security_path, params: {
+      settings: {
+        admin_bot_protection_level: 'x' * 256
+      }
+    }
+
+    assert_response :success
+    assert_template :edit
+    assert_equal 'There were problems saving the settings', flash[:danger]
   end
 
   test 'displays Permissions-Policy header field' do
@@ -46,19 +77,6 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     @provider.reload
     setting = @provider.account_settings.find_by(type: 'AccountSetting::PermissionsPolicyHeaderAdmin')
     assert_equal policy_value, setting.value
-  end
-
-  test 'updates admin bot protection level setting' do
-    put provider_admin_security_path, params: {
-      settings: {
-        admin_bot_protection_level: 'captcha'
-      }
-    }
-
-    assert_redirected_to edit_provider_admin_security_path
-
-    @provider.settings.reload
-    assert_equal :captcha, @provider.settings.admin_bot_protection_level
   end
 
   test 'omitting header field deletes existing setting' do
@@ -105,5 +123,34 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     get edit_provider_admin_security_path
     assert_response :success
     assert response.headers.key?('Permissions-Policy'), 'Permissions-Policy header should be present'
+  end
+
+  test 'requires authentication' do
+    logout!
+
+    get edit_provider_admin_security_path
+    assert_redirected_to provider_login_path
+
+    put provider_admin_security_path, params: {
+      settings: { admin_bot_protection_level: 'captcha' }
+    }
+    assert_redirected_to provider_login_path
+  end
+
+  test 'member can update the settings' do
+    member = FactoryBot.create(:member, account: @provider)
+    member.activate!
+    logout!
+    login_provider @provider, user: member
+
+    get edit_provider_admin_security_path
+    assert_response :success
+
+    put provider_admin_security_path, params: {
+      settings: { admin_bot_protection_level: 'captcha' }
+    }
+
+    assert_redirected_to edit_provider_admin_security_url
+    assert_equal 'Security settings updated', flash[:success]
   end
 end

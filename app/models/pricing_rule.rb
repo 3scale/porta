@@ -5,8 +5,6 @@ class PricingRule < ApplicationRecord
   belongs_to :plan
   belongs_to :metric
 
-  attr_protected :metric_id, :plan_id, :plan_type, :tenant_id, :audit_ids
-
   # TODO: add validations that check that the intervals are well defined. TODO:
   # min must be always > 0
   #

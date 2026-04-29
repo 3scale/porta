@@ -20,8 +20,6 @@ class Finance::BillingStrategy < ApplicationRecord
   belongs_to :account
   alias_method :provider, :account
 
-  attr_protected :account_id, :tenant_id, :audit_ids
-
   accepts_nested_attributes_for :account
   validates :currency, inclusion: { in: CURRENCIES.values, message: :invalid }
 

@@ -38,7 +38,7 @@ class DeveloperPortal::Admin::Messages::InboxController < ::DeveloperPortal::Bas
   def create
     @message = current_account.received_messages.find(params[:reply_to])
     reply = @message.reply
-    reply.attributes = params[:message].merge(origin: "web")
+    reply.assign_attributes(message_params.merge(origin: "web"))
 
     reply.save!
     reply.deliver!
@@ -51,5 +51,9 @@ class DeveloperPortal::Admin::Messages::InboxController < ::DeveloperPortal::Bas
 
   def find_message
     @message = current_account.received_messages.find(params[:id])
+  end
+
+  def message_params
+    params.require(:message).permit(:body)
   end
 end

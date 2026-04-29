@@ -22,6 +22,56 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     policy_params[:policy].each { |key, value| assert_equal(value, policy.public_send(key)) }
   end
 
+  test 'POST create accepts nested schema hash with complex structure from fixture' do
+    new_schema = JSON.parse(file_fixture('policies/apicast-policy.json').read)
+
+    assert_difference(@provider.policies.method(:count), 1) do
+      post admin_api_registry_policies_path(
+        policy: {
+          name: new_schema['name'],
+          version: new_schema['version'],
+          schema: new_schema
+        },
+        access_token: @access_token.value
+      )
+    end
+    assert_response :created
+
+    policy = @provider.policies.last!
+    assert_equal new_schema['name'], policy.name
+    assert_equal new_schema['version'], policy.version
+    assert_equal new_schema, policy.schema
+
+    # Verify deeply nested structure is preserved
+    assert_equal 'string', policy.schema.dig('configuration', 'properties', 'rules', 'items', 'properties', 'regex', 'type')
+  end
+
+  test 'POST create accepts nested schema as a string' do
+    new_schema = file_fixture('policies/apicast-policy.json').read
+    parsed_schema = JSON.parse(new_schema)
+
+    assert_difference(@provider.policies.method(:count), 1) do
+      post admin_api_registry_policies_path(
+        policy: {
+          name: parsed_schema['name'],
+          version: parsed_schema['version'],
+          schema: new_schema
+        },
+        access_token: @access_token.value
+      )
+    end
+    assert_response :created
+
+    policy = @provider.policies.last!
+    assert_equal parsed_schema['name'], policy.name
+    assert_equal parsed_schema['version'], policy.version
+    assert_equal parsed_schema, policy.schema
+
+    # Verify deeply nested structure is preserved
+    assert_equal 'string', policy.schema.dig('configuration', 'properties', 'rules', 'items', 'properties', 'regex', 'type')
+  end
+
+
   test 'POST create responds with an error message when it is incorrect' do
     FactoryBot.create(:policy, policy_params[:policy].merge(account: @provider))
     assert_no_difference(Policy.method(:count)) do
@@ -266,3 +316,4 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
     { policy: @policy_attributes, access_token: token }
   end
 end
+

@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseController
-  before_action :available_groups, :only => [:edit, :new ]
-  before_action :available_sections, :only => [:edit, :new ]
+  before_action :available_groups, :only => %i[edit new]
+  before_action :available_sections, :only => %i[edit new]
   before_action :authorize_groups
+  before_action :validate_section_ids, only: %i[create update]
 
   activate_menu :audience, :cms, :groups
 
@@ -24,7 +27,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   end
 
   def create
-    @group = current_account.provided_groups.build(sections_params)
+    @group = current_account.provided_groups.build(group_params)
 
     if @group.save
       redirect_to({ action: :index }, success: t('.success'))
@@ -38,7 +41,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   def update
     @group = current_account.provided_groups.find(params[:id])
 
-    if @group.update(sections_params)
+    if @group.update(group_params)
       redirect_to({ action: :index }, success: t('.success'))
     else
       available_groups
@@ -53,32 +56,33 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
     redirect_to({ action: :index }, success: t('.success'))
   end
 
-
-
   protected
 
-  def sections_params
-    params[:cms_group].dup.tap do |params|
-      if section_ids = params[:section_ids].presence
-        section_ids.reject!(&:empty?)
-        params[:sections] = section_ids.map do  |sec_id|
-          current_account.sections.find(sec_id.to_i)
-        end
-      end
-    end
-
+  def group_params
+    @group_params ||= params.require(:cms_group).permit(:name, section_ids: [])
   end
 
   def available_groups
-    @available_groups= current_account.provided_groups
+    @available_groups = current_account.provided_groups
   end
 
   def available_sections
-    @available_sections= current_account.provided_sections
+    @available_sections = current_account.provided_sections
   end
 
   def authorize_groups
     authorize! :manage, :groups
   end
 
+  # Ensure that all section IDs provided in the parameters belong to the account, which is the group owner
+  # Providing a non-existent section ID, or the one that belongs to another provider results in a Not Found error
+  def validate_section_ids
+    section_ids = group_params[:section_ids]
+    return if section_ids.blank?
+
+    section_ids.reject!(&:empty?)
+    exising_section_ids = current_account.section_ids.map(&:to_s)
+
+    render_error(:not_found, status: :not_found) if (section_ids.map(&:to_s) - exising_section_ids).any?
+  end
 end
