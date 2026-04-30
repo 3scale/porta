@@ -106,9 +106,9 @@ class AccountTest < ActiveSupport::TestCase
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
-    assert_nothing_raised do
-      buyer.update(nil)
-    end
+
+    buyer.update(nil)
+    assert_empty buyer.saved_changes, 'no changes should be saved'
   end
 
   test 'should validate self_domain uniqueness' do
