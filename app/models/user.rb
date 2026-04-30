@@ -454,7 +454,7 @@ class User < ApplicationRecord
     end
 
     def by_user?
-      @user.signup.new? || @user.signup_type.nil?
+      (new? || signup_type.nil? || partner?) && !open_id? && !cas? && !oauth2?
     end
 
     private
