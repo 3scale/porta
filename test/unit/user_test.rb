@@ -273,11 +273,13 @@ class UserTest < ActiveSupport::TestCase
     assert created_by_provider_user.errors[:password].blank?
   end
 
-  test 'by_user? returns true only for :new_signup and nil signup types' do
+  test 'by_user? returns true only for :new_signup, nil, and :partner signup types' do
     user = User.new
 
-    user.signup_type = :new_signup
-    assert user.signup.by_user?
+    %i[new_signup partner].each do |type|
+      user.signup_type = type
+      assert user.signup.by_user?, "expected by_user? to be true for :#{type}"
+    end
 
     user.signup_type = nil
     assert user.signup.by_user?
