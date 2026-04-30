@@ -273,6 +273,21 @@ class UserTest < ActiveSupport::TestCase
     assert created_by_provider_user.errors[:password].blank?
   end
 
+  test 'by_user? returns true only for :new_signup and nil signup types' do
+    user = User.new
+
+    user.signup_type = :new_signup
+    assert user.signup.by_user?
+
+    user.signup_type = nil
+    assert user.signup.by_user?
+
+    %i[minimal api created_by_provider].each do |type|
+      user.signup_type = type
+      assert_not user.signup.by_user?, "expected by_user? to be false for :#{type}"
+    end
+  end
+
   test 'reset password' do
     user = FactoryBot.create(:simple_user, username: 'person', password: 'superSecret1234#')
     user.activate!

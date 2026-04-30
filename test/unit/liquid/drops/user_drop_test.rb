@@ -77,6 +77,18 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
       assert @user.signup.machine?
       assert_not @drop.password_required?
     end
+
+    test '#password_required? returns false for legacy :api signup type' do
+      @user.signup_type = :api
+
+      assert_not @drop.password_required?
+    end
+
+    test '#password_required? returns false for :created_by_provider signup type' do
+      @user.signup_type = :created_by_provider
+
+      assert_not @drop.password_required?
+    end
   end
 
   class BuyerUserTest < Liquid::Drops::UserDropTest
