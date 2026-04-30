@@ -278,7 +278,7 @@ class UserTest < ActiveSupport::TestCase
 
     %i[new_signup partner].each do |type|
       user.signup_type = type
-      assert user.signup.by_user?, "expected by_user? to be true for :#{type}"
+      assert user.signup.by_user?
     end
 
     user.signup_type = nil
@@ -286,7 +286,7 @@ class UserTest < ActiveSupport::TestCase
 
     %i[minimal api created_by_provider].each do |type|
       user.signup_type = type
-      assert_not user.signup.by_user?, "expected by_user? to be false for :#{type}"
+      assert_not user.signup.by_user?
     end
   end
 
