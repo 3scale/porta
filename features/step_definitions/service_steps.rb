@@ -47,12 +47,12 @@ Given "{product} has {} set to {string}" do |product, name, value|
 end
 
 Given "the service of {provider} has {string} {enabled}" do |account, toggle, enabled|
-  ActiveSupport::Deprecation.warn '[cucumber] stop using "the service of provider" use "product" instead'
+  ActiveSupport.deprecator.warn '[cucumber] stop using "the service of provider" use "product" instead'
   account.first_service!.update_attribute("#{underscore_spaces(toggle)}_enabled", enabled)
 end
 
 Given "the service of {provider} has {string} set to {string}" do |account, name, value|
-  ActiveSupport::Deprecation.warn '[cucumber] stop using "the service of provider" use "product" instead'
+  ActiveSupport.deprecator.warn '[cucumber] stop using "the service of provider" use "product" instead'
   account.first_service!.update_attribute(underscore_spaces(name), value)
 end
 

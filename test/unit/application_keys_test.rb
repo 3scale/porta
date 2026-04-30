@@ -209,8 +209,9 @@ class ApplicationKeysTest < ActiveSupport::TestCase
   end
 
   test 'is audited' do
-    app_key = FactoryBot.build(:application_key)
-    app_key.application.user_account.save!
+    # Create the application first to ensure all associated objects are persisted
+    application = FactoryBot.create(:cinstance)
+    app_key = FactoryBot.build(:application_key, application: application)
 
     assert_difference(Audited.audit_class.method(:count)) do
       ApplicationKey.with_synchronous_auditing do

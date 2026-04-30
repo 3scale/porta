@@ -46,6 +46,7 @@ Feature: Application plan change card
       And press "Change" within the change plan card
       Then they should see a toast alert with text "Plan changed to 'Premium'"
 
+    @emails
     Scenario: Buyer is notified if their plan is changed
       Given they go to the application's admin page
       And they select "Premium" from "Change plan" within the change plan card

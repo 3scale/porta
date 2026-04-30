@@ -54,7 +54,7 @@ Given "{buyer} has an invoice for {date} with the following item(s):" do |buyer,
 end
 
 Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Use the newer step.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Use the newer step.'
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
@@ -109,7 +109,7 @@ Then /^the buyer should have (\d+) invoices?$/ do |number|
 end
 
 Then /^the buyer should have following line items for "([^"]*)"(?: in the (\d)(?:nd|st|rd|th))? invoice:$/ do |date, order, items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Assert table instead.'
   step "the buyer logs in"
 
   visit admin_account_invoices_path
@@ -133,7 +133,7 @@ end
 
 # TODO: change to accept REGEXPs! (use page.body and assert)
 Then(/^I should see line items$/) do |items|
-  ActiveSupport::Deprecation.warn '[Cucumber] Deprecated! Assert table instead.'
+  ActiveSupport.deprecator.warn '[Cucumber] Deprecated! Assert table instead.'
   assert_line_items(items)
 end
 

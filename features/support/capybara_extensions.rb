@@ -19,7 +19,7 @@ module CapybaraExtensions
           .find('input.pf-c-form-control')
           .set with
     else
-      ActiveSupport::Deprecation.warn "[cucumber] field not implemented with Patternfly: #{field}"
+      ActiveSupport.deprecator.warn "[cucumber] field not implemented with Patternfly: #{field}"
       super
     end
   end
@@ -40,7 +40,7 @@ module CapybaraExtensions
         end
       end
     else
-      ActiveSupport::Deprecation.warn "[cucumber] Select not implemented with Patternfly: #{from}"
+      ActiveSupport.deprecator.warn "[cucumber] Select not implemented with Patternfly: #{from}"
       super
     end
   end

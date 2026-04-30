@@ -11,9 +11,10 @@ class Invoice < ApplicationRecord
   DECIMALS   = 2
   CHARGE_PRECISION   = 2
 
-  enum creation_type: {manual: 'manual', background: 'background'}
+  enum :creation_type, { manual: 'manual', background: 'background' }
 
   include AfterCommitQueue
+
   audited
   has_associated_audits
 

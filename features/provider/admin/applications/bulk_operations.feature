@@ -66,6 +66,7 @@ Feature: Audience > Applications > Bulk operations
       | Body    |                   |
     Then the buyer has received no emails
 
+  @emails
   Scenario: Send email in bulk
     Given the buyer has received no emails
     And item "Bob's App" is selected
