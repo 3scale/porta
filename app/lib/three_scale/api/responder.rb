@@ -4,15 +4,15 @@ class ThreeScale::Api::Responder < ActionController::Responder
 
   def api_behavior
     resource = serializable
+    return if get? && !controller.stale?(resource)
+
     resource = representer.prepare(resource) unless resource.frozen?
 
     case
-    when get?
-      display(resource, status: :ok) if controller.stale?(serializable)
+    when get? || put? || patch?
+      display(resource, status: :ok)
     when post? # create
       display resource, status: :created, location: api_location
-    when put? || patch? # update
-      display resource, status: :ok
     when delete?
       head :ok
     else
