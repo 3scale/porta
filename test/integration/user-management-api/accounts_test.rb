@@ -116,7 +116,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         assert_not_nil etag, 'ETag header should be present'
         assert_not_nil last_modified, 'Last-Modified header should be present'
 
-        assert 'approved', @buyer.state
+        assert_equal 'approved', @buyer.state
 
         # Bump updated_at manually, because otherwise it could be the same as last-modified timestamp
         @buyer.update(state: 'suspended', updated_at: @buyer.updated_at + 1.second)

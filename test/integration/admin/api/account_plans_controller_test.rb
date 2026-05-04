@@ -10,16 +10,18 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
     host! @provider.external_admin_domain
   end
 
-  # This simple test is because rails 5.0 upgrade.
-  # The issue was because the responder uses controller.stale?(resource)
-  # https://github.com/3scale/porta/blob/bdc91b894eac16fbd81afd4f05198eb5cb8beee9/app/lib/three_scale/api/responder.rb#L11
-  # Rails 5.0 `ActionController::Base#stale?` uses to_hash on the object and not Rails 4.x
-  # But the +representable+ gem is extending each items with the representer inside the `to_hash`
-  # https://github.com/trailblazer/representable/blob/v2.3.0/lib/representable/hash.rb#L32
-  #
-  # We implicitly extend those items with the JSON representer as to_json uses to_hash
-  # So it works but might also breaks in the future ...
-  def test_get
+  # Originally, this test was added in https://github.com/3scale/porta/commit/379b3dc26189f7dc5c5276de84d70c46ba5ae0b6
+  # and tested that calling #stale? in the controller was not affecting the XML representation of the object -
+  # as after upgrading from rails 4.x to rails 5.0, #stale? started calling #to_hash, breaking the response.
+  # As of today (Rails 7.1) .to_hash is not called by ActionController anymore, so the test was just kept to prevent
+  # potential future regressions
+  # This test demonstrates that +representable+ gem that we use for object representers (to convert objects to XML/JSON)
+  # mutates the caller objects on `.to_hash`.
+  # Specifically, in this test for the Plan object, the `trial_period_days` attribute with nil value is represented as:
+  # - `<trial_period_days>0</trial_period_days>` if `.to_hash` is called before `.to_xml`
+  # - `<trial_period_days/>` if just `.to_xml` is called
+  # Calling `.to_hash` before `.to_json` doesn't have any effect, because `.to_json` calls `.to_hash` anyway.
+  def test_account_plan_representer
     account_plans = @provider.account_plans.to_a
     represented = AccountPlansRepresenter.prepare(account_plans)
 
