@@ -37,11 +37,14 @@ class Buyers::ServiceContractsIndexPresenter
   end
 
   def service_contracts
-    @service_contracts ||= raw_service_contracts.scope_search(search)
-                                                .order_by(*sorting_params)
-                                                .includes(plan: %i[pricing_rules], user_account: [:admin_user])
-                                                .paginate(pagination_params)
-                                                .decorate
+    @service_contracts ||= begin
+      account_includes = buyer ? :user_account : { user_account: [:admin_user] }
+      raw_service_contracts.scope_search(search)
+                           .order_by(*sorting_params)
+                           .includes(account_includes, plan: %i[pricing_rules])
+                           .paginate(pagination_params)
+                           .decorate
+    end
   end
 
   def toolbar_props # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

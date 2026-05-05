@@ -104,7 +104,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_contract
       Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_plan
       Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :provider_account
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_user
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_users
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_cinstances
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
