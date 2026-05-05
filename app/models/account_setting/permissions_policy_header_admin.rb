@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccountSetting::PermissionsPolicyHeaderAdmin < AccountSetting::HttpHeaders
+class AccountSetting::PermissionsPolicyHeaderAdmin < AccountSetting::HttpHeader
   def self.display_name = "Permissions-Policy Header"
 
   # Default restrictive policy for admin portal
