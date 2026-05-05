@@ -195,13 +195,6 @@ ActiveSupport.on_load(:active_record) do
       end
     end)
 
-    BabySqueel::Nodes::Attribute.prepend(Module.new do
-      # those relations are used in subqueries and oracle does not support ORDER in subqueries
-      private def sanitize_relation(rel)
-        super rel.unscope(:order)
-      end
-    end)
-
     ActiveRecord::ConnectionAdapters::OracleEnhanced::SchemaStatements.module_eval do
       def distinct_relation_for_primary_key(relation) # :nodoc:
         primary_key_columns = Array(relation.primary_key).map do |column|
