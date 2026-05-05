@@ -68,7 +68,7 @@ module ApiDocs
     end
 
     def service_metrics
-      @account.top_level_metrics.includes(:owner)
+      @account.metrics.top_level.includes(:owner)
     end
 
     def backend_api_metrics
