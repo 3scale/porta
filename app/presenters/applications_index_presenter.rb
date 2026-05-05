@@ -157,7 +157,7 @@ class ApplicationsIndexPresenter
   private
 
   def plans_for_filter
-    accessible_services.reject { |service| service.application_plans.empty? }
+    accessible_services.includes(:application_plans).reject { |service| service.application_plans.empty? }
                         .map do |service|
                           {
                             groupName: service.name,
