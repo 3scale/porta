@@ -24,7 +24,7 @@ module AccountSettings
       private
 
       def cache_key(account, setting_name)
-        "account:#{account.id}:#{setting_name}"
+        "account_setting:#{account.id}:#{setting_name}"
       end
     end
   end
