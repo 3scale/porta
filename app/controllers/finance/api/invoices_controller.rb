@@ -65,11 +65,11 @@ class Finance::Api::InvoicesController < Finance::Api::BaseController
   private
 
   def invoices
-    @invoices ||= current_account.buyer_invoices.includes(:line_items, {:buyer_account => [:country]}, :provider_account)
+    @invoices ||= current_account.buyer_invoices.includes(:line_items, :provider_account)
   end
 
   def invoice
-    @invoice ||= invoices.find(params[:id])
+    @invoice ||= current_account.buyer_invoices.find(params[:id])
   end
 
   def invoice_params_create
