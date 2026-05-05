@@ -6,4 +6,4 @@
 
 div class="pf-c-card"
   div class="pf-c-card__body"
-    = render partial: 'provider/admin/securities/form', locals: { url: admin_site_security_path, settings: @settings, field: :spam_protection_level, selector_label: t('.selector_label') }
+    = render partial: 'provider/admin/securities/form', locals: { url: admin_site_security_path, settings: @settings, account_settings: @account_settings, field: :spam_protection_level, selector_label: t('.selector_label') }

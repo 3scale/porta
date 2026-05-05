@@ -692,6 +692,11 @@ en:
           selector_label: Protection against bots on the admin portal
           captcha_hint_false: reCAPTCHA has not been configured correctly, bot protection cannot be enabled.
           captcha_hint_true: reCAPTCHA v3 will invisibly verify interactions to detect bots.
+        form:
+          use_custom_value: Use custom value instead of server default
+          default_hint: "Default: %{default_value}"
+          default_hint_none: "Default: none"
+          submit: Update Security Settings
         update:
           error: There were problems saving the settings
           success: Security settings updated

@@ -15,14 +15,15 @@ module DeveloperPortal
 
     private
 
-    def set_permissions_policy_header
-      header_value = AccountSettings::SettingCache.fetch(
-        account: site_account,
-        setting_name: 'permissions_policy_header_developer'
-      )
-
-      # Set header only if value is present (even if only whitespaces)
-      response.headers['Permissions-Policy'] = header_value if header_value&.size&.nonzero?
+    def set_security_headers
+      {
+        'Permissions-Policy'                  => 'permissions_policy_header_developer',
+        'Content-Security-Policy'             => 'csp_header_developer',
+        'Content-Security-Policy-Report-Only' => 'csp_report_only_header_developer'
+      }.each do |header, setting_name|
+        value = AccountSettings::SettingCache.fetch(account: site_account, setting_name: setting_name)
+        response.headers[header] = value if value&.size&.nonzero?
+      end
     end
   end
 end

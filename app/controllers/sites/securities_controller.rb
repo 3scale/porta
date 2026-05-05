@@ -3,7 +3,7 @@
 class Sites::SecuritiesController < Sites::BaseController
   activate_menu :audience, :cms, :security
 
-  ACCOUNT_SETTING_TYPES = %w[AccountSetting::PermissionsPolicyHeaderDeveloper].freeze
+  ACCOUNT_SETTING_TYPES = %w[PermissionsPolicyHeaderDeveloper CspHeaderDeveloper CspReportOnlyHeaderDeveloper].freeze
 
   before_action :find_settings
   before_action :find_account_settings
