@@ -98,19 +98,19 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
   end
 
   test '#usage with period eternity rejects non-eternity granularity' do
-    assert_raise Stats::InvalidParameterError do
+    assert_raise Stats::InvalidParameterError, match: "Only 'eternity' granularity is supported for period 'eternity'" do
       @dummy.usage(period: 'eternity', granularity: :month, metric_name: 'foo', timezone: 'UTC')
     end
   end
 
   test '#usage rejects eternity granularity without eternity period' do
-    assert_raise Stats::InvalidParameterError do
+    assert_raise Stats::InvalidParameterError, match: "Granularity 'eternity' is only supported for period 'eternity'" do
       @dummy.usage(period: 'month', granularity: :eternity, metric_name: 'foo', timezone: 'UTC')
     end
   end
 
   test '#usage rejects eternity granularity when no period is given' do
-    assert_raise Stats::InvalidParameterError do
+    assert_raise Stats::InvalidParameterError, match: "Granularity 'eternity' is only supported for period 'eternity'" do
       @dummy.usage(since: '2015-01-01', until: '2016-01-01', granularity: :eternity, metric_name: 'foo', timezone: 'UTC')
     end
   end
