@@ -110,9 +110,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_plans
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :users
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :country
-      Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_plans
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :contracts
       Bullet.add_safelist class_name: "AccountContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "AccountPlan", type: :n_plus_one_query, association: :customizations
@@ -138,21 +135,12 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :user_account
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
-      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
-      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
-      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :user_account
-      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :user_account
-      Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
       Bullet.add_safelist class_name: "Invoice", type: :counter_cache, association: :payment_transactions
       Bullet.add_safelist class_name: "Invoice", type: :n_plus_one_query, association: :buyer_account
       Bullet.add_safelist class_name: "Invoice", type: :n_plus_one_query, association: :provider_account
       Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
-      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
       Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :buyer_account
-      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :line_items
-      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :buyer_account
-      Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :provider_account
       Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :provider_account
       Bullet.add_safelist class_name: "LineItem::PlanCost", type: :n_plus_one_query, association: :contract
       Bullet.add_safelist class_name: "Message", type: :n_plus_one_query, association: :sender
@@ -161,8 +149,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :parent
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :children
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
-      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
-      Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
       Bullet.add_safelist class_name: "Post", type: :n_plus_one_query, association: :topic
       Bullet.add_safelist class_name: "ProxyConfig", type: :n_plus_one_query, association: :user
@@ -182,7 +168,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post
-      Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :metric
       Bullet.add_safelist class_name: "User", type: :n_plus_one_query, association: :member_permissions
