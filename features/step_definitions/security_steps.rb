@@ -1,19 +1,24 @@
 # frozen_string_literal: true
 
-Given('the provider has configured {word} portal Permissions-Policy {string}') do |portal, policy_value|
+def header_setting_type(header_name, portal)
+  class_prefix = header_name.split(/[\s-]/).map(&:capitalize).join
+  "#{class_prefix}Header#{portal.capitalize}"
+end
+
+Given(/^the provider has configured (\w+) portal (.+?) "([^"]*)"$/) do |portal, header_name, value|
   @provider.account_settings.create!(
-    type: "AccountSetting::PermissionsPolicyHeader#{portal.capitalize}",
-    value: policy_value
+    type: header_setting_type(header_name, portal),
+    value: value
   )
 end
 
-Then('the {word} portal should have configured Permissions-Policy header {string}') do |portal, expected_value|
-  setting = @provider.account_settings.find_by(type: "AccountSetting::PermissionsPolicyHeader#{portal.capitalize}")
-  assert_not_nil setting, "Expected #{portal} portal Permissions-Policy setting to exist"
+Then(/^the (\w+) portal should have configured (.+?) header "([^"]*)"$/) do |portal, header_name, expected_value|
+  setting = @provider.account_settings.find_by(type: header_setting_type(header_name, portal))
+  assert_not_nil setting, "Expected #{portal} portal #{header_name} setting to exist"
   assert_equal expected_value, setting.value
 end
 
-Then('the {word} portal should not have configured Permissions-Policy header') do |portal|
-  setting = @provider.account_settings.find_by(type: "AccountSetting::PermissionsPolicyHeader#{portal.capitalize}")
-  assert setting.nil? || setting.value.blank?, "Expected #{portal} portal Permissions-Policy to be blank or not exist"
+Then(/^the (\w+) portal should not have configured (.+?) header$/) do |portal, header_name|
+  setting = @provider.account_settings.find_by(type: header_setting_type(header_name, portal))
+  assert setting.nil? || setting.value.blank?, "Expected #{portal} portal #{header_name} to be blank or not exist"
 end

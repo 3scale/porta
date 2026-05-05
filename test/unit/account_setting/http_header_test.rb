@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class AccountSetting::HttpHeadersTest < ActiveSupport::TestCase
+class AccountSetting::HttpHeaderTest < ActiveSupport::TestCase
   def setup
     @account = FactoryBot.build(:simple_provider)
     @original_cache = Rails.cache

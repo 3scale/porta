@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccountSetting::HttpHeaders < AccountSetting
+class AccountSetting::HttpHeader < AccountSetting
   validates :value,
             length: { maximum: 5000 },
             format: {

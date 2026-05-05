@@ -4,7 +4,7 @@ class Provider::Admin::SecuritiesController < Provider::Admin::BaseController
 
   activate_menu! :account, :integrate, :security
 
-  ACCOUNT_SETTING_TYPES = %w[AccountSetting::PermissionsPolicyHeaderAdmin].freeze
+  ACCOUNT_SETTING_TYPES = %w[PermissionsPolicyHeaderAdmin CspHeaderAdmin CspReportOnlyHeaderAdmin].freeze
 
   before_action :find_settings
   before_action :find_account_settings

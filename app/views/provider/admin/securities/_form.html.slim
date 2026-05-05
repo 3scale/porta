@@ -14,17 +14,18 @@
             label class="pf-c-radio__label #{'pf-m-disabled' if disabled}" for=id
               = label
 
-  - @account_settings.each do |account_setting|
+  - account_settings.each do |account_setting|
     - setting_name = account_setting.setting_name
+    - hint = account_setting.default_value.presence ? t('provider.admin.securities.form.default_hint', default_value: account_setting.default_value) : t('provider.admin.securities.form.default_hint_none')
     = form.inputs account_setting.display_name do
       label
         input type="checkbox" id="override_#{setting_name}" data-toggle-target=setting_name checked=account_setting.persisted?
-        |  Use custom value instead of server default
+        = t('provider.admin.securities.form.use_custom_value')
       = form.input setting_name.to_sym,
               as: :patternfly_input,
               label: account_setting.display_name,
-              hint: "Default: #{account_setting.default_value.presence || 'none'}",
+              hint: hint,
               input_html: { id: setting_name, placeholder: account_setting.default_value, value: account_setting.value, disabled: account_setting.new_record? }
 
   = form.actions do
-    = form.commit_button 'Update Security Settings'
+    = form.commit_button t('provider.admin.securities.form.submit')
