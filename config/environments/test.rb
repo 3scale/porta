@@ -122,7 +122,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :pricing_rules
       Bullet.add_safelist class_name: "ApplicationPlan", type: :n_plus_one_query, association: :usage_limits
       Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :issuer
-      Bullet.add_safelist class_name: "ApplicationPlan", type: :unused_eager_loading, association: :pricing_rules
       Bullet.add_safelist class_name: "BackendApi", type: :counter_cache, association: :backend_api_configs
       Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :children
       Bullet.add_safelist class_name: "CMS::Builtin::Section", type: :n_plus_one_query, association: :parent
