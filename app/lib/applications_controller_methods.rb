@@ -86,7 +86,7 @@ module ApplicationsControllerMethods
   end
 
   def accessible_services
-    @accessible_services ||= current_user.accessible_services.includes(:application_plans)
+    @accessible_services ||= current_user.accessible_services
   end
 
   def accessible_not_bought_cinstances

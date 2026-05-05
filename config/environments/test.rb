@@ -158,7 +158,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :account
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :default_service_plan
       Bullet.add_safelist class_name: "Service", type: :n_plus_one_query, association: :metrics
-      Bullet.add_safelist class_name: "Service", type: :unused_eager_loading, association: :application_plans
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :plan
       Bullet.add_safelist class_name: "ServiceContract", type: :n_plus_one_query, association: :user_account
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :customizations
