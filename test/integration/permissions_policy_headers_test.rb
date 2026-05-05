@@ -7,7 +7,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
   test 'admin portal sets Permissions-Policy header from AccountSetting' do
     provider = FactoryBot.create(:provider_account)
     provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
+      type: 'PermissionsPolicyHeaderAdmin',
       value: 'camera=(), microphone=()'
     )
 
@@ -32,7 +32,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
   test 'admin portal does not set header when setting is blank' do
     provider = FactoryBot.create(:provider_account)
     provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
+      type: 'PermissionsPolicyHeaderAdmin',
       value: ''
     )
 
@@ -50,7 +50,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
     user.activate!
 
     provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
+      type: 'PermissionsPolicyHeaderDeveloper',
       value: 'camera=(), geolocation=()'
     )
 
@@ -83,7 +83,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
   test 'developer portal sets Permissions-Policy header on unauthenticated pages' do
     provider = FactoryBot.create(:provider_account)
     provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
+      type: 'PermissionsPolicyHeaderDeveloper',
       value: 'camera=(), geolocation=()'
     )
 
@@ -99,7 +99,7 @@ class PermissionsPolicyHeadersTest < ActionDispatch::IntegrationTest
     login_provider provider
 
     provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
+      type: 'PermissionsPolicyHeaderDeveloper',
       value: 'fullscreen=(self)'
     )
 

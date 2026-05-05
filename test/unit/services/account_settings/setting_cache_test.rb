@@ -17,7 +17,7 @@ class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
 
   test 'fetch returns setting value when it exists' do
     @provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderAdmin',
+      type: 'PermissionsPolicyHeaderAdmin',
       value: 'camera=(), microphone=()'
     )
 
@@ -38,7 +38,7 @@ class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
 
   test 'fetch caches the value after first call' do
     @provider.account_settings.create!(
-      type: 'AccountSetting::PermissionsPolicyHeaderDeveloper',
+      type: 'PermissionsPolicyHeaderDeveloper',
       value: 'camera=(), geolocation=()'
     )
 
@@ -46,7 +46,7 @@ class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
       account: @provider, setting_name: :permissions_policy_header_developer
     )
 
-    cache_key = "account:#{@provider.id}:permissions_policy_header_developer"
+    cache_key = "account_setting:#{@provider.id}:permissions_policy_header_developer"
     assert_equal 'camera=(), geolocation=()', Rails.cache.read(cache_key)
   end
 
@@ -55,7 +55,7 @@ class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
       account: @provider, setting_name: :permissions_policy_header_admin, value: 'geolocation=()'
     )
 
-    cache_key = "account:#{@provider.id}:permissions_policy_header_admin"
+    cache_key = "account_setting:#{@provider.id}:permissions_policy_header_admin"
     assert_equal 'geolocation=()', Rails.cache.read(cache_key)
   end
 
@@ -64,7 +64,7 @@ class AccountSettings::SettingCacheTest < ActiveSupport::TestCase
       account: @provider, setting_name: :permissions_policy_header_admin, value: nil
     )
 
-    cache_key = "account:#{@provider.id}:permissions_policy_header_admin"
+    cache_key = "account_setting:#{@provider.id}:permissions_policy_header_admin"
     assert_nil Rails.cache.read(cache_key)
     assert Rails.cache.exist?(cache_key)
   end
