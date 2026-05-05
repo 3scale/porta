@@ -2,6 +2,14 @@
 
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      # https://github.com/rsim/oracle-enhanced/pull/2573
+      # Perhaps will end-up into adapter version 8.1.4+ but double check
+      def supports_fetch_first_n_rows_and_offset?
+        true
+      end
+    end
+
     require 'arel/visitors/oracle12_hack' || next # once done, we can skip setup
 
     # in 6.0.6 automatic detection of max identifier length was introduced
@@ -159,6 +167,9 @@ ActiveSupport.on_load(:active_record) do
       # ar_object.with_lock doesn't work OOB on oracle, see https://github.com/rsim/oracle-enhanced/issues/2237
       # A workaround is to avoid using FETCH FIRST when reloading an object by primary key.
       # https://github.com/rails/rails/blob/v7.1.5.1/activerecord/lib/active_record/relation/finder_methods.rb#L506
+      # Might be fixed in 8.1.4+ with
+      #   https://github.com/rsim/oracle-enhanced/pull/2573 and
+      #   https://github.com/rsim/oracle-enhanced/pull/2693
       def find_one(id)
         if ActiveRecord::Base === id
           raise ArgumentError, <<-MSG.squish
@@ -282,6 +293,7 @@ ActiveSupport.on_load(:active_record) do
         # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
         # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
         # upstreamed: https://github.com/rsim/oracle-enhanced/pull/2293
+        # TODO: maybe can remove now
         index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, **options)
         quoted_table_name = quote_table_name(table_name)
         quoted_column_name = quote_column_name(index_name)
