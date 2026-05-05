@@ -168,7 +168,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "ServicePlan", type: :n_plus_one_query, association: :service
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :last_user
       Bullet.add_safelist class_name: "Topic", type: :n_plus_one_query, association: :recent_post
-      Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "UsageLimit", type: :unused_eager_loading, association: :metric
       Bullet.add_safelist class_name: "User", type: :n_plus_one_query, association: :member_permissions
       Bullet.add_safelist class_name: "UserTopic", type: :n_plus_one_query, association: :topic
