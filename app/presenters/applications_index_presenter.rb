@@ -130,15 +130,14 @@ class ApplicationsIndexPresenter
   end
 
   def applications
-    query = raw_applications.scope_search(search)
-                            .order_by(*sorting_params)
-                            .paginate(pagination_params)
-    query = if provider.settings.finance.allowed?
-              query.includes(plan: %i[pricing_rules])
-            else
-              query.includes(:plan)
-            end
-    @applications ||= query.decorate
+    @applications ||= begin
+      includes = provider.settings.finance.allowed? ? { plan: %i[pricing_rules] } : :plan
+      raw_applications.scope_search(search)
+                      .order_by(*sorting_params)
+                      .includes(includes)
+                      .paginate(pagination_params)
+                      .decorate
+    end
   end
 
   def empty_state?
