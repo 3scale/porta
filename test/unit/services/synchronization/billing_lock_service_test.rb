@@ -16,7 +16,7 @@ class Synchronization::BillingLockServiceTest < ActionDispatch::IntegrationTest
   test "initializes with account_id and creates billing resource key" do
     service = Synchronization::BillingLockService.new(@account_id)
 
-    assert_equal @account_id, service.account_id
+    assert_equal @account_id, service.send(:account_id)
     assert_equal "lock:billing:#{@account_id}", service.send(:lock_key)
   end
 
@@ -33,15 +33,16 @@ class Synchronization::BillingLockServiceTest < ActionDispatch::IntegrationTest
     assert_equal custom_timeout, service.send(:timeout)
   end
 
-  test "lock acquires lock and stores lock info" do
+  test "lock acquires lock and stores and returns lock info" do
     service = Synchronization::BillingLockService.new(@account_id)
 
-    service.lock
+    lock_info = service.lock
 
-    assert_not_nil service.lock_info
-    assert_instance_of Hash, service.lock_info
-    assert service.lock_info.key?(:validity)
-    assert service.lock_info.key?(:resource)
+    assert_not_nil lock_info
+    assert_equal lock_info, service.send(:lock_info)
+    assert_instance_of Hash, lock_info
+    assert lock_info.key?(:validity)
+    assert lock_info.key?(:resource)
   end
 
   test "lock raises LockBillingError when lock is already held" do
@@ -50,11 +51,9 @@ class Synchronization::BillingLockServiceTest < ActionDispatch::IntegrationTest
 
     service1.lock
 
-    error = assert_raises(Finance::LockBillingError) do
+    assert_raises(Finance::LockBillingError, match: "Concurrent billing job already running for account #{@account_id}") do
       service2.lock
     end
-
-    assert_match(/Concurrent billing job already running for account #{@account_id}/, error.message)
   end
 
   test "unlock releases the lock" do
@@ -71,9 +70,8 @@ class Synchronization::BillingLockServiceTest < ActionDispatch::IntegrationTest
     service1.unlock
 
     # Now second service can acquire lock
-    assert_nothing_raised { service2.lock }
-
-    service2.unlock
+    assert service2.lock
+    assert_nil service2.unlock
   end
 
   test "unlock is idempotent and does not raise if lock is not held" do
@@ -94,10 +92,10 @@ class Synchronization::BillingLockServiceTest < ActionDispatch::IntegrationTest
     service = Synchronization::BillingLockService.new(@account_id)
 
     service.lock
-    assert_not_nil service.lock_info
+    assert_not_nil service.send(:lock_info)
 
     service.unlock
-    assert_nil service.lock_info
+    assert_nil service.send(:lock_info)
   end
 
   test "unlock logs warning if unlock fails" do

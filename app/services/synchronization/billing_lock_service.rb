@@ -15,11 +15,11 @@ class Synchronization::BillingLockService < Synchronization::NowaitLockService
     super(resource, timeout: timeout, &block)
   end
 
-  attr_accessor :lock_info, :account_id
-
   def lock
     @lock_info = manager.lock(lock_key, timeout)
     raise Finance::LockBillingError, "Concurrent billing job already running for account #{account_id}" unless @lock_info
+
+    @lock_info
   end
 
   def unlock
@@ -28,4 +28,8 @@ class Synchronization::BillingLockService < Synchronization::NowaitLockService
   rescue StandardError => exception
     Rails.logger.warn("Failed to release billing lock for account #{account_id}: #{exception.message}")
   end
+
+  private
+
+  attr_accessor :lock_info, :account_id
 end
