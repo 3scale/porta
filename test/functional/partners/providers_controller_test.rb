@@ -100,6 +100,17 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert_equal true, body['success']
   end
 
+  test 'post without password or open_id rejected' do
+    prepare_master_account
+    post :create, params: provider_params.except(:open_id)
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+
+    refute body['success']
+    assert body['errors']['user']['password'].present?
+  end
+
   test 'post with weak password rejected when strong passwords enabled' do
     prepare_master_account
 

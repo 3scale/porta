@@ -237,10 +237,6 @@ class User < ApplicationRecord
     signup.minimal?
   end
 
-  def api_signup?
-    signup.api?
-  end
-
   def cas_signup?
     signup.cas?
   end
@@ -437,10 +433,6 @@ class User < ApplicationRecord
       signup_type == :minimal
     end
 
-    def api?
-      signup_type == :api
-    end
-
     def open_id?
       @user.open_id.present?
     end
@@ -458,11 +450,11 @@ class User < ApplicationRecord
     end
 
     def machine?
-      minimal? || api? || created_by_provider? || open_id? || cas? || oauth2?
+      !by_user?
     end
 
     def by_user?
-      not machine?
+      (new? || signup_type.nil? || partner?) && !open_id? && !cas? && !oauth2?
     end
 
     private
