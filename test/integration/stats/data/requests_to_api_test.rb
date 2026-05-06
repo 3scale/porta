@@ -124,6 +124,11 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
     assert_equal '{"error":"metric xxxx not found"}', @response.body
   end
 
+  test 'usage with period eternity rejects granularity' do
+    params = { period: 'eternity', granularity: 'month', metric_name: 'hits', provider_key: @provider_account.api_key }
+    get usage_stats_data_applications_path(@application, format: :json), params: params
+    assert_response :bad_request
+  end
 
   # Services
 

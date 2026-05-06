@@ -9,7 +9,7 @@ module Stats
     def values_in_range(range, granularity, prefix)
       # TODO: - refactor, isolate to strategies?
       case granularity
-      when :day, :month
+      when :day, :month, :year, :eternity
         use_aggregated_values(range, granularity, prefix)
       when 6.hours
         resum_all_value(range, granularity, prefix)
@@ -215,6 +215,8 @@ module Stats
       transform = ->(time) { prefix + time.to_fs(:compact) }
 
       case granularity
+      when :eternity
+        ["#{key}/eternity"]
       when :day
         from = range.begin.to_date
         to = range.end.to_date

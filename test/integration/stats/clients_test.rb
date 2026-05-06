@@ -60,6 +60,29 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
      "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
   end
 
+  test 'usage with period eternity as json' do
+    make_transaction_at(Time.utc(2009, 12,  4, 11, 30), :cinstance_id => @cinstance.id)
+    make_transaction_at(Time.utc(2009, 12,  4, 22, 15), :cinstance_id => @cinstance.id)
+    make_transaction_at(Time.utc(2009, 12, 12), :cinstance_id => @cinstance.id)
+
+    travel_to(Time.utc(2009, 12, 13))
+
+    login! @provider_account
+
+    get usage_stats_api_applications_path(@cinstance, format: :json), params: { period: 'eternity', metric_name: @metric.system_name }
+
+    assert_response :success
+    assert_media_type 'application/json'
+
+    result = JSON.parse(@response.body)
+    assert_equal 'eternity', result['period']['name']
+    assert_equal 'eternity', result['period']['granularity']
+    assert_equal 3, result['total']
+    assert_equal [3], result['values']
+    assert_nil result['previous_total']
+    assert_nil result['change']
+  end
+
   test 'usage_response_code as json' do
     # This one is outside of the time range
     make_transaction_at(Time.utc(2009, 11,  3), :cinstance_id => @cinstance.id)
