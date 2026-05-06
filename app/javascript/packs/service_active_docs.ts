@@ -26,8 +26,7 @@ const renderActiveDocs = async () => {
 
   SwaggerUI({
     url,
-    // eslint-disable-next-line @typescript-eslint/naming-convention -- SwaggerUI API
-    dom_id: `#${containerId}`,
+    domNode: container,
     requestInterceptor
   })
 }

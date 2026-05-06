@@ -10,18 +10,19 @@ import type { AccountDataResponse, ApiDocsServices, BackendApiReportBody, Backen
 import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 import type { Component } from 'react'
-import type { SwaggerUIContext, ParameterIncludeEmptyProperties } from 'swagger-ui-utils'
+import type { SwaggerUIContext, ParameterIncludeEmptyProperties, JsonSchemaFormProperties } from 'swagger-ui-utils'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
   return `${baseUrl.replace(/\/$/, '')}${specPath}`
 }
 
-const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
+const appendSwaggerDiv = (container: HTMLElement, id: string): HTMLDivElement => {
   const div = document.createElement('div')
   div.setAttribute('class',  'api-docs-wrap')
   div.setAttribute('id', id)
 
   container.appendChild(div)
+  return div
 }
 
 /**
@@ -132,23 +133,33 @@ const UncheckSendEmptyValuePlugin: SwaggerUIPlugin = () => {
   }
 }
 
+const ClearDefaultValuesPlugin: SwaggerUIPlugin = () => {
+  return {
+    wrapComponents: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention, react/no-multi-comp
+      JsonSchemaForm: (originalComponent: Component, { React }: SwaggerUIContext) => function JsonSchemaFormWrapped (props: JsonSchemaFormProperties) {
+        return React.createElement(originalComponent, { ...props, dispatchInitialValue: false })
+      }
+    }
+  }
+}
+
 export const renderSwaggerUI = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, accountDataUrl: string): Promise<void> => {
   const apiSpecs: ApiDocsServices = await fetchData<ApiDocsServices>(apiDocsPath)
 
   const accountData: AccountDataResponse = await fetchData<AccountDataResponse>(accountDataUrl)
 
-  apiSpecs.apis.forEach( api => {
+  apiSpecs.apis.forEach(api => {
     const domId = api.system_name.replace(/_/g, '-')
     const url = getApiSpecUrl(baseUrl, api.path)
-    appendSwaggerDiv(container, domId)
+    const div = appendSwaggerDiv(container, domId)
     SwaggerUI({
       url,
-      // eslint-disable-next-line @typescript-eslint/naming-convention -- Swagger UI
-      dom_id: `#${domId}`,
+      domNode: div,
       requestInterceptor: (request) => autocompleteRequestInterceptor(request, accountData, ''),
       tryItOutEnabled: true,
       plugins: [
-        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin
+        RequestBodyTransformerPlugin, UncheckSendEmptyValuePlugin, ClearDefaultValuesPlugin
       ]
     })
   })
