@@ -7,10 +7,11 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { CompactListItem } from 'Common/components/CompactListCard'
 
 interface Props {
+  title: string;
   products: CompactListItem[];
 }
 
-const ProductsUsedListCard: React.FunctionComponent<Props> = ({ products }) => {
+const ProductsUsedListCard: React.FunctionComponent<Props> = ({ title, products }) => {
   const [page, setPage] = useState(1)
   const [filteredProducts, setFilteredProducts] = useState(products)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -33,7 +34,7 @@ const ProductsUsedListCard: React.FunctionComponent<Props> = ({ products }) => {
       searchInputPlaceholder="Find a product"
       searchInputRef={searchInputRef}
       setPage={setPage}
-      tableAriaLabel="Products using this backend"
+      tableAriaLabel={title}
       onSearch={handleOnSearch}
     />
   )

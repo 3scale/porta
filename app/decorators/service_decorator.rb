@@ -35,6 +35,10 @@ class ServiceDecorator < ApplicationDecorator
     ApplicationPlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
   end
 
+  def published_service_plans
+    ServicePlanDecorator.decorate_collection(service_plans.published)
+  end
+
   def service_path
     if h.can?(:manage, :plans)
       h.admin_service_path(object)
@@ -74,6 +78,58 @@ class ServiceDecorator < ApplicationDecorator
     return super unless options[:js]
 
     super.deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
+  end
+
+  def top_metrics
+    @top_metrics ||= metrics.top_level.limit(5)
+  end
+
+  def refresh_service_discovery_link
+    url = h.service_discovery_usable? ? h.provider_admin_service_discovery_service_path(self) : h.service_discovery_presenter.authorize_url
+
+    confirm = I18n.t('api.services.forms.definition_settings.refresh.confirmation', name: name)
+    label = I18n.t('api.services.forms.definition_settings.refresh.label')
+    h.action_link_to(:refresh, url, label:,
+                                    data: { confirm: },
+                                    method: :put)
+  end
+
+  def latest_alerts
+    @latest_alerts ||= account.alerts.by_service(self).latest.decorate
+  end
+
+  def latest_applications
+    @latest_applications ||= cinstances.latest
+  end
+
+  def traffic?
+    cinstances.where.not(first_traffic_at: nil).exists?
+  end
+
+  def human_backend
+    {
+      "1" => "API key",
+      "2" => "App Id",
+      "oauth" => "OAuth",
+      "oidc" => "OpenID Connect"
+    }[service.proxy_authentication_method]
+  end
+
+  # :reek:NilCheck
+  def friendly_service_settings
+    %i[buyers_manage_keys buyers_manage_apps buyer_plan_change_permission buyer_can_select_plan].map do |setting|
+      value = object.send(setting)
+      next if value.nil?
+
+      subkey = case setting
+               when :buyer_plan_change_permission
+                 value.to_sym
+               else
+                 value ? :enabled : :disabled
+               end
+
+      I18n.t("api.services.cards.settings.friendly_service_setting.#{setting}.#{subkey}").html_safe
+    end.compact
   end
 
   private

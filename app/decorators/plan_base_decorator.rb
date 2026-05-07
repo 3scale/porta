@@ -25,4 +25,8 @@ class PlanBaseDecorator < ApplicationDecorator
   def contracts_path
     raise NoMethodError, "#{__method__} not implemented in #{self.class}"
   end
+
+  def link_to_edit
+    raise NoMethodError, "#{__method__} not implemented in #{self.class}"
+  end
 end

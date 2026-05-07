@@ -14,6 +14,7 @@ class Api::ServicesController < Api::BaseController
 
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, except: [:create]
 
+  decorates_assigned :service
   helper_method :presenter
 
   def index
@@ -25,9 +26,7 @@ class Api::ServicesController < Api::BaseController
     end
   end
 
-  def show
-    @service = @service.decorate
-  end
+  def show; end
 
   def new
     activate_menu :products
@@ -86,8 +85,6 @@ class Api::ServicesController < Api::BaseController
   end
 
   private
-
-  attr_reader :service
 
   def integration_settings_updater_service
     ApiIntegration::SettingsUpdaterService.new(service: service, proxy: service.proxy)
