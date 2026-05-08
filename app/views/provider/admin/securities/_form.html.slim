@@ -8,7 +8,7 @@
         - disabled = !Recaptcha.captcha_configured?
         - ThreeScale::BotProtection::LEVELS.each do |label, value|
           - id = "settings_#{field}_#{value}"
-          - checked = settings[field].to_sym == value
+          - checked = settings.public_send(field) == value
           div class="pf-c-radio"
             input class="pf-c-radio__input" name="settings[#{field}]" id=id type="radio" value=value checked=checked disabled=disabled
             label class="pf-c-radio__label #{'pf-m-disabled' if disabled}" for=id
