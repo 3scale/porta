@@ -20,17 +20,19 @@ module Arel
         collector
       end
 
-      # remove when addressed: https://github.com/rsim/oracle-enhanced/pull/2247 - included in v7.1.0
-      def visit_Arel_Nodes_Matches o, collector
-        if !o.case_sensitive && o.left && o.right
-          o.left = Arel::Nodes::NamedFunction.new('UPPER', [o.left])
-          o.right = Arel::Nodes::NamedFunction.new('UPPER', [o.right])
+      # remove once fixed in https://github.com/rsim/oracle-enhanced/pull/2573 (8.1.4+)
+      # Note that I'm not fully happy with this as the other visitor is missing potential
+      # patches that we have in this visitor. But limit+lock should be rare and simpler.
+      # An example failing operation without this is ProxyRule#move_to_top
+      def visit_Arel_Nodes_SelectStatement(o, collector)
+        if o.limit && o.lock
+          @oracle11_visitor ||= Arel::Visitors::Oracle.new(@connection)
+          return @oracle11_visitor.accept(o.dup, collector)
         end
-
-        super o, collector
+        super
       end
 
-      # Remove after upgrade to a version with
+      # can remove both after upgrade to a version with (8.1.4+ perhaps)
       # https://github.com/rsim/oracle-enhanced/pull/2654
       def visit_Arel_Nodes_In(o, collector)
         attr, values = o.left, o.right
@@ -43,7 +45,7 @@ module Arel
         in_nodes = values.each_slice(in_clause_length).map do |slice|
           Arel::Nodes::In.new(attr, slice)
         end
-        or_node = in_nodes.reduce { |left, right| Arel::Nodes::Or.new([left, right]) }
+        or_node = in_nodes.reduce { |left, right| Arel::Nodes::Or.new(left, right) }
         visit(Arel::Nodes::Grouping.new(or_node), collector)
       end
 
@@ -58,8 +60,7 @@ module Arel
         not_in_nodes = values.each_slice(in_clause_length).map do |slice|
           Arel::Nodes::NotIn.new(attr, slice)
         end
-        and_node = not_in_nodes.reduce { |left, right| Arel::Nodes::And.new([left, right]) }
-        visit(and_node, collector)
+        visit(Arel::Nodes::And.new(not_in_nodes), collector)
       end
     end
   end
