@@ -11,6 +11,13 @@ class Sites::AdminSecurityTest < ActionDispatch::IntegrationTest
     Rails.cache.clear
   end
 
+  test 'edit with nil admin_bot_protection_level' do
+    @provider.settings.update_column(:admin_bot_protection_level, nil)
+    get edit_provider_admin_security_path
+    assert_response :success
+    assert_xpath '//input[@type="radio"][@name="settings[admin_bot_protection_level]"][@value="none"][@checked]'
+  end
+
   test 'edit without captcha' do
     Recaptcha.expects(:captcha_configured?).returns(false).twice
     get edit_provider_admin_security_path
