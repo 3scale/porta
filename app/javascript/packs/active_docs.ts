@@ -2,6 +2,7 @@
 import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
+import { ClearDefaultValuesPlugin } from 'ActiveDocs/ClearDefaultValuesPlugin'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 import { fetchData } from 'utilities/fetchData'
 
@@ -16,9 +17,12 @@ window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) =
     .then(accountData => {
       const requestInterceptor = (request: SwaggerUI.Request) => autocompleteRequestInterceptor(request, accountData, serviceEndpoint)
 
+      const plugins = [...(args.plugins ?? []), ClearDefaultValuesPlugin]
+
       return SwaggerUI({
         ...args,
-        requestInterceptor
+        requestInterceptor,
+        plugins
       } as SwaggerUI.SwaggerUIOptions)
     })
     .catch(error => { console.error(error) })

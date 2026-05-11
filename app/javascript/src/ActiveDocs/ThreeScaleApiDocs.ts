@@ -2,6 +2,7 @@ import SwaggerUI from 'swagger-ui'
 // this is how SwaggerUI imports this function https://github.com/swagger-api/swagger-ui/pull/6208
 import { execute } from 'swagger-client/es/execute'
 
+import { ClearDefaultValuesPlugin } from 'ActiveDocs/ClearDefaultValuesPlugin'
 import { fetchData } from 'utilities/fetchData'
 import { safeFromJsonString } from 'utilities/json-utils'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
@@ -128,17 +129,6 @@ const UncheckSendEmptyValuePlugin: SwaggerUIPlugin = () => {
       ParameterIncludeEmpty: (originalComponent: Component, { React }: SwaggerUIContext ) => function ParameterIncludeEmptyWrapped (props: ParameterIncludeEmptyProperties) {
         props.isIncludedOptions.defaultValue = false
         return React.createElement(originalComponent, props)
-      }
-    }
-  }
-}
-
-const ClearDefaultValuesPlugin: SwaggerUIPlugin = () => {
-  return {
-    wrapComponents: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention, react/no-multi-comp
-      JsonSchemaForm: (originalComponent: Component, { React }: SwaggerUIContext) => function JsonSchemaFormWrapped (props: JsonSchemaFormProperties) {
-        return React.createElement(originalComponent, { ...props, dispatchInitialValue: false })
       }
     }
   }
