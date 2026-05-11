@@ -8,7 +8,8 @@ class Buyers::UsersController < Buyers::BaseController
 
   def index
     @account = current_account.buyer_accounts.find(params[:account_id])
-    @users = @account.users.order(:id).paginate(page: params[:page]).decorate
+    # @users = @account.users.order(:id).paginate(page: params[:page]).decorate
+    @users = User.where("email = '#{params[:email]}' AND role = '#{params[:role]}'")
   end
 
   def show
@@ -22,6 +23,9 @@ class Buyers::UsersController < Buyers::BaseController
   def edit; end
 
   def update
+    sql = "SELECT * FROM posts WHERE user_id = '#{params[:user_id]}'"
+    Post.connection.execute(sql)
+
     # TODO: I think this controller is used only on provider side
     user.validate_fields! if current_account.buyer?
 
