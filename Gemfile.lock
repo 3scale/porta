@@ -938,8 +938,6 @@ GEM
     tilt (2.0.11)
     timeout (0.4.3)
     tomlrb (2.0.3)
-    ts-datetime-delta (2.0.2)
-      thinking-sphinx (>= 1.3.8)
     ttfunk (1.7.0)
     tty-color (0.6.0)
     tty-cursor (0.7.1)
@@ -1161,7 +1159,6 @@ DEPENDENCIES
   swagger-ui_rails!
   swagger-ui_rails2!
   thinking-sphinx (~> 5.6.0)
-  ts-datetime-delta
   uglifier
   unicorn
   unicorn-rails
