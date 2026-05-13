@@ -89,6 +89,19 @@ Feature: Dev Portal Buyer Payment Details
       When the buyer is reviewing their account settings
       Then the buyer can't add an incomplete billing address for stripe
 
+    @javascript
+    Scenario: Buyer pays a failed invoice
+      Given the provider has Stripe configured as payment gateway
+      And the buyer has an invoice for May, 2026 with the following items:
+       | Name      | Description     | Quantity | Cost |
+       | Something | Nice things     | 1        | 10   |
+      And the invoice has a pending payment intent
+      And they go to the invoice dev portal page
+      And Stripe API is stubbed
+      And they follow "Pay invoice"
+      Then the current page is the invoice payment page on dev portal
+      And the Stripe form is visible and configured
+
   Rule: Braintree
 
     Background:

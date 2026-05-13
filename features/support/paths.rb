@@ -683,9 +683,13 @@ World(Module.new do
     when 'the dev portal invoices page'
       admin_account_invoices_path
 
-    when /^the invoice "(.*)" dev portal page$/
-      invoice = Invoice.find_by!(friendly_id: $1)
+    when /^the invoice(?: "(.*)")? dev portal page$/
+      invoice = $1.present? ? Invoice.find_by!(friendly_id: $1) : @invoice
       admin_account_invoice_path(invoice)
+
+    when /^the invoice(?: "(.*)")? payment page on dev portal$/
+      invoice = $1.present? ? Invoice.find_by!(friendly_id: $1) : @invoice
+      payment_admin_account_invoice_path(invoice)
 
     when 'the provider site page'
       admin_site_settings_path

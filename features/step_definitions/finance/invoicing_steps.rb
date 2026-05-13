@@ -92,6 +92,13 @@ Given(/^the buyer pays the invoice but failed$/) do
   invoice.fail
 end
 
+Given("the invoice has a pending payment intent") do
+  invoice = @invoice.presence || Invoice.last
+  invoice.finalize
+  invoice.issue
+  FactoryBot.create(:payment_intent, invoice: invoice, reference: 'pi_test', state: 'requires_payment_method')
+end
+
 Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
   if count.to_i == 0
     should have_no_xpath("//tr[contains(@id, 'invoice_')]")
@@ -231,4 +238,19 @@ end
 
 Then "the total cost is/should( be) {string}" do |cost_with_currency|
   assert_equal cost_with_currency, find('table.invoice tfoot tr td#invoice_cost').text
+end
+
+Given "Stripe API is stubbed" do
+  stub_request(:get, %r{https://api\.stripe\.com/v1/payment_intents/pi_test})
+    .to_return(status: 200, body: '{"id": "pi_test", "client_secret": "pi_test_secret", "object": "payment_intent"}', headers: { 'Content-Type' => 'application/json' })
+end
+
+Then "the Stripe form is visible and configured" do
+  stripe_form = page.find('.stripe-form')
+
+  assert_not_empty stripe_form['data-publishable-key']
+  assert_not_empty stripe_form['data-client-secret']
+  within(stripe_form) do
+    assert_selector('#card-element iframe')
+  end
 end
