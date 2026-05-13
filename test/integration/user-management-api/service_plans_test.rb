@@ -25,10 +25,10 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
 
     get admin_api_service_service_plan_path(service, plan)
     assert_response :forbidden
-    get admin_api_service_service_plan_path(service, plan), params: { access_token: token.value }
+    get admin_api_service_service_plan_path(service, plan), params: { access_token: token.plaintext_value }
     assert_response :not_found
     user.update(member_permission_service_ids: [service.id])
-    get admin_api_service_service_plan_path(service, plan), params: { access_token: token.value }
+    get admin_api_service_service_plan_path(service, plan), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 

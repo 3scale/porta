@@ -34,7 +34,7 @@ module Finance::Api
         member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
         token = FactoryBot.create(:access_token, owner: member)
 
-        get "/api/invoices.xml?access_token=#{token.value}"
+        get "/api/invoices.xml?access_token=#{token.plaintext_value}"
 
         assert_response :forbidden
       end
@@ -44,7 +44,7 @@ module Finance::Api
         member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
         token = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
-        get "/api/invoices.xml?access_token=#{token.value}"
+        get "/api/invoices.xml?access_token=#{token.plaintext_value}"
 
         assert_response :success
       end
@@ -54,7 +54,7 @@ module Finance::Api
         member = FactoryBot.create(:member, account: @provider, admin_sections: [])
         token = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
-        get "/api/invoices.xml?access_token=#{token.value}"
+        get "/api/invoices.xml?access_token=#{token.plaintext_value}"
 
         assert_response :forbidden
       end

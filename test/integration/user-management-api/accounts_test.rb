@@ -274,7 +274,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           assert_not settings.monthly_billing_enabled
 
           put admin_api_account_path(@buyer, format: :xml), params: {
-            access_token: token.value,
+            access_token: token.plaintext_value,
             monthly_billing_enabled: true,
             monthly_charging_enabled: true,
             org_name: 'ooooooooo'
@@ -334,7 +334,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     protected
 
     def access_token_params(token = @token)
-      { access_token: token.value }
+      { access_token: token.plaintext_value }
     end
 
     alias params access_token_params

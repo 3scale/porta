@@ -31,7 +31,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     ReferrerFilter.enable_backend!
     stub_backend_get_keys
 
-    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
   end
 
   test 'index' do

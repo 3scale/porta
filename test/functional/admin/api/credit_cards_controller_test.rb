@@ -8,7 +8,7 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
     provider = FactoryBot.create(:provider_account)
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
     host! provider.external_admin_domain
-    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
 
     @params = {
       id: @buyer.provider_account_id,

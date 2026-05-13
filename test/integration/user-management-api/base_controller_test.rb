@@ -26,7 +26,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
   def test_unknown_format
     with_api_routes do
-      get '/api/version/2.php', params: {access_token: @token.value}
+      get '/api/version/2.php', params: {access_token: @token.plaintext_value}
       assert_response :not_acceptable
     end
   end
@@ -37,7 +37,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     def setup
       provider = FactoryBot.create(:provider_account)
-      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
       host! provider.external_admin_domain
     end
 
@@ -131,7 +131,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       @provider = FactoryBot.create(:simple_provider)
       @user = FactoryBot.create(:simple_admin, account: @provider)
       @user.access_tokens.create!(name: 'API', scopes: %w[account_management], permission: 'ro') do |token|
-        token.value = 'access_token'
+        token.value = AccessToken.compute_digest('access_token')
       end
       ThreeScale.config.stubs(tenant_mode: 'multitenant')
     end
@@ -159,7 +159,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       ThreeScale.config.stubs(onpremises: true)
       user = FactoryBot.create(:simple_admin, account: master_account)
       user.access_tokens.create!(name: 'API', scopes: %w[account_management], permission: 'ro') do |token|
-        token.value = 'master_access_token'
+        token.value = AccessToken.compute_digest('master_access_token')
       end
 
       with_api_routes do
@@ -193,7 +193,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
   def multipart
     boundary = '----0123456789'
-    parts = {body: '{"hello": "world"}', name: 'Multipart request', access_token: @token.value}
+    parts = {body: '{"hello": "world"}', name: 'Multipart request', access_token: @token.plaintext_value}
     body = parts.map do |key, val|
       %(Content-Disposition: form-data; name="#{key}"\r\n\r\n#{val}\r\n)
     end.join("#{boundary}\r\n")

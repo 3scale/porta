@@ -6,7 +6,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     @provider.settings.allow_finance!
-    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
     host! @provider.external_admin_domain
     @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
@@ -17,7 +17,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
       @buyer = FactoryBot.create(:simple_account, provider_account: master_account)
       @invoice = FactoryBot.create(:invoice, provider_account: master_account, buyer_account: @buyer)
       @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
-      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).plaintext_value
       host! master_account.internal_admin_domain
     end
 

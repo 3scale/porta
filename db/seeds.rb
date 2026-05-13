@@ -143,21 +143,21 @@ ActiveRecord::Base.transaction do
 
   apicast_access_token = master_user.access_tokens.create!(name: 'APIcast', scopes: %w[account_management], permission: 'ro') do |token|
     if (value = ENV['APICAST_ACCESS_TOKEN'].presence)
-      token.value = value
+      token.value =  AccessToken.compute_digest(value)
     end
-  end.value
+  end.plaintext_value
 
 
   master_access_token = master_user.access_tokens.create!(name: 'Master Token', scopes: %w[account_management], permission: 'rw') do |token|
     if (value = ENV['MASTER_ACCESS_TOKEN'].presence)
-      token.value = value
+      token.value = AccessToken.compute_digest(value)
     end
-  end.value
+  end.plaintext_value
 
   if (admin_access_token = ENV['ADMIN_ACCESS_TOKEN'].presence)
     access_token = user.access_tokens.build(name: 'Administration', permission: 'rw')
     access_token.scopes = access_token.class.scopes.values
-    access_token.value = admin_access_token
+    access_token.value = AccessToken.compute_digest(admin_access_token)
     access_token.save!
   end
 

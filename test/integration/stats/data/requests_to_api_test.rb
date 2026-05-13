@@ -21,7 +21,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   test 'usage with access token' do
     member = FactoryBot.create(:member, account: @provider_account, admin_sections: ['monitoring'])
     token  = FactoryBot.create(:access_token, owner: member, scopes: ['stats'])
-    params = { period: 'day', metric_name: 'hits', access_token: token.value }
+    params = { period: 'day', metric_name: 'hits', access_token: token.plaintext_value }
 
     # token includes the right scope, member has the right permission, all services are accessible
     get usage_stats_data_applications_path(@application, format: :json), params: params
@@ -55,7 +55,7 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
   test 'summary with access token' do
     member = FactoryBot.create(:member, account: @provider_account, admin_sections: ['monitoring'])
     token  = FactoryBot.create(:access_token, owner: member, scopes: ['stats'])
-    params = { period: 'day', metric_name: 'hits', access_token: token.value }
+    params = { period: 'day', metric_name: 'hits', access_token: token.plaintext_value }
 
     get summary_stats_data_applications_path(@application, format: :json), params: params
     assert_response :success

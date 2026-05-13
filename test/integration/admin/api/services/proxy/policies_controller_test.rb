@@ -8,13 +8,13 @@ class PoliciesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
     host! @provider.external_admin_domain
-    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).plaintext_value
   end
 
   class PolicyRegistryAccessTokenScopeTest < PoliciesControllerTest
     def setup
       super
-      @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry]).value
+      @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry]).plaintext_value
     end
   end
 

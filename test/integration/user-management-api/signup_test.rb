@@ -35,7 +35,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider)
     token = FactoryBot.create(:access_token, owner: user)
 
-    post admin_api_signup_path, params: { format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona' }
+    post admin_api_signup_path, params: { format: :xml, access_token: token.plaintext_value, org_name: 'fiona', username: 'fiona' }
     assert_response :forbidden
 
     user.admin_sections = ['partners']
@@ -43,7 +43,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     token.scopes = ['account_management']
     token.save!
 
-    post admin_api_signup_path, params: { format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona' }
+    post admin_api_signup_path, params: { format: :xml, access_token: token.plaintext_value, org_name: 'fiona', username: 'fiona' }
     assert_response :created
   end
 

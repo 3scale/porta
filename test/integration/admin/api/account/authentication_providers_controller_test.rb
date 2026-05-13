@@ -108,7 +108,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     FactoryBot.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     FactoryBot.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     FactoryBot.create(:auth0_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
-    get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.value)
+    get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.plaintext_value)
     assert_response :ok
     authentication_providers = JSON.parse(response.body)['authentication_providers']
     assert authentication_providers.present?
@@ -122,7 +122,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     FactoryBot.create(:auth0_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     FactoryBot.create(:keycloak_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
     FactoryBot.create(:auth0_authentication_provider, account: FactoryBot.build_stubbed(:simple_provider), account_type: AuthenticationProvider.account_types[:provider])
-    get admin_api_account_authentication_providers_path(format: :xml, access_token: @access_token.value)
+    get admin_api_account_authentication_providers_path(format: :xml, access_token: @access_token.plaintext_value)
     assert_response :ok
     assert_xml './authentication_providers/authentication_provider', 2
   end
@@ -130,13 +130,13 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   test '#index ensures provider can use provider_sso' do
     Logic::RollingUpdates.stubs(:enabled?).returns(true)
     @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
-    get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.value)
+    get admin_api_account_authentication_providers_path(format: :json, access_token: @access_token.plaintext_value)
     assert_response :not_found
   end
 
   test '#show returns the requested authentication provider' do
     authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.value)
+    get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.plaintext_value)
     assert_response :ok
     assert_equal authentication_provider.id, JSON.parse(response.body).dig('authentication_provider', 'id')
   end
@@ -145,7 +145,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
     Logic::RollingUpdates.stubs(:enabled?).returns(true)
     @provider.stubs(:provider_can_use?).with(:provider_sso).returns(false)
     authentication_provider = FactoryBot.create(:self_authentication_provider, account: @provider, account_type: AuthenticationProvider.account_types[:provider])
-    get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.value)
+    get admin_api_account_authentication_provider_path(authentication_provider, format: :json, access_token: @access_token.plaintext_value)
     assert_response :not_found
   end
 
@@ -161,6 +161,6 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
       client_id: 'cid', client_secret: 'csecret', site: 'http://example',
       kind: 'auth0', skip_ssl_certificate_verification: true, published: true
     }.merge(different_attributes)
-    { authentication_provider: attributes, format: :json, access_token: @access_token.value }
+    { authentication_provider: attributes, format: :json, access_token: @access_token.plaintext_value }
   end
 end

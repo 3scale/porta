@@ -74,7 +74,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   def valid_params
     {
       service_id:   @service.id,
-      access_token: @token.value,
+      access_token: @token.plaintext_value,
       format:       :json
     }
   end
@@ -92,7 +92,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
       @service = @provider.default_service
       @another_service = FactoryBot.create(:simple_service, account: @provider)
       @member = FactoryBot.create(:active_user, account: @provider, role: :member)
-      @access_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[policy_registry]).value
+      @access_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[policy_registry]).plaintext_value
 
       host! @provider.external_admin_domain
     end
@@ -124,7 +124,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
 
     test 'correct member permissions but wrong token scope' do
       member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
-      new_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[stats cms finance]).value
+      new_token = FactoryBot.create(:access_token, owner: @member, scopes: %w[stats cms finance]).plaintext_value
 
       get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
 
@@ -133,7 +133,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
 
     test 'correct member permissions with invalid scope' do
       member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
-      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[account_management]).value
+      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[account_management]).plaintext_value
 
       get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
 
@@ -142,7 +142,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
 
     test 'correct member permissions with correct scope' do
       member.update(allowed_sections: :policy_registry, allowed_service_ids: [service.id])
-      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[policy_registry]).value
+      new_token = FactoryBot.create(:access_token, owner: member.reload, scopes: %w[policy_registry]).plaintext_value
 
       get admin_api_service_proxy_policies_path(service, access_token: new_token, format: :json)
 

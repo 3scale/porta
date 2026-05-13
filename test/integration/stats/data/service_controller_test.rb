@@ -7,7 +7,7 @@ class Stats::Data::ServicesControllerTest < ActionDispatch::IntegrationTest
     @application = FactoryBot.create :cinstance
     host! @application.provider_account.internal_admin_domain
     user = @application.provider_account.admins.first!
-    @token = FactoryBot.create(:access_token, owner: user, scopes: %w[stats], permission: 'rw').value
+    @token = FactoryBot.create(:access_token, owner: user, scopes: %w[stats], permission: 'rw').plaintext_value
   end
 
   attr_reader :application, :token
