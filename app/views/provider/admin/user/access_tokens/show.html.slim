@@ -1,0 +1,50 @@
+- content_for :javascripts
+= javascript_packs_with_chunks_tag 'access_tokens'
+
+- content_for :page_header_title, t('.page_header_title')
+div class="pf-c-card"
+  div class="pf-c-card__body"
+    div class="pf-c-content"
+      p = t('.copy_warning')
+    br
+    dl class="pf-c-description-list pf-m-horizontal"
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            = t('.fields.name')
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.name
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            = t('.fields.scopes')
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.human_scopes.to_sentence
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            = t('.fields.permission')
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+           = token.human_permission
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            = t('.fields.expires_at')
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+            = token.expires_at.present? ? l(token.expires_at) : t('access_token_options.no_expiration')
+      div class="pf-c-description-list__group"
+        dt class="pf-c-description-list__term"
+          span class="pf-c-description-list__text"
+            = t('.fields.token')
+        dd class="pf-c-description-list__description"
+          div class="pf-c-description-list__text"
+           = token.plaintext_value
+
+div class="pf-c-page__main-section"
+  div class="pf-l-flex"
+    div class="pf-l-flex__item pf-m-align-right"
+      = link_to t('.copied_button'), provider_admin_user_access_tokens_path, class: 'pf-c-button pf-m-primary'
