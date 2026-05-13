@@ -49,8 +49,11 @@ ActiveSupport.on_load(:active_record) do
       end
     end
 
-    # uncomment the commented our lines for https://github.com/rsim/oracle-enhanced/pull/2485
-    # if you uncomment them and things don't fail, then they are taking effect
+    # https://github.com/rsim/oracle-enhanced/pull/2485 enables callbacks
+    #   which are basically redundant for use case we don't have.
+    # Version 7.1 has only the `update` callbacks so the `create` ones
+    #   need to be uncommented by probably 7.2 upgrade.
+    # If you uncomment them and things don't fail, then we are good.
     ActiveRecord::Base.skip_callback(:update, :after, :enhanced_write_lobs)
     # ActiveRecord::Base.skip_callback(:create, :after, :enhanced_write_lobs)
     ActiveRecord::Base.skip_callback(:update, :before, :record_changed_lobs)
