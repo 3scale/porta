@@ -22,14 +22,14 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
            "avs_result"=>"Y", "error_code"=>"000", "auth_code"=>"005308"}
     FactoryBot.create :payment_transaction, invoice: invoice, :params => gr
 
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
 
     assert_response :ok
     assert_payment_transactions @response.body
   end
 
   test "has payment_transactions root on the xml when the list in empty" do
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
 
     assert_response :ok
     assert_xml '/payment_transactions'
@@ -38,7 +38,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
   test "payment_transaction with nil params" do
     FactoryBot.create :payment_transaction, invoice: @invoice, params: nil
 
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :ok
   end
 
@@ -61,7 +61,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     FactoryBot.create(:payment_transaction, success: true, invoice: invoice)
     host! without_finance.internal_admin_domain
 
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :forbidden
     assert_match 'Finance module not enabled for the account', @response.body
   end
@@ -73,18 +73,18 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     invoice = FactoryBot.create(:invoice, provider_account: without_finance, buyer_account: buyer)
     FactoryBot.create(:payment_transaction, success: true, invoice: invoice)
     host! without_finance.internal_admin_domain
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :forbidden
   end
 
   test 'work only on provider admin domain' do
     host! @provider.internal_domain
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :not_found
   end
 
   test 'return 404 on non-existent invoice' do
-    get api_invoice_payment_transactions_path(invoice_id: 'WHAT_42_EVER', format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice_id: 'WHAT_42_EVER', format: :xml, access_token: access_token.plaintext_value)
     assert_response :not_found
   end
 
@@ -92,11 +92,11 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     host! master_account.internal_admin_domain
     invoice = FactoryBot.create(:invoice, provider_account: master_account)
     access_token = FactoryBot.create(:access_token, owner: master_account.first_admin, scopes: ['finance'])
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :success
 
     ThreeScale.config.stubs(onpremises: true)
-    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
+    get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.plaintext_value)
     assert_response :forbidden
   end
 end

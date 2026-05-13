@@ -54,7 +54,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
     private
 
     def access_token_params(token = @token)
-      { access_token: token.value }
+      { access_token: token.plaintext_value }
     end
 
     alias params access_token_params

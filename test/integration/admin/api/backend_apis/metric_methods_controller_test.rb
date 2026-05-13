@@ -22,14 +22,14 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     end
 
     attr_reader :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'index' do
       FactoryBot.create_list(:metric, 2, owner: backend_api, service_id: nil, parent: hits) # two more method metrics of the backend api
       FactoryBot.create(:metric, owner: FactoryBot.create(:backend_api, account: provider), service_id: nil) # other backend api
       FactoryBot.create(:metric, owner: FactoryBot.create(:service, account: provider)) # owned by service, not a backend api
 
-      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value }
 
       assert_response :success
       assert(response_metrics = JSON.parse(response.body)['methods'])
@@ -39,7 +39,7 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     end
 
     test 'show' do
-      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
 
       assert_response :success
       assert_equal method_metric.id, JSON.parse(response.body).dig('method', 'id')
@@ -47,7 +47,7 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
 
     test 'create' do
       assert_difference(Metric.method(:count)) do
-        post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+        post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
         assert_response :created
       end
       method_metric = hits.children.find(JSON.parse(response.body).dig('method', 'id'))
@@ -57,13 +57,13 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     end
 
     test 'create with errors in the model' do
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: '' }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: '' }
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'friendly_name'), 'can\'t be blank'
     end
 
     test 'update' do
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :success
       method_metric.reload
       assert_equal 'my friendly name', method_metric.friendly_name
@@ -71,24 +71,24 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     end
 
     test 'update with errors in the model' do
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: '' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: '' }
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'friendly_name'), 'can\'t be blank'
     end
 
     test 'system_name can be created but not updated' do
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit', system_name: 'first-system-name' }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit', system_name: 'first-system-name' }
       method_metric = hits.children.find(JSON.parse(response.body).dig('method', 'id'))
       assert_equal "first-system-name.#{backend_api.id}", method_metric.system_name
 
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit', system_name: 'edited' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit', system_name: 'edited' }
       assert_equal "first-system-name.#{backend_api.id}", method_metric.reload.system_name
     end
 
     test 'destroy' do
       method_metric = FactoryBot.create(:metric, owner: backend_api, service_id: nil, parent: hits)
       assert_difference(Metric.method(:count), -1) do
-        delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+        delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
         assert_response :success
       end
       assert_raises(ActiveRecord::RecordNotFound) { method_metric.reload }
@@ -97,7 +97,7 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     test 'index can be paginated' do
       FactoryBot.create_list(:metric, 5, owner: backend_api, parent: hits, service_id: nil)
 
-      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, per_page: 3, page: 2 }
+      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, per_page: 3, page: 2 }
 
       assert_response :success
       response_ids = JSON.parse(response.body)['methods'].map { |response| response.dig('method', 'id') }
@@ -109,28 +109,28 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
       hits = backend_api.metrics.hits
       method_metric = FactoryBot.create(:metric, owner: backend_api, service_id: nil, parent: hits)
 
-      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
 
-      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
 
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :not_found
 
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :not_found
 
-      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value }
       assert_response :not_found
     end
 
     test 'when no params are sent, the error message is the same as in the other metrics endpoint' do
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value }
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'friendly_name'), 'can\'t be blank'
 
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :success
     end
   end
@@ -145,42 +145,42 @@ class Admin::Api::BackendApis::MetricMethodsControllerTest < ActionDispatch::Int
     end
 
     attr_reader :member, :access_token
-    delegate :value, to: :access_token, prefix: true
+    delegate :plaintext_value, to: :access_token, prefix: true
 
     test 'member with permission' do
       member.admin_sections = %w[partners plans]
       member.save!
 
-      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :success
 
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :success
 
-      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :success
 
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :success
 
-      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value }
       assert_response :success
     end
 
     test 'member without permission' do
-      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
 
-      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      put admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :forbidden
 
-      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_value }
+      delete admin_api_backend_api_metric_method_path(backend_api, hits, method_metric), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
 
-      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value, friendly_name: 'my friendly name', unit: 'hit' }
+      post admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value, friendly_name: 'my friendly name', unit: 'hit' }
       assert_response :forbidden
 
-      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_value }
+      get admin_api_backend_api_metric_methods_path(backend_api, hits), params: { access_token: access_token_plaintext_value }
       assert_response :forbidden
     end
   end

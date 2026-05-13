@@ -15,7 +15,7 @@ class Stats::Data::BaseControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :service, :metric, :access_token
 
   test 'required params' do
-    url_params = { service_id: service.id, format: :json, access_token: access_token.value }
+    url_params = { service_id: service.id, format: :json, access_token: access_token.plaintext_value }
     stats_params = { metric_name: metric.system_name, period: 'day', timezone: ActiveSupport::TimeZone['UTC'].name, skip_change: false }
 
     get usage_stats_data_services_path(url_params), params: stats_params
@@ -61,7 +61,7 @@ class Stats::Data::BaseControllerTest < ActionDispatch::IntegrationTest
 
     buyer_access_token = FactoryBot.create(:access_token, owner: buyer_user, scopes: ['stats'])
 
-    url_params = { service_id: service.id, format: :json, access_token: buyer_access_token.value }
+    url_params = { service_id: service.id, format: :json, access_token: buyer_access_token.plaintext_value }
     stats_params = { metric_name: metric.system_name, period: 'day', timezone: ActiveSupport::TimeZone['UTC'].name, skip_change: false }
 
     get usage_stats_data_services_path(url_params), params: stats_params

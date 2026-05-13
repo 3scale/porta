@@ -22,7 +22,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
 
     @audit_class = Audited.audit_class
 
-    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: ['account_management']).value
+    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: ['account_management']).plaintext_value
 
     audit_class.delete_all
   end

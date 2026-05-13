@@ -19,10 +19,10 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
     get admin_api_service_path(@service)
     assert_response :forbidden
-    get admin_api_service_path(@service), params: { access_token: token.value }
+    get admin_api_service_path(@service), params: { access_token: token.plaintext_value }
     assert_response :not_found
     user.update(member_permission_service_ids: [@service.id])
-    get admin_api_service_path(@service), params: { access_token: token.value }
+    get admin_api_service_path(@service), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -102,7 +102,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     _other_service  = FactoryBot.create(:simple_service, account: @provider)
 
     access_token = FactoryBot.create(:access_token, owner: @provider.admins.first, scopes: 'account_management')
-    delete admin_api_service_path @service.id, access_token: access_token.value, format: :json
+    delete admin_api_service_path @service.id, access_token: access_token.plaintext_value, format: :json
 
     assert_response 200
     assert_raise(ActiveRecord::RecordNotFound) { Service.accessible.find(@service.id) }
@@ -123,12 +123,12 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
       ro_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'ro')
       rw_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw')
 
-      put admin_api_service_path(@service), params: { access_token: rw_token.value, format: :xml, name: 'new service name' }
+      put admin_api_service_path(@service), params: { access_token: rw_token.plaintext_value, format: :xml, name: 'new service name' }
       assert_response :success
       @service.reload
       assert_equal 'new service name', @service.name
 
-      put admin_api_service_path(@service), params: { access_token: ro_token.value, format: :xml, name: 'other service name' }
+      put admin_api_service_path(@service), params: { access_token: ro_token.plaintext_value, format: :xml, name: 'other service name' }
       assert_response :forbidden
       @service.reload
       assert_equal 'new service name', @service.name

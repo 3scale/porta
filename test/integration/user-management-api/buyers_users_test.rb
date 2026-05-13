@@ -35,7 +35,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
       User.any_instance.expects(:forget_me).never
 
-      post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.value }
+      post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.plaintext_value }
       assert_response :success
     end
   end
@@ -47,17 +47,17 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider)
     token = FactoryBot.create(:access_token, owner: user)
 
-    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.value }
+    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :forbidden
 
     user.admin_sections = ['partners']
     user.save!
-    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.value }
+    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :forbidden
 
     token.scopes = ['account_management']
     token.save!
-    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.value }
+    get admin_api_account_users_path(@buyer, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -66,12 +66,12 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
-    get admin_api_account_user_path(@buyer, id: @member.id, format: :xml), params: { access_token: token.value }
+    get admin_api_account_user_path(@buyer, id: @member.id, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
-    get admin_api_account_user_path(@buyer, id: @member.id, format: :xml), params: { access_token: token.value }
+    get admin_api_account_user_path(@buyer, id: @member.id, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -80,12 +80,12 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
-    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'Alex', access_token: token.value }
+    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'Alex', access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
-    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'Alex', access_token: token.value }
+    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'Alex', access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -94,12 +94,12 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
-    post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.value }
+    post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.plaintext_value }
     assert_response :forbidden
 
     user.role = 'admin'
     user.save!
-    post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.value }
+    post admin_api_account_users_path(@buyer, format: :xml), params: { username: 'alex', email: 'alex@alaska.hu', access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -108,16 +108,16 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
-    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
-    put activate_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put activate_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
-    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
-    put activate_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put activate_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -126,16 +126,16 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
-    put admin_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put admin_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
-    put member_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put member_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
-    put admin_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put admin_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
-    put member_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put member_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -145,13 +145,13 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     User.any_instance.expects(:destroy).returns(true)
-    delete admin_api_account_user_path(@buyer, format: :xml, id: @member.id), params: { access_token: token.value }
+    delete admin_api_account_user_path(@buyer, format: :xml, id: @member.id), params: { access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
     User.any_instance.expects(:destroy).returns(true)
-    delete admin_api_account_user_path(@buyer, format: :xml, id: @member.id), params: { access_token: token.value }
+    delete admin_api_account_user_path(@buyer, format: :xml, id: @member.id), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -161,19 +161,19 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'])
 
     User.any_instance.expects(:suspend!).returns(true)
-    put suspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put suspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
     User.any_instance.expects(:unsuspend).returns(true)
-    put unsuspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put unsuspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
     User.any_instance.expects(:suspend!).returns(true)
-    put suspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put suspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
     User.any_instance.expects(:unsuspend).returns(true)
-    put unsuspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.value }
+    put unsuspend_admin_api_account_user_path(@buyer.id, id: @member.id, format: :xml), params: { username: 'alex', access_token: token.plaintext_value }
     assert_response :success
   end
 

@@ -50,13 +50,13 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['finance'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'finance')
 
-    delete admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.value }
+    delete admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
 
     user.role = 'admin'
     user.save!
 
-    delete admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.value }
+    delete admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.plaintext_value }
     assert_response :success
   end
 
@@ -247,7 +247,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
       billing_address_country:      'spain',
       credit_card_expiration_year:  '2013',
       credit_card_expiration_month: '12',
-      access_token:                 token.value
+      access_token:                 token.plaintext_value
     }
   end
 end
