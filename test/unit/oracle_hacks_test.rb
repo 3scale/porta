@@ -31,7 +31,7 @@ class OracleHacksTest < ActiveSupport::TestCase
       assert_equal @ids.size, messages.size, "Expected to retrieve all #{@ids.size} messages"
 
       # SQL contains multiple IN clauses (split due to 1000 limit)
-      in_clause_count = sql.scan(/IN \(/).size
+      in_clause_count = sql.scan("IN (").size
       assert in_clause_count > 1, "Expected multiple IN clauses due to Oracle's 1000 item limit, but found #{in_clause_count}"
     end
 
@@ -50,7 +50,7 @@ class OracleHacksTest < ActiveSupport::TestCase
       assert_equal non_not_in, messages.first["id"], "Expected to retrieve the message with id #{non_not_in}"
 
       # SQL contains multiple NOT IN clauses (split due to 1000 limit)
-      not_in_clause_count = sql.scan(/NOT IN \(/).size
+      not_in_clause_count = sql.scan("NOT IN (").size
       assert not_in_clause_count > 1, "Expected multiple NOT IN clauses due to Oracle's 1000 item limit, but found #{not_in_clause_count}"
     end
   end
