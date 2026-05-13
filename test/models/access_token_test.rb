@@ -3,7 +3,7 @@ require 'test_helper'
 class AccessTokenTest < ActiveSupport::TestCase
 
   def setup
-    @token = FactoryBot.build(:access_token, owner: nil)
+    @token = FactoryBot.create(:access_token)
   end
 
   def test_destroy_dependency
@@ -87,12 +87,113 @@ class AccessTokenTest < ActiveSupport::TestCase
   def test_find_from_id_or_value_and_bang
     FactoryBot.create_list(:access_token, 2).each do |token|
       assert_equal token.id, AccessToken.find_from_id_or_value(token.id).id
-      assert_equal token.id, AccessToken.find_from_id_or_value(token.value).id
+      assert_equal token.id, AccessToken.find_from_id_or_value(token.plaintext_value).id
       assert_equal token.id, AccessToken.find_from_id_or_value!(token.id).id
-      assert_equal token.id, AccessToken.find_from_id_or_value!(token.value).id
+      assert_equal token.id, AccessToken.find_from_id_or_value!(token.plaintext_value).id
     end
     assert_nil AccessToken.find_from_id_or_value('fake')
     assert_raise(ActiveRecord::RecordNotFound) { AccessToken.find_from_id_or_value!('fake') }
+  end
+
+  # find_from_value tests
+
+  def test_find_from_value_returns_nil_for_invalid_token
+    assert_nil AccessToken.find_from_value('nonexistent_token')
+  end
+
+  def test_find_from_value_returns_nil_for_blank_token
+    assert_nil AccessToken.find_from_value('')
+    assert_nil AccessToken.find_from_value(nil)
+  end
+
+  def test_find_from_value_finds_new_token_by_digest
+    found = AccessToken.find_from_value(@token.plaintext_value)
+
+    assert_equal @token.id, found&.id
+    assert @token.reload.read_attribute(:value).start_with?(AccessToken::DIGEST_PREFIX)
+  end
+
+  def test_find_from_value_finds_legacy_token
+    legacy_value = 'legacy_plaintext_token_value_64chars'
+    @token.update_columns(value: legacy_value)
+
+    found = AccessToken.find_from_value(legacy_value)
+
+    assert_equal @token.id, found&.id
+    # No migration: DB value remains unchanged
+    assert_equal legacy_value, @token.reload.read_attribute(:value)
+  end
+
+  # compute_digest tests
+
+  def test_compute_digest_returns_prefixed_sha384_hex
+    digest = AccessToken.compute_digest('test_value')
+
+    assert digest.start_with?(AccessToken::DIGEST_PREFIX)
+    hex_part = digest.delete_prefix(AccessToken::DIGEST_PREFIX)
+    assert_equal 96, hex_part.length
+    assert_match(/\A[0-9a-f]+\z/, hex_part)
+  end
+
+  def test_compute_digest_is_deterministic
+    assert_equal AccessToken.compute_digest('same'), AccessToken.compute_digest('same')
+  end
+
+  def test_compute_digest_returns_nil_for_blank
+    assert_nil AccessToken.compute_digest(nil)
+    assert_nil AccessToken.compute_digest('')
+  end
+
+  # generate_if_missing tests
+
+  def test_generate_if_missing_populates_plaintext_and_digest
+    token = AccessToken.new
+    assert token.plaintext_value.present?
+    assert token.read_attribute(:value).start_with?(AccessToken::DIGEST_PREFIX)
+    assert_equal AccessToken.compute_digest(token.plaintext_value), token.read_attribute(:value)
+  end
+
+  def test_generate_if_missing_does_not_run_on_persisted_records
+    loaded_token = AccessToken.find(@token.id)
+    assert_nil loaded_token.plaintext_value
+  end
+
+  def test_generate_if_missing_does_not_overwrite_existing_plaintext
+    token = AccessToken.new
+    first_plaintext = token.plaintext_value
+    token.send(:generate_if_missing)
+    assert_equal first_plaintext, token.plaintext_value
+  end
+
+  # plaintext_value_known? tests
+
+  def test_show_plaintext_value_true_for_new_token
+    token = FactoryBot.create(:access_token)
+    assert token.plaintext_value_known?
+  end
+
+  def test_show_plaintext_value_false_when_loaded_from_db
+    token = FactoryBot.create(:access_token)
+    loaded_token = AccessToken.find(token.id)
+    assert_not loaded_token.plaintext_value_known?
+  end
+
+  # random_id tests
+
+  def test_random_id_length
+    assert_equal 96, AccessToken.random_id.length
+  end
+
+  def test_find_from_value_rejects_leaked_hash_as_token
+    stored_hash = @token.reload.read_attribute(:value)
+
+    # Verify the DB value has our prefix
+    assert stored_hash.start_with?(AccessToken::DIGEST_PREFIX)
+
+    # An attacker with access to the DB hash should NOT be able to authenticate
+    found = AccessToken.find_from_value(stored_hash)
+
+    assert_nil found, "Security vulnerability: leaked hash was accepted as a valid token"
   end
 
   test 'timestamps filled' do
