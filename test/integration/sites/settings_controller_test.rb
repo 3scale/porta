@@ -40,8 +40,9 @@ class Sites::SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_site_settings_path
 
     provider.settings.reload
-    assert_equal '', provider.settings.cc_terms_path
-    assert_equal '', provider.settings.cc_privacy_path
+    # Oracle converts empty strings to NULL, so we check for blank (accepts both '' and nil)
+    assert provider.settings.cc_terms_path.blank?
+    assert provider.settings.cc_privacy_path.blank?
   end
 
   test 'update with invalid values shows errors' do
