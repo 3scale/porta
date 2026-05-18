@@ -130,11 +130,14 @@ class ApplicationsIndexPresenter
   end
 
   def applications
-    @applications ||= raw_applications.scope_search(search)
-                                      .order_by(*sorting_params)
-                                      .includes(plan: %i[pricing_rules])
-                                      .paginate(pagination_params)
-                                      .decorate
+    @applications ||= begin
+      includes = provider.settings.finance.allowed? ? { plan: %i[pricing_rules] } : :plan
+      raw_applications.scope_search(search)
+                      .order_by(*sorting_params)
+                      .includes(includes)
+                      .paginate(pagination_params)
+                      .decorate
+    end
   end
 
   def empty_state?
@@ -157,7 +160,7 @@ class ApplicationsIndexPresenter
   private
 
   def plans_for_filter
-    accessible_services.reject { |service| service.application_plans.empty? }
+    accessible_services.includes(:application_plans).reject { |service| service.application_plans.empty? }
                         .map do |service|
                           {
                             groupName: service.name,

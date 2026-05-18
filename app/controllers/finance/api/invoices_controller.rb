@@ -65,11 +65,14 @@ class Finance::Api::InvoicesController < Finance::Api::BaseController
   private
 
   def invoices
-    @invoices ||= current_account.buyer_invoices.includes(:line_items, {:buyer_account => [:country]}, :provider_account)
+    @invoices ||= begin
+      includes = request.format.xml? ? %i[line_items provider_account buyer_account] : []
+      current_account.buyer_invoices.includes(includes)
+    end
   end
 
   def invoice
-    @invoice ||= invoices.find(params[:id])
+    @invoice ||= current_account.buyer_invoices.find(params[:id])
   end
 
   def invoice_params_create
