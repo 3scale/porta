@@ -796,10 +796,7 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
-        suppress(ActiveJob::DeserializationError) do
-          provider.destroy!
-        end
+        provider.destroy!
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
@@ -812,10 +809,7 @@ class AccountTest < ActiveSupport::TestCase
       provider.schedule_for_deletion!
 
       ::Sidekiq::Testing.inline! do
-        # Prevent exception when deserializing ProviderDomainsChangedEvent with a non-existing (destroyed) provider
-        suppress(ActiveJob::DeserializationError) do
-          provider.destroy!
-        end
+        provider.destroy!
       end
 
       # TODO: master should not be notified about deleted scheduled for deletion providers for any reason
