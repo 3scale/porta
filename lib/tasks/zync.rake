@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
+BATCH_SIZE = 100
+
 namespace :zync do
   namespace :resync do
     def each_with_progress(scope)
       total_count = scope.count
-      batch_size = 100
       index = 0
 
       progress = -> do
-        break unless (index % batch_size) == 0
+        break unless (index % BATCH_SIZE) == 0
+
         percent = (index / total_count.to_f) * 100.0
         puts "#{percent.round(2)}% completed"
       end
 
-      scope.find_each(batch_size: batch_size) do |object|
+      scope.find_each(batch_size: BATCH_SIZE) do |object|
         index += 1
         yield object
         progress.call
