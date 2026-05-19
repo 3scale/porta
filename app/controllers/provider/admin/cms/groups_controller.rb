@@ -77,12 +77,9 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   # Ensure that all section IDs provided in the parameters belong to the account, which is the group owner
   # Providing a non-existent section ID, or the one that belongs to another provider results in a Not Found error
   def validate_section_ids
-    section_ids = group_params[:section_ids]
+    section_ids = group_params[:section_ids]&.reject(&:empty?)&.uniq
     return if section_ids.blank?
 
-    section_ids.reject!(&:empty?)
-    exising_section_ids = current_account.section_ids.map(&:to_s)
-
-    render_error(:not_found, status: :not_found) if (section_ids.map(&:to_s) - exising_section_ids).any?
+    render_error(:not_found, status: :not_found) unless current_account.sections.where(id: section_ids).count == section_ids.size
   end
 end

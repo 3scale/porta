@@ -2,7 +2,7 @@
 
 class Admin::Api::SSOTokensController < Admin::Api::BaseController
 
-  wrap_parameters :sso_token, :include => %i[user_id username expires_in redirect_url protocol], :format => [:url_encoded_form]
+  wrap_parameters :sso_token, include: %i[user_id username expires_in redirect_url protocol], format: [:url_encoded_form]
 
   # parameters:
   #   * user_id

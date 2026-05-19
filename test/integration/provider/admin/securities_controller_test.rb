@@ -234,6 +234,7 @@ class Provider::Admin::SecuritiesControllerTest < ActionDispatch::IntegrationTes
     assert_redirected_to provider_login_path
   end
 
+  # TODO: review if this behavior is actually desired, and if not, restrict this page for member users
   test 'member can update the settings' do
     member = FactoryBot.create(:member, account: @provider)
     member.activate!
