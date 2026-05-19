@@ -17,7 +17,7 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
     authorize! :create, user
 
     user.unflattened_attributes = flat_params
-    user.signup_type = :api
+    user.signup_type = :created_by_provider
 
     user.save
 
