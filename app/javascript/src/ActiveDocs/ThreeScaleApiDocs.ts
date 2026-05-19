@@ -11,7 +11,7 @@ import type { AccountDataResponse, ApiDocsServices, BackendApiReportBody, Backen
 import type { ExecuteData } from 'swagger-client/es/execute'
 import type { SwaggerUIPlugin } from 'swagger-ui'
 import type { Component } from 'react'
-import type { SwaggerUIContext, ParameterIncludeEmptyProperties, JsonSchemaFormProperties } from 'swagger-ui-utils'
+import type { SwaggerUIContext, ParameterIncludeEmptyProperties } from 'swagger-ui-utils'
 
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
   return `${baseUrl.replace(/\/$/, '')}${specPath}`
