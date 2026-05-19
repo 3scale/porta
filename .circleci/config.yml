@@ -148,7 +148,7 @@ dnsmasq-container: &dnsmasq-container
       --log-facility=- \
       --log-queries \
       --no-poll \
-      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/$DEFAULT_DNS \
+      --server=/circleci.com/dns.podman/circleci-tasks-prod.s3.us-east-1.amazonaws.com/circleci-binary-releases.s3.amazonaws.com/api.stripe.com/js.stripe.com/$DEFAULT_DNS \
       --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter

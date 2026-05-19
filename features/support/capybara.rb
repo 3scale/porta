@@ -38,7 +38,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('--no-sandbox')
   options.add_argument('--no-zygote') # zygote proc used by sandboxing
   options.add_argument('--disable-popup-blocking')
-  options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*')
+  options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *localhost*,EXCLUDE api.stripe.com,EXCLUDE js.stripe.com')
   options.add_argument('--process-per-site')
   options.add_argument('--disable-gpu') # TODO: gpu-process still started
   options.add_argument('--disable-gpu-early-init')
