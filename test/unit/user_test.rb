@@ -273,6 +273,43 @@ class UserTest < ActiveSupport::TestCase
     assert created_by_provider_user.errors[:password].blank?
   end
 
+  test 'by_user? returns true only for :new_signup, nil, and :partner signup types' do
+    user = User.new
+
+    %i[new_signup partner].each do |type|
+      user.signup_type = type
+      assert user.signup.by_user?
+    end
+
+    user.signup_type = nil
+    assert user.signup.by_user?
+
+    %i[minimal api created_by_provider].each do |type|
+      user.signup_type = type
+      assert_not user.signup.by_user?
+    end
+  end
+
+  test 'by_user? returns false when user has SSO identifiers regardless of signup type' do
+    user = User.new
+    user.signup_type = :new_signup
+
+    user.open_id = 'some-open-id'
+    assert_not user.signup.by_user?
+    user.open_id = nil
+
+    user.stubs(:any_sso_authorizations?).returns(true)
+    assert_not user.signup.by_user?
+    user.unstub(:any_sso_authorizations?)
+
+    user.authentication_id = 'some-auth-id'
+    assert_not user.signup.by_user?
+    user.authentication_id = nil
+
+    user.cas_identifier = 'some-cas-id'
+    assert_not user.signup.by_user?
+  end
+
   test 'reset password' do
     user = FactoryBot.create(:simple_user, username: 'person', password: 'superSecret1234#')
     user.activate!

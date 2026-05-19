@@ -82,6 +82,16 @@ class Partners::UsersControllerTest < ActionController::TestCase
     assert body['success']
   end
 
+  test 'create user without password or open_id rejected' do
+    post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron" }
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+
+    assert_not body['success']
+    assert body['errors']['password'].present?
+  end
+
   test 'create user with invalid params returns 422' do
     post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "invalid-email", username: "aaron" }
 
