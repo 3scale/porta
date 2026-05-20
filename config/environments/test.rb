@@ -126,7 +126,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "CMS::Page", type: :n_plus_one_query, association: :provider
       Bullet.add_safelist class_name: "CMS::Page", type: :n_plus_one_query, association: :section
       Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :plan
-      Bullet.add_safelist class_name: "Cinstance", type: :n_plus_one_query, association: :user_account
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :plan
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :service
       Bullet.add_safelist class_name: "Cinstance", type: :unused_eager_loading, association: :user_account
