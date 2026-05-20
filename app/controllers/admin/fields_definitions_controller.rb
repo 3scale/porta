@@ -4,17 +4,19 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   respond_to :html
   activate_menu :audience, :accounts, :fields_definitions
 
+  before_action :set_fields_definition_params, only: %i[new create update]
+  before_action :validate_target, only: [:new]
+
   def index
     @possible_targets = available_targets
 
-    respond_with(field_definitions)
+    respond_with(fields_definitions)
   end
 
   def new
-    target = field_definition_params[:target]
-    target = available_targets.first unless available_targets.include?(target)
+    target = fields_definition_params[:target]
 
-    @fields_definition = field_definitions.build(target: target)
+    @fields_definition = fields_definitions.build(target: target)
     target_class = @fields_definition.target_class
 
     @optional_fields = target_class.builtin_fields - existing_fields_names_by_target(target)
@@ -27,14 +29,14 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   end
 
   def edit
-    @optional_fields = field_definition.target_class.builtin_fields
-    @required_fields = field_definition.target_class.required_fields
+    @optional_fields = fields_definition.target_class.builtin_fields
+    @required_fields = fields_definition.target_class.required_fields
 
-    respond_with(field_definition)
+    respond_with(fields_definition)
   end
 
   def create
-    @fields_definition = field_definitions.build(field_definition_params)
+    @fields_definition = fields_definitions.build(fields_definition_params)
 
     if @fields_definition.save
       flash[:success] = t('.success')
@@ -51,16 +53,14 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   def update
     @required_fields = []
-    if field_definition.update(field_definition_params)
-      @required_fields = field_definition.target_class.required_fields
-    end
+    @required_fields = fields_definition.target_class.required_fields if fields_definition.update(fields_definition_params)
 
-    respond_with(field_definition, location: admin_fields_definitions_path)
+    respond_with(fields_definition, location: admin_fields_definitions_path)
   end
 
   def destroy
-    field_definition.destroy
-    respond_with(field_definition, location: admin_fields_definitions_path)
+    fields_definition.destroy
+    respond_with(fields_definition, location: admin_fields_definitions_path)
   end
 
   def sort
@@ -75,20 +75,18 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   private
 
-  def field_definition_params
-    params.fetch(:fields_definition, {}).permit(:target, :name, :label, :required, :hidden, :read_only, :choices_for_views)
-  end
+  attr_reader :fields_definition_params
 
   def sort_params
     @sort_params ||= params.permit(fields_definition: [])[:fields_definition] || []
   end
 
-  def field_definitions
+  def fields_definitions
     @fields_definitions ||= current_account.fields_definitions
   end
 
-  def field_definition
-    @fields_definition ||= field_definitions.find(params[:id])
+  def fields_definition
+    @fields_definition ||= fields_definitions.find(params[:id])
   end
 
   def available_targets
@@ -97,5 +95,18 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   def existing_fields_names_by_target(target)
     current_account.fields_definitions.by_target(target).map(&:name)
+  end
+
+  def set_fields_definition_params
+    fd_params = params.fetch(:fields_definition)
+    if fd_params.respond_to? :permit
+      @fields_definition_params = fd_params.permit(:target, :name, :label, :required, :hidden, :read_only, :choices_for_views)
+    else
+      render_error "invalid fields definition", status: :bad_request unless fd_params.is_a?(Hash)
+    end
+  end
+
+  def validate_target
+    render_error "invalid fields definition target", status: :bad_request unless available_targets.include?(fields_definition_params[:target])
   end
 end
