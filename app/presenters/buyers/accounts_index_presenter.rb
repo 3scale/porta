@@ -17,9 +17,13 @@ class Buyers::AccountsIndexPresenter
   delegate :can?, to: :ability
 
   def buyers
-    @buyers ||= raw_buyers.scope_search(search)
-                          .order_by(*sorting_params)
-                          .paginate(pagination_params)
+    @buyers ||= begin
+      scope = raw_buyers.scope_search(search)
+                        .order_by(*sorting_params)
+                        .paginate(pagination_params)
+      scope = scope.includes(:bought_account_plan, bought_account_contract: [:plan]) if account_plans_size > 1
+      scope
+    end
   end
 
   def account_plans
