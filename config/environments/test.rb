@@ -138,7 +138,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :owner
       Bullet.add_safelist class_name: "Metric", type: :unused_eager_loading, association: :parent
       Bullet.add_safelist class_name: "Post", type: :n_plus_one_query, association: :topic
-      Bullet.add_safelist class_name: "ProxyConfig", type: :n_plus_one_query, association: :user
       Bullet.add_safelist class_name: "ProxyRule", type: :n_plus_one_query, association: :owner
       Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :backend_api_configs
       Bullet.add_safelist class_name: "Service", type: :counter_cache, association: :cinstances
