@@ -133,6 +133,7 @@ class ApplicationsIndexPresenter
     @applications ||= begin
       includes = provider.settings.finance.allowed? ? [{ plan: %i[pricing_rules] }] : [:plan]
       includes << :service if service.nil? && provider.multiservice?
+      includes << :user_account if buyer.nil?
       raw_applications.scope_search(search)
                       .order_by(*sorting_params)
                       .includes(includes)
