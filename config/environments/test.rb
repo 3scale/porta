@@ -131,7 +131,6 @@ Rails.application.configure do
       Bullet.add_safelist class_name: "Invoice", type: :n_plus_one_query, association: :provider_account
       Bullet.add_safelist class_name: "Invoice", type: :unused_eager_loading, association: :provider_account
       Bullet.add_safelist class_name: "LineItem::PlanCost", type: :n_plus_one_query, association: :contract
-      Bullet.add_safelist class_name: "Message", type: :n_plus_one_query, association: :sender
       Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :children
       Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :owner
       Bullet.add_safelist class_name: "Metric", type: :n_plus_one_query, association: :parent
