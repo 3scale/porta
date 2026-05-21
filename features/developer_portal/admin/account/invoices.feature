@@ -1,3 +1,4 @@
+@emails
 Feature: Dev Portal Buyer Invoices
   In order not be confused
   As a buyer

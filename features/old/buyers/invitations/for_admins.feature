@@ -54,6 +54,7 @@ Feature: Buyer Account Invitations
     And confirm the dialog
     Then I should not see invitation for "alice@lolcats.com"
 
+  @emails
   Scenario: Resending invitations
     Given an invitation sent to "invited@lolcats.com" to join account "lol cats"
     And an invitation sent to "pending@lolcats.com" to join account "lol cats"
