@@ -4,8 +4,6 @@ class Moderatorship < ApplicationRecord
   validates :user_id, :forum_id, presence: true
   validate :uniqueness_of_relationship
 
-  attr_protected :forum_id, :user_id, :tenant_id
-
   protected
 
   def uniqueness_of_relationship

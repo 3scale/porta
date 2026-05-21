@@ -76,6 +76,6 @@ class Api::PricingRulesController < FrontendController
   end
 
   def pricing_rule_params
-    params.require(:pricing_rule)
+    params.require(:pricing_rule).permit(:min, :max, :cost_per_unit)
   end
 end

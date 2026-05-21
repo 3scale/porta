@@ -4,8 +4,6 @@ class Post < ApplicationRecord
   after_commit(:on => :destroy) { update_cached_fields }
   after_commit :update_topic_delta_index
 
-  attr_accessible :body, :markup_type, :anonymous_user
-
   include Indices::TopicIndex::ForPost
 
   # author of post

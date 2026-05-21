@@ -48,7 +48,6 @@ class FieldsDefinition < ApplicationRecord
   default_scope { by_position }
   scope :by_position, -> { order(:pos) }
 
-  attr_protected :account_id, :tenant_id
   attr_readonly :account_id, :tenant_id, :target, :name
 
   # The attribute `pos` is exposed as `position` in the API
