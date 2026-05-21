@@ -30,4 +30,20 @@ module BillingResultsTestHelpers
     billing_results.failure(provider.billing_strategy)
     billing_results
   end
+
+  def mock_stripe_rate_limit_response
+    rate_limit_response = {
+      error: {
+        message: "Request rate limit exceeded. Learn more about rate limits here https://stripe.com/docs/rate-limits.",
+        type: "invalid_request_error",
+        code: "rate_limit",
+        doc_url: "https://stripe.com/docs/error-codes/rate-limit"
+      }
+    }
+    ActiveMerchant::Billing::Response.new(false, rate_limit_response[:error][:message], rate_limit_response.as_json)
+  end
+
+  def mock_gateway_rate_limit_error(payment_metadata = {})
+    Finance::Payment::GatewayRateLimitError.new(mock_stripe_rate_limit_response, payment_metadata)
+  end
 end

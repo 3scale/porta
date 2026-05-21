@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Finance
   module Payment
     class CreditCardError < RuntimeError; end
@@ -7,16 +9,33 @@ module Finance
     class GatewayError < CreditCardError
       attr_reader :response
 
+      # @param [ActiveMerchant::Billing::Response] response
       def initialize(response = nil)
         @response = response
+        super(message)
       end
 
       def message
-        response.try!(:message) || super
+        response&.message || super
       end
     end
 
     CreditCardPurchaseFailed = Class.new(GatewayError)
 
+    # Rate limit error - should be retried immediately, not treated as payment failure
+    class GatewayRateLimitError < GatewayError
+      attr_reader :payment_metadata
+
+      # @param [ActiveMerchant::Billing::Response] response
+      # @param [Hash] payment_metadata
+      def initialize(response = nil, payment_metadata = {})
+        @payment_metadata = payment_metadata
+        super(response)
+      end
+
+      def message
+        response&.message || 'Rate limit exceeded - too many requests to payment gateway'
+      end
+    end
   end
 end
