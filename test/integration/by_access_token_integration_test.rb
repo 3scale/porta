@@ -114,4 +114,15 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
 
     assert_response :forbidden
   end
+
+  test 'oidc_sync tokens are rejected even with a valid plaintext value' do
+    # Create a token with the oidc_sync name and store its plaintext value
+    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management',
+                                             name: AccessToken::OIDC_SYNC_TOKEN)
+    plaintext = token.plaintext_value
+
+    get admin_api_accounts_path(format: :xml), params: { access_token: plaintext }
+
+    assert_response :forbidden
+  end
 end

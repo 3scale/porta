@@ -312,6 +312,14 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert access_token.valid?
   end
 
+  test 'AccessToken.oidc_sync no longer exists' do
+    assert_not AccessToken.respond_to?(:oidc_sync)
+  end
+
+  test 'OIDC_SYNC_TOKEN constant is still defined for rejection logic' do
+    assert_equal 'OIDC Synchronization Token', AccessToken::OIDC_SYNC_TOKEN
+  end
+
   private
 
   def assert_access_token_audit_all_data(access_token, audit)
