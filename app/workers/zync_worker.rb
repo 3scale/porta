@@ -172,10 +172,8 @@ class ZyncWorker
 
   delegate :provider_access_token, to: :class
 
-  def self.provider_access_token(provider)
-    user = provider.find_impersonation_admin || provider.first_admin!
-
-    user.access_tokens.oidc_sync.value
+  def self.provider_access_token(_provider)
+    'zync'
   end
 
   def notification_url
