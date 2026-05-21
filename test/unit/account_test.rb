@@ -183,6 +183,26 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal 2.34, @account.reload.vat_rate
   end
 
+  test 'vat_rate value is converted automatically on update' do
+    assert_nil @account.vat_rate
+
+    @account.update(vat_rate: "23.45")
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 23.45, @account.vat_rate
+
+    @account.update(vat_rate: Float(45.23))
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 45.23, @account.vat_rate
+
+    @account.update(vat_rate: Integer(30))
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 30, @account.vat_rate
+
+    @account.update(vat_rate: 'random-string')
+    assert_instance_of BigDecimal, @account.vat_rate
+    assert_equal 0, @account.vat_rate
+  end
+
   test 'without :timezone set return UTC as default :timezone' do
     assert_equal 'UTC', @account.timezone
   end

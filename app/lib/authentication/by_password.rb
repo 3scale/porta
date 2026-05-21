@@ -20,8 +20,6 @@ module Authentication
 
       validates :lost_password_token, :password_digest, length: { maximum: 255 }
 
-      attr_accessible :password, :password_confirmation, as: %i[default member admin]
-
       scope :with_valid_password_token, -> { where { lost_password_token_generated_at >= 24.hours.ago } }
 
       alias_method :authenticate_without_normalization, :authenticate
@@ -88,10 +86,6 @@ module Authentication
 
     def can_set_password?
       account.password_login_allowed? && !already_using_password?
-    end
-
-    def special_fields
-      %i[password password_confirmation]
     end
 
     def reset_lost_password_token

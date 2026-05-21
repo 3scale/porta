@@ -11,6 +11,7 @@ module DeveloperPortal
     before_action :deny_if_signup_disabled
     before_action :find_plans, :except => :success
     before_action :set_strategy, :only => %i[show create]
+    before_action :init_signup_service, only: %i[create]
     skip_before_action :finish_signup_for_paid_plan
 
     self.builtin_template_scope = 'signup'
@@ -30,10 +31,7 @@ module DeveloperPortal
     end
 
     def create
-      account_params = filter_readonly_params(params[:account], Account)
-      user_params    = filter_readonly_params(account_params.try(:delete, :user), User)
-
-      if signup_user!(account_params, user_params)
+      if signup_user!
         if @user.can_login?
           self.current_user = @user
           create_user_session!
@@ -67,9 +65,9 @@ module DeveloperPortal
         .find_by(system_name: session[:authentication_provider])
     end
 
-    def signup_user!(account_params, user_params)
+    def signup_user!
       Account.transaction do
-        SignupService.create(**signup_service_params(account_params, user_params)) do |signup_result|
+        @signup_service.create(account_params:, user_params: user_params.merge(signup_type: :minimal)) do |signup_result|
           @signup_result = signup_result
           @user  = signup_result.user
           @buyer = signup_result.account
@@ -78,16 +76,6 @@ module DeveloperPortal
       end
 
       @signup_result.persisted?
-    end
-
-    def signup_service_params(account_params, user_params)
-      { provider:       @provider,
-        plans:          @plans,
-        session:        session,
-        account_params: account_params,
-        user_params:    user_params,
-        authentication_provider: authentication_provider
-      }
     end
 
     def redirect_if_logged_in
@@ -133,6 +121,28 @@ module DeveloperPortal
         params[:plans] ||= []
         params[:plans] << params[type] if params[type].present?
       end
+    end
+
+    def init_signup_service
+      signup_service_params = {
+        provider: @provider,
+        plans: @plans,
+        session: session,
+        authentication_provider: authentication_provider
+      }
+      @signup_service = SignupService.new(**signup_service_params)
+    end
+
+    def account_params
+      account = @signup_service.account_manager.account
+      allowed_attrs = account.defined_fields_names - %w[country vat_rate] + %w[country_id]
+      filter_readonly_params(params.fetch(:account, {}), Account).permit(*allowed_attrs)
+    end
+
+    def user_params
+      user = @signup_service.account_manager.user
+      allowed_attrs = user.defined_fields_names + %w[password]
+      filter_readonly_params(params.fetch(:account, {})[:user], User).permit(*allowed_attrs)
     end
   end
 end

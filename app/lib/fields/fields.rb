@@ -97,14 +97,6 @@ module Fields::Fields
       true
     end
 
-    # these fields are here to be able to recognize fields that are not in the
-    # db but still can be updated and such. This is a need given the flatten
-    # params on user-management-api, if that gets removed this won't be needed
-    # e.g. password and password_confirmation in User
-    def special_fields
-      []
-    end
-
   end # ClassMethods
 
   module ActiverecordOverrides
@@ -165,11 +157,6 @@ module Fields::Fields
   def internal_fields
     self.class.internal_fields
   end
-
-  def special_fields
-    self.class.special_fields
-  end
-
 
   # TODO: implementation of field_definitions_object, fields_definitions_source_root_object, validate_fields?
   # is 3scale specific and should be extracted to separate module
@@ -275,6 +262,14 @@ module Fields::Fields
     defined_extra_fields.map(&:name)
   end
 
+  def defined_fields_names
+    defined_fields.map(&:name)
+  end
+
+  def defined_builtin_fields_names
+    defined_builtin_fields.map(&:name)
+  end
+
   def defined_fields_hash
     @defined_fields_hash ||= Hash[defined_fields.map { |f| [f.name.to_sym, f]}]
   end
@@ -321,10 +316,6 @@ module Fields::Fields
 
   def internal_field?(name)
     field(name) && internal_fields.include?(name.to_s)
-  end
-
-  def special_field?(key)
-    special_fields.include?(key.to_sym)
   end
 
   def field(name)

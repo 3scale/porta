@@ -32,9 +32,9 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'hi', user.extra_fields['created_by']
     end
 
-    test 'billing address extra field and webhooks' do
+    test 'legal address extra field and webhooks' do
       FactoryBot.create(:fields_definition, account: @provider,
-                         target: 'Account', name: 'billing_address', read_only: true)
+                         target: 'Account', name: 'org_legaladdress')
 
       @provider.settings.allow_web_hooks!
       WebHook.delete_all
@@ -271,6 +271,19 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
         assert_select '.pf-m-error', false
         assert_response :redirect
       end
+    end
+
+    test 'update account, including optional built-in and custom fields' do
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'custom_account_field')
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'vat_rate')
+
+      put admin_buyers_account_path(@buyer), params: { account: { org_name: 'new name', vat_rate: '33', extra_fields: { custom_account_field: 'custom value' } } }
+
+      assert_redirected_to admin_buyers_account_path(@buyer)
+      @buyer.reload
+      assert_equal 'new name', @buyer.name
+      assert_equal 'custom value', @buyer.extra_fields['custom_account_field']
+      assert_equal 33.0, @buyer.vat_rate.to_f
     end
 
     test "can't manage buyer's of other providers" do

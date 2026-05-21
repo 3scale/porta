@@ -5,12 +5,11 @@ module User::Invitations
     after_commit :accept_invitation, :on => :create
 
     attr_accessor :invitation
-    attr_accessible :invitation
 
     # TODO: refactor to make this work removing above attribute.
     # has_one :invitation
 
-    before_destroy  :destroy_invitation
+    before_destroy :destroy_invitation
   end
 
   def accept_invitation

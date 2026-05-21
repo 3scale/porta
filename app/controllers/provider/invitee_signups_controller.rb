@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::InviteeSignupsController < FrontendController
   skip_before_action :login_required
 
@@ -5,15 +7,15 @@ class Provider::InviteeSignupsController < FrontendController
   before_action :ask_for_upgrade
 
   before_action :find_invitation
-  before_action :build_user
+  before_action :build_new_user
   before_action :instantiate_sessions_presenter
 
   layout 'provider/login'
 
-  def show
-  end
+  def show; end
 
   def create
+    @user.assign_attributes(user_params)
     @user.admin_sections = domain_account.provider_can_use?(:service_permissions) ? [] : ['monitoring']
 
     if can_create? && @user.save
@@ -23,11 +25,7 @@ class Provider::InviteeSignupsController < FrontendController
 
       redirect_to provider_login_path, success: t('.success')
     else
-      errors = @user.errors.full_messages.reduce do |result, error|
-        "#{result}\n#{error}"
-      end
-
-      flash.now[:danger] = t('.error', errors: errors)
+      flash.now[:danger] = t('.error', errors: user_errors)
       render 'show'
     end
   end
@@ -52,12 +50,12 @@ class Provider::InviteeSignupsController < FrontendController
     account.provider_constraints.can_create_user?
   end
 
-  def build_user
-    @user = @invitation.make_user(params[:user] || {})
+  def build_new_user
+    @user = @invitation.make_user
+  end
 
-    # This is just a sanity guard added when splitting invitation
-    # controllers. Remove when SURE.
-    raise 'Developer invitation used and worked on provider side!' unless @user.account.provider?
+  def user_params
+    params.require(:user).permit(@user.defined_fields_names, :password, :password_confirmation)
   end
 
   def invitation_token
@@ -66,5 +64,13 @@ class Provider::InviteeSignupsController < FrontendController
 
   def instantiate_sessions_presenter
     @presenter = Provider::SessionsPresenter.new(domain_account)
+  end
+
+  def user_errors
+    return "" unless @user
+
+    @user.errors.full_messages.reduce do |result, error|
+      "#{result}\n#{error}"
+    end
   end
 end

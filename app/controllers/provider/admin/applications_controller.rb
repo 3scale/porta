@@ -29,6 +29,8 @@ class Provider::Admin::ApplicationsController < FrontendController
   def new; end
 
   def create
+    @cinstance.assign_attributes(application_params)
+
     if @cinstance.save
       redirect_to provider_admin_application_path(@cinstance), success: t('.success')
     else
@@ -43,7 +45,7 @@ class Provider::Admin::ApplicationsController < FrontendController
   def update
     # TODO: this is not needed if this controller is used only by providers
     @cinstance.validate_human_edition!
-    @cinstance.attributes = params[:cinstance]
+    @cinstance.assign_attributes(application_params)
 
     respond_to do |format|
       json = @cinstance.to_json(only: %i[id name], methods: %i[errors])
