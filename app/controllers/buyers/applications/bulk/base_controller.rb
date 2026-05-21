@@ -20,7 +20,7 @@ class Buyers::Applications::Bulk::BaseController < Buyers::BulkBaseController
   end
 
   def collection
-    @collection ||= current_account.provided_cinstances.where(id: selected_ids_param).includes(:user_account)
+    @collection ||= current_account.provided_cinstances.where(id: selected_ids_param).includes(:service, user_account: [:admin_user])
   end
 
   def errors_template
