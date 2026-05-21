@@ -222,4 +222,11 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     assert_equal zync_event.data[:service_id], dependency_event_service.data[:id]
     Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data.as_json) }
   end
+
+  test 'provider_access_token returns a non-empty placeholder string' do
+    provider = FactoryBot.create(:provider_account)
+    token = ZyncWorker.provider_access_token(provider)
+    assert_kind_of String, token
+    assert token.present?
+  end
 end

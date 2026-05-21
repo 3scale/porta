@@ -1,4 +1,5 @@
 class Admin::Api::ApplicationsController < Admin::Api::BaseController
+  include ApiAuthentication::ByZyncToken
   representer ::Cinstance
 
   paginate only: :index

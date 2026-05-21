@@ -22,7 +22,7 @@ class ApiAuthentication::ByAuthenticationTokenTest < SimpleMiniTest
 
   def mock_token(attributes = {})
     @params = { access_token: 'some-token' }
-    token = mock('access-token', attributes.merge(expired?: false))
+    token = mock('access-token', **attributes, expired?: false, name: 'access-token')
     @access_tokens.expects(:find_from_value).with('some-token').returns(token)
     token
   end

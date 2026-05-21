@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::ProxiesController < Admin::Api::Services::BaseController
+  include ApiAuthentication::ByZyncToken
 
   represents :json, entity: ::ProxyRepresenter::JSON
   represents :xml, entity: ::ProxyRepresenter::XML

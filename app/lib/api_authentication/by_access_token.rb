@@ -111,7 +111,7 @@ module ApiAuthentication
 
       token = domain_account.access_tokens.find_from_value(given_token)
 
-      return if token.blank? || token.expired?
+      return if token.blank? || token.expired? || token.name == AccessToken::OIDC_SYNC_TOKEN
 
       @authenticated_token = token
     end

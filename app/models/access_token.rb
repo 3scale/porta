@@ -142,12 +142,7 @@ class AccessToken < ApplicationRecord
     find_by(id: id_or_value) || find_from_value(id_or_value)
   end
 
-  # This can't change or it will create new tokens for everyone
   OIDC_SYNC_TOKEN = 'OIDC Synchronization Token'.freeze
-
-  def self.oidc_sync
-    create_with(scopes: %w[account_management], permission: 'ro').find_or_create_by!(name: OIDC_SYNC_TOKEN)
-  end
 
   def scopes=(values)
     super Array(values).select(&:present?)
