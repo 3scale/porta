@@ -1,4 +1,5 @@
 class Admin::Api::ProvidersController < Admin::Api::BaseController
+  include ApiAuthentication::ByZyncToken
 
   wrap_parameters Account
 
