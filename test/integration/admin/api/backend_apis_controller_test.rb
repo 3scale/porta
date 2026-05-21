@@ -41,6 +41,22 @@ class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
     assert_persists_right_params
   end
 
+  test 'update with annotations' do
+    assert_empty backend_api.annotations
+
+    put admin_api_backend_api_path(backend_api), params: {
+      access_token: access_token_plaintext_value,
+      annotations: { managed_by: 'operator' }
+    }
+
+    assert_response :success
+
+    assert_equal({ 'managed_by' => 'operator'}, response.parsed_body[:backend_api][:annotations])
+
+    assert_equal 1, backend_api.reload.annotations.count
+    assert_equal 'operator', backend_api.annotations.where(name: 'managed_by').first.value
+  end
+
   test 'update with errors in the model' do
     put admin_api_backend_api_path(backend_api), params: { access_token: access_token_plaintext_value, private_endpoint: '' }
     assert_response :unprocessable_entity
@@ -54,6 +70,26 @@ class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
     end
     assert(@backend_api = provider.backend_apis.find_by(id: JSON.parse(response.body).dig('backend_api', 'id')))
     assert_persists_right_params
+  end
+
+  test 'create with annotations' do
+    assert_difference(BackendApi.method(:count)) do
+      post admin_api_backend_apis_path, params: {
+        access_token: access_token_plaintext_value,
+        name: 'the-name',
+        description: 'New description.',
+        private_endpoint: 'http://custom-api.example.org:80',
+        annotations: { managed_by: 'operator' }
+      }
+      assert_response :created
+    end
+
+    backend_api = response.parsed_body[:backend_api]
+    assert_equal({ 'managed_by' => 'operator'}, backend_api[:annotations])
+
+    persisted_backend_api = BackendApi.find(backend_api[:id])
+    assert_equal 1, persisted_backend_api.annotations.count
+    assert_equal 'operator', persisted_backend_api.annotations.where(name: 'managed_by').first.value
   end
 
   test 'create with errors in the model' do

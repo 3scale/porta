@@ -329,4 +329,19 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
 
     assert xml.xpath('.//account/applications/application').present?
   end
+
+  test 'account signup with annotations' do
+    post admin_api_signup_path(format: :json), params: {
+      provider_key: @provider.api_key,
+      org_name: 'annotated account',
+      username: 'annotated',
+      annotations: { managed_by: 'operator' }
+    }
+
+    assert_response :success
+
+    new_account = response.parsed_body[:account]
+    assert_equal({ 'managed_by' => 'operator'}, new_account[:annotations])
+    assert_equal 'operator', Account.find(new_account[:id]).annotations.where(name: 'managed_by').first.value
+  end
 end
