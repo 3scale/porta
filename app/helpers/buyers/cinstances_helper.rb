@@ -1,12 +1,4 @@
 module Buyers::CinstancesHelper
-  def link_to_cinstance_or_deleted(cinstance)
-    if cinstance
-      link_to(cinstance.name, provider_admin_application_path(cinstance))
-    else
-      content_tag(:span, '(deleted app)', :class => 'deleted')
-    end
-  end
-
   def link_to_plan_edit(plan)
     if can?(:manage, :plans)
       link_to(plan.name, edit_polymorphic_path([:admin, plan]))

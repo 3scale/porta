@@ -1,138 +1,48 @@
-- content_for :page_header_title, 'Product Overview'
+- content_for :page_header_title, t('.page_header_title', name: service.name)
 - content_for :page_header_annotation do
-  = render partial: 'shared/annotations', locals: { resource: @service, plain: true }
+  = render partial: 'shared/annotations', locals: { resource: service, plain: true }
 
-section.Section
-  .SettingsBox
-    = pf_link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
-    dl.SettingsBox-summary.u-dl data-state="open"
-      dt.u-dl-term Name
-      dd.u-dl-definition = @service.name
-      dt.u-dl-term System Name
-      dd.u-dl-definition = @service.system_name
-      - if @service.description.present?
-        dt.u-dl-term Description
-        dd.u-dl-definition = @service.description
-      - if service_discovery_accessible? && @service.discovered?
-        dt.u-dl-term Source
-        dd.u-dl-definition
-          'OpenShift
-          = refresh_service_link(@service, label: 'refresh')
+- content_for :javascripts do
+  = stylesheet_link_tag 'provider/admin/apiconfig/services/show'
+  = stylesheet_packs_chunks_tag 'pf_grid', 'pf_description_list', 'pf_text', 'pf_stack'
 
-- service =  @service
+div class="pf-l-grid pf-m-gutter"
+  div class="pf-l-grid__item pf-m-12-col"
+    = render 'api/services/cards/details', service:
 
-section class="service-widget"
-  div.content-service
-    section[name="settings"]
+  / Left column
+  div class="pf-l-grid__item pf-m-6-col"
+    div class="pf-l-grid__item"
+      div class="pf-l-flex pf-m-column pf-m-flex-1"
+        - if can?(:manage, :partners)
+          - if can?(:show, Cinstance)
+            div class="pf-l-flex__item"
+              = render 'api/services/cards/latest_apps', service:
 
-      - if can? :manage, :partners
+          div class="pf-l-flex__item"
+            = render 'api/services/cards/latest_alerts', service:
 
-        - if can?(:show, Cinstance)
-          h2 = link_to 'Latest Apps', admin_service_applications_path(service), :title => 'Show all applications for this service'
-          ol.latest-apps
-            = list_items_or_empty service.latest_applications, 'There are no latest applications.' do |cinstance|
-              - if cinstance.user_account.present?
-                li.item
-                  => link_to cinstance.name, provider_admin_application_path(cinstance)
-                  '  from
-                  = link_to cinstance.user_account.org_name, admin_buyers_account_path(cinstance.user_account)
+        - if can?(:manage, :plans)
+          div class="pf-l-flex__item"
+            = render 'api/services/cards/application_plans', service:
 
+          - if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
+            div class="pf-l-flex__item"
+              = render 'api/services/cards/service_plans', service:
 
-        h2 = link_to 'Latest alerts', admin_service_alerts_path(service), :title => 'Show all limit alerts for this service'
-        ol.latest-alerts
-          = list_items_or_empty current_account.alerts.by_service(service).latest, 'There are no alerts.' do |alert|
-            li.item.utilization
-              = link_to_cinstance_or_deleted(alert.cinstance)
-              |  at
-              = l alert.timestamp
-              |  (
-              = colorize_utilization(alert.level)
-              | )
-              br
-              span.name
-                = alert.message
+        - if can?(:manage, :partners)
+          div class="pf-l-flex__item"
+            = render 'api/services/cards/settings', service:
 
-      - if can? :manage, :plans
-        .flex-row
-          h2.flex-item
-            '  Published
-            => link_to 'Application Plans', admin_service_application_plans_path(service)
-          = action_link_to :new, new_admin_service_application_plan_path(service),
-            label: 'Create application plan', class: 'flex-item'
+        - if current_user.accessible_services.empty?
+          = render 'shared/service_access'
 
-        ul.application-plans[data-hint="published"]
-          = list_items_or_empty service.published_application_plans, 'There are no published application plans. Create one!' do |plan|
-            li.plan.item
-              => plan.link_to_edit(class: :name)
-              ' -
-              = plan.link_to_applications
-        p
-          '  You have
-          = service.link_to_application_plans
-          '  with a total of
-          = service.link_to_live_applications
-          | .
+  / Right column
+  div class="pf-l-grid__item pf-m-6-col"
+    div class="pf-l-flex pf-m-column pf-m-flex-1"
+      - if can?(:manage, :monitoring)
+        div class="pf-l-flex__item"
+          = render 'api/services/cards/analytics', service:
 
-        - if (can? :manage, :service_plans) && (current_account.settings.service_plans_ui_visible?)
-          .flex-row
-            h2.flex-item
-              '  Published
-              => link_to 'Service plans', admin_service_service_plans_path(service)
-            = action_link_to :new,  new_admin_service_service_plan_path(service),
-              label: 'Create Service Plan', class: 'flex-item'
-
-          ul.service-plans[data-hint="published"]
-            = list_items_or_empty service.service_plans.published, 'There are no published service plans. Create one!' do |plan|
-              li.plan.item
-                => link_to plan.name, edit_admin_service_plan_path(plan), :class => :name
-                ' -
-                = pluralize plan.contracts.size, 'contract'
-          p
-            '  You have
-            = link_to pluralize(service.service_plans.size, 'service plan'),admin_service_service_plans_path(service)
-            |  (
-            = service.service_plans.published.size
-            '  published) with a total of
-            = pluralize service.contracts.service.size, 'contract'
-            | .
-
-      - if can? :manage, :partners
-        h2
-          = link_to 'Configuration', admin_service_integration_path(service), title: 'Change integration settings for this service'
-          ' ,
-          => link_to 'Methods', admin_service_metrics_path(service)
-          '  and
-          =< link_to 'Settings', settings_admin_service_path(service), :title => "Edit service settings"
-
-        ul.service-settings[data-hint="basics"]
-          - if service.deployment_option.present? && service.has_traffic?
-            li.item
-              ' Integrated through
-              strong => t(service.deployment_option, scope: "deployment_options.phrased")
-
-          li.item
-            ' Authenticated by
-            strong
-              => human_backend service.proxy_authentication_method
-          li.item
-            ' ID for API calls is
-            strong
-              => service.id
-            ' and system name is
-            strong
-              = service.system_name
-
-          - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
-            li.item
-              = setting
-
-      - if current_user.accessible_services.empty?
-        = render 'shared/service_access'
-
-    section[name="activity"]
-
-      - if can? :manage, :monitoring
-        h2 = link_to 'Analytics', admin_service_stats_usage_path(service), title: 'Show more stats for this service'
-        = render 'stats/inlinechart', metrics: service.metrics.top_level
-
-      = render 'api/services/cards/backends_table', product: service
+      div class="pf-l-flex__item"
+        = render 'api/services/cards/backends_table', product: service

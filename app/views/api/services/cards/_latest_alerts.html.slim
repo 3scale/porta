@@ -1,0 +1,27 @@
+- alerts = service.latest_alerts
+
+div class="pf-c-card"
+  div class="pf-c-card__header"
+    div class="pf-c-card__title" = t('.title')
+  div class="pf-c-card__body"
+    ul class="pf-c-list pf-m-plain pf-m-bordered pf-m-icon-md"
+      - if alerts.empty?
+        div class="pf-l-flex pf-m-space-items-sm"
+          div class="pf-l-flex__item"
+            = pf_alert_icon :success, colored: true
+          div class="pf-l-flex__item"
+            span = t('.no_alerts')
+      - else
+        - alerts.each do |alert|
+          li class="pf-c-list__item"
+            span class="pf-c-list__item-icon"
+              = alert.icon
+            span class="pf-c-list__item-text utilization"
+              p
+                b == "#{alert.message} (#{colorize_utilization(alert.level)})"
+              == "#{alert.link_to_app} at #{l alert.timestamp}"
+  - unless alerts.empty?
+    div class="pf-c-card__footer"
+      = pf_link_to t('shared.view_more'), admin_service_alerts_path(service),
+                                          class: 'pf-m-inline',
+                                          title: t('.view_more')
