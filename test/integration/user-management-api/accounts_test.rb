@@ -637,6 +637,17 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       assert_equal 33.0, @buyer.vat_rate.to_f
     end
 
+    test 'account update with annotations' do
+      put admin_api_account_path(@buyer, format: :json), params: params.merge({ annotations: { managed_by: 'operator' } })
+
+      assert_response :success
+
+      assert_equal({ 'managed_by' => 'operator'}, response.parsed_body[:account][:annotations])
+
+      assert_equal 1,  @buyer.reload.annotations.count
+      assert_equal 'operator', @buyer.annotations.where(name: 'managed_by').first.value
+    end
+
     test 'destroy' do
       delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
 

@@ -158,7 +158,10 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   def account_params
     defined_fields_names = buyer_account.defined_fields_names
     allowed_attrs = defined_fields_names + %w[name]
-    nested_params = { extra_fields: buyer_account.defined_extra_fields_names }
+    nested_params = {
+      extra_fields: buyer_account.defined_extra_fields_names,
+      annotations: {}
+    }
 
     if defined_fields_names.include?('billing_address')
       allowed_attrs += %w[billing_address_name billing_address_address1 billing_address_address2 billing_address_city

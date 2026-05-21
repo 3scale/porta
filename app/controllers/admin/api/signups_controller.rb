@@ -27,7 +27,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
 
   def account_params
     allowed_attrs = account_manager.account.defined_fields_names - %w[billing_address]
-    params.permit(*allowed_attrs)
+    params.permit(*allowed_attrs, annotations: {})
   end
 
   def check_creation_errors
