@@ -19,11 +19,21 @@ class DeveloperPortal::Admin::Account::UsersControllerTest < DeveloperPortal::Ac
   test "index shows users list" do
     get :index
     assert_response :success
+
+    assigned_drops = assigns(:_assigned_drops)
+
+    assert assigned_drops['users'].is_a?(Liquid::Drops::Collection)
+    assert assigned_drops['pagination'].is_a?(Liquid::Drops::Pagination)
   end
 
   test "edit shows user form" do
     get :edit, params: { id: @member_user.id }
     assert_response :success
+
+    user_drop = assigns(:_assigned_drops)['user']
+
+    assert user_drop.is_a?(Liquid::Drops::User)
+    assert_equal @member_user.username, user_drop.username
   end
 
   test "update with valid params redirects to users list" do
