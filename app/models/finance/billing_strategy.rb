@@ -11,7 +11,7 @@ class Finance::BillingStrategy < ApplicationRecord
     prepend NonAuditedColumns
   end
 
-  audited :allow_mass_assignment => true
+  audited
 
   attr_reader :failed_buyers
 

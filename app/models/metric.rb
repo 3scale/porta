@@ -21,7 +21,7 @@ class Metric < ApplicationRecord
 
   has_many :proxy_rules, :dependent => :destroy, inverse_of: :metric
 
-  audited :allow_mass_assignment => true
+  audited
   has_system_name uniqueness_scope: %i[owner_type owner_id], human_name: :friendly_name
 
   acts_as_tree

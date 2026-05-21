@@ -72,7 +72,7 @@ class ModelsTest < ActiveSupport::TestCase
         next if column_sql_type.match(/\Acharacter varying\Z/)
         length = column_sql_type.match(/\(([\d]+)\)/)[1].to_i
 
-        object = model.new(options, without_protection: true)
+        object = model.new(options)
         object.send("#{column_name}=", 'a' * (length + 1))
         object.valid?
 

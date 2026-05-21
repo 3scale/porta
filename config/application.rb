@@ -131,8 +131,6 @@ module System
 
     config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT)) if ENV['RAILS_LOG_TO_STDOUT'].present?
 
-    config.active_record.whitelist_attributes = false
-
     config.boot_time = Time.now
 
     # Configuration for the application, engines, and railties goes here.
