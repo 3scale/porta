@@ -332,10 +332,6 @@ class Account < ApplicationRecord
                       end
   end
 
-  def special_fields
-    %i[country annotations]
-  end
-
   # Returns the id corresponding to an account with given api key. This function avoids
   # database lookup if possible (uses cache), so it is super fast.
   def self.id_from_api_key(api_key)
