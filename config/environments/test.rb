@@ -100,6 +100,9 @@ Rails.application.configure do
 
       # We ignore these items because they are broken at the time commit them but we should fix them, see
       # https://issues.redhat.com/browse/THREESCALE-9973
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :admin_user
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_contract
+      Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :bought_account_plan
       Bullet.add_safelist class_name: "Account", type: :n_plus_one_query, association: :provider_account
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :admin_users
       Bullet.add_safelist class_name: "Account", type: :unused_eager_loading, association: :bought_cinstances
