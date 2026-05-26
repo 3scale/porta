@@ -116,7 +116,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       delete admin_api_docs_service_path(forbidden_api_docs_service)
       assert_response :not_found
 
-      post admin_api_docs_services_path(api_docs_params(service_id: forbidden_api_docs_service.id, system_name: 'forbidden_service_spec'))
+      post admin_api_docs_services_path(api_docs_params(service_id: forbidden_service.id, system_name: 'forbidden_service_spec'))
       assert_response :not_found
     end
 
