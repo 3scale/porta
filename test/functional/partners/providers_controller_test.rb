@@ -49,7 +49,9 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert user.active?
     assert user.valid?
     assert user.account.valid?
-    assert_equal :'partner:someone', user.signup_type
+    assert_equal :created_by_provider, user.signup_type
+    assert user.signup.machine?
+    assert_not user.signup.by_user?
     assert_equal account, user.account
 
     assert_equal provider_params[:open_id], user.open_id
@@ -100,15 +102,19 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert_equal true, body['success']
   end
 
-  test 'post without password or open_id rejected' do
+  test 'post without password or open_id creates user with no password' do
+    # Partner users have signup_type :created_by_provider so password is not required.
+    # A user created this way must go through password reset to set a password and log in.
     prepare_master_account
     post :create, params: provider_params.except(:open_id)
 
-    assert_response :unprocessable_entity
-    body = JSON.parse(response.body)
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert_nil user.password_digest, 'User should have no password when not provided'
 
-    assert_not body['success']
-    assert body['errors']['user']['password'].present?
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
   end
 
   test 'post with weak password rejected when strong passwords enabled' do

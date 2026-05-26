@@ -20,6 +20,9 @@ class Partners::UsersControllerTest < ActionController::TestCase
     assert_equal "foo_last_name", user.last_name
     assert_equal "bar_id", user.open_id
     assert_equal "aaron", user.username
+    assert_equal :created_by_provider, user.signup_type
+    assert user.signup.machine?
+    assert_not user.signup.by_user?
 
     assert_equal "active", user.state
 
@@ -82,14 +85,18 @@ class Partners::UsersControllerTest < ActionController::TestCase
     assert body['success']
   end
 
-  test 'create user without password or open_id rejected' do
+  test 'create user without password or open_id creates user with no password' do
+    # Partner users have signup_type :created_by_provider so password is not required.
+    # A user created this way must go through password reset to set a password and log in.
     post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", username: "aaron" }
 
-    assert_response :unprocessable_entity
-    body = JSON.parse(response.body)
+    assert_response :success
+    user = assigns(:user)
+    assert user.valid?
+    assert_nil user.password_digest, 'User should have no password when not provided'
 
-    assert_not body['success']
-    assert body['errors']['password'].present?
+    body = JSON.parse(response.body)
+    assert body['success']
   end
 
   test 'create user with invalid params returns 422' do
