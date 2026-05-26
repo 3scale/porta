@@ -145,8 +145,9 @@ class AccessToken < ApplicationRecord
   # This can't change or it will create new tokens for everyone
   OIDC_SYNC_TOKEN = 'OIDC Synchronization Token'.freeze
 
-  def self.oidc_sync
-    create_with(scopes: %w[account_management], permission: 'ro').find_or_create_by!(name: OIDC_SYNC_TOKEN)
+  def self.refresh_oidc_sync
+    where(name: OIDC_SYNC_TOKEN).delete_all
+    create!(name: OIDC_SYNC_TOKEN, scopes: %w[account_management], permission: 'ro')
   end
 
   def scopes=(values)
