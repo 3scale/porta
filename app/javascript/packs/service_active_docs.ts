@@ -1,6 +1,7 @@
 import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
+import { ClearDefaultValuesPlugin } from 'ActiveDocs/ClearDefaultValuesPlugin'
 import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
 import type { AccountDataResponse } from 'Types/SwaggerTypes'
@@ -26,9 +27,9 @@ const renderActiveDocs = async () => {
 
   SwaggerUI({
     url,
-    // eslint-disable-next-line @typescript-eslint/naming-convention -- SwaggerUI API
-    dom_id: `#${containerId}`,
-    requestInterceptor
+    domNode: container,
+    requestInterceptor,
+    plugins: [ClearDefaultValuesPlugin]
   })
 }
 
