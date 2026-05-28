@@ -67,6 +67,18 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       post :create, params: valid_buyer_params
     end
 
+    test '#create should create a valid user' do
+      post :create, params: valid_buyer_params
+
+      account = @provider.buyer_accounts.last
+      assert_equal valid_buyer_params.dig(:account, :org_name), account.org_name
+
+      user_params = valid_buyer_params.dig(:account, :user)
+      user = account.users.find_by(username: user_params[:username])
+      assert_equal user_params[:email], user.email
+      assert_equal :new_signup, user.signup_type
+    end
+
     test '#create successfully from oauth2 should save the id_token' do
       auth_provider = FactoryBot.create(:keycloak_authentication_provider, account: @provider)
       session[:id_token] = 'fake-token'

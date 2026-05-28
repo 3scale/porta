@@ -67,7 +67,7 @@ module DeveloperPortal
 
     def signup_user!
       Account.transaction do
-        @signup_service.create(account_params:, user_params: user_params.merge(signup_type: :minimal)) do |signup_result|
+        @signup_service.create(account_params:, user_params:) do |signup_result|
           @signup_result = signup_result
           @user  = signup_result.user
           @buyer = signup_result.account
