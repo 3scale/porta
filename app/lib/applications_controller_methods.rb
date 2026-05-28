@@ -90,7 +90,7 @@ module ApplicationsControllerMethods
   end
 
   def plan_id
-    @plan_id ||= cinstance_params.require(:plan_id)
+    @plan_id ||= cinstance_params.permit(:plan_id).tap { |plan_params| plan_params.require(:plan_id) }[:plan_id]
   end
 
   def accessible_services
