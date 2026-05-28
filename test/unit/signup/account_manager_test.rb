@@ -13,14 +13,14 @@ module Signup
         FieldsDefinition.create_defaults!(manager_account)
       end
 
-      test 'validate_fields parameter controls field validation' do
-        # With validate_fields: true (default), fields are validated
+      test 'fields are validated when validate_fields: true' do
         manager_with_validation = signup_account_manager
         manager_with_validation.account.expects(:validate_fields!).once
         manager_with_validation.user.expects(:validate_fields!).once
         manager_with_validation.create(**signup_params, validate_fields: true)
+      end
 
-        # With validate_fields: false, fields are not validated
+      test 'fields are not validated when validate_fields: false' do
         manager_without_validation = signup_account_manager
         manager_without_validation.account.expects(:validate_fields!).never
         manager_without_validation.user.expects(:validate_fields!).never

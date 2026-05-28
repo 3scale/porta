@@ -634,7 +634,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
       @buyer.reload
       assert_equal "stuff", @buyer.extra_fields["some_extra_field"]
-      assert_equal 33.0, @buyer.vat_rate.to_f
+      assert_equal BigDecimal(33), @buyer.vat_rate
     end
 
     test 'account update with annotations' do
