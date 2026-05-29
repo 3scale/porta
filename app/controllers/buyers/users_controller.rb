@@ -88,8 +88,10 @@ class Buyers::UsersController < Buyers::BaseController
   end
 
   def permitted_user_params
-    user_params.permit(*user.defined_builtin_fields_names, :password, :password_confirmation,
-                       extra_fields: user.defined_extra_fields_names)
+    fields_names = current_account.defined_fields_names_for(User)
+    extra_fields_names = current_account.defined_extra_fields_names_for(User)
+    user_params.permit(*fields_names, :password, :password_confirmation,
+                       extra_fields: extra_fields_names)
   end
 
   def redirect_back_or_show_detail(**opts)

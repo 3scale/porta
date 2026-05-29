@@ -2,10 +2,6 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   representer User
 
   before_action :can_create, only: :create
-  before_action :build_new_user, only: %i[create]
-  before_action :find_user, except: %i[create index]
-
-  attr_reader :user
 
   # User List (provider account)
   # GET /admin/api/users.xml
@@ -18,6 +14,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   # User Create (provider account)
   # POST /admin/api/users.xml
   def create
+    user = new_user
+
     authorize! :create, user
 
     user.update(user_params.merge(signup_type: :created_by_provider))
@@ -109,6 +107,10 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     current_user ? super : logged_in?
   end
 
+  def new_user
+    @new_user ||= current_account.users.new
+  end
+
   def users
     @users ||= begin
       conditions = params.slice(:state, :role)
@@ -116,12 +118,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
     end
   end
 
-  def build_new_user
-    @user = current_account.users.new
-  end
-
-  def find_user
-    @user = current_account.users.but_impersonation_admin.find(params[:id])
+  def user
+    @user ||= current_account.users.but_impersonation_admin.find(params[:id])
   end
 
   def can_create
@@ -131,8 +129,9 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   private
 
   def user_params
+    defined_fields_names = current_account.provider_account.defined_fields_names_for(User)
     permission_attrs = [:member_permission_service_ids, { member_permission_service_ids: [], member_permission_ids: [] }]
-    allowed_attrs = user.defined_fields_names + %w[password password_confirmation cas_identifier]
+    allowed_attrs = defined_fields_names + %w[password password_confirmation cas_identifier]
     allowed_attrs += permission_attrs if provider_key.present? || current_user.admin?
     params.permit(*allowed_attrs)
   end

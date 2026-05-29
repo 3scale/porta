@@ -1,11 +1,6 @@
 class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   representer User
 
-  before_action :find_user, except: %i[create index]
-  before_action :build_new_user, only: %i[create]
-
-  attr_reader :user
-
   # User List
   # GET /admin/api/accounts/{account_id}/users.xml
   def index
@@ -17,6 +12,8 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   # User Create
   # POST /admin/api/accounts/{account_id}/users.xml
   def create
+    user = new_user
+
     authorize! :create, user
 
     user.update(user_params.merge(signup_type: :created_by_provider))
@@ -108,11 +105,19 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
     current_user ? super : logged_in?
   end
 
+  def new_user
+    @new_user ||= buyer.users.new
+  end
+
   def users
     @users ||= begin
       conditions = params.slice(:state, :role)
       buyer.users.where(conditions)
     end
+  end
+
+  def user
+    @user ||= buyer.users.find(params[:id])
   end
 
   private
@@ -126,6 +131,6 @@ class Admin::Api::BuyersUsersController < Admin::Api::BuyersBaseController
   end
 
   def user_params
-    params.permit(*user.defined_fields_names, :password, :password_confirmation)
+    params.permit(*current_account.defined_fields_names_for(User), :password, :password_confirmation)
   end
 end

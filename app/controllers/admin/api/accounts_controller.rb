@@ -156,10 +156,10 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
   end
 
   def account_params
-    defined_fields_names = buyer_account.defined_fields_names
+    defined_fields_names = current_account.defined_fields_names_for(Account)
     allowed_attrs = defined_fields_names + %w[name]
     nested_params = {
-      extra_fields: buyer_account.defined_extra_fields_names,
+      extra_fields: current_account.defined_extra_fields_names_for(Account),
       annotations: {}
     }
 

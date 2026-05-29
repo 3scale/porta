@@ -2,10 +2,6 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   representer Cinstance
 
   before_action :find_or_create_service_contract, :only => :create
-  before_action :find_application, except: %i[create index find]
-  before_action :build_new_application, only: %i[create]
-
-  attr_reader :application
 
   # Application List
   # GET /admin/api/accounts/{account_id}/applications.xml
@@ -16,6 +12,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   # Application Create
   # POST /admin/api/accounts/{account_id}/applications.xml
   def create
+    application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
     application.assign_attributes(application_params)
 
     Array(params[:application_key]).each do |key|
@@ -113,12 +110,8 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
     @applications ||= accessible_bought_cinstances.includes(:user_account, :plan, :service)
   end
 
-  def build_new_application
-    @application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
-  end
-
-  def find_application
-    @application = applications.find params[:id]
+  def application
+    @application ||= applications.find params[:id]
   end
 
   def application_plan
@@ -127,7 +120,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
 
   def application_params
     @application_params ||= begin
-      allowed_attrs = application.defined_fields_names + %w[user_key application_id redirect_url first_traffic_at first_daily_traffic_at]
+      allowed_attrs = current_account.defined_fields_names_for(Cinstance) + %w[user_key application_id redirect_url first_traffic_at first_daily_traffic_at]
       params.permit(*allowed_attrs)
     end
   end

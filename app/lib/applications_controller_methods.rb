@@ -23,7 +23,7 @@ module ApplicationsControllerMethods
 
   # TODO: this should be done by buy! method
   def initialize_cinstance
-    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, @service_plan)
+    @cinstance = current_account.provider_builds_application_for(@account, @application_plan, application_params, @service_plan)
     @cinstance.validate_human_edition!
   end
 
@@ -85,8 +85,8 @@ module ApplicationsControllerMethods
   end
 
   def application_params
-    allowed_attrs = @cinstance.defined_builtin_fields_names
-    cinstance_params.permit(*allowed_attrs, extra_fields: @cinstance.defined_extra_fields_names)
+    allowed_attrs = current_account.defined_builtin_fields_names_for(Cinstance)
+    cinstance_params.permit(*allowed_attrs, extra_fields: current_account.defined_extra_fields_names_for(Cinstance))
   end
 
   def plan_id
