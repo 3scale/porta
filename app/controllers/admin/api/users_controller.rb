@@ -18,10 +18,7 @@ class Admin::Api::UsersController < Admin::Api::BaseController
 
     authorize! :create, user
 
-    user.unflattened_attributes = flat_params
-    user.signup_type = :created_by_provider
-
-    user.save
+    user.update(user_params.merge(signup_type: :created_by_provider))
 
     respond_with(user)
   end
@@ -39,7 +36,7 @@ class Admin::Api::UsersController < Admin::Api::BaseController
   def update
     authorize! :update, user
 
-    user.update_with_flattened_attributes(flat_params, as: current_user.try(:role))
+    user.update(user_params)
 
     respond_with(user)
   end
@@ -131,7 +128,11 @@ class Admin::Api::UsersController < Admin::Api::BaseController
 
   private
 
-  def flat_params
-    super.except(:id)
+  def user_params
+    defined_fields_names = current_account.provider_account.defined_fields_names_for(User)
+    permission_attrs = [:member_permission_service_ids, { member_permission_service_ids: [], member_permission_ids: [] }]
+    allowed_attrs = defined_fields_names + %w[password password_confirmation cas_identifier]
+    allowed_attrs += permission_attrs if provider_key.present? || current_user.admin?
+    params.permit(*allowed_attrs)
   end
 end

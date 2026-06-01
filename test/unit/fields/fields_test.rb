@@ -61,4 +61,29 @@ class Fields::FieldsTest < ActiveSupport::TestCase
       model.fields_definitions_source!
     end
   end
+
+  def test_defined_fields_names
+    field1 = mock('field', name: 'field1')
+    field2 = mock('field', name: 'field2')
+    model = Model.new
+    model.stubs(:defined_fields).returns([field1, field2])
+    assert_same_elements %w[field1 field2], model.defined_fields_names
+  end
+
+  def test_defined_extra_fields_names
+    extra_field = mock('field', name: 'extra')
+    builtin_field = mock('field')
+    model = Model.new
+    model.stubs(:defined_fields).returns([extra_field, builtin_field])
+    model.stubs(:defined_builtin_fields).returns([builtin_field])
+    assert_equal %w[extra], model.defined_extra_fields_names
+  end
+
+  def test_defined_builtin_fields_names
+    field1 = mock('field', name: 'field1')
+    field2 = mock('field', name: 'field2')
+    model = Model.new
+    model.stubs(:defined_builtin_fields).returns([field1, field2])
+    assert_same_elements %w[field1 field2], model.defined_builtin_fields_names
+  end
 end

@@ -27,7 +27,7 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
   end
 
   def filter_readonly_params(params, resource_class)
-    return {} unless params
+    return ActionController::Parameters.new unless params
 
     read_only_fields = FieldsDefinition.by_provider(site_account).by_target(resource_class.name).read_only.pluck(:name)
     params.except(*read_only_fields)

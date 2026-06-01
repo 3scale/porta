@@ -255,6 +255,14 @@ module Fields::Fields
       .by_target(self.class.to_s.underscore)
   end
 
+  def defined_fields_names
+    defined_fields.map(&:name)
+  end
+
+  def defined_builtin_fields_names
+    defined_builtin_fields.map(&:name)
+  end
+
   def visible_defined_fields_for(user)
     defined_fields.select { |field| field.visible_for?(user) }
   end
