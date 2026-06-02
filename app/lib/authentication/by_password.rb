@@ -88,10 +88,6 @@ module Authentication
       account.password_login_allowed? && !already_using_password?
     end
 
-    def special_fields
-      %i[password password_confirmation]
-    end
-
     def reset_lost_password_token
       self.lost_password_token = nil
     end
