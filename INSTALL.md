@@ -54,10 +54,8 @@ bundle && yarn
 Start the rails server by running the following command:
 
 ```bash
-env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
+rails server -b 0.0.0.0 # Runs the server, available at localhost:3000
 ```
-
-> The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
 
 ## Sphinx server
 
