@@ -77,7 +77,7 @@ This will include both the rails assets pipeline and webpack and it's intended f
 For development, if you're gonna change anything under app/javascript or app/assets/stylesheets, it's more convenient to use live code reloading:
 
 ```sh
-bundle exec rails yarn:dev
+yarn dev
 ```
 
 This will re-compile webpack and CSS after changes are saved and reload the browser.
