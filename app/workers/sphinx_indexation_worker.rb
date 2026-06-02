@@ -11,6 +11,6 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   def perform(model, id)
-    ThinkingSphinx::Processor.new(model: model, id: id).stage
+    ThinkingSphinx::Processor.new(model: model, id: id).sync
   end
 end
