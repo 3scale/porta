@@ -57,6 +57,26 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     assert @provider.services.find_by(name: 'service foo')
   end
 
+  test 'create with annotations' do
+    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+
+    assert_difference(Service.method(:count)) do
+      post admin_api_services_path(format: :json), params: {
+        provider_key: @provider.api_key,
+        name: 'annotated service',
+        annotations: { managed_by: 'operator' }
+      }
+      assert_response :created
+    end
+
+    service = response.parsed_body[:service]
+    assert_equal({ 'managed_by' => 'operator'}, service[:annotations])
+
+    persisted_service = Service.find(service[:id])
+    assert_equal 1, persisted_service.annotations.count
+    assert_equal 'operator', persisted_service.annotations.where(name: 'managed_by').first.value
+  end
+
   test 'create with json body parameters' do
     @provider.settings.allow_multiple_services!
     @provider.provider_constraints.update!(max_services: 5)
@@ -91,6 +111,21 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     @service.reload
 
     assert_equal 'supp@topo.com', @service.support_email
+  end
+
+  test 'update with annotations' do
+    put admin_api_service_path(@service, format: :json), params: {
+      provider_key: @provider.api_key,
+      annotations: { managed_by: 'operator' }
+    }
+
+    assert_response :success
+
+    service = response.parsed_body[:service]
+    assert_equal({ 'managed_by' => 'operator'}, service[:annotations])
+
+    assert_equal 1, @service.reload.annotations.count
+    assert_equal 'operator', @service.annotations.where(name: 'managed_by').first.value
   end
 
   pending_test 'update with wrong id' do

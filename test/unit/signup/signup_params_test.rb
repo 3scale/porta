@@ -42,7 +42,7 @@ module Signup
       FactoryBot.create(:fields_definition, account: provider_account, target: 'Account', name: 'extra_for_account')
 
       user_attributes = { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-                      password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal, 'created_by': 'hi' }
+                      password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal, extra_fields: { 'created_by': 'hi' } }
       account_attributes = { org_name: 'Developer', vat_rate: 33, extra_fields: { extra_for_account: 'itWorks' } }
       signup_params =  Signup::SignupParams.new(user_attributes: user_attributes, account_attributes: account_attributes, plans: [], defaults: {})
 
@@ -53,10 +53,27 @@ module Signup
       assert_equal 'itWorks', account.extra_fields[:extra_for_account]
     end
 
+    test "'name' is an alias for 'org_name', but the 'org_name' has priority" do
+      params = signup_params_hash.merge({ account_attributes: ActionController::Parameters.new({ name: 'name' }).permit! })
+      signup_params =  Signup::SignupParams.new(**params)
+
+      # only name provided
+      account = signup_params.build_account_with_attributes_for_provider_account(provider_account)
+      assert_equal 'name', account.name
+      assert_equal 'name', account.org_name
+
+      # both org_name and name (in this order) provided
+      params = signup_params_hash.merge({ account_attributes: ActionController::Parameters.new({ org_name: 'org_name', name: 'name' }).permit! })
+      signup_params =  Signup::SignupParams.new(**params)
+      account = signup_params.build_account_with_attributes_for_provider_account(provider_account)
+      assert_equal 'org_name', account.name
+      assert_equal 'org_name', account.org_name
+    end
+
     private
 
     def signup_params
-      @signup_params ||= Signup::SignupParams.new(user_attributes: user_params, account_attributes: account_params, plans: [], defaults: {})
+      @signup_params ||= Signup::SignupParams.new(**signup_params_hash)
     end
 
     def signup_params_hash
@@ -72,12 +89,16 @@ module Signup
     end
 
     def user_params
-      { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
-        password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal }
+      ActionController::Parameters.new(
+        { email: 'emailTest@email.com', username: 'john', first_name: 'John', last_name: 'Doe',
+          password: 'superSecret1234#', password_confirmation: 'superSecret1234#', signup_type: :minimal }
+      ).permit!
     end
 
     def account_params
-      { org_name: 'Developer', vat_rate: 33 }
+      ActionController::Parameters.new(
+        { org_name: 'Developer', vat_rate: 33 }
+      ).permit!
     end
   end
 end

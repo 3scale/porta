@@ -48,9 +48,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   # Tenant Update
   # PUT /master/api/providers/{id}.xml
   def update
-    provider_account.assign_attributes(update_params, without_protection: true)
-    provider_account.assign_unflattened_attributes(params.require(:account))
-    provider_account.save
+    provider_account.update(update_account_params)
 
     respond_with signup_result_with_nil_token
   end
@@ -117,14 +115,27 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     render_error "Plan with ID #{plan_id.presence} not found", status: :not_found
   end
 
-  def update_params
-    permitted_params = provider_account.scheduled_for_deletion? ? %i[state_event] : UPDATE_PARAMS
-    params.require(:account).permit(permitted_params)
-  end
-
   def create_params
     defaults = { ApplicationPlan => { :name => 'API signup', :description => 'API signup', :create_origin => 'api' } }
-    Signup::SignupParams.new(plans: plans, user_attributes: flat_params.merge(signup_type: :created_by_provider), account_attributes: flat_params, defaults: defaults)
+    Signup::SignupParams.new(plans: plans, user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: create_account_params, defaults: defaults)
+  end
+
+  def user_params
+    defined_fields_names = current_account.defined_fields_names_for(User)
+    params.permit(*defined_fields_names, :password)
+  end
+
+  def permitted_account_attrs
+    current_account.defined_fields_names_for(Account) | UPDATE_PARAMS
+  end
+
+  def create_account_params
+    params.permit(*permitted_account_attrs)
+  end
+
+  def update_account_params
+    allowed_attrs = provider_account.scheduled_for_deletion? ? %i[state_event] : permitted_account_attrs
+    params.require(:account).permit(*allowed_attrs)
   end
 
   def plans

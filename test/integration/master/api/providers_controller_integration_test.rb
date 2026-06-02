@@ -10,6 +10,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
+    FieldsDefinition.create_defaults!(master_account)
     FactoryBot.create(:fields_definition, account: master_account, target: 'Account', name: 'account_extra_field')
     FactoryBot.create(:fields_definition, account: master_account, target: 'User', name: 'user_extra_field')
 
@@ -169,6 +170,15 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_response :unprocessable_entity
   end
 
+  test '#create with annotations' do
+    post master_api_providers_path(format: :json), params: signup_params.merge({ annotations: { managed_by: 'operator' }})
+    assert_response :created
+
+    new_tenant = response.parsed_body[:signup][:account]
+    assert_equal({ 'managed_by' => 'operator'}, new_tenant[:annotations])
+    assert_equal 'operator', Account.find(new_tenant[:id]).annotations.where(name: 'managed_by').first.value
+  end
+
   test '#update' do
     provider = FactoryBot.create(:provider_account, provider_account: master_account)
     user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
@@ -197,14 +207,35 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     provider.schedule_for_deletion!
 
-    update_params = { account: { from_email: 'from@email.com', state_event: 'resume'},
+    update_params = { account: { from_email: 'from@email.com', state_event: 'resume', org_name: 'new-org-name' },
                       access_token: token.plaintext_value, format: :json }
     put master_api_provider_path(provider, update_params)
     assert_response :ok
 
     provider.reload
+    assert_equal 'approved', provider.state
     assert_not_equal update_params[:account][:from_email], provider.from_email
-    assert_equal 'approved',                           provider.state
+    assert_not_equal 'new-org-name', provider.org_name
+  end
+
+  test '#update with annotations' do
+    provider = FactoryBot.create(:provider_account, provider_account: master_account)
+    user = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+    assert_empty provider.annotations
+
+    put master_api_provider_path(provider, format: :json), params: {
+      annotations: { managed_by: 'operator' },
+      access_token: token.plaintext_value
+    }
+    assert_response :ok
+
+    updated_account = response.parsed_body[:signup][:account]
+    assert_equal({ 'managed_by' => 'operator'}, updated_account[:annotations])
+
+    assert_equal 1, provider.reload.annotations.count
+    assert_equal 'operator', provider.annotations.where(name: 'managed_by').first.value
   end
 
   test '#destroy' do
@@ -260,7 +291,9 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
       email: 'person@example.com',
       password: 'superSecret1234#',
       user_extra_field: 'hi-user',
-      account_extra_field: 'hi-account'
+      account_extra_field: 'hi-account',
+      from_email: 'from@example.com',
+      support_email: 'support@example.com'
     }.merge(different_params)
   end
 

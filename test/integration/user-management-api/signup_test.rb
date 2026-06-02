@@ -71,6 +71,8 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful api signup with country' do
+    field_defined(@provider, { target: 'Account', name: 'country' })
+
     post admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona', country: 'Spain' }
 
     assert_response :created
@@ -113,6 +115,8 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     UserMailer.expects(:deliver_signup_notification).never
 
     field_defined(@provider, { target: 'Account', name: 'account_extra_field' })
+    field_defined(@provider, { target: 'Account', name: 'org_legaladdress' })
+    field_defined(@provider, { target: 'Account', name: 'vat_rate' })
     field_defined(@provider, { target: 'User', name: 'user_extra_field' })
 
     post admin_api_signup_path, params: { format: :xml,
@@ -324,5 +328,29 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     assert_equal application_plan_local.id.to_s, xml.xpath(".//account/plans/plan[type[text() = 'application_plan']]/id").text
 
     assert xml.xpath('.//account/applications/application').present?
+  end
+
+  test 'account signup with annotations' do
+    post admin_api_signup_path(format: :json), params: {
+      provider_key: @provider.api_key,
+      org_name: 'annotated account',
+      username: 'annotated',
+      annotations: { managed_by: 'operator' }
+    }
+
+    assert_response :success
+
+    new_account = response.parsed_body[:account]
+    assert_equal({ 'managed_by' => 'operator'}, new_account[:annotations])
+    assert_equal 'operator', Account.find(new_account[:id]).annotations.where(name: 'managed_by').first.value
+  end
+
+  test "account signup sets user's signup_type to minimal" do
+    post admin_api_signup_path(format: :json), params: { provider_key: @provider.api_key, org_name: 'org', username: 'user' }
+
+    assert_response :success
+
+    new_user = User.find_by(username: 'user', account_id: response.parsed_body[:account][:id])
+    assert_equal :minimal, new_user.signup_type
   end
 end
