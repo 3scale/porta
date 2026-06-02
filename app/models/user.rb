@@ -421,10 +421,6 @@ class User < ApplicationRecord
       @user = user
     end
 
-    def partner?
-      signup_type.to_s.match(/^partner(:|$)/)
-    end
-
     def new?
       signup_type == :new_signup
     end

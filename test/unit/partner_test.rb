@@ -30,12 +30,6 @@ class PartnerTest < ActiveSupport::TestCase
     assert_equal [application_plan], partner.application_plans
   end
 
-  test 'has signup_type' do
-    partner = FactoryBot.build_stubbed(:partner, system_name: 'some-name')
-
-    assert_equal 'partner:some-name', partner.signup_type
-  end
-
   test 'can manage users?' do
     partner = FactoryBot.build_stubbed(:partner)
 

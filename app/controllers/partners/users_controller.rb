@@ -27,7 +27,7 @@ class Partners::UsersController < Partners::BaseController
     @user.last_name = params[:last_name].presence
     @user.open_id = params[:open_id].presence
     @user.username = params[:username]
-    @user.signup_type = :partner
+    @user.signup_type = :created_by_provider
     @user.role = :admin
     @user.activate!
     @user.save!
