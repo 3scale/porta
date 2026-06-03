@@ -22,6 +22,6 @@ class JanitorWorkerTest < ActiveSupport::TestCase
   def mock_purge_workers(called_times:)
     PurgeOldUserSessionsWorker.expects(:perform_async).send(called_times)
     PurgeStaleObjectsWorker.expects(:perform_later).send(called_times).with(EventStore::Event.name, DeletedObject.name)
-    DeleteAllStaleObjectsWorker.expects(:perform_later).send(called_times).with(MessageRecipient.name, Message.name)
+    DeleteAllStaleObjectsWorker.expects(:perform_later).send(called_times).with(MessageRecipient.name, Message.name, AccessToken.name)
   end
 end
