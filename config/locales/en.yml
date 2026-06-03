@@ -1526,22 +1526,22 @@ en:
           title: Analytics
           view_more: View more stats for this service
         application_plans:
-          title: Published Application Plans
+          title: Published application plans
           footer_html: 'You have %{plans} with a total of %{apps}.'
           create_first_plan: Create your first application plan
         details:
           title: Details
           edit: Edit
         latest_alerts:
-          title: Latest Alerts
+          title: Latest alerts
           no_alerts: There are no alerts
           view_more: View all limit alerts for this service
         latest_apps:
           create: Create an application
-          title: Latest Apps
+          title: Latest applications
           view_more: View all applications for this service
         service_plans:
-          title: Published Service Plans
+          title: Published service plans
           footer_html: You have %{plans} (%{published} published) with a total of %{contracts}.
           create_first_plan: Create your first service plan
           contracts:
@@ -1551,7 +1551,7 @@ en:
           configuration: Edit integration settings for this service
           methods: Manage metrics and method for this service
           settings: Edit settings for this service
-          title: Configuration and Settings
+          title: Configuration and settings
           friendly_service_setting:
             buyers_manage_keys:
               enabled: "Users <strong>can</strong> manage application keys"
