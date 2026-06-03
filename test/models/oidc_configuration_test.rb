@@ -9,7 +9,8 @@ class OIDCConfigurationTest < ActiveSupport::TestCase
       "service_accounts_enabled" => false,
       "standard_flow_enabled" => false,
       "implicit_flow_enabled" => false,
-      "direct_access_grants_enabled" => false
+      "direct_access_grants_enabled" => false,
+      "token_exchange_enabled" => false
     }
     assert_equal json, JSON.parse(config.config_before_type_cast)
   end
@@ -21,7 +22,8 @@ class OIDCConfigurationTest < ActiveSupport::TestCase
       "service_accounts_enabled" => true,
       "standard_flow_enabled" => false,
       "implicit_flow_enabled" => false,
-      "direct_access_grants_enabled" => false
+      "direct_access_grants_enabled" => false,
+      "token_exchange_enabled" => false
     }
     assert_equal json, config.attributes
   end
@@ -36,7 +38,8 @@ class OIDCConfigurationTest < ActiveSupport::TestCase
       "service_accounts_enabled" => false,
       "standard_flow_enabled" => true,
       "implicit_flow_enabled" => true,
-      "direct_access_grants_enabled" => false
+      "direct_access_grants_enabled" => false,
+      "token_exchange_enabled" => false
     }
 
     assert_equal json, JSON.parse(record.config_before_type_cast)
