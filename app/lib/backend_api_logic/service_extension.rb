@@ -18,6 +18,11 @@ module BackendApiLogic
       end, class_name: 'Metric'
     end
 
+    # This class is a compatibility layer added in https://github.com/3scale/porta/pull/1211
+    # to make the legacy code work after BackendApis ("API as a Product" feature) were introduced.
+    # For example, code like `proxy.update(api_backend: "value")` still works, even though `api_backend` is 
+    # now a field of BackendApi (aka `private_endpoint`), and not Proxy's.
+    # It is achieved by building a BackendApi and a BackendApiConfig objects lazily .
     class BackendApiProxy
       attr_reader :service
       delegate :account, :backend_apis, :backend_api_configs, to: :service
@@ -32,12 +37,16 @@ module BackendApiLogic
                                 backend_api_configs.build(path: '/', backend_api: backend_api)
       end
 
+      # Lazy building is required for some old code to work.
+      # However, it is needed to be dissociated, because otherwise `provider.backend_apis` will include this object,
+      # and validation will fail, because the lazily built BackendApi object itself might not be valid (due to a missing
+      # `backend_endpoint`).
       def backend_api
         # Return early if we already have a persisted backend_api
         return @backend_api if @backend_api&.persisted?
 
         # Try to get backend_api from backend_api_configs, or keep the memoized unpersisted one, or build a new one
-        @backend_api = backend_api_configs.first&.backend_api || @backend_api || build_backend_api
+        @backend_api = backend_api_configs.first&.backend_api || @backend_api || build_dissociated_backend_api
       end
 
       def update!(attrs = {})
@@ -59,8 +68,8 @@ module BackendApiLogic
 
       private
 
-      def build_backend_api
-        # Build without adding to association to avoid polluting it with unpersisted records
+      # Build a BackendApi without adding it to `backend_apis` association to avoid polluting it with unpersisted records.
+      def build_dissociated_backend_api
         BackendApi.new(
           account: account,
           system_name: service_system_name,
