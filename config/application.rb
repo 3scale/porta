@@ -58,7 +58,7 @@ module System
     # we do here instead of using initializers because of a Rails 5.1 vs
     # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
     # before initializers and causes configuration not to be respected.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # TODO: consider removing this to enable the default value 'true', and setting `allow_other_host: true` for `redirect_to` only where needed
     # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
