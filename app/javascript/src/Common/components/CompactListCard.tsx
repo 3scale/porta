@@ -3,6 +3,7 @@ import {
   ButtonVariant,
   Card,
   CardBody,
+  CardTitle,
   InputGroup,
   TextInput
 } from '@patternfly/react-core'
@@ -24,6 +25,7 @@ interface Props {
   onSearch: (term?: string) => void;
   page: number;
   setPage: (page: number) => void;
+  title?: string;
   perPage?: number;
   searchInputPlaceholder?: string;
   tableAriaLabel?: string;
@@ -38,6 +40,7 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   onSearch,
   page,
   setPage,
+  title,
   perPage = PER_PAGE,
   searchInputPlaceholder,
   tableAriaLabel
@@ -68,6 +71,9 @@ const CompactListCard: React.FunctionComponent<Props> = ({
 
   return (
     <Card>
+      <CardTitle>
+        {title}
+      </CardTitle>
       <CardBody>
         <Table
           aria-label={tableAriaLabel}
