@@ -99,7 +99,7 @@ class ServiceDecorator < ApplicationDecorator
   end
 
   def latest_applications
-    @latest_applications ||= cinstances.latest
+    @latest_applications ||= cinstances.with_account.latest
   end
 
   def traffic?

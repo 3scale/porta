@@ -24,7 +24,6 @@ class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::
   attr_reader :service
 
   def find_services
-    # probably should preload :service and :user_account
     services = applications.map(&:service).uniq
     return render(:multiple_services) unless services.size == 1
 

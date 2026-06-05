@@ -7,6 +7,7 @@ class Provider::Admin::Messages::InboxController < Provider::Admin::Messages::Ba
 
   def index
     @messages = current_account.received_messages
+                               .includes(message: { sender: [:admin_user] })
                                .not_system
                                .latest_first
                                .paginate(pagination_params)
