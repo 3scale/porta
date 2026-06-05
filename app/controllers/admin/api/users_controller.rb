@@ -130,6 +130,8 @@ class Admin::Api::UsersController < Admin::Api::BaseController
 
   def user_params
     defined_fields_names = current_account.provider_account.defined_fields_names_for(User)
+    # both `:member_permission_service_ids` and `member_permission_service_ids: []` need to be permitted, because the
+    # value can be either `nil` (meaning all services are allowed), or an array
     permission_attrs = [:member_permission_service_ids, { member_permission_service_ids: [], member_permission_ids: [] }]
     allowed_attrs = defined_fields_names + %w[password password_confirmation cas_identifier]
     allowed_attrs += permission_attrs if provider_key.present? || current_user.admin?

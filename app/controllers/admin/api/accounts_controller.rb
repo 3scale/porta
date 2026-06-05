@@ -154,21 +154,4 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
       raise ActiveRecord::RecordNotFound
     end
   end
-
-  def account_params
-    defined_fields_names = current_account.defined_fields_names_for(Account)
-    allowed_attrs = defined_fields_names + %w[name]
-    nested_params = {
-      extra_fields: current_account.defined_extra_fields_names_for(Account),
-      annotations: {}
-    }
-
-    if defined_fields_names.include?('billing_address')
-      allowed_attrs += %w[billing_address_name billing_address_address1 billing_address_address2 billing_address_city
-                          billing_address_country billing_address_state billing_address_zip billing_address_phone]
-      nested_params[:billing_address] = %i[name address1 address2 city country state zip phone]
-    end
-
-    params.permit(*allowed_attrs, **nested_params)
-  end
 end

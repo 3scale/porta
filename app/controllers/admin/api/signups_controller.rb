@@ -17,12 +17,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
 
   def user_params
     defined_user_fields = current_account.defined_fields_names_for(User)
-    params.permit(*defined_user_fields, :password)
-  end
-
-  def account_params
-    allowed_attrs = current_account.defined_fields_names_for(Account) - %w[billing_address]
-    params.permit(*allowed_attrs, annotations: {})
+    params.permit(*defined_user_fields, :password, :password_confirmation)
   end
 
   def check_creation_errors
