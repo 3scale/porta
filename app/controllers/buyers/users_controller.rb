@@ -22,9 +22,7 @@ class Buyers::UsersController < Buyers::BaseController
   def edit; end
 
   def update
-    user.assign_attributes(permitted_user_params)
-    user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
-
+    user.assign_attributes(user_params)
     if user.save
       redirect_to({ action: :show }, success: t('.success'))
     else
@@ -84,14 +82,11 @@ class Buyers::UsersController < Buyers::BaseController
   end
 
   def user_params
-    @user_params ||= params.require(:user)
-  end
-
-  def permitted_user_params
     fields_names = current_account.defined_fields_names_for(User)
     extra_fields_names = current_account.defined_extra_fields_names_for(User)
-    user_params.permit(*fields_names, :password, :password_confirmation,
-                       extra_fields: extra_fields_names)
+    allowed_attrs = [*fields_names, :password, :password_confirmation]
+    allowed_attrs += [:role] if can?(:update_role, user)
+    params.require(:user).permit(allowed_attrs, extra_fields: extra_fields_names)
   end
 
   def redirect_back_or_show_detail(**opts)
