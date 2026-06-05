@@ -43,7 +43,7 @@ class Provider::Admin::ApplicationsController < FrontendController
   def update
     # TODO: this is not needed if this controller is used only by providers
     @cinstance.validate_human_edition!
-    @cinstance.attributes = params[:cinstance]
+    @cinstance.assign_attributes(application_params)
 
     respond_to do |format|
       json = @cinstance.to_json(only: %i[id name], methods: %i[errors])

@@ -67,6 +67,18 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       post :create, params: valid_buyer_params
     end
 
+    test '#create should create a valid user' do
+      post :create, params: valid_buyer_params
+
+      account = @provider.buyer_accounts.last
+      assert_equal valid_buyer_params.dig(:account, :org_name), account.org_name
+
+      user_params = valid_buyer_params.dig(:account, :user)
+      user = account.users.find_by(username: user_params[:username])
+      assert_equal user_params[:email], user.email
+      assert_equal :new_signup, user.signup_type
+    end
+
     test '#create successfully from oauth2 should save the id_token' do
       auth_provider = FactoryBot.create(:keycloak_authentication_provider, account: @provider)
       session[:id_token] = 'fake-token'
@@ -80,6 +92,20 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     test "raise RecordNotFound with wrong plan ids" do
       post :create, params: valid_buyer_params(plans: [1, 2])
       assert_response :not_found
+    end
+
+    test 'signup with non-matching password fails' do
+      assert_no_difference Account.method(:count) do
+        params = valid_buyer_params
+        params[:account][:user][:password_confirmation] = 'non-matching-password'
+
+        post :create, params: params
+
+        assert_response :success
+        signup_result = assigns(:signup_result)
+
+        assert_equal ["Password confirmation doesn't match Password"], signup_result.errors[:user]
+      end
     end
   end
 

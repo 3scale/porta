@@ -144,4 +144,47 @@ class Buyers::UsersControllerTest < ActionController::TestCase
       assert_select 'input[name="user[password_confirmation]"]'
     end
   end
+
+  class UpdateWithRoleTest < ActionController::TestCase
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @user = FactoryBot.create(:user, account: @buyer, username: 'member', role: :member)
+      host! @provider.internal_admin_domain
+      login_provider @provider
+    end
+
+    test 'update allows role when user can update_role' do
+      @controller.stubs(:can?).with(:update_role, @user).returns(true)
+
+      put :update, params: { account_id: @buyer.id, id: @user.id, user: { role: 'admin', username: 'new_username' } }
+
+      assert_response :redirect
+      assert_equal :admin, @user.reload.role
+      assert_equal 'new_username', @user.username
+    end
+
+    test 'setting role to nil value when user can update_role' do
+      @controller.stubs(:can?).with(:update_role, @user).returns(true)
+      @user.update(role: :admin)
+
+      put :update, params: { account_id: @buyer.id, id: @user.id, user: { role: nil, username: 'new_username' } }
+
+      assert_response :redirect
+      # user.role defaults to :member, if the value is missing
+      assert_equal :member, @user.reload.role
+      assert_equal 'new_username', @user.username
+    end
+
+    test 'update does not allow role when user cannot update_role' do
+      @controller.stubs(:can?).with(:update_role, @user).returns(false)
+
+      put :update, params: { account_id: @buyer.id, id: @user.id, user: { role: 'admin', username: 'new_username' } }
+
+      # Role should not change because user cannot update_role
+      assert_equal :member, @user.reload.role
+      # But other attributes should still update
+      assert_equal 'new_username', @user.username
+    end
+  end
 end

@@ -45,19 +45,8 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
     redirect_to new_admin_account_password_url(request_password_reset: true)
   end
 
-  def buyer
-    @buyer ||= @provider.buyers.build do |account|
-      # We need to get all the account params to run the spam check
-      account.unflattened_attributes = account_params
-    end
-  end
-
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
-  end
-
-  def account_params
-    params.fetch(:account, {})
   end
 
   def find_user

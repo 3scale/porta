@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::InviteeSignupsController < FrontendController
   skip_before_action :login_required
 
@@ -10,8 +12,7 @@ class Provider::InviteeSignupsController < FrontendController
 
   layout 'provider/login'
 
-  def show
-  end
+  def show; end
 
   def create
     @user.admin_sections = domain_account.provider_can_use?(:service_permissions) ? [] : ['monitoring']
@@ -53,11 +54,12 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def build_user
-    @user = @invitation.make_user(params[:user] || {})
+    @user = @invitation.make_user(user_params)
+  end
 
-    # This is just a sanity guard added when splitting invitation
-    # controllers. Remove when SURE.
-    raise 'Developer invitation used and worked on provider side!' unless @user.account.provider?
+  def user_params
+    defined_fields = domain_account.provider_account.defined_fields_names_for(User)
+    params.fetch(:user, {}).permit(*defined_fields, :password, :password_confirmation)
   end
 
   def invitation_token

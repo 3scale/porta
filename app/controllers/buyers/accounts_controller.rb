@@ -30,10 +30,7 @@ class Buyers::AccountsController < Buyers::BaseController
   end
 
   def update
-    vat = account_params[:vat_rate]
-    account.vat_rate = vat if vat # vat_rate is protected attribute
-
-    if account.update(account_params.except(:vat_rate))
+    if account.update(account_params)
       redirect_to admin_buyers_account_path(account), success: t('.success')
     else
       render :edit
@@ -109,13 +106,18 @@ class Buyers::AccountsController < Buyers::BaseController
     Signup::SignupParams.new(plans: [], user_attributes: user_params.merge(signup_type: :created_by_provider), account_attributes: account_params, validate_fields: false)
   end
 
-  # TODO: using `permit` later
   def account_params
-    @account_params ||= params.require(:account).except(:user)
+    defined_builtin_fields_names = current_account.defined_builtin_fields_names_for(Account)
+    defined_extra_fields_names = current_account.defined_extra_fields_names_for(Account)
+    allowed_attrs = defined_builtin_fields_names - %w[billing_address country] + %w[country_id]
+    params.require(:account).permit(*allowed_attrs, extra_fields: defined_extra_fields_names)
   end
 
   def user_params
-    params.require(:account).fetch(:user, {})
+    defined_builtin_fields_names = current_account.defined_builtin_fields_names_for(User)
+    defined_extra_fields_names = current_account.defined_extra_fields_names_for(User)
+    allowed_attrs = defined_builtin_fields_names + %w[password]
+    params.require(:account).fetch(:user, {}).permit(*allowed_attrs, extra_fields: defined_extra_fields_names)
   end
 
   def set_plans

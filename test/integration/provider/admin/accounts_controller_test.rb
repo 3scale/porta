@@ -11,6 +11,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     @service_plan = master.default_service_plans.first
     @application_plan = master.default_application_plans.first
     @application_plan.update(system_name: 'enterprise') # for the switches tested later
+    FieldsDefinition.create_defaults!(@master)
     FactoryBot.create(:fields_definition, account: @master, target: 'User', name: 'created_by')
   end
 
