@@ -5,7 +5,7 @@ class LineItem < ApplicationRecord
   belongs_to :contract, polymorphic: true
   belongs_to :metric, inverse_of: :line_items
 
-  audited associated_with: :invoice, allow_mass_assignment: true
+  audited associated_with: :invoice
 
   validates :name, :description, :type, :contract_type, length: { maximum: 255 }
   validates :type, inclusion: {in: [LineItem::PlanCost, LineItem::VariableCost].flat_map { |klass| [klass, klass.to_s]}, allow_blank: true}

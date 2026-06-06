@@ -115,7 +115,7 @@ module Fields::Fields
     # otherwise it raises exception on unknown (extra) fields
     # check http://api.rubyonrails.org/classes/ActiveRecord/AttributeAssignment.html#method-i-assign_attributes
 
-    def assign_attributes(extra_attributes, options = {})
+    def assign_attributes(extra_attributes)
       # dup the fields because we are mutating them (params hash)
       attributes = extra_attributes.present? ? extra_attributes.dup : {}
 
@@ -126,7 +126,7 @@ module Fields::Fields
         self.extra_fields = fields_attributes
       end
 
-      super(attributes, options)
+      super(attributes)
     end
 
     alias attributes= assign_attributes

@@ -51,6 +51,21 @@ class CMS::TemplateTest < ActiveSupport::TestCase
     assert_equal 'old', page.current
   end
 
+  test 'revert_to' do
+    page = FactoryBot.create(:cms_page, draft: 'original draft', published: 'original published')
+    version = page.build_version(updated_at: Time.utc(2020, 1, 1), updated_by: 'developer')
+    version.save
+    page.update(draft: 'new draft', published: 'new published')
+
+    page.revert_to(version)
+
+    assert_equal 'original draft', page.draft
+    assert_equal '2020-01-01T00:00:00Z', page.updated_at.iso8601
+    assert_equal 'developer', page.updated_by
+    # as 'state' is :draft if draft is present, 'published' is not touched
+    assert_equal 'new published', page.published
+  end
+
   test "destroy" do
     page = FactoryBot.create(:cms_page, draft: 'something')
     page.publish!

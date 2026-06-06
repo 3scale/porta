@@ -36,5 +36,84 @@ class ServiceExtensionTest < ActiveSupport::TestCase
 
       assert_equal backend_api_config, service.backend_api_proxy.backend_api_config
     end
+
+    test '#backend_api returns backend_api from the first backend_api_configs, if persisted' do
+      service = FactoryBot.create(:simple_service)
+      backend_api = FactoryBot.create(:backend_api, account: service.account)
+      another_backend_api = FactoryBot.create(:backend_api, account: service.account)
+      FactoryBot.create(:backend_api_config, service: service, backend_api: backend_api, path: '/one')
+      FactoryBot.create(:backend_api_config, service: service, backend_api: another_backend_api, path: '/two')
+
+      assert_equal 2, service.reload.backend_api_configs.count
+
+      first_result = service.backend_api
+      assert_equal backend_api, first_result
+
+      # The second call returns the memoized instance
+      second_result = service.backend_api
+      assert_same first_result, second_result
+    end
+
+    test '#update! saves backend_api_config and backend_api for the service' do
+      service = FactoryBot.create(:simple_service)
+
+      # built on demand
+      backend_api = service.backend_api
+      assert_not backend_api.persisted?
+      assert_not service.backend_api_proxy.backend_api_config.persisted?
+
+      service.backend_api_proxy.update!(private_endpoint: 'https://api.example.com', path: '/backend-path')
+
+      # memoized instances, but now persisted
+      persisted_backend_api = service.backend_api
+
+      assert persisted_backend_api.persisted?
+      assert service.backend_api_proxy.backend_api_config.persisted?
+
+      assert_same backend_api, persisted_backend_api
+    end
+
+    test '#backend_api builds and memoizes unpersisted backend_api' do
+      service = FactoryBot.create(:simple_service)
+      proxy = service.backend_api_proxy
+
+      # First call builds unpersisted backend_api
+      first_call = proxy.backend_api
+      assert_not first_call.persisted?
+      assert_same service.account, first_call.account
+      assert_equal service.system_name, first_call.system_name
+
+      # Second call returns the same memoized unpersisted instance
+      second_call = proxy.backend_api
+      assert_same first_call, second_call
+      assert_not second_call.persisted?
+    end
+
+    test '#backend_api_config memoizes across multiple calls' do
+      service = FactoryBot.create(:simple_service)
+      proxy = service.backend_api_proxy
+
+      first_call = proxy.backend_api_config
+      second_call = proxy.backend_api_config
+
+      assert_not first_call.persisted?
+      assert_not second_call.persisted?
+      assert_same first_call, second_call
+    end
+
+    test '#backend_api does not pollute account.backend_apis association with unpersisted records' do
+      service = FactoryBot.create(:simple_service)
+      account = service.account
+
+      initial_count = account.backend_apis.count
+
+      # Call backend_api which builds an unpersisted backend_api
+      backend_api = service.backend_api_proxy.backend_api
+      assert_not backend_api.persisted?
+
+      # Association should not include unpersisted record
+      assert_equal initial_count, account.backend_apis.count
+      assert_not_includes account.backend_apis, backend_api
+    end
   end
 end

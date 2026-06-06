@@ -70,7 +70,7 @@ class ZyncEvent < BaseEventStoreEvent
   def non_persisted_dependencies
     case record
     when Proxy, Cinstance
-      [Service.new({id: data[:service_id]}, without_protection: true)]
+      [Service.new(id: data[:service_id])]
     else
       NONE
     end

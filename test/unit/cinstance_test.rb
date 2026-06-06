@@ -979,13 +979,13 @@ class ApplicationUpdatedSavedEventTest < ActiveSupport::TestCase
     end
 
     assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
-      cinstance.update!({ first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round }, without_protection: true)
+      cinstance.update!(first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round)
     end
   end
 
   test 'ApplicationUpdatedEvent is created after an update when there are updated traffic and non-traffic attributes' do
     assert_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
-      cinstance.update!({ name: 'mycinstance', first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round }, without_protection: true)
+      cinstance.update!(name: 'mycinstance', first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round)
     end
   end
 end

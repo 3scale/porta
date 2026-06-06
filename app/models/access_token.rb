@@ -178,8 +178,7 @@ class AccessToken < ApplicationRecord
   end
 
   def generate_if_missing
-    return if persisted?
-    return if @plaintext_value.present?
+    return if value.present?
 
     @plaintext_value = self.class.random_id
     self.value = self.class.compute_digest(@plaintext_value)
