@@ -32,7 +32,7 @@ class CMS::Template::Version < ApplicationRecord
   end
 
   def revert_attributes
-    accessible = [:updated_at, :updated_by, state.to_s]
+    accessible = ['updated_at', 'updated_by', state.to_s]
     attributes.slice(*accessible)
   end
 

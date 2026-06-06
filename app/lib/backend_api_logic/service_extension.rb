@@ -20,7 +20,7 @@ module BackendApiLogic
 
     # This class is a compatibility layer added in https://github.com/3scale/porta/pull/1211
     # to make the legacy code work after BackendApis ("API as a Product" feature) were introduced.
-    # For example, code like `proxy.update(api_backend: "value")` still works, even though `api_backend` is 
+    # For example, code like `proxy.update(api_backend: "value")` still works, even though `api_backend` is
     # now a field of BackendApi (aka `private_endpoint`), and not Proxy's.
     # It is achieved by building a BackendApi and a BackendApiConfig objects lazily .
     class BackendApiProxy
