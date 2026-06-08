@@ -65,8 +65,8 @@ Feature: Provider Admin Access tokens
       And field "Expires in" has no inline error
 
     Scenario: Create access token
-      When they press "Create Access Token"
-      And the form is submitted with:
+      Given a token will be created with value "asdf1234"
+      When the form is submitted with:
         | Name          | LeToken       |
         | Analytics API | Yes           |
         | Permission    | Read & Write  |
@@ -78,6 +78,7 @@ Feature: Provider Admin Access tokens
         | Scopes     | Analytics API  |
         | Permission | Read & Write   |
         | Expires at | Never expires  |
+        | Token      | asdf1234       |
       And there should be a link to "I have copied the token"
 
   Rule: Edit page
