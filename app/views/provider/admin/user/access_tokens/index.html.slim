@@ -60,7 +60,7 @@ div class="pf-c-card pf-u-mt-lg" id="service-tokens"
   div class="pf-c-card__body"
     = t('.service_tokens.body_html', href: provider_admin_api_docs_path)
 
-  - if service_tokens.empty?
+  - if services_with_token.empty?
     div class="pf-c-card__body"
       = pf_inline_alert t('.service_tokens.empty'), variant: :info
 
@@ -73,7 +73,7 @@ div class="pf-c-card pf-u-mt-lg" id="service-tokens"
           th role="columnheader" scope="col" = t('.service_tokens.permission_col')
           th role="columnheader" scope="col" = t('.service_tokens.token')
       tbody
-        - service_tokens.each do |service|
+        - services_with_token.each do |service|
           tr role="row"
             td role="cell" data-label="Service name" = service.name
             td role="cell" data-label="Scope" = t('.service_tokens.scope_value')
