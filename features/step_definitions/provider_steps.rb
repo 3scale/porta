@@ -294,13 +294,6 @@ Given(/^master admin( is logged in)?/) do |login|
   end
 end
 
-When(/^I have opened edit page for the active member$/) do
-  visit provider_admin_account_users_path
-  user = User.find_by!(username: 'alex')
-  find("tr#user_#{user.id} .pf-c-table__action").click_link('Edit')
-  assert_text 'Edit User'
-end
-
 Then(/^no permissions should be checked$/) do
   within('.FeatureAccessList') do
     all('input[type=checkbox]').each do |input|

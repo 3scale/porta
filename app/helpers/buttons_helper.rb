@@ -83,6 +83,7 @@ module ButtonsHelper
     fancy_button_to(label, url, options)
   end
 
+  # DEPRECATED: Replace with form to be independent of rails-ujs (data-method: 'delete')
   # Button for deleting stuff.
   #
   # This is a shortcut for

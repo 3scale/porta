@@ -35,5 +35,11 @@ FactoryBot.define do
 
   factory(:member, :parent => :user) do
     role { :member }
+
+    trait :with_plans_permission do
+      after(:create) do |user|
+        user.member_permission_ids = ['plans']
+      end
+    end
   end
 end
