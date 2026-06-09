@@ -8,12 +8,16 @@ module Tasks
 
     class DomainsSyncTest < ZyncTest
       test 'resync provider domains' do
-        Account.providers_with_master.each { |account| Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).with(account) }
+        Account.providers_with_master.without_suspended.without_deleted.each do |account|
+          Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).with(account)
+        end
         execute_rake_task 'zync.rake', 'zync:resync:provider_domains'
       end
 
       test 'resync proxy domains' do
-        Service.all.each { |service| Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(service.proxy) }
+        Proxy.joins(service: :account).merge(Account.providers_with_master.without_suspended.without_deleted).each do |proxy|
+          Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(proxy)
+        end
         execute_rake_task 'zync.rake', 'zync:resync:proxy_domains'
       end
     end
@@ -31,12 +35,13 @@ module Tasks
         end
 
         @all_accounts = Account.providers_with_master.without_suspended.without_deleted.to_a
-        @all_services = Service.where(account: @all_accounts).to_a
-        @all_cinstances = Cinstance.where(service: @all_services).to_a
+        @all_services = Service.joins(:account).merge(Account.providers_with_master.without_suspended.without_deleted).to_a
+        @all_proxies = Proxy.joins(service: :account).merge(Account.providers_with_master.without_suspended.without_deleted).to_a
+        @all_cinstances = Cinstance.joins(service: :account).merge(Account.providers_with_master.without_suspended.without_deleted).to_a
       end
 
       test 'full resync' do
-        expect_full_resync_events(@all_accounts, @all_services, @all_cinstances)
+        expect_full_resync_events(@all_accounts, @all_services, @all_proxies, @all_cinstances)
         execute_rake_task 'zync.rake', 'zync:resync:full'
       end
 
@@ -45,13 +50,15 @@ module Tasks
         suspended_provider.suspend!
 
         excluded_services = Service.where(account: suspended_provider).to_a
+        excluded_proxies = Proxy.where(service: excluded_services).to_a
         excluded_cinstances = Cinstance.where(service: excluded_services).to_a
-        expect_no_resync_events(suspended_provider, excluded_services, excluded_cinstances)
+        expect_no_resync_events(suspended_provider, excluded_services, excluded_proxies, excluded_cinstances)
 
         remaining_accounts = @all_accounts.reject { |a| a.id == suspended_provider.id }
         remaining_services = @all_services.reject { |s| s.account_id == suspended_provider.id }
+        remaining_proxies = @all_proxies.reject { |p| excluded_services.map(&:id).include?(p.service_id) }
         remaining_cinstances = @all_cinstances.reject { |c| excluded_services.map(&:id).include?(c.service_id) }
-        expect_full_resync_events(remaining_accounts, remaining_services, remaining_cinstances)
+        expect_full_resync_events(remaining_accounts, remaining_services, remaining_proxies, remaining_cinstances)
 
         execute_rake_task 'zync.rake', 'zync:resync:full'
       end
@@ -61,13 +68,15 @@ module Tasks
         deleted_provider.schedule_for_deletion!
 
         excluded_services = Service.where(account: deleted_provider).to_a
+        excluded_proxies = Proxy.where(service: excluded_services).to_a
         excluded_cinstances = Cinstance.where(service: excluded_services).to_a
-        expect_no_resync_events(deleted_provider, excluded_services, excluded_cinstances)
+        expect_no_resync_events(deleted_provider, excluded_services, excluded_proxies, excluded_cinstances)
 
         remaining_accounts = @all_accounts.reject { |a| a.id == deleted_provider.id }
         remaining_services = @all_services.reject { |s| s.account_id == deleted_provider.id }
+        remaining_proxies = @all_proxies.reject { |p| excluded_services.map(&:id).include?(p.service_id) }
         remaining_cinstances = @all_cinstances.reject { |c| excluded_services.map(&:id).include?(c.service_id) }
-        expect_full_resync_events(remaining_accounts, remaining_services, remaining_cinstances)
+        expect_full_resync_events(remaining_accounts, remaining_services, remaining_proxies, remaining_cinstances)
 
         execute_rake_task 'zync.rake', 'zync:resync:full'
       end
@@ -75,9 +84,10 @@ module Tasks
       test 'full resync with PROVIDER_ID' do
         provider = @providers.first
         provider_services = @all_services.select { |s| s.account_id == provider.id }
+        provider_proxies = @all_proxies.select { |p| provider_services.map(&:id).include?(p.service_id) }
         provider_cinstances = @all_cinstances.select { |c| provider_services.map(&:id).include?(c.service_id) }
 
-        expect_full_resync_events([provider], provider_services, provider_cinstances)
+        expect_full_resync_events([provider], provider_services, provider_proxies, provider_cinstances)
 
         ENV['PROVIDER_ID'] = provider.id.to_s
         execute_rake_task 'zync.rake', 'zync:resync:full'
@@ -87,23 +97,17 @@ module Tasks
 
       private
 
-      def expect_full_resync_events(accounts, services, cinstances)
+      def expect_full_resync_events(accounts, services, proxies, cinstances)
         accounts.each { |account| Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).with(account) }
-        services.each do |service|
-          OIDC::ServiceChangedEvent.expects(:create_and_publish!).with(service)
-          Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(service.proxy)
-          OIDC::ProxyChangedEvent.expects(:create_and_publish!).with(service.proxy)
-        end
+        services.each { |service| OIDC::ServiceChangedEvent.expects(:create_and_publish!).with(service) }
+        proxies.each { |proxy| Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(proxy) }
         cinstances.each { |cinstance| Applications::ApplicationUpdatedEvent.expects(:create_and_publish!).with(cinstance) }
       end
 
-      def expect_no_resync_events(account, services, cinstances)
+      def expect_no_resync_events(account, services, proxies, cinstances)
         Domains::ProviderDomainsChangedEvent.expects(:create_and_publish!).with(account).never
-        services.each do |service|
-          OIDC::ServiceChangedEvent.expects(:create_and_publish!).with(service).never
-          Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(service.proxy).never
-          OIDC::ProxyChangedEvent.expects(:create_and_publish!).with(service.proxy).never
-        end
+        services.each { |service| OIDC::ServiceChangedEvent.expects(:create_and_publish!).with(service).never }
+        proxies.each { |proxy| Domains::ProxyDomainsChangedEvent.expects(:create_and_publish!).with(proxy).never }
         cinstances.each { |cinstance| Applications::ApplicationUpdatedEvent.expects(:create_and_publish!).with(cinstance).never }
       end
     end

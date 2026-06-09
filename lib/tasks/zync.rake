@@ -4,12 +4,14 @@ BATCH_SIZE = 100
 
 namespace :zync do
   namespace :resync do
-    def each_with_progress(scope)
+    def each_with_progress(label, scope)
+      puts "== Resyncing #{label} =="
       total_count = scope.count
       index = 0
 
+      step = [(total_count / 10), 1].max
       progress = -> do
-        break unless (index % BATCH_SIZE) == 0
+        break unless (index % step).zero?
 
         percent = (index / total_count.to_f) * 100.0
         puts "#{percent.round(2)}% completed"
@@ -22,49 +24,46 @@ namespace :zync do
       end
     end
 
-    desc 'Resync provider domains with zync'
-    task provider_domains: :environment do
+    def active_providers
       accounts = Account.providers_with_master
       if (provider_id = ENV["PROVIDER_ID"])
-        accounts = accounts.where(id: provider_id)
+        accounts.where(id: provider_id)
+      else
+        accounts.without_suspended.without_deleted
       end
-      each_with_progress(accounts) { |account| Domains::ProviderDomainsChangedEvent.create_and_publish!(account) }
+    end
+
+    desc 'Resync provider domains with zync'
+    task providers: :environment do
+      each_with_progress('providers', active_providers) { |account| Domains::ProviderDomainsChangedEvent.create_and_publish!(account) }
+    end
+
+    task provider_domains: :providers
+
+    desc 'Resync services with zync'
+    task services: :environment do
+      services = Service.joins(:account).merge(active_providers)
+      each_with_progress('services', services) { |service| OIDC::ServiceChangedEvent.create_and_publish!(service) }
     end
 
     desc 'Resync proxy domains with zync'
-    task proxy_domains: :environment do
-      services = Service.includes(:proxy)
-      if (provider_id = ENV["PROVIDER_ID"])
-        services = services.where(account_id: provider_id)
-      end
-      each_with_progress(services) { |service| Domains::ProxyDomainsChangedEvent.create_and_publish!(service.proxy) }
+    task proxies: :environment do
+      proxies = Proxy.joins(service: :account).merge(active_providers)
+      each_with_progress('proxies', proxies) { |proxy| Domains::ProxyDomainsChangedEvent.create_and_publish!(proxy) }
+    end
+
+    task proxy_domains: :proxies
+
+    desc 'Resync applications with zync'
+    task applications: :environment do
+      cinstances = Cinstance.joins(service: :account).merge(active_providers)
+      each_with_progress('applications', cinstances) { |cinstance| Applications::ApplicationUpdatedEvent.create_and_publish!(cinstance) }
     end
 
     desc 'Resync all domains with zync'
-    task domains: [:provider_domains, :proxy_domains]
+    task domains: %i[provider_domains proxy_domains]
 
     desc 'Full resync'
-    task full: :environment do
-      accounts = Account.providers_with_master
-      accounts = if (provider_id = ENV["PROVIDER_ID"])
-                   accounts.where(id: provider_id)
-                 else
-                   accounts.without_suspended.without_deleted
-                 end
-
-      each_with_progress(accounts) do |account|
-        Domains::ProviderDomainsChangedEvent.create_and_publish!(account)
-
-        account.services.find_each(batch_size: BATCH_SIZE) do |service|
-          OIDC::ServiceChangedEvent.create_and_publish!(service)
-          Domains::ProxyDomainsChangedEvent.create_and_publish!(service.proxy)
-          OIDC::ProxyChangedEvent.create_and_publish!(service.proxy)
-
-          service.cinstances.find_each(batch_size: BATCH_SIZE) do |cinstance|
-            Applications::ApplicationUpdatedEvent.create_and_publish!(cinstance)
-          end
-        end
-      end
-    end
+    task full: %i[providers services proxies applications]
   end
 end
