@@ -33,9 +33,14 @@ namespace :zync do
       end
     end
 
+    def publish_zync_event(model, provider_id:, service_id: nil)
+      event = ResyncEvent.create(provider_id:, service_id:)
+      ZyncEvent.create_and_publish!(event, model)
+    end
+
     desc 'Resync provider domains with zync'
     task providers: :environment do
-      each_with_progress('providers', active_providers) { |account| Domains::ProviderDomainsChangedEvent.create_and_publish!(account) }
+      each_with_progress('providers', active_providers) { |account| publish_zync_event(account, provider_id: account.id) }
     end
 
     task provider_domains: :providers
@@ -43,21 +48,21 @@ namespace :zync do
     desc 'Resync services with zync'
     task services: :environment do
       services = Service.joins(:account).merge(active_providers)
-      each_with_progress('services', services) { |service| OIDC::ServiceChangedEvent.create_and_publish!(service) }
+      each_with_progress('services', services) { |service| publish_zync_event(service, provider_id: service.account_id) }
     end
 
     desc 'Resync proxy domains with zync'
     task proxies: :environment do
-      proxies = Proxy.joins(service: :account).merge(active_providers)
-      each_with_progress('proxies', proxies) { |proxy| Domains::ProxyDomainsChangedEvent.create_and_publish!(proxy) }
+      proxies = Proxy.eager_load(service: :account).merge(active_providers)
+      each_with_progress('proxies', proxies) { |proxy| publish_zync_event(proxy, provider_id: proxy.service.account_id, service_id: proxy.service_id) }
     end
 
     task proxy_domains: :proxies
 
     desc 'Resync applications with zync'
     task applications: :environment do
-      cinstances = Cinstance.joins(service: :account).merge(active_providers)
-      each_with_progress('applications', cinstances) { |cinstance| Applications::ApplicationUpdatedEvent.create_and_publish!(cinstance) }
+      cinstances = Cinstance.eager_load(service: :account).merge(active_providers)
+      each_with_progress('applications', cinstances) { |cinstance| publish_zync_event(cinstance, provider_id: cinstance.service.account_id, service_id: cinstance.service_id) }
     end
 
     desc 'Resync all domains with zync'
