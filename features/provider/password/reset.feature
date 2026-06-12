@@ -48,6 +48,7 @@ Feature: Provider password reset
       Then they should see "We sent an email with password reset instructions to: unknown@not.valid"
       Then the current page is the provider login page
 
+    @emails
     Scenario: Set a new password
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
@@ -58,6 +59,7 @@ Feature: Provider password reset
       And the current page is the provider login page
       And the user is now able to sign in with password "superSecret1234#"
 
+    @emails
     Scenario: New password form validation
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"
@@ -73,6 +75,7 @@ Feature: Provider password reset
       Given they go to the provider password page with invalid password reset token
       Then they should see "The password reset token is invalid"
 
+    @emails
     Scenario: Password reset token expires after 1 day
       Given time flies to 12th June 2009
       And the user has requested a new password
@@ -80,6 +83,7 @@ Feature: Provider password reset
       And follow the link found in the provider password reset email send to "pepe@example.com"
       Then they should see "The password reset token is invalid"
 
+    @emails
     Scenario: Reuse a password reset token
       Given the user has requested a new password
       And follow the link found in the provider password reset email send to "pepe@example.com"

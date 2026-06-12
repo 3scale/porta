@@ -14,7 +14,11 @@ end
 
 World(EmailSupport)
 
-Before do
-  Sidekiq::Job.clear_all
+Before '@emails' do
   ActionMailer::Base.deliveries.clear
+  ActiveJob::Base.queue_adapter = :inline
+end
+
+After '@emails' do
+  ActiveJob::Base.queue_adapter = Rails.configuration.active_job.queue_adapter
 end
