@@ -12,7 +12,7 @@ class PoliciesConfigParams
     return policies_config_params if json_param?
 
     [policies_config_params].flatten.map do |policies_config|
-      policies_config.try(:permit!)
+      policies_config.try(:permit, :name, :version, :enabled, :removable, :id, :humanName, configuration: {})
     end
   end
 

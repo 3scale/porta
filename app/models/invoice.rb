@@ -39,8 +39,6 @@ class Invoice < ApplicationRecord
   has_attached_file :pdf, url: ':url_root/:class/:id/:attachment/:style/:basename.:extension'
   do_not_validate_attachment_file_type :pdf
 
-  attr_accessible :provider_account, :buyer_account, :friendly_id, :period
-
   validates :provider_account, :buyer_account, :friendly_id, presence: true
 
   validates :period, presence: { :message => 'Billing period format should be YYYY-MM' }

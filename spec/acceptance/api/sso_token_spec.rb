@@ -15,7 +15,8 @@ resource "SSOToken" do
 
   api 'sso token' do
     before do
-      expect(SSOToken).to receive(:new).with(user_id: user_id.to_s, expires_in: expires_in.to_s)
+      expected_params = ActionController::Parameters.new(user_id: user_id.to_s, expires_in: expires_in.to_s).permit!
+      expect(SSOToken).to receive(:new).with(expected_params)
                               .and_return(sso_token)
 
     end
