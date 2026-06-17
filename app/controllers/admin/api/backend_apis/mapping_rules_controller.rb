@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis::BaseController
+  include DeadlockRetryable
+
   represents :json, entity: ::ProxyRuleRepresenter::JSON, collection: ::ProxyRulesRepresenter::JSON
   wrap_parameters ProxyRule, name: :mapping_rule
 
@@ -33,7 +35,7 @@ class Admin::Api::BackendApis::MappingRulesController < Admin::Api::BackendApis:
   # Backend Mapping Rule Delete
   # DELETE /admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json
   def destroy
-    mapping_rule.destroy
+    with_deadlock_retry { mapping_rule.destroy }
     respond_with(mapping_rule)
   end
 
