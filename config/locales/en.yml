@@ -39,7 +39,6 @@ en:
   # start documentation links
   docs:
     base_url: 'https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/%{docs_version}/html'
-    hero_api_portal: '%{docs_base_url}/creating_the_developer_portal/index'
     developer_portal:
       email_configuration: '%{docs_base_url}/creating_the_developer_portal/email-configuration'
       liquid_reference: '%{docs_base_url}/liquid_reference/index'

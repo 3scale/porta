@@ -31,13 +31,6 @@
 @forward 'provider/call_to_action';
 
 // view specific stylesheets placed in the controller paths
-@forward 'provider/admin/cms/templates';
-@forward 'provider/admin/cms/cms_intro';
-@forward 'provider/admin/cms/files';
-@forward 'provider/admin/cms/sections';
-@forward 'provider/admin/cms/switches';
-@forward 'provider/admin/cms/sidebar';
-@forward 'provider/admin/buyers/plans/listing';
 @forward 'provider/settings_box';
 @forward 'provider/admin/apiconfig/services/proxies';
 @forward 'provider/admin/apiconfig/services/hosted_proxy';
