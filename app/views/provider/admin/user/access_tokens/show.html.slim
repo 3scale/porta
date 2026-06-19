@@ -1,7 +1,7 @@
 - content_for :title, t('provider.admin.user.access_tokens.index.title')
 - content_for :page_header_title, t('.title')
 
-- content_for :javascripts
+- content_for :javascripts do
   = stylesheet_packs_chunks_tag 'pf_description_list'
 
 div class="pf-c-card"

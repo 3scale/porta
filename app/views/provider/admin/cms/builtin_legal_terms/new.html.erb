@@ -2,7 +2,10 @@
   Legal Terms for <%= @page.title %>
 <% end %>
 
-<%= javascript_packs_with_chunks_tag 'cms', 'pf_spacing' %>
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'cms' %>
+  <%= stylesheet_packs_chunks_tag 'pf_spacing' %>
+<% end %>
 
 <% content_for :page_header_title, "Legal Terms for #{@page.title}" %>
 <%= render 'info' %>
