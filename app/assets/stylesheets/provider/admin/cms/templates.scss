@@ -1,0 +1,29 @@
+@use 'provider/colors' as *;
+@use 'provider/typography' as *;
+
+#cms-intro-tabs {
+  .pf-c-tabs {
+    --pf-c-tabs--before--BorderBottomWidth: 0; /* HACK: remove pf-tabs horizontal line */
+  }
+
+  i.fa {
+    color: $link-color;
+  }
+
+  .ui-tabs-nav {
+    margin-bottom: 12px;
+  }
+
+  #quick-links em {
+    cursor: help;
+    border-bottom: $border-width dashed $border-color;
+  }
+
+  pre code {
+    display: block;
+  }
+
+  #recent-templates li {
+    @include ellipsis;
+  }
+}

@@ -1,5 +1,0 @@
-@use 'provider/colors' as *;
-
-tr.switch-inactive {
-  --pf-c-table--cell--Color: $disabled-color;
-}

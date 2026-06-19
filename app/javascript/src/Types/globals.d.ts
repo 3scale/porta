@@ -54,12 +54,19 @@ declare global {
     tabs?: (opts?: Partial<{
       active: boolean | number;
       activate: (event: Event, ui: { newPanel: JQuery }) => void;
+      classes: Record<string, string>;
     }>) => void;
     droppable?: (opts: {
-      hoverClass: string;
+      activate: (event: Event, ui: unknown) => void;
+      activeClass: string;
+      addClasses: false;
+      deactivate: (event: Event, ui: unknown) => void;
       drop: (event: Event, ui: { helper: JQuery }) => void;
+      out: (event: Event, ui: unknown) => void;
+      over: (event: Event, ui: unknown) => void;
     }) => void;
     draggable?: (opts: {
+      addClasses: false;
       handle: string;
       helper: string | ((event: Event) => Element);
       revert: string;
