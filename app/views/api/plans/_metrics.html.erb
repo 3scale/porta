@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+  <%= javascript_packs_with_chunks_tag 'plans_metrics' %>
+<% end %>
+
 <div>
   <h2 id="header_table">
     <% if @plan.pricing_enabled? %>
@@ -68,5 +72,4 @@
       <% end -%>
     </tbody>
   </table>
-  <%= javascript_packs_with_chunks_tag 'plans_metrics' %>
 </div>
