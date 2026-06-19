@@ -21,19 +21,14 @@
 @forward 'provider/upgrade_notice';
 @forward 'provider/admin/account';
 @forward 'provider/service_access';
-@forward 'provider/plans_widget';
 @forward 'vendor/c3';
 @forward 'provider/stats/base';
 @forward 'provider/stats/selector';
-@forward 'provider/sample_data';
 @forward 'provider/finance';
 @forward 'provider/metrics';
 @forward 'provider/section';
 @forward 'provider/liquid_docs';
-@forward 'provider/docs_widget';
-@forward 'provider/create_application';
 @forward 'provider/logo';
-@forward 'provider/info_box';
 @forward 'provider/call_to_action';
 
 // view specific stylesheets placed in the controller paths
