@@ -32,11 +32,6 @@
 
 // view specific stylesheets placed in the controller paths
 @forward 'provider/settings_box';
-@forward 'provider/admin/apiconfig/services/proxies';
-@forward 'provider/admin/apiconfig/services/hosted_proxy';
-@forward 'provider/admin/apiconfig/services/promote_form';
-@forward 'provider/admin/apiconfig/services/promote_button';
-@forward 'provider/admin/apiconfig/services/configuration_version';
 @forward 'provider/colorbox';
 @forward 'provider/pagination';
 @forward 'provider/print';
