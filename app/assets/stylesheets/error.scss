@@ -1,9 +1,8 @@
-@use 'provider/colors' as *;
-@use 'provider/logo';
-@use 'provider/typography' as *;
+@use "provider/typography" as *;
 
 $width: line-height-times(24);
 $wrapper-padding: line-height-times(1);
+$border-color: #d2d2d2;
 
 html {
   @include typography-base;
@@ -51,7 +50,7 @@ body {
   /* stylelint-disable-next-line no-descending-specificity -- FIXME */
   a {
     text-decoration: none;
-    color: $label-color;
+    color: #8A8D90;
   }
 }
 
