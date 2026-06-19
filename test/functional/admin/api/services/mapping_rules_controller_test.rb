@@ -129,21 +129,5 @@ module Admin::Api::Services
 
       assert_raise(ActiveRecord::RecordNotFound) { proxy_rule.reload }
     end
-
-    def test_destroy_json_retries_on_deadlock
-      proxy_rule = @service.proxy.proxy_rules.first!
-
-      attempts = 0
-      ProxyRule.any_instance.stubs(:destroy).with do
-        attempts += 1
-        raise ActiveRecord::Deadlocked, "Deadlock found when trying to get lock" if attempts == 1
-        true
-      end
-
-      delete :destroy, params: { id: proxy_rule, service_id: @service.id, format: :json, access_token: @token }
-      assert_response :success
-      assert_equal 2, attempts
-    end
-
   end
 end

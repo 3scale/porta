@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseController
-  include DeadlockRetryable
 
   represents :json, entity: ::ProxyRuleRepresenter::JSON, collection: ::ProxyRulesRepresenter::JSON
   represents :xml, entity: ::ProxyRuleRepresenter::XML, collection: ::ProxyRulesRepresenter::XML
@@ -38,7 +37,7 @@ class Admin::Api::Services::MappingRulesController < Admin::Api::Services::BaseC
   # Proxy Mapping Rule Delete
   # DELETE /admin/api/services/{service_id}/proxy/mapping_rules/{id}.xml"
   def destroy
-    with_deadlock_retry { proxy_rule.destroy }
+    proxy_rule.destroy
     respond_with(proxy_rule)
   end
 
