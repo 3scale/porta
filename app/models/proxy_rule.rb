@@ -172,6 +172,6 @@ class ProxyRule < ApplicationRecord
   end
 
   def lock_owner_for_position_update
-    owner.lock! if owner && !scheduled_for_deletion?
+    owner.lock! unless scheduled_for_deletion?
   end
 end

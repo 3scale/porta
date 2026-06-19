@@ -162,7 +162,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       with_proxy_config_affecting_changes_tracker do |tracker|
         proxy_rule.destroy
         assert tracker.tracking?(ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)),
-          'lock_owner_for_position_update must not break proxy config change tracking'
+               'lock_owner_for_position_update must not break proxy config change tracking'
       end
     end
   end
@@ -188,7 +188,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
 
       assert_nothing_raised { threads.each(&:join) }
-      rules.each { |r| assert_raises(ActiveRecord::RecordNotFound) { r.reload } }
+      rules.each { |rule| assert_raises(ActiveRecord::RecordNotFound) { rule.reload } }
     end
 
     test 'concurrent deletes under same backend_api owner do not deadlock' do
@@ -203,7 +203,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
 
       assert_nothing_raised { threads.each(&:join) }
-      rules.each { |r| assert_raises(ActiveRecord::RecordNotFound) { r.reload } }
+      rules.each { |rule| assert_raises(ActiveRecord::RecordNotFound) { rule.reload } }
     end
   end
 
