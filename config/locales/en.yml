@@ -139,6 +139,13 @@ en:
         limit_violation_reached_provider: 'Application %{name} limit violation - usage of %{message} is above %{level}%'
         weekly_report: '%{name} weekly report'
         daily_report: '%{name} daily report'
+
+  layouts:
+    provider:
+      call_to_action_html:
+        In order to be able to open a support case, please <a href="%{href}">connect your Red Hat
+        Account</a> to this 3scale account.
+
   master:
     providers:
       plans:
