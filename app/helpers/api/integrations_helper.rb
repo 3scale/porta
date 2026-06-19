@@ -68,15 +68,15 @@ module Api::IntegrationsHelper
     promote_button_options(label)
   end
 
-  PROMOTE_BUTTON_COMMON_OPTIONS = { class: 'PromoteButton', data: { disable_with: 'promoting…' }}.freeze
+  PROMOTE_BUTTON_COMMON_OPTIONS = { data: { disable_with: 'promoting…' }}.freeze
 
   def promote_button_options(label = 'Promote')
-    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge({ class: 'PromoteButton pf-c-button pf-m-primary' })
+    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge({ class: 'pf-c-button pf-m-primary' })
     [label, options]
   end
 
   def disabled_promote_button_options
-    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge({ class: 'PromoteButton pf-c-button pf-m-primary', disabled: true })
+    options = PROMOTE_BUTTON_COMMON_OPTIONS.deep_merge({ class: 'pf-c-button pf-m-primary', disabled: true })
     ['Nothing to promote', options]
   end
 
