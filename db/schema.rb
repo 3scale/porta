@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_19_102359) do
   create_table "access_tokens", charset: "utf8mb3", collation: "utf8mb3_bin", force: :cascade do |t|
     t.bigint "owner_id", null: false
     t.text "scopes"
@@ -184,7 +184,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
     t.string "kind"
     t.text "audited_changes", size: :medium
     t.text "comment"
-    t.integer "associated_id"
+    t.bigint "associated_id"
     t.string "associated_type"
     t.string "remote_address"
     t.string "request_uuid"
