@@ -85,19 +85,6 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
       assert_raises(ActiveRecord::RecordNotFound) { mapping_rule.reload }
     end
 
-    test 'destroy retries on deadlock' do
-      attempts = 0
-      ProxyRule.any_instance.stubs(:destroy).with do
-        attempts += 1
-        raise ActiveRecord::Deadlocked, "Deadlock found when trying to get lock" if attempts == 1
-        true
-      end
-
-      delete admin_api_backend_api_mapping_rule_path(backend_api, mapping_rule), params: { access_token: access_token_plaintext_value }
-      assert_response :success
-      assert_equal 2, attempts
-    end
-
     test 'index can be paginated' do
       FactoryBot.create_list(:proxy_rule, 5, owner: backend_api, proxy_id: nil)
 

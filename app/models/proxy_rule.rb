@@ -12,6 +12,8 @@ class ProxyRule < ApplicationRecord
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric, inverse_of: :proxy_rules
 
+  before_destroy :lock_owner_for_position_update
+
   validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
   validates :owner_type, length: { maximum: 255 }
   validates :delta, numericality: { :only_integer => true, :greater_than => 0 }
@@ -167,5 +169,9 @@ class ProxyRule < ApplicationRecord
     return true if owner_type?
     self.owner_id = proxy_id
     self.owner_type = 'Proxy'
+  end
+
+  def lock_owner_for_position_update
+    owner.lock! if owner && !scheduled_for_deletion?
   end
 end
