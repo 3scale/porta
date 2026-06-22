@@ -140,12 +140,6 @@ en:
         weekly_report: '%{name} weekly report'
         daily_report: '%{name} daily report'
 
-  layouts:
-    provider:
-      call_to_action_html:
-        In order to be able to open a support case, please <a href="%{href}">connect your Red Hat
-        Account</a> to this 3scale account.
-
   master:
     providers:
       plans:
@@ -2557,6 +2551,10 @@ en:
         all: Show all content
         own: Show only my content
         builtin: Show only 3scale content
+    provider:
+      call_to_action_html:
+        In order to be able to open a support case, please <a href="%{href}">connect your Red Hat
+        Account</a> to this 3scale account.
 
   shared:
     annotations:
