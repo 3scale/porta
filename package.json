@@ -22,7 +22,7 @@
     "node": "24"
   },
   "devDependencies": {
-    "@babel/core": "7.21.8",
+    "@babel/core": "7.29.6",
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-react": "^7.24.7",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
