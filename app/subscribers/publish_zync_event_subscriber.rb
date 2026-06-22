@@ -27,6 +27,8 @@ class PublishZyncEventSubscriber
         ZyncEvent.create(event, event.service)
       when Domains::ProviderDomainsChangedEvent
         ZyncEvent.create(event, event.provider)
+      when ZyncResyncEvent
+        ZyncEvent.create(event, event.model)
       else raise "Unknown event type #{event.class}"
       end
     end
