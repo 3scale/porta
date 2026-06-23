@@ -179,6 +179,13 @@ class ProxyRuleTest < ActiveSupport::TestCase
     test 'concurrent deletes under same proxy owner do not deadlock' do
       proxy = FactoryBot.create(:service, account: provider).proxy
       rules = FactoryBot.create_list(:proxy_rule, 3, proxy: proxy)
+      barrier = Concurrent::CyclicBarrier.new(rules.size)
+
+      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+      ProxyRule.define_method(:lock_owner_for_position_update) do
+        barrier.wait(5)
+        original_method.bind(self).call
+      end
 
       threads = rules.map do |rule|
         Thread.new do
@@ -188,12 +195,21 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
 
       assert_nothing_raised { threads.each(&:join) }
-      rules.each { |rule| assert_raises(ActiveRecord::RecordNotFound) { rule.reload } }
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    ensure
+      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
     end
 
     test 'concurrent deletes under same backend_api owner do not deadlock' do
       backend_api = FactoryBot.create(:backend_api, account: provider)
       rules = FactoryBot.create_list(:proxy_rule, 3, owner: backend_api, proxy: nil)
+      barrier = Concurrent::CyclicBarrier.new(rules.size)
+
+      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+      ProxyRule.define_method(:lock_owner_for_position_update) do
+        barrier.wait(5)
+        original_method.bind(self).call
+      end
 
       threads = rules.map do |rule|
         Thread.new do
@@ -203,7 +219,9 @@ class ProxyRuleTest < ActiveSupport::TestCase
       end
 
       assert_nothing_raised { threads.each(&:join) }
-      rules.each { |rule| assert_raises(ActiveRecord::RecordNotFound) { rule.reload } }
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    ensure
+      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
     end
   end
 

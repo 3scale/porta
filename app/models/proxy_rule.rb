@@ -3,6 +3,8 @@
 require 'addressable/template'
 
 class ProxyRule < ApplicationRecord
+  before_destroy :lock_owner_for_position_update
+
   acts_as_list scope: %i[owner_id owner_type], add_new_at: :bottom
   scope :ordered, -> { order(position: :asc) }
 
@@ -11,8 +13,6 @@ class ProxyRule < ApplicationRecord
   belongs_to :proxy, inverse_of: :proxy_rules
   belongs_to :owner, polymorphic: true # FIXME: we should touch the owner here, but it will raise ActiveRecord::StaleObjectError
   belongs_to :metric, inverse_of: :proxy_rules
-
-  before_destroy :lock_owner_for_position_update
 
   validates :http_method, :pattern, :owner_id, :owner_type, :metric_id, presence: true
   validates :owner_type, length: { maximum: 255 }
@@ -172,6 +172,6 @@ class ProxyRule < ApplicationRecord
   end
 
   def lock_owner_for_position_update
-    owner.lock! unless scheduled_for_deletion?
+    owner.lock! unless act_as_list_no_update?
   end
 end
