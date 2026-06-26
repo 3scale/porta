@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_19_102359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -185,7 +185,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_26_134251) do
     t.string "kind", limit: 255
     t.text "audited_changes"
     t.text "comment"
-    t.integer "associated_id"
+    t.bigint "associated_id"
     t.string "associated_type", limit: 255
     t.string "remote_address", limit: 255
     t.string "request_uuid", limit: 255
