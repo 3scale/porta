@@ -154,6 +154,77 @@ class ProxyRuleTest < ActiveSupport::TestCase
     assert backend_proxy_rule.valid?
   end
 
+  class LockOwnerForPositionUpdate < ActiveSupport::TestCase
+    test 'destroy still tracks proxy config affecting changes' do
+      proxy = FactoryBot.create(:simple_proxy)
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+
+      with_proxy_config_affecting_changes_tracker do |tracker|
+        proxy_rule.destroy
+        assert tracker.tracking?(ProxyConfigAffectingChanges::TrackedObject.new(proxy_rule)),
+               'lock_owner_for_position_update must not break proxy config change tracking'
+      end
+    end
+  end
+
+  class ConcurrentMappingRuleDeletion < ActiveSupport::TestCase
+    disable_transactional_fixtures!
+
+    setup do
+      @provider = FactoryBot.create(:simple_provider)
+    end
+
+    attr_reader :provider
+
+    test 'concurrent deletes under same proxy owner do not deadlock' do
+      proxy = FactoryBot.create(:service, account: provider).proxy
+      rules = FactoryBot.create_list(:proxy_rule, 3, proxy: proxy)
+      barrier = Concurrent::CyclicBarrier.new(rules.size)
+
+      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+      ProxyRule.define_method(:lock_owner_for_position_update) do
+        barrier.wait(5)
+        original_method.bind(self).call
+      end
+
+      threads = rules.map do |rule|
+        Thread.new do
+          Thread.current.report_on_exception = false
+          rule.destroy!
+        end
+      end
+
+      assert_nothing_raised { threads.each(&:join) }
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    ensure
+      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
+    end
+
+    test 'concurrent deletes under same backend_api owner do not deadlock' do
+      backend_api = FactoryBot.create(:backend_api, account: provider)
+      rules = FactoryBot.create_list(:proxy_rule, 3, owner: backend_api, proxy: nil)
+      barrier = Concurrent::CyclicBarrier.new(rules.size)
+
+      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+      ProxyRule.define_method(:lock_owner_for_position_update) do
+        barrier.wait(5)
+        original_method.bind(self).call
+      end
+
+      threads = rules.map do |rule|
+        Thread.new do
+          Thread.current.report_on_exception = false
+          rule.destroy!
+        end
+      end
+
+      assert_nothing_raised { threads.each(&:join) }
+      assert_empty ProxyRule.where(id: rules.map(&:id))
+    ensure
+      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
+    end
+  end
+
   class PositionUpdateOnConcurrentDeletion < ActiveSupport::TestCase
     disable_transactional_fixtures!
 

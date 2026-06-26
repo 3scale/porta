@@ -3,6 +3,8 @@
 require 'addressable/template'
 
 class ProxyRule < ApplicationRecord
+  before_destroy :lock_owner_for_position_update
+
   acts_as_list scope: %i[owner_id owner_type], add_new_at: :bottom
   scope :ordered, -> { order(position: :asc) }
 
@@ -167,5 +169,9 @@ class ProxyRule < ApplicationRecord
     return true if owner_type?
     self.owner_id = proxy_id
     self.owner_type = 'Proxy'
+  end
+
+  def lock_owner_for_position_update
+    owner.lock! unless act_as_list_no_update?
   end
 end
