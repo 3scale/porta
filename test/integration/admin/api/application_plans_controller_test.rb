@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
 
   def setup
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
@@ -75,6 +76,25 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       get admin_api_service_application_plans_path(service_id: service.id, format: :json, access_token: @token)
       assert_response :success
       assert_equal 2, JSON.parse(response.body)['plans'].length
+    end
+
+    def test_update_syncs_plan_name_to_backend
+      application_plan = FactoryBot.create(:application_plan, name: 'old name', issuer: service)
+      cinstances = FactoryBot.create_list(:simple_cinstance, 2, plan: application_plan)
+
+      cinstances.each do |cinstance|
+        ThreeScale::Core::Application.expects(:save)
+          .with(has_entries(service_id: service.backend_id,
+                            id: cinstance.application_id,
+                            plan_id: application_plan.id,
+                            plan_name: 'new name'))
+      end
+
+      perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
+        put admin_api_service_application_plan_path(application_plan, service_id: service.id, format: :json, access_token: @token,
+                                                    application_plan: { name: 'new name' })
+        assert_response :success
+      end
     end
 
     def test_approval_required
