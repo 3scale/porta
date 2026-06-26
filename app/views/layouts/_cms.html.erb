@@ -1,7 +1,11 @@
+<%# Assets included in this template can't go inside content_for %>
+<%= stylesheet_link_tag 'provider/layouts/cms' %>
+<%= stylesheet_packs_chunks_tag 'pf_spacing' %>
+
 <%= javascript_include_tag 'vendor/jquery/extensions/jquery.cookie.js' %>
 <%= javascript_include_tag 'provider/admin/cms/sidebar' %>
 
-<%= javascript_packs_with_chunks_tag 'codemirror', 'cms', 'pf_spacing' %>
+<%= javascript_packs_with_chunks_tag 'codemirror', 'cms' %>
 <%= javascript_include_tag 'codemirror/modes/liquid' %>
 
 <div id="cms-sidebar">
@@ -33,5 +37,5 @@
 </div>
 
 <div id="tab-content">
-  <%= yield  %>
+  <%= yield %>
 </div>

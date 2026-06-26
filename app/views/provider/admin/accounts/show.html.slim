@@ -10,19 +10,20 @@ div id="key-overview"
     ' authenticate yourself. This key should be kept secret between you and
     ' 3scale and never passed to other people.
 
-  div class="InfoBox InfoBox--notice"
-    ' We strongly suggest using
-    => link_to 'service tokens',
-               provider_admin_user_access_tokens_path(anchor: 'service-tokens')
-    ' to authenticate against the Service Management API and
-    => link_to 'access tokens',
-               provider_admin_user_access_tokens_path(anchor: 'access-tokens')
-    ' to authenticate against the Account Management API,
-    ' the Analytics API and the Billing API. Their custom/limited access scopes
-    ' make them inherently more secure than using this provider API key.
+  div class="pf-c-card"
+    div class="pf-c-card__body"
+      ' We strongly suggest using
+      => link_to 'service tokens',
+                provider_admin_user_access_tokens_path(anchor: 'service-tokens')
+      ' to authenticate against the Service Management API and
+      => link_to 'access tokens',
+                provider_admin_user_access_tokens_path(anchor: 'access-tokens')
+      ' to authenticate against the Account Management API,
+      ' the Analytics API and the Billing API. Their custom/limited access scopes
+      ' make them inherently more secure than using this provider API key.
 
-    p class="key"
-      = current_account.api_key
+      p class="key"
+        = current_account.api_key
 
 div id="account-column-wrapper"
   div class="overview-box" id="account-overview"

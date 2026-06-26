@@ -1,5 +1,5 @@
 @use 'provider/typography' as *;
-@use 'provider/layouts/main' as *;
+@use 'utils';
 
 .Section {
   h2 {
@@ -7,11 +7,11 @@
   }
 
   &.u-toggleableBySettingsBox p {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
   }
 
   &#service-tokens p {
-    @include white-box-shadow;
+    @include utils.white-box-shadow;
   }
 }
 
@@ -20,7 +20,7 @@
 }
 
 .swagger-section {
-  @include white-box-shadow;
+  @include utils.white-box-shadow;
 
   padding: line-height-times(1);
 }
