@@ -76,8 +76,4 @@ class Api::MetricVisibilitiesController < FrontendController
   def authorize_section
     authorize! :manage, :plans
   end
-
-  def usage_limit_params
-    params.require(:usage_limit)
-  end
 end

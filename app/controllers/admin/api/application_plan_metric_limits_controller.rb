@@ -61,7 +61,7 @@ class Admin::Api::ApplicationPlanMetricLimitsController < Admin::Api::BaseContro
   end
 
   def usage_limit_params
-    params.fetch(:usage_limit)
+    params.fetch(:usage_limit).permit(:period, :value)
   end
 
 end

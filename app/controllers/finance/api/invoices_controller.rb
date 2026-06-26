@@ -51,7 +51,7 @@ class Finance::Api::InvoicesController < Finance::Api::BaseController
   # Invoice Update
   # PUT /api/invoices/{id}.xml
   def update
-    invoice.update(invoice_params_update, without_protection: true)
+    invoice.update(invoice_params_update)
     respond_with(invoice)
   end
 

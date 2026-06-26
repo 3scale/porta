@@ -8,7 +8,6 @@ class ApiDocs::Service < ApplicationRecord
   belongs_to :account, required: true
   belongs_to :service, class_name: '::Service', inverse_of: :api_docs_services
 
-  attr_accessible :account, :body, :name, :description, :published, :skip_swagger_validations
   attr_readonly :system_name
 
   self.table_name = "api_docs_services"

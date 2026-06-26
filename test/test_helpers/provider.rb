@@ -24,7 +24,7 @@ module TestHelpers
           FactoryBot.create(:limit_alert, account: provider, cinstance: provider.application_contracts.take)
           app_plan = FactoryBot.create(:application_plan, issuer: service)
           app_plan.customize
-          FactoryBot.create(:application_plan, name: "somehow_broken", original_id: app_plan.id, issuer: service).update(issuer_id: service.id + 100)
+          FactoryBot.create(:application_plan, name: "somehow_broken", original_id: app_plan.id, issuer: service)
           metric = service.metrics.take
           FactoryBot.create(:usage_limit, plan: app_plan, metric:)
           FactoryBot.create(:plan_metric, plan: app_plan, metric:, visible: false, limits_only_text: false)

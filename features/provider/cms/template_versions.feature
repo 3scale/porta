@@ -37,6 +37,7 @@ Feature: CMS Template versions
   Scenario: Revert to version from the version itself
     Given they fill the template draft with "<div>Dammit, I Changed Again</div>"
     And press "Save"
+    And they should see a toast alert with text "Template saved"
     When they follow "Versions"
     And follow "24 Dec 2012 12:00:00 UTC"
     And the version template should contain "Original Prankster"

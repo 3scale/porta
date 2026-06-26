@@ -19,6 +19,26 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'new' do
+    get :new
+    assert_response :bad_request
+    assert_equal 'Required parameter missing: fields_definition', @response.body
+
+    get :new, params: { fields_definition: 'invalid' }
+    assert_response :bad_request
+    assert_equal 'invalid fields definition', @response.body
+
+    get :new, params: { fields_definition: { target: 'non-existent' } }
+    assert_response :bad_request
+    assert_equal 'invalid fields definition target', @response.body
+
+    get :new, params: { fields_definition: { target: 'User' } }
+
+    assert_response :success
+    assert_select 'h1', text: "New field definition for User"
+    assert_select 'input#fields_definition_target[value=?][type=?]', 'User', 'hidden'
+  end
+
   test 'edit' do
     get :edit, params: { id: field_definition }
 
@@ -47,9 +67,9 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
   test 'update fails' do
     FieldsDefinition.any_instance.stubs(:save).returns(false)
     put :update, params: { id: field_definition }
-    assert assigns(:required_fields)
-  end
 
+    assert_response :bad_request
+  end
 
   test 'destroy' do
     delete :destroy, params: { id: field_definition }

@@ -106,8 +106,6 @@ class AccessToken < ApplicationRecord
 
   after_initialize :generate_if_missing, if: :new_record?
 
-  attr_accessible :owner, :name, :scopes, :permission, :expires_at
-
   def self.compute_digest(plaintext_value)
     return nil if plaintext_value.blank?
 

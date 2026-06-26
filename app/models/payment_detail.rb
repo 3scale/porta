@@ -12,8 +12,6 @@ class PaymentDetail < ApplicationRecord
 
   audited allow_mass_assignment: true
 
-  attr_protected :account_id, :audit_ids
-
   validates :credit_card_partial_number, length: { :maximum => 4,
                                                    :allow_blank => true,
                                                    :message => "must be the final 4 digits only" }
