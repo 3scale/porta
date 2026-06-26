@@ -9,11 +9,14 @@ declare -a packages=(instantclient-sdk instantclient-odbc)
 
 function install_pkg {
   local package="$1"
+  local path="vendor/oracle"
   local zip="${package}-${oracle_version}.zip"
-  local file="vendor/oracle/${zip}"
+  local file="$path/${zip}"
+  local existing_file="$path/${package}-"*".zip"
 
-  if [ -f "${file}" ]; then
-    echo "[OK] ${file} already present"
+  if [ -f "${existing_file}" ]; then
+    echo "[OK] ${existing_file} already present"
+    file="${existing_file}"
   else
     echo "[INFO] Downloading ${zip} from Oracle servers"
     wget "${oracle_otn}/${zip}" -O "${file}"
