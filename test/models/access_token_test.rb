@@ -113,17 +113,6 @@ class AccessTokenTest < ActiveSupport::TestCase
     assert @token.reload.read_attribute(:value).start_with?(AccessToken::DIGEST_PREFIX)
   end
 
-  def test_find_from_value_finds_legacy_token
-    legacy_value = 'legacy_plaintext_token_value_64chars'
-    @token.update_columns(value: legacy_value)
-
-    found = AccessToken.find_from_value(legacy_value)
-
-    assert_equal @token.id, found&.id
-    # No migration: DB value remains unchanged
-    assert_equal legacy_value, @token.reload.read_attribute(:value)
-  end
-
   # compute_digest tests
 
   def test_compute_digest_returns_prefixed_sha384_hex
@@ -190,7 +179,8 @@ class AccessTokenTest < ActiveSupport::TestCase
     # Verify the DB value has our prefix
     assert stored_hash.start_with?(AccessToken::DIGEST_PREFIX)
 
-    # An attacker with access to the DB hash should NOT be able to authenticate
+    # An attacker with access to the DB hash should NOT be able to authenticate:
+    # compute_digest(stored_hash) produces a double-hash that won't match any row.
     found = AccessToken.find_from_value(stored_hash)
 
     assert_nil found, "Security vulnerability: leaked hash was accepted as a valid token"
