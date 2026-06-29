@@ -121,15 +121,7 @@ class AccessToken < ApplicationRecord
     scrubbed = plaintext_value.to_s.scrub
     digest = compute_digest(scrubbed)
 
-    # Fast path: find by digest (new tokens)
-    token = find_by(value: digest)
-    return token if token
-
-    # Reject if the input looks like a stored hash (has our prefix)
-    return nil if scrubbed.start_with?(DIGEST_PREFIX)
-
-    # Slow path: find by plaintext (legacy tokens, no migration)
-    find_by(value: scrubbed)
+    find_by(value: digest)
   rescue ActiveRecord::StatementInvalid, ArgumentError # utf-8 issues
     nil
   end
