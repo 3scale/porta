@@ -80,7 +80,7 @@ gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
 gem 'dalli'
-gem 'faraday', '~> 2.0', '<= 2.9'
+gem 'faraday', '~> 2.0', '>= 2.14.3'
 gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.18.9', force_ruby_platform: true
 gem 'secure_headers', '~> 6.3.0'
