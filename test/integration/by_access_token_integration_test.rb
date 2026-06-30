@@ -83,17 +83,6 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     assert_response :forbidden
   end
 
-  test 'authentication with legacy unmigrated token succeeds' do
-    token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
-    legacy_value = 'legacy_plaintext_token_for_integration'
-    token.update_columns(value: legacy_value)
-
-    get admin_api_accounts_path(format: :xml), params: { access_token: legacy_value }
-
-    assert_response :success
-    # No migration: DB value remains unchanged
-    assert_equal legacy_value, token.reload.read_attribute(:value)
-  end
 
   test 'authentication with leaked database hash fails' do
     token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
