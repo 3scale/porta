@@ -11,8 +11,8 @@ class FaradayNestedParamsTest < ActiveSupport::TestCase
     # Create a deeply nested query string that would trigger the vulnerability
     # in vulnerable Faraday versions
     nested_depth = 100
-    nested_params = 'a' * nested_depth + '=1'
-    nested_depth.times { |i| nested_params = "a[#{nested_params}]" }
+    nested_params = "#{'a' * nested_depth}=1"
+    nested_depth.times { nested_params = "a[#{nested_params}]" }
 
     connection = Faraday.new(url: 'http://example.com') do |faraday|
       faraday.adapter :test do |stub|
@@ -24,7 +24,7 @@ class FaradayNestedParamsTest < ActiveSupport::TestCase
     assert_nothing_raised do
       # Try to make a request with deeply nested parameters
       # The fix should handle this gracefully
-      connection.get('/test', {deep: nested_params})
+      connection.get('/test', { deep: nested_params })
     end
   rescue Faraday::ParamPart::PartLimitError
     # This is expected in newer versions that enforce limits
