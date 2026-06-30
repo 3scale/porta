@@ -172,6 +172,11 @@ class ProxyRuleTest < ActiveSupport::TestCase
 
     setup do
       @provider = FactoryBot.create(:simple_provider)
+      @original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+    end
+
+    teardown do
+      ProxyRule.define_method(:lock_owner_for_position_update, @original_method)
     end
 
     attr_reader :provider
@@ -179,36 +184,24 @@ class ProxyRuleTest < ActiveSupport::TestCase
     test 'concurrent deletes under same proxy owner do not deadlock' do
       proxy = FactoryBot.create(:service, account: provider).proxy
       rules = FactoryBot.create_list(:proxy_rule, 3, proxy: proxy)
-      barrier = Concurrent::CyclicBarrier.new(rules.size)
-
-      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
-      ProxyRule.define_method(:lock_owner_for_position_update) do
-        barrier.wait(5)
-        original_method.bind(self).call
-      end
-
-      threads = rules.map do |rule|
-        Thread.new do
-          Thread.current.report_on_exception = false
-          rule.destroy!
-        end
-      end
-
-      assert_nothing_raised { threads.each(&:join) }
-      assert_empty ProxyRule.where(id: rules.map(&:id))
-    ensure
-      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
+      assert_concurrent_deletes_do_not_deadlock(rules)
     end
 
     test 'concurrent deletes under same backend_api owner do not deadlock' do
       backend_api = FactoryBot.create(:backend_api, account: provider)
       rules = FactoryBot.create_list(:proxy_rule, 3, owner: backend_api, proxy: nil)
-      barrier = Concurrent::CyclicBarrier.new(rules.size)
+      assert_concurrent_deletes_do_not_deadlock(rules)
+    end
 
-      original_method = ProxyRule.instance_method(:lock_owner_for_position_update)
+    private
+
+    def assert_concurrent_deletes_do_not_deadlock(rules)
+      barrier = Concurrent::CyclicBarrier.new(rules.size)
+      original = @original_method
+
       ProxyRule.define_method(:lock_owner_for_position_update) do
         barrier.wait(5)
-        original_method.bind(self).call
+        original.bind_call(self)
       end
 
       threads = rules.map do |rule|
@@ -218,10 +211,8 @@ class ProxyRuleTest < ActiveSupport::TestCase
         end
       end
 
-      assert_nothing_raised { threads.each(&:join) }
+      threads.each(&:join)
       assert_empty ProxyRule.where(id: rules.map(&:id))
-    ensure
-      ProxyRule.define_method(:lock_owner_for_position_update, original_method)
     end
   end
 
