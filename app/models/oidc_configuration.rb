@@ -18,6 +18,7 @@ class OIDCConfiguration < ApplicationRecord
       implicit_flow_enabled
       service_accounts_enabled
       direct_access_grants_enabled
+      token_exchange_enabled
     ].freeze
 
     BOOLEAN_ATTRIBUTES = FLOWS
