@@ -43,7 +43,7 @@ gem 'sorted_set', '~> 1.0'
 gem 'i18n'
 
 # Apisonator client
-gem 'pisoni', '~> 1.30'
+gem 'pisoni', '~> 1.31'
 
 gem '3scale_time_range', '0.0.6'
 
