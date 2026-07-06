@@ -7,8 +7,6 @@ class LineItem < ApplicationRecord
 
   audited associated_with: :invoice, allow_mass_assignment: true
 
-  attr_accessible :name, :description, :cost, :finished_at, :quantity, :started_at
-
   validates :name, :description, :type, :contract_type, length: { maximum: 255 }
   validates :type, inclusion: {in: [LineItem::PlanCost, LineItem::VariableCost].flat_map { |klass| [klass, klass.to_s]}, allow_blank: true}
 

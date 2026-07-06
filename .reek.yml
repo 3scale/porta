@@ -39,3 +39,6 @@ directories:
   "app/mailers":
     InstanceVariableAssumption:
       enabled: false
+  "test":
+    InstanceVariableAssumption:
+      enabled: false

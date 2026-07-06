@@ -54,6 +54,8 @@ class Admin::Api::Registry::PoliciesController < Admin::Api::BaseController
   def policy_params
     policy_params = params.require(:policy)
     final_params = policy_params.permit(:name, :version)
+    # permit! is necessary here because the schema field accepts arbitrary nested JSON structures
+    # that cannot be whitelisted in advance.
     final_params.merge(schema: policy_params.require(:schema)).permit!
   end
 

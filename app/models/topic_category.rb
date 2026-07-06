@@ -3,8 +3,6 @@ class TopicCategory < ApplicationRecord
   #TODO: Rails 4 changes to has_many …, -> { order(…) }
   has_many :topics, -> { sticky_first.last_updated_first }, :foreign_key => :category_id
 
-  attr_protected :forum_id, :tenant_id
-
   validates :name, presence: true, length: {maximum: 255}
   validates :name, uniqueness: { scope: :forum_id, case_sensitive: true }
 

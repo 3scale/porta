@@ -1308,6 +1308,7 @@ en:
     settings:
       update:
         success: Settings updated
+        error: Settings could not be updated
     securities:
       edit:
         selector_label: Protection against bots on the developer portal

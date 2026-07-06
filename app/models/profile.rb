@@ -13,8 +13,6 @@ class Profile < ApplicationRecord
   # with the account validation that causes profile#valid? to be false
   before_save :validate_presence_of_account
 
-  attr_protected :account_id, :tenant_id, :audit_ids
-
   after_initialize :set_company_size
 
   audited

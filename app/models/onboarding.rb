@@ -1,6 +1,4 @@
 class Onboarding < ApplicationRecord
-  attr_accessible :wizard_state
-
   belongs_to :account
 
   validates :account_id, presence: true
