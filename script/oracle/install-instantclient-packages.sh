@@ -3,8 +3,8 @@
 set +o pipefail
 
 # Execute this script by a user with read right ability to /opt/oracle and /opt/system/vendor/oracle
-declare oracle_otn=https://download.oracle.com/otn_software/linux/instantclient/1918000
-declare oracle_version=linux.x64-19.18.0.0.0dbru
+declare oracle_otn=https://download.oracle.com/otn_software/linux/instantclient/1931000v2
+declare oracle_version=linux.x64-19.31.0.0.0dbru
 declare -a packages=(instantclient-sdk instantclient-odbc)
 
 function install_pkg {
@@ -45,6 +45,6 @@ fi
 
 # hack for system-builder ENV
 rm -rf /opt/system/vendor/oracle
-ln -sf /opt/oracle/instantclient_19_18/libsqora.so.19.1 /opt/oracle/instantclient_19_18/libsqora.so
-ln -sf /opt/oracle/instantclient_19_18 /opt/oracle/instantclient
+ln -sf /opt/oracle/instantclient_19_31/libsqora.so.19.1 /opt/oracle/instantclient_19_31/libsqora.so
+ln -sf /opt/oracle/instantclient_19_31 /opt/oracle/instantclient
 cp config/oracle/*.ini /etc/
