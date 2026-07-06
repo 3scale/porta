@@ -13,9 +13,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   # POST /admin/api/accounts/{account_id}/applications.xml
   def create
     application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
-    application.unflattened_attributes = application_params
-    application.user_key = params[:user_key] if params[:user_key]
-    application.application_id = params[:application_id] if params[:application_id]
+    application.assign_attributes(application_params)
 
     Array(params[:application_key]).each do |key|
       application.application_keys.build(value: key)
@@ -35,10 +33,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   # Application Update
   # PUT /admin/api/accounts/{account_id}/applications/{id}.xml
   def update
-    application.unflattened_attributes = flat_params
-    application.user_key = params[:user_key] if params[:user_key]
-
-    application.save
+    application.update(application_update_params)
 
     respond_with application
   end
@@ -124,15 +119,13 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   end
 
   def application_params
-    flat_params.slice(*application_attributes)
+    allowed_attrs = current_account.defined_fields_names_for(Cinstance) +
+                    %w[user_key application_id redirect_url first_traffic_at first_daily_traffic_at accepted_at create_origin]
+    params.permit(*allowed_attrs)
   end
 
-  def application_attributes
-    current_account.fields.for(Cinstance) + %w|user_key application_id|
-  end
-
-  def flat_params
-    super.except(:account_id)
+  def application_update_params
+    application_params.except(:application_id)
   end
 
   def find_or_create_service_contract

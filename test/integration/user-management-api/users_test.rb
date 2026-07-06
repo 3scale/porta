@@ -160,6 +160,18 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     assert_equal admin_sections, @member.admin_sections
   end
 
+  test 'set member permissions with provider key' do
+    service = @provider.services.default
+
+    put admin_api_user_path(format: :xml, id: @member.id), params: { member_permission_service_ids: [service.id], member_permission_ids: %w[monitoring services], provider_key: @provider.api_key }
+
+    assert_response :success
+
+    assert @member.reload
+    assert_equal [service.id], @member.member_permission_service_ids
+    assert_equal Set[ :services, :monitoring ], @member.admin_sections
+  end
+
   test 'suspend/unsuspend with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
@@ -323,6 +335,22 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :forbidden
+  end
+
+  test 'create sets user signup_type' do
+    Settings::Switch.any_instance.stubs(:allowed?).returns(true)
+
+    post admin_api_users_path(format: :json), params: {
+      provider_key: @provider.api_key,
+      username: 'new_provider_user',
+      email: 'new_provider_user@example.com'
+    }
+
+    assert_response :success
+
+    new_user = User.find(response.parsed_body[:user][:id])
+    assert_equal 'new_provider_user@example.com', new_user.email
+    assert_equal :created_by_provider, new_user.signup_type
   end
 
   test 'show' do

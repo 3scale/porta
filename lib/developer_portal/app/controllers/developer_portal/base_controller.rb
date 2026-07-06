@@ -27,9 +27,10 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
   end
 
   def filter_readonly_params(params, resource_class)
-    return {} unless params
+    return ActionController::Parameters.new unless params
 
     read_only_fields = FieldsDefinition.by_provider(site_account).by_target(resource_class.name).read_only.pluck(:name)
+    read_only_fields += %w[country_id] if read_only_fields.include?('country')
     params.except(*read_only_fields)
   end
 end

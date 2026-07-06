@@ -22,12 +22,7 @@ class Buyers::UsersController < Buyers::BaseController
   def edit; end
 
   def update
-    # TODO: I think this controller is used only on provider side
-    user.validate_fields! if current_account.buyer?
-
-    user.attributes = user_params
-    user.role = user_params.fetch(:role, user.role) if can?(:update_role, user)
-
+    user.assign_attributes(user_params)
     if user.save
       redirect_to({ action: :show }, success: t('.success'))
     else
@@ -86,10 +81,12 @@ class Buyers::UsersController < Buyers::BaseController
     @user = @account.users.find(params[:id]).decorate
   end
 
-  DEFAULT_PARAMS = %i[username email password password_confirmation role].freeze
-
   def user_params
-    @user_params ||= params.require(:user).permit(*DEFAULT_PARAMS, extra_fields: [*user.defined_extra_fields_names])
+    fields_names = current_account.defined_fields_names_for(User)
+    extra_fields_names = current_account.defined_extra_fields_names_for(User)
+    allowed_attrs = [*fields_names, :password, :password_confirmation]
+    allowed_attrs += [:role] if can?(:update_role, user)
+    params.require(:user).permit(allowed_attrs, extra_fields: extra_fields_names)
   end
 
   def redirect_back_or_show_detail(**opts)

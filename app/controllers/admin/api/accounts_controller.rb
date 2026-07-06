@@ -43,9 +43,8 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
 
     preload_to_present(buyer_account)
 
-    buyer_account.vat_rate = params[:vat_rate].to_f if params[:vat_rate]
     buyer_account.settings.attributes = billing_params
-    buyer_account.update_with_flattened_attributes(flat_params)
+    buyer_account.update(account_params)
 
     respond_with(buyer_account)
   end
@@ -154,9 +153,5 @@ class Admin::Api::AccountsController < Admin::Api::BaseController
     else
       raise ActiveRecord::RecordNotFound
     end
-  end
-
-  def flat_params
-    super.except(:vat_rate, :id)
   end
 end

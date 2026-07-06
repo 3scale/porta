@@ -70,19 +70,6 @@ module Fields::ExtraFields
     end
   end
 
-  def update_with_flattened_attributes(flattened_attrs, options = {})
-    assign_unflattened_attributes(flattened_attrs, options)
-    save
-  end
-
-  def assign_unflattened_attributes(attributes, options = {})
-    assign_attributes(nest_extra_fields(attributes), options)
-  end
-
-  def unflattened_attributes=(flattened_attrs)
-    self.attributes = nest_extra_fields(flattened_attrs)
-  end
-
   protected
 
   def encode_string_extra_field(value)
@@ -109,27 +96,5 @@ module Fields::ExtraFields
     else
       value
     end
-  end
-
-  def nest_extra_fields(flattened_attrs)
-    attrs = { }
-    flattened_attrs.each_pair do |key, value|
-      # we don't mind too much about this loose condition, that leads to push into
-      # attrs[:extra_fields] many undesired things, since extra_fields= method will take
-      # care of not allowing those to get in into the db
-      if extra_fields_attribute?(key) || special_field?(key)
-        attrs[key] = value
-      else
-        attrs[:extra_fields] ||= { }
-        attrs[:extra_fields][key] = encode_extra_field(value)
-      end
-    end
-
-    attrs
-  end
-
-  def extra_fields_attribute?(key)
-    respond_to?("#{key}=") &&
-      !(self.class.reflect_on_aggregation(key.to_sym) || self.class.reflect_on_association(key.to_sym))
   end
 end

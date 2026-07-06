@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::BaseController
   before_action :current_password_verification, only: :update
   activate_menu :account, :personal, :personal_details
@@ -5,7 +7,7 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   def edit; end
 
   def update
-    if current_user.update(user_params.except(:current_password))
+    if current_user.update(permitted_user_params)
       if current_user.just_changed_password?
         current_user.kill_user_sessions(user_session)
       end
@@ -26,7 +28,12 @@ class Provider::Admin::User::PersonalDetailsController < Provider::Admin::User::
   end
 
   def user_params
-    params.require(:user)
+    @user_params ||= params.require(:user)
+  end
+
+  def permitted_user_params
+    allowed_attrs = current_user.defined_builtin_fields_names + %w[password]
+    user_params.permit(*allowed_attrs, extra_fields: current_user.defined_extra_fields_names)
   end
 
   def current_password_verification

@@ -109,14 +109,6 @@ class User < ApplicationRecord
   validate :username_is_unique
   validates :open_id, uniqueness: { case_sensitive: true }, allow_nil: true
 
-  attr_accessible :title, :username, :email, :first_name, :last_name,
-                  :conditions, :cas_identifier, :open_id, :service_conditions,
-                  :job_role, :extra_fields, as: %i[default member admin]
-
-  attr_accessible :member_permission_service_ids, :member_permission_ids, as: %i[admin]
-
-
-
   def self.search_states
     %w(pending active)
   end

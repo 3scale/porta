@@ -30,9 +30,6 @@ module DeveloperPortal
     end
 
     def create
-      account_params = filter_readonly_params(params[:account], Account)
-      user_params    = filter_readonly_params(account_params.try(:delete, :user), User)
-
       if signup_user!(account_params, user_params)
         if @user.can_login?
           self.current_user = @user
@@ -88,6 +85,16 @@ module DeveloperPortal
         user_params:    user_params,
         authentication_provider: authentication_provider
       }
+    end
+
+    def account_params
+      allowed_attrs = site_account.defined_fields_names_for(Account) - %w[country vat_rate] + %w[country_id]
+      filter_readonly_params(params.fetch(:account, {}), Account).permit(*allowed_attrs)
+    end
+
+    def user_params
+      allowed_attrs = site_account.defined_fields_names_for(User) + %w[password password_confirmation]
+      filter_readonly_params(params.fetch(:account, {})[:user], User).permit(*allowed_attrs)
     end
 
     def redirect_if_logged_in

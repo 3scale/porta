@@ -16,7 +16,8 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
   private
 
   def user_params
-    flat_params.merge({signup_type: :minimal})
+    defined_user_fields = current_account.defined_fields_names_for(User)
+    params.permit(*defined_user_fields, :password, :password_confirmation)
   end
 
   def check_creation_errors
@@ -31,7 +32,7 @@ class Admin::Api::SignupsController < Admin::Api::BaseController
   end
 
   def signup_params
-    Signup::SignupParams.new(plans: plans, user_attributes: user_params, account_attributes: flat_params, defaults: defaults)
+    Signup::SignupParams.new(plans: plans, user_attributes: user_params.merge(signup_type: :minimal), account_attributes: account_params, defaults: defaults)
   end
 
   def defaults

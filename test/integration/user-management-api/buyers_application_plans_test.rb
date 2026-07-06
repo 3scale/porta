@@ -91,6 +91,38 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
     assert_equal app_plan.id.to_s, xml.xpath('/plan/id').children.text
   end
 
+  test 'buy with different application attributes' do
+    app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
+
+    app_params = {
+      name: 'name_value',
+      description: 'description_value',
+      redirect_url: 'http://example.com',
+      create_origin: 'create_origin_value',
+      user_key: 'user_key_value',
+      application_id: 'application_id_value',
+      accepted_at: Time.utc(2020,01,01).to_s,
+      first_traffic_at: Time.utc(2020,02,02).to_s,
+      first_daily_traffic_at: Time.utc(2020,03,03).to_s
+    }
+
+    assert_difference app_plan.cinstances.method(:count), +1 do
+      post buy_admin_api_account_application_plan_path(@buyer, app_plan, format: :xml), params: {
+        provider_key: @provider.api_key,
+      }.merge(app_params)
+
+      plan_id = Nokogiri::XML::Document.parse(@response.body).xpath('/plan/id').children.text
+      assert_equal app_plan.id.to_s, plan_id
+      app = app_plan.cinstances.first
+
+      app_params.except(:user_key, :application_id).each do |k, v|
+        assert_equal v, app.public_send(k).to_s, "field '#{k}' should equal '#{v}'"
+      end
+      assert_not_equal app_params[:user_key], app.user_key
+      assert_not_equal app_params[:application_id], app.application_id
+    end
+  end
+
   test 'buy an already bought plan' do
     app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     app_plan.publish!
