@@ -8,7 +8,7 @@ class Sidebar
 
   constructor: (@selector) ->
 
-    @fire_ajax()
+    @fetch_sidebar()
 
     @filter = new SidebarFilter(this)
 
@@ -61,7 +61,7 @@ class Sidebar
     @expand_collapse_all_button().
       html(Sidebar.icon(if all_packed then 'plus-square' else 'minus-square'))
 
-  fire_ajax: ->
+  fetch_sidebar: ->
     @ajax.abort() if @ajax
     @ajax = $.ajax('/p/admin/cms/templates/sidebar.json')
       .success (json) => @update(json)
