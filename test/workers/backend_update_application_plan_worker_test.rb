@@ -12,16 +12,24 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
 
   attr_reader :plan
 
-  test 'syncs plan name to backend for each cinstance' do
+  test 'batch syncs plan name to backend for all cinstances' do
     cinstances = FactoryBot.create_list(:simple_cinstance, 2, plan: plan)
 
-    cinstances.each do |cinstance|
-      ThreeScale::Core::Application.expects(:save)
-        .with(has_entries(service_id: plan.service.backend_id,
-                          id: cinstance.application_id,
-                          plan_id: plan.id,
-                          plan_name: plan.name))
+    expected_applications = cinstances.map do |cinstance|
+      state = cinstance.state
+      state = :active if cinstance.live?
+
+      {
+        service_id: plan.service.backend_id,
+        id: cinstance.application_id,
+        state: state,
+        plan_id: plan.id,
+        plan_name: plan.name,
+        redirect_url: cinstance.redirect_url
+      }
     end
+
+    ThreeScale::Core::Application.expects(:save_batch).with(plan.service.backend_id, expected_applications)
 
     perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
       BackendUpdateApplicationPlanWorker.perform_later(plan.id)
@@ -29,7 +37,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
   end
 
   test 'no n+1 queries' do
-    ThreeScale::Core::Application.stubs(:save)
+    ThreeScale::Core::Application.stubs(:save_batch)
 
     populate = ->(n) { FactoryBot.create_list(:simple_cinstance, n, plan: plan) }
 
@@ -39,7 +47,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
   end
 
   test 'does nothing when plan does not exist' do
-    ThreeScale::Core::Application.expects(:save).never
+    ThreeScale::Core::Application.expects(:save_batch).never
 
     perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
       BackendUpdateApplicationPlanWorker.perform_later(0)
@@ -47,7 +55,7 @@ class BackendUpdateApplicationPlanWorkerTest < ActiveSupport::TestCase
   end
 
   test 'does nothing when plan has no cinstances' do
-    ThreeScale::Core::Application.expects(:save).never
+    ThreeScale::Core::Application.expects(:save_batch).never
 
     perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
       BackendUpdateApplicationPlanWorker.perform_later(plan.id)

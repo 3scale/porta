@@ -7,6 +7,6 @@ class BackendUpdateApplicationPlanWorker < ApplicationJob
     plan = ApplicationPlan.find_by(id: plan_id)
     return unless plan
 
-    plan.cinstances.includes(:service, :plan).find_each(&:update_backend_application)
+    plan.update_backend_plan
   end
 end

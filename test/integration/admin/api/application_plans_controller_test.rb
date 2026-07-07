@@ -82,13 +82,21 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
       application_plan = FactoryBot.create(:application_plan, name: 'old name', issuer: service)
       cinstances = FactoryBot.create_list(:simple_cinstance, 2, plan: application_plan)
 
-      cinstances.each do |cinstance|
-        ThreeScale::Core::Application.expects(:save)
-          .with(has_entries(service_id: service.backend_id,
-                            id: cinstance.application_id,
-                            plan_id: application_plan.id,
-                            plan_name: 'new name'))
+      expected_applications = cinstances.map do |cinstance|
+        state = cinstance.state
+        state = :active if cinstance.live?
+
+        {
+          service_id: service.backend_id,
+          id: cinstance.application_id,
+          state: state,
+          plan_id: application_plan.id,
+          plan_name: 'new name',
+          redirect_url: cinstance.redirect_url
+        }
       end
+
+      ThreeScale::Core::Application.expects(:save_batch).with(service.backend_id, expected_applications)
 
       perform_enqueued_jobs(only: BackendUpdateApplicationPlanWorker) do
         put admin_api_service_application_plan_path(application_plan, service_id: service.id, format: :json, access_token: @token,
