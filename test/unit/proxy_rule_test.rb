@@ -165,6 +165,15 @@ class ProxyRuleTest < ActiveSupport::TestCase
                'lock_owner_for_position_update must not break proxy config change tracking'
       end
     end
+
+    test 'skips lock when act_as_list_no_update?' do
+      proxy = FactoryBot.create(:simple_proxy)
+      proxy_rule = FactoryBot.create(:proxy_rule, proxy: proxy)
+      proxy_rule.stubs(:act_as_list_no_update?).returns(true)
+
+      Proxy.any_instance.expects(:lock!).never
+      proxy_rule.destroy
+    end
   end
 
   class ConcurrentMappingRuleDeletion < ActiveSupport::TestCase
